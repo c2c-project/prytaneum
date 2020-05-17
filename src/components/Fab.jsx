@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Fab from '@material-ui/core/Fab';
+import MUIFab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Zoom from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,17 +13,22 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function MyFab({ onClick }) {
+/**
+ * @description Fab button that displays bottom right of screen, currently only uses a + sign
+ * @arg {Object} props
+ * @arg {Function} props.onClick function that runs when the fab is clicked
+ */
+export default function Fab({ onClick }) {
     const classes = useStyles();
     return (
         <Zoom in timeout={300}>
-            <Fab onClick={onClick} className={classes.fab} color='secondary'>
+            <MUIFab onClick={onClick} className={classes.fab} color='secondary'>
                 <AddIcon />
-            </Fab>
+            </MUIFab>
         </Zoom>
     );
 }
 
-MyFab.propTypes = {
+Fab.propTypes = {
     onClick: PropTypes.func.isRequired
 };

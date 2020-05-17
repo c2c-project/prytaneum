@@ -2,6 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useJwt from '../hooks/useJwt';
 
+/**
+ * @description client side display guard
+ * @arg {Object} props
+ * @arg {String[]} props.permissions permissions needed to render children
+ * @arg {PropTypes.ReactNodeLike|PropTypes.ReactNodeArray} props.children privileged viewing component
+ * @arg {Boolean} props.local if true, only check the local document of the user, else check with server
+ * @arg {PropTypes.ReactNodeLike} props.elseRender what to display if the user cannot see the children, typically nothing
+ * @example
+ * // local or remote check depends on the case
+ * <GateKeep local permissions={['admin']} elseRender={<></>}>
+ *  <OnlyAdminsCanSeeMe />
+ * </GateKeep>
+ */
 export default function GateKeep({ permissions, children, local, elseRender }) {
     const [isLoading, setLoading] = React.useState(true);
     const [isAllowed, setAllowed] = React.useState(false);

@@ -18,10 +18,20 @@ import GateKeep from './GateKeep';
 
 const useStyles = makeStyles({
     button: {
-        marginLeft: 'auto'
-    }
+        marginLeft: 'auto',
+    },
 });
 
+/**
+ * @description an implementation of ListItem for Sessions
+ * @arg {Object} props
+ * @arg {Object} props.headerProps
+ * @arg {String} props.headerProps.title title string for card header
+ * @arg {String} props.headerProps.subheader
+ * @arg {PropTypes.ReactNodeLike} props.headerProps.action the action buttons for the card header
+ * @arg {String} props.description description of the session
+ * @arg {Function} props.onClickGoToSession what to do when the user clicks the button to go to the session
+ */
 function SessionListItem({ headerProps, description, onClickGoToSession }) {
     const { title, subheader, action } = headerProps;
     const classes = useStyles();
@@ -56,25 +66,35 @@ function SessionListItem({ headerProps, description, onClickGoToSession }) {
 }
 
 SessionListItem.defaultProps = {
-    description: ''
+    description: '',
 };
 
 SessionListItem.propTypes = {
     headerProps: PropTypes.shape({
         title: PropTypes.string.isRequired,
         subheader: PropTypes.string,
-        action: PropTypes.node
+        action: PropTypes.node,
     }).isRequired,
     description: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
-    onClickGoToSession: PropTypes.func.isRequired
+    onClickGoToSession: PropTypes.func.isRequired,
 };
 
-const calcTimeout = idx => (idx + 1) * 200;
+const calcTimeout = (idx) => (idx + 1) * 200;
 
+/**
+ * @description an implmentation of List for Sessions
+ * @arg {Object} props
+ * @arg {Object[]} props.sessions list of sessions to display
+ * @arg {String} props.sessions[].speaker name of speaker
+ * @arg {String} props.sessions[].description session description
+ * @arg {String} props.sessions[].moderator name of moderator
+ * @arg {Function} props.onClickOptions function to run when the options button is clicked
+ * @arg {Function} props.onClickGoToSession function to run with the "go to" session button is clicked
+ */
 export default function SessionList({
     sessions,
     onClickOptions,
-    onClickGoToSession
+    onClickGoToSession,
 }) {
     return (
         <List>
@@ -93,12 +113,12 @@ export default function SessionList({
                                                 permissions={{
                                                     requiredAny: [
                                                         'moderator',
-                                                        'admin'
-                                                    ]
+                                                        'admin',
+                                                    ],
                                                 }}
                                             >
                                                 <IconButton
-                                                    onClick={e =>
+                                                    onClick={(e) =>
                                                         onClickOptions(e, _id)
                                                     }
                                                     aria-label='session options'
@@ -106,7 +126,7 @@ export default function SessionList({
                                                     <MoreVertIcon />
                                                 </IconButton>
                                             </GateKeep>
-                                        )
+                                        ),
                                     }}
                                     onClickGoToSession={() =>
                                         onClickGoToSession(_id)
@@ -127,9 +147,9 @@ SessionList.propTypes = {
         PropTypes.shape({
             speaker: PropTypes.string.isRequired,
             moderator: PropTypes.string.isRequired,
-            description: PropTypes.string
+            description: PropTypes.string,
         })
     ).isRequired,
     onClickOptions: PropTypes.func.isRequired,
-    onClickGoToSession: PropTypes.func.isRequired
+    onClickGoToSession: PropTypes.func.isRequired,
 };
