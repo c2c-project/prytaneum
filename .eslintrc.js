@@ -11,19 +11,20 @@ module.exports = {
         'react/no-array-index-key': 0,
         'react/forbid-prop-types': 0,
         'react/no-find-dom-node': 0,
+        'react/jsx-curly-newline': ['off'],
         'jsx-quotes': ['error', 'prefer-single'],
         'import/no-extraneous-dependencies': [
             'error',
-            { devDependencies: ['**/*.tests.js', '**/*.stories.*'] }
+            { devDependencies: ['**/*.tests.js', '**/*.stories.*'] },
         ],
         'import/no-absolute-path': 0,
         'no-underscore-dangle': 'off',
-        'func-names': 'off'
+        'func-names': 'off',
     },
     env: {
         node: true,
         browser: true,
-        mocha: true
+        mocha: true,
     },
     settings: {
         'import/extensions': ['.js', '.jsx'],
@@ -38,5 +39,5 @@ module.exports = {
         //     //     extensions: ['.ts', '.js', '.jsx', '.json']
         //     // }
         // }
-    }
+    },
 };

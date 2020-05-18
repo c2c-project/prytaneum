@@ -10,8 +10,6 @@ const useStyles = makeStyles({
     },
 });
 
-
-
 export default function MessageListItem({ button, onClick, children, hidden }) {
     const classes = useStyles();
     // const isOwnerOrModerator = moderator || checkIsOwner(user, userId);
@@ -24,7 +22,7 @@ export default function MessageListItem({ button, onClick, children, hidden }) {
             onClick={(button || undefined) && onClick}
             className={classes.message}
         >
-            <Grid container>
+            <Grid container spacing={1}>
                 {React.Children.map(children, (child) => (
                     <Grid item xs='auto'>
                         {child}

@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 
 export default function ScrollToBottom({ active, children }) {
     const bottomRef = React.useRef();
+    const firstRender = React.useRef(true);
     const scrollToBottom = () => {
         if (active) {
             bottomRef.current.scrollIntoView({
-                behavior: 'smooth',
+                behavior: firstRender.current ? 'smooth' : 'auto',
             });
         }
     };
-    React.useEffect(scrollToBottom, [active]);
+    React.useEffect(scrollToBottom);
+    React.useEffect(() => {
+        firstRender.current = false;
+    }, []);
     return (
         <>
             {children}

@@ -8,14 +8,14 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     appBar: {
-        position: 'relative'
+        position: 'relative',
     },
     title: {
         marginLeft: theme.spacing(2),
-        flex: 1
-    }
+        flex: 1,
+    },
 }));
 
 /**
@@ -56,7 +56,7 @@ export default function FullScreenDialog({ children, open, onClose }) {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                {children}
+                {open && children}
             </Dialog>
         </div>
     );
@@ -65,5 +65,5 @@ export default function FullScreenDialog({ children, open, onClose }) {
 FullScreenDialog.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
     open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
 };

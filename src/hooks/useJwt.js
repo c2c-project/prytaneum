@@ -18,5 +18,6 @@ export default function useJwt() {
     // });
     // don't decode unless the token exists
     const rawToken = jwt ? decode(jwt) : null;
+    console.log(jwt);
     return [jwt, rawToken];
 }

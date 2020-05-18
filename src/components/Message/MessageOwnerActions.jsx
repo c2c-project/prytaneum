@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserMessageActions({ targetMsg, onClick }) {
+export default function MessageOwnerActions({ targetMessage, onClick }) {
     const classes = useStyles();
-    const [message, setMessage] = React.useState(targetMsg.message);
+    const [message, setMessage] = React.useState(targetMessage.message);
     const [jwt] = useJwt();
     const [snack] = useSnack();
     const { roomId } = useParams();
@@ -43,7 +43,7 @@ export default function UserMessageActions({ targetMsg, onClick }) {
             },
             body: JSON.stringify({
                 newMessage: message,
-                message: targetMsg,
+                message: targetMessage,
                 roomId,
             }),
         })
@@ -72,7 +72,7 @@ export default function UserMessageActions({ targetMsg, onClick }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                message: targetMsg,
+                message: targetMessage,
             }),
         })
             .then((r) => {
@@ -94,22 +94,20 @@ export default function UserMessageActions({ targetMsg, onClick }) {
     return (
         <Grid container justify='center' spacing={3}>
             <Grid item xs={12}>
-                <Grid container>
-                    <Grid container justify='center'>
-                        <Grid item xs='auto' className={classes.UserName}>
-                            <Bold>{`${targetMsg.username}:`}</Bold>
-                        </Grid>
-                        <Grid item xs='auto' className={classes.Message}>
-                            <form onSubmit={handleEdit}>
-                                <TextField
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    fullWidth='true'
-                                    color='secondary'
-                                    variant='outlined'
-                                />
-                            </form>
-                        </Grid>
+                <Grid container justify='center'>
+                    <Grid item xs='auto' className={classes.UserName}>
+                        <Bold>{`${targetMessage.username}:`}</Bold>
+                    </Grid>
+                    <Grid item xs='auto' className={classes.Message}>
+                        <form onSubmit={handleEdit}>
+                            <TextField
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                fullWidth
+                                color='secondary'
+                                variant='outlined'
+                            />
+                        </form>
                     </Grid>
                 </Grid>
             </Grid>
@@ -139,12 +137,12 @@ export default function UserMessageActions({ targetMsg, onClick }) {
     );
 }
 
-UserMessageActions.defaultProps = {
+MessageOwnerActions.defaultProps = {
     onClick: () => {},
 };
 
-UserMessageActions.propTypes = {
-    targetMsg: PropTypes.shape({
+MessageOwnerActions.propTypes = {
+    targetMessage: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,

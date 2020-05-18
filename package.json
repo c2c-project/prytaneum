@@ -46,7 +46,8 @@
         ]
     },
     "devDependencies": {
-        "@storybook/react": "^5.2.8",
+        "@storybook/preset-create-react-app": "^2.1.2",
+        "@storybook/react": "^5.3.18",
         "eslint": "^6.5.1",
         "eslint-config-airbnb": "^18.0.1",
         "eslint-config-prettier": "^6.4.0",
