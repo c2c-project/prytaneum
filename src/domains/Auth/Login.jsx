@@ -10,20 +10,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
 import banner from '../../assets/spp-banner.png';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import useEndpoint from '../../hooks/useEndpoint';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100%'
+        height: '100%',
     },
     paper: {
         // not necessary anymore?
         // marginTop: '64-px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     img: {
         width: '100%',
-        height: 'auto'
-    }
+        height: 'auto',
+    },
 }));
 
 export default function Loginpage() {
@@ -31,39 +33,36 @@ export default function Loginpage() {
     const history = useHistory();
     const [form, setForm] = React.useState({
         username: '',
-        password: ''
+        password: '',
     });
     const [snack] = useSnack();
+    const [handleError] = useErrorHandler();
+    const [login] = useEndpoint('/api/users/login', 'POST');
 
     const handleChange = (e, id) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm(state => ({ ...state, [id]: value }));
+        setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: form.username,
-                password: form.password
+        login
+            .onStatus(200, () => {
+                // window.localStorage.setItem('jwt', jwt);
+                history.push('/app/sessions/list');
             })
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    res.json().then(({ jwt }) => {
-                        window.localStorage.setItem('jwt', jwt);
-                        history.push('/app/sessions/list');
-                    });
-                } else {
-                    snack('Failed login, please try again!', 'error');
-                }
+            .onStatus('_', () => {
+                snack('Failed login, please try again!', 'error');
             })
-            .catch(console.err);
+            .onFailure((err) => {
+                snack(
+                    'Failed to send login request, please try again',
+                    'error'
+                );
+                handleError(err);
+            })
+            .send(form);
     };
 
     return (
@@ -98,7 +97,7 @@ export default function Loginpage() {
                                                 variant='outlined'
                                                 type='text'
                                                 value={form.username}
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     handleChange(e, 'username')
                                                 }
                                                 label='Username'
@@ -111,7 +110,7 @@ export default function Loginpage() {
                                                 variant='outlined'
                                                 type='password'
                                                 value={form.password}
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     handleChange(e, 'password')
                                                 }
                                                 label='Password'

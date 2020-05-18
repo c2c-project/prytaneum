@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnack from '../../hooks/useSnack';
 
@@ -28,5 +27,5 @@ export default function VerificationPage() {
     });
 
     // TODO: implement some sort of verification page for verification failure with ability to re-send link?
-    return <Container></Container>;
+    return <div />;
 }

@@ -9,43 +9,45 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100%'
+        height: '100%',
     },
     paper: {
         marginTop: '-64px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function Loginpage() {
     const classes = useStyles();
     const history = useHistory();
     const [form, setForm] = React.useState({
-        username: ''
+        username: '',
     });
     const [snack] = useSnack();
+    const [handleError] = useErrorHandler();
 
     const handleChange = (e, id) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm(state => ({ ...state, [id]: value }));
+        setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         fetch('/api/users/login-temporary', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: form.username
-            })
+                username: form.username,
+            }),
         })
-            .then(res => {
+            .then((res) => {
                 if (res.status === 200) {
                     res.json().then(({ jwt }) => {
                         window.localStorage.setItem('jwt', jwt);
@@ -55,12 +57,12 @@ export default function Loginpage() {
                     snack(`Error: ${res.statusText}`, 'error');
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 snack(
                     'Something went wrong -- please refresh and try again.',
                     'error'
                 );
-                console.err(err);
+                handleError(err);
             });
     };
     return (
@@ -88,7 +90,7 @@ export default function Loginpage() {
                                         type='username'
                                         required
                                         value={form.username}
-                                        onChange={e =>
+                                        onChange={(e) =>
                                             handleChange(e, 'username')
                                         }
                                         label='Username'

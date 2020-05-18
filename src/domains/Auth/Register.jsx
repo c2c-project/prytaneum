@@ -9,16 +9,17 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100%'
+        height: '100%',
     },
     paper: {
         // not necessary anymore?
         // marginTop: '64-px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function RegisterPage() {
@@ -28,35 +29,37 @@ export default function RegisterPage() {
         username: '',
         email: '',
         password: '',
-        confirmPass: ''
+        confirmPass: '',
     });
     const [snack] = useSnack();
+    const [handleError] = useErrorHandler();
 
     const handleChange = (e, id) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm(state => ({ ...state, [id]: value }));
+        setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         fetch('/api/users/register', {
             method: 'POST',
             body: JSON.stringify({ form }),
             headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            if (res.status === 200) {
-                history.push('/login');
-                snack('You may now login', 'success');
-            } else if (res.status === 400) {
-                snack(`Error: ${res.statusText}`, 'error');
-            } else {
-                snack(`Error: ${res.statusText}`, 'error');
-            }
-            console.log(res);
-        });
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    history.push('/login');
+                    snack('You may now login', 'success');
+                } else if (res.status === 400) {
+                    snack(`Error: ${res.statusText}`, 'error');
+                } else {
+                    snack(`Error: ${res.statusText}`, 'error');
+                }
+            })
+            .catch(handleError);
     };
 
     return (
@@ -86,7 +89,7 @@ export default function RegisterPage() {
                                         variant='outlined'
                                         type='text'
                                         value={form.username}
-                                        onChange={e =>
+                                        onChange={(e) =>
                                             handleChange(e, 'username')
                                         }
                                         label='Username'
@@ -99,7 +102,9 @@ export default function RegisterPage() {
                                         variant='outlined'
                                         type='email'
                                         value={form.email}
-                                        onChange={e => handleChange(e, 'email')}
+                                        onChange={(e) =>
+                                            handleChange(e, 'email')
+                                        }
                                         label='Email'
                                     />
                                 </Grid>
@@ -110,7 +115,7 @@ export default function RegisterPage() {
                                         variant='outlined'
                                         type='password'
                                         value={form.password}
-                                        onChange={e =>
+                                        onChange={(e) =>
                                             handleChange(e, 'password')
                                         }
                                         label='Password'
@@ -123,20 +128,23 @@ export default function RegisterPage() {
                                         variant='outlined'
                                         type='password'
                                         value={form.confirmPass}
-                                        onChange={e =>
+                                        onChange={(e) =>
                                             handleChange(e, 'confirmPass')
                                         }
                                         label='Confirm Password'
                                     />
                                 </Grid>
-                                <Grid 
+                                <Grid
                                     container
                                     item
-                                    item xs={12}
+                                    xs={12}
                                     justify='space-between'
                                 >
                                     <Button
-                                        onClick={e => {e.preventDefault(); history.push('/login');}}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            history.push('/login');
+                                        }}
                                         variant='text'
                                     >
                                         Login

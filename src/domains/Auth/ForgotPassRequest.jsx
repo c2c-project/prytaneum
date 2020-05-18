@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import useEndpoint from '../../hooks/useEndpoint';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,39 +22,38 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PasswordResetPage() {
+export default function ForgotPassRequest() {
     const classes = useStyles();
     const history = useHistory();
     const [form, setForm] = React.useState({
         email: '',
     });
-    const { token } = useParams();
+    // const { token } = useParams();
     const [snack] = useSnack();
+    const [handleError] = useErrorHandler();
+    const [requestPasswordReset] = useEndpoint(
+        '/api/users/request-password-reset',
+        'POST'
+    );
 
     const handleChange = (e, id) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
-        console.log(form);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/users/request-password-reset', {
-            method: 'POST',
-            body: JSON.stringify({ form }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((res) => {
-            if (res.status === 200) {
+        requestPasswordReset
+            .onStatus(200, () => {
                 history.push('/login');
-                snack('Email Sent', 'success');
-            } else {
+                snack('Email sent', 'success');
+            })
+            .onStatus('_', (res) => {
                 snack(`Error: ${res.statusText}`, 'error');
-            }
-            console.log(res);
-        });
+            })
+            .onFailure(handleError)
+            .send({ form });
     };
 
     return (
@@ -88,7 +89,6 @@ export default function PasswordResetPage() {
                                 </Grid>
                                 <Grid
                                     container
-                                    item
                                     item
                                     xs={12}
                                     justify='space-between'
