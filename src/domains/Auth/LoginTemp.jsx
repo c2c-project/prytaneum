@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
-import useErrorHandler from '../../hooks/useErrorHandler';
+import useEndPoint from '../../hooks/useEndpoint';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +28,10 @@ export default function Loginpage() {
         username: '',
     });
     const [snack] = useSnack();
-    const [handleError] = useErrorHandler();
+    const [loginTemporarily] = useEndPoint(
+        '/api/users/login-temporary',
+        'POST'
+    );
 
     const handleChange = (e, id) => {
         e.preventDefault();
@@ -38,32 +41,17 @@ export default function Loginpage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/users/login-temporary', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: form.username,
-            }),
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    res.json().then(({ jwt }) => {
-                        window.localStorage.setItem('jwt', jwt);
-                        history.push('/app/sessions/list');
-                    });
-                } else {
-                    snack(`Error: ${res.statusText}`, 'error');
-                }
+        loginTemporarily
+            .onStatus(200, (res) => {
+                res.json().then(({ jwt }) => {
+                    window.localStorage.setItem('jwt', jwt);
+                    history.push('/app/sessions/list');
+                });
             })
-            .catch((err) => {
-                snack(
-                    'Something went wrong -- please refresh and try again.',
-                    'error'
-                );
-                handleError(err);
-            });
+            .onStatus('_', (res) => {
+                snack(`Error: ${res.statusText}`, 'error');
+            })
+            .send(form);
     };
     return (
         <Container maxWidth='md' className={classes.root}>

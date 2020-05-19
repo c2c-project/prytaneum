@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
-import useErrorHandler from '../../hooks/useErrorHandler';
 import useEndpoint from '../../hooks/useEndpoint';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +29,6 @@ export default function ForgotPassRequest() {
     });
     // const { token } = useParams();
     const [snack] = useSnack();
-    const [handleError] = useErrorHandler();
     const [requestPasswordReset] = useEndpoint(
         '/api/users/request-password-reset',
         'POST'
@@ -52,7 +50,6 @@ export default function ForgotPassRequest() {
             .onStatus('_', (res) => {
                 snack(`Error: ${res.statusText}`, 'error');
             })
-            .onFailure(handleError)
             .send({ form });
     };
 

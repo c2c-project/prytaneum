@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -8,14 +9,13 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import useJwt from '../hooks/useJwt';
-import PageContainer from '../layout/PageContainer';
+import useJwt from '../../../hooks/useJwt';
+import PageContainer from '../../../layout/PageContainer';
 
 const useStyles = makeStyles({
     card: {
-        height: 140
-    }
+        height: 140,
+    },
 });
 
 export default function SessionSummary() {
@@ -24,7 +24,7 @@ export default function SessionSummary() {
     const [target, setTarget] = React.useState(null);
     const [data, setData] = React.useState([]);
     const [tdata, tsetData] = React.useState([]);
-    const [force, refetch] = React.useReducer(x => x + 1, 0);
+    const [force, refetch] = React.useReducer((x) => x + 1, 0);
     const [jwt] = useJwt();
 
     const goToSession = (sessionId, messages, duration, speaker) => {
@@ -33,15 +33,14 @@ export default function SessionSummary() {
 
         localStorage.setItem(
             'session',
-            JSON.stringify(data.find(session => sessionId === session._id))
+            JSON.stringify(data.find((session) => sessionId === session._id))
         );
         fetch(`/api/analytics/session-summary/${sessionId}`, {
             headers: {
-                Authorization: `bearer ${jwt}`
-            }
-        }).then(res => {
-            
-            res.json().then(r => console.log(r));
+                Authorization: `bearer ${jwt}`,
+            },
+        }).then((res) => {
+            res.json().then((r) => console.log(r));
         });
         history.push({
             pathname: `/app/sessions/${sessionId}/session-summary`,
@@ -50,20 +49,20 @@ export default function SessionSummary() {
                 sent: messages.sent,
                 asked: messages.asked,
                 unanswered: messages.unanswered,
-                duration: duration,
-                speaker: speaker,
-                tdata:tdata
-            }
+                duration,
+                speaker,
+                tdata,
+            },
         });
     };
 
     React.useEffect(() => {
         fetch('/api/sessions/session-summary', {
             headers: {
-                Authorization: `bearer ${jwt}`
-            }
-        }).then(res => {
-            res.json().then(r => setData(r));
+                Authorization: `bearer ${jwt}`,
+            },
+        }).then((res) => {
+            res.json().then((r) => setData(r));
         });
     }, [force]);
 
@@ -77,7 +76,7 @@ export default function SessionSummary() {
                         moderator,
                         description,
                         messages,
-                        duration
+                        duration,
                     },
                     idx
                 ) => (
@@ -130,8 +129,8 @@ export default function SessionSummary() {
                                     history.push({
                                         pathname: `/app/sessions/${_id}/clips`,
                                         state: {
-                                            id: _id
-                                        }
+                                            id: _id,
+                                        },
                                     });
                                 }}
                             >

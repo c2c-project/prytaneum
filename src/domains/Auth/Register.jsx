@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 import useSnack from '../../hooks/useSnack';
-import useErrorHandler from '../../hooks/useErrorHandler';
+import useEndpoint from '../../hooks/useEndpoint';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +32,7 @@ export default function RegisterPage() {
         confirmPass: '',
     });
     const [snack] = useSnack();
-    const [handleError] = useErrorHandler();
+    const [register] = useEndpoint('/api/users/register', 'POST');
 
     const handleChange = (e, id) => {
         e.preventDefault();
@@ -42,24 +42,14 @@ export default function RegisterPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/users/register', {
-            method: 'POST',
-            body: JSON.stringify({ form }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    history.push('/login');
-                    snack('You may now login', 'success');
-                } else if (res.status === 400) {
-                    snack(`Error: ${res.statusText}`, 'error');
-                } else {
-                    snack(`Error: ${res.statusText}`, 'error');
-                }
+        register
+            .onStatus(200, () => {
+                history.push('/login');
+                snack('You may now login', 'success');
             })
-            .catch(handleError);
+            .onStatus('_', (res) => {
+                snack(`Error: ${res.statusText}`, 'error');
+            });
     };
 
     return (

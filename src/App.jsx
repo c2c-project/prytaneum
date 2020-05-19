@@ -11,14 +11,14 @@ import Pages from './pages';
 function App() {
     return (
         <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <CssBaseline />
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <SnackContext maxSnack={1}>
+            <CssBaseline />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <SnackContext maxSnack={1}>
+                    <BrowserRouter>
                         <Pages />
-                    </SnackContext>
-                </MuiPickersUtilsProvider>
-            </BrowserRouter>
+                    </BrowserRouter>
+                </SnackContext>
+            </MuiPickersUtilsProvider>
         </ThemeProvider>
     );
 }

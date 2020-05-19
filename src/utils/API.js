@@ -16,10 +16,12 @@ export default function API(url) {
 }
 
 API.mock = false;
+
 API.resolve = false;
 API.resolveWith = null;
-API.failWith = null;
+
 API.fail = false;
+API.failWith = null;
 
 API.prototype.body = function (body) {
     this.options.body = JSON.stringify(body);
@@ -76,7 +78,7 @@ API.prototype.send = function (body = undefined) {
     }
     if (API.mock) {
         return new Promise((resolve, reject) => {
-            if (API.resolveWith !== null) {
+            if (API.resolve) {
                 resolve(API.resolveWith);
             } else {
                 reject(API.failWith);

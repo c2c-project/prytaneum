@@ -10,14 +10,14 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import SessionList from '../components/SessionList';
-import Fab from '../components/Fab';
-import Dialog from '../components/Dialog';
-import DateTimePicker from '../components/DateTimePicker';
-import PageContainer from '../layout/PageContainer';
-import GateKeep from '../components/GateKeep';
-import useSnack from '../hooks/useSnack';
-import useJwt from '../hooks/useJwt';
+import SessionList from '../../components/SessionList';
+import Fab from '../../components/Fab';
+import Dialog from '../../components/Dialog';
+import DateTimePicker from '../../components/DateTimePicker';
+import PageContainer from '../../layout/PageContainer';
+import GateKeep from '../../components/GateKeep';
+import useSnack from '../../hooks/useSnack';
+import useJwt from '../../hooks/useJwt';
 
 function SessionForm({ type, onSubmit: cb, editTarget }) {
     const [state, setState] = React.useState({

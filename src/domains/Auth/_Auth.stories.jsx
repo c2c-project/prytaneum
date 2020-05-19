@@ -11,18 +11,22 @@ export default { title: 'Auth' };
 export function Login() {
     const [status, setStatus] = React.useState(200);
     API.mock = true;
-    API.resolve = true;
     API.resolveWith = { status };
     const statusMap = {
         200: 'Succeed',
         400: 'Fail',
+        0: 'Faulty Connection',
     };
+
     return (
         <>
             <Grid container spacing={1} alignItems='center'>
                 <Grid item xs='auto'>
                     <Button
-                        onClick={() => setStatus(200)}
+                        onClick={() => {
+                            setStatus(200);
+                            API.resolve = true;
+                        }}
                         disabled={status === 200}
                         variant='contained'
                     >
@@ -31,11 +35,28 @@ export function Login() {
                 </Grid>
                 <Grid item xs='auto'>
                     <Button
-                        onClick={() => setStatus(400)}
+                        onClick={() => {
+                            setStatus(400);
+                            API.resolve = true;
+                        }}
                         disabled={status === 400}
                         variant='contained'
                     >
                         Fail
+                    </Button>
+                </Grid>
+                <Grid item xs='auto'>
+                    <Button
+                        onClick={() => {
+                            setStatus(0);
+                            API.fail = true;
+                            API.resolve = false;
+                            API.failWith = new Error('Some error with fetch');
+                        }}
+                        disabled={status === 0}
+                        variant='contained'
+                    >
+                        Cannot connect to server
                     </Button>
                 </Grid>
                 <Grid item xs='auto'>
@@ -50,26 +71,27 @@ export function Login() {
 }
 
 export function ForgotPassRequest() {
-    const [status, setStatus] = React.useState({
+    const [response, setResponse] = React.useState({
         status: 200,
         statusText: 'Ok',
     });
     API.mock = true;
-    API.resolve = true;
-    API.resolveWith = status;
+    API.resolveWith = response;
     const statusMap = {
         200: 'Succeed',
         400: 'Fail',
+        0: 'Faulty Connection',
     };
     return (
         <>
             <Grid container spacing={1} alignItems='center'>
                 <Grid item xs='auto'>
                     <Button
-                        onClick={() =>
-                            setStatus({ status: 200, statusText: 'Ok' })
-                        }
-                        disabled={status.status === 200}
+                        onClick={() => {
+                            API.resolve = true;
+                            setResponse({ status: 200, statusText: 'Ok' });
+                        }}
+                        disabled={response.status === 200}
                         variant='contained'
                     >
                         Succeed
@@ -77,22 +99,37 @@ export function ForgotPassRequest() {
                 </Grid>
                 <Grid item xs='auto'>
                     <Button
-                        onClick={() =>
-                            setStatus({
+                        onClick={() => {
+                            API.resolve = true;
+                            setResponse({
                                 status: 400,
                                 statusText: 'Bad Request',
-                            })
-                        }
-                        disabled={status.status === 400}
+                            });
+                        }}
+                        disabled={response.status === 400}
                         variant='contained'
                     >
                         Fail
                     </Button>
                 </Grid>
                 <Grid item xs='auto'>
+                    <Button
+                        onClick={() => {
+                            setResponse({ status: 0, statusText: 'should not see this' });
+                            API.fail = true;
+                            API.resolve = false;
+                            API.failWith = new Error('Some error with fetch');
+                        }}
+                        disabled={response.status === 0}
+                        variant='contained'
+                    >
+                        Cannot connect to server
+                    </Button>
+                </Grid>
+                <Grid item xs='auto'>
                     <Typography>
                         {`Submission will currently: ${
-                            statusMap[status.status]
+                            statusMap[response.status]
                         }`}
                     </Typography>
                 </Grid>
