@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Auth from './Auth';
+import LoggedIn from '../components/LoggedIn';
 // import TownhallList from '../domains/Townhall/TownhallList';
 // import Chat from '../domains/Townhall/TownhallChat';
 // import SessionSummary from './SessionSummary';
@@ -40,6 +41,11 @@ export default function Routes() {
             </Route> */}
             <Route path='/auth'>
                 <Auth />
+            </Route>
+            <Route path='/app'>
+                <LoggedIn>
+                    <div>Logged in</div>
+                </LoggedIn>
             </Route>
             {/* <Route exact path='/login'>
                 <Login />

@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
     const history = useHistory();
-
     const classes = useStyles();
     return (
         <Container maxWidth='md' className={classes.root}>
@@ -48,7 +47,7 @@ export default function Login() {
                             <Grid item xs={12}>
                                 <LoginForm
                                     afterSubmit={() =>
-                                        history.push('/app/sessions/list')
+                                        history.push('/app/home')
                                     }
                                 />
                             </Grid>
@@ -67,7 +66,9 @@ export default function Login() {
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        history.push('/auth/forgot-password/request')
+                                        history.push(
+                                            '/auth/forgot-password/request'
+                                        )
                                     }
                                 >
                                     Forgot Password?

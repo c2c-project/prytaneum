@@ -4,8 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import useSnack from '../../hooks/useSnack';
 import useEndpoint from '../../hooks/useEndpoint';
+import LoadingButton from '../../components/LoadingButton';
+import { login } from './auth-api';
 
 const useStyles = makeStyles({
     root: {
@@ -19,8 +20,18 @@ export default function LoginForm({ afterSubmit }) {
         username: '',
         password: '',
     });
-    const [snack] = useSnack();
-    const [login] = useEndpoint('/api/users/login', 'POST');
+    const request = React.useCallback(
+        () => login(form.username, form.password),
+        [form]
+    );
+    const [requestLogin, isLoading, response] = useEndpoint(request);
+
+    const parseResponse = () => {
+        const { status } = response;
+        if (status === 200) {
+            afterSubmit();
+        }
+    };
 
     const handleChange = (e, id) => {
         e.preventDefault();
@@ -28,19 +39,15 @@ export default function LoginForm({ afterSubmit }) {
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = (e) => {
+    React.useEffect(() => {
+        if (response) {
+            parseResponse();
+        }
+    }, [response]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        login
-            .onStatus(200, () => {
-                // window.localStorage.setItem('jwt', jwt);
-                // console.log(res);
-                // history.push('/app/sessions/list');
-                afterSubmit();
-            })
-            .onStatus('_', () => {
-                snack('Failed login, please try again!', 'error');
-            })
-            .send(form);
+        requestLogin();
     };
 
     return (
@@ -53,6 +60,7 @@ export default function LoginForm({ afterSubmit }) {
             >
                 <Grid item xs={12}>
                     <TextField
+                        id='username'
                         required
                         fullWidth
                         variant='outlined'
@@ -64,6 +72,7 @@ export default function LoginForm({ afterSubmit }) {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        id='password'
                         required
                         fullWidth
                         variant='outlined'
@@ -74,14 +83,19 @@ export default function LoginForm({ afterSubmit }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button
-                        fullWidth
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                    >
-                        Login
-                    </Button>
+                    <LoadingButton
+                        loading={isLoading}
+                        component={
+                            <Button
+                                fullWidth
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                            >
+                                Login
+                            </Button>
+                        }
+                    />
                 </Grid>
             </Grid>
         </form>

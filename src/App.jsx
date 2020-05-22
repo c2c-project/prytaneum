@@ -13,7 +13,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <SnackContext maxSnack={1}>
+                <SnackContext maxSnack={3}>
                     <BrowserRouter>
                         <Pages />
                     </BrowserRouter>

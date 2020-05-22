@@ -84,12 +84,20 @@ API.prototype.send = function (body = undefined) {
                 reject(API.failWith);
             }
         })
+            .then((res) => {
+                this._onSuccess(res);
+                return res;
+            })
             .then((res) => this._parseStatus(res))
             .catch((e) => this._onFailure(e));
     }
     const promise = fetch(this.url, this.options);
     setTimeout(() => this.controller.abort(), this.timeLimit);
     return promise
+        .then((res) => {
+            this._onSuccess(res);
+            return res;
+        })
         .then((res) => this._parseStatus(res))
         .catch((e) => this._onFailure(e));
 };

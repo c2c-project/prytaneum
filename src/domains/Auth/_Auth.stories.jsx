@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import INTERNAL_LOGIN from './Login';
+import INTERNAL_LOGIN from './LoginForm';
 import INTERNAL_FORGOT_PASS_REQUEST from './ForgotPassRequest';
 import API from '../../utils/API';
 
@@ -115,7 +115,10 @@ export function ForgotPassRequest() {
                 <Grid item xs='auto'>
                     <Button
                         onClick={() => {
-                            setResponse({ status: 0, statusText: 'should not see this' });
+                            setResponse({
+                                status: 0,
+                                statusText: 'should not see this',
+                            });
                             API.fail = true;
                             API.resolve = false;
                             API.failWith = new Error('Some error with fetch');
