@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import useSnack from '../../hooks/useSnack';
-import useEndpoint from '../../hooks/useEndpoint';
+import useSnack from '../../../hooks/useSnack';
+import useEndpoint from '../../../hooks/useEndpoint';
 
 export default function VerificationPage() {
     const history = useHistory();

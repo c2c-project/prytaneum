@@ -2,8 +2,8 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import LoginForm from '../LoginForm';
-import * as Auth from '../auth-api';
+import LoginForm from './LoginForm';
+import API from '../api';
 
 jest.mock('../../../hooks/useSnack');
 
@@ -64,7 +64,7 @@ describe('LoginForm', () => {
         const afterSubmit = jest.fn();
         const resolveVal = { status: 200 };
         const loginSpy = jest
-            .spyOn(Auth, 'login')
+            .spyOn(API, 'login')
             .mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 
@@ -86,7 +86,7 @@ describe('LoginForm', () => {
             2. aftersubmit is waiting for login to resolve
          */
         expect(afterSubmit).not.toBeCalled();
-        expect(Auth.login).toBeCalledWith('', '');
+        expect(API.login).toBeCalledWith('', '');
         jest.runAllTimers();
 
         // let useEffect handle changes due to login request resolving
@@ -95,7 +95,7 @@ describe('LoginForm', () => {
         });
 
         // login should only get called once & afterSubmit should get called
-        expect(Auth.login).toBeCalledTimes(1);
+        expect(API.login).toBeCalledTimes(1);
         expect(afterSubmit).toBeCalled();
     });
 
@@ -103,7 +103,7 @@ describe('LoginForm', () => {
         const afterSubmit = jest.fn();
         const resolveVal = { status: 500 };
         const loginSpy = jest
-            .spyOn(Auth, 'login')
+            .spyOn(API, 'login')
             .mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 
@@ -125,7 +125,7 @@ describe('LoginForm', () => {
             2. aftersubmit is waiting for login to resolve
          */
         expect(afterSubmit).not.toBeCalled();
-        expect(Auth.login).toBeCalledWith('', '');
+        expect(API.login).toBeCalledWith('', '');
         jest.runAllTimers();
 
         // let useEffect handle changes due to login request resolving
@@ -134,7 +134,7 @@ describe('LoginForm', () => {
         });
 
         // login should only get called once & afterSubmit should not be called
-        expect(Auth.login).toBeCalledTimes(1);
+        expect(API.login).toBeCalledTimes(1);
         expect(afterSubmit).not.toBeCalled();
     });
 });

@@ -4,9 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import useEndpoint from '../../hooks/useEndpoint';
-import LoadingButton from '../../components/LoadingButton';
-import { login } from './auth-api';
+import useEndpoint from '../../../hooks/useEndpoint';
+import LoadingButton from '../../../components/LoadingButton';
+import API from '../api';
 
 const useStyles = makeStyles({
     root: {
@@ -21,7 +21,7 @@ export default function LoginForm({ afterSubmit }) {
         password: '',
     });
     const request = React.useCallback(
-        () => login(form.username, form.password),
+        () => API.login(form.username, form.password),
         [form]
     );
     const [requestLogin, isLoading, response] = useEndpoint(request);
