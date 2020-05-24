@@ -62,8 +62,21 @@ export async function register(form) {
     if (!username || !password || !email || !confirmPassword) {
         throw errors.fieldError();
     }
+
+    const match = form.email.match(/(\w+\.*)*\w+@(\w+\.)+\w+/gi);
+    if (!match || match[0].length !== form.email.length) {
+        throw errors.invalidEmail();
+    }
+
     if (password !== confirmPassword) {
         throw errors.passMatch();
     }
     return axios.post('/api/users/register', { form });
+}
+
+export async function verifyEmail(userId) {
+    if (!userId) {
+        throw errors.invalidInfo();
+    }
+    return axios.post('/api/confirm/user-email', { userId });
 }

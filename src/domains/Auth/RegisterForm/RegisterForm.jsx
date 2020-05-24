@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+
 import useEndpoint from '../../../hooks/useEndpoint';
 import LoadingButton from '../../../components/LoadingButton';
 import API from '../api';
@@ -14,21 +16,18 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LoginForm({ onSuccess }) {
+export default function RegisterForm({ onSuccess, onFailure }) {
     const classes = useStyles();
-
     const [form, setForm] = React.useState({
         username: '',
+        email: '',
         password: '',
+        confirmPass: '',
     });
-
-    const _request = React.useCallback(
-        () => API.login(form.username, form.password),
-        [form]
-    );
-
-    const [request, isLoading] = useEndpoint(_request, {
+    const _request = React.useCallback(() => API.register(form), [form]);
+    const [register, isLoading] = useEndpoint(_request, {
         onSuccess,
+        onFailure,
     });
 
     const handleChange = (e, id) => {
@@ -37,9 +36,9 @@ export default function LoginForm({ onSuccess }) {
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        request();
+        register();
     };
 
     return (
@@ -64,6 +63,18 @@ export default function LoginForm({ onSuccess }) {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        id='email'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='email'
+                        value={form.email}
+                        onChange={(e) => handleChange(e, 'email')}
+                        label='Email'
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
                         id='password'
                         required
                         fullWidth
@@ -75,16 +86,27 @@ export default function LoginForm({ onSuccess }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
+                    <TextField
+                        id='confirm-password'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='password'
+                        value={form.confirmPass}
+                        onChange={(e) => handleChange(e, 'confirmPass')}
+                        label='Confirm Password'
+                    />
+                </Grid>
+                <Grid container item xs={12} justify='flex-end'>
                     <LoadingButton
                         loading={isLoading}
                         component={
                             <Button
-                                fullWidth
                                 type='submit'
                                 variant='contained'
                                 color='primary'
                             >
-                                Login
+                                Register
                             </Button>
                         }
                     />
@@ -94,6 +116,11 @@ export default function LoginForm({ onSuccess }) {
     );
 }
 
-LoginForm.propTypes = {
+RegisterForm.defaultProps = {
+    onFailure: null,
+};
+
+RegisterForm.propTypes = {
     onSuccess: PropTypes.func.isRequired,
+    onFailure: PropTypes.func,
 };

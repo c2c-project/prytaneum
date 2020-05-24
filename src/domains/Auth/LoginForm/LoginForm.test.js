@@ -27,14 +27,14 @@ describe('LoginForm', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
         ReactTestUtils.act(() => {
-            render(<LoginForm afterSubmit={jest.fn()} />, container);
+            render(<LoginForm onSuccess={jest.fn()} />, container);
         });
     });
 
     it('should change state appropriately', () => {
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm afterSubmit={jest.fn()} />, container);
+            render(<LoginForm onSuccess={jest.fn()} />, container);
         });
 
         // find fields
@@ -60,17 +60,15 @@ describe('LoginForm', () => {
         expect(usernameNode.value).toBe('username');
     });
 
-    it('should call handleSubmit & afterSubmit appropriately', async () => {
-        const afterSubmit = jest.fn();
+    it('should call handleSubmit & onSuccess appropriately', async () => {
+        const onSuccess = jest.fn();
         const resolveVal = { status: 200 };
-        const loginSpy = jest
-            .spyOn(API, 'login')
-            .mockResolvedValue(resolveVal);
+        const loginSpy = jest.spyOn(API, 'login').mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm afterSubmit={afterSubmit} />, container);
+            render(<LoginForm onSuccess={onSuccess} />, container);
         });
 
         const button = document.querySelector('[type="submit"]');
@@ -83,9 +81,9 @@ describe('LoginForm', () => {
         /*
             After clicking the button
             1. login request is called
-            2. aftersubmit is waiting for login to resolve
+            2. onSuccess is waiting for login to resolve
          */
-        expect(afterSubmit).not.toBeCalled();
+        expect(onSuccess).not.toBeCalled();
         expect(API.login).toBeCalledWith('', '');
         jest.runAllTimers();
 
@@ -94,22 +92,22 @@ describe('LoginForm', () => {
             await loginSpy.mock.results.pop().value;
         });
 
-        // login should only get called once & afterSubmit should get called
+        // login should only get called once & onSuccess should get called
         expect(API.login).toBeCalledTimes(1);
-        expect(afterSubmit).toBeCalled();
+        expect(onSuccess).toBeCalled();
     });
 
-    it('should fail in calling afterSubmit if status is not 200', async () => {
-        const afterSubmit = jest.fn();
-        const resolveVal = { status: 500 };
+    it('should fail in calling onSuccess if status is not 2**', async () => {
+        const onSuccess = jest.fn();
+        const rejectedVal = { status: 500 };
         const loginSpy = jest
             .spyOn(API, 'login')
-            .mockResolvedValue(resolveVal);
+            .mockRejectedValue(rejectedVal);
         jest.useFakeTimers();
 
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm afterSubmit={afterSubmit} />, container);
+            render(<LoginForm onSuccess={onSuccess} />, container);
         });
 
         const button = document.querySelector('[type="submit"]');
@@ -122,19 +120,19 @@ describe('LoginForm', () => {
         /*
             After clicking the button
             1. login request is called
-            2. aftersubmit is waiting for login to resolve
+            2. onSuccess is waiting for login to resolve
          */
-        expect(afterSubmit).not.toBeCalled();
+        expect(onSuccess).not.toBeCalled();
         expect(API.login).toBeCalledWith('', '');
         jest.runAllTimers();
 
         // let useEffect handle changes due to login request resolving
         await ReactTestUtils.act(async () => {
-            await loginSpy.mock.results.pop().value;
+            await Promise.allSettled(loginSpy.mock.results);
         });
 
-        // login should only get called once & afterSubmit should not be called
+        // login should only get called once & onSuccess should not be called
         expect(API.login).toBeCalledTimes(1);
-        expect(afterSubmit).not.toBeCalled();
+        expect(onSuccess).not.toBeCalled();
     });
 });

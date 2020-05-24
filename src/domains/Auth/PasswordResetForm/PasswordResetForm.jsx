@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+
+import API from '../api';
+import useEndpoint from '../../../hooks/useEndpoint';
+import LoadingButton from '../../../components/LoadingButton';
 
 const useStyles = makeStyles({
     root: {
@@ -12,25 +15,31 @@ const useStyles = makeStyles({
     },
 });
 
-export default function PasswordForm({ onSubmit }) {
+export default function PasswordResetForm({ token, onSuccess }) {
     const classes = useStyles();
-    const history = useHistory();
     const [form, setForm] = React.useState({
         password: '',
         confirmPassword: '',
+    });
+    const _request = React.useCallback(
+        () => API.forgotPassConsume(token, form),
+        [form, token]
+    );
+    const [request, isLoading] = useEndpoint(_request, {
+        onSuccess,
     });
     const handleChange = (e, id) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        request();
+    };
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                onSubmit(form);
-            }}
-        >
+        <form onSubmit={handleSubmit}>
             <Grid
                 container
                 spacing={2}
@@ -39,6 +48,7 @@ export default function PasswordForm({ onSubmit }) {
             >
                 <Grid item xs={12}>
                     <TextField
+                        id='password'
                         required
                         fullWidth
                         variant='outlined'
@@ -50,6 +60,7 @@ export default function PasswordForm({ onSubmit }) {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        id='confirm-password'
                         required
                         fullWidth
                         variant='outlined'
@@ -60,24 +71,25 @@ export default function PasswordForm({ onSubmit }) {
                     />
                 </Grid>
                 <Grid container item xs={12} justify='space-between'>
-                    <Button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            history.push('/login');
-                        }}
-                        variant='text'
-                    >
-                        Login
-                    </Button>
-                    <Button type='submit' variant='contained' color='primary'>
-                        Submit
-                    </Button>
+                    <LoadingButton
+                        loading={isLoading}
+                        component={
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                            >
+                                Submit
+                            </Button>
+                        }
+                    />
                 </Grid>
             </Grid>
         </form>
     );
 }
 
-PasswordForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+PasswordResetForm.propTypes = {
+    onSuccess: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired,
 };

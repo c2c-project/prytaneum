@@ -1,12 +1,14 @@
+/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import useEndpoint from '../../../hooks/useEndpoint';
-import LoadingButton from '../../../components/LoadingButton';
+
+import useEndPoint from '../../../hooks/useEndpoint';
 import API from '../api';
+import LoadingButton from '../../../components/LoadingButton';
 
 const useStyles = makeStyles({
     root: {
@@ -14,21 +16,17 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LoginForm({ onSuccess }) {
+export default function LoginTempForm({ onSuccess, onFailure }) {
     const classes = useStyles();
-
     const [form, setForm] = React.useState({
         username: '',
-        password: '',
     });
-
-    const _request = React.useCallback(
-        () => API.login(form.username, form.password),
-        [form]
-    );
-
-    const [request, isLoading] = useEndpoint(_request, {
+    const _request = React.useCallback(() => API.loginTemp(form.username), [
+        form,
+    ]);
+    const [request, isLoading] = useEndPoint(_request, {
         onSuccess,
+        onFailure,
     });
 
     const handleChange = (e, id) => {
@@ -37,7 +35,7 @@ export default function LoginForm({ onSuccess }) {
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         request();
     };
@@ -53,25 +51,13 @@ export default function LoginForm({ onSuccess }) {
                 <Grid item xs={12}>
                     <TextField
                         id='username'
-                        required
                         fullWidth
                         variant='outlined'
-                        type='text'
+                        type='username'
+                        required
                         value={form.username}
                         onChange={(e) => handleChange(e, 'username')}
                         label='Username'
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id='password'
-                        required
-                        fullWidth
-                        variant='outlined'
-                        type='password'
-                        value={form.password}
-                        onChange={(e) => handleChange(e, 'password')}
-                        label='Password'
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -94,6 +80,11 @@ export default function LoginForm({ onSuccess }) {
     );
 }
 
-LoginForm.propTypes = {
+LoginTempForm.defaultProps = {
+    onFailure: null,
+};
+
+LoginTempForm.propTypes = {
     onSuccess: PropTypes.func.isRequired,
+    onFailure: PropTypes.func,
 };
