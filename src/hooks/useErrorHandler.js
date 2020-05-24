@@ -1,7 +1,11 @@
-import React from 'react';
+import useSnack from './useSnack';
 
 export default function useErrorHandler() {
-    const handleError = (e) => console.error(e);
+    const [snack] = useSnack();
+    const handleError = (err) => {
+        // console.log(new Error('asdf'))
+        snack(`Error: ${err.message}`, 'error');
+    };
     // TODO: log this to server?
     return [handleError];
 }

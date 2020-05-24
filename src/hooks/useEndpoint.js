@@ -1,5 +1,4 @@
 import React from 'react';
-import useSnack from './useSnack';
 import useErrorHandler from './useErrorHandler';
 
 // export default function useEndpoint(url, method = 'GET') {
@@ -19,12 +18,23 @@ import useErrorHandler from './useErrorHandler';
 //         .onSuccess(() => setLoading(false));
 //     return [request, isLoading];
 // }
-
-export default function useEndpoint(endpoint) {
+/**
+ * @arg {Function} endpoint
+ * @arg {Object} options
+ * @arg {Function} options.onSuccess
+ * @arg {Function} options.onFailure
+ * @returns {Array}
+ */
+export default function useEndpoint(endpoint, options = {}) {
+    const { onSuccess, onFailure } = options;
     const [isLoading, setIsLoading] = React.useState(false);
-    const [responseState, setResponseState] = React.useState(null);
     const [handleError] = useErrorHandler();
-    const [snack] = useSnack();
+
+    const defaultFailure = handleError;
+    const defaultSucess = () => {};
+
+    const _onSuccess = onSuccess || defaultSucess;
+    const _onFailure = onFailure || defaultFailure;
 
     const minWaitTime = () =>
         new Promise((resolve) => {
@@ -39,32 +49,37 @@ export default function useEndpoint(endpoint) {
                     endpoint(),
                     minWaitTime(),
                 ]);
-                
                 // check if I'm still mounted before continuing
                 if (isMounted === true) {
+                    setIsLoading(false);
                     // there might be a better way to do this?
                     if (response.status === 'rejected') {
-                        throw response.reason;
+                        _onFailure(response.reason);
+                    } else {
+                        _onSuccess(response.value);
                     }
-                    setIsLoading(false);
-                    setResponseState(response.value);
                 }
             } catch (e) {
                 // check if I'm still mounted before continuing
+                // this failure is something on the client and not from the response
+                // because allSettled doesn't throw an error even if a promise is rejected
                 if (isMounted === true) {
                     setIsLoading(false);
-                    snack(e.message, 'error');
-                    handleError(e);
+                    _onFailure(e);
                 }
             }
         };
+
         if (isLoading) {
             request();
         }
+
         return () => {
             isMounted = false;
         };
     }, [isLoading]);
 
-    return [() => setIsLoading(true), isLoading, responseState];
+    return [() => setIsLoading(true), isLoading];
 }
+
+// request -> waiting -> response -> success or failure
