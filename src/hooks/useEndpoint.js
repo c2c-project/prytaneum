@@ -1,23 +1,6 @@
 import React from 'react';
 import useErrorHandler from './useErrorHandler';
 
-// export default function useEndpoint(url, method = 'GET') {
-//     const _API = React.useContext(API);
-//     const [isLoading, setLoading] = React.useState(false);
-//     const [snack] = useSnack();
-//     const [handleError] = useErrorHandler();
-//     const request = new _API(url)
-//         .method(method)
-//         .onFailure((err) => {
-//             snack(
-//                 'Trouble connecting to server, please try again in a few minutes',
-//                 'error'
-//             );
-//             handleError(err);
-//         })
-//         .onSuccess(() => setLoading(false));
-//     return [request, isLoading];
-// }
 /**
  * @arg {Function} endpoint
  * @arg {Object} options
@@ -34,7 +17,12 @@ export default function useEndpoint(endpoint, options = {}) {
     const defaultSucess = () => {};
 
     const _onSuccess = onSuccess || defaultSucess;
-    const _onFailure = onFailure || defaultFailure;
+    const _onFailure = (err) => {
+        defaultFailure(err);
+        if (onFailure) {
+            onFailure(err);
+        }
+    };
 
     const minWaitTime = () =>
         new Promise((resolve) => {
