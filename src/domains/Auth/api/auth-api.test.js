@@ -51,10 +51,10 @@ describe('#loginTemp', () => {
     });
 });
 
-describe('#forgotPassConsume', () => {
+describe('#forgotPassReset', () => {
     it('should reject mismatching passwords', async () => {
         await expect(
-            API.forgotPassConsume('123', {
+            API.forgotPassReset('123', {
                 password: '1',
                 confirmPassword: '2',
             })
@@ -63,18 +63,18 @@ describe('#forgotPassConsume', () => {
     });
     it('should reject a blank fields', async () => {
         await expect(
-            API.forgotPassConsume('123', { password: '', confirmPassword: '' })
+            API.forgotPassReset('123', { password: '', confirmPassword: '' })
         ).rejects.toThrow(errors.fieldError());
         await expect(
-            API.forgotPassConsume('123', { password: '1', confirmPassword: '' })
+            API.forgotPassReset('123', { password: '1', confirmPassword: '' })
         ).rejects.toThrow(errors.fieldError());
         await expect(
-            API.forgotPassConsume('123', { password: '', confirmPassword: '1' })
+            API.forgotPassReset('123', { password: '', confirmPassword: '1' })
         ).rejects.toThrow(errors.fieldError());
     });
     it('should reject a falsy token', async () => {
         await expect(
-            API.forgotPassConsume(null, { password: '', confirmPassword: '' })
+            API.forgotPassReset(null, { password: '', confirmPassword: '' })
         ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
@@ -86,7 +86,7 @@ describe('#forgotPassConsume', () => {
         };
         const token = '123';
         axios.post.mockResolvedValue(resolvedValue);
-        await expect(API.forgotPassConsume(token, form)).resolves.toBe(
+        await expect(API.forgotPassReset(token, form)).resolves.toBe(
             resolvedValue
         );
         expect(axios.post).toHaveBeenCalledWith(

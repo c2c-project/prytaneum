@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import VerifyEmailComponent from 'domains/Auth/VerifyEmail';
+import routes from '../routes';
 
 export default function VerifyEmail() {
     const history = useHistory();
@@ -10,8 +11,8 @@ export default function VerifyEmail() {
     return (
         <VerifyEmailComponent
             userId={userId}
-            onSuccess={() => history.push('/login')}
-            onFailure={() => history.push('/login')}
+            onSuccess={() => history.push(routes.login)}
+            onFailure={() => history.push(routes.login)}
         />
     );
 }

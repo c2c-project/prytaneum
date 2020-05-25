@@ -6,6 +6,7 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import axios from 'utils/axios';
 
 import VerifyEmail from './VerifyEmail';
+import routes from '../routes';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
@@ -59,7 +60,7 @@ describe('VerifyEmail', () => {
             await Promise.allSettled(spy.mock.results);
         });
 
-        expect(_location.pathname).toBe('/login');
+        expect(_location.pathname).toBe(routes.login);
     });
 
     it('should render, fail to verify, & go to /login', async () => {
@@ -93,6 +94,6 @@ describe('VerifyEmail', () => {
             await Promise.allSettled(spy.mock.results);
         });
 
-        expect(_location.pathname).toBe('/login');
+        expect(_location.pathname).toBe(routes.login);
     });
 });

@@ -36,7 +36,7 @@ describe('ForgotPassConsume', () => {
     });
     it('call onSuccess appropriately after a successful submission', async () => {
         jest.useFakeTimers();
-        const spy = jest.spyOn(API, 'forgotPassConsume');
+        const spy = jest.spyOn(API, 'forgotPassReset');
         const onSuccess = jest.fn();
         ReactTestUtils.act(() => {
             render(

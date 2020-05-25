@@ -25,7 +25,7 @@ export default function PasswordResetForm({ token, onSuccess }) {
         confirmPassword: '',
     });
     const _request = React.useCallback(
-        () => API.forgotPassConsume(token, form),
+        () => API.forgotPassReset(token, form),
         [form, token]
     );
     const [request, isLoading] = useEndpoint(_request, {

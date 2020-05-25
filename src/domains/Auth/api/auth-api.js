@@ -25,7 +25,7 @@ export async function loginTemp(username) {
 
 // }
 
-export async function forgotPassConsume(token, form) {
+export async function forgotPassReset(token, form) {
     const { password, confirmPassword } = form;
 
     if (!password || !confirmPassword) {
