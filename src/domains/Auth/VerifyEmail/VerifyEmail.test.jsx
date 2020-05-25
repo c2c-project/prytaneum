@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { MemoryRouter, Route } from 'react-router-dom';
 
-import ForgotPassConsume from './ForgotPassConsume';
+import VerifyEmail from './VerifyEmail';
 import API from '../api';
+
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
@@ -28,30 +27,24 @@ describe('ForgotPassConsume', () => {
     });
 
     // eslint-disable-next-line jest/expect-expect
-    it('should render, verify, & go to /login', async () => {
-        let _location;
+    it('should render, verify, & call onSuccess', async () => {
         jest.useFakeTimers();
         const resolvedValue = { status: 200 };
         const userId = '123456';
+        const onSuccess = jest.fn();
 
         // jest.spyOn(axios, 'post').mockResolvedValue(resolvedValue);
         const verifyEmailSpy = jest
             .spyOn(API, 'verifyEmail')
             .mockResolvedValue(resolvedValue);
+
         await ReactTestUtils.act(async () => {
             render(
-                <MemoryRouter initialEntries={[`/${userId}`]}>
-                    <Route path='/:userId'>
-                        <ForgotPassConsume />
-                    </Route>
-                    <Route
-                        path='*'
-                        render={({ location }) => {
-                            _location = location;
-                            return null;
-                        }}
-                    />
-                </MemoryRouter>,
+                <VerifyEmail
+                    onFailure={jest.fn()}
+                    onSuccess={onSuccess}
+                    userId={userId}
+                />,
                 container
             );
         });
@@ -63,33 +56,26 @@ describe('ForgotPassConsume', () => {
             await verifyEmailSpy.mock.results.pop().value;
         });
 
-        expect(_location.pathname).toBe('/login');
+        expect(onSuccess).toBeCalledTimes(1);
     });
 
-    it('should render, error, & go to /login', async () => {
-        let _location;
+    it('should render, error, & call onFailure', async () => {
         jest.useFakeTimers();
         const resolvedValue = { status: 400 };
         const userId = '123456';
+        const onFailure = jest.fn();
 
         // jest.spyOn(axios, 'post').mockResolvedValue(resolvedValue);
         const verifyEmailSpy = jest
             .spyOn(API, 'verifyEmail')
-            .mockResolvedValue(resolvedValue);
+            .mockRejectedValue(resolvedValue);
         await ReactTestUtils.act(async () => {
             render(
-                <MemoryRouter initialEntries={[`/${userId}`]}>
-                    <Route path='/:userId'>
-                        <ForgotPassConsume />
-                    </Route>
-                    <Route
-                        path='*'
-                        render={({ location }) => {
-                            _location = location;
-                            return null;
-                        }}
-                    />
-                </MemoryRouter>,
+                <VerifyEmail
+                    onFailure={onFailure}
+                    onSuccess={jest.fn()}
+                    userId={userId}
+                />,
                 container
             );
         });
@@ -98,9 +84,35 @@ describe('ForgotPassConsume', () => {
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
-            await verifyEmailSpy.mock.results.pop().value;
+            await Promise.allSettled(verifyEmailSpy.mock.results);
         });
 
-        expect(_location.pathname).toBe('/login');
+        expect(onFailure).toBeCalledTimes(1);
+    });
+
+    it('fail with falsy userId', async () => {
+        jest.useFakeTimers();
+        const onFailure = jest.fn();
+
+        const verifyEmailSpy = jest.spyOn(API, 'verifyEmail');
+        await ReactTestUtils.act(async () => {
+            render(
+                <VerifyEmail
+                    onFailure={onFailure}
+                    onSuccess={jest.fn()}
+                    userId=''
+                />,
+                container
+            );
+        });
+
+        expect(API.verifyEmail).toBeCalledWith('');
+        jest.runAllTimers();
+
+        await ReactTestUtils.act(async () => {
+            await Promise.allSettled(verifyEmailSpy.mock.results);
+        });
+
+        expect(onFailure).toBeCalled();
     });
 });

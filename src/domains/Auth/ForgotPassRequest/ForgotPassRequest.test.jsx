@@ -1,14 +1,13 @@
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import RegisterForm from './RegisterForm';
+import ForgotPassRequest from './ForgotPassRequest';
 import API from '../api';
 
 jest.mock('hooks/useSnack');
 
-describe('RegisterForm', () => {
+describe('ForgotPassRequest', () => {
     let container = null;
 
     beforeEach(() => {
@@ -29,7 +28,10 @@ describe('RegisterForm', () => {
     it('should render', async () => {
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={jest.fn()} onFailure={jest.fn()} />,
+                <ForgotPassRequest
+                    onSuccess={jest.fn()}
+                    onFailure={jest.fn()}
+                />,
                 container
             );
         });
@@ -38,10 +40,13 @@ describe('RegisterForm', () => {
     it('should submit on button click', async () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
-        const spy = jest.spyOn(API, 'register');
+        const spy = jest.spyOn(API, 'forgotPassRequest');
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });
@@ -56,45 +61,32 @@ describe('RegisterForm', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
         const resolvedVal = { status: 200 };
-        const spy = jest.spyOn(API, 'register').mockResolvedValue(resolvedVal);
-        const form = {
-            username: 'username',
-            email: 'email@email.com',
-            password: 'password',
-            confirmPass: 'password'
-        }
+        const spy = jest
+            .spyOn(API, 'forgotPassRequest')
+            .mockResolvedValue(resolvedVal);
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });
 
-        const usernameNode = document.querySelector('#username');
         const emailNode = document.querySelector('#email');
-        const passwordNode = document.querySelector('#password');
-        const confirmNode = document.querySelector('#confirm-password');
         const button = document.querySelector('[type="submit"]');
 
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: form.username },
-            });
             ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: form.email },
-            });
-            ReactTestUtils.Simulate.change(passwordNode, {
-                target: { value: form.password },
-            });
-            ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: form.confirmPass },
+                target: { value: 'email@email.com' },
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith('email@email.com');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -109,45 +101,32 @@ describe('RegisterForm', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
         const rejectedVal = { status: 500 };
-        const spy = jest.spyOn(API, 'register').mockRejectedValue(rejectedVal);       
-        const form = {
-            username: 'username',
-            email: 'email@email.com',
-            password: 'password',
-            confirmPass: 'password'
-        }
+        const spy = jest
+            .spyOn(API, 'forgotPassRequest')
+            .mockRejectedValue(rejectedVal);
         jest.useFakeTimers();
-        
+
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });
 
-        const usernameNode = document.querySelector('#username');
         const emailNode = document.querySelector('#email');
-        const passwordNode = document.querySelector('#password');
-        const confirmNode = document.querySelector('#confirm-password');
         const button = document.querySelector('[type="submit"]');
 
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: form.username },
-            });
             ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: form.email },
-            });
-            ReactTestUtils.Simulate.change(passwordNode, {
-                target: { value: form.password },
-            });
-            ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: form.confirmPass },
+                target: { value: 'email@email.com' },
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith('email@email.com');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
