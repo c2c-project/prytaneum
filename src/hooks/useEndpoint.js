@@ -9,28 +9,28 @@ import useErrorHandler from './useErrorHandler';
  * @returns {Array}
  */
 export default function useEndpoint(endpoint, options = {}) {
-    const { onSuccess, onFailure } = options;
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
 
-    const defaultFailure = handleError;
-    const defaultSucess = () => {};
-
-    const _onSuccess = onSuccess || defaultSucess;
-    const _onFailure = (err) => {
-        defaultFailure(err);
-        if (onFailure) {
-            onFailure(err);
-        }
-    };
-
-    const minWaitTime = () =>
-        new Promise((resolve) => {
-            setTimeout(resolve, 600);
-        });
-
     React.useEffect(() => {
         let isMounted = true;
+        const { onSuccess, onFailure } = options;
+        const minWaitTime = () =>
+            new Promise((resolve) => {
+                setTimeout(resolve, 600);
+            });
+
+        const defaultFailure = handleError;
+        const defaultSucess = () => {};
+
+        const _onSuccess = onSuccess || defaultSucess;
+        const _onFailure = (err) => {
+            defaultFailure(err);
+            if (onFailure) {
+                onFailure(err);
+            }
+        };
+
         const request = async function () {
             try {
                 const [response] = await Promise.allSettled([
@@ -65,7 +65,7 @@ export default function useEndpoint(endpoint, options = {}) {
         return () => {
             isMounted = false;
         };
-    }, [isLoading]);
+    }, [isLoading, endpoint, handleError, options]);
 
     return [() => setIsLoading(true), isLoading];
 }
