@@ -6,7 +6,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import RegisterForm from './RegisterForm';
 import API from '../api';
 
-jest.mock('../../../hooks/useSnack');
+jest.mock('hooks/useSnack');
 
 describe('RegisterForm', () => {
     let container = null;

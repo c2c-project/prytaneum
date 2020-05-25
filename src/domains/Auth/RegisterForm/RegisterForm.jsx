@@ -6,8 +6,10 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useEndpoint from '../../../hooks/useEndpoint';
-import LoadingButton from '../../../components/LoadingButton';
+import useEndpoint from 'hooks/useEndpoint';
+import LoadingButton from 'components/LoadingButton';
+import useSnack from 'hooks/useSnack';
+
 import API from '../api';
 
 const useStyles = makeStyles({
@@ -18,6 +20,7 @@ const useStyles = makeStyles({
 
 export default function RegisterForm({ onSuccess, onFailure }) {
     const classes = useStyles();
+    const [snack] = useSnack();
     const [form, setForm] = React.useState({
         username: '',
         email: '',
@@ -26,7 +29,10 @@ export default function RegisterForm({ onSuccess, onFailure }) {
     });
     const _request = React.useCallback(() => API.register(form), [form]);
     const [register, isLoading] = useEndpoint(_request, {
-        onSuccess,
+        onSuccess: () => {
+            snack('Successfully registered!', 'success');
+            onSuccess();
+        },
         onFailure,
     });
 

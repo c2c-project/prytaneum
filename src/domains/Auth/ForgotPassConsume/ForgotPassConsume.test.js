@@ -3,12 +3,12 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
+
 import ForgotPassConsume from './ForgotPassConsume';
 import API from '../api';
-// import axios from '../../../utils/axios';
 
-jest.mock('../../../hooks/useSnack');
-jest.mock('../../../utils/axios');
+jest.mock('hooks/useSnack');
+jest.mock('utils/axios');
 
 describe('ForgotPassConsume', () => {
     let container = null;

@@ -40,14 +40,14 @@ module.exports = {
         'import/extensions': ['.js', '.jsx'],
         // 'import/ignore': ['\.png$'],
         // 'import/no-unresolved': [2, { ignore: ['\.png$'] }]
-        // 'import/resolver': {
-        //     node: {
-        //         paths: ['.']
-        //     }
-        //     // alias: {
-        //     //     map: [['/src', './src']],
-        //     //     extensions: ['.ts', '.js', '.jsx', '.json']
-        //     // }
-        // }
+        'import/resolver': {
+            node: {
+                paths: ['src'],
+            },
+            // alias: {
+            //     map: [['/src', './src']],
+            //     extensions: ['.ts', '.js', '.jsx', '.json']
+            // }
+        },
     },
 };

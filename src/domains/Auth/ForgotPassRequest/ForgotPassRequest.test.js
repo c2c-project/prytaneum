@@ -6,7 +6,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import ForgotPassRequest from './ForgotPassRequest';
 import API from '../api';
 
-jest.mock('../../../hooks/useSnack');
+jest.mock('hooks/useSnack');
 
 describe('ForgotPassRequest', () => {
     let container = null;
@@ -29,7 +29,10 @@ describe('ForgotPassRequest', () => {
     it('should render', async () => {
         ReactTestUtils.act(() => {
             render(
-                <ForgotPassRequest onSuccess={jest.fn()} onFailure={jest.fn()} />,
+                <ForgotPassRequest
+                    onSuccess={jest.fn()}
+                    onFailure={jest.fn()}
+                />,
                 container
             );
         });
@@ -41,7 +44,10 @@ describe('ForgotPassRequest', () => {
         const spy = jest.spyOn(API, 'forgotPassRequest');
         ReactTestUtils.act(() => {
             render(
-                <ForgotPassRequest onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });
@@ -56,12 +62,17 @@ describe('ForgotPassRequest', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
         const resolvedVal = { status: 200 };
-        const spy = jest.spyOn(API, 'forgotPassRequest').mockResolvedValue(resolvedVal);
+        const spy = jest
+            .spyOn(API, 'forgotPassRequest')
+            .mockResolvedValue(resolvedVal);
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
-                <ForgotPassRequest onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });
@@ -91,12 +102,17 @@ describe('ForgotPassRequest', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
         const rejectedVal = { status: 500 };
-        const spy = jest.spyOn(API, 'forgotPassRequest').mockRejectedValue(rejectedVal);
+        const spy = jest
+            .spyOn(API, 'forgotPassRequest')
+            .mockRejectedValue(rejectedVal);
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
-                <ForgotPassRequest onSuccess={onSuccess} onFailure={onFailure} />,
+                <ForgotPassRequest
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                />,
                 container
             );
         });

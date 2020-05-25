@@ -6,8 +6,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import LoginForm from '../../domains/Auth/LoginForm';
-import banner from '../../assets/spp-banner.png';
+
+import LoginForm from 'domains/Auth/LoginForm';
+import banner from 'assets/spp-banner.png';
+
+import routes from '../routes';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,9 +49,7 @@ export default function Login() {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <LoginForm
-                                    afterSubmit={() =>
-                                        history.push('/app/home')
-                                    }
+                                    onSuccess={() => history.push('/app/home')} // TODO: CHANGE THIS
                                 />
                             </Grid>
                             <Grid
@@ -59,23 +60,21 @@ export default function Login() {
                             >
                                 <Button
                                     onClick={() =>
-                                        history.push('/auth/register')
+                                        history.push(routes.register)
                                     }
                                 >
                                     Register
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        history.push(
-                                            '/auth/forgot-password/request'
-                                        )
+                                        history.push(routes.forgotPassRequest)
                                     }
                                 >
                                     Forgot Password?
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        history.push('/auth/login-temporary')
+                                        history.push(routes.loginTemp)
                                     }
                                 >
                                     Temporarily Login

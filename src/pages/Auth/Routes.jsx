@@ -1,39 +1,37 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
+
 import Login from './Login';
 import Register from './Register';
 import LoginTemp from './LoginTemp';
 import Logout from './Logout';
-import ForgotPassConsume from './ForgotPassConsume';
+import ForgotPassReset from './ForgotPasswordReset';
 import ForgotPassRequest from './ForgotPassRequest';
-import ResetPassword from './ResetPassword';
+import routes from './routes';
 
 export default function Routes() {
     return (
         <Switch>
-            <Route exact path='/auth/login'>
+            <Route exact path={routes.login}>
                 <Login />
             </Route>
-            <Route exact path='/auth/register'>
+            <Route exact path={routes.register}>
                 <Register />
             </Route>
-            <Route exact path='/auth/login-temporary'>
+            <Route exact path={routes.loginTemp}>
                 <LoginTemp />
             </Route>
-            <Route exact path='/auth/logout'>
+            <Route exact path={routes.logout}>
                 <Logout />
             </Route>
-            <Route path='/auth/forgot-password/consume-token/:userId'>
-                <ForgotPassConsume />
-            </Route>
-            <Route path='/auth/forgot-password/request'>
+            <Route path={routes.forgotPassRequest}>
                 <ForgotPassRequest />
             </Route>
-            <Route path='/auth/forgot-password/reset/:token'>
-                <ResetPassword />
+            <Route path={routes.forgotPasswordReset}>
+                <ForgotPassReset />
             </Route>
             <Route path='/'>
-                <Redirect to='/auth/login' />
+                <Redirect to={routes.login} />
             </Route>
         </Switch>
     );

@@ -2,10 +2,11 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+
 import LoginForm from './LoginForm';
 import API from '../api';
 
-jest.mock('../../../hooks/useSnack');
+jest.mock('hooks/useSnack');
 
 describe('LoginForm', () => {
     let container = null;

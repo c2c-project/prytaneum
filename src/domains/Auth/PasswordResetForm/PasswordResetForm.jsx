@@ -5,9 +5,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import useEndpoint from 'hooks/useEndpoint';
+import LoadingButton from 'components/LoadingButton';
+import useSnack from 'hooks/useSnack';
+
 import API from '../api';
-import useEndpoint from '../../../hooks/useEndpoint';
-import LoadingButton from '../../../components/LoadingButton';
 
 const useStyles = makeStyles({
     root: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles({
 
 export default function PasswordResetForm({ token, onSuccess }) {
     const classes = useStyles();
+    const [snack] = useSnack();
     const [form, setForm] = React.useState({
         password: '',
         confirmPassword: '',
@@ -26,7 +29,10 @@ export default function PasswordResetForm({ token, onSuccess }) {
         [form, token]
     );
     const [request, isLoading] = useEndpoint(_request, {
-        onSuccess,
+        onSuccess: () => {
+            snack('Successfully reset password!');
+            onSuccess();
+        },
     });
     const handleChange = (e, id) => {
         e.preventDefault();

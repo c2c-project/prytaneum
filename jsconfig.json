@@ -1,10 +1,6 @@
 {
-    "typeAcquisition": {
-        "include": ["jest"]
-    },
     "compilerOptions": {
-        "target": "es6",
-        "module": "es6"
+        "baseUrl": "src"
     },
-    "include": ["src/**/*"]
+    "include": ["src/**"]
 }

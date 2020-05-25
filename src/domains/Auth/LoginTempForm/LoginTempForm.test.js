@@ -6,7 +6,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import LoginTempForm from './LoginTempForm';
 import API from '../api';
 
-jest.mock('../../../hooks/useSnack');
+jest.mock('hooks/useSnack');
 
 describe('LoginTempForm', () => {
     let container = null;

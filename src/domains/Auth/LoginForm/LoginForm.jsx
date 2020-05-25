@@ -4,8 +4,10 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import useEndpoint from '../../../hooks/useEndpoint';
-import LoadingButton from '../../../components/LoadingButton';
+
+import useEndpoint from 'hooks/useEndpoint';
+import LoadingButton from 'components/LoadingButton';
+
 import API from '../api';
 
 const useStyles = makeStyles({

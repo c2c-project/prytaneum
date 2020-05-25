@@ -15,4 +15,5 @@ export default function LoadingButton({ loading, component }) {
 
 LoadingButton.propTypes = {
     loading: PropTypes.bool.isRequired,
+    component: PropTypes.node.isRequired,
 };

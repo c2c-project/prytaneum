@@ -5,8 +5,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useSnack from '../../../hooks/useSnack';
-import useEndpoint from '../../../hooks/useEndpoint';
+import useSnack from 'hooks/useSnack';
+import useEndpoint from 'hooks/useEndpoint';
+
 import API from '../api';
 
 const useStyles = makeStyles({

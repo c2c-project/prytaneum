@@ -1,8 +1,10 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import Loader from '../../../components/Loader';
-import useSnack from '../../../hooks/useSnack';
-import useEndpoint from '../../../hooks/useEndpoint';
+
+import Loader from 'components/Loader';
+import useSnack from 'hooks/useSnack';
+import useEndpoint from 'hooks/useEndpoint';
+
 import API from '../api';
 
 export default function VerificationPage() {
