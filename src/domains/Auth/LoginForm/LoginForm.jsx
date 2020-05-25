@@ -62,6 +62,10 @@ export default function LoginForm({ onSuccess }) {
                         value={form.username}
                         onChange={(e) => handleChange(e, 'username')}
                         label='Username'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -74,6 +78,10 @@ export default function LoginForm({ onSuccess }) {
                         value={form.password}
                         onChange={(e) => handleChange(e, 'password')}
                         label='Password'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
                     />
                 </Grid>
                 <Grid item xs={12}>
