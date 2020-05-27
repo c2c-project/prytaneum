@@ -1,0 +1,13 @@
+version: '2.1'
+services:
+    server:
+        container_name: prytanea_client
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: 'yarn start'
+        volumes:
+            - .:/user/src/app
+            - /usr/src/app/node_modules
+        ports:
+            - '3000:3001'
