@@ -1,0 +1,75 @@
+import React from 'react';
+import { useParams, Link, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Grow from '@material-ui/core/Grow';
+import IconButton from '@material-ui/core/IconButton';
+import BackIcon from '@material-ui/icons/ArrowBack';
+
+// import IconButton from '@material-ui/core/IconButton';
+// import MenuIcon from '@material-ui/icons/Menu';
+
+import { parseTitle } from './utils';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+        transition: 'inherit 2s ease-in 10s'
+    },
+}));
+
+export default function Nav({ tabs, back }) {
+    const { title } = useParams();
+    const history = useHistory();
+    const classes = useStyles();
+    const ref = React.useRef(history.entries[history.entries.length - 1]);
+
+    return (
+        <div className={classes.root}>
+            <AppBar position='static'>
+                <Toolbar>
+                    {back && (
+                        <Grow in>
+                            <IconButton
+                                component={Link}
+                                to={ref.current}
+                                edge='start'
+                                // className={classes.menuButton}
+                                color='inherit'
+                                aria-label='back-button'
+                            >
+                                <BackIcon />
+                            </IconButton>
+                        </Grow>
+                    )}
+                    <Typography variant='h6' className={classes.title}>
+                        {parseTitle(title)}
+                    </Typography>
+                    <Button color='inherit'>Login</Button>
+                </Toolbar>
+                {tabs}
+            </AppBar>
+        </div>
+    );
+}
+
+Nav.defaultProps = {
+    tabs: <></>,
+    back: false,
+};
+
+Nav.propTypes = {
+    tabs: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
+    back: PropTypes.bool,
+};

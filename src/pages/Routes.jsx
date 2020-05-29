@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Auth from './Auth';
 import LoggedIn from '../components/LoggedIn';
+import Nav from '../layout/Nav';
 // import TownhallList from '../domains/Townhall/TownhallList';
 // import Chat from '../domains/Townhall/TownhallChat';
 // import SessionSummary from './SessionSummary';
@@ -19,8 +20,10 @@ import LoggedIn from '../components/LoggedIn';
 
 export default function Routes() {
     return (
-        <Switch>
-            {/* <Route path='/app/:title'>
+        <Nav>
+            <Route path='/:domain/:title'>
+                <Switch>
+                    {/* <Route path='/app/:title'>
                 <LoggedIn>
                     <Layout>
                         <Route path='/app/sessions/list'>
@@ -39,15 +42,15 @@ export default function Routes() {
                     </Layout>
                 </LoggedIn>
             </Route> */}
-            <Route path='/auth'>
-                <Auth />
-            </Route>
-            <Route path='/app'>
-                <LoggedIn>
-                    <div>Logged in</div>
-                </LoggedIn>
-            </Route>
-            {/* <Route exact path='/login'>
+                    <Route path='/auth'>
+                        <Auth />
+                    </Route>
+                    <Route path='/app'>
+                        <LoggedIn>
+                            <div>Logged in</div>
+                        </LoggedIn>
+                    </Route>
+                    {/* <Route exact path='/login'>
                 <Login />
             </Route>
             <Route exact path='/register'>
@@ -71,9 +74,11 @@ export default function Routes() {
             <Route path='/'>
                 <Redirect to='/login' />
             </Route> */}
-            <Route path='/'>
-                <Redirect to='/auth/login' />
+                    <Route path='/'>
+                        <Redirect to='/auth/login' />
+                    </Route>
+                </Switch>
             </Route>
-        </Switch>
+        </Nav>
     );
 }
