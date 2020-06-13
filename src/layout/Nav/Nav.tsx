@@ -14,7 +14,7 @@ import BackIcon from '@material-ui/icons/ArrowBack';
 // import IconButton from '@material-ui/core/IconButton';
 // import MenuIcon from '@material-ui/icons/Menu';
 
-import { parseTitle } from './utils';
+import { parseTitle } from '../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,13 +30,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    tabs: React.ReactNode[] | React.ReactNode;
-    back: boolean;
+    tabs?: React.ReactNode[] | React.ReactNode;
+    back?: boolean;
+}
+
+interface Params {
+    title?: string;
 }
 
 export default function Nav({ tabs, back }: Props) {
-    const { title } = useParams();
-    const history = useHistory();
+    const { title } = useParams<Params>();
+    const history = useHistory(); // TODO: change this to not use history and instead have my own internal routing?
     const classes = useStyles();
 
     return (

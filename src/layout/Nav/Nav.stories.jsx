@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 import Nav from './Nav';
-import TransitionPage from './TransitionPage';
+import TransitionPage from '../TransitionPage';
 
 export default { title: 'Layout' };
 
@@ -58,7 +58,7 @@ export function NavWithTabs() {
     );
 }
 
-export function NavWithBackOnThree() {
+export function NavWithTransitions() {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -69,7 +69,6 @@ export function NavWithBackOnThree() {
         <MemoryRouter initialEntries={['/domain/title']}>
             <Route path='/:domain/:title'>
                 <Nav
-                    back={value === 2}
                     tabs={
                         <Tabs
                             variant='fullWidth'

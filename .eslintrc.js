@@ -33,7 +33,7 @@ module.exports = {
                     '**/*.test.js',
                     '**/*.stories.*',
                     '**/__tests__/**',
-                    '**/setupTests.js',
+                    '**/setupTests.ts',
                 ],
             },
         ],
