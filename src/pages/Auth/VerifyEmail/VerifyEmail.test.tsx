@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/require-await */
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -12,7 +14,7 @@ jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
 describe('VerifyEmail', () => {
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -22,15 +24,17 @@ describe('VerifyEmail', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
 
     // eslint-disable-next-line jest/expect-expect
     it('should render, verify, & go to /login', async () => {
-        let _location;
+        let _location: any;
         jest.useFakeTimers();
         const resolvedValue = { status: 200 };
         const userId = '123456';
@@ -60,11 +64,15 @@ describe('VerifyEmail', () => {
             await Promise.allSettled(spy.mock.results);
         });
 
+        if (!_location) {
+            throw new Error('location not defined');
+        }
+
         expect(_location.pathname).toBe(routes.login);
     });
 
     it('should render, fail to verify, & go to /login', async () => {
-        let _location;
+        let _location: any;
         jest.useFakeTimers();
         const resolvedValue = { status: 500 };
         const userId = '123456';
@@ -93,6 +101,10 @@ describe('VerifyEmail', () => {
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(spy.mock.results);
         });
+
+        if (!_location) {
+            throw new Error('location not defined');
+        }
 
         expect(_location.pathname).toBe(routes.login);
     });

@@ -3,13 +3,13 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-import ForgotPassRequest from './ForgotPassRequest';
+import Register from './Register';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
 describe('Register', () => {
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -19,8 +19,10 @@ describe('Register', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -31,7 +33,7 @@ describe('Register', () => {
             render(
                 <MemoryRouter initialEntries={['/']}>
                     <Route path='/'>
-                        <ForgotPassRequest />
+                        <Register />
                     </Route>
                 </MemoryRouter>,
                 container

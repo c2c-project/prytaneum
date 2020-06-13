@@ -4,9 +4,9 @@ import { useSnackbar } from 'notistack';
 export default function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     return [
-        (message, type) => {
+        (message: string, type: 'error' | 'success' | 'warning' | 'info') => {
             enqueueSnackbar(message, { variant: type });
         },
-        closeSnackbar
+        closeSnackbar,
     ];
 }

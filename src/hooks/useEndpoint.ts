@@ -1,5 +1,15 @@
 import React from 'react';
+import { AxiosResponse } from 'axios';
+
 import useErrorHandler from './useErrorHandler';
+
+interface EndpointOptions {
+    onSuccess?: (value: AxiosResponse) => void;
+    onFailure?: (err: Error) => void;
+}
+type SendRequest = () => void;
+type IsLoading = boolean;
+type EndpointUtils = [SendRequest, IsLoading];
 
 /**
  * @arg {Function} endpoint
@@ -8,7 +18,10 @@ import useErrorHandler from './useErrorHandler';
  * @arg {Function} options.onFailure
  * @returns {Array}
  */
-export default function useEndpoint(endpoint, options = {}) {
+export default function useEndpoint(
+    endpoint: () => AxiosResponse,
+    options: EndpointOptions = {}
+): EndpointUtils {
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
 
@@ -24,7 +37,7 @@ export default function useEndpoint(endpoint, options = {}) {
         const defaultSucess = () => {};
 
         const _onSuccess = onSuccess || defaultSucess;
-        const _onFailure = (err) => {
+        const _onFailure = (err: Error) => {
             defaultFailure(err);
             if (onFailure) {
                 onFailure(err);
@@ -59,7 +72,8 @@ export default function useEndpoint(endpoint, options = {}) {
         };
 
         if (isLoading) {
-            request();
+            // eslint-disable-next-line no-void
+            void request();
         }
 
         return () => {

@@ -4,7 +4,7 @@ import { unmountComponentAtNode } from 'react-dom';
  * @returns {HTMLElement}
  */
 export default function setup() {
-    let container = null;
+    let container: React.ReactElement = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target

@@ -1,11 +1,22 @@
 module.exports = {
     // parser: 'babel-eslint',
-    plugins: ['jest'],
+    plugins: ['jest', '@typescript-eslint'],
     //meteorjs/eslint-config-meteor uses airbnb
-    extends: ['airbnb', 'prettier', 'plugin:jest/recommended'],
+    extends: [
+        'airbnb-typescript',
+        'prettier',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:jest/recommended',
+    ],
+    parserOptions: {
+        project: './tsconfig.json',
+    },
     rules: {
         quotes: ['error', 'single'],
-        indent: ['error', 4, { SwitchCase: 1 }],
+        indent: 'off',
+        '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
         'react/no-array-index-key': 0,
@@ -29,6 +40,7 @@ module.exports = {
         'import/no-absolute-path': 0,
         'no-underscore-dangle': 'off',
         'func-names': 'off',
+        '@typescript-eslint/naming-convention': 'off',
     },
     env: {
         node: true,
@@ -37,7 +49,7 @@ module.exports = {
         'jest/globals': true,
     },
     settings: {
-        'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+        // 'import/extensions': ['.js', '.jsx'],
         // 'import/ignore': ['\.png$'],
         // 'import/no-unresolved': [2, { ignore: ['\.png$'] }]
         'import/resolver': {
@@ -45,7 +57,7 @@ module.exports = {
                 paths: ['src'],
             },
             // alias: {
-            //     map: [['/src', './src']],
+            //     // map: [['/src', './src']],
             //     extensions: ['.ts', '.js', '.jsx', '.json']
             // }
         },

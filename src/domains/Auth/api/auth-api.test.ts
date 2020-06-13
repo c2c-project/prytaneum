@@ -1,6 +1,6 @@
 import API from './index';
-import axios from '../../../utils/axios';
-import errors from '../../../utils/errors';
+import axios from 'utils/axios';
+import errors from 'utils/errors';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');

@@ -3,13 +3,13 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-import ForgotPasswordReset from './ForgotPasswordReset';
+import LoginTemp from './LoginTemp';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
 describe('Register', () => {
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -19,20 +19,21 @@ describe('Register', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
 
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
-        const path = '/123456';
         ReactTestUtils.act(() => {
             render(
-                <MemoryRouter initialEntries={[path]}>
-                    <Route path='/:token'>
-                        <ForgotPasswordReset />
+                <MemoryRouter initialEntries={['/']}>
+                    <Route path='/'>
+                        <LoginTemp />
                     </Route>
                 </MemoryRouter>,
                 container

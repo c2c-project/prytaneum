@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -11,15 +11,27 @@ import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 import routes from '../routes';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+    },
     paper: {
         padding: theme.spacing(2),
     },
 }));
 
+interface Params {
+    token?: string;
+}
+
 export default function ForgotPasswordReset() {
     const classes = useStyles();
     const history = useHistory();
-    const { token } = useParams();
+    const { token } = useParams<Params>();
+
+    if (!token) {
+        return <Redirect to='/login' />;
+    }
 
     return (
         <Container maxWidth='md' className={classes.root}>
