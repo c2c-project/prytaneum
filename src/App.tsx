@@ -8,7 +8,7 @@ import SnackContext from './contexts/Snack';
 import theme from './theme';
 import Pages from './pages';
 
-function App() {
+export default function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -22,5 +22,3 @@ function App() {
         </ThemeProvider>
     );
 }
-
-export default App;

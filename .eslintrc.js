@@ -37,7 +37,7 @@ module.exports = {
         'jest/globals': true,
     },
     settings: {
-        'import/extensions': ['.js', '.jsx'],
+        'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
         // 'import/ignore': ['\.png$'],
         // 'import/no-unresolved': [2, { ignore: ['\.png$'] }]
         'import/resolver': {

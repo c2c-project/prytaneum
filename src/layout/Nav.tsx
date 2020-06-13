@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,15 +25,19 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-        transition: 'inherit 2s ease-in 10s'
+        transition: 'inherit 2s ease-in 10s',
     },
 }));
 
-export default function Nav({ tabs, back }) {
+interface Props {
+    tabs: React.ReactNode[] | React.ReactNode;
+    back: boolean;
+}
+
+export default function Nav({ tabs, back }: Props) {
     const { title } = useParams();
     const history = useHistory();
     const classes = useStyles();
-    const ref = React.useRef(history.entries[history.entries.length - 1]);
 
     return (
         <div className={classes.root}>
@@ -42,8 +46,7 @@ export default function Nav({ tabs, back }) {
                     {back && (
                         <Grow in>
                             <IconButton
-                                component={Link}
-                                to={ref.current}
+                                onClick={() => history.goBack()}
                                 edge='start'
                                 // className={classes.menuButton}
                                 color='inherit'
