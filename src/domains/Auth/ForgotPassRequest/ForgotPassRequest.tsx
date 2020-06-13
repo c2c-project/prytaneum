@@ -15,17 +15,19 @@ const useStyles = makeStyles({
         height: '100%',
     },
 });
-
-export default function ForgotPassRequest({ onSuccess, onFailure }) {
+interface Props {
+    onSuccess: () => void;
+    onFailure: () => void;
+}
+export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
     const [form, setForm] = React.useState({
         email: '',
     });
-    const _request = React.useCallback(
-        () => API.forgotPassRequest(form.email),
-        [form]
-    );
+    const _request = React.useCallback(() => API.forgotPassRequest(form), [
+        form,
+    ]);
     const [request] = useEndpoint(_request, {
         onSuccess: () => {
             snack(`Email sent to ${form.email}`, 'success');
@@ -34,13 +36,16 @@ export default function ForgotPassRequest({ onSuccess, onFailure }) {
         onFailure,
     });
 
-    const handleChange = (e, id) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        id: string
+    ) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         request();
     };
@@ -60,7 +65,7 @@ export default function ForgotPassRequest({ onSuccess, onFailure }) {
                         fullWidth
                         variant='outlined'
                         type='email'
-                        value={form.password}
+                        value={form.email}
                         onChange={(e) => handleChange(e, 'email')}
                         label='Email'
                     />

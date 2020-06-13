@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/require-await */
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+import { AxiosResponse } from 'axios';
 
 import VerifyEmail from './VerifyEmail';
 import API from '../api';
-
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
 describe('ForgotPassConsume', () => {
-    let container = null;
+    let container: HTMLElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -20,8 +21,10 @@ describe('ForgotPassConsume', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -36,7 +39,7 @@ describe('ForgotPassConsume', () => {
         // jest.spyOn(axios, 'post').mockResolvedValue(resolvedValue);
         const verifyEmailSpy = jest
             .spyOn(API, 'verifyEmail')
-            .mockResolvedValue(resolvedValue);
+            .mockResolvedValue(resolvedValue as AxiosResponse);
 
         await ReactTestUtils.act(async () => {
             render(
@@ -53,7 +56,14 @@ describe('ForgotPassConsume', () => {
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
-            await verifyEmailSpy.mock.results.pop().value;
+            const result = verifyEmailSpy.mock.results.pop();
+            if (result) {
+                await result.value;
+            } else {
+                throw new Error(
+                    'This should not happen and this message is helpful :)'
+                );
+            }
         });
 
         expect(onSuccess).toBeCalledTimes(1);

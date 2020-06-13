@@ -7,7 +7,13 @@ import Loader from 'components/Loader';
 
 import API from '../api';
 
-export default function VerifyEmail({ onSuccess, onFailure, userId }) {
+interface Props {
+    onSuccess: () => void;
+    onFailure: () => void;
+    userId: string;
+}
+
+export default function VerifyEmail({ onSuccess, onFailure, userId }: Props) {
     const _request = React.useCallback(() => API.verifyEmail(userId), [userId]);
     const [snack] = useSnack();
     const [request] = useEndpoint(_request, {
@@ -19,7 +25,7 @@ export default function VerifyEmail({ onSuccess, onFailure, userId }) {
     });
 
     React.useEffect(() => {
-        request(userId);
+        request();
     }, []);
 
     return <Loader />;

@@ -19,7 +19,7 @@ type EndpointUtils = [SendRequest, IsLoading];
  * @returns {Array}
  */
 export default function useEndpoint(
-    endpoint: () => AxiosResponse,
+    endpoint: () => Promise<AxiosResponse>,
     options: EndpointOptions = {}
 ): EndpointUtils {
     const [isLoading, setIsLoading] = React.useState(false);

@@ -18,7 +18,12 @@ const useStyles = makeStyles({
     },
 });
 
-export default function RegisterForm({ onSuccess, onFailure }) {
+interface Props {
+    onSuccess: () => void;
+    onFailure: () => void;
+}
+
+export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
     const [form, setForm] = React.useState({
@@ -36,13 +41,16 @@ export default function RegisterForm({ onSuccess, onFailure }) {
         onFailure,
     });
 
-    const handleChange = (e, id) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        id: string
+    ) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         register();
     };

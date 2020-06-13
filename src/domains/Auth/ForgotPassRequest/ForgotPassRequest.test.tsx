@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/require-await */
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+import { AxiosResponse } from 'axios';
 
 import ForgotPassRequest from './ForgotPassRequest';
 import API from '../api';
@@ -8,7 +10,7 @@ import API from '../api';
 jest.mock('hooks/useSnack');
 
 describe('ForgotPassRequest', () => {
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -18,8 +20,10 @@ describe('ForgotPassRequest', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -52,7 +56,11 @@ describe('ForgotPassRequest', () => {
         });
         const button = document.querySelector('[type="submit"]');
         ReactTestUtils.act(() => {
-            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            if (button) {
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            }
         });
         expect(spy).toBeCalled();
     });
@@ -60,7 +68,13 @@ describe('ForgotPassRequest', () => {
     it('should submit and succeed', async () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
-        const resolvedVal = { status: 200 };
+        const resolvedVal: AxiosResponse = {
+            status: 200,
+            data: {},
+            statusText: 'OK',
+            headers: {},
+            config: {},
+        };
         const spy = jest
             .spyOn(API, 'forgotPassRequest')
             .mockResolvedValue(resolvedVal);
@@ -80,13 +94,17 @@ describe('ForgotPassRequest', () => {
         const button = document.querySelector('[type="submit"]');
 
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: 'email@email.com' },
-            });
-            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            if (emailNode && button) {
+                ReactTestUtils.Simulate.change(emailNode, {
+                    target: { value: 'email@email.com' },
+                } as any);
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            }
         });
 
-        expect(spy).toBeCalledWith('email@email.com');
+        expect(spy).toBeCalledWith({ email: 'email@email.com' });
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -118,15 +136,18 @@ describe('ForgotPassRequest', () => {
 
         const emailNode = document.querySelector('#email');
         const button = document.querySelector('[type="submit"]');
-
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: 'email@email.com' },
-            });
-            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            if (emailNode && button) {
+                ReactTestUtils.Simulate.change(emailNode, {
+                    target: { value: 'email@email.com' },
+                } as any);
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            }
         });
 
-        expect(spy).toBeCalledWith('email@email.com');
+        expect(spy).toBeCalledWith({ email:'email@email.com'});
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

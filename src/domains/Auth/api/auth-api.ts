@@ -33,7 +33,10 @@ interface ForgotPassForm {
     confirmPassword?: string;
 }
 
-export async function forgotPassReset(token: string, form: ForgotPassForm) {
+export async function forgotPassReset(
+    token: string | unknown,
+    form: ForgotPassForm
+) {
     const { password, confirmPassword } = form;
 
     if (!password || !confirmPassword) {
@@ -54,11 +57,11 @@ export async function forgotPassReset(token: string, form: ForgotPassForm) {
     });
 }
 
-interface ForgotPassForm {
+interface ForgotPassRequestForm {
     email: string;
 }
 
-export async function forgotPassRequest(form: ForgotPassForm) {
+export async function forgotPassRequest(form: ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
     }

@@ -1,6 +1,8 @@
-import API from './index';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/unbound-method */
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import API from './index';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');
@@ -25,7 +27,9 @@ describe('#login', () => {
     });
     it('should accept a username and password pair', async () => {
         const resolvedValue = { status: 200 };
-        axios.post.mockResolvedValue(resolvedValue);
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
         await expect(API.login('username', 'password')).resolves.toBe(
             resolvedValue
         );
@@ -43,7 +47,9 @@ describe('#loginTemp', () => {
     });
     it('should accept a username', async () => {
         const resolvedValue = { status: 200 };
-        axios.post.mockResolvedValue(resolvedValue);
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
         await expect(API.loginTemp('username')).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith('/api/users/login-temporary', {
             username: 'username',
@@ -85,7 +91,9 @@ describe('#forgotPassReset', () => {
             confirmPassword: '1',
         };
         const token = '123';
-        axios.post.mockResolvedValue(resolvedValue);
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
         await expect(API.forgotPassReset(token, form)).resolves.toBe(
             resolvedValue
         );
@@ -124,7 +132,9 @@ describe('#forgotPassRequest', () => {
     });
     it('should accept valid emails', async () => {
         const resolvedValue = { status: 200 };
-        axios.post.mockResolvedValue(resolvedValue);
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
         await expect(
             API.forgotPassRequest({ email: 'a.b.c.d@email.com' })
         ).resolves.toBe(resolvedValue);
