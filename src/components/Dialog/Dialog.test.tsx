@@ -5,7 +5,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import Dialog from './Dialog';
 
 describe('Dialog', function () {
-    let container = null;
+    let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -15,8 +15,10 @@ describe('Dialog', function () {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -44,7 +46,11 @@ describe('Dialog', function () {
         });
         const button = document.querySelector('button');
         ReactTestUtils.act(() => {
-            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            if (button) {
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            }
         });
 
         expect(onClose).toBeCalledTimes(1);

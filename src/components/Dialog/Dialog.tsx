@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import { TransitionProps } from '@material-ui/core/transitions';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -21,7 +22,10 @@ const useStyles = makeStyles((theme) => ({
 /**
  * @description Transition used by FullScreenDialog -- it slides up
  */
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & { children?: React.ReactElement<any, any> },
+    ref: React.Ref<unknown>
+) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <Slide direction='up' ref={ref} {...props} />;
 });
@@ -33,7 +37,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @arg {Boolean} props.open parent is expected to handle open or closed state, so this is either T or F
  * @arg {Function} props.onClose function to run when the close button is clicked within the dialog, typically setting open to false
  */
-export default function FullScreenDialog({ children, open, onClose }) {
+
+interface Props {
+    children: JSX.Element | JSX.Element[];
+    open: boolean;
+    onClose: () => void;
+}
+export default function FullScreenDialog({ children, open, onClose }: Props) {
     const classes = useStyles();
 
     return (
