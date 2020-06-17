@@ -1,6 +1,7 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
+import FixtureContext from 'contexts/Fixtures';
 import useErrorHandler from './useErrorHandler';
 
 interface EndpointOptions {
@@ -46,6 +47,19 @@ export default function useEndpoint(
 
         const request = async function () {
             try {
+                if (process.env.NODE_ENV === 'development') {
+                    // instantly fetches data, figure out a way to mock loading? TODO:
+                    const { meta, data } = React.useContext(FixtureContext);
+                    await minWaitTime();
+                    _onSuccess({
+                        status: meta.status,
+                        statusText: meta.statusText,
+                        data,
+                        headers: meta.headers,
+                        config: meta.config,
+                    });
+                    return;
+                }
                 const [response] = await Promise.allSettled([
                     endpoint(),
                     minWaitTime(),

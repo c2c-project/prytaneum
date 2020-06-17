@@ -14,7 +14,11 @@ const useStyles = makeStyles({
     },
 });
 
-export default function MessageList({ children }) {
+interface Props {
+    children: JSX.Element | JSX.Element[];
+}
+
+export default function MessageList({ children }: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>

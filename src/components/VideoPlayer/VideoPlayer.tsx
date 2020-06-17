@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import ReactPlayer from 'react-player';
 // import Clipper from '../Clipper';
 
-function VideoPlayer({ url }) {
+interface Props {
+    url: string;
+}
+
+function VideoPlayer({ url }: Props) {
     return (
         <ReactPlayer
             url={url}
@@ -16,7 +20,7 @@ function VideoPlayer({ url }) {
 }
 
 VideoPlayer.propTypes = {
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
 };
 
 export default VideoPlayer;

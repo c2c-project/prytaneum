@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Bold from '../Bold';
 import useJwt from '../../hooks/useJwt';
 import useSnack from '../../hooks/useSnack';
+import { Message } from './types';
 
 const useStyles = makeStyles((theme) => ({
     Message: {
@@ -26,69 +27,75 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MessageOwnerActions({ targetMessage, onClick }) {
+interface Props {
+    targetMessage: Message;
+    onClick: () => void;
+}
+
+interface Params {
+    roomId: string;
+}
+
+export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const classes = useStyles();
     const [message, setMessage] = React.useState(targetMessage.message);
-    const [jwt] = useJwt();
+    const jwt = ''; // TODO:
+    // const [jwt] = useJwt();
     const [snack] = useSnack();
-    const { roomId } = useParams();
+    const { roomId } = useParams<Params>();
 
-    const handleEdit = (e) => {
+    const handleEdit = async (
+        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    ) => {
         e.preventDefault();
-        fetch('/api/chat/update-message/', {
-            method: 'POST',
-            headers: {
-                Authorization: `bearer ${jwt}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                newMessage: message,
-                message: targetMessage,
-                roomId,
-            }),
-        })
-            .then((r) => {
-                r.json().then((res) => {
-                    if (res.success) {
-                        snack('Message edited successfully', 'success');
-                        onClick();
-                    } else {
-                        snack('Something went wrong! Try again.', 'error');
-                    }
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                snack('Something went wrong! Try again.', 'error');
+        try {
+            const response = await fetch('/api/chat/update-message/', {
+                method: 'POST',
+                headers: {
+                    Authorization: `bearer ${jwt}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    newMessage: message,
+                    message: targetMessage,
+                    roomId,
+                }),
             });
+            if (response.status === 200) {
+                snack('Message edited successfully', 'success');
+                onClick();
+            } else {
+                snack('Something went wrong! Try again.', 'error');
+            }
+        } catch (e) {
+            console.log(e);
+            snack('Something went wrong! Try again.', 'error');
+        }
     };
 
     // Change the delete message to just hide it. ie markit as deleted
-    const handleDelete = () => {
-        fetch(`/api/chat/delete-message/${roomId}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `bearer ${jwt}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: targetMessage,
-            }),
-        })
-            .then((r) => {
-                r.json().then((res) => {
-                    if (res.success) {
-                        snack('Successfully deleted message', 'success');
-                        onClick();
-                    } else {
-                        snack('Something went wrong! Try again.', 'error');
-                    }
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                snack('Something went wrong! Try again.', 'error');
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`/api/chat/delete-message/${roomId}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `bearer ${jwt}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: targetMessage,
+                }),
             });
+            if (response.status === 200) {
+                snack('Successfully deleted message', 'success');
+                onClick();
+            } else {
+                snack('Something went wrong! Try again.', 'error');
+            }
+        } catch (e) {
+            console.log(e);
+            snack('Something went wrong! Try again.', 'error');
+        }
     };
 
     return (
@@ -99,7 +106,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }) {
                         <Bold>{`${targetMessage.username}:`}</Bold>
                     </Grid>
                     <Grid item xs='auto' className={classes.Message}>
-                        <form onSubmit={handleEdit}>
+                        <form>
                             <TextField
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
@@ -114,10 +121,10 @@ export default function MessageOwnerActions({ targetMessage, onClick }) {
             <Grid item xs={12}>
                 <Button
                     color='secondary'
-                    variant='contained'
+                    variant='contained' // TODO: fix this, should be inside the form tag
                     fullWidth
-                    onClick={handleEdit}
-                    type='submit'
+                    // TODO: any?
+                    onClick={handleEdit as any}
                 >
                     Submit Change
                 </Button>

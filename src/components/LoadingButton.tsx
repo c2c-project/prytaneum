@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-export default function LoadingButton({ loading, component }) {
+interface Props {
+    loading: boolean;
+    component: JSX.Element;
+}
+
+export default function LoadingButton({ loading, component }: Props) {
     if (loading) {
         return React.cloneElement(
             component,

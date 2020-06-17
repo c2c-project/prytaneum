@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function ScrollToBottom({ active, children }) {
-    const bottomRef = React.useRef();
+interface Props {
+    active: boolean;
+    children: JSX.Element | JSX.Element[];
+}
+
+export default function ScrollToBottom({ active, children }: Props) {
+    const bottomRef = React.useRef<HTMLDivElement>(null);
     const firstRender = React.useRef(true);
     const scrollToBottom = () => {
-        if (active) {
+        if (active && bottomRef.current) {
             bottomRef.current.scrollIntoView({
                 behavior: firstRender.current ? 'smooth' : 'auto',
             });

@@ -5,13 +5,24 @@ import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import Bold from '../Bold';
-import useJwt from '../../hooks/useJwt';
+// import useJwt from '../../hooks/useJwt';
 import useSnack from '../../hooks/useSnack';
+import { Message } from './types';
 
-export default function MessageActions({ targetMsg, onClick }) {
-    const [jwt] = useJwt();
+interface Props {
+    targetMsg: Message;
+    onClick: () => void;
+}
+
+interface Params {
+    roomId: string;
+}
+
+export default function MessageActions({ targetMsg, onClick }: Props) {
+    const jwt = '';
+    // const [jwt] = useJwt(); // TODO: fix this
     const [snack] = useSnack();
-    const { roomId } = useParams();
+    const { roomId } = useParams<Params>();
     const handleAction = () => {
         fetch(`/api/chat/message-action/${roomId}/${targetMsg._id}`, {
             method: 'POST',

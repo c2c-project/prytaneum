@@ -1,20 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useJwt from '../../hooks/useJwt';
+// import useJwt from '../../hooks/useJwt';
 import MessageList from './MessageList';
 import MessageListItem from './MessageListItem';
 import MessageItemText from './MessageItemText';
 import MessageItemAuthor from './MessageItemAuthor';
 import MessageItemTimestamp from './MessageItemTimestamp';
 import ScrollToBottom from '../ScrollToBottom';
+import { Message } from './types';
 
-const checkIsOwner = (user, messageUserId = '') =>
-    user && user._id === messageUserId;
+const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
+    user._id === messageUserId;
 
 // export const MessageContext = React.createContext(false);
+// interface Message {
+//     _id: string;
+//     userId: string;
+//     username: string;
+//     message: string;
+//     moderated: boolean;
+//     sent: number;
+// }
 
-function Messages({ messages, onClickMessage }) {
-    const [, user] = useJwt();
+interface Props {
+    messages: Message[];
+    onClickMessage: (mId: string) => void;
+}
+function Messages({ messages, onClickMessage }: Props) {
+    // const [, user] = useJwt();
+    const user = { _id: '' }; // PLACEHOLDER TODO: remove this/fix this
 
     // const filterQuestions = () => {
     //     if (!Array.isArray(messages)) {
@@ -80,4 +94,3 @@ Messages.propTypes = {
 };
 
 export default Messages;
-

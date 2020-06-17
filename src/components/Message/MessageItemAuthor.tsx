@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Bold from '../Bold';
 
-export default function MessageItemAuthor({ name }) {
+interface Props {
+    name: string;
+}
+export default function MessageItemAuthor({ name }: Props) {
     return <Bold>{`${name}:`}</Bold>;
 }
 

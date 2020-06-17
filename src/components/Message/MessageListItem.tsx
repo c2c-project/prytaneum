@@ -10,16 +10,26 @@ const useStyles = makeStyles({
     },
 });
 
-export default function MessageListItem({ button, onClick, children, hidden }) {
+interface Props {
+    button: boolean;
+    onClick: () => void;
+    children: JSX.Element | JSX.Element[];
+    hidden: boolean;
+}
+
+export default function MessageListItem(props: Props) {
+    const { button, onClick, children, hidden } = props;
     const classes = useStyles();
     // const isOwnerOrModerator = moderator || checkIsOwner(user, userId);
     return (
         <ListItem
             hidden={hidden}
             // If user is moderator on the owner of the message then this ListItem is rendered as a button
-            button={button}
+            // https://github.com/mui-org/material-ui/issues/14971
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+            button={button as any}
             // If user is moderator on the owner of the message then this ListItem's onClick event calls setTargetMsg
-            onClick={(button || undefined) && onClick}
+            onClick={button ? onClick : undefined}
             className={classes.message}
         >
             <Grid container spacing={1}>
