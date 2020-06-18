@@ -3,6 +3,7 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Auth from './Auth';
 import LoggedIn from '../components/LoggedIn';
 import Nav from '../layout/Nav';
+import Footer from '../layout/Footer';
 // import TownhallList from '../domains/Townhall/TownhallList';
 // import Chat from '../domains/Townhall/TownhallChat';
 // import SessionSummary from './SessionSummary';
@@ -17,31 +18,13 @@ import Nav from '../layout/Nav';
 // import Verification from './Verification';
 // import RequestPasswordReset from './RequestPasswordReset';
 // import UpdatePassword from './UpdatePassword';
+import Public from './Public';
 
 export default function Routes() {
     return (
         <Nav>
-            <Route path='/:domain/:title'>
-                <Switch>
-                    {/* <Route path='/app/:title'>
-                <LoggedIn>
-                    <Layout>
-                        <Route path='/app/sessions/list'>
-                            <TownhallList />
-                        </Route>
-                        <Route path='/app/sessions/:roomId/live'>
-                            <Chat />
-                        </Route>
-                        <Route path='/app/sessions/summary'>
-                            <SessionSummary />
-                        </Route>
-                        <Route path='/app/sessions/:sessionId/session-summary' component={SessionData} />
-                        <Route path='/app/sessions/:sessionId/clips'>
-                            <Timeline />
-                        </Route>
-                    </Layout>
-                </LoggedIn>
-            </Route> */}
+            <Switch>
+                <Route path='/:domain/:title'>
                     <Route path='/auth'>
                         <Auth />
                     </Route>
@@ -50,35 +33,15 @@ export default function Routes() {
                             <div>Logged in</div>
                         </LoggedIn>
                     </Route>
-                    {/* <Route exact path='/login'>
-                <Login />
-            </Route>
-            <Route exact path='/register'>
-                <Register />
-            </Route>
-            <Route exact path='/login-temporary'>
-                <LoginTemp />
-            </Route>
-            <Route exact path='/logout'>
-                <Logout />
-            </Route>
-            <Route path='/verification/:userId'>
-                <Verification />
-            </Route>
-            <Route path='/forgot-password'>
-                <RequestPasswordReset />
-            </Route>
-            <Route path='/resetpassword/:token'>
-                <UpdatePassword />
-            </Route>
-            <Route path='/'>
-                <Redirect to='/login' />
-            </Route> */}
                     <Route path='/'>
                         <Redirect to='/auth/login' />
                     </Route>
-                </Switch>
-            </Route>
+                </Route>
+                <Route path='/'>
+                    <Public />
+                    <Footer />
+                </Route>
+            </Switch>
         </Nav>
     );
 }

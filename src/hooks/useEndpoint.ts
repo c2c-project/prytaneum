@@ -23,6 +23,7 @@ export default function useEndpoint(
     endpoint: () => Promise<AxiosResponse>,
     options: EndpointOptions = {}
 ): EndpointUtils {
+    const { meta, data } = React.useContext(FixtureContext); // only used in dev mode
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
 
@@ -49,7 +50,7 @@ export default function useEndpoint(
             try {
                 if (process.env.NODE_ENV === 'development') {
                     // instantly fetches data, figure out a way to mock loading? TODO:
-                    const { meta, data } = React.useContext(FixtureContext);
+
                     await minWaitTime();
                     _onSuccess({
                         status: meta.status,
@@ -93,7 +94,7 @@ export default function useEndpoint(
         return () => {
             isMounted = false;
         };
-    }, [isLoading, endpoint, handleError, options]);
+    }, [isLoading, endpoint, handleError, options, meta, data]);
 
     return [() => setIsLoading(true), isLoading];
 }

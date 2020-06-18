@@ -195,3 +195,5 @@
 // };
 
 // export default ResponsiveDrawer;
+
+export default {};

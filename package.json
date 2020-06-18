@@ -34,7 +34,8 @@
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
         "storybook": "start-storybook --port 3003",
-        "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client"
+        "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
+        "lint": "eslint src/ --ext \".ts .tsx\""
     },
     "browserslist": {
         "production": [
