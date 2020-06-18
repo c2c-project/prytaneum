@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-import ForgotPasswordReset from './ForgotPasswordReset';
+import ForgotPasswordReset from './ForgotPassReset';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');

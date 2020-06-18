@@ -52,13 +52,17 @@ export default function useEndpoint(
                     // instantly fetches data, figure out a way to mock loading? TODO:
 
                     await minWaitTime();
-                    _onSuccess({
-                        status: meta.status,
-                        statusText: meta.statusText,
-                        data,
-                        headers: meta.headers,
-                        config: meta.config,
-                    });
+                    if (meta.status === 200) {
+                        _onSuccess({
+                            status: meta.status,
+                            statusText: meta.statusText,
+                            data,
+                            headers: meta.headers,
+                            config: meta.config,
+                        });
+                    } else {
+                        throw new Error(meta.statusText);
+                    }
                     return;
                 }
                 const [response] = await Promise.allSettled([

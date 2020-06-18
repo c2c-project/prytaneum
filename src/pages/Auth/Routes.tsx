@@ -5,7 +5,7 @@ import Login from './Login';
 import Register from './Register';
 import LoginTemp from './LoginTemp';
 import Logout from './Logout';
-import ForgotPassReset from './ForgotPasswordReset';
+import ForgotPassReset from './ForgotPassReset';
 import ForgotPassRequest from './ForgotPassRequest';
 import routes from './routes';
 
