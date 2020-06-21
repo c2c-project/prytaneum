@@ -4,11 +4,13 @@ import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
 import './main.css';
 
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>
+        <CssBaseline />
         <BrowserRouter>
             <SnackContext maxSnack={1}>
                 <UserContext.Provider

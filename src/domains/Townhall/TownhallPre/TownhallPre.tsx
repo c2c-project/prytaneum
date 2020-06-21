@@ -7,10 +7,14 @@ import TooltipIconButton from 'components/TooltipIconButton';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography, { TypographyProps } from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import clsx from 'clsx';
+import { format } from 'date-fns';
 
 import ShareIcon from '@material-ui/icons/Share';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
+import { Townhall } from '../api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,36 +25,48 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: theme.custom.borderRadius,
         margin: '20px',
     },
+    title: {
+        fontSize: '25px',
+    },
+    text: {
+        fontWeight: theme.typography.fontWeightLight,
+    },
+    largeAvatar: {
+        width: theme.spacing(7),
+        height: theme.spacing(7),
+    },
 }));
 
-interface SessionData {
-    speaker: string;
-    moderator: string;
-    topic: string;
-    picture: string; // should be a uri or url
-    readingMaterials: string; // should be a uri or url
-}
-
 interface Props {
-    data: SessionData;
+    townhall: Townhall;
 }
 
 export default function TownhallPre(props: Props) {
     const classes = useStyles();
-    const { data } = props;
-    const SubHeader = () => (
-        <>
-            {/* eslint-disable-next-line react/prop-types */}
-            <Typography>{`Topic: ${data.topic}`}</Typography>
-            {/* eslint-disable-next-line react/prop-types */}
-            <Typography>{`Moderator: ${data.moderator}`}</Typography>
-        </>
-    );
+    const { townhall } = props;
     return (
         <Card className={classes.root} elevation={8}>
             <CardHeader
-                title={data.speaker}
-                subheader={<SubHeader />}
+                avatar={
+                    <Avatar
+                        className={classes.largeAvatar}
+                        src={townhall.picture}
+                    />
+                }
+                title={
+                    <>
+                        <Typography
+                            className={clsx([classes.text, classes.title])}
+                        >
+                            {townhall.speaker}
+                        </Typography>
+                        <Typography className={classes.text}>
+                            {townhall.topic}
+                        </Typography>
+                    </>
+                }
+                subheaderTypographyProps={{ className: classes.text }}
+                subheader={format(townhall.date, 'MM/dd/yyyy p')}
                 action={
                     <>
                         <TooltipIconButton
@@ -70,7 +86,7 @@ export default function TownhallPre(props: Props) {
                     </>
                 }
             />
-            <CardMedia className={classes.media} image={data.picture} />
+            <CardMedia className={classes.media} image={townhall.picture} />
             <CardActions>
                 <Grid container spacing={1}>
                     <Grid item xs={12}>
@@ -88,12 +104,14 @@ export default function TownhallPre(props: Props) {
                             onClick={() => console.log('TODO: Stats page')}
                             fullWidth
                         >
-                            {`More Information on ${data.speaker}`}
+                            {`More Information on ${townhall.speaker}`}
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
                         <Button
-                            onClick={() => console.log('TODO: Submit Question early')}
+                            onClick={() =>
+                                console.log('TODO: Submit Question early')
+                            }
                             fullWidth
                         >
                             Help I&apos;m unable to attend!

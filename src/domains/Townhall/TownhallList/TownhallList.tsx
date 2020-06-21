@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: theme.typography.fontWeightLight,
     },
     title: {
-        fontSize: '1.5em',
+        fontSize: '25px',
     },
     avatar: {
         paddingRight: theme.spacing(3)

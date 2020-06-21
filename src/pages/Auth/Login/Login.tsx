@@ -2,11 +2,11 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Paper from 'components/Paper';
 import LoginForm from 'domains/Auth/LoginForm';
 import banner from 'assets/spp-banner.png';
 
