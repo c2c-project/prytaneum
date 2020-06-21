@@ -3,7 +3,7 @@ import { MemoryRouter, Route } from 'react-router-dom';
 
 import Page from '.';
 
-export default { title: 'pages/auth' };
+export default { title: 'Pages/Auth' };
 
 export function ForgotPassReset() {
     return (

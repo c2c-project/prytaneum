@@ -1,11 +1,11 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import FixtureContext from 'contexts/Fixtures';
+import FixtureContext, { Fixture } from 'contexts/Fixtures';
 import useErrorHandler from './useErrorHandler';
 
-interface EndpointOptions {
-    onSuccess?: (value: AxiosResponse) => void;
+interface EndpointOptions<T> {
+    onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
 }
 type SendRequest = () => void;
@@ -19,11 +19,11 @@ type EndpointUtils = [SendRequest, IsLoading];
  * @arg {Function} options.onFailure
  * @returns {Array}
  */
-export default function useEndpoint(
-    endpoint: () => Promise<AxiosResponse>,
-    options: EndpointOptions = {}
+export default function useEndpoint<T>(
+    endpoint: () => Promise<AxiosResponse<T>>,
+    options: EndpointOptions<T> = {}
 ): EndpointUtils {
-    const { meta, data } = React.useContext(FixtureContext); // only used in dev mode
+    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // only used in dev mode
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
 
@@ -52,8 +52,9 @@ export default function useEndpoint(
                     // instantly fetches data, figure out a way to mock loading? TODO:
 
                     await minWaitTime();
+                    setIsLoading(false);
                     if (meta.status === 200) {
-                        _onSuccess({
+                        _onSuccess(<AxiosResponse<T>>{
                             status: meta.status,
                             statusText: meta.statusText,
                             data,
@@ -65,6 +66,7 @@ export default function useEndpoint(
                     }
                     return;
                 }
+
                 const [response] = await Promise.allSettled([
                     endpoint(),
                     minWaitTime(),

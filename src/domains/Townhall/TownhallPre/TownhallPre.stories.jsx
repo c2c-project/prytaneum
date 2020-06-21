@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 
 import Component from '.';
 
-export default { title: 'domains/townhall' };
+export default { title: 'Domains/townhall' };
 
 const session = {
     speaker: 'Darth Vader',

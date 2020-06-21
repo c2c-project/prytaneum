@@ -6,4 +6,6 @@ export default {
     missingToken: (): Error => new Error('Missing Token.'),
     invalidEmail: (): Error => new Error('Invalid email'),
     invalidInfo: (): Error => new Error('Invalid information provided'),
+    internalError: (): Error =>
+        new Error('Looks like something went wrong! Please contact support.'), // this means a programming error in the data flow
 };

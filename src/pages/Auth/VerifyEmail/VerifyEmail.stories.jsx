@@ -6,7 +6,7 @@ import Fixtures from 'contexts/Fixtures';
 import routes from '../routes';
 import Page from '.';
 
-export default { title: 'pages/auth', decorators: [withKnobs] };
+export default { title: 'Pages/Auth', decorators: [withKnobs] };
 
 const options = {
     success: {
