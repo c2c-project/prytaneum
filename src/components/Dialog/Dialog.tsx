@@ -7,17 +7,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import Typography from '@material-ui/core/Typography';
 import { TransitionProps } from '@material-ui/core/transitions';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     appBar: {
         position: 'relative',
     },
     title: {
-        marginLeft: theme.spacing(2),
-        flex: 1,
+        flexGrow: 1,
     },
-}));
+});
 
 /**
  * @description Transition used by FullScreenDialog -- it slides up
@@ -38,12 +38,22 @@ const Transition = React.forwardRef(function Transition(
  * @arg {Function} props.onClose function to run when the close button is clicked within the dialog, typically setting open to false
  */
 
-interface Props {
+export interface Props {
     children: JSX.Element | JSX.Element[];
     open: boolean;
     onClose: () => void;
+    title?: string;
+    onEntered?: () => void;
+    onExit?: () => void;
 }
-export default function FullScreenDialog({ children, open, onClose }: Props) {
+export default function FullScreenDialog({
+    children,
+    open,
+    onClose,
+    title,
+    onEntered,
+    onExit,
+}: Props) {
     const classes = useStyles();
 
     return (
@@ -52,6 +62,8 @@ export default function FullScreenDialog({ children, open, onClose }: Props) {
                 fullScreen
                 open={open}
                 onClose={onClose}
+                onEntered={onEntered}
+                onExit={onExit}
                 TransitionComponent={Transition}
             >
                 <AppBar className={classes.appBar}>
@@ -64,6 +76,9 @@ export default function FullScreenDialog({ children, open, onClose }: Props) {
                         >
                             <CloseIcon />
                         </IconButton>
+                        <Typography variant='h6' className={classes.title}>
+                            {title}
+                        </Typography>
                     </Toolbar>
                 </AppBar>
                 {open && children}

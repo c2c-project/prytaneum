@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '25px',
     },
     avatar: {
-        paddingRight: theme.spacing(3)
+        paddingRight: theme.spacing(3),
     },
     largeAvatar: {
         width: theme.spacing(7),
@@ -52,7 +52,7 @@ export default function TownhallList() {
         return () => {
             isMounted.current = false;
         };
-    }, []);
+    }, [sendRequest]);
     if (renderCount.current < 1 || isLoading) {
         return <Loader />;
     }

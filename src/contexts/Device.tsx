@@ -9,14 +9,17 @@ export const DeviceContext = React.createContext<'desktop' | 'mobile'>(
 
 interface Props {
     children: JSX.Element | JSX.Element[];
+    override?: 'mobile' | 'desktop';
 }
 
-export default function Device({ children }: Props) {
+export default function Device({ children, override }: Props) {
     const matches = useMediaQuery<typeof MuiTheme>((theme) =>
         theme.breakpoints.down('sm')
     );
     return (
-        <DeviceContext.Provider value={matches ? 'mobile' : 'desktop'}>
+        <DeviceContext.Provider
+            value={override || matches ? 'mobile' : 'desktop'}
+        >
             {children}
         </DeviceContext.Provider>
     );

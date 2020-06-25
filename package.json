@@ -53,6 +53,7 @@
     "devDependencies": {
         "@storybook/addon-a11y": "^5.3.19",
         "@storybook/addon-knobs": "^5.3.19",
+        "@storybook/addon-viewport": "^5.3.19",
         "@storybook/preset-create-react-app": "^2.1.2",
         "@storybook/react": "^5.3.18",
         "@testing-library/jest-dom": "^5.10.0",

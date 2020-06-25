@@ -26,6 +26,7 @@ export default function useEndpoint<T>(
     const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // only used in dev mode
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
+    const sendRequest = React.useCallback(() => setIsLoading(true), []);
 
     React.useEffect(() => {
         let isMounted = true;
@@ -54,13 +55,13 @@ export default function useEndpoint<T>(
                     await minWaitTime();
                     setIsLoading(false);
                     if (meta.status === 200) {
-                        _onSuccess(<AxiosResponse<T>>{
+                        _onSuccess({
                             status: meta.status,
                             statusText: meta.statusText,
                             data,
                             headers: meta.headers,
                             config: meta.config,
-                        });
+                        } as AxiosResponse<T>);
                     } else {
                         throw new Error(meta.statusText);
                     }
@@ -102,7 +103,7 @@ export default function useEndpoint<T>(
         };
     }, [isLoading, endpoint, handleError, options, meta, data]);
 
-    return [() => setIsLoading(true), isLoading];
+    return [sendRequest, isLoading];
 }
 
 // request -> waiting -> response -> success or failure

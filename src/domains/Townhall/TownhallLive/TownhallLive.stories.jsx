@@ -17,6 +17,7 @@ const dummyTownhall = {
     date: new Date(),
     url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
 };
+
 export function TownhallLive() {
     return (
         <MemoryRouter initialEntries={['/123']}>
@@ -25,9 +26,7 @@ export function TownhallLive() {
                     value={makeSuccessFixture({ townhall: dummyTownhall })}
                 >
                     <TownhallProvider>
-                        <Container maxWidth='md'>
-                            <Component />
-                        </Container>
+                        <Component />
                     </TownhallProvider>
                 </FixtureContext.Provider>
             </Route>

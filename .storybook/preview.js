@@ -1,12 +1,20 @@
 import React from 'react';
-import { addDecorator } from '@storybook/react';
+import { addDecorator, addParameters } from '@storybook/react';
 import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import DeviceContext from '../src/contexts/Device';
+import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 import theme from '../src/theme';
 import './main.css';
+
+addParameters({
+    viewport: {
+        viewports: MINIMAL_VIEWPORTS,
+    },
+});
 
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>
@@ -16,9 +24,11 @@ addDecorator((storyFn) => (
                 <UserContext.Provider
                     value={{ _id: '1', username: 'anonymous' }}
                 >
-                    <div style={{ height: '100%', width: '100%' }}>
-                        {storyFn()}
-                    </div>
+                    <DeviceContext>
+                        <div style={{ height: '100%', width: '100%' }}>
+                            {storyFn()}
+                        </div>
+                    </DeviceContext>
                 </UserContext.Provider>
             </SnackContext>
         </BrowserRouter>
