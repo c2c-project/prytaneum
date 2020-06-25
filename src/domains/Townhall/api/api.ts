@@ -6,7 +6,7 @@ import TownhallForm from '../TownhallForm';
     TYPE DECLARATIONS
  */
 
-interface TownhallForm {
+export interface TownhallForm {
     speaker?: string;
     moderator?: string;
     date?: Date;
@@ -25,6 +25,10 @@ export type Townhall = Required<TownhallForm> & {
     _id: string;
     picture: string;
 };
+
+export interface TownhallQuestionForm {
+    question: string;
+}
 
 /*
     API
@@ -55,4 +59,13 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
 
 export async function getTownhallList() {
     return axios.get<{ list: Townhall[] }>('/api/townhalls/list');
+}
+
+export async function getTownhall(id: string) {
+    return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
+}
+
+export async function createQuestion(form: TownhallQuestionForm) {
+    const body: { form: TownhallQuestionForm } = { form };
+    return axios.post('/api/townhalls/:_id/create-question', body);
 }

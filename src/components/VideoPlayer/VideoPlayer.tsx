@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactPlayer from 'react-player';
+import ReactPlayer, { ReactPlayerProps } from 'react-player';
 // import Clipper from '../Clipper';
 
-interface Props {
-    url: string;
-}
-
-function VideoPlayer({ url }: Props) {
+function VideoPlayer({ url, rest }: ReactPlayerProps) {
     return (
         <ReactPlayer
             url={url}
@@ -15,6 +11,8 @@ function VideoPlayer({ url }: Props) {
             width='100%'
             playsinline
             controls
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...rest}
         />
     );
 }
