@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 services:
     prytaneum-client:
         build:
@@ -7,9 +7,8 @@ services:
             target: BASE_IMAGE
         command: 'yarn start'
         volumes:
-            - ./src:/user/app/src
-            - ./.env:/usr/app/.env
-            - ./.tsconfig.json:/usr/app/tsconfig.json
-            - ./public:/usr/app/public
+            - .:/usr/app
         ports:
             - '3000:3000'
+        tty: true
+        # stdin_open: true
