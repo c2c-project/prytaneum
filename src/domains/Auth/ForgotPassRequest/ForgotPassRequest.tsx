@@ -25,10 +25,10 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     const [form, setForm] = React.useState({
         email: '',
     });
-    const _request = React.useCallback(() => API.forgotPassRequest(form), [
+    const builtRequest = React.useCallback(() => API.forgotPassRequest(form), [
         form,
     ]);
-    const [request] = useEndpoint(_request, {
+    const [sendRequest] = useEndpoint(builtRequest, {
         onSuccess: () => {
             snack(`Email sent to ${form.email}`, 'success');
             onSuccess();
@@ -47,7 +47,7 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        request();
+        sendRequest();
     };
 
     return (

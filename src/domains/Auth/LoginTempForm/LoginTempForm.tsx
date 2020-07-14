@@ -17,28 +17,36 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LoginTempForm({ onSuccess, onFailure }) {
+interface Props {
+    onSuccess: () => void;
+    onFailure: () => void;
+}
+
+export default function LoginTempForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [form, setForm] = React.useState({
         username: '',
     });
-    const _request = React.useCallback(() => API.loginTemp(form.username), [
+    const builtRequest = React.useCallback(() => API.loginTemp(form.username), [
         form,
     ]);
-    const [request, isLoading] = useEndPoint(_request, {
+    const [sendRequest, isLoading] = useEndPoint(builtRequest, {
         onSuccess,
         onFailure,
     });
 
-    const handleChange = (e, id) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+        id: string
+    ) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        request();
+        sendRequest();
     };
 
     return (

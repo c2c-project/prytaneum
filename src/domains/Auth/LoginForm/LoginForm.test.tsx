@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+import { AxiosResponse } from 'axios';
 
 import LoginForm from './LoginForm';
 import API from '../api';
@@ -8,7 +9,7 @@ import API from '../api';
 jest.mock('hooks/useSnack');
 
 describe('LoginForm', () => {
-    let container = null;
+    let container: HTMLElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -18,8 +19,10 @@ describe('LoginForm', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -38,8 +41,12 @@ describe('LoginForm', () => {
         });
 
         // find fields
-        const usernameNode = document.querySelector('#username');
-        const passwordNode = document.querySelector('#password');
+        const usernameNode = document.querySelector(
+            '#username'
+        ) as HTMLInputElement;
+        const passwordNode = document.querySelector(
+            '#password'
+        ) as HTMLInputElement;
 
         // expect them to be initially empty
         expect(usernameNode.value).toBe('');
@@ -49,10 +56,10 @@ describe('LoginForm', () => {
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
                 target: { value: 'username' },
-            });
+            } as any);
             ReactTestUtils.Simulate.change(passwordNode, {
                 target: { value: 'password' },
-            });
+            } as any);
         });
 
         // expect them to reflect the changed values
@@ -62,7 +69,7 @@ describe('LoginForm', () => {
 
     it('should call handleSubmit & onSuccess appropriately', async () => {
         const onSuccess = jest.fn();
-        const resolveVal = { status: 200 };
+        const resolveVal = { status: 200 } as AxiosResponse<any>;
         const loginSpy = jest.spyOn(API, 'login').mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 
@@ -71,7 +78,9 @@ describe('LoginForm', () => {
             render(<LoginForm onSuccess={onSuccess} />, container);
         });
 
-        const button = document.querySelector('[type="submit"]');
+        const button = document.querySelector(
+            '[type="submit"]'
+        ) as HTMLButtonElement;
 
         // click button
         ReactTestUtils.act(() => {
@@ -89,7 +98,7 @@ describe('LoginForm', () => {
 
         // let useEffect handle changes due to login request resolving
         await ReactTestUtils.act(async () => {
-            await loginSpy.mock.results.pop().value;
+            await Promise.allSettled(loginSpy.mock.results);
         });
 
         // login should only get called once & onSuccess should get called
@@ -110,7 +119,9 @@ describe('LoginForm', () => {
             render(<LoginForm onSuccess={onSuccess} />, container);
         });
 
-        const button = document.querySelector('[type="submit"]');
+        const button = document.querySelector(
+            '[type="submit"]'
+        ) as HTMLButtonElement;
 
         // click button
         ReactTestUtils.act(() => {

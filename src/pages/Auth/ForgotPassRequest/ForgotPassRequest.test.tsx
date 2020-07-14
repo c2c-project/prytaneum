@@ -4,8 +4,8 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import ForgotPassRequest from './ForgotPassRequest';
 import theme from 'theme';
+import ForgotPassRequest from './ForgotPassRequest';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');

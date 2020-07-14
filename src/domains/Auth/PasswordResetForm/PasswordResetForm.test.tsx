@@ -9,7 +9,7 @@ jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
 describe('ForgotPassConsume', () => {
-    let container = null;
+    let container: HTMLElement | null = null;
 
     beforeEach(() => {
         // setup a DOM element as a render target
@@ -19,8 +19,10 @@ describe('ForgotPassConsume', () => {
 
     afterEach(() => {
         // cleanup on exiting
-        unmountComponentAtNode(container);
-        container.remove();
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
         container = null;
         jest.restoreAllMocks();
     });
@@ -44,17 +46,23 @@ describe('ForgotPassConsume', () => {
                 container
             );
         });
-        const passNode = document.querySelector('#password');
-        const confirmNode = document.querySelector('#confirm-password');
-        const button = document.querySelector('[type="submit"]');
+        const passNode = document.querySelector(
+            '#password'
+        ) as HTMLInputElement;
+        const confirmNode = document.querySelector(
+            '#confirm-password'
+        ) as HTMLInputElement;
+        const button = document.querySelector(
+            '[type="submit"]'
+        ) as HTMLButtonElement;
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(passNode, {
                 target: { value: '123' },
-            });
+            } as any);
             ReactTestUtils.Simulate.change(confirmNode, {
                 target: { value: '123' },
-            });
+            } as any);
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

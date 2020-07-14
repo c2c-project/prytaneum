@@ -14,9 +14,11 @@ interface Props {
 }
 
 export default function VerifyEmail({ onSuccess, onFailure, userId }: Props) {
-    const _request = React.useCallback(() => API.verifyEmail(userId), [userId]);
+    const builtRequest = React.useCallback(() => API.verifyEmail(userId), [
+        userId,
+    ]);
     const [snack] = useSnack();
-    const [request] = useEndpoint(_request, {
+    const [sendRequest] = useEndpoint(builtRequest, {
         onSuccess: () => {
             snack('Successfully validated your email', 'success');
             onSuccess();
@@ -25,7 +27,7 @@ export default function VerifyEmail({ onSuccess, onFailure, userId }: Props) {
     });
 
     React.useEffect(() => {
-        request();
+        sendRequest();
     }, []);
 
     return <Loader />;

@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
-import useSnack from 'hooks/useSnack';
 
 import API from '../api';
 
@@ -17,33 +16,41 @@ const useStyles = makeStyles({
     },
 });
 
-export default function PasswordResetForm({ token, onSuccess }) {
+interface Props {
+    onSuccess: () => void;
+}
+
+export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
-    const [snack] = useSnack();
+
     const [form, setForm] = React.useState({
+        username: '',
         password: '',
-        confirmPassword: '',
     });
-    const _request = React.useCallback(
-        () => API.forgotPassReset(token, form),
-        [form, token]
+
+    const builtRequest = React.useCallback(
+        () => API.login(form.username, form.password),
+        [form]
     );
-    const [request, isLoading] = useEndpoint(_request, {
-        onSuccess: () => {
-            snack('Successfully reset password!');
-            onSuccess();
-        },
+
+    const [sendRequest, isLoading] = useEndpoint(builtRequest, {
+        onSuccess,
     });
-    const handleChange = (e, id) => {
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+        id: string
+    ) => {
         e.preventDefault();
         const { value } = e.target;
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        request();
+        sendRequest();
     };
+
     return (
         <form onSubmit={handleSubmit}>
             <Grid
@@ -54,6 +61,22 @@ export default function PasswordResetForm({ token, onSuccess }) {
             >
                 <Grid item xs={12}>
                     <TextField
+                        id='username'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='text'
+                        value={form.username}
+                        onChange={(e) => handleChange(e, 'username')}
+                        label='Username'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
                         id='password'
                         required
                         fullWidth
@@ -62,30 +85,23 @@ export default function PasswordResetForm({ token, onSuccess }) {
                         value={form.password}
                         onChange={(e) => handleChange(e, 'password')}
                         label='Password'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        id='confirm-password'
-                        required
-                        fullWidth
-                        variant='outlined'
-                        type='password'
-                        value={form.confirmPassword}
-                        onChange={(e) => handleChange(e, 'confirmPassword')}
-                        label='Confirm Password'
-                    />
-                </Grid>
-                <Grid container item xs={12} justify='space-between'>
                     <LoadingButton
                         loading={isLoading}
                         component={
                             <Button
+                                fullWidth
                                 type='submit'
                                 variant='contained'
                                 color='primary'
                             >
-                                Submit
+                                Login
                             </Button>
                         }
                     />
@@ -95,7 +111,6 @@ export default function PasswordResetForm({ token, onSuccess }) {
     );
 }
 
-PasswordResetForm.propTypes = {
+LoginForm.propTypes = {
     onSuccess: PropTypes.func.isRequired,
-    token: PropTypes.string.isRequired,
 };
