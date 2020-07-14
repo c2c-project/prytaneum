@@ -2,7 +2,9 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core/styles';
 
+import theme from 'theme';
 import ForgotPasswordReset from './ForgotPassReset';
 
 jest.mock('hooks/useSnack');
@@ -32,11 +34,13 @@ describe('Register', () => {
         const path = '/123456';
         ReactTestUtils.act(() => {
             render(
-                <MemoryRouter initialEntries={[path]}>
-                    <Route path='/:token'>
-                        <ForgotPasswordReset />
-                    </Route>
-                </MemoryRouter>,
+                <ThemeProvider theme={theme}>
+                    <MemoryRouter initialEntries={[path]}>
+                        <Route path='/:token'>
+                            <ForgotPasswordReset />
+                        </Route>
+                    </MemoryRouter>
+                </ThemeProvider>,
                 container
             );
         });
