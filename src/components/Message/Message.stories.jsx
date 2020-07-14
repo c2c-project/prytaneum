@@ -40,6 +40,7 @@
 //         <div style={{ height: '500px' }}>
 //             <Message
 //                 messages={mockMessages}
+//                 button
 //                 onClickMessage={(id) =>
 //                     console.log(`I, ${id}, have been clicked!`)
 //                 }

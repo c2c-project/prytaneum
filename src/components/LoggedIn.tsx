@@ -16,10 +16,10 @@ interface Props {
 export default function LoggedIn({ children }: Props) {
     const jwt = { _id: '' }; // useJwt();
     if (NODE_ENV === 'development') {
-        return children;
+        return <>children</>;
     }
     // assumption is that if there is no jwt, then they are not logged in
-    return jwt ? children : <Redirect to='/logout' />;
+    return jwt ? <>children</> : <Redirect to='/logout' />;
 }
 
 LoggedIn.propTypes = {

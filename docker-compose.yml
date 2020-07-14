@@ -1,13 +1,15 @@
-version: '2.1'
+version: '3.3'
 services:
-    server:
-        container_name: prytanea_client
+    prytaneum-client:
         build:
             context: .
             dockerfile: Dockerfile
+            target: BASE_IMAGE
         command: 'yarn start'
         volumes:
-            - .:/user/src/app
-            - /usr/src/app/node_modules
+            - ./src:/user/app/src
+            - ./.env:/usr/app/.env
+            - ./.tsconfig.json:/usr/app/tsconfig.json
+            - ./public:/usr/app/public
         ports:
-            - '3000:3001'
+            - '3000:3000'

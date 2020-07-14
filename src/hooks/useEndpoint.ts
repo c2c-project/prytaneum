@@ -23,7 +23,7 @@ export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
     options: EndpointOptions<T> = {}
 ): EndpointUtils {
-    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // only used in dev mode
+    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // NOTE: only used in dev mode
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);
@@ -49,9 +49,10 @@ export default function useEndpoint<T>(
 
         const request = async function () {
             try {
+                /*
+                 * THIS BLOCK OF CODE ONLY MATTERS IN DEVELOPMENT
+                 */
                 if (process.env.NODE_ENV === 'development') {
-                    // instantly fetches data, figure out a way to mock loading? TODO:
-
                     await minWaitTime();
                     setIsLoading(false);
                     if (meta.status === 200) {
@@ -68,14 +69,16 @@ export default function useEndpoint<T>(
                     return;
                 }
 
+                // the first indices is all I care about
                 const [response] = await Promise.allSettled([
                     endpoint(),
                     minWaitTime(),
                 ]);
-                // check if I'm still mounted before continuing
+
+                // I need to check if I'm still mounted before continuing
                 if (isMounted === true) {
                     setIsLoading(false);
-                    // there might be a better way to do this?
+                    // there might be a better way to do this? other than just checking the status string :\
                     if (response.status === 'rejected') {
                         _onFailure(response.reason);
                     } else {
@@ -83,9 +86,11 @@ export default function useEndpoint<T>(
                     }
                 }
             } catch (e) {
-                // check if I'm still mounted before continuing
-                // this failure is something on the client and not from the response
-                // because allSettled doesn't throw an error even if a promise is rejected
+                /*
+                 * check if I'm still mounted before continuing
+                 * this catch only triggers if it is something on the client and not from the response
+                 * because allSettled doesn't throw an error even if one of the promises are rejected
+                 */
                 if (isMounted === true) {
                     setIsLoading(false);
                     _onFailure(e);
@@ -93,7 +98,9 @@ export default function useEndpoint<T>(
             }
         };
 
+        // sendRequest sets loading to true, I use this as the trigger to send the request
         if (isLoading) {
+            // I use callbacks after the request completes, so I don't care about "await"-ing the promise
             // eslint-disable-next-line no-void
             void request();
         }

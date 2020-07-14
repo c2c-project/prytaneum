@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import useJwt from '../../hooks/useJwt';
-import MessageList from './MessageList';
-import MessageListItem from './MessageListItem';
-import MessageItemText from './MessageItemText';
-import MessageItemAuthor from './MessageItemAuthor';
-import MessageItemTimestamp from './MessageItemTimestamp';
+
+import MessageList from '../MessageList';
+import MessageListItem from '../MessageListItem';
+import MessageItemText from '../MessageItemText';
+import MessageItemAuthor from '../MessageItemAuthor';
+import MessageItemTimestamp from '../MessageItemTimestamp';
 import ScrollToBottom from '../ScrollToBottom';
 import { Message } from './types';
 
@@ -24,11 +24,17 @@ const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
 
 interface Props {
     messages: Message[];
-    onClickMessage: (mId: string) => void;
+    button?: boolean;
+    onClickMessage?: (_id: string) => void;
 }
-function Messages({ messages, onClickMessage }: Props) {
+
+interface PropDefaults {
+    onClickMessage: () => void;
+    button: false;
+}
+function Messages({ messages, button, onClickMessage }: Props & PropDefaults) {
     // const [, user] = useJwt();
-    const user = { _id: '' }; // PLACEHOLDER TODO: remove this/fix this
+    // const user = { _id: '' }; // PLACEHOLDER TODO: remove this/fix this
 
     // const filterQuestions = () => {
     //     if (!Array.isArray(messages)) {
@@ -55,20 +61,18 @@ function Messages({ messages, onClickMessage }: Props) {
         <ScrollToBottom active>
             {/* <MessageContext.Provider value={moderator}> */}
             <MessageList>
-                {messages.map(
-                    ({ _id, userId, username, message, moderated, sent }) => (
-                        <MessageListItem
-                            key={_id}
-                            hidden={moderated}
-                            button={checkIsOwner(user, userId)}
-                            onClick={() => onClickMessage(_id)}
-                        >
-                            <MessageItemTimestamp time={sent} />
-                            <MessageItemAuthor name={username} />
-                            <MessageItemText text={message} />
-                        </MessageListItem>
-                    )
-                )}
+                {messages.map(({ _id, username, message, moderated, sent }) => (
+                    <MessageListItem
+                        key={_id}
+                        hidden={moderated}
+                        button={button}
+                        onClick={() => onClickMessage(_id)}
+                    >
+                        <MessageItemTimestamp time={sent} />
+                        <MessageItemAuthor name={username} />
+                        <MessageItemText text={message} />
+                    </MessageListItem>
+                ))}
             </MessageList>
             {/* </MessageContext.Provider> */}
         </ScrollToBottom>
@@ -77,6 +81,8 @@ function Messages({ messages, onClickMessage }: Props) {
 
 Messages.defaultProps = {
     messages: [],
+    button: false,
+    onClickMessage: () => {},
 };
 
 Messages.propTypes = {
@@ -89,7 +95,8 @@ Messages.propTypes = {
             moderated: PropTypes.bool,
         })
     ),
-    onClickMessage: PropTypes.func.isRequired,
+    onClickMessage: PropTypes.func,
+    button: PropTypes.bool,
     // moderator: PropTypes.bool.isRequired,
 };
 

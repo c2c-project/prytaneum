@@ -13,6 +13,7 @@ import Message from '../Message';
 import Chatbar from './Chatbar';
 import useJwt from '../../hooks/useJwt';
 
+// TODO: test comment to see if this works
 const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),

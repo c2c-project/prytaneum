@@ -34,7 +34,7 @@ export default createMuiTheme({
         secondary: { main: '#fdb813' },
     },
     custom: {
-        borderRadius: '25px',
+        borderRadius: '18px',
         maxHW: {
             height: '100%',
             width: '100%',
