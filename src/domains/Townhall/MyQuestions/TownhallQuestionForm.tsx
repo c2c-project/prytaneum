@@ -10,23 +10,24 @@ import { createQuestion, TownhallQuestionForm as FormType } from '../api';
 
 interface Props {
     form?: FormType;
-    focus?: boolean;
+    onSubmit?: () => void;
 }
 
 interface DefaultProps {
     form: FormType;
+    onSubmit: () => void;
 }
 
 export default function TownhallQuestionForm({
     form: formProp,
-    focus,
+    onSubmit,
 }: Props & DefaultProps) {
     const [form, setForm] = React.useState<FormType>(formProp);
     const [snack] = useSnack();
-    const ref = React.useRef<HTMLDivElement | null>();
     const [sendQuestion, isLoading] = useEndpoint(() => createQuestion(form), {
         onSuccess: () => {
             snack('Successfully submitted your question!', 'success');
+            onSubmit();
         },
     });
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,23 +40,17 @@ export default function TownhallQuestionForm({
         const { value } = e.target;
         setForm({ question: value });
     };
-    React.useEffect(() => {
-        console.log(focus);
-        if (focus && ref.current) {
-            ref.current.focus();
-        }
-    }, [focus]);
     return (
         <form onSubmit={handleSubmit}>
             <Grid container justify='center' spacing={2}>
                 <Grid item xs={12}>
                     <TextField
+                        autoFocus
                         value={form.question}
                         onChange={handleChange}
                         label='Your Question Here'
                         fullWidth
                         variant='outlined'
-                        inputRef={ref}
                     />
                 </Grid>
                 <Grid container item xs={12} justify='flex-end'>
@@ -77,4 +72,5 @@ TownhallQuestionForm.defaultProps = {
     form: {
         question: '',
     },
+    onSubmit: () => {},
 };

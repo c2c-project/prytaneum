@@ -1,16 +1,102 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import clsx from 'clsx';
+import { Divider, AppBar, Tabs, Tab, Grid } from '@material-ui/core';
+import { useRouteMatch, Route, Switch, Link, Redirect } from 'react-router-dom';
 
 import Paper from 'components/Paper';
 import VideoPlayer from 'components/VideoPlayer';
-import Dialog, { DialogProps } from 'components/Dialog';
 import { DeviceContext } from 'contexts/Device';
-import QuestionForm from './TownhallQuestionForm';
 import { TownhallContext } from '../Contexts/Townhall';
+import MyQuestions from '../MyQuestions';
+
+function TownhallLiveTabs({ url }: { url: string }) {
+    const { params } = useRouteMatch<{ tab: string }>();
+    const { tab } = params;
+
+    return (
+        <div>
+            <AppBar position='static' color='transparent' elevation={0}>
+                <Tabs value={tab} variant='fullWidth'>
+                    <Tab
+                        value='my-questions'
+                        label='My Questions'
+                        component={Link}
+                        to={`${url}/my-questions`}
+                    />
+                    <Tab
+                        value='all-questions'
+                        label='All Questions'
+                        component={Link}
+                        to={`${url}/all-questions`}
+                    />
+                </Tabs>
+                <Divider />
+            </AppBar>
+            <div style={{ overflowX: 'hidden' }}>
+                <Switch>
+                    <Route path={`${url}/my-questions`}>
+                        <MyQuestions />
+                    </Route>
+                    <Route path={`${url}/all-questions`}>
+                        <h1>TODO: all questions feed</h1>
+                    </Route>
+                </Switch>
+            </div>
+        </div>
+    );
+}
+
+function TabRouter() {
+    const { path, url } = useRouteMatch();
+    return (
+        <Switch>
+            <Route path={`${url}/:tab`}>
+                <TownhallLiveTabs url={url} />
+            </Route>
+            <Route path={path} exact>
+                <Redirect to={`${path}/my-questions`} />
+            </Route>
+        </Switch>
+    );
+}
+
+const useMobileStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+    },
+    bottom: {
+        paddingBottom: theme.spacing(3),
+    },
+    // button: {
+    //     padding: `0px ${theme.spacing(1)}px 0px ${theme.spacing(1)}px`,
+    // },
+    paper: {
+        paddingBottom: theme.spacing(1),
+        borderRadius: '0px',
+        height: '100%',
+    },
+}));
+
+function MobileLive() {
+    const townhall = React.useContext(TownhallContext);
+    const classes = useMobileStyles();
+
+    return (
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <VideoPlayer url={townhall.url} />
+                    </Grid>
+                    <Grid item xs={12} className={classes.bottom}>
+                        <TabRouter />
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
+    );
+}
 
 const useDesktopStyles = makeStyles((theme) => ({
     paper: {
@@ -19,52 +105,7 @@ const useDesktopStyles = makeStyles((theme) => ({
     },
 }));
 
-const useMobileStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        height: '100%',
-    },
-    item: {
-        paddingBottom: theme.spacing(3),
-    },
-    button: {
-        padding: `0px ${theme.spacing(1)}px 0px ${theme.spacing(1)}px`,
-    },
-}));
-
-interface LiveProps {
-    onClickAsk: () => void;
-}
-
-function MobileLive({ onClickAsk }: LiveProps) {
-    const townhall = React.useContext(TownhallContext);
-    const classes = useMobileStyles();
-    return (
-        <div className={classes.root}>
-            <Grid container spacing={0}>
-                <Grid item xs={12} className={classes.item}>
-                    <VideoPlayer url={townhall.url} />
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    className={clsx([classes.button, classes.item])}
-                >
-                    <Button
-                        onClick={onClickAsk}
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                    >
-                        Ask a Question
-                    </Button>
-                </Grid>
-            </Grid>
-        </div>
-    );
-}
-
-function DesktopLive({ onClickAsk }: LiveProps) {
+function DesktopLive() {
     const townhall = React.useContext(TownhallContext);
     const classes = useDesktopStyles();
 
@@ -75,77 +116,22 @@ function DesktopLive({ onClickAsk }: LiveProps) {
                     <VideoPlayer url={townhall.url} />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button
-                        onClick={onClickAsk}
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                    >
-                        Ask a Question
-                    </Button>
+                    <TabRouter />
                 </Grid>
             </Grid>
         </Paper>
     );
 }
-const useDialogStyles = makeStyles((theme) => ({
-    spacing: {
-        padding: theme.spacing(3),
-    },
-}));
-type QuestionDialogProps = Omit<DialogProps, 'children'>;
-function QuestionDialog(props: QuestionDialogProps) {
-    const { open, onClose } = props;
-    const [animEnded, setAnimEnded] = React.useState(false);
-    const classes = useDialogStyles();
-    return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            title='Question Form'
-            onEntered={() => setAnimEnded(true)}
-            onExit={() => setAnimEnded(false)}
-        >
-            <Container maxWidth='md'>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <div className={classes.spacing} />
-                        <QuestionForm focus={animEnded} />
-                    </Grid>
-                </Grid>
-            </Container>
-        </Dialog>
-    );
-}
 
 export default function TownhallLive() {
     const device = React.useContext(DeviceContext);
-    const [open, setOpen] = React.useState(false);
-    const onClose = () => setOpen(false);
-    const DialogWithProps = <QuestionDialog open={open} onClose={onClose} />;
 
-    const onClickAsk = () => setOpen(true);
     switch (device) {
         case 'desktop':
-            return (
-                <>
-                    <DesktopLive onClickAsk={onClickAsk} />
-                    {DialogWithProps}
-                </>
-            );
+            return <DesktopLive />;
         case 'mobile':
-            return (
-                <>
-                    <MobileLive onClickAsk={onClickAsk} />
-                    {DialogWithProps}
-                </>
-            );
+            return <MobileLive />;
         default:
-            return (
-                <>
-                    <DesktopLive onClickAsk={onClickAsk} />
-                    {DialogWithProps}
-                </>
-            );
+            return <DesktopLive />;
     }
 }

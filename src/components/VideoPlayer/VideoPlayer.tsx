@@ -9,6 +9,7 @@ function VideoPlayer({ url, rest }: ReactPlayerProps) {
             url={url}
             playing={process.env.NODE_ENV === 'production'}
             width='100%'
+            height='240px'
             playsinline
             controls
             // eslint-disable-next-line react/jsx-props-no-spreading

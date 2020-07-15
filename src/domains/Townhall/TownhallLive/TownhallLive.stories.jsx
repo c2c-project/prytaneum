@@ -1,6 +1,5 @@
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
 
 import FixtureContext, { makeSuccessFixture } from 'contexts/Fixtures';
 import Component from './TownhallLive';
