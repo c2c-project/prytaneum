@@ -7,9 +7,30 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import RangeSlider from './RangeSlider';
-import FullScreenDialog from '../../../components/Dialoag';
 
+import FullScreenDialog from 'components/Dialog';
+import RangeSlider from './RangeSlider';
+
+interface Clip {
+    question: string;
+    start: number;
+    end: number;
+    category: {
+        tag: string;
+        color: string;
+    };
+    link: {
+        text: string;
+    };
+}
+
+interface Props {
+    currentClip: Clip;
+    confirm: () => void;
+    openState: boolean;
+    edit: (a: Clip) => void;
+    modeOff: () => void;
+}
 
 export default function ClipDialog({
     currentClip,
@@ -17,20 +38,19 @@ export default function ClipDialog({
     openState,
     edit,
     modeOff,
-}) {
-
+}: Props) {
     const handleClose = () => {
         modeOff();
     };
 
     // case: editing the timeframe without the question.
-    function handleClipTime(start, end) {
+    function handleClipTime(start: number, end: number) {
         edit({ ...currentClip, start, end });
     }
 
     // e is pre-defined event object to stop form from refreshing.
     // https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
-    const handleSubmit = e => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         confirm();
         // }
@@ -57,11 +77,11 @@ export default function ClipDialog({
                             label='edit question here'
                             type='text'
                             value={currentClip.question}
-                            onChange={event => {
+                            onChange={(event) => {
                                 const question = event.target.value;
                                 // console.log('Current event: '+event.target.value);
                                 // setForm({ ...form, question });
-                                edit({...currentClip, question});
+                                edit({ ...currentClip, question });
                             }}
                             fullWidth
                         />
@@ -103,12 +123,11 @@ ClipDialog.propTypes = {
             color: PropTypes.string,
         }),
         link: PropTypes.shape({
-            text: PropTypes.string
-        })
+            text: PropTypes.string,
+        }),
     }).isRequired,
     confirm: PropTypes.func.isRequired,
     edit: PropTypes.func.isRequired,
     openState: PropTypes.bool.isRequired,
     modeOff: PropTypes.func.isRequired,
-
 };
