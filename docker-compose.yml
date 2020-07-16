@@ -1,14 +1,62 @@
 version: '3.8'
+networks:
+    backend-network:
+        internal: true
+        driver: bridge
+    traefik-network:
+        external: true
+        driver: bridge
 services:
-    prytaneum-client:
+    frontend:
         build:
             context: .
             dockerfile: Dockerfile
             target: BASE_IMAGE
         command: 'yarn start'
         volumes:
-            - .:/usr/app
+            - ./src:/usr/app/src
+            - ./public:/usr/app/public
+            - ./.env:/usr/app/.env
+            - ./tsconfig.json:/usr/app/tsconfig.json
+        # ports:
+        #     - '3000:3000'
+        # tty: true
+        stdin_open: true
+        networks:
+            - traefik-network
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
+    backend:
+        image: prytaneum/backend:1.0.0
+        networks:
+            - backend-network
+            - traefik-network
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.backend.rule=PathPrefix(`/api`) || PathPrefix(`/chat`) || PathPrefix(`/socket.io`)'
+        # ports:
+        #     - 3001:3000
+    backend-db:
+        image: mongo:4.2.8-bionic
+        networks:
+            backend-network:
+                aliases:
+                    - mongo
+    traefik:
+        image: 'traefik:v2.2'
+        container_name: 'traefik'
+        command:
+            - '--log.level=DEBUG'
+            - '--api.insecure=true'
+            - '--providers.docker=true'
+            - '--providers.docker.exposedbydefault=false'
+            - '--entrypoints.web.address=:80'
+            - '--providers.docker.network=traefik-network'
         ports:
-            - '3000:3000'
-        tty: true
-        # stdin_open: true
+            - '3000:80'
+            - '8080:8080'
+        networks:
+            - traefik-network
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock:ro'

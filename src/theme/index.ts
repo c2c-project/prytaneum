@@ -33,6 +33,12 @@ export default createMuiTheme({
         primary: { main: '#0074bc' },
         secondary: { main: '#fdb813' },
     },
+    typography: {
+        button: {
+            lineHeight: '1.75em',
+            // fontSize: 'rem',
+        },
+    },
     custom: {
         borderRadius: '18px',
         maxHW: {

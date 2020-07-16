@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import Auth from './Auth';
 import LoggedIn from '../components/LoggedIn';
 import Nav from '../layout/Nav';
@@ -22,26 +22,26 @@ import Public from './Public';
 
 export default function Routes() {
     return (
-        <Nav>
-            <Switch>
-                <Route path='/:domain/:title'>
+        <Switch>
+            <Route path='/:domain/:title'>
+                <Switch>
                     <Route path='/auth'>
                         <Auth />
                     </Route>
                     <Route path='/app'>
                         <LoggedIn>
+                            {/* <Nav /> */}
                             <div>Logged in</div>
                         </LoggedIn>
                     </Route>
                     <Route path='/'>
                         <Redirect to='/auth/login' />
                     </Route>
-                </Route>
-                <Route path='/'>
-                    <Public />
-                    <Footer />
-                </Route>
-            </Switch>
-        </Nav>
+                </Switch>
+            </Route>
+            <Route path='/'>
+                <Redirect to='/auth/login' />
+            </Route>
+        </Switch>
     );
 }

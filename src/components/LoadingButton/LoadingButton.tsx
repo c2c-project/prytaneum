@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface Props {
@@ -8,11 +9,12 @@ interface Props {
 }
 
 export default function LoadingButton({ loading, component }: Props) {
+    const theme = useTheme();
     if (loading) {
         return React.cloneElement(
             component,
             { disabled: loading },
-            <CircularProgress />
+            <CircularProgress size={theme.typography.button.lineHeight} />
         );
     }
     return component;

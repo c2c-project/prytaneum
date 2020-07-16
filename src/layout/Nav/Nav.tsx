@@ -19,6 +19,8 @@ import { parseTitle } from '../utils';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        height: '100%',
+        width: '100%',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -27,19 +29,22 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         transition: 'inherit 2s ease-in 10s',
     },
+    main: {
+        width: '100%',
+        flex: 1,
+    },
 }));
 
 interface Props {
     tabs?: React.ReactNode[] | React.ReactNode;
     back?: boolean;
-    children: JSX.Element | JSX.Element[];
 }
 
 interface Params {
     title?: string;
 }
 
-export default function Nav({ tabs, back, children }: Props) {
+export default function Nav({ tabs, back }: Props) {
     const { title } = useParams<Params>();
     const history = useHistory(); // TODO: change this to not use history and instead have my own internal routing?
     const classes = useStyles();
@@ -68,7 +73,6 @@ export default function Nav({ tabs, back, children }: Props) {
                 </Toolbar>
                 {tabs}
             </AppBar>
-            <main>{children}</main>
         </div>
     );
 }

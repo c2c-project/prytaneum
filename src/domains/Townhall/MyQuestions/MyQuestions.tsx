@@ -60,12 +60,12 @@ const useFeedStyles = makeStyles((theme) => ({
     },
 }));
 
-export default React.forwardRef(function MyQuestions(props, ref) {
+export default function MyQuestions() {
     const [open, setOpen] = React.useState(false);
     const classes = useFeedStyles();
 
     return (
-        <div className={classes.root} ref={ref}>
+        <div className={classes.root}>
             <QuestionDialog open={open} onClose={() => setOpen(false)} />
             <Button
                 className={classes.button}
@@ -81,4 +81,4 @@ export default React.forwardRef(function MyQuestions(props, ref) {
             </div>
         </div>
     );
-});
+}

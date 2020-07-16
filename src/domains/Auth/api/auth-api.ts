@@ -81,7 +81,7 @@ interface RegisterForm {
 
 export async function register(form: RegisterForm) {
     const { username, password, email, confirmPassword } = form;
-
+    
     if (!username || !password || !email || !confirmPassword) {
         throw errors.fieldError();
     }

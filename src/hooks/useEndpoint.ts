@@ -50,9 +50,9 @@ export default function useEndpoint<T>(
         const request = async function () {
             try {
                 /*
-                 * THIS BLOCK OF CODE ONLY MATTERS IN DEVELOPMENT
+                 * THIS BLOCK OF CODE ONLY MATTERS IN test
                  */
-                if (process.env.NODE_ENV === 'development') {
+                if (process.env.NODE_ENV === 'test') {
                     await minWaitTime();
                     setIsLoading(false);
                     if (meta.status === 200) {
