@@ -8,7 +8,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from 'components/Paper';
 import ForgotPassRequestForm from 'domains/Auth/ForgotPassRequest';
 
-import routes from '../routes';
+import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,7 +38,7 @@ export default function ForgotPassRequest() {
                     <Paper className={classes.paper}>
                         <ForgotPassRequestForm
                             onSuccess={() => {
-                                history.push(routes.login);
+                                history.push(routeNames.login);
                             }}
                         />
                     </Paper>

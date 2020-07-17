@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Switch, useHistory } from 'react-router-dom';
 import { withKnobs, select } from '@storybook/addon-knobs';
 
 import Fixtures from 'contexts/Fixtures';
-import routes from '../routes';
+import routeNames from '../route-names';
 import Page from '.';
 
 export default { title: 'Pages/Auth', decorators: [withKnobs] };
@@ -44,7 +44,7 @@ export function VerifyEmail() {
         <Fixtures.Provider value={select('Outcome', options, defaultValue)}>
             <MemoryRouter initialEntries={['/123456']}>
                 <Switch>
-                    <Route path={routes.login}>
+                    <Route path={routeNames.login}>
                         <Helper />
                     </Route>
                     <Route path='/:userId'>

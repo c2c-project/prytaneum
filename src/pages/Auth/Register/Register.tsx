@@ -9,7 +9,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from 'components/Paper';
 import RegisterForm from 'domains/Auth/RegisterForm';
 
-import routes from '../routes';
+import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,7 +36,7 @@ export default function RegisterPage() {
                 >
                     <Paper className={classes.paper}>
                         <RegisterForm
-                            onSuccess={() => history.push(routes.login)}
+                            onSuccess={() => history.push(routeNames.login)}
                         />
                     </Paper>
                 </Grid>

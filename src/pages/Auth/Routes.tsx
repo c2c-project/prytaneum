@@ -7,7 +7,7 @@ import LoginTemp from './LoginTemp';
 import Logout from './Logout';
 import ForgotPassReset from './ForgotPassReset';
 import ForgotPassRequest from './ForgotPassRequest';
-import routes from './routes';
+import routes from './route-names';
 
 export default function Routes() {
     return (
