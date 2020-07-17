@@ -55,7 +55,7 @@ export default function FullScreenDialog({
     onExit,
 }: Props) {
     const classes = useStyles();
-
+    
     return (
         <div>
             <Dialog

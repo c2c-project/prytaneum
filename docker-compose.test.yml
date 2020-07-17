@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: BASE_IMAGE
+        command: 'yarn test'
+        volumes:
+            - ./src:/usr/app/src
+            - ./public:/usr/app/public
+            - ./.env:/usr/app/.env
+            - ./tsconfig.json:/usr/app/tsconfig.json
+        ports:
+            - '3000:3000'
+        tty: true
+        # stdin_open: true

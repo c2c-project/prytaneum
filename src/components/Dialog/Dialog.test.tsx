@@ -44,13 +44,9 @@ describe('Dialog', function () {
                 container
             );
         });
-        const button = document.querySelector('button');
+        const button = document.querySelector('button') as HTMLButtonElement;
         ReactTestUtils.act(() => {
-            if (button) {
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
         expect(onClose).toBeCalledTimes(1);

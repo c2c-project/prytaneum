@@ -52,7 +52,7 @@ export default function useEndpoint<T>(
                 /*
                  * THIS BLOCK OF CODE ONLY MATTERS IN test
                  */
-                if (process.env.NODE_ENV === 'test') {
+                if (process.env.NODE_ENV === 'development') {
                     await minWaitTime();
                     setIsLoading(false);
                     if (meta.status === 200) {
