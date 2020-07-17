@@ -32,7 +32,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-        "storybook": "start-storybook --port 3003",
+        "storybook": "start-storybook --port 3000",
         "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
         "lint": "eslint src/ --ext \".ts .tsx\""
     },
