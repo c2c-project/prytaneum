@@ -5,7 +5,7 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import theme from 'theme';
-import LoggedIn, {children} from './LoggedIn';
+import LoggedIn from './LoggedIn';
 
 describe('LoggedIn', function() {
     let container: HTMLDivElement | null = null;
@@ -33,6 +33,7 @@ describe('LoggedIn', function() {
     
     // check if NODE_ENV === 'development'
     it('should NODE_ENV be development', () => {
+        const children = <h1>hi</h1>;
         ReactTestUtils.act(
             () => {
                 render(
