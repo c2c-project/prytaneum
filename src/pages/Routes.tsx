@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import Auth from './Auth';
-import LoggedIn from '../components/LoggedIn';
+import LoggedIn from '../components/LoggedIn/LoggedIn';
 import Nav from '../layout/Nav';
 import Footer from '../layout/Footer';
 // import TownhallList from '../domains/Townhall/TownhallList';
