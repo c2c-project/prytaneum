@@ -10,7 +10,7 @@ import Paper from 'components/Paper';
 import LoginForm from 'domains/Auth/LoginForm';
 import banner from 'assets/spp-banner.png';
 
-import routes from '../routes';
+import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,21 +60,21 @@ export default function Login() {
                             >
                                 <Button
                                     onClick={() =>
-                                        history.push(routes.register)
+                                        history.push(routeNames.register)
                                     }
                                 >
                                     Register
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        history.push(routes.forgotPassRequest)
+                                        history.push(routeNames.forgotPassRequest)
                                     }
                                 >
                                     Forgot Password?
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        history.push(routes.loginTemp)
+                                        history.push(routeNames.loginTemp)
                                     }
                                 >
                                     Temporarily Login

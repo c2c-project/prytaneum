@@ -8,7 +8,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from 'components/Paper';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 
-import routes from '../routes';
+import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,7 +47,7 @@ export default function ForgotPasswordReset() {
                         <PasswordResetForm
                             token={token}
                             onSuccess={() => {
-                                history.push(routes.login);
+                                history.push(routeNames.login);
                             }}
                         />
                     </Paper>

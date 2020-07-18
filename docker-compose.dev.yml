@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: BASE_IMAGE
+        command: 'yarn start'
+        volumes:
+            - ./src:/usr/app/src
+            - ./public:/usr/app/public
+            - ./.env:/usr/app/.env
+            - ./tsconfig.json:/usr/app/tsconfig.json
+        ports:
+            - '3000:3000'
+        # tty: true
+        stdin_open: true
+    storybook:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: BASE_IMAGE
+        command: 'yarn storybook'
+        volumes:
+            - ./src:/usr/app/src
+            - ./public:/usr/app/public
+            - ./.env:/usr/app/.env
+            - ./tsconfig.json:/usr/app/tsconfig.json
+            - ./.storybook:/usr/app/.storybook
+        ports:
+            - '3001:3000'
+        tty: true

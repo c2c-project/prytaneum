@@ -4,22 +4,22 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './Home';
 import About from './About';
 import Err from './404';
-import routes from './routes';
+import routeNames from './route-names';
 
 export default function PublicRoutes() {
     return (
         <Switch>
-            <Route path={routes.home}>
+            <Route path={routeNames.home}>
                 <Home />
             </Route>
-            <Route path={routes.about}>
+            <Route path={routeNames.about}>
                 <About />
             </Route>
-            <Route path={routes.err}>
+            <Route path={routeNames.err}>
                 <Err />
             </Route>
             <Route path='/'>
-                <Redirect to={routes.home} />
+                <Redirect to={routeNames.home} />
             </Route>
         </Switch>
     );
