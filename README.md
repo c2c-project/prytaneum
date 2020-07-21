@@ -2,6 +2,7 @@
 
 - Notes about development and progress go here.
 - Currently working on writing unit tests for the time being and will move to documentation and integration after units pass thoroughly
+- noticed you can go to /app/home and be greeted with `Logged In` so this might an issue
 
 ### Significant Parts of the Stack
 
