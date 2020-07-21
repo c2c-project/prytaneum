@@ -54,10 +54,16 @@ describe('LoggedIn', function() {
     });
 
     // https://stackoverflow.com/questions/49096093/how-do-i-test-a-jest-console-log
+    // Since we cannot alter NODE_ENV to test for 'development
+    // we added a console.log to LoggedIn if it gets passed the 
+    // if statement, so we can test if it passed
     it('should log if redirecting NODE_ENV != development', 
         () => {
             const consoleSpy = jest.spyOn(console, 'log');
             const children = <h1>hi</h1>;
+            // NODE_ENV is read-only so we cannot change it to test it?
+            // process.env.NODE_ENV = 'development';
+
             ReactTestUtils.act(
                 () => {
                     render(
