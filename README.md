@@ -1,6 +1,7 @@
 # Dev Notes
 
-Notes about development and progress go here.
+- Notes about development and progress go here.
+- Currently working on writing unit tests for the time being and will move to documentation and integration after units pass thoroughly
 
 ### Significant Parts of the Stack
 
