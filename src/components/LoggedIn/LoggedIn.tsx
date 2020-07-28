@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 // import useJwt from '../hooks/useJwt';
 
-const NODE_ENV = process.env.NODE_ENV;
+const { NODE_ENV } = process.env;
 
 interface Props {
     children: JSX.Element | JSX.Element[];

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
-import Bold from '../Bold';
+import Bold from '../Bold/Bold';
 // import useJwt from 'hooks/useJwt';
 import useSnack from '../../hooks/useSnack';
 import { Message } from './types';
