@@ -1,11 +1,32 @@
 # Title of component
-- description of component
+## Overview
+- inspired by golang documentation but modified for a more funcitonal approach
 
-# Methods
-- `func1()` 
-    * <b>description</b>: renders string into HTMLDivElement
-    * <b>input</b>: (string, HTMLDivElement)
-    * <b>return</b>: HTMLDivElement
-- `func2()`
+# Index
+- [Variables](#v)
+- [Functions](#f)
+- [Examples](#e)
 
+# <a name="v"></a>Variables
+- name: type
+    * description
+
+# <a name="f"></a>Functions
+- function signature
+- `function like_this(string, HTMLDivElement)`
+    * <b>description</b>: renders string into HTMLDivElement 
+    * <b>return (if returns)</b>: HTMLDivElement
+
+# <a name="e"></a>Examples
+- Lets say we have the following code
+```
+function addStringToDiv() {
+    const toAdd = "going to be added";
+    var div = document.createElement("div");
+
+    const divToAdd = like_this(toAdd,div);
+
+    return divToAdd;
+}
+```
 
