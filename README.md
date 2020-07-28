@@ -3,6 +3,12 @@
 - Notes about development and progress go here.
 - Currently working on writing unit tests for the time being and will move to documentation and integration after units pass thoroughly
 - noticed you can go to /app/home and be greeted with `Logged In` so this might an issue
+- typedoc and jsdoc kept giving me this error
+```
+.../src/domains/Townhall/api/api.test.ts(32)
+ Argument of type '{ speaker: string; moderator: string; date: Date; description: string; url: string; }' is not assignable to parameter of type 'TownhallForm'.
+  Property 'topic' is missing in type '{ speaker: string; moderator: string; date: Date; description: string; url: string; }' but required in type 'TownhallForm'.
+```
 
 ### Significant Parts of the Stack
 
