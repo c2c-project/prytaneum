@@ -17,7 +17,6 @@
 |-------|------  |------------- |
 | func1(string)   | string | returns name of user in upper case |
 
-
 # <a name="e"></a>Examples
 - Lets say we have the following code
 ```
@@ -29,4 +28,9 @@ function addStringToDiv() {
     
     return divToAdd;
 }
+```
+```mermaid
+sequenceDiagram
+    addStringToDiv()->>like_this(string): sends string to be added to div
+    like_this()->>addStringToDiv: returns HTMLDivElement containing string
 ```

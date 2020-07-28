@@ -29,4 +29,8 @@ function addStringToDiv() {
     return divToAdd;
 }
 ```
-
+```mermaid
+    sequenceDiagram
+    addStringToDiv->>like_this: sends string to be added to div.
+    like_this-->>addStringToDiv: returns HTMLDivElement containing string.
+```
