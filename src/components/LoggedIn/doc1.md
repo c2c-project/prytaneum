@@ -3,8 +3,7 @@
 - if trying to access something with login privileges, we redirect to `/logout`
 
 # Attributes
-- Props
-    * children: JSX.Element | JSX.Element[]
+
 
 # Functions
 ## `LoggedIn()` 
