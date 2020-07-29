@@ -12,7 +12,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Bold from '../../../components/Bold/Bold';
+import Bold from '../../../components/Bold';
 import Dialog from '../../../components/Dialog';
 import QuestionActions from './QuestionActions';
 import MessageActions from '../../../components/Chat/Message/MessageActions';

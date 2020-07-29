@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Bold from '../Bold/Bold';
+import Bold from '../Bold';
 
 interface Props {
     name: string;
