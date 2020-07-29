@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 /**
- * @description Transition used by FullScreenDialog -- it slides up
+ *  Transition used by FullScreenDialog -- it slides up
  */
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children?: React.ReactElement<any, any> },
@@ -31,11 +31,11 @@ const Transition = React.forwardRef(function Transition(
 });
 
 /**
- * @description full screen dialog box
- * @arg {Object} props
- * @arg {PropTypes.ReactNodeArray|PropTypes.ReactNodeLike} props.children what to display inside the dialog
- * @arg {Boolean} props.open parent is expected to handle open or closed state, so this is either T or F
- * @arg {Function} props.onClose function to run when the close button is clicked within the dialog, typically setting open to false
+ *  full screen dialog box
+ * @param {Object} props
+ * @param {PropTypes.ReactNodeArray|PropTypes.ReactNodeLike} props.children what to display inside the dialog
+ * @param {Boolean} props.open parent is expected to handle open or closed state, so this is either T or F
+ * @param {Function} props.onClose function to run when the close button is clicked within the dialog, typically setting open to false
  */
 
 export interface Props {
