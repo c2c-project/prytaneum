@@ -25,18 +25,13 @@ describe('Bold', function() {
         const children = "hi";
         ReactTestUtils.act(() => {
             render(
-                <Bold
-                    children={children}
-                />,
+                <Bold>
+                    <div id='test'/>
+                </Bold>,
                 container
             )
         });
-        const toCheck = container?.innerHTML;
-        console.log(toCheck); 
+        expect(document.getElementById('test')).toBeTruthy();
     });
 
-    // pass in 
-    it('should bold', () => {
-        const children = <body>test</body>;
-    });
 }); 

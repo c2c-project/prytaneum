@@ -29,10 +29,10 @@ export default function Routes() {
                         <Auth />
                     </Route>
                     <Route path='/app'>
-                        <LoggedIn>
+                        {/* <LoggedIn > */}
                             {/* <Nav /> */}
                             <div>Logged in</div>
-                        </LoggedIn>
+                        {/* </LoggedIn> */}
                     </Route>
                     <Route path='/'>
                         <Redirect to='/auth/login' />
