@@ -17,6 +17,7 @@
         "framer-motion": "^2.0.0",
         "global": "^4.4.0",
         "jwt-decode": "https://github.com/auth0/jwt-decode",
+        "nivo": "^0.31.0",
         "notistack": "^0.9.7",
         "prop-types": "^15.7.2",
         "react": "^16.8.6",
