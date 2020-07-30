@@ -27,4 +27,5 @@ export default function LoggedIn({ children, jwt }: Props) {
 
 LoggedIn.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
+    jwt: PropTypes.bool.isRequired,
 };
