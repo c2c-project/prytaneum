@@ -32,10 +32,14 @@ export default function Routes() {
             </Route>
             <Route path='/app'>
                 <Switch>
-                    <Route path='/app/townhalls'>
-                        <LoggedIn>
-                            <Townhall />
-                        </LoggedIn>
+                    <Route path='/auth'>
+                        <Auth />
+                    </Route>
+                    <Route path='/app'>
+                        {/* <LoggedIn > */}
+                        {/* <Nav /> */}
+                        <div>Logged in</div>
+                        {/* </LoggedIn> */}
                     </Route>
                     <Route path={['/app/home', '/']}>
                         <AppHomePage />

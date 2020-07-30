@@ -1,6 +1,5 @@
 # Dev Notes
 
-Notes about development and progress go here.
 
 ### Significant Parts of the Stack
 
