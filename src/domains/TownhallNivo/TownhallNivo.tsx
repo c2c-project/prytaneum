@@ -38,30 +38,8 @@ export default function TownhallNivo(props: Props) {
     const { townhall } = props;
 
     return (
-        <div style={{ height: '50%', width: '50%', position: 'absolute' }}>
-            <ResponsivePie
-                data={townhall.graphData}
-                legends={[
-                    {
-                        anchor: 'bottom',
-                        direction: 'row',
-                        translateY: 56,
-                        itemWidth: 100,
-                        itemHeight: 18,
-                        itemTextColor: '#999',
-                        symbolSize: 18,
-                        symbolShape: 'circle',
-                        effects: [
-                            {
-                                on: 'hover',
-                                style: {
-                                    itemTextColor: '#000',
-                                },
-                            },
-                        ],
-                    },
-                ]}
-            />
+        <div style={{ height: townhall.graphHeight }}>
+            <ResponsivePie data={townhall.graphData} />
         </div>
     );
 }
