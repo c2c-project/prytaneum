@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TimeLineItem from './TimeLineItem';
 import ClipDialog from './ClipDialog';
-import Fab from '../Fab';
+import Fab from '../Fab/Fab';
 import './TimeLineItem.css';
 import useJwt from '../../hooks/useJwt';
 

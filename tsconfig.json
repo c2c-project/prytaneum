@@ -14,9 +14,23 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react",
-        "baseUrl": "src"
+        "baseUrl": "src",
     },
     "include": ["src"],
-    "exclude": ["node_modules","**/*.test.ts"],
-    "theme": "node_modules/typedoc-neo-theme/bin/default",
+    "exclude": [
+        "node_modules",
+        "**/src/test/*",
+        "**/*.test.ts",
+        "**/__tests__/*",
+        "**/__mocks__/*"
+    ],
+    "typedocOptions": {
+		"inputFiles": [
+			"./src"
+		],
+		"theme": "node_modules/typedoc-clarity-theme/bin",
+		"mode": "modules",
+        "out": "docs",
+		"excludeNotExported": true
+	},
 }

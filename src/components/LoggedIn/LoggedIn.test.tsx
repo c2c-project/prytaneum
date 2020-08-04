@@ -7,9 +7,6 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'theme';
 import LoggedIn from './LoggedIn';
 
-jest.mock('hooks/useSnack');
-jest.mock('utils/axios');
-
 describe('LoggedIn', function () {
     let container: HTMLDivElement | null = null;
     const OLD_ENV = process.env;

@@ -14036,6 +14036,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typedoc-clarity-theme@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/typedoc-clarity-theme/-/typedoc-clarity-theme-1.1.0.tgz#11294adde4f342e2fc66a5fa62a6fb7438cc561c"
+  integrity sha1-ESlK3eTzQuL8ZqX6Yqb7dDjMVhw=
+
 typedoc-default-themes@^0.10.2:
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/typedoc-default-themes/-/typedoc-default-themes-0.10.2.tgz#743380a80afe62c5ef92ca1bd4abe2ac596be4d2"
@@ -14043,14 +14048,7 @@ typedoc-default-themes@^0.10.2:
   dependencies:
     lunr "^2.3.8"
 
-typedoc-neo-theme@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/typedoc-neo-theme/-/typedoc-neo-theme-1.0.9.tgz#03ca596427ed0f36de951d96b37e20bc15bc3200"
-  integrity sha512-g6ITZAkRBTVyTQnyq8LfYN3Y2fOoLnND3gG3nK7lcRthQ1kU4pTEK711KCEaceSK93qB5EgtLZkjv7NOg7qRTw==
-  dependencies:
-    typedoc "~0.17.8"
-
-typedoc@^0.17.8, typedoc@~0.17.8:
+typedoc@^0.17.8:
   version "0.17.8"
   resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.17.8.tgz#96b67e9454aa7853bfc4dc9a55c8a07adfd5478e"
   integrity sha512-/OyrHCJ8jtzu+QZ+771YaxQ9s4g5Z3XsQE3Ma7q+BL392xxBn4UMvvCdVnqKC2T/dz03/VXSLVKOP3lHmDdc/w==
