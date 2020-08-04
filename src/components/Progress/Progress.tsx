@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: 300,
-        },
-        margin: {
-            height: theme.spacing(10),
+            marginLeft: 'auto !important',
+            marginRight: 'auto !important',
         },
     })
 );
+
+const muiTheme = createMuiTheme({
+    overrides: {
+        MuiSlider: {
+            thumb: {
+                color: '#0074BC',
+            },
+            track: {
+                color: '#0074BC',
+            },
+            rail: {
+                color: 'black',
+            },
+        },
+    },
+});
 
 export interface TownhallForm {
     speaker?: string;
@@ -29,31 +45,45 @@ export type Townhall = Required<TownhallForm> & {
 };
 
 interface Props {
-    townhall: Townhall;
+    progress: Townhall;
 }
-
-
 
 function valuetext(value: number) {
     return `${value}`;
 }
+function useWindowSize() {
+    const [size, setSize] = useState([0, 0]);
+    useLayoutEffect(() => {
+        function updateSize() {
+            setSize([window.innerWidth, window.innerHeight]);
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+    return size;
+}
 
 export default function DiscreteSlider(props: Props) {
     const classes = useStyles();
-    const { townhall } = props;
+    const { progress } = props;
+    const [width, height] = useWindowSize();
 
     return (
-        <div className={classes.root}>
-            <Typography id='discrete-slider-custom' gutterBottom>
-               Progress Bar
-            </Typography>
-            <Slider
-                getAriaValueText={valuetext}
-                aria-labelledby='discrete-slider-custom'
-                valueLabelDisplay='auto'
-                marks={townhall}
-                disabled
-            />
-        </div>
+        <ThemeProvider theme={muiTheme}>
+            <div
+                className={classes.root}
+                style={{
+                    width: width - 200,
+                }}
+            >
+                <Slider
+                    defaultValue={progress.defaultVal}
+                    getAriaValueText={valuetext}
+                    marks={progress.progressData}
+                    disabled
+                />
+            </div>
+        </ThemeProvider>
     );
 }

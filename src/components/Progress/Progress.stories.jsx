@@ -3,21 +3,26 @@ import Component from './Progress';
 
 
 export default { title: 'Components' };
-const data = [
-    {
-        value: 0,
-        label: 'Introduced',
-    },
-    {
-        value: 50,
-        label: 'Passed in houses',
-    },
+const progress = {
+    progressData: [
+        {
+            value: 0,
+            label: 'Introduced',
+        },
+        {
+            value: 50,
+            label: 'Passed in houses',
+        },
+    
+        {
+            value: 100,
+            label: "Became Law",
+        },
+        
+    ],
+    defaultVal: 0
+};
 
-    {
-        value: 100,
-        label: "Became Law",
-    },
-];
 export function Progress() {
-    return <Component townhall={data} />;
+    return <Component progress={progress} />;
 }
