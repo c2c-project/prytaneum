@@ -45,7 +45,7 @@ export default function DiscreteSlider(props: Props) {
     return (
         <div className={classes.root}>
             <Typography id='discrete-slider-custom' gutterBottom>
-                Custom marks
+               Progress Bar
             </Typography>
             <Slider
                 getAriaValueText={valuetext}
