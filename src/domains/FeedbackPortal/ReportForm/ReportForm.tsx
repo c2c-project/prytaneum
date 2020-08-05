@@ -2,17 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { AxiosResponse } from 'axios';
 
+import errors from 'utils/errors';
 import FormBase from '../FormBase';
-// import { AxiosResponse } from 'axios';
+import {
+    createFeedbackReport,
+    createBugReport,
+    FeedbackForm,
+    BugReportForm,
+} from '../api';
 
 interface FormProps {
     Title: string;
     MainDescription: string;
-    CreateReportEndpoint: string;
+    CreateReportEndpoint: (
+        form: FeedbackForm | BugReportForm,
+        townhallId?: string
+    ) => Promise<AxiosResponse<any>>;
 }
 
-export default function ReportForm({
+function ReportForm({
     Title,
     MainDescription,
     CreateReportEndpoint,
@@ -25,9 +35,7 @@ export default function ReportForm({
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant='body1'>
-                    {MainDescription}
-                </Typography>
+                <Typography variant='body1'>{MainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
                 <FormBase SubmitEndpoint={CreateReportEndpoint} />
@@ -39,11 +47,50 @@ export default function ReportForm({
 ReportForm.defaultProps = {
     Title: '',
     MainDescription: '',
-    CreateReportEndpoint: '',
+    CreateReportEndpoint: () => {},
 };
 
 ReportForm.propTypes = {
     Title: PropTypes.string,
     MainDescription: PropTypes.string,
-    CreateReportEndpoint: PropTypes.string,
+    CreateReportEndpoint: PropTypes.func,
 };
+
+export default function ReportFormFactory({
+    Type,
+    Title,
+    MainDescription,
+    townhallId,
+}: FormProps & { Type: string; townhallId?: string }) {
+    switch (Type) {
+        case 'feedback':
+            return (
+                <ReportForm
+                    Title={Title}
+                    MainDescription={MainDescription}
+                    CreateReportEndpoint={(form) => createFeedbackReport(form)}
+                />
+            );
+        case 'bug':
+            if (!townhallId) {
+                throw errors.internalError();
+            }
+            return (
+                <ReportForm
+                    Title={Title}
+                    MainDescription={MainDescription}
+                    CreateReportEndpoint={(form) =>
+                        createBugReport(form, townhallId)
+                    }
+                />
+            );
+        default:
+            return (
+                <ReportForm
+                    Title={Title}
+                    MainDescription={MainDescription}
+                    CreateReportEndpoint={(form) => createFeedbackReport(form)}
+                />
+            );
+    }
+}

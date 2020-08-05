@@ -1,24 +1,45 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Component from '.';
 
 export default { title: 'Domains/ReportForm' };
 
-const dummyReportForm = {
+const FeedbackReportForm = {
     Title: 'Feedback Form',
     MainDescription:
         'Let us know how we can improve your virtual town hall experience in the future. We strongly appreciate your feedback!',
-    CreateReportEndpoint: '/api/feedback/create-report',
+    Type: 'feedback',
 };
 
-export function FormBase() {
+const BugReportForm = {
+    Title: 'Bug Report Form',
+    MainDescription:
+        'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
+    Type: 'bug',
+    townhallId: 'utvb67r45f846gf5f85',
+};
+
+export function ReportForm() {
     return (
         <Container maxWidth='sm'>
-            <Component
-                Title={dummyReportForm.Title}
-                MainDescription={dummyReportForm.MainDescription}
-                CreateReportEndpoint={dummyReportForm.CreateReportEndpoint}
-            />
+            <Grid container spacing={10}>
+                <Grid item>
+                    <Component
+                        Title={FeedbackReportForm.Title}
+                        MainDescription={FeedbackReportForm.MainDescription}
+                        Type={FeedbackReportForm.Type}
+                    />
+                </Grid>
+                <Grid item>
+                    <Component
+                        Title={BugReportForm.Title}
+                        MainDescription={BugReportForm.MainDescription}
+                        Type={BugReportForm.Type}
+                        townhallId={BugReportForm.townhallId}
+                    />
+                </Grid>
+            </Grid>
         </Container>
     );
 }

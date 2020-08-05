@@ -1,22 +1,47 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import Component from '.';
 
 export default { title: 'Domains/SummaryReport' };
 
-const dummyReport = {
-    description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    date: new Date().toISOString(),
+const FeedbackReportSummary = {
+    Report: {
+        description:
+            'This is a feedback report. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utev. adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt',
+        date: new Date().toISOString(),
+        _id: 'b63124n62345gb2345n3451345n',
+    },
+    Type: 'feedback',
 };
 
-export function FormBase() {
+const BugReportSummary = {
+    Report: {
+        description:
+            'This is a bug report. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utev. adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt',
+        date: new Date().toISOString(),
+        _id: 'b63124n62345gb2345n3451345n',
+    },
+    Type: 'bug',
+};
+
+export function ReportSummary() {
     return (
         <Container maxWidth='sm'>
-            <Component
-                Report={dummyReport}
-                UpdateReportEndpoint='/api/feedback/update-report'
-            />
+            <Grid container spacing={10}>
+                <Grid item>
+                    <Component
+                        Report={FeedbackReportSummary.Report}
+                        Type={FeedbackReportSummary.Type}
+                    />
+                </Grid>
+                <Grid item>
+                    <Component
+                        Report={BugReportSummary.Report}
+                        Type={BugReportSummary.Type}
+                    />
+                </Grid>
+            </Grid>
         </Container>
     );
 }

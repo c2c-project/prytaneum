@@ -12,25 +12,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { AxiosResponse } from 'axios';
 
 import FormBase from '../FormBase';
-import { ReportForm as ReportFormType } from '../api';
-// import { AxiosResponse } from 'axios';
+import {
+    FeedbackForm,
+    BugReportForm,
+    updateBugReport,
+    updateFeedbackReport,
+} from '../api';
 
 interface SummaryProps {
-    Report: ReportFormType;
-    UpdateReportEndpoint: string;
+    Report: FeedbackForm | BugReportForm;
+    UpdateReportEndpoint: (
+        form: FeedbackForm | BugReportForm
+    ) => Promise<AxiosResponse<any>>;
 }
 
-export default function ReportSummary({
-    Report,
-    UpdateReportEndpoint,
-}: SummaryProps) {
+function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
     return (
         <Grid container spacing={5}>
             <Grid item xs={12}>
                 <Typography variant='h4' align='left'>
-                    Date Submitted: {Report.date}
+                    Date Submitted:
+                    {Report.date}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -50,14 +55,44 @@ export default function ReportSummary({
 }
 
 ReportSummary.defaultProps = {
-    UpdateReportEndpoint: '',
+    UpdateReportEndpoint: () => {},
     Report: {
         description: '',
         date: '',
+        _id: '',
     },
 };
 
 ReportSummary.propTypes = {
-    UpdateReportEndpoint: PropTypes.string,
+    UpdateReportEndpoint: PropTypes.func,
     Report: PropTypes.object,
 };
+
+export default function ReportSummaryFactory({
+    Type,
+    Report,
+}: SummaryProps & { Type: string }) {
+    switch (Type) {
+        case 'feedback':
+            return (
+                <ReportSummary
+                    Report={Report}
+                    UpdateReportEndpoint={(form) => updateFeedbackReport(form)}
+                />
+            );
+        case 'bug':
+            return (
+                <ReportSummary
+                    Report={Report}
+                    UpdateReportEndpoint={(form) => updateBugReport(form)}
+                />
+            );
+        default:
+            return (
+                <ReportSummary
+                    Report={Report}
+                    UpdateReportEndpoint={(form) => updateFeedbackReport(form)}
+                />
+            );
+    }
+}

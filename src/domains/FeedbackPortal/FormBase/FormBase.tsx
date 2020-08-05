@@ -4,26 +4,34 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
+import { AxiosResponse } from 'axios';
+
+import useEndpoint from 'hooks/useEndpoint';
 import { ReportForm as ReportFormType } from '../api';
-// import { AxiosResponse } from 'axios';
 
 interface FormProps {
     Report: ReportFormType;
-    SubmitEndpoint: string;
+    SubmitEndpoint: (form: ReportFormType) => Promise<AxiosResponse<any>>;
 }
 
+//  TODO: CHECK WHY apiRequest is not working
 export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
     const [isLoading, setIsLoading] = React.useState(false);
     const [reportState, setReportState] = React.useState<ReportFormType>(
         Report
     );
-    const onSubmit = (e) => {
+    const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
+        reportState,
+    ]);
+    const [sendRequest] = useEndpoint(apiRequest, {
+        onSuccess: () => console.log('Success'),
+    });
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
-        console.log(SubmitEndpoint);
+        sendRequest();
+        setIsLoading(false);
     };
 
     type MyEvent = React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>;
@@ -46,7 +54,7 @@ export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
                                 onChange={(e) => handleChange(e, 'description')}
                             />
                         </Grid>
-                        <Grid container item xs={12} justify='flex-end'>
+                        <Grid item xs={12} justify='flex-end'>
                             <LoadingButton
                                 loading={isLoading}
                                 component={
@@ -69,13 +77,13 @@ export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
 }
 
 FormBase.defaultProps = {
-    SubmitEndpoint: '',
+    SubmitEndpoint: () => {},
     Report: {
         description: '',
     },
 };
 
 FormBase.propTypes = {
-    SubmitEndpoint: PropTypes.string,
+    SubmitEndpoint: PropTypes.func,
     Report: PropTypes.object,
 };
