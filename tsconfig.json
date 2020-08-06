@@ -14,7 +14,7 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react",
-        "baseUrl": "src",
+        "baseUrl": "src"
     },
     "include": ["src"],
     "exclude": [
@@ -27,7 +27,11 @@
     ],
     "typedocOptions": {
 		"inputFiles": [
-			"./src"
+            "./src",
+            "./src/*",
+            "./src/*/*",
+            "./src/*/*/*",
+            "./src/*/*/*/*"
 		],
 		"mode": "modules",
         "out": "docs",
