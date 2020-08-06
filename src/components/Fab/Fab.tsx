@@ -18,9 +18,10 @@ interface Props {
 }
 
 /**
+ * @category Wrapper
  * @description Fab button that displays bottom right of screen, currently only uses a + sign
- * @arg {Object} props
- * @arg {Function} props.onClick function that runs when the fab is clicked
+ * @arg props
+ * @arg props.onClick function that runs when the fab is clicked
  */
 export default function Fab({ onClick }: Props) {
     const classes = useStyles();
