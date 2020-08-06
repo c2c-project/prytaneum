@@ -16,8 +16,6 @@ const townhall = {
 
 export function TownhallPre() {
     return (
-        <Container maxWidth='sm'>
-            <Component townhall={townhall} />
-        </Container>
+        <Component townhall={townhall} />
     );
 }
