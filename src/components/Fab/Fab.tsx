@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * @category Wrapper
+ * @category components
  * @description Fab button that displays bottom right of screen, currently only uses a + sign
  * @arg props
  * @arg props.onClick function that runs when the fab is clicked

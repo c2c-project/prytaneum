@@ -29,7 +29,7 @@
 		"inputFiles": [
 			"./src"
 		],
-		"mode": "library",
+		"mode": "modules",
         "out": "docs",
         "excludeNotExported": true,
           "exclude": [
@@ -37,10 +37,10 @@
             "**/*.stories.*",
             "**/*+(index|.spec|.e2e).ts"
         ],
-        "categoryOrder": ["Components", "hooks", "*"],
-    "toc": [
-        "Components",
-        "hooks"
-    ],
+        "categoryOrder": ["components", "hooks"],
+        "toc": [
+            "Components",
+            "hooks"
+        ],
 	},
 }
