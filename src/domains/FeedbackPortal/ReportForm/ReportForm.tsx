@@ -16,15 +16,16 @@ import {
 interface FormProps {
     Title: string;
     MainDescription: string;
+    Report: FeedbackForm | BugReportForm;
     CreateReportEndpoint: (
-        form: FeedbackForm | BugReportForm,
-        townhallId?: string
+        form: FeedbackForm | BugReportForm
     ) => Promise<AxiosResponse<any>>;
 }
 
 function ReportForm({
     Title,
     MainDescription,
+    Report,
     CreateReportEndpoint,
 }: FormProps) {
     return (
@@ -38,7 +39,10 @@ function ReportForm({
                 <Typography variant='body1'>{MainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
-                <FormBase SubmitEndpoint={CreateReportEndpoint} />
+                <FormBase
+                    SubmitEndpoint={CreateReportEndpoint}
+                    Report={Report}
+                />
             </Grid>
         </Grid>
     );
@@ -60,6 +64,7 @@ export default function ReportFormFactory({
     Type,
     Title,
     MainDescription,
+    Report,
     townhallId,
 }: FormProps & { Type: string; townhallId?: string }) {
     switch (Type) {
@@ -69,6 +74,7 @@ export default function ReportFormFactory({
                     Title={Title}
                     MainDescription={MainDescription}
                     CreateReportEndpoint={(form) => createFeedbackReport(form)}
+                    Report={Report}
                 />
             );
         case 'bug':
@@ -79,6 +85,7 @@ export default function ReportFormFactory({
                 <ReportForm
                     Title={Title}
                     MainDescription={MainDescription}
+                    Report={Report}
                     CreateReportEndpoint={(form) =>
                         createBugReport(form, townhallId)
                     }
@@ -90,6 +97,7 @@ export default function ReportFormFactory({
                     Title={Title}
                     MainDescription={MainDescription}
                     CreateReportEndpoint={(form) => createFeedbackReport(form)}
+                    Report={Report}
                 />
             );
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Component from '.';
+import FixtureContext, { makeSuccessFixture } from 'contexts/Fixtures';
 
 export default { title: 'Domains/ReportForm' };
 
@@ -29,6 +30,9 @@ export function ReportForm() {
                         Title={FeedbackReportForm.Title}
                         MainDescription={FeedbackReportForm.MainDescription}
                         Type={FeedbackReportForm.Type}
+                        Report={{
+                            date: new Date().toISOString(),
+                        }}
                     />
                 </Grid>
                 <Grid item>
@@ -36,6 +40,9 @@ export function ReportForm() {
                         Title={BugReportForm.Title}
                         MainDescription={BugReportForm.MainDescription}
                         Type={BugReportForm.Type}
+                        Report={{
+                            date: new Date().toISOString(),
+                        }}
                         townhallId={BugReportForm.townhallId}
                     />
                 </Grid>

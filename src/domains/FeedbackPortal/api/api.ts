@@ -16,9 +16,10 @@ export interface FeedbackForm extends ReportForm {
 export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
+type FeedbackReport = Required<ReportForm>;
+type BugReport = Required<BugReportForm>;
 
 // Feedback reports API functions
-
 export async function createFeedbackReport(form: FeedbackForm) {
     const { date, description } = form;
     if (!date || !description) {
@@ -26,6 +27,22 @@ export async function createFeedbackReport(form: FeedbackForm) {
     }
     const body = { date, description };
     return axios.post('/api/feedback/create-report', body);
+}
+
+export async function getFeedbackReports(page: number, ascending: string) {
+    if (!page || !ascending) {
+        throw errors.fieldError();
+    }
+    const params = {
+        page,
+        ascending,
+    };
+    return axios.get<{ reports: FeedbackReport[] }>(
+        '/api/feedback/get-reports',
+        {
+            params,
+        }
+    );
 }
 
 export async function updateFeedbackReport(form: FeedbackForm) {
@@ -41,8 +58,16 @@ export async function updateFeedbackReport(form: FeedbackForm) {
     return axios.post('/api/feedback/update-report', body);
 }
 
-// Bug reports API functions
+export async function deleteFeedbackReport(form: FeedbackForm) {
+    const { _id } = form;
+    if (!_id) {
+        throw errors.internalError();
+    }
+    const body = { _id };
+    return axios.post('/api/feedback/delete-report', body);
+}
 
+// Bug reports API functions
 export async function createBugReport(form: BugReportForm, townhallId: string) {
     const { date, description } = form;
     if (!date || !description) {
@@ -57,6 +82,19 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
     return axios.post('/api/bugs/create-report', body);
 }
 
+export async function getBugReports(page: number, ascending: string) {
+    if (!page || !ascending) {
+        throw errors.fieldError();
+    }
+    const params = {
+        page,
+        ascending,
+    };
+    return axios.get<{ reports: BugReport[] }>('/api/bugs/get-reports', {
+        params,
+    });
+}
+
 export async function updateBugReport(form: BugReportForm) {
     const { description, _id } = form;
     if (!description) {
@@ -67,4 +105,13 @@ export async function updateBugReport(form: BugReportForm) {
     }
     const body = { _id, newDescription: description };
     return axios.post('/api/bugs/update-report', body);
+}
+
+export async function deleteBugReport(form: BugReportForm) {
+    const { _id } = form;
+    if (!_id) {
+        throw errors.internalError();
+    }
+    const body = { _id };
+    return axios.post('/api/bugs/delete-report', body);
 }

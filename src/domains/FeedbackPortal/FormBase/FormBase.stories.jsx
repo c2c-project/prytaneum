@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import Component from '.';
-
+import { updateFeedbackReport } from '../api';
 export default { title: 'Domains/FormBase' };
 
 const dummyReport = {
@@ -18,7 +18,7 @@ export function FormBase() {
         <Container maxWidth='sm'>
             <Component
                 Report={dummyReport}
-                SubmitEndpoint='/api/feedback/update-report'
+                SubmitEndpoint={(form) => updateFeedbackReport(form)}
             />
         </Container>
     );
