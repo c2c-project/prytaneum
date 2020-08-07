@@ -6,10 +6,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { format } from 'date-fns';
 import clsx from 'clsx';
 
 import useEndpoint from 'hooks/useEndpoint';
+import { formatDate } from 'utils/format';
 import Loader from 'components/Loader';
 import { getTownhallList, Townhall } from '../api';
 
@@ -88,7 +88,10 @@ export default function TownhallList() {
                                     </Typography>
                                 </>
                             }
-                            secondary={format(townhall.date, 'MM/dd/yyyy p')}
+                            secondary={formatDate(
+                                townhall.date,
+                                'MM/dd/yyyy p'
+                            )}
                             secondaryTypographyProps={{
                                 className: classes.text,
                             }}
