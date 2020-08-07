@@ -4,7 +4,7 @@ import errors from 'utils/errors';
 export interface ReportForm {
     _id?: string;
     description?: string;
-    date?: Date;
+    date: Date;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -16,8 +16,9 @@ export interface FeedbackForm extends ReportForm {
 export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
-type FeedbackReport = Required<ReportForm>;
-type BugReport = Required<BugReportForm>;
+
+export type FeedbackReport = Required<ReportForm>;
+export type BugReport = Required<BugReportForm>;
 
 // Feedback reports API functions
 export async function createFeedbackReport(form: FeedbackForm) {

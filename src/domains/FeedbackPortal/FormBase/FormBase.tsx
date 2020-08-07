@@ -7,19 +7,18 @@ import LoadingButton from 'components/LoadingButton';
 import { AxiosResponse } from 'axios';
 
 import useEndpoint from 'hooks/useEndpoint';
-import { ReportForm as ReportFormType } from '../api';
+import { FeedbackForm, BugReportForm } from '../api';
 
+type ReportType = FeedbackForm | BugReportForm;
 interface FormProps {
-    Report: ReportFormType;
-    SubmitEndpoint: (form: ReportFormType) => Promise<AxiosResponse<any>>;
+    Report: ReportType;
+    SubmitEndpoint: (form: ReportType) => Promise<AxiosResponse<any>>;
 }
 
 //  TODO: CHECK WHY apiRequest is not working
 export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [reportState, setReportState] = React.useState<ReportFormType>(
-        Report
-    );
+    const [reportState, setReportState] = React.useState<ReportType>(Report);
     const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
         reportState,
     ]);

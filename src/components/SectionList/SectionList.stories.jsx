@@ -12,7 +12,8 @@ const sections = [
             {
                 image: 'https://i.imgur.com/3beQH5s.jpeg',
                 title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
+                subtitle:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Scelerisque eu ultrices vitae auctor. Id eu nisl nunc mi ipsum. Tempor orci eu lobortis elementum nibh tellus. Amet facilisis magna etiam tempor orci eu lobortis eleme  melementum  ...',
             },
             {
                 image: 'https://i.imgur.com/3beQH5s.jpeg',
