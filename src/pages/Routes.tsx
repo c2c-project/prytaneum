@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import Auth from './Auth';
 import LoggedIn from '../components/LoggedIn';
+import Townhall from './Townhall';
 import Nav from '../layout/Nav';
 import Footer from '../layout/Footer';
 // import TownhallList from '../domains/Townhall/TownhallList';
@@ -20,27 +21,33 @@ import Footer from '../layout/Footer';
 // import UpdatePassword from './UpdatePassword';
 import Public from './Public';
 
+const DefaultPage = () => <Redirect to='/auth/login' />;
+const AppHomePage = () => <Redirect to='/app/townhalls' />;
+
 export default function Routes() {
     return (
         <Switch>
-            <Route path='/:domain/:title'>
+            <Route path='/auth'>
+                <Auth />
+            </Route>
+            <Route path='/app'>
                 <Switch>
                     <Route path='/auth'>
                         <Auth />
                     </Route>
                     <Route path='/app'>
-                        <LoggedIn>
-                            {/* <Nav /> */}
-                            <div>Logged in</div>
-                        </LoggedIn>
+                        {/* <LoggedIn > */}
+                        {/* <Nav /> */}
+                        <div>Logged in</div>
+                        {/* </LoggedIn> */}
                     </Route>
-                    <Route path='/'>
-                        <Redirect to='/auth/login' />
+                    <Route path={['/app/home', '/']}>
+                        <AppHomePage />
                     </Route>
                 </Switch>
             </Route>
             <Route path='/'>
-                <Redirect to='/auth/login' />
+                <DefaultPage />
             </Route>
         </Switch>
     );

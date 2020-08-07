@@ -8,7 +8,7 @@ import { DeviceContext } from 'contexts/Device';
 
 import GridMenu from './GridMenu';
 
-export default { title: 'Grid Menu', decorators: [withKnobs] };
+export default { title: 'Components', decorators: [withKnobs] };
 
 export function GridMenuNormal() {
     return (
@@ -16,9 +16,7 @@ export function GridMenuNormal() {
             value={select('DeviceType', ['desktop', 'mobile'], 'desktop')}
         >
             <GridMenu>
-                <Button startIcon={<TownhallIcon />}>
-                    Townhalls
-                </Button>
+                <Button startIcon={<TownhallIcon />}>Townhalls</Button>
                 <Button startIcon={<SettingsIcon />}>Settings</Button>
                 <Button>asdf</Button>
                 <Button>asdf</Button>

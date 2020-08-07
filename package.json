@@ -81,6 +81,7 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
+        "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     }
 }

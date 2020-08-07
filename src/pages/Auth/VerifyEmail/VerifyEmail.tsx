@@ -20,6 +20,6 @@ export default function VerifyEmail() {
             onFailure={() => history.push(routeNames.login)}
         />
     ) : (
-        <Redirect to='/login' />
+        <Redirect to={routeNames.login} />
     );
 }
