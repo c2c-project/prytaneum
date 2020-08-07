@@ -1,5 +1,7 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
+import { withA11y } from '@storybook/addon-a11y';
+
 import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import { BrowserRouter } from 'react-router-dom';
@@ -34,3 +36,5 @@ addDecorator((storyFn) => (
         </BrowserRouter>
     </ThemeProvider>
 ));
+
+addDecorator(withA11y);

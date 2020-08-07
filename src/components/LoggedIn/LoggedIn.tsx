@@ -7,22 +7,25 @@ const { NODE_ENV } = process.env;
 
 interface Props {
     children: JSX.Element | JSX.Element[];
+    jwt: boolean;
 }
 
 /**
  * @description redirects to the login page if the user is not logged in
  * ie they were trying to access a page that, at minimum, requires the user to be logged in
  */
-export default function LoggedIn({ children }: Props) {
-    const jwt = { _id: '' }; // useJwt();
+export default function LoggedIn({ children, jwt }: Props) {
+    // const jwt = '';//{ _id: '' }; // useJwt();
     if (NODE_ENV === 'development') {
         console.log('not redirecting');
         return <>{children}</>;
     }
+    // console.log('redirecting');
     // assumption is that if there is no jwt, then they are not logged in
     return jwt ? <>{children}</> : <Redirect to='/logout' />;
 }
 
 LoggedIn.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
+    jwt: PropTypes.bool.isRequired,
 };
