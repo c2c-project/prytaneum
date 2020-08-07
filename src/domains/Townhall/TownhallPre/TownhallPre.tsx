@@ -1,7 +1,22 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Fab, Paper } from '@material-ui/core';
+import {
+    Grid,
+    Fab,
+    Paper,
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    ListSubheader,
+} from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import CalendarIcon from '@material-ui/icons/CalendarToday';
+import ForumIcon from '@material-ui/icons/ForumOutlined';
+
+import { formatDate } from 'utils/format';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,19 +31,25 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
     fab: {
-        paddingRight: '10%',
-        marginTop: '-10%',
+        paddingRight: theme.spacing(4),
+        marginTop: -theme.spacing(3),
     },
     paper: {
         borderRadius: '50px 50px 0px 0px',
         height: '100%',
-        minHeight: '',
+        width: '100%',
+        marginTop: '-15%',
+        padding: `0px ${theme.spacing(2)}px 0px ${theme.spacing(6)}px`,
     },
 }));
 
 interface Props {
     townhall: {
-        speaker: string;
+        speaker: {
+            name: string;
+            party: string;
+            territory: string;
+        };
         moderator: string;
         topic: string;
         picture: string;
@@ -36,27 +57,77 @@ interface Props {
         date: Date;
     };
 }
-
 export default function TownhallPre({ townhall }: Props) {
     const classes = useStyles();
+    const Title = () => (
+        <Grid container spacing={0} item xs={12}>
+            <Grid item xs={12}>
+                <Typography variant='h5'>{townhall.speaker.name}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant='body2' color='textSecondary'>
+                    {`${townhall.speaker.party}, ${townhall.speaker.territory}`}
+                </Typography>
+            </Grid>
+        </Grid>
+    );
+    const FavoriteFab = () => (
+        <Grid container>
+            <Grid
+                container
+                justify='flex-end'
+                item
+                xs={12}
+                className={classes.fab}
+            >
+                <Fab color='secondary'>
+                    <FavoriteIcon className={classes.fabIcon} />
+                </Fab>
+            </Grid>
+        </Grid>
+    );
+    const Info = () => (
+        <Grid container>
+            <Grid item xs={12}>
+                <List>
+                    <ListSubheader disableGutters disableSticky>
+                        Information
+                    </ListSubheader>
+                    <ListItem disableGutters>
+                        <ListItemIcon>
+                            <ForumIcon style={{ fontSize: 30 }} />
+                        </ListItemIcon>
+                        <ListItemText primary={townhall.topic} />
+                    </ListItem>
+                    <ListItem disableGutters>
+                        <ListItemIcon>
+                            <CalendarIcon style={{ fontSize: 30 }} />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={formatDate(
+                                townhall.date,
+                                'MMMM do, yyyy p'
+                            )}
+                        />
+                    </ListItem>
+                </List>
+            </Grid>
+        </Grid>
+    );
     return (
         <Grid container className={classes.root} spacing={0}>
             <Grid item xs='auto'>
-                <div
-                    style={{
-                        backgroundImage: `url(${townhall.picture})`,
-                        backgroundSize: '100% auto',
-                        height: '40%',
-                        width: '100vw',
-                    }}
-                    // className={classes.picture}
-                    // src={townhall.picture}
-                    // alt='Member of Congress'
+                <img
+                    className={classes.picture}
+                    src={townhall.picture}
+                    alt='Member of Congress'
                 />
             </Grid>
-            <Grid item xs={12} style={{ paddingTop: '40%' }}>
-                <Paper className={classes.paper}>Hello World</Paper>
-            </Grid>
+            <Paper className={classes.paper} elevation={5}>
+                <FavoriteFab />
+                <Title />
+                <Info />
+            </Paper>
         </Grid>
     );
 }

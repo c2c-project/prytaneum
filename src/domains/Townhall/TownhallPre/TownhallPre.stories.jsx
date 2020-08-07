@@ -6,16 +6,26 @@ import Component from '.';
 export default { title: 'Domains/Townhall' };
 
 const townhall = {
-    speaker: 'Darth Vader',
+    speaker: {
+        name: 'Darth Vader',
+        party: 'Dark Side',
+        territory: 'CA-41',
+    },
     moderator: 'Luke Skywalker',
     topic: 'Death Star Design & Imperial Unions',
     picture: 'https://i.imgur.com/3beQH5s.jpeg',
     readingMaterials: '',
     date: new Date(),
+    alignment: 'Dark Side',
 };
 
 export function TownhallPre() {
     return (
-        <Component townhall={townhall} />
+        <Container
+            maxWidth='sm'
+            style={{ height: '100%', width: '100%', padding: '0' }}
+        >
+            <Component townhall={townhall} />
+        </Container>
     );
 }
