@@ -44,7 +44,7 @@ export default function Login() {
                         <img
                             className={classes.img}
                             src={banner}
-                            alt='spp-banner'
+                            alt='University of California Riverside School of Public Policy Logo'
                         />
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -66,6 +66,7 @@ export default function Login() {
                                     Register
                                 </Button>
                                 <Button
+                                    aria-label='Forgot Password'
                                     onClick={() =>
                                         history.push(routeNames.forgotPassRequest)
                                     }
