@@ -26,13 +26,6 @@
         "**/*+(index|.spec|.e2e).ts"
     ],
     "typedocOptions": {
-		"inputFiles": [
-            "./src",
-            "./src/*",
-            "./src/*/*",
-            "./src/*/*/*",
-            "./src/*/*/*/*"
-		],
 		"mode": "modules",
         "out": "docs",
         "excludeNotExported": true,
@@ -41,10 +34,7 @@
             "**/*.stories.*",
             "**/*+(index|.spec|.e2e).ts"
         ],
-        "categoryOrder": ["components", "hooks"],
-        "toc": [
-            "Components",
-            "hooks"
-        ],
+        "categoryOrder": ["components", "hooks", "*"],
+        
 	},
 }

@@ -19,6 +19,8 @@ interface Props {
 
 /**
  * @category components
+ * @category secondCat
+ * @category components
  * @description Fab button that displays bottom right of screen, currently only uses a + sign
  * @arg props
  * @arg props.onClick function that runs when the fab is clicked
@@ -37,3 +39,13 @@ export default function Fab({ onClick }: Props) {
 Fab.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
+
+
+/**
+ * @category secondCat
+ * @description Alerts(param)
+ * @param {string} alertMsg
+ */
+export function Alert(s: string) {
+    alert(s);
+}
