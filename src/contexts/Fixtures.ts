@@ -18,4 +18,16 @@ export function makeSuccessFixture(data?: Record<string, any>) {
     };
 }
 
+export function makeFailureFixture(data?: Record<string, any>) {
+    return {
+        meta: {
+            status: 400,
+            statusText: 'BAD REQUEST',
+            config: {},
+            headers: {},
+        },
+        data,
+    };
+}
+
 export default React.createContext<Fixture>(makeSuccessFixture());
