@@ -1,5 +1,5 @@
 import React from 'react';
-import io from 'socket.io-client';
+import { EventEmitter } from 'events';
 
 type Events =
     | 'townhall-chat-state'
@@ -16,7 +16,7 @@ type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
 
 function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
     const { url, event, reducer, initialState } = settings;
-    const socket = io.connect(url);
+    const socket = (new EventEmitter() as unknown) as SocketIOClient.Socket;
     const [state, dispatch] = React.useReducer(reducer, initialState);
     socket.on(event, dispatch);
     return [state, dispatch, socket];

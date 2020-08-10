@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FixtureSocket from 'contexts/Fixture.socket';
+import FixtureSocket from 'mock/Fixture.socket';
 import Component from '.';
 
 export default { title: 'Domains/Townhall' };

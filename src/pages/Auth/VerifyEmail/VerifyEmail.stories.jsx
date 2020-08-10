@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter, Route, Switch, useHistory } from 'react-router-dom';
 import { withKnobs, select } from '@storybook/addon-knobs';
 
-import Fixtures from 'contexts/Fixtures';
+import Fixtures from 'mock/Fixtures';
 import routeNames from '../route-names';
 import Page from '.';
 
