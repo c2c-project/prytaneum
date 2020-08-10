@@ -18,8 +18,7 @@ interface Props {
 }
 
 /**
- * @category components
- * @category secondCat
+ * @component component
  * @category components
  * @description Fab button that displays bottom right of screen, currently only uses a + sign
  * @arg props

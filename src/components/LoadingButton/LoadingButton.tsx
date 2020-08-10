@@ -8,6 +8,9 @@ interface Props {
     component: JSX.Element;
 }
 
+/**
+ * @component component
+ */
 export default function LoadingButton({ loading, component }: Props) {
     const theme = useTheme();
     if (loading) {

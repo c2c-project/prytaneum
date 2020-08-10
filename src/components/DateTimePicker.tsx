@@ -4,7 +4,7 @@ import { DateTimePicker, DateTimePickerProps } from '@material-ui/pickers';
 
 /**
  * @description Element for picking date & time
- * @arg {import('@material-ui/pickers').DateTimePickerProps} props refer to material-ui/pickers documentation
+ * @arg  props refer to material-ui/pickers documentation
  */
 export default function Picker(props: DateTimePickerProps) {
     return (
