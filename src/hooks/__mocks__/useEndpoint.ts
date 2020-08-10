@@ -1,7 +1,8 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import useErrorHandler from './useErrorHandler';
+import FixtureContext, { Fixture } from 'mock/Fixtures';
+import useErrorHandler from '../useErrorHandler';
 
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
@@ -22,6 +23,7 @@ export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
     options: EndpointOptions<T> = {}
 ): EndpointUtils {
+    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext);
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);
@@ -47,28 +49,20 @@ export default function useEndpoint<T>(
 
         const request = async function () {
             try {
-                // the first indices is all I care about
-                const [response] = await Promise.allSettled([
-                    endpoint(),
-                    minWaitTime(),
-                ]);
-
-                // I need to check if I'm still mounted before continuing
-                if (isMounted === true) {
-                    setIsLoading(false);
-                    // there might be a better way to do this? other than just checking the status string :\
-                    if (response.status === 'rejected') {
-                        _onFailure(response.reason);
-                    } else {
-                        _onSuccess(response.value);
-                    }
+                await minWaitTime();
+                setIsLoading(false);
+                if (meta.status === 200) {
+                    _onSuccess({
+                        status: meta.status,
+                        statusText: meta.statusText,
+                        data,
+                        headers: meta.headers,
+                        config: meta.config,
+                    } as AxiosResponse<T>);
+                } else {
+                    throw new Error(meta.statusText);
                 }
             } catch (e) {
-                /*
-                 * check if I'm still mounted before continuing
-                 * this catch only triggers if it is something on the client and not from the response
-                 * because allSettled doesn't throw an error even if one of the promises are rejected
-                 */
                 if (isMounted === true) {
                     setIsLoading(false);
                     _onFailure(e);
@@ -76,9 +70,7 @@ export default function useEndpoint<T>(
             }
         };
 
-        // sendRequest sets loading to true, I use this as the trigger to send the request
         if (isLoading) {
-            // I use callbacks after the request completes, so I don't care about "await"-ing the promise
             // eslint-disable-next-line no-void
             void request();
         }
@@ -86,7 +78,7 @@ export default function useEndpoint<T>(
         return () => {
             isMounted = false;
         };
-    }, [isLoading, endpoint, handleError, options]);
+    }, [isLoading, endpoint, handleError, options, meta, data]);
 
     return [sendRequest, isLoading];
 }
