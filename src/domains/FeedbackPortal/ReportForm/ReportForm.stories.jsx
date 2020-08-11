@@ -1,8 +1,12 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import {
+    BugReport as BugReportIcon,
+    Feedback as FeedbackReportIcon,
+} from '@material-ui/icons';
+
 import Component from '.';
-import FixtureContext, { makeSuccessFixture } from 'contexts/Fixtures';
 
 export default { title: 'Domains/ReportForm' };
 
@@ -10,6 +14,7 @@ const FeedbackReportForm = {
     Title: 'Feedback Form',
     MainDescription:
         'Let us know how we can improve your virtual town hall experience in the future. We strongly appreciate your feedback!',
+    Icon: <FeedbackReportIcon />,
     Type: 'feedback',
 };
 
@@ -18,6 +23,7 @@ const BugReportForm = {
     MainDescription:
         'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
     Type: 'bug',
+    Icon: <BugReportIcon />,
     townhallId: 'utvb67r45f846gf5f85',
 };
 
@@ -29,6 +35,7 @@ export function ReportForm() {
                     <Component
                         Title={FeedbackReportForm.Title}
                         MainDescription={FeedbackReportForm.MainDescription}
+                        Icon={FeedbackReportForm.Icon}
                         Type={FeedbackReportForm.Type}
                         Report={{
                             date: new Date().toISOString(),
@@ -39,6 +46,7 @@ export function ReportForm() {
                     <Component
                         Title={BugReportForm.Title}
                         MainDescription={BugReportForm.MainDescription}
+                        Icon={BugReportForm.Icon}
                         Type={BugReportForm.Type}
                         Report={{
                             date: new Date().toISOString(),

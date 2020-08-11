@@ -17,6 +17,7 @@ interface FormProps {
     Title: string;
     MainDescription: string;
     Report: FeedbackForm | BugReportForm;
+    Icon: JSX.Element;
     CreateReportEndpoint: (
         form: FeedbackForm | BugReportForm
     ) => Promise<AxiosResponse<any>>;
@@ -25,6 +26,7 @@ interface FormProps {
 function ReportForm({
     Title,
     MainDescription,
+    Icon,
     Report,
     CreateReportEndpoint,
 }: FormProps) {
@@ -33,6 +35,7 @@ function ReportForm({
             <Grid item xs={12}>
                 <Typography variant='h4' align='center'>
                     {Title}
+                    {React.cloneElement(Icon)}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -57,6 +60,7 @@ ReportForm.defaultProps = {
 ReportForm.propTypes = {
     Title: PropTypes.string,
     MainDescription: PropTypes.string,
+    Icon: PropTypes.node.isRequired,
     CreateReportEndpoint: PropTypes.func,
 };
 
@@ -64,6 +68,7 @@ export default function ReportFormFactory({
     Type,
     Title,
     MainDescription,
+    Icon,
     Report,
     townhallId,
 }: FormProps & { Type: string; townhallId?: string }) {
@@ -72,6 +77,7 @@ export default function ReportFormFactory({
             return (
                 <ReportForm
                     Title={Title}
+                    Icon={Icon}
                     MainDescription={MainDescription}
                     CreateReportEndpoint={(form) => createFeedbackReport(form)}
                     Report={Report}
@@ -85,6 +91,7 @@ export default function ReportFormFactory({
                 <ReportForm
                     Title={Title}
                     MainDescription={MainDescription}
+                    Icon={Icon}
                     Report={Report}
                     CreateReportEndpoint={(form) =>
                         createBugReport(form, townhallId)
@@ -96,6 +103,7 @@ export default function ReportFormFactory({
                 <ReportForm
                     Title={Title}
                     MainDescription={MainDescription}
+                    Icon={Icon}
                     CreateReportEndpoint={(form) => createFeedbackReport(form)}
                     Report={Report}
                 />

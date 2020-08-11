@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Component from '.';
 
-export default { title: 'Domains/SummaryReport' };
+export default { title: 'Domains/ReportSummary' };
 
 const FeedbackReportSummary = {
     Report: {
