@@ -1,5 +1,6 @@
 import React from 'react';
-import { EventEmitter } from 'events';
+
+import FixtureContext from 'mock/Fixture.socket';
 
 type Events =
     | 'townhall-chat-state'
@@ -13,12 +14,21 @@ interface Settings<T, U> {
     initialState: T;
 }
 type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
-
 function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
-    const { url, event, reducer, initialState } = settings;
-    const socket = (new EventEmitter() as unknown) as SocketIOClient.Socket;
+    // this is really just an Event emitter
+    const socket = React.useContext(FixtureContext);
+
+    // const initSocket = React.useContext(FixtureContext);
+    // const [socket, handle] = initSocket();
+    // React.useEffect(() => {
+    //     return () => clearInterval(handle);
+    // });
+
+    const { event, reducer, initialState } = settings;
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    socket.on(event, dispatch);
+    React.useEffect(() => {
+        socket.on(event, dispatch);
+    }, [socket]);
     return [state, dispatch, socket];
 }
 

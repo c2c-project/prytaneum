@@ -11,6 +11,7 @@ import {
     ListItemText,
     ListItemIcon,
     ListSubheader,
+    Zoom,
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -80,9 +81,11 @@ export default function TownhallPre({ townhall }: Props) {
                 xs={12}
                 className={classes.fab}
             >
-                <Fab color='secondary'>
-                    <FavoriteIcon className={classes.fabIcon} />
-                </Fab>
+                <Zoom in>
+                    <Fab color='secondary'>
+                        <FavoriteIcon className={classes.fabIcon} />
+                    </Fab>
+                </Zoom>
             </Grid>
         </Grid>
     );

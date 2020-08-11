@@ -1,21 +1,17 @@
 import React from 'react';
+import { EventEmitter } from 'events';
+// import faker from 'faker';
 
-export interface Fixture<T = any> {
-    meta: {
-        timeout?: number;
-        status: number;
-        statusText: string;
-        config: Record<string, unknown>;
-        headers: Record<string, string>;
-    };
-    data?: T;
+// export type Fixture = [SocketIOClient.Socket, NodeJS.Timeout];
+export type Fixture = SocketIOClient.Socket;
+
+export function makeEmitter(): Fixture {
+    const event = new EventEmitter();
+    // const handle = setInterval(() => {
+    //     event.emit('data', faker.lorem.sentence());
+    // }, 10000); // 10 seconds
+    const e = (event as unknown) as SocketIOClient.Socket; // pretty gross :\
+    return e;
 }
 
-export function makeSuccessFixture(data?: Record<string, any>) {
-    return {
-        meta: { status: 200, statusText: 'OK', config: {}, headers: {} },
-        data,
-    };
-}
-
-export default React.createContext<Fixture>(makeSuccessFixture());
+export default React.createContext<Fixture>(makeEmitter());
