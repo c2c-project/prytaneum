@@ -45,9 +45,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const [snack] = useSnack();
     const { roomId } = useParams<Params>();
 
-    const handleEdit = async (
-        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-    ) => {
+    const handleEdit = async (e: React.MouseEvent<{ value: unknown }>) => {
         e.preventDefault();
         try {
             const response = await fetch('/api/chat/update-message/', {
@@ -74,7 +72,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
         }
     };
 
-    // Change the delete message to just hide it. ie markit as deleted
+    // Change the delete message to just hide it. ie mark it as deleted
     const handleDelete = async () => {
         try {
             const response = await fetch(`/api/chat/delete-message/${roomId}`, {
@@ -124,8 +122,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
                     color='secondary'
                     variant='contained' // TODO: fix this, should be inside the form tag
                     fullWidth
-                    // TODO: any?
-                    onClick={handleEdit as any}
+                    onClick={handleEdit}
                 >
                     Submit Change
                 </Button>

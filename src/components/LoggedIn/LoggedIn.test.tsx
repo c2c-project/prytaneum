@@ -39,7 +39,7 @@ describe('LoggedIn', function () {
     it('should render, fail, redirect to /logout', () => {
         const jwt = false;
         const pathToCheck = '/';
-        let _location: any;
+        let _location = { pathname: '' };
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
@@ -67,7 +67,7 @@ describe('LoggedIn', function () {
     it('should render, succeed, should render to <>children</>', () => {
         const jwt = true;
         const pathToCheck = '/';
-        let _location: any;
+        let _location = { pathname: '' };
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
