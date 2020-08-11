@@ -17,10 +17,13 @@ interface Props {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
+
+// tried following this but it doesnt work
 /**
- * @component component
- * @category components
- * @description Fab button that displays bottom right of screen, currently only uses a + sign
+ * Fab button that displays bottom right of screen, currently only uses a + sign
+ * @component 
+ * @example
+ * <Fab onClick=""/>
  * @arg props
  * @arg props.onClick function that runs when the fab is clicked
  */

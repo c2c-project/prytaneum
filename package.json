@@ -81,6 +81,7 @@
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
         "jsdoc": "^3.6.5",
+        "jsdoc-mermaid": "^1.0.0",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     }

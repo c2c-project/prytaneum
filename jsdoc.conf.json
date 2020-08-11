@@ -4,11 +4,13 @@
       "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
-      "include": ["src"],
+      "include": ["src/"],
       "includePattern": ".+\\.ts(doc|x)?$",
       "excludePattern": ".+\\.(test|spec).ts"
     },
-    "plugins": ["plugins/markdown", "better-docs/*"],
+    "sourceType": "module",
+    "plugins": ["plugins/markdown", "better-docs/typescript", "better-docs/component" ],
+    "recurseDepth": 10,
     "templates": {
       "better-docs": {
         "name": "My React components"
