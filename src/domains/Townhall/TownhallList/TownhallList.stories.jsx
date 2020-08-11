@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FixtureContext, { makeSuccessFixture } from 'contexts/Fixtures';
+import FixtureContext, { makeSuccessFixture } from 'mock/Fixtures';
 import Page from '.';
 
 export default { title: 'Domains/Townhall' };
