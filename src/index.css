@@ -18,3 +18,7 @@ div#root {
     height: 100%;
     overflow: hidden;
 }
+
+main {
+    overflow-x: scroll
+}

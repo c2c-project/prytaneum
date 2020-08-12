@@ -8,7 +8,7 @@ export default function TownhallPre() {
     return (
         <>
             <AppBar back />
-            <main style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+            <main>
                 <Container
                     maxWidth='sm'
                     style={{ width: '100%', height: '100%' }}

@@ -3,7 +3,15 @@ import Container from '@material-ui/core/Container';
 
 import Component from '.';
 
-export default { title: 'Components' };
+export default {
+    title: 'Components',
+    component: Component,
+    parameters: {
+        docs: {
+            page: () => <h1>Hello world</h1>,
+        },
+    },
+};
 
 const sections = [
     {

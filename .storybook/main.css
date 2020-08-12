@@ -7,3 +7,9 @@ div#root {
     padding: 0; */
     overflow: hidden;
 }
+
+main {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+}
