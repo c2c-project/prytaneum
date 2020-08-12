@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Checkbox from '@material-ui/core/Checkbox';
-import theme from 'theme';
+
 
 const useStyles = makeStyles(() => ({
     selectedRow: {
@@ -25,7 +25,7 @@ interface ClipData {
     duration: string;
     title: string;
     description: string;
-    tags?: string[];
+    tags: string[];
 }
 
 function createData(
@@ -36,6 +36,12 @@ function createData(
     tags: string[]
 ): ClipData {
     return { timeStamp, duration, title, description, tags };
+}
+
+interface Props {
+    clips: ClipData[];
+    isSelected: (title: string) => boolean;
+    handleClick: (event: React.MouseEvent<unknown>, clip: ClipData) => void;
 }
 
 const tempRows = [
@@ -75,59 +81,14 @@ const tempRows = [
         ['History', 'Philosophy', 'Prop 60']
     ),
 ];
-// function descendingComparator<T>(a: T, b: T, orderBy: keyof T){
-//     if (b[orderBy] < a[orderBy]){
-//         return -1;
-//     }
-//     if (b[orderBy] > a[orderBy]){
-//         return 1;
-//     }
-//     return 0;
-// }
 
-// type Order = 'asc' | 'desc';
 
-// interface EnhancedTableProps {414
-//     classes: ReturnType<typeof useStyles>;
-//     numSelected: number;
-//     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ClipData) => void;
-//     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-//     order: Order;
-//     orderBy: string;
-//     rowCount: number;
-//   }
-
-export default function ClipTable() {
+export default function ClipTable({clips, isSelected, handleClick}: Props) {
     const classes = useStyles();
-    const [selected, setSelected] = React.useState<string[]>([]);
 
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
+    
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        // adds and pops items that are clicked/unclicked to selected list state
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: string[] = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
-        }
-
-        setSelected(newSelected);
-    };
-    // returns boolean if title has been selected
-    const isSelected = (title: string) => selected.indexOf(title) !== -1;
-
+    
     const matches = useMediaQuery('(min-width:300px)');
 
     return !matches ? (
@@ -143,14 +104,14 @@ export default function ClipTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {tempRows.map((row) => {
+                    {clips.map((row) => {
                         const isRowSelected = isSelected(row.title);
                         return (
                             <TableRow
                                 hover
                                 key={row.title}
                                 onClick={(event) => {
-                                    handleClick(event, row.title);
+                                    handleClick(event, row);
                                 }}
                                 selected={isRowSelected}
                             >
