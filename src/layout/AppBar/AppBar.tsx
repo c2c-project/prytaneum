@@ -1,18 +1,14 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
-
+import {
+    Toolbar,
+    Typography,
+    Grow,
+    IconButton,
+    AppBar as MUIAppBar,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Grow from '@material-ui/core/Grow';
-import IconButton from '@material-ui/core/IconButton';
 import BackIcon from '@material-ui/icons/ArrowBack';
-
-// import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
 
 import { parseTitle } from '../utils';
 
@@ -36,22 +32,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    // tabs?: React.ReactNode[] | React.ReactNode;
     back?: boolean;
+    children?: JSX.Element | JSX.Element[];
 }
 
 interface Params {
     title?: string;
 }
 
-export default function Nav({ back }: Props) {
+export default function AppBar({ back, children }: Props) {
     const { title } = useParams<Params>();
     const history = useHistory(); // TODO: change this to not use history and instead have my own internal routing?
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <AppBar position='static'>
+            <MUIAppBar position='static'>
                 <Toolbar>
                     {back && (
                         <Grow in>
@@ -67,21 +63,16 @@ export default function Nav({ back }: Props) {
                         </Grow>
                     )}
                     <Typography variant='h6' className={classes.title}>
-                        {parseTitle(title)}
+                        {parseTitle(title) || 'Prytaneum'}
                     </Typography>
-                    <Button color='inherit'>Login</Button>
+                    {children}
                 </Toolbar>
-            </AppBar>
+            </MUIAppBar>
         </div>
     );
 }
 
-Nav.defaultProps = {
-    // tabs: <></>,
+AppBar.defaultProps = {
     back: false,
-};
-
-Nav.propTypes = {
-    // tabs: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
-    back: PropTypes.bool,
+    children: <></>,
 };

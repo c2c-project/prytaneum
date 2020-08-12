@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid,
     Fab,
-    Paper,
     Typography,
     List,
     ListItem,
@@ -12,6 +11,7 @@ import {
     ListItemIcon,
     ListSubheader,
     Zoom,
+    Paper,
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -27,19 +27,21 @@ const useStyles = makeStyles((theme) => ({
     picture: {
         width: '100%',
         height: 'auto',
+        borderRadius: '0 0 50px 50px',
     },
     fabIcon: {
         color: 'white',
     },
     fab: {
         paddingRight: theme.spacing(4),
-        marginTop: -theme.spacing(3),
+        marginTop: -theme.spacing(4),
+    },
+    color: {
+        backgroundColor: theme.palette.background.paper,
     },
     paper: {
-        borderRadius: '50px 50px 0px 0px',
         height: '100%',
         width: '100%',
-        marginTop: '-15%',
         padding: `0px ${theme.spacing(2)}px 0px ${theme.spacing(6)}px`,
     },
 }));
@@ -119,14 +121,14 @@ export default function TownhallPre({ townhall }: Props) {
     );
     return (
         <Grid container className={classes.root} spacing={0}>
-            <Grid item xs='auto'>
+            <Grid item xs='auto' className={classes.color}>
                 <img
                     className={classes.picture}
                     src={townhall.picture}
                     alt='Member of Congress'
                 />
             </Grid>
-            <Paper className={classes.paper} elevation={5}>
+            <Paper className={classes.paper} elevation={0}>
                 <FavoriteFab />
                 <Title />
                 <Info />
