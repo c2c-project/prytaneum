@@ -21,6 +21,7 @@ interface Props {
 /** This function generates a Fab button 
  *  which is the '+' on the bottom of the page
  *  that runs the given function
+ *  @category Component
  *  @constructor Fab
  *  @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} props 
  *          props consists of an onClick function
@@ -42,6 +43,7 @@ Fab.propTypes = {
 
 
 /**
+ * @category Component
  * @description Alerts(param)
  * @param {string} alertMsg
  */

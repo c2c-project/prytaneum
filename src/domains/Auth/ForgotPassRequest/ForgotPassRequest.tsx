@@ -19,6 +19,18 @@ interface Props {
     onSuccess: () => void;
     onFailure: () => void;
 }
+
+/**
+ * Function to hanlde forgotten password requests by calling the API
+ * and rendering the text boxes
+ * @constructor ForgotPassRequest
+ * @category Domains/Auth
+ * @component
+ * @example 
+ * ForGotPassExaMple()
+ * @param {"() => void, () => void"} props props.onSuccess is the function to use if successful <br><br>
+ *                       props.onFailure is the function to use if failed
+ */
 export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
