@@ -18,15 +18,13 @@ interface Props {
 }
 
 
-// tried following this but it doesnt work
-/**
- * Fab button that displays bottom right of screen, currently only uses a + sign
- * @component 
- * @example
- * <Fab onClick=""/>
- * @arg props
- * @arg props.onClick function that runs when the fab is clicked
- */
+/** This function generates a Fab button 
+ *  which is the '+' on the bottom of the page
+ *  that runs the given function
+ *  @constructor Fab
+ *  @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} props 
+ *          props consists of an onClick function
+*/
 export default function Fab({ onClick }: Props) {
     const classes = useStyles();
     return (
@@ -44,7 +42,6 @@ Fab.propTypes = {
 
 
 /**
- * @category secondCat
  * @description Alerts(param)
  * @param {string} alertMsg
  */
