@@ -14,7 +14,10 @@ export default function LoadingButton({ loading, component }: Props) {
         return React.cloneElement(
             component,
             { disabled: loading },
-            <CircularProgress size={theme.typography.button.lineHeight} />
+            <CircularProgress
+                size={theme.typography.button.lineHeight}
+                aria-label="loading"
+            />
         );
     }
     return component;

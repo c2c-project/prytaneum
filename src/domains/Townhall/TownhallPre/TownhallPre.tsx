@@ -51,6 +51,7 @@ export default function TownhallPre(props: Props) {
                     <Avatar
                         className={classes.largeAvatar}
                         src={townhall.picture}
+                        alt="speaker's profile picture"
                     />
                 }
                 title={
