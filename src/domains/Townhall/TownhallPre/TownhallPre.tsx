@@ -16,8 +16,12 @@ import {
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import ForumIcon from '@material-ui/icons/ForumOutlined';
+import { useParams } from 'react-router-dom';
 
+import useEndpoint from 'hooks/useEndpoint';
 import { formatDate } from 'utils/format';
+import Loader from 'components/Loader';
+import { getTownhall } from '../api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,22 +50,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface Props {
-    townhall: {
-        speaker: {
-            name: string;
-            party: string;
-            territory: string;
-        };
-        moderator: string;
-        topic: string;
-        picture: string;
-        readingMaterials: '';
-        date: Date;
-    };
-}
-export default function TownhallPre({ townhall }: Props) {
+export default function TownhallPre() {
+    const [townhall, setTownhall] = React.useState<Prytaneum.Townhall | null>(
+        null
+    );
     const classes = useStyles();
+    const { townhallId } = useParams<{ townhallId: string }>();
+    const [sendRequest, loading] = useEndpoint<{
+        townhall: Prytaneum.Townhall;
+    }>(() => getTownhall(townhallId), {
+        onSuccess: (response) => {
+            const { data } = response;
+            setTownhall(data.townhall);
+        },
+    });
+    React.useEffect(sendRequest, []);
+    if (loading || !townhall) {
+        return <Loader />;
+    }
     const Title = () => (
         <Grid container spacing={0} item xs={12}>
             <Grid item xs={12}>

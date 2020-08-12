@@ -1,20 +1,20 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
 
-import List from 'domains/Townhall/TownhallList';
 import AppBar from 'layout/AppBar';
+import Component from 'domains/Townhall/TownhallPre';
 
-export default function TownhallList() {
+export default function TownhallPre() {
     return (
         <>
-            <AppBar />
+            <AppBar back />
             <main style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
                 <Container
-                    maxWidth='md'
+                    maxWidth='sm'
                     style={{ width: '100%', height: '100%' }}
                     disableGutters
                 >
-                    <List />
+                    <Component />
                 </Container>
             </main>
         </>

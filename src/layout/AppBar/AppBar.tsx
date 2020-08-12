@@ -15,8 +15,6 @@ import { parseTitle } from '../utils';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        height: '100%',
-        width: '100%',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -47,7 +45,7 @@ export default function AppBar({ back, children }: Props) {
 
     return (
         <div className={classes.root}>
-            <MUIAppBar position='static'>
+            <MUIAppBar position='static' elevation={0}>
                 <Toolbar>
                     {back && (
                         <Grow in>

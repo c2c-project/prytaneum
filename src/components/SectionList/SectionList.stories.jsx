@@ -70,7 +70,10 @@ const sections = [
 
 export function SectionList() {
     return (
-        <Container maxWidth='md' style={{ width: '100%', height: '100%' }}>
+        <Container
+            maxWidth='md'
+            style={{ width: '100%', height: '100%', overflowY: 'scroll' }}
+        >
             <Component sections={sections} />
         </Container>
     );
