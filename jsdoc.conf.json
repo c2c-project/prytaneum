@@ -1,17 +1,18 @@
 {
     "tags": {
-        "allowUnknownTags": ["component"],
+        "allowUnknownTags": true,
         "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
         "include": ["src/"],
-        "includePattern": ".+\\.ts(doc|x)?$",
+        "includePattern": ".+\\.(t|j)s(doc|x)?$",
         "excludePattern": ".+\\.(test|spec).ts"
     },
     "sourceType": "module",
-
+    "plugins": ["plugins/markdown", "better-docs/category", "better-docs/typescript"],
     "recurseDepth": 10,
     "opts": {
+        "template": "node_modules/better-docs",
         "destination": "docs",
         "recurse": true,
         "readme": "README.md"

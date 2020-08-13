@@ -21,8 +21,10 @@ interface Props {
 /** This function generates a Fab button 
  *  which is the '+' on the bottom of the page
  *  that runs the given function
- *  category Component
- *  @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} props 
+ *  @category Component
+ *  @constructor Fab
+ *  @param props
+ *  @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} props.onClick 
  *          props consists of an onClick function
 */
 export default function Fab({ onClick }: Props) {
@@ -39,13 +41,3 @@ export default function Fab({ onClick }: Props) {
 Fab.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
-
-
-/**
- * @category Component
- * @description Alerts(param)
- * @param {string} alertMsg
- */
-export function Alert(s: string) {
-    alert(s);
-}
