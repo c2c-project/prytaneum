@@ -13,7 +13,9 @@ import Collapse from '@material-ui/core/Collapse';
 import { Townhall } from '../api';
 
 const useStyles = makeStyles((theme) => ({
-    root: {},
+    root: {
+        width: '100%',
+    },
 
     title: {
         fontSize: '25px',
@@ -49,7 +51,7 @@ export default function TownhallBillSummary(props: Props) {
         setExpanded(!expanded);
     };
     return (
-        <Card className={classes.root} elevation={8}>
+        <Card className={classes.root} elevation={0}>
             <CardHeader
                 title={
                     <>

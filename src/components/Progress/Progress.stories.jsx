@@ -1,28 +1,28 @@
 import React from 'react';
-import Component from './Progress';
+import Component from '.';
+import { ProgressStep } from './Progress';
 
+export default { title: 'components' };
 
-export default { title: 'Components' };
-const progress = {
-    progressData: [
-        {
-            value: 0,
-            label: 'Introduced',
-        },
-        {
-            value: 50,
-            label: 'Passed in houses',
-        },
-    
-        {
-            value: 100,
-            label: "Became Law",
-        },
-        
-    ],
-    defaultVal: 0
-};
+export function ProgressBar() {
 
-export function Progress() {
-    return <Component progress={progress} />;
+    return (
+
+        <Component currentStep={2}>
+
+            <ProgressStep />
+
+            <ProgressStep />
+
+            <ProgressStep />
+
+            <ProgressStep />
+
+            <ProgressStep />
+
+        </Component>
+
+    );
+
 }
+

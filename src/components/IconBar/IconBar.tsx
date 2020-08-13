@@ -55,9 +55,7 @@ export default function IconBar({ children, alignBar }: Props) {
                             // clone the child and apply the button styles
                             const StylizedChild = React.cloneElement(child, {
                                 className: clsx([
-                                    classes.btn,
-                                    (child.props as Record<string, unknown>)
-                                        .className,
+                               
                                 ]),
                                 size: 'large',
                                 variant: 'contained',

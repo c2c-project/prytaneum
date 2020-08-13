@@ -1,89 +1,99 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            marginLeft: 'auto !important',
-            marginRight: 'auto !important',
-        },
-    })
-);
-
-const muiTheme = createMuiTheme({
-    overrides: {
-        MuiSlider: {
-            thumb: {
-                color: '#0074BC',
-            },
-            track: {
-                color: '#0074BC',
-            },
-            rail: {
-                color: 'black',
-            },
-        },
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import Divider from '@material-ui/core/Divider';
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: 'blue',
     },
-});
+    circle: {
+        clipPath: 'circle(40%)',
 
-export interface TownhallForm {
-    speaker?: string;
-    moderator?: string;
-    date?: Date;
-    description?: string;
-    url?: string;
-    topic: string;
+        height: '24px',
+
+        width: '24px',
+    },
+
+    active: {
+        backgroundColor: theme.palette.primary.main,
+    },
+
+    inactive: {
+        backgroundColor: 'grey',
+    },
+
+    current: {
+        height: '48px',
+
+        width: '48px',
+    },
+}));
+
+const container1 = {
+    backgroundColor: 'yellow',
+};
+
+interface ProgressStepProps {
+    active?: boolean;
+    current?: boolean;
 }
 
-export type Townhall = Required<TownhallForm> & {
-    _id: string;
-    picture: string;
+export function ProgressStep({ active, current }: ProgressStepProps) {
+    const classes = useStyles();
+    const { progress } = { active, current };
+
+    return (
+        <div
+            className={
+                active
+                    ? clsx([classes.circle, classes.active])
+                    : clsx([classes.circle, classes.inactive])
+            }
+        />
+    );
+}
+
+ProgressStep.defaultProps = {
+    active: false,
+
+    current: false,
 };
 
 interface Props {
-    progress: Townhall;
+    children: JSX.Element | JSX.Element[];
+
+    currentStep: number;
 }
 
-function valuetext(value: number) {
-    return `${value}`;
-}
-function useWindowSize() {
-    const [size, setSize] = useState([0, 0]);
-    useLayoutEffect(() => {
-        function updateSize() {
-            setSize([window.innerWidth, window.innerHeight]);
-        }
-        window.addEventListener('resize', updateSize);
-        updateSize();
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
-    return size;
-}
+export default function ProgressBar({ children, currentStep }: Props) {
 
-export default function DiscreteSlider(props: Props) {
-    const classes = useStyles();
-    const { progress } = props;
-    const [width, height] = useWindowSize();
-
+    const sample = {
+        backGroundColor: 'yellow',
+    };
     return (
-        <ThemeProvider theme={muiTheme}>
-            <div
-                className={classes.root}
-                style={{
-                    width: width - 200,
-                }}
+        <Grid container>
+            <Grid
+                item
+                xs={12}
+                container
+                justify='space-evenly'
             >
-                <Slider
-                    defaultValue={progress.defaultVal}
-                    getAriaValueText={valuetext}
-                    marks={progress.progressData}
-                    disabled
-                />
-            </div>
-        </ThemeProvider>
+                {React.Children.map(children, (child, idx) => {
+                    return (
+                        <Grid item xs='auto' className='container1'>
+                            {React.cloneElement(child, {
+                                active: idx < currentStep,
+                                current: idx + 1 === currentStep,
+                            })}
+                        </Grid>
+                    );
+                })}
+            </Grid>
+
+            <Grid item xs={12} container justify='center'>
+                Current label
+            </Grid>
+        </Grid>
     );
 }

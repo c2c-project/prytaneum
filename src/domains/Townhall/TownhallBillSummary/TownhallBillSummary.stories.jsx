@@ -48,7 +48,7 @@ const townhall = {
 
 export function TownhallBillSummary() {
     return (
-        <Container maxWidth='sm'>
+        <Container maxWidth='sm' disableGutters>
             <Component townhall={townhall} />
         </Container>
     );
