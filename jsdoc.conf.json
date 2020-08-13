@@ -9,7 +9,12 @@
         "excludePattern": ".+\\.(test|spec).ts"
     },
     "sourceType": "module",
-    "plugins": ["plugins/markdown", "better-docs/category", "better-docs/typescript"],
+    "plugins": [
+        "plugins/markdown",
+        "better-docs/category",
+        "better-docs/typescript",
+        "jsdoc-mermaid"
+    ],
     "recurseDepth": 10,
     "opts": {
         "template": "node_modules/better-docs",

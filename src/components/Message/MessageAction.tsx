@@ -18,6 +18,10 @@ interface Params {
     roomId: string;
 }
 
+/** Test Description
+ *  @category Component
+ *  @constructor MessageActions
+*/
 export default function MessageActions({ targetMsg, onClick }: Props) {
     const jwt = '';
     // const [jwt] = useJwt(); // TODO: fix this

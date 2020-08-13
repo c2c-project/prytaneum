@@ -11,8 +11,17 @@ interface Props {
 }
 
 /**
- * @description redirects to the login page if the user is not logged in
+ * redirects to the login page if the user is not logged in
  * ie they were trying to access a page that, at minimum, requires the user to be logged in
+ * @category Component
+ * @constructor LoggedIn
+ * @param Props
+ * @param {boolean} jwt is the current user signed in? 
+ * @param {JSX.Element | JSX.Element[]} children to return if jwt is true
+ * @mermaid
+ * sequenceDiagram
+    example->>LoggedIn: checks if LoggedIn
+    LoggedIn-->>example: returns either {children} or /logout
  */
 export default function LoggedIn({ children, jwt }: Props) {
     // const jwt = '';//{ _id: '' }; // useJwt();

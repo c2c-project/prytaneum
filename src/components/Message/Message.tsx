@@ -32,6 +32,11 @@ interface PropDefaults {
     onClickMessage: () => void;
     button: false;
 }
+
+/** Test Description
+ *  @category Component
+ *  @constructor Messages
+*/
 function Messages({ messages, button, onClickMessage }: Props & PropDefaults) {
     // const [, user] = useJwt();
     // const user = { _id: '' }; // PLACEHOLDER TODO: remove this/fix this
