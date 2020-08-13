@@ -3,8 +3,6 @@ import { MemoryRouter } from 'react-router-dom'
 
 import Bold from '.';
 
-export default { title: 'Components/Bold' };
-
 const toBoldString = "test_asdASD_123_=-0\"\'";
 const toBoldJSX = <p>this should look bold</p>;
 const toBoldJSXArr = 

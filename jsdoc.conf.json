@@ -1,6 +1,6 @@
 {
     "tags": {
-        "allowUnknownTags": true,
+        "allowUnknownTags": ["component"],
         "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
@@ -9,14 +9,9 @@
         "excludePattern": ".+\\.(test|spec).ts"
     },
     "sourceType": "module",
-    "plugins": [
-        "node_modules/better-docs/component",
-        "node_modules/better-docs/category",
-        "better-docs/typescript"
-    ],
+
     "recurseDepth": 10,
     "opts": {
-        "template": "node_modules/better-docs",
         "destination": "docs",
         "recurse": true,
         "readme": "README.md"

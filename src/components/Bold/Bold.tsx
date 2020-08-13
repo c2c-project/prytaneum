@@ -9,7 +9,7 @@ interface Props {
 
 /**
  *
- * @description Bolds the children, while keeping typography intact
+ * Bolds the children, while keeping typography intact
  * @arg props
  * @arg props.children
  */

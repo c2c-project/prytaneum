@@ -19,13 +19,14 @@
         "jwt-decode": "https://github.com/auth0/jwt-decode",
         "notistack": "^0.9.7",
         "prop-types": "^15.7.2",
-        "react": "^16.8.6",
+        "react": "^16.13.1",
         "react-dom": "^16.8.6",
         "react-player": "^1.11.1",
         "react-router-dom": "^5.2.0",
         "react-scripts": "^3.4.1",
         "react-webcam": "^4.0.0",
-        "socket.io-client": "^2.2.0"
+        "socket.io-client": "^2.2.0",
+        "storybook": "^6.0.5"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -35,7 +36,19 @@
         "storybook": "NODE_PATH=src start-storybook --port 3000",
         "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
         "lint": "eslint src/ --ext \".ts .tsx\"",
-        "docs": "jsdoc -c jsdoc.conf.json"
+        "docs": "jsdoc -c jsdoc.conf.json",
+        "storybook-docs": "yarn storybook --docs"
+    },
+    "alias": {
+        "assets": "./src/assets",
+        "components": "./src/components",
+        "contexts": "./src/contexts",
+        "domains": "./src/domains",
+        "hooks": "./src/hooks",
+        "layout": "./src/layout",
+        "pages": "./src/pages",
+        "theme": "./src/theme",
+        "utils": "./src/utils"
     },
     "browserslist": {
         "production": [
@@ -50,11 +63,12 @@
         ]
     },
     "devDependencies": {
-        "@storybook/addon-a11y": "^5.3.19",
-        "@storybook/addon-knobs": "^5.3.19",
-        "@storybook/addon-viewport": "^5.3.19",
+        "@storybook/addon-a11y": "^6.0.5",
+        "@storybook/addon-docs": "^6.0.5",
+        "@storybook/addon-knobs": "^6.0.5",
+        "@storybook/addon-viewport": "^6.0.5",
         "@storybook/preset-create-react-app": "^3.1.4",
-        "@storybook/react": "^5.3.19",
+        "@storybook/react": "^6.0.5",
         "@testing-library/dom": "^7.20.2",
         "@testing-library/jest-dom": "^5.10.0",
         "@testing-library/react": "^10.2.1",
@@ -68,6 +82,7 @@
         "@types/socket.io-client": "^1.4.33",
         "@typescript-eslint/eslint-plugin": "^3.2.0",
         "@typescript-eslint/parser": "^3.2.0",
+        "babel-loader": "^8.1.0",
         "better-docs": "^2.3.0",
         "eslint": "^6.5.1",
         "eslint-config-airbnb-typescript": "^8.0.2",
@@ -82,6 +97,7 @@
         "jest-environment-jsdom-sixteen": "^1.0.3",
         "jsdoc": "^3.6.5",
         "jsdoc-mermaid": "^1.0.0",
+        "react-is": "^16.13.1",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     }
