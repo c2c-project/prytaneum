@@ -7,7 +7,7 @@ export default { title: 'Domains/ReportHistory' };
 
 export function ReportSummary() {
     return (
-        <Container maxWidth='sm'>
+        <Container>
             <Component />
         </Container>
     );
