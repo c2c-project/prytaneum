@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import ClipDetails from './ClipDetails';
 import ClipTable from './ClipTable';
 
@@ -99,11 +100,7 @@ export default function ClipsPortal() {
     return (
         <section>
             <ClipDetails
-                title={selected.title}
-                duration={selected.duration}
-                description={selected.description}
-                timeStamp={selected.timeStamp}
-                tags={selected.tags}
+                clip={{...selected}}
             />
             <ClipTable
                 clips={tempRows}

@@ -32,6 +32,7 @@ export default createMuiTheme({
     palette: {
         primary: { main: '#0074bc' },
         secondary: { main: '#fdb813' },
+        background: {paper: '#F6F6F6'}
     },
     typography: {
         button: {

@@ -2,7 +2,9 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import theme from '../../theme';
+
+import theme from 'theme';
+import { ClipData } from '.';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -31,26 +33,30 @@ const useStyles = makeStyles(() =>
     })
 );
 
-interface ClipData {
-    timeStamp: string;
-    duration: string;
-    title: string;
-    description: string;
-    tags: string[];
+interface Props {
+    clip: ClipData;
 }
 
-export default function ClipDetails({duration, title, description, tags}: ClipData) {
+// interface ClipData {
+//     timeStamp: string;
+//     duration: string;
+//     title: string;
+//     description: string;
+//     tags: string[];
+// }
+
+export default function ClipDetails({ clip }: Props) {
     const classes = useStyles();
     return (
         <Card className={classes.root} variant='outlined'>
             <h1>
                 Current:
-                {title}
+                {clip.title}
             </h1>
-            <h2 className={classes.duration}>{duration}</h2>
+            <h2 className={classes.duration}>{clip.duration}</h2>
             <p>
                 Tags:
-                {tags.join()}
+                {clip.tags.join()}
             </p>
             <div className={classes.cardActions}>
                 <Button variant='contained' color='secondary'>
