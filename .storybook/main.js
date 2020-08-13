@@ -1,12 +1,11 @@
 const path = require('path');
 
 module.exports = {
-    stories: ['../src/**/*.stories.jsx', '../src/**/*.stories.tsx'],
+    stories: ['../src/**/*.stories.(jsx|tsx|mdx)'],
     addons: [
         '@storybook/preset-create-react-app',
-        '@storybook/addon-a11y/register',
-        '@storybook/addon-knobs/register',
-        '@storybook/addon-viewport/register',
+        '@storybook/addon-a11y',
+        '@storybook/addon-essentials',
     ],
     webpackFinal: (config) => {
         config.resolve.alias = {

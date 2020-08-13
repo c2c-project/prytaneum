@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+/**
+ * some description here
+ */
 export default function SectionList({ sections }: Props) {
     const classes = useStyles();
     return (

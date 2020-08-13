@@ -1,12 +1,9 @@
 import React from 'react';
 import { MemoryRouter, Route, Switch, useHistory } from 'react-router-dom';
-import { withKnobs, select } from '@storybook/addon-knobs';
 
-import Fixtures from 'mock/Fixtures';
+import Fixtures, { Fixture } from 'mock/Fixtures';
 import routeNames from '../route-names';
 import Page from '.';
-
-export default { title: 'Pages/Auth', decorators: [withKnobs] };
 
 const options = {
     success: {
@@ -22,8 +19,18 @@ const options = {
         },
     },
 };
-
-const defaultValue = options.success;
+export default {
+    title: 'Pages/Auth',
+    component: Page,
+    argTypes: {
+        outcome: {
+            control: {
+                type: 'select',
+                options,
+            },
+        },
+    },
+};
 
 const Helper = () => {
     const history = useHistory();
@@ -39,9 +46,9 @@ const Helper = () => {
     return <h1>{`Redirecting in ${time}`}</h1>;
 };
 
-export function VerifyEmail() {
+export function VerifyEmail({ outcome }: { outcome: Fixture }) {
     return (
-        <Fixtures.Provider value={select('Outcome', options, defaultValue)}>
+        <Fixtures.Provider value={outcome}>
             <MemoryRouter initialEntries={['/123456']}>
                 <Switch>
                     <Route path={routeNames.login}>
@@ -55,3 +62,5 @@ export function VerifyEmail() {
         </Fixtures.Provider>
     );
 }
+
+VerifyEmail.args = { outcome: options.success };

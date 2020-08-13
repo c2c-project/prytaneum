@@ -1,82 +1,40 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import faker from 'faker';
 
-import Component from '.';
+import Component, { Datum, Section } from '.';
 
 export default {
-    title: 'Components',
+    title: 'Components/SectionList',
     component: Component,
-    parameters: {
-        docs: {
-            page: () => <h1>Hello world</h1>,
-        },
-    },
 };
 
-const sections = [
-    {
-        title: 'Section 1',
-        sectionData: [
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-        ],
-    },
-    {
-        title: 'Section 2',
-        sectionData: [
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-            {
-                image: 'https://i.imgur.com/3beQH5s.jpeg',
-                title: 'Leia Organa',
-                subtitle: 'Automation in the Workforce',
-            },
-        ],
-    },
-];
+const makeDatum = (): Datum => ({
+    image: 'https://i.imgur.com/3beQH5s.jpeg',
+    title: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    subtitle: faker.lorem.words(10),
+});
 
-export function SectionList() {
+const makeSectionData = (num: number): Datum[] => {
+    const data = [];
+    for (let i = 0; i < num; i += 1) {
+        data.push(makeDatum());
+    }
+    return data;
+};
+
+const makeSections = (num: number): Section[] => {
+    const data = [];
+    for (let i = 0; i < num; i += 1) {
+        data.push({
+            title: faker.commerce.department(),
+            sectionData: makeSectionData(num),
+        });
+    }
+    return data;
+};
+
+export function SectionList({ sections }: { sections: Section[]}) {
     return (
         <Container
             maxWidth='md'
@@ -86,3 +44,4 @@ export function SectionList() {
         </Container>
     );
 }
+SectionList.args = { sections: makeSections(3) };
