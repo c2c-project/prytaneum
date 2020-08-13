@@ -9,6 +9,15 @@ interface Props {
     className?: string;
 }
 
+/** Displays the ToolTip when the mouse is over the IconButton
+ *  @category Component
+ *  @constructor ToolTipIconButton
+ *  @param props
+ *  @param {JSX.Element} props.children content of IconButton
+ *  @param {string} props.tooltip what is displayed when the mouse hovers over the IconButton
+ *  @param {"() => void"} props.onClick function to call when the button is clicked
+ *  @param {string | undefind} props.className className for CSS, could be blank
+*/
 export default function TooltipIconButton({
     children,
     tooltip,

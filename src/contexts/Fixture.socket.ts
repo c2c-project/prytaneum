@@ -11,6 +11,11 @@ export interface Fixture<T = any> {
     data?: T;
 }
 
+/** Returns a Fixture, containing HTTP header information like status, timeout, etc
+ *  @category Context
+ *  @constructor makeSuccessFixture
+ *  @param {Record<string, any>} data @todo
+*/
 export function makeSuccessFixture(data?: Record<string, any>) {
     return {
         meta: { status: 200, statusText: 'OK', config: {}, headers: {} },

@@ -18,6 +18,19 @@ interface Props {
  * @param Props
  * @param {boolean} jwt is the current user signed in? 
  * @param {JSX.Element | JSX.Element[]} children to return if jwt is true
+ * @example
+ * function example() {
+    ...
+    const children = <h1>LoggedIn</h1>;
+    ...
+    return (
+        <Route path='/app'>
+            <LoggedIn
+                children={children}
+            />
+        </Route>
+    );
+}
  * @mermaid
  * sequenceDiagram
     example->>LoggedIn: checks if LoggedIn

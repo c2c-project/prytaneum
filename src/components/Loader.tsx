@@ -13,8 +13,9 @@ const useStyles = makeStyles({
     },
 });
 
-/**
- * @description generic Loader that displays in the center vertically and horizontally of its parent component
+/** generic Loader that displays in the center vertically and horizontally of its parent component
+ * @category Component
+ * @constructor Loader
  */
 const Loader = () => {
     const classes = useStyles();
