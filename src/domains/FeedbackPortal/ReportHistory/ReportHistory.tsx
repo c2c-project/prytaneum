@@ -38,7 +38,9 @@ const useStyles = makeStyles(() =>
 
 export default function ReportHistory({}) {
     const classes = useStyles();
-    const [getReportEndpoints, setGetReportEndpoints] = React.useState([]);
+    const [getReportEndpoints, setGetReportEndpoints] = React.useState<
+        string[]
+    >([]);
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
     const [reports, setReports] = React.useState<Report[]>([]);
@@ -69,21 +71,35 @@ export default function ReportHistory({}) {
         setSortingOrder(e.target.value as string);
     };
 
+    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(
+        ApiRequests.Feedback,
+        {
+            onSuccess: (results) => {
+                setReports((prevReports) => [
+                    ...prevReports,
+                    ...results.data.reports,
+                ]);
+            },
+        }
+    );
+
+    const [sendBugRequest, isLoadingBug] = useEndpoint(ApiRequests.Bug, {
+        onSuccess: (results) => {
+            setReports((prevReports) => [
+                ...prevReports,
+                ...results.data.reports,
+            ]);
+        },
+    });
+
     // TODO: use UseEffect instead?? CAN'T CALL A HOOK INSIDE OF A CALLBACK
     const getReports = () => {
-        // TODO: Call all API functions in the array getReportEndpoints
-        getReportEndpoints.forEach((endpoint) => {
-            // Gets respective api request for the get-report endpoint selected
-            const apiRequest = ApiRequests[endpoint];
-            // Uses hook to get a sendRequest function
-            const [sendRequest, isLoading] = useEndpoint(apiRequest, {
-                onSuccess: (results) => {
-                    setReports(results.data.reports);
-                },
-            });
-            // Call the sendRequest function to perform the call the api
-            sendRequest();
-        });
+        if (getReportEndpoints.includes('Feedback')) {
+            sendFeedbackRequest();
+        }
+        if (getReportEndpoints.includes('Bug')) {
+            sendBugRequest();
+        }
     };
 
     return (
