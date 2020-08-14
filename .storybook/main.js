@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    stories: ['../src/**/*.stories.(jsx|tsx|mdx)'],
+    stories: ['../src/**/*.stories.@(jsx|tsx|mdx)'],
     addons: [
         '@storybook/preset-create-react-app',
         '@storybook/addon-a11y',
