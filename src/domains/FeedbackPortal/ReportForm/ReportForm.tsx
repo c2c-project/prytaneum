@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { AxiosResponse } from 'axios';
@@ -51,18 +50,14 @@ function ReportForm({
     );
 }
 
-ReportForm.defaultProps = {
-    Title: '',
-    MainDescription: '',
-    CreateReportEndpoint: () => {},
-};
-
-ReportForm.propTypes = {
-    Title: PropTypes.string,
-    MainDescription: PropTypes.string,
-    Icon: PropTypes.node.isRequired,
-    CreateReportEndpoint: PropTypes.func,
-};
+interface FactoryProps {
+    Title: string;
+    MainDescription: string;
+    Report: FeedbackForm | BugReportForm;
+    Icon: JSX.Element;
+    townhallId?: string;
+    Type: string;
+}
 
 export default function ReportFormFactory({
     Type,
@@ -71,7 +66,7 @@ export default function ReportFormFactory({
     Icon,
     Report,
     townhallId,
-}: FormProps & { Type: string; townhallId?: string }) {
+}: FactoryProps) {
     switch (Type) {
         case 'feedback':
             return (
@@ -110,3 +105,7 @@ export default function ReportFormFactory({
             );
     }
 }
+
+ReportFormFactory.defaultProps = {
+    townhallId: '',
+};

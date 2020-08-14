@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { AxiosResponse } from 'axios';
@@ -45,24 +44,11 @@ function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
     );
 }
 
-ReportSummary.defaultProps = {
-    UpdateReportEndpoint: () => {},
-    Report: {
-        description: '',
-        date: '',
-        _id: '',
-    },
-};
-
-ReportSummary.propTypes = {
-    UpdateReportEndpoint: PropTypes.func,
-    Report: PropTypes.object,
-};
-
-export default function ReportSummaryFactory({
-    Type,
-    Report,
-}: SummaryProps & { Type: string }) {
+interface FactoryProps {
+    Type: string;
+    Report: FeedbackForm | BugReportForm;
+}
+export default function ReportSummaryFactory({ Type, Report }: FactoryProps) {
     switch (Type) {
         case 'feedback':
             return (

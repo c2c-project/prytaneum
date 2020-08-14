@@ -4,7 +4,7 @@ import errors from 'utils/errors';
 export interface ReportForm {
     _id?: string;
     description?: string;
-    date: Date;
+    date: Date | string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
