@@ -28,10 +28,6 @@ interface Props {
  * @param props
  * @param {"() => void"} onSuccess function to call if successful
  * @param {"() => void"} onFailure function to call if failed
- * @example 
- * const onS = () => {};
- * const onF = () => {};
- * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
 export default function LoginTempForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
