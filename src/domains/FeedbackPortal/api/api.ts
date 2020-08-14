@@ -17,8 +17,9 @@ export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
 
+export type Report = Required<ReportForm>;
 export type FeedbackReport = Required<ReportForm>;
-export type BugReport = Required<BugReportForm>;
+export type BugReport = Required<BugReportForm> & { townhallId: string };
 
 // Feedback reports API functions
 export async function createFeedbackReport(form: FeedbackForm) {
@@ -31,6 +32,7 @@ export async function createFeedbackReport(form: FeedbackForm) {
 }
 
 export async function getFeedbackReports(page: number, ascending: string) {
+    console.log(page, ascending);
     if (!page || !ascending) {
         throw errors.fieldError();
     }
@@ -84,6 +86,7 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
 }
 
 export async function getBugReports(page: number, ascending: string) {
+    console.log(page, ascending);
     if (!page || !ascending) {
         throw errors.fieldError();
     }

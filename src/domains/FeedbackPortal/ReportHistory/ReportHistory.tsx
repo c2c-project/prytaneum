@@ -8,16 +8,17 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Sort as SortIcon, Search as SearchIcon } from '@material-ui/icons';
+import Pagination from '@material-ui/lab/Pagination';
 
+import useEndpoint from 'hooks/useEndpoint';
+import { getFeedbackReports, getBugReports, Report } from '../api';
 //  TODO: replace values with API function to call
 const ReportOptions = [
     {
         name: 'Feedback',
-        value: '/api/feedback/get-reports',
     },
     {
         name: 'Bug',
-        value: '/api/bug/get-reports',
     },
 ];
 
@@ -39,6 +40,26 @@ export default function ReportHistory({}) {
     const classes = useStyles();
     const [getReportEndpoints, setGetReportEndpoints] = React.useState([]);
     const [sortingOrder, setSortingOrder] = React.useState('');
+    const [page, setPage] = React.useState(1);
+    const [reports, setReports] = React.useState<Report[]>([]);
+
+    const ApiRequests = {
+        Feedback: React.useCallback(
+            () => getFeedbackReports(page, sortingOrder),
+            [page, sortingOrder]
+        ),
+        Bug: React.useCallback(() => getBugReports(page, sortingOrder), [
+            page,
+            sortingOrder,
+        ]),
+    };
+
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setPage(value);
+    };
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setGetReportEndpoints(e.target.value as []);
@@ -48,9 +69,21 @@ export default function ReportHistory({}) {
         setSortingOrder(e.target.value as string);
     };
 
+    // TODO: use UseEffect instead?? CAN'T CALL A HOOK INSIDE OF A CALLBACK
     const getReports = () => {
         // TODO: Call all API functions in the array getReportEndpoints
-        console.log('Getting Reports');
+        getReportEndpoints.forEach((endpoint) => {
+            // Gets respective api request for the get-report endpoint selected
+            const apiRequest = ApiRequests[endpoint];
+            // Uses hook to get a sendRequest function
+            const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+                onSuccess: (results) => {
+                    setReports(results.data.reports);
+                },
+            });
+            // Call the sendRequest function to perform the call the api
+            sendRequest();
+        });
     };
 
     return (
@@ -68,7 +101,7 @@ export default function ReportHistory({}) {
                             {ReportOptions.map((ReportOption) => (
                                 <MenuItem
                                     key={ReportOption.name}
-                                    value={ReportOption.value}
+                                    value={ReportOption.name}
                                 >
                                     {ReportOption.name}
                                 </MenuItem>
@@ -117,6 +150,18 @@ export default function ReportHistory({}) {
                     <h1>Sorting Value Selected:</h1>
                     <h2>{sortingOrder}</h2>
                 </div>
+                <div>
+                    <h1>Page Selected:</h1>
+                    <h1>{page}</h1>
+                </div>
+            </Grid>
+            <Grid item>
+                <Pagination
+                    color='primary'
+                    count={10}
+                    page={page}
+                    onChange={handlePageChange}
+                />
             </Grid>
         </Grid>
     );
