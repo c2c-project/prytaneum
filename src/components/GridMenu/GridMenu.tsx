@@ -31,7 +31,7 @@ const sizing: { desktop: 4; mobile: 12 } = {
     mobile: 12,
 };
 
-interface Props {
+export interface Props {
     children: JSX.Element | JSX.Element[];
     btnCols?:
         | boolean

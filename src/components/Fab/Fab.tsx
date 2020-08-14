@@ -1,7 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import PropTypes from 'prop-types';
-import MUIFab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import MUIFab, { FabProps } from '@material-ui/core/Fab';
 import Zoom from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -13,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+<<<<<<< HEAD:src/components/Fab/Fab.tsx
 interface Props {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
@@ -28,16 +28,22 @@ interface Props {
  *          props consists of an onClick function
 */
 export default function Fab({ onClick }: Props) {
+=======
+export default function Fab({ children, ...rest }: FabProps) {
+>>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d:src/components/Fab.tsx
     const classes = useStyles();
     return (
         <Zoom in timeout={300}>
-            <MUIFab onClick={onClick} className={classes.fab} color='secondary'>
-                <AddIcon />
+            <MUIFab {...rest} className={classes.fab} color='secondary'>
+                {children}
             </MUIFab>
         </Zoom>
     );
 }
+<<<<<<< HEAD:src/components/Fab/Fab.tsx
 
 Fab.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
+=======
+>>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d:src/components/Fab.tsx
