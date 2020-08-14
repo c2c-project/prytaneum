@@ -6,16 +6,17 @@ import {
     ListItemAvatar,
     ListSubheader,
     Avatar,
+    Divider,
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 interface Datum {
-    image: string;
+    image?: string;
     title: string;
     subtitle: string;
 }
 
-interface Section {
+export interface Section {
     title: string;
     sectionData: Datum[];
 }
@@ -28,18 +29,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        backgroundColor: theme.palette.background.paper,
-        overflow: 'auto',
     },
     listSection: {
-        backgroundColor: 'inherit',
+        // backgroundColor: 'inherit',
+        marker: 'none',
+        backgroundColor: theme.palette.background.paper,
+        // margin: `${theme.spacing(2)}px 0px ${theme.spacing(2)}px 0px`,
+        // boxShadow: theme.shadows[2],
     },
     ul: {
         backgroundColor: 'inherit',
         padding: 0,
+        listStyle: 'none',
     },
 }));
 
+/**
+ * some description here
+ */
 export default function SectionList({ sections }: Props) {
     const classes = useStyles();
     return (
@@ -48,6 +55,7 @@ export default function SectionList({ sections }: Props) {
                 <li key={title} className={classes.listSection}>
                     <ul className={classes.ul}>
                         <ListSubheader>{title}</ListSubheader>
+                        <Divider component='li' />
                         {sectionData.map(
                             (
                                 { image, title: listItemTitle, subtitle },
@@ -55,12 +63,14 @@ export default function SectionList({ sections }: Props) {
                             ) => (
                                 <li key={idx}>
                                     <ListItem divider button>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                src={image}
-                                                alt='Member of Congress Picture'
-                                            />
-                                        </ListItemAvatar>
+                                        {image && (
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    src={image}
+                                                    alt='Member of Congress Picture'
+                                                />
+                                            </ListItemAvatar>
+                                        )}
                                         <ListItemText
                                             primary={listItemTitle}
                                             secondary={subtitle}

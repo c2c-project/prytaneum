@@ -10,7 +10,7 @@ import MessageItemText from '../../../components/Message/MessageItemText';
 import MessageItemAuthor from '../../../components/Message/MessageItemAuthor';
 import MessageItemTimestamp from '../../../components/Message/MessageItemTimestamp';
 import MessageOwnerActions from '../../../components/Message/MessageOwnerActions';
-import ScrollToBottom from '../../../components/ScrollToBottom';
+import ScrollTo from '../../../components/ScrollTo';
 import Dialog from '../../../components/Dialog';
 import UserContext from '../../../contexts/User';
 
@@ -32,7 +32,7 @@ export default function TownhallChatUser({ title, messages, onMessageSend }) {
     return (
         <>
             <Chat title={title} onMessageSend={onMessageSend}>
-                <ScrollToBottom active>
+                <ScrollTo active direciton='bottom'>
                     <MessageList>
                         {userMessages.map((userMessage) => {
                             const {
@@ -57,7 +57,7 @@ export default function TownhallChatUser({ title, messages, onMessageSend }) {
                             );
                         })}
                     </MessageList>
-                </ScrollToBottom>
+                </ScrollTo>
             </Chat>
             <Dialog
                 open={Boolean(targetMessage)}
