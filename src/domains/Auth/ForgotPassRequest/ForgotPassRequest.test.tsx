@@ -97,6 +97,7 @@ describe('ForgotPassRequest', () => {
             if (emailNode && button) {
                 ReactTestUtils.Simulate.change(emailNode, {
                     target: { value: 'email@email.com' },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 } as any);
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
@@ -147,7 +148,7 @@ describe('ForgotPassRequest', () => {
             }
         });
 
-        expect(spy).toBeCalledWith({ email:'email@email.com'});
+        expect(spy).toBeCalledWith({ email: 'email@email.com' });
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

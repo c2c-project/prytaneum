@@ -28,7 +28,7 @@ describe('ForgotPassConsume', () => {
     });
 
     // eslint-disable-next-line jest/expect-expect
-    it('should render', async () => {
+    it('should render', () => {
         ReactTestUtils.act(() => {
             render(
                 <PasswordResetForm onSuccess={jest.fn()} token='' />,

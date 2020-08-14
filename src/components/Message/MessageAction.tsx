@@ -45,6 +45,7 @@ export default function MessageActions({ targetMsg, onClick }: Props) {
                 }
             })
             .catch((err) => {
+                // eslint-disable-next-line no-console
                 console.log(err);
                 snack('Something went wrong! Try again.', 'error');
             });

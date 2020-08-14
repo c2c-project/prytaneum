@@ -32,7 +32,7 @@ export default function TownhallProvider({ value, children }: Props) {
             get();
         }
     }, []);
-    
+
     return !townhall ? (
         <Loader />
     ) : (

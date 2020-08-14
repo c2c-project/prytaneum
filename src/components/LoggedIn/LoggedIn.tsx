@@ -17,6 +17,7 @@ interface Props {
 export default function LoggedIn({ children, jwt }: Props) {
     // const jwt = '';//{ _id: '' }; // useJwt();
     if (NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.log('not redirecting');
         return <>{children}</>;
     }
