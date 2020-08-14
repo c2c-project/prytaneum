@@ -1,7 +1,7 @@
 import React from 'react';
 import Popover from '@material-ui/core/Popover';
 
-import ScrollToBottom from 'components/ScrollToBottom';
+import ScrollTo from 'components/ScrollTo';
 import MessageList from 'components/MessageList';
 import MessageItemAuthor from 'components/MessageItemAuthor';
 import MessageItemText from 'components/MessageItemText';
@@ -74,7 +74,7 @@ export default function TownhallChat() {
 
     return (
         <div>
-            <ScrollToBottom active>
+            <ScrollTo active direction='bottom'>
                 <MessageList>
                     {state.map(
                         ({ _id, username, message, moderated, sent }) => (
@@ -91,7 +91,7 @@ export default function TownhallChat() {
                         )
                     )}
                 </MessageList>
-            </ScrollToBottom>
+            </ScrollTo>
             <Popover
                 open={Boolean(target)}
                 anchorOrigin={{
