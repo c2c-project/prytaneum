@@ -1,26 +1,26 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import faker from 'faker';
+
 import Component from '.';
 
 export default { title: 'Domains/ReportSummary' };
 
 const FeedbackReportSummary = {
     Report: {
-        description:
-            'This is a feedback report. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utev. adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt',
+        description: faker.lorem.paragraphs(),
         date: new Date().toISOString(),
-        _id: 'b63124n62345gb2345n3451345n',
+        _id: faker.random.alphaNumeric(12),
     },
     Type: 'feedback',
 };
 
 const BugReportSummary = {
     Report: {
-        description:
-            'This is a bug report. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utev. adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt',
+        description: faker.lorem.paragraphs(),
         date: new Date().toISOString(),
-        _id: 'b63124n62345gb2345n3451345n',
+        _id: faker.random.alphaNumeric(12),
     },
     Type: 'bug',
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import faker from 'faker';
 import {
     BugReport as BugReportIcon,
     Feedback as FeedbackReportIcon,
@@ -24,7 +25,7 @@ const BugReportForm = {
         'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
     Type: 'bug',
     Icon: <BugReportIcon />,
-    townhallId: 'utvb67r45f846gf5f85',
+    townhallId: faker.random.alphaNumeric(12),
 };
 
 export function ReportForm() {
