@@ -58,11 +58,11 @@ describe('ForgotPassConsume', () => {
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(passNode, {
-                target: { value: '123' },
-            } as any);
+                target: ({ value: '123' } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: '123' },
-            } as any);
+                target: ({ value: '123' } as unnown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

@@ -140,8 +140,10 @@ describe('ForgotPassRequest', () => {
         ReactTestUtils.act(() => {
             if (emailNode && button) {
                 ReactTestUtils.Simulate.change(emailNode, {
-                    target: { value: 'email@email.com' },
-                } as any);
+                    target: ({
+                        value: 'email@email.com',
+                    } as unknown) as EventTarget,
+                });
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );

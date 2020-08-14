@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -66,8 +65,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
             } else {
                 snack('Something went wrong! Try again.', 'error');
             }
-        } catch (error) {
-            console.log(error);
+        } catch {
             snack('Something went wrong! Try again.', 'error');
         }
     };
@@ -91,8 +89,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
             } else {
                 snack('Something went wrong! Try again.', 'error');
             }
-        } catch (e) {
-            console.log(e);
+        } catch {
             snack('Something went wrong! Try again.', 'error');
         }
     };

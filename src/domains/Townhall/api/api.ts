@@ -1,6 +1,5 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import TownhallForm from '../TownhallForm';
 
 /*
     TYPE DECLARATIONS
