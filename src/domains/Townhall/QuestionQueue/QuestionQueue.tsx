@@ -75,6 +75,7 @@ function questionReducer(state: Question[], action: Actions) {
 export default function QuestionQueue() {
     const classes = useStyles();
     const topRef = React.useRef<HTMLDivElement | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, dispatch, socket] = useSocketio<Question[], Actions>({
         url: '/moderator/questions',
         event: 'townhall-question-state',

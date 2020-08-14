@@ -20,7 +20,7 @@ import {
 interface FormProps {
     onSubmit: () => void;
     initialState?: TownhallFormType;
-    endpoint: (form: TownhallFormType) => Promise<AxiosResponse<any>>;
+    endpoint: (form: TownhallFormType) => Promise<AxiosResponse<unknown>>;
 }
 
 interface DefaultFormProps {

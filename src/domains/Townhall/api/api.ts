@@ -33,7 +33,7 @@ export async function createTownhall(form: TownhallForm) {
         throw errors.fieldError();
     }
     const body: Create = { form };
-    return axios.post('/api/townhalls/create', body);
+    return axios.post<unknown>('/api/townhalls/create', body);
 }
 
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
@@ -48,7 +48,7 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
     }
 
     const body: Update = { form, townhallId };
-    return axios.post('/api/townhalls/update', body);
+    return axios.post<unknown>('/api/townhalls/update', body);
 }
 
 export async function getTownhallList() {

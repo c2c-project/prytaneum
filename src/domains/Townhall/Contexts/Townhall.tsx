@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 
 import useEndpoint from 'hooks/useEndpoint';
-import { Townhall, getTownhall } from '../api';
+import { getTownhall } from '../api';
 
 interface Props {
-    value?: Townhall;
+    value?: Prytaneum.Townhall;
     children: JSX.Element | JSX.Element[];
 }
 
@@ -15,7 +15,9 @@ interface Params {
 }
 
 // this is dangerous to cast an empty object as a townhall, but my component below gaurantees it will always be defined
-export const TownhallContext = React.createContext<Townhall>({} as Townhall);
+export const TownhallContext = React.createContext<Prytaneum.Townhall>(
+    {} as Prytaneum.Townhall
+);
 
 export default function TownhallProvider({ value, children }: Props) {
     const { townhallId } = useParams<Params>();
