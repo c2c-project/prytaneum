@@ -1,9 +1,10 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import Component from '.';
+import FixtureContext, { makeSuccessFixture } from 'mock/Fixtures';
+import Page from '.';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Pages/Townhall' };
 
 const townhall = {
     speaker: {
@@ -21,11 +22,8 @@ const townhall = {
 
 export function TownhallPre() {
     return (
-        <Container
-            maxWidth='sm'
-            style={{ height: '100%', width: '100%', padding: '0' }}
-        >
-            <Component townhall={townhall} />
-        </Container>
+        <FixtureContext.Provider value={makeSuccessFixture({ townhall })}>
+            <Page />
+        </FixtureContext.Provider>
     );
 }

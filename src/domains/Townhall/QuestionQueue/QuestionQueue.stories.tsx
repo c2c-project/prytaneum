@@ -14,7 +14,7 @@ function sendMessage() {
         payload: {
             _id: faker.random.alphaNumeric(12),
             user: {
-                _id: faker.random.alphaNumeric(),
+                _id: faker.random.alphaNumeric(12),
                 name: faker.internet.userName(),
             },
             question: faker.lorem.sentences(),

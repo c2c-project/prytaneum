@@ -1,7 +1,8 @@
 import React from 'react';
+
 import Component from './Dialog';
 
-export default { title: 'Components' };
+export default { title: 'Components/Dialog', component: Component };
 
 export function Dialog() {
     const [open, setOpen] = React.useState(false);
