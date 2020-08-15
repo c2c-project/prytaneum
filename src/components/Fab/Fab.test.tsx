@@ -38,7 +38,9 @@ describe('Fab', function () {
         ReactTestUtils.act(() => {
             render(
                 <div id='fab'>
-                    <Fab onClick={onClick} />
+                    <Fab onClick={onClick}>
+                        <h1>+</h1>
+                    </Fab>
                 </div>,
                 container
             )
