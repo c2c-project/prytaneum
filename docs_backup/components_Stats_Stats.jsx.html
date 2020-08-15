@@ -1,0 +1,445 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Stats/Stats.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="Props.html">Props</a></li></ul></div><div class="category"><h2>Component</h2><h3>Classes</h3><ul><li><a href="Bold.html">Bold</a></li><li><a href="ClipDialog.html">ClipDialog</a></li><li><a href="DateTimePicker.html">DateTimePicker</a></li><li><a href="Dialog.html">Dialog</a></li><li><a href="Fab.html">Fab</a></li><li><a href="GridMenu.html">GridMenu</a></li><li><a href="Loader.html">Loader</a></li><li><a href="LoadingButton.html">LoadingButton</a></li><li><a href="LoggedIn.html">LoggedIn</a></li><li><a href="MessageActions.html">MessageActions</a></li><li><a href="MessageItemAuthor.html">MessageItemAuthor</a></li><li><a href="MessageItemText.html">MessageItemText</a></li><li><a href="MessageItemTimestamp.html">MessageItemTimestamp</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessageListItem.html">MessageListItem</a></li><li><a href="MessageOwnerAction.html">MessageOwnerAction</a></li><li><a href="Messages.html">Messages</a></li><li><a href="RangeSlider.html">RangeSlider</a></li><li><a href="ScrollToBottom.html">ScrollToBottom</a></li><li><a href="SectionList.html">SectionList</a></li><li><a href="Stats.html">Stats</a></li><li><a href="TextField.html">TextField</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TimeLineItem.html">TimeLineItem</a></li><li><a href="ToolTipIconButton.html">ToolTipIconButton</a></li><li><a href="VideoPlayer.html">VideoPlayer</a></li></ul></div><div class="category"><h2>Context</h2><h3>Classes</h3><ul><li><a href="Device.html">Device</a></li><li><a href="makeSuccessFixture.html">makeSuccessFixture</a></li><li><a href="SnackContext.html">SnackContext</a></li></ul></div><div class="category"><h2>Domains/Auth</h2><h3>Classes</h3><ul><li><a href="ForgotPassRequest.html">ForgotPassRequest</a></li><li><a href="forgotPassRequest_.html">forgotPassRequest</a></li><li><a href="forgotPassReset.html">forgotPassReset</a></li><li><a href="login.html">login</a></li><li><a href="loginTemp.html">loginTemp</a></li><li><a href="LoginTempForm.html">LoginTempForm</a></li><li><a href="Logout.html">Logout</a></li><li><a href="register.html">register</a></li><li><a href="verifyEmail.html">verifyEmail</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Stats/Stats.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint import/no-unresolved: [2, { ignore: ['\.png$', '\.css$'] }] */
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { ResponsivePie } from '@nivo/pie';
+import { ResponsiveBar } from '@nivo/bar';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import question from '../assets/question.png';
+import message from '../assets/message.png';
+import time from '../assets/time.png';
+import './Stats.css';
+
+const barData = [
+    {
+        'Similar Questions': 'Topic1',
+        Topic1: 28,
+        Topic1Color: 'hsl(297, 70%, 50%)',
+    },
+    {
+        'Similar Questions': 'Topic2',
+        Topic2: 45,
+        Topic2Color: 'hsl(68, 70%, 50%)',
+    },
+    {
+        'Similar Questions': 'Topic3',
+        Topic3: 87,
+        Topic3Color: 'hsl(345, 70%, 50%)',
+    },
+];
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    headerFont: {
+        fontFamily: ['Montserrat'],
+        fontSize: '20px',
+    },
+    contentFont: {
+        fontFamily: ['Montserrat'],
+        fontSize: '30px',
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.Primary,
+        height: '500px',
+        width: '580px',
+    },
+    paperSpacing: {
+        padding: '20px',
+    },
+    barWrapper: {
+        height: '400px',
+    },
+}));
+
+/** Displays the stats in a nice layout
+ *  @category Component
+ *  @constructor Stats
+ *  @param {any} sent total sent messages
+ *  @param {any} asked total asked questions
+ *  @param {any} unanswered total unanswered questions
+ *  @param {any} duration total time the session lasted
+ *  @param {any} speaker name of the Congressmember who was leading the TownHall
+ *  @param {any} tdata console.log tdata inside Grid
+*/
+function Stats({ sent, asked, unanswered, duration, speaker }, tdata) {
+    const classes = useStyles();
+
+    const data = [
+        {
+            id: 'Questions Asked',
+            label: 'Questions Asked',
+            value: asked,
+            color: 'hsl(201, 70%, 50%)',
+        },
+        {
+            id: 'Unasked Questions',
+            label: 'Unasked Questions',
+            value: unanswered,
+            color: 'hsl(195, 70%, 50%)',
+        },
+    ];
+
+    return (
+        &lt;div>
+            &lt;Typography className={classes.headerFont}>
+                Speaker: {speaker}
+            &lt;/Typography>
+            &lt;Grid container spacing={2}>
+                {console.log(tdata)}
+                &lt;Grid item xs={4}>
+                    &lt;Paper className={classes.paperSpacing} elevation={3}>
+                        &lt;Grid justify='space-between' container spacing={2}>
+                            &lt;Grid>
+                                &lt;img src={time} />
+                            &lt;/Grid>
+                            &lt;Grid>
+                                &lt;Typography className={classes.headerFont}>
+                                    Duration
+                                &lt;/Typography>
+                                &lt;Typography className={classes.contentFont}>
+                                    {duration}
+                                &lt;/Typography>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/Paper>
+                &lt;/Grid>
+                &lt;Grid item xs={4}>
+                    &lt;Paper className={classes.paperSpacing} elevation={3}>
+                        &lt;Grid justify='space-between' container spacing={2}>
+                            &lt;Grid>
+                                &lt;img src={message} />
+                            &lt;/Grid>
+                            &lt;Grid>
+                                &lt;Typography className={classes.headerFont}>
+                                    Messages
+                                &lt;/Typography>
+                                &lt;Typography className={classes.contentFont}>
+                                    {sent}
+                                &lt;/Typography>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/Paper>
+                &lt;/Grid>
+                &lt;Grid item xs={4}>
+                    &lt;Paper className={classes.paperSpacing} elevation={3}>
+                        &lt;Grid justify='space-between' container spacing={2}>
+                            &lt;Grid>
+                                &lt;img src={question} />
+                            &lt;/Grid>
+                            &lt;Grid>
+                                &lt;Typography className={classes.headerFont}>
+                                    Questions
+                                &lt;/Typography>
+                                &lt;Typography className={classes.contentFont}>
+                                    {asked}
+                                &lt;/Typography>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/Paper>
+                &lt;/Grid>
+                &lt;Grid
+                    container
+                    spacing={8}
+                    direction='row'
+                    justify='center'
+                    alignItems='center'
+                >
+                    &lt;Grid item xs={4}>
+                        &lt;Paper className={classes.paper} elevation={3}>
+                            &lt;Typography
+                                className={classes.headerFont}
+                                align='left'
+                            >
+                                Questions Asked
+                            &lt;/Typography>
+                            &lt;Grid className={classes.barWrapper}>
+                                &lt;ResponsivePie
+                                    data={data}
+                                    margin={{
+                                        top: 40,
+                                        right: 80,
+                                        bottom: 80,
+                                        left: 80,
+                                    }}
+                                    innerRadius={0.5}
+                                    padAngle={0.7}
+                                    cornerRadius={3}
+                                    colors={{ scheme: 'nivo' }}
+                                    borderWidth={1}
+                                    borderColor={{
+                                        from: 'color',
+                                        modifiers: [['darker', 0.2]],
+                                    }}
+                                    radialLabelsSkipAngle={10}
+                                    radialLabelsTextXOffset={6}
+                                    radialLabelsTextColor='#333333'
+                                    radialLabelsLinkOffset={0}
+                                    radialLabelsLinkDiagonalLength={16}
+                                    radialLabelsLinkHorizontalLength={24}
+                                    radialLabelsLinkStrokeWidth={1}
+                                    radialLabelsLinkColor={{ from: 'color' }}
+                                    slicesLabelsSkipAngle={10}
+                                    slicesLabelsTextColor='#333333'
+                                    animate={true}
+                                    motionStiffness={90}
+                                    motionDamping={15}
+                                    defs={[
+                                        {
+                                            id: 'dots',
+                                            type: 'patternDots',
+                                            background: 'inherit',
+                                            color: 'rgba(255, 255, 255, 0.3)',
+                                            size: 4,
+                                            padding: 1,
+                                            stagger: true,
+                                        },
+                                        {
+                                            id: 'lines',
+                                            type: 'patternLines',
+                                            background: 'inherit',
+                                            color: 'rgba(255, 255, 255, 0.3)',
+                                            rotation: -45,
+                                            lineWidth: 6,
+                                            spacing: 10,
+                                        },
+                                    ]}
+                                    legends={[
+                                        {
+                                            anchor: 'bottom',
+                                            direction: 'row',
+                                            translateY: 56,
+                                            itemWidth: 140,
+                                            itemHeight: 18,
+                                            itemTextColor: '#999',
+                                            symbolSize: 18,
+                                            symbolShape: 'circle',
+                                            effects: [
+                                                {
+                                                    on: 'hover',
+                                                    style: {
+                                                        itemTextColor: '#000',
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    ]}
+                                />
+                            &lt;/Grid>
+                        &lt;/Paper>
+                    &lt;/Grid>
+                    &lt;Grid item xs={4}>
+                        &lt;Paper className={classes.paper} elevation={3}>
+                            &lt;Typography
+                                className={classes.headerFont}
+                                align='left'
+                            >
+                                Similar Questions
+                            &lt;/Typography>
+                            &lt;Grid className={classes.barWrapper}>
+                                &lt;ResponsiveBar
+                                    data={barData}
+                                    keys={['Topic1', 'Topic2', 'Topic3']}
+                                    indexBy='Similar Questions'
+                                    margin={{
+                                        top: 50,
+                                        right: 130,
+                                        bottom: 50,
+                                        left: 60,
+                                    }}
+                                    padding={0.3}
+                                    colors={{ scheme: 'nivo' }}
+                                    borderColor={{
+                                        from: 'color',
+                                        modifiers: [['darker', 1.6]],
+                                    }}
+                                    axisTop={null}
+                                    axisRight={null}
+                                    axisBottom={{
+                                        tickSize: 5,
+                                        tickPadding: 5,
+                                        tickRotation: 0,
+                                        legend: 'Questions',
+                                        legendPosition: 'middle',
+                                        legendOffset: 32,
+                                    }}
+                                    axisLeft={{
+                                        tickSize: 5,
+                                        tickPadding: 5,
+                                        tickRotation: 0,
+                                        legend: 'Total Questions',
+                                        legendPosition: 'middle',
+                                        legendOffset: -40,
+                                    }}
+                                    labelSkipWidth={12}
+                                    labelSkipHeight={12}
+                                    labelTextColor={{
+                                        from: 'color',
+                                        modifiers: [['darker', 1.6]],
+                                    }}
+                                    legends={[
+                                        {
+                                            dataFrom: 'keys',
+                                            anchor: 'bottom-right',
+                                            direction: 'column',
+                                            justify: false,
+                                            translateX: 120,
+                                            translateY: 0,
+                                            itemsSpacing: 2,
+                                            itemWidth: 100,
+                                            itemHeight: 20,
+                                            itemDirection: 'left-to-right',
+                                            itemOpacity: 0.85,
+                                            symbolSize: 20,
+                                            effects: [
+                                                {
+                                                    on: 'hover',
+                                                    style: {
+                                                        itemOpacity: 1,
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    ]}
+                                    animate={true}
+                                    motionStiffness={90}
+                                    motionDamping={15}
+                                />
+                            &lt;/Grid>
+                        &lt;/Paper>
+                    &lt;/Grid>
+                &lt;/Grid>
+            &lt;/Grid>
+        &lt;/div>
+    );
+}
+Stats.propTypes = {
+    sent: PropTypes.string.isRequired,
+    asked: PropTypes.string.isRequired,
+    unanswered: PropTypes.string.isRequired,
+    duration: PropTypes.string.isRequired,
+    speaker: PropTypes.string.isRequired,
+};
+
+export default Stats;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

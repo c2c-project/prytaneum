@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-<<<<<<< HEAD
 /** SectionList returns a list of sections that display the corresponding Congressmembers and their pictures
  *  So you can have one section for a County and then their accompanying Congressmembers
  *  @category Component
@@ -52,11 +51,6 @@ const useStyles = makeStyles((theme: Theme) => ({
  *  @param props
  *  @param {Section[]} props.sections consists of the Sections to iterate through <br><br> A Section consits of Title and a Datum[]
 */
-=======
-/**
- * some description here
- */
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d
 export default function SectionList({ sections }: Props) {
     const classes = useStyles();
     return (

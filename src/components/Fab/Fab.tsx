@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-<<<<<<< HEAD:src/components/Fab/Fab.tsx
 interface Props {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
@@ -24,13 +23,9 @@ interface Props {
  *  @category Component
  *  @constructor Fab
  *  @param props
- *  @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} props.onClick 
- *          props consists of an onClick function
+ *  @param @todo
 */
-export default function Fab({ onClick }: Props) {
-=======
 export default function Fab({ children, ...rest }: FabProps) {
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d:src/components/Fab.tsx
     const classes = useStyles();
     return (
         <Zoom in timeout={300}>
@@ -40,10 +35,3 @@ export default function Fab({ children, ...rest }: FabProps) {
         </Zoom>
     );
 }
-<<<<<<< HEAD:src/components/Fab/Fab.tsx
-
-Fab.propTypes = {
-    onClick: PropTypes.func.isRequired,
-};
-=======
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d:src/components/Fab.tsx

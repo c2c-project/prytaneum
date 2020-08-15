@@ -33,10 +33,9 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-<<<<<<< HEAD
         "storybook": "NODE_PATH=src start-storybook --port 3000",
         "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
-        "lint": "eslint src/ --ext \".ts .tsx\"",
+        "lint": "eslint src/**/*.ts src/**/*.tsx",
         "docs": "jsdoc -c jsdoc.conf.json",
         "storybook-docs": "yarn storybook --docs"
     },
@@ -50,10 +49,6 @@
         "pages": "./src/pages",
         "theme": "./src/theme",
         "utils": "./src/utils"
-=======
-        "storybook": "start-storybook --port 3000",
-        "lint": "eslint src/**/*.ts src/**/*.tsx"
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d
     },
     "browserslist": {
         "production": [
@@ -69,14 +64,11 @@
     },
     "devDependencies": {
         "@storybook/addon-a11y": "^6.0.5",
-<<<<<<< HEAD
         "@storybook/addon-docs": "^6.0.5",
         "@storybook/addon-knobs": "^6.0.5",
         "@storybook/addon-viewport": "^6.0.5",
-=======
         "@storybook/addon-essentials": "^6.0.5",
         "@storybook/node-logger": "^6.0.5",
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d
         "@storybook/preset-create-react-app": "^3.1.4",
         "@storybook/react": "^6.0.5",
         "@testing-library/dom": "^7.20.2",
@@ -94,10 +86,7 @@
         "@typescript-eslint/eslint-plugin": "^3.2.0",
         "@typescript-eslint/parser": "^3.2.0",
         "babel-loader": "^8.1.0",
-<<<<<<< HEAD
         "better-docs": "^2.3.0",
-=======
->>>>>>> ae9e94d4142381e48183ff99649042d7be5b9f5d
         "eslint": "^6.5.1",
         "eslint-config-airbnb-typescript": "^8.0.2",
         "eslint-config-prettier": "^6.4.0",
