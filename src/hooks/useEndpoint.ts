@@ -1,7 +1,6 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import FixtureContext, { Fixture } from 'contexts/Fixtures';
 import useErrorHandler from './useErrorHandler';
 
 interface EndpointOptions<T> {
@@ -23,7 +22,6 @@ export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
     options: EndpointOptions<T> = {}
 ): EndpointUtils {
-    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // NOTE: only used in dev mode
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);
@@ -49,26 +47,6 @@ export default function useEndpoint<T>(
 
         const request = async function () {
             try {
-                /*
-                 * THIS BLOCK OF CODE ONLY MATTERS IN test
-                 */
-                if (process.env.NODE_ENV === 'development') {
-                    await minWaitTime();
-                    setIsLoading(false);
-                    if (meta.status === 200) {
-                        _onSuccess({
-                            status: meta.status,
-                            statusText: meta.statusText,
-                            data,
-                            headers: meta.headers,
-                            config: meta.config,
-                        } as AxiosResponse<T>);
-                    } else {
-                        throw new Error(meta.statusText);
-                    }
-                    return;
-                }
-
                 // the first indices is all I care about
                 const [response] = await Promise.allSettled([
                     endpoint(),
@@ -108,7 +86,7 @@ export default function useEndpoint<T>(
         return () => {
             isMounted = false;
         };
-    }, [isLoading, endpoint, handleError, options, meta, data]);
+    }, [isLoading, endpoint, handleError, options]);
 
     return [sendRequest, isLoading];
 }

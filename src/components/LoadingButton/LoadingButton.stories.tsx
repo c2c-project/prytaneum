@@ -5,7 +5,10 @@ import Grid from '@material-ui/core/Grid';
 
 import Component from './LoadingButton';
 
-export default { title: 'Components' };
+export default {
+    title: 'Components/Loading Button',
+    component: Component,
+};
 
 export function LoadingButton() {
     const [loading, setIsLoading] = React.useState(false);

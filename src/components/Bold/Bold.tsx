@@ -10,8 +10,8 @@ interface Props {
 /**
  *
  * @description Bolds the children, while keeping typography intact
- * @arg {Object} props
- * @arg {PropTypes.ReactNodeArray|PropTypes.ReactNodeLike} props.children
+ * @arg props
+ * @arg props.children
  */
 export default function Bold({ children }: Props) {
     return (

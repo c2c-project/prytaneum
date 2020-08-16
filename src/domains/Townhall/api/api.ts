@@ -21,11 +21,6 @@ interface RequestBody {
 type Create = RequestBody;
 type Update = RequestBody & { townhallId: string };
 
-export type Townhall = Required<TownhallForm> & {
-    _id: string;
-    picture: string;
-};
-
 export interface TownhallQuestionForm {
     question: string;
 }
@@ -58,11 +53,11 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
 }
 
 export async function getTownhallList() {
-    return axios.get<{ list: Townhall[] }>('/api/townhalls/list');
+    return axios.get<{ list: Prytaneum.Townhall[] }>('/api/townhalls/list');
 }
 
 export async function getTownhall(id: string) {
-    return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
+    return axios.get<{ townhall: Prytaneum.Townhall }>(`/api/townhalls/${id}`);
 }
 
 export async function createQuestion(form: TownhallQuestionForm) {

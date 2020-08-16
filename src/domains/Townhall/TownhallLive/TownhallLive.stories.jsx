@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-import FixtureContext, { makeSuccessFixture } from 'contexts/Fixtures';
+import FixtureContext, { makeSuccessFixture } from 'mock/Fixtures';
 import Component from './TownhallLive';
 import TownhallProvider from '../Contexts/Townhall';
 
