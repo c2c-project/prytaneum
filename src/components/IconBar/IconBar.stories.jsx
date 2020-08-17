@@ -8,7 +8,7 @@ import { DeviceContext } from 'contexts/Device';
 
 import GridMenu from './IconBar';
 
-export default { title: 'Grid Menu', decorators: [withKnobs] };
+export default { title: 'Icon Bar', decorators: [withKnobs] };
 
 export function CenterIconBar() {
     return (
