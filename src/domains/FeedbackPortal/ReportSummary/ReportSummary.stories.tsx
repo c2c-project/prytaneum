@@ -21,6 +21,7 @@ const BugReportSummary = {
         description: faker.lorem.paragraphs(),
         date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
+        townhallId: faker.random.alphaNumeric(12),
     },
     Type: 'bug',
 };
