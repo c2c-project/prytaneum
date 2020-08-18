@@ -1,7 +1,5 @@
 module.exports = {
-    // parser: 'babel-eslint',
     plugins: ['jest', '@typescript-eslint'],
-    //meteorjs/eslint-config-meteor uses airbnb
     extends: [
         'airbnb-typescript',
         'prettier',
@@ -29,6 +27,7 @@ module.exports = {
             'error',
             {
                 devDependencies: [
+                    '**/__mocks__/*',
                     '**/mock/*',
                     '**/*.tests.js',
                     '**/*.test.js',
@@ -46,21 +45,13 @@ module.exports = {
     env: {
         node: true,
         browser: true,
-        mocha: true,
         'jest/globals': true,
     },
     settings: {
-        // 'import/extensions': ['.js', '.jsx'],
-        // 'import/ignore': ['\.png$'],
-        // 'import/no-unresolved': [2, { ignore: ['\.png$'] }]
         'import/resolver': {
             node: {
                 paths: ['src'],
             },
-            // alias: {
-            //     // map: [['/src', './src']],
-            //     extensions: ['.ts', '.js', '.jsx', '.json']
-            // }
         },
     },
 };

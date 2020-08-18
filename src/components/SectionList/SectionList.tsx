@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-export interface Datum {
-    image: string;
+interface Datum {
+    image?: string;
     title: string;
     subtitle: string;
 }
@@ -62,13 +62,15 @@ export default function SectionList({ sections }: Props) {
                                 idx
                             ) => (
                                 <li key={idx}>
-                                    <ListItem button>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                src={image}
-                                                alt='Member of Congress Picture'
-                                            />
-                                        </ListItemAvatar>
+                                    <ListItem divider button>
+                                        {image && (
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    src={image}
+                                                    alt='Member of Congress Picture'
+                                                />
+                                            </ListItemAvatar>
+                                        )}
                                         <ListItemText
                                             primary={listItemTitle}
                                             secondary={subtitle}
