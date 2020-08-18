@@ -28,11 +28,10 @@ export async function createFeedbackReport(form: FeedbackForm) {
         throw errors.fieldError();
     }
     const body = { date, description };
-    return axios.post('/api/feedback/create-report', body);
+    return axios.post<unknown>('/api/feedback/create-report', body);
 }
 
 export async function getFeedbackReports(page: number, ascending: string) {
-    console.log(page, ascending);
     if (!page || !ascending) {
         throw errors.fieldError();
     }
@@ -58,7 +57,7 @@ export async function updateFeedbackReport(form: FeedbackForm) {
     }
 
     const body = { _id, newDescription: description };
-    return axios.post('/api/feedback/update-report', body);
+    return axios.post<unknown>('/api/feedback/update-report', body);
 }
 
 export async function deleteFeedbackReport(form: FeedbackForm) {
@@ -82,11 +81,10 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
     }
 
     const body = { date, description, townhallId };
-    return axios.post('/api/bugs/create-report', body);
+    return axios.post<unknown>('/api/bugs/create-report', body);
 }
 
 export async function getBugReports(page: number, ascending: string) {
-    console.log(page, ascending);
     if (!page || !ascending) {
         throw errors.fieldError();
     }
@@ -108,7 +106,7 @@ export async function updateBugReport(form: BugReportForm) {
         throw errors.internalError();
     }
     const body = { _id, newDescription: description };
-    return axios.post('/api/bugs/update-report', body);
+    return axios.post<unknown>('/api/bugs/update-report', body);
 }
 
 export async function deleteBugReport(form: BugReportForm) {
