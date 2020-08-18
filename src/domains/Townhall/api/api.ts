@@ -1,19 +1,7 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import TownhallForm from '../TownhallForm';
 
-/*
-    TYPE DECLARATIONS
- */
-
-export interface TownhallForm {
-    speaker?: string;
-    moderator?: string;
-    date?: Date;
-    description?: string;
-    url?: string;
-    topic: string;
-}
+import { Townhall, TownhallForm, TownhallQuestionForm } from '../types';
 
 interface RequestBody {
     form: TownhallForm;
@@ -21,13 +9,6 @@ interface RequestBody {
 type Create = RequestBody;
 type Update = RequestBody & { townhallId: string };
 
-export interface TownhallQuestionForm {
-    question: string;
-}
-
-/*
-    API
-*/
 export async function createTownhall(form: TownhallForm) {
     const { speaker, moderator, date, description, url } = form;
     if (!speaker || !moderator || !date || !url || !description) {
@@ -53,11 +34,11 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
 }
 
 export async function getTownhallList() {
-    return axios.get<{ list: Prytaneum.Townhall[] }>('/api/townhalls/list');
+    return axios.get<{ list: Townhall[] }>('/api/townhalls/list');
 }
 
 export async function getTownhall(id: string) {
-    return axios.get<{ townhall: Prytaneum.Townhall }>(`/api/townhalls/${id}`);
+    return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
 }
 
 export async function createQuestion(form: TownhallQuestionForm) {

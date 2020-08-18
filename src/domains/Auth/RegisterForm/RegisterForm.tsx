@@ -11,6 +11,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 
 import API from '../api';
+import { RegisterForm } from '../types';
 
 const useStyles = makeStyles({
     root: {
@@ -26,11 +27,11 @@ interface Props {
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
-    const [form, setForm] = React.useState({
+    const [form, setForm] = React.useState<RegisterForm>({
         username: '',
         email: '',
         password: '',
-        confirmPass: '',
+        confirmPassword: '',
     });
     const builtRequest = React.useCallback(() => API.register(form), [form]);
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
@@ -106,8 +107,8 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         fullWidth
                         variant='outlined'
                         type='password'
-                        value={form.confirmPass}
-                        onChange={(e) => handleChange(e, 'confirmPass')}
+                        value={form.confirmPassword}
+                        onChange={(e) => handleChange(e, 'confirmPassword')}
                         label='Confirm Password'
                     />
                 </Grid>

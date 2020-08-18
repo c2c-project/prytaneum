@@ -12,19 +12,19 @@ import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import {
-    TownhallForm as TownhallFormType,
     createTownhall,
     updateTownhall,
 } from '../api';
+import { TownhallForm } from '../types';
 
 interface FormProps {
     onSubmit: () => void;
-    initialState?: TownhallFormType;
-    endpoint: (form: TownhallFormType) => Promise<AxiosResponse<any>>;
+    initialState?: TownhallForm;
+    endpoint: (form: TownhallForm) => Promise<AxiosResponse<any>>;
 }
 
 interface DefaultFormProps {
-    initialState: TownhallFormType;
+    initialState: TownhallForm;
 }
 
 function TownhallFormBase({
@@ -32,7 +32,7 @@ function TownhallFormBase({
     initialState,
     endpoint,
 }: FormProps & DefaultFormProps) {
-    const [state, setState] = React.useState<TownhallFormType>(initialState);
+    const [state, setState] = React.useState<TownhallForm>(initialState);
     const apiRequest = React.useCallback(() => endpoint(state), [state]);
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess: cb,
