@@ -48,7 +48,10 @@ export default function SimpleList(props: Props) {
                                         />
                                     </ListItemAvatar>
                                 </ListItemIcon>
-                                <ListItemText primary={person.action} />
+                                <ListItemText
+                                    primary={person.action}
+                                    secondary={person.date}
+                                />
                             </ListItem>
                             <Divider />
                         </div>
