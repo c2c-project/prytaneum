@@ -6,32 +6,30 @@ import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
 import { AxiosResponse } from 'axios';
 
+import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import { FeedbackForm, BugReportForm } from '../api';
 
 type ReportType = FeedbackForm | BugReportForm;
 interface FormProps {
     Report: ReportType;
-    SubmitEndpoint: (form: ReportType) => Promise<AxiosResponse<any>>;
+    SubmitEndpoint: (form: ReportType) => Promise<AxiosResponse<unknown>>;
 }
 
 //  TODO: CHECK WHY apiRequest is not working
 export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<ReportType>(Report);
     const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
         reportState,
     ]);
-    const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: () => console.log('Success'),
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+        onSuccess: () => snack('Report successfully submitted', 'success'),
     });
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        //  TODO: Add date to form here?
         e.preventDefault();
-        setIsLoading(true);
         sendRequest();
-        setIsLoading(false);
     };
 
     type MyEvent = React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>;
