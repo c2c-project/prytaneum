@@ -32,7 +32,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-        "storybook": "start-storybook --port 3000",
+        "storybook": "start-storybook --port 3000 -s public",
         "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
         "lint": "eslint src/ --ext \".ts .tsx\""
     },
@@ -80,6 +80,7 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
+        "msw": "^0.20.5",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     },
