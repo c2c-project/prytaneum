@@ -1,8 +1,12 @@
 import React from 'react';
+import { ThemeProvider } from '@material-ui/core';
 
 import MessageItemText from '.';
+import theme from 'theme';
 
-export default { title: 'Components/MessageItemText' };
+export default { 
+    title: 'Components/MessageItemText' 
+};
 
 const onClick = () => {
     alert("onClick works");
@@ -16,12 +20,12 @@ const nonBold = "this is to check if it displayed properly. The above text shoul
 
 export function MessageItemTextDisplay() {
     return (
-        <div>
+        <ThemeProvider theme={theme}>
             <MessageItemText text={str1} />
             <MessageItemText text={str2} />
             <MessageItemText text={str3} />
             <MessageItemText text={str4} />
             <p>{nonBold}</p>
-        </div>
+        </ThemeProvider>
     );
 }

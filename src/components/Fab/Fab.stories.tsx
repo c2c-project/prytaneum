@@ -1,9 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom'
 
-import Fab from '.';
+import Component from './Fab';
+import theme from 'theme';
 
-export default { title: 'Components/Fab' };
+export default { 
+    title: 'Components/Fab',
+    component: Component 
+};
 
 const onClick = () => {
     alert("onClick works");
@@ -12,7 +16,7 @@ const onClick = () => {
 export function FabButton() {
     return (
         <MemoryRouter initialEntries={['/']}>
-            <Fab onClick={onClick} />
+            <Component onClick={onClick} />
         </MemoryRouter>
     );
 }
