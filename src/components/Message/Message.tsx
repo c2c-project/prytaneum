@@ -6,7 +6,7 @@ import MessageListItem from '../MessageListItem';
 import MessageItemText from '../MessageItemText';
 import MessageItemAuthor from '../MessageItemAuthor';
 import MessageItemTimestamp from '../MessageItemTimestamp';
-import ScrollToBottom from '../ScrollToBottom';
+import ScrollTo from '../ScrollTo';
 import { Message } from './types';
 
 const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
@@ -58,7 +58,7 @@ function Messages({ messages, button, onClickMessage }: Props & PropDefaults) {
     // const isOwnerOrModerator = (sentBy) => checkIsOwner(user, sentBy);
     // console.log(isOwnerOrModerator());
     return (
-        <ScrollToBottom active>
+        <ScrollTo active direction='bottom'>
             {/* <MessageContext.Provider value={moderator}> */}
             <MessageList>
                 {messages.map(({ _id, username, message, moderated, sent }) => (
@@ -75,7 +75,7 @@ function Messages({ messages, button, onClickMessage }: Props & PropDefaults) {
                 ))}
             </MessageList>
             {/* </MessageContext.Provider> */}
-        </ScrollToBottom>
+        </ScrollTo>
     );
 }
 
