@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import faker from 'faker';
 import * as API from '.';
 
 // Creates a mocked axios.post function but also tracks calls to axios.post
@@ -17,16 +18,24 @@ afterEach(() => {
 describe('#FeedbackRports', () => {
     describe('#create', () => {
         const form = {
-            date: new Date(),
-            description: 'This is a feedback report',
+            description: faker.lorem.paragraphs(),
         };
 
-        it('should reject the feedback report', async () => {
-            await expect(API.createFeedbackReport({})).rejects.toThrow(
+        const date = new Date().toISOString();
+
+        it('should reject the feedback report because of missing description', async () => {
+            await expect(API.createFeedbackReport({}, date)).rejects.toThrow(
                 errors.fieldError()
             );
             expect(axios.post).not.toHaveBeenCalled();
         });
+        it('should reject the feedback report because of missing date', async () => {
+            await expect(API.createFeedbackReport(form, '')).rejects.toThrow(
+                errors.internalError()
+            );
+            expect(axios.post).not.toHaveBeenCalled();
+        });
+
         it('should create a feedback report', async () => {
             const resolvedValue = { status: 200 };
 
@@ -36,7 +45,7 @@ describe('#FeedbackRports', () => {
             );
             // .resolves makes Jest wait for the mocked API call to resolve
             // .toBe is the expected value returned from the mocked API call
-            await expect(API.createFeedbackReport(form)).resolves.toBe(
+            await expect(API.createFeedbackReport(form, date)).resolves.toBe(
                 resolvedValue
             );
             // .toHaveBeenCalledWith ensures that the mocked API call function was called with specific arguments (endpoint and body).
@@ -44,6 +53,7 @@ describe('#FeedbackRports', () => {
                 '/api/feedback/create-report',
                 {
                     ...form,
+                    date,
                 }
             );
         });
@@ -147,20 +157,27 @@ describe('#FeedbackRports', () => {
 describe('#BugRports', () => {
     describe('#create', () => {
         const form = {
-            date: new Date(),
             description: 'This is a bug report',
         };
-        const townhallId = '507f1f77bcf86cd799439022';
+        const townhallId = faker.random.alphaNumeric(12);
+        const date = new Date().toISOString();
 
         it('should reject the bug report since form body is not provided', async () => {
-            await expect(API.createBugReport({}, townhallId)).rejects.toThrow(
-                errors.fieldError()
-            );
+            await expect(
+                API.createBugReport({}, date, townhallId)
+            ).rejects.toThrow(errors.fieldError());
             expect(axios.post).not.toHaveBeenCalled();
         });
 
         it('should reject the bug report since townhallId is not provided', async () => {
-            await expect(API.createBugReport(form, '')).rejects.toThrow(
+            await expect(API.createBugReport(form, date, '')).rejects.toThrow(
+                errors.internalError()
+            );
+            expect(axios.post).not.toHaveBeenCalled();
+        });
+
+        it('should reject the bug report since date is not provided', async () => {
+            await expect(API.createBugReport(form, '', '')).rejects.toThrow(
                 errors.internalError()
             );
             expect(axios.post).not.toHaveBeenCalled();
@@ -171,11 +188,12 @@ describe('#BugRports', () => {
             (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
                 resolvedValue
             );
-            await expect(API.createBugReport(form, townhallId)).resolves.toBe(
-                resolvedValue
-            );
+            await expect(
+                API.createBugReport(form, date, townhallId)
+            ).resolves.toBe(resolvedValue);
             expect(axios.post).toHaveBeenCalledWith('/api/bugs/create-report', {
                 ...form,
+                date,
                 townhallId,
             });
         });
@@ -219,7 +237,7 @@ describe('#BugRports', () => {
     describe('#update', () => {
         const form = {
             description: 'This is a bug report',
-            _id: '507f1f77bcf86cd799439011',
+            _id: faker.random.alphaNumeric(12),
         };
         it('should reject update', async () => {
             await expect(API.updateBugReport({})).rejects.toThrow(
@@ -244,7 +262,7 @@ describe('#BugRports', () => {
 
     describe('#delete', () => {
         const form = {
-            _id: '507f1f77bcf86cd799439011',
+            _id: faker.random.alphaNumeric(12),
         };
         it('should reject delete', async () => {
             await expect(API.deleteBugReport({})).rejects.toThrow(

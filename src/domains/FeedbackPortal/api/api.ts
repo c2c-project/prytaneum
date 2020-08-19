@@ -4,7 +4,6 @@ import errors from 'utils/errors';
 export interface ReportForm {
     _id?: string;
     description?: string;
-    date: Date | string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -17,15 +16,18 @@ export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
 
-export type Report = Required<ReportForm>;
-export type FeedbackReport = Required<ReportForm>;
-export type BugReport = Required<BugReportForm> & { townhallId: string };
+export type Report = Required<ReportForm> & { date: string };
+export type FeedbackReport = Report;
+export type BugReport = Report & { townhallId: string };
 
 // Feedback reports API functions
-export async function createFeedbackReport(form: FeedbackForm) {
-    const { date, description } = form;
-    if (!date || !description) {
+export async function createFeedbackReport(form: FeedbackForm, date: string) {
+    const { description } = form;
+    if (!description) {
         throw errors.fieldError();
+    }
+    if (!date) {
+        throw errors.internalError();
     }
     const body = { date, description };
     return axios.post<unknown>('/api/feedback/create-report', body);
@@ -70,13 +72,18 @@ export async function deleteFeedbackReport(form: FeedbackForm) {
 }
 
 // Bug reports API functions
-export async function createBugReport(form: BugReportForm, townhallId: string) {
-    const { date, description } = form;
-    if (!date || !description) {
+export async function createBugReport(
+    form: BugReportForm,
+    date: string,
+    townhallId: string
+) {
+    const { description } = form;
+
+    if (!description) {
         throw errors.fieldError();
     }
 
-    if (!townhallId) {
+    if (!date || !townhallId) {
         throw errors.internalError();
     }
 
