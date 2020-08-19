@@ -38,9 +38,6 @@ export function ReportForm() {
                         MainDescription={FeedbackReportForm.MainDescription}
                         Icon={FeedbackReportForm.Icon}
                         Type={FeedbackReportForm.Type}
-                        Report={{
-                            date: new Date().toISOString(),
-                        }}
                     />
                 </Grid>
                 <Grid item>
@@ -49,9 +46,6 @@ export function ReportForm() {
                         MainDescription={BugReportForm.MainDescription}
                         Icon={BugReportForm.Icon}
                         Type={BugReportForm.Type}
-                        Report={{
-                            date: new Date().toISOString(),
-                        }}
                         townhallId={BugReportForm.townhallId}
                     />
                 </Grid>

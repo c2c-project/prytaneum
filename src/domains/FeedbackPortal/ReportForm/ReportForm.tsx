@@ -15,7 +15,6 @@ import {
 interface FormProps {
     Title: string;
     MainDescription: string;
-    Report: FeedbackForm | BugReportForm;
     Icon: JSX.Element;
     CreateReportEndpoint: (
         form: FeedbackForm | BugReportForm
@@ -26,7 +25,6 @@ function ReportForm({
     Title,
     MainDescription,
     Icon,
-    Report,
     CreateReportEndpoint,
 }: FormProps) {
     return (
@@ -41,10 +39,7 @@ function ReportForm({
                 <Typography variant='body1'>{MainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
-                <FormBase
-                    SubmitEndpoint={CreateReportEndpoint}
-                    Report={Report}
-                />
+                <FormBase SubmitEndpoint={CreateReportEndpoint} />
             </Grid>
         </Grid>
     );
@@ -53,7 +48,6 @@ function ReportForm({
 interface FactoryProps {
     Title: string;
     MainDescription: string;
-    Report: FeedbackForm | BugReportForm;
     Icon: JSX.Element;
     townhallId?: string;
     Type: string;
@@ -64,7 +58,6 @@ export default function ReportFormFactory({
     Title,
     MainDescription,
     Icon,
-    Report,
     townhallId,
 }: FactoryProps) {
     switch (Type) {
@@ -74,8 +67,9 @@ export default function ReportFormFactory({
                     Title={Title}
                     Icon={Icon}
                     MainDescription={MainDescription}
-                    CreateReportEndpoint={(form) => createFeedbackReport(form)}
-                    Report={Report}
+                    CreateReportEndpoint={(form) =>
+                        createFeedbackReport(form, new Date().toISOString())
+                    }
                 />
             );
         case 'bug':
@@ -87,9 +81,12 @@ export default function ReportFormFactory({
                     Title={Title}
                     MainDescription={MainDescription}
                     Icon={Icon}
-                    Report={Report}
                     CreateReportEndpoint={(form) =>
-                        createBugReport(form, townhallId)
+                        createBugReport(
+                            form,
+                            new Date().toISOString(),
+                            townhallId
+                        )
                     }
                 />
             );
@@ -99,8 +96,9 @@ export default function ReportFormFactory({
                     Title={Title}
                     MainDescription={MainDescription}
                     Icon={Icon}
-                    CreateReportEndpoint={(form) => createFeedbackReport(form)}
-                    Report={Report}
+                    CreateReportEndpoint={(form) =>
+                        createFeedbackReport(form, new Date().toISOString())
+                    }
                 />
             );
     }
