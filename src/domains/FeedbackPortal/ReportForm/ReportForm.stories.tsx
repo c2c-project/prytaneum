@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import faker from 'faker';
 import {
@@ -45,26 +44,22 @@ interface Props {
 export function ReportForm({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
-            <Grid container spacing={10}>
-                <Grid item>
-                    {ReportType === 'Feedback' ? (
-                        <Component
-                            Title={FeedbackReportForm.Title}
-                            MainDescription={FeedbackReportForm.MainDescription}
-                            Icon={FeedbackReportForm.Icon}
-                            Type={FeedbackReportForm.Type}
-                        />
-                    ) : (
-                        <Component
-                            Title={BugReportForm.Title}
-                            MainDescription={BugReportForm.MainDescription}
-                            Icon={BugReportForm.Icon}
-                            Type={BugReportForm.Type}
-                            townhallId={BugReportForm.townhallId}
-                        />
-                    )}
-                </Grid>
-            </Grid>
+            {ReportType === 'Feedback' ? (
+                <Component
+                    Title={FeedbackReportForm.Title}
+                    MainDescription={FeedbackReportForm.MainDescription}
+                    Icon={FeedbackReportForm.Icon}
+                    Type={FeedbackReportForm.Type}
+                />
+            ) : (
+                <Component
+                    Title={BugReportForm.Title}
+                    MainDescription={BugReportForm.MainDescription}
+                    Icon={BugReportForm.Icon}
+                    Type={BugReportForm.Type}
+                    townhallId={BugReportForm.townhallId}
+                />
+            )}
         </Container>
     );
 }
