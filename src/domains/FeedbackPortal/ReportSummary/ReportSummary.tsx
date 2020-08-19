@@ -6,14 +6,16 @@ import { AxiosResponse } from 'axios';
 import { formatDate } from 'utils/format';
 import FormBase from '../FormBase';
 import {
+    FeedbackReport,
+    BugReport,
+    updateBugReport,
     FeedbackForm,
     BugReportForm,
-    updateBugReport,
     updateFeedbackReport,
 } from '../api';
 
 interface SummaryProps {
-    Report: FeedbackForm | BugReportForm;
+    Report: FeedbackReport | BugReport;
     UpdateReportEndpoint: (
         report: FeedbackForm | BugReportForm
     ) => Promise<AxiosResponse<any>>;
@@ -36,7 +38,10 @@ function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
             </Grid>
             <Grid item xs={12}>
                 <FormBase
-                    Report={Report}
+                    Report={{
+                        description: Report.description,
+                        _id: Report._id,
+                    }}
                     SubmitEndpoint={UpdateReportEndpoint}
                 />
             </Grid>
@@ -46,7 +51,7 @@ function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
 
 interface FactoryProps {
     Type: string;
-    Report: FeedbackForm | BugReportForm;
+    Report: FeedbackReport | BugReport;
 }
 export default function ReportSummaryFactory({ Type, Report }: FactoryProps) {
     switch (Type) {
