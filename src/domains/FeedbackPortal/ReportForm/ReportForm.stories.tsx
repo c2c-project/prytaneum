@@ -9,7 +9,18 @@ import {
 
 import Component from '.';
 
-export default { title: 'Domains/ReportForm' };
+export default {
+    title: 'Domains/ReportForm',
+    component: Component,
+    argTypes: {
+        ReportType: {
+            control: {
+                type: 'select',
+                options: ['Feedback', 'Bug'],
+            },
+        },
+    },
+};
 
 const FeedbackReportForm = {
     Title: 'Feedback Form',
@@ -28,26 +39,30 @@ const BugReportForm = {
     townhallId: faker.random.alphaNumeric(12),
 };
 
-export function ReportForm() {
+interface Props {
+    ReportType: string;
+}
+export function ReportForm({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             <Grid container spacing={10}>
                 <Grid item>
-                    <Component
-                        Title={FeedbackReportForm.Title}
-                        MainDescription={FeedbackReportForm.MainDescription}
-                        Icon={FeedbackReportForm.Icon}
-                        Type={FeedbackReportForm.Type}
-                    />
-                </Grid>
-                <Grid item>
-                    <Component
-                        Title={BugReportForm.Title}
-                        MainDescription={BugReportForm.MainDescription}
-                        Icon={BugReportForm.Icon}
-                        Type={BugReportForm.Type}
-                        townhallId={BugReportForm.townhallId}
-                    />
+                    {ReportType === 'Feedback' ? (
+                        <Component
+                            Title={FeedbackReportForm.Title}
+                            MainDescription={FeedbackReportForm.MainDescription}
+                            Icon={FeedbackReportForm.Icon}
+                            Type={FeedbackReportForm.Type}
+                        />
+                    ) : (
+                        <Component
+                            Title={BugReportForm.Title}
+                            MainDescription={BugReportForm.MainDescription}
+                            Icon={BugReportForm.Icon}
+                            Type={BugReportForm.Type}
+                            townhallId={BugReportForm.townhallId}
+                        />
+                    )}
                 </Grid>
             </Grid>
         </Container>
