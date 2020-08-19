@@ -1,15 +1,26 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 import faker from 'faker';
 
 import Component from '.';
 
-export default { title: 'Domains/ReportSummary' };
+// TODO: For some reason, the select control does not change what component gets rendered.
+export default {
+    title: 'Domains/ReportSummary',
+    component: Component,
+    argTypes: {
+        ReportType: {
+            control: {
+                type: 'select',
+                options: ['Feedback', 'Bug'],
+            },
+        },
+    },
+};
 
 const FeedbackReportSummary = {
     Report: {
-        description: faker.lorem.paragraphs(),
+        description: 'xdf',
         date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
     },
@@ -18,7 +29,7 @@ const FeedbackReportSummary = {
 
 const BugReportSummary = {
     Report: {
-        description: faker.lorem.paragraphs(),
+        description: 'xdb',
         date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
         townhallId: faker.random.alphaNumeric(12),
@@ -26,23 +37,23 @@ const BugReportSummary = {
     Type: 'bug',
 };
 
-export function ReportSummary() {
+interface Props {
+    ReportType: string;
+}
+export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
-            <Grid container spacing={10}>
-                <Grid item>
-                    <Component
-                        Report={FeedbackReportSummary.Report}
-                        Type={FeedbackReportSummary.Type}
-                    />
-                </Grid>
-                <Grid item>
-                    <Component
-                        Report={BugReportSummary.Report}
-                        Type={BugReportSummary.Type}
-                    />
-                </Grid>
-            </Grid>
+            {ReportType === 'Feedback' ? (
+                <Component
+                    Report={FeedbackReportSummary.Report}
+                    Type={FeedbackReportSummary.Type}
+                />
+            ) : (
+                <Component
+                    Report={BugReportSummary.Report}
+                    Type={BugReportSummary.Type}
+                />
+            )}
         </Container>
     );
 }
