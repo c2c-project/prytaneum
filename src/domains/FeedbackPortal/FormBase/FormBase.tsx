@@ -23,6 +23,7 @@ export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
     const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
         reportState,
     ]);
+    // TODO: Make the onSuccess function be passed as a parameter
     const [sendRequest, isLoading] = useEndpoint(apiRequest, {
         onSuccess: () => snack('Report successfully submitted', 'success'),
     });
