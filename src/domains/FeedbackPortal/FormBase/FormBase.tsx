@@ -46,6 +46,7 @@ export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                id='reportDescription'
                                 required
                                 multiline
                                 label='Report Description'
@@ -53,7 +54,7 @@ export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
                                 onChange={(e) => handleChange(e, 'description')}
                             />
                         </Grid>
-                        <Grid item xs={12} justify='flex-end'>
+                        <Grid item xs={12}>
                             <LoadingButton
                                 loading={isLoading}
                                 component={

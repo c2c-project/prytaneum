@@ -20,21 +20,19 @@ export default {
 
 const FeedbackReportSummary = {
     Report: {
-        description: 'xdf',
+        description: faker.lorem.paragraph(),
         date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
     },
-    Type: 'feedback',
 };
 
 const BugReportSummary = {
     Report: {
-        description: 'xdb',
+        description: faker.lorem.paragraph(),
         date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
         townhallId: faker.random.alphaNumeric(12),
     },
-    Type: 'bug',
 };
 
 interface Props {
@@ -46,13 +44,10 @@ export function ReportSummary({ ReportType }: Props) {
             {ReportType === 'Feedback' ? (
                 <Component
                     Report={FeedbackReportSummary.Report}
-                    Type={FeedbackReportSummary.Type}
+                    Type='feedback'
                 />
             ) : (
-                <Component
-                    Report={BugReportSummary.Report}
-                    Type={BugReportSummary.Type}
-                />
+                <Component Report={BugReportSummary.Report} Type='bug' />
             )}
         </Container>
     );

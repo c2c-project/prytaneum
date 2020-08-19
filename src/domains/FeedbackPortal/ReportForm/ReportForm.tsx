@@ -50,7 +50,7 @@ interface FactoryProps {
     MainDescription: string;
     Icon: JSX.Element;
     townhallId?: string;
-    Type: string;
+    Type: 'feedback' | 'bug';
 }
 
 export default function ReportFormFactory({

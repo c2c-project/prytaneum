@@ -26,14 +26,12 @@ const FeedbackReportForm = {
     MainDescription:
         'Let us know how we can improve your virtual town hall experience in the future. We strongly appreciate your feedback!',
     Icon: <FeedbackReportIcon />,
-    Type: 'feedback',
 };
 
 const BugReportForm = {
     Title: 'Bug Report Form',
     MainDescription:
         'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
-    Type: 'bug',
     Icon: <BugReportIcon />,
     townhallId: faker.random.alphaNumeric(12),
 };
@@ -49,14 +47,14 @@ export function ReportForm({ ReportType }: Props) {
                     Title={FeedbackReportForm.Title}
                     MainDescription={FeedbackReportForm.MainDescription}
                     Icon={FeedbackReportForm.Icon}
-                    Type={FeedbackReportForm.Type}
+                    Type='feedback'
                 />
             ) : (
                 <Component
                     Title={BugReportForm.Title}
                     MainDescription={BugReportForm.MainDescription}
                     Icon={BugReportForm.Icon}
-                    Type={BugReportForm.Type}
+                    Type='bug'
                     townhallId={BugReportForm.townhallId}
                 />
             )}

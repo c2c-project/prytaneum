@@ -50,7 +50,7 @@ function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
 }
 
 interface FactoryProps {
-    Type: string;
+    Type: 'feedback' | 'bug';
     Report: FeedbackReport | BugReport;
 }
 export default function ReportSummaryFactory({ Type, Report }: FactoryProps) {
