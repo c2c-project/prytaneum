@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    tabs?: React.ReactNode[] | React.ReactNode;
+    // tabs?: React.ReactNode[] | React.ReactNode;
     back?: boolean;
 }
 
@@ -44,7 +44,7 @@ interface Params {
     title?: string;
 }
 
-export default function Nav({ tabs, back }: Props) {
+export default function Nav({ back }: Props) {
     const { title } = useParams<Params>();
     const history = useHistory(); // TODO: change this to not use history and instead have my own internal routing?
     const classes = useStyles();
@@ -71,18 +71,17 @@ export default function Nav({ tabs, back }: Props) {
                     </Typography>
                     <Button color='inherit'>Login</Button>
                 </Toolbar>
-                {tabs}
             </AppBar>
         </div>
     );
 }
 
 Nav.defaultProps = {
-    tabs: <></>,
+    // tabs: <></>,
     back: false,
 };
 
 Nav.propTypes = {
-    tabs: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
+    // tabs: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
     back: PropTypes.bool,
 };

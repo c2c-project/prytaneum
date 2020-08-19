@@ -11,7 +11,6 @@ import { AxiosResponse } from 'axios';
 import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
-
 import {
     TownhallForm as TownhallFormType,
     createTownhall,
@@ -44,10 +43,10 @@ function TownhallFormBase({
         sendRequest();
     };
 
-    type MyEvent =
+    type ChangeEvent =
         | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
         | { target: { value: MaterialUiPickersDate } };
-    const handleChange = (e: MyEvent, key: string) => {
+    const handleChange = (e: ChangeEvent, key: string) => {
         const { value } = e.target;
         setState((prev) => ({ ...prev, [key]: value }));
     };
@@ -135,11 +134,11 @@ TownhallFormBase.propTypes = {
     endpoint: PropTypes.func.isRequired,
 };
 
-interface CreateSessionProps {
+interface CreateTownhallProps {
     onSubmit: () => void;
 }
 
-function CreateTownhall(props: CreateSessionProps) {
+function CreateTownhall(props: CreateTownhallProps) {
     return (
         <TownhallFormBase
             endpoint={(form) => createTownhall(form)}
@@ -198,8 +197,3 @@ export default function TownhallForm({ type, onSubmit, updateTarget }: Props) {
             return <CreateTownhall onSubmit={onSubmit} />;
     }
 }
-// function Test() {
-//     return (
-//         <TownhallForm type='' onSubmit={() => {}} />
-//     );
-// }
