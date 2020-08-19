@@ -1,125 +1,144 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import TooltipIconButton from 'components/TooltipIconButton';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import clsx from 'clsx';
-import { format } from 'date-fns';
+import {
+    Grid,
+    Fab,
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    ListSubheader,
+    Zoom,
+    Paper,
+} from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import CalendarIcon from '@material-ui/icons/CalendarToday';
+import ForumIcon from '@material-ui/icons/ForumOutlined';
+import { useParams } from 'react-router-dom';
 
-import ShareIcon from '@material-ui/icons/Share';
-import DownloadIcon from '@material-ui/icons/CloudDownload';
-import { Townhall } from '../api';
+import useEndpoint from 'hooks/useEndpoint';
+import { formatDate } from 'utils/format';
+import Loader from 'components/Loader';
+import { getTownhall } from '../api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        borderRadius: theme.custom.borderRadius,
+        width: '100%',
+        height: '100%',
     },
-    media: {
-        minHeight: theme.custom.media.minHeight,
-        borderRadius: theme.custom.borderRadius,
-        margin: '20px',
+    picture: {
+        width: '100%',
+        height: 'auto',
+        borderRadius: '0 0 50px 50px',
     },
-    title: {
-        fontSize: '25px',
+    fabIcon: {
+        color: 'white',
     },
-    text: {
-        fontWeight: theme.typography.fontWeightLight,
+    fab: {
+        paddingRight: theme.spacing(4),
+        marginTop: -theme.spacing(4),
     },
-    largeAvatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
+    color: {
+        backgroundColor: theme.palette.background.paper,
+    },
+    paper: {
+        height: '100%',
+        width: '100%',
+        padding: `0px ${theme.spacing(2)}px 0px ${theme.spacing(6)}px`,
     },
 }));
 
-interface Props {
-    townhall: Townhall;
-}
-
-export default function TownhallPre(props: Props) {
+export default function TownhallPre() {
+    const [townhall, setTownhall] = React.useState<Prytaneum.Townhall | null>(
+        null
+    );
     const classes = useStyles();
-    const { townhall } = props;
+    const { townhallId } = useParams<{ townhallId: string }>();
+    const [sendRequest, loading] = useEndpoint<{
+        townhall: Prytaneum.Townhall;
+    }>(() => getTownhall(townhallId), {
+        onSuccess: (response) => {
+            const { data } = response;
+            setTownhall(data.townhall);
+        },
+    });
+    React.useEffect(sendRequest, []);
+    if (loading || !townhall) {
+        return <Loader />;
+    }
+    const Title = () => (
+        <Grid container spacing={0} item xs={12}>
+            <Grid item xs={12}>
+                <Typography variant='h5'>{townhall.speaker.name}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant='body2' color='textSecondary'>
+                    {`${townhall.speaker.party}, ${townhall.speaker.territory}`}
+                </Typography>
+            </Grid>
+        </Grid>
+    );
+    const FavoriteFab = () => (
+        <Grid container>
+            <Grid
+                container
+                justify='flex-end'
+                item
+                xs={12}
+                className={classes.fab}
+            >
+                <Zoom in>
+                    <Fab color='secondary'>
+                        <FavoriteIcon className={classes.fabIcon} />
+                    </Fab>
+                </Zoom>
+            </Grid>
+        </Grid>
+    );
+    const Info = () => (
+        <Grid container>
+            <Grid item xs={12}>
+                <List>
+                    <ListSubheader disableGutters disableSticky>
+                        Information
+                    </ListSubheader>
+                    <ListItem disableGutters>
+                        <ListItemIcon>
+                            <ForumIcon style={{ fontSize: 30 }} />
+                        </ListItemIcon>
+                        <ListItemText primary={townhall.topic} />
+                    </ListItem>
+                    <ListItem disableGutters>
+                        <ListItemIcon>
+                            <CalendarIcon style={{ fontSize: 30 }} />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={formatDate(
+                                townhall.date,
+                                'MMMM do, yyyy p'
+                            )}
+                        />
+                    </ListItem>
+                </List>
+            </Grid>
+        </Grid>
+    );
     return (
-        <Card className={classes.root} elevation={8}>
-            <CardHeader
-                avatar={
-                    <Avatar
-                        className={classes.largeAvatar}
-                        src={townhall.picture}
-                        alt="speaker's profile picture"
-                    />
-                }
-                title={
-                    <>
-                        <Typography
-                            className={clsx([classes.text, classes.title])}
-                        >
-                            {townhall.speaker}
-                        </Typography>
-                        <Typography className={classes.text}>
-                            {townhall.topic}
-                        </Typography>
-                    </>
-                }
-                subheaderTypographyProps={{ className: classes.text }}
-                subheader={format(townhall.date, 'MM/dd/yyyy p')}
-                action={
-                    <>
-                        <TooltipIconButton
-                            onClick={() => console.log('TODO: share button')}
-                            tooltip='Share'
-                        >
-                            <ShareIcon />
-                        </TooltipIconButton>
-                        <TooltipIconButton
-                            onClick={() =>
-                                console.log('TODO: download calendar event')
-                            }
-                            tooltip='Download Calendar Invite'
-                        >
-                            <DownloadIcon />
-                        </TooltipIconButton>
-                    </>
-                }
-            />
-            <CardMedia className={classes.media} image={townhall.picture} />
-            <CardActions>
-                <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <Button
-                            onClick={() =>
-                                console.log('TODO: reading materials')
-                            }
-                            fullWidth
-                        >
-                            View Topic Reading Material
-                        </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            onClick={() => console.log('TODO: Stats page')}
-                            fullWidth
-                        >
-                            {`More Information on ${townhall.speaker}`}
-                        </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            onClick={() =>
-                                console.log('TODO: Submit Question early')
-                            }
-                            fullWidth
-                        >
-                            Help I&apos;m unable to attend!
-                        </Button>
-                    </Grid>
-                </Grid>
-            </CardActions>
-        </Card>
+        <Grid container className={classes.root} spacing={0}>
+            <Grid item xs='auto' className={classes.color}>
+                <img
+                    className={classes.picture}
+                    src={townhall.picture}
+                    alt='Member of Congress'
+                />
+            </Grid>
+            <Paper className={classes.paper} elevation={0}>
+                <FavoriteFab />
+                <Title />
+                <Info />
+            </Paper>
+        </Grid>
     );
 }

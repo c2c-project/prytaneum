@@ -1,14 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
+import MUIDialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
+import Slide, { SlideProps } from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
-import { TransitionProps } from '@material-ui/core/transitions';
 
 const useStyles = makeStyles({
     appBar: {
@@ -23,20 +21,12 @@ const useStyles = makeStyles({
  *  Transition used by FullScreenDialog -- it slides up
  */
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & { children?: React.ReactElement<any, any> },
+    props: SlideProps,
     ref: React.Ref<unknown>
 ) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <Slide direction='up' ref={ref} {...props} />;
 });
-
-/**
- *  full screen dialog box
- * @param {Object} props
- * @param {PropTypes.ReactNodeArray|PropTypes.ReactNodeLike} props.children what to display inside the dialog
- * @param {Boolean} props.open parent is expected to handle open or closed state, so this is either T or F
- * @param {Function} props.onClose function to run when the close button is clicked within the dialog, typically setting open to false
- */
 
 export interface Props {
     children: JSX.Element | JSX.Element[];
@@ -46,19 +36,17 @@ export interface Props {
     onEntered?: () => void;
     onExit?: () => void;
 }
-export default function FullScreenDialog({
-    children,
-    open,
-    onClose,
-    title,
-    onEntered,
-    onExit,
-}: Props) {
+
+/**
+ * Slide Up Dialog
+ */
+export default function Dialog(props: Props) {
+    const { children, open, onClose, title, onEntered, onExit } = props;
     const classes = useStyles();
-    
+
     return (
         <div>
-            <Dialog
+            <MUIDialog
                 fullScreen
                 open={open}
                 onClose={onClose}
@@ -82,13 +70,13 @@ export default function FullScreenDialog({
                     </Toolbar>
                 </AppBar>
                 {open && children}
-            </Dialog>
+            </MUIDialog>
         </div>
     );
 }
 
-FullScreenDialog.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
+Dialog.defaultProps = {
+    title: undefined,
+    onEntered: undefined,
+    onExit: undefined,
 };
