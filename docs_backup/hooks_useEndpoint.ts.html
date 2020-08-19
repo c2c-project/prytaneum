@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> hooks/useEndpoint.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="Props.html">Props</a></li></ul></div><div class="category"><h2>Component</h2><h3>Classes</h3><ul><li><a href="Bold.html">Bold</a></li><li><a href="ClipDialog.html">ClipDialog</a></li><li><a href="DateTimePicker.html">DateTimePicker</a></li><li><a href="Dialog.html">Dialog</a></li><li><a href="Fab.html">Fab</a></li><li><a href="GridMenu.html">GridMenu</a></li><li><a href="Loader.html">Loader</a></li><li><a href="LoadingButton.html">LoadingButton</a></li><li><a href="LoggedIn.html">LoggedIn</a></li><li><a href="MessageActions.html">MessageActions</a></li><li><a href="MessageItemAuthor.html">MessageItemAuthor</a></li><li><a href="MessageItemText.html">MessageItemText</a></li><li><a href="MessageItemTimestamp.html">MessageItemTimestamp</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessageListItem.html">MessageListItem</a></li><li><a href="MessageOwnerAction.html">MessageOwnerAction</a></li><li><a href="Messages.html">Messages</a></li><li><a href="RangeSlider.html">RangeSlider</a></li><li><a href="ScrollToBottom.html">ScrollToBottom</a></li><li><a href="SectionList.html">SectionList</a></li><li><a href="Stats.html">Stats</a></li><li><a href="TextField.html">TextField</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TimeLineItem.html">TimeLineItem</a></li><li><a href="ToolTipIconButton.html">ToolTipIconButton</a></li><li><a href="VideoPlayer.html">VideoPlayer</a></li></ul></div><div class="category"><h2>Context</h2><h3>Classes</h3><ul><li><a href="Device.html">Device</a></li><li><a href="makeSuccessFixture.html">makeSuccessFixture</a></li><li><a href="SnackContext.html">SnackContext</a></li></ul></div><div class="category"><h2>Domains/Auth</h2><h3>Classes</h3><ul><li><a href="ForgotPassRequest.html">ForgotPassRequest</a></li><li><a href="forgotPassRequest_.html">forgotPassRequest</a></li><li><a href="forgotPassReset.html">forgotPassReset</a></li><li><a href="login.html">login</a></li><li><a href="loginTemp.html">loginTemp</a></li><li><a href="LoginTempForm.html">LoginTempForm</a></li><li><a href="Logout.html">Logout</a></li><li><a href="register.html">register</a></li><li><a href="verifyEmail.html">verifyEmail</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>hooks/useEndpoint.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { AxiosResponse } from 'axios';
+
+import FixtureContext, { Fixture } from 'contexts/Fixtures';
+import useErrorHandler from './useErrorHandler';
+
+interface EndpointOptions&lt;T> {
+    onSuccess?: (value: AxiosResponse&lt;T>) => void;
+    onFailure?: (err: Error) => void;
+}
+type SendRequest = () => void;
+type IsLoading = boolean;
+type EndpointUtils = [SendRequest, IsLoading];
+
+/**
+ * @arg {Function} endpoint
+ * @arg {Object} options
+ * @arg {Function} options.onSuccess
+ * @arg {Function} options.onFailure
+ * @returns {Array}
+ */
+export default function useEndpoint&lt;T>(
+    endpoint: () => Promise&lt;AxiosResponse&lt;T>>,
+    options: EndpointOptions&lt;T> = {}
+): EndpointUtils {
+    const { meta, data } = React.useContext&lt;Fixture&lt;T>>(FixtureContext); // NOTE: only used in dev mode
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [handleError] = useErrorHandler();
+    const sendRequest = React.useCallback(() => setIsLoading(true), []);
+
+    React.useEffect(() => {
+        let isMounted = true;
+        const { onSuccess, onFailure } = options;
+        const minWaitTime = () =>
+            new Promise((resolve) => {
+                setTimeout(resolve, 600);
+            });
+
+        const defaultFailure = handleError;
+        const defaultSucess = () => {};
+
+        const _onSuccess = onSuccess || defaultSucess;
+        const _onFailure = (err: Error) => {
+            defaultFailure(err);
+            if (onFailure) {
+                onFailure(err);
+            }
+        };
+
+        const request = async function () {
+            try {
+                /*
+                 * THIS BLOCK OF CODE ONLY MATTERS IN test
+                 */
+                if (process.env.NODE_ENV === 'development') {
+                    await minWaitTime();
+                    setIsLoading(false);
+                    if (meta.status === 200) {
+                        _onSuccess({
+                            status: meta.status,
+                            statusText: meta.statusText,
+                            data,
+                            headers: meta.headers,
+                            config: meta.config,
+                        } as AxiosResponse&lt;T>);
+                    } else {
+                        throw new Error(meta.statusText);
+                    }
+                    return;
+                }
+
+                // the first indices is all I care about
+                const [response] = await Promise.allSettled([
+                    endpoint(),
+                    minWaitTime(),
+                ]);
+
+                // I need to check if I'm still mounted before continuing
+                if (isMounted === true) {
+                    setIsLoading(false);
+                    // there might be a better way to do this? other than just checking the status string :\
+                    if (response.status === 'rejected') {
+                        _onFailure(response.reason);
+                    } else {
+                        _onSuccess(response.value);
+                    }
+                }
+            } catch (e) {
+                /*
+                 * check if I'm still mounted before continuing
+                 * this catch only triggers if it is something on the client and not from the response
+                 * because allSettled doesn't throw an error even if one of the promises are rejected
+                 */
+                if (isMounted === true) {
+                    setIsLoading(false);
+                    _onFailure(e);
+                }
+            }
+        };
+
+        // sendRequest sets loading to true, I use this as the trigger to send the request
+        if (isLoading) {
+            // I use callbacks after the request completes, so I don't care about "await"-ing the promise
+            // eslint-disable-next-line no-void
+            void request();
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [isLoading, endpoint, handleError, options, meta, data]);
+
+    return [sendRequest, isLoading];
+}
+
+// request -> waiting -> response -> success or failure
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

@@ -3,6 +3,11 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { SnackbarProvider } from 'notistack';
 
+/** @todo description
+ *  @category Context
+ *  @constructor SnackContext
+ *  @todo params
+*/
 // eslint-disable-next-line react/prop-types
 function SnackContext({ children, ...rest }) {
     // add action to all snackbars

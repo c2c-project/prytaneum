@@ -1,6 +1,12 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
+/** Function to POST to /api/users/login if username is valid
+ *  @category Domains/Auth
+ *  @constructor login
+ *  @param {string} username the username to login with
+ *  @param {string} password the password to try to login with username
+*/
 export async function login(username?: string, password?: string) {
     if (!username || !password) {
         throw errors.fieldError();
@@ -15,6 +21,11 @@ export async function login(username?: string, password?: string) {
     });
 }
 
+/** Function to POST to /api/users/login to login as a temporary account, ie no password, only a display name
+ *  @category Domains/Auth
+ *  @constructor loginTemp
+ *  @param {string} username the username to login with
+*/
 export async function loginTemp(username: string) {
     if (!username.match(/\w+/g)) {
         throw errors.fieldError();
@@ -33,6 +44,12 @@ interface ForgotPassForm {
     confirmPassword?: string;
 }
 
+/** Function to reset the logged in user's password
+ *  @category Domains/Auth
+ *  @constructor forgotPassReset
+ *  @param {string | unknown} token current log in token for the user
+ *  @param {ForgotPassForm} form the form to submit the reset through
+*/
 export async function forgotPassReset(
     token: string | unknown,
     form: ForgotPassForm
@@ -61,6 +78,11 @@ interface ForgotPassRequestForm {
     email: string;
 }
 
+/** Function to request a password reset
+ *  @category Domains/Auth
+ *  @constructor forgotPassRequest
+ *  @param {ForgotPassForm} form the form to submit the reset through
+*/
 export async function forgotPassRequest(form: ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
@@ -79,6 +101,11 @@ interface RegisterForm {
     confirmPassword?: string;
 }
 
+/** Function to register a new user, pulls the data from the form, checks if its valid, then returns either a POST, or an error if something is invalid
+ *  @category Domains/Auth
+ *  @constructor register
+ *  @param {RegisterForm} form the form to submit the new user registration through
+*/
 export async function register(form: RegisterForm) {
     const { username, password, email, confirmPassword } = form;
     
@@ -97,6 +124,11 @@ export async function register(form: RegisterForm) {
     return axios.post('/api/users/register', { form });
 }
 
+/** Function to confirm user from email
+ *  @category Domains/Auth
+ *  @constructor verifyEmail
+ *  @param {string} userId the userId to check
+*/
 export async function verifyEmail(userId: string) {
     if (!userId) {
         throw errors.invalidInfo();

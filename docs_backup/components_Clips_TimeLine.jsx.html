@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Clips/TimeLine.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="Props.html">Props</a></li></ul></div><div class="category"><h2>Component</h2><h3>Classes</h3><ul><li><a href="Bold.html">Bold</a></li><li><a href="ClipDialog.html">ClipDialog</a></li><li><a href="DateTimePicker.html">DateTimePicker</a></li><li><a href="Dialog.html">Dialog</a></li><li><a href="Fab.html">Fab</a></li><li><a href="GridMenu.html">GridMenu</a></li><li><a href="Loader.html">Loader</a></li><li><a href="LoadingButton.html">LoadingButton</a></li><li><a href="LoggedIn.html">LoggedIn</a></li><li><a href="MessageActions.html">MessageActions</a></li><li><a href="MessageItemAuthor.html">MessageItemAuthor</a></li><li><a href="MessageItemText.html">MessageItemText</a></li><li><a href="MessageItemTimestamp.html">MessageItemTimestamp</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessageListItem.html">MessageListItem</a></li><li><a href="MessageOwnerAction.html">MessageOwnerAction</a></li><li><a href="Messages.html">Messages</a></li><li><a href="RangeSlider.html">RangeSlider</a></li><li><a href="ScrollToBottom.html">ScrollToBottom</a></li><li><a href="SectionList.html">SectionList</a></li><li><a href="Stats.html">Stats</a></li><li><a href="TextField.html">TextField</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TimeLineItem.html">TimeLineItem</a></li><li><a href="ToolTipIconButton.html">ToolTipIconButton</a></li><li><a href="VideoPlayer.html">VideoPlayer</a></li></ul></div><div class="category"><h2>Context</h2><h3>Classes</h3><ul><li><a href="Device.html">Device</a></li><li><a href="makeSuccessFixture.html">makeSuccessFixture</a></li><li><a href="SnackContext.html">SnackContext</a></li></ul></div><div class="category"><h2>Domains/Auth</h2><h3>Classes</h3><ul><li><a href="ForgotPassRequest.html">ForgotPassRequest</a></li><li><a href="forgotPassRequest_.html">forgotPassRequest</a></li><li><a href="forgotPassReset.html">forgotPassReset</a></li><li><a href="login.html">login</a></li><li><a href="loginTemp.html">loginTemp</a></li><li><a href="LoginTempForm.html">LoginTempForm</a></li><li><a href="Logout.html">Logout</a></li><li><a href="register.html">register</a></li><li><a href="verifyEmail.html">verifyEmail</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Clips/TimeLine.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import ReactPlayer from 'react-player';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import TimeLineItem from './TimeLineItem';
+import ClipDialog from './ClipDialog';
+import Fab from '../Fab/Fab';
+import './TimeLineItem.css';
+import useJwt from '../../hooks/useJwt';
+
+/** Test Description
+ *  @category Component
+ *  @constructor TimeLine
+*/
+export default function TimeLine({ url }) {
+    const player = useRef();
+    const location = useLocation();
+    const quickScroll = React.useRef(null);
+    const [jwt] = useJwt();
+    const [currUrl, setUrl] = useState(url);
+    const [playVideo, setPlayVideo] = useState(true);
+    const [addMode, setAddMode] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [currClip, setCurrClip] = React.useState({
+        question: '',
+        start: 0,
+        end: 0
+    });
+    const [clips, setClipState] = useState([]);
+    useEffect(() => {
+        // initialize our set of clips
+        fetch(`/api/sessions/find/${location.state.id}`, {
+            headers: {
+                Authorization: `bearer ${jwt}`
+            }
+        }).then(res => {
+            res.json().then(r => {
+                console.log(r);
+                if (r.clips !== undefined) {
+                    setClipState(r.clips);
+                }
+                if (r.url !== undefined) {
+                    setUrl(r.url);
+                }
+            });
+        });
+    }, []);
+
+    const postData = newClips => {
+        console.log(newClips);
+        fetch('/api/sessions/updateClips', {
+            method: 'POST',
+            headers: {
+                Authorization: `bearer ${jwt}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sessionId: location.state.id,
+                changes: [...newClips]
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Success:', data);
+                setClipState(newClips);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+    const addToClips = () => {
+        const newClips = [...clips, { ...currClip, id: clips.length }];
+        postData(newClips);
+    };
+
+    function handleTimeStamp({ playedSeconds }) {
+        document.getElementById('header').innerHTML = playedSeconds;
+    }
+
+    function editClips() {
+        const newClips = [...clips];
+        newClips[currClip.id] = currClip;
+        postData(newClips);
+    }
+
+    function editCurrentClip(item) {
+        setCurrClip(item);
+    }
+
+    return (
+        &lt;div>
+            &lt;div ref={quickScroll} />
+            &lt;ReactPlayer
+                ref={player}
+                url={currUrl}
+                playing={playVideo}
+                width='100%'
+                playsinline
+                onProgress={handleTimeStamp}
+            />
+            &lt;Grid container>
+                
+                &lt;Button
+                    variant='contained'
+                    color='primary'
+                    onClick={() => {
+                        const [beforeUrl] = currUrl.split('?');
+                        setUrl(beforeUrl);
+                        setPlayVideo(true);
+                    }}
+                >
+                Reset Video
+                &lt;/Button>
+                &lt;h1 id='header'>CurrentTime&lt;/h1>
+            &lt;/Grid>
+            
+            &lt;Fab
+                onClick={() => {
+                    // create new initial clip.
+                    setPlayVideo(false);
+                    setCurrClip({
+                        question: '',
+                        start: player.current.getCurrentTime(),
+                        end: player.current.getCurrentTime() + 15,
+                        category: {
+                            tag: 'medium',
+                            color: '#018f69'
+                        },
+                        link: {
+                            text: 'Click Here'
+                        }
+                    });
+                    setEditMode(false);
+                    setAddMode(true);
+                }}
+            />
+
+            &lt;ClipDialog
+                currentClip={currClip}
+                confirm={editClips}
+                openState={false || editMode}
+                edit={editCurrentClip}
+                modeOff={() => {
+                    setEditMode(false);
+                }}
+            />
+
+            &lt;ClipDialog
+                currentClip={currClip}
+                confirm={addToClips}
+                edit={editCurrentClip}
+                openState={false || addMode}
+                modeOff={() => {
+                    setAddMode(false);
+                }}
+            />
+
+            &lt;div className='timeline-container'>
+                {clips.map((x, index) => (
+                    &lt;TimeLineItem
+                        data={x}
+                        key={index}
+                        onClickPlay={() => {
+                            // console.log(`TimeFrame: ${x.start} ${x.end}`);
+                            const [beforeUrl] = currUrl.split('?');
+                            setUrl(
+                                `${beforeUrl}?start=${x.start}&amp;end=${x.end}`
+                            );
+                            setPlayVideo(true);
+                            quickScroll.current.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }}
+                        onClickEdit={() => {
+                            setCurrClip({ ...x });
+                            setEditMode(true);
+                        }}
+                        onClickDelete={() => {
+                            console.log(`Deleting Clip ${x.question}`);
+                            const temp = [];
+                            for (let i = 0; i &lt; clips.length; i += 1) {
+                                if (i !== index) {
+                                    temp.push(clips[i]);
+                                }
+                            }
+                            postData(temp);
+                            // setClipState(temp);
+                        }}
+                    />
+                ))}
+            &lt;/div>
+        &lt;/div>
+    );
+}
+
+TimeLine.defaultProps = {
+    url: ''
+};
+
+TimeLine.propTypes = {
+    url: PropTypes.string
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

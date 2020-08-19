@@ -27,6 +27,7 @@ interface FormState {
     confirmPassword: string;
 }
 
+
 export default function PasswordResetForm({ token, onSuccess }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();

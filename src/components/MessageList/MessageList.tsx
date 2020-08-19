@@ -18,6 +18,12 @@ interface Props {
     children: JSX.Element | JSX.Element[];
 }
 
+/** Returns a list of the children, since children are JSX elements, we can pass MessageListItems in
+ *  @category Component
+ *  @constructor MessageList
+ *  @param props
+ *  @param {JSX.Element | JSX.Element[]} props.children JSX elements to list out on the page; for example, using MessageListItems 
+*/
 export default function MessageList({ children }: Props) {
     const classes = useStyles();
     return (

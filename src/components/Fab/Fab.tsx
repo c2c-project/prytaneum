@@ -12,6 +12,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+interface Props {
+    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
+
+
+/** This function generates a Fab button 
+ *  which is the '+' on the bottom of the page
+ *  that runs the given function
+ *  @category Component
+ *  @constructor Fab
+ *  @param props
+ *  @param @todo
+*/
 export default function Fab({ children, ...rest }: FabProps) {
     const classes = useStyles();
     return (

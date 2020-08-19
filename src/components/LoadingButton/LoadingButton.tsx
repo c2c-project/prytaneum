@@ -8,6 +8,11 @@ interface Props {
     component: JSX.Element;
 }
 
+/**
+ * LoadingButton displays a clickable button with a loading circle if (bool) loading is set
+ * @category Component
+ * @constructor LoadingButton
+ */
 export default function LoadingButton({ loading, component }: Props) {
     const theme = useTheme();
     if (loading) {

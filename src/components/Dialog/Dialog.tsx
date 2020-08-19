@@ -17,9 +17,11 @@ const useStyles = makeStyles({
     },
 });
 
-/**
- *  Transition used by FullScreenDialog -- it slides up
- */
+
+/** Transition used by FullScreenDialog -- it slides up
+ *  @category Component
+ *  @constructor Dialog
+*/
 const Transition = React.forwardRef(function Transition(
     props: SlideProps,
     ref: React.Ref<unknown>

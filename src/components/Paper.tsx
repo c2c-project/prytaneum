@@ -10,6 +10,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/** Paper returns a MaterialUI paper with children as its contents
+ * @category Component
+ * @constructor Loader
+ * @param {props} PaperProps holds children, className, classNameProp
+ */
 export default function Paper(props: PaperProps) {
     const classes = useStyles();
     const { children, className: classNameProp } = props;

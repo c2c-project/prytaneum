@@ -22,6 +22,13 @@ interface Props {
     onFailure: () => void;
 }
 
+/** Function to create a temporary login form
+ * @category Domains/Auth
+ * @constructor LoginTempForm
+ * @param props
+ * @param {"() => void"} onSuccess function to call if successful
+ * @param {"() => void"} onFailure function to call if failed
+ */
 export default function LoginTempForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [form, setForm] = React.useState({

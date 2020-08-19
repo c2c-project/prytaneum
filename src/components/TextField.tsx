@@ -11,6 +11,11 @@ function labelToId(label: string) {
         .join('');
 }
 
+/** TextField in the MaterialUI format and theme
+ * @category Component
+ * @constructor TextField
+ * @todo params
+ */
 export default function TextField(props: TextFieldProps & { label: string }) {
     const { children, ...passThroughProps } = props;
     return (

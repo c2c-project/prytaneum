@@ -17,6 +17,17 @@ interface Props {
     hidden: boolean;
 }
 
+/** MessageListItem returns a Grid of JSX children 
+ *  If user is moderator on the owner of the message then this ListItem is rendered as a button
+ *  @see https://github.com/mui-org/material-ui/issues/14971
+ *  @category Component
+ *  @constructor MessageListItem
+ *  @param props
+ *  @param {boolean} props.button boolean to check if the button is active or not, ie has an onClick or undefined
+ *  @param {"() => void"} props.onClick used by the button, when clicked, it will call onClick
+ *  @param {JSX.Element | JSX.Element[]} props.children JSX elements to use in Grid
+ *  @param {boolean} props.hidden describes whether or not the list is visible 
+*/
 export default function MessageListItem(props: Props) {
     const { button, onClick, children, hidden } = props;
     const classes = useStyles();

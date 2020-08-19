@@ -7,6 +7,13 @@ interface Props {
     direction: 'top' | 'bottom';
 }
 
+/** Scrolls to the bottom of the current page
+ * @category Component
+ * @constructor ScrollToBottom
+ * @param props
+ * @param {boolean} props.active tells whether or not the button is active to be used
+ * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
+ */
 export default function ScrollTo({ active, children, direction }: Props) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
     const topRef = React.useRef<HTMLDivElement>(null);

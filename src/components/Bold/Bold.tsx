@@ -8,10 +8,11 @@ interface Props {
 }
 
 /**
- *
- * @description Bolds the children, while keeping typography intact
- * @arg props
- * @arg props.children
+ * Bolds the children, while keeping typography intact
+ * @constructor Bold
+ * @category Component
+ * @param props holds props.children
+ * @param {JSX.Element | JSX.Element[] | string} props.children props.children has the element to bold
  */
 export default function Bold({ children }: Props) {
     return (

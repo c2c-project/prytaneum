@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Clips/ClipDialog.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="Props.html">Props</a></li></ul></div><div class="category"><h2>Component</h2><h3>Classes</h3><ul><li><a href="Bold.html">Bold</a></li><li><a href="ClipDialog.html">ClipDialog</a></li><li><a href="DateTimePicker.html">DateTimePicker</a></li><li><a href="Dialog.html">Dialog</a></li><li><a href="Fab.html">Fab</a></li><li><a href="GridMenu.html">GridMenu</a></li><li><a href="Loader.html">Loader</a></li><li><a href="LoadingButton.html">LoadingButton</a></li><li><a href="LoggedIn.html">LoggedIn</a></li><li><a href="MessageActions.html">MessageActions</a></li><li><a href="MessageItemAuthor.html">MessageItemAuthor</a></li><li><a href="MessageItemText.html">MessageItemText</a></li><li><a href="MessageItemTimestamp.html">MessageItemTimestamp</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessageListItem.html">MessageListItem</a></li><li><a href="MessageOwnerAction.html">MessageOwnerAction</a></li><li><a href="Messages.html">Messages</a></li><li><a href="RangeSlider.html">RangeSlider</a></li><li><a href="ScrollToBottom.html">ScrollToBottom</a></li><li><a href="SectionList.html">SectionList</a></li><li><a href="Stats.html">Stats</a></li><li><a href="TextField.html">TextField</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TimeLineItem.html">TimeLineItem</a></li><li><a href="ToolTipIconButton.html">ToolTipIconButton</a></li><li><a href="VideoPlayer.html">VideoPlayer</a></li></ul></div><div class="category"><h2>Context</h2><h3>Classes</h3><ul><li><a href="Device.html">Device</a></li><li><a href="makeSuccessFixture.html">makeSuccessFixture</a></li><li><a href="SnackContext.html">SnackContext</a></li></ul></div><div class="category"><h2>Domains/Auth</h2><h3>Classes</h3><ul><li><a href="ForgotPassRequest.html">ForgotPassRequest</a></li><li><a href="forgotPassRequest_.html">forgotPassRequest</a></li><li><a href="forgotPassReset.html">forgotPassReset</a></li><li><a href="login.html">login</a></li><li><a href="loginTemp.html">loginTemp</a></li><li><a href="LoginTempForm.html">LoginTempForm</a></li><li><a href="Logout.html">Logout</a></li><li><a href="register.html">register</a></li><li><a href="verifyEmail.html">verifyEmail</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Clips/ClipDialog.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import FullScreenDialog from 'components/Dialog';
+import RangeSlider from './RangeSlider';
+
+interface Clip {
+    question: string;
+    start: number;
+    end: number;
+    category: {
+        tag: string;
+        color: string;
+    };
+    link: {
+        text: string;
+    };
+}
+
+interface Props {
+    currentClip: Clip;
+    confirm: () => void;
+    openState: boolean;
+    edit: (a: Clip) => void;
+    modeOff: () => void;
+}
+
+/** This function clips a dialog clip in a text field and returns it as a form to submit
+ *  @category Component
+ *  @constructor ClipDialog
+ *  @param {Clip} currentClip the current clip
+ *  @param {"() => void"} confirm function to call when handleing submits
+ *  @param {boolean} openState used when calling FullScreenDialog to determine if its open or not
+ *  @param {"(a: Clip) => void"} edit function to call to edit the current clip from a start and end time
+ *  @param {"() => void"} modeOff called when we handleClose
+*/
+export default function ClipDialog({
+    currentClip,
+    confirm,
+    openState,
+    edit,
+    modeOff,
+}: Props) {
+    const handleClose = () => {
+        modeOff();
+    };
+
+    // case: editing the timeframe without the question.
+    function handleClipTime(start: number, end: number) {
+        edit({ ...currentClip, start, end });
+    }
+
+    // e is pre-defined event object to stop form from refreshing.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
+    const handleSubmit = (e: React.FormEvent&lt;HTMLFormElement>) => {
+        e.preventDefault();
+        confirm();
+        // }
+
+        handleClose();
+    };
+
+    return (
+        &lt;div>
+            &lt;FullScreenDialog
+                open={false || openState}
+                onClose={handleClose}
+                aria-labelledby='form-dialog-title'
+            >
+                {/* with a form tag you don't need to create onClick events for your buttons */}
+                &lt;form onSubmit={handleSubmit}>
+                    &lt;DialogTitle id='form-dialog-title'>Subscribe&lt;/DialogTitle>
+                    &lt;DialogContent>
+                        &lt;DialogContentText>Current Question:&lt;/DialogContentText>
+                        &lt;TextField
+                            autoFocus
+                            margin='dense'
+                            id='name'
+                            label='edit question here'
+                            type='text'
+                            value={currentClip.question}
+                            onChange={(event) => {
+                                const question = event.target.value;
+                                // console.log('Current event: '+event.target.value);
+                                // setForm({ ...form, question });
+                                edit({ ...currentClip, question });
+                            }}
+                            fullWidth
+                        />
+                        &lt;RangeSlider
+                            timeStamp={currentClip}
+                            confirm={handleClipTime}
+                        />
+                    &lt;/DialogContent>
+                    &lt;DialogActions>
+                        &lt;Button onClick={handleClose} color='primary'>
+                            Cancel
+                        &lt;/Button>
+                        {/* no need for a onClick, a button inside a form tag will execute its onSubmit */}
+                        &lt;Button type='submit' color='primary'>
+                            Confirm
+                        &lt;/Button>
+                    &lt;/DialogActions>
+                &lt;/form>
+            &lt;/FullScreenDialog>
+        &lt;/div>
+    );
+}
+
+// ClipDialog.defaultProps = {
+//     currentClip: PropTypes.shape({
+//         question: '',
+//         start:2,
+//         end: 23,
+//     }),
+// };
+
+ClipDialog.propTypes = {
+    currentClip: PropTypes.shape({
+        question: PropTypes.string,
+        start: PropTypes.number,
+        end: PropTypes.number,
+        category: PropTypes.shape({
+            tag: PropTypes.string,
+            color: PropTypes.string,
+        }),
+        link: PropTypes.shape({
+            text: PropTypes.string,
+        }),
+    }).isRequired,
+    confirm: PropTypes.func.isRequired,
+    edit: PropTypes.func.isRequired,
+    openState: PropTypes.bool.isRequired,
+    modeOff: PropTypes.func.isRequired,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
