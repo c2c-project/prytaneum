@@ -36,13 +36,9 @@ function formatSections(list: Prytaneum.Townhall[]): Section[] {
 
 export default function TownhallList() {
     const [list, setList] = React.useState<Prytaneum.Townhall[] | null>(null);
-    // const isMounted = React.useRef(true);
-    // const renderCount = React.useRef(0);
     const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
         onSuccess: (results) => {
-            // if (isMounted.current) {
             setList(results.data.list);
-            // }
         },
     });
 
@@ -50,20 +46,5 @@ export default function TownhallList() {
     if (isLoading || !list) {
         return <Loader />;
     }
-
-    // React.useEffect(() => {
-    //     renderCount.current += 1;
-    // });
-
-    // React.useEffect(() => {
-    //     isMounted.current = true;
-    //     sendRequest();
-    //     return () => {
-    //         isMounted.current = false;
-    //     };
-    // }, [sendRequest]);
-    // if (renderCount.current < 1 || isLoading) {
-    //     return <Loader />;
-    // }
     return <SectionList sections={formatSections(list)} />;
 }
