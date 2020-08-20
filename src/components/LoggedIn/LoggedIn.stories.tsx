@@ -11,7 +11,7 @@ export default {
 };
 
 const path = '/';
-let _location: any;
+let logout: any;
 
 export function LoggedIn_JwtTrue() {
     return (
@@ -22,13 +22,6 @@ export function LoggedIn_JwtTrue() {
                         <h1>this should be rendered</h1>
                     </Component>
                 </Route>
-                <Route
-                    path='*'
-                    render={({ location }) => {
-                        _location = location;
-                        return null;
-                    }}
-                />
             </MemoryRouter>
         </ThemeProvider>
     );
@@ -38,17 +31,14 @@ export function LoggedIn_JwtFalse() {
     return (
         <ThemeProvider theme={theme}>
             <MemoryRouter initialEntries={['/']}>
-                <Route path={path}>
+                <Route path={path} exact>
                     <Component jwt={false}>
-                        <h1>This should not be rendered</h1>
+                        <h1>This should be rendered, but console.log should say 'not redirecting'</h1>
                     </Component>
                 </Route>
                 <Route
-                    path='*'
-                    render={({ location }) => {
-                        _location = location;
-                        return null;
-                    }}
+                    path='/logout'
+                    render={() => <h1>logout</h1>}
                 />
             </MemoryRouter>
         </ThemeProvider>

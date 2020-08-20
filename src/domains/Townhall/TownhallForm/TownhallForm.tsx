@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosResponse } from 'axios';
 
-import TextField from 'components/TextField';
+import TextField from 'components/TextField/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import {
