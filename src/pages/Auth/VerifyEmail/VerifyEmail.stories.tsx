@@ -46,7 +46,11 @@ const Helper = () => {
     return <h1>{`Redirecting in ${time}`}</h1>;
 };
 
-export function VerifyEmail({ outcome }: { outcome: Fixture }) {
+export function VerifyEmail({
+    outcome,
+}: {
+    outcome: Fixture<Record<string, unknown>>;
+}) {
     return (
         <Fixtures.Provider value={outcome}>
             <MemoryRouter initialEntries={['/123456']}>
