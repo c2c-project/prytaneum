@@ -83,7 +83,7 @@ export default function ClipList() {
 
     return (
         <section>
-            <Toolbar className={classes.toolbar}>
+            <Toolbar className={classes.toolbar} disableGutters>
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
@@ -91,33 +91,28 @@ export default function ClipList() {
                     <FilterListIcon />
                 </IconButton>
             </Toolbar>
-            <Grid item xs={12} md={6}>
-                <div>
-                    <List>
-                        {tempRows.map((row) => {
-                            return (
-                                <ListItem button onClick={() => {}}>
-                                    <ListItemIcon>
-                                        <FolderIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary='Luke SkyWalker'
-                                        secondary={row.title}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            edge='end'
-                                            aria-label='delete'
-                                        >
-                                            <FavoriteIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </div>
-            </Grid>
+            <div>
+                <List>
+                    {tempRows.map((row) => {
+                        return (
+                            <ListItem button onClick={() => {}}>
+                                <ListItemIcon>
+                                    <FolderIcon />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary='Luke SkyWalker'
+                                    secondary={row.title}
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge='end' aria-label='delete'>
+                                        <FavoriteIcon />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </div>
         </section>
     );
 }

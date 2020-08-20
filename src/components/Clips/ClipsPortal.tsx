@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import {
     Typography,
-    Container,
-    Grid,
     makeStyles,
-    Chip,
     Divider,
-    Collapse,
     List,
     ListItem,
-    ListItemText,
-    IconButton,
-    GridListTile,
-    GridListTileBar,
-    GridList,
+    Chip,
 } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ClipDetails from './ClipDetails';
-import ClipTable from './ClipTable';
 import Thumbnail from '../../assets/default-thumbnail.jpg';
 import { ClipData } from '.';
 
 const useStyles = makeStyles(() => ({
-    root: {
-        display: 'flex',
-    },
+    root: {},
     thumbnail: {
         maxWidth: '100%',
         height: 'auto',
     },
-    collapseRow: {
+    links: {
         display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
+        flexDirection: 'column',
+        rowGap: '10px',
     },
+    chips: {
+        display: 'flex',
+        columnGap: '2px'
+    }
 }));
 
 interface Props {
@@ -44,138 +33,56 @@ interface Props {
 }
 
 export default function ClipsPortal({ clip }: Props) {
-    const [openSess, setOpenSess] = React.useState(false);
-    const [openClips, setOpenClips] = React.useState(false);
-    const [openProfile, setOpenProfile] = React.useState(false);
-
-
-    const handleClick = () => {
-        setOpenSess(!openSess);
-    };
-
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <Grid container direction='column' justify='flex-start'>
+        <section className={classes.root}>
+            <List className={classes.links}>
                 <img
                     alt='Clip Thumbnail'
                     className={classes.thumbnail}
                     src={Thumbnail}
                 />
+                <div className={classes.chips}>
+                    {clip.tags.map((tag, index) => {
+                        return <Chip color='primary' clickable size='small' label={tag} />;
+                    })}
+                </div>
                 <Typography variant='h4' gutterBottom>
                     Mark Takano
                 </Typography>
+                
+
+                {/* <Chip size='small' label='basic' /> */}
                 <Typography variant='caption' gutterBottom>
                     Description
                 </Typography>
-                <Typography variant='body1' gutterBottom>
+                <Typography variant='body2' gutterBottom>
                     {clip.title}
                 </Typography>
                 <Divider />
-                <Typography variant='body1' gutterBottom>
+                <Typography variant='caption' gutterBottom>
                     Links
                 </Typography>
-                <List>
-                    <ListItem button onClick={handleClick}>
-                        <ListItemText primary='View Full Video' />
-                        {openSess ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={openSess} timeout='auto' unmountOnExit>
-                        <div className={classes.collapseRow}>
-                            <GridList
-                                cellHeight={180}
-                                className={classes.gridList}
-                                cols={2.5}
-                            >
-                                <GridListTile
-                                    key='Subheader'
-                                    cols={2}
-                                    style={{ height: 'auto' }}
-                                />
-                                <GridListTile>
-                                    <img
-                                        src={Thumbnail}
-                                        alt='Session Thumbnail'
-                                    />
-                                    <GridListTileBar
-                                        title='Session Title'
-                                        subtitle={<span>by: Mark Takano</span>}
-                                    />
-                                </GridListTile>
-                            </GridList>
-                        </div>
-                    </Collapse>
-                    <ListItem
-                        button
-                        onClick={() => {
-                            setOpenClips(!openClips);
-                        }}
-                    >
-                        <ListItemText primary='View Similar Clips' />
-                        {openClips ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={openClips} timeout='auto' unmountOnExit>
-                        <div className={classes.collapseRow}>
-                            <GridList
-                                cellHeight={180}
-                                className={classes.gridList}
-                                cols={2.5}
-                            >
-                                <GridListTile
-                                    key='Subheader'
-                                    cols={2}
-                                    style={{ height: 'auto' }}
-                                />
-                                <GridListTile>
-                                    <img
-                                        src={Thumbnail}
-                                        alt='Session Thumbnail'
-                                    />
-                                    <GridListTileBar
-                                        title='Session Title'
-                                        subtitle={<span>by: Mark Takano</span>}
-                                    />
-                                </GridListTile>
-                            </GridList>
-                        </div>
-                    </Collapse>
-                    <ListItem
-                        button
-                        onClick={() => {
-                            setOpenProfile(!openProfile);
-                        }}
-                    >
-                        <ListItemText primary='View Mark Takano Profile' />
-                        {openProfile ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={openProfile} timeout='auto' unmountOnExit>
-                        <div className={classes.collapseRow}>
-                            <GridList
-                                cellHeight={180}
-                                className={classes.gridList}
-                                cols={2.5}
-                            >
-                                <GridListTile
-                                    key='Subheader'
-                                    cols={2}
-                                    style={{ height: 'auto' }}
-                                />
-                                <GridListTile>
-                                    <img
-                                        src={Thumbnail}
-                                        alt='Session Thumbnail'
-                                    />
-                                    <GridListTileBar
-                                        title='Session Title'
-                                        subtitle={<span>by: Mark Takano</span>}
-                                    />
-                                </GridListTile>
-                            </GridList>
-                        </div>
-                    </Collapse>
-                </List>
-            </Grid>
-        </div>
+                <ListItem button disableGutters>
+                    <Typography variant='h6' gutterBottom>
+                        View Full Video
+                    </Typography>
+                </ListItem>
+                <Divider />
+                <ListItem button disableGutters>
+                    <Typography variant='h6' gutterBottom>
+                        View Similar Clips
+                    </Typography>
+                </ListItem>
+                <Divider />
+                <ListItem button disableGutters>
+                    <Typography variant='h6' gutterBottom>
+                        View Mark Takano
+                    </Typography>
+                </ListItem>
+                <Divider />
+            </List>
+        </section>
     );
 }
