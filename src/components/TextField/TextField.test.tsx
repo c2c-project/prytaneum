@@ -33,14 +33,34 @@ describe('TextField', function () {
     });
 
     it('should render', () => {
+        const onClick = jest.fn();
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
-                    
+                    <TextField 
+                        id='testing'
+                        required
+                        label='Test Label'
+                        value='Test value in the box'
+                        onChange={onClick}
+                    />
                 </ThemeProvider>,
                 container
             );
         });
+
+        // find the input field
+        const valueNode = document.querySelector('#testing') as HTMLElement;
+        const simVal = { v:'test'};
+
+        // enter in our simVal into the form
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(valueNode, {
+                target : { value : simVal.v }
+            } as any);
+        });
+
+        expect(onClick).toBeCalledTimes(1);
     });
 
 });
