@@ -11,7 +11,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 
 import API from '../api';
-import { RegisterForm } from '../types';
+import { RegisterForm as RegisterFormType } from '../types';
 
 const useStyles = makeStyles({
     root: {
@@ -27,7 +27,7 @@ interface Props {
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
-    const [form, setForm] = React.useState<RegisterForm>({
+    const [form, setForm] = React.useState<RegisterFormType>({
         username: '',
         email: '',
         password: '',
