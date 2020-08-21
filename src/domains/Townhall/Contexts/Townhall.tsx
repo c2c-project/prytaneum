@@ -1,11 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Loader from 'components/Loader';
 
 import useEndpoint from 'hooks/useEndpoint';
-import { Townhall, getTownhall } from '../api';
+import Loader from 'components/Loader';
+import { getTownhall } from '../api';
+import { Townhall } from '../types';
 
 interface Props {
+    // TODO: add defaults here
+    // eslint-disable-next-line react/require-default-props
     value?: Townhall;
     children: JSX.Element | JSX.Element[];
 }
@@ -14,8 +17,20 @@ interface Params {
     townhallId: string;
 }
 
-// this is dangerous to cast an empty object as a townhall, but my component below gaurantees it will always be defined
-export const TownhallContext = React.createContext<Townhall>({} as Townhall);
+export const TownhallContext = React.createContext<Townhall>({
+    _id: '',
+    speaker: {
+        name: '',
+        party: '',
+        territory: '',
+    },
+    moderator: '',
+    topic: '',
+    picture: '',
+    readingMaterials: '',
+    date: new Date(),
+    url: '',
+});
 
 export default function TownhallProvider({ value, children }: Props) {
     const { townhallId } = useParams<Params>();
@@ -32,7 +47,7 @@ export default function TownhallProvider({ value, children }: Props) {
             get();
         }
     }, []);
-    
+
     return !townhall ? (
         <Loader />
     ) : (
@@ -41,3 +56,7 @@ export default function TownhallProvider({ value, children }: Props) {
         </TownhallContext.Provider>
     );
 }
+
+TownhallProvider.defaultProps = {
+    value: {},
+};

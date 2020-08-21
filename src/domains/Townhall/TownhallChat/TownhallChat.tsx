@@ -61,7 +61,7 @@ const chatReducer = (state: Message[], action: Actions): Message[] => {
 };
 
 export default function TownhallChat() {
-    const [state, dispatch, socket] = useSocketio<Message[], Actions>({
+    const [state] = useSocketio<Message[], Actions>({
         url: '/chat',
         event: 'townhall-chat-state',
         reducer: chatReducer,

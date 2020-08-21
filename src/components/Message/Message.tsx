@@ -9,8 +9,8 @@ import MessageItemTimestamp from '../MessageItemTimestamp';
 import ScrollTo from '../ScrollTo/ScrollTo';
 import { Message } from './types';
 
-const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
-    user._id === messageUserId;
+// const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
+//     user._id === messageUserId;
 
 // export const MessageContext = React.createContext(false);
 // interface Message {

@@ -42,4 +42,37 @@ describe('TooltipIconButton', () => {
 
         expect(onClickButton).toBeCalledTimes(1);
     });
+    // eslint-disable-next-line jest/no-commented-out-tests
+    // it('should call onClose when close button is clicked', () => {
+    //     const onClose = jest.fn();
+    //     ReactTestUtils.act(() => {
+    //         render(
+    //             <Dialog open onClose={onClose}>
+    //                 <div />
+    //             </Dialog>,
+    //             container
+    //         );
+    //     });
+    //     const button = document.querySelector('button') as HTMLButtonElement;
+    //     ReactTestUtils.act(() => {
+    //         button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    //     });
+
+    //     expect(onClose).toBeCalledTimes(1);
+    // });
+
+    // eslint-disable-next-line jest/no-commented-out-tests
+    // it('should not render children if closed', () => {
+    //     const onClose = jest.fn();
+    //     ReactTestUtils.act(() => {
+    //         render(
+    //             <Dialog open={false} onClose={onClose}>
+    //                 <div id='child' />
+    //             </Dialog>,
+    //             container
+    //         );
+    //     });
+    //     const child = document.querySelector('#child');
+    //     expect(child).toBeFalsy();
+    // });
 });

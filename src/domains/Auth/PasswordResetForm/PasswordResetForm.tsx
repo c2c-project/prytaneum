@@ -10,6 +10,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 
 import API from '../api';
+import { ForgotPassForm } from '../types';
 
 const useStyles = makeStyles({
     root: {
@@ -22,16 +23,10 @@ interface Props {
     onSuccess: () => void;
 }
 
-interface FormState {
-    password: string;
-    confirmPassword: string;
-}
-
-
 export default function PasswordResetForm({ token, onSuccess }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
-    const [form, setForm] = React.useState<FormState>({
+    const [form, setForm] = React.useState<ForgotPassForm>({
         password: '',
         confirmPassword: '',
     });
@@ -47,7 +42,7 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
     });
     const handleChange = (
         e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-        id: keyof FormState
+        id: keyof ForgotPassForm
     ) => {
         e.preventDefault();
         const { value } = e.target;

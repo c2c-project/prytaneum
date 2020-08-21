@@ -34,3 +34,7 @@ export default function TooltipIconButton({
         </Tooltip>
     );
 }
+
+TooltipIconButton.defaultProps = {
+    className: '',
+};

@@ -98,18 +98,17 @@ describe('RegisterForm', () => {
         // modify input fields in the DOM
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: form.username },
-            } as any);
+                target: ({ value: form.username } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: form.email },
-            } as any);
+                target: ({ value: form.email } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(passwordNode, {
-                target: { value: form.password },
-            } as any);
+                target: ({ value: form.password } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: form.confirmPass },
-            } as any);
-            // clicking submit
+                target: ({ value: form.confirmPass } as unknown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
@@ -150,22 +149,24 @@ describe('RegisterForm', () => {
         const usernameNode = document.querySelector('#username') as HTMLElement;
         const emailNode = document.querySelector('#email') as HTMLElement;
         const passwordNode = document.querySelector('#password') as HTMLElement;
-        const confirmNode = document.querySelector('#confirm-password') as HTMLElement;
+        const confirmNode = document.querySelector(
+            '#confirm-password'
+        ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: form.username },
-            } as any);
+                target: ({ value: form.username } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(emailNode, {
-                target: { value: form.email },
-            } as any);
+                target: ({ value: form.email } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(passwordNode, {
-                target: { value: form.password },
-            } as any);
+                target: ({ value: form.password } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: form.confirmPass },
-            } as any);
+                target: ({ value: form.confirmPass } as unknown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

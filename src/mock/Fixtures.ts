@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface Fixture<T = any> {
+export interface Fixture<T extends Record<string, unknown>> {
     meta: {
         timeout?: number;
         status: number;
@@ -16,11 +16,13 @@ export interface Fixture<T = any> {
  *  @constructor makeSuccessFixture
  *  @param {Record<string, any>} data @todo
 */
-export function makeSuccessFixture(data?: Record<string, any>) {
+export function makeSuccessFixture(data?: Record<string, unknown>) {
     return {
         meta: { status: 200, statusText: 'OK', config: {}, headers: {} },
         data,
     };
 }
 
-export default React.createContext<Fixture>(makeSuccessFixture());
+export default React.createContext<Fixture<Record<string, unknown>>>(
+    makeSuccessFixture()
+);
