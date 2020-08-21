@@ -93,20 +93,18 @@ describe('Update report summary', () => {
 
             const reportDescriptionNode = document.querySelector(
                 '#reportDescription'
-            );
-            const button = document.querySelector('[type="submit"]');
+            ) as HTMLInputElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
-                if (reportDescriptionNode && button) {
-                    ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                        target: ({
-                            value: description,
-                        } as unknown) as EventTarget,
-                    });
-                    button.dispatchEvent(
-                        new MouseEvent('click', { bubbles: true })
-                    );
-                }
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: description,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
             });
             expect(spy).toBeCalledWith({
                 description,
@@ -180,20 +178,18 @@ describe('Update report summary', () => {
 
             const reportDescriptionNode = document.querySelector(
                 '#reportDescription'
-            );
-            const button = document.querySelector('[type="submit"]');
+            ) as HTMLButtonElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
-                if (reportDescriptionNode && button) {
-                    ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                        target: ({
-                            value: description,
-                        } as unknown) as EventTarget,
-                    });
-                    button.dispatchEvent(
-                        new MouseEvent('click', { bubbles: true })
-                    );
-                }
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: description,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
             });
             expect(spy).toBeCalledWith({ description, _id: BugReport._id });
         });

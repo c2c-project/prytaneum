@@ -16,7 +16,10 @@ export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
 
-export type Report = Required<ReportForm> & { date: string };
+export type Report = Required<ReportForm> & {
+    date: string;
+    user: { _id: string };
+};
 export type FeedbackReport = Report;
 export type BugReport = Report & { townhallId: string };
 

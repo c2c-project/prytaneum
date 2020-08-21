@@ -11,7 +11,6 @@ import * as API from '../api/api';
 jest.mock('hooks/useSnack');
 
 // TODO: When form base is changed to receive onSuccess and onFailure call backs then update this test suite
-
 describe('CreateReportRequest', () => {
     let container: HTMLDivElement | null = null;
 
@@ -58,20 +57,16 @@ describe('CreateReportRequest', () => {
             );
         });
 
-        // Get the input field for report description
         const reportDescriptionNode = document.querySelector(
             '#reportDescription'
         ) as HTMLInputElement;
-        // the input field should be empty after first render
         expect(reportDescriptionNode.value).toBe('');
 
-        // Change the input field of the form
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
                 target: ({ value: description } as unknown) as EventTarget,
             });
         });
-        // the input field should not be empty anymore
         expect(reportDescriptionNode.value).toBe(description);
     });
 
@@ -132,19 +127,17 @@ describe('CreateReportRequest', () => {
         // Get form nodes
         const reportDescriptionNode = document.querySelector(
             '#reportDescription'
-        );
-        const button = document.querySelector('[type="submit"]');
+        ) as HTMLInputElement;
+        const button = document.querySelector(
+            '[type="submit"]'
+        ) as HTMLButtonElement;
 
         // Simulate events
         ReactTestUtils.act(() => {
-            if (reportDescriptionNode && button) {
-                ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                    target: ({ value: description } as unknown) as EventTarget,
-                });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                target: ({ value: description } as unknown) as EventTarget,
+            });
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalledWith({ description }, date);
     });
@@ -169,33 +162,20 @@ describe('CreateReportRequest', () => {
             );
         });
 
-        ReactTestUtils.act(() => {
-            render(
-                <FormBase
-                    SubmitEndpoint={(form) =>
-                        API.createFeedbackReport(form, date)
-                    }
-                />,
-                container
-            );
-        });
-
         // Get form nodes
         const reportDescriptionNode = document.querySelector(
             '#reportDescription'
-        );
-        const button = document.querySelector('[type="submit"]');
+        ) as HTMLInputElement;
+        const button = document.querySelector(
+            '[type="submit"]'
+        ) as HTMLButtonElement;
 
         // Simulate events
         ReactTestUtils.act(() => {
-            if (reportDescriptionNode && button) {
-                ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                    target: ({ value: description } as unknown) as EventTarget,
-                });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                target: ({ value: description } as unknown) as EventTarget,
+            });
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalledWith({ description }, date);
     });

@@ -18,20 +18,22 @@ export default {
     },
 };
 
-const FeedbackReportSummary = {
-    Report: {
-        description: faker.lorem.paragraph(),
-        date: new Date().toISOString(),
+const FeedbackReport = {
+    description: faker.lorem.paragraph(),
+    date: new Date().toISOString(),
+    _id: faker.random.alphaNumeric(12),
+    user: {
         _id: faker.random.alphaNumeric(12),
     },
 };
 
-const BugReportSummary = {
-    Report: {
-        description: faker.lorem.paragraph(),
-        date: new Date().toISOString(),
+const BugReport = {
+    description: faker.lorem.paragraph(),
+    date: new Date().toISOString(),
+    _id: faker.random.alphaNumeric(12),
+    townhallId: faker.random.alphaNumeric(12),
+    user: {
         _id: faker.random.alphaNumeric(12),
-        townhallId: faker.random.alphaNumeric(12),
     },
 };
 
@@ -42,12 +44,9 @@ export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
-                <Component
-                    Report={FeedbackReportSummary.Report}
-                    Type='feedback'
-                />
+                <Component Report={FeedbackReport} Type='feedback' />
             ) : (
-                <Component Report={BugReportSummary.Report} Type='bug' />
+                <Component Report={BugReport} Type='bug' />
             )}
         </Container>
     );
