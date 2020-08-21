@@ -69,7 +69,6 @@ interface ForgotPassRequestForm {
  *  @constructor forgotPassRequest
  *  @param {ForgotPassForm} form the form to submit the reset through
 */
-export async function forgotPassRequest(form: ForgotPassRequestForm) {
 export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
@@ -93,7 +92,6 @@ interface RegisterForm {
  *  @constructor register
  *  @param {RegisterForm} form the form to submit the new user registration through
 */
-export async function register(form: RegisterForm) {
 export async function register(form: AuthTypes.RegisterForm) {
     const { username, password, email, confirmPassword } = form;
 
