@@ -39,7 +39,11 @@ function ReportForm({
                 <Typography variant='body1'>{MainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
-                <FormBase SubmitEndpoint={CreateReportEndpoint} />
+                {/* TODO: Pass an actual onSucces callback function */}
+                <FormBase
+                    SubmitEndpoint={CreateReportEndpoint}
+                    onSuccess={() => {}}
+                />
             </Grid>
         </Grid>
     );
