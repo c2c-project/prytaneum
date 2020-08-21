@@ -10,7 +10,7 @@ import * as API from '../api/api';
 
 jest.mock('hooks/useSnack');
 
-// TODO: When form base is changed to receive onSuccess and onFailure call backs then update this test suite
+// TODO: Test delete button
 describe('Update report summary', () => {
     let container: HTMLDivElement | null = null;
 
@@ -44,19 +44,27 @@ describe('Update report summary', () => {
 
         // eslint-disable-next-line jest/expect-expect
         it('should create feedback report summary', async () => {
+            const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={FeedbackReportObject} />,
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
         });
 
-        it('should change state of feedback summary', async () => {
+        it('should change state of feedback report summary', async () => {
+            const callBack = jest.fn();
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={FeedbackReportObject} />,
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -90,10 +98,15 @@ describe('Update report summary', () => {
                 .spyOn(API, 'updateFeedbackReport')
                 .mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
+            const callBack = jest.fn();
+            jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={FeedbackReportObject} />,
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -119,9 +132,61 @@ describe('Update report summary', () => {
                 description: newDescription,
                 _id: FeedbackReportObject.Report._id,
             });
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).toBeCalled();
+        });
+
+        it('should attempt to update feedback report summary and fail', async () => {
+            const rejectedVal = { status: 500 };
+            const spy = jest
+                .spyOn(API, 'updateFeedbackReport')
+                .mockRejectedValue(rejectedVal);
+            const newDescription = faker.lorem.paragraph();
+            const callBack = jest.fn();
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith({
+                description: newDescription,
+                _id: FeedbackReportObject.Report._id,
+            });
+
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).not.toBeCalled();
         });
     });
-
     // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report summary', () => {
         const BugReportObject = {
@@ -140,9 +205,13 @@ describe('Update report summary', () => {
 
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report summary', async () => {
+            const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={BugReportObject} />,
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -150,9 +219,14 @@ describe('Update report summary', () => {
 
         it('should change state of bug report summary', async () => {
             const newDescription = faker.lorem.paragraph();
+            const callBack = jest.fn();
+
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={BugReportObject} />,
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -174,7 +248,7 @@ describe('Update report summary', () => {
             expect(reportDescriptionNode.value).toBe(newDescription);
         });
 
-        it('should update bug report summary  and succeed', async () => {
+        it('should update bug report summary and succeed', async () => {
             const resolvedVal: AxiosResponse = {
                 status: 200,
                 data: {},
@@ -186,10 +260,15 @@ describe('Update report summary', () => {
                 .spyOn(API, 'updateBugReport')
                 .mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
+            const callBack = jest.fn();
+            jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary ReportObject={BugReportObject} />,
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -215,6 +294,60 @@ describe('Update report summary', () => {
                 description: newDescription,
                 _id: BugReportObject.Report._id,
             });
+
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).toBeCalled();
+        });
+
+        it('should attempt to update bug report summary and fail', async () => {
+            const rejectedVal = { status: 500 };
+            const spy = jest
+                .spyOn(API, 'updateBugReport')
+                .mockRejectedValue(rejectedVal);
+            const newDescription = faker.lorem.paragraph();
+            const callBack = jest.fn();
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith({
+                description: newDescription,
+                _id: BugReportObject.Report._id,
+            });
+
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).not.toBeCalled();
         });
     });
 });

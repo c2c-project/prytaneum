@@ -6,6 +6,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 
+import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
@@ -14,6 +15,7 @@ import { ReportObject as ReportObjectType } from '../api';
 
 interface SummaryProps {
     ReportObject: ReportObjectType;
+    callBack: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -26,17 +28,27 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-export default function ReportSummary({ ReportObject }: SummaryProps) {
+export default function ReportSummary({
+    ReportObject,
+    callBack,
+}: SummaryProps) {
     // TODO: Check if empty array as second parameter is okay
     const deleteApiRequest = React.useCallback(
         () => ReportObject.delete(ReportObject.Report),
         []
     );
 
+    const [snack] = useSnack();
+
     // TODO: call callback function from parent component
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
-        onSuccess: () => console.log('Report deleted'),
-        onFailure: () => console.log('Report not deleted'),
+        onSuccess: () => {
+            callBack();
+            snack('Report successfully deleted', 'success');
+        },
+        onFailure: () => {
+            snack('Something went wrong! Try again', 'error');
+        },
     });
 
     const classes = useStyles();
@@ -61,6 +73,7 @@ export default function ReportSummary({ ReportObject }: SummaryProps) {
                         _id: ReportObject.Report._id,
                     }}
                     SubmitEndpoint={ReportObject.update}
+                    onSuccess={() => callBack()}
                 />
             </Grid>
             <Grid item xs={12}>

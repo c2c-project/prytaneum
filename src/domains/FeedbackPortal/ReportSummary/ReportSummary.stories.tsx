@@ -60,9 +60,12 @@ export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
-                <Component ReportObject={FeedbackReportObject} />
+                <Component
+                    ReportObject={FeedbackReportObject}
+                    callBack={() => {}}
+                />
             ) : (
-                <Component ReportObject={BugReportObject} />
+                <Component ReportObject={BugReportObject} callBack={() => {}} />
             )}
         </Container>
     );
