@@ -42,6 +42,7 @@ describe('TooltipIconButton', () => {
 
         expect(onClickButton).toBeCalledTimes(1);
     });
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it('should call onClose when close button is clicked', () => {
     //     const onClose = jest.fn();
     //     ReactTestUtils.act(() => {
@@ -59,6 +60,8 @@ describe('TooltipIconButton', () => {
 
     //     expect(onClose).toBeCalledTimes(1);
     // });
+
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it('should not render children if closed', () => {
     //     const onClose = jest.fn();
     //     ReactTestUtils.act(() => {
