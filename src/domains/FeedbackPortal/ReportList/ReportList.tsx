@@ -4,73 +4,81 @@ import {
     ListItem,
     ListItemText,
     ListSubheader,
-    ListItemSecondaryAction,
     Divider,
 } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { red, blue } from '@material-ui/core/colors';
-import IconButton from '@material-ui/core/IconButton';
-import {
-    Delete as DeleteIcon,
-    ArrowForward as ArrowForwardIcon,
-} from '@material-ui/icons';
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
 
+import Dialog from 'components/Dialog';
+import ReportSummary from 'domains/FeedbackPortal/ReportSummary';
 import { formatDate } from 'utils/format';
-import { Report } from '../api';
+import { ReportObject } from '../api';
 
 interface Props {
-    Reports: Report[];
+    ReportObjects: ReportObject[];
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
         height: '100%',
     },
-    PrimaryButton: {
-        color: theme.palette.getContrastText(blue[500]),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
+    li: {
+        padding: 10,
     },
-    DangerButton: {
-        color: theme.palette.getContrastText(red[500]),
-        backgroundColor: red[500],
-        '&:hover': {
-            backgroundColor: red[700],
-        },
+    FontSize: {
+        fontSize: 20,
     },
 }));
 
 // TODO: Make this component receive the update and delete functions to call as callback functions
-export default function ReportList({ Reports }: Props) {
+export default function ReportList({ ReportObjects }: Props) {
     const classes = useStyles();
+    const [reportObjectSelected, setReportObjectSelected] = React.useState<
+        ReportObject
+    >({});
+    const [open, setOpen] = React.useState(false);
+
+    const selectReport = (reportObject: ReportObject) => {
+        setReportObjectSelected(reportObject);
+        setOpen(true);
+    };
+
     return (
-        <List className={classes.root}>
-            {Reports.map((report) => (
-                <div>
-                    <ListSubheader color='primary'>
-                        {formatDate(new Date(report.date))}
-                    </ListSubheader>
-                    <Divider />
-                    <ListItem divider>
-                        <ListItemText
-                            primary={report.description.substr(0, 200) + '...'}
-                        />
-                        <ListItemSecondaryAction>
-                            <IconButton className={classes.PrimaryButton}>
-                                <ArrowForwardIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                        <ListItemSecondaryAction>
-                            <IconButton className={classes.DangerButton}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </div>
-            ))}
-        </List>
+        <div>
+            <List className={classes.root} subheader={<li />}>
+                {ReportObjects.map((reportObject) => (
+                    <li key={reportObject.Report._id}>
+                        <Divider />
+                        <ListSubheader
+                            className={classes.FontSize}
+                            color='primary'
+                        >
+                            {`Date Submitted: ${formatDate(
+                                new Date(reportObject.Report.date)
+                            )}`}
+                        </ListSubheader>
+                        <ListItem
+                            button
+                            onClick={() => {
+                                selectReport(reportObject);
+                            }}
+                        >
+                            <ListItemText
+                                primary={`${reportObject.Report.description.substr(
+                                    0,
+                                    200
+                                )} ...`}
+                            />
+                        </ListItem>
+                    </li>
+                ))}
+            </List>
+            <Dialog open={open} onClose={() => setOpen(false)}>
+                <Container maxWidth='sm' style={{ padding: 20 }}>
+                    <ReportSummary ReportObject={reportObjectSelected} />
+                </Container>
+            </Dialog>
+        </div>
     );
 }
