@@ -12,7 +12,18 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
-import { getFeedbackReports, getBugReports, Report } from '../api';
+import ReportList from 'domains/FeedbackPortal/ReportList';
+import {
+    getFeedbackReports,
+    getBugReports,
+    ReportObject,
+    updateBugReport,
+    updateFeedbackReport,
+    deleteBugReport,
+    deleteFeedbackReport,
+    FeedbackForm,
+    BugReportForm,
+} from '../api';
 
 //  TODO: replace values with API function to call
 const ReportOptions = [
@@ -38,7 +49,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-export default function ReportHistory({}) {
+export default function ReportHistory() {
     const classes = useStyles();
     const [getReportEndpoints, setGetReportEndpoints] = React.useState<
         string[]
@@ -46,7 +57,9 @@ export default function ReportHistory({}) {
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
 
-    const [reports, setReports] = React.useState<Report[]>([]);
+    const [reportObjects, setReportObjects] = React.useState<ReportObject[]>(
+        []
+    );
 
     const ApiRequests = {
         Feedback: React.useCallback(
@@ -78,9 +91,21 @@ export default function ReportHistory({}) {
         ApiRequests.Feedback,
         {
             onSuccess: (results) => {
-                setReports((prevReports) => [
+                // Creates Report objects with a report, update, and delete functions
+                const feedbackReportObjects = results.data.reports.map(
+                    (report) => ({
+                        Report: report,
+                        update: (form: FeedbackForm) =>
+                            updateFeedbackReport(form),
+                        delete: (form: FeedbackForm) =>
+                            deleteFeedbackReport(form),
+                    })
+                );
+
+                // Updates the state of reportObjects
+                setReportObjects((prevReports) => [
                     ...prevReports,
-                    ...results.data.reports,
+                    ...feedbackReportObjects,
                 ]);
             },
         }
@@ -88,9 +113,15 @@ export default function ReportHistory({}) {
 
     const [sendBugRequest, isLoadingBug] = useEndpoint(ApiRequests.Bug, {
         onSuccess: (results) => {
-            setReports((prevReports) => [
+            const bugReportObjects = results.data.reports.map((report) => ({
+                Report: report,
+                update: (form: BugReportForm) => updateBugReport(form),
+                delete: (form: BugReportForm) => deleteBugReport(form),
+            }));
+
+            setReportObjects((prevReports) => [
                 ...prevReports,
-                ...results.data.reports,
+                ...bugReportObjects,
             ]);
         },
     });
@@ -172,7 +203,8 @@ export default function ReportHistory({}) {
                 </Grid>
             </Grid>
             <Grid justify='center' item xs={12}>
-                <div>
+                <ReportList ReportObjects={reportObjects} />
+                {/* <div>
                     <h1>Report Value Selected:</h1>
                     {getReportEndpoints.map((getReportEndpoint) => (
                         <h3>{getReportEndpoint}</h3>
@@ -185,7 +217,7 @@ export default function ReportHistory({}) {
                 <div>
                     <h1>Page Selected:</h1>
                     <h1>{page}</h1>
-                </div>
+                </div> */}
             </Grid>
             <Grid item container justify='center' xs={12}>
                 <Pagination
