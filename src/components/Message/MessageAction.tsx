@@ -48,8 +48,7 @@ export default function MessageActions({ targetMsg, onClick }: Props) {
                     snack('Something went wrong! Try again.', 'error');
                 }
             })
-            .catch((err) => {
-                console.log(err);
+            .catch(() => {
                 snack('Something went wrong! Try again.', 'error');
             });
     };

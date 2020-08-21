@@ -31,3 +31,7 @@ export default function Device({ children, override }: Props) {
         </DeviceContext.Provider>
     );
 }
+
+Device.defaultProps = {
+    override: '',
+};

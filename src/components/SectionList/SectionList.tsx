@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-interface Datum {
+export interface Datum {
     image?: string;
     title: string;
     subtitle: string;

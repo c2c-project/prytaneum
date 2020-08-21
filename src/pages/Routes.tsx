@@ -1,10 +1,10 @@
 import React from 'react';
-import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import Auth from './Auth';
-import LoggedIn from '../components/LoggedIn';
-import Townhall from './Townhall';
-import Nav from '../layout/Nav';
-import Footer from '../layout/Footer';
+// import LoggedIn from '../components/LoggedIn';
+// import Townhall from './Townhall';
+// import Nav from '../layout/Nav';
+// import Footer from '../layout/Footer';
 // import TownhallList from '../domains/Townhall/TownhallList';
 // import Chat from '../domains/Townhall/TownhallChat';
 // import SessionSummary from './SessionSummary';
@@ -19,7 +19,7 @@ import Footer from '../layout/Footer';
 // import Verification from './Verification';
 // import RequestPasswordReset from './RequestPasswordReset';
 // import UpdatePassword from './UpdatePassword';
-import Public from './Public';
+// import Public from './Public';
 
 const DefaultPage = () => <Redirect to='/auth/login' />;
 const AppHomePage = () => <Redirect to='/app/townhalls' />;
