@@ -2,6 +2,14 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker';
 
+import {
+    updateBugReport,
+    updateFeedbackReport,
+    deleteBugReport,
+    deleteFeedbackReport,
+    FeedbackForm,
+    BugReportForm,
+} from '../api';
 import Component from '.';
 
 // TODO: For some reason, the select control does not change what component gets rendered.
@@ -18,23 +26,31 @@ export default {
     },
 };
 
-const FeedbackReport = {
-    description: faker.lorem.paragraph(),
-    date: new Date().toISOString(),
-    _id: faker.random.alphaNumeric(12),
-    user: {
+const FeedbackReportObject = {
+    Report: {
+        description: faker.lorem.paragraph(),
+        date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
+        user: {
+            _id: faker.random.alphaNumeric(12),
+        },
     },
+    update: (form: FeedbackForm) => updateFeedbackReport(form),
+    delete: (form: FeedbackForm) => deleteFeedbackReport(form),
 };
 
-const BugReport = {
-    description: faker.lorem.paragraph(),
-    date: new Date().toISOString(),
-    _id: faker.random.alphaNumeric(12),
-    townhallId: faker.random.alphaNumeric(12),
-    user: {
+const BugReportObject = {
+    Report: {
+        description: faker.lorem.paragraph(),
+        date: new Date().toISOString(),
         _id: faker.random.alphaNumeric(12),
+        townhallId: faker.random.alphaNumeric(12),
+        user: {
+            _id: faker.random.alphaNumeric(12),
+        },
     },
+    update: (form: BugReportForm) => updateBugReport(form),
+    delete: (form: BugReportForm) => deleteBugReport(form),
 };
 
 interface Props {
@@ -44,9 +60,9 @@ export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
-                <Component Report={FeedbackReport} Type='feedback' />
+                <Component ReportObject={FeedbackReportObject} />
             ) : (
-                <Component Report={BugReport} Type='bug' />
+                <Component ReportObject={BugReportObject} />
             )}
         </Container>
     );

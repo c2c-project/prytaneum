@@ -29,27 +29,34 @@ describe('Update report summary', () => {
     });
 
     describe('Create feedback report summary', () => {
-        const FeedbackReport = {
-            description: faker.lorem.paragraph(),
-            date: new Date().toISOString(),
-            _id: faker.random.alphaNumeric(12),
+        const FeedbackReportObject = {
+            Report: {
+                description: faker.lorem.paragraph(),
+                date: new Date().toISOString(),
+                _id: faker.random.alphaNumeric(12),
+                user: {
+                    _id: faker.random.alphaNumeric(12),
+                },
+            },
+            update: (form: API.FeedbackForm) => API.updateFeedbackReport(form),
+            delete: (form: API.FeedbackForm) => API.deleteFeedbackReport(form),
         };
 
         // eslint-disable-next-line jest/expect-expect
-        it('should create feedback report form', async () => {
+        it('should create feedback report summary', async () => {
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='feedback' Report={FeedbackReport} />,
+                    <ReportSummary ReportObject={FeedbackReportObject} />,
                     container
                 );
             });
         });
 
         it('should change state of feedback summary', async () => {
-            const description = faker.lorem.paragraph();
+            const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='feedback' Report={FeedbackReport} />,
+                    <ReportSummary ReportObject={FeedbackReportObject} />,
                     container
                 );
             });
@@ -58,17 +65,17 @@ describe('Update report summary', () => {
                 '#reportDescription'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe(
-                FeedbackReport.description
+                FeedbackReportObject.Report.description
             );
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: description,
+                        value: newDescription,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(description);
+            expect(reportDescriptionNode.value).toBe(newDescription);
         });
 
         it('should update feedback report summary and succeed', async () => {
@@ -82,11 +89,11 @@ describe('Update report summary', () => {
             const spy = jest
                 .spyOn(API, 'updateFeedbackReport')
                 .mockResolvedValue(resolvedVal);
-            const description = faker.lorem.paragraph();
+            const newDescription = faker.lorem.paragraph();
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='feedback' Report={FeedbackReport} />,
+                    <ReportSummary ReportObject={FeedbackReportObject} />,
                     container
                 );
             });
@@ -94,12 +101,14 @@ describe('Update report summary', () => {
             const reportDescriptionNode = document.querySelector(
                 '#reportDescription'
             ) as HTMLInputElement;
-            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: description,
+                        value: newDescription,
                     } as unknown) as EventTarget,
                 });
                 button.dispatchEvent(
@@ -107,36 +116,43 @@ describe('Update report summary', () => {
                 );
             });
             expect(spy).toBeCalledWith({
-                description,
-                _id: FeedbackReport._id,
+                description: newDescription,
+                _id: FeedbackReportObject.Report._id,
             });
         });
     });
 
     // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report summary', () => {
-        const BugReport = {
-            description: faker.lorem.paragraph(),
-            date: new Date().toISOString(),
-            _id: faker.random.alphaNumeric(12),
-            townhallId: faker.random.alphaNumeric(12),
+        const BugReportObject = {
+            Report: {
+                description: faker.lorem.paragraph(),
+                date: new Date().toISOString(),
+                _id: faker.random.alphaNumeric(12),
+                townhallId: faker.random.alphaNumeric(12),
+                user: {
+                    _id: faker.random.alphaNumeric(12),
+                },
+            },
+            update: (form: API.BugReportForm) => API.updateBugReport(form),
+            delete: (form: API.BugReportForm) => API.deleteBugReport(form),
         };
 
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report summary', async () => {
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='bug' Report={BugReport} />,
+                    <ReportSummary ReportObject={BugReportObject} />,
                     container
                 );
             });
         });
 
         it('should change state of bug report summary', async () => {
-            const description = faker.lorem.paragraph();
+            const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='bug' Report={BugReport} />,
+                    <ReportSummary ReportObject={BugReportObject} />,
                     container
                 );
             });
@@ -144,16 +160,18 @@ describe('Update report summary', () => {
             const reportDescriptionNode = document.querySelector(
                 '#reportDescription'
             ) as HTMLInputElement;
-            expect(reportDescriptionNode.value).toBe(BugReport.description);
+            expect(reportDescriptionNode.value).toBe(
+                BugReportObject.Report.description
+            );
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: description,
+                        value: newDescription,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(description);
+            expect(reportDescriptionNode.value).toBe(newDescription);
         });
 
         it('should update bug report summary  and succeed', async () => {
@@ -167,11 +185,11 @@ describe('Update report summary', () => {
             const spy = jest
                 .spyOn(API, 'updateBugReport')
                 .mockResolvedValue(resolvedVal);
-            const description = faker.lorem.paragraph();
+            const newDescription = faker.lorem.paragraph();
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary Type='bug' Report={BugReport} />,
+                    <ReportSummary ReportObject={BugReportObject} />,
                     container
                 );
             });
@@ -179,19 +197,24 @@ describe('Update report summary', () => {
             const reportDescriptionNode = document.querySelector(
                 '#reportDescription'
             ) as HTMLButtonElement;
-            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: description,
+                        value: newDescription,
                     } as unknown) as EventTarget,
                 });
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith({ description, _id: BugReport._id });
+            expect(spy).toBeCalledWith({
+                description: newDescription,
+                _id: BugReportObject.Report._id,
+            });
         });
     });
 });

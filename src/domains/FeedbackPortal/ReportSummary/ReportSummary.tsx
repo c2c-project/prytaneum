@@ -1,33 +1,51 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-import { AxiosResponse } from 'axios';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
+import Button from '@material-ui/core/Button';
 
+import useEndpoint from 'hooks/useEndpoint';
+import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
 import FormBase from '../FormBase';
-import {
-    FeedbackReport,
-    BugReport,
-    updateBugReport,
-    FeedbackForm,
-    BugReportForm,
-    updateFeedbackReport,
-} from '../api';
+import { ReportObject as ReportObjectType } from '../api';
 
 interface SummaryProps {
-    Report: FeedbackReport | BugReport;
-    UpdateReportEndpoint: (
-        report: FeedbackForm | BugReportForm
-    ) => Promise<AxiosResponse<any>>;
+    ReportObject: ReportObjectType;
 }
 
-function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
+const useStyles = makeStyles((theme: Theme) => ({
+    DangerButton: {
+        color: theme.palette.getContrastText(red[500]),
+        backgroundColor: red[500],
+        '&:hover': {
+            backgroundColor: red[700],
+        },
+    },
+}));
+
+export default function ReportSummary({ ReportObject }: SummaryProps) {
+    // TODO: Check if empty array as second parameter is okay
+    const deleteApiRequest = React.useCallback(
+        () => ReportObject.delete(ReportObject.Report),
+        []
+    );
+
+    // TODO: call callback function from parent component
+    const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
+        onSuccess: () => console.log('Report deleted'),
+        onFailure: () => console.log('Report not deleted'),
+    });
+
+    const classes = useStyles();
     return (
         <Grid container spacing={5}>
             <Grid item xs={12}>
                 <Typography variant='h4' align='left'>
                     Date Submitted:
-                    {formatDate(new Date(Report.date))}
+                    {formatDate(new Date(ReportObject.Report.date))}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -39,42 +57,28 @@ function ReportSummary({ Report, UpdateReportEndpoint }: SummaryProps) {
             <Grid item xs={12}>
                 <FormBase
                     Report={{
-                        description: Report.description,
-                        _id: Report._id,
+                        description: ReportObject.Report.description,
+                        _id: ReportObject.Report._id,
                     }}
-                    SubmitEndpoint={UpdateReportEndpoint}
+                    SubmitEndpoint={ReportObject.update}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <LoadingButton
+                    loading={isLoading}
+                    component={
+                        <Button
+                            variant='contained'
+                            fullWidth
+                            className={classes.DangerButton}
+                            startIcon={<DeleteIcon />}
+                            onClick={() => sendDeleteRequest()}
+                        >
+                            Delete
+                        </Button>
+                    }
                 />
             </Grid>
         </Grid>
     );
-}
-
-interface FactoryProps {
-    Type: 'feedback' | 'bug';
-    Report: FeedbackReport | BugReport;
-}
-export default function ReportSummaryFactory({ Type, Report }: FactoryProps) {
-    switch (Type) {
-        case 'feedback':
-            return (
-                <ReportSummary
-                    Report={Report}
-                    UpdateReportEndpoint={(form) => updateFeedbackReport(form)}
-                />
-            );
-        case 'bug':
-            return (
-                <ReportSummary
-                    Report={Report}
-                    UpdateReportEndpoint={(form) => updateBugReport(form)}
-                />
-            );
-        default:
-            return (
-                <ReportSummary
-                    Report={Report}
-                    UpdateReportEndpoint={(form) => updateFeedbackReport(form)}
-                />
-            );
-    }
 }
