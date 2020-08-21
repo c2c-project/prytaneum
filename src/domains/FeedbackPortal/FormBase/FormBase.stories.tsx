@@ -20,6 +20,7 @@ export function FormBase() {
         <Container maxWidth='sm'>
             <Component
                 Report={dummyReport}
+                onSuccess={() => {}}
                 SubmitEndpoint={(form) => updateFeedbackReport(form)}
             />
         </Container>

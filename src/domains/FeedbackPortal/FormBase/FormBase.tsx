@@ -14,18 +14,27 @@ type ReportType = FeedbackForm | BugReportForm;
 interface FormProps {
     Report: ReportType;
     SubmitEndpoint: (form: ReportType) => Promise<AxiosResponse<unknown>>;
+    onSuccess: () => void;
 }
 
-//  TODO: CHECK WHY apiRequest is not working
-export default function FormBase({ Report, SubmitEndpoint }: FormProps) {
+export default function FormBase({
+    Report,
+    SubmitEndpoint,
+    onSuccess,
+}: FormProps) {
     const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<ReportType>(Report);
     const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
         reportState,
     ]);
-    // TODO: Make the onSuccess function be passed as a parameter
     const [sendRequest, isLoading] = useEndpoint(apiRequest, {
-        onSuccess: () => snack('Report successfully submitted', 'success'),
+        onSuccess: () => {
+            onSuccess();
+            snack('Report successfully submitted', 'success');
+        },
+        onFailure: () => {
+            snack('Something went wrong! Try again', 'error');
+        },
     });
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

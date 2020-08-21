@@ -30,9 +30,11 @@ describe('CreateReportRequest', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should render report form with create Feedback endpoint', async () => {
+        const onSuccess = jest.fn();
         ReactTestUtils.act(() => {
             render(
                 <FormBase
+                    onSuccess={onSuccess}
                     SubmitEndpoint={(form) =>
                         API.createFeedbackReport(form, new Date().toISOString())
                     }
@@ -45,10 +47,12 @@ describe('CreateReportRequest', () => {
     it('should change state of form', async () => {
         const description = faker.lorem.paragraph();
         const date = new Date().toISOString();
+        const onSuccess = jest.fn();
 
         ReactTestUtils.act(() => {
             render(
                 <FormBase
+                    onSuccess={onSuccess}
                     SubmitEndpoint={(form) =>
                         API.createFeedbackReport(form, date)
                     }
@@ -112,6 +116,8 @@ describe('CreateReportRequest', () => {
             .mockResolvedValue(resolvedVal);
         const description = faker.lorem.paragraph();
         const date = new Date().toISOString();
+        const onSuccess = jest.fn();
+        jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
@@ -119,6 +125,7 @@ describe('CreateReportRequest', () => {
                     SubmitEndpoint={(form) =>
                         API.createFeedbackReport(form, date)
                     }
+                    onSuccess={onSuccess}
                 />,
                 container
             );
@@ -140,9 +147,15 @@ describe('CreateReportRequest', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalledWith({ description }, date);
+        jest.runAllTimers();
+        await ReactTestUtils.act(async () => {
+            await Promise.allSettled(spy.mock.results);
+        });
+        expect(onSuccess).toBeCalled();
     });
 
     it('should submit and fail', async () => {
+        const onSuccess = jest.fn();
         const rejectedVal = { status: 500 };
         const spy = jest
             .spyOn(API, 'createFeedbackReport')
@@ -150,10 +163,12 @@ describe('CreateReportRequest', () => {
 
         const description = faker.lorem.paragraph();
         const date = new Date().toISOString();
+        jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
                 <FormBase
+                    onSuccess={onSuccess}
                     SubmitEndpoint={(form) =>
                         API.createFeedbackReport(form, date)
                     }
@@ -178,5 +193,11 @@ describe('CreateReportRequest', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalledWith({ description }, date);
+        jest.runAllTimers();
+
+        await ReactTestUtils.act(async () => {
+            await Promise.allSettled(spy.mock.results);
+        });
+        expect(onSuccess).not.toBeCalled();
     });
 });
