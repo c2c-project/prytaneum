@@ -13,6 +13,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import { getFeedbackReports, getBugReports, Report } from '../api';
+
 //  TODO: replace values with API function to call
 const ReportOptions = [
     {
@@ -44,6 +45,7 @@ export default function ReportHistory({}) {
     >([]);
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
+
     const [reports, setReports] = React.useState<Report[]>([]);
 
     const ApiRequests = {
@@ -93,7 +95,6 @@ export default function ReportHistory({}) {
         },
     });
 
-    // TODO: use UseEffect instead?? CAN'T CALL A HOOK INSIDE OF A CALLBACK
     const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (getReportEndpoints.includes('Feedback')) {
@@ -105,87 +106,95 @@ export default function ReportHistory({}) {
     };
 
     return (
-        <form onSubmit={getReports}>
+        <div>
             <Grid container spacing={5}>
-                <Grid container item spacing={5} direction='row'>
-                    <Grid item>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel>Report Type</InputLabel>
-                            <Select
-                                required
-                                multiple
-                                value={getReportEndpoints}
-                                onChange={handleReportChange}
-                                input={<Input />}
-                            >
-                                {ReportOptions.map((ReportOption) => (
-                                    <MenuItem
-                                        key={ReportOption.name}
-                                        value={ReportOption.name}
+                <Grid item xs={12}>
+                    <form onSubmit={getReports}>
+                        <Grid container spacing={5}>
+                            <Grid item>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel>Report Type</InputLabel>
+                                    <Select
+                                        required
+                                        multiple
+                                        value={getReportEndpoints}
+                                        onChange={handleReportChange}
+                                        input={<Input />}
                                     >
-                                        {ReportOption.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel>Sorting Order</InputLabel>
-                            <Select
-                                required
-                                value={sortingOrder}
-                                onChange={handleSortingChange}
-                                input={<Input />}
-                                IconComponent={() => <SortIcon />}
-                            >
-                                {sortingOptions.map((sortingOption) => (
-                                    <MenuItem
-                                        key={sortingOption.name}
-                                        value={sortingOption.value}
+                                        {ReportOptions.map((ReportOption) => (
+                                            <MenuItem
+                                                key={ReportOption.name}
+                                                value={ReportOption.name}
+                                            >
+                                                {ReportOption.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel>Sorting Order</InputLabel>
+                                    <Select
+                                        required
+                                        value={sortingOrder}
+                                        onChange={handleSortingChange}
+                                        input={<Input />}
+                                        IconComponent={() => <SortIcon />}
                                     >
-                                        {sortingOption.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <LoadingButton
-                            loading={isLoadingFeedback && isLoadingBug}
-                            component={
-                                <Button fullWidth type='submit' color='primary'>
-                                    <SearchIcon />
-                                </Button>
-                            }
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item>
-                    <div>
-                        <h1>Report Value Selected:</h1>
-                        {getReportEndpoints.map((getReportEndpoint) => (
-                            <h3>{getReportEndpoint}</h3>
-                        ))}
-                    </div>
-                    <div>
-                        <h1>Sorting Value Selected:</h1>
-                        <h2>{sortingOrder}</h2>
-                    </div>
-                    <div>
-                        <h1>Page Selected:</h1>
-                        <h1>{page}</h1>
-                    </div>
-                </Grid>
-                <Grid item>
-                    <Pagination
-                        color='primary'
-                        count={10}
-                        page={page}
-                        onChange={handlePageChange}
-                    />
+                                        {sortingOptions.map((sortingOption) => (
+                                            <MenuItem
+                                                key={sortingOption.name}
+                                                value={sortingOption.value}
+                                            >
+                                                {sortingOption.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item>
+                                <LoadingButton
+                                    loading={isLoadingFeedback && isLoadingBug}
+                                    component={
+                                        <Button
+                                            fullWidth
+                                            type='submit'
+                                            color='primary'
+                                        >
+                                            <SearchIcon />
+                                        </Button>
+                                    }
+                                />
+                            </Grid>
+                        </Grid>
+                    </form>
                 </Grid>
             </Grid>
-        </form>
+            <Grid justify='center' item xs={12}>
+                <div>
+                    <h1>Report Value Selected:</h1>
+                    {getReportEndpoints.map((getReportEndpoint) => (
+                        <h3>{getReportEndpoint}</h3>
+                    ))}
+                </div>
+                <div>
+                    <h1>Sorting Value Selected:</h1>
+                    <h2>{sortingOrder}</h2>
+                </div>
+                <div>
+                    <h1>Page Selected:</h1>
+                    <h1>{page}</h1>
+                </div>
+            </Grid>
+            <Grid item container justify='center' xs={12}>
+                <Pagination
+                    color='primary'
+                    count={10}
+                    page={page}
+                    onChange={handlePageChange}
+                />
+            </Grid>
+        </div>
     );
 }

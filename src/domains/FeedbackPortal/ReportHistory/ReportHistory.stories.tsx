@@ -1,10 +1,9 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import faker from 'faker';
 import FixtureContext, { makeSuccessFixture } from 'mock/Fixtures';
 
 import Component from '.';
-import { FeedbackReport, BugReport } from '../api';
+
 export default { title: 'Domains/ReportHistory' };
 
 const recent = faker.date.recent();
@@ -19,7 +18,7 @@ const makeBaseReport = () => ({
     },
 });
 
-const makeFeedbackReports = (amount: number): FeedbackReport[] => {
+const makeFeedbackReports = (amount: number) => {
     const feedbackReports = [];
     for (let i = 0; i < amount; i += 1) {
         feedbackReports.push(makeBaseReport());
@@ -27,7 +26,7 @@ const makeFeedbackReports = (amount: number): FeedbackReport[] => {
     return feedbackReports;
 };
 
-const makeBugReports = (amount: number): BugReport[] => {
+const makeBugReports = (amount: number) => {
     const bugReports = [];
     for (let i = 0; i < amount; i += 1) {
         const tempReport = makeBaseReport();
