@@ -10,7 +10,7 @@ import MessageItemText from '../../../components/Message/MessageItemText';
 import MessageItemAuthor from '../../../components/Message/MessageItemAuthor';
 import MessageItemTimestamp from '../../../components/Message/MessageItemTimestamp';
 import MessageOwnerActions from '../../../components/Message/MessageOwnerActions';
-import ScrollTo from '../../../components/ScrollTo';
+import ScrollTo from '../../../components/ScrollTo/ScrollTo';
 import Dialog from '../../../components/Dialog';
 import UserContext from '../../../contexts/User';
 

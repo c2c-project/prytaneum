@@ -4,9 +4,9 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import theme from 'theme';
-import TextField from './TextField';
+import ScrollTo from './ScrollTo';
 
-describe('TextField', function () {
+describe('ScrollTo', function () {
     let container: HTMLDivElement | null = null;
     const OLD_ENV = process.env;
 
@@ -32,36 +32,17 @@ describe('TextField', function () {
         process.env = OLD_ENV; // restore old env
     });
 
-    it('should render AND test if the function is called when the value changes', () => {
-        const onClick = jest.fn();
+    it('should render', () => {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
-                    <TextField 
-                        id='testing'
-                        required
-                        label='Test Label'
-                        value='Test value in the box'
-                        onChange={onClick}
-                    />
+                    <ScrollTo active={true} direction='top'>
+                        <h1 id='testing'>Test</h1>
+                    </ScrollTo>
                 </ThemeProvider>,
                 container
             );
         });
-
-        // find the input field
-        const valueNode = document.querySelector('#testing') as HTMLElement;
-        const simVal = { v:'test'};
-
-        // enter in our simVal into the form
-        ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(valueNode, {
-                target : { value : simVal.v }
-            } as any);
-        });
-
-        expect(onClick).toBeCalledTimes(1);
         expect(document.getElementById('testing')).toBeTruthy();
     });
-
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import Popover from '@material-ui/core/Popover';
 
-import ScrollTo from 'components/ScrollTo';
+import ScrollTo from 'components/ScrollTo/ScrollTo';
 import MessageList from 'components/MessageList';
 import MessageItemAuthor from 'components/MessageItemAuthor';
 import MessageItemText from 'components/MessageItemText';
