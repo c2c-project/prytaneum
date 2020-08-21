@@ -3,6 +3,7 @@ import { rest } from 'msw';
 export default [
     rest.post('/api/users/login', (req, res, ctx) => {
         // we do nothing with the password for now
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { username, password } = req.body as {
             username: string;
             password: string;
