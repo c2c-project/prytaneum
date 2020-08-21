@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const { NODE_ENV } = process.env;
+
 interface Props {
     active: boolean;
     children: JSX.Element | JSX.Element[];
@@ -20,6 +22,10 @@ export default function ScrollTo({ active, children, direction }: Props) {
     const firstRender = React.useRef(true);
     const scrollTo = () => {
         const ref = direction === 'top' ? topRef : bottomRef;
+        // this is needed for testing as window is null and there is no scrollIntoView fcn
+        if (NODE_ENV === 'test') {
+            window.HTMLElement.prototype.scrollIntoView = function() {};
+        }
         if (active && ref.current) {
             ref.current.scrollIntoView({
                 behavior: firstRender.current ? 'smooth' : 'auto',
