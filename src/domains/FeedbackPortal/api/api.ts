@@ -1,5 +1,6 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import { AxiosResponse } from 'axios';
 
 export interface ReportForm {
     _id?: string;
@@ -16,13 +17,22 @@ export interface BugReportForm extends ReportForm {
     // Add more fields in the future
 }
 
-export type Report = Required<ReportForm> & {
+type Report = Required<ReportForm> & {
     date: string;
     user: { _id: string };
 };
 export type FeedbackReport = Report;
 export type BugReport = Report & { townhallId: string };
 
+export type ReportObject = {
+    Report: FeedbackReport | BugReport;
+    update: (
+        report: FeedbackForm | BugReportForm
+    ) => Promise<AxiosResponse<any>>;
+    delete: (
+        report: FeedbackForm | BugReportForm
+    ) => Promise<AxiosResponse<any>>;
+};
 // Feedback reports API functions
 export async function createFeedbackReport(form: FeedbackForm, date: string) {
     const { description } = form;
