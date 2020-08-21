@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker';
 
-import Component, { Datum, Section } from '.';
+import Component, { Section, Datum } from '.';
 
 export default {
     title: 'Components/SectionList',
@@ -34,7 +34,7 @@ const makeSections = (num: number): Section[] => {
     return data;
 };
 
-export function SectionList({ sections }: { sections: Section[]}) {
+export function SectionList({ sections }: { sections: Section[] }) {
     return (
         <Container
             maxWidth='md'

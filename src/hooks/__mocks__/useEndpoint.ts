@@ -1,7 +1,7 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import FixtureContext, { Fixture } from 'mock/Fixtures';
+import FixtureContext from 'mock/Fixtures';
 import useErrorHandler from '../useErrorHandler';
 
 interface EndpointOptions<T> {
