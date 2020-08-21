@@ -11,16 +11,13 @@ import { AxiosResponse } from 'axios';
 import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
-import {
-    createTownhall,
-    updateTownhall,
-} from '../api';
+import { createTownhall, updateTownhall } from '../api';
 import { TownhallForm } from '../types';
 
 interface FormProps {
     onSubmit: () => void;
     initialState?: TownhallForm;
-    endpoint: (form: TownhallForm) => Promise<AxiosResponse<any>>;
+    endpoint: (form: TownhallForm) => Promise<AxiosResponse<unknown>>;
 }
 
 interface DefaultFormProps {

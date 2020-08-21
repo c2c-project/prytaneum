@@ -56,3 +56,7 @@ export default function TownhallProvider({ value, children }: Props) {
         </TownhallContext.Provider>
     );
 }
+
+TownhallProvider.defaultProps = {
+    value: {},
+};
