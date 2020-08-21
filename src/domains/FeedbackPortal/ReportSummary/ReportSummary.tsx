@@ -81,6 +81,7 @@ export default function ReportSummary({
                     loading={isLoading}
                     component={
                         <Button
+                            id='deleteButton'
                             variant='contained'
                             fullWidth
                             className={classes.DangerButton}

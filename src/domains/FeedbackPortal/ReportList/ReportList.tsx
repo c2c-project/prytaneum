@@ -31,19 +31,12 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// TODO: Make this component receive the update and delete functions to call as callback functions
 export default function ReportList({ ReportObjects }: Props) {
     const classes = useStyles();
-    const [reportObjectSelected, setReportObjectSelected] = React.useState<
-        ReportObject
-    >({});
-    const [open, setOpen] = React.useState(false);
-
-    const selectReport = (reportObject: ReportObject) => {
-        setReportObjectSelected(reportObject);
-        setOpen(true);
-    };
-
+    const [
+        reportObjectSelected,
+        setReportObjectSelected,
+    ] = React.useState<ReportObject | null>(null);
     return (
         <div>
             <List className={classes.root} subheader={<li />}>
@@ -61,7 +54,7 @@ export default function ReportList({ ReportObjects }: Props) {
                         <ListItem
                             button
                             onClick={() => {
-                                selectReport(reportObject);
+                                setReportObjectSelected(reportObject);
                             }}
                         >
                             <ListItemText
@@ -74,10 +67,22 @@ export default function ReportList({ ReportObjects }: Props) {
                     </li>
                 ))}
             </List>
-            <Dialog open={open} onClose={() => setOpen(false)}>
-                <Container maxWidth='sm' style={{ padding: 20 }}>
-                    <ReportSummary ReportObject={reportObjectSelected} />
-                </Container>
+            <Dialog
+                open={Boolean(reportObjectSelected)}
+                onClose={() => setReportObjectSelected(null)}
+            >
+                {reportObjectSelected ? (
+                    <Container maxWidth='sm' style={{ padding: 20 }}>
+                        <ReportSummary
+                            ReportObject={reportObjectSelected}
+                            callBack={() => {
+                                setReportObjectSelected(null);
+                            }}
+                        />
+                    </Container>
+                ) : (
+                    <></>
+                )}
             </Dialog>
         </div>
     );

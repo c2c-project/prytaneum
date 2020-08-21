@@ -186,6 +186,80 @@ describe('Update report summary', () => {
             });
             expect(callBack).not.toBeCalled();
         });
+
+        it('Should delete a feedback report summary and succeed', async () => {
+            const callBack = jest.fn();
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'deleteFeedbackReport')
+                .mockResolvedValue(resolvedVal);
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+            const deleteButton = document.querySelector(
+                '#deleteButton'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                deleteButton.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(FeedbackReportObject.Report);
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).toBeCalled();
+        });
+
+        it('Should attempt to delete a feedback report summary and fail', async () => {
+            const callBack = jest.fn();
+            const rejectedVal = { status: 500 };
+            const spy = jest
+                .spyOn(API, 'deleteFeedbackReport')
+                .mockRejectedValue(rejectedVal);
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={FeedbackReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+            const deleteButton = document.querySelector(
+                '#deleteButton'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                deleteButton.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(FeedbackReportObject.Report);
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).not.toBeCalled();
+        });
     });
     // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report summary', () => {
