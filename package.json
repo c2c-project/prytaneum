@@ -82,10 +82,7 @@
         "@typescript-eslint/eslint-plugin": "^3.2.0",
         "@typescript-eslint/parser": "^3.2.0",
         "babel-loader": "^8.1.0",
-<<<<<<< HEAD
         "better-docs": "^2.3.0",
-=======
->>>>>>> bee1f7a2e45764293d7ab13c32b53cc7a59c74fb
         "babel-plugin-typescript-to-proptypes": "^1.4.0",
         "eslint": "^6.5.1",
         "eslint-config-airbnb-typescript": "^8.0.2",
