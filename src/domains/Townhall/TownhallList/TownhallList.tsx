@@ -4,9 +4,11 @@ import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import SectionList, { Section, Datum } from 'components/SectionList';
 import { formatDate } from 'utils/format';
-import { getTownhallList } from '../api';
 
-function formatSections(list: Prytaneum.Townhall[]): Section[] {
+import { getTownhallList } from '../api';
+import { Townhall } from '../types';
+
+function formatSections(list: Townhall[]): Section[] {
     interface Intermediate {
         [index: string]: Datum[];
     }
@@ -35,7 +37,9 @@ function formatSections(list: Prytaneum.Townhall[]): Section[] {
 }
 
 export default function TownhallList() {
-    const [list, setList] = React.useState<Prytaneum.Townhall[] | null>(null);
+    const [list, setList] = React.useState<Townhall[] | null>(null);
+    // const isMounted = React.useRef(true);
+    // const renderCount = React.useRef(0);
     const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
         onSuccess: (results) => {
             setList(results.data.list);

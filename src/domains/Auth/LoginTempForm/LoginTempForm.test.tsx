@@ -59,7 +59,7 @@ describe('LoginTempForm', () => {
     it('should submit and succeed', async () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
-        const resolvedVal = { status: 200 } as AxiosResponse<any>;
+        const resolvedVal = { status: 200 } as AxiosResponse<unknown>;
         const spy = jest.spyOn(API, 'loginTemp').mockResolvedValue(resolvedVal);
         jest.useFakeTimers();
 
@@ -79,8 +79,8 @@ describe('LoginTempForm', () => {
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: 'username' },
-            } as any);
+                target: ({ value: 'username' } as unknown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
@@ -118,8 +118,8 @@ describe('LoginTempForm', () => {
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: 'username' },
-            } as any);
+                target: ({ value: 'username' } as unknown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

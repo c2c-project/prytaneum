@@ -6,7 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import useEndpoint from 'hooks/useEndpoint';
 import useSnack from 'hooks/useSnack';
 import LoadingButton from 'components/LoadingButton';
-import { createQuestion, TownhallQuestionForm as FormType } from '../api';
+import { createQuestion } from '../api';
+import { TownhallQuestionForm as FormType } from '../types';
 
 interface Props {
     form?: FormType;

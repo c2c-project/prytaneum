@@ -28,7 +28,7 @@ describe('ForgotPassConsume', () => {
     });
 
     // eslint-disable-next-line jest/expect-expect
-    it('should render', async () => {
+    it('should render', () => {
         ReactTestUtils.act(() => {
             render(
                 <PasswordResetForm onSuccess={jest.fn()} token='' />,
@@ -58,11 +58,11 @@ describe('ForgotPassConsume', () => {
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(passNode, {
-                target: { value: '123' },
-            } as any);
+                target: ({ value: '123' } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: { value: '123' },
-            } as any);
+                target: ({ value: '123' } as unnown) as EventTarget,
+            });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
@@ -38,8 +38,8 @@ describe('LoggedIn', function () {
 
     it('should render, fail, redirect to /logout', () => {
         const jwt = false;
-        var pathToCheck = '/';
-        let _location: any;
+        const pathToCheck = '/';
+        let _location = { pathname: '' };
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
@@ -64,11 +64,10 @@ describe('LoggedIn', function () {
         expect(_location.pathname).toBe('/logout');
     });
 
-
     it('should render, succeed, should render to <>children</>', () => {
         const jwt = true;
-        var pathToCheck = '/';
-        let _location: any;
+        const pathToCheck = '/';
+        let _location = { pathname: '' };
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
