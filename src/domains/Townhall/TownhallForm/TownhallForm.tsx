@@ -9,7 +9,7 @@ import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosResponse } from 'axios';
 
 import TextField from 'components/TextField/TextField';
-import DateTimePicker from 'components/DateTimePicker';
+import DateTimePicker from 'components/DateTimePicker/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import { createTownhall, updateTownhall } from '../api';
 import { TownhallForm } from '../types';
