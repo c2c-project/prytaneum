@@ -19,7 +19,6 @@ import Auth from './Auth';
 // import Verification from './Verification';
 // import RequestPasswordReset from './RequestPasswordReset';
 // import UpdatePassword from './UpdatePassword';
-// import Public from './Public';
 
 const DefaultPage = () => <Redirect to='/auth/login' />;
 const AppHomePage = () => <Redirect to='/app/townhalls' />;

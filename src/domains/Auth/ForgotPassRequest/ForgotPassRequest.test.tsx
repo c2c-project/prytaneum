@@ -54,13 +54,13 @@ describe('ForgotPassRequest', () => {
                 container
             );
         });
-        const button = document.querySelector('[type="submit"]');
+        const email = document.querySelector('#email') as HTMLElement;
+        const button = document.querySelector('[type="submit"]') as HTMLElement;
         ReactTestUtils.act(() => {
-            if (button) {
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            ReactTestUtils.Simulate.change(email, {
+                target: ({ value: 'not null' } as unknown) as EventTarget,
+            });
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalled();
     });

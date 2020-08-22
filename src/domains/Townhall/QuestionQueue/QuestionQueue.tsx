@@ -35,19 +35,17 @@ interface Question {
     timestamp: string;
 }
 
-type PayloadBase = { _id: string };
-
 interface NewQuestionAction {
     type: 'new-question';
-    payload: PayloadBase & Question;
+    payload: Question;
 }
 interface UpdateQuestionAction {
     type: 'update-question';
-    payload: PayloadBase & Pick<Question, 'question'>;
+    payload: Pick<Question, 'question' | '_id'>;
 }
 interface DeleteQuestionAction {
     type: 'hide-question';
-    payload: PayloadBase;
+    payload: Pick<Question, '_id'>;
 }
 
 type Actions = NewQuestionAction | UpdateQuestionAction | DeleteQuestionAction;

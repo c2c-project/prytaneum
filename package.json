@@ -2,7 +2,6 @@
     "name": "prytanea-client",
     "version": "0.1.0",
     "private": true,
-    "proxy": "http://localhost:3001",
     "dependencies": {
         "@date-io/core": "^1.3.6",
         "@date-io/date-fns": "1.3.13",
@@ -33,22 +32,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-        "storybook": "NODE_PATH=src start-storybook --port 3000",
-        "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
-        "lint": "eslint src/**/*.ts src/**/*.tsx",
-        "docs": "jsdoc -c jsdoc.conf.json",
-        "storybook-docs": "yarn storybook --docs"
-    },
-    "alias": {
-        "assets": "./src/assets",
-        "components": "./src/components",
-        "contexts": "./src/contexts",
-        "domains": "./src/domains",
-        "hooks": "./src/hooks",
-        "layout": "./src/layout",
-        "pages": "./src/pages",
-        "theme": "./src/theme",
-        "utils": "./src/utils"
+        "storybook": "start-storybook --port 3000 -s public",
+        "lint": "eslint src/**/*.ts src/**/*.tsx"
     },
     "browserslist": {
         "production": [
@@ -63,14 +48,11 @@
         ]
     },
     "devDependencies": {
-        "@storybook/addon-a11y": "^6.0.5",
-        "@storybook/addon-docs": "^6.0.5",
-        "@storybook/addon-knobs": "^6.0.5",
-        "@storybook/addon-viewport": "^6.0.5",
-        "@storybook/addon-essentials": "^6.0.5",
-        "@storybook/node-logger": "^6.0.5",
+        "@storybook/addon-a11y": "^6.0.16",
+        "@storybook/addon-essentials": "^6.0.16",
+        "@storybook/node-logger": "^6.0.16",
         "@storybook/preset-create-react-app": "^3.1.4",
-        "@storybook/react": "^6.0.5",
+        "@storybook/react": "^6.0.16",
         "@testing-library/dom": "^7.20.2",
         "@testing-library/jest-dom": "^5.10.0",
         "@testing-library/react": "^10.2.1",
@@ -98,9 +80,7 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
-        "jsdoc": "^3.6.5",
-        "jsdoc-mermaid": "^1.0.0",
-        "react-is": "^16.13.1",
+        "msw": "^0.20.5",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     },

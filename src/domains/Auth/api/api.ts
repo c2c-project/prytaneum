@@ -1,5 +1,6 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import * as AuthTypes from '../types';
 
 /** Function to POST to /api/users/login if username is valid
  *  @category Domains/Auth
@@ -35,24 +36,9 @@ export async function loginTemp(username: string) {
     });
 }
 
-// export async function logout() {
-
-// }
-
-interface ForgotPassForm {
-    password?: string;
-    confirmPassword?: string;
-}
-
-/** Function to reset the logged in user's password
- *  @category Domains/Auth
- *  @constructor forgotPassReset
- *  @param {string | unknown} token current log in token for the user
- *  @param {ForgotPassForm} form the form to submit the reset through
-*/
 export async function forgotPassReset(
     token: string | unknown,
-    form: ForgotPassForm
+    form: AuthTypes.ForgotPassForm
 ) {
     const { password, confirmPassword } = form;
 
@@ -74,16 +60,7 @@ export async function forgotPassReset(
     });
 }
 
-interface ForgotPassRequestForm {
-    email: string;
-}
-
-/** Function to request a password reset
- *  @category Domains/Auth
- *  @constructor forgotPassRequest
- *  @param {ForgotPassForm} form the form to submit the reset through
-*/
-export async function forgotPassRequest(form: ForgotPassRequestForm) {
+export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
     }
@@ -94,21 +71,9 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
     return axios.post('/api/users/request-password-reset', { form });
 }
 
-interface RegisterForm {
-    username?: string;
-    password?: string;
-    email?: string;
-    confirmPassword?: string;
-}
-
-/** Function to register a new user, pulls the data from the form, checks if its valid, then returns either a POST, or an error if something is invalid
- *  @category Domains/Auth
- *  @constructor register
- *  @param {RegisterForm} form the form to submit the new user registration through
-*/
-export async function register(form: RegisterForm) {
+export async function register(form: AuthTypes.RegisterForm) {
     const { username, password, email, confirmPassword } = form;
-    
+
     if (!username || !password || !email || !confirmPassword) {
         throw errors.fieldError();
     }

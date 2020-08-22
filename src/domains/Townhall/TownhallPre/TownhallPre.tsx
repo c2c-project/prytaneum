@@ -21,7 +21,9 @@ import { useParams } from 'react-router-dom';
 import useEndpoint from 'hooks/useEndpoint';
 import { formatDate } from 'utils/format';
 import Loader from 'components/Loader';
+
 import { getTownhall } from '../api';
+import { Townhall } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,13 +53,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TownhallPre() {
-    const [townhall, setTownhall] = React.useState<Prytaneum.Townhall | null>(
+    const [townhall, setTownhall] = React.useState<Townhall | null>(
         null
     );
     const classes = useStyles();
     const { townhallId } = useParams<{ townhallId: string }>();
     const [sendRequest, loading] = useEndpoint<{
-        townhall: Prytaneum.Townhall;
+        townhall: Townhall;
     }>(() => getTownhall(townhallId), {
         onSuccess: (response) => {
             const { data } = response;
