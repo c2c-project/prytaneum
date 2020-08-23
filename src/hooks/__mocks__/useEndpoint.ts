@@ -1,7 +1,7 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import FixtureContext, { Fixture } from 'mock/Fixtures';
+import FixtureContext from 'mock/Fixtures';
 import useErrorHandler from '../useErrorHandler';
 
 interface EndpointOptions<T> {
@@ -23,7 +23,7 @@ export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
     options: EndpointOptions<T> = {}
 ): EndpointUtils {
-    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext);
+    const { meta, data } = React.useContext(FixtureContext);
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);

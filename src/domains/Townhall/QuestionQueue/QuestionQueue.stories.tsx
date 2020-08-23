@@ -7,7 +7,7 @@ import Component from '.';
 
 export default { title: 'Domains/Townhall' };
 
-const emitter = new EventEmitter();
+const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 function sendMessage() {
     emitter.emit('townhall-question-state', {
         type: 'new-question',
