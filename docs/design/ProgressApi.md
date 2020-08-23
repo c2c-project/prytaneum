@@ -1,4 +1,0 @@
-# ProgressTimeline
-```
-  <ProgressTimeline checkpoints={} current={} />
-```

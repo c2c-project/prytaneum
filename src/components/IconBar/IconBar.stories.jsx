@@ -2,40 +2,36 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TownhallIcon from '@material-ui/icons/AccountBalance';
-import { withKnobs, select } from '@storybook/addon-knobs';
+
 
 import { DeviceContext } from 'contexts/Device';
 
-import GridMenu from './IconBar';
+import Component from './IconBar';
 
-export default { title: 'Icon Bar', decorators: [withKnobs] };
+export default { title: 'Icon Bar' };
 
 export function CenterIconBar() {
     return (
-        <DeviceContext.Provider
-            value={select('DeviceType', ['desktop', 'mobile'], 'desktop')}
-        >
-            <GridMenu alignBar={'center'}>
-                <div>
-                    <TownhallIcon />
-                </div>
-                <div>
-                    <SettingsIcon />
-                </div>
-                <div>
-                    <SettingsIcon />
-                </div>
-                <div>
-                    <SettingsIcon />
-                </div>
-            </GridMenu>
-        </DeviceContext.Provider>
+        <Component justify={'center'}>
+            <div>
+                <TownhallIcon />
+            </div>
+            <div>
+                <SettingsIcon />
+            </div>
+            <div>
+                <SettingsIcon />
+            </div>
+            <div>
+                <SettingsIcon />
+            </div>
+        </Component>
     );
 }
 
 export function TopIconBar() {
     return (
-        <GridMenu alignBar={'flex-start'}>
+        <Component justify={'flex-start'}>
             <div>
                 <TownhallIcon />
             </div>
@@ -48,13 +44,13 @@ export function TopIconBar() {
             <div>
                 <SettingsIcon />
             </div>
-        </GridMenu>
+        </Component>
     );
 }
 
 export function IconBarFooter() {
     return (
-        <GridMenu alignBar={'flex-end'}>
+        <Component justify={'flex-end'}>
             <div>
                 <TownhallIcon />
             </div>
@@ -67,6 +63,6 @@ export function IconBarFooter() {
             <div>
                 <SettingsIcon />
             </div>
-        </GridMenu>
+        </Component>
     );
 }

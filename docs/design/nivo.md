@@ -1,38 +1,49 @@
-# Nivo Components
-## Pie 
-## sample data
+# Nivo Pie
+Will accept the following prop which will contain an array of graph data as well as the initial height of the container around the component
+
+
+Imagined Example Usage: 
+```
+        <Container>
+            <NivoPie townhall={townhall} />
+        </Container>
 ```
 
-  [
-  {
-    "id": "scala",
-    "label": "scala",
-    "value": 251,
-    "color": "hsl(203, 70%, 50%)"
-  },
-  {
-    "id": "make",
-    "label": "make",
-    "value": 353,
-    "color": "hsl(21, 70%, 50%)"
-  },
-  {
-    "id": "php",
-    "label": "php",
-    "value": 104,
-    "color": "hsl(185, 70%, 50%)"
-  },
-  {
-    "id": "hack",
-    "label": "hack",
-    "value": 13,
-    "color": "hsl(124, 70%, 50%)"
-  },
-  {
-    "id": "elixir",
-    "label": "elixir",
-    "value": 295,
-    "color": "hsl(50, 70%, 50%)"
-  }
-]
+sample data
+```
+const townhall = {
+    graphHeight: 500,
+    graphData: [
+        {
+            id: 'php',
+            label: 'php',
+            value: 344,
+            color: 'hsl(312, 70%, 50%)',
+        },
+        {
+            id: 'go',
+            label: 'go',
+            value: 262,
+            color: 'hsl(244, 70%, 50%)',
+        },
+        {
+            id: 'javascript',
+            label: 'javascript',
+            value: 411,
+            color: 'hsl(320, 70%, 50%)',
+        },
+        {
+            id: 'ruby',
+            label: 'ruby',
+            value: 191,
+            color: 'hsl(305, 70%, 50%)',
+        },
+        {
+            id: 'hack',
+            label: 'hack',
+            value: 234,
+            color: 'hsl(230, 70%, 50%)',
+        },
+    ],
+};
 ```

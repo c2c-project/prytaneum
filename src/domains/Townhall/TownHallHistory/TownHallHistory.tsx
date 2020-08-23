@@ -21,9 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface Props {
-    townhall: Townhall;
-}
+
 
 function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
     return <ListItem button component='a' {...props} />;
@@ -36,7 +34,7 @@ export default function SimpleList(props: Props) {
     return (
         <div className={classes.root}>
             <List component='nav'>
-                {townhall.map((person, index) => {
+                {townhall.map((person) => {
                     return (
                         <div>
                             <ListItem button>
@@ -44,7 +42,7 @@ export default function SimpleList(props: Props) {
                                     <ListItemAvatar>
                                         <Avatar
                                             src={person.link}
-                                            alt='Member of Congress Picture'
+                                            
                                         />
                                     </ListItemAvatar>
                                 </ListItemIcon>

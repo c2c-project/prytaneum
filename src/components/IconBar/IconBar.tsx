@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     children: JSX.Element | JSX.Element[];
-    alignBar: string;
+    justify: string;
 }
 
-export default function IconBar({ children, alignBar }: Props) {
+export default function IconBar({ children, justify }: Props) {
     const classes = useStyles();
     const value = React.useContext(DeviceContext);
 
@@ -46,7 +46,7 @@ export default function IconBar({ children, alignBar }: Props) {
             <div
                 className={classes.container}
                 style={{
-                    justifyContent: alignBar,
+                    justifyContent: justify,
                 }}
             >
                 <div className={classes.footer}>

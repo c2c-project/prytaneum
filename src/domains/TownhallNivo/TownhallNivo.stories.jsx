@@ -39,12 +39,11 @@ const townhall = {
             color: 'hsl(230, 70%, 50%)',
         },
     ],
-    date: new Date(),
 };
 
 export function TownhallNivo() {
     return (
-        <Container maxWidth='sm'>
+        <Container>
             <Component townhall={townhall} />
         </Container>
     );
