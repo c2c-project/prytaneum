@@ -16,6 +16,12 @@ import { ReportObject } from '../types';
 
 interface Props {
     ReportObjects: ReportObject[];
+    onUpdate: (
+        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
+    ) => void;
+    onDelete: (
+        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
+    ) => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -31,7 +37,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function ReportList({ ReportObjects }: Props) {
+export default function ReportList({
+    ReportObjects,
+    onUpdate,
+    onDelete,
+}: Props) {
     const classes = useStyles();
     const [
         reportObjectSelected,
@@ -75,7 +85,9 @@ export default function ReportList({ ReportObjects }: Props) {
                 {reportObjectSelected ? (
                     <Container maxWidth='sm' style={{ padding: 20 }}>
                         <ReportSummary
-                            ReportObject={reportObjectSelected}
+                            reportObject={reportObjectSelected}
+                            onUpdate={onUpdate}
+                            onDelete={onDelete}
                             callBack={() => {
                                 setReportObjectSelected(null);
                             }}

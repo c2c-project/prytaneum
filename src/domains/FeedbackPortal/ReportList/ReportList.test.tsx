@@ -28,7 +28,6 @@ const ReportObject = {
 
 describe('CreateReportList', () => {
     let container: HTMLDivElement | null = null;
-
     beforeEach(() => {
         container = document.createElement('div');
         document.body.appendChild(container);
@@ -45,16 +44,34 @@ describe('CreateReportList', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should render report list', async () => {
+        const onUpdate = jest.fn();
+        const onDelete = jest.fn();
         ReactTestUtils.act(() => {
-            render(<ReportList ReportObjects={[ReportObject]} />, container);
+            render(
+                <ReportList
+                    ReportObjects={[ReportObject]}
+                    onUpdate={onUpdate}
+                    onDelete={onDelete}
+                />,
+                container
+            );
         });
     });
 
     it('should render and open dialog', async () => {
         const newDescription = faker.lorem.paragraph();
+        const onUpdate = jest.fn();
+        const onDelete = jest.fn();
 
         ReactTestUtils.act(() => {
-            render(<ReportList ReportObjects={[ReportObject]} />, container);
+            render(
+                <ReportList
+                    ReportObjects={[ReportObject]}
+                    onUpdate={onUpdate}
+                    onDelete={onDelete}
+                />,
+                container
+            );
         });
 
         // Get form nodes
