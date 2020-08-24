@@ -42,7 +42,7 @@ export default function SimpleList(props: Props) {
                                     <ListItemAvatar>
                                         <Avatar
                                             src={person.link}
-                                            
+                                            alt='Member of Congress Picture'
                                         />
                                     </ListItemAvatar>
                                 </ListItemIcon>
