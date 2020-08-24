@@ -41,7 +41,7 @@ export default function ReportList({ ReportObjects }: Props) {
         <div>
             <List className={classes.root} subheader={<li />}>
                 {ReportObjects.map((reportObject) => (
-                    <li key={reportObject.Report._id}>
+                    <div key={reportObject.Report._id}>
                         <Divider />
                         <ListSubheader
                             className={classes.FontSize}
@@ -52,6 +52,7 @@ export default function ReportList({ ReportObjects }: Props) {
                             )}`}
                         </ListSubheader>
                         <ListItem
+                            id={reportObject.Report._id}
                             button
                             onClick={() => {
                                 setReportObjectSelected(reportObject);
@@ -64,7 +65,7 @@ export default function ReportList({ ReportObjects }: Props) {
                                 )} ...`}
                             />
                         </ListItem>
-                    </li>
+                    </div>
                 ))}
             </List>
             <Dialog
