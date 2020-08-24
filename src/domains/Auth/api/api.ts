@@ -1,5 +1,6 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import * as AuthTypes from '../types';
 
 export async function login(username?: string, password?: string) {
     if (!username || !password) {
@@ -24,18 +25,9 @@ export async function loginTemp(username: string) {
     });
 }
 
-// export async function logout() {
-
-// }
-
-interface ForgotPassForm {
-    password?: string;
-    confirmPassword?: string;
-}
-
 export async function forgotPassReset(
     token: string | unknown,
-    form: ForgotPassForm
+    form: AuthTypes.ForgotPassForm
 ) {
     const { password, confirmPassword } = form;
 
@@ -57,11 +49,7 @@ export async function forgotPassReset(
     });
 }
 
-interface ForgotPassRequestForm {
-    email: string;
-}
-
-export async function forgotPassRequest(form: ForgotPassRequestForm) {
+export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
     }
@@ -72,16 +60,9 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
     return axios.post('/api/users/request-password-reset', { form });
 }
 
-interface RegisterForm {
-    username?: string;
-    password?: string;
-    email?: string;
-    confirmPassword?: string;
-}
-
-export async function register(form: RegisterForm) {
+export async function register(form: AuthTypes.RegisterForm) {
     const { username, password, email, confirmPassword } = form;
-    
+
     if (!username || !password || !email || !confirmPassword) {
         throw errors.fieldError();
     }
