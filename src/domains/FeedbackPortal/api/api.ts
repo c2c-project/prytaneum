@@ -58,8 +58,7 @@ export async function updateFeedbackReport(form: FeedbackForm) {
     return axios.post<unknown>('/api/feedback/update-report', body);
 }
 
-export async function deleteFeedbackReport(form: FeedbackForm) {
-    const { _id } = form;
+export async function deleteFeedbackReport(_id: string) {
     if (!_id) {
         throw errors.internalError();
     }
@@ -124,8 +123,7 @@ export async function updateBugReport(form: BugReportForm) {
     return axios.post<unknown>('/api/bugs/update-report', body);
 }
 
-export async function deleteBugReport(form: BugReportForm) {
-    const { _id } = form;
+export async function deleteBugReport(_id: string) {
     if (!_id) {
         throw errors.internalError();
     }

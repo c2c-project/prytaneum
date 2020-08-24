@@ -65,11 +65,7 @@ describe('#FeedbackRports', () => {
         const submitterId = faker.random.alphaNumeric(12);
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(
-                    undefined,
-                    ascending,
-                    submitterId
-                )
+                API.getFeedbackReportsBySubmitter(0, ascending, submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -138,11 +134,9 @@ describe('#FeedbackRports', () => {
     });
 
     describe('#delete', () => {
-        const form = {
-            _id: '507f1f77bcf86cd799439011',
-        };
+        const _id = faker.random.alphaNumeric(12);
         it('should reject delete', async () => {
-            await expect(API.deleteFeedbackReport({})).rejects.toThrow(
+            await expect(API.deleteFeedbackReport('')).rejects.toThrow(
                 errors.internalError()
             );
             expect(axios.post).not.toHaveBeenCalled();
@@ -152,13 +146,13 @@ describe('#FeedbackRports', () => {
             (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
                 resolvedValue
             );
-            await expect(API.deleteFeedbackReport(form)).resolves.toBe(
+            await expect(API.deleteFeedbackReport(_id)).resolves.toBe(
                 resolvedValue
             );
             expect(axios.post).toHaveBeenCalledWith(
                 '/api/feedback/delete-report',
                 {
-                    _id: form._id,
+                    _id,
                 }
             );
         });
@@ -217,7 +211,7 @@ describe('#BugRports', () => {
 
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(undefined, ascending, submitterId)
+                API.getBugReportsBySubmitter(0, ascending, submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -283,11 +277,9 @@ describe('#BugRports', () => {
     });
 
     describe('#delete', () => {
-        const form = {
-            _id: faker.random.alphaNumeric(12),
-        };
+        const _id = faker.random.alphaNumeric(12);
         it('should reject delete', async () => {
-            await expect(API.deleteBugReport({})).rejects.toThrow(
+            await expect(API.deleteBugReport('')).rejects.toThrow(
                 errors.internalError()
             );
             expect(axios.post).not.toHaveBeenCalled();
@@ -297,11 +289,9 @@ describe('#BugRports', () => {
             (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
                 resolvedValue
             );
-            await expect(API.deleteBugReport(form)).resolves.toBe(
-                resolvedValue
-            );
+            await expect(API.deleteBugReport(_id)).resolves.toBe(resolvedValue);
             expect(axios.post).toHaveBeenCalledWith('/api/bugs/delete-report', {
-                _id: form._id,
+                _id,
             });
         });
     });

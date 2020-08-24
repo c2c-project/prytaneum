@@ -7,10 +7,10 @@ import { AxiosResponse } from 'axios';
 
 import ReportSummary from './ReportSummary';
 import * as API from '../api/api';
+import { FeedbackForm, BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
-// TODO: Test delete button
 describe('Update report summary', () => {
     let container: HTMLDivElement | null = null;
 
@@ -38,8 +38,8 @@ describe('Update report summary', () => {
                     _id: faker.random.alphaNumeric(12),
                 },
             },
-            update: (form: API.FeedbackForm) => API.updateFeedbackReport(form),
-            delete: (form: API.FeedbackForm) => API.deleteFeedbackReport(form),
+            update: (form: FeedbackForm) => API.updateFeedbackReport(form),
+            delete: (_id: string) => API.deleteFeedbackReport(_id),
         };
 
         // eslint-disable-next-line jest/expect-expect
@@ -219,7 +219,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(FeedbackReportObject.Report);
+            expect(spy).toBeCalledWith(FeedbackReportObject.Report._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -253,7 +253,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(FeedbackReportObject.Report);
+            expect(spy).toBeCalledWith(FeedbackReportObject.Report._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -261,6 +261,7 @@ describe('Update report summary', () => {
             expect(callBack).not.toBeCalled();
         });
     });
+
     // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report summary', () => {
         const BugReportObject = {
@@ -273,8 +274,8 @@ describe('Update report summary', () => {
                     _id: faker.random.alphaNumeric(12),
                 },
             },
-            update: (form: API.BugReportForm) => API.updateBugReport(form),
-            delete: (form: API.BugReportForm) => API.deleteBugReport(form),
+            update: (form: BugReportForm) => API.updateBugReport(form),
+            delete: (_id: string) => API.deleteBugReport(_id),
         };
 
         // eslint-disable-next-line jest/expect-expect
@@ -417,6 +418,80 @@ describe('Update report summary', () => {
                 _id: BugReportObject.Report._id,
             });
 
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).not.toBeCalled();
+        });
+
+        it('Should delete a bug report summary and succeed', async () => {
+            const callBack = jest.fn();
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'deleteBugReport')
+                .mockResolvedValue(resolvedVal);
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+            const deleteButton = document.querySelector(
+                '#deleteButton'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                deleteButton.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(BugReportObject.Report._id);
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+            expect(callBack).toBeCalled();
+        });
+
+        it('Should attempt to delete a feedback report summary and fail', async () => {
+            const callBack = jest.fn();
+            const rejectedVal = { status: 500 };
+            const spy = jest
+                .spyOn(API, 'deleteBugReport')
+                .mockRejectedValue(rejectedVal);
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportSummary
+                        ReportObject={BugReportObject}
+                        callBack={callBack}
+                    />,
+                    container
+                );
+            });
+            const deleteButton = document.querySelector(
+                '#deleteButton'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                deleteButton.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(BugReportObject.Report._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);

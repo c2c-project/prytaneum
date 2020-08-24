@@ -34,7 +34,7 @@ export default function ReportSummary({
 }: SummaryProps) {
     // TODO: Check if empty array as second parameter is okay
     const deleteApiRequest = React.useCallback(
-        () => ReportObject.delete(ReportObject.Report),
+        () => ReportObject.delete(ReportObject.Report._id),
         []
     );
 

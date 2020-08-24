@@ -74,35 +74,6 @@ describe('CreateReportRequest', () => {
         expect(reportDescriptionNode.value).toBe(description);
     });
 
-    // TODO: ask David: Why is the spy being called even thought the input field is empty?
-    // it('should not submit on button click', async () => {
-    //     const spy = jest.spyOn(API, 'createFeedbackReport');
-    //     const date = new Date().toISOString();
-
-    //     ReactTestUtils.act(() => {
-    //         render(
-    //             <FormBase
-    //                 SubmitEndpoint={(form) =>
-    //                     API.createFeedbackReport(form, date)
-    //                 }
-    //             />,
-    //             container
-    //         );
-    //     });
-
-    //     // Trigger a button click
-    //     const button = document.querySelector('[type="submit"]');
-    //     ReactTestUtils.act(() => {
-    //         if (button) {
-    //             button.dispatchEvent(
-    //                 new MouseEvent('click', { bubbles: true })
-    //             );
-    //         }
-    //     });
-
-    //     expect(spy).not.toBeCalled();
-    // });
-
     it('should submit and succeed', async () => {
         const resolvedVal: AxiosResponse = {
             status: 200,

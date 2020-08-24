@@ -28,7 +28,5 @@ export type ReportObject = {
     update: (
         report: FeedbackForm | BugReportForm
     ) => Promise<AxiosResponse<any>>;
-    delete: (
-        report: FeedbackForm | BugReportForm
-    ) => Promise<AxiosResponse<any>>;
+    delete: (_id: string) => Promise<AxiosResponse<any>>;
 };

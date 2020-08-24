@@ -97,8 +97,7 @@ export default function ReportHistory() {
                         Report: report,
                         update: (form: FeedbackForm) =>
                             updateFeedbackReport(form),
-                        delete: (form: FeedbackForm) =>
-                            deleteFeedbackReport(form),
+                        delete: (_id: string) => deleteFeedbackReport(_id),
                     })
                 );
 
@@ -116,7 +115,7 @@ export default function ReportHistory() {
             const bugReportObjects = results.data.reports.map((report) => ({
                 Report: report,
                 update: (form: BugReportForm) => updateBugReport(form),
-                delete: (form: BugReportForm) => deleteBugReport(form),
+                delete: (_id: string) => deleteBugReport(_id),
             }));
 
             setReportObjects((prevReports) => [
