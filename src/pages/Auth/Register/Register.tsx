@@ -14,33 +14,39 @@ import routeNames from '../route-names';
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
+        // position: 'absolute',
+        // top: '10%',
+        // right: '45%',
     },
     paper: {
         padding: theme.spacing(2),
     },
 }));
 
-export default function RegisterPage() {
+export default React.forwardRef<HTMLDivElement>(function RegisterPage(
+    props,
+    ref
+) {
     const classes = useStyles();
     const history = useHistory();
 
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <Paper className={classes.paper}>
-                        <RegisterForm
-                            onSuccess={() => history.push(routeNames.login)}
-                        />
-                    </Paper>
-                </Grid>
-            </Grow>
-        </Container>
+        // <Container maxWidth='xs' className={classes.root}>
+        <div ref={ref}>
+            <Grid
+                container
+                direction='column'
+                className={classes.root}
+                alignContent='center'
+                justify='center'
+            >
+                <Paper className={classes.paper}>
+                    <RegisterForm
+                        onSuccess={() => history.push(routeNames.login)}
+                    />
+                </Paper>
+            </Grid>
+        </div>
+        // </Container>
     );
-}
+});

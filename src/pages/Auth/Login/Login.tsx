@@ -1,77 +1,106 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-import Grow from '@material-ui/core/Grow';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import {
+    Slide,
+    Container,
+    Link as MUILink,
+    Grid,
+    Typography,
+    Avatar,
+    Box,
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 import Paper from 'components/Paper';
 import LoginForm from 'domains/Auth/LoginForm';
 import banner from 'assets/spp-banner.png';
 
-import routeNames from '../route-names';
+function Copyright() {
+    return (
+        <Typography variant='body2' color='textSecondary' align='center'>
+            {'Copyright © '}
+            <MUILink
+                color='inherit'
+                to='https://material-ui.com/'
+                component={Link}
+            >
+                Your Website
+            </MUILink>
+            <p>{new Date().getFullYear()}</p>
+        </Typography>
+    );
+}
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '100%',
-    },
     paper: {
-        // not necessary anymore?
-        // marginTop: '64-px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2),
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    img: {
-        width: '100%',
-        height: 'auto',
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(4),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
     },
 }));
 
-export default function Login() {
-    const history = useHistory();
+interface Props {
+    onLogin: () => void;
+    registerRoute: string;
+    forgotPassRoute: string;
+}
+
+export default function Login({
+    onLogin,
+    registerRoute,
+    forgotPassRoute,
+}: Props) {
     const classes = useStyles();
+    React.useEffect(() => {});
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grid
-                container
-                direction='column'
-                className={classes.root}
-                alignContent='center'
-                justify='center'
-            >
-                <img
-                    className={classes.img}
-                    src={banner}
-                    alt='University of California Riverside School of Public Policy Logo'
-                />
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <LoginForm
-                            onSuccess={() => history.push('/app/home')} // TODO: CHANGE THIS
-                        />
-                    </Grid>
-                    <Grid container item xs={12} justify='space-between'>
-                        <Button
-                            onClick={() => history.push(routeNames.register)}
-                        >
-                            Register
-                        </Button>
-                        <Button
-                            aria-label='Forgot Password'
-                            onClick={() =>
-                                history.push(routeNames.forgotPassRequest)
-                            }
-                        >
-                            Forgot Password?
-                        </Button>
-                        <Button
-                            onClick={() => history.push(routeNames.loginTemp)}
-                        >
-                            Temporarily Login
-                        </Button>
-                    </Grid>
+        // <Container maxWidth='xs'>
+        <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+            </Avatar>
+            <Typography component='h1' variant='h5'>
+                Sign in
+            </Typography>
+            <div className={classes.form}>
+                <LoginForm onSuccess={onLogin} />
+            </div>
+            <Grid container>
+                <Grid item xs>
+                    <MUILink
+                        to={forgotPassRoute}
+                        variant='body2'
+                        component={Link}
+                    >
+                        Forgot password?
+                    </MUILink>
+                </Grid>
+                <Grid item>
+                    <MUILink
+                        to={registerRoute}
+                        variant='body2'
+                        component={Link}
+                    >
+                        Don&#39;t have an account? Sign Up
+                    </MUILink>
                 </Grid>
             </Grid>
-        </Container>
+        </div>
+        // <Box mt={8}>
+        //     <Copyright />
+        // </Box>
+        // </Container>
     );
 }
