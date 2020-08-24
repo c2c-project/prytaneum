@@ -14,8 +14,8 @@ import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
 import {
-    getFeedbackReports,
-    getBugReports,
+    getFeedbackReportsBySubmitter,
+    getBugReportsBySubmitter,
     updateBugReport,
     updateFeedbackReport,
     deleteBugReport,
@@ -60,13 +60,16 @@ export default function ReportHistory() {
 
     const ApiRequests = {
         Feedback: React.useCallback(
-            () => getFeedbackReports(page, sortingOrder),
+            () =>
+                // TODO: Replace with user Id
+                getFeedbackReportsBySubmitter(page, sortingOrder, '123456789'),
             [page, sortingOrder]
         ),
-        Bug: React.useCallback(() => getBugReports(page, sortingOrder), [
-            page,
-            sortingOrder,
-        ]),
+        Bug: React.useCallback(
+            // TODO: Replace with user Id
+            () => getBugReportsBySubmitter(page, sortingOrder, '123456789'),
+            [page, sortingOrder]
+        ),
     };
 
     const handlePageChange = (

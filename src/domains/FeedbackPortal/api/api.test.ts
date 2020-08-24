@@ -39,7 +39,7 @@ describe('#FeedbackRports', () => {
         it('should create a feedback report', async () => {
             const resolvedValue = { status: 200 };
 
-            //  TODO: Makes the mocked axios.post call to return a status of 200
+            // Makes the mocked axios.post call to return a status of 200
             (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
                 resolvedValue
             );
@@ -60,20 +60,31 @@ describe('#FeedbackRports', () => {
     });
 
     describe('#get', () => {
-        const page = 2;
+        const page = faker.random.number();
         const ascending = 'false';
-
+        const submitterId = faker.random.alphaNumeric(12);
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getFeedbackReports(undefined, ascending)
+                API.getFeedbackReportsBySubmitter(
+                    undefined,
+                    ascending,
+                    submitterId
+                )
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should reject since ascending is not provided', async () => {
-            await expect(API.getFeedbackReports(page, '')).rejects.toThrow(
-                errors.fieldError()
-            );
+            await expect(
+                API.getFeedbackReportsBySubmitter(page, '', submitterId)
+            ).rejects.toThrow(errors.fieldError());
+            expect(axios.get).not.toHaveBeenCalled();
+        });
+
+        it('should reject since submitterId is not provided', async () => {
+            await expect(
+                API.getFeedbackReportsBySubmitter(page, ascending, '')
+            ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
@@ -82,11 +93,11 @@ describe('#FeedbackRports', () => {
             (axios as jest.Mocked<typeof axios>).get.mockResolvedValue(
                 resolvedValue
             );
-            await expect(API.getFeedbackReports(page, ascending)).resolves.toBe(
-                resolvedValue
-            );
+            await expect(
+                API.getFeedbackReportsBySubmitter(page, ascending, submitterId)
+            ).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith(
-                '/api/feedback/get-reports',
+                `/api/feedback/get-reports/${submitterId}`,
                 {
                     params: {
                         page,
@@ -200,20 +211,28 @@ describe('#BugRports', () => {
     });
 
     describe('#get', () => {
-        const page = 1;
+        const page = faker.random.number();
         const ascending = 'true';
+        const submitterId = faker.random.alphaNumeric(12);
 
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getBugReports(undefined, ascending)
+                API.getBugReportsBySubmitter(undefined, ascending, submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should reject since ascending is not provided', async () => {
-            await expect(API.getBugReports(page, '')).rejects.toThrow(
-                errors.fieldError()
-            );
+            await expect(
+                API.getBugReportsBySubmitter(page, '', submitterId)
+            ).rejects.toThrow(errors.fieldError());
+            expect(axios.get).not.toHaveBeenCalled();
+        });
+
+        it('should reject since submitterId is not provided', async () => {
+            await expect(
+                API.getBugReportsBySubmitter(page, ascending, '')
+            ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
@@ -222,15 +241,18 @@ describe('#BugRports', () => {
             (axios as jest.Mocked<typeof axios>).get.mockResolvedValue(
                 resolvedValue
             );
-            await expect(API.getBugReports(page, ascending)).resolves.toBe(
-                resolvedValue
+            await expect(
+                API.getBugReportsBySubmitter(page, ascending, submitterId)
+            ).resolves.toBe(resolvedValue);
+            expect(axios.get).toHaveBeenCalledWith(
+                `/api/bugs/get-reports/${submitterId}`,
+                {
+                    params: {
+                        page,
+                        ascending,
+                    },
+                }
             );
-            expect(axios.get).toHaveBeenCalledWith('/api/bugs/get-reports', {
-                params: {
-                    page,
-                    ascending,
-                },
-            });
         });
     });
 

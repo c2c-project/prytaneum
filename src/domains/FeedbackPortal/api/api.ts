@@ -20,16 +20,25 @@ export async function createFeedbackReport(form: FeedbackForm, date: string) {
     return axios.post<unknown>('/api/feedback/create-report', body);
 }
 
-export async function getFeedbackReports(page: number, ascending: string) {
+export async function getFeedbackReportsBySubmitter(
+    page: number,
+    ascending: string,
+    submitterId: string
+) {
     if (!page || !ascending) {
         throw errors.fieldError();
     }
+
+    if (!submitterId) {
+        throw errors.internalError();
+    }
+
     const params = {
         page,
         ascending,
     };
     return axios.get<{ reports: FeedbackReport[] }>(
-        '/api/feedback/get-reports',
+        `/api/feedback/get-reports/${submitterId}`,
         {
             params,
         }
@@ -78,17 +87,29 @@ export async function createBugReport(
     return axios.post<unknown>('/api/bugs/create-report', body);
 }
 
-export async function getBugReports(page: number, ascending: string) {
+export async function getBugReportsBySubmitter(
+    page: number,
+    ascending: string,
+    submitterId: string
+) {
     if (!page || !ascending) {
         throw errors.fieldError();
     }
+
+    if (!submitterId) {
+        throw errors.internalError();
+    }
+
     const params = {
         page,
         ascending,
     };
-    return axios.get<{ reports: BugReport[] }>('/api/bugs/get-reports', {
-        params,
-    });
+    return axios.get<{ reports: BugReport[] }>(
+        `/api/bugs/get-reports/${submitterId}`,
+        {
+            params,
+        }
+    );
 }
 
 export async function updateBugReport(form: BugReportForm) {
