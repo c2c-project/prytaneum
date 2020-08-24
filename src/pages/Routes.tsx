@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Auth from './Auth';
+// import Slide from '@material-ui/core/Slide';
 // import LoggedIn from '../components/LoggedIn';
 // import Townhall from './Townhall';
 // import Nav from '../layout/Nav';
@@ -24,30 +25,37 @@ const DefaultPage = () => <Redirect to='/auth/login' />;
 const AppHomePage = () => <Redirect to='/app/townhalls' />;
 
 export default function Routes() {
+    // return (
+    //     <Switch>
+    //         <Route path='/auth'>
+    //             <Auth />
+    //         </Route>
+    //         <Route path='/app'>
+    //             <Switch>
+    //                 <Route path='/auth'>
+    //                     <Auth />
+    //                 </Route>
+    //                 <Route path='/app'>
+    //                     {/* <LoggedIn > */}
+    //                     {/* <Nav /> */}
+    //                     <div>Logged in</div>
+    //                     {/* </LoggedIn> */}
+    //                 </Route>
+    //                 <Route path={['/app/home', '/']}>
+    //                     <AppHomePage />
+    //                 </Route>
+    //             </Switch>
+    //         </Route>
+    //         <Route path='/'>
+    //             <DefaultPage />
+    //         </Route>
+    //     </Switch>
+    // );
     return (
-        <Switch>
+        <Route path='/'>
             <Route path='/auth'>
                 <Auth />
             </Route>
-            <Route path='/app'>
-                <Switch>
-                    <Route path='/auth'>
-                        <Auth />
-                    </Route>
-                    <Route path='/app'>
-                        {/* <LoggedIn > */}
-                        {/* <Nav /> */}
-                        <div>Logged in</div>
-                        {/* </LoggedIn> */}
-                    </Route>
-                    <Route path={['/app/home', '/']}>
-                        <AppHomePage />
-                    </Route>
-                </Switch>
-            </Route>
-            <Route path='/'>
-                <DefaultPage />
-            </Route>
-        </Switch>
+        </Route>
     );
 }

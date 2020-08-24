@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import Grow from '@material-ui/core/Grow';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -32,59 +32,46 @@ export default function Login() {
     const classes = useStyles();
     return (
         <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <Paper className={classes.paper}>
-                        <img
-                            className={classes.img}
-                            src={banner}
-                            alt='University of California Riverside School of Public Policy Logo'
+            <Grid
+                container
+                direction='column'
+                className={classes.root}
+                alignContent='center'
+                justify='center'
+            >
+                <img
+                    className={classes.img}
+                    src={banner}
+                    alt='University of California Riverside School of Public Policy Logo'
+                />
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <LoginForm
+                            onSuccess={() => history.push('/app/home')} // TODO: CHANGE THIS
                         />
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <LoginForm
-                                    onSuccess={() => history.push('/app/home')} // TODO: CHANGE THIS
-                                />
-                            </Grid>
-                            <Grid
-                                container
-                                item
-                                xs={12}
-                                justify='space-between'
-                            >
-                                <Button
-                                    onClick={() =>
-                                        history.push(routeNames.register)
-                                    }
-                                >
-                                    Register
-                                </Button>
-                                <Button
-                                    aria-label='Forgot Password'
-                                    onClick={() =>
-                                        history.push(routeNames.forgotPassRequest)
-                                    }
-                                >
-                                    Forgot Password?
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        history.push(routeNames.loginTemp)
-                                    }
-                                >
-                                    Temporarily Login
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
+                    </Grid>
+                    <Grid container item xs={12} justify='space-between'>
+                        <Button
+                            onClick={() => history.push(routeNames.register)}
+                        >
+                            Register
+                        </Button>
+                        <Button
+                            aria-label='Forgot Password'
+                            onClick={() =>
+                                history.push(routeNames.forgotPassRequest)
+                            }
+                        >
+                            Forgot Password?
+                        </Button>
+                        <Button
+                            onClick={() => history.push(routeNames.loginTemp)}
+                        >
+                            Temporarily Login
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grow>
+            </Grid>
         </Container>
     );
 }
