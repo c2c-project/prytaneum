@@ -15,13 +15,14 @@ export default [
     }),
 
     // TODO: Return fake feedback reports after David review PR
-    rest.post('/api/feedback/get-reports', (req, res, ctx) => {
+    rest.post('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { page, ascending } = req.params as {
-            page: number;
-            ascending: string;
-        };
-        if (page === -1) {
+        const { submitterId } = req.params;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const page = req.url.searchParams.get('page');
+        const ascending = req.url.searchParams.get('ascending');
+
+        if (!page) {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
@@ -62,13 +63,15 @@ export default [
     }),
 
     // TODO: Return fake bug reports after David review PR
-    rest.post('/api/bugs/get-reports', (req, res, ctx) => {
+    rest.post('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { page, ascending } = req.params as {
-            page: number;
-            ascending: string;
-        };
-        if (page === -1) {
+        const { submitterId } = req.params;
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const page = req.url.searchParams.get('page');
+        const ascending = req.url.searchParams.get('ascending');
+
+        if (!page) {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
