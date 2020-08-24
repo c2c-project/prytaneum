@@ -74,7 +74,7 @@ describe('RegisterForm', () => {
             username: 'username',
             email: 'email@email.com',
             password: 'password',
-            confirmPass: 'password',
+            confirmPassword: 'password',
         };
         jest.useFakeTimers();
 
@@ -135,7 +135,7 @@ describe('RegisterForm', () => {
             username: 'username',
             email: 'email@email.com',
             password: 'password',
-            confirmPass: 'password',
+            confirmPassword: 'password',
         };
         jest.useFakeTimers();
 
