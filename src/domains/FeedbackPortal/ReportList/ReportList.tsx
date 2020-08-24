@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Dialog from 'components/Dialog';
 import ReportSummary from 'domains/FeedbackPortal/ReportSummary';
 import { formatDate } from 'utils/format';
-import { ReportObject } from '../api';
+import { ReportObject } from '../types';
 
 interface Props {
     ReportObjects: ReportObject[];

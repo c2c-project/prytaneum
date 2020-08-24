@@ -7,9 +7,8 @@ import {
     updateFeedbackReport,
     deleteBugReport,
     deleteFeedbackReport,
-    FeedbackForm,
-    BugReportForm,
 } from '../api';
+import { FeedbackForm, BugReportForm } from '../types';
 import Component from '.';
 
 // TODO: For some reason, the select control does not change what component gets rendered.

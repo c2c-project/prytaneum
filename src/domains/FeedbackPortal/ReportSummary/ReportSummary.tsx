@@ -11,7 +11,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
 import FormBase from '../FormBase';
-import { ReportObject as ReportObjectType } from '../api';
+import { ReportObject as ReportObjectType } from '../types';
 
 interface SummaryProps {
     ReportObject: ReportObjectType;
@@ -40,7 +40,6 @@ export default function ReportSummary({
 
     const [snack] = useSnack();
 
-    // TODO: call callback function from parent component
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
             callBack();

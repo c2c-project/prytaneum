@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios';
 
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
-import { FeedbackForm, BugReportForm } from '../api';
+import { FeedbackForm, BugReportForm } from '../types';
 
 type ReportType = FeedbackForm | BugReportForm;
 interface FormProps {

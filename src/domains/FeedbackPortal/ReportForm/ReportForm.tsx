@@ -5,12 +5,8 @@ import { AxiosResponse } from 'axios';
 
 import errors from 'utils/errors';
 import FormBase from '../FormBase';
-import {
-    createFeedbackReport,
-    createBugReport,
-    FeedbackForm,
-    BugReportForm,
-} from '../api';
+import { createFeedbackReport, createBugReport } from '../api';
+import { FeedbackForm, BugReportForm } from '../types';
 
 interface FormProps {
     Title: string;

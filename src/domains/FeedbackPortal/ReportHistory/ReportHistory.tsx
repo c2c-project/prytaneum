@@ -16,14 +16,13 @@ import ReportList from 'domains/FeedbackPortal/ReportList';
 import {
     getFeedbackReports,
     getBugReports,
-    ReportObject,
     updateBugReport,
     updateFeedbackReport,
     deleteBugReport,
     deleteFeedbackReport,
-    FeedbackForm,
-    BugReportForm,
 } from '../api';
+
+import { ReportObject, FeedbackForm, BugReportForm } from '../types';
 
 //  TODO: replace values with API function to call
 const ReportOptions = [
@@ -51,9 +50,7 @@ const useStyles = makeStyles(() =>
 
 export default function ReportHistory() {
     const classes = useStyles();
-    const [getReportEndpoints, setGetReportEndpoints] = React.useState<
-        string[]
-    >([]);
+    const [ReportEndpoints, setReportEndpoints] = React.useState<string[]>([]);
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
 
@@ -80,7 +77,7 @@ export default function ReportHistory() {
     };
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setGetReportEndpoints(e.target.value as []);
+        setReportEndpoints(e.target.value as []);
     };
 
     const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
@@ -128,10 +125,10 @@ export default function ReportHistory() {
 
     const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (getReportEndpoints.includes('Feedback')) {
+        if (ReportEndpoints.includes('Feedback')) {
             sendFeedbackRequest();
         }
-        if (getReportEndpoints.includes('Bug')) {
+        if (ReportEndpoints.includes('Bug')) {
             sendBugRequest();
         }
     };
@@ -148,7 +145,7 @@ export default function ReportHistory() {
                                     <Select
                                         required
                                         multiple
-                                        value={getReportEndpoints}
+                                        value={ReportEndpoints}
                                         onChange={handleReportChange}
                                         input={<Input />}
                                     >
