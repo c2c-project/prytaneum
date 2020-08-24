@@ -11,10 +11,16 @@ import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
 import FormBase from '../FormBase';
-import { ReportObject as ReportObjectType } from '../types';
+import { ReportObject } from '../types';
 
 interface SummaryProps {
-    ReportObject: ReportObjectType;
+    reportObject: ReportObject;
+    onUpdate: (
+        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
+    ) => void;
+    onDelete: (
+        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
+    ) => void;
     callBack: () => void;
 }
 
@@ -28,13 +34,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+// TODO: Pass onUpdate to FormBase
 export default function ReportSummary({
-    ReportObject,
+    reportObject,
+    onUpdate,
+    onDelete,
     callBack,
 }: SummaryProps) {
     // TODO: Check if empty array as second parameter is okay
     const deleteApiRequest = React.useCallback(
-        () => ReportObject.delete(ReportObject.Report._id),
+        () => reportObject.delete(reportObject.Report._id),
         []
     );
 
@@ -42,6 +51,14 @@ export default function ReportSummary({
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
+            // Removes report from the state of grandparent component (ReportHistory)
+            onDelete((prevReports: ReportObject[]) => {
+                const indexOfReportToDelete = prevReports.findIndex(
+                    (prevReport) =>
+                        prevReport.Report._id === reportObject.Report._id
+                );
+                return prevReports.splice(indexOfReportToDelete, 1);
+            });
             callBack();
             snack('Report successfully deleted', 'success');
         },
@@ -56,7 +73,7 @@ export default function ReportSummary({
             <Grid item xs={12}>
                 <Typography variant='h4' align='left'>
                     Date Submitted:
-                    {formatDate(new Date(ReportObject.Report.date))}
+                    {formatDate(new Date(reportObject.Report.date))}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -68,10 +85,10 @@ export default function ReportSummary({
             <Grid item xs={12}>
                 <FormBase
                     Report={{
-                        description: ReportObject.Report.description,
-                        _id: ReportObject.Report._id,
+                        description: reportObject.Report.description,
+                        _id: reportObject.Report._id,
                     }}
-                    SubmitEndpoint={ReportObject.update}
+                    SubmitEndpoint={reportObject.update}
                     onSuccess={() => callBack()}
                 />
             </Grid>

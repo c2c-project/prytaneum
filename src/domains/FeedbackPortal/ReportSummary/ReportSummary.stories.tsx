@@ -35,7 +35,7 @@ const FeedbackReportObject = {
         },
     },
     update: (form: FeedbackForm) => updateFeedbackReport(form),
-    delete: (form: FeedbackForm) => deleteFeedbackReport(form),
+    delete: (_id: string) => deleteFeedbackReport(_id),
 };
 
 const BugReportObject = {
@@ -49,7 +49,7 @@ const BugReportObject = {
         },
     },
     update: (form: BugReportForm) => updateBugReport(form),
-    delete: (form: BugReportForm) => deleteBugReport(form),
+    delete: (_id: string) => deleteBugReport(_id),
 };
 
 interface Props {
@@ -59,12 +59,13 @@ export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
+                // TODO: How to mock functions in stories?
                 <Component
-                    ReportObject={FeedbackReportObject}
+                    reportObject={FeedbackReportObject}
                     callBack={() => {}}
                 />
             ) : (
-                <Component ReportObject={BugReportObject} callBack={() => {}} />
+                <Component reportObject={BugReportObject} callBack={() => {}} />
             )}
         </Container>
     );
