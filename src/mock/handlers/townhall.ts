@@ -40,6 +40,7 @@ export default [
     }),
 
     rest.post('/api/townhalls/update', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { form, townhallId } = req.body as {
             form: TownHallTypes.TownhallForm;
             townhallId: string;

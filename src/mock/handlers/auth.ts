@@ -25,6 +25,7 @@ export default [
     }),
 
     rest.post('/api/users/consume-password-reset-token', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { token, form } = req.body as {
             token: string;
             form: AuthTypes.ForgotPassForm;
