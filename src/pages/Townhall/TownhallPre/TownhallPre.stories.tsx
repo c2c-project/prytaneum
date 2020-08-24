@@ -1,6 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-
 import FixtureContext, { makeSuccessFixture } from 'mock/Fixtures';
 import Page from '.';
 

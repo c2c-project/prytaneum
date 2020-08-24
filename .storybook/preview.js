@@ -9,6 +9,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import DeviceContext from '../src/contexts/Device';
 import theme from '../src/theme';
 import './main.css';
+import { worker } from '../src/mock/browser';
+
+worker.start();
 
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>

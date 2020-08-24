@@ -55,11 +55,11 @@ describe('LoginForm', () => {
         // change the fields
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(usernameNode, {
-                target: { value: 'username' },
-            } as any);
+                target: ({ value: 'username' } as unknown) as EventTarget,
+            });
             ReactTestUtils.Simulate.change(passwordNode, {
-                target: { value: 'password' },
-            } as any);
+                target: ({ value: 'password' } as unknown) as EventTarget,
+            });
         });
 
         // expect them to reflect the changed values
@@ -69,7 +69,7 @@ describe('LoginForm', () => {
 
     it('should call handleSubmit & onSuccess appropriately', async () => {
         const onSuccess = jest.fn();
-        const resolveVal = { status: 200 } as AxiosResponse<any>;
+        const resolveVal = { status: 200 } as AxiosResponse<unknown>;
         const loginSpy = jest.spyOn(API, 'login').mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 

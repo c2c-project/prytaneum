@@ -1,10 +1,10 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import Bold from './Bold';
 
-describe('Bold', function() {
+describe('Bold', function () {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
@@ -22,16 +22,14 @@ describe('Bold', function() {
     });
 
     it('should render', () => {
-        const children = "hi";
         ReactTestUtils.act(() => {
             render(
                 <Bold>
-                    <div id='test'/>
+                    <div id='test' />
                 </Bold>,
                 container
-            )
+            );
         });
         expect(document.getElementById('test')).toBeTruthy();
     });
-
-}); 
+});

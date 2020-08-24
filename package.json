@@ -2,7 +2,6 @@
     "name": "prytanea-client",
     "version": "0.1.0",
     "private": true,
-    "proxy": "http://localhost:3001",
     "dependencies": {
         "@date-io/core": "^1.3.6",
         "@date-io/date-fns": "1.3.13",
@@ -34,7 +33,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-        "storybook": "start-storybook --port 3000",
+        "storybook": "start-storybook --port 3000 -s public",
         "lint": "eslint src/**/*.ts src/**/*.tsx"
     },
     "browserslist": {
@@ -50,11 +49,11 @@
         ]
     },
     "devDependencies": {
-        "@storybook/addon-a11y": "^6.0.5",
-        "@storybook/addon-essentials": "^6.0.5",
-        "@storybook/node-logger": "^6.0.5",
+        "@storybook/addon-a11y": "^6.0.16",
+        "@storybook/addon-essentials": "^6.0.16",
+        "@storybook/node-logger": "^6.0.16",
         "@storybook/preset-create-react-app": "^3.1.4",
-        "@storybook/react": "^6.0.5",
+        "@storybook/react": "^6.0.16",
         "@testing-library/dom": "^7.20.2",
         "@testing-library/jest-dom": "^5.10.0",
         "@testing-library/react": "^10.2.1",
@@ -72,6 +71,7 @@
         "@typescript-eslint/eslint-plugin": "^3.2.0",
         "@typescript-eslint/parser": "^3.2.0",
         "babel-loader": "^8.1.0",
+        "babel-plugin-typescript-to-proptypes": "^1.4.0",
         "eslint": "^6.5.1",
         "eslint-config-airbnb-typescript": "^8.0.2",
         "eslint-config-prettier": "^6.4.0",
@@ -83,6 +83,7 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
+        "msw": "^0.20.5",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     },

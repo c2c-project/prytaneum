@@ -34,7 +34,7 @@ describe('VerifyEmail', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should render, verify, & go to /login', async () => {
-        let _location: any;
+        let _location = { pathname: '' };
         jest.useFakeTimers();
         const resolvedValue = { status: 200 };
         const userId = '123456';
@@ -72,7 +72,7 @@ describe('VerifyEmail', () => {
     });
 
     it('should render, fail to verify, & go to /login', async () => {
-        let _location: any;
+        let _location = { pathname: '' };
         jest.useFakeTimers();
         const resolvedValue = { status: 500 };
         const userId = '123456';
