@@ -5,11 +5,11 @@ import CardActions from '@material-ui/core/CardActions';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import { format } from 'date-fns';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
+import { Townhall } from '../types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+interface Props {
+    townhall: Townhall;
+}
 
 
 export default function TownhallBillSummary(props: Props) {

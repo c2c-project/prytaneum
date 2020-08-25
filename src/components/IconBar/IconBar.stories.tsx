@@ -1,10 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TownhallIcon from '@material-ui/icons/AccountBalance';
-
-
-import { DeviceContext } from 'contexts/Device';
 
 import Component from './IconBar';
 
@@ -12,7 +8,7 @@ export default { title: 'Icon Bar' };
 
 export function CenterIconBar() {
     return (
-        <Component justify={'center'}>
+        <Component justify='center'>
             <div>
                 <TownhallIcon />
             </div>
@@ -31,7 +27,7 @@ export function CenterIconBar() {
 
 export function TopIconBar() {
     return (
-        <Component justify={'flex-start'}>
+        <Component justify='flex-start'>
             <div>
                 <TownhallIcon />
             </div>
@@ -50,7 +46,7 @@ export function TopIconBar() {
 
 export function IconBarFooter() {
     return (
-        <Component justify={'flex-end'}>
+        <Component justify='flex-end'>
             <div>
                 <TownhallIcon />
             </div>

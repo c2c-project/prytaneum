@@ -1,7 +1,6 @@
 import React from 'react';
 import Component from '.';
 
-
 export default { title: 'Domains/Townhall' };
 
 const townhall = [
@@ -28,5 +27,5 @@ const townhall = [
 ];
 
 export function TownhallHistory() {
-    return <Component townhall={townhall}></Component>;
+    return <Component townhall={townhall} />;
 }

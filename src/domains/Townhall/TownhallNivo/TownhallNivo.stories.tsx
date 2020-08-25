@@ -5,7 +5,7 @@ import Component from './TownhallNivo';
 
 export default { title: 'Domains/Townhall' };
 
-const townhall = {
+const Nivo = {
     graphHeight: 500,
     graphData: [
         {
@@ -44,7 +44,7 @@ const townhall = {
 export function TownhallNivo() {
     return (
         <Container>
-            <Component townhall={townhall} />
+            <Component townhall={Nivo} />
         </Container>
     );
 }

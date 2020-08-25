@@ -2,14 +2,13 @@ import React from 'react';
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import { ListItemAvatar, Avatar } from '@material-ui/core';
-import { getTownhallList } from '../api';
+import { Townhall } from '../types';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,9 +22,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 
-function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
-    return <ListItem button component='a' {...props} />;
+interface Props {
+    townhall: Townhall;
 }
+
+
+
 
 export default function SimpleList(props: Props) {
     const { townhall } = props;
@@ -33,22 +35,22 @@ export default function SimpleList(props: Props) {
 
     return (
         <div className={classes.root}>
-            <List component='nav'>
-                {townhall.map((person) => {
+            <List>
+                {townhall.map((idx) => {
                     return (
                         <div>
                             <ListItem button>
                                 <ListItemIcon>
                                     <ListItemAvatar>
                                         <Avatar
-                                            src={person.link}
+                                            src={idx.link}
                                             alt='Member of Congress Picture'
                                         />
                                     </ListItemAvatar>
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={person.action}
-                                    secondary={person.date}
+                                    primary={idx.action}
+                                    secondary={idx.date}
                                 />
                             </ListItem>
                             <Divider />
