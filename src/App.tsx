@@ -22,7 +22,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <SnackContext maxSnack={3}>
+                <SnackContext maxSnack={1}>
                     <BrowserRouter>
                         <Pages />
                     </BrowserRouter>
