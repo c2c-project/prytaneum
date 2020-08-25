@@ -24,7 +24,7 @@ import {
 
 import { ReportObject, FeedbackForm, BugReportForm } from '../types';
 
-//  TODO: replace values with API function to call
+//  TODO: Add static state to check if child components are able t o update the state of this component
 const ReportOptions = [
     {
         name: 'Feedback',
@@ -109,6 +109,19 @@ export default function ReportHistory() {
             },
         }
     );
+
+    const deleteReport = (Report: ReportObject) => {
+        setReportObjects((prevReportObjects) => {
+            const indexOfReportToDelete = prevReportObjects.findIndex(
+                (prevReportObject) =>
+                    prevReportObject.Report._id === Report.Report._id
+            );
+            if (indexOfReportToDelete < 0) {
+                return prevReportObjects;
+            }
+            return prevReportObjects.splice(indexOfReportToDelete, 1);
+        });
+    };
 
     const [sendBugRequest, isLoadingBug] = useEndpoint(ApiRequests.Bug, {
         onSuccess: (results) => {
@@ -202,7 +215,11 @@ export default function ReportHistory() {
                 </Grid>
             </Grid>
             <Grid justify='center' item xs={12}>
-                <ReportList ReportObjects={reportObjects} />
+                <ReportList
+                    ReportObjects={reportObjects}
+                    onUpdate={setReportObjects}
+                    onDelete={setReportObjects}
+                />
                 {/* <div>
                     <h1>Report Value Selected:</h1>
                     {getReportEndpoints.map((getReportEndpoint) => (
