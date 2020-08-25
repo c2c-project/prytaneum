@@ -40,7 +40,7 @@ export default [
         const { form } = req.body as {
             form: AuthTypes.ForgotPassRequestForm;
         };
-        if (form.email === 'fail') {
+        if (form.email === 'fail1234@gmail.com') {
             res(ctx.status(400));
         }
         return res(ctx.status(200));
