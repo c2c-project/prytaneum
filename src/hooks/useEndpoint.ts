@@ -1,11 +1,15 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
+import { Button } from '@material-ui/core';
+import useSnack from 'hooks/useSnack';
 
 import useErrorHandler from './useErrorHandler';
 
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
+    onUndo?: () => void;
+    isUndo?: boolean;
 }
 type SendRequest = () => void;
 type IsLoading = boolean;
@@ -16,6 +20,7 @@ type EndpointUtils = [SendRequest, IsLoading];
  * @arg {Object} options
  * @arg {Function} options.onSuccess
  * @arg {Function} options.onFailure
+ * @arg {Function} options.onUndo
  * @returns {Array}
  */
 export default function useEndpoint<T>(
@@ -25,10 +30,12 @@ export default function useEndpoint<T>(
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);
+    const [snack] = useSnack();
 
     React.useEffect(() => {
         let isMounted = true;
-        const { onSuccess, onFailure } = options;
+        let isStopped = false;
+        const { onSuccess, onFailure, onUndo, isUndo } = options;
         const minWaitTime = () =>
             new Promise((resolve) => {
                 setTimeout(resolve, 600);
@@ -36,8 +43,10 @@ export default function useEndpoint<T>(
 
         const defaultFailure = handleError;
         const defaultSucess = () => {};
+        const defaultUndo = () => {};
 
         const _onSuccess = onSuccess || defaultSucess;
+        const _onUndo = onUndo || defaultUndo;
         const _onFailure = (err: Error) => {
             defaultFailure(err);
             if (onFailure) {
@@ -52,6 +61,7 @@ export default function useEndpoint<T>(
                     endpoint(),
                     minWaitTime(),
                 ]);
+
 
                 // I need to check if I'm still mounted before continuing
                 if (isMounted === true) {
@@ -76,11 +86,44 @@ export default function useEndpoint<T>(
             }
         };
 
+        const undoableRequest = () => {
+            snack('Registered, Undo -> ', 'info', {
+                action: React.createElement(
+                    Button,
+                    {
+                        onClick: () => {
+                            if (isMounted === true) {
+                                isStopped = true;
+                                _onUndo();
+                                // eslint-disable-next-line no-void
+                                window.removeEventListener('beforeunload', function (){void request();}, false);
+                            }
+                        },
+                        variant: 'text',
+                        color: 'secondary'
+                    },
+                    'Undo'
+                ),
+                onExited: () => {
+                    if (isStopped === false) {
+                        // eslint-disable-next-line no-void
+                        void request();
+                        // eslint-disable-next-line no-void
+                        window.removeEventListener('beforeunload', function (){void request();}, false);
+                    }
+                }
+            });            
+        };
+
         // sendRequest sets loading to true, I use this as the trigger to send the request
         if (isLoading) {
             // I use callbacks after the request completes, so I don't care about "await"-ing the promise
-            // eslint-disable-next-line no-void
-            void request();
+            if (isUndo === true) {
+                undoableRequest();
+            } else { 
+                // eslint-disable-next-line no-void
+                void request();
+            }
         }
 
         return () => {
