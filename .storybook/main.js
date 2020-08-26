@@ -5,8 +5,16 @@ module.exports = {
     addons: [
         '@storybook/preset-create-react-app',
         '@storybook/addon-a11y',
-        '@storybook/addon-essentials',
+        {
+            name: '@storybook/addon-essentials',
+            options: {
+                docs: false,
+            },
+        },
     ],
+    typescript: {
+        reactDocgen: 'none',
+    },
     webpackFinal: (config) => {
         config.resolve.alias = {
             hooks: path.resolve(__dirname, '../src/hooks/__mocks__/'),
