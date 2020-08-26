@@ -1,4 +1,37 @@
 import { rest } from 'msw';
+import faker from 'faker';
+
+const recent = faker.date.recent();
+const future = faker.date.future();
+
+const makeBaseReport = () => ({
+    _id: faker.random.alphaNumeric(5),
+    date: faker.date.between(recent, future),
+    description: faker.lorem.paragraphs(),
+    user: {
+        _id: faker.random.alphaNumeric(5),
+    },
+});
+
+const makeFeedbackReports = (amount: number) => {
+    const feedbackReports = [];
+    for (let i = 0; i < amount; i += 1) {
+        feedbackReports.push(makeBaseReport());
+    }
+    return feedbackReports;
+};
+
+const makeBugReports = (amount: number) => {
+    const bugReports = [];
+    for (let i = 0; i < amount; i += 1) {
+        const tempReport = makeBaseReport();
+        bugReports.push({
+            ...tempReport,
+            townhallId: faker.random.alphaNumeric(12),
+        });
+    }
+    return bugReports;
+};
 
 export default [
     // Feedback reports
@@ -14,7 +47,7 @@ export default [
         return res(ctx.status(200));
     }),
 
-    // TODO: Return fake feedback reports after David review PR
+    // TODO: Return fake feedback reports after David reviews PR
     rest.post('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
@@ -25,7 +58,12 @@ export default [
         if (!page) {
             return res(ctx.status(400));
         }
-        return res(ctx.status(200));
+        return res(
+            ctx.status(200),
+            ctx.json({
+                reports: makeFeedbackReports(10),
+            })
+        );
     }),
 
     rest.post('/api/feedback/update-report', (req, res, ctx) => {
@@ -34,6 +72,7 @@ export default [
             newDescription: string;
             _id: string;
         };
+
         if (newDescription === 'fail') {
             return res(ctx.status(400));
         }
@@ -74,7 +113,12 @@ export default [
         if (!page) {
             return res(ctx.status(400));
         }
-        return res(ctx.status(200));
+        return res(
+            ctx.status(200),
+            ctx.json({
+                reports: makeBugReports(10),
+            })
+        );
     }),
 
     rest.post('/api/bugs/update-report', (req, res, ctx) => {
