@@ -39,22 +39,19 @@ describe('Update report summary', () => {
                     _id: faker.random.alphaNumeric(12),
                 },
             },
-            update: (form: FeedbackForm) => API.updateFeedbackReport(form),
-            delete: (_id: string) => API.deleteFeedbackReport(_id),
+            submitEndpoint: (form: FeedbackForm) =>
+                API.updateFeedbackReport(form),
+            deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
         };
 
         // eslint-disable-next-line jest/expect-expect
         it('should create feedback report summary', async () => {
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -63,16 +60,12 @@ describe('Update report summary', () => {
 
         it('should change state of feedback report summary', async () => {
             const callBack = jest.fn();
-            const onDelete = jest.fn();
-            const onUpdate = jest.fn();
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -108,8 +101,6 @@ describe('Update report summary', () => {
                 .mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
             const callBack = jest.fn();
-            const onDelete = jest.fn();
-            const onUpdate = jest.fn();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -117,8 +108,6 @@ describe('Update report summary', () => {
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -141,10 +130,10 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith({
-                description: newDescription,
-                _id: FeedbackReportObject.Report._id,
-            });
+            const expectedForm = { ...FeedbackReportObject };
+            expectedForm.Report.description = newDescription;
+
+            expect(spy).toBeCalledWith({ ...expectedForm });
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -159,8 +148,6 @@ describe('Update report summary', () => {
                 .mockRejectedValue(rejectedVal);
             const newDescription = faker.lorem.paragraph();
             const callBack = jest.fn();
-            const onDelete = jest.fn();
-            const onUpdate = jest.fn();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -168,8 +155,6 @@ describe('Update report summary', () => {
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onDelete={onDelete}
-                        onUpdate={onUpdate}
                     />,
                     container
                 );
@@ -206,8 +191,6 @@ describe('Update report summary', () => {
 
         it('Should delete a feedback report summary and succeed', async () => {
             const callBack = jest.fn();
-            const onDelete = jest.fn();
-            const onUpdate = jest.fn();
             const resolvedVal: AxiosResponse = {
                 status: 200,
                 data: {},
@@ -225,8 +208,6 @@ describe('Update report summary', () => {
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -245,14 +226,11 @@ describe('Update report summary', () => {
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
             });
-            expect(onDelete).toBeCalled();
             expect(callBack).toBeCalled();
         });
 
         it('Should attempt to delete a feedback report summary and fail', async () => {
             const callBack = jest.fn();
-            const onDelete = jest.fn();
-            const onUpdate = jest.fn();
             const rejectedVal = { status: 500 };
             const spy = jest
                 .spyOn(API, 'deleteFeedbackReport')
@@ -264,8 +242,6 @@ describe('Update report summary', () => {
                     <ReportSummary
                         reportObject={FeedbackReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -285,7 +261,6 @@ describe('Update report summary', () => {
                 await Promise.allSettled(spy.mock.results);
             });
             expect(callBack).not.toBeCalled();
-            expect(onDelete).not.toBeCalled();
         });
     });
 
@@ -301,20 +276,16 @@ describe('Update report summary', () => {
                     _id: faker.random.alphaNumeric(12),
                 },
             },
-            update: (form: BugReportForm) => API.updateBugReport(form),
-            delete: (_id: string) => API.deleteBugReport(_id),
+            submitEndpoint: (form: BugReportForm) => API.updateBugReport(form),
+            deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
         };
 
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report summary', async () => {
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                         reportObject={BugReportObject}
                         callBack={callBack}
                     />,
@@ -326,13 +297,9 @@ describe('Update report summary', () => {
         it('should change state of bug report summary', async () => {
             const newDescription = faker.lorem.paragraph();
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
-                        onDelete={onDelete}
-                        onUpdate={onUpdate}
                         reportObject={BugReportObject}
                         callBack={callBack}
                     />,
@@ -370,8 +337,6 @@ describe('Update report summary', () => {
                 .mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -379,8 +344,6 @@ describe('Update report summary', () => {
                     <ReportSummary
                         reportObject={BugReportObject}
                         callBack={callBack}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                     />,
                     container
                 );
@@ -422,15 +385,11 @@ describe('Update report summary', () => {
                 .mockRejectedValue(rejectedVal);
             const newDescription = faker.lorem.paragraph();
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                         reportObject={BugReportObject}
                         callBack={callBack}
                     />,
@@ -469,8 +428,6 @@ describe('Update report summary', () => {
 
         it('Should delete a bug report summary and succeed', async () => {
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             const resolvedVal: AxiosResponse = {
                 status: 200,
                 data: {},
@@ -486,8 +443,6 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                         reportObject={BugReportObject}
                         callBack={callBack}
                     />,
@@ -509,13 +464,10 @@ describe('Update report summary', () => {
                 await Promise.allSettled(spy.mock.results);
             });
             expect(callBack).toBeCalled();
-            expect(onDelete).toBeCalled();
         });
 
         it('Should attempt to delete a feedback report summary and fail', async () => {
             const callBack = jest.fn();
-            const onUpdate = jest.fn();
-            const onDelete = jest.fn();
             const rejectedVal = { status: 500 };
             const spy = jest
                 .spyOn(API, 'deleteBugReport')
@@ -525,8 +477,6 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportSummary
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
                         reportObject={BugReportObject}
                         callBack={callBack}
                     />,
@@ -548,7 +498,6 @@ describe('Update report summary', () => {
                 await Promise.allSettled(spy.mock.results);
             });
             expect(callBack).not.toBeCalled();
-            expect(onDelete).not.toBeCalled();
         });
     });
 });

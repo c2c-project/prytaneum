@@ -1,35 +1,39 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
-import { AxiosResponse } from 'axios';
 
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
-import { FeedbackForm, BugReportForm } from '../types';
+import { ReportObject, FeedbackReport, BugReport } from '../types';
 
-type ReportType = FeedbackForm | BugReportForm;
+type Report = FeedbackReport | BugReport;
+
 interface FormProps {
-    Report: ReportType;
-    SubmitEndpoint: (form: ReportType) => Promise<AxiosResponse<unknown>>;
-    onSuccess: () => void;
+    reportObject: ReportObject;
+    callback: () => void;
+    onSuccess: (report: Report) => void;
 }
 
 export default function FormBase({
-    Report,
-    SubmitEndpoint,
+    reportObject,
     onSuccess,
+    callback,
 }: FormProps) {
     const [snack] = useSnack();
-    const [reportState, setReportState] = React.useState<ReportType>(Report);
-    const apiRequest = React.useCallback(() => SubmitEndpoint(reportState), [
-        reportState,
-    ]);
-    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+    const [reportState, setReportState] = React.useState<Report>(
+        reportObject.Report
+    );
+    const submitRequest = React.useCallback(
+        () => reportObject.submitEndpoint(reportState),
+        [reportState]
+    );
+
+    const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            onSuccess();
+            onSuccess(reportState);
+            callback();
             snack('Report successfully submitted', 'success');
         },
         onFailure: () => {
@@ -84,15 +88,3 @@ export default function FormBase({
         </Grid>
     );
 }
-
-FormBase.defaultProps = {
-    SubmitEndpoint: () => {},
-    Report: {
-        description: '',
-    },
-};
-
-FormBase.propTypes = {
-    SubmitEndpoint: PropTypes.func,
-    Report: PropTypes.object,
-};

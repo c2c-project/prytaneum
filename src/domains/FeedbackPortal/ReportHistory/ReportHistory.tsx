@@ -13,6 +13,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
+import ReportContext from '../Contexts/ReportContext';
 import {
     getFeedbackReportsBySubmitter,
     getBugReportsBySubmitter,
@@ -22,9 +23,14 @@ import {
     deleteFeedbackReport,
 } from '../api';
 
-import { ReportObject, FeedbackForm, BugReportForm } from '../types';
+import {
+    ReportObject,
+    FeedbackForm,
+    BugReportForm,
+    FeedbackReport,
+    BugReport,
+} from '../types';
 
-//  TODO: Add static state to check if child components are able t o update the state of this component
 const ReportOptions = [
     {
         name: 'Feedback',
@@ -72,13 +78,6 @@ export default function ReportHistory() {
         ),
     };
 
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
-        setPage(value);
-    };
-
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setReportEndpoints(e.target.value as []);
     };
@@ -91,13 +90,15 @@ export default function ReportHistory() {
         ApiRequests.Feedback,
         {
             onSuccess: (results) => {
-                // Creates Report objects with a report, update, and delete functions
+                // Creates an object that contains a report object, update function, and delete function
+                console.log(results);
                 const feedbackReportObjects = results.data.reports.map(
                     (report) => ({
                         Report: report,
-                        update: (form: FeedbackForm) =>
+                        submitEndpoint: (form: FeedbackForm) =>
                             updateFeedbackReport(form),
-                        delete: (_id: string) => deleteFeedbackReport(_id),
+                        deleteEndpoint: (_id: string) =>
+                            deleteFeedbackReport(_id),
                     })
                 );
 
@@ -110,25 +111,13 @@ export default function ReportHistory() {
         }
     );
 
-    const deleteReport = (Report: ReportObject) => {
-        setReportObjects((prevReportObjects) => {
-            const indexOfReportToDelete = prevReportObjects.findIndex(
-                (prevReportObject) =>
-                    prevReportObject.Report._id === Report.Report._id
-            );
-            if (indexOfReportToDelete < 0) {
-                return prevReportObjects;
-            }
-            return prevReportObjects.splice(indexOfReportToDelete, 1);
-        });
-    };
-
     const [sendBugRequest, isLoadingBug] = useEndpoint(ApiRequests.Bug, {
         onSuccess: (results) => {
+            console.log(results);
             const bugReportObjects = results.data.reports.map((report) => ({
                 Report: report,
-                update: (form: BugReportForm) => updateBugReport(form),
-                delete: (_id: string) => deleteBugReport(_id),
+                submitEndpoint: (form: BugReportForm) => updateBugReport(form),
+                deleteEndpoint: (_id: string) => deleteBugReport(_id),
             }));
 
             setReportObjects((prevReports) => [
@@ -138,8 +127,7 @@ export default function ReportHistory() {
         },
     });
 
-    const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const sendRequests = () => {
         if (ReportEndpoints.includes('Feedback')) {
             sendFeedbackRequest();
         }
@@ -148,12 +136,65 @@ export default function ReportHistory() {
         }
     };
 
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        // Update the page number in the state of the component
+        setPage(value);
+        // Removes existing report objects from the state of the component
+        setReportObjects([]);
+        // Sends requests with an updated page query parameter
+        sendRequests();
+    };
+
+    const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        sendRequests();
+    };
+
+    type Report = FeedbackReport | BugReport;
+
+    const findReport = (reports: ReportObject[], report: Report) => {
+        return reports.findIndex((rp) => rp.Report._id === report._id);
+    };
+
+    const deleteReport = (reportId: string) => {
+        setReportObjects((prevReports) => {
+            return prevReports.filter(
+                (prevReport) => prevReport.Report._id !== reportId
+            );
+        });
+    };
+
+    const updateReport = (report: Report) => {
+        const prevReports = [...reportObjects];
+        const indexOfReport = findReport(prevReports, report);
+        if (indexOfReport === -1) {
+            return;
+        }
+        prevReports[indexOfReport].Report = report;
+
+        setReportObjects(prevReports);
+    };
+
+    const customReportFunctions = {
+        updateReport,
+        deleteReport,
+    };
+
     return (
         <div>
             <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <form onSubmit={getReports}>
-                        <Grid container spacing={5}>
+                        {/*  Search button seems to be out of place but it's because the input fields enlarger */}
+                        <Grid
+                            container
+                            direction='row'
+                            spacing={5}
+                            alignItems='center'
+                        >
                             <Grid item>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel>Report Type</InputLabel>
@@ -214,35 +255,33 @@ export default function ReportHistory() {
                     </form>
                 </Grid>
             </Grid>
-            <Grid justify='center' item xs={12}>
-                <ReportList
-                    ReportObjects={reportObjects}
-                    onUpdate={setReportObjects}
-                    onDelete={setReportObjects}
-                />
-                {/* <div>
-                    <h1>Report Value Selected:</h1>
-                    {getReportEndpoints.map((getReportEndpoint) => (
-                        <h3>{getReportEndpoint}</h3>
-                    ))}
-                </div>
-                <div>
-                    <h1>Sorting Value Selected:</h1>
-                    <h2>{sortingOrder}</h2>
-                </div>
-                <div>
-                    <h1>Page Selected:</h1>
-                    <h1>{page}</h1>
-                </div> */}
-            </Grid>
-            <Grid item container justify='center' xs={12}>
-                <Pagination
-                    color='primary'
-                    count={10}
-                    page={page}
-                    onChange={handlePageChange}
-                />
-            </Grid>
+            <ReportContext.Provider value={customReportFunctions}>
+                <Grid
+                    item
+                    container
+                    justify='center'
+                    alignItems='center'
+                    xs={12}
+                >
+                    <ReportList reportObjects={reportObjects} />
+                </Grid>
+            </ReportContext.Provider>
+            {reportObjects.length !== 0 && (
+                <Grid
+                    item
+                    container
+                    justify='center'
+                    alignItems='center'
+                    xs={12}
+                >
+                    <Pagination
+                        color='primary'
+                        count={10}
+                        page={page}
+                        onChange={handlePageChange}
+                    />
+                </Grid>
+            )}
         </div>
     );
 }

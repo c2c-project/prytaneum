@@ -6,6 +6,7 @@ import faker from 'faker';
 
 import ReportList from './ReportList';
 import * as API from '../api/api';
+import { FeedbackForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
@@ -22,8 +23,8 @@ const ReportObject = {
             _id: faker.random.alphaNumeric(11),
         },
     },
-    update: API.updateFeedbackReport,
-    delete: API.deleteFeedbackReport,
+    submitEndpoint: (form: FeedbackForm) => API.updateFeedbackReport(form),
+    deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
 };
 
 describe('CreateReportList', () => {
@@ -44,34 +45,16 @@ describe('CreateReportList', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should render report list', async () => {
-        const onUpdate = jest.fn();
-        const onDelete = jest.fn();
         ReactTestUtils.act(() => {
-            render(
-                <ReportList
-                    ReportObjects={[ReportObject]}
-                    onUpdate={onUpdate}
-                    onDelete={onDelete}
-                />,
-                container
-            );
+            render(<ReportList reportObjects={[ReportObject]} />, container);
         });
     });
 
     it('should render and open dialog', async () => {
         const newDescription = faker.lorem.paragraph();
-        const onUpdate = jest.fn();
-        const onDelete = jest.fn();
 
         ReactTestUtils.act(() => {
-            render(
-                <ReportList
-                    ReportObjects={[ReportObject]}
-                    onUpdate={onUpdate}
-                    onDelete={onDelete}
-                />,
-                container
-            );
+            render(<ReportList reportObjects={[ReportObject]} />, container);
         });
 
         // Get form nodes

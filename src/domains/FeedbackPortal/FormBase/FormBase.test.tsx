@@ -7,8 +7,25 @@ import { AxiosResponse } from 'axios';
 
 import FormBase from './FormBase';
 import * as API from '../api/api';
+import { FeedbackForm } from '../types';
 
 jest.mock('hooks/useSnack');
+
+const dummyDate = new Date().toISOString();
+
+const makeDummyFeedbackReport = () => ({
+    Report: {
+        _id: '',
+        description: '',
+        date: '',
+        user: {
+            _id: '',
+        },
+    },
+    submitEndpoint: (form: FeedbackForm) =>
+        API.createFeedbackReport(form, dummyDate),
+    deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
+});
 
 // TODO: When form base is changed to receive onSuccess and onFailure call backs then update this test suite
 describe('CreateReportRequest', () => {
@@ -31,13 +48,14 @@ describe('CreateReportRequest', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render report form with create Feedback endpoint', async () => {
         const onSuccess = jest.fn();
+        const callback = jest.fn();
+
         ReactTestUtils.act(() => {
             render(
                 <FormBase
+                    reportObject={makeDummyFeedbackReport()}
                     onSuccess={onSuccess}
-                    SubmitEndpoint={(form) =>
-                        API.createFeedbackReport(form, new Date().toISOString())
-                    }
+                    callback={callback}
                 />,
                 container
             );
@@ -46,16 +64,15 @@ describe('CreateReportRequest', () => {
 
     it('should change state of form', async () => {
         const description = faker.lorem.paragraph();
-        const date = new Date().toISOString();
         const onSuccess = jest.fn();
+        const callback = jest.fn();
 
         ReactTestUtils.act(() => {
             render(
                 <FormBase
                     onSuccess={onSuccess}
-                    SubmitEndpoint={(form) =>
-                        API.createFeedbackReport(form, date)
-                    }
+                    callback={callback}
+                    reportObject={makeDummyFeedbackReport()}
                 />,
                 container
             );
@@ -86,16 +103,16 @@ describe('CreateReportRequest', () => {
             .spyOn(API, 'createFeedbackReport')
             .mockResolvedValue(resolvedVal);
         const description = faker.lorem.paragraph();
-        const date = new Date().toISOString();
         const onSuccess = jest.fn();
+        const callback = jest.fn();
+
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
                 <FormBase
-                    SubmitEndpoint={(form) =>
-                        API.createFeedbackReport(form, date)
-                    }
+                    reportObject={makeDummyFeedbackReport()}
+                    callback={callback}
                     onSuccess={onSuccess}
                 />,
                 container
@@ -117,32 +134,33 @@ describe('CreateReportRequest', () => {
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
-        expect(spy).toBeCalledWith({ description }, date);
+        expect(spy).toBeCalledWith({ description }, dummyDate);
         jest.runAllTimers();
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(spy.mock.results);
         });
         expect(onSuccess).toBeCalled();
+        expect(callback).toBeCalled();
     });
 
     it('should submit and fail', async () => {
         const onSuccess = jest.fn();
+        const callback = jest.fn();
+
         const rejectedVal = { status: 500 };
         const spy = jest
             .spyOn(API, 'createFeedbackReport')
             .mockRejectedValue(rejectedVal);
 
         const description = faker.lorem.paragraph();
-        const date = new Date().toISOString();
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
                 <FormBase
                     onSuccess={onSuccess}
-                    SubmitEndpoint={(form) =>
-                        API.createFeedbackReport(form, date)
-                    }
+                    reportObject={makeDummyFeedbackReport()}
+                    callback={callback}
                 />,
                 container
             );
@@ -163,12 +181,13 @@ describe('CreateReportRequest', () => {
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
-        expect(spy).toBeCalledWith({ description }, date);
+        expect(spy).toBeCalledWith({ description }, dummyDate);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(spy.mock.results);
         });
         expect(onSuccess).not.toBeCalled();
+        expect(callback).not.toBeCalled();
     });
 });

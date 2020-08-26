@@ -2,6 +2,7 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 import faker from 'faker';
+
 import * as API from '.';
 
 // Creates a mocked axios.post function but also tracks calls to axios.post

@@ -25,8 +25,8 @@ export type BugReport = Report & { townhallId: string };
 
 export type ReportObject = {
     Report: FeedbackReport | BugReport;
-    update: (
-        report: FeedbackForm | BugReportForm
-    ) => Promise<AxiosResponse<any>>;
-    delete: (_id: string) => Promise<AxiosResponse<any>>;
+    submitEndpoint: (
+        form: FeedbackForm | BugReportForm
+    ) => Promise<AxiosResponse<unknown>>;
+    deleteEndpoint: (_id: string) => Promise<AxiosResponse<unknown>>;
 };

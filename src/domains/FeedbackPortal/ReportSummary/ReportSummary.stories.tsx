@@ -34,8 +34,8 @@ const FeedbackReportObject = {
             _id: faker.random.alphaNumeric(12),
         },
     },
-    update: (form: FeedbackForm) => updateFeedbackReport(form),
-    delete: (_id: string) => deleteFeedbackReport(_id),
+    submitEndpoint: (form: FeedbackForm) => updateFeedbackReport(form),
+    deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
 };
 
 const BugReportObject = {
@@ -48,8 +48,8 @@ const BugReportObject = {
             _id: faker.random.alphaNumeric(12),
         },
     },
-    update: (form: BugReportForm) => updateBugReport(form),
-    delete: (_id: string) => deleteBugReport(_id),
+    submitEndpoint: (form: BugReportForm) => updateBugReport(form),
+    deleteEndpoint: (_id: string) => deleteBugReport(_id),
 };
 
 interface Props {
@@ -59,7 +59,6 @@ export function ReportSummary({ ReportType }: Props) {
     return (
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
-                // TODO: How to mock functions in stories?
                 <Component
                     reportObject={FeedbackReportObject}
                     callBack={() => {}}

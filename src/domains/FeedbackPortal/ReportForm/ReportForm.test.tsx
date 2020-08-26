@@ -4,17 +4,45 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 import { AxiosResponse } from 'axios';
-// import {
-//     BugReport as BugReportIcon,
-//     Feedback as FeedbackReportIcon,
-// } from '@material-ui/icons';
 
 import ReportForm from './ReportForm';
 import * as API from '../api/api';
+import { FeedbackForm, BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
-// TODO: When form base is changed to receive onSuccess and onFailure call backs then update this test suite
+// TODO: Add failure tests
+const dummyDate = new Date().toISOString();
+const makeDummyFeedbackReportForm = () => ({
+    Report: {
+        _id: '',
+        description: '',
+        date: '',
+        user: {
+            _id: '',
+        },
+    },
+    submitEndpoint: (form: FeedbackForm) =>
+        API.createFeedbackReport(form, dummyDate),
+    deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
+});
+
+const dummyTownhallId = faker.random.alphaNumeric(12);
+const makeDummyBugReportForm = () => ({
+    Report: {
+        _id: '',
+        description: '',
+        date: '',
+        townhallId: '',
+        user: {
+            _id: '',
+        },
+    },
+    submitEndpoint: (form: BugReportForm) =>
+        API.createBugReport(form, dummyDate, dummyTownhallId),
+    deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
+});
+
 describe('create report form', () => {
     let container: HTMLDivElement | null = null;
 
@@ -38,10 +66,10 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportForm
-                        Type='feedback'
-                        Title={faker.random.word()}
-                        MainDescription={faker.lorem.paragraph()}
-                        Icon={<></>}
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyFeedbackReportForm()}
                     />,
                     container
                 );
@@ -53,10 +81,10 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportForm
-                        Type='feedback'
-                        Title={faker.random.word()}
-                        MainDescription={faker.lorem.paragraph()}
-                        Icon={<></>}
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyFeedbackReportForm()}
                     />,
                     container
                 );
@@ -80,68 +108,65 @@ describe('create report form', () => {
         });
 
         // TODO:This test does not pass because the date used by the component is different than the date declared in the test, by a difference of seconds
-        // it('should submit feedback report form and succeed', async () => {
-        //     const resolvedVal: AxiosResponse = {
-        //         status: 200,
-        //         data: {},
-        //         statusText: 'OK',
-        //         headers: {},
-        //         config: {},
-        //     };
-        //     const spy = jest
-        //         .spyOn(API, 'createFeedbackReport')
-        //         .mockResolvedValue(resolvedVal);
-        //     const description = faker.lorem.paragraph();
-        //     const date = new Date().toISOString();
+        it('should submit feedback report form and succeed', async () => {
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'createFeedbackReport')
+                .mockResolvedValue(resolvedVal);
+            const description = faker.lorem.paragraph();
 
-        //     ReactTestUtils.act(() => {
-        //         render(
-        //             <ReportForm
-        //                 Type='feedback'
-        //                 Title={faker.random.word()}
-        //                 MainDescription={faker.lorem.paragraph()}
-        //                 Icon={<></>}
-        //             />,
-        //             container
-        //         );
-        //     });
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyFeedbackReportForm()}
+                    />,
+                    container
+                );
+            });
 
-        //     // Get form nodes
-        //     const reportDescriptionNode = document.querySelector(
-        //         '#reportDescription'
-        //     );
-        //     const button = document.querySelector('[type="submit"]');
+            // Get form nodes
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
 
-        //     // Simulate events
-        //     ReactTestUtils.act(() => {
-        //         if (reportDescriptionNode && button) {
-        //             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-        //                 target: ({
-        //                     value: description,
-        //                 } as unknown) as EventTarget,
-        //             });
-        //             button.dispatchEvent(
-        //                 new MouseEvent('click', { bubbles: true })
-        //             );
-        //         }
-        //     });
-        //     // Dates may not match
-        //     expect(spy).toBeCalledWith({ description }, date);
-        // });
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
+
+            // Simulate events
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: description,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith({ description }, dummyDate);
+        });
     });
 
-    // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report form', () => {
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report form', async () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportForm
-                        Type='bug'
-                        Title={faker.random.word()}
-                        MainDescription={faker.lorem.paragraph()}
-                        Icon={<></>}
-                        townhallId={faker.random.alphaNumeric(12)}
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyBugReportForm()}
                     />,
                     container
                 );
@@ -153,11 +178,10 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 render(
                     <ReportForm
-                        Type='bug'
-                        Title={faker.random.word()}
-                        MainDescription={faker.lorem.paragraph()}
-                        townhallId={faker.random.alphaNumeric(12)}
-                        Icon={<></>}
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyBugReportForm()}
                     />,
                     container
                 );
@@ -180,55 +204,56 @@ describe('create report form', () => {
             expect(reportDescriptionNode.value).toBe(description);
         });
 
-        // TODO: This test does not pass because the date used by the component is different than the date declared in the test, by a difference of seconds
-        // it('should submit and succeed', async () => {
-        //     const resolvedVal: AxiosResponse = {
-        //         status: 200,
-        //         data: {},
-        //         statusText: 'OK',
-        //         headers: {},
-        //         config: {},
-        //     };
-        //     const spy = jest
-        //         .spyOn(API, 'createFeedbackReport')
-        //         .mockResolvedValue(resolvedVal);
-        //     const description = faker.lorem.paragraph();
-        //     const date = new Date().toISOString();
+        it('should submit and succeed', async () => {
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'createBugReport')
+                .mockResolvedValue(resolvedVal);
+            const description = faker.lorem.paragraph();
 
-        //     ReactTestUtils.act(() => {
-        //         render(
-        //             <ReportForm
-        //                 Type='bug'
-        //                 Title={faker.random.word()}
-        //                 MainDescription={faker.lorem.paragraph()}
-        //                 townhallId={faker.random.alphaNumeric(12)}
-        //                 Icon={<></>}
-        //             />,
-        //             container
-        //         );
-        //     });
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        reportObject={makeDummyBugReportForm()}
+                    />,
+                    container
+                );
+            });
 
-        //     // Get form nodes
-        //     const reportDescriptionNode = document.querySelector(
-        //         '#reportDescription'
-        //     );
-        //     const button = document.querySelector('[type="submit"]');
+            // Get form nodes
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
 
-        //     // Simulate events
-        //     ReactTestUtils.act(() => {
-        //         if (reportDescriptionNode && button) {
-        //             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-        //                 target: ({
-        //                     value: description,
-        //                 } as unknown) as EventTarget,
-        //             });
-        //             button.dispatchEvent(
-        //                 new MouseEvent('click', { bubbles: true })
-        //             );
-        //         }
-        //     });
-        //     // Dates may not match
-        //     expect(spy).toBeCalledWith({ description }, date);
-        // });
+            // Simulate events
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: description,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            // Dates may not match
+            expect(spy).toBeCalledWith(
+                { description },
+                dummyDate,
+                dummyTownhallId
+            );
+        });
     });
 });

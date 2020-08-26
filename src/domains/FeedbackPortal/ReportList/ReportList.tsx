@@ -15,13 +15,7 @@ import { formatDate } from 'utils/format';
 import { ReportObject } from '../types';
 
 interface Props {
-    ReportObjects: ReportObject[];
-    onUpdate: (
-        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
-    ) => void;
-    onDelete: (
-        p: ReportObject[] | ((p: ReportObject[]) => ReportObject[])
-    ) => void;
+    reportObjects: ReportObject[];
 }
 
 const useStyles = makeStyles(() => ({
@@ -37,11 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function ReportList({
-    ReportObjects,
-    onUpdate,
-    onDelete,
-}: Props) {
+export default function ReportList({ reportObjects }: Props) {
     const classes = useStyles();
     const [
         reportObjectSelected,
@@ -50,10 +40,11 @@ export default function ReportList({
     return (
         <div>
             <List className={classes.root} subheader={<li />}>
-                {ReportObjects.map((reportObject) => (
+                {reportObjects.map((reportObject) => (
                     <div key={reportObject.Report._id}>
                         <Divider />
                         <ListSubheader
+                            disableSticky
                             className={classes.FontSize}
                             color='primary'
                         >
@@ -86,8 +77,6 @@ export default function ReportList({
                     <Container maxWidth='sm' style={{ padding: 20 }}>
                         <ReportSummary
                             reportObject={reportObjectSelected}
-                            onUpdate={onUpdate}
-                            onDelete={onDelete}
                             callBack={() => {
                                 setReportObjectSelected(null);
                             }}

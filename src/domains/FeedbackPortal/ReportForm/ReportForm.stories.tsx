@@ -6,6 +6,14 @@ import {
     Feedback as FeedbackReportIcon,
 } from '@material-ui/icons';
 
+import {
+    createFeedbackReport,
+    createBugReport,
+    deleteFeedbackReport,
+    deleteBugReport,
+} from '../api';
+import { FeedbackForm, BugReportForm } from '../types';
+
 import Component from '.';
 
 export default {
@@ -21,19 +29,49 @@ export default {
     },
 };
 
-const FeedbackReportForm = {
-    Title: 'Feedback Form',
-    MainDescription:
+const dummyFeedbackReportForm = {
+    title: 'Feedback Form',
+    mainDescription:
         'Let us know how we can improve your virtual town hall experience in the future. We strongly appreciate your feedback!',
-    Icon: <FeedbackReportIcon />,
+    icon: <FeedbackReportIcon />,
+    reportObject: {
+        Report: {
+            _id: '',
+            description: '',
+            date: '',
+            user: {
+                _id: '',
+            },
+        },
+        submitEndpoint: (form: FeedbackForm) =>
+            createFeedbackReport(form, new Date().toISOString()),
+        deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
+    },
 };
 
-const BugReportForm = {
-    Title: 'Bug Report Form',
-    MainDescription:
+const dummyBugReportForm = {
+    title: 'Bug Report Form',
+    mainDescription:
         'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
-    Icon: <BugReportIcon />,
-    townhallId: faker.random.alphaNumeric(12),
+    icon: <BugReportIcon />,
+    reportObject: {
+        Report: {
+            _id: '',
+            description: '',
+            date: '',
+            townhallId: '',
+            user: {
+                _id: '',
+            },
+        },
+        submitEndpoint: (form: BugReportForm) =>
+            createBugReport(
+                form,
+                new Date().toISOString(),
+                faker.random.alphaNumeric(12)
+            ),
+        deleteEndpoint: (_id: string) => deleteBugReport(_id),
+    },
 };
 
 interface Props {
@@ -44,18 +82,17 @@ export function ReportForm({ ReportType }: Props) {
         <Container maxWidth='sm'>
             {ReportType === 'Feedback' ? (
                 <Component
-                    Title={FeedbackReportForm.Title}
-                    MainDescription={FeedbackReportForm.MainDescription}
-                    Icon={FeedbackReportForm.Icon}
-                    Type='feedback'
+                    title={dummyFeedbackReportForm.title}
+                    mainDescription={dummyFeedbackReportForm.mainDescription}
+                    icon={dummyFeedbackReportForm.icon}
+                    reportObject={dummyFeedbackReportForm.reportObject}
                 />
             ) : (
                 <Component
-                    Title={BugReportForm.Title}
-                    MainDescription={BugReportForm.MainDescription}
-                    Icon={BugReportForm.Icon}
-                    Type='bug'
-                    townhallId={BugReportForm.townhallId}
+                    title={dummyBugReportForm.title}
+                    mainDescription={dummyBugReportForm.mainDescription}
+                    icon={dummyBugReportForm.icon}
+                    reportObject={dummyBugReportForm.reportObject}
                 />
             )}
         </Container>

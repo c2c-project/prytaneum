@@ -1,109 +1,42 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { AxiosResponse } from 'axios';
 
-import errors from 'utils/errors';
 import FormBase from '../FormBase';
-import { createFeedbackReport, createBugReport } from '../api';
-import { FeedbackForm, BugReportForm } from '../types';
+import { ReportObject } from '../types';
 
 interface FormProps {
-    Title: string;
-    MainDescription: string;
-    Icon: JSX.Element;
-    CreateReportEndpoint: (
-        form: FeedbackForm | BugReportForm
-    ) => Promise<AxiosResponse<any>>;
+    title: string;
+    mainDescription: string;
+    icon: JSX.Element;
+    reportObject: ReportObject;
 }
 
-function ReportForm({
-    Title,
-    MainDescription,
-    Icon,
-    CreateReportEndpoint,
+export default function ReportForm({
+    title,
+    mainDescription,
+    icon,
+    reportObject,
 }: FormProps) {
     return (
         <Grid container spacing={5}>
             <Grid item xs={12}>
                 <Typography variant='h4' align='center'>
-                    {Title}
-                    {React.cloneElement(Icon)}
+                    {title}
+                    {React.cloneElement(icon)}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant='body1'>{MainDescription}</Typography>
+                <Typography variant='body1'>{mainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
-                {/* TODO: Pass an actual onSucces callback function */}
+                {/* TODO: Pass actual onSuccess and callback functions */}
                 <FormBase
-                    SubmitEndpoint={CreateReportEndpoint}
+                    reportObject={reportObject}
                     onSuccess={() => {}}
+                    callback={() => {}}
                 />
             </Grid>
         </Grid>
     );
 }
-
-interface FactoryProps {
-    Title: string;
-    MainDescription: string;
-    Icon: JSX.Element;
-    townhallId?: string;
-    Type: 'feedback' | 'bug';
-}
-
-export default function ReportFormFactory({
-    Type,
-    Title,
-    MainDescription,
-    Icon,
-    townhallId,
-}: FactoryProps) {
-    switch (Type) {
-        case 'feedback':
-            return (
-                <ReportForm
-                    Title={Title}
-                    Icon={Icon}
-                    MainDescription={MainDescription}
-                    CreateReportEndpoint={(form) =>
-                        createFeedbackReport(form, new Date().toISOString())
-                    }
-                />
-            );
-        case 'bug':
-            if (!townhallId) {
-                throw errors.internalError();
-            }
-            return (
-                <ReportForm
-                    Title={Title}
-                    MainDescription={MainDescription}
-                    Icon={Icon}
-                    CreateReportEndpoint={(form) =>
-                        createBugReport(
-                            form,
-                            new Date().toISOString(),
-                            townhallId
-                        )
-                    }
-                />
-            );
-        default:
-            return (
-                <ReportForm
-                    Title={Title}
-                    MainDescription={MainDescription}
-                    Icon={Icon}
-                    CreateReportEndpoint={(form) =>
-                        createFeedbackReport(form, new Date().toISOString())
-                    }
-                />
-            );
-    }
-}
-
-ReportFormFactory.defaultProps = {
-    townhallId: '',
-};
