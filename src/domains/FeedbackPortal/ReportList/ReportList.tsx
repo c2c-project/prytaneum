@@ -7,18 +7,34 @@ import {
     Divider,
 } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import Dialog from 'components/Dialog';
 import ReportSummary from 'domains/FeedbackPortal/ReportSummary';
 import { formatDate } from 'utils/format';
-import { ReportObject } from '../types';
+import ReportEndpointContext, {
+    ReportEndpointHandlers,
+    defaultEndpointHandlers,
+} from '../Contexts/ReportEndpointContext';
+import {
+    FeedbackReport,
+    BugReport,
+    FeedbackForm,
+    BugReportForm,
+} from '../types';
+import {
+    deleteFeedbackReport,
+    updateBugReport,
+    deleteBugReport,
+    updateFeedbackReport,
+} from '../api';
 
+type Report = FeedbackReport | BugReport;
 interface Props {
-    reportObjects: ReportObject[];
+    reports: Report[];
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         width: '100%',
         height: '100%',
@@ -29,19 +45,66 @@ const useStyles = makeStyles(() => ({
     FontSize: {
         fontSize: 20,
     },
+    ul: {
+        backgroundColor: 'inherit',
+        padding: 0,
+        listStyle: 'none',
+    },
+    listSection: {
+        // backgroundColor: 'inherit',
+        marker: 'none',
+        backgroundColor: theme.palette.background.paper,
+        // margin: `${theme.spacing(2)}px 0px ${theme.spacing(2)}px 0px`,
+        // boxShadow: theme.shadows[2],
+    },
+    ul: {
+        backgroundColor: 'inherit',
+        padding: 0,
+        listStyle: 'none',
+    },
 }));
 
-export default function ReportList({ reportObjects }: Props) {
+export default function ReportList({ reports }: Props) {
     const classes = useStyles();
-    const [
-        reportObjectSelected,
-        setReportObjectSelected,
-    ] = React.useState<ReportObject | null>(null);
+    const [reportSelected, setReportSelected] = React.useState<Report | null>(
+        null
+    );
+
+    const [endpoints, setEndpoints] = React.useState<ReportEndpointHandlers>(
+        defaultEndpointHandlers
+    );
+
+    const endpointDict = {
+        Feedback: {
+            submitEndpoint: (form: FeedbackForm) => updateFeedbackReport(form),
+            deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
+        },
+        Bug: {
+            submitEndpoint: (form: BugReportForm) => updateBugReport(form),
+            deleteEndpoint: (_id: string) => deleteBugReport(_id),
+        },
+    };
+
+    const selectReport = (report: Report) => {
+        setReportSelected(report);
+        switch (report.type) {
+            case 'Feedback':
+                setEndpoints(endpointDict.Feedback);
+                break;
+            case 'Bug':
+                setEndpoints(endpointDict.Bug);
+                break;
+            default:
+                setEndpoints(endpointDict.Feedback);
+                break;
+        }
+    };
+
     return (
         <div>
-            <List className={classes.root} subheader={<li />}>
-                {reportObjects.map((reportObject) => (
-                    <div key={reportObject.Report._id}>
+            <List className={classes.root}>
+                {reports.map((report) => (
+                    <li key={report._id} className={classes.listSection}>
                         <Divider />
                         <ListSubheader
                             disableSticky
@@ -49,38 +112,41 @@ export default function ReportList({ reportObjects }: Props) {
                             color='primary'
                         >
                             {`Date Submitted: ${formatDate(
-                                new Date(reportObject.Report.date)
+                                new Date(report.date)
                             )}`}
                         </ListSubheader>
                         <ListItem
-                            id={reportObject.Report._id}
+                            id={report._id}
                             button
                             onClick={() => {
-                                setReportObjectSelected(reportObject);
+                                selectReport(report);
                             }}
                         >
                             <ListItemText
-                                primary={`${reportObject.Report.description.substr(
+                                primary={`${report.description.substr(
                                     0,
                                     200
                                 )} ...`}
                             />
                         </ListItem>
-                    </div>
+                    </li>
                 ))}
             </List>
             <Dialog
-                open={Boolean(reportObjectSelected)}
-                onClose={() => setReportObjectSelected(null)}
+                open={Boolean(reportSelected)}
+                onClose={() => setReportSelected(null)}
             >
-                {reportObjectSelected ? (
+                {reportSelected ? (
                     <Container maxWidth='sm' style={{ padding: 20 }}>
-                        <ReportSummary
-                            reportObject={reportObjectSelected}
-                            callBack={() => {
-                                setReportObjectSelected(null);
-                            }}
-                        />
+                        <ReportEndpointContext.Provider value={endpoints}>
+                            <ReportSummary
+                                report={reportSelected}
+                                callBack={() => {
+                                    setReportSelected(null);
+                                    setEndpoints(defaultEndpointHandlers);
+                                }}
+                            />
+                        </ReportEndpointContext.Provider>
                     </Container>
                 ) : (
                     <></>

@@ -6,33 +6,28 @@ import LoadingButton from 'components/LoadingButton';
 
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
-import { ReportObject, FeedbackReport, BugReport } from '../types';
+import ReportEndpointContext from '../Contexts/ReportEndpointContext';
+import { FeedbackReport, BugReport } from '../types';
 
 type Report = FeedbackReport | BugReport;
 
 interface FormProps {
-    reportObject: ReportObject;
+    report: Report;
     callback: () => void;
     onSuccess: (report: Report) => void;
 }
 
-export default function FormBase({
-    reportObject,
-    onSuccess,
-    callback,
-}: FormProps) {
+export default function FormBase({ report, onSuccess, callback }: FormProps) {
+    const { submitEndpoint } = React.useContext(ReportEndpointContext);
     const [snack] = useSnack();
-    const [reportState, setReportState] = React.useState<Report>(
-        reportObject.Report
-    );
-    const submitRequest = React.useCallback(
-        () => reportObject.submitEndpoint(reportState),
-        [reportState]
-    );
+    const [reportState, setReportState] = React.useState<Report>(report);
+    const submitRequest = React.useCallback(() => submitEndpoint(reportState), [
+        reportState,
+    ]);
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            onSuccess(reportState);
+            if (reportState) onSuccess(reportState);
             callback();
             snack('Report successfully submitted', 'success');
         },

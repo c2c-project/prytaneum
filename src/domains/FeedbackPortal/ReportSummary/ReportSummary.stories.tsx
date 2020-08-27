@@ -2,70 +2,27 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker';
 
-import {
-    updateBugReport,
-    updateFeedbackReport,
-    deleteBugReport,
-    deleteFeedbackReport,
-} from '../api';
-import { FeedbackForm, BugReportForm } from '../types';
 import Component from '.';
 
-// TODO: For some reason, the select control does not change what component gets rendered.
 export default {
     title: 'Domains/ReportSummary',
     component: Component,
-    argTypes: {
-        ReportType: {
-            control: {
-                type: 'select',
-                options: ['Feedback', 'Bug'],
-            },
-        },
-    },
 };
 
-const FeedbackReportObject = {
-    Report: {
-        description: faker.lorem.paragraph(),
-        date: new Date().toISOString(),
+const dummyFeedbackReport = {
+    description: faker.lorem.paragraph(),
+    date: new Date().toISOString(),
+    _id: faker.random.alphaNumeric(12),
+    user: {
         _id: faker.random.alphaNumeric(12),
-        user: {
-            _id: faker.random.alphaNumeric(12),
-        },
     },
-    submitEndpoint: (form: FeedbackForm) => updateFeedbackReport(form),
-    deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
+    type: 'Feedback',
 };
 
-const BugReportObject = {
-    Report: {
-        description: faker.lorem.paragraph(),
-        date: new Date().toISOString(),
-        _id: faker.random.alphaNumeric(12),
-        townhallId: faker.random.alphaNumeric(12),
-        user: {
-            _id: faker.random.alphaNumeric(12),
-        },
-    },
-    submitEndpoint: (form: BugReportForm) => updateBugReport(form),
-    deleteEndpoint: (_id: string) => deleteBugReport(_id),
-};
-
-interface Props {
-    ReportType: string;
-}
-export function ReportSummary({ ReportType }: Props) {
+export function ReportSummary() {
     return (
         <Container maxWidth='sm'>
-            {ReportType === 'Feedback' ? (
-                <Component
-                    reportObject={FeedbackReportObject}
-                    callBack={() => {}}
-                />
-            ) : (
-                <Component reportObject={BugReportObject} callBack={() => {}} />
-            )}
+            <Component report={dummyFeedbackReport} callBack={() => {}} />
         </Container>
     );
 }

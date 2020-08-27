@@ -10,43 +10,42 @@ import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
-import ReportContext from '../Contexts/ReportContext';
+import ReportStateContext from '../Contexts/ReportStateContext';
+import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from '../FormBase';
-import { ReportObject } from '../types';
+import { FeedbackReport, BugReport } from '../types';
 
+type Report = FeedbackReport | BugReport;
 interface SummaryProps {
-    reportObject: ReportObject;
+    report: Report;
     callBack: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
     DangerButton: {
-        color: theme.palette.getContrastText(red[500]),
-        backgroundColor: red[500],
+        color: theme.palette.getContrastText(red[700]),
+        backgroundColor: red[700],
         '&:hover': {
-            backgroundColor: red[700],
+            backgroundColor: red[900],
         },
     },
 }));
 
 // TODO: Pass onUpdate to FormBase
-export default function ReportSummary({
-    reportObject,
-    callBack,
-}: SummaryProps) {
-    const { updateReport, deleteReport } = React.useContext(ReportContext);
+export default function ReportSummary({ report, callBack }: SummaryProps) {
+    const { updateReport, deleteReport } = React.useContext(ReportStateContext);
+    const { deleteEndpoint } = React.useContext(ReportEndpointContext);
 
     const deleteApiRequest = React.useCallback(
-        () => reportObject.deleteEndpoint(reportObject.Report._id),
-        [reportObject]
+        () => deleteEndpoint(report._id),
+        [report]
     );
 
     const [snack] = useSnack();
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
-            // Removes report from list of reports in the grandparent component (ReportHistory)
-            deleteReport(reportObject.Report._id);
+            deleteReport(report._id);
             callBack();
             snack('Report successfully deleted', 'success');
         },
@@ -57,11 +56,11 @@ export default function ReportSummary({
 
     const classes = useStyles();
     return (
-        <Grid container spacing={5}>
+        <Grid container spacing={3}>
             <Grid item xs={12}>
                 <Typography variant='h4' align='left'>
                     Date Submitted:
-                    {formatDate(new Date(reportObject.Report.date))}
+                    {formatDate(new Date(report.date))}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -72,7 +71,7 @@ export default function ReportSummary({
             </Grid>
             <Grid item xs={12}>
                 <FormBase
-                    reportObject={reportObject}
+                    report={report}
                     onSuccess={updateReport}
                     callback={callBack}
                 />

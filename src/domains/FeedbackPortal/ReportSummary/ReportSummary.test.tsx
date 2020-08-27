@@ -5,6 +5,8 @@ import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 import { AxiosResponse } from 'axios';
 
+import ReportEndpointContext from '../Contexts/ReportEndpointContext';
+import { makeFeedbackReport, makeBugReport } from '../reportMaker';
 import ReportSummary from './ReportSummary';
 import * as API from '../api/api';
 import { FeedbackForm, BugReportForm } from '../types';
@@ -30,29 +32,24 @@ describe('Update report summary', () => {
     });
 
     describe('Create feedback report summary', () => {
-        const FeedbackReportObject = {
-            Report: {
-                description: faker.lorem.paragraph(),
-                date: new Date().toISOString(),
-                _id: faker.random.alphaNumeric(12),
-                user: {
-                    _id: faker.random.alphaNumeric(12),
-                },
-            },
+        const customEndpoints = {
             submitEndpoint: (form: FeedbackForm) =>
                 API.updateFeedbackReport(form),
             deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
         };
+        const dummyFeedbackReport = makeFeedbackReport();
 
         // eslint-disable-next-line jest/expect-expect
         it('should create feedback report summary', async () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -63,10 +60,12 @@ describe('Update report summary', () => {
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -75,7 +74,7 @@ describe('Update report summary', () => {
                 '#reportDescription'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe(
-                FeedbackReportObject.Report.description
+                dummyFeedbackReport.description
             );
 
             ReactTestUtils.act(() => {
@@ -105,10 +104,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -130,10 +131,10 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            const expectedForm = { ...FeedbackReportObject };
-            expectedForm.Report.description = newDescription;
+            const expectedReport = { ...dummyFeedbackReport };
+            expectedReport.description = newDescription;
+            expect(spy).toBeCalledWith(expectedReport);
 
-            expect(spy).toBeCalledWith({ ...expectedForm });
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -152,10 +153,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -177,10 +180,11 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith({
-                description: newDescription,
-                _id: FeedbackReportObject.Report._id,
-            });
+
+            const expectedReport = { ...dummyFeedbackReport };
+            expectedReport.description = newDescription;
+
+            expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -205,10 +209,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -221,7 +227,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(FeedbackReportObject.Report._id);
+            expect(spy).toBeCalledWith(dummyFeedbackReport._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -239,10 +245,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={FeedbackReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyFeedbackReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -255,7 +263,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(FeedbackReportObject.Report._id);
+            expect(spy).toBeCalledWith(dummyFeedbackReport._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -264,31 +272,24 @@ describe('Update report summary', () => {
         });
     });
 
-    // TODO: Adds a test where the component does not render because townhallId is not provided
     describe('Create bug report summary', () => {
-        const BugReportObject = {
-            Report: {
-                description: faker.lorem.paragraph(),
-                date: new Date().toISOString(),
-                _id: faker.random.alphaNumeric(12),
-                townhallId: faker.random.alphaNumeric(12),
-                user: {
-                    _id: faker.random.alphaNumeric(12),
-                },
-            },
+        const customEndpoints = {
             submitEndpoint: (form: BugReportForm) => API.updateBugReport(form),
             deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
         };
+        const dummyBugReport = makeBugReport();
 
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report summary', async () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -299,10 +300,12 @@ describe('Update report summary', () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -311,7 +314,7 @@ describe('Update report summary', () => {
                 '#reportDescription'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe(
-                BugReportObject.Report.description
+                dummyBugReport.description
             );
 
             ReactTestUtils.act(() => {
@@ -341,10 +344,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -366,10 +371,10 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith({
-                description: newDescription,
-                _id: BugReportObject.Report._id,
-            });
+
+            const expectedReport = { ...dummyBugReport };
+            expectedReport.description = newDescription;
+            expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -389,10 +394,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -414,10 +421,10 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith({
-                description: newDescription,
-                _id: BugReportObject.Report._id,
-            });
+
+            const expectedReport = { ...dummyBugReport };
+            expectedReport.description = newDescription;
+            expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -442,10 +449,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -458,7 +467,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(BugReportObject.Report._id);
+            expect(spy).toBeCalledWith(dummyBugReport._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -476,10 +485,12 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportSummary
-                        reportObject={BugReportObject}
-                        callBack={callBack}
-                    />,
+                    <ReportEndpointContext.Provider value={customEndpoints}>
+                        <ReportSummary
+                            report={dummyBugReport}
+                            callBack={callBack}
+                        />
+                    </ReportEndpointContext.Provider>,
                     container
                 );
             });
@@ -492,7 +503,7 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalledWith(BugReportObject.Report._id);
+            expect(spy).toBeCalledWith(dummyBugReport._id);
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);

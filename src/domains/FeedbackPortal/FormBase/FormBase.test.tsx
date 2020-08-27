@@ -2,33 +2,23 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import faker from 'faker';
 import { AxiosResponse } from 'axios';
+import faker from 'faker';
 
+import { makeFeedbackReport } from '../reportMaker';
+import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from './FormBase';
 import * as API from '../api/api';
 import { FeedbackForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
-const dummyDate = new Date().toISOString();
-
-const makeDummyFeedbackReport = () => ({
-    Report: {
-        _id: '',
-        description: '',
-        date: '',
-        user: {
-            _id: '',
-        },
-    },
-    submitEndpoint: (form: FeedbackForm) =>
-        API.createFeedbackReport(form, dummyDate),
-    deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
-});
-
-// TODO: When form base is changed to receive onSuccess and onFailure call backs then update this test suite
 describe('CreateReportRequest', () => {
+    const customEndpoints = {
+        submitEndpoint: (form: FeedbackForm) => API.updateFeedbackReport(form),
+        deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
+    };
+    const dummyFeedbackReport = makeFeedbackReport();
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
@@ -46,17 +36,19 @@ describe('CreateReportRequest', () => {
     });
 
     // eslint-disable-next-line jest/expect-expect
-    it('should render report form with create Feedback endpoint', async () => {
+    it('should render report form with update Feedback endpoint', async () => {
         const onSuccess = jest.fn();
         const callback = jest.fn();
 
         ReactTestUtils.act(() => {
             render(
-                <FormBase
-                    reportObject={makeDummyFeedbackReport()}
-                    onSuccess={onSuccess}
-                    callback={callback}
-                />,
+                <ReportEndpointContext.Provider value={customEndpoints}>
+                    <FormBase
+                        report={dummyFeedbackReport}
+                        onSuccess={onSuccess}
+                        callback={callback}
+                    />
+                </ReportEndpointContext.Provider>,
                 container
             );
         });
@@ -69,11 +61,13 @@ describe('CreateReportRequest', () => {
 
         ReactTestUtils.act(() => {
             render(
-                <FormBase
-                    onSuccess={onSuccess}
-                    callback={callback}
-                    reportObject={makeDummyFeedbackReport()}
-                />,
+                <ReportEndpointContext.Provider value={customEndpoints}>
+                    <FormBase
+                        onSuccess={onSuccess}
+                        callback={callback}
+                        report={dummyFeedbackReport}
+                    />
+                </ReportEndpointContext.Provider>,
                 container
             );
         });
@@ -81,7 +75,9 @@ describe('CreateReportRequest', () => {
         const reportDescriptionNode = document.querySelector(
             '#reportDescription'
         ) as HTMLInputElement;
-        expect(reportDescriptionNode.value).toBe('');
+        expect(reportDescriptionNode.value).toBe(
+            dummyFeedbackReport.description
+        );
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -100,9 +96,9 @@ describe('CreateReportRequest', () => {
             config: {},
         };
         const spy = jest
-            .spyOn(API, 'createFeedbackReport')
+            .spyOn(API, 'updateFeedbackReport')
             .mockResolvedValue(resolvedVal);
-        const description = faker.lorem.paragraph();
+        const newDescription = faker.lorem.paragraph();
         const onSuccess = jest.fn();
         const callback = jest.fn();
 
@@ -110,11 +106,13 @@ describe('CreateReportRequest', () => {
 
         ReactTestUtils.act(() => {
             render(
-                <FormBase
-                    reportObject={makeDummyFeedbackReport()}
-                    callback={callback}
-                    onSuccess={onSuccess}
-                />,
+                <ReportEndpointContext.Provider value={customEndpoints}>
+                    <FormBase
+                        onSuccess={onSuccess}
+                        callback={callback}
+                        report={dummyFeedbackReport}
+                    />
+                </ReportEndpointContext.Provider>,
                 container
             );
         });
@@ -130,12 +128,18 @@ describe('CreateReportRequest', () => {
         // Simulate events
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                target: ({ value: description } as unknown) as EventTarget,
+                target: ({ value: newDescription } as unknown) as EventTarget,
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
-        expect(spy).toBeCalledWith({ description }, dummyDate);
+
+        const expectedReport = {
+            ...dummyFeedbackReport,
+        };
+        expectedReport.description = newDescription;
+        expect(spy).toBeCalledWith(expectedReport);
         jest.runAllTimers();
+
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(spy.mock.results);
         });
@@ -149,19 +153,21 @@ describe('CreateReportRequest', () => {
 
         const rejectedVal = { status: 500 };
         const spy = jest
-            .spyOn(API, 'createFeedbackReport')
+            .spyOn(API, 'updateFeedbackReport')
             .mockRejectedValue(rejectedVal);
 
-        const description = faker.lorem.paragraph();
+        const newDescription = faker.lorem.paragraph();
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
-                <FormBase
-                    onSuccess={onSuccess}
-                    reportObject={makeDummyFeedbackReport()}
-                    callback={callback}
-                />,
+                <ReportEndpointContext.Provider value={customEndpoints}>
+                    <FormBase
+                        onSuccess={onSuccess}
+                        callback={callback}
+                        report={dummyFeedbackReport}
+                    />
+                </ReportEndpointContext.Provider>,
                 container
             );
         });
@@ -177,11 +183,16 @@ describe('CreateReportRequest', () => {
         // Simulate events
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                target: ({ value: description } as unknown) as EventTarget,
+                target: ({ value: newDescription } as unknown) as EventTarget,
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
-        expect(spy).toBeCalledWith({ description }, dummyDate);
+
+        const expectedReport = {
+            ...dummyFeedbackReport,
+        };
+        expectedReport.description = newDescription;
+        expect(spy).toBeCalledWith(expectedReport);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

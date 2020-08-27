@@ -1,6 +1,5 @@
 import React from 'react';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -11,25 +10,16 @@ import { Sort as SortIcon, Search as SearchIcon } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
+import Loader from 'components/Loader';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
-import ReportContext from '../Contexts/ReportContext';
+import ReportStateContext from '../Contexts/ReportStateContext';
 import {
     getFeedbackReportsBySubmitter,
     getBugReportsBySubmitter,
-    updateBugReport,
-    updateFeedbackReport,
-    deleteBugReport,
-    deleteFeedbackReport,
 } from '../api';
 
-import {
-    ReportObject,
-    FeedbackForm,
-    BugReportForm,
-    FeedbackReport,
-    BugReport,
-} from '../types';
+import { FeedbackReport, BugReport } from '../types';
 
 const ReportOptions = [
     {
@@ -54,91 +44,79 @@ const useStyles = makeStyles(() =>
     })
 );
 
-// TODO: Pass submit and delete endpoint API functions using Context provider. Only let user get at one type of report at a time, either bug or feedback
-// TODO: When the type of report is changed also reset the number of pages back to 1
+// TODO: When the type of report is changed and the search button is pressed, also reset the number of pages back to 1
+type Report = FeedbackReport | BugReport;
 
 export default function ReportHistory() {
     const classes = useStyles();
-    const [ReportEndpoints, setReportEndpoints] = React.useState<string[]>([]);
+    const [prevReportType, setPrevReportType] = React.useState('');
+    const [reportType, setReportType] = React.useState('');
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
 
-    const [reportObjects, setReportObjects] = React.useState<ReportObject[]>(
-        []
-    );
-
-    const ApiRequests = {
-        Feedback: React.useCallback(
-            () =>
-                // TODO: Replace with user Id
-                getFeedbackReportsBySubmitter(page, sortingOrder, '123456789'),
-            [page, sortingOrder]
-        ),
-        Bug: React.useCallback(
-            // TODO: Replace with user Id
-            () => getBugReportsBySubmitter(page, sortingOrder, '123456789'),
-            [page, sortingOrder]
-        ),
-    };
+    const [reports, setReports] = React.useState<Report[]>([]);
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        // When type of report is changed also changed the submit and delete endpoints.
-        setReportEndpoints(e.target.value as []);
+        setReportType(e.target.value as string);
     };
 
     const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+        setPrevReportType(reportType);
         setSortingOrder(e.target.value as string);
     };
 
+    const feedbackReportsAPIrequest = React.useCallback(
+        () =>
+            // TODO: Replace with user Id
+            getFeedbackReportsBySubmitter(page, sortingOrder, '123456789'),
+        [page, sortingOrder]
+    );
+
+    const bugReportsAPIrequest = React.useCallback(
+        // TODO: Replace with user Id
+        () => getBugReportsBySubmitter(page, sortingOrder, '123456789'),
+        [page, sortingOrder]
+    );
+
     const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(
-        ApiRequests.Feedback,
+        feedbackReportsAPIrequest,
         {
             onSuccess: (results) => {
-                // Creates an object that contains a report object, update function, and delete function
                 console.log(results);
-                const feedbackReportObjects = results.data.reports.map(
-                    (report) => ({
-                        Report: report,
-                        submitEndpoint: (form: FeedbackForm) =>
-                            updateFeedbackReport(form),
-                        deleteEndpoint: (_id: string) =>
-                            deleteFeedbackReport(_id),
-                    })
-                );
-
-                // Updates the state of reportObjects
-                setReportObjects((prevReports) => [
-                    ...prevReports,
-                    ...feedbackReportObjects,
-                ]);
+                // Adds type attribute to report objects. This will be needed in children components
+                const feedbackReports = results.data.reports.map((report) => ({
+                    ...report,
+                    type: 'feedback',
+                }));
+                setReports(feedbackReports);
             },
         }
     );
 
-    const [sendBugRequest, isLoadingBug] = useEndpoint(ApiRequests.Bug, {
+    const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
         onSuccess: (results) => {
             console.log(results);
-            const bugReportObjects = results.data.reports.map((report) => ({
-                Report: report,
-                submitEndpoint: (form: BugReportForm) => updateBugReport(form),
-                deleteEndpoint: (_id: string) => deleteBugReport(_id),
+            const bugReports = results.data.reports.map((report) => ({
+                ...report,
+                type: 'Bug',
             }));
-
-            setReportObjects((prevReports) => [
-                ...prevReports,
-                ...bugReportObjects,
-            ]);
+            setReports(bugReports);
         },
     });
 
-    const sendRequests = () => {
+    const sendRequest = () => {
         // Clean reports from state of component
-        setReportObjects([]);
-        if (ReportEndpoints.includes('Feedback')) {
-            sendFeedbackRequest();
-        }
-        if (ReportEndpoints.includes('Bug')) {
-            sendBugRequest();
+        setReports([]);
+        switch (reportType) {
+            case 'Feedback':
+                sendFeedbackRequest();
+                break;
+            case 'Bug':
+                sendBugRequest();
+                break;
+            default:
+                sendFeedbackRequest();
+                break;
         }
     };
 
@@ -148,40 +126,39 @@ export default function ReportHistory() {
     ) => {
         // Update the page number in the state of the component
         setPage(value);
-        // Removes existing report objects from the state of the component
-        setReportObjects([]);
         // Sends requests with an updated page query parameter
-        sendRequests();
+        sendRequest();
     };
 
     const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        sendRequests();
+        // If the report type selected has changed then set the page number to 1
+        if (prevReportType !== reportType) {
+            setPage(1);
+        }
+        sendRequest();
     };
 
-    type Report = FeedbackReport | BugReport;
-
-    const findReport = (reports: ReportObject[], report: Report) => {
-        return reports.findIndex((rp) => rp.Report._id === report._id);
+    const findReport = (reportsToIterate: Report[], report: Report) => {
+        return reportsToIterate.findIndex((rp) => rp._id === report._id);
     };
 
     const deleteReport = (reportId: string) => {
-        setReportObjects((prevReports) => {
+        setReports((prevReports) => {
             return prevReports.filter(
-                (prevReport) => prevReport.Report._id !== reportId
+                (prevReport) => prevReport._id !== reportId
             );
         });
     };
 
     const updateReport = (report: Report) => {
-        const prevReports = [...reportObjects];
+        const prevReports = [...reports];
         const indexOfReport = findReport(prevReports, report);
         if (indexOfReport === -1) {
             return;
         }
-        prevReports[indexOfReport].Report = report;
-
-        setReportObjects(prevReports);
+        prevReports[indexOfReport] = report;
+        setReports(prevReports);
     };
 
     const customReportFunctions = {
@@ -203,14 +180,16 @@ export default function ReportHistory() {
                         >
                             <Grid item>
                                 <FormControl className={classes.formControl}>
-                                    <InputLabel>Report Type</InputLabel>
                                     <Select
+                                        displayEmpty
                                         required
-                                        multiple
-                                        value={ReportEndpoints}
+                                        value={reportType}
                                         onChange={handleReportChange}
                                         input={<Input />}
                                     >
+                                        <MenuItem disabled value=''>
+                                            <em>Report Type</em>
+                                        </MenuItem>
                                         {ReportOptions.map((ReportOption) => (
                                             <MenuItem
                                                 key={ReportOption.name}
@@ -224,14 +203,17 @@ export default function ReportHistory() {
                             </Grid>
                             <Grid item>
                                 <FormControl className={classes.formControl}>
-                                    <InputLabel>Sorting Order</InputLabel>
                                     <Select
+                                        displayEmpty
                                         required
                                         value={sortingOrder}
                                         onChange={handleSortingChange}
                                         input={<Input />}
                                         IconComponent={() => <SortIcon />}
                                     >
+                                        <MenuItem disabled value=''>
+                                            <em>Sorting Order</em>
+                                        </MenuItem>
                                         {sortingOptions.map((sortingOption) => (
                                             <MenuItem
                                                 key={sortingOption.name}
@@ -245,14 +227,15 @@ export default function ReportHistory() {
                             </Grid>
                             <Grid item>
                                 <LoadingButton
-                                    loading={isLoadingFeedback && isLoadingBug}
+                                    loading={isLoadingFeedback || isLoadingBug}
                                     component={
                                         <Button
                                             fullWidth
                                             type='submit'
                                             color='primary'
+                                            endIcon={<SearchIcon />}
                                         >
-                                            <SearchIcon />
+                                            Search
                                         </Button>
                                     }
                                 />
@@ -261,18 +244,18 @@ export default function ReportHistory() {
                     </form>
                 </Grid>
             </Grid>
-            <ReportContext.Provider value={customReportFunctions}>
-                <Grid
-                    item
-                    container
-                    justify='center'
-                    alignItems='center'
-                    xs={12}
-                >
-                    <ReportList reportObjects={reportObjects} />
-                </Grid>
-            </ReportContext.Provider>
-            {reportObjects.length !== 0 && (
+            {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
+            <Grid item container justify='center' alignItems='center' xs={12}>
+                {isLoadingFeedback || isLoadingBug ? (
+                    <Loader />
+                ) : (
+                    <ReportStateContext.Provider value={customReportFunctions}>
+                        <ReportList reports={reports} />
+                    </ReportStateContext.Provider>
+                )}
+            </Grid>
+
+            {reports.length !== 0 && (
                 <Grid
                     item
                     container

@@ -3,20 +3,20 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import FormBase from '../FormBase';
-import { ReportObject } from '../types';
+import { FeedbackReport, BugReport } from '../types';
 
 interface FormProps {
     title: string;
     mainDescription: string;
     icon: JSX.Element;
-    reportObject: ReportObject;
+    report: FeedbackReport | BugReport;
 }
 
 export default function ReportForm({
     title,
     mainDescription,
     icon,
-    reportObject,
+    report,
 }: FormProps) {
     return (
         <Grid container spacing={5}>
@@ -32,7 +32,7 @@ export default function ReportForm({
             <Grid item xs={12}>
                 {/* TODO: Pass actual onSuccess and callback functions */}
                 <FormBase
-                    reportObject={reportObject}
+                    report={report}
                     onSuccess={() => {}}
                     callback={() => {}}
                 />

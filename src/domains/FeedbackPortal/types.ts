@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 export interface ReportForm {
     _id?: string;
     description?: string;
@@ -18,15 +16,8 @@ export interface BugReportForm extends ReportForm {
 type Report = Required<ReportForm> & {
     date: string;
     user: { _id: string };
+    type: string;
 };
 
 export type FeedbackReport = Report;
 export type BugReport = Report & { townhallId: string };
-
-export type ReportObject = {
-    Report: FeedbackReport | BugReport;
-    submitEndpoint: (
-        form: FeedbackForm | BugReportForm
-    ) => Promise<AxiosResponse<unknown>>;
-    deleteEndpoint: (_id: string) => Promise<AxiosResponse<unknown>>;
-};
