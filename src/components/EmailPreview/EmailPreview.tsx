@@ -10,34 +10,40 @@ const useStyles = makeStyles({
     },
 });
 
-interface Props {
+export interface Props {
     fName: string;
     MoC: string;
     topic: string;
     eventDateTime: string;
-    constituentScope: string;
+    constituentScope: 'district' | 'state';
     registrationLink: string;
 }
 
-export default function EmailPreview(props: Props) {
+export default function EmailPreview({
+    fName,
+    MoC,
+    topic,
+    eventDateTime,
+    constituentScope,
+    registrationLink,
+}: Props) {
     const classes = useStyles();
     return (
         <Typography component='div'>
             <p className={classes.text}>
-                Dear <mark>{props.fName}</mark>,
+                Dear <mark>{fName}</mark>,
             </p>
             <p>
-                Your Member of Congress, <mark>{props.MoC}</mark> will be
+                Your Member of Congress, <mark>{MoC}</mark> will be
                 participating in an online Deliberative Townhall on
-                <mark>&#32;{props.topic}</mark> at{' '}
-                <mark>{props.eventDateTime}</mark>. This event is organized by
-                Connecting to Congress, an independent, non-partisan initiative
-                led by the Ohio State University, whose mission is to connect a
-                representative sample of constituents with their elected
-                officials in productive online townhall meetings. All{' '}
-                <mark>{props.constituentScope}</mark> constituents are invited
-                to attend this event; if you would like to participate, please
-                register here <mark>{props.registrationLink}</mark>
+                <mark>&#32;{topic}</mark> at <mark>{eventDateTime}</mark>. This
+                event is organized by Connecting to Congress, an independent,
+                non-partisan initiative led by the Ohio State University, whose
+                mission is to connect a representative sample of constituents
+                with their elected officials in productive online townhall
+                meetings. All <mark>{constituentScope}</mark> constituents are
+                invited to attend this event; if you would like to participate,
+                please register here <mark>{registrationLink}</mark>
             </p>
             <p>
                 The townhall will be online using the GoToWebcast platform,
@@ -49,11 +55,11 @@ export default function EmailPreview(props: Props) {
             <p>
                 The townhall will be moderated by the Connecting to Congress
                 team. This is an opportunity for you to ask
-                <mark>&#32;{props.MoC}</mark> questions and let them know about
-                any concerns or problems you have had as a result of the
-                COVID-19 pandemic. Our goal for these Deliberative Townhalls is
-                to help elected officials hear from not just the loudest and
-                most powerful voices in the conversation, but a representative
+                <mark>&#32;{MoC}</mark> questions and let them know about any
+                concerns or problems you have had as a result of the COVID-19
+                pandemic. Our goal for these Deliberative Townhalls is to help
+                elected officials hear from not just the loudest and most
+                powerful voices in the conversation, but a representative
                 cross-section of their constituents, so they can better
                 represent their district. We hope you will participate!
             </p>
