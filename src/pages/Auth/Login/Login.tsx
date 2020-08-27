@@ -1,36 +1,11 @@
 import React from 'react';
-import {
-    Slide,
-    Container,
-    Link as MUILink,
-    Grid,
-    Typography,
-    Avatar,
-    Box,
-} from '@material-ui/core';
+import { Link as MUILink, Grid, Typography, Avatar } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
-import Paper from 'components/Paper';
 import LoginForm from 'domains/Auth/LoginForm';
-import banner from 'assets/spp-banner.png';
-
-function Copyright() {
-    return (
-        <Typography variant='body2' color='textSecondary' align='center'>
-            {'Copyright © '}
-            <MUILink
-                color='inherit'
-                to='https://material-ui.com/'
-                component={Link}
-            >
-                Your Website
-            </MUILink>
-            <p>{new Date().getFullYear()}</p>
-        </Typography>
-    );
-}
+import Page from 'layout/Page';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -64,9 +39,7 @@ export default function Login({
     forgotPassRoute,
 }: Props) {
     const classes = useStyles();
-    React.useEffect(() => {});
     return (
-        // <Container maxWidth='xs'>
         <div className={classes.paper}>
             <Avatar className={classes.avatar}>
                 <LockOutlinedIcon />
@@ -98,9 +71,5 @@ export default function Login({
                 </Grid>
             </Grid>
         </div>
-        // <Box mt={8}>
-        //     <Copyright />
-        // </Box>
-        // </Container>
     );
 }

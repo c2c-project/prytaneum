@@ -8,7 +8,6 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import axios from 'utils/axios';
 
 import VerifyEmail from './VerifyEmail';
-import routeNames from '../route-names';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
@@ -68,7 +67,7 @@ describe('VerifyEmail', () => {
             throw new Error('location not defined');
         }
 
-        expect(_location.pathname).toBe(routeNames.login);
+        expect(_location.pathname).toBe('/auth/login');
     });
 
     it('should render, fail to verify, & go to /login', async () => {
@@ -106,6 +105,6 @@ describe('VerifyEmail', () => {
             throw new Error('location not defined');
         }
 
-        expect(_location.pathname).toBe(routeNames.login);
+        expect(_location.pathname).toBe('/auth/login');
     });
 });

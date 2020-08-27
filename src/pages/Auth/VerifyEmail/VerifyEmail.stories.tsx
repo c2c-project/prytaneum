@@ -2,7 +2,6 @@ import React from 'react';
 import { MemoryRouter, Route, Switch, useHistory } from 'react-router-dom';
 
 import Fixtures, { Fixture } from 'mock/Fixtures';
-import routeNames from '../route-names';
 import Page from '.';
 
 const options = {
@@ -55,7 +54,7 @@ export function VerifyEmail({
         <Fixtures.Provider value={outcome}>
             <MemoryRouter initialEntries={['/123456']}>
                 <Switch>
-                    <Route path={routeNames.login}>
+                    <Route path='/auth/login'>
                         <Helper />
                     </Route>
                     <Route path='/:userId'>

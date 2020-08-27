@@ -9,8 +9,6 @@ import Grow from '@material-ui/core/Grow';
 import Paper from 'components/Paper';
 import RegisterForm from 'domains/Auth/RegisterForm';
 
-import routeNames from '../route-names';
-
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
@@ -42,7 +40,7 @@ export default React.forwardRef<HTMLDivElement>(function RegisterPage(
             >
                 <Paper className={classes.paper}>
                     <RegisterForm
-                        onSuccess={() => history.push(routeNames.login)}
+                        onSuccess={() => history.push('/auth/login')}
                     />
                 </Paper>
             </Grid>

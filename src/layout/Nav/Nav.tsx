@@ -19,7 +19,7 @@ import { parseTitle } from '../utils';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        height: '100%',
+        // height: '100%',
         width: '100%',
     },
     menuButton: {
@@ -51,7 +51,7 @@ export default function Nav({ back }: Props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position='static'>
+            <AppBar position='fixed'>
                 <Toolbar>
                     {back && (
                         <Grow in>
@@ -69,7 +69,12 @@ export default function Nav({ back }: Props) {
                     <Typography variant='h6' className={classes.title}>
                         {parseTitle(title)}
                     </Typography>
-                    <Button color='inherit'>Login</Button>
+                    <Button
+                        color='inherit'
+                        onClick={() => history.push('/auth/login')}
+                    >
+                        Login
+                    </Button>
                 </Toolbar>
             </AppBar>
         </div>

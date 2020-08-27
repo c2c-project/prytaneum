@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 
 import VerifyEmailComponent from 'domains/Auth/VerifyEmail';
-import routeNames from '../route-names';
 
 interface Params {
     userId?: string;
@@ -16,10 +15,10 @@ export default function VerifyEmail() {
     return userId ? (
         <VerifyEmailComponent
             userId={userId}
-            onSuccess={() => history.push(routeNames.login)}
-            onFailure={() => history.push(routeNames.login)}
+            onSuccess={() => history.push('/auth/login')}
+            onFailure={() => history.push('/auth/login')}
         />
     ) : (
-        <Redirect to={routeNames.login} />
+        <Redirect to='/auth/login' />
     );
 }
