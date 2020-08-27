@@ -51,7 +51,7 @@ export default [
         return res(ctx.status(200));
     }),
 
-    rest.post('/api/townhalls/list', (req, res, ctx) => {
+    rest.get('/api/townhalls/list', (req, res, ctx) => {
         return res(
             ctx.json({
                 list: makeTownHalls(10),
@@ -60,7 +60,7 @@ export default [
         );
     }),
 
-    rest.post('/api/townhalls/:id', (req, res, ctx) => {
+    rest.get('/api/townhalls/:id', (req, res, ctx) => {
         const { id } = req.params as { id: string };
         if (id === '0') {
             return res(
