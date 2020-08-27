@@ -39,30 +39,35 @@ function UploadField({
     return (
         <Grid container alignItems='center'>
             <Grid item xs='auto'>
-                <TextField
-                    className={classes.textField}
-                    variant='filled'
-                    value={fileName}
-                    label='Chosen File'
-                    placeholder='No File Chosen'
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
+                <label htmlFor='chosen-file'>
+                    <TextField
+                        className={classes.textField}
+                        variant='outlined'
+                        color='primary'
+                        value={fileName}
+                        label='Chosen File'
+                        placeholder='No File Chosen'
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </label>
             </Grid>
-            <input
-                accept='.csv'
-                className={classes.input}
-                id='contained-button-file'
-                type='file'
-                onChange={handleChange}
-            />
+            <label htmlFor='selected-file'>
+                <input
+                    accept='.csv'
+                    className={classes.input}
+                    id='contained-button-file'
+                    type='file'
+                    onChange={handleChange}
+                />
+            </label>
             <Grid item xs='auto'>
                 <label htmlFor='contained-button-file'>
                     <Button
                         variant='outlined'
                         component='span'
-                        color='secondary'
+                        color='primary'
                         className={classes.button}
                     >
                         Select File
