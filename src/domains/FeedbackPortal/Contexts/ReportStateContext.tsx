@@ -5,13 +5,13 @@ import { FeedbackReport, BugReport } from '../types';
 
 type Report = FeedbackReport | BugReport;
 
-interface ReportFunctions {
+interface ReportStateHandlers {
     updateReport: (report: Report) => void;
     deleteReport: (reportId: string) => void;
 }
-const defaultFunctions: ReportFunctions = {
+const defaultFunctions: ReportStateHandlers = {
     updateReport: (report: Report) => {},
     deleteReport: (reportId: string) => {},
 };
 
-export default React.createContext<ReportFunctions>(defaultFunctions);
+export default React.createContext<ReportStateHandlers>(defaultFunctions);
