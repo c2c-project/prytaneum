@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { AxiosRequestConfig } from 'axios';
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
-import { createInvite, InviteForm } from './invite-api';
+import API from './index';
+import { InviteForm } from '../types';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');
@@ -37,35 +40,40 @@ describe('createInvite', () => {
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
-        await expect(createInvite(testFormData, testFile)).resolves.toBe(
-            resolvedValue
-        );
-        const expectedBuffer = await testFile.arrayBuffer();
-        const testMetadata = {
-            name: testFile.name,
-            lastModified: new Date().toUTCString(), // UNIX epoch time
-            size: testFile.size, // Size in bytes
-        };
         const expectedOptions: AxiosRequestConfig = {
             headers: {
-                'Content-Type': 'text/csv',
-                moc: testFormData.MoC,
-                topic: testFormData.topic,
-                eventdatetime: testFormData.eventDateTime,
-                constituentscope: testFormData.constituentScope,
-                region: testFormData.region,
-                deliverytime: testFormData.deliveryTime,
-                metadata: JSON.stringify(testMetadata),
+                'Content-Type': 'multipart/form-data',
             },
         };
+        const expectedFormData = new FormData();
+        expectedFormData.append('inviteFile', testFile);
+        expectedFormData.append('MoC', testFormData.MoC as string);
+        expectedFormData.append('topic', testFormData.topic as string);
+        expectedFormData.append(
+            'eventDateTime',
+            testFormData.eventDateTime as string
+        );
+        expectedFormData.append(
+            'constituentScope',
+            testFormData.constituentScope
+        );
+        expectedFormData.append('region', testFormData.region as string);
+        const deliveryTime = testFormData.deliveryTime as Date;
+        expectedFormData.append(
+            'deliveryTimeString',
+            deliveryTime.toISOString()
+        );
+        await expect(API.createInvite(testFormData, testFile)).resolves.toBe(
+            resolvedValue
+        );
         expect(axios.post).toHaveBeenCalledWith(
             '/api/invite',
-            expectedBuffer,
+            expectedFormData,
             expectedOptions
         );
     });
     it('should throw file error with undifined file', async () => {
-        await expect(createInvite(testFormData, undefined)).rejects.toThrow(
+        await expect(API.createInvite(testFormData, undefined)).rejects.toThrow(
             errors.missingFile()
         );
         expect(axios.post).not.toHaveBeenCalled();
@@ -79,7 +87,7 @@ describe('createInvite', () => {
             region: 'test',
             deliveryTime: testDeliveryTime,
         };
-        await expect(createInvite(formData, testFile)).rejects.toThrow(
+        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
@@ -93,7 +101,7 @@ describe('createInvite', () => {
             region: 'test',
             deliveryTime: testDeliveryTime,
         };
-        await expect(createInvite(formData, testFile)).rejects.toThrow(
+        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
@@ -107,7 +115,7 @@ describe('createInvite', () => {
             region: 'test',
             deliveryTime: testDeliveryTime,
         };
-        await expect(createInvite(formData, testFile)).rejects.toThrow(
+        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
@@ -121,7 +129,7 @@ describe('createInvite', () => {
             region: undefined,
             deliveryTime: testDeliveryTime,
         };
-        await expect(createInvite(formData, testFile)).rejects.toThrow(
+        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
