@@ -54,6 +54,9 @@ const useStyles = makeStyles(() =>
     })
 );
 
+// TODO: Pass submit and delete endpoint API functions using Context provider. Only let user get at one type of report at a time, either bug or feedback
+// TODO: When the type of report is changed also reset the number of pages back to 1
+
 export default function ReportHistory() {
     const classes = useStyles();
     const [ReportEndpoints, setReportEndpoints] = React.useState<string[]>([]);
@@ -79,6 +82,7 @@ export default function ReportHistory() {
     };
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+        // When type of report is changed also changed the submit and delete endpoints.
         setReportEndpoints(e.target.value as []);
     };
 
@@ -128,6 +132,8 @@ export default function ReportHistory() {
     });
 
     const sendRequests = () => {
+        // Clean reports from state of component
+        setReportObjects([]);
         if (ReportEndpoints.includes('Feedback')) {
             sendFeedbackRequest();
         }

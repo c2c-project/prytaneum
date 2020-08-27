@@ -39,13 +39,5 @@ const makeBugReports = (amount: number) => {
 };
 
 export function ReportSummary() {
-    return (
-        <FixtureContext.Provider
-            value={makeSuccessFixture({
-                reports: [...makeFeedbackReports(5), ...makeBugReports(5)],
-            })}
-        >
-            <Component />
-        </FixtureContext.Provider>
-    );
+    return <Component />;
 }
