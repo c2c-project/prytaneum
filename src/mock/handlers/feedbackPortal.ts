@@ -48,7 +48,7 @@ export default [
     }),
 
     // TODO: Return fake feedback reports after David reviews PR
-    rest.post('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
+    rest.get('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -102,7 +102,7 @@ export default [
     }),
 
     // TODO: Return fake bug reports after David review PR
-    rest.post('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
+    rest.get('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
 

@@ -1,3 +1,4 @@
 import auth from './auth';
+import feedbackPortal from './feedbackPortal';
 
-export default [...auth];
+export default [...auth, ...feedbackPortal];
