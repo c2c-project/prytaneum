@@ -29,20 +29,13 @@ export default {
     },
 };
 
+// TODO: Ask David: A deleteEnpoint here has to be passed although it is not going to be used
 const dummyFeedbackReportForm = {
     title: 'Feedback Form',
     mainDescription:
         'Let us know how we can improve your virtual town hall experience in the future. We strongly appreciate your feedback!',
     icon: <FeedbackReportIcon />,
-    reportObject: {
-        Report: {
-            _id: '',
-            description: '',
-            date: '',
-            user: {
-                _id: '',
-            },
-        },
+    endpointFunctions: {
         submitEndpoint: (form: FeedbackForm) =>
             createFeedbackReport(form, new Date().toISOString()),
         deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
@@ -54,16 +47,7 @@ const dummyBugReportForm = {
     mainDescription:
         'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
     icon: <BugReportIcon />,
-    reportObject: {
-        Report: {
-            _id: '',
-            description: '',
-            date: '',
-            townhallId: '',
-            user: {
-                _id: '',
-            },
-        },
+    endpointFunctions: {
         submitEndpoint: (form: BugReportForm) =>
             createBugReport(
                 form,
@@ -85,14 +69,16 @@ export function ReportForm({ ReportType }: Props) {
                     title={dummyFeedbackReportForm.title}
                     mainDescription={dummyFeedbackReportForm.mainDescription}
                     icon={dummyFeedbackReportForm.icon}
-                    reportObject={dummyFeedbackReportForm.reportObject}
+                    endpointFunctions={
+                        dummyFeedbackReportForm.endpointFunctions
+                    }
                 />
             ) : (
                 <Component
                     title={dummyBugReportForm.title}
                     mainDescription={dummyBugReportForm.mainDescription}
                     icon={dummyBugReportForm.icon}
-                    reportObject={dummyBugReportForm.reportObject}
+                    endpointFunctions={dummyBugReportForm.endpointFunctions}
                 />
             )}
         </Container>
