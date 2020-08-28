@@ -1,13 +1,12 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import Component from './TownhallBillSummary';
+import Component, {Bill} from './TownhallBillSummary';
 
 export default { title: 'Domains/Townhall' };
 
-const townhall = {
-    billName: 'Darth Vader',
-    topic: 'Death Star Design & Imperial Unions',
+const bill: Bill = {
+    name: 'Darth Vader',
     summaryText: 'Summary Text',
  
 };
@@ -15,7 +14,7 @@ const townhall = {
 export function TownhallBillSummary() {
     return (
         <Container maxWidth='sm' disableGutters>
-            <Component townhall={townhall} />
+            <Component bill={bill} />
         </Container>
     );
 }

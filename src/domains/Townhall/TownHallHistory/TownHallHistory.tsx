@@ -7,8 +7,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { ListItemAvatar, Avatar } from '@material-ui/core';
-import { Townhall } from '../types';
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,37 +18,38 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
-
-interface Props {
-    townhall: Townhall;
+export interface TownHallHistoryEntry {
+    action: string;
+    link: string;
+    date: string;
 }
 
-
-
+interface Props {
+    history: TownHallHistoryEntry[];
+}
 
 export default function SimpleList(props: Props) {
-    const { townhall } = props;
+    const { history } = props;
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <List>
-                {townhall.map((idx) => {
+                {history.map(({ action, link, date }) => {
                     return (
                         <div>
                             <ListItem button>
                                 <ListItemIcon>
                                     <ListItemAvatar>
                                         <Avatar
-                                            src={idx.link}
+                                            src={link}
                                             alt='Member of Congress Picture'
                                         />
                                     </ListItemAvatar>
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={idx.action}
-                                    secondary={idx.date}
+                                    primary={action}
+                                    secondary={date}
                                 />
                             </ListItem>
                             <Divider />

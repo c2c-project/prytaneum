@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
-import { Townhall } from '../types';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,14 +39,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+export interface Bill {
+    name: string,
+    summaryText: string,
+}
 interface Props {
-    townhall: Townhall;
+    bill: Bill;
 }
 
 
 export default function TownhallBillSummary(props: Props) {
     const classes = useStyles();
-    const { townhall } = props;
+    const { bill } = props;
     const [expanded, setExpanded] = React.useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -59,11 +63,9 @@ export default function TownhallBillSummary(props: Props) {
                         <Typography
                             className={clsx([classes.text, classes.title])}
                         >
-                            {townhall.billName}
+                            {bill.name}
                         </Typography>
-                        <Typography className={classes.text}>
-                            {townhall.topic}
-                        </Typography>
+                  
                     </>
                 }
                 subheaderTypographyProps={{ className: classes.text }}
@@ -86,7 +88,7 @@ export default function TownhallBillSummary(props: Props) {
             <Collapse in={expanded} timeout='auto' unmountOnExit>
                 <CardContent>
                     <Typography paragraph>
-                        {townhall.summaryText}
+                        {bill.summaryText}
                     </Typography>
                 </CardContent>
             </Collapse>

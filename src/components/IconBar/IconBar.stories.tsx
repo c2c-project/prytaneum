@@ -16,10 +16,7 @@ export function CenterIconBar() {
                 <SettingsIcon />
             </div>
             <div>
-                <SettingsIcon />
-            </div>
-            <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
         </Component>
     );
@@ -32,13 +29,13 @@ export function TopIconBar() {
                 <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
         </Component>
     );
@@ -51,13 +48,13 @@ export function IconBarFooter() {
                 <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
         </Component>
     );
