@@ -51,8 +51,8 @@ export default [
     rest.get('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const page = req.url.searchParams.get('page');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const ascending = req.url.searchParams.get('ascending');
 
         if (!page) {
@@ -106,8 +106,8 @@ export default [
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const page = req.url.searchParams.get('page');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const ascending = req.url.searchParams.get('ascending');
 
         if (!page) {

@@ -82,7 +82,6 @@ export default function ReportHistory() {
         feedbackReportsAPIrequest,
         {
             onSuccess: (results) => {
-                console.log(results);
                 // Adds type attribute to report objects. This will be needed in children components
                 const feedbackReports = results.data.reports.map((report) => ({
                     ...report,
@@ -95,7 +94,6 @@ export default function ReportHistory() {
 
     const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
         onSuccess: (results) => {
-            console.log(results);
             const bugReports = results.data.reports.map((report) => ({
                 ...report,
                 type: 'Bug',
