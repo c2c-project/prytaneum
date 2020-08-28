@@ -18,6 +18,13 @@ export function makeSuccessFixture(data?: Record<string, unknown>) {
     };
 }
 
+export function makeFailureFixture(data?: Record<string, unknown>) {
+    return {
+        meta: { status: 400, statusText: 'Fail', config: {}, headers: {} },
+        data,
+    };
+}
+
 export default React.createContext<Fixture<Record<string, unknown>>>(
     makeSuccessFixture()
 );
