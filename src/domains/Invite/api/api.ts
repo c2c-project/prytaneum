@@ -7,7 +7,9 @@ import { InviteForm } from '../types';
 
 export async function createInvite(
     inviteData: InviteForm,
-    file: File | undefined
+    file: File | undefined,
+    sendPreview: boolean,
+    previewEmail: string
 ): Promise<AxiosResponse> {
     if (!file) {
         throw errors.missingFile();
@@ -19,13 +21,15 @@ export async function createInvite(
         constituentScope,
         region,
         deliveryTime,
+        townHallID,
     } = inviteData;
     if (
         MoC === undefined ||
         topic === undefined ||
         eventDateTime === undefined ||
         region === undefined ||
-        deliveryTime === undefined
+        deliveryTime === undefined ||
+        townHallID === undefined
     )
         throw errors.fieldError();
     // Set formData
@@ -37,6 +41,8 @@ export async function createInvite(
     formData.append('constituentScope', constituentScope);
     formData.append('region', region);
     formData.append('deliveryTimeString', deliveryTime.toISOString());
+    formData.append('townHallID', townHallID);
+    if (sendPreview) formData.append('previewEmail', previewEmail);
     if (!MoC || !topic || !eventDateTime || !region || !deliveryTime) {
         throw errors.fieldError();
     }

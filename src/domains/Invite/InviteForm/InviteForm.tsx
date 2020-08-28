@@ -1,10 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import DateFnsUtils from '@date-io/date-fns';
 import {
     KeyboardDatePicker,
@@ -19,7 +16,10 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import { ParseResult } from 'papaparse';
 
 import EmailPreview from 'components/EmailPreview';
@@ -27,7 +27,7 @@ import SelectFile from '../../../components/SelectFile';
 import VerifyPreview from '../../../components/SelectFile/VerifyPreview';
 import Parse from '../../../components/SelectFile/utils';
 import CreateInvite from './CreateInvite';
-import { InviteForm } from '../api';
+import { InviteForm } from '../types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,20 +51,253 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function getSteps() {
-    return [
-        'Select File',
-        'Verify Preview',
-        'Fill out webinar info',
-        'Upload to Server',
-    ];
-}
-
 interface Result extends ParseResult<object> {
     data: Array<object>;
 }
 
-export default function VerticalLinearStepper() {
+/* STEPS */
+function PickFileStep({
+    expectedKeys,
+    file,
+    setFile,
+}: {
+    expectedKeys: string[];
+    file: File | undefined;
+    setFile: Function;
+}) {
+    return (
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Typography>
+                    Expected Headers:{' '}
+                    {expectedKeys.map((header) => ` "${header}" `)}
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography>Case matters, order does not</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <SelectFile onComplete={setFile} initialState={file} />
+            </Grid>
+        </Grid>
+    );
+}
+
+function VerifyPreviewStep({
+    file,
+    preview,
+    setPreview,
+    expectedKeys,
+}: {
+    file: File | undefined;
+    preview: object[] | undefined;
+    setPreview: Function;
+    expectedKeys: string[];
+}) {
+    if (!file || !(file instanceof File)) {
+        return (
+            <Typography variant='caption' color='error'>
+                Please go back and select a valid file
+            </Typography>
+        );
+    }
+
+    Parse.csv(file, {
+        preview: 5,
+        complete: (results: Result) => {
+            const { data } = results;
+            setPreview(data);
+        },
+    });
+    return (
+        <Grid container spacing={4}>
+            <Grid item xs={12}>
+                <VerifyPreview data={preview} expectedKeys={expectedKeys} />
+            </Grid>
+            <Grid item xs={12}>
+                If everything looks correct, click next.
+            </Grid>
+        </Grid>
+    );
+}
+
+function PickDeliveryDateStep({
+    inviteForm,
+    setInviteForm,
+}: {
+    inviteForm: InviteForm;
+    setInviteForm: Function;
+}) {
+    const handleDateChange = (date: Date | null) => {
+        setInviteForm((val: InviteForm) => ({
+            ...val,
+            deliveryTime: date,
+        }));
+    };
+    const maxDate = new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000); // Default 3 days ahead
+    return (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            {/* TODO Only allow up to 3 days in advance from now */}
+            <KeyboardDatePicker
+                format='MM/dd/yyyy'
+                disablePast
+                maxDate={maxDate}
+                margin='normal'
+                id='date-picker-inline'
+                label='Delivery Date'
+                value={inviteForm.deliveryTime}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                }}
+            />
+            <KeyboardTimePicker
+                margin='normal'
+                id='time-picker'
+                label='Delivery Time'
+                value={inviteForm.deliveryTime}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                    'aria-label': 'change time',
+                }}
+            />
+        </MuiPickersUtilsProvider>
+    );
+}
+
+function InvitePreviewStep({
+    inviteForm,
+    sendPreview,
+    setSendPreview,
+    email,
+    setEmail,
+}: {
+    inviteForm: InviteForm;
+    sendPreview: boolean;
+    setSendPreview: Function;
+    email: string;
+    setEmail: Function;
+}) {
+    // TODO Get the uploader's email in order to add to the list of recipiants or send in seperate request?
+    const [showPreview, setShowPreview] = useState(false);
+    const toggleSendPreview = () => {
+        setSendPreview(!sendPreview);
+    };
+    const toggleShowPreview = () => {
+        setShowPreview(!showPreview);
+    };
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        setEmail(event.target.value);
+    };
+    return (
+        <div>
+            <Grid>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={sendPreview}
+                            onChange={toggleSendPreview}
+                            name='send email preview checkbox'
+                            aria-label='send email preview checkbox'
+                            color='primary'
+                        />
+                    }
+                    label='send email preview'
+                />
+                {sendPreview ? (
+                    <Grid>
+                        <InputLabel htmlFor='email-input'>Email</InputLabel>
+                        <Input
+                            onChange={handleChange}
+                            value={email}
+                            type='email'
+                            name='email input'
+                            aria-labelledby='email-input'
+                            color='primary'
+                        />
+                    </Grid>
+                ) : (
+                    <></>
+                )}
+            </Grid>
+            <Grid>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={showPreview}
+                            onChange={toggleShowPreview}
+                            name='show email preview checkbox'
+                            color='primary'
+                        />
+                    }
+                    label='show email preview'
+                />
+                {showPreview ? (
+                    <EmailPreview
+                        fName='NAME_PLACEHOLDER'
+                        MoC={inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'}
+                        topic={
+                            inviteForm.topic
+                                ? inviteForm.topic
+                                : 'Unknown Topic'
+                        }
+                        eventDateTime={
+                            inviteForm.eventDateTime
+                                ? inviteForm.eventDateTime
+                                : 'Unknown Event Date'
+                        }
+                        constituentScope={inviteForm.constituentScope}
+                        registrationLink='https://connectingtocongress.org/register'
+                    />
+                ) : (
+                    <></>
+                )}
+            </Grid>
+        </div>
+    );
+}
+
+interface NextStepAction {
+    type: 'next-step';
+}
+
+interface PreviousStepAction {
+    type: 'previous-step';
+}
+
+interface ResetAction {
+    type: 'reset-step';
+}
+
+type Actions = NextStepAction | PreviousStepAction | ResetAction;
+
+function stepReducer(step: number, action: Actions): number {
+    switch (action.type) {
+        case 'next-step':
+            if (step <= 3) return step + 1;
+            return step;
+        case 'previous-step':
+            if (step > 0) return step - 1;
+            return step;
+        case 'reset-step':
+            return 0;
+        default:
+            return step;
+    }
+}
+
+function getSteps() {
+    return [
+        'Select File',
+        'Verify Preview',
+        'Select Invite Delivery Date/Time',
+        'Invite Preview',
+        'Upload to Server',
+    ];
+}
+
+export default function InviteFormStepper() {
     const classes = useStyles();
     const [file, setFile]: [File | undefined, Function] = React.useState();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -72,6 +305,8 @@ export default function VerticalLinearStepper() {
         object[] | undefined,
         Function
     ] = React.useState();
+    const [sendPreview, setSendPreview] = useState(false);
+    const [previewEmail, setPreviewEmail] = useState('');
     const [inviteForm, setInviteForm]: [InviteForm, Function] = React.useState({
         MoC: '',
         topic: '',
@@ -79,239 +314,76 @@ export default function VerticalLinearStepper() {
         constituentScope: 'district',
         region: '',
         deliveryTime: new Date(),
-    });
+        townHallID: '',
+    }); // TODO Some of these fields can be pre-filled and/or set from db values.
+    // const [step, dispatch] = React.useReducer(stepReducer, 0);
+    // const [test, dispatcher] = React.useReducer(formReducer, <></>);
     const steps = getSteps();
     const expectedKeys = ['email', 'fName', 'lName'];
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        // dispatch({ type: 'next-step' });
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        // dispatch({ type: 'previous-step' });
     };
 
     const handleReset = () => {
         setActiveStep(0);
-    };
-    const handleDateChange = (date: Date | null) => {
-        setInviteForm((val: InviteForm) => ({
-            ...val,
-            deliveryTime: date,
-        }));
+        // dispatch({ type: 'reset-step' });
     };
 
     function getStepContent(step: number) {
         switch (step) {
             case 0:
                 return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Typography>
-                                Expected Headers:{' '}
-                                {expectedKeys.map((header) => ` "${header}" `)}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography>
-                                Case matters, order does not
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <SelectFile
-                                onComplete={setFile}
-                                initialState={file}
-                            />
-                        </Grid>
-                    </Grid>
+                    <PickFileStep
+                        expectedKeys={expectedKeys}
+                        file={file}
+                        setFile={setFile}
+                    />
                 );
             case 1:
-                if (!file || !(file instanceof File)) {
-                    return (
-                        <Typography variant='h4'>
-                            Please go back and select a valid file
-                        </Typography>
-                    );
-                }
-
-                Parse.csv(file, {
-                    preview: 5,
-                    complete: (results: Result) => {
-                        const { data } = results;
-                        setPreview(data);
-                    },
-                });
                 return (
-                    <Grid container spacing={4}>
-                        <Grid item xs={12}>
-                            <VerifyPreview
-                                data={preview}
-                                expectedKeys={expectedKeys}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            If everything looks correct, click next.
-                        </Grid>
-                    </Grid>
+                    <VerifyPreviewStep
+                        file={file}
+                        preview={preview}
+                        setPreview={setPreview}
+                        expectedKeys={expectedKeys}
+                    />
                 );
             case 2:
                 return (
-                    <Grid container spacing={2}>
-                        <Grid container item xs={12} spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label='Member of Congress'
-                                    variant='outlined'
-                                    value={inviteForm.MoC}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const { value } = e.target;
-                                        setInviteForm((val: InviteForm) => ({
-                                            ...val,
-                                            MoC: value,
-                                        }));
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label='Webinar Topic'
-                                    variant='outlined'
-                                    value={inviteForm.topic}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const { value } = e.target;
-                                        setInviteForm((val: InviteForm) => ({
-                                            ...val,
-                                            topic: value,
-                                        }));
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label='Event Date & Time'
-                                    variant='outlined'
-                                    value={inviteForm.eventDateTime}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const { value } = e.target;
-                                        setInviteForm((val: InviteForm) => ({
-                                            ...val,
-                                            eventDateTime: value,
-                                        }));
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label='Constituent Scope (state or district)'
-                                    variant='outlined'
-                                    value={inviteForm.constituentScope}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const { value } = e.target;
-                                        setInviteForm((val: InviteForm) => ({
-                                            ...val,
-                                            constituentScope: value,
-                                        }));
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputLabel id='Region'>Region</InputLabel>
-                                <Select
-                                    labelId='Region'
-                                    label='Region'
-                                    variant='outlined'
-                                    value={inviteForm.region}
-                                    inputProps={{
-                                        name: 'Region',
-                                    }}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const { value } = e.target;
-                                        setInviteForm((val: InviteForm) => ({
-                                            ...val,
-                                            region: value,
-                                        }));
-                                    }}
-                                >
-                                    <MenuItem value=''>
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value='west_coast'>
-                                        West Coast
-                                    </MenuItem>
-                                    <MenuItem value='east_coast'>
-                                        East Coast
-                                    </MenuItem>
-                                </Select>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    {/* TODO Only allow up to 3 days in advance from now */}
-                                    <KeyboardDatePicker
-                                        format='MM/dd/yyyy'
-                                        margin='normal'
-                                        id='date-picker-inline'
-                                        label='Delivery Date'
-                                        value={inviteForm.deliveryTime}
-                                        onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                    <KeyboardTimePicker
-                                        margin='normal'
-                                        id='time-picker'
-                                        label='Delivery Time'
-                                        value={inviteForm.deliveryTime}
-                                        onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change time',
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
-                            </Grid>
-                        </Grid>
-                        <Grid container item xs={12} spacing={2}>
-                            <EmailPreview
-                                MoC={inviteForm.MoC || 'PLACEHOLDER'}
-                                fName='PLACEHOLDER'
-                                topic={inviteForm.topic || 'PLACEHOLDER'}
-                                eventDateTime={
-                                    inviteForm.eventDateTime || 'PLACEHOLDER'
-                                }
-                                constituentScope={
-                                    inviteForm.constituentScope || 'PLACEHOLDER'
-                                }
-                                registrationLink={`http${
-                                    process.env.NODE_ENV === 'production'
-                                        ? 's'
-                                        : ''
-                                }://${
-                                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                                    process.env.REACT_APP_ORIGIN
-                                }.com/register/custom_link`}
-                            />
-                        </Grid>
-                    </Grid>
+                    <PickDeliveryDateStep
+                        inviteForm={inviteForm}
+                        setInviteForm={setInviteForm}
+                    />
                 );
             case 3:
+                return (
+                    <InvitePreviewStep
+                        inviteForm={inviteForm}
+                        sendPreview={sendPreview}
+                        setSendPreview={setSendPreview}
+                        email={previewEmail}
+                        setEmail={setPreviewEmail}
+                    />
+                );
+            case 4:
                 return (
                     <CreateInvite
                         onSuccess={handleNext}
                         onFailure={handleBack}
                         inviteForm={inviteForm}
+                        sendPreview={sendPreview}
+                        previewEmail={previewEmail}
                         file={file}
                     />
                 );
-            case 4:
+            case 5:
                 return (
                     <Grid container spacing={2}>
                         <Typography>Finished</Typography>

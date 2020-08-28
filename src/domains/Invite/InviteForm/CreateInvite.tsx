@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Loader from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import useEndpoint from 'hooks/useEndpoint';
-import { InviteForm, createInvite } from '../api';
+import API from '../api';
+import { InviteForm } from '../types';
 
 interface Props {
     onSuccess: () => void;
     onFailure: () => void;
     inviteForm: InviteForm;
     file: File | undefined;
+    sendPreview: boolean;
+    previewEmail: string;
 }
 
 export default function CreateInvite({
@@ -16,11 +19,13 @@ export default function CreateInvite({
     onFailure,
     inviteForm,
     file,
+    sendPreview,
+    previewEmail,
 }: Props): JSX.Element {
-    const apiRequest = React.useCallback(() => createInvite(inviteForm, file), [
-        inviteForm,
-        file,
-    ]);
+    const apiRequest = useCallback(
+        () => API.createInvite(inviteForm, file, sendPreview, previewEmail),
+        [inviteForm, file]
+    );
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess: (value) => {
             console.log('Success', value);
@@ -31,7 +36,7 @@ export default function CreateInvite({
             onFailure();
         },
     });
-    React.useEffect(() => {
+    useEffect(() => {
         sendRequest();
     }, []);
     return (
