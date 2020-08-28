@@ -42,13 +42,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     li: {
         padding: 10,
     },
-    FontSize: {
+    listSubheader: {
         fontSize: 20,
+        color: theme.palette.common.black,
     },
     ul: {
         backgroundColor: 'inherit',
         padding: 0,
         listStyle: 'none',
+    },
+    listText: {
+        color: theme.palette.grey[700],
     },
 }));
 
@@ -96,7 +100,7 @@ export default function ReportList({ reports }: Props) {
                         <Divider />
                         <ListSubheader
                             disableSticky
-                            className={classes.FontSize}
+                            className={classes.listSubheader}
                             color='primary'
                             component='div'
                         >
@@ -112,6 +116,7 @@ export default function ReportList({ reports }: Props) {
                             }}
                         >
                             <ListItemText
+                                className={classes.listText}
                                 primary={`${report.description.substr(
                                     0,
                                     200
