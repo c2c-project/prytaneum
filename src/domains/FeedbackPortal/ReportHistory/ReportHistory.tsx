@@ -199,19 +199,26 @@ export default function ReportHistory() {
                             <Grid item>
                                 <FormControl>
                                     <Select
+                                        id='reportSelector'
                                         displayEmpty
                                         required
                                         value={reportType}
                                         onChange={handleReportChange}
                                         input={<Input />}
+                                        native
                                     >
-                                        <MenuItem disabled value=''>
-                                            <em>Report Type</em>
+                                        <MenuItem
+                                            disabled
+                                            value=''
+                                            component='option'
+                                        >
+                                            Report Type
                                         </MenuItem>
                                         {ReportOptions.map((ReportOption) => (
                                             <MenuItem
                                                 key={ReportOption.name}
                                                 value={ReportOption.name}
+                                                component='option'
                                             >
                                                 {ReportOption.name}
                                             </MenuItem>
@@ -222,20 +229,27 @@ export default function ReportHistory() {
                             <Grid item>
                                 <FormControl>
                                     <Select
+                                        id='sortingSelector'
                                         displayEmpty
                                         required
+                                        native
                                         value={sortingOrder}
                                         onChange={handleSortingChange}
                                         input={<Input />}
                                         IconComponent={() => <SortIcon />}
                                     >
-                                        <MenuItem disabled value=''>
-                                            <em>Sorting Order</em>
+                                        <MenuItem
+                                            disabled
+                                            value=''
+                                            component='option'
+                                        >
+                                            Sorting Order
                                         </MenuItem>
                                         {sortingOptions.map((sortingOption) => (
                                             <MenuItem
                                                 key={sortingOption.name}
                                                 value={sortingOption.value}
+                                                component='option'
                                             >
                                                 {sortingOption.name}
                                             </MenuItem>
