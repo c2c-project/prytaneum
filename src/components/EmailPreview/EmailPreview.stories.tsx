@@ -4,11 +4,11 @@ import faker from 'faker';
 
 import { DeviceContext } from 'contexts/Device';
 
-import EmailPreview, { Props as EmailPreviewProps } from './EmailPreview';
+import Component, { Props as EmailPreviewProps } from './EmailPreview';
 
 export default {
-    title: 'Invite/UploadForm',
-    component: EmailPreview,
+    title: 'Components/Invite',
+    component: Component,
     argTypes: {
         DeviceType: {
             control: {
@@ -29,7 +29,7 @@ interface Props extends EmailPreviewProps {
     DeviceType: 'desktop' | 'mobile';
 }
 
-export function EmailPreviewDefault({
+export function EmailPreview({
     DeviceType,
     fName,
     MoC,
@@ -40,7 +40,7 @@ export function EmailPreviewDefault({
 }: Props) {
     return (
         <DeviceContext.Provider value={DeviceType}>
-            <EmailPreview
+            <Component
                 fName={fName}
                 MoC={MoC}
                 topic={topic}
@@ -52,7 +52,8 @@ export function EmailPreviewDefault({
     );
 }
 
-EmailPreviewDefault.args = {
+EmailPreview.args = {
+    DeviceType: 'desktop',
     fName: faker.name.firstName(),
     MoC: faker.name.firstName(),
     topic: 'Technology',
