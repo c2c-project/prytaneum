@@ -5,7 +5,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Sort as SortIcon, Search as SearchIcon } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
 
@@ -17,6 +16,8 @@ import ReportStateContext from '../Contexts/ReportStateContext';
 import {
     getFeedbackReportsBySubmitter,
     getBugReportsBySubmitter,
+    // getNumberOfBugReports,
+    // getNumberOfFeedbackReports,
 } from '../api';
 
 import { FeedbackReport, BugReport } from '../types';
@@ -35,22 +36,19 @@ const sortingOptions = [
     { name: 'Descending', value: 'false' },
 ];
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        formControl: {
-            minWidth: 150,
-            maxWidth: 350,
-        },
-    })
-);
-
 type Report = FeedbackReport | BugReport;
+
+const user = {
+    _id: '123456789',
+};
+
+// TODO: Potential Issues: Pagination corner cases. Would it be better to: Every time a delete occurs, retreive all reports from db again?
 export default function ReportHistory() {
-    const classes = useStyles();
     const [prevReportType, setPrevReportType] = React.useState('');
     const [reportType, setReportType] = React.useState('');
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
+    const [numOfPages, setNumOfPages] = React.useState(0);
 
     const [reports, setReports] = React.useState<Report[]>([]);
 
@@ -65,13 +63,13 @@ export default function ReportHistory() {
     const feedbackReportsAPIrequest = React.useCallback(
         () =>
             // TODO: Replace with user Id
-            getFeedbackReportsBySubmitter(page, sortingOrder, '123456789'),
+            getFeedbackReportsBySubmitter(page, sortingOrder, user._id),
         [page, sortingOrder]
     );
 
     const bugReportsAPIrequest = React.useCallback(
         // TODO: Replace with user Id
-        () => getBugReportsBySubmitter(page, sortingOrder, '123456789'),
+        () => getBugReportsBySubmitter(page, sortingOrder, user._id),
         [page, sortingOrder]
     );
 
@@ -84,6 +82,7 @@ export default function ReportHistory() {
                     ...report,
                     type: 'Feedback',
                 }));
+                setNumOfPages(results.data.numberOfPages);
                 setReports(feedbackReports);
             },
         }
@@ -95,9 +94,31 @@ export default function ReportHistory() {
                 ...report,
                 type: 'Bug',
             }));
+            setNumOfPages(results.data.numberOfPages);
             setReports(bugReports);
         },
     });
+
+    // const [
+    //     sendGetNumberOfFeedbackReports,
+    //     isLoadingNumbOfFeedbackReports,
+    // ] = useEndpoint(
+    //     React.useCallback(() => getNumberOfFeedbackReports(user._id), []),
+    //     {
+    //         onSuccess: (results) => {
+    //             setNumOfPages(results.data.numOfReports);
+    //         },
+    //     }
+    // );
+
+    // const [sendGetNumberOfBugReports, isLoadingNumOfBugReports] = useEndpoint(
+    //     React.useCallback(() => getNumberOfBugReports(user._id), []),
+    //     {
+    //         onSuccess: (results) => {
+    //             setNumOfPages(results.data.numOfReports);
+    //         },
+    //     }
+    // );
 
     const sendRequest = () => {
         // Clean reports from state of component
@@ -176,7 +197,7 @@ export default function ReportHistory() {
                             alignItems='center'
                         >
                             <Grid item>
-                                <FormControl className={classes.formControl}>
+                                <FormControl>
                                     <Select
                                         displayEmpty
                                         required
@@ -199,7 +220,7 @@ export default function ReportHistory() {
                                 </FormControl>
                             </Grid>
                             <Grid item>
-                                <FormControl className={classes.formControl}>
+                                <FormControl>
                                     <Select
                                         displayEmpty
                                         required
@@ -262,7 +283,7 @@ export default function ReportHistory() {
                 >
                     <Pagination
                         color='primary'
-                        count={10}
+                        count={numOfPages}
                         page={page}
                         onChange={handlePageChange}
                     />

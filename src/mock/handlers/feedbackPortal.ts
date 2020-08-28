@@ -62,6 +62,7 @@ export default [
             ctx.status(200),
             ctx.json({
                 reports: makeFeedbackReports(10),
+                numberOfPages: 10,
             })
         );
     }),
@@ -86,6 +87,19 @@ export default [
         };
         return res(ctx.status(200));
     }),
+
+    // rest.get(
+    //     '/api/feedback/getNumberOfReports/:submitterId',
+    //     (req, res, ctx) => {
+    //         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //         const { submitterId } = req.params;
+
+    //         return res(
+    //             ctx.json({ numOfReports: faker.random.number(7) }),
+    //             ctx.status(200)
+    //         );
+    //     }
+    // ),
 
     // Bug reports
     rest.post('/api/bugs/create-report', (req, res, ctx) => {
@@ -117,6 +131,7 @@ export default [
             ctx.status(200),
             ctx.json({
                 reports: makeBugReports(10),
+                numberOfPages: 10,
             })
         );
     }),
@@ -140,4 +155,13 @@ export default [
         };
         return res(ctx.status(200));
     }),
+
+    // rest.get('/api/bugs/getNumberOfReports/:submitterId', (req, res, ctx) => {
+    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //     const { submitterId } = req.params;
+    //     return res(
+    //         ctx.json({ numOfReports: faker.random.number(7) }),
+    //         ctx.status(200)
+    //     );
+    // }),
 ];
