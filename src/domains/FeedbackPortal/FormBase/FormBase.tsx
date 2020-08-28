@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
@@ -11,13 +12,13 @@ import { FeedbackReport, BugReport } from '../types';
 
 type Report = FeedbackReport | BugReport;
 
-interface FormProps {
+interface Props {
     report: Report;
     callback: () => void;
     onSuccess: (report: Report) => void;
 }
 
-export default function FormBase({ report, onSuccess, callback }: FormProps) {
+export default function FormBase({ report, onSuccess, callback }: Props) {
     const { submitEndpoint } = React.useContext(ReportEndpointContext);
     const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<Report>(report);
@@ -83,3 +84,13 @@ export default function FormBase({ report, onSuccess, callback }: FormProps) {
         </Grid>
     );
 }
+
+FormBase.defaultProps = {
+    report: {
+        description: '',
+    },
+};
+
+FormBase.propTypes = {
+    report: PropTypes.object,
+};
