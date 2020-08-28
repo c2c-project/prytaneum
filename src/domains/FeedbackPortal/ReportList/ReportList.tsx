@@ -50,18 +50,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 0,
         listStyle: 'none',
     },
-    listSection: {
-        // backgroundColor: 'inherit',
-        marker: 'none',
-        backgroundColor: theme.palette.background.paper,
-        // margin: `${theme.spacing(2)}px 0px ${theme.spacing(2)}px 0px`,
-        // boxShadow: theme.shadows[2],
-    },
-    ul: {
-        backgroundColor: 'inherit',
-        padding: 0,
-        listStyle: 'none',
-    },
 }));
 
 export default function ReportList({ reports }: Props) {
@@ -104,12 +92,13 @@ export default function ReportList({ reports }: Props) {
         <div>
             <List className={classes.root}>
                 {reports.map((report) => (
-                    <li key={report._id} className={classes.listSection}>
+                    <li key={report._id}>
                         <Divider />
                         <ListSubheader
                             disableSticky
                             className={classes.FontSize}
                             color='primary'
+                            component='div'
                         >
                             {`Date Submitted: ${formatDate(
                                 new Date(report.date)
