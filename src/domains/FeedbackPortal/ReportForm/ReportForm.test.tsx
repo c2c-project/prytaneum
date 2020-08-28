@@ -1,259 +1,347 @@
-// /* eslint-disable @typescript-eslint/require-await */
-// import React from 'react';
-// import { render, unmountComponentAtNode } from 'react-dom';
-// import ReactTestUtils from 'react-dom/test-utils';
-// import faker from 'faker';
-// import { AxiosResponse } from 'axios';
+/* eslint-disable @typescript-eslint/require-await */
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import ReactTestUtils from 'react-dom/test-utils';
+import faker from 'faker';
+import { AxiosResponse } from 'axios';
 
-// import ReportForm from './ReportForm';
-// import * as API from '../api/api';
-// import { FeedbackForm, BugReportForm } from '../types';
+import ReportForm from './ReportForm';
+import * as API from '../api/api';
+import { FeedbackForm, BugReportForm } from '../types';
 
-// jest.mock('hooks/useSnack');
+jest.mock('hooks/useSnack');
 
-// // TODO: Add failure tests
-// const dummyDate = new Date().toISOString();
-// const makeDummyFeedbackReportForm = () => ({
-//     Report: {
-//         _id: '',
-//         description: '',
-//         date: '',
-//         user: {
-//             _id: '',
-//         },
-//     },
-//     submitEndpoint: (form: FeedbackForm) =>
-//         API.createFeedbackReport(form, dummyDate),
-//     deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
-// });
+describe('create report form', () => {
+    let container: HTMLDivElement | null = null;
 
-// const dummyTownhallId = faker.random.alphaNumeric(12);
-// const makeDummyBugReportForm = () => ({
-//     Report: {
-//         _id: '',
-//         description: '',
-//         date: '',
-//         townhallId: '',
-//         user: {
-//             _id: '',
-//         },
-//     },
-//     submitEndpoint: (form: BugReportForm) =>
-//         API.createBugReport(form, dummyDate, dummyTownhallId),
-//     deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
-// });
+    beforeEach(() => {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+    });
 
-// describe('create report form', () => {
-//     let container: HTMLDivElement | null = null;
+    afterEach(() => {
+        if (container) {
+            unmountComponentAtNode(container);
+            container.remove();
+        }
+        container = null;
+        jest.restoreAllMocks();
+    });
 
-//     beforeEach(() => {
-//         container = document.createElement('div');
-//         document.body.appendChild(container);
-//     });
+    describe('Create feedback report form', () => {
+        const dummyDate = new Date().toISOString();
+        const endpointFunctions = {
+            submitEndpoint: (form: FeedbackForm) =>
+                API.createFeedbackReport(form, dummyDate),
+            deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
+        };
 
-//     afterEach(() => {
-//         if (container) {
-//             unmountComponentAtNode(container);
-//             container.remove();
-//         }
-//         container = null;
-//         jest.restoreAllMocks();
-//     });
+        // eslint-disable-next-line jest/expect-expect
+        it('should create feedback report form', async () => {
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
+        });
 
-//     describe('Create feedback report form', () => {
-//         // eslint-disable-next-line jest/expect-expect
-//         it('should create feedback report form', async () => {
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyFeedbackReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
-//         });
+        it('should change state of feedback report form', async () => {
+            const newDescription = faker.lorem.paragraph();
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
 
-//         it('should change state of feedback report form', async () => {
-//             const description = faker.lorem.paragraph();
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyFeedbackReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            expect(reportDescriptionNode.value).toBe('');
 
-//             // Get the input field for report description
-//             const reportDescriptionNode = document.querySelector(
-//                 '#reportDescription'
-//             ) as HTMLInputElement;
-//             // the input field should be empty after first render
-//             expect(reportDescriptionNode.value).toBe('');
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+            });
+            expect(reportDescriptionNode.value).toBe(newDescription);
+        });
 
-//             // Change the input field of the form
-//             ReactTestUtils.act(() => {
-//                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
-//                     target: ({ value: description } as unknown) as EventTarget,
-//                 });
-//             });
-//             // the input field should not be empty anymore
-//             expect(reportDescriptionNode.value).toBe(description);
-//         });
+        it('should submit feedback report form and succeed', async () => {
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'createFeedbackReport')
+                .mockResolvedValue(resolvedVal);
+            const newDescription = faker.lorem.paragraph();
+            jest.useFakeTimers();
 
-//         // TODO:This test does not pass because the date used by the component is different than the date declared in the test, by a difference of seconds
-//         it('should submit feedback report form and succeed', async () => {
-//             const resolvedVal: AxiosResponse = {
-//                 status: 200,
-//                 data: {},
-//                 statusText: 'OK',
-//                 headers: {},
-//                 config: {},
-//             };
-//             const spy = jest
-//                 .spyOn(API, 'createFeedbackReport')
-//                 .mockResolvedValue(resolvedVal);
-//             const description = faker.lorem.paragraph();
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
 
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyFeedbackReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
 
-//             // Get form nodes
-//             const reportDescriptionNode = document.querySelector(
-//                 '#reportDescription'
-//             ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
 
-//             const button = document.querySelector(
-//                 '[type="submit"]'
-//             ) as HTMLButtonElement;
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(
+                { description: newDescription },
+                dummyDate
+            );
+            jest.runAllTimers();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+        });
 
-//             // Simulate events
-//             ReactTestUtils.act(() => {
-//                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
-//                     target: ({
-//                         value: description,
-//                     } as unknown) as EventTarget,
-//                 });
-//                 button.dispatchEvent(
-//                     new MouseEvent('click', { bubbles: true })
-//                 );
-//             });
-//             expect(spy).toBeCalledWith({ description }, dummyDate);
-//         });
-//     });
+        it('should submit feedback report form and fail', async () => {
+            const rejectedVal = { status: 500 };
+            const spy = jest
+                .spyOn(API, 'createFeedbackReport')
+                .mockRejectedValue(rejectedVal);
+            const newDescription = faker.lorem.paragraph();
+            jest.useFakeTimers();
 
-//     describe('Create bug report form', () => {
-//         // eslint-disable-next-line jest/expect-expect
-//         it('should create bug report form', async () => {
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyBugReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
-//         });
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
 
-//         it('should change state of bug report form', async () => {
-//             const description = faker.lorem.paragraph();
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyBugReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
 
-//             // Get the input field for report description
-//             const reportDescriptionNode = document.querySelector(
-//                 '#reportDescription'
-//             ) as HTMLInputElement;
-//             // the input field should be empty after first render
-//             expect(reportDescriptionNode.value).toBe('');
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
 
-//             // Change the input field of the form
-//             ReactTestUtils.act(() => {
-//                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
-//                     target: ({ value: description } as unknown) as EventTarget,
-//                 });
-//             });
-//             // the input field should not be empty anymore
-//             expect(reportDescriptionNode.value).toBe(description);
-//         });
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(
+                { description: newDescription },
+                dummyDate
+            );
+            jest.runAllTimers();
 
-//         it('should submit and succeed', async () => {
-//             const resolvedVal: AxiosResponse = {
-//                 status: 200,
-//                 data: {},
-//                 statusText: 'OK',
-//                 headers: {},
-//                 config: {},
-//             };
-//             const spy = jest
-//                 .spyOn(API, 'createBugReport')
-//                 .mockResolvedValue(resolvedVal);
-//             const description = faker.lorem.paragraph();
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+        });
+    });
 
-//             ReactTestUtils.act(() => {
-//                 render(
-//                     <ReportForm
-//                         title={faker.random.word()}
-//                         mainDescription={faker.lorem.paragraph()}
-//                         icon={<></>}
-//                         reportObject={makeDummyBugReportForm()}
-//                     />,
-//                     container
-//                 );
-//             });
+    describe('Create bug report form', () => {
+        const dummyDate = new Date().toISOString();
+        const dummyTownhallId = faker.random.alphaNumeric(12);
+        const endpointFunctions = {
+            submitEndpoint: (form: BugReportForm) =>
+                API.createBugReport(form, dummyDate, dummyTownhallId),
+            deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
+        };
 
-//             // Get form nodes
-//             const reportDescriptionNode = document.querySelector(
-//                 '#reportDescription'
-//             ) as HTMLInputElement;
-//             const button = document.querySelector(
-//                 '[type="submit"]'
-//             ) as HTMLButtonElement;
+        // eslint-disable-next-line jest/expect-expect
+        it('should create bug report form', async () => {
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
+        });
 
-//             // Simulate events
-//             ReactTestUtils.act(() => {
-//                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
-//                     target: ({
-//                         value: description,
-//                     } as unknown) as EventTarget,
-//                 });
-//                 button.dispatchEvent(
-//                     new MouseEvent('click', { bubbles: true })
-//                 );
-//             });
-//             // Dates may not match
-//             expect(spy).toBeCalledWith(
-//                 { description },
-//                 dummyDate,
-//                 dummyTownhallId
-//             );
-//         });
-//     });
-// });
+        it('should change state of bug report form', async () => {
+            const newDescription = faker.lorem.paragraph();
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
+
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            expect(reportDescriptionNode.value).toBe('');
+
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+            });
+            expect(reportDescriptionNode.value).toBe(newDescription);
+        });
+
+        it('should submit and succeed', async () => {
+            const resolvedVal: AxiosResponse = {
+                status: 200,
+                data: {},
+                statusText: 'OK',
+                headers: {},
+                config: {},
+            };
+            const spy = jest
+                .spyOn(API, 'createBugReport')
+                .mockResolvedValue(resolvedVal);
+            const newDescription = faker.lorem.paragraph();
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
+
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+            expect(spy).toBeCalledWith(
+                { description: newDescription },
+                dummyDate,
+                dummyTownhallId
+            );
+            jest.runAllTimers();
+
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+        });
+
+        it('should submit and fail', async () => {
+            const resolvedVal = {
+                status: 500,
+            };
+            const spy = jest
+                .spyOn(API, 'createBugReport')
+                .mockRejectedValue(resolvedVal);
+            const newDescription = faker.lorem.paragraph();
+            jest.useFakeTimers();
+
+            ReactTestUtils.act(() => {
+                render(
+                    <ReportForm
+                        title={faker.random.word()}
+                        mainDescription={faker.lorem.paragraph()}
+                        icon={<></>}
+                        endpointFunctions={endpointFunctions}
+                    />,
+                    container
+                );
+            });
+
+            const reportDescriptionNode = document.querySelector(
+                '#reportDescription'
+            ) as HTMLInputElement;
+            const button = document.querySelector(
+                '[type="submit"]'
+            ) as HTMLButtonElement;
+
+            ReactTestUtils.act(() => {
+                ReactTestUtils.Simulate.change(reportDescriptionNode, {
+                    target: ({
+                        value: newDescription,
+                    } as unknown) as EventTarget,
+                });
+                button.dispatchEvent(
+                    new MouseEvent('click', { bubbles: true })
+                );
+            });
+
+            expect(spy).toBeCalledWith(
+                { description: newDescription },
+                dummyDate,
+                dummyTownhallId
+            );
+            jest.runAllTimers();
+
+            await ReactTestUtils.act(async () => {
+                await Promise.allSettled(spy.mock.results);
+            });
+        });
+    });
+});
