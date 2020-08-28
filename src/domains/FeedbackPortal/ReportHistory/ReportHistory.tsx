@@ -44,9 +44,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-// TODO: When the type of report is changed and the search button is pressed, also reset the number of pages back to 1
 type Report = FeedbackReport | BugReport;
-
 export default function ReportHistory() {
     const classes = useStyles();
     const [prevReportType, setPrevReportType] = React.useState('');
@@ -61,7 +59,6 @@ export default function ReportHistory() {
     };
 
     const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setPrevReportType(reportType);
         setSortingOrder(e.target.value as string);
     };
 
@@ -85,7 +82,7 @@ export default function ReportHistory() {
                 // Adds type attribute to report objects. This will be needed in children components
                 const feedbackReports = results.data.reports.map((report) => ({
                     ...report,
-                    type: 'feedback',
+                    type: 'Feedback',
                 }));
                 setReports(feedbackReports);
             },
@@ -105,6 +102,14 @@ export default function ReportHistory() {
     const sendRequest = () => {
         // Clean reports from state of component
         setReports([]);
+        // If the report type selected has changed then set the page number to 1
+        if (prevReportType !== reportType) {
+            setPage(1);
+        }
+        // save the report Type just selected
+        setPrevReportType(reportType);
+
+        // Decide which type of request to send
         switch (reportType) {
             case 'Feedback':
                 sendFeedbackRequest();
@@ -122,18 +127,12 @@ export default function ReportHistory() {
         event: React.ChangeEvent<unknown>,
         value: number
     ) => {
-        // Update the page number in the state of the component
         setPage(value);
-        // Sends requests with an updated page query parameter
         sendRequest();
     };
 
     const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // If the report type selected has changed then set the page number to 1
-        if (prevReportType !== reportType) {
-            setPage(1);
-        }
         sendRequest();
     };
 
