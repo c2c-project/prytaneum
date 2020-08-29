@@ -1,17 +1,14 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TownhallIcon from '@material-ui/icons/AccountBalance';
 
-import { DeviceContext } from 'contexts/Device';
-
-import GridMenu from './IconBar';
+import Component from './IconBar';
 
 export default { title: 'Icon Bar' };
 
 export function CenterIconBar() {
     return (
-        <GridMenu alignBar={'center'}>
+        <Component justify='center'>
             <div>
                 <TownhallIcon />
             </div>
@@ -19,49 +16,46 @@ export function CenterIconBar() {
                 <SettingsIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
-            <div>
-                <SettingsIcon />
-            </div>
-        </GridMenu>
+        </Component>
     );
 }
 
 export function TopIconBar() {
     return (
-        <GridMenu alignBar={'flex-start'}>
+        <Component justify='flex-start'>
             <div>
                 <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
-        </GridMenu>
+        </Component>
     );
 }
 
 export function IconBarFooter() {
     return (
-        <GridMenu alignBar={'flex-end'}>
+        <Component justify='flex-end'>
             <div>
                 <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
             <div>
-                <SettingsIcon />
+                <TownhallIcon />
             </div>
-        </GridMenu>
+        </Component>
     );
 }
