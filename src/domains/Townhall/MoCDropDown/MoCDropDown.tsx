@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+interface MemberLabel {
+    first_name: string;
+    last_name: string;
+}
+  
+
 export default function MoCDropdown() {
     const classes = useStyles();
     const [chamber, setChamber] = React.useState('');
@@ -28,8 +34,7 @@ export default function MoCDropdown() {
     const [data2, setData2] = React.useState([]);
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setChamber(event.target.value as string);
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        const url = `https://api.propublica.org/congress/v1/116/${event.target.value}/members.json`;
+        const url = `https://api.propublica.org/congress/v1/116/${event.target.value as string}/members.json`;
         axios
             .get(url, {
                 headers: {
@@ -37,7 +42,7 @@ export default function MoCDropdown() {
                 },
             })
             .then((response) => {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+           
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 setData2(response.data.results[0].members);
             })
@@ -66,7 +71,7 @@ export default function MoCDropdown() {
 
             <Autocomplete
                 id='combo-box-demo'
-                options={data2}
+                options={data2 as MemberLabel[]}
                 getOptionLabel={(option) =>
               
                     `${option.first_name} ${option.last_name}`
