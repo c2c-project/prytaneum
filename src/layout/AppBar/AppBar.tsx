@@ -1,17 +1,13 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import {
-    Toolbar,
-    Grow,
-    IconButton,
-    AppBar as MUIAppBar,
-} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import BackIcon from '@material-ui/icons/ArrowBack';
+import MUIAppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        // height: '100%',
+        width: '100%',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -27,39 +23,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    back?: boolean;
-    children?: JSX.Element | JSX.Element[];
+    children: JSX.Element | JSX.Element[];
 }
 
-export default function AppBar({ back, children }: Props) {
-    const history = useHistory(); // TODO: change this to not use history and instead have my own internal routing?
+export default function AppBar({ children }: Props) {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <MUIAppBar position='static' elevation={0}>
-                <Toolbar>
-                    {back && (
-                        <Grow in>
-                            <IconButton
-                                onClick={() => history.goBack()}
-                                edge='start'
-                                // className={classes.menuButton}
-                                color='inherit'
-                                aria-label='back-button'
-                            >
-                                <BackIcon />
-                            </IconButton>
-                        </Grow>
-                    )}
-                    {children}
-                </Toolbar>
+            <MUIAppBar position='absolute'>
+                <Toolbar>{children}</Toolbar>
             </MUIAppBar>
         </div>
     );
 }
-
-AppBar.defaultProps = {
-    back: false,
-    children: <></>,
-};

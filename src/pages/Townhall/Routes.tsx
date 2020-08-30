@@ -1,15 +1,19 @@
-// import React from 'react';
-// import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { Fade } from '@material-ui/core';
 
-// import TownhallList from './TownhallList';
+import TownhallList from './TownhallList';
 
-// export default function Routes() {
-//     return (
-//         <Switch>
-//             <Route path={routeNames.list}>
-//                 <TownhallList />
-//             </Route>
-//         </Switch>
-//     );
-// }
-export default {};
+export default function Townhalls() {
+    return (
+        <Route path='/townhalls/list'>
+            {({ match }) => (
+                <Fade in={Boolean(match)}>
+                    <div>
+                        <TownhallList />
+                    </div>
+                </Fade>
+            )}
+        </Route>
+    );
+}

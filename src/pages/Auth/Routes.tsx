@@ -3,7 +3,7 @@ import { Route, useHistory, match as MatchType, Link } from 'react-router-dom';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close as CloseIcon, ArrowBack as BackIcon } from '@material-ui/icons';
 
-import Nav from 'layout/Nav';
+import AppBar from 'layout/AppBar';
 import Page from 'layout/Page';
 import Login from './Login';
 import Register from './Register';
@@ -33,7 +33,7 @@ export default function Routes({ match: parentMatch }: Props) {
                         unmountOnExit
                     >
                         <div>
-                            <Nav>
+                            <AppBar>
                                 <IconButton
                                     onClick={() => history.goBack()}
                                     edge='start'
@@ -42,7 +42,7 @@ export default function Routes({ match: parentMatch }: Props) {
                                 >
                                     <CloseIcon />
                                 </IconButton>
-                            </Nav>
+                            </AppBar>
                             <Page maxWidth='sm'>
                                 <Login
                                     onLogin={() => history.push('/home')}
@@ -64,7 +64,7 @@ export default function Routes({ match: parentMatch }: Props) {
                         unmountOnExit
                     >
                         <div>
-                            <Nav>
+                            <AppBar>
                                 <IconButton
                                     onClick={() => history.goBack()}
                                     edge='start'
@@ -73,7 +73,7 @@ export default function Routes({ match: parentMatch }: Props) {
                                 >
                                     <BackIcon />
                                 </IconButton>
-                            </Nav>
+                            </AppBar>
                             <Page maxWidth='sm'>
                                 <Register />
                             </Page>
@@ -91,7 +91,7 @@ export default function Routes({ match: parentMatch }: Props) {
                         unmountOnExit
                     >
                         <div>
-                            <Nav>
+                            <AppBar>
                                 <IconButton
                                     onClick={() => history.goBack()}
                                     edge='start'
@@ -100,7 +100,7 @@ export default function Routes({ match: parentMatch }: Props) {
                                 >
                                     <BackIcon />
                                 </IconButton>
-                            </Nav>
+                            </AppBar>
                             <Page maxWidth='sm'>
                                 <ForgotPasswordRequest />
                             </Page>

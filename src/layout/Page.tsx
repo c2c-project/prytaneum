@@ -31,7 +31,9 @@ export default React.forwardRef<HTMLDivElement, Props>(function Page(
             className={classes.outerContainer}
             ref={ref}
         >
-            <div className={classes.innerContainer}>{children}</div>
+            <div className={classes.innerContainer}>
+                <main>{children}</main>
+            </div>
         </Container>
     );
 });

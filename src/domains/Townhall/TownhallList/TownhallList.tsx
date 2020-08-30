@@ -38,8 +38,6 @@ function formatSections(list: Townhall[]): Section[] {
 
 export default function TownhallList() {
     const [list, setList] = React.useState<Townhall[] | null>(null);
-    // const isMounted = React.useRef(true);
-    // const renderCount = React.useRef(0);
     const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
         onSuccess: (results) => {
             setList(results.data.list);

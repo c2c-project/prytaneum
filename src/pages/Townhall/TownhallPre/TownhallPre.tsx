@@ -7,7 +7,6 @@ import Component from 'domains/Townhall/TownhallPre';
 export default function TownhallPre() {
     return (
         <>
-            <AppBar back />
             <main>
                 <Container
                     maxWidth='sm'

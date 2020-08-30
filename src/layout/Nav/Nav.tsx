@@ -1,39 +1,87 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+    Button,
+    Zoom,
+    IconButton,
+    Drawer,
+    List,
+    ListItem,
+    ListItemText,
+} from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+
+import AppBar from '../AppBar';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        // height: '100%',
-        width: '100%',
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-        transition: 'inherit 2s ease-in 10s',
-    },
-    main: {
-        width: '100%',
+    hamburgerIcon: {
+        display: 'flex',
         flex: 1,
+        justifyContent: 'flex-start',
+    },
+    rightMenu: {
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'flex-end',
+    },
+    drawer: {
+        minWidth: '240px',
     },
 }));
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    isVisible: boolean;
 }
 
-export default function Nav({ children }: Props) {
+export default function Nav({ isVisible }: Props) {
+    const [open, setOpen] = React.useState(false);
     const classes = useStyles();
 
+    const handleClick = () => setOpen(false);
+
     return (
-        <div className={classes.root}>
-            <AppBar position='absolute'>
-                <Toolbar>{children}</Toolbar>
-            </AppBar>
+        <div>
+            <Zoom in={isVisible} timeout={300}>
+                <div>
+                    <AppBar>
+                        <div className={classes.hamburgerIcon}>
+                            <IconButton onClick={() => setOpen(true)}>
+                                <MenuIcon style={{ color: 'white' }} />
+                            </IconButton>
+                        </div>
+                        <div className={classes.rightMenu}>
+                            <Button
+                                color='inherit'
+                                component={Link}
+                                to='/auth/login'
+                            >
+                                Login
+                            </Button>
+                        </div>
+                    </AppBar>
+                </div>
+            </Zoom>
+            <Drawer
+                classes={{ paper: classes.drawer }}
+                open={open}
+                onClose={() => setOpen(false)}
+            >
+                <nav>
+                    <List>
+                        <li>
+                            <ListItem
+                                button
+                                component={Link}
+                                to='/townhalls/list'
+                                onClick={handleClick}
+                            >
+                                <ListItemText primary='Townhalls' />
+                            </ListItem>
+                        </li>
+                    </List>
+                </nav>
+            </Drawer>
         </div>
     );
 }
