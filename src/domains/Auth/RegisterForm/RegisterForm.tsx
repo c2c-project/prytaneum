@@ -117,6 +117,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         loading={isLoading}
                         component={
                             <Button
+                                fullWidth
                                 type='submit'
                                 variant='contained'
                                 color='primary'

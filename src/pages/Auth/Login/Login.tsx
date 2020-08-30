@@ -5,14 +5,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 import LoginForm from 'domains/Auth/LoginForm';
-import Page from 'layout/Page';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(12),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
     },
     avatar: {
         margin: theme.spacing(1),
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+    },
+    nav: {
+        paddingTop: theme.spacing(2),
     },
 }));
 
@@ -50,7 +54,7 @@ export default function Login({
             <div className={classes.form}>
                 <LoginForm onSuccess={onLogin} />
             </div>
-            <Grid container>
+            <Grid container className={classes.nav}>
                 <Grid item xs>
                     <MUILink
                         to={forgotPassRoute}

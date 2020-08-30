@@ -1,47 +1,85 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Grow from '@material-ui/core/Grow';
+// import React from 'react';
+// import { useHistory } from 'react-router-dom';
+// import { makeStyles } from '@material-ui/core/styles';
 
-import Paper from 'components/Paper';
 import ForgotPassRequestForm from 'domains/Auth/ForgotPassRequest';
 
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         marginTop: theme.spacing(27),
+//         display: 'flex',
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         paddingLeft: theme.spacing(1),
+//         paddingRight: theme.spacing(1),
+//     },
+// }));
+
+// export default function ForgotPassRequest() {
+//     const classes = useStyles();
+//     const history = useHistory();
+
+//     return (
+//         <div className={classes.root}>
+//             <div style={{ width: '100%' }}>
+//                 <ForgotPassRequestForm
+//                     onSuccess={() => {
+//                         history.push('/auth/login');
+//                     }}
+//                 />
+//             </div>
+//         </div>
+//     );
+// }
+import React from 'react';
+import { Typography, Avatar } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/VpnKey';
+import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '100%',
-    },
     paper: {
-        // not necessary anymore?
-        // marginTop: '64-px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2),
+        marginTop: theme.spacing(12),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(4),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    nav: {
+        paddingTop: theme.spacing(2),
     },
 }));
 
 export default function ForgotPassRequest() {
-    const classes = useStyles();
     const history = useHistory();
-
+    const classes = useStyles();
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <Paper className={classes.paper}>
-                        <ForgotPassRequestForm
-                            onSuccess={() => {
-                                history.push('/auth/login');
-                            }}
-                        />
-                    </Paper>
-                </Grid>
-            </Grow>
-        </Container>
+        <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+                <RefreshIcon />
+            </Avatar>
+            <Typography component='h1' variant='h5'>
+                Forgot Password
+            </Typography>
+            <div className={classes.form}>
+                <ForgotPassRequestForm
+                    onSuccess={() => {
+                        history.push('/auth/login');
+                    }}
+                />
+            </div>
+        </div>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, useHistory, match as MatchType } from 'react-router-dom';
-import { Slide } from '@material-ui/core';
+import { Route, useHistory, match as MatchType, Link } from 'react-router-dom';
+import { Slide, IconButton } from '@material-ui/core';
+import { Close as CloseIcon, ArrowBack as BackIcon } from '@material-ui/icons';
 
 import Nav from 'layout/Nav';
 import Page from 'layout/Page';
@@ -15,71 +16,98 @@ interface Props {
 
 export default function Routes({ match: parentMatch }: Props) {
     const history = useHistory();
+    const isMatch = Boolean(parentMatch);
     const [firstEnter, setFirstEnter] = React.useState(true);
+    React.useEffect(() => {
+        if (!isMatch) setFirstEnter(true);
+    }, [parentMatch]);
     return (
-        <Slide
-            in={Boolean(parentMatch)}
-            direction='up'
-            onEntered={() => setFirstEnter(false)}
-            onExited={() => setFirstEnter(true)}
-        >
-            <div>
-                <Route path='/auth/login'>
-                    {({ match }) => (
-                        <Slide
-                            direction='right'
-                            in={Boolean(match)}
-                            timeout={firstEnter ? 0 : 400}
-                            unmountOnExit
-                        >
-                            <div>
-                                <Nav back />
-                                <Page maxWidth='sm'>
-                                    <Login
-                                        onLogin={() => history.push('/home')}
-                                        registerRoute='/auth/register'
-                                        forgotPassRoute='/auth/forgot-password/request'
-                                    />
-                                </Page>
-                            </div>
-                        </Slide>
-                    )}
-                </Route>
-                <Route path='/auth/register'>
-                    {({ match }) => (
-                        <Slide
-                            direction='left'
-                            in={Boolean(match)}
-                            timeout={firstEnter ? 0 : 400}
-                            unmountOnExit
-                        >
-                            <div>
-                                <Nav back />
-                                <Page maxWidth='sm'>
-                                    <Register />
-                                </Page>
-                            </div>
-                        </Slide>
-                    )}
-                </Route>
-                <Route path='/auth/forgot-password/request'>
-                    {({ match }) => (
-                        <Slide
-                            direction='left'
-                            in={Boolean(match)}
-                            timeout={firstEnter ? 0 : 400}
-                            unmountOnExit
-                        >
-                            <div>
-                                <Nav back />
-                                <Page maxWidth='sm'>
-                                    <ForgotPasswordRequest />
-                                </Page>
-                            </div>
-                        </Slide>
-                    )}
-                </Route>
-            </div>
-        </Slide>
+        <div>
+            <Route path='/auth/login'>
+                {({ match }) => (
+                    <Slide
+                        direction={firstEnter ? 'up' : 'right'}
+                        in={Boolean(match)}
+                        onEntered={() => setFirstEnter(false)}
+                        timeout={400}
+                        unmountOnExit
+                    >
+                        <div>
+                            <Nav>
+                                <IconButton
+                                    onClick={() => history.goBack()}
+                                    edge='start'
+                                    color='inherit'
+                                    aria-label='back-button'
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </Nav>
+                            <Page maxWidth='sm'>
+                                <Login
+                                    onLogin={() => history.push('/home')}
+                                    registerRoute='/auth/register'
+                                    forgotPassRoute='/auth/forgot-password/request'
+                                />
+                            </Page>
+                        </div>
+                    </Slide>
+                )}
+            </Route>
+            <Route path='/auth/register'>
+                {({ match }) => (
+                    <Slide
+                        direction={firstEnter ? 'up' : 'left'}
+                        onEntered={() => setFirstEnter(false)}
+                        in={Boolean(match)}
+                        timeout={400}
+                        unmountOnExit
+                    >
+                        <div>
+                            <Nav>
+                                <IconButton
+                                    onClick={() => history.goBack()}
+                                    edge='start'
+                                    color='inherit'
+                                    aria-label='back-button'
+                                >
+                                    <BackIcon />
+                                </IconButton>
+                            </Nav>
+                            <Page maxWidth='sm'>
+                                <Register />
+                            </Page>
+                        </div>
+                    </Slide>
+                )}
+            </Route>
+            <Route path='/auth/forgot-password/request'>
+                {({ match }) => (
+                    <Slide
+                        direction={firstEnter ? 'up' : 'left'}
+                        onEntered={() => setFirstEnter(false)}
+                        in={Boolean(match)}
+                        timeout={400}
+                        unmountOnExit
+                    >
+                        <div>
+                            <Nav>
+                                <IconButton
+                                    onClick={() => history.goBack()}
+                                    edge='start'
+                                    color='inherit'
+                                    aria-label='back-button'
+                                >
+                                    <BackIcon />
+                                </IconButton>
+                            </Nav>
+                            <Page maxWidth='sm'>
+                                <ForgotPasswordRequest />
+                            </Page>
+                        </div>
+                    </Slide>
+                )}
+            </Route>
+        </div>
     );
 }

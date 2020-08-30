@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     },
     innerContainer: {
         position: 'absolute',
+        width: '100%',
     },
 });
 

@@ -20,6 +20,9 @@ export default function TextField(props: TextFieldProps & { label: string }) {
             id={labelToId(passThroughProps.label)}
             {...passThroughProps}
             autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            spellCheck={false}
         >
             {children}
         </MUITextField>
