@@ -10,8 +10,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -40,13 +38,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Bill {
-    name: string,
-    summaryText: string,
+    name: string;
+    summaryText: string;
 }
 interface Props {
     bill: Bill;
 }
-
 
 export default function TownhallBillSummary(props: Props) {
     const classes = useStyles();
@@ -65,11 +62,9 @@ export default function TownhallBillSummary(props: Props) {
                         >
                             {bill.name}
                         </Typography>
-                  
                     </>
                 }
                 subheaderTypographyProps={{ className: classes.text }}
-        
                 action={<></>}
             />
 
@@ -87,9 +82,7 @@ export default function TownhallBillSummary(props: Props) {
             </CardActions>
             <Collapse in={expanded} timeout='auto' unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>
-                        {bill.summaryText}
-                    </Typography>
+                    <Typography paragraph>{bill.summaryText}</Typography>
                 </CardContent>
             </Collapse>
         </Card>
