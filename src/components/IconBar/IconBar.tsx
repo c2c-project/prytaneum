@@ -25,22 +25,23 @@ interface Props {
     justify: string;
 }
 
-function convertNum(
-    children: number
-): 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 {
-    return Math.round(12 / children) as
-        | 1
-        | 2
-        | 3
-        | 4
-        | 5
-        | 6
-        | 7
-        | 8
-        | 9
-        | 10
-        | 11
-        | 12;
+function convertNum(children: number) {
+    if (children <= 12) {
+        return Math.round(12 / children) as
+            | 1
+            | 2
+            | 3
+            | 4
+            | 5
+            | 6
+            | 7
+            | 8
+            | 9
+            | 10
+            | 11
+            | 12;
+    }
+    return Math.ceil(12 / children) as 1;
 }
 
 export default function IconBar({ children, justify }: Props) {
