@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Pages from './UserSettings';
+import Page from './UserSettings';
 
-export default { title: 'Pages/Auth', component: Pages };
+export default { title: 'Pages/Auth', component: Page };
 
 export function UserSetting() {
-    return <Pages />;
+    return <Page />;
 }
