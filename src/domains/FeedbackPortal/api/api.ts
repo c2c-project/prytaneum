@@ -37,7 +37,7 @@ export async function getFeedbackReportsBySubmitter(
         page,
         ascending,
     };
-    return axios.get<{ reports: FeedbackReport[]; numberOfPages: number }>(
+    return axios.get<{ reports: FeedbackReport[]; count: number }>(
         `/api/feedback/get-reports/${submitterId}`,
         {
             params,
@@ -65,12 +65,6 @@ export async function deleteFeedbackReport(_id: string) {
     const body = { _id };
     return axios.post('/api/feedback/delete-report', body);
 }
-
-// export async function getNumberOfFeedbackReports(submitterId: string) {
-//     return axios.get<{ numOfReports: number }>(
-//         `/api/feedback/getNumberOfReports/${submitterId}`
-//     );
-// }
 
 // Bug reports API functions
 export async function createBugReport(
@@ -109,7 +103,7 @@ export async function getBugReportsBySubmitter(
         page,
         ascending,
     };
-    return axios.get<{ reports: BugReport[]; numberOfPages: number }>(
+    return axios.get<{ reports: BugReport[]; count: number }>(
         `/api/bugs/get-reports/${submitterId}`,
         {
             params,
@@ -136,9 +130,3 @@ export async function deleteBugReport(_id: string) {
     const body = { _id };
     return axios.post('/api/bugs/delete-report', body);
 }
-
-// export async function getNumberOfBugReports(submitterId: string) {
-//     return axios.get<{ numOfReports: number }>(
-//         `/api/bugs/getNumberOfReports/${submitterId}`
-//     );
-// }

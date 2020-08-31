@@ -34,6 +34,8 @@ const user = {
     _id: '123456789',
 };
 
+const pageSize = 10;
+
 export default function ReportHistory() {
     const [prevReportType, setPrevReportType] = React.useState('');
     const [reportType, setReportType] = React.useState('');
@@ -73,7 +75,7 @@ export default function ReportHistory() {
                     ...report,
                     type: 'Feedback',
                 }));
-                setNumOfPages(results.data.numberOfPages);
+                setNumOfPages(results.data.count / pageSize);
                 setReports(feedbackReports);
             },
         }
@@ -85,7 +87,7 @@ export default function ReportHistory() {
                 ...report,
                 type: 'Bug',
             }));
-            setNumOfPages(results.data.numberOfPages);
+            setNumOfPages(results.data.count / pageSize);
             setReports(bugReports);
         },
     });
