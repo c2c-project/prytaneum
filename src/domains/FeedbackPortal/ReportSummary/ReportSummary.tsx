@@ -32,20 +32,22 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function ReportSummary({ report, callBack }: SummaryProps) {
-    const { updateReport, deleteReport } = React.useContext(ReportStateContext);
+    const { updateReport, refetchReports } = React.useContext(
+        ReportStateContext
+    );
     const { deleteEndpoint } = React.useContext(ReportEndpointContext);
 
     const deleteApiRequest = React.useCallback(
         () => deleteEndpoint(report._id),
-        [report]
+        [report, deleteEndpoint]
     );
 
     const [snack] = useSnack();
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
-            deleteReport(report._id);
             callBack();
+            refetchReports();
             snack('Report successfully deleted', 'success');
         },
         onFailure: () => {

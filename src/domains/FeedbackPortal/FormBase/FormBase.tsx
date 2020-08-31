@@ -22,13 +22,14 @@ export default function FormBase({ report, onSuccess, callback }: Props) {
     const { submitEndpoint } = React.useContext(ReportEndpointContext);
     const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<Report>(report);
+
     const submitRequest = React.useCallback(() => submitEndpoint(reportState), [
         reportState,
+        submitEndpoint,
     ]);
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            // TODO: Check why was there an if statement here
             onSuccess(reportState);
             callback();
             snack('Report successfully submitted', 'success');

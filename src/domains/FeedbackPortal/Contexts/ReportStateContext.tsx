@@ -7,11 +7,11 @@ type Report = FeedbackReport | BugReport;
 
 interface ReportStateHandlers {
     updateReport: (report: Report) => void;
-    deleteReport: (reportId: string) => void;
+    refetchReports: () => void;
 }
 const defaultFunctions: ReportStateHandlers = {
     updateReport: (report: Report) => {},
-    deleteReport: (reportId: string) => {},
+    refetchReports: () => {},
 };
 
 export default React.createContext<ReportStateHandlers>(defaultFunctions);
