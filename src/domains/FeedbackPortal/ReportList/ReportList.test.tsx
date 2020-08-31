@@ -4,11 +4,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 
-import ReactEndpointContext from '../Contexts/ReportEndpointContext';
 import { makeBugReport } from '../reportMaker';
 import ReportList from './ReportList';
-import * as API from '../api/api';
-import { BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
@@ -16,10 +13,6 @@ describe('CreateReportList', () => {
     const dummyBugReport = makeBugReport();
     // Append a letter to the id of the report. This is necessary for jest to be able to query a node by the id attribute
     dummyBugReport._id = `p${faker.random.alphaNumeric(11)}`;
-    const customEndpoints = {
-        submitEndpoint: (form: BugReportForm) => API.updateBugReport(form),
-        deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
-    };
     let container: HTMLDivElement | null = null;
     beforeEach(() => {
         container = document.createElement('div');
