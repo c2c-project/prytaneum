@@ -7,11 +7,13 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { ListItem } from '@material-ui/core';
+import { MemoryRouter, Route } from 'react-router-dom';
 
 import { Section } from 'components/SectionList';
 import Paper from 'components/Paper';
 import SectionList from 'components/SectionList';
 import Dialog from 'components/Dialog';
+import AppBar from 'layout/AppBar';
 
 import banner from 'assets/spp-banner.png';
 
@@ -121,8 +123,8 @@ export default function UserSettings() {
         title: 'Options',
         sectionData: [
             {
-                image: 'o', // pull from db of users for pic
-                title: 'o', // pull from db of users for name
+                //image: 'o', // pull from db of users for pic
+                title: '', // pull from db of users for name
                 subtitle: (
                     <Grid container spacing={2} alignContent='center'>
                         <Grid item xs={12}>
@@ -149,15 +151,15 @@ export default function UserSettings() {
                                 hidden={false}
                                 onClick={() => setOpen(true)}
                             >
-                                Feedback
+                                Appearance
                             </ListItem>
                             <Dialog
                                 open={open}
-                                title='Feedback'
+                                title='Appearance'
                                 onClose={() => setOpen(false)}
                             >
                                 <h1>Dark mode: {darkmode}</h1>
-                                <h2>Colorscheme: {colorscheme}</h2>
+                                <h2>Color scheme: {colorscheme}</h2>
                             </Dialog>
                         </Grid>
                     </Grid>
@@ -170,8 +172,8 @@ export default function UserSettings() {
         title: 'Account Settings',
         sectionData: [
             {
-                image: 'https://i.imgur.com/3beQH5s.jpeg', // pull from db of users for pic
-                title: 'Account Settings',
+                //image: 'https://i.imgur.com/3beQH5s.jpeg', // pull from db of users for pic
+                title: '',
                 subtitle: (
                     <Grid container spacing={2} alignContent='center'>
                         <Grid item xs={12}>
@@ -312,8 +314,8 @@ export default function UserSettings() {
         title: 'About Prytaneum',
         sectionData: [
             {
-                image: 'https://i.imgur.com/3beQH5s.jpeg', // pull from db of users for pic
-                title: 'About Us',
+                //image: 'https://i.imgur.com/3beQH5s.jpeg', // pull from db of users for pic
+                title: '',
                 subtitle: (
                     <Grid container spacing={2} alignContent='center'>
                         <Grid item xs={12}>
@@ -372,13 +374,13 @@ export default function UserSettings() {
                             >
                                 Terms of Service
                             </ListItem>
-                            <Dialog
+                            {/* <Dialog
                                 open={open}
                                 title='Terms of Service'
                                 onClose={() => setOpen(false)}
                             >
                                 <h1>Pls no hurt us we no hurt you.</h1>
-                            </Dialog>
+                            </Dialog> */}
                         </Grid>
                     </Grid>
                 ),
@@ -389,22 +391,22 @@ export default function UserSettings() {
     var test: Section[] = [
         {
             title: userProfile.title,
-            sectionData: userProfile.sectionData
+            sectionData: userProfile.sectionData,
         },
         {
             title: options.title,
-            sectionData: options.sectionData
+            sectionData: options.sectionData,
         },
         {
             title: AccountSettings.title,
-            sectionData: AccountSettings.sectionData
+            sectionData: AccountSettings.sectionData,
         },
         {
             title: Information.title,
-            sectionData: Information.sectionData
-        }
+            sectionData: Information.sectionData,
+        },
     ];
-    // TODO add app bar
+
     // replace `{classes.*}` with 't' or something else to reset the formatting
     // right now it is bad and we will fix it
     // just need it to work right now
@@ -413,21 +415,20 @@ export default function UserSettings() {
             <Grow timeout={300} in>
                 <Grid
                     container
-                    direction='column'
+                    direction='row'
                     className={classes.root}
                     alignContent='center'
                     justify='center'
                 >
-                    <Paper className={classes.paper}>
-                        <img
-                            className={classes.img}
-                            src={banner}
-                            alt='University of California Riverside School of Public Policy Logo'
-                        />
-                        <Grid container spacing={3}>
-                            <SectionList sections={test} />
-                        </Grid>
-                    </Paper>
+                    <MemoryRouter initialEntries={['/User Settings']}>
+                        <Route path='/:title'>
+                            <AppBar back />
+                        </Route>
+                    </MemoryRouter>
+                    <div/>
+                    <Grid container spacing={3}>
+                        <SectionList sections={test} />
+                    </Grid>
                 </Grid>
             </Grow>
         </Container>

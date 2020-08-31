@@ -2,8 +2,8 @@ import React from 'react';
 
 import Page from './UserSettings';
 
-export default { title: 'Pages/Auth', component: Page };
+export default { title: 'Pages/Auth' };
 
-export function UserSetting() {
+export function UserSettings() {
     return <Page />;
 }
