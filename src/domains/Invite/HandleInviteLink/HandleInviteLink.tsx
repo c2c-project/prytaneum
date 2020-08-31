@@ -1,140 +1,136 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import React, { useEffect, useState } from 'react';
-import Loader from '@material-ui/core/CircularProgress';
-import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import { TransitionProps } from '@material-ui/core/transitions/transition';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
 import { useParams, useHistory } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 
 import errors from 'utils/errors';
-import useEndpoint from 'hooks/useEndpoint';
 
-import API from '../api';
-
-interface inviteTokenResult {
-    email: string;
-}
+import HandleInviteToken from './HandleInviteToken';
+import InvalidInviteLink from '../../../components/InvalidInviteLink';
+import { InviteTokenResult } from '../types';
 
 // jwt should contain email, check if account exists
 // Different cases, using email to check if account exists
 // Case 1: No account, redirect to register
 // Case 2: account exists, redirect to login page
 // Case 3: jwt invalid, display error message.
-function consumeInviteToken(inviteToken: string): string | undefined {
+function consumeInviteToken(
+    inviteToken: string,
+    setValidJWT: Function,
+    onError: Function
+): InviteTokenResult | undefined {
     try {
         const JWT_SECRET = 'secret';
         // Decode the invite token
         const decoded = jwt.verify(
             inviteToken,
             JWT_SECRET
-        ) as inviteTokenResult;
+        ) as InviteTokenResult;
         console.log('decoded: ', decoded);
-        const { email } = decoded;
-        if (!email) {
+        const { email, townHallID } = decoded;
+        if (!email || !townHallID) {
             // Throw error as link contains invalid data
-            errors.invalidEmail(); // TODO handle this error
+            errors.invalidToken(); // TODO handle this error
+            onError('Invalid Token Data');
             return undefined;
         }
-        return email;
+        setValidJWT(true);
+        return { email, townHallID };
     } catch (e) {
-        console.log(e);
-        errors.jwt(e);
-        // TODO Handle Errors
-        // switch (e.message) {
-        //     case 'jwt malformed':
-        //         console.log(e.message);
-        //         break;
-        //     case '':
-        //         break;
-        //     default:
-        //         console.error(e);
-        // }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        onError(e.message);
         return undefined;
     }
 }
 
-interface Props {
-    onIsRegistered: () => void;
-    onNotRegistered: () => void;
-    onFailure: () => void;
-    email: string;
-}
-
-export function HandleInviteToken({
-    onIsRegistered,
-    onNotRegistered,
-    onFailure,
-    email,
-}: Props): JSX.Element {
-    const apiRequest = React.useCallback(() => API.checkIfRegistered(email), [
-        email,
-    ]);
-    const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: (isRegisteredResponse) => {
-            console.log(isRegisteredResponse);
-            // TODO Ensure data response is of type boolean
-            const isRegistered = isRegisteredResponse.data as boolean;
-            if (isRegistered) {
-                // TODO Take to login, find out how David wants router used
-                onIsRegistered();
-            } else {
-                // TODO Take to registration, could pass the email to have it pre-filled on registration page
-                onNotRegistered();
-            }
-        },
-        onFailure: (e) => {
-            console.log('Fail', e);
-            onFailure();
-        },
-    });
-    useEffect(() => {
-        if (email === '') return;
-        sendRequest();
-    }, []);
-    return (
-        <Grid container justify='center'>
-            <Loader style={{ marginTop: '8em' }} />
-        </Grid>
-    );
-}
+const Transition = React.forwardRef(function Transition(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    props: TransitionProps & { children?: React.ReactElement<any, any> },
+    ref: React.Ref<unknown>
+) {
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <Slide direction='up' ref={ref} {...props} />;
+});
 
 export default function HandleInviteLink(): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { token }: { token: string } = useParams();
     const history = useHistory();
-    const [email, setEmail] = useState('');
+    const [townHallID, setTownHallID] = useState('');
+    const [validJWT, setValidJWT] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [open, setOpen] = useState(false);
 
-    const handleIsRegistered = () => {
-        console.log('Registered');
-        history.push(`/login/${token}`);
-    };
-
-    const handleNotRegistered = () => {
-        console.log('Not Registered');
-        history.push(`/register/${token}`);
+    const handleSuccess = () => {
+        history.push(`/townhalls/${townHallID}`); // TODO Verify correct route
     };
 
     const handleFailure = () => {
-        // API call failure
-        console.log('Failed Response');
-        history.push('/register');
+        history.push('/home');
     };
 
-    const handleError = () => {
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        history.push('/home');
+    };
+
+    const handleError = (error: string) => {
         // JWT Error
-        console.log('JWT Error');
-        history.push('/invited/invalid'); // Display invalid
+        setErrorMessage(error);
+        handleOpen();
+    };
+
+    const ErrorDialog = () => {
+        return (
+            <div>
+                <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-labelledby='alert-dialog-slide-title'
+                    aria-describedby='alert-dialog-slide-description'
+                >
+                    <DialogContent>
+                        <InvalidInviteLink errorMessage={errorMessage} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color='primary'>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        );
     };
 
     useEffect(() => {
-        const result = consumeInviteToken(token);
-        if (result === undefined) handleError();
-        else setEmail(result);
+        const result = consumeInviteToken(token, setValidJWT, handleError);
+        if (result !== undefined) {
+            setTownHallID(result.townHallID);
+        }
     }, []);
     return (
-        <HandleInviteToken
-            onIsRegistered={handleIsRegistered}
-            onNotRegistered={handleNotRegistered}
-            onFailure={handleFailure}
-            email={email}
-        />
+        <div>
+            {validJWT ? (
+                <HandleInviteToken
+                    onSuccess={handleSuccess}
+                    onFailure={handleFailure}
+                    token={token}
+                />
+            ) : (
+                <ErrorDialog />
+            )}
+        </div>
     );
 }

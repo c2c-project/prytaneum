@@ -5,12 +5,12 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import jwt from 'jsonwebtoken';
 
-import HandleInviteLink from './HandleInviteLink';
+import HandleInviteToken from './HandleInviteToken';
 
 jest.mock('hooks/useSnack');
 jest.mock('hooks/useEndpoint');
 
-describe('Handle Invite Link', () => {
+describe('Handle Invite Token', () => {
     let container: HTMLElement | null = null;
     const testToken = jwt.sign({ email: 'test@test.com' }, 'secret');
 
@@ -29,16 +29,15 @@ describe('Handle Invite Link', () => {
         container = null;
         jest.restoreAllMocks();
     });
-
     // eslint-disable-next-line jest/expect-expect
     it('should render', async () => {
         ReactTestUtils.act(() => {
             render(
-                <MemoryRouter initialEntries={[`/invited/${testToken}`]}>
-                    <Route path='/invited/:token'>
-                        <HandleInviteLink />
-                    </Route>
-                </MemoryRouter>,
+                <HandleInviteToken
+                    onSuccess={() => {}}
+                    onFailure={() => {}}
+                    token={testToken}
+                />,
                 container
             );
         });

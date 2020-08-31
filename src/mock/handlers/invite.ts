@@ -41,4 +41,9 @@ export default [
         };
         return res(ctx.body(responseBody), ctx.status(200));
     }),
+    rest.post('api/users/login-with-jwt', (req, res, ctx) => {
+        const { token } = req.body as { token: string };
+        if (!token) return res(ctx.status(400));
+        return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
+    }),
 ];

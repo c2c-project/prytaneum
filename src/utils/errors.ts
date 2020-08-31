@@ -9,4 +9,5 @@ export default {
     invalidInfo: (): Error => new Error('Invalid information provided'),
     internalError: (): Error =>
         new Error('Looks like something went wrong! Please contact support.'), // this means a programming error in the data flow
+    invalidToken: (): Error => new Error('Invalid Token'),
 };
