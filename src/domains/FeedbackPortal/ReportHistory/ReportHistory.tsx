@@ -16,20 +16,11 @@ import ReportStateContext from '../Contexts/ReportStateContext';
 import {
     getFeedbackReportsBySubmitter,
     getBugReportsBySubmitter,
-    // getNumberOfBugReports,
-    // getNumberOfFeedbackReports,
 } from '../api';
 
 import { FeedbackReport, BugReport } from '../types';
 
-const ReportOptions = [
-    {
-        name: 'Feedback',
-    },
-    {
-        name: 'Bug',
-    },
-];
+const ReportOptions = ['Feedback', 'Bug'];
 
 const sortingOptions = [
     { name: 'Ascending', value: 'true' },
@@ -38,11 +29,11 @@ const sortingOptions = [
 
 type Report = FeedbackReport | BugReport;
 
+// TODO: auth
 const user = {
     _id: '123456789',
 };
 
-// TODO: Potential Issues: Pagination corner cases. Would it be better to: Every time a delete occurs, retreive all reports from db again?
 export default function ReportHistory() {
     const [prevReportType, setPrevReportType] = React.useState('');
     const [reportType, setReportType] = React.useState('');
@@ -98,27 +89,6 @@ export default function ReportHistory() {
             setReports(bugReports);
         },
     });
-
-    // const [
-    //     sendGetNumberOfFeedbackReports,
-    //     isLoadingNumbOfFeedbackReports,
-    // ] = useEndpoint(
-    //     React.useCallback(() => getNumberOfFeedbackReports(user._id), []),
-    //     {
-    //         onSuccess: (results) => {
-    //             setNumOfPages(results.data.numOfReports);
-    //         },
-    //     }
-    // );
-
-    // const [sendGetNumberOfBugReports, isLoadingNumOfBugReports] = useEndpoint(
-    //     React.useCallback(() => getNumberOfBugReports(user._id), []),
-    //     {
-    //         onSuccess: (results) => {
-    //             setNumOfPages(results.data.numOfReports);
-    //         },
-    //     }
-    // );
 
     const sendRequest = () => {
         // Clean reports from state of component
@@ -188,92 +158,90 @@ export default function ReportHistory() {
         <div>
             <Grid container spacing={5}>
                 <Grid item xs={12}>
-                    <form onSubmit={getReports}>
-                        {/*  Search button seems to be out of place but it's because the input fields enlarger */}
-                        <Grid
-                            container
-                            direction='row'
-                            spacing={5}
-                            alignItems='center'
-                        >
-                            <Grid item>
-                                <FormControl>
-                                    <Select
-                                        id='reportSelector'
-                                        displayEmpty
-                                        required
-                                        value={reportType}
-                                        onChange={handleReportChange}
-                                        input={<Input />}
-                                        native
-                                    >
-                                        <MenuItem
-                                            disabled
-                                            value=''
-                                            component='option'
+                    <div style={{ position: 'sticky' }}>
+                        <form onSubmit={getReports}>
+                            <Grid
+                                container
+                                direction='row'
+                                spacing={5}
+                                alignItems='center'
+                            >
+                                <Grid item>
+                                    <FormControl>
+                                        <Select
+                                            id='reportSelector'
+                                            displayEmpty
+                                            required
+                                            value={reportType}
+                                            onChange={handleReportChange}
+                                            input={<Input />}
                                         >
-                                            Report Type
-                                        </MenuItem>
-                                        {ReportOptions.map((ReportOption) => (
-                                            <MenuItem
-                                                key={ReportOption.name}
-                                                value={ReportOption.name}
-                                                component='option'
-                                            >
-                                                {ReportOption.name}
+                                            <MenuItem disabled value=''>
+                                                Report Type
                                             </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <FormControl>
-                                    <Select
-                                        id='sortingSelector'
-                                        displayEmpty
-                                        required
-                                        native
-                                        value={sortingOrder}
-                                        onChange={handleSortingChange}
-                                        input={<Input />}
-                                        IconComponent={() => <SortIcon />}
-                                    >
-                                        <MenuItem
-                                            disabled
-                                            value=''
-                                            component='option'
+
+                                            {ReportOptions.map(
+                                                (ReportOption) => (
+                                                    <MenuItem
+                                                        key={ReportOption}
+                                                        value={ReportOption}
+                                                    >
+                                                        {ReportOption}
+                                                    </MenuItem>
+                                                )
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item>
+                                    <FormControl>
+                                        <Select
+                                            id='sortingSelector'
+                                            displayEmpty
+                                            required
+                                            value={sortingOrder}
+                                            onChange={handleSortingChange}
+                                            input={<Input />}
+                                            IconComponent={() => <SortIcon />}
                                         >
-                                            Sorting Order
-                                        </MenuItem>
-                                        {sortingOptions.map((sortingOption) => (
-                                            <MenuItem
-                                                key={sortingOption.name}
-                                                value={sortingOption.value}
-                                                component='option'
-                                            >
-                                                {sortingOption.name}
+                                            <MenuItem disabled value=''>
+                                                Sorting Order
                                             </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                            {sortingOptions.map(
+                                                (sortingOption) => (
+                                                    <MenuItem
+                                                        key={sortingOption.name}
+                                                        value={
+                                                            sortingOption.value
+                                                        }
+                                                    >
+                                                        {sortingOption.name}
+                                                    </MenuItem>
+                                                )
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item>
+                                    <LoadingButton
+                                        loading={
+                                            isLoadingFeedback || isLoadingBug
+                                        }
+                                        component={
+                                            <Button
+                                                fullWidth
+                                                type='submit'
+                                                color='primary'
+                                                endIcon={<SearchIcon />}
+                                            >
+                                                Search
+                                            </Button>
+                                        }
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <LoadingButton
-                                    loading={isLoadingFeedback || isLoadingBug}
-                                    component={
-                                        <Button
-                                            fullWidth
-                                            type='submit'
-                                            color='primary'
-                                            endIcon={<SearchIcon />}
-                                        >
-                                            Search
-                                        </Button>
-                                    }
-                                />
-                            </Grid>
-                        </Grid>
-                    </form>
+                        </form>
+                    </div>
                 </Grid>
             </Grid>
             {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
@@ -296,6 +264,7 @@ export default function ReportHistory() {
                     xs={12}
                 >
                     <Pagination
+                        siblingCount={0}
                         color='primary'
                         count={numOfPages}
                         page={page}
