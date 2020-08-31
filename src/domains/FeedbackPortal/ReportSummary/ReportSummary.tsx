@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-// TODO: Pass onUpdate to FormBase
 export default function ReportSummary({ report, callBack }: SummaryProps) {
     const { updateReport, deleteReport } = React.useContext(ReportStateContext);
     const { deleteEndpoint } = React.useContext(ReportEndpointContext);
