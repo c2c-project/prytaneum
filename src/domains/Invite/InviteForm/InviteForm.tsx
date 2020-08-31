@@ -27,7 +27,7 @@ import SelectFile from '../../../components/SelectFile';
 import VerifyPreview from '../../../components/SelectFile/VerifyPreview';
 import Parse from '../../../components/SelectFile/utils';
 import CreateInvite from './CreateInvite';
-import { InviteForm } from '../types';
+import { InviteForm, InvitePreview } from '../types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -378,8 +378,7 @@ export default function InviteFormStepper() {
                         onSuccess={handleNext}
                         onFailure={handleBack}
                         inviteForm={inviteForm}
-                        sendPreview={sendPreview}
-                        previewEmail={previewEmail}
+                        preview={{ sendPreview, previewEmail } as InvitePreview}
                         file={file}
                     />
                 );

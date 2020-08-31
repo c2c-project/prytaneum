@@ -5,7 +5,7 @@ import errors from 'utils/errors';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
 import API from './index';
-import { InviteForm } from '../types';
+import { InviteForm, InvitePreview } from '../types';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');
@@ -24,6 +24,12 @@ const testFormData: InviteForm = {
     constituentScope: 'state',
     region: 'test',
     deliveryTime: testDeliveryTime,
+    townHallID: 'testID',
+};
+
+const testPreview: InvitePreview = {
+    sendPreview: true,
+    previewEmail: faker.internet.email(),
 };
 
 const testFileData = [
@@ -40,11 +46,6 @@ describe('createInvite', () => {
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
-        const expectedOptions: AxiosRequestConfig = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
         const expectedFormData = new FormData();
         expectedFormData.append('inviteFile', testFile);
         expectedFormData.append('MoC', testFormData.MoC as string);
@@ -63,9 +64,15 @@ describe('createInvite', () => {
             'deliveryTimeString',
             deliveryTime.toISOString()
         );
-        await expect(API.createInvite(testFormData, testFile)).resolves.toBe(
-            resolvedValue
-        );
+        expectedFormData.append('previewEmail', testPreview.previewEmail);
+        const expectedOptions: AxiosRequestConfig = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        await expect(
+            API.createInvite(testFormData, testFile, testPreview)
+        ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(
             '/api/invite',
             expectedFormData,
@@ -73,9 +80,9 @@ describe('createInvite', () => {
         );
     });
     it('should throw file error with undifined file', async () => {
-        await expect(API.createInvite(testFormData, undefined)).rejects.toThrow(
-            errors.missingFile()
-        );
+        await expect(
+            API.createInvite(testFormData, undefined, testPreview)
+        ).rejects.toThrow(errors.missingFile());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should throw field error with undefined MoC', async () => {
@@ -86,10 +93,11 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
+            townHallID: 'testID',
         };
-        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
-            errors.fieldError()
-        );
+        await expect(
+            API.createInvite(formData, testFile, testPreview)
+        ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should throw field error with undefined topic', async () => {
@@ -100,10 +108,11 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
+            townHallID: 'testID',
         };
-        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
-            errors.fieldError()
-        );
+        await expect(
+            API.createInvite(formData, testFile, testPreview)
+        ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should throw field error with undefined eventDateTime', async () => {
@@ -114,10 +123,11 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
+            townHallID: 'testID',
         };
-        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
-            errors.fieldError()
-        );
+        await expect(
+            API.createInvite(formData, testFile, testPreview)
+        ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should throw field error with undefined region', async () => {
@@ -128,10 +138,26 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: undefined,
             deliveryTime: testDeliveryTime,
+            townHallID: 'testID',
         };
-        await expect(API.createInvite(formData, testFile)).rejects.toThrow(
-            errors.fieldError()
-        );
+        await expect(
+            API.createInvite(formData, testFile, testPreview)
+        ).rejects.toThrow(errors.fieldError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should throw field error with undefined townHallID', async () => {
+        const formData: InviteForm = {
+            MoC: faker.name.firstName(),
+            topic: 'Topic',
+            eventDateTime: testEventDateTime,
+            constituentScope: 'state',
+            region: 'test',
+            deliveryTime: testDeliveryTime,
+            townHallID: undefined,
+        };
+        await expect(
+            API.createInvite(formData, testFile, testPreview)
+        ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
 });

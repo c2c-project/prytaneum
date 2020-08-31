@@ -1,15 +1,14 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import { InviteForm } from '../types';
+import { InviteForm, InvitePreview } from '../types';
 
 // API
 
 export async function createInvite(
     inviteData: InviteForm,
     file: File | undefined,
-    sendPreview: boolean,
-    previewEmail: string
+    preview: InvitePreview
 ): Promise<AxiosResponse> {
     if (!file) {
         throw errors.missingFile();
@@ -42,7 +41,8 @@ export async function createInvite(
     formData.append('region', region);
     formData.append('deliveryTimeString', deliveryTime.toISOString());
     formData.append('townHallID', townHallID);
-    if (sendPreview) formData.append('previewEmail', previewEmail);
+    if (preview.sendPreview)
+        formData.append('previewEmail', preview.previewEmail);
     if (!MoC || !topic || !eventDateTime || !region || !deliveryTime) {
         throw errors.fieldError();
     }
@@ -57,6 +57,17 @@ export async function createInvite(
 export async function checkIfRegistered(email: string): Promise<AxiosResponse> {
     // TODO update axios request to match correct route
     return axios.post('/api/account/is-registered', email);
+}
+
+export async function loginWithJWT(token: string) {
+    if (!token) {
+        throw errors.fieldError();
+    }
+    // Verify the token and allow user to login if valid
+    // TODO Username vs Email, or doesn't matter since we can just post with jwt and have it handled in API
+    return axios.post('/api/users/login-with-jwt', {
+        token,
+    });
 }
 
 // TODO Find out if/what data/cookie (town hall ID?) is required to get relevant data.
