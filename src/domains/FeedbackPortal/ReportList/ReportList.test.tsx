@@ -14,7 +14,7 @@ jest.mock('hooks/useSnack');
 
 describe('CreateReportList', () => {
     const dummyBugReport = makeBugReport();
-    // Append a letter to the id of the report. This is necessary for jest to be able to query a listiem by the id attribute
+    // Append a letter to the id of the report. This is necessary for jest to be able to query a node by the id attribute
     dummyBugReport._id = `p${faker.random.alphaNumeric(11)}`;
     const customEndpoints = {
         submitEndpoint: (form: BugReportForm) => API.updateBugReport(form),
