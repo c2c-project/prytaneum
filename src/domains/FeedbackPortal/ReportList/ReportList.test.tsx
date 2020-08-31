@@ -38,12 +38,7 @@ describe('CreateReportList', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render report list', async () => {
         ReactTestUtils.act(() => {
-            render(
-                <ReactEndpointContext.Provider value={customEndpoints}>
-                    <ReportList reports={[dummyBugReport]} />
-                </ReactEndpointContext.Provider>,
-                container
-            );
+            render(<ReportList reports={[dummyBugReport]} />, container);
         });
     });
 
@@ -51,12 +46,7 @@ describe('CreateReportList', () => {
         const newDescription = faker.lorem.paragraph();
 
         ReactTestUtils.act(() => {
-            render(
-                <ReactEndpointContext.Provider value={customEndpoints}>
-                    <ReportList reports={[dummyBugReport]} />
-                </ReactEndpointContext.Provider>,
-                container
-            );
+            render(<ReportList reports={[dummyBugReport]} />, container);
         });
 
         const ListItemNode = document.querySelector(
