@@ -28,7 +28,8 @@ export default function FormBase({ report, onSuccess, callback }: Props) {
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            if (reportState) onSuccess(reportState);
+            // TODO: Check why was there an if statement here
+            onSuccess(reportState);
             callback();
             snack('Report successfully submitted', 'success');
         },
