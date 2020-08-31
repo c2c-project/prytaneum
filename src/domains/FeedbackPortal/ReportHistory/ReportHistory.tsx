@@ -131,14 +131,6 @@ export default function ReportHistory() {
         return reportsToIterate.findIndex((rp) => rp._id === report._id);
     };
 
-    const deleteReport = (reportId: string) => {
-        setReports((prevReports) => {
-            return prevReports.filter(
-                (prevReport) => prevReport._id !== reportId
-            );
-        });
-    };
-
     const updateReport = (report: Report) => {
         const prevReports = [...reports];
         const indexOfReport = findReport(prevReports, report);
@@ -151,7 +143,7 @@ export default function ReportHistory() {
 
     const customReportFunctions = {
         updateReport,
-        deleteReport,
+        refetchReports: () => sendRequest(),
     };
 
     return (
