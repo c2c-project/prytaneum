@@ -459,114 +459,17 @@ export default function UserSettings() {
                                 alignContent='center'
                                 justify='center'
                             >
-                                <Paper className={classes.paper}>
-                                    <Grid container spacing={3}>
-                                        <Grid
-                                            container
-                                            spacing={2}
-                                            className={classes.root}
-                                            alignContent='center'
-                                        >
-                                            <Grid
-                                                container
-                                                spacing={2}
-                                                alignContent='center'
-                                            >
-                                                <Grid item>
-                                                    <ListItem
-                                                        button={true}
-                                                        hidden={false}
-                                                        onClick={() =>
-                                                            setOpen(true)
-                                                        }
-                                                    >
-                                                        Feedback
-                                                    </ListItem>
-                                                    <Dialog
-                                                        open={open}
-                                                        title='Feedback'
-                                                        onClose={() =>
-                                                            setOpen(false)
-                                                        }
-                                                    >
-                                                        <h1>
-                                                            Tell us how we are
-                                                            doing.
-                                                        </h1>
-                                                    </Dialog>
-                                                </Grid>
-                                                <Grid item>
-                                                    <ListItem
-                                                        button={true}
-                                                        hidden={false}
-                                                        onClick={() =>
-                                                            setOpen(true)
-                                                        }
-                                                    >
-                                                        About Us
-                                                    </ListItem>
-                                                    <Dialog
-                                                        open={open}
-                                                        title='About Us'
-                                                        onClose={() =>
-                                                            setOpen(false)
-                                                        }
-                                                    >
-                                                        <h1>
-                                                            This was made
-                                                            somehow by some
-                                                            people.
-                                                        </h1>
-                                                    </Dialog>
-                                                </Grid>
-                                                <Grid item>
-                                                    <ListItem
-                                                        button={true}
-                                                        hidden={false}
-                                                        onClick={() =>
-                                                            setOpen(true)
-                                                        }
-                                                    >
-                                                        Privacy Policy
-                                                    </ListItem>
-                                                    <Dialog
-                                                        open={open}
-                                                        title='Privacy Policy'
-                                                        onClose={() =>
-                                                            setOpen(false)
-                                                        }
-                                                    >
-                                                        <h1>
-                                                            Information is
-                                                            important.
-                                                        </h1>
-                                                    </Dialog>
-                                                </Grid>
-                                                <Grid item>
-                                                    <ListItem
-                                                        button={true}
-                                                        hidden={false}
-                                                        onClick={() =>
-                                                            setOpen(true)
-                                                        }
-                                                    >
-                                                        Terms of Service
-                                                    </ListItem>
-                                                    {/* <Dialog
+                                Terms of Service
+                            </ListItem>
+                            <Dialog
                                 open={open}
                                 title='Terms of Service'
                                 onClose={() => setOpen(false)}
                             >
                                 <h1>Pls no hurt us we no hurt you.</h1>
-                            </Dialog> */}
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grow>
-                    </Container>
+                            </Dialog>
+                        </Grid>
+                    </Grid>
                 ),
             },
         ],
@@ -597,14 +500,20 @@ export default function UserSettings() {
     return (
         <Container
             maxWidth='md'
-            style={{ width: '100%', height: '100%', overflowY: 'scroll' }}
+            style={{
+                width: '100%',
+                height: '100%',
+                overflowY: 'scroll',
+            }}
         >
-            <MemoryRouter initialEntries={['/User Settings']}>
-                <Route path='/:title'>
-                    <AppBar back />
-                </Route>
-            </MemoryRouter>
-            <SectionList sections={sections} />
+            <Paper className={classes.paper}>
+                <MemoryRouter initialEntries={['/User Settings']}>
+                    <Route path='/:title'>
+                        <AppBar back />
+                    </Route>
+                </MemoryRouter>
+                <SectionList sections={test} />
+            </Paper>
         </Container>
     );
 }
