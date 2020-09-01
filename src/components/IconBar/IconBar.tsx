@@ -25,28 +25,10 @@ interface Props {
     justify: string;
 }
 
-function convertNum(children: number) {
-    if (children <= 12) {
-        return Math.round(12 / children) as
-            | 1
-            | 2
-            | 3
-            | 4
-            | 5
-            | 6
-            | 7
-            | 8
-            | 9
-            | 10
-            | 11
-            | 12;
-    }
-    return Math.ceil(12 / children) as 1;
-}
+
 
 export default function IconBar({ children, justify }: Props) {
     const classes = useStyles();
-    const b = convertNum(React.Children.count(children));
 
     return (
         <div className={classes.root}>
@@ -57,7 +39,7 @@ export default function IconBar({ children, justify }: Props) {
                 }}
             >
                 <div className={classes.footer}>
-                    <Grid container>
+                    <Grid container justify='space-evenly'>
                         {React.Children.map(children, (child, idx) => {
                             // clone the child and apply the button styles
                             const StylizedChild = React.cloneElement(child, {
@@ -66,7 +48,7 @@ export default function IconBar({ children, justify }: Props) {
                             });
 
                             return (
-                                <Grid item key={idx} xs={b}>
+                                <Grid item key={idx} xs='auto'>
                                     {StylizedChild}
                                 </Grid>
                             );
