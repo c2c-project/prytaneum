@@ -5,7 +5,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
 import faker from 'faker';
 
-import { makeFeedbackReport } from '../reportMaker';
+import { makeFeedbackReport } from '../reportMaker.mocks';
 import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from './FormBase';
 import * as API from '../api/api';

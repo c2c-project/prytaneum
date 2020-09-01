@@ -6,7 +6,7 @@ import faker from 'faker';
 import { AxiosResponse } from 'axios';
 
 import ReportEndpointContext from '../Contexts/ReportEndpointContext';
-import { makeFeedbackReport, makeBugReport } from '../reportMaker';
+import { makeFeedbackReport, makeBugReport } from '../reportMaker.mocks';
 import ReportSummary from './ReportSummary';
 import * as API from '../api/api';
 import { FeedbackForm, BugReportForm } from '../types';
