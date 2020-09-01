@@ -6,7 +6,7 @@ import faker from 'faker';
 import { AxiosResponse } from 'axios';
 
 import ReportForm from './ReportForm';
-import * as API from '../api/api';
+import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 import { FeedbackForm, BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');

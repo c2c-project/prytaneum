@@ -8,7 +8,7 @@ import faker from 'faker';
 import { makeFeedbackReport } from '../reportMaker.mocks';
 import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from './FormBase';
-import * as API from '../api/api';
+import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 import { FeedbackForm } from '../types';
 
 jest.mock('hooks/useSnack');

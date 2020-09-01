@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios';
 import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import { makeFeedbackReport, makeBugReport } from '../reportMaker.mocks';
 import ReportSummary from './ReportSummary';
-import * as API from '../api/api';
+import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 import { FeedbackForm, BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');
