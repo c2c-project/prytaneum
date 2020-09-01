@@ -29,7 +29,6 @@ export default {
     },
 };
 
-// TODO: Ask David: A deleteEnpoint here has to be passed although it is not going to be used
 const dummyFeedbackReportForm = {
     title: 'Feedback Form',
     mainDescription:

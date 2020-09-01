@@ -32,7 +32,7 @@ export default function ReportForm({
                 <Typography variant='body1'>{mainDescription}</Typography>
             </Grid>
             <Grid item xs={12}>
-                {/* TODO: Pass actual onSuccess and callback functions */}
+                {/* TODO: Pass actual onSuccess and callback functions  if needed*/}
                 <ReportEndpointContext.Provider value={endpointFunctions}>
                     <FormBase onSuccess={() => {}} callback={() => {}} />
                 </ReportEndpointContext.Provider>
