@@ -374,13 +374,13 @@ export default function UserSettings() {
                             >
                                 Terms of Service
                             </ListItem>
-                            {/* <Dialog
+                            <Dialog
                                 open={open}
                                 title='Terms of Service'
                                 onClose={() => setOpen(false)}
                             >
                                 <h1>Pls no hurt us we no hurt you.</h1>
-                            </Dialog> */}
+                            </Dialog>
                         </Grid>
                     </Grid>
                 ),
@@ -411,26 +411,22 @@ export default function UserSettings() {
     // right now it is bad and we will fix it
     // just need it to work right now
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='row'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <MemoryRouter initialEntries={['/User Settings']}>
-                        <Route path='/:title'>
-                            <AppBar back />
-                        </Route>
-                    </MemoryRouter>
-                    <div/>
-                    <Grid container spacing={3}>
-                        <SectionList sections={test} />
-                    </Grid>
-                </Grid>
-            </Grow>
+        <Container
+            maxWidth='md'
+            style={{
+                width: '100%',
+                height: '100%',
+                overflowY: 'scroll',
+            }}
+        >
+            <Paper className={classes.paper}>
+                <MemoryRouter initialEntries={['/User Settings']}>
+                    <Route path='/:title'>
+                        <AppBar back />
+                    </Route>
+                </MemoryRouter>
+                <SectionList sections={test} />
+            </Paper>
         </Container>
     );
 }
