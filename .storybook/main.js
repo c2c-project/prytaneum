@@ -15,10 +15,8 @@ module.exports = {
     typescript: {
         reactDocgen: 'none',
     },
-    // webpackFinal: (config) => {
-    //     config.resolve.alias = {
-    //         hooks: path.resolve(__dirname, '../src/hooks/__mocks__/'),
-    //     };
-    //     return config;
-    // },
+    'hooks/useSocketio': path.resolve(
+        __dirname,
+        '../src/hooks/__mocks__/useSocketio'
+    ),
 };
