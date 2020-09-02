@@ -55,7 +55,14 @@ export default function UserSettings() {
         setForm((state) => ({ ...state, [id]: value }));
     };
 
-    const [open, setOpen] = React.useState(false);
+    const [openAppearance, setOpenAppearance] = React.useState(false);
+    const [openLogout, setOpenLogout] = React.useState(false);
+    const [openDisable, setOpenDisable] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [openFeedback, setOpenFeedback] = React.useState(false);
+    const [openAboutUs, setOpenAboutUs] = React.useState(false);
+    const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
+    const [openTOS, setOpenTOS] = React.useState(false);
 
     var userProfile: Section = {
         title: 'User',
@@ -149,14 +156,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenAppearance(true)}
                             >
                                 Appearance
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openAppearance}
                                 title='Appearance'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenAppearance(false)}
                             >
                                 <h1>Dark mode: {darkmode}</h1>
                                 <h2>Color scheme: {colorscheme}</h2>
@@ -180,12 +187,12 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenLogout(true)}
                             >
                                 Logout
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openLogout}
                                 title='You have been logged out'
                                 onClose={() => {}}
                             >
@@ -200,14 +207,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenDisable(true)}
                             >
                                 Disable Account
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openDisable}
                                 title='Disable Account'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenDisable(false)}
                             >
                                 <h1>
                                     Disable Account?
@@ -255,14 +262,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenDelete(true)}
                             >
                                 Delete Account
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openDelete}
                                 title='Delete Account'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenDelete(false)}
                             >
                                 <h1>
                                     Delete Account?
@@ -322,14 +329,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenFeedback(true)}
                             >
                                 Feedback
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openFeedback}
                                 title='Feedback'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenFeedback(false)}
                             >
                                 <h1>Tell us how we are doing.</h1>
                             </Dialog>
@@ -338,14 +345,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenAboutUs(true)}
                             >
                                 About Us
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openAboutUs}
                                 title='About Us'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenAboutUs(false)}
                             >
                                 <h1>This was made somehow by some people.</h1>
                             </Dialog>
@@ -354,14 +361,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenPrivacyPolicy(true)}
                             >
                                 Privacy Policy
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openPrivacyPolicy}
                                 title='Privacy Policy'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenPrivacyPolicy(false)}
                             >
                                 <h1>Information is important.</h1>
                             </Dialog>
@@ -370,14 +377,14 @@ export default function UserSettings() {
                             <ListItem
                                 button={true}
                                 hidden={false}
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenTOS(true)}
                             >
                                 Terms of Service
                             </ListItem>
                             <Dialog
-                                open={open}
+                                open={openTOS}
                                 title='Terms of Service'
-                                onClose={() => setOpen(false)}
+                                onClose={() => setOpenTOS(false)}
                             >
                                 <h1>Pls no hurt us we no hurt you.</h1>
                             </Dialog>
@@ -407,9 +414,6 @@ export default function UserSettings() {
         },
     ];
 
-    // replace `{classes.*}` with 't' or something else to reset the formatting
-    // right now it is bad and we will fix it
-    // just need it to work right now
     return (
         <Container
             maxWidth='md'
