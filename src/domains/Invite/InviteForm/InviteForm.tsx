@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -8,6 +8,7 @@ import {
     KeyboardTimePicker,
     MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import Collapse from '@material-ui/core/Collapse';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -22,11 +23,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { ParseResult } from 'papaparse';
 
+import useEndpoint from 'hooks/useEndpoint';
+
 import EmailPreview from 'components/EmailPreview';
-import SelectFile from '../../../components/SelectFile';
-import VerifyPreview from '../../../components/SelectFile/VerifyPreview';
-import Parse from '../../../components/SelectFile/utils';
+import SelectFile from 'components/SelectFile';
+import VerifyPreview from 'components/SelectFile/VerifyPreview';
+import Parse from 'components/SelectFile/utils';
 import CreateInvite from './CreateInvite';
+import API from '../api';
 import { InviteForm, InvitePreview } from '../types';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -205,7 +209,7 @@ function InvitePreviewStep({
                     }
                     label='send email preview'
                 />
-                {sendPreview ? (
+                <Collapse in={sendPreview}>
                     <Grid>
                         <InputLabel htmlFor='email-input'>Email</InputLabel>
                         <Input
@@ -217,9 +221,7 @@ function InvitePreviewStep({
                             color='primary'
                         />
                     </Grid>
-                ) : (
-                    <></>
-                )}
+                </Collapse>
             </Grid>
             <Grid>
                 <FormControlLabel
@@ -233,26 +235,28 @@ function InvitePreviewStep({
                     }
                     label='show email preview'
                 />
-                {showPreview ? (
-                    <EmailPreview
-                        fName='NAME_PLACEHOLDER'
-                        MoC={inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'}
-                        topic={
-                            inviteForm.topic
-                                ? inviteForm.topic
-                                : 'Unknown Topic'
-                        }
-                        eventDateTime={
-                            inviteForm.eventDateTime
-                                ? inviteForm.eventDateTime
-                                : 'Unknown Event Date'
-                        }
-                        constituentScope={inviteForm.constituentScope}
-                        registrationLink='https://connectingtocongress.org/register'
-                    />
-                ) : (
-                    <></>
-                )}
+                <Collapse in={showPreview}>
+                    <div id='email-preview'>
+                        <EmailPreview
+                            fName='NAME_PLACEHOLDER'
+                            MoC={
+                                inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'
+                            }
+                            topic={
+                                inviteForm.topic
+                                    ? inviteForm.topic
+                                    : 'Unknown Topic'
+                            }
+                            eventDateTime={
+                                inviteForm.eventDateTime
+                                    ? inviteForm.eventDateTime
+                                    : 'Unknown Event Date'
+                            }
+                            constituentScope={inviteForm.constituentScope}
+                            registrationLink='https://connectingtocongress.org/register'
+                        />
+                    </div>
+                </Collapse>
             </Grid>
         </div>
     );
@@ -300,13 +304,15 @@ function getSteps() {
 export default function InviteFormStepper() {
     const classes = useStyles();
     const [file, setFile]: [File | undefined, Function] = React.useState();
-    const [activeStep, setActiveStep] = React.useState(0);
     const [preview, setPreview]: [
         object[] | undefined,
         Function
     ] = React.useState();
     const [sendPreview, setSendPreview] = useState(false);
     const [previewEmail, setPreviewEmail] = useState('');
+    const [activeStep, dispatch] = React.useReducer(stepReducer, 0);
+    const steps = getSteps();
+    const expectedKeys = ['email', 'fName', 'lName'];
     const [inviteForm, setInviteForm]: [InviteForm, Function] = React.useState({
         MoC: '',
         topic: '',
@@ -316,24 +322,42 @@ export default function InviteFormStepper() {
         deliveryTime: new Date(),
         townHallID: '',
     }); // TODO Some of these fields can be pre-filled and/or set from db values.
-    // const [step, dispatch] = React.useReducer(stepReducer, 0);
-    // const [test, dispatcher] = React.useReducer(formReducer, <></>);
-    const steps = getSteps();
-    const expectedKeys = ['email', 'fName', 'lName'];
+
+    const apiRequest = useCallback(() => API.getInviteData(), [
+        inviteForm,
+        file,
+    ]);
+    const [sendRequest] = useEndpoint(apiRequest, {
+        onSuccess: (result) => {
+            console.log('Success', result);
+            // TODO Update once endpoint has been finalized
+            // setInviteForm({
+            //     ...inviteForm,
+            //     MoC: result.MoC,
+            //     topic: result.topic,
+            //     eventDateTime: result.eventDateTime,
+            //     constituentScope: result.constituentScope,
+            //     region: result.region,
+            //     townHallID: result.townHallID
+            // });
+        },
+        onFailure: (e) => {
+            console.log('Fail', e);
+        },
+    });
+
+    sendRequest();
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        // dispatch({ type: 'next-step' });
+        dispatch({ type: 'next-step' });
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-        // dispatch({ type: 'previous-step' });
+        dispatch({ type: 'previous-step' });
     };
 
     const handleReset = () => {
-        setActiveStep(0);
-        // dispatch({ type: 'reset-step' });
+        dispatch({ type: 'reset-step' });
     };
 
     function getStepContent(step: number) {
