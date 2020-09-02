@@ -1,9 +1,8 @@
 import React from 'react';
 
-import Component, {TownHallHistoryEntry} from './TownHallHistory';
+import Component, { TownHallHistoryEntry } from './TownHallHistory';
 
 export default { title: 'Domains/Townhall' };
-
 
 const historyEntries: TownHallHistoryEntry[] = [
     {
