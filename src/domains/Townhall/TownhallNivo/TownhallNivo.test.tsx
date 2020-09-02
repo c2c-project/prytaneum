@@ -2,9 +2,33 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import IconBar from './IconBar';
+import Component, { PieDatum } from './TownhallNivo';
 
-describe('IconBar', function () {
+const Nivo: PieDatum[] = [
+    {
+        id: 'php',
+        value: 344,
+    },
+    {
+        id: 'go',
+        value: 262,
+    },
+    {
+        id: 'javascript',
+        value: 411,
+    },
+    {
+        id: 'ruby',
+        value: 191,
+    },
+    {
+        id: 'hack',
+        value: 234,
+   
+    },
+];
+
+describe('TownHallNivo', function () {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
@@ -21,18 +45,10 @@ describe('IconBar', function () {
         jest.restoreAllMocks();
     });
 
-    it('should render using flex-start', () => {
+    // eslint-disable-next-line jest/expect-expect
+    it('should render', () => {
         ReactTestUtils.act(() => {
-            render(
-                <IconBar justify='flex-start'>
-                    <div id='test' />
-                    <div id='test2' />
-                </IconBar>,
-
-                container
-            );
+            render(<Component data={Nivo} height={200} />, container);
         });
-        expect(document.getElementById('test')).toBeTruthy();
-        expect(document.getElementById('test2')).toBeTruthy();
     });
 });
