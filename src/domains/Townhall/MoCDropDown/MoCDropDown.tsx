@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,31 +25,32 @@ interface MemberLabel {
     first_name: string;
     last_name: string;
 }
-  
 
 export default function MoCDropdown() {
     const classes = useStyles();
-    const [chamber, setChamber] = React.useState('');
-    const [input] = React.useState('');
-    const [data2, setData2] = React.useState([]);
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const [chamber, setChamber] = useState('');
+    const [input] = useState('');
+    const [data2, setData2] = useState([]);
+    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
         setChamber(event.target.value as string);
-        const url = `https://api.propublica.org/congress/v1/116/${event.target.value as string}/members.json`;
+    };
+
+    useEffect(() => {
+        const url = `https://api.propublica.org/congress/v1/116/${chamber}/members.json`;
         axios
             .get(url, {
                 headers: {
-                    'X-API-Key': process.env.REACT_APP_API_KEY,
+                    'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY,
                 },
             })
             .then((response) => {
-           
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 setData2(response.data.results[0].members);
             })
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }, [chamber]);
 
     return (
         <div>
@@ -73,7 +74,6 @@ export default function MoCDropdown() {
                 id='combo-box-demo'
                 options={data2 as MemberLabel[]}
                 getOptionLabel={(option) =>
-              
                     `${option.first_name} ${option.last_name}`
                 }
                 style={{ width: 300 }}
