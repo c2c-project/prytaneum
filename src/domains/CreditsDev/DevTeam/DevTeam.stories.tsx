@@ -10,7 +10,7 @@ export default {
 
 export function DevTeam() {
     return (
-        <Container maxWidth='sm'>
+        <Container>
             <Component />
         </Container>
     );
