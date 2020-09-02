@@ -10,7 +10,7 @@ export default function InvalidInviteLink({ errorMessage }: Props) {
     return (
         <Grid container justify='center' direction='column'>
             <Grid container justify='center'>
-                <Typography variant='h3' component='div'>
+                <Typography variant='h4' component='div'>
                     Invalid Invite Link
                 </Typography>
             </Grid>
