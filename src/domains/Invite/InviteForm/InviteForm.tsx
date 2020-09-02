@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -346,8 +346,6 @@ export default function InviteFormStepper() {
         },
     });
 
-    sendRequest();
-
     const handleNext = () => {
         dispatch({ type: 'next-step' });
     };
@@ -359,6 +357,10 @@ export default function InviteFormStepper() {
     const handleReset = () => {
         dispatch({ type: 'reset-step' });
     };
+
+    useEffect(() => {
+        sendRequest();
+    }, []);
 
     function getStepContent(step: number) {
         switch (step) {

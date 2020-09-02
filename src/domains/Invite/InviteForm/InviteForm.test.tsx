@@ -5,6 +5,9 @@ import { unmountComponentAtNode, render } from 'react-dom';
 
 import InviteForm from '.';
 
+jest.mock('hooks/useSnack');
+jest.mock('hooks/useEndpoint');
+
 describe('Invite Form', () => {
     let container: HTMLElement | null = null;
 
