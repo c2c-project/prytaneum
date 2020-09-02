@@ -15,8 +15,6 @@ import SectionList from 'components/SectionList';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 
-import banner from 'assets/spp-banner.png';
-
 //import API from '../../api';
 
 const useStyles = makeStyles((theme) => ({
@@ -197,7 +195,7 @@ export default function UserSettings() {
                                 onClose={() => {}}
                             >
                                 <button
-                                    onClick={() => history.push('/app/home')}
+                                    onClick={() => setOpenLogout(false)} // TODO: go to home page
                                 >
                                     Click here to return to the home page
                                 </button>
