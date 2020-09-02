@@ -22,9 +22,7 @@ import { InviteTokenResult } from '../types';
 // Case 1: No account, redirect to register
 // Case 2: account exists, redirect to login page
 // Case 3: jwt invalid, display error message.
-export function consumeInviteToken(
-    inviteToken: string
-): InviteTokenResult | undefined {
+export function consumeInviteToken(inviteToken: string): InviteTokenResult {
     const JWT_SECRET = 'secret';
     // Decode the invite token
     const decoded = jwt.verify(inviteToken, JWT_SECRET) as InviteTokenResult;
@@ -32,7 +30,7 @@ export function consumeInviteToken(
     if (!email || !townHallID) {
         // Throw error as link contains invalid data
         errors.invalidToken(); // TODO handle this error
-        return undefined;
+        throw new Error('Undefined token data');
     }
     return { email, townHallID };
 }
@@ -85,9 +83,6 @@ export default function HandleInviteLink(): JSX.Element {
     const history = useHistory();
     try {
         const result = consumeInviteToken(token);
-        if (result === undefined) {
-            throw new Error('Undefined invite token data');
-        }
         const handleSuccess = () => {
             history.push(`/townhalls/${result.townHallID}`);
         };

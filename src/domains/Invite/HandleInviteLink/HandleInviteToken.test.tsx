@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
 import React from 'react';
-import { MemoryRouter, Route } from 'react-router-dom';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import jwt from 'jsonwebtoken';
