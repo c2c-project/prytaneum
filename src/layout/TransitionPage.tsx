@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Fade from '@material-ui/core/Fade';
 
 interface Props {
-    children: ReactElement<any, any> | undefined; // this is strange?
+    children: ReactElement<unknown, string> | undefined; // this is strange?
 }
 
 export default function TransitionPage({ children }: Props) {
