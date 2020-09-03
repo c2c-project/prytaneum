@@ -11,6 +11,7 @@ declare namespace Prytaneum {
         picture: string;
         readingMaterials: '';
         date: Date;
+        url: string;
     }
     interface User {
         _id: string;

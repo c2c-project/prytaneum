@@ -35,19 +35,17 @@ interface Question {
     timestamp: string;
 }
 
-type PayloadBase = { _id: string };
-
 interface NewQuestionAction {
     type: 'new-question';
-    payload: PayloadBase & Question;
+    payload: Question;
 }
 interface UpdateQuestionAction {
     type: 'update-question';
-    payload: PayloadBase & Pick<Question, 'question'>;
+    payload: Pick<Question, 'question' | '_id'>;
 }
 interface DeleteQuestionAction {
     type: 'hide-question';
-    payload: PayloadBase;
+    payload: Pick<Question, '_id'>;
 }
 
 type Actions = NewQuestionAction | UpdateQuestionAction | DeleteQuestionAction;
@@ -75,6 +73,7 @@ function questionReducer(state: Question[], action: Actions) {
 export default function QuestionQueue() {
     const classes = useStyles();
     const topRef = React.useRef<HTMLDivElement | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, dispatch, socket] = useSocketio<Question[], Actions>({
         url: '/moderator/questions',
         event: 'townhall-question-state',
