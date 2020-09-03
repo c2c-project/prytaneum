@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import OpenIcon from '@material-ui/icons/CallMade';
+import OpenIcon from '@material-ui/icons/Launch';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -59,6 +59,17 @@ export default function ProfileCard({ teamMember }: Props) {
                 alignItems='center'
                 justify='center'
             >
+                <Grid container direction='row' justify='flex-end'>
+                    <Grid item>
+                        <IconButton
+                            size='small'
+                            onClick={() => handleClickOpen()}
+                            aria-label='open-dialog'
+                        >
+                            <OpenIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
                 <Grid item>
                     <Avatar
                         className={classes.medium}
@@ -70,13 +81,6 @@ export default function ProfileCard({ teamMember }: Props) {
                     <Typography align='center' variant='h5'>
                         {teamMember.fullName}
                     </Typography>
-                    <IconButton
-                        size='small'
-                        onClick={() => handleClickOpen()}
-                        aria-label='open-dialog'
-                    >
-                        <OpenIcon />
-                    </IconButton>
                 </Grid>
                 {teamMember.references && (
                     <Grid item container direction='row' justify='center'>
@@ -99,7 +103,7 @@ export default function ProfileCard({ teamMember }: Props) {
                 <Grid container direction='column' alignItems='center'>
                     <Grid item>
                         <DialogTitle>
-                            <Typography variant='h4'>
+                            <Typography align='center' variant='h4'>
                                 {teamMember.fullName}
                             </Typography>
                         </DialogTitle>
