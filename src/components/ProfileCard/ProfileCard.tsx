@@ -3,14 +3,13 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
+import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { teamMember as teamMemberType } from '../Team/types';
@@ -98,8 +97,15 @@ export default function ProfileCard({ teamMember }: Props) {
                         ))}
                 </Grid>
             </Grid>
-            <Dialog maxWidth='xs' open={open} onClose={handleClose}>
+            <Dialog maxWidth='sm' open={open} onClose={handleClose}>
                 <Grid container direction='column' alignItems='center'>
+                    <Grid container direction='row' justify='flex-end'>
+                        <Grid item>
+                            <IconButton onClick={handleClose} color='primary'>
+                                <CloseIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                     <Grid item>
                         <DialogTitle>
                             <Typography align='center' variant='h4'>
@@ -129,17 +135,6 @@ export default function ProfileCard({ teamMember }: Props) {
                                 </Grid>
                             </Grid>
                         </DialogContent>
-                    </Grid>
-                    <Grid item>
-                        <DialogActions>
-                            <Button
-                                autoFocus
-                                onClick={handleClose}
-                                color='primary'
-                            >
-                                Close
-                            </Button>
-                        </DialogActions>
                     </Grid>
                 </Grid>
             </Dialog>
