@@ -82,9 +82,9 @@ export default function ProfileCard({ teamMember }: Props) {
                         {teamMember.fullName}
                     </Typography>
                 </Grid>
-                {teamMember.references && (
-                    <Grid item container direction='row' justify='center'>
-                        {teamMember.references.map((reference, index) => (
+                <Grid item container direction='row' justify='center'>
+                    {teamMember.references &&
+                        teamMember.references.map((reference, index) => (
                             <Grid item key={index}>
                                 <IconButton
                                     target='_blank'
@@ -96,8 +96,7 @@ export default function ProfileCard({ teamMember }: Props) {
                                 </IconButton>
                             </Grid>
                         ))}
-                    </Grid>
-                )}
+                </Grid>
             </Grid>
             <Dialog maxWidth='xs' open={open} onClose={handleClose}>
                 <Grid container direction='column' alignItems='center'>
