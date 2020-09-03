@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import EmailIcon from '@material-ui/icons/Email';
 import faker from 'faker';
 import Component from '.';
 
@@ -31,7 +32,17 @@ const makeTeam = (num: number) => {
                 ],
             });
         } else {
-            team.push(tempMem);
+            team.push({
+                ...tempMem,
+                picturePath: faker.image.imageUrl(),
+                references: [
+                    {
+                        icon: <EmailIcon />,
+                        name: 'Email',
+                        link: 'https://www.gmail.com',
+                    },
+                ],
+            });
         }
     }
     return team;
