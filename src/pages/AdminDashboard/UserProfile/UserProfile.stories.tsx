@@ -1,34 +1,34 @@
 import React from 'react';
+import { userProfileData } from 'pages/AdminDashboard/data';
+import UserProfile from './UserProfile';
 
-import { Story, Meta } from '@storybook/react/types-6-0';
-
-import { UserProfile, Props } from './UserProfile';
-import { userProfileData } from '../data';
-
-export default {
-    title: 'AdminDashboard/UserProfile',
-    component: UserProfile,
-    argsTypes: {},
-} as Meta;
-
-// eslint-disable-next-line react/jsx-props-no-spreading
-const Template: Story<Props> = (args) => <UserProfile {...args} />;
+export default { title: 'AdminDashboard/UserProfile' };
 
 const filterList = ['Attended', 'Moderated', 'Banned'];
+const fabMenuItems = ['PROMOTE', 'EDIT', 'ADD'];
+const userInfo = userProfileData();
 
-export const Primary = Template.bind({});
-Primary.args = {
-    profileInfo: {
-        primary: userProfileData.name,
-        info: userProfileData.status.filter((x) =>
-            filterList.includes(x.status)
-        ),
-    },
-    tags: userProfileData.status.map((x) => {
-        return x.status;
-    }),
-    userActionHistory: userProfileData.actionHistoryData.map((x) => {
-        return { id: x.timeStamp, primary: x.action, secondary: x.timeStamp };
-    }),
-    fabMenuItems: ['PROMOTE', 'EDIT', 'ADD'],
+const profileInfo = {
+    primary: userInfo.name,
+    info: userInfo.status.filter((x) => filterList.includes(x.status)),
 };
+
+const userTags = userInfo.status.map((stat) => stat.status);
+const userActionHistory = userInfo.actionHistoryData.map((user) => {
+    return {
+        id: user.timeStamp,
+        primary: user.action,
+        secondary: user.timeStamp.toString(),
+    };
+});
+
+export function Primary() {
+    return (
+        <UserProfile
+            profileInfo={profileInfo}
+            tags={userTags}
+            userActionHistory={userActionHistory}
+            fabMenuItems={fabMenuItems}
+        />
+    );
+}

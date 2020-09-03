@@ -3,8 +3,9 @@ import React, { useReducer, useCallback } from 'react';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ListOverflow from 'components/ListOverflow';
 import AdminToolbar from './AdminToolbar';
-import ListOverflow from '../../../components/ListOverflow';
+import { UserInfo } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,38 +20,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type UserInfo = {
-    id: number;
-    name: string;
+type State = UserInfo[];
+interface SetAction {
+    type: 'SET';
+    users: UserInfo[];
+}
+
+interface PromoteAction {
+    type: 'PROMOTE';
     status: string;
-    timeStamp: number;
-};
-
-interface State {
-    users: Array<UserInfo>;
+    id: string;
 }
 
-interface Action {
-    type: string;
-    users?: Array<UserInfo>;
-    status?: string;
-    id?: number | string;
-}
+type Action = SetAction | PromoteAction;
 
-function usersReducer(currentUsers: State, action: Action) {
+function reducer(users: State, action: Action): State {
     switch (action.type) {
         case 'SET':
             return action.users;
-        case 'PROMOTE':
-            const userIndex = currentUsers.findIndex((user) => {
-                return user.id === action.id;
-            });
+        case 'PROMOTE': {
+            const copy: UserInfo[] = [...users];
+            const userIndex = copy.findIndex((user) => user.id === action.id);
             const newUserInfo = {
-                ...currentUsers[userIndex],
+                ...copy[userIndex],
                 status: action.status,
             };
-            currentUsers[userIndex] = newUserInfo;
-            return currentUsers;
+
+            copy[userIndex] = newUserInfo;
+
+            return copy;
+        }
         default:
             throw new Error('Should not get there!');
     }
@@ -58,7 +57,7 @@ function usersReducer(currentUsers: State, action: Action) {
 
 const UserList = () => {
     const classes = useStyles();
-    const [users, dispatch] = useReducer(usersReducer, []);
+    const [users, dispatch] = useReducer(reducer, []);
 
     const filteredUsersHandler = useCallback(
         (filteredUsers: Array<UserInfo>) => {

@@ -4,10 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { IconButton, Grid, Popper, Paper } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-import CheckBox from '../../../../components/CheckBox';
-import SearchToolbar from '../../../../components/SearchToolbar';
+import CheckBox from 'components/CheckBox';
+import SearchToolbar from 'components/SearchToolbar';
 
-import { mockData, statusTags } from '../../data';
+import { UserInfo } from 'pages/AdminDashboard/types';
+
+import { makeUsers, statusTags } from '../../data';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -17,21 +19,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type userInfo = {
-    id: number;
-    name: string;
-    status: string;
-    timeStamp: number;
-};
-
 export interface Props {
-    onLoadUsers: (setHandler: Array<userInfo>) => void;
+    onLoadUsers: (setHandler: UserInfo[]) => void;
     filterLabel?: string;
 }
 
+type Anchor = (EventTarget & Element) | null;
+const mockData = makeUsers(10);
+
 const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
     const classes = useStyles();
-    const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+    const [filterAnchorEl, setFilterAnchorEl] = useState<Anchor>(null);
     const open = Boolean(filterAnchorEl);
     const [enteredFilter, setEnteredFilter] = useState<string>('');
     const [enteredFilterTags, setEnteredFilterTags] = useState<Array<string>>(
@@ -41,7 +39,9 @@ const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
     const inputRef = useRef();
 
     const filterClickHandler = (event: React.MouseEvent) => {
-        open ? setFilterAnchorEl(null) : setFilterAnchorEl(event.currentTarget);
+        const { currentTarget } = event;
+        if (open) setFilterAnchorEl(null);
+        else setFilterAnchorEl(currentTarget);
     };
 
     useEffect(() => {

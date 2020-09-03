@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
 
-import ListOverflow from '../../../../components/ListOverflow';
+import ListOverflow from 'components/ListOverflow';
 
 interface ActionHistory {
     id: string | number;

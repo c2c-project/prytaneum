@@ -1,28 +1,23 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react/types-6-0';
+import { makeUsers } from 'pages/AdminDashboard/data';
+import ListOverflow from './ListOverflow';
 
-import { mockData } from '../../pages/AdminDashboard/data';
-import ListOverflow, { Props } from './ListOverflow';
+export default { title: 'Components/ListOverflow' };
 
-export default {
-    title: 'Components/ListOverflow',
-    component: ListOverflow,
-    argTypes: {},
-} as Meta;
+const usersPrimary = makeUsers(10).map((user) => {
+    return { id: user.id, primary: user.name };
+});
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const Template: Story<Props> = (args) => <ListOverflow {...args} />;
+export function Primary() {
+    return <ListOverflow rowTraits={usersPrimary} />;
+}
 
-export const Primary = Template.bind({});
-Primary.args = {
-    rowTraits: mockData.map((row) => {
-        return { id: row.id, primary: row.name };
-    }),
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-    rowTraits: mockData.map((row) => {
-        return { id: row.id, primary: row.name, secondary: row.status };
-    }),
-};
+export function Secondary() {
+    return (
+        <ListOverflow
+            rowTraits={usersPrimary.map((user) => {
+                return { ...user, secondary: 'regular' };
+            })}
+        />
+    );
+}

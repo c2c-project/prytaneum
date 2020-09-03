@@ -53,15 +53,7 @@ const CheckBox = ({ options, onChange, selectedFilter }: Props) => {
             )}
             // style={{ width: 500 }}
             className={classes.TextField}
-            renderInput={(
-                params:
-                    | (JSX.IntrinsicAttributes &
-                          import('@material-ui/core').StandardTextFieldProps)
-                    | (JSX.IntrinsicAttributes &
-                          import('@material-ui/core').FilledTextFieldProps)
-                    | (JSX.IntrinsicAttributes &
-                          import('@material-ui/core').OutlinedTextFieldProps)
-            ) => (
+            renderInput={(params) => (
                 <TextField
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...params}

@@ -1,28 +1,27 @@
 import React from 'react';
+import { userProfileData } from 'pages/AdminDashboard/data';
+import UserTags from './UserTags';
 
-import { Story, Meta } from '@storybook/react/types-6-0';
+export default { title: 'AdminDashboard/UserProfile/UserTags' };
 
-import UserTags, { Props } from './UserTags';
+const userTags = userProfileData().status.map((stat) => stat.status);
 
-export default {
-    title: 'AdminDashboard/UserProfile/UserTags',
-    component: UserTags,
-    argTypes: {},
-} as Meta;
+export function Primary() {
+    return (
+        <UserTags
+            tags={userTags}
+            primaryHeader='User Tags'
+            errorHeader='User does not contain tags'
+        />
+    );
+}
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const Template: Story<Props> = (args) => <UserTags {...args} />;
-
-export const Tags = Template.bind({});
-Tags.args = {
-    tags: ['Democrat', 'Orgaizner', 'Admin', 'Banned', 'Regular'],
-    primaryHeader: 'User Tags',
-    errorHeader: 'User does not contain tags',
-};
-
-export const NoTags = Template.bind({});
-NoTags.args = {
-    tags: [],
-    primaryHeader: 'User Tags',
-    errorHeader: 'User does not contain tags',
-};
+export function NoTags() {
+    return (
+        <UserTags
+            tags={[]}
+            primaryHeader='User Tags'
+            errorHeader='User does not contain tags'
+        />
+    );
+}

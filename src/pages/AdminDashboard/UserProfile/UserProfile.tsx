@@ -5,11 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import Fab from 'components/Fab';
 import UserInfo from './UserInfo';
 import UserTags from './UserTags';
 import UserActionHistory from './UserActionHistory';
-// import FabButton from '../../../components/fabButton';
-import Fab from '../../../components/Fab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,14 +43,14 @@ export interface Props {
     fabMenuItems: Array<string>;
 }
 
-export const UserProfile = ({
+const UserProfile = ({
     profileInfo,
     tags,
     userActionHistory,
     fabMenuItems,
 }: Props) => {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
 
     const handleFabClose = (
@@ -63,7 +62,8 @@ export const UserProfile = ({
     const handleFabClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
-        setAnchorEl(event.currentTarget);
+        const { currentTarget } = event;
+        setAnchorEl(currentTarget);
     };
 
     const itemList = fabMenuItems.map((item) => {
@@ -135,3 +135,5 @@ UserProfile.propTypes = {
         })
     ).isRequired,
 };
+
+export default UserProfile;
