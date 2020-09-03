@@ -15,7 +15,7 @@ export interface BugReportForm extends ReportForm {
 
 type Report = Required<ReportForm> & {
     date: string;
-    user: { _id: string };
+    submitterId: string;
     type: string;
 };
 

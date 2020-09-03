@@ -9,9 +9,7 @@ export function makeFeedbackReport() {
         _id: faker.random.alphaNumeric(12),
         description: faker.lorem.paragraph(),
         date: faker.date.between(recent, future).toISOString(),
-        user: {
-            _id: faker.random.alphaNumeric(12),
-        },
+        submitterId: faker.random.alphaNumeric(12),
         type: 'feedback',
     };
 }
@@ -22,9 +20,7 @@ export function makeBugReport() {
         description: faker.lorem.paragraph(),
         date: faker.date.between(recent, future).toISOString(),
         townhallId: faker.random.alphaNumeric(12),
-        user: {
-            _id: faker.random.alphaNumeric(12),
-        },
+        submitterId: faker.random.alphaNumeric(12),
         type: 'bug',
     };
 }
