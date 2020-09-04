@@ -36,12 +36,15 @@ describe('UserSettings', () => {
                 <ThemeProvider theme={theme}>
                     <MemoryRouter initialEntries={['/']}>
                         <Route path='/'>
-                            <UserSettings />
+                            <span id='test'>
+                                <UserSettings />
+                            </span>
                         </Route>
                     </MemoryRouter>
                 </ThemeProvider>,
                 container
             );
         });
+        expect(document.getElementById('test')).toBeTruthy();
     });
 });
