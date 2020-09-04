@@ -9,7 +9,10 @@ module.exports = {
     ],
     webpackFinal: (config) => {
         config.resolve.alias = {
-            hooks: path.resolve(__dirname, '../src/hooks/__mocks__/'),
+            'hooks/socketIo': path.resolve(
+                __dirname,
+                '../src/hooks/__mocks__/socketIo'
+            ),
         };
         return config;
     },

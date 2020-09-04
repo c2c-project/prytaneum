@@ -28,11 +28,29 @@ interface MemberLabel {
 
 export default function MoCDropdown() {
     const classes = useStyles();
+
     const [chamber, setChamber] = useState('');
-    const [input] = useState('');
+    const [input, setInput] = useState('');
     const [data2, setData2] = useState([]);
+    const [form, setForm] = React.useState({
+        username: '',
+    });
+
     const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
         setChamber(event.target.value as string);
+    };
+
+    const nameChange = (event: ChangeEvent<{ value: unknown }>) => {
+        setInput(event.target.value as string);
+    };
+
+    const handleChange2 = (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+        id: string
+    ) => {
+        e.preventDefault();
+        const { value } = e.target;
+        setForm((state) => ({ ...state, [id]: value }));
     };
 
     useEffect(() => {
@@ -60,8 +78,11 @@ export default function MoCDropdown() {
                 </InputLabel>
                 <Select
                     labelId='demo-simple-select-helper-label'
-                    id='demo-simple-select-helper'
+                    className='help'
                     value={chamber}
+                    inputProps={{
+                        id: 'selectField',
+                    }}
                     onChange={handleChange}
                 >
                     <MenuItem value='House'>House</MenuItem>
@@ -71,7 +92,7 @@ export default function MoCDropdown() {
             </FormControl>
 
             <Autocomplete
-                id='combo-box-demo'
+                id='optionBox'
                 options={data2 as MemberLabel[]}
                 getOptionLabel={(option) =>
                     `${option.first_name} ${option.last_name}`
@@ -81,11 +102,25 @@ export default function MoCDropdown() {
                     <TextField
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...params}
+                        className='helloThere'
                         variant='outlined'
                         label='type here'
+                        id='standard-premium'
                         value={input}
+                        onChange={nameChange}
+                        inputProps={{
+                            ...params.inputProps,
+                            id: 'standard-premium',
+                        }}
                     />
                 )}
+            />
+
+            <TextField
+                id='standard-basic'
+                onChange={(e) => handleChange2(e, 'username')}
+                value={form.username}
+                label='Standard'
             />
         </div>
     );
