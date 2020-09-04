@@ -279,7 +279,7 @@ type Actions = NextStepAction | PreviousStepAction | ResetAction;
 function stepReducer(step: number, action: Actions): number {
     switch (action.type) {
         case 'next-step':
-            if (step <= 3) return step + 1;
+            if (step <= 4) return step + 1;
             return step;
         case 'previous-step':
             if (step > 0) return step - 1;
@@ -328,20 +328,19 @@ export default function InviteFormStepper() {
         file,
     ]);
     const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: (result) => {
-            console.log('Success', result);
-            // TODO Update once endpoint has been finalized
-            // setInviteForm({
-            //     ...inviteForm,
-            //     MoC: result.MoC,
-            //     topic: result.topic,
-            //     eventDateTime: result.eventDateTime,
-            //     constituentScope: result.constituentScope,
-            //     region: result.region,
-            //     townHallID: result.townHallID
-            // });
+        onSuccess: ({ data }: { data: InviteForm }) => {
+            setInviteForm({
+                ...inviteForm,
+                MoC: data.MoC,
+                topic: data.topic,
+                eventDateTime: data.eventDateTime,
+                constituentScope: data.constituentScope,
+                region: data.region,
+                townHallID: data.townHallID,
+            });
         },
         onFailure: (e) => {
+            // TODO Handle error
             console.log('Fail', e);
         },
     });
