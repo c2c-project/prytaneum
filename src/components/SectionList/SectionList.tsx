@@ -66,7 +66,7 @@ export default function SectionList({ sections }: Props) {
                                 idx
                             ) => (
                                 <li key={idx}>
-                                    <ListItem divider button>
+                                    <ListItem divider>
                                         {image && (
                                             <ListItemAvatar>
                                                 <Avatar

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Route} from 'react-router-dom';
+import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -45,7 +45,7 @@ export default function UserSettings() {
     ) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm( (state) => ({ ...state, [id]: value }) );
+        setForm((state) => ({ ...state, [id]: value }));
     };
 
     // needed for dialogs
@@ -57,6 +57,169 @@ export default function UserSettings() {
     const [openAboutUs, setOpenAboutUs] = React.useState(false);
     const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
     const [openTOS, setOpenTOS] = React.useState(false);
+
+    const openStateArr: {
+        s: [
+            string,
+            JSX.Element,
+            boolean,
+            React.Dispatch<React.SetStateAction<boolean>>
+        ];
+    }[] = [
+        {
+            s: [
+                'Appearance',
+                <>
+                    <h1>Dark mode: </h1>
+                    <h2>Color scheme: </h2>
+                </>,
+                openAppearance,
+                setOpenAppearance,
+            ],
+        },
+        {
+            s: [
+                'Logout',
+                <span>
+                    <button
+                        type='button'
+                        onClick={() => setOpenLogout(false)} // TODO: go to home page
+                    >
+                        Click here to return to the home page
+                    </button>
+                </span>,
+                openLogout,
+                setOpenLogout,
+            ],
+        },
+        {
+            s: [
+                'Disable Account',
+                <span>
+                    <h1>
+                        Disable Account?
+                        <p>
+                            You will no longer receive notifications about Town
+                            Halls and you can no longer join live Town Halls.
+                            You will still be able to log into your account.
+                            Please enter your password below twice to confirm.
+                        </p>
+                    </h1>
+                    <TextField
+                        id='Disable Account Password Entry One'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='password'
+                        value=''
+                        onChange={() => {}}
+                        label='Please enter your password'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
+                    />
+                    <TextField
+                        id='Disable Account Password Entry Two'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='password'
+                        value=''
+                        onChange={() => {}}
+                        label='Please enter your password again to DISABLE your account'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
+                    />
+                </span>,
+                openDisable,
+                setOpenDisable,
+            ],
+        },
+        {
+            s: [
+                'Delete Account',
+                <span>
+                    <h1>
+                        Delete Account?
+                        <p>
+                            All of your account information will be erased from
+                            Prytaneum. This action is irreversible. Please enter
+                            your password below twice to confirm.
+                        </p>
+                    </h1>
+                    <TextField
+                        id='Delete Account Password Entry One'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='password'
+                        value=''
+                        onChange={() => {}}
+                        label='Please enter your password'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
+                    />
+                    <TextField
+                        id='Delete Account Password Entry Two'
+                        required
+                        fullWidth
+                        variant='outlined'
+                        type='password'
+                        value=''
+                        onChange={() => {}}
+                        label='Please enter your password again to DELETE your account'
+                        spellCheck={false}
+                        autoComplete='off'
+                        autoCorrect='off'
+                        autoCapitalize='off'
+                    />
+                </span>,
+                openDelete,
+                setOpenDelete,
+            ],
+        },
+        {
+            s: [
+                'Feedback',
+                <span>hows our driving</span>,
+                openFeedback,
+                setOpenFeedback,
+            ],
+        },
+        {
+            s: [
+                'About Us',
+                <span>
+                    <h1>This was made somehow by some people.</h1>
+                </span>,
+                openAboutUs,
+                setOpenAboutUs,
+            ],
+        },
+        {
+            s: [
+                'Privacy Policy',
+                <span>
+                    <h1>Information is important.</h1>
+                </span>,
+                openPrivacyPolicy,
+                setOpenPrivacyPolicy,
+            ],
+        },
+        {
+            s: [
+                'TOS',
+                <span>plz no hurt us we no hurt u -- Carolyn</span>,
+                openTOS,
+                setOpenTOS,
+            ],
+        },
+    ];
 
     const userProfile = {
         title: 'User',
@@ -148,7 +311,7 @@ export default function UserSettings() {
                                     anonymous = !anonymous;
                                 }}
                             >
-                                Appear anonymous: 
+                                Appear anonymous:
                             </Button>
                         </Grid>
                         <Grid component='span' item xs={12}>
@@ -163,7 +326,7 @@ export default function UserSettings() {
                         </Grid>
                         <Grid component='span' item xs={12}>
                             <ListItem
-                                button={false}
+                                button
                                 hidden={false}
                                 onClick={() => setOpenAppearance(true)}
                             >
@@ -275,7 +438,7 @@ export default function UserSettings() {
         ],
     };
 
-    const test = [
+    const sections = [
         {
             title: userProfile.title,
             sectionData: userProfile.sectionData,
@@ -310,151 +473,17 @@ export default function UserSettings() {
                         <AppBar back />
                     </Route>
                 </MemoryRouter>
-                <SectionList sections={test} />
+                <SectionList sections={sections} />
+                {openStateArr.map(({ s }) => (
+                    <Dialog
+                        open={s[2]}
+                        title={s[0]}
+                        onClose={() => s[3](false)}
+                    >
+                        {s[1]}
+                    </Dialog>
+                ))}
             </Paper>
-            {/** Appearance */}
-            <Dialog
-                open={openAppearance}
-                title='Appearance'
-                onClose={() => setOpenAppearance(false)}
-            >
-                <h1>Dark mode: </h1>
-                <h2>Color scheme: </h2>
-            </Dialog>
-            {/** Disable Account */}
-            <Dialog
-                open={openDisable}
-                title='Disable Account'
-                onClose={() => setOpenDisable(false)}
-            >
-                <h1>
-                    Disable Account?
-                    <p>
-                        You will no longer receive notifications about Town
-                        Halls and you can no longer join live Town Halls. You
-                        will still be able to log into your account. Please
-                        enter your password below twice to confirm.
-                    </p>
-                </h1>
-                <TextField
-                    id='Disable Account Password Entry One'
-                    required
-                    fullWidth
-                    variant='outlined'
-                    type='password'
-                    value=''
-                    onChange={() => {}}
-                    label='Please enter your password'
-                    spellCheck={false}
-                    autoComplete='off'
-                    autoCorrect='off'
-                    autoCapitalize='off'
-                />
-                <TextField
-                    id='Disable Account Password Entry Two'
-                    required
-                    fullWidth
-                    variant='outlined'
-                    type='password'
-                    value=''
-                    onChange={() => {}}
-                    label='Please enter your password again to DISABLE your account'
-                    spellCheck={false}
-                    autoComplete='off'
-                    autoCorrect='off'
-                    autoCapitalize='off'
-                />
-                {/* TODO: If they enter their password correctly twice, redirects them to home page */}
-            </Dialog>
-            {/** Delete Account */}
-            <Dialog
-                open={openDelete}
-                title='Delete Account'
-                onClose={() => setOpenDelete(false)}
-            >
-                <h1>
-                    Delete Account?
-                    <p>
-                        All of your account information will be erased from
-                        Prytaneum. This action is irreversible. Please enter
-                        your password below twice to confirm.
-                    </p>
-                </h1>
-                <TextField
-                    id='Delete Account Password Entry One'
-                    required
-                    fullWidth
-                    variant='outlined'
-                    type='password'
-                    value=''
-                    onChange={() => {}}
-                    label='Please enter your password'
-                    spellCheck={false}
-                    autoComplete='off'
-                    autoCorrect='off'
-                    autoCapitalize='off'
-                />
-                <TextField
-                    id='Delete Account Password Entry Two'
-                    required
-                    fullWidth
-                    variant='outlined'
-                    type='password'
-                    value=''
-                    onChange={() => {}}
-                    label='Please enter your password again to DELETE your account'
-                    spellCheck={false}
-                    autoComplete='off'
-                    autoCorrect='off'
-                    autoCapitalize='off'
-                />
-                {/* TODO: If they enter their password correctly twice, redirects them to home page */}
-            </Dialog>
-            {/** Feedback */}
-            <Dialog
-                open={openFeedback}
-                title='Feedback'
-                onClose={() => setOpenFeedback(false)}
-            >
-                <h1>Tell us how we are doing.</h1>
-            </Dialog>
-            {/** About Us */}
-            <Dialog
-                open={openAboutUs}
-                title='About Us'
-                onClose={() => setOpenAboutUs(false)}
-            >
-                <h1>This was made somehow by some people.</h1>
-            </Dialog>
-            {/** Privacy Policy */}
-            <Dialog
-                open={openPrivacyPolicy}
-                title='Privacy Policy'
-                onClose={() => setOpenPrivacyPolicy(false)}
-            >
-                <h1>Information is important.</h1>
-            </Dialog>
-            {/** TOS */}
-            <Dialog
-                open={openTOS}
-                title='Terms of Service'
-                onClose={() => setOpenTOS(false)}
-            >
-                <h1>Pls no hurt us we no hurt you.</h1>
-            </Dialog>
-            {/** logout */}
-            <Dialog
-                open={openLogout}
-                title='You have been logged out'
-                onClose={() => {}}
-            >
-                <button
-                    type='button'
-                    onClick={() => setOpenLogout(false)} // TODO: go to home page
-                >
-                    Click here to return to the home page
-                </button>
-            </Dialog>
         </Container>
     );
 }
@@ -464,10 +493,10 @@ export default function UserSettings() {
  - make own list instead of using seciton list, to get rid of clickable area that does nothing 
     - look at listcomponent and make a new one
  - TODO:
-    - Move Dialogs into return [DONE]
     - Separate Dialog from Dialog Content (pass them in as children)
-    - dont use var
-    - fix eslint errors
-    - make own list component
     - move sections to their own file
+    - [DONE] Move Dialogs into return
+    - [DONE] dont use var
+    - [DONE] fix eslint errors
+    - [DONE, bc we got rid of button in SectionList] make own list component
 */
