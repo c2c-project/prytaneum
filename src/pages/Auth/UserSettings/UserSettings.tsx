@@ -493,8 +493,8 @@ export default function UserSettings() {
  - make own list instead of using seciton list, to get rid of clickable area that does nothing 
     - look at listcomponent and make a new one
  - TODO:
-    - Separate Dialog from Dialog Content (pass them in as children)
     - move sections to their own file
+    - [DONE] Separate Dialog from Dialog Content (pass them in as children)
     - [DONE] Move Dialogs into return
     - [DONE] dont use var
     - [DONE] fix eslint errors
