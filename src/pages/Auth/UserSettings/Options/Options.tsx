@@ -5,7 +5,7 @@ import { ListItem } from '@material-ui/core';
 
 const [openAppearance, setOpenAppearance] = React.useState(false);
 
-export function AppearanceState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+export default function AppearanceState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
     return (
         [
             'Appearance',
@@ -17,7 +17,7 @@ export function AppearanceState() : [string, JSX.Element, boolean, React.Dispatc
             setOpenAppearance,
         ]
     );
-};
+}
 
 export const Options = {
     title: 'Options',

@@ -7,7 +7,7 @@ export const [openAboutUs, setOpenAboutUs] = React.useState(false);
 export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
 export const [openTOS, setOpenTOS] = React.useState(false);
 
-export function InformationState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
+export default function InformationState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
     return [
         [
             'Feedback',
