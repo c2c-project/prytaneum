@@ -7,40 +7,40 @@ import faker from 'faker';
 import API from './index';
 import { InviteForm, InvitePreview } from '../types';
 
-beforeEach(() => {
-    jest.spyOn(axios, 'post');
-});
-
-afterEach(() => {
-    jest.restoreAllMocks();
-});
-
-const testEventDateTime = faker.date.future().toUTCString();
-const testDeliveryTime = new Date();
-const testFormData: InviteForm = {
-    MoC: faker.name.firstName(),
-    topic: 'Topic',
-    eventDateTime: testEventDateTime,
-    constituentScope: 'state',
-    region: 'test',
-    deliveryTime: testDeliveryTime,
-    townHallID: 'testID',
-};
-
-const testPreview: InvitePreview = {
-    sendPreview: true,
-    previewEmail: faker.internet.email(),
-};
-
-const testFileData = [
-    `email,fName,lName\n
-    ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}`,
-];
-const testFile = new File(testFileData, 'test.csv', {
-    type: 'text/csv',
-});
-
 describe('createInvite', () => {
+    const testEventDateTime = faker.date.future().toUTCString();
+    const testDeliveryTime = new Date();
+    const testFormData: InviteForm = {
+        MoC: faker.name.firstName(),
+        topic: 'Topic',
+        eventDateTime: testEventDateTime,
+        constituentScope: 'state',
+        region: 'test',
+        deliveryTime: testDeliveryTime,
+        townHallID: 'testID',
+    };
+
+    const testPreview: InvitePreview = {
+        sendPreview: true,
+        previewEmail: faker.internet.email(),
+    };
+
+    const testFileData = [
+        `email,fName,lName\n
+    ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}`,
+    ];
+    const testFile = new File(testFileData, 'test.csv', {
+        type: 'text/csv',
+    });
+
+    beforeEach(() => {
+        jest.spyOn(axios, 'post');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it('should accept valid invite data and a file', async () => {
         const resolvedValue = { status: 200 };
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
@@ -63,6 +63,10 @@ describe('createInvite', () => {
         expectedFormData.append(
             'deliveryTimeString',
             deliveryTime.toISOString()
+        );
+        expectedFormData.append(
+            'townHallID',
+            testFormData.townHallID as string
         );
         expectedFormData.append('previewEmail', testPreview.previewEmail);
         const expectedOptions: AxiosRequestConfig = {
