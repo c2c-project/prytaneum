@@ -47,7 +47,6 @@ export default function Dialog(props: Props) {
     const classes = useStyles();
 
     return (
-        <div>
             <MUIDialog
                 fullScreen
                 open={open}
@@ -66,14 +65,13 @@ export default function Dialog(props: Props) {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Typography variant='h6' className={classes.title}>
+                        <Typography component="span" variant='h6' className={classes.title}>
                             {title}
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 {open && children}
             </MUIDialog>
-        </div>
     );
 }
 
