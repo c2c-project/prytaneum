@@ -1,11 +1,8 @@
 import React from 'react';
+import { rest } from 'msw';
 
 import { DeviceContext } from 'contexts/Device';
-
-import FixtureContext, {
-    makeSuccessFixture,
-    makeFailureFixture,
-} from '../../../mock/Fixtures';
+import { worker } from 'mock/browser';
 
 import Component from '.';
 
@@ -34,15 +31,22 @@ interface Props {
 }
 
 export function InviteForm({ DeviceType, Status }: Props) {
-    let statusFixture;
-    if (Status === 'succeed')
-        statusFixture = makeSuccessFixture({ response: 'success' });
-    else statusFixture = makeFailureFixture({ response: 'fail' });
+    if (Status === 'succeed') {
+        worker.use(
+            rest.post('/api/invite', (req, res, ctx) => {
+                return res.once(ctx.status(200));
+            })
+        );
+    } else {
+        worker.use(
+            rest.post('/api/invite', (req, res, ctx) => {
+                return res.once(ctx.status(400));
+            })
+        );
+    }
     return (
         <DeviceContext.Provider value={DeviceType}>
-            <FixtureContext.Provider value={statusFixture}>
-                <Component />
-            </FixtureContext.Provider>
+            <Component />
         </DeviceContext.Provider>
     );
 }

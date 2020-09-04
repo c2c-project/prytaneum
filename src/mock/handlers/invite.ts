@@ -1,26 +1,7 @@
 import { rest } from 'msw';
-import { InviteForm } from '../../domains/Invite/types';
 
 export default [
     rest.post('/api/invite', (req, res, ctx) => {
-        console.log(req);
-        // const {
-        //     MoC,
-        //     topic,
-        //     eventDateTime,
-        //     region,
-        //     deliveryTime,
-        // } = req.body as InviteForm;
-        // if (
-        //     MoC === undefined ||
-        //     topic === undefined ||
-        //     eventDateTime === undefined ||
-        //     region === undefined ||
-        //     deliveryTime === undefined
-        // ) {
-        //     console.log(MoC, topic, eventDateTime, region, deliveryTime);
-        //     return res(ctx.status(400));
-        // }
         return res(ctx.status(200));
     }),
     rest.get('/api/get-invite-data', (req, res, ctx) => {
