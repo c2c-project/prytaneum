@@ -26,7 +26,7 @@ export default function HandleInviteToken({
     });
     useEffect(() => {
         sendRequest();
-    }, []);
+    }, [sendRequest]);
     return (
         <Grid container justify='center'>
             <Loader style={{ marginTop: '8em' }} />

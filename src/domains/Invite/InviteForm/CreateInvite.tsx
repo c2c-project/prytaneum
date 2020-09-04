@@ -25,14 +25,8 @@ export default function CreateInvite({
         [inviteForm, file]
     );
     const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: (value) => {
-            console.log('Success', value);
-            onSuccess();
-        },
-        onFailure: (e) => {
-            console.log('Fail', e);
-            onFailure();
-        },
+        onSuccess,
+        onFailure,
     });
     useEffect(() => {
         sendRequest();
