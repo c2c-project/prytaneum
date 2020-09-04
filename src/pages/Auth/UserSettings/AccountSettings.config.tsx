@@ -7,9 +7,9 @@ const [openLogout, setOpenLogout] = React.useState(false);
 const [openDisable, setOpenDisable] = React.useState(false);
 const [openDelete, setOpenDelete] = React.useState(false);
 
-export function AccountSettingsState() {
-    return {
-        s1: [
+export function AccountSettingsState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
+    return [
+        [
             'Logout',
             <span>
                 <button
@@ -22,7 +22,7 @@ export function AccountSettingsState() {
             openLogout,
             setOpenLogout,
         ],
-        s2: [
+        [
             'Disable Account',
             <span>
                 <h1>
@@ -66,7 +66,7 @@ export function AccountSettingsState() {
             openDisable,
             setOpenDisable,
         ],
-        s3: [
+        [
             'Delete Account',
             <span>
                 <h1>
@@ -109,7 +109,7 @@ export function AccountSettingsState() {
             openDelete,
             setOpenDelete,
         ],
-    }    
+    ];    
 };
 
 export const AccountSettings = {
