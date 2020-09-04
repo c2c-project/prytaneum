@@ -7,46 +7,38 @@ export const [openAboutUs, setOpenAboutUs] = React.useState(false);
 export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
 export const [openTOS, setOpenTOS] = React.useState(false);
 
-export function InformationState() {
-
-};
- 
-{
-    s: [
-        'Feedback',
-        <span>hows our driving</span>,
-        openFeedback,
-        setOpenFeedback,
-    ],
-},
-{
-    s: [
-        'About Us',
-        <span>
-            <h1>This was made somehow by some people.</h1>
-        </span>,
-        openAboutUs,
-        setOpenAboutUs,
-    ],
-},
-{
-    s: [
-        'Privacy Policy',
-        <span>
-            <h1>Information is important.</h1>
-        </span>,
-        openPrivacyPolicy,
-        setOpenPrivacyPolicy,
-    ],
-},
-{
-    s: [
-        'TOS',
-        <span>plz no hurt us we no hurt u -- Carolyn</span>,
-        openTOS,
-        setOpenTOS,
-    ],
-},
+export function InformationState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
+    return [
+        [
+            'Feedback',
+            <span>hows our driving</span>,
+            openFeedback,
+            setOpenFeedback,
+        ],
+        [
+            'About Us',
+            <span>
+                <h1>This was made somehow by some people.</h1>
+            </span>,
+            openAboutUs,
+            setOpenAboutUs,
+        ],
+        [
+            'Privacy Policy',
+            <span>
+                <h1>Information is important.</h1>
+            </span>,
+            openPrivacyPolicy,
+            setOpenPrivacyPolicy,
+        ],
+        [
+            'TOS',
+            <span>plz no hurt us we no hurt u -- Carolyn</span>,
+            openTOS,
+            setOpenTOS,
+        ],
+    ];
+}
 
 export const Information = {
     title: 'About Prytaneum',

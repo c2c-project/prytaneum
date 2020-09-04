@@ -44,10 +44,13 @@ export default function UserSettings() {
         ];
     }[] = [
         {s: AppearanceState()},
-        {s: AccountSettingsState().s1},
-        {s: AccountSettingsState().s2},
-        {s: AccountSettingsState().s3},
-        {s: InformationState()},
+        {s: AccountSettingsState()[0]},
+        {s: AccountSettingsState()[1]},
+        {s: AccountSettingsState()[2]},
+        {s: InformationState()[0]},
+        {s: InformationState()[1]},
+        {s: InformationState()[2]},
+        {s: InformationState()[3]},
     ];
         
     const sections = [
