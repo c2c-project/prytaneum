@@ -32,9 +32,6 @@ export default function MoCDropdown() {
     const [chamber, setChamber] = useState('');
     const [input, setInput] = useState('');
     const [data2, setData2] = useState([]);
-    const [form, setForm] = React.useState({
-        username: '',
-    });
 
     const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
         setChamber(event.target.value as string);
@@ -42,15 +39,6 @@ export default function MoCDropdown() {
 
     const nameChange = (event: ChangeEvent<{ value: unknown }>) => {
         setInput(event.target.value as string);
-    };
-
-    const handleChange2 = (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-        id: string
-    ) => {
-        e.preventDefault();
-        const { value } = e.target;
-        setForm((state) => ({ ...state, [id]: value }));
     };
 
     useEffect(() => {
@@ -102,10 +90,8 @@ export default function MoCDropdown() {
                     <TextField
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...params}
-                        className='helloThere'
                         variant='outlined'
                         label='type here'
-                        id='standard-premium'
                         value={input}
                         onChange={nameChange}
                         inputProps={{
@@ -114,13 +100,6 @@ export default function MoCDropdown() {
                         }}
                     />
                 )}
-            />
-
-            <TextField
-                id='standard-basic'
-                onChange={(e) => handleChange2(e, 'username')}
-                value={form.username}
-                label='Standard'
             />
         </div>
     );

@@ -1,13 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { AxiosResponse } from 'axios';
-
 import DropDown from './MoCDropDown';
-import { text } from 'msw/lib/types/context';
-//import API from '../api';
-
-jest.mock('hooks/useSnack');
 
 describe('DropDown', () => {
     let container: HTMLElement | null = null;
@@ -43,9 +37,6 @@ describe('DropDown', () => {
 
         // find fields
 
-        const textField = document.querySelector(
-            '#standard-basic'
-        ) as HTMLInputElement;
         const selection = document.querySelector(
             '#selectField'
         ) as HTMLSelectElement;
@@ -55,15 +46,11 @@ describe('DropDown', () => {
 
         // expect them to be initially empty
 
-        expect(textField.value).toBe('');
         expect(selection.value).toBe('');
         expect(nameField.value).toBe('');
 
         // change the fields
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(textField, {
-                target: ({ value: 'text' } as unknown) as EventTarget,
-            });
             ReactTestUtils.Simulate.change(selection, {
                 target: ({ value: 'House' } as unknown) as EventTarget,
             });
@@ -74,7 +61,6 @@ describe('DropDown', () => {
 
         // expect them to reflect the changed values
         expect(selection.value).toBe('House');
-        expect(textField.value).toBe('text');
         expect(nameField.value).toBe('Jack');
 
         ReactTestUtils.act(() => {
