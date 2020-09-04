@@ -54,11 +54,6 @@ export async function createInvite(
     return axios.post('/api/invite', formData, config);
 }
 
-export async function checkIfRegistered(email: string): Promise<AxiosResponse> {
-    // TODO update axios request to match correct route
-    return axios.post('/api/account/is-registered', email);
-}
-
 export async function loginWithJWT(token: string) {
     if (!token) {
         throw errors.fieldError();
