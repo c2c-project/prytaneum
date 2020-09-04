@@ -40,7 +40,7 @@ export default function UserSettings() {
             React.Dispatch<React.SetStateAction<boolean>>
         ];
     }[] = [
-        {s: AppearanceState().s},
+        {s: AppearanceState()},
         {s: AccountSettingsState().s1},
         {s: AccountSettingsState().s2},
         {s: AccountSettingsState().s3},
