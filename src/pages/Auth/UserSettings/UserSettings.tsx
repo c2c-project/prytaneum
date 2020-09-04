@@ -28,11 +28,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserSettings() {
-    let anonymous = true; // TODO, should be part of the profile pulled from db
-    let notify = true; // TODO see above
-    // const darkmode = false; // TODO see above
-    // const colorscheme = <b>TODO</b>; // TODO see above
-    // const history = useHistory();
     const classes = useStyles();
 
     const [form, setForm] = React.useState({
@@ -308,7 +303,6 @@ export default function UserSettings() {
                                 // react is only re-rendered when use/set state is used
                                 // same value of variable is not kept upon refreshing
                                 onClick={() => {
-                                    anonymous = !anonymous;
                                 }}
                             >
                                 Appear anonymous:
@@ -318,7 +312,6 @@ export default function UserSettings() {
                             <Button
                                 component='span'
                                 onClick={() => {
-                                    notify = !notify;
                                 }}
                             >
                                 Notify me about upcoming Townhalls:
