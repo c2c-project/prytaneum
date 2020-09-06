@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface MemberLabel {
     first_name: string;
     last_name: string;
+    // api request returns json with snake_case
 }
 
 export default function MoCDropdown() {
