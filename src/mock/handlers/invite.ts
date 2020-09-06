@@ -11,7 +11,7 @@ export default [
             eventDateTime: new Date().toUTCString(),
             constituentScope: 'state',
             region: 'Test Region',
-            townHallID: 'Test TownHallID',
+            townHallId: 'Test TownHallID',
         };
         return res(ctx.json(responseBody), ctx.status(200));
     }),

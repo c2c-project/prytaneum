@@ -17,7 +17,7 @@ describe('createInvite', () => {
         constituentScope: 'state',
         region: 'test',
         deliveryTime: testDeliveryTime,
-        townHallID: 'testID',
+        townHallId: 'testID',
     };
 
     const testPreview: InvitePreview = {
@@ -65,8 +65,8 @@ describe('createInvite', () => {
             deliveryTime.toISOString()
         );
         expectedFormData.append(
-            'townHallID',
-            testFormData.townHallID as string
+            'townHallId',
+            testFormData.townHallId as string
         );
         expectedFormData.append('previewEmail', testPreview.previewEmail);
         const expectedOptions: AxiosRequestConfig = {
@@ -97,7 +97,7 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
-            townHallID: 'testID',
+            townHallId: 'testID',
         };
         await expect(
             API.createInvite(formData, testFile, testPreview)
@@ -112,7 +112,7 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
-            townHallID: 'testID',
+            townHallId: 'testID',
         };
         await expect(
             API.createInvite(formData, testFile, testPreview)
@@ -127,7 +127,7 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
-            townHallID: 'testID',
+            townHallId: 'testID',
         };
         await expect(
             API.createInvite(formData, testFile, testPreview)
@@ -142,14 +142,14 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: undefined,
             deliveryTime: testDeliveryTime,
-            townHallID: 'testID',
+            townHallId: 'testID',
         };
         await expect(
             API.createInvite(formData, testFile, testPreview)
         ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
-    it('should throw field error with undefined townHallID', async () => {
+    it('should throw field error with undefined townHallId', async () => {
         const formData: InviteForm = {
             MoC: faker.name.firstName(),
             topic: 'Topic',
@@ -157,7 +157,7 @@ describe('createInvite', () => {
             constituentScope: 'state',
             region: 'test',
             deliveryTime: testDeliveryTime,
-            townHallID: undefined,
+            townHallId: undefined,
         };
         await expect(
             API.createInvite(formData, testFile, testPreview)

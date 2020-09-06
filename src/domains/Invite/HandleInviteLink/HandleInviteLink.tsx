@@ -26,13 +26,13 @@ export function consumeInviteToken(inviteToken: string): InviteTokenResult {
     const JWT_SECRET = 'secret';
     // Decode the invite token
     const decoded = jwt.verify(inviteToken, JWT_SECRET) as InviteTokenResult;
-    const { email, townHallID } = decoded;
-    if (!email || !townHallID) {
+    const { email, townHallId } = decoded;
+    if (!email || !townHallId) {
         // Throw error as link contains invalid data
         errors.invalidToken(); // TODO handle this error
         throw new Error('Undefined token data');
     }
-    return { email, townHallID };
+    return { email, townHallId };
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -84,7 +84,7 @@ export default function HandleInviteLink(): JSX.Element {
     try {
         const result = consumeInviteToken(token);
         const handleSuccess = () => {
-            history.push(`/townhalls/${result.townHallID}`);
+            history.push(`/townhalls/${result.townHallId}`);
         };
 
         const handleFailure = () => {

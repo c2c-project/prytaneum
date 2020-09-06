@@ -320,7 +320,7 @@ export default function InviteFormStepper() {
         constituentScope: 'district',
         region: '',
         deliveryTime: new Date(),
-        townHallID: '',
+        townHallId: '',
     }); // TODO Some of these fields can be pre-filled and/or set from db values.
 
     const apiRequest = useCallback(() => API.getInviteData(), [
@@ -336,7 +336,7 @@ export default function InviteFormStepper() {
                 eventDateTime: data.eventDateTime,
                 constituentScope: data.constituentScope,
                 region: data.region,
-                townHallID: data.townHallID,
+                townHallId: data.townHallId,
             });
         },
         onFailure: (e) => {
