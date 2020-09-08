@@ -8,14 +8,10 @@ import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 import SectionList from 'components/SectionList';
 
-// import UserProfile from './UserProfile';
-import { Options } from './Options';
-import AppearanceState from './Options';
-// import { AccountSettings } from './AccountSettings';
-// import AccountSettingsState from './AccountSettings';
-// import { Information } from './Information';
-// import InformationState from './Information';
-
+import UserProfile from './UserProfile';
+import { Options, AppearanceState } from './Options';
+import { AccountSettings, AccountSettingsState } from './AccountSettings';
+import { Information, InformationState  } from './Information';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,32 +40,32 @@ export default function UserSettings() {
         ];
     }[] = [
         {s: AppearanceState()},
-        // {s: AccountSettingsState()[0]},
-        // {s: AccountSettingsState()[1]},
-        // {s: AccountSettingsState()[2]},
-        // {s: InformationState()[0]},
-        // {s: InformationState()[1]},
-        // {s: InformationState()[2]},
-        // {s: InformationState()[3]},
+        {s: AccountSettingsState()[0]},
+        {s: AccountSettingsState()[1]},
+        {s: AccountSettingsState()[2]},
+        {s: InformationState()[0]},
+        {s: InformationState()[1]},
+        {s: InformationState()[2]},
+        {s: InformationState()[3]},
     ];
         
     const sections = [
-        // {
-        //     title: UserProfile().title,
-        //     sectionData: UserProfile().sectionData,
-        // },
+        {
+            title: UserProfile().title,
+            sectionData: UserProfile().sectionData,
+        },
         {
             title: Options.title,
             sectionData: Options.sectionData,
         },
-        // {
-        //     title: AccountSettings.title,
-        //     sectionData: AccountSettings.sectionData,
-        // },
-        // {
-        //     title: Information.title,
-        //     sectionData: Information.sectionData,
-        // },
+        {
+            title: AccountSettings.title,
+            sectionData: AccountSettings.sectionData,
+        },
+        {
+            title: Information.title,
+            sectionData: Information.sectionData,
+        },
     ];
 
     return (

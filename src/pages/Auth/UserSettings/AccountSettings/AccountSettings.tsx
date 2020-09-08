@@ -7,7 +7,7 @@ const [openLogout, setOpenLogout] = React.useState(false);
 const [openDisable, setOpenDisable] = React.useState(false);
 const [openDelete, setOpenDelete] = React.useState(false);
 
-export default function AccountSettingsState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
+export function AccountSettingsState() : [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>][] {
     return [
         [
             'Logout',
