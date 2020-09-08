@@ -4,14 +4,14 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from 'components/Paper';
-import Dialog from 'components/Dialog';
+// import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 import SectionList from 'components/SectionList';
 
-import UserProfile from './UserProfile';
-import { Options, AppearanceState } from './Options';
-import { AccountSettings, AccountSettingsState } from './AccountSettings';
-import { Information, InformationState  } from './Information';
+import UserProfile from 'components/UserProfile';
+import Options from 'components/Options';
+import AccountSettings from 'components/AccountSettings';
+import Information from 'components/Information';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,40 +31,40 @@ const useStyles = makeStyles((theme) => ({
 export default function UserSettings() {
     const classes = useStyles();
 
-    const openStateArr: {
-        s: [
-            string,
-            JSX.Element,
-            boolean,
-            React.Dispatch<React.SetStateAction<boolean>>
-        ];
-    }[] = [
-        {s: AppearanceState()},
-        {s: AccountSettingsState()[0]},
-        {s: AccountSettingsState()[1]},
-        {s: AccountSettingsState()[2]},
-        {s: InformationState()[0]},
-        {s: InformationState()[1]},
-        {s: InformationState()[2]},
-        {s: InformationState()[3]},
-    ];
-        
+    // const openStateArr: {
+    //     s: [
+    //         string,
+    //         JSX.Element,
+    //         boolean,
+    //         React.Dispatch<React.SetStateAction<boolean>>
+    //     ];
+    // }[] = [
+    //     { s: AppearanceState() },
+    //     { s: AccountSettingsState()[0] },
+    //     { s: AccountSettingsState()[1] },
+    //     { s: AccountSettingsState()[2] },
+    //     { s: InformationState()[0] },
+    //     { s: InformationState()[1] },
+    //     { s: InformationState()[2] },
+    //     { s: InformationState()[3] },
+    // ];
+
     const sections = [
         {
             title: UserProfile().title,
             sectionData: UserProfile().sectionData,
         },
         {
-            title: Options.title,
-            sectionData: Options.sectionData,
+            title: Options().title,
+            sectionData: Options().sectionData,
         },
         {
-            title: AccountSettings.title,
-            sectionData: AccountSettings.sectionData,
+            title: AccountSettings().title,
+            sectionData: AccountSettings().sectionData,
         },
         {
-            title: Information.title,
-            sectionData: Information.sectionData,
+            title: Information().title,
+            sectionData: Information().sectionData,
         },
     ];
 
@@ -85,7 +85,7 @@ export default function UserSettings() {
                     </Route>
                 </MemoryRouter>
                 <SectionList sections={sections} />
-                {openStateArr.map(({ s }) => (
+                {/* {openStateArr.map(({ s }) => (
                     <Dialog
                         open={s[2]}
                         title={s[0]}
@@ -93,7 +93,7 @@ export default function UserSettings() {
                     >
                         {s[1]}
                     </Dialog>
-                ))}
+                ))} */}
             </Paper>
         </Container>
     );
@@ -104,7 +104,7 @@ export default function UserSettings() {
  - make own list instead of using seciton list, to get rid of clickable area that does nothing 
     - look at listcomponent and make a new one
  - TODO:
-    - move sections to their own file
+    - [DONE?] move sections to their own file
     - [DONE] Separate Dialog from Dialog Content (pass them in as children)
     - [DONE] Move Dialogs into return
     - [DONE] dont use var
