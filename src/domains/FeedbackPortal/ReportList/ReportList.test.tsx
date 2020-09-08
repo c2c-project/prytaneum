@@ -4,7 +4,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 
-import { makeBugReport } from '../reportMaker.mocks';
+import { makeBugReport } from '../reportMaker.mock';
 import ReportList from './ReportList';
 
 jest.mock('hooks/useSnack');

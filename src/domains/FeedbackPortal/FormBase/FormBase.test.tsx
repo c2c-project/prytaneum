@@ -5,7 +5,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
 import faker from 'faker';
 
-import { makeFeedbackReport } from '../reportMaker.mocks';
+import { makeFeedbackReport } from '../reportMaker.mock';
 import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from './FormBase';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which

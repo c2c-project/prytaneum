@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 
 import Component from '.';
-import { makeFeedbackReport } from '../reportMaker.mocks';
+import { makeFeedbackReport } from '../reportMaker.mock';
 
 export default {
     title: 'Domains/ReportList',
