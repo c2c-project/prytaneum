@@ -22,33 +22,40 @@ import {
 
 type Report = FeedbackReport | BugReport;
 
+interface DefaultProps {
+    onSuccess: (report: Report) => void;
+    onFailure: () => void;
+    townhallId: string;
+}
+
 interface Props {
     report: Report;
+    reportType: 'Feedback' | 'Bug';
     submitType: 'create' | 'update';
     onSuccess?: (report: Report) => void;
     onFailure?: () => void;
+    townhallId?: string;
 }
 
-// TODO: Pass reportType as a prop too?
 export default function FormBase({
     report,
+    reportType,
     submitType,
     onSuccess,
     onFailure,
-}: Props) {
+    townhallId,
+}: Props & DefaultProps) {
     const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<Report>(report);
 
+    interface EndpointFunctions<T> {
+        create: (form: T) => Promise<AxiosResponse<unknown>>;
+        update: (form: T) => Promise<AxiosResponse<unknown>>;
+    }
     // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
     const endpoints: {
-        Feedback: {
-            create: (form: FeedbackForm) => Promise<AxiosResponse<unknown>>;
-            update: (form: FeedbackForm) => Promise<AxiosResponse<unknown>>;
-        };
-        Bug: {
-            create: (form: BugReportForm) => Promise<AxiosResponse<unknown>>;
-            update: (form: BugReportForm) => Promise<AxiosResponse<unknown>>;
-        };
+        Feedback: EndpointFunctions<FeedbackForm>;
+        Bug: EndpointFunctions<BugReportForm>;
     } = {
         Feedback: {
             create: (form: FeedbackForm) =>
@@ -57,23 +64,23 @@ export default function FormBase({
         },
         Bug: {
             create: (form: BugReportForm) =>
-                createBugReport(form, new Date().toISOString(), '123456'),
+                createBugReport(form, new Date().toISOString(), townhallId),
             update: (form: BugReportForm) => updateBugReport(form),
         },
     };
 
     const submitRequest = React.useCallback(
-        () => endpoints[report.type][submitType](reportState),
+        () => endpoints[reportType][submitType](reportState),
         [reportState]
     );
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            if (onSuccess) onSuccess(reportState);
+            onSuccess(reportState);
             snack('Report successfully submitted', 'success');
         },
         onFailure: () => {
-            if (onFailure) onFailure();
+            onFailure();
             snack('Something went wrong! Try again', 'error');
         },
     });
@@ -130,10 +137,14 @@ FormBase.defaultProps = {
     report: {
         description: '',
     },
+    townhallId: '',
     onSuccess: () => {},
     onFailure: () => {},
 };
 
 FormBase.propTypes = {
     report: PropTypes.object,
+    townhallId: PropTypes.string,
+    onSuccess: PropTypes.func,
+    onFailure: PropTypes.func,
 };

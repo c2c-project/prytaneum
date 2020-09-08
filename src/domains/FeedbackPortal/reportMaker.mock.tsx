@@ -1,10 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
+import { FeedbackReport, BugReport } from './types';
 
 const recent = faker.date.recent();
 const future = faker.date.future();
 
-export function makeFeedbackReport() {
+export function makeFeedbackReport(): FeedbackReport {
     return {
         _id: faker.random.alphaNumeric(12),
         description: faker.lorem.paragraph(),
@@ -14,7 +15,7 @@ export function makeFeedbackReport() {
     };
 }
 
-export function makeBugReport() {
+export function makeBugReport(): BugReport {
     return {
         _id: faker.random.alphaNumeric(12),
         description: faker.lorem.paragraph(),

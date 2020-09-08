@@ -5,15 +5,12 @@ import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 import { AxiosResponse } from 'axios';
 
-import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import { makeFeedbackReport, makeBugReport } from '../reportMaker.mock';
 import ReportSummary from './ReportSummary';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
-import { FeedbackForm, BugReportForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
-// TODO: Check whether onUpdates are called
 describe('Update report summary', () => {
     let container: HTMLDivElement | null = null;
 
@@ -32,11 +29,6 @@ describe('Update report summary', () => {
     });
 
     describe('Create feedback report summary', () => {
-        const customEndpoints = {
-            submitEndpoint: (form: FeedbackForm) =>
-                API.updateFeedbackReport(form),
-            deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
-        };
         const dummyFeedbackReport = makeFeedbackReport();
 
         // eslint-disable-next-line jest/expect-expect
@@ -44,12 +36,10 @@ describe('Update report summary', () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -60,12 +50,10 @@ describe('Update report summary', () => {
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -104,12 +92,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -131,8 +117,10 @@ describe('Update report summary', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            const expectedReport = { ...dummyFeedbackReport };
-            expectedReport.description = newDescription;
+            const expectedReport = {
+                ...dummyFeedbackReport,
+                description: newDescription,
+            };
             expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
@@ -153,12 +141,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -181,8 +167,10 @@ describe('Update report summary', () => {
                 );
             });
 
-            const expectedReport = { ...dummyFeedbackReport };
-            expectedReport.description = newDescription;
+            const expectedReport = {
+                ...dummyFeedbackReport,
+                description: newDescription,
+            };
 
             expect(spy).toBeCalledWith(expectedReport);
 
@@ -209,12 +197,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -245,12 +231,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyFeedbackReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyFeedbackReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -273,10 +257,6 @@ describe('Update report summary', () => {
     });
 
     describe('Create bug report summary', () => {
-        const customEndpoints = {
-            submitEndpoint: (form: BugReportForm) => API.updateBugReport(form),
-            deleteEndpoint: (_id: string) => API.deleteBugReport(_id),
-        };
         const dummyBugReport = makeBugReport();
 
         // eslint-disable-next-line jest/expect-expect
@@ -284,12 +264,10 @@ describe('Update report summary', () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -300,12 +278,10 @@ describe('Update report summary', () => {
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -344,12 +320,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -372,8 +346,10 @@ describe('Update report summary', () => {
                 );
             });
 
-            const expectedReport = { ...dummyBugReport };
-            expectedReport.description = newDescription;
+            const expectedReport = {
+                ...dummyBugReport,
+                description: newDescription,
+            };
             expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
@@ -394,12 +370,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -422,8 +396,10 @@ describe('Update report summary', () => {
                 );
             });
 
-            const expectedReport = { ...dummyBugReport };
-            expectedReport.description = newDescription;
+            const expectedReport = {
+                ...dummyBugReport,
+                description: newDescription,
+            };
             expect(spy).toBeCalledWith(expectedReport);
 
             jest.runAllTimers();
@@ -449,12 +425,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });
@@ -485,12 +459,10 @@ describe('Update report summary', () => {
 
             ReactTestUtils.act(() => {
                 render(
-                    <ReportEndpointContext.Provider value={customEndpoints}>
-                        <ReportSummary
-                            report={dummyBugReport}
-                            callBack={callBack}
-                        />
-                    </ReportEndpointContext.Provider>,
+                    <ReportSummary
+                        report={dummyBugReport}
+                        callBack={callBack}
+                    />,
                     container
                 );
             });

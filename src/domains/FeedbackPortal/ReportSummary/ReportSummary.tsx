@@ -38,10 +38,10 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
     );
     const [snack] = useSnack();
 
-    // const { deleteEndpoint } = React.useContext(ReportEndpointContext);
-
+    type deleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
     const endpoints: {
-        [reportType: string]: (_id: string) => Promise<AxiosResponse<unknown>>;
+        Feedback: deleteFunction;
+        Bug: deleteFunction;
     } = {
         Feedback: (_id: string) => deleteFeedbackReport(_id),
         Bug: (_id: string) => deleteBugReport(_id),
@@ -87,6 +87,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
             <Grid item xs={12}>
                 <FormBase
                     report={report}
+                    reportType={report.type}
                     onSuccess={onSuccess}
                     submitType='update'
                 />

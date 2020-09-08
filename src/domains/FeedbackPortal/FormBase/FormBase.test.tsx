@@ -6,18 +6,12 @@ import { AxiosResponse } from 'axios';
 import faker from 'faker';
 
 import { makeFeedbackReport } from '../reportMaker.mock';
-import ReportEndpointContext from '../Contexts/ReportEndpointContext';
 import FormBase from './FormBase';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
-import { FeedbackForm } from '../types';
 
 jest.mock('hooks/useSnack');
 
 describe('CreateReportRequest', () => {
-    const customEndpoints = {
-        submitEndpoint: (form: FeedbackForm) => API.updateFeedbackReport(form),
-        deleteEndpoint: (_id: string) => API.deleteFeedbackReport(_id),
-    };
     const dummyFeedbackReport = makeFeedbackReport();
     let container: HTMLDivElement | null = null;
 
@@ -38,17 +32,15 @@ describe('CreateReportRequest', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render report form with update Feedback endpoint', async () => {
         const onSuccess = jest.fn();
-        const callback = jest.fn();
 
         ReactTestUtils.act(() => {
             render(
-                <ReportEndpointContext.Provider value={customEndpoints}>
-                    <FormBase
-                        report={dummyFeedbackReport}
-                        onSuccess={onSuccess}
-                        callback={callback}
-                    />
-                </ReportEndpointContext.Provider>,
+                <FormBase
+                    report={dummyFeedbackReport}
+                    onSuccess={onSuccess}
+                    reportType='Feedback'
+                    submitType='update'
+                />,
                 container
             );
         });
@@ -57,17 +49,15 @@ describe('CreateReportRequest', () => {
     it('should change state of form', async () => {
         const description = faker.lorem.paragraph();
         const onSuccess = jest.fn();
-        const callback = jest.fn();
 
         ReactTestUtils.act(() => {
             render(
-                <ReportEndpointContext.Provider value={customEndpoints}>
-                    <FormBase
-                        onSuccess={onSuccess}
-                        callback={callback}
-                        report={dummyFeedbackReport}
-                    />
-                </ReportEndpointContext.Provider>,
+                <FormBase
+                    onSuccess={onSuccess}
+                    report={dummyFeedbackReport}
+                    reportType='Feedback'
+                    submitType='update'
+                />,
                 container
             );
         });
@@ -100,24 +90,21 @@ describe('CreateReportRequest', () => {
             .mockResolvedValue(resolvedVal);
         const newDescription = faker.lorem.paragraph();
         const onSuccess = jest.fn();
-        const callback = jest.fn();
 
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(
-                <ReportEndpointContext.Provider value={customEndpoints}>
-                    <FormBase
-                        onSuccess={onSuccess}
-                        callback={callback}
-                        report={dummyFeedbackReport}
-                    />
-                </ReportEndpointContext.Provider>,
+                <FormBase
+                    onSuccess={onSuccess}
+                    reportType='Feedback'
+                    submitType='update'
+                    report={dummyFeedbackReport}
+                />,
                 container
             );
         });
 
-        // Get form nodes
         const reportDescriptionNode = document.querySelector(
             '#reportDescription'
         ) as HTMLInputElement;
@@ -125,7 +112,6 @@ describe('CreateReportRequest', () => {
             '[type="submit"]'
         ) as HTMLButtonElement;
 
-        // Simulate events
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
                 target: ({ value: newDescription } as unknown) as EventTarget,
@@ -144,13 +130,10 @@ describe('CreateReportRequest', () => {
             await Promise.allSettled(spy.mock.results);
         });
         expect(onSuccess).toBeCalled();
-        expect(callback).toBeCalled();
     });
 
     it('should submit and fail', async () => {
         const onSuccess = jest.fn();
-        const callback = jest.fn();
-
         const rejectedVal = { status: 500 };
         const spy = jest
             .spyOn(API, 'updateFeedbackReport')
@@ -161,13 +144,12 @@ describe('CreateReportRequest', () => {
 
         ReactTestUtils.act(() => {
             render(
-                <ReportEndpointContext.Provider value={customEndpoints}>
-                    <FormBase
-                        onSuccess={onSuccess}
-                        callback={callback}
-                        report={dummyFeedbackReport}
-                    />
-                </ReportEndpointContext.Provider>,
+                <FormBase
+                    onSuccess={onSuccess}
+                    reportType='Feedback'
+                    submitType='update'
+                    report={dummyFeedbackReport}
+                />,
                 container
             );
         });
@@ -199,6 +181,5 @@ describe('CreateReportRequest', () => {
             await Promise.allSettled(spy.mock.results);
         });
         expect(onSuccess).not.toBeCalled();
-        expect(callback).not.toBeCalled();
     });
 });

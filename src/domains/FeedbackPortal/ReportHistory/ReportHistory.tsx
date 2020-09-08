@@ -74,7 +74,7 @@ export default function ReportHistory() {
                 const feedbackReports = results.data.reports.map((report) => ({
                     ...report,
                     type: 'Feedback',
-                }));
+                })) as Report[];
                 setNumOfPages(results.data.count / pageSize);
                 setReports(feedbackReports);
             },
@@ -86,7 +86,7 @@ export default function ReportHistory() {
             const bugReports = results.data.reports.map((report) => ({
                 ...report,
                 type: 'Bug',
-            }));
+            })) as Report[];
             setNumOfPages(results.data.count / pageSize);
             setReports(bugReports);
         },

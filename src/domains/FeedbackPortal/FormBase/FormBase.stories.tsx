@@ -9,7 +9,11 @@ export default { title: 'Domains/FormBase' };
 export function FormBase() {
     return (
         <Container maxWidth='sm'>
-            <Component report={makeFeedbackReport()} submitType='create' />
+            <Component
+                report={makeFeedbackReport()}
+                submitType='create'
+                reportType='Feedback'
+            />
         </Container>
     );
 }
