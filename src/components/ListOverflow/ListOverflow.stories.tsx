@@ -1,11 +1,11 @@
 import React from 'react';
-import { makeUsers } from 'pages/AdminDashboard/data';
+import { makeUsers } from 'mock/handlers/adminDashboard';
 import ListOverflow from './ListOverflow';
 
 export default { title: 'Components/ListOverflow' };
 
 const usersPrimary = makeUsers(10).map((user) => {
-    return { id: user.id, primary: user.name };
+    return { _id: user._id, primary: user.name };
 });
 
 export function Primary() {

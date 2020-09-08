@@ -1,11 +1,11 @@
 import React from 'react';
-import { userProfileData } from 'pages/AdminDashboard/data';
+import { makeUser } from 'mock/handlers/adminDashboard';
 import UserInfo from './UserInfo';
 
 export default { title: 'AdminDashboard/UserProfile/UserInfo' };
 
 const filterList = ['Attended', 'Moderated', 'Banned'];
-const userInfo = userProfileData();
+const userInfo = makeUser();
 
 const profileInfo = {
     primary: userInfo.name,

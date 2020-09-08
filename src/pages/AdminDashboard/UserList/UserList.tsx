@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useReducer, useCallback } from 'react';
+import React, { useReducer, useCallback, useState, useEffect } from 'react';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { UserInfo } from 'domains/AdminDashboard/types';
+
 import ListOverflow from 'components/ListOverflow';
 import AdminToolbar from './AdminToolbar';
-import { UserInfo } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +59,7 @@ function reducer(users: State, action: Action): State {
 const UserList = () => {
     const classes = useStyles();
     const [users, dispatch] = useReducer(reducer, []);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const filteredUsersHandler = useCallback(
         (filteredUsers: Array<UserInfo>) => {
@@ -66,20 +68,11 @@ const UserList = () => {
         []
     );
 
-    // const promoteUserHandler = useCallback((id, status) => {
-    //     dispatch({ type: 'PROMOTE', id: id, status: status });
-    // }, []);
+    const promoteUserHandler = useCallback((id: string, status: string) => {
+        dispatch({ type: 'PROMOTE', status, id });
+    }, []);
 
-    const usersList =
-        users.length === 0 ? (
-            <h1>No Users Avaliable</h1>
-        ) : (
-            <ListOverflow
-                rowTraits={users.map((user) => {
-                    return { ...user, primary: user.name };
-                })}
-            />
-        );
+    console.log('LOADING: ', loading);
 
     return (
         <div className={classes.root}>
@@ -89,10 +82,16 @@ const UserList = () => {
                         <AdminToolbar
                             onLoadUsers={filteredUsersHandler}
                             filterLabel='statusFilter'
+                            setLoading={setLoading}
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        {usersList}
+                        <ListOverflow
+                            rowTraits={users.map((user) => {
+                                return { ...user, primary: user.name };
+                            })}
+                            loading={loading}
+                        />
                     </Grid>
                 </Grid>
             </Paper>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { userProfileData } from 'pages/AdminDashboard/data';
+import { makeUser } from 'mock/handlers/adminDashboard';
 import UserActionHistory from './UserActionHistory';
 
 export default { title: 'AdminDashboard/UserProfile/UserActionHistory' };
 
-const userActionHistory = userProfileData().actionHistoryData.map((user) => {
+const userActionHistory = makeUser().actionHistoryData.map((user) => {
     return {
-        id: user.timeStamp,
+        _id: user.timeStamp.toString(),
         primary: user.action,
         secondary: user.timeStamp.toString(),
     };

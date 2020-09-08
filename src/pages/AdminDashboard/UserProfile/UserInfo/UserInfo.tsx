@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Avatar, Typography } from '@material-ui/core';
+import { ProfileInfoFormat } from 'domains/AdminDashboard/types';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -15,13 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    profileInfo: {
-        primary: string;
-        info: Array<{
-            status: string;
-            count: number;
-        }>;
-    };
+    profileInfo: ProfileInfoFormat;
 }
 
 const UserInfo = ({ profileInfo }: Props) => {
@@ -29,7 +24,7 @@ const UserInfo = ({ profileInfo }: Props) => {
 
     const formatedInfo = profileInfo.info.map((row) => {
         return (
-            <Typography className={classes.typographySpacing}>
+            <Typography className={classes.typographySpacing} key={row.status}>
                 {row.status}:{row.count}
             </Typography>
         );

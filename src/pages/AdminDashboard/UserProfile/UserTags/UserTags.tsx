@@ -15,16 +15,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    tags: Array<string>;
+    tags: string[];
     primaryHeader: string;
-    errorHeader: string;
+    emptyMessage?: string;
 }
 
-const UserTags = ({ tags, primaryHeader, errorHeader }: Props) => {
+const UserTags = ({ tags, primaryHeader, emptyMessage }: Props) => {
     const classes = useStyles();
     let structuredTags = null;
     if (tags.length === 0) {
-        structuredTags = <Typography>{errorHeader}</Typography>;
+        structuredTags = <Typography>{emptyMessage}</Typography>;
     } else {
         structuredTags = tags.map((tag) => {
             return <Chip key={tag} color='primary' size='small' label={tag} />;
@@ -43,10 +43,14 @@ const UserTags = ({ tags, primaryHeader, errorHeader }: Props) => {
     );
 };
 
+UserTags.defaultProps = {
+    emptyMessage: 'User does not contain tags',
+};
+
 UserTags.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     primaryHeader: PropTypes.string.isRequired,
-    errorHeader: PropTypes.string.isRequired,
+    emptyMessage: PropTypes.string,
 };
 
 export default UserTags;

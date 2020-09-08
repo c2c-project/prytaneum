@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { List, Divider } from '@material-ui/core';
-// import { FixedSizeList } from 'react-window';
+import { List, Divider, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ListCell from './ListCell';
@@ -17,41 +16,45 @@ const useStyles = makeStyles((theme) => ({
 
 export interface Props {
     rowTraits: Array<{
-        id: string | number;
+        _id: string | number;
         primary: string;
         secondary?: string;
     }>;
+    emptyMessage?: string;
 }
 
-const ListOverflow = ({ rowTraits }: Props) => {
+const ListOverflow = ({ rowTraits, emptyMessage }: Props) => {
     const classes = useStyles();
 
-    let structuredUserList = [];
-
-    if (rowTraits.length !== 0) {
-        structuredUserList = rowTraits.map((row) => (
-            <Fragment key={row.id}>
-                <ListCell primary={row.primary} secondary={row.secondary} />
-                <li>
-                    <Divider />
-                </li>
-            </Fragment>
-        ));
-    } else {
-        return <h1>Empty List</h1>;
+    if (rowTraits.length === 0) {
+        return <Typography>{emptyMessage}</Typography>;
     }
 
+    const structuredUserList = rowTraits.map((row) => (
+        <Fragment key={row._id}>
+            <ListCell primary={row.primary} secondary={row.secondary} />
+            <li>
+                <Divider />
+            </li>
+        </Fragment>
+    ));
+
     return <List className={classes.root}>{structuredUserList}</List>;
+};
+
+ListOverflow.defaultProps = {
+    emptyMessage: 'Empty List',
 };
 
 ListOverflow.propTypes = {
     rowTraits: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             primary: PropTypes.string.isRequired,
             secondary: PropTypes.string,
         })
     ).isRequired,
+    emptyMessage: PropTypes.string,
 };
 
 export default ListOverflow;

@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton, Grid, Popper, Paper } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+import useEndpoint from 'hooks/useEndpoint';
 import CheckBox from 'components/CheckBox';
 import SearchToolbar from 'components/SearchToolbar';
-
-import { UserInfo } from 'pages/AdminDashboard/types';
-
-import { makeUsers, statusTags } from '../../data';
+import { UserInfo } from 'domains/AdminDashboard/types';
+import { getUserList } from 'domains/AdminDashboard/api/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -22,12 +21,18 @@ const useStyles = makeStyles((theme) => ({
 export interface Props {
     onLoadUsers: (setHandler: UserInfo[]) => void;
     filterLabel?: string;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    statusTags: string[];
 }
 
 type Anchor = (EventTarget & Element) | null;
-const mockData = makeUsers(10);
 
-const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
+const AdminToolbar = ({
+    onLoadUsers,
+    filterLabel,
+    setLoading,
+    statusTags,
+}: Props) => {
     const classes = useStyles();
     const [filterAnchorEl, setFilterAnchorEl] = useState<Anchor>(null);
     const open = Boolean(filterAnchorEl);
@@ -35,23 +40,13 @@ const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
     const [enteredFilterTags, setEnteredFilterTags] = useState<Array<string>>(
         []
     );
-
-    const inputRef = useRef();
-
-    const filterClickHandler = (event: React.MouseEvent) => {
-        const { currentTarget } = event;
-        if (open) setFilterAnchorEl(null);
-        else setFilterAnchorEl(currentTarget);
-    };
-
-    useEffect(() => {
-        //* API FETCH SHOULD GO HERE
-        const timer = setTimeout(() => {
-            // if (enteredFilter === inputRef.current.value) {
-            let loadedUsers = mockData;
+    const [sendRequest, isLoading] = useEndpoint(getUserList, {
+        onSuccess: (results) => {
+            let loadedUsers = results.data.list;
+            const copy = [...loadedUsers];
 
             if (enteredFilter.length > 0) {
-                loadedUsers = mockData.filter((user) =>
+                loadedUsers = copy.filter((user) =>
                     user.name
                         .toLowerCase()
                         .includes(enteredFilter.toLowerCase())
@@ -63,20 +58,27 @@ const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
                     enteredFilterTags.includes(user.status)
                 );
             }
+
             onLoadUsers(loadedUsers);
-            // }
-        }, 500);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [enteredFilter, enteredFilterTags, onLoadUsers, inputRef]);
+        },
+    });
+
+    useEffect(() => {
+        sendRequest();
+        setLoading(isLoading);
+    }, [enteredFilter, enteredFilterTags, onLoadUsers, setLoading]);
+
+    const filterClickHandler = (event: React.MouseEvent) => {
+        const { currentTarget } = event;
+        if (open) setFilterAnchorEl(null);
+        else setFilterAnchorEl(currentTarget);
+    };
 
     return (
         <div>
             <Grid container alignItems='center'>
                 <Grid item xs={11}>
                     <SearchToolbar
-                        // placeholder='Search User'
                         label='Search User'
                         onChange={(event) =>
                             setEnteredFilter(event.target.value)
@@ -115,11 +117,14 @@ const AdminToolbar = ({ onLoadUsers, filterLabel }: Props) => {
 
 AdminToolbar.defaultProps = {
     filterLabel: 'filter',
+    statusTags: ['admin', 'moderator', 'organizer', 'regular', 'banned'],
 };
 
 AdminToolbar.propTypes = {
     onLoadUsers: PropTypes.func.isRequired,
     filterLabel: PropTypes.string,
+    setLoading: PropTypes.func.isRequired,
+    statusTags: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default AdminToolbar;
