@@ -12,22 +12,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Dialog from 'components/Dialog';
 import ReportSummary from 'domains/FeedbackPortal/ReportSummary';
 import { formatDate } from 'utils/format';
-import ReportEndpointContext, {
-    ReportEndpointHandlers,
-    defaultEndpointHandlers,
-} from '../Contexts/ReportEndpointContext';
-import {
-    FeedbackReport,
-    BugReport,
-    FeedbackForm,
-    BugReportForm,
-} from '../types';
-import {
-    deleteFeedbackReport,
-    updateBugReport,
-    deleteBugReport,
-    updateFeedbackReport,
-} from '../api';
+import { FeedbackReport, BugReport } from '../types';
 
 type Report = FeedbackReport | BugReport;
 interface Props {
@@ -62,36 +47,6 @@ export default function ReportList({ reports }: Props) {
         null
     );
 
-    const [endpoints, setEndpoints] = React.useState<ReportEndpointHandlers>(
-        defaultEndpointHandlers
-    );
-
-    const endpointDict = {
-        Feedback: {
-            submitEndpoint: (form: FeedbackForm) => updateFeedbackReport(form),
-            deleteEndpoint: (_id: string) => deleteFeedbackReport(_id),
-        },
-        Bug: {
-            submitEndpoint: (form: BugReportForm) => updateBugReport(form),
-            deleteEndpoint: (_id: string) => deleteBugReport(_id),
-        },
-    };
-
-    const selectReport = (report: Report) => {
-        setReportSelected(report);
-        switch (report.type) {
-            case 'Feedback':
-                setEndpoints(endpointDict.Feedback);
-                break;
-            case 'Bug':
-                setEndpoints(endpointDict.Bug);
-                break;
-            default:
-                setEndpoints(endpointDict.Feedback);
-                break;
-        }
-    };
-
     return (
         <div>
             <List className={classes.root}>
@@ -112,7 +67,7 @@ export default function ReportList({ reports }: Props) {
                             id={report._id}
                             button
                             onClick={() => {
-                                selectReport(report);
+                                setReportSelected(report);
                             }}
                         >
                             <ListItemText
@@ -132,15 +87,12 @@ export default function ReportList({ reports }: Props) {
             >
                 {reportSelected ? (
                     <Container maxWidth='sm' style={{ padding: 20 }}>
-                        <ReportEndpointContext.Provider value={endpoints}>
-                            <ReportSummary
-                                report={reportSelected}
-                                callBack={() => {
-                                    setReportSelected(null);
-                                    setEndpoints(defaultEndpointHandlers);
-                                }}
-                            />
-                        </ReportEndpointContext.Provider>
+                        <ReportSummary
+                            report={reportSelected}
+                            callBack={() => {
+                                setReportSelected(null);
+                            }}
+                        />
                     </Container>
                 ) : (
                     <></>
