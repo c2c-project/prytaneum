@@ -135,8 +135,8 @@ describe('CreateReportRequest', () => {
 
         const expectedReport = {
             ...dummyFeedbackReport,
+            description: newDescription,
         };
-        expectedReport.description = newDescription;
         expect(spy).toBeCalledWith(expectedReport);
         jest.runAllTimers();
 
@@ -190,8 +190,8 @@ describe('CreateReportRequest', () => {
 
         const expectedReport = {
             ...dummyFeedbackReport,
+            description: newDescription,
         };
-        expectedReport.description = newDescription;
         expect(spy).toBeCalledWith(expectedReport);
         jest.runAllTimers();
 
