@@ -4,7 +4,7 @@ import UserInfo from './UserInfo';
 
 export default { title: 'AdminDashboard/UserProfile/UserInfo' };
 
-const filterList = ['Attended', 'Moderated', 'Banned'];
+const filterList = ['Attended', 'Moderator', 'Banned'];
 const userInfo = makeUser();
 
 const profileInfo = {

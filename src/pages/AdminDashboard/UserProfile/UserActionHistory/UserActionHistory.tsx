@@ -28,7 +28,7 @@ const UserActionHistory = ({ ListsTraits }: Props) => {
 UserActionHistory.propTypes = {
     ListsTraits: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
                 .isRequired,
             primary: PropTypes.string,
             secondary: PropTypes.string,

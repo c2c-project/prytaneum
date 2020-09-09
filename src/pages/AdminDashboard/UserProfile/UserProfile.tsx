@@ -102,7 +102,7 @@ const UserProfile = ({ fabMenuItems }: Props) => {
                         <UserTags
                             tags={user.tags}
                             primaryHeader='User Tags'
-                            errorHeader='No Tags'
+                            emptyMessage='No Tags'
                         />
                     </Grid>
                     <Grid item xs={12}>

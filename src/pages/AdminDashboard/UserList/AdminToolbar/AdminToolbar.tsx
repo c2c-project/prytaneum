@@ -7,7 +7,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import useEndpoint from 'hooks/useEndpoint';
 import CheckBox from 'components/CheckBox';
 import SearchToolbar from 'components/SearchToolbar';
-import { UserInfo } from 'domains/AdminDashboard/types';
+import { UserProfile } from 'domains/AdminDashboard/types';
 import { getUserList } from 'domains/AdminDashboard/api/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    onLoadUsers: (setHandler: UserInfo[]) => void;
+    onLoadUsers: (setHandler: UserProfile[]) => void;
     filterLabel?: string;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     statusTags: string[];
@@ -37,13 +37,11 @@ const AdminToolbar = ({
     const [filterAnchorEl, setFilterAnchorEl] = useState<Anchor>(null);
     const open = Boolean(filterAnchorEl);
     const [enteredFilter, setEnteredFilter] = useState<string>('');
-    const [enteredFilterTags, setEnteredFilterTags] = useState<Array<string>>(
-        []
-    );
+    const [enteredFilterTags, setEnteredFilterTags] = useState<string[]>([]);
     const [sendRequest, isLoading] = useEndpoint(getUserList, {
         onSuccess: (results) => {
             let loadedUsers = results.data.list;
-            const copy = [...loadedUsers];
+            const copy: UserProfile[] = [...loadedUsers];
 
             if (enteredFilter.length > 0) {
                 loadedUsers = copy.filter((user) =>
@@ -54,9 +52,11 @@ const AdminToolbar = ({
             }
 
             if (enteredFilterTags.length > 0) {
-                loadedUsers = loadedUsers.filter((user) =>
-                    enteredFilterTags.includes(user.status)
-                );
+                loadedUsers = loadedUsers.filter((usr) => {
+                    return usr.status.some((u) => {
+                        return enteredFilterTags.includes(u.status) && u.active;
+                    });
+                });
             }
 
             onLoadUsers(loadedUsers);
@@ -117,7 +117,7 @@ const AdminToolbar = ({
 
 AdminToolbar.defaultProps = {
     filterLabel: 'filter',
-    statusTags: ['admin', 'moderator', 'organizer', 'regular', 'banned'],
+    statusTags: ['Admin', 'Organizer', 'Moderator', 'Regular', 'Banned'],
 };
 
 AdminToolbar.propTypes = {
