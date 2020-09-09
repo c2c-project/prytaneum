@@ -7,8 +7,8 @@ import faker from 'faker';
 
 export default [
     {
-        teamName: 'Front-end Developers',
-        teamMembers: [
+        name: 'Front-end Developers',
+        members: [
             {
                 // picturePath: '',
                 fullName: 'Anthony Hallak',
@@ -87,8 +87,8 @@ export default [
         ],
     },
     {
-        teamName: 'Back-end Developers',
-        teamMembers: [
+        name: 'Back-end Developers',
+        members: [
             {
                 // picturePath: '',
                 fullName: 'Jerry Tan',

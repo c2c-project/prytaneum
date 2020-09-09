@@ -16,10 +16,7 @@ export default function DevTeam() {
             {devTeam.map((subTeam, index) => (
                 <Grid item key={index}>
                     <Divider style={{ marginBottom: 30 }} />
-                    <Team
-                        teamName={subTeam.teamName}
-                        teamMembers={subTeam.teamMembers}
-                    />
+                    <Team team={subTeam} />
                 </Grid>
             ))}
         </Grid>

@@ -19,11 +19,11 @@ const makeBaseTeam = () => ({
 });
 
 const makeTeam = (num: number) => {
-    const team = [];
+    const teamMembers = [];
     for (let i = 0; i < num; i += 1) {
         const tempMem = makeBaseTeam();
         if (i % 2 === 0) {
-            team.push({
+            teamMembers.push({
                 ...tempMem,
                 picturePath: faker.image.imageUrl(),
                 references: [
@@ -35,7 +35,7 @@ const makeTeam = (num: number) => {
                 ],
             });
         } else {
-            team.push({
+            teamMembers.push({
                 ...tempMem,
                 picturePath: faker.image.imageUrl(),
                 references: [
@@ -48,16 +48,16 @@ const makeTeam = (num: number) => {
             });
         }
     }
-    return team;
+    return {
+        name: faker.company.companyName(),
+        members: teamMembers,
+    };
 };
 
 export function Team() {
     return (
         <Container>
-            <Component
-                teamName={faker.company.companyName()}
-                teamMembers={makeTeam(8)}
-            />
+            <Component team={makeTeam(8)} />
         </Container>
     );
 }
