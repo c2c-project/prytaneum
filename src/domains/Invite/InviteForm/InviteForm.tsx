@@ -26,9 +26,9 @@ import { ParseResult } from 'papaparse';
 import useEndpoint from 'hooks/useEndpoint';
 
 import EmailPreview from 'domains/Townhall/EmailPreview';
-import SelectFile from 'components/SelectFile';
-import VerifyPreview from 'components/SelectFile/VerifyPreview';
-import Parse from 'components/SelectFile/utils';
+import SelectFile from 'domains/Invite/SelectFile';
+import VerifyPreview from 'domains/Invite/SelectFile/VerifyPreview';
+import Parse from 'domains/Invite/SelectFile/utils';
 import CreateInvite from './CreateInvite';
 import API from '../api';
 import { InviteForm, InvitePreview } from '../types';
