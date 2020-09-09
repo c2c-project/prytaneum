@@ -6,7 +6,7 @@ interface Props {
     errorMessage: string;
 }
 
-export default function InvalidInviteLink({ errorMessage }: Props) {
+export default function InvalidLink({ errorMessage }: Props) {
     return (
         <Grid container justify='center' direction='column'>
             <Grid container justify='center'>

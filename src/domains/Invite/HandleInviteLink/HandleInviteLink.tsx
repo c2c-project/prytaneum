@@ -14,7 +14,7 @@ import jwt from 'jsonwebtoken';
 import errors from 'utils/errors';
 
 import HandleInviteToken from './HandleInviteToken';
-import InvalidInviteLink from '../../../components/InvalidInviteLink';
+import InvalidLink from '../../../components/InvalidLink';
 import { InviteTokenResult } from '../types';
 
 // jwt should contain email, check if account exists
@@ -66,7 +66,7 @@ export function ErrorDialog({
                 aria-describedby='alert-dialog-slide-description'
             >
                 <DialogContent>
-                    <InvalidInviteLink errorMessage={errorMessage} />
+                    <InvalidLink errorMessage={errorMessage} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color='primary'>

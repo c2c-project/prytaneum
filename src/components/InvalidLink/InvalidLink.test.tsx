@@ -3,7 +3,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import InvalidInviteLink from '.';
+import InvalidLink from '.';
 
 jest.mock('hooks/useSnack');
 
@@ -29,10 +29,7 @@ describe('Handle Invite Link', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render Invalid Invite Link component with a valid errorMessage', async () => {
         ReactTestUtils.act(() => {
-            render(
-                <InvalidInviteLink errorMessage='valid message' />,
-                container
-            );
+            render(<InvalidLink errorMessage='valid message' />, container);
         });
     });
 });
