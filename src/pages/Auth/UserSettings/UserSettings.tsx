@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from 'components/Paper';
-// import Dialog from 'components/Dialog';
+import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 import SectionList from 'components/SectionList';
 
@@ -28,25 +28,42 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+// interface Datum {
+//     title: string;
+//     content: JSX.Element;
+//     isOpen: boolean;
+//     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+// }
+
+// const openStateArr: Datum[] => {
+//     const s: Datum[] = [];
+//     for (let i = 0; i < 4; i += 1) {
+//         s.push({
+//             title: '',
+//             content: <span>hi</span>,
+//             isOpen: true,
+//             setOpen: setOpenInformation(true)
+//         })
+//     }
+//     return s;
+// };
+
 export default function UserSettings() {
     const classes = useStyles();
 
+    // TODO: fix type error on s
     // const openStateArr: {
-    //     s: [
-    //         string,
-    //         JSX.Element,
-    //         boolean,
+    //     s: [ 
+    //         string, 
+    //         JSX.Element, 
+    //         boolean, 
     //         React.Dispatch<React.SetStateAction<boolean>>
-    //     ];
+    //     ]
     // }[] = [
-    //     { s: AppearanceState() },
-    //     { s: AccountSettingsState()[0] },
-    //     { s: AccountSettingsState()[1] },
-    //     { s: AccountSettingsState()[2] },
-    //     { s: InformationState()[0] },
-    //     { s: InformationState()[1] },
-    //     { s: InformationState()[2] },
-    //     { s: InformationState()[3] },
+    //     { s: Options().dialogData },
+    //     { s: AccountSettings().dialogData },
+    //     { s: Information().dialogData },
     // ];
 
     const sections = [
@@ -85,7 +102,7 @@ export default function UserSettings() {
                     </Route>
                 </MemoryRouter>
                 <SectionList sections={sections} />
-                {/* {openStateArr.map(({ s }) => (
+                {openStateArr.map(({ s }) => (
                     <Dialog
                         open={s[2]}
                         title={s[0]}
@@ -93,7 +110,7 @@ export default function UserSettings() {
                     >
                         {s[1]}
                     </Dialog>
-                ))} */}
+                ))}
             </Paper>
         </Container>
     );

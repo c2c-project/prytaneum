@@ -2,48 +2,10 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { ListItem } from '@material-ui/core';
 
-// export const [openFeedback, setOpenFeedback] = React.useState(false);
-// export const [openAboutUs, setOpenAboutUs] = React.useState(false);
-// export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
-// export const [openTOS, setOpenTOS] = React.useState(false);
-
-// export function InformationState(): [
-//     string,
-//     JSX.Element,
-//     boolean,
-//     React.Dispatch<React.SetStateAction<boolean>>
-// ][] {
-//     return [
-//         [
-//             'Feedback',
-//             <span>hows our driving</span>,
-//             openFeedback,
-//             setOpenFeedback,
-//         ],
-//         [
-//             'About Us',
-//             <span>
-//                 <h1>This was made somehow by some people.</h1>
-//             </span>,
-//             openAboutUs,
-//             setOpenAboutUs,
-//         ],
-//         [
-//             'Privacy Policy',
-//             <span>
-//                 <h1>Information is important.</h1>
-//             </span>,
-//             openPrivacyPolicy,
-//             setOpenPrivacyPolicy,
-//         ],
-//         [
-//             'TOS',
-//             <span>plz no hurt us we no hurt u -- Carolyn</span>,
-//             openTOS,
-//             setOpenTOS,
-//         ],
-//     ];
-// }
+export const [openFeedback, setOpenFeedback] = React.useState(false);
+export const [openAboutUs, setOpenAboutUs] = React.useState(false);
+export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
+export const [openTOS, setOpenTOS] = React.useState(false);
 
 export default function Information() {
     return {
@@ -97,6 +59,36 @@ export default function Information() {
                     </Grid>
                 ),
             },
+        ],
+        dialogData: [
+            [
+                'Feedback',
+                <span> hows our driving </span>,
+                openFeedback,
+                setOpenFeedback,
+            ],
+            [
+                'About Us',
+                <span>
+                    <h1>this was made somehow by some people</h1>
+                </span>,
+                openAboutUs,
+                setOpenAboutUs,
+            ],
+            [
+                'Privacy Policy',
+                <span>
+                    <h1>Information is important.</h1>
+                </span>,
+                openPrivacyPolicy,
+                setOpenPrivacyPolicy,
+            ],
+            [
+                'TOS',
+                <span>plz no hurt us we no hurt u</span>,
+                openTOS,
+                setOpenTOS,
+            ],
         ],
     };
 }
