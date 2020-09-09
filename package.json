@@ -15,7 +15,6 @@
         "date-fns": "^2.14.0",
         "framer-motion": "^2.0.0",
         "global": "^4.4.0",
-        "jsonwebtoken": "^8.5.1",
         "jwt-decode": "https://github.com/auth0/jwt-decode",
         "notistack": "^0.9.7",
         "papaparse": "^5.2.0",
@@ -83,6 +82,7 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
+        "jsonwebtoken": "^8.5.1",
         "msw": "^0.20.5",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
