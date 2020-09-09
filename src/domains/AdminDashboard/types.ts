@@ -37,11 +37,3 @@ export interface ProfileInfoFormat {
     primary: string;
     info: UserStatus[];
 }
-
-export interface UserPromotionType {
-    _id: string;
-    name: string;
-    email: string;
-    status: { status: string; count: number; active: boolean }[];
-    timeStamp: string;
-}

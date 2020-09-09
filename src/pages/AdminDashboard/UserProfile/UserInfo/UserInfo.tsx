@@ -49,6 +49,7 @@ UserInfo.propTypes = {
             PropTypes.shape({
                 status: PropTypes.string.isRequired,
                 count: PropTypes.number.isRequired,
+                active: PropTypes.bool.isRequired,
             }).isRequired
         ),
     }).isRequired,
