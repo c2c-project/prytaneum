@@ -2,11 +2,11 @@ import React from 'react';
 
 import { DeviceContext } from 'contexts/Device';
 
-import InvalidLink from '.';
+import Component from './InvalidLink';
 
 export default {
     title: 'Components/Invite',
-    component: InvalidLink,
+    component: Component,
     argTypes: {
         DeviceType: {
             control: {
@@ -22,15 +22,15 @@ interface Props {
     errorMessage: string;
 }
 
-export function InvalidLinkDefault({ DeviceType, errorMessage }: Props) {
+export function InvalidLink({ DeviceType, errorMessage }: Props) {
     return (
         <DeviceContext.Provider value={DeviceType}>
-            <InvalidLink errorMessage={errorMessage} />
+            <Component errorMessage={errorMessage} />
         </DeviceContext.Provider>
     );
 }
 
-InvalidLinkDefault.args = {
+InvalidLink.args = {
     DeviceType: 'desktop',
     errorMessage: 'Invalid Link',
 };
