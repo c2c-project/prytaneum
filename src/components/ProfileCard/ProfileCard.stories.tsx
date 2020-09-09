@@ -15,6 +15,9 @@ const dummyTeamMember = {
     picturePath: faker.image.avatar(),
     fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.lorem.paragraph(2),
+    subtitle: faker.random.words(2),
+    startDate: faker.date.recent(),
+    endDate: faker.date.future(),
     references: [
         {
             icon: <GithubIcon />,

@@ -13,6 +13,9 @@ export default {
 const makeBaseTeam = () => ({
     fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.lorem.paragraph(),
+    subtitle: faker.random.words(2),
+    startDate: faker.date.recent(),
+    endDate: faker.date.future(),
 });
 
 const makeTeam = (num: number) => {
@@ -51,7 +54,10 @@ const makeTeam = (num: number) => {
 export function Team() {
     return (
         <Container>
-            <Component teamMembers={makeTeam(8)} />
+            <Component
+                teamName={faker.company.companyName()}
+                teamMembers={makeTeam(8)}
+            />
         </Container>
     );
 }

@@ -12,6 +12,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
+import { formatDate } from 'utils/format';
 import { teamMember as teamMemberType } from '../Team/types';
 
 interface Props {
@@ -79,6 +80,26 @@ export default function ProfileCard({ teamMember }: Props) {
                 <Grid item>
                     <Typography align='center' variant='h5'>
                         {teamMember.fullName}
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <Typography
+                        align='center'
+                        variant='h6'
+                        color='textSecondary'
+                    >
+                        {teamMember.subtitle}
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <Typography
+                        align='center'
+                        variant='h6'
+                        color='textSecondary'
+                    >
+                        {formatDate(teamMember.startDate)}
+                        -
+                        {formatDate(teamMember.endDate)}
                     </Typography>
                 </Grid>
                 <Grid item container direction='row' justify='center'>
