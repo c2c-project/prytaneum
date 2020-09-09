@@ -25,7 +25,7 @@ import { ParseResult } from 'papaparse';
 
 import useEndpoint from 'hooks/useEndpoint';
 
-import EmailPreview from 'components/EmailPreview';
+import EmailPreview from 'domains/Townhall/EmailPreview';
 import SelectFile from 'components/SelectFile';
 import VerifyPreview from 'components/SelectFile/VerifyPreview';
 import Parse from 'components/SelectFile/utils';
