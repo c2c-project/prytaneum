@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 //     const s: Datum[] = [];
 //     for (let i = 0; i < 4; i += 1) {
 //         s.push({
-//             title: '',
+//             title: '', // how do I fill these with the right things
 //             content: <span>hi</span>,
 //             isOpen: true,
 //             setOpen: setOpenInformation(true)
@@ -48,23 +48,84 @@ const useStyles = makeStyles((theme) => ({
 //     }
 //     return s;
 // };
+    
+// const sArray = [
+//     [{sArray: Options().dialogData, }],
+//     [{sArray: AccountSettings().dialogData, }],
+//     [{sArray: Information().dialogData, }],
+// ];
+
+// const openStateArr: {
+//     s: [ 
+//         string, 
+//         JSX.Element, 
+//         boolean, 
+//         React.Dispatch<React.SetStateAction<boolean>>
+//     ]
+// }[] = { ...sArray };
+
 
 export default function UserSettings() {
     const classes = useStyles();
 
     // TODO: fix type error on s
-    // const openStateArr: {
-    //     s: [ 
-    //         string, 
-    //         JSX.Element, 
-    //         boolean, 
-    //         React.Dispatch<React.SetStateAction<boolean>>
-    //     ]
-    // }[] = [
-    //     { s: Options().dialogData },
-    //     { s: AccountSettings().dialogData },
-    //     { s: Information().dialogData },
-    // ];
+    const openStateArr: {
+        s: [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ]
+    }[] = [
+        { s: Options().dialogData as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: AccountSettings().dialogData[0] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: AccountSettings().dialogData[1] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: AccountSettings().dialogData[2] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: Information().dialogData[0] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: Information().dialogData[1] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: Information().dialogData[2] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+        { s: Information().dialogData[3] as [ 
+            string, 
+            JSX.Element, 
+            boolean, 
+            React.Dispatch<React.SetStateAction<boolean>>
+        ] },
+    ];
 
     const sections = [
         {
