@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import faker from 'faker';
+import jwt from 'jsonwebtoken';
 
 import { DeviceContext } from 'contexts/Device';
 
@@ -59,5 +60,8 @@ EmailPreview.args = {
     topic: 'Technology',
     eventDateTime: faker.date.future().toUTCString(),
     constituentScope: 'state',
-    registrationLink: `https://connectingtocongress.org/invite/${faker.random.uuid()}`,
+    registrationLink: `https://prytaneum.io/invite/${jwt.sign(
+        { email: faker.internet.email(), townHallId: 'test' },
+        'secret'
+    )}`,
 };
