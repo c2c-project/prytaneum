@@ -14,13 +14,11 @@ interface Props {
 }
 export default function Team({ team }: Props) {
     return (
-        <Grid container direction='row' alignItems='center' spacing={2}>
-            <Grid container item direction='row' justify='center'>
-                <Grid item>
-                    <Typography align='center' variant='h5'>
-                        {team.name}
-                    </Typography>
-                </Grid>
+        <Grid container alignItems='center' spacing={2}>
+            <Grid container item justify='center'>
+                <Typography align='center' variant='h5'>
+                    {team.name}
+                </Typography>
             </Grid>
             {team.members.map((teamMember, index) => (
                 <Grid item xs={12} sm={6} md={3} lg={3}>

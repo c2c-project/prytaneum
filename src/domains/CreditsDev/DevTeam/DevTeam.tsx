@@ -8,7 +8,7 @@ import devTeam from './devTeamMembers';
 export default function DevTeam() {
     return (
         <Grid container spacing={5}>
-            <Grid container item direction='row' justify='center'>
+            <Grid container item justify='center'>
                 <Typography variant='h4' align='center'>
                     Lab Research Team
                 </Typography>

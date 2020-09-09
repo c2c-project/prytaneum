@@ -59,16 +59,14 @@ export default function ProfileCard({ teamMember }: Props) {
                 alignItems='center'
                 justify='center'
             >
-                <Grid container direction='row' justify='flex-end'>
-                    <Grid item>
-                        <IconButton
-                            size='small'
-                            onClick={() => handleClickOpen()}
-                            aria-label='open-dialog'
-                        >
-                            <OpenIcon />
-                        </IconButton>
-                    </Grid>
+                <Grid container item justify='flex-end'>
+                    <IconButton
+                        size='small'
+                        onClick={() => handleClickOpen()}
+                        aria-label='open-dialog'
+                    >
+                        <OpenIcon />
+                    </IconButton>
                 </Grid>
                 <Grid item>
                     <Avatar
@@ -97,12 +95,12 @@ export default function ProfileCard({ teamMember }: Props) {
                         variant='h6'
                         color='textSecondary'
                     >
-                        {formatDate(teamMember.startDate)}
-                        -
-                        {formatDate(teamMember.endDate)}
+                        {`${formatDate(teamMember.startDate)} - ${formatDate(
+                            teamMember.endDate
+                        )}`}
                     </Typography>
                 </Grid>
-                <Grid item container direction='row' justify='center'>
+                <Grid item container justify='center'>
                     {teamMember.references &&
                         teamMember.references.map((reference, index) => (
                             <Grid item key={index}>
