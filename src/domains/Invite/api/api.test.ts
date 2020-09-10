@@ -27,6 +27,9 @@ describe('createInvite', () => {
 
     const testFileData = [
         `email,fName,lName\n
+    ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}\n
+    ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}\n
+    ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}\n
     ${faker.internet.email()},${faker.name.firstName()},${faker.name.lastName()}`,
     ];
     const testFile = new File(testFileData, 'test.csv', {
@@ -83,7 +86,7 @@ describe('createInvite', () => {
             expectedOptions
         );
     });
-    it('should throw file error with undifined file', async () => {
+    it('should throw file error with undefined file', async () => {
         await expect(
             API.createInvite(testFormData, undefined, testPreview)
         ).rejects.toThrow(errors.missingFile());
