@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AxiosResponse } from 'axios';
 
-import TextField from 'components/TextField/TextField';
-import DateTimePicker from 'components/DateTimePicker/DateTimePicker';
+import TextField from 'components/TextField';
+import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import { createTownhall, updateTownhall } from '../api';
 import { TownhallForm } from '../types';

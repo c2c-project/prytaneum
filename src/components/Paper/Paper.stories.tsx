@@ -11,7 +11,6 @@ export default {
 
 export function Paper() {
     return (
-        <ThemeProvider theme={theme}>
             <Component>
                 <button type='button' onClick={() => {}}>Button for paper 1</button>
                 <h1> hello 1</h1>
@@ -24,6 +23,5 @@ export function Paper() {
                 <p> I am here 2</p>
                 <h2> Here's paper 2</h2>
             </Component>
-        </ThemeProvider>
     );
 }

@@ -18,14 +18,13 @@
         "jwt-decode": "https://github.com/auth0/jwt-decode",
         "notistack": "^0.9.7",
         "prop-types": "^15.7.2",
-        "react": "^16.13.1",
+        "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-player": "^1.11.1",
         "react-router-dom": "^5.2.0",
         "react-scripts": "^3.4.3",
         "react-webcam": "^4.0.0",
-        "socket.io-client": "^2.2.0",
-        "storybook": "^6.0.5"
+        "socket.io-client": "^2.2.0"
     },
     "scripts": {
         "start": "react-scripts start",

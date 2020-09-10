@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import {
     List,
     ListItem,
     ListItemText,
     ListItemAvatar,
-    ListSubheader,
+    ListSubheader, 
     Avatar,
     Divider,
 } from '@material-ui/core';
@@ -19,6 +22,8 @@ export interface Datum {
 export interface Section {
     title: string;
     sectionData: Datum[];
+    // dialogData: added for user settings page
+    dialogData?: [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>];
 }
 
 interface Props {

@@ -1,8 +1,6 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core';
 
 import Component from './TextField';
-import theme from 'theme';
 
 export default {
     title: 'Components/TextField',
@@ -11,13 +9,12 @@ export default {
 
 export function TextField() {
     return (
-        <ThemeProvider theme={theme}>
-            <Component 
-                required
-                label='Storybook Label'
-                value='start typing here, or change it and it will `alert(1)`'
-                onChange={() => alert(1)}
-            />
-        </ThemeProvider>
+        <Component
+            required
+            label='Storybook Label'
+            value='start typing here, or change it and it will `alert(1)`'
+            /* eslint-disable-next-line no-alert */
+            onChange={() => alert('onChange alert')}
+        />
     );
 }

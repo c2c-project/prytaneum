@@ -7,8 +7,8 @@ import { MemoryRouter, Route } from 'react-router';
 
 export default {
     title: 'Components/Bold',
-    component: Component
-}
+    component: Component,
+};
 
 const toBoldString = 'test_asdASD_123_=-0"\'';
 const toBoldJSX = <p>this should look bold</p>;
@@ -21,15 +21,13 @@ const toBoldJSXArr = (
 
 export function BoldText() {
     return (
-        <ThemeProvider theme={theme}>
-            <MemoryRouter initialEntries={['/']}>
-                <Route path='/'>
-                    <Bold children={toBoldString} />
-                    <Bold children={toBoldJSX} />
-                    <Bold children={toBoldJSXArr} />
-                    <p>this is not bold for reference</p>
-                </Route>
-            </MemoryRouter>
-        </ThemeProvider>
+        <MemoryRouter initialEntries={['/']}>
+            <Route path='/'>
+                <Bold children={toBoldString} />
+                <Bold children={toBoldJSX} />
+                <Bold children={toBoldJSXArr} />
+                <p>this is not bold for reference</p>
+            </Route>
+        </MemoryRouter>
     );
 }

@@ -3,9 +3,6 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import Picker from './DateTimePicker';
-import { ThemeProvider } from '@material-ui/core';
-
-import theme from 'theme';
 
 describe('DateTimePicker', function () {
     let container: HTMLDivElement | null = null;
@@ -30,7 +27,7 @@ describe('DateTimePicker', function () {
     it('should render', () => {
         ReactTestUtils.act(() => {
             render(
-                <Picker id='test' value='test' onChange={() => {}}></Picker>,
+                <Picker id='test' value='test' onChange={() => {}} />,
                 container
             );
         });

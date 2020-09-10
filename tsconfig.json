@@ -17,24 +17,16 @@
         "baseUrl": "src"
     },
     "include": ["src"],
-    "exclude": [
-        "node_modules",
-        "**/src/test/*",
-        "**/*.test.ts",
-        "**/__tests__/*",
-        "**/__mocks__/*",
-        "**/*+(index|.spec|.e2e).ts"
-    ],
+    "exclude": ["node_modules"],
     "typedocOptions": {
-		"mode": "modules",
+        "mode": "modules",
         "out": "docs",
         "excludeNotExported": true,
-          "exclude": [
+        "exclude": [
             "**/*.test.ts",
             "**/*.stories.*",
             "**/*+(index|.spec|.e2e).ts"
         ],
-        "categoryOrder": ["components", "hooks", "*"],
-        
-	},
+        "categoryOrder": ["components", "hooks", "*"]
+    }
 }

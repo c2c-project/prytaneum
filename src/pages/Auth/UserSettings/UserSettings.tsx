@@ -8,14 +8,10 @@ import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 import SectionList from 'components/SectionList';
 
-// import UserProfile from './UserProfile';
-import { Options } from './Options';
-import AppearanceState from './Options';
-// import { AccountSettings } from './AccountSettings';
-// import AccountSettingsState from './AccountSettings';
-// import { Information } from './Information';
-// import InformationState from './Information';
-
+import UserProfile from 'components/UserProfile';
+import Options from 'components/Options';
+import AccountSettings from 'components/AccountSettings';
+import Information from 'components/Information';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,33 +42,33 @@ export default function UserSettings() {
             React.Dispatch<React.SetStateAction<boolean>>
         ];
     }[] = [
-        {s: AppearanceState()},
-        // {s: AccountSettingsState()[0]},
-        // {s: AccountSettingsState()[1]},
-        // {s: AccountSettingsState()[2]},
-        // {s: InformationState()[0]},
-        // {s: InformationState()[1]},
-        // {s: InformationState()[2]},
-        // {s: InformationState()[3]},
+        { s: Options().dialogData[0] },
+        { s: AccountSettings().dialogData[0] },
+        { s: AccountSettings().dialogData[1] },
+        { s: AccountSettings().dialogData[2] },
+        { s: Information().dialogData[0] },
+        { s: Information().dialogData[1] },
+        { s: Information().dialogData[2] },
+        { s: Information().dialogData[3] },
     ];
-        
+
     const sections = [
-        // {
-        //     title: UserProfile().title,
-        //     sectionData: UserProfile().sectionData,
-        // },
         {
-            title: Options.title,
-            sectionData: Options.sectionData,
+            title: UserProfile().title,
+            sectionData: UserProfile().sectionData,
         },
-        // {
-        //     title: AccountSettings.title,
-        //     sectionData: AccountSettings.sectionData,
-        // },
-        // {
-        //     title: Information.title,
-        //     sectionData: Information.sectionData,
-        // },
+        {
+            title: Options().title,
+            sectionData: Options().sectionData,
+        },
+        {
+            title: AccountSettings().title,
+            sectionData: AccountSettings().sectionData,
+        },
+        {
+            title: Information().title,
+            sectionData: Information().sectionData,
+        },
     ];
 
     return (
@@ -111,7 +107,7 @@ export default function UserSettings() {
  - make own list instead of using seciton list, to get rid of clickable area that does nothing 
     - look at listcomponent and make a new one
  - TODO:
-    - move sections to their own file
+    - [DONE?] move sections to their own file
     - [DONE] Separate Dialog from Dialog Content (pass them in as children)
     - [DONE] Move Dialogs into return
     - [DONE] dont use var

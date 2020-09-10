@@ -6,13 +6,9 @@ import Component from './Loader';
 
 export default {
     title: 'Components/Loader',
-    component: Component
+    component: Component,
 };
 
 export function Loader() {
-    return (
-        <ThemeProvider theme={theme}>
-            <Component/>
-        </ThemeProvider>
-    );
+    return <Component />;
 }
