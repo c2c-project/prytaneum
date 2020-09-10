@@ -1,6 +1,5 @@
 /* eslint-disable react/no-children-prop */
 import React from 'react';
-import { Route, useHistory, MemoryRouter } from 'react-router-dom';
 import { Slide, IconButton, useTheme, Fade } from '@material-ui/core';
 import { Close as CloseIcon, ArrowBack as BackIcon } from '@material-ui/icons';
 
@@ -85,29 +84,31 @@ import ForgotPasswordRequest from './ForgotPassRequest';
 //     );
 // }
 
-export default function Routes() {
-    const history = useHistory();
-    return (
-        <div>
-            <Route path='/auth/login'>
-                <Page>
-                    <Login
-                        onLogin={() => history.push('/home')}
-                        registerRoute='/auth/register'
-                        forgotPassRoute='/auth/forgot-password/request'
-                    />
-                </Page>
-            </Route>
-            <Route path='/auth/register'>
-                <Page>
-                    <Register />
-                </Page>
-            </Route>
-            <Route path='/auth/forgot-password/request'>
-                <Page>
-                    <ForgotPasswordRequest />
-                </Page>
-            </Route>
-        </div>
-    );
-}
+// export default function Routes() {
+//     const history = useHistory();
+//     return (
+//         <div>
+//             <Route path='/auth/login'>
+//                 <Page>
+//                     <Login
+//                         onLogin={() => history.push('/home')}
+//                         registerRoute='/auth/register'
+//                         forgotPassRoute='/auth/forgot-password/request'
+//                     />
+//                 </Page>
+//             </Route>
+//             <Route path='/auth/register'>
+//                 <Page>
+//                     <Register />
+//                 </Page>
+//             </Route>
+//             <Route path='/auth/forgot-password/request'>
+//                 <Page>
+//                     <ForgotPasswordRequest />
+//                 </Page>
+//             </Route>
+//         </div>
+//     );
+// }
+
+export default {};
