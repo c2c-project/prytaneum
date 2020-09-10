@@ -5,7 +5,7 @@ import faker from 'faker';
 
 import Team from './Team';
 
-describe('ProfileCard', () => {
+describe('Team', () => {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {

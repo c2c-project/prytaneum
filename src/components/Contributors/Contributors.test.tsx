@@ -5,7 +5,7 @@ import faker from 'faker';
 
 import Contributors from './Contributors';
 
-describe('ProfileCard', () => {
+describe('Contributors', () => {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
