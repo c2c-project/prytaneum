@@ -5,8 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import CloseIcon from '@material-ui/icons/Close';
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from 'components/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -36,6 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
         black: {
             color: theme.palette.common.black,
         },
+        center: {
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+        },
     })
 );
 
@@ -64,6 +68,7 @@ export default function ProfileCard({ teamMember }: Props) {
                         size='small'
                         onClick={() => handleClickOpen()}
                         aria-label='open-dialog'
+                        color='primary'
                     >
                         <OpenIcon />
                     </IconButton>
@@ -116,46 +121,24 @@ export default function ProfileCard({ teamMember }: Props) {
                         ))}
                 </Grid>
             </Grid>
-            <Dialog maxWidth='sm' open={open} onClose={handleClose}>
-                <Grid container direction='column' alignItems='center'>
-                    <Grid container direction='row' justify='flex-end'>
-                        <Grid item>
-                            <IconButton onClick={handleClose} color='primary'>
-                                <CloseIcon />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <DialogTitle>
-                            <Typography align='center' variant='h4'>
-                                {teamMember.fullName}
-                            </Typography>
-                        </DialogTitle>
-                    </Grid>
-                    <Grid item>
-                        <DialogContent dividers>
-                            <Grid
-                                container
-                                direction='column'
-                                alignItems='center'
-                                spacing={2}
-                            >
-                                <Grid item>
-                                    <Avatar
-                                        className={classes.large}
-                                        alt={teamMember.fullName}
-                                        src={teamMember.picturePath}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <DialogContentText>
-                                        {teamMember.description}
-                                    </DialogContentText>
-                                </Grid>
-                            </Grid>
-                        </DialogContent>
-                    </Grid>
-                </Grid>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                    <Typography align='center' variant='h4'>
+                        {teamMember.fullName}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <div className={classes.center}>
+                        <Avatar
+                            className={classes.large}
+                            alt={teamMember.fullName}
+                            src={teamMember.picturePath}
+                        />
+                    </div>
+                    <DialogContentText style={{ paddingTop: 20 }}>
+                        {teamMember.description}
+                    </DialogContentText>
+                </DialogContent>
             </Dialog>
         </Card>
     );
