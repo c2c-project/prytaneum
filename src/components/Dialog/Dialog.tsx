@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MUIDialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide, { SlideProps } from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles({
     appBar: {
@@ -44,13 +43,11 @@ export interface Props {
 export default function Dialog(props: Props) {
     const { children, open, onClose, title, onEntered, onExit } = props;
     const classes = useStyles();
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <div>
             <MUIDialog
-                fullScreen={fullScreen}
+                fullScreen
                 open={open}
                 onClose={onClose}
                 onEntered={onEntered}
