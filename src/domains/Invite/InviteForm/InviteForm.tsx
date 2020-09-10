@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useReducer } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -82,17 +82,18 @@ function getSteps() {
 
 export default function InviteFormStepper() {
     const classes = useStyles();
-    const [file, setFile]: [File | undefined, Function] = React.useState();
+    const [file, setFile]: [File | undefined, Function] = useState();
+    const [fileSelected, setFileSelected] = useState(false);
     const [preview, setPreview]: [
         object[] | undefined,
         Function
     ] = React.useState();
     const [sendPreview, setSendPreview] = useState(false);
     const [previewEmail, setPreviewEmail] = useState('');
-    const [activeStep, dispatch] = React.useReducer(stepReducer, 0);
+    const [activeStep, dispatch] = useReducer(stepReducer, 0);
     const steps = getSteps();
     const expectedKeys = ['email', 'fName', 'lName'];
-    const [inviteForm, setInviteForm]: [InviteForm, Function] = React.useState({
+    const [inviteForm, setInviteForm]: [InviteForm, Function] = useState({
         MoC: '',
         topic: '',
         eventDateTime: '',
@@ -139,6 +140,12 @@ export default function InviteFormStepper() {
     useEffect(() => {
         sendRequest();
     }, []);
+
+    useEffect(() => {
+        if (file?.size) setFileSelected(true);
+        else setFileSelected(false);
+        console.log(file);
+    }, [file]);
 
     function getStepContent(step: number) {
         switch (step) {
@@ -220,6 +227,7 @@ export default function InviteFormStepper() {
                                     <Button
                                         variant='contained'
                                         color='primary'
+                                        disabled={!fileSelected}
                                         onClick={handleNext}
                                         className={classes.button}
                                     >
