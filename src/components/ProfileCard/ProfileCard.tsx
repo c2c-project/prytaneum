@@ -12,6 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
+import { TeamMember } from 'types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    teamMember: Prytaneum.TeamMember;
+    teamMember: TeamMember;
 }
 export default function ProfileCard({ teamMember }: Props) {
     const classes = useStyles();

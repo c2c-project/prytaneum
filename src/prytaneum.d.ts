@@ -16,25 +16,4 @@ declare namespace Prytaneum {
     interface User {
         _id: string;
     }
-
-    interface Reference {
-        link: string;
-        name: string;
-        icon: JSX.Element;
-    }
-
-    interface TeamMember {
-        picturePath?: string;
-        fullName: string;
-        subtitle: string;
-        description: string;
-        startDate: Date;
-        endDate: Date;
-        references?: Reference[];
-    }
-
-    interface Team {
-        name: string;
-        members: TeamMember[];
-    }
 }
