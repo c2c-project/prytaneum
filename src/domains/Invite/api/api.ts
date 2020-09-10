@@ -58,8 +58,7 @@ export async function loginWithJWT(token: string) {
     if (!token) {
         throw errors.fieldError();
     }
-    // Verify the token and allow user to login if valid
-    // TODO Username vs Email, or doesn't matter since we can just post with jwt and have it handled in API
+    // TODO: once logging in is finalized modify this code appropriately
     return axios.post('/api/users/login-with-jwt', {
         token,
     });
