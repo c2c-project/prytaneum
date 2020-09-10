@@ -154,12 +154,7 @@ export default function ReportHistory() {
                 <Grid item xs={12}>
                     <div style={{ position: 'sticky' }}>
                         <form onSubmit={getReports}>
-                            <Grid
-                                container
-                                direction='row'
-                                spacing={5}
-                                alignItems='center'
-                            >
+                            <Grid container alignItems='center' spacing={5}>
                                 <Grid item>
                                     <FormControl>
                                         <Select
@@ -223,7 +218,6 @@ export default function ReportHistory() {
                                         }
                                         component={
                                             <Button
-                                                fullWidth
                                                 type='submit'
                                                 color='primary'
                                                 endIcon={<SearchIcon />}
