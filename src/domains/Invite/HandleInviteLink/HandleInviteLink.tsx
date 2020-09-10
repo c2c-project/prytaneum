@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/ban-types */
 import React, { useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,12 +8,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import { useParams, useHistory } from 'react-router-dom';
-import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 
-import errors from 'utils/errors';
+import InvalidLink from 'components/InvalidLink';
 
 import HandleInviteToken from './HandleInviteToken';
-import InvalidLink from '../../../components/InvalidLink';
 import { InviteTokenResult } from '../types';
 
 // jwt should contain email, check if account exists
@@ -23,14 +21,15 @@ import { InviteTokenResult } from '../types';
 // Case 2: account exists, redirect to login page
 // Case 3: jwt invalid, display error message.
 export function consumeInviteToken(inviteToken: string): InviteTokenResult {
-    const JWT_SECRET = 'secret';
-    // Decode the invite token
-    const decoded = jwt.verify(inviteToken, JWT_SECRET) as InviteTokenResult;
-    const { email, townHallId } = decoded;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const decoded = jwtDecode(inviteToken);
+    const { email, townHallId } = decoded as {
+        email: string;
+        townHallId: string;
+    };
     if (!email || !townHallId) {
         // Throw error as link contains invalid data
-        errors.invalidToken(); // TODO handle this error
-        throw new Error('Undefined token data');
+        throw new Error('Invalid Token');
     }
     return { email, townHallId };
 }
@@ -79,7 +78,7 @@ export function ErrorDialog({
 }
 
 export default function HandleInviteLink(): JSX.Element {
-    const { token }: { token: string } = useParams();
+    const { token } = useParams<{ token: string }>();
     const history = useHistory();
     try {
         const result = consumeInviteToken(token);
