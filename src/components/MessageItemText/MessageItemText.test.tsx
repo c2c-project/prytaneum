@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
@@ -22,16 +22,17 @@ describe('MessageItemText', function () {
     });
 
     it('should render', () => {
-        const str = "toTest";
+        const str = 'toTest';
         ReactTestUtils.act(() => {
             render(
                 <div id='MessageItemText'>
                     <MessageItemText text={str} />
                 </div>,
                 container
-            )
+            );
         });
-        expect(document.getElementById('MessageItemText')).toBeTruthy();
+        expect(
+            document.getElementById('MessageItemText')?.childElementCount
+        ).toBe(1);
     });
-
 });
