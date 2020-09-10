@@ -42,7 +42,7 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const jwt = ''; // TODO:
     // const [jwt] = useJwt();
     const [snack] = useSnack();
-    const { roomId } = useParams<Params>();
+    const { roomId } = useParams();
 
     const handleEdit = async (e: React.MouseEvent<{ value: unknown }>) => {
         e.preventDefault();

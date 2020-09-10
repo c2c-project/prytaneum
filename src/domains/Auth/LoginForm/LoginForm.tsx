@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import { Grid, Button, InputAdornment, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import TextField from 'components/TextField';
 import useEndpoint from 'hooks/useEndpoint';
@@ -20,16 +21,22 @@ interface Props {
     onSuccess: () => void;
 }
 
+interface Form {
+    email: string;
+    password: string;
+}
+
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
 
-    const [form, setForm] = React.useState({
-        username: '',
+    const [form, setForm] = React.useState<Form>({
+        email: '',
         password: '',
     });
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
 
     const builtRequest = React.useCallback(
-        () => API.login(form.username, form.password),
+        () => API.login(form.email, form.password),
         [form]
     );
 
@@ -37,18 +44,23 @@ export default function LoginForm({ onSuccess }: Props) {
         onSuccess,
     });
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-        id: string
+    const handleChange = (key: keyof Form) => (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     ) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm((state) => ({ ...state, [id]: value }));
+        setForm((state) => ({ ...state, [key]: value }));
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         sendRequest();
+    };
+
+    const handleMouseDownPassword = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
     };
 
     return (
@@ -61,22 +73,43 @@ export default function LoginForm({ onSuccess }: Props) {
             >
                 <Grid item xs={12}>
                     <TextField
-                        id='username'
+                        id='email'
                         required
-                        type='text'
-                        value={form.username}
-                        onChange={(e) => handleChange(e, 'username')}
-                        label='Username'
+                        type='email'
+                        value={form.email}
+                        onChange={handleChange('email')}
+                        label='Email'
+                        autoFocus
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         id='password'
                         required
-                        type='password'
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
-                        onChange={(e) => handleChange(e, 'password')}
+                        onChange={handleChange('password')}
                         label='Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() =>
+                                            setIsPassVisible(!isPassVisible)
+                                        }
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>

@@ -9,9 +9,6 @@ const useStyles = makeStyles((theme) => ({
         // height: '100%',
         width: '100%',
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
     title: {
         flexGrow: 1,
         transition: 'inherit 2s ease-in 10s',
@@ -31,7 +28,7 @@ export default function AppBar({ children }: Props) {
 
     return (
         <div className={classes.root}>
-            <MUIAppBar position='absolute'>
+            <MUIAppBar position='absolute' elevation={0}>
                 <Toolbar>{children}</Toolbar>
             </MUIAppBar>
         </div>

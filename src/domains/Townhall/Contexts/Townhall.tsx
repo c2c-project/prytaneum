@@ -33,7 +33,7 @@ export const TownhallContext = React.createContext<Townhall>({
 });
 
 export default function TownhallProvider({ value, children }: Props) {
-    const { townhallId } = useParams<Params>();
+    const { townhallId } = useParams();
     const [townhall, setTownhall] = React.useState(value);
     const [get] = useEndpoint(() => getTownhall(townhallId), {
         onSuccess: (res) => {

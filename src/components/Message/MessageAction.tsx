@@ -22,7 +22,7 @@ export default function MessageActions({ targetMsg, onClick }: Props) {
     const jwt = '';
     // const [jwt] = useJwt(); // TODO: fix this
     const [snack] = useSnack();
-    const { roomId } = useParams<Params>();
+    const { roomId } = useParams();
     const handleAction = () => {
         fetch(`/api/chat/message-action/${roomId}/${targetMsg._id}`, {
             method: 'POST',

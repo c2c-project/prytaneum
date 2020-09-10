@@ -7,6 +7,11 @@ const useStyles = makeStyles({
     root: {
         width: '100%',
         height: '100%',
+        position: 'relative',
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop: '35vh',
     },
     loader: {
         position: 'absolute',
@@ -20,14 +25,14 @@ const Loader = () => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Grid
+            {/* <Grid
                 container
                 style={{ height: '100%' }}
                 alignItems='center'
                 justify='center'
-            >
-                <CircularProgress className={classes.loader} />
-            </Grid>
+            > */}
+            <CircularProgress className={classes.loader} />
+            {/* </Grid> */}
         </div>
     );
 };

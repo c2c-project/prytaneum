@@ -32,10 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default React.forwardRef<HTMLDivElement>(function RegisterPage(
-    props,
-    ref
-) {
+export default function RegisterPage() {
     const classes = useStyles();
     const history = useHistory();
 
@@ -45,14 +42,14 @@ export default React.forwardRef<HTMLDivElement>(function RegisterPage(
                 <AccountCirlceOutline />
             </Avatar>
             <Typography component='h1' variant='h5'>
-                Sign in
+                Register
             </Typography>
             <div className={classes.form}>
                 <RegisterForm
-                    onSuccess={() => history.push('/auth/login')}
-                    onFailure={() => history.push('/auth/login')}
+                    onSuccess={() => history.push('/login')}
+                    onFailure={() => history.push('/login')}
                 />
             </div>
         </div>
     );
-});
+}

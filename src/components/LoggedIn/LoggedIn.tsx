@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 // import useJwt from '../hooks/useJwt';
 
 const { NODE_ENV } = process.env;
@@ -20,7 +20,8 @@ export default function LoggedIn({ children, jwt }: Props) {
         return <>{children}</>;
     }
     // assumption is that if there is no jwt, then they are not logged in
-    return jwt ? <>{children}</> : <Redirect to='/logout' />;
+    // return jwt ? <>{children}</> : <Redirect to='/logout' />;
+    return null;
 }
 
 LoggedIn.propTypes = {

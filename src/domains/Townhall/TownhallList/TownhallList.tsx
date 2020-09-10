@@ -1,9 +1,9 @@
 import React from 'react';
-
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import SectionList, { Section, Datum } from 'components/SectionList';
 import { formatDate } from 'utils/format';
+import { Typography, Fade } from '@material-ui/core';
 
 import { getTownhallList } from '../api';
 import { Townhall } from '../types';
@@ -48,5 +48,18 @@ export default function TownhallList() {
     if (isLoading || !list) {
         return <Loader />;
     }
-    return <SectionList sections={formatSections(list)} />;
+    if (list.length === 0) {
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <Typography variant='h4'>No Townhalls to display</Typography>
+            </div>
+        );
+    }
+    return (
+        <Fade in={!isLoading || !list} timeout={400} unmountOnExit>
+            <div>
+                <SectionList sections={formatSections(list)} />
+            </div>
+        </Fade>
+    );
 }

@@ -66,6 +66,7 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
                         value={form.email}
                         onChange={(e) => handleChange(e, 'email')}
                         label='Email'
+                        autoFocus
                     />
                 </Grid>
                 <Grid container item xs={12} justify='flex-end'>

@@ -53,11 +53,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TownhallPre() {
-    const [townhall, setTownhall] = React.useState<Townhall | null>(
-        null
-    );
+    const [townhall, setTownhall] = React.useState<Townhall | null>(null);
     const classes = useStyles();
-    const { townhallId } = useParams<{ townhallId: string }>();
+    const { townhallId } = useParams();
     const [sendRequest, loading] = useEndpoint<{
         townhall: Townhall;
     }>(() => getTownhall(townhallId), {
