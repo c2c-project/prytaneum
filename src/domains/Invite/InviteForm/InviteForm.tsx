@@ -2,13 +2,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { useState, useCallback, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    KeyboardDatePicker,
-    KeyboardTimePicker,
-    MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import Collapse from '@material-ui/core/Collapse';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -17,21 +10,11 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { ParseResult } from 'papaparse';
 
 import useEndpoint from 'hooks/useEndpoint';
-
-import EmailPreview from 'domains/Townhall/EmailPreview';
-import SelectFile from 'domains/Invite/SelectFile';
-import VerifyPreview from 'domains/Invite/SelectFile/VerifyPreview';
-import Parse from 'domains/Invite/SelectFile/utils';
-import CreateInvite from './CreateInvite';
 import API from '../api';
 import { InviteForm, InvitePreview } from '../types';
+import Steps from './Steps';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,213 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
-interface Result extends ParseResult<object> {
-    data: Array<object>;
-}
-
-/* STEPS */
-function PickFileStep({
-    expectedKeys,
-    file,
-    setFile,
-}: {
-    expectedKeys: string[];
-    file: File | undefined;
-    setFile: Function;
-}) {
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <Typography>
-                    Expected Headers:{' '}
-                    {expectedKeys.map((header) => ` "${header}" `)}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography>Case matters, order does not</Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <SelectFile onComplete={setFile} initialState={file} />
-            </Grid>
-        </Grid>
-    );
-}
-
-function VerifyPreviewStep({
-    file,
-    preview,
-    setPreview,
-    expectedKeys,
-}: {
-    file: File | undefined;
-    preview: object[] | undefined;
-    setPreview: Function;
-    expectedKeys: string[];
-}) {
-    if (!file || !(file instanceof File)) {
-        return (
-            <Typography variant='caption' color='error'>
-                Please go back and select a valid file
-            </Typography>
-        );
-    }
-
-    Parse.csv(file, {
-        preview: 5,
-        complete: (results: Result) => {
-            const { data } = results;
-            setPreview(data);
-        },
-    });
-    return (
-        <Grid container spacing={4}>
-            <Grid item xs={12}>
-                <VerifyPreview data={preview} expectedKeys={expectedKeys} />
-            </Grid>
-            <Grid item xs={12}>
-                If everything looks correct, click next.
-            </Grid>
-        </Grid>
-    );
-}
-
-function PickDeliveryDateStep({
-    inviteForm,
-    setInviteForm,
-}: {
-    inviteForm: InviteForm;
-    setInviteForm: Function;
-}) {
-    const handleDateChange = (date: Date | null) => {
-        setInviteForm((val: InviteForm) => ({
-            ...val,
-            deliveryTime: date,
-        }));
-    };
-    const maxDate = new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000); // Default 3 days ahead
-    return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            {/* TODO Only allow up to 3 days in advance from now */}
-            <KeyboardDatePicker
-                format='MM/dd/yyyy'
-                disablePast
-                maxDate={maxDate}
-                margin='normal'
-                id='date-picker-inline'
-                label='Delivery Date'
-                value={inviteForm.deliveryTime}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                }}
-            />
-            <KeyboardTimePicker
-                margin='normal'
-                id='time-picker'
-                label='Delivery Time'
-                value={inviteForm.deliveryTime}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                    'aria-label': 'change time',
-                }}
-            />
-        </MuiPickersUtilsProvider>
-    );
-}
-
-function InvitePreviewStep({
-    inviteForm,
-    sendPreview,
-    setSendPreview,
-    email,
-    setEmail,
-}: {
-    inviteForm: InviteForm;
-    sendPreview: boolean;
-    setSendPreview: Function;
-    email: string;
-    setEmail: Function;
-}) {
-    // TODO Get the uploader's email in order to add to the list of recipiants or send in seperate request?
-    const [showPreview, setShowPreview] = useState(false);
-    const toggleSendPreview = () => {
-        setSendPreview(!sendPreview);
-    };
-    const toggleShowPreview = () => {
-        setShowPreview(!showPreview);
-    };
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        setEmail(event.target.value);
-    };
-    return (
-        <div>
-            <Grid>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={sendPreview}
-                            onChange={toggleSendPreview}
-                            name='send email preview checkbox'
-                            aria-label='send email preview checkbox'
-                            color='primary'
-                        />
-                    }
-                    label='send email preview'
-                />
-                <Collapse in={sendPreview}>
-                    <Grid>
-                        <InputLabel htmlFor='email-input'>Email</InputLabel>
-                        <Input
-                            onChange={handleChange}
-                            value={email}
-                            type='email'
-                            name='email input'
-                            aria-labelledby='email-input'
-                            color='primary'
-                        />
-                    </Grid>
-                </Collapse>
-            </Grid>
-            <Grid>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={showPreview}
-                            onChange={toggleShowPreview}
-                            name='show email preview checkbox'
-                            color='primary'
-                        />
-                    }
-                    label='show email preview'
-                />
-                <Collapse in={showPreview}>
-                    <div id='email-preview'>
-                        <EmailPreview
-                            fName='NAME_PLACEHOLDER'
-                            MoC={
-                                inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'
-                            }
-                            topic={
-                                inviteForm.topic
-                                    ? inviteForm.topic
-                                    : 'Unknown Topic'
-                            }
-                            eventDateTime={
-                                inviteForm.eventDateTime
-                                    ? inviteForm.eventDateTime
-                                    : 'Unknown Event Date'
-                            }
-                            constituentScope={inviteForm.constituentScope}
-                            registrationLink='https://connectingtocongress.org/register'
-                        />
-                    </div>
-                </Collapse>
-            </Grid>
-        </div>
-    );
-}
 
 interface NextStepAction {
     type: 'next-step';
@@ -293,11 +69,14 @@ function stepReducer(step: number, action: Actions): number {
 
 function getSteps() {
     return [
-        'Select File',
-        'Verify Preview',
-        'Select Invite Delivery Date/Time',
-        'Invite Preview',
-        'Upload to Server',
+        { title: 'Select File', component: Steps.SelectFileStep },
+        { title: 'Verify Preview', component: Steps.VerifyPreviewStep },
+        {
+            title: 'Select Invite Delivery Date/Time',
+            component: Steps.PickDeliveryDateStep,
+        },
+        { title: 'Invite Preview', component: Steps.InvitePreviewStep },
+        { title: 'Upload to Server', component: Steps.CreateInviteStep },
     ];
 }
 
@@ -365,7 +144,8 @@ export default function InviteFormStepper() {
         switch (step) {
             case 0:
                 return (
-                    <PickFileStep
+                    // steps[0].component({ expectedKeys, file, setFile })
+                    <Steps.SelectFileStep
                         expectedKeys={expectedKeys}
                         file={file}
                         setFile={setFile}
@@ -373,7 +153,7 @@ export default function InviteFormStepper() {
                 );
             case 1:
                 return (
-                    <VerifyPreviewStep
+                    <Steps.VerifyPreviewStep
                         file={file}
                         preview={preview}
                         setPreview={setPreview}
@@ -382,14 +162,14 @@ export default function InviteFormStepper() {
                 );
             case 2:
                 return (
-                    <PickDeliveryDateStep
+                    <Steps.PickDeliveryDateStep
                         inviteForm={inviteForm}
                         setInviteForm={setInviteForm}
                     />
                 );
             case 3:
                 return (
-                    <InvitePreviewStep
+                    <Steps.InvitePreviewStep
                         inviteForm={inviteForm}
                         sendPreview={sendPreview}
                         setSendPreview={setSendPreview}
@@ -399,7 +179,7 @@ export default function InviteFormStepper() {
                 );
             case 4:
                 return (
-                    <CreateInvite
+                    <Steps.CreateInviteStep
                         onSuccess={handleNext}
                         onFailure={handleBack}
                         inviteForm={inviteForm}
@@ -421,9 +201,9 @@ export default function InviteFormStepper() {
     return (
         <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation='vertical'>
-                {steps.map((label, index) => (
-                    <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
+                {steps.map((item, index) => (
+                    <Step key={item.title}>
+                        <StepLabel>{item.title}</StepLabel>
                         <StepContent>
                             <div className={classes.step}>
                                 {getStepContent(index)}
