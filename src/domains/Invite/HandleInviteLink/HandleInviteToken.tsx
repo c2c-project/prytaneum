@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Loader from '@material-ui/core/CircularProgress';
 
@@ -17,16 +17,23 @@ export default function HandleInviteToken({
     onFailure,
     token,
 }: Props): JSX.Element {
-    const apiRequest = React.useCallback(() => API.loginWithJWT(token), [
-        token,
-    ]);
-    const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess,
+    const loginRequest = useCallback(() => API.loginWithJWT(token), [token]);
+    const [sendLoginRequest] = useEndpoint(loginRequest, {
+        onSuccess() {
+            onSuccess();
+        },
+        onFailure,
+    });
+    const validateRequest = useCallback(() => API.validateJWT(token), [token]);
+    const [sendValidateRequest] = useEndpoint(validateRequest, {
+        onSuccess() {
+            sendLoginRequest();
+        },
         onFailure,
     });
     useEffect(() => {
-        sendRequest();
-    }, [sendRequest]);
+        sendValidateRequest();
+    }, [sendValidateRequest]);
     return (
         <Grid container justify='center'>
             <Loader style={{ marginTop: '8em' }} />
