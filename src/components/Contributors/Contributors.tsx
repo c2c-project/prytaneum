@@ -38,7 +38,7 @@ export default function Contributors({ team }: Props) {
                 spacing={3}
             >
                 {subTeam.map((member, index) => (
-                    <Grid item xs={6} sm={2}>
+                    <Grid item xs={6} sm={2} key={index}>
                         <Grid
                             container
                             direction='column'

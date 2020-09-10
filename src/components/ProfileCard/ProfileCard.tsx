@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'center',
         },
+        paddingTop: {
+            paddingTop: 20,
+        },
     })
 );
 
@@ -64,6 +67,7 @@ export default function ProfileCard({ teamMember }: Props) {
             >
                 <Grid container item justify='flex-end'>
                     <IconButton
+                        id='openDialogButton'
                         size='small'
                         onClick={() => handleClickOpen()}
                         aria-label='open-dialog'
@@ -121,11 +125,14 @@ export default function ProfileCard({ teamMember }: Props) {
                 </Grid>
             </Grid>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>
-                    <Typography align='center' variant='h4'>
-                        {teamMember.fullName}
-                    </Typography>
-                </DialogTitle>
+                <Typography
+                    id='dialogTitle'
+                    align='center'
+                    variant='h4'
+                    className={classes.paddingTop}
+                >
+                    {teamMember.fullName}
+                </Typography>
                 <DialogContent>
                     <div className={classes.center}>
                         <Avatar
@@ -134,7 +141,10 @@ export default function ProfileCard({ teamMember }: Props) {
                             src={teamMember.picturePath}
                         />
                     </div>
-                    <DialogContentText style={{ paddingTop: 20 }}>
+                    <DialogContentText
+                        id='dialogDescription'
+                        className={classes.paddingTop}
+                    >
                         {teamMember.description}
                     </DialogContentText>
                 </DialogContent>

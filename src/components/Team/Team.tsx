@@ -18,7 +18,7 @@ export default function Team({ team }: Props) {
                 </Typography>
             </Grid>
             {team.members.map((teamMember, index) => (
-                <Grid item xs={12} sm={6} md={3} lg={3}>
+                <Grid item xs={12} sm={6} md={3} lg={3} key={index}>
                     <ProfileCard key={index} teamMember={teamMember} />
                 </Grid>
             ))}
