@@ -1,11 +1,18 @@
 import React from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Sort as SortIcon, Search as SearchIcon } from '@material-ui/icons';
+import {
+    Sort as SortIcon,
+    Search as SearchIcon,
+    ArrowDropDown as ArrowDownIcon,
+} from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
@@ -36,13 +43,20 @@ const user = {
 
 const pageSize = 10;
 
+const useStyles = makeStyles((theme: Theme) => ({
+    select: {
+        borderColor: theme.palette.common.white,
+        color: theme.palette.common.white,
+    },
+}));
+
 export default function ReportHistory() {
+    const classes = useStyles();
     const [prevReportType, setPrevReportType] = React.useState('');
     const [reportType, setReportType] = React.useState('');
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
-
     const [reports, setReports] = React.useState<Report[]>([]);
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
@@ -150,90 +164,84 @@ export default function ReportHistory() {
 
     return (
         <div>
-            <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <div style={{ position: 'sticky' }}>
-                        <form onSubmit={getReports}>
-                            <Grid container alignItems='center' spacing={5}>
-                                <Grid item>
-                                    <FormControl>
-                                        <Select
-                                            id='reportSelector'
-                                            displayEmpty
-                                            required
-                                            value={reportType}
-                                            onChange={handleReportChange}
-                                            input={<Input />}
-                                        >
-                                            <MenuItem disabled value=''>
-                                                Report Type
-                                            </MenuItem>
+            <AppBar position='sticky'>
+                <Toolbar>
+                    <form onSubmit={getReports}>
+                        <Grid container alignItems='center' spacing={3}>
+                            <Grid item>
+                                <FormControl>
+                                    <Select
+                                        className={classes.select}
+                                        id='reportSelector'
+                                        displayEmpty
+                                        required
+                                        value={reportType}
+                                        onChange={handleReportChange}
+                                        input={<Input />}
+                                        IconComponent={() => <ArrowDownIcon />}
+                                    >
+                                        <MenuItem disabled value=''>
+                                            Report Type
+                                        </MenuItem>
 
-                                            {ReportOptions.map(
-                                                (ReportOption) => (
-                                                    <MenuItem
-                                                        key={ReportOption}
-                                                        value={ReportOption}
-                                                    >
-                                                        {ReportOption}
-                                                    </MenuItem>
-                                                )
-                                            )}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item>
-                                    <FormControl>
-                                        <Select
-                                            id='sortingSelector'
-                                            displayEmpty
-                                            required
-                                            value={sortingOrder}
-                                            onChange={handleSortingChange}
-                                            input={<Input />}
-                                            IconComponent={() => <SortIcon />}
-                                        >
-                                            <MenuItem disabled value=''>
-                                                Sorting Order
-                                            </MenuItem>
-                                            {sortingOptions.map(
-                                                (sortingOption) => (
-                                                    <MenuItem
-                                                        key={sortingOption.name}
-                                                        value={
-                                                            sortingOption.value
-                                                        }
-                                                    >
-                                                        {sortingOption.name}
-                                                    </MenuItem>
-                                                )
-                                            )}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item>
-                                    <LoadingButton
-                                        loading={
-                                            isLoadingFeedback || isLoadingBug
-                                        }
-                                        component={
-                                            <Button
-                                                type='submit'
-                                                color='primary'
-                                                endIcon={<SearchIcon />}
+                                        {ReportOptions.map((ReportOption) => (
+                                            <MenuItem
+                                                key={ReportOption}
+                                                value={ReportOption}
                                             >
-                                                Search
-                                            </Button>
-                                        }
-                                    />
-                                </Grid>
+                                                {ReportOption}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
-                        </form>
-                    </div>
-                </Grid>
-            </Grid>
+                            <Grid item>
+                                <FormControl>
+                                    <Select
+                                        id='sortingSelector'
+                                        className={classes.select}
+                                        displayEmpty
+                                        required
+                                        value={sortingOrder}
+                                        onChange={handleSortingChange}
+                                        input={<Input />}
+                                        IconComponent={() => <SortIcon />}
+                                    >
+                                        <MenuItem disabled value=''>
+                                            Sorting Order
+                                        </MenuItem>
+                                        {sortingOptions.map((sortingOption) => (
+                                            <MenuItem
+                                                key={sortingOption.name}
+                                                value={sortingOption.value}
+                                            >
+                                                {sortingOption.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item>
+                                <LoadingButton
+                                    loading={isLoadingFeedback || isLoadingBug}
+                                    component={
+                                        <Button
+                                            type='submit'
+                                            color='inherit'
+                                            endIcon={<SearchIcon />}
+                                        >
+                                            Search
+                                        </Button>
+                                    }
+                                />
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Toolbar>
+            </AppBar>
+
             {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
-            <Grid item container justify='center' alignItems='center' xs={12}>
+            <Grid container justify='center' alignItems='center' xs={12}>
                 {isLoadingFeedback || isLoadingBug ? (
                     <Loader />
                 ) : (
@@ -244,13 +252,7 @@ export default function ReportHistory() {
             </Grid>
 
             {reports.length !== 0 && (
-                <Grid
-                    item
-                    container
-                    justify='center'
-                    alignItems='center'
-                    xs={12}
-                >
+                <Grid container justify='center' alignItems='center' xs={12}>
                     <Pagination
                         siblingCount={0}
                         color='primary'
