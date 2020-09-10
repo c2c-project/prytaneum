@@ -12,11 +12,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
-import { teamMember as teamMemberType } from '../Team/types';
-
-interface Props {
-    teamMember: teamMemberType;
-}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+interface Props {
+    teamMember: Prytaneum.TeamMember;
+}
 export default function ProfileCard({ teamMember }: Props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);

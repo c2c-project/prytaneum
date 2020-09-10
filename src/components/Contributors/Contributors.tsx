@@ -5,14 +5,8 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-import { teamMember as teamMemberType } from 'components/Team/types';
-
-interface Team {
-    name: string;
-    members: teamMemberType[];
-}
 interface Props {
-    team: Team;
+    team: Prytaneum.Team;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Contributors({ team }: Props) {
     const classes = useStyles();
 
-    const [subTeam, setSubTeam] = React.useState<teamMemberType[]>([]);
+    const [subTeam, setSubTeam] = React.useState<Prytaneum.TeamMember[]>([]);
 
     React.useEffect(() => {
         setSubTeam(team.members.slice(0, 10));

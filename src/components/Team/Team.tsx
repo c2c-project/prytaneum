@@ -2,15 +2,11 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { teamMember as teamMemberType } from './types';
+
 import ProfileCard from '../ProfileCard';
 
-interface Team {
-    name: string;
-    members: teamMemberType[];
-}
 interface Props {
-    team: Team;
+    team: Prytaneum.Team;
 }
 export default function Team({ team }: Props) {
     return (
