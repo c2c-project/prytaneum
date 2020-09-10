@@ -3,6 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { ListItem } from '@material-ui/core';
 
+import { DialogType } from 'pages/Auth/UserSettings/types';
+
 const [openAppearance, setOpenAppearance] = React.useState(false);
 
 export default function Options() {
@@ -49,13 +51,15 @@ export default function Options() {
             },
         ],
         dialogData: [
-            'Appearance',
-            <>
-                <h1>Dark mode: </h1>
-                <h2>Color scheme: </h2>
-            </>,
-            openAppearance,
-            setOpenAppearance,
-        ],
+            [
+                'Appearance',
+                <>
+                    <h1>Dark mode: </h1>
+                    <h2>Color scheme: </h2>
+                </>,
+                openAppearance,
+                setOpenAppearance,
+            ],
+        ] as DialogType,
     };
 }

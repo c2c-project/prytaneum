@@ -2,6 +2,8 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { ListItem } from '@material-ui/core';
 
+import { DialogType } from 'pages/Auth/UserSettings/types';
+
 export const [openFeedback, setOpenFeedback] = React.useState(false);
 export const [openAboutUs, setOpenAboutUs] = React.useState(false);
 export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
@@ -89,6 +91,6 @@ export default function Information() {
                 openTOS,
                 setOpenTOS,
             ],
-        ],
+        ] as DialogType,
     };
 }

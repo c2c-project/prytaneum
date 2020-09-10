@@ -18,7 +18,7 @@
     "recurseDepth": 10,
     "opts": {
         "template": "node_modules/better-docs",
-        "destination": "docs",
+        "destination": "docs/html",
         "recurse": true,
         "readme": "README.md"
     }

@@ -3,6 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import { ListItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
+import { DialogType } from 'pages/Auth/UserSettings/types';
+
 const [openLogout, setOpenLogout] = React.useState(false);
 const [openDisable, setOpenDisable] = React.useState(false);
 const [openDelete, setOpenDelete] = React.useState(false);
@@ -72,9 +74,9 @@ export default function AccountSettings() {
                         Disable Account?
                         <p>
                             You will no longer receive notifications about Town
-                            Halls and you can no longer join live Town Halls. You
-                            will still be able to log into your account. Please
-                            enter your password below twice to confirm.
+                            Halls and you can no longer join live Town Halls.
+                            You will still be able to log into your account.
+                            Please enter your password below twice to confirm.
                         </p>
                     </h1>
                     <TextField
@@ -152,6 +154,6 @@ export default function AccountSettings() {
                 openDelete,
                 setOpenDelete,
             ],
-        ],
+        ] as DialogType,
     };
 }
