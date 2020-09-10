@@ -9,37 +9,31 @@ export default {
     component: Component,
 };
 
+function Spam() {
+    const toAdd = document.createElement('p');
+    toAdd.innerHTML = '';
+    toAdd.innerHTML = '<br/>';
+
+    toAdd.innerHTML = toAdd.innerHTML + 'spam' + '<br/>';
+    document.body.appendChild(toAdd);
+}
+
 export function ScrollToTop() {
     return (
-        <ThemeProvider theme={theme}>
-            <Component 
-                active={true}
-                direction='top'
-            >
-                <button type="button" onClick={() => Spam()}>click to add spam</button>
-            </Component>
-        </ThemeProvider>
+        <Component active direction='top'>
+            <button type='button' onClick={() => Spam()}>
+                click to add spam
+            </button>
+        </Component>
     );
 }
 
 export function ScrollToBottom() {
     return (
-        <ThemeProvider theme={theme}>
-            <Component 
-                active={true}
-                direction='bottom'
-            >
-                <button type="button"  onClick={() => Spam()}>click to add spam</button>
-            </Component>
-        </ThemeProvider>
+        <Component active direction='bottom'>
+            <button type='button' onClick={() => Spam()}>
+                click to add spam
+            </button>
+        </Component>
     );
-}
-
-function Spam() {
-    const toAdd = document.createElement('p');
-    toAdd.innerHTML = "";
-    toAdd.innerHTML = '<br/>';
-
-    toAdd.innerHTML = toAdd.innerHTML + "spam" + '<br/>';
-    document.body.appendChild(toAdd);
 }
