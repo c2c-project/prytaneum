@@ -1,0 +1,76 @@
+
+
+#player_wrapper {
+    position: relative;
+    width: 800px;
+}
+
+#video_player {
+    width: 600px;
+}
+
+.player_controls_top {
+    top: 8px;
+    width: 600px;
+    height: auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    background-color: grey;
+    padding: 2px;
+    position: absolute;
+}
+
+
+.player_controls_top #expand_button {
+    position: relative;
+    background-color: aqua;
+}
+
+.player_controls_top #volume {
+    position: relative;
+}
+
+.player_controls_bottom {
+    bottom: 16px;
+    width: 600px;
+    height: auto;
+    position: absolute;
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: gray;
+    padding: 2px;
+}
+
+.player_controls_bottom > * {
+    justify-content: center;
+}
+
+.player_controls_bottom #playpause {
+    position: relative;
+    background-color: rebeccapurple;
+}
+
+.player_controls_bottom .progress {
+    position: relative;
+    flex: 1 auto;
+}
+
+.player_controls_bottom .progress #progress {
+    width:100%;
+}
+
+.player_controls_bottom #cc {
+    display: flex;
+    position: relative;
+}
+
+
+
+.controls[data-state='hidden'] {
+    display: none;
+}
+
+.controls[data-state='visible'] {
+    display: block;
+}
