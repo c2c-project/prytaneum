@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 interface Props {
+    id?: string;
     text: string;
 }
 
@@ -11,10 +12,18 @@ interface Props {
  *  @constructor MessageItemText
  *  @param props
  *  @param {string} props.text The text to return wrapped in \<Typography\>
-*/
-export default function MessageItemText({ text }: Props) {
-    return <Typography variant='body1'>{text}</Typography>;
+ */
+export default function MessageItemText({ id, text }: Props) {
+    return (
+        <span id={id}>
+            <Typography variant='body1'>{text}</Typography>
+        </span>
+    );
 }
+
+MessageItemText.defaultProps = {
+    id: 'MessageItemText',
+};
 
 MessageItemText.propTypes = {
     text: PropTypes.string.isRequired,
