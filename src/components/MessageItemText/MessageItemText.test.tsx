@@ -25,14 +25,10 @@ describe('MessageItemText', function () {
         const str = 'toTest';
         ReactTestUtils.act(() => {
             render(
-                <div id='MessageItemText'>
-                    <MessageItemText text={str} />
-                </div>,
+                <MessageItemText id='MessageItemTextTest' text={str} />,
                 container
             );
         });
-        expect(
-            document.getElementById('MessageItemText')?.childElementCount
-        ).toBe(1);
+        expect(document.getElementById('MessageItemTextTest')).toBeTruthy();
     });
 });

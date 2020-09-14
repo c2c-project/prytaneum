@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 });
 
 interface Props {
+    id?: string;
     children: JSX.Element | JSX.Element[];
 }
 
@@ -22,16 +23,22 @@ interface Props {
  *  @category Component
  *  @constructor MessageList
  *  @param props
- *  @param {JSX.Element | JSX.Element[]} props.children JSX elements to list out on the page; for example, using MessageListItems 
-*/
-export default function MessageList({ children }: Props) {
+ *  @param {JSX.Element | JSX.Element[]} props.children JSX elements to list out on the page; for example, using MessageListItems
+ */
+export default function MessageList({ id, children }: Props) {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            <List dense>{children}</List>
-        </div>
+        <span id={id}>
+            <div className={classes.root}>
+                <List dense>{children}</List>
+            </div>
+        </span>
     );
 }
+
+MessageList.defaultProps = {
+    id: 'MessageList',
+};
 
 MessageList.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
