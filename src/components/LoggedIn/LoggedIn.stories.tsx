@@ -29,7 +29,7 @@ export function LoggedIn_JwtFalse() {
                 <Component jwt={false}>
                     <h1>
                         This should be rendered, but console.log should say
-                        &quotnot redirecting&quot
+                        &quot not redirecting &quot
                     </h1>
                 </Component>
             </Route>

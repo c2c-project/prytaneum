@@ -42,6 +42,8 @@ export default function LoggedIn({ children, jwt }: Props) {
         return <>{children}</>;
     }
     // assumption is that if there is no jwt, then they are not logged in
+    // eslint-disable-next-line
+    console.log('not redirecting');
     return jwt ? <>{children}</> : <Redirect to='/logout' />;
 }
 
