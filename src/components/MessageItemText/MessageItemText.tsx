@@ -11,6 +11,7 @@ interface Props {
  *  @category Component
  *  @constructor MessageItemText
  *  @param props
+ *  @param {string} props.id The id of the wrapping <span>
  *  @param {string} props.text The text to return wrapped in \<Typography\>
  */
 export default function MessageItemText({ id, text }: Props) {
