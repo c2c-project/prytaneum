@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { ThemeProvider } from '@material-ui/core';
+import { MemoryRouter, Route } from 'react-router';
 
 import Bold from '.';
-import theme from 'theme';
-import { MemoryRouter, Route } from 'react-router';
 
 export default {
     title: 'Components/Bold',
@@ -23,9 +21,9 @@ export function BoldText() {
     return (
         <MemoryRouter initialEntries={['/']}>
             <Route path='/'>
-                <Bold children={toBoldString} />
-                <Bold children={toBoldJSX} />
-                <Bold children={toBoldJSXArr} />
+                <Bold>{toBoldString}</Bold>
+                <Bold>{toBoldJSX}</Bold>
+                <Bold>{toBoldJSXArr}</Bold>
                 <p>this is not bold for reference</p>
             </Route>
         </MemoryRouter>

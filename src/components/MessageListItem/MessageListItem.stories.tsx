@@ -1,9 +1,6 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core';
-import { MemoryRouter, Route } from 'react-router-dom';
 
 import Component from './MessageListItem';
-import theme from 'theme';
 
 export default {
     title: 'Components/MessageListItem',
@@ -13,7 +10,7 @@ export default {
 export function MessageListItemDisplay() {
     return (
         <ul>
-            <Component button={true} hidden={false}>
+            <Component button hidden={false}>
                 <h1>item 1</h1>
                 <h2>item 2</h2>
                 <em>item 3</em>

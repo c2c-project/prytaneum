@@ -1,8 +1,6 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core';
 
 import Component from './ScrollTo';
-import theme from 'theme';
 
 export default {
     title: 'Components/ScrollTo',
@@ -14,6 +12,7 @@ function Spam() {
     toAdd.innerHTML = '';
     toAdd.innerHTML = '<br/>';
 
+    // eslint-disable-next-line
     toAdd.innerHTML = toAdd.innerHTML + 'spam' + '<br/>';
     document.body.appendChild(toAdd);
 }
