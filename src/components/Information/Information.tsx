@@ -4,10 +4,10 @@ import { ListItem } from '@material-ui/core';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-export const [openFeedback, setOpenFeedback] = React.useState(false);
-export const [openAboutUs, setOpenAboutUs] = React.useState(false);
-export const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
-export const [openTOS, setOpenTOS] = React.useState(false);
+const [openFeedback, setOpenFeedback] = React.useState(false);
+const [openAboutUs, setOpenAboutUs] = React.useState(false);
+const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
+const [openTOS, setOpenTOS] = React.useState(false);
 
 export default function Information() {
     return {
