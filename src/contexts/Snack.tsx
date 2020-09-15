@@ -12,14 +12,16 @@ interface Props {
 function SnackContext({ children, ...rest }: Props) {
     // add action to all snackbars
     const notistackRef = React.useRef<ProviderContext | null>(null);
+    
     const onClickDismiss = (key: React.ReactText) => () => {
         notistackRef?.current?.closeSnackbar(key);
     };
+    
     return (
         <SnackbarProvider
             ref={notistackRef}
             action={(key) => (
-                <Button onClick={onClickDismiss(key)}>Dismiss</Button>
+                <Button color='inherit' onClick={onClickDismiss(key)}>Dismiss</Button>
             )}
             {...rest}
         >
