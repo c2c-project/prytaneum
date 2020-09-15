@@ -8,21 +8,15 @@ import useErrorHandler from './useErrorHandler';
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
-    onUndo?: () => void;
-    isUndo?: boolean;
+    undo?: {
+        message?: string;
+        onClick: () => void;
+    }
 }
 type SendRequest = () => void;
 type IsLoading = boolean;
 type EndpointUtils = [SendRequest, IsLoading];
 
-/**
- * @arg {Function} endpoint
- * @arg {Object} options
- * @arg {Function} options.onSuccess
- * @arg {Function} options.onFailure
- * @arg {Function} options.onUndo
- * @returns {Array}
- */
 export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
     options: EndpointOptions<T> = {}
@@ -34,8 +28,7 @@ export default function useEndpoint<T>(
 
     React.useEffect(() => {
         let isMounted = true;
-        let isStopped = false;
-        const { onSuccess, onFailure, onUndo, isUndo } = options;
+        const { onSuccess, onFailure, undo } = options;
         const minWaitTime = () =>
             new Promise((resolve) => {
                 setTimeout(resolve, 600);
@@ -46,7 +39,8 @@ export default function useEndpoint<T>(
         const defaultUndo = () => {};
 
         const _onSuccess = onSuccess || defaultSucess;
-        const _onUndo = onUndo || defaultUndo;
+        const _onUndo = undo?.onClick || defaultUndo;
+        const isUndo = Boolean(undo);
         const _onFailure = (err: Error) => {
             defaultFailure(err);
             if (onFailure) {
@@ -61,7 +55,6 @@ export default function useEndpoint<T>(
                     endpoint(),
                     minWaitTime(),
                 ]);
-
 
                 // I need to check if I'm still mounted before continuing
                 if (isMounted === true) {
@@ -87,29 +80,41 @@ export default function useEndpoint<T>(
         };
 
         const undoableRequest = () => {
-            snack('Registered, Undo -> ', 'info', {
-                action: React.createElement(
+            let isStopped = false;
+            let sentRequest = false;
+
+            const closeFunction = () => {
+                if (sentRequest === false) {
+                    sentRequest = true;
+                    // eslint-disable-next-line no-void
+                    void request();
+                }
+            };
+
+            window.addEventListener('beforeunload', closeFunction, false);
+            snack(undo?.message || 'Request Sent', {
+                action: React.createElement( 
                     Button,
                     {
                         onClick: () => {
                             if (isMounted === true) {
-                                isStopped = true;
                                 _onUndo();
-                                // eslint-disable-next-line no-void
-                                window.removeEventListener('beforeunload', function (){void request();}, false);
+                                isStopped = true;
+                                setIsLoading(false);
+                                window.removeEventListener('beforeunload', closeFunction, false);
                             }
                         },
                         variant: 'text',
-                        color: 'secondary'
+                        color: 'inherit'
                     },
                     'Undo'
                 ),
                 onExited: () => {
-                    if (isStopped === false) {
+                    if (isStopped === false && sentRequest === false) {
+                        sentRequest = true;
                         // eslint-disable-next-line no-void
                         void request();
-                        // eslint-disable-next-line no-void
-                        window.removeEventListener('beforeunload', function (){void request();}, false);
+                        window.removeEventListener('beforeunload', closeFunction, false);
                     }
                 }
             });            
