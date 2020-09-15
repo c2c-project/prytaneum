@@ -10,13 +10,13 @@ export default function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     return [
         (message: string, 
-            type: 'error' | 'success' | 'warning' | 'info' | 'default', 
             options?: Options
         ) => {
             enqueueSnackbar(message, { 
-                variant: type,
+                variant: 'default',
                 action: options?.action,
                 onExited: options?.onExited,
+                color: 'inherit'
             });
         },
         closeSnackbar,
