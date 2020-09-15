@@ -5,9 +5,9 @@ import { ListItem } from '@material-ui/core';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-const [openAppearance, setOpenAppearance] = React.useState(false);
-
 export default function Options() {
+    const [openAppearance, setOpenAppearance] = React.useState(false);
+
     return {
         title: 'Options',
         sectionData: [

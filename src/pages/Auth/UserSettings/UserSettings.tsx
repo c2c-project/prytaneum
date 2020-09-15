@@ -26,7 +26,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserSettings() {
+interface Props {
+    id?: string;
+}
+
+export default function UserSettings({ id }: Props) {
     const classes = useStyles();
 
     const openStateArr: {
@@ -68,6 +72,7 @@ export default function UserSettings() {
 
     return (
         <Container
+            id={id}
             maxWidth='md'
             disableGutters
             style={{
@@ -96,6 +101,10 @@ export default function UserSettings() {
         </Container>
     );
 }
+
+UserSettings.defaultProps = {
+    id: 'UserSettings',
+};
 
 /*
  - React components can be saved in state

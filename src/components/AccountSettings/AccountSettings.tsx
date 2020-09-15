@@ -5,11 +5,11 @@ import TextField from '@material-ui/core/TextField';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-const [openLogout, setOpenLogout] = React.useState(false);
-const [openDisable, setOpenDisable] = React.useState(false);
-const [openDelete, setOpenDelete] = React.useState(false);
-
 export default function AccountSettings() {
+    const [openLogout, setOpenLogout] = React.useState(false);
+    const [openDisable, setOpenDisable] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+
     return {
         title: 'Account Settings',
         sectionData: [

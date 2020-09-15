@@ -4,12 +4,12 @@ import { ListItem } from '@material-ui/core';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-const [openFeedback, setOpenFeedback] = React.useState(false);
-const [openAboutUs, setOpenAboutUs] = React.useState(false);
-const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
-const [openTOS, setOpenTOS] = React.useState(false);
-
 export default function Information() {
+    const [openFeedback, setOpenFeedback] = React.useState(false);
+    const [openAboutUs, setOpenAboutUs] = React.useState(false);
+    const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
+    const [openTOS, setOpenTOS] = React.useState(false);
+
     return {
         title: 'About Prytaneum',
         sectionData: [

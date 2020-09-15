@@ -7,7 +7,7 @@ import {
     ListItem,
     ListItemText,
     ListItemAvatar,
-    ListSubheader, 
+    ListSubheader,
     Avatar,
     Divider,
 } from '@material-ui/core';
@@ -23,7 +23,12 @@ export interface Section {
     title: string;
     sectionData: Datum[];
     // dialogData: added for user settings page
-    dialogData?: [string, JSX.Element, boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    dialogData?: [
+        string,
+        JSX.Element,
+        boolean,
+        React.Dispatch<React.SetStateAction<boolean>>
+    ];
 }
 
 interface Props {
@@ -55,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
  *  @constructor SectionList
  *  @param props
  *  @param {Section[]} props.sections consists of the Sections to iterate through <br><br> A Section consits of Title and a Datum[]
-*/
+ */
 export default function SectionList({ sections }: Props) {
     const classes = useStyles();
     return (

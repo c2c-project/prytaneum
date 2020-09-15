@@ -17,11 +17,10 @@ const useStyles = makeStyles({
     },
 });
 
-
 /** Transition used by FullScreenDialog -- it slides up
  *  @category Component
  *  @constructor Dialog
-*/
+ */
 const Transition = React.forwardRef(function Transition(
     props: SlideProps,
     ref: React.Ref<unknown>
@@ -47,31 +46,35 @@ export default function Dialog(props: Props) {
     const classes = useStyles();
 
     return (
-            <MUIDialog
-                fullScreen
-                open={open}
-                onClose={onClose}
-                onEntered={onEntered}
-                onExit={onExit}
-                TransitionComponent={Transition}
-            >
-                <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton
-                            edge='start'
-                            color='inherit'
-                            onClick={onClose}
-                            aria-label='close'
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography component="span" variant='h6' className={classes.title}>
-                            {title}
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                {open && children}
-            </MUIDialog>
+        <MUIDialog
+            fullScreen
+            open={open}
+            onClose={onClose}
+            onEntered={onEntered}
+            onExit={onExit}
+            TransitionComponent={Transition}
+        >
+            <AppBar className={classes.appBar}>
+                <Toolbar>
+                    <IconButton
+                        edge='start'
+                        color='inherit'
+                        onClick={onClose}
+                        aria-label='close'
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography
+                        component='span'
+                        variant='h6'
+                        className={classes.title}
+                    >
+                        {title}
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            {open && children}
+        </MUIDialog>
     );
 }
 
