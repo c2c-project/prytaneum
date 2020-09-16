@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -28,10 +31,23 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     id?: string;
+    setOpenDialog: () => void;
+    setCloseDialog: () => void;
 }
 
+// function setChange(this: any,  b: boolean) {
+//     this.setState({ changed: true });
+// };
+
 export default function UserSettings({ id }: Props) {
-    const classes = useStyles();
+    const [isOpen, setOpen] = React.useState(false);
+
+    const handleChange = (
+        e: React.Dispatch<React.SetStateAction<boolean>>,
+        id: string
+    ) => {
+        setOpen((state) => ({ state }));
+    };
 
     const openStateArr: {
         s: [
@@ -41,14 +57,14 @@ export default function UserSettings({ id }: Props) {
             React.Dispatch<React.SetStateAction<boolean>>
         ];
     }[] = [
-        { s: Options().dialogData[0] },
-        { s: AccountSettings().dialogData[0] },
-        { s: AccountSettings().dialogData[1] },
-        { s: AccountSettings().dialogData[2] },
-        { s: Information().dialogData[0] },
-        { s: Information().dialogData[1] },
-        { s: Information().dialogData[2] },
-        { s: Information().dialogData[3] },
+        // { s: Options().dialogData[0] },
+        // { s: AccountSettings().dialogData[0] },
+        // { s: AccountSettings().dialogData[1] },
+        // { s: AccountSettings().dialogData[2] },
+        { s: [Information().dialogData[0][0], Information().dialogData[0][1], openFeedback, setOpenFeedback] },
+        { s: [Information().dialogData[1][0], Information().dialogData[1][1], openAboutUs, setOpenAboutUs] },
+        { s: [Information().dialogData[2][0], Information().dialogData[2][1], openPrivacyPolicy, setOpenPrivacyPolicy] },
+        { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS] },
     ];
 
     const sections = [
@@ -95,6 +111,10 @@ export default function UserSettings({ id }: Props) {
                         onClose={() => s[3](false)}
                     >
                         {s[1]}
+                    this.setChanged = this.setChanged.bind(this);
+    this.state = {
+      changed: false
+    }
                     </Dialog>
                 ))}
             </Paper>

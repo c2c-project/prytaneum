@@ -1,10 +1,20 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import { ListItem } from '@material-ui/core';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-export default function Information() {
+interface Props {
+    handleChanges: () => void;
+}
+
+export default function Information({ handleChanges }: Props ) {
+    // const [openFeedback, setOpenFeedback] = React.useState(false);
+    // const [openAboutUs, setOpenAboutUs] = React.useState(false);
+    // const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
+    // const [openTOS, setOpenTOS] = React.useState(false);
+
     const [openFeedback, setOpenFeedback] = React.useState(false);
     const [openAboutUs, setOpenAboutUs] = React.useState(false);
     const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
@@ -26,7 +36,7 @@ export default function Information() {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => setOpenFeedback(true)}
+                                onClick={() => handleChange(true)}
                             >
                                 Feedback
                             </ListItem>
@@ -66,7 +76,7 @@ export default function Information() {
             [
                 'Feedback',
                 <span> hows our driving </span>,
-                openFeedback,
+                //openFeedback,
                 setOpenFeedback,
             ],
             [
@@ -74,7 +84,7 @@ export default function Information() {
                 <span>
                     <h1>this was made somehow by some people</h1>
                 </span>,
-                openAboutUs,
+                //openAboutUs,
                 setOpenAboutUs,
             ],
             [
@@ -82,13 +92,13 @@ export default function Information() {
                 <span>
                     <h1>Information is important.</h1>
                 </span>,
-                openPrivacyPolicy,
+                //openPrivacyPolicy,
                 setOpenPrivacyPolicy,
             ],
             [
                 'TOS',
                 <span>plz no hurt us we no hurt u</span>,
-                openTOS,
+                //openTOS,
                 setOpenTOS,
             ],
         ] as DialogType,
