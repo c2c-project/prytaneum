@@ -28,7 +28,7 @@ export default function ReportForm({
             <Grid item xs={12}>
                 <Typography variant='h4' align='center'>
                     {title}
-                    {React.cloneElement(icon)}
+                    {icon}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
