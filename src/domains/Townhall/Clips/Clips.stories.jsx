@@ -16,7 +16,7 @@ const clip = {
 
 export default { title: 'Clips' };
 
-export const clipsPortal = () => <ClipPortal clip={clip} />;
+export const clipsPortal = () => <ClipPortal clipData={clip} />;
 
 export const clipList = () => <ClipList />;
 

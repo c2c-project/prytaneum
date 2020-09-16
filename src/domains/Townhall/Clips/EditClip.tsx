@@ -1,5 +1,5 @@
 import React from 'react';
-import Thumbnail from '../../assets/default-thumbnail.jpg';
+import Thumbnail from '../../../assets/default-thumbnail.jpg';
 import './style.css';
 
 export default function EditClip() {

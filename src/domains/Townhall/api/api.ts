@@ -1,7 +1,7 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
-import { Townhall, TownhallForm, TownhallQuestionForm } from '../types';
+import { Townhall, TownhallForm, TownhallQuestionForm, ClipData } from '../types';
 
 interface RequestBody {
     form: TownhallForm;
@@ -44,4 +44,13 @@ export async function getTownhall(id: string) {
 export async function createQuestion(form: TownhallQuestionForm) {
     const body: { form: TownhallQuestionForm } = { form };
     return axios.post('/api/townhalls/:_id/create-question', body);
+}
+
+export async function getTownhallClip(townhallId: string, clipId: string) {
+    return axios.get<{ clip: ClipData }>('/api/townhalls/clip');
+}
+
+
+export async function getTownhallClips(townhallId: string) {
+    return axios.get<{ clips: ClipData[]  }>(`/api/townhalls/${townhallId}/clip`);
 }
