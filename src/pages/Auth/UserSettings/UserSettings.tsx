@@ -33,8 +33,16 @@ interface Props {
     id?: string;
 }
 
+
 export default function UserSettings({ id }: Props) {
     const classes = useStyles();
+
+    const handleChange = (
+        e: React.Dispatch<React.SetStateAction<boolean>>,
+        b: boolean
+    ) => {
+        e(b);
+    };
     
     const openStateArr: {
         s: [
@@ -96,7 +104,7 @@ export default function UserSettings({ id }: Props) {
                     <Dialog
                         open={s[2]}
                         title={s[0]}
-                        onClose={() => s[4](s[3], false)}
+                        onClose={() => handleChange(s[3], false)}
                     >
                         {s[1]}
                     </Dialog>
