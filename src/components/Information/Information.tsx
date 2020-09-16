@@ -1,24 +1,22 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import PropTypes from 'prop-types';
 import { ListItem } from '@material-ui/core';
 
 import { DialogType } from 'pages/Auth/UserSettings/types';
 
-interface Props {
-    handleChanges: () => void;
-}
-
-export default function Information({ handleChanges }: Props ) {
-    // const [openFeedback, setOpenFeedback] = React.useState(false);
-    // const [openAboutUs, setOpenAboutUs] = React.useState(false);
-    // const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
-    // const [openTOS, setOpenTOS] = React.useState(false);
-
+export default function Information() {
     const [openFeedback, setOpenFeedback] = React.useState(false);
     const [openAboutUs, setOpenAboutUs] = React.useState(false);
     const [openPrivacyPolicy, setOpenPrivacyPolicy] = React.useState(false);
     const [openTOS, setOpenTOS] = React.useState(false);
+
+    const handleChange = (
+        e: React.Dispatch<React.SetStateAction<boolean>>,
+        b: boolean
+    ) => {
+        e(b);
+    };
+
 
     return {
         title: 'About Prytaneum',
@@ -36,7 +34,7 @@ export default function Information({ handleChanges }: Props ) {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => handleChange(true)}
+                                onClick={() => handleChange(setOpenFeedback, true)}
                             >
                                 Feedback
                             </ListItem>
@@ -45,7 +43,7 @@ export default function Information({ handleChanges }: Props ) {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => setOpenAboutUs(true)}
+                                onClick={() => handleChange(setOpenAboutUs, true)}
                             >
                                 About Us
                             </ListItem>
@@ -54,7 +52,7 @@ export default function Information({ handleChanges }: Props ) {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => setOpenPrivacyPolicy(true)}
+                                onClick={() => handleChange(setOpenPrivacyPolicy, true)}
                             >
                                 Privacy Policy
                             </ListItem>
@@ -63,7 +61,7 @@ export default function Information({ handleChanges }: Props ) {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => setOpenTOS(true)}
+                                onClick={() => handleChange(setOpenTOS, true)}
                             >
                                 Terms of Service
                             </ListItem>
@@ -76,7 +74,7 @@ export default function Information({ handleChanges }: Props ) {
             [
                 'Feedback',
                 <span> hows our driving </span>,
-                //openFeedback,
+                openFeedback,
                 setOpenFeedback,
             ],
             [
@@ -84,7 +82,7 @@ export default function Information({ handleChanges }: Props ) {
                 <span>
                     <h1>this was made somehow by some people</h1>
                 </span>,
-                //openAboutUs,
+                openAboutUs,
                 setOpenAboutUs,
             ],
             [
@@ -92,15 +90,16 @@ export default function Information({ handleChanges }: Props ) {
                 <span>
                     <h1>Information is important.</h1>
                 </span>,
-                //openPrivacyPolicy,
+                openPrivacyPolicy,
                 setOpenPrivacyPolicy,
             ],
             [
                 'TOS',
                 <span>plz no hurt us we no hurt u</span>,
-                //openTOS,
+                openTOS,
                 setOpenTOS,
             ],
         ] as DialogType,
+        handleChange: handleChange
     };
 }
