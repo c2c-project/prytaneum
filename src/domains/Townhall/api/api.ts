@@ -47,7 +47,7 @@ export async function createQuestion(form: TownhallQuestionForm) {
 }
 
 export async function getTownhallClip(townhallId: string, clipId: string) {
-    return axios.get<{ clip: ClipData }>('/api/townhalls/clip');
+    return axios.get<{ clip: ClipData  }>(`/api/townhalls/${townhallId}/clip/${clipId}`);
 }
 
 
