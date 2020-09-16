@@ -240,7 +240,7 @@ export default function ReportHistory() {
                 </Toolbar>
             </AppBar>
 
-            {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
+            {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container justify='center' alignItems='center' xs={12}>
                 {isLoadingFeedback || isLoadingBug ? (
                     <Loader />
