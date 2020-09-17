@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
         },
         paddingTop: {
-            paddingTop: 20,
+            paddingTop: 30,
         },
     })
 );
@@ -130,6 +130,7 @@ export default function ProfileCard({ teamMember }: Props) {
                     align='center'
                     variant='h4'
                     className={classes.paddingTop}
+                    style={{ padding: 30 }}
                 >
                     {teamMember.fullName}
                 </Typography>
