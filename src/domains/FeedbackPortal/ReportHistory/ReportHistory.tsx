@@ -251,6 +251,7 @@ export default function ReportHistory() {
                 )}
             </Grid>
 
+            {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
             {reports.length !== 0 && (
                 <Grid container justify='center' alignItems='center' xs={12}>
                     <Pagination
