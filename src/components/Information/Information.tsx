@@ -17,7 +17,6 @@ export default function Information() {
         e(b);
     };
 
-
     return {
         title: 'About Prytaneum',
         sectionData: [
@@ -34,7 +33,9 @@ export default function Information() {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => handleChange(setOpenFeedback, true)}
+                                onClick={() =>
+                                    handleChange(setOpenFeedback, true)
+                                }
                             >
                                 Feedback
                             </ListItem>
@@ -43,7 +44,9 @@ export default function Information() {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => handleChange(setOpenAboutUs, true)}
+                                onClick={() =>
+                                    handleChange(setOpenAboutUs, true)
+                                }
                             >
                                 About Us
                             </ListItem>
@@ -52,7 +55,9 @@ export default function Information() {
                             <ListItem
                                 button
                                 hidden={false}
-                                onClick={() => handleChange(setOpenPrivacyPolicy, true)}
+                                onClick={() =>
+                                    handleChange(setOpenPrivacyPolicy, true)
+                                }
                             >
                                 Privacy Policy
                             </ListItem>
@@ -100,6 +105,6 @@ export default function Information() {
                 setOpenTOS,
             ],
         ] as DialogType,
-        handleChange: handleChange
+        hc: handleChange,
     };
 }

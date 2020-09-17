@@ -33,31 +33,41 @@ interface Props {
     id?: string;
 }
 
-
 export default function UserSettings({ id }: Props) {
     const classes = useStyles();
 
-    const handleChange = (
-        e: React.Dispatch<React.SetStateAction<boolean>>,
-        b: boolean
-    ) => {
-        e(b);
-    };
-    
+    // const handleChange = (
+    //     e: React.Dispatch<React.SetStateAction<boolean>>,
+    //     b: boolean
+    // ) => {
+    //     e(b);
+    // };
+
     const openStateArr: {
         s: [
             string,
             JSX.Element,
             boolean,
             React.Dispatch<React.SetStateAction<boolean>>,
-            (e: React.Dispatch<React.SetStateAction<boolean>>, b: boolean) => void
+            (
+                e: React.Dispatch<React.SetStateAction<boolean>>,
+                b: boolean
+            ) => void
         ];
     }[] = [
         // { s: Options().dialogData[0] },
         // { s: AccountSettings().dialogData[0] },
         // { s: AccountSettings().dialogData[1] },
         // { s: AccountSettings().dialogData[2] },
-        { s: [Information().dialogData[0][0], Information().dialogData[0][1], Information().dialogData[0][2], Information().dialogData[0][3], Information().handleChange ] },
+        // {
+        //     s: [
+        //         Information().dialogData[0][0],
+        //         Information().dialogData[0][1],
+        //         Information().dialogData[0][2],
+        //         Information().dialogData[0][3],
+        //         Information().hc,
+        //     ],
+        // },
         // { s: [Information().dialogData[1][0], Information().dialogData[1][1], openAboutUs, setOpenAboutUs, Information().handleChange] },
         // { s: [Information().dialogData[2][0], Information().dialogData[2][1], openPrivacyPolicy, setOpenPrivacyPolicy, Information().handleChange] },
         // { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS, Information().handleChange] },
@@ -68,18 +78,18 @@ export default function UserSettings({ id }: Props) {
             title: UserProfile().title,
             sectionData: UserProfile().sectionData,
         },
-        {
-            title: Options().title,
-            sectionData: Options().sectionData,
-        },
-        {
-            title: AccountSettings().title,
-            sectionData: AccountSettings().sectionData,
-        },
-        {
-            title: Information().title,
-            sectionData: Information().sectionData,
-        },
+        // {
+        //     title: Options().title,
+        //     sectionData: Options().sectionData,
+        // },
+        // {
+        //     title: AccountSettings().title,
+        //     sectionData: AccountSettings().sectionData,
+        // },
+        // {
+        //     title: Information().title,
+        //     sectionData: Information().sectionData,
+        // },
     ];
 
     return (
@@ -104,7 +114,7 @@ export default function UserSettings({ id }: Props) {
                     <Dialog
                         open={s[2]}
                         title={s[0]}
-                        onClose={() => handleChange(s[3], false)}
+                        onClose={() => s[4](s[3], false)}
                     >
                         {s[1]}
                     </Dialog>
