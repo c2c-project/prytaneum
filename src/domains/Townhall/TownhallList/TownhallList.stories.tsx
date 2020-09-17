@@ -32,11 +32,5 @@ const makeEvents = (amount: number) => {
 };
 
 export function TownhallList() {
-    return (
-        <FixtureContext.Provider
-            value={makeSuccessFixture({ list: makeEvents(40) })}
-        >
-            <Component />
-        </FixtureContext.Provider>
-    );
+    return <Component />;
 }

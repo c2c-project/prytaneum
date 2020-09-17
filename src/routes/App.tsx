@@ -1,12 +1,20 @@
 import React from 'react';
 import UniversalRouter from 'universal-router/sync';
-import { Slide } from '@material-ui/core';
+import { Fade, Slide } from '@material-ui/core';
 import { Update, State } from 'history';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Page from 'layout/Page';
 import history from 'utils/history';
+import Nav from 'layout/Nav';
 
-const router = new UniversalRouter([
+// for side effects (adding the routes)
+import './Auth';
+import './Townhall';
+
+import { addRoutes, routes } from './utils';
+
+addRoutes([
     {
         path: '/',
         action: () => (
@@ -31,6 +39,7 @@ const router = new UniversalRouter([
     },
     { path: '(.*)', action: () => <h1>404</h1> },
 ]);
+const router = new UniversalRouter<JSX.Element>(routes);
 
 type PageState = {
     component: JSX.Element | null | undefined;
@@ -41,7 +50,40 @@ const initialState: PageState = {
     key: null,
 };
 
+const useStyles = makeStyles((theme) => ({
+    '@keyframes slideInRight': {
+        from: { transform: 'translateX(-100vw)' },
+        to: { transform: 'translateX(0)' },
+    },
+    '@keyframes slideOutRight': {
+        from: { transform: 'translateX(0)' },
+        to: { transform: 'translateX(-100vw)', visibility: 'hidden`' },
+    },
+    '@keyframes slideInLeft': {
+        from: { transform: 'translateX(100vw)' },
+        to: { transform: 'translateX(0)' },
+    },
+    '@keyframes slideOutLeft': {
+        from: { transform: 'translateX(0)' },
+        to: { transform: 'translateX(100vw)', visibility: 'hidden' },
+    },
+    '@keyframes fadeIn': {
+        from: { opacity: 0 },
+        to: { opacity: 1 },
+    },
+    '@keyframes fadeOut': {
+        from: { opacity: 1 },
+        to: { opacity: 0 },
+    },
+    navigateBack: {
+        animationName: '$fadeIn',
+        animationDuration: '400ms',
+        overflow: 'visible',
+    },
+}));
+
 export default function App() {
+    // const classes = useStyles();
     const [currPage, setCurrPage] = React.useState<PageState>(initialState);
     const [destPage, setDestPage] = React.useState<PageState>(initialState);
 
@@ -66,9 +108,22 @@ export default function App() {
         return unlisten;
     }, []);
 
+    React.useEffect(() => {
+        if (currPage.component === null) setCurrPage(destPage);
+    }, [destPage]);
+
     return (
         <div>
-            <Slide
+            <Nav />
+            <Page key={currPage.key}>
+                <Fade
+                    in={history.location.key === currPage.key}
+                    onExited={() => setCurrPage(destPage)}
+                >
+                    <div>{currPage.component}</div>
+                </Fade>
+            </Page>
+            {/* <Slide
                 key={currPage.key}
                 in={history.location.key === currPage.key}
                 direction='right'
@@ -91,7 +146,7 @@ export default function App() {
                 <Page>
                     <div>{destPage.component}</div>
                 </Page>
-            </Slide>
+            </Slide> */}
         </div>
     );
 }

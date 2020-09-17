@@ -53,6 +53,8 @@ export default function useEndpoint<T>(
                     minWaitTime(),
                 ]);
 
+                console.log(response);
+
                 // I need to check if I'm still mounted before continuing
                 if (isMounted === true) {
                     setIsLoading(false);

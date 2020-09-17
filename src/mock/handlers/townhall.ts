@@ -54,7 +54,7 @@ export default [
     rest.get('/api/townhalls/list', (req, res, ctx) => {
         return res(
             ctx.json({
-                list: makeTownHalls(10),
+                list: makeTownHalls(50),
             }),
             ctx.status(200)
         );

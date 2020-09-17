@@ -15,11 +15,14 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
         // overflowY: 'auto',
     },
+    main: {
+        marginBottom: '100px',
+    },
     appBar: theme.mixins.toolbar,
 }));
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    children: JSX.Element | JSX.Element[] | React.ReactNode;
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
@@ -38,7 +41,8 @@ export default React.forwardRef<HTMLDivElement, Props>(function Page(
         >
             <div className={classes.innerContainer}>
                 <div className={classes.appBar} />
-                <main>{children}</main>
+                <main className={classes.main}>{children}</main>
+                <div className={classes.appBar} />
             </div>
         </Container>
     );

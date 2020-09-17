@@ -20,6 +20,7 @@ function formatSections(list: Townhall[]): Section[] {
                 image: townhall.picture,
                 title: townhall.speaker.name,
                 subtitle: `${townhall.speaker.party}, ${townhall.speaker.territory}`,
+                href: `/townhalls/${townhall._id}`,
             };
             if (copy[formattedDate] !== undefined) {
                 copy[formattedDate].push(datum);

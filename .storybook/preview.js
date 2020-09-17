@@ -3,7 +3,7 @@ import { addDecorator, addParameters } from '@storybook/react';
 
 import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
-import { BrowserRouter } from 'react-router-dom';
+// import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import DeviceContext from '../src/contexts/Device';
@@ -16,7 +16,7 @@ worker.start();
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
+        {/* <BrowserRouter> */}
             <SnackContext maxSnack={1}>
                 <UserContext.Provider
                     value={{ _id: '1', username: 'anonymous' }}
@@ -28,7 +28,7 @@ addDecorator((storyFn) => (
                     </DeviceContext>
                 </UserContext.Provider>
             </SnackContext>
-        </BrowserRouter>
+        {/* </BrowserRouter> */}
     </ThemeProvider>
 ));
 
