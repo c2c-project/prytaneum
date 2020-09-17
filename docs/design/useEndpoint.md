@@ -3,7 +3,6 @@
 This feature provides the user the option to undo a given request after it has been sent.
 
 # Index
-- [Variables](#v)
 - [Functions](#f)
 - [Examples](#e)
 
@@ -29,7 +28,6 @@ const [sendRequest, isLoading] = useEndpoint(builtRequest, {
 ```js
 const undo = { message: 'click to undo', onClick: () => {
     snack('You clicked undo');
-    onUndo();
 }};
 
 const builtRequest = React.useCallback(() => API.register(form), [form]);
