@@ -18,6 +18,15 @@ interface Props {
     title: string;
     content: JSX.Element | JSX.Element[];
 }
+
+/**
+ * Similar to SectionList, but does not use material UI list* and instead just uses the grid to display JSX elements passed in with a title and layout.
+ * @category Component
+ * @constructor SettingsMenu
+ * @param Props
+ * @param {string} title title of the section
+ * @param {JSX.Element | JSX.Element[]} content the JSX content to display in the section, useful for defining how specific things in the list should look
+ */
 export default function SettingsMenu({ title, content }: Props) {
     const classes = useStyles();
     return (

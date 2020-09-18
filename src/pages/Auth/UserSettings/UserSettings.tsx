@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -10,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
-// import SectionList from 'components/SectionList';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
@@ -36,6 +31,16 @@ interface Props {
     id?: string;
 }
 
+/**
+ * Displays the settings for User, using SettingsMenu, it displays the User information like first name, last name, username, email and obfuscated password, so they can change it. To be pulled and pushed from/to database later <br/></br>
+ * It also displays options for appearing anonymously, notifcations for upcoming townhalls, darkmode and color scheme (like material UIs website) <br/></br>
+ * Account settings shows an option to logout, disable or delete account, each one opens a dialog box, see components/dialog
+ * Information is info about us, feedback, ToS and privacy policy
+ * @category Auth
+ * @constructor UserSettings
+ * @param Props
+ * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
+ */
 export default function UserSettings({ id }: Props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -48,9 +53,11 @@ export default function UserSettings({ id }: Props) {
 
     const dialogData = [
         { text: Options().title, component: Options().dialogData },
-        { text: AccountSettings().title, component: AccountSettings().dialogData },
+        {
+            text: AccountSettings().title,
+            component: AccountSettings().dialogData,
+        },
         { text: Information().title, component: Information().dialogData },
-
     ];
 
     const optionsDialog = () => {
@@ -92,7 +99,6 @@ export default function UserSettings({ id }: Props) {
             </List>
         ));
     };
-    
 
     const sections = [
         {
@@ -146,73 +152,3 @@ export default function UserSettings({ id }: Props) {
 UserSettings.defaultProps = {
     id: 'UserSettings',
 };
-
-/*
- - React components can be saved in state
- - make own list instead of using seciton list, to get rid of clickable area that does nothing 
-    - look at listcomponent and make a new one
- - TODO:
-    - [DONE?] move sections to their own file
-    - [DONE] Separate Dialog from Dialog Content (pass them in as children)
-    - [DONE] Move Dialogs into return
-    - [DONE] dont use var
-    - [DONE] fix eslint errors
-    - [DONE, bc we got rid of button in SectionList] make own list component
-*/
-/* {dialogData.map(({ text, component }) => (
-                    <ListItem
-                        key={text}
-                        button
-                        onClick={() => setContent(component)}
-                    >
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))} */
-
-// const openStateArr: {
-//     s: [
-//         string,
-//         JSX.Element,
-//         boolean,
-//         React.Dispatch<React.SetStateAction<boolean>>,
-//         (
-//             e: React.Dispatch<React.SetStateAction<boolean>>,
-//             b: boolean
-//         ) => void
-//     ];
-// }[] = [
-// { s: Options().dialogData[0] },
-// { s: AccountSettings().dialogData[0] },
-// { s: AccountSettings().dialogData[1] },
-// { s: AccountSettings().dialogData[2] },
-// {
-//     s: [
-//         Information().dialogData[0][0],
-//         Information().dialogData[0][1],
-//         Information().dialogData[0][2],
-//         Information().dialogData[0][3],
-//         Information().hc,
-//     ],
-// },
-// { s: [Information().dialogData[1][0], Information().dialogData[1][1], openAboutUs, setOpenAboutUs, Information().handleChange] },
-// { s: [Information().dialogData[2][0], Information().dialogData[2][1], openPrivacyPolicy, setOpenPrivacyPolicy, Information().handleChange] },
-// { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS, Information().handleChange] },
-// ];
-
-// const DialogContent1 = () => <h1>dialog 1 content aaaaaaa</h1>;
-// const DialogContent2 = () => <h1>dialog 2 content bbbbbbb</h1>;
-// const DialogContent3 = () => <h1>dialog 3 content ccccccc</h1>;
-// const DialogContent4 = () => <h1>dialog 4 content ddddddd</h1>;
-
-// {
-//     title: UserProfile().title,
-//     content: UserProfile().content,
-// },
-// {
-//     title: Options().title,
-//     content: Options().content,
-// },
-// {
-//     title: AccountSettings().title,
-//     content: AccountSettings().content,
-// },

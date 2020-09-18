@@ -10,6 +10,7 @@ export default function UserProfile() {
         content: (
             <Grid component='span' container spacing={2} alignContent='center'>
                 {/* <Avatar src={image} alt='Profile Avatar' /> */}
+                {/** Trouble adding avatar for some reason */}
                 <Grid component='span' item xs={12}>
                     <TextField
                         id='username'

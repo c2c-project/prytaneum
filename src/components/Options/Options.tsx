@@ -1,7 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { ListItem } from '@material-ui/core';
 
 export default function Options() {
     return {
@@ -10,8 +7,8 @@ export default function Options() {
             {
                 text: 'Appear Anonymous',
                 component: (
-                    <span> 
-                    {/* TODO: dialog text depends on if they are already anonymous */}
+                    <span>
+                        {/* TODO: dialog text depends on if they are already anonymous */}
                         You will now appear anonymous.
                     </span>
                 ),
@@ -20,10 +17,7 @@ export default function Options() {
                 text: 'Notifications',
                 component: (
                     <span>
-                        <button
-                            type='button'
-                            onClick={() => {}} 
-                        >
+                        <button type='button' onClick={() => {}}>
                             Notify me about upcoming Townhalls
                         </button>
                     </span>
@@ -31,12 +25,7 @@ export default function Options() {
             },
             {
                 text: 'Appearance',
-                component: (
-                    <span>
-                        Dark mode
-                        Color Scheme
-                    </span>
-                ),
+                component: <span>Dark mode Color Scheme</span>,
             },
         ],
     };
