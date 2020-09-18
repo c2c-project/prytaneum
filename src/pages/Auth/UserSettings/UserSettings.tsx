@@ -36,7 +36,7 @@ interface Props {
  * It also displays options for appearing anonymously, notifcations for upcoming townhalls, darkmode and color scheme (like material UIs website) <br/></br>
  * Account settings shows an option to logout, disable or delete account, each one opens a dialog box, see components/dialog
  * Information is info about us, feedback, ToS and privacy policy
- * @category Auth
+ * @category Pages/Auth
  * @constructor UserSettings
  * @param Props
  * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
