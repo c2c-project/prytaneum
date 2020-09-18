@@ -1,7 +1,11 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { ListItem } from '@material-ui/core';
+
+/**
+ * Template/config for displaying Options section on user settings page
+ * contains dialogs for Appear anonymous, Notifications, and Appearance
+ * @category Component
+ * @constructor Options
+ */
 
 export default function Options() {
     return {

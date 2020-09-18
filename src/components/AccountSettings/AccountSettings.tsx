@@ -1,6 +1,13 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
+/**
+ * Template/config for displaying AccountSettings section on user settings page
+ * contains dialogs for Logout, Disable account, and delete account
+ * @category Component
+ * @constructor AccountSettings
+ */
+
 export default function AccountSettings() {
     return {
         title: 'Account Settings',

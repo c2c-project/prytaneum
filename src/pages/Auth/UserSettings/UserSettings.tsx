@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
-// import SectionList from 'components/SectionList';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
@@ -93,7 +92,6 @@ export default function UserSettings({ id }: Props) {
         ));
     };
     
-
     const sections = [
         {
             title: UserProfile().title,

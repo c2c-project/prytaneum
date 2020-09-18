@@ -1,5 +1,12 @@
 import React from 'react';
 
+/**
+ * Template/config for displaying Information/AboutUs section on user settings page
+ * contains dialogs for Feedback, AboutUs, PrivacyPolicy, and Terms of Service
+ * @category Component
+ * @constructor Information
+ */
+
 export default function Information() {
     return {
         title: 'Information',
