@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
     title: string;
     content: JSX.Element | JSX.Element[];
-    children?: JSX.Element | JSX.Element[];
 }
 export default function SettingsMenu({ title, content }: Props) {
     const classes = useStyles();
