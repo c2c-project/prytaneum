@@ -1,117 +1,99 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import Divider from '@material-ui/core/Divider';
-const useStyles = makeStyles((theme) => ({
-    root: {
-        color: 'blue',
-    },
-    circle: {
-        clipPath: 'circle(40%)',
+import React, { useState } from 'react';
+import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
+import { SliderRail, Handle, Track, Tick } from './component';
 
-        height: '24px',
-
-        width: '24px',
-    },
-
-    active: {
-        backgroundColor: theme.palette.primary.main,
-    },
-
-    inactive: {
-        backgroundColor: 'grey',
-    },
-
-    current: {
-        height: '48px',
-
-        width: '48px',
-    },
-}));
-
-const containerStyles = {
-    height: 10,
+const sliderStyle = {
+    position: 'relative' as const,
     width: '100%',
-    backgroundColor: '#e0e0de',
-    borderRadius: 50,
-    margin: 50,
+    touchAction: 'none',
 };
 
-const fillerStyles = {
-    height: '100%',
-    width: '60%',
-    backgroundColor: 'blue',
-    borderRadius: 'inherit',
-    textAlign: 'right',
-};
-
-const labelStyles = {
-    padding: 5,
-    color: 'white',
-    fontWeight: 'bold',
-};
-
-interface ProgressStepProps {
-    active?: boolean;
-    current?: boolean;
+function formatTick() {
+    return '';
 }
 
-export function ProgressStep({ active, current }: ProgressStepProps) {
-    const classes = useStyles();
-
-    return (
-        <div
-            className={
-                active
-                    ? clsx([classes.circle, classes.active])
-                    : clsx([classes.circle, classes.inactive])
-            }
-        />
-    );
+export interface DataEntry {
+    label: string;
+    value: number;
 }
-
-ProgressStep.defaultProps = {
-    active: false,
-
-    current: false,
-};
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
-
-    currentStep: number;
+    currentVal: number;
+    timeline: DataEntry[];
 }
 
-export default function ProgressBar({ children, currentStep }: Props) {
-    const sample = {
-        backGroundColor: 'yellow',
-    };
-    return (
-        <div>
-            <Grid container>
-                <div style={containerStyles}>
-                    <div style={fillerStyles}>
-                        <span></span>
-                    </div>
-                </div>
-                <Grid item xs={12} container justify='space-evenly'>
-                    {React.Children.map(children, (child, idx) => {
-                        return (
-                            <Grid item xs='auto' className='container1'>
-                                {React.cloneElement(child, {
-                                    active: idx < currentStep,
-                                    current: idx + 1 === currentStep,
-                                })}
-                            </Grid>
-                        );
-                    })}
-                </Grid>
 
-                <Grid item xs={12} container justify='center'>
-                    Current label
-                </Grid>
-            </Grid>
+
+export default function Example1({ currentVal, timeline }: Props) {
+    const maxValue = timeline[timeline.length - 1].value;
+    const minValue = timeline[0].value;
+    const domain = [minValue, maxValue];
+    const defaultValues = [currentVal];
+    const [values] = useState(defaultValues.slice());
+
+    return (
+        <div style={{ height: 120, width: '100%' }}>
+            <p>
+                Current Label:
+                {' '}
+                {timeline.filter((el) => el.value === currentVal)[0].label}
+            </p>
+            <Slider
+                mode={1}
+                step={1}
+                disabled
+                domain={domain}
+                rootStyle={sliderStyle}
+                values={values}
+            >
+                <Rail>
+                    {({ getRailProps }) => (
+                        <SliderRail getRailProps={getRailProps} />
+                    )}
+                </Rail>
+                <Handles>
+                    {({ handles, getHandleProps }) => (
+                        <div className='slider-handles'>
+                            {handles.map((handle) => (
+                                <Handle
+                                    key={handle.id}
+                                    handle={handle}
+                                    domain={domain}
+                                    getHandleProps={getHandleProps}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </Handles>
+                <Tracks right={false}>
+                    {({ tracks, getTrackProps }) => (
+                        <div className='slider-tracks'>
+                            {tracks.map(({ id, source, target }) => (
+                                <Track
+                                    key={id}
+                                    source={source}
+                                    target={target}
+                                    getTrackProps={getTrackProps}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </Tracks>
+                <Ticks count={timeline.length - 1}>
+                    {({ ticks }) => (
+                        <div className='slider-ticks'>
+                            {ticks.map((tick) => (
+                                <Tick
+                                    key={tick.id}
+                                    tick={tick}
+                                    count={ticks.length}
+                                    format={formatTick}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </Ticks>
+            </Slider>
         </div>
     );
 }
