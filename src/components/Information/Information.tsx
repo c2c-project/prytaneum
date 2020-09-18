@@ -5,11 +5,11 @@ export default function Information() {
         title: 'Information',
         dialogData: [
             {
-                title: 'Feedback',
+                text: 'Feedback',
                 component: <span> hows our driving </span>,
             },
             {
-                title: 'About Us',
+                text: 'About Us',
                 component: (
                     <span>
                         <h1>this was made somehow by some people</h1>
@@ -17,7 +17,7 @@ export default function Information() {
                 ),
             },
             {
-                title: 'Privacy Policy',
+                text: 'Privacy Policy',
                 component: (
                     <span>
                         <h1>Information is important.</h1>
@@ -25,7 +25,7 @@ export default function Information() {
                 ),
             },
             {
-                title: 'TOS',
+                text: 'TOS',
                 component: <span>plz no hurt us we no hurt u</span>,
             },
         ],

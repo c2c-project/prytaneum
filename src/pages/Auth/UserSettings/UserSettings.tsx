@@ -14,7 +14,7 @@ import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
 import Options from 'components/Options';
-// import AccountSettings from 'components/AccountSettings';
+import AccountSettings from 'components/AccountSettings';
 import Information from 'components/Information';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
 
@@ -46,22 +46,52 @@ export default function UserSettings({ id }: Props) {
     }, [cont]);
 
     const dialogData = [
+       // { text: Options().title, component: Options().dialogData },
+        { text: AccountSettings().title, component: AccountSettings().dialogData },
         { text: Information().title, component: Information().dialogData },
+
     ];
 
-    const infoDialog = () => {
-        return dialogData[0].component.map(({ title, component }) => (
+    // const optionsDialog = () => {
+    //     return dialogData[0].component.map(({ text, component }) => (
+    //         <List>
+    //             <ListItem
+    //                 key={text}
+    //                 button
+    //                 onClick={() => setContent(component)}
+    //             >
+    //                 <ListItemText primary={text} />
+    //             </ListItem>
+    //         </List>
+    //     ));
+    // };
+    const accountSettingsDialog = () => {
+        return dialogData[1].component.map(({ text, component }) => (
             <List>
                 <ListItem
-                    key={title}
+                    key={text}
                     button
                     onClick={() => setContent(component)}
                 >
-                    <ListItemText primary={title} />
+                    <ListItemText primary={text} />
                 </ListItem>
             </List>
         ));
     };
+    const infoDialog = () => {
+        return dialogData[2].component.map(({ text, component }) => (
+            <List>
+                <ListItem
+                    key={text}
+                    button
+                    onClick={() => setContent(component)}
+                >
+                    <ListItemText primary={text} />
+                </ListItem>
+            </List>
+        ));
+    };
+    
 
     const sections = [
         {
@@ -71,6 +101,10 @@ export default function UserSettings({ id }: Props) {
         {
             title: Options().title,
             content: Options().content,
+        },
+        {
+            title: AccountSettings().title,
+            content: accountSettingsDialog(),
         },
         {
             title: Information().title,
