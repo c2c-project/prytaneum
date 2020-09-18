@@ -1,4 +1,5 @@
 import * as React from 'react';
+// original code here: https://github.com/sghall/react-compound-slider/blob/master/docs/src/demos/horizontal/components.tsx
 import {
     GetRailProps,
     GetHandleProps,
@@ -103,10 +104,7 @@ export const Handle: React.FC<HandleProps> = ({
 Handle.propTypes = {
     domain: PropTypes.array.isRequired,
     disabled: PropTypes.bool.isRequired,
-    
 };
-
-
 
 // *******************************************************
 // KEYBOARD HANDLE COMPONENT
@@ -146,7 +144,6 @@ export const KeyboardHandle: React.FC<HandleProps> = ({
 KeyboardHandle.propTypes = {
     domain: PropTypes.array.isRequired,
     disabled: PropTypes.bool.isRequired,
-    
 };
 
 // *******************************************************
@@ -189,9 +186,7 @@ export const Track: React.FC<TrackProps> = ({
     );
 };
 Track.propTypes = {
-    disabled: PropTypes.bool.isRequired
-    
-    
+    disabled: PropTypes.bool.isRequired,
 };
 
 // *******************************************************
@@ -233,15 +228,11 @@ export const Tick: React.FC<TickProps> = ({
                     // eslint-disable-next-line react/prop-types
                     left: `${tick.percent}%`,
                 }}
-            >
-                {format(tick.value)}
-            </div>
+            />
         </div>
     );
 };
 Tick.propTypes = {
     count: PropTypes.number.isRequired,
     format: PropTypes.func.isRequired,
-    
-    
 };

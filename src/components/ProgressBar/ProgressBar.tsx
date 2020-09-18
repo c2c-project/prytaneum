@@ -8,9 +8,7 @@ const sliderStyle = {
     touchAction: 'none',
 };
 
-function formatTick() {
-    return '';
-}
+
 
 export interface DataEntry {
     label: string;
@@ -24,7 +22,7 @@ interface Props {
 
 
 
-export default function Example1({ currentVal, timeline }: Props) {
+export default function Progress({ currentVal, timeline }: Props) {
     const maxValue = timeline[timeline.length - 1].value;
     const minValue = timeline[0].value;
     const domain = [minValue, maxValue];
@@ -87,7 +85,7 @@ export default function Example1({ currentVal, timeline }: Props) {
                                     key={tick.id}
                                     tick={tick}
                                     count={ticks.length}
-                                    format={formatTick}
+                                   
                                 />
                             ))}
                         </div>
