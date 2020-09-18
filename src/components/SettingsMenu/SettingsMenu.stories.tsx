@@ -94,9 +94,15 @@ export function SettingsMenu() {
 
     const content2 = () => {
         return dialogData.map(({ text, component }) => (
-            <ListItem key={text} button onClick={() => setContent(component)}>
-                <ListItemText primary={text} />
-            </ListItem>
+            <List>
+                <ListItem
+                    key={text}
+                    button
+                    onClick={() => setContent(component)}
+                >
+                    <ListItemText primary={text} />
+                </ListItem>
+            </List>
         ));
     };
     const info = { title: 'Information', content: content2() };
@@ -110,8 +116,8 @@ export function SettingsMenu() {
                     <Component title={title} content={content} />
                 </div>
             ))}
-            <List>
-                {/* {dialogData.map(({ text, component }) => (
+            {/* <List>
+                {dialogData.map(({ text, component }) => (
                     <ListItem
                         key={text}
                         button
@@ -119,10 +125,10 @@ export function SettingsMenu() {
                     >
                         <ListItemText primary={text} />
                     </ListItem>
-                ))} */}
-            </List>
+                ))}
+            </List> */}
             <Dialog open={open} onClose={() => setContent(null)}>
-                {content2() || <div />}
+                {cont || <div />}
             </Dialog>
         </div>
     );
