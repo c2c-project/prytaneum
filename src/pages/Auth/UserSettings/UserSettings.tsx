@@ -10,6 +10,7 @@ import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
 import SectionList from 'components/SectionList';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
 import Options from 'components/Options';
@@ -74,22 +75,48 @@ export default function UserSettings({ id }: Props) {
         // { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS, Information().handleChange] },
     ];
 
+    const DialogContent1 = () => <h1>dialog 1 content aaaaaaa</h1>;
+    const DialogContent2 = () => <h1>dialog 2 content bbbbbbb</h1>;
+    const DialogContent3 = () => <h1>dialog 3 content ccccccc</h1>;
+    const DialogContent4 = () => <h1>dialog 4 content ddddddd</h1>;
+
+    const dialogData = [
+        { text: 'about', component: DialogContent1 },
+        { text: 'feedback', component: DialogContent2 },
+        { text: 'delete', component: DialogContent3 },
+        { text: 'aboutdevs', component: DialogContent4 },
+    ];
+
+    const content2 = () => {
+        return dialogData.map(({ text, component }) => (
+            <List>
+                <ListItem
+                    key={text}
+                    button
+                    onClick={() => setContent(component)}
+                >
+                    <ListItemText primary={text} />
+                </ListItem>
+            </List>
+        ));
+    };
+
     const sections = [
         {
             title: UserProfile().title,
-            sectionData: UserProfile().sectionData,
+            content: content2()
         },
         {
             title: Options().title,
-            sectionData: Options().sectionData,
+            content: content2(),
         },
         {
             title: AccountSettings().title,
-            sectionData: AccountSettings().sectionData,
+            content: content2(),
         },
         {
             title: Information().title,
-            sectionData: Information().sectionData,
+            content: content2(),
         },
     ];
 
@@ -110,21 +137,27 @@ export default function UserSettings({ id }: Props) {
                         <AppBar back />
                     </Route>
                 </MemoryRouter>
-                <SectionList sections={sections} />
                 {sections.map(({ title, content }) => (
                     <div style={{ height: '100%', top: '0' }}>
                         <SettingsMenu title={title} content={content} />
                     </div>
                 ))}
-                {openStateArr.map(({ s }) => (
-                    <Dialog
-                        open={s[2]}
-                        title={s[0]}
-                        onClose={() => s[4](s[3], false)}
+                {dialogData.map(({ text, component }) => (
+                    <ListItem
+                        key={text}
+                        button
+                        onClick={() => setContent(component)}
                     >
-                        {s[1]}
-                    </Dialog>
+                        <ListItemText primary={text} />
+                    </ListItem>
                 ))}
+                {/* <Dialog
+                    open={s[2]}
+                    title={s[0]}
+                    onClose={() => setContent(null)}
+                >
+                    {s[1] || <div />}
+                </Dialog> */}
             </Paper>
         </Container>
     );
