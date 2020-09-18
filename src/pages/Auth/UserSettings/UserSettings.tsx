@@ -15,6 +15,7 @@ import UserProfile from 'components/UserProfile';
 import Options from 'components/Options';
 import AccountSettings from 'components/AccountSettings';
 import Information from 'components/Information';
+import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,13 +36,13 @@ interface Props {
 
 export default function UserSettings({ id }: Props) {
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [content, setContent] = React.useState<JSX.Element | null>(null);
 
-    // const handleChange = (
-    //     e: React.Dispatch<React.SetStateAction<boolean>>,
-    //     b: boolean
-    // ) => {
-    //     e(b);
-    // };
+    React.useEffect(() => {
+        if (content !== null) setOpen(true);
+        if (content === null) setOpen(false);
+    }, [content]);
 
     const openStateArr: {
         s: [
@@ -78,18 +79,18 @@ export default function UserSettings({ id }: Props) {
             title: UserProfile().title,
             sectionData: UserProfile().sectionData,
         },
-        // {
-        //     title: Options().title,
-        //     sectionData: Options().sectionData,
-        // },
-        // {
-        //     title: AccountSettings().title,
-        //     sectionData: AccountSettings().sectionData,
-        // },
-        // {
-        //     title: Information().title,
-        //     sectionData: Information().sectionData,
-        // },
+        {
+            title: Options().title,
+            sectionData: Options().sectionData,
+        },
+        {
+            title: AccountSettings().title,
+            sectionData: AccountSettings().sectionData,
+        },
+        {
+            title: Information().title,
+            sectionData: Information().sectionData,
+        },
     ];
 
     return (
@@ -110,6 +111,11 @@ export default function UserSettings({ id }: Props) {
                     </Route>
                 </MemoryRouter>
                 <SectionList sections={sections} />
+                {sections.map(({ title, content }) => (
+                    <div style={{ height: '100%', top: '0' }}>
+                        <SettingsMenu title={title} content={content} />
+                    </div>
+                ))}
                 {openStateArr.map(({ s }) => (
                     <Dialog
                         open={s[2]}
