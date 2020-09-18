@@ -107,6 +107,7 @@ Handle.propTypes = {
 };
 
 
+
 // *******************************************************
 // KEYBOARD HANDLE COMPONENT
 // Uses a button to allow keyboard events
