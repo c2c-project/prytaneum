@@ -1,18 +1,9 @@
-// import React from 'react';
-// import { MemoryRouter, Route } from 'react-router-dom';
+import React from 'react';
 
-// import Page from '.';
+import Page from '.';
 
-// export default { title: 'Pages/Auth' };
+export default { title: 'Pages/Auth' };
 
-// export function ForgotPassReset() {
-//     return (
-//         <MemoryRouter initialEntries={['/im a token']}>
-//             <Route path='/:token'>
-//                 <Page />
-//             </Route>
-//         </MemoryRouter>
-//     );
-// }
-
-export default { title: 'TODO' };
+export function ForgotPassReset() {
+    return <Page />;
+}

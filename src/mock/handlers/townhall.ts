@@ -1,11 +1,11 @@
 import { rest } from 'msw';
 import faker from 'faker';
-import * as TownHallTypes from 'domains/Townhall/types';
+import * as TownhallTypes from 'domains/Townhall/types';
 
 const recent = faker.date.recent();
 const future = faker.date.future();
 
-const makeTownhall = () => ({
+const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     speaker: {
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -17,10 +17,10 @@ const makeTownhall = () => ({
     picture: faker.image.imageUrl(),
     readingMaterials: '',
     date: faker.date.between(recent, future),
-    alignment: faker.company.companyName(),
+    url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
 });
 
-const makeTownHalls = (amount: number) => {
+const makeTownHalls = (amount: number): TownhallTypes.Townhall[] => {
     const list = [];
     for (let i = 0; i < amount; i += 1) {
         list.push(makeTownhall());
@@ -31,7 +31,7 @@ const makeTownHalls = (amount: number) => {
 export default [
     rest.post('/api/townhalls/create', (req, res, ctx) => {
         const { form } = req.body as {
-            form: TownHallTypes.TownhallForm;
+            form: TownhallTypes.TownhallForm;
         };
         if (form.speaker === 'fail') {
             return res(ctx.status(400));
@@ -42,7 +42,7 @@ export default [
     rest.post('/api/townhalls/update', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { form, townhallId } = req.body as {
-            form: TownHallTypes.TownhallForm;
+            form: TownhallTypes.TownhallForm;
             townhallId: string;
         };
         if (form.speaker === 'fail') {
@@ -81,7 +81,7 @@ export default [
     rest.post('/api/townhalls/:_id/create-question', (req, res, ctx) => {
         const { id } = req.params as { id: string };
         const { form } = req.body as {
-            form: TownHallTypes.TownhallQuestionForm;
+            form: TownhallTypes.TownhallQuestionForm;
         };
 
         if (form.question === 'fail' || id === '0') {

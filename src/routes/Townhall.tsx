@@ -2,10 +2,9 @@ import React from 'react';
 
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
+import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 
 import { addRoutes } from './utils';
-
-const TownhallContext = React.createContext({});
 
 const Invite = () => {
     return <div />;
@@ -31,14 +30,14 @@ addRoutes([
                     const child = ctx.next();
                     if (!child)
                         return (
-                            <TownhallContext.Provider value={{}}>
+                            <TownhallProvider townhallId={townhallId}>
                                 <TownhallProfile townhallId={townhallId} />
-                            </TownhallContext.Provider>
+                            </TownhallProvider>
                         );
                     return (
-                        <TownhallContext.Provider value={{}}>
+                        <TownhallProvider townhallId={townhallId}>
                             {child}
-                        </TownhallContext.Provider>
+                        </TownhallProvider>
                     );
                 },
                 children: [
@@ -54,7 +53,19 @@ addRoutes([
                             return <Settings />;
                         },
                     },
+                    {
+                        path: '/update',
+                        action: (ctx) => {
+                            return <div />;
+                        },
+                    },
                 ],
+            },
+            {
+                path: '/create',
+                action: () => {
+                    return <div />;
+                },
             },
         ],
     },

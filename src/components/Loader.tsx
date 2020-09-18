@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,10 +10,13 @@ const useStyles = makeStyles({
         display: 'flex',
         flex: 1,
         justifyContent: 'center',
-        paddingTop: '35vh',
     },
     loader: {
         position: 'absolute',
+    },
+    container: {
+        position: 'relative',
+        top: '35%',
     },
 });
 
@@ -25,14 +27,9 @@ const Loader = () => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            {/* <Grid
-                container
-                style={{ height: '100%' }}
-                alignItems='center'
-                justify='center'
-            > */}
-            <CircularProgress className={classes.loader} />
-            {/* </Grid> */}
+            <div className={classes.container}>
+                <CircularProgress className={classes.loader} />
+            </div>
         </div>
     );
 };

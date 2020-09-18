@@ -1,6 +1,6 @@
 // import React from 'react';
-// import { MemoryRouter, Route, Switch, useHistory } from 'react-router-dom';
 
+// import history from 'utils/history';
 // import Fixtures, { Fixture } from 'mock/Fixtures';
 // import Page from '.';
 
@@ -67,4 +67,6 @@
 // }
 
 // VerifyEmail.args = { outcome: options.success };
-export default { title: 'TODO' };
+// FIXME: with the new routing/history here
+
+export default { title: 'FIXME' };

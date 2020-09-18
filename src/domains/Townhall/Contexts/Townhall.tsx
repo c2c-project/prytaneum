@@ -1,64 +1,60 @@
-// import React from 'react';
-// import { useParams } from 'react-router-dom';
+import React from 'react';
 
-// import useEndpoint from 'hooks/useEndpoint';
-// import Loader from 'components/Loader';
-// import { getTownhall } from '../api';
-// import { Townhall } from '../types';
+import useEndpoint from 'hooks/useEndpoint';
+import Loader from 'components/Loader';
+import { getTownhall } from '../api';
+import { Townhall } from '../types';
 
-// interface Props {
-//     // TODO: add defaults here
-//     // eslint-disable-next-line react/require-default-props
-//     value?: Townhall;
-//     children: JSX.Element | JSX.Element[];
-// }
+interface Props {
+    // TODO: add defaults here
+    value?: Townhall; // we may not need this?
+    children: JSX.Element | JSX.Element[];
+    townhallId: string;
+}
 
-// interface Params {
-//     townhallId: string;
-// }
+export const TownhallContext = React.createContext<Townhall>({
+    _id: '',
+    speaker: {
+        name: '',
+        party: '',
+        territory: '',
+    },
+    moderator: '',
+    topic: '',
+    picture: '',
+    readingMaterials: '',
+    date: new Date(),
+    url: '',
+});
 
-// export const TownhallContext = React.createContext<Townhall>({
-//     _id: '',
-//     speaker: {
-//         name: '',
-//         party: '',
-//         territory: '',
-//     },
-//     moderator: '',
-//     topic: '',
-//     picture: '',
-//     readingMaterials: '',
-//     date: new Date(),
-//     url: '',
-// });
+export default function TownhallProvider({
+    value,
+    children,
+    townhallId,
+}: Props) {
+    const [townhall, setTownhall] = React.useState(value);
+    const [get] = useEndpoint(() => getTownhall(townhallId), {
+        onSuccess: (res) => {
+            const { townhall: fetchedTownhall } = res.data;
+            setTownhall(fetchedTownhall);
+        },
+    });
 
-// export default function TownhallProvider({ value, children }: Props) {
-//     const { townhallId } = useParams();
-//     const [townhall, setTownhall] = React.useState(value);
-//     const [get] = useEndpoint(() => getTownhall(townhallId), {
-//         onSuccess: (res) => {
-//             const { townhall: fetchedTownhall } = res.data;
-//             setTownhall(fetchedTownhall);
-//         },
-//     });
+    React.useEffect(() => {
+        if (!townhall) {
+            get();
+        }
+    }, []);
 
-//     React.useEffect(() => {
-//         if (!townhall) {
-//             get();
-//         }
-//     }, []);
+    return !townhall ? (
+        <Loader />
+    ) : (
+        <TownhallContext.Provider value={townhall}>
+            {children}
+        </TownhallContext.Provider>
+    );
+}
 
-//     return !townhall ? (
-//         <Loader />
-//     ) : (
-//         <TownhallContext.Provider value={townhall}>
-//             {children}
-//         </TownhallContext.Provider>
-//     );
-// }
-
-// TownhallProvider.defaultProps = {
-//     value: {},
-// };
-
-export default {};
+TownhallProvider.defaultProps = {
+    value: undefined,
+};

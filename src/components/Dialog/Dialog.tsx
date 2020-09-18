@@ -54,7 +54,7 @@ export default function Dialog(props: Props) {
                 onExit={onExit}
                 TransitionComponent={Transition}
             >
-                <AppBar className={classes.appBar} position='absolute'>
+                <AppBar className={classes.appBar}>
                     <Toolbar>
                         <IconButton
                             edge='start'

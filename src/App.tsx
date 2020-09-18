@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default function App() {
+    // TODO: update when user fetching/logging in is figured out
     const [user, setUser] = React.useState<User | null>(null);
     return (
         <ThemeProvider theme={theme}>

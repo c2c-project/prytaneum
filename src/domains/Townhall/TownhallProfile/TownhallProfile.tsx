@@ -17,12 +17,9 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import ForumIcon from '@material-ui/icons/ForumOutlined';
 
-import useEndpoint from 'hooks/useEndpoint';
 import { formatDate } from 'utils/format';
-import Loader from 'components/Loader';
 
-import { getTownhall } from '../api';
-import { Townhall } from '../types';
+import { TownhallContext } from '../Contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,25 +48,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface Props {
-    townhallId: string;
-}
-
-export default function TownhallProfile({ townhallId }: Props) {
-    const [townhall, setTownhall] = React.useState<Townhall | null>(null);
+export default function TownhallProfile() {
+    const townhall = React.useContext(TownhallContext);
     const classes = useStyles();
-    const [sendRequest, loading] = useEndpoint<{
-        townhall: Townhall;
-    }>(() => getTownhall(townhallId), {
-        onSuccess: (response) => {
-            const { data } = response;
-            setTownhall(data.townhall);
-        },
-    });
-    React.useEffect(sendRequest, []);
-    if (loading || !townhall) {
-        return <Loader />;
-    }
 
     const Title = () => (
         <Grid container spacing={0} item xs={12}>
