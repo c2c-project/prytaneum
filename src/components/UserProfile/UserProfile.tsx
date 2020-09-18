@@ -1,10 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core';
+// import Avatar from '@material-ui/core';
 
 export default function UserProfile() {
-    const image = 'https://i.imgur.com/3beQH5s.jpeg';
+    // const image = 'https://i.imgur.com/3beQH5s.jpeg';
     return {
         title: 'fName lName',
         content: (

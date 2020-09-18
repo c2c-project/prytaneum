@@ -13,7 +13,7 @@ import AppBar from 'layout/AppBar';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
-// import Options from 'components/Options';
+import Options from 'components/Options';
 // import AccountSettings from 'components/AccountSettings';
 import Information from 'components/Information';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
@@ -67,6 +67,10 @@ export default function UserSettings({ id }: Props) {
         {
             title: UserProfile().title,
             content: UserProfile().content,
+        },
+        {
+            title: Options().title,
+            content: Options().content,
         },
         {
             title: Information().title,
