@@ -33,9 +33,9 @@ export default function UserProfile() {
                         fullWidth
                         variant='outlined'
                         type='email'
-                        value='push to db for password'
+                        value='push to db for email'
                         onChange={() => {}}
-                        label='email'
+                        label='Email'
                         spellCheck={false}
                         autoComplete='off'
                         autoCorrect='off'

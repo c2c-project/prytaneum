@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -46,25 +47,25 @@ export default function UserSettings({ id }: Props) {
     }, [cont]);
 
     const dialogData = [
-       // { text: Options().title, component: Options().dialogData },
+        { text: Options().title, component: Options().dialogData },
         { text: AccountSettings().title, component: AccountSettings().dialogData },
         { text: Information().title, component: Information().dialogData },
 
     ];
 
-    // const optionsDialog = () => {
-    //     return dialogData[0].component.map(({ text, component }) => (
-    //         <List>
-    //             <ListItem
-    //                 key={text}
-    //                 button
-    //                 onClick={() => setContent(component)}
-    //             >
-    //                 <ListItemText primary={text} />
-    //             </ListItem>
-    //         </List>
-    //     ));
-    // };
+    const optionsDialog = () => {
+        return dialogData[0].component.map(({ text, component }) => (
+            <List>
+                <ListItem
+                    key={text}
+                    button
+                    onClick={() => setContent(component)}
+                >
+                    <ListItemText primary={text} />
+                </ListItem>
+            </List>
+        ));
+    };
     const accountSettingsDialog = () => {
         return dialogData[1].component.map(({ text, component }) => (
             <List>
@@ -100,7 +101,7 @@ export default function UserSettings({ id }: Props) {
         },
         {
             title: Options().title,
-            content: Options().content,
+            content: optionsDialog(),
         },
         {
             title: AccountSettings().title,

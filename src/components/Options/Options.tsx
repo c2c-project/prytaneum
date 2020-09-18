@@ -6,24 +6,38 @@ import { ListItem } from '@material-ui/core';
 export default function Options() {
     return {
         title: 'Options',
-        content: (
-            <Grid component='span' container spacing={2} alignContent='center'>
-                <Grid component='span' item xs={12}>
-                    <Button component='span' onClick={() => {}}>
-                        Appear anonymous:
-                    </Button>
-                </Grid>
-                <Grid component='span' item xs={12}>
-                    <Button component='span' onClick={() => {}}>
-                        Notify me about upcoming Townhalls:
-                    </Button>
-                </Grid>
-                <Grid component='span' item xs={12}>
-                    <ListItem button hidden={false} onClick={() => {}}>
-                        Appearance
-                    </ListItem>
-                </Grid>
-            </Grid>
-        ),
+        dialogData: [
+            {
+                text: 'Appear Anonymous',
+                component: (
+                    <span> 
+                    {/* TODO: dialog text depends on if they are already anonymous */}
+                        You will now appear anonymous.
+                    </span>
+                ),
+            },
+            {
+                text: 'Notifications',
+                component: (
+                    <span>
+                        <button
+                            type='button'
+                            onClick={() => {}} 
+                        >
+                            Notify me about upcoming Townhalls
+                        </button>
+                    </span>
+                ),
+            },
+            {
+                text: 'Appearance',
+                component: (
+                    <span>
+                        Dark mode
+                        Color Scheme
+                    </span>
+                ),
+            },
+        ],
     };
 }

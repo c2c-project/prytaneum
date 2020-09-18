@@ -19,9 +19,9 @@ export default {
 const makeDatum = (): Datum => ({
     image: 'https://i.imgur.com/3beQH5s.jpeg',
     title: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    subtitle: <LoginForm
-    onSuccess={() => {}} // TODO: CHANGE THIS
-/>,
+    subtitle: (
+        `${faker.lorem.words(10)}`
+    ),
 });
 
 const makeSectionData = (num: number): Datum[] => {

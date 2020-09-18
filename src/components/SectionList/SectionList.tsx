@@ -16,7 +16,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 export interface Datum {
     image?: string;
     title: string;
-    subtitle: string | JSX.Element | JSX.Element[];
+    subtitle: string;
 }
 
 export interface Section {

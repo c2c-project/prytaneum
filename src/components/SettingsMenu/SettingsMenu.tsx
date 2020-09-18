@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     },
     titleContainer: {
         position: 'sticky',
-        padding: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px 0`,
+        padding: `${theme.spacing(2)}px 0 ${theme.spacing(2)}px 0`,
         marginLeft: theme.spacing(1),
     },
 }));
