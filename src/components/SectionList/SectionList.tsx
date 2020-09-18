@@ -22,13 +22,6 @@ export interface Datum {
 export interface Section {
     title: string;
     sectionData: Datum[];
-    // dialogData: added for user settings page
-    dialogData?: [
-        string,
-        JSX.Element,
-        boolean,
-        React.Dispatch<React.SetStateAction<boolean>>
-    ];
 }
 
 interface Props {
