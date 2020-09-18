@@ -104,19 +104,19 @@ export default function UserSettings({ id }: Props) {
     const sections = [
         {
             title: UserProfile().title,
-            content: content2(),
+            content: UserProfile().content,
         },
         {
             title: Options().title,
-            content: content2(),
+            content: Options().content,
         },
         {
             title: AccountSettings().title,
-            content: content2(),
+            content: AccountSettings().content,
         },
         {
             title: Information().title,
-            content: content2(),
+            content: Information().content,
         },
     ];
 
@@ -154,13 +154,6 @@ export default function UserSettings({ id }: Props) {
                 <Dialog open={open} onClose={() => setContent(null)}>
                     {cont || <div />}
                 </Dialog>
-                {/* <Dialog
-                    open={s[2]}
-                    title={s[0]}
-                    onClose={() => setContent(null)}
-                >
-                    {s[1] || <div />}
-                </Dialog> */}
             </Paper>
         </Container>
     );
