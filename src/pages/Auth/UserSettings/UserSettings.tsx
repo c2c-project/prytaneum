@@ -9,12 +9,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
-import SectionList from 'components/SectionList';
+// import SectionList from 'components/SectionList';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
-import UserProfile from 'components/UserProfile';
-import Options from 'components/Options';
-import AccountSettings from 'components/AccountSettings';
+// import UserProfile from 'components/UserProfile';
+// import Options from 'components/Options';
+// import AccountSettings from 'components/AccountSettings';
 import Information from 'components/Information';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
 
@@ -45,57 +45,19 @@ export default function UserSettings({ id }: Props) {
         if (cont === null) setOpen(false);
     }, [cont]);
 
-    // const openStateArr: {
-    //     s: [
-    //         string,
-    //         JSX.Element,
-    //         boolean,
-    //         React.Dispatch<React.SetStateAction<boolean>>,
-    //         (
-    //             e: React.Dispatch<React.SetStateAction<boolean>>,
-    //             b: boolean
-    //         ) => void
-    //     ];
-    // }[] = [
-    // { s: Options().dialogData[0] },
-    // { s: AccountSettings().dialogData[0] },
-    // { s: AccountSettings().dialogData[1] },
-    // { s: AccountSettings().dialogData[2] },
-    // {
-    //     s: [
-    //         Information().dialogData[0][0],
-    //         Information().dialogData[0][1],
-    //         Information().dialogData[0][2],
-    //         Information().dialogData[0][3],
-    //         Information().hc,
-    //     ],
-    // },
-    // { s: [Information().dialogData[1][0], Information().dialogData[1][1], openAboutUs, setOpenAboutUs, Information().handleChange] },
-    // { s: [Information().dialogData[2][0], Information().dialogData[2][1], openPrivacyPolicy, setOpenPrivacyPolicy, Information().handleChange] },
-    // { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS, Information().handleChange] },
-    // ];
-
-    const DialogContent1 = () => <h1>dialog 1 content aaaaaaa</h1>;
-    const DialogContent2 = () => <h1>dialog 2 content bbbbbbb</h1>;
-    const DialogContent3 = () => <h1>dialog 3 content ccccccc</h1>;
-    const DialogContent4 = () => <h1>dialog 4 content ddddddd</h1>;
-
     const dialogData = [
-        { text: 'about', component: DialogContent1 },
-        { text: 'feedback', component: DialogContent2 },
-        { text: 'delete', component: DialogContent3 },
-        { text: 'aboutdevs', component: DialogContent4 },
+        { text: Information().title, component: Information().dialogData },
     ];
 
-    const content2 = () => {
-        return dialogData.map(({ text, component }) => (
+    const infoDialog = () => {
+        return dialogData[0].component.map(({ title, component }) => (
             <List>
                 <ListItem
-                    key={text}
+                    key={title}
                     button
                     onClick={() => setContent(component)}
                 >
-                    <ListItemText primary={text} />
+                    <ListItemText primary={title} />
                 </ListItem>
             </List>
         ));
@@ -103,20 +65,8 @@ export default function UserSettings({ id }: Props) {
 
     const sections = [
         {
-            title: UserProfile().title,
-            content: UserProfile().content,
-        },
-        {
-            title: Options().title,
-            content: Options().content,
-        },
-        {
-            title: AccountSettings().title,
-            content: AccountSettings().content,
-        },
-        {
             title: Information().title,
-            content: Information().content,
+            content: infoDialog(),
         },
     ];
 
@@ -142,15 +92,6 @@ export default function UserSettings({ id }: Props) {
                         <SettingsMenu title={title} content={content} />
                     </div>
                 ))}
-                {/* {dialogData.map(({ text, component }) => (
-                    <ListItem
-                        key={text}
-                        button
-                        onClick={() => setContent(component)}
-                    >
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))} */}
                 <Dialog open={open} onClose={() => setContent(null)}>
                     {cont || <div />}
                 </Dialog>
@@ -175,3 +116,60 @@ UserSettings.defaultProps = {
     - [DONE] fix eslint errors
     - [DONE, bc we got rid of button in SectionList] make own list component
 */
+/* {dialogData.map(({ text, component }) => (
+                    <ListItem
+                        key={text}
+                        button
+                        onClick={() => setContent(component)}
+                    >
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))} */
+
+// const openStateArr: {
+//     s: [
+//         string,
+//         JSX.Element,
+//         boolean,
+//         React.Dispatch<React.SetStateAction<boolean>>,
+//         (
+//             e: React.Dispatch<React.SetStateAction<boolean>>,
+//             b: boolean
+//         ) => void
+//     ];
+// }[] = [
+// { s: Options().dialogData[0] },
+// { s: AccountSettings().dialogData[0] },
+// { s: AccountSettings().dialogData[1] },
+// { s: AccountSettings().dialogData[2] },
+// {
+//     s: [
+//         Information().dialogData[0][0],
+//         Information().dialogData[0][1],
+//         Information().dialogData[0][2],
+//         Information().dialogData[0][3],
+//         Information().hc,
+//     ],
+// },
+// { s: [Information().dialogData[1][0], Information().dialogData[1][1], openAboutUs, setOpenAboutUs, Information().handleChange] },
+// { s: [Information().dialogData[2][0], Information().dialogData[2][1], openPrivacyPolicy, setOpenPrivacyPolicy, Information().handleChange] },
+// { s: [Information().dialogData[3][0], Information().dialogData[3][1], openTOS, setOpenTOS, Information().handleChange] },
+// ];
+
+// const DialogContent1 = () => <h1>dialog 1 content aaaaaaa</h1>;
+// const DialogContent2 = () => <h1>dialog 2 content bbbbbbb</h1>;
+// const DialogContent3 = () => <h1>dialog 3 content ccccccc</h1>;
+// const DialogContent4 = () => <h1>dialog 4 content ddddddd</h1>;
+
+// {
+//     title: UserProfile().title,
+//     content: UserProfile().content,
+// },
+// {
+//     title: Options().title,
+//     content: Options().content,
+// },
+// {
+//     title: AccountSettings().title,
+//     content: AccountSettings().content,
+// },
