@@ -12,7 +12,7 @@ import AppBar from 'layout/AppBar';
 // import SectionList from 'components/SectionList';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
-// import UserProfile from 'components/UserProfile';
+import UserProfile from 'components/UserProfile';
 // import Options from 'components/Options';
 // import AccountSettings from 'components/AccountSettings';
 import Information from 'components/Information';
@@ -64,6 +64,10 @@ export default function UserSettings({ id }: Props) {
     };
 
     const sections = [
+        {
+            title: UserProfile().title,
+            content: UserProfile().content,
+        },
         {
             title: Information().title,
             content: infoDialog(),
