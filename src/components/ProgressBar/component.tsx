@@ -35,7 +35,7 @@ interface SliderRailProps {
 }
 
 // eslint-disable-next-line react/prop-types
-export const SliderRail: React.FC<SliderRailProps> = ({ getRailProps }) => {
+export const SliderRail = ({ getRailProps }: SliderRailProps) => {
     return (
         <>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -55,14 +55,14 @@ interface HandleProps {
     disabled?: boolean;
 }
 
-export const Handle: React.FC<HandleProps> = ({
+export const Handle = ({
     domain: [min, max],
     // eslint-disable-next-line react/prop-types
     handle: { id, value, percent },
     disabled = false,
     // eslint-disable-next-line react/prop-types
     getHandleProps,
-}) => {
+}: HandleProps) => {
     return (
         <>
             <div
@@ -104,21 +104,25 @@ export const Handle: React.FC<HandleProps> = ({
 
 Handle.propTypes = {
     domain: PropTypes.array.isRequired,
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+};
+
+Handle.defaultProps = {
+    disabled: false,
 };
 
 // *******************************************************
 // KEYBOARD HANDLE COMPONENT
 // Uses a button to allow keyboard events
 // *******************************************************
-export const KeyboardHandle: React.FC<HandleProps> = ({
+export const KeyboardHandle = ({
     domain: [min, max],
     // eslint-disable-next-line react/prop-types
     handle: { id, value, percent },
     disabled = false,
     // eslint-disable-next-line react/prop-types
     getHandleProps,
-}) => {
+}: HandleProps) => {
     return (
         // eslint-disable-next-line react/button-has-type
         <button
@@ -144,7 +148,11 @@ export const KeyboardHandle: React.FC<HandleProps> = ({
 };
 KeyboardHandle.propTypes = {
     domain: PropTypes.array.isRequired,
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+};
+
+KeyboardHandle.defaultProps = {
+    disabled: false,
 };
 
 // *******************************************************
@@ -157,7 +165,7 @@ interface TrackProps {
     disabled?: boolean;
 }
 
-export const Track: React.FC<TrackProps> = ({
+export const Track = ({
     // eslint-disable-next-line react/prop-types
     source,
     // eslint-disable-next-line react/prop-types
@@ -165,7 +173,7 @@ export const Track: React.FC<TrackProps> = ({
     // eslint-disable-next-line react/prop-types
     getTrackProps,
     disabled = false,
-}) => {
+}: TrackProps) => {
     return (
         <div
             style={{
@@ -187,7 +195,11 @@ export const Track: React.FC<TrackProps> = ({
     );
 };
 Track.propTypes = {
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+};
+
+Track.defaultProps = {
+    disabled: false,
 };
 
 // *******************************************************
@@ -199,12 +211,12 @@ interface TickProps {
     format?: (val: number) => string;
 }
 
-export const Tick: React.FC<TickProps> = ({
+export const Tick = ({
     // eslint-disable-next-line react/prop-types
     tick,
     count,
-    format = (d) => d,
-}) => {
+    format = (num) => num.toString(),
+}: TickProps) => {
     return (
         <div>
             <div
@@ -235,5 +247,9 @@ export const Tick: React.FC<TickProps> = ({
 };
 Tick.propTypes = {
     count: PropTypes.number.isRequired,
-    format: PropTypes.func.isRequired,
+    format: PropTypes.func,
+};
+
+Tick.defaultProps = {
+    format: undefined,
 };

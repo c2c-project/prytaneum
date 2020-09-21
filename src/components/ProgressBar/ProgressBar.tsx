@@ -28,6 +28,7 @@ export default function Progress({ currentVal, timeline }: Props) {
     return (
         <div style={{ height: 120, width: '100%' }}>
             <p>
+                {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
                 Current Label:{' '}
                 {timeline.filter((el) => el.value === currentVal)[0].label}
             </p>
@@ -49,7 +50,6 @@ export default function Progress({ currentVal, timeline }: Props) {
                         <div className='slider-handles'>
                             {handles.map((handle) => (
                                 <Handle
-                                    disabled={false}
                                     key={handle.id}
                                     handle={handle}
                                     domain={domain}
@@ -64,7 +64,6 @@ export default function Progress({ currentVal, timeline }: Props) {
                         <div className='slider-tracks'>
                             {tracks.map(({ id, source, target }) => (
                                 <Track
-                                    disabled={false}
                                     key={id}
                                     source={source}
                                     target={target}
