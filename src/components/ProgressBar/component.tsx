@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 // RAIL
 // *******************************************************
 const railOuterStyle = {
-    position: 'absolute',
+    position: 'absolute' as const,
     width: '100%',
     height: 42,
     transform: 'translate(0%, -50%)',
@@ -38,6 +38,7 @@ interface SliderRailProps {
 export const SliderRail: React.FC<SliderRailProps> = ({ getRailProps }) => {
     return (
         <>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <div style={railOuterStyle} {...getRailProps()} />
             <div style={railInnerStyle} />
         </>
