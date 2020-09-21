@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
@@ -8,32 +7,34 @@ import { Townhall } from '../types';
 
 interface Props {
     // TODO: add defaults here
-    // eslint-disable-next-line react/require-default-props
-    value?: Townhall;
+    value?: Townhall; // we may not need this?
     children: JSX.Element | JSX.Element[];
-}
-
-interface Params {
     townhallId: string;
 }
 
 export const TownhallContext = React.createContext<Townhall>({
     _id: '',
-    speaker: {
-        name: '',
-        party: '',
-        territory: '',
+    form: {
+        speaker: {
+            name: '',
+            party: '',
+            territory: '',
+        },
+        moderator: '',
+        topic: '',
+        picture: '',
+        readingMaterials: '',
+        date: new Date(),
+        url: '',
+        description: '',
     },
-    moderator: '',
-    topic: '',
-    picture: '',
-    readingMaterials: '',
-    date: new Date(),
-    url: '',
 });
 
-export default function TownhallProvider({ value, children }: Props) {
-    const { townhallId } = useParams<Params>();
+export default function TownhallProvider({
+    value,
+    children,
+    townhallId,
+}: Props) {
     const [townhall, setTownhall] = React.useState(value);
     const [get] = useEndpoint(() => getTownhall(townhallId), {
         onSuccess: (res) => {
@@ -49,7 +50,9 @@ export default function TownhallProvider({ value, children }: Props) {
     }, []);
 
     return !townhall ? (
-        <Loader />
+        <div style={{ height: '500px' }}>
+            <Loader />
+        </div>
     ) : (
         <TownhallContext.Provider value={townhall}>
             {children}
@@ -58,5 +61,5 @@ export default function TownhallProvider({ value, children }: Props) {
 }
 
 TownhallProvider.defaultProps = {
-    value: {},
+    value: undefined,
 };

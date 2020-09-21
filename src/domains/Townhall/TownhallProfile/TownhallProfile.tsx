@@ -16,14 +16,10 @@ import {
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import ForumIcon from '@material-ui/icons/ForumOutlined';
-import { useParams } from 'react-router-dom';
 
-import useEndpoint from 'hooks/useEndpoint';
 import { formatDate } from 'utils/format';
-import Loader from 'components/Loader';
 
-import { getTownhall } from '../api';
-import { Townhall } from '../types';
+import { TownhallContext } from '../Contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,36 +48,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TownhallPre() {
-    const [townhall, setTownhall] = React.useState<Townhall | null>(
-        null
-    );
+export default function TownhallProfile() {
+    const { form } = React.useContext(TownhallContext);
     const classes = useStyles();
-    const { townhallId } = useParams<{ townhallId: string }>();
-    const [sendRequest, loading] = useEndpoint<{
-        townhall: Townhall;
-    }>(() => getTownhall(townhallId), {
-        onSuccess: (response) => {
-            const { data } = response;
-            setTownhall(data.townhall);
-        },
-    });
-    React.useEffect(sendRequest, []);
-    if (loading || !townhall) {
-        return <Loader />;
-    }
+
     const Title = () => (
         <Grid container spacing={0} item xs={12}>
             <Grid item xs={12}>
-                <Typography variant='h5'>{townhall.speaker.name}</Typography>
+                <Typography variant='h5'>{form.speaker.name}</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant='body2' color='textSecondary'>
-                    {`${townhall.speaker.party}, ${townhall.speaker.territory}`}
+                    {`${form.speaker.party}, ${form.speaker.territory}`}
                 </Typography>
             </Grid>
         </Grid>
     );
+
     const FavoriteFab = () => (
         <Grid container>
             <Grid
@@ -99,6 +82,7 @@ export default function TownhallPre() {
             </Grid>
         </Grid>
     );
+
     const Info = () => (
         <Grid container>
             <Grid item xs={12}>
@@ -110,7 +94,7 @@ export default function TownhallPre() {
                         <ListItemIcon>
                             <ForumIcon style={{ fontSize: 30 }} />
                         </ListItemIcon>
-                        <ListItemText primary={townhall.topic} />
+                        <ListItemText primary={form.topic} />
                     </ListItem>
                     <ListItem disableGutters>
                         <ListItemIcon>
@@ -118,7 +102,7 @@ export default function TownhallPre() {
                         </ListItemIcon>
                         <ListItemText
                             primary={formatDate(
-                                townhall.date,
+                                form.date,
                                 'MMMM do, yyyy p'
                             )}
                         />
@@ -127,12 +111,13 @@ export default function TownhallPre() {
             </Grid>
         </Grid>
     );
+
     return (
         <Grid container className={classes.root} spacing={0}>
-            <Grid item xs='auto' className={classes.color}>
+            <Grid item xs={12} className={classes.color}>
                 <img
                     className={classes.picture}
-                    src={townhall.picture}
+                    src={form.picture}
                     alt='Member of Congress'
                 />
             </Grid>

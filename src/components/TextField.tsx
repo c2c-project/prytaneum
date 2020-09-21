@@ -18,8 +18,11 @@ export default function TextField(props: TextFieldProps & { label: string }) {
             variant='outlined'
             fullWidth
             id={labelToId(passThroughProps.label)}
-            {...passThroughProps}
             autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            spellCheck={false}
+            {...passThroughProps}
         >
             {children}
         </MUITextField>

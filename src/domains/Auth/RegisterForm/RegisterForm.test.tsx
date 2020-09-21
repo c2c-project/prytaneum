@@ -67,7 +67,6 @@ describe('RegisterForm', () => {
             .spyOn(API, 'register')
             .mockResolvedValue(resolvedVal as AxiosResponse);
         const form = {
-            username: 'username',
             email: 'email@email.com',
             password: 'password',
             confirmPassword: 'password',
@@ -81,7 +80,6 @@ describe('RegisterForm', () => {
             );
         });
 
-        const usernameNode = document.querySelector('#username') as HTMLElement;
         const emailNode = document.querySelector('#email') as HTMLElement;
         const passwordNode = document.querySelector('#password') as HTMLElement;
         const confirmNode = document.querySelector(
@@ -90,9 +88,6 @@ describe('RegisterForm', () => {
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(usernameNode, {
-                target: ({ value: form.username } as unknown) as EventTarget,
-            });
             ReactTestUtils.Simulate.change(emailNode, {
                 target: ({ value: form.email } as unknown) as EventTarget,
             });
@@ -124,7 +119,6 @@ describe('RegisterForm', () => {
         const rejectedVal = { status: 500 };
         const spy = jest.spyOn(API, 'register').mockRejectedValue(rejectedVal);
         const form = {
-            username: 'username',
             email: 'email@email.com',
             password: 'password',
             confirmPassword: 'password',
@@ -138,7 +132,6 @@ describe('RegisterForm', () => {
             );
         });
 
-        const usernameNode = document.querySelector('#username') as HTMLElement;
         const emailNode = document.querySelector('#email') as HTMLElement;
         const passwordNode = document.querySelector('#password') as HTMLElement;
         const confirmNode = document.querySelector(
@@ -147,9 +140,6 @@ describe('RegisterForm', () => {
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(usernameNode, {
-                target: ({ value: form.username } as unknown) as EventTarget,
-            });
             ReactTestUtils.Simulate.change(emailNode, {
                 target: ({ value: form.email } as unknown) as EventTarget,
             });

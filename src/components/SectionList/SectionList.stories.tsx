@@ -13,6 +13,7 @@ const makeDatum = (): Datum => ({
     image: 'https://i.imgur.com/3beQH5s.jpeg',
     title: `${faker.name.firstName()} ${faker.name.lastName()}`,
     subtitle: faker.lorem.words(10),
+    href: `/townhalls/${faker.random.alphaNumeric()}`,
 });
 
 const makeSectionData = (num: number): Datum[] => {
