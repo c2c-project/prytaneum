@@ -13,14 +13,14 @@ function formatSections(list: Townhall[]): Section[] {
         [index: string]: Datum[];
     }
     const intermediateVal: Intermediate = list.reduce<Intermediate>(
-        (accum, townhall) => {
-            const formattedDate = formatDate(new Date(townhall.date), 'P');
+        (accum, { _id, form }) => {
+            const formattedDate = formatDate(new Date(form.date), 'P');
             const copy = { ...accum };
             const datum: Datum = {
-                image: townhall.picture,
-                title: townhall.speaker.name,
-                subtitle: `${townhall.speaker.party}, ${townhall.speaker.territory}`,
-                href: `/townhalls/${townhall._id}`,
+                image: form.picture,
+                title: form.speaker.name,
+                subtitle: `${form.speaker.party}, ${form.speaker.territory}`,
+                href: `/townhalls/${_id}`,
             };
             if (copy[formattedDate] !== undefined) {
                 copy[formattedDate].push(datum);
@@ -47,7 +47,11 @@ export default function TownhallList() {
 
     React.useEffect(sendRequest, []);
     if (isLoading || !list) {
-        return <Loader />;
+        return (
+            <div style={{ height: '500px' }}>
+                <Loader />
+            </div>
+        );
     }
     if (list.length === 0) {
         return (

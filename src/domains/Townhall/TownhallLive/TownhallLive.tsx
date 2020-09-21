@@ -54,7 +54,7 @@ const useMobileStyles = makeStyles((theme) => ({
 }));
 
 function MobileLive() {
-    const townhall = React.useContext(TownhallContext);
+    const { form } = React.useContext(TownhallContext);
     const classes = useMobileStyles();
 
     return (
@@ -62,7 +62,7 @@ function MobileLive() {
             <Paper className={classes.paper}>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
-                        <VideoPlayer url={townhall.url} />
+                        <VideoPlayer url={form.url} />
                     </Grid>
                     <Grid item xs={12} className={classes.bottom}>
                         <TownhallLiveTabs />
@@ -80,14 +80,14 @@ const useDesktopStyles = makeStyles((theme) => ({
 }));
 
 function DesktopLive() {
-    const townhall = React.useContext(TownhallContext);
+    const { form } = React.useContext(TownhallContext);
     const classes = useDesktopStyles();
 
     return (
         <Paper className={classes.paper}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <VideoPlayer url={townhall.url} />
+                    <VideoPlayer url={form.url} />
                 </Grid>
                 <Grid item xs={12}>
                     <TownhallLiveTabs />

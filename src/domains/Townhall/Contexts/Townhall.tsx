@@ -14,17 +14,20 @@ interface Props {
 
 export const TownhallContext = React.createContext<Townhall>({
     _id: '',
-    speaker: {
-        name: '',
-        party: '',
-        territory: '',
+    form: {
+        speaker: {
+            name: '',
+            party: '',
+            territory: '',
+        },
+        moderator: '',
+        topic: '',
+        picture: '',
+        readingMaterials: '',
+        date: new Date(),
+        url: '',
+        description: '',
     },
-    moderator: '',
-    topic: '',
-    picture: '',
-    readingMaterials: '',
-    date: new Date(),
-    url: '',
 });
 
 export default function TownhallProvider({
@@ -47,7 +50,9 @@ export default function TownhallProvider({
     }, []);
 
     return !townhall ? (
-        <Loader />
+        <div style={{ height: '500px' }}>
+            <Loader />
+        </div>
     ) : (
         <TownhallContext.Provider value={townhall}>
             {children}

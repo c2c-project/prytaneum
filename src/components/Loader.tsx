@@ -10,6 +10,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flex: 1,
         justifyContent: 'center',
+        transform: 'translateX(-5%)', // wasn't quite centered without this offset
     },
     loader: {
         position: 'absolute',
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 
 /**
  * @description generic Loader that displays in the center vertically and horizontally of its parent component
+ * requires that the parent component have a height
  */
 const Loader = () => {
     const classes = useStyles();

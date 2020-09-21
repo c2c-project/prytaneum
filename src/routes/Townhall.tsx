@@ -3,6 +3,7 @@ import React from 'react';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
+import TownhallForm from 'pages/Townhall/TownhallForm';
 
 import { addRoutes } from './utils';
 
@@ -24,6 +25,14 @@ addRoutes([
         },
         children: [
             {
+                // this must go before :townhallId, otherwise the router will think "create" is an id
+                path: '/create',
+                action: () => {
+                    console.log('what');
+                    return <TownhallForm />;
+                },
+            },
+            {
                 path: '/:townhallId',
                 action: (ctx) => {
                     const { townhallId } = ctx.params as { townhallId: string };
@@ -31,7 +40,7 @@ addRoutes([
                     if (!child)
                         return (
                             <TownhallProvider townhallId={townhallId}>
-                                <TownhallProfile townhallId={townhallId} />
+                                <TownhallProfile />
                             </TownhallProvider>
                         );
                     return (
@@ -54,18 +63,12 @@ addRoutes([
                         },
                     },
                     {
-                        path: '/update',
+                        path: '/update', // /townhalls/:townhallId/update
                         action: (ctx) => {
-                            return <div />;
+                            return <TownhallForm />;
                         },
                     },
                 ],
-            },
-            {
-                path: '/create',
-                action: () => {
-                    return <div />;
-                },
             },
         ],
     },

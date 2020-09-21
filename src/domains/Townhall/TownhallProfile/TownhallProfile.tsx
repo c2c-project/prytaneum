@@ -49,17 +49,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TownhallProfile() {
-    const townhall = React.useContext(TownhallContext);
+    const { form } = React.useContext(TownhallContext);
     const classes = useStyles();
 
     const Title = () => (
         <Grid container spacing={0} item xs={12}>
             <Grid item xs={12}>
-                <Typography variant='h5'>{townhall.speaker.name}</Typography>
+                <Typography variant='h5'>{form.speaker.name}</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant='body2' color='textSecondary'>
-                    {`${townhall.speaker.party}, ${townhall.speaker.territory}`}
+                    {`${form.speaker.party}, ${form.speaker.territory}`}
                 </Typography>
             </Grid>
         </Grid>
@@ -94,7 +94,7 @@ export default function TownhallProfile() {
                         <ListItemIcon>
                             <ForumIcon style={{ fontSize: 30 }} />
                         </ListItemIcon>
-                        <ListItemText primary={townhall.topic} />
+                        <ListItemText primary={form.topic} />
                     </ListItem>
                     <ListItem disableGutters>
                         <ListItemIcon>
@@ -102,7 +102,7 @@ export default function TownhallProfile() {
                         </ListItemIcon>
                         <ListItemText
                             primary={formatDate(
-                                townhall.date,
+                                form.date,
                                 'MMMM do, yyyy p'
                             )}
                         />
@@ -117,7 +117,7 @@ export default function TownhallProfile() {
             <Grid item xs={12} className={classes.color}>
                 <img
                     className={classes.picture}
-                    src={townhall.picture}
+                    src={form.picture}
                     alt='Member of Congress'
                 />
             </Grid>

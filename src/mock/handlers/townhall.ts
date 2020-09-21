@@ -7,17 +7,20 @@ const future = faker.date.future();
 
 const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
-    speaker: {
-        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        party: faker.company.companyName(),
-        territory: 'CA-41',
+    form: {
+        speaker: {
+            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+            party: faker.company.companyName(),
+            territory: 'CA-41',
+        },
+        moderator: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        topic: faker.random.word(),
+        picture: faker.image.imageUrl(),
+        readingMaterials: '',
+        date: faker.date.between(recent, future),
+        url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
+        description: faker.lorem.paragraph(),
     },
-    moderator: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    topic: faker.random.word(),
-    picture: faker.image.imageUrl(),
-    readingMaterials: '',
-    date: faker.date.between(recent, future),
-    url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
 });
 
 const makeTownHalls = (amount: number): TownhallTypes.Townhall[] => {
@@ -33,7 +36,7 @@ export default [
         const { form } = req.body as {
             form: TownhallTypes.TownhallForm;
         };
-        if (form.speaker === 'fail') {
+        if (form.description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
@@ -45,7 +48,7 @@ export default [
             form: TownhallTypes.TownhallForm;
             townhallId: string;
         };
-        if (form.speaker === 'fail') {
+        if (form.description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
