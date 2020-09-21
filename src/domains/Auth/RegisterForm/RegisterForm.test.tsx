@@ -70,7 +70,7 @@ describe('RegisterForm', () => {
             username: 'username',
             email: 'email@email.com',
             password: 'password',
-            confirmPass: 'password',
+            confirmPassword: 'password',
         };
         jest.useFakeTimers();
 
@@ -100,7 +100,9 @@ describe('RegisterForm', () => {
                 target: ({ value: form.password } as unknown) as EventTarget,
             });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: ({ value: form.confirmPass } as unknown) as EventTarget,
+                target: ({
+                    value: form.confirmPassword,
+                } as unknown) as EventTarget,
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
@@ -125,7 +127,7 @@ describe('RegisterForm', () => {
             username: 'username',
             email: 'email@email.com',
             password: 'password',
-            confirmPass: 'password',
+            confirmPassword: 'password',
         };
         jest.useFakeTimers();
 
@@ -155,7 +157,9 @@ describe('RegisterForm', () => {
                 target: ({ value: form.password } as unknown) as EventTarget,
             });
             ReactTestUtils.Simulate.change(confirmNode, {
-                target: ({ value: form.confirmPass } as unknown) as EventTarget,
+                target: ({
+                    value: form.confirmPassword,
+                } as unknown) as EventTarget,
             });
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
