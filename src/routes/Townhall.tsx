@@ -28,7 +28,6 @@ addRoutes([
                 // this must go before :townhallId, otherwise the router will think "create" is an id
                 path: '/create',
                 action: () => {
-                    console.log('what');
                     return <TownhallForm />;
                 },
             },
@@ -52,19 +51,19 @@ addRoutes([
                 children: [
                     {
                         path: '/invite',
-                        action: (ctx) => {
+                        action: () => {
                             return <Invite />;
                         },
                     },
                     {
                         path: '/settings',
-                        action: (ctx) => {
+                        action: () => {
                             return <Settings />;
                         },
                     },
                     {
                         path: '/update', // /townhalls/:townhallId/update
-                        action: (ctx) => {
+                        action: () => {
                             return <TownhallForm />;
                         },
                     },

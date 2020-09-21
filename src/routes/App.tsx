@@ -1,6 +1,6 @@
 import React from 'react';
 import UniversalRouter from 'universal-router/sync';
-import { Fade, Slide } from '@material-ui/core';
+import { Fade } from '@material-ui/core';
 import { Update, State } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -50,6 +50,7 @@ const initialState: PageState = {
     key: null,
 };
 
+// eslint-disable-next-line
 const useStyles = makeStyles((theme) => ({
     '@keyframes slideInRight': {
         from: { transform: 'translateX(-100vw)' },
