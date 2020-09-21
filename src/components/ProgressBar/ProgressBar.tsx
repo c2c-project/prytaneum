@@ -8,8 +8,6 @@ const sliderStyle = {
     touchAction: 'none',
 };
 
-
-
 export interface DataEntry {
     label: string;
     value: number;
@@ -19,8 +17,6 @@ interface Props {
     currentVal: number;
     timeline: DataEntry[];
 }
-
-
 
 export default function Progress({ currentVal, timeline }: Props) {
     const maxValue = timeline[timeline.length - 1].value;
@@ -32,8 +28,7 @@ export default function Progress({ currentVal, timeline }: Props) {
     return (
         <div style={{ height: 120, width: '100%' }}>
             <p>
-                Current Label:
-                {' '}
+                Current Label:{' '}
                 {timeline.filter((el) => el.value === currentVal)[0].label}
             </p>
             <Slider
@@ -54,6 +49,7 @@ export default function Progress({ currentVal, timeline }: Props) {
                         <div className='slider-handles'>
                             {handles.map((handle) => (
                                 <Handle
+                                    disabled={false}
                                     key={handle.id}
                                     handle={handle}
                                     domain={domain}
@@ -68,6 +64,7 @@ export default function Progress({ currentVal, timeline }: Props) {
                         <div className='slider-tracks'>
                             {tracks.map(({ id, source, target }) => (
                                 <Track
+                                    disabled={false}
                                     key={id}
                                     source={source}
                                     target={target}
@@ -85,7 +82,6 @@ export default function Progress({ currentVal, timeline }: Props) {
                                     key={tick.id}
                                     tick={tick}
                                     count={ticks.length}
-                                   
                                 />
                             ))}
                         </div>
