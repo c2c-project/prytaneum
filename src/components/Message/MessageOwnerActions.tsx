@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,7 +41,8 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const jwt = ''; // TODO:
     // const [jwt] = useJwt();
     const [snack] = useSnack();
-    const { roomId } = useParams<Params>();
+    // FIXME:
+    const roomId = '';
 
     const handleEdit = async (e: React.MouseEvent<{ value: unknown }>) => {
         e.preventDefault();

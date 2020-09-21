@@ -5,20 +5,20 @@ export default [
     rest.post('/api/users/login', (req, res, ctx) => {
         // we do nothing with the password for now
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { username, password } = req.body as {
-            username: string;
+        const { email, password } = req.body as {
+            email: string;
             password: string;
         };
-        if (username === 'fail') {
+        if (email === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
     }),
     rest.post('/api/users/login-temporary', (req, res, ctx) => {
-        const { username } = req.body as {
-            username: string;
+        const { email } = req.body as {
+            email: string;
         };
-        if (username === 'fail') {
+        if (email === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
@@ -50,7 +50,7 @@ export default [
         const { form } = req.body as {
             form: AuthTypes.RegisterForm;
         };
-        if (form.username === 'fail') {
+        if (form.email === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));

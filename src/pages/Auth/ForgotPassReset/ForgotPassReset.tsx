@@ -1,14 +1,10 @@
 import React from 'react';
-import { useHistory, useParams, Redirect } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
+import { Container, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Grow from '@material-ui/core/Grow';
 
-import Paper from 'components/Paper';
+import history from 'utils/history';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
-
-import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,18 +16,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface Params {
-    token?: string;
+interface Props {
+    token: string;
 }
 
-export default function ForgotPasswordReset() {
+// TODO: verify token from the routing itself and don't render this component if there's no token, handle redirect in routing
+export default function ForgotPasswordReset({ token }: Props) {
     const classes = useStyles();
-    const history = useHistory();
-    const { token } = useParams<Params>();
-
-    if (!token) {
-        return <Redirect to='/login' />;
-    }
 
     return (
         <Container maxWidth='md' className={classes.root}>
@@ -46,9 +37,7 @@ export default function ForgotPasswordReset() {
                     <Paper className={classes.paper}>
                         <PasswordResetForm
                             token={token}
-                            onSuccess={() => {
-                                history.push(routeNames.login);
-                            }}
+                            onSuccess={() => history.push('/auth/login')}
                         />
                     </Paper>
                 </Grid>
