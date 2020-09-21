@@ -47,16 +47,14 @@ export default function MoCDropdown() {
         axios
             .get(url, {
                 headers: {
-                    'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY,
+                    'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY, // FIXME: should be a request to our server rather than a process.env
                 },
             })
             .then((response) => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 setData2(response.data.results[0].members);
             })
-            .catch((error) => {
-                console.log(error);
-            });
+            .catch(console.error); // FIXME:
     }, [chamber]);
 
     return (
