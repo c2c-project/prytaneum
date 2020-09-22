@@ -5,12 +5,18 @@ module.exports = {
     addons: [
         '@storybook/preset-create-react-app',
         '@storybook/addon-a11y',
-        '@storybook/addon-essentials',
+        {
+            name: '@storybook/addon-essentials',
+            options: {
+                docs: false,
+            },
+        },
     ],
-    webpackFinal: (config) => {
-        config.resolve.alias = {
-            'hooks/socketIo': path.resolve(__dirname, '../src/hooks/__mocks__/socketIo'),
-        };
-        return config;
+    typescript: {
+        reactDocgen: 'none',
     },
+    'hooks/useSocketio': path.resolve(
+        __dirname,
+        '../src/hooks/__mocks__/useSocketio'
+    ),
 };

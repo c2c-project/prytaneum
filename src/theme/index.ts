@@ -28,6 +28,8 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     }
 }
 
+const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
 export default createMuiTheme({
     palette: {
         primary: { main: '#0074bc' },
@@ -47,6 +49,14 @@ export default createMuiTheme({
         },
         media: {
             minHeight: '300px',
+        },
+    },
+    transitions: {
+        easing: {
+            easeIn: easingFunc,
+            easeInOut: easingFunc,
+            easeOut: easingFunc,
+            sharp: easingFunc,
         },
     },
 });

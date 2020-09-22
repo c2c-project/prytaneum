@@ -1,5 +1,9 @@
 export interface Townhall {
     _id: string;
+    form: TownhallForm;
+}
+
+export interface TownhallForm {
     speaker: {
         name: string;
         party: string;
@@ -11,15 +15,7 @@ export interface Townhall {
     readingMaterials: '';
     date: Date;
     url: string;
-}
-
-export interface TownhallForm {
-    speaker?: string;
-    moderator?: string;
-    date?: Date;
-    description?: string;
-    url?: string;
-    topic: string;
+    description: string;
 }
 
 export interface TownhallQuestionForm {

@@ -1,65 +1,43 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Divider, AppBar, Tabs, Tab, Grid } from '@material-ui/core';
-import { useRouteMatch, Route, Switch, Link, Redirect } from 'react-router-dom';
+import { Divider, AppBar, Tabs, Tab, Grid, Paper } from '@material-ui/core';
 
-import Paper from 'components/Paper';
 import VideoPlayer from 'components/VideoPlayer';
 import { DeviceContext } from 'contexts/Device';
 import { TownhallContext } from '../Contexts/Townhall';
 import MyQuestions from '../MyQuestions';
 
-function TownhallLiveTabs({ url }: { url: string }) {
-    const { params } = useRouteMatch<{ tab: string }>();
-    const { tab } = params;
-
+type TabNames = 'my-questions' | 'all-questions';
+function TownhallLiveTabs() {
+    const [currentTab, setCurrentTab] = React.useState<TabNames>(
+        'my-questions'
+    );
+    const getContent = () =>
+        ({
+            'my-questions': <MyQuestions />,
+            'all-questions': <div>TODO</div>,
+        }[currentTab]);
     return (
         <div>
             <AppBar position='static' color='transparent' elevation={0}>
-                <Tabs value={tab} variant='fullWidth'>
+                <Tabs value={currentTab} variant='fullWidth'>
                     <Tab
                         value='my-questions'
                         label='My Questions'
-                        component={Link}
-                        to={`${url}/my-questions`}
+                        onClick={() => setCurrentTab('my-questions')}
                     />
                     <Tab
                         value='all-questions'
                         label='All Questions'
-                        component={Link}
-                        to={`${url}/all-questions`}
+                        onClick={() => setCurrentTab('all-questions')}
                     />
                 </Tabs>
                 <Divider />
             </AppBar>
-            <div style={{ overflowX: 'hidden' }}>
-                <Switch>
-                    <Route path={`${url}/my-questions`}>
-                        <MyQuestions />
-                    </Route>
-                    <Route path={`${url}/all-questions`}>
-                        <h1>TODO: all questions feed</h1>
-                    </Route>
-                </Switch>
-            </div>
+            <div style={{ overflowX: 'hidden' }}>{getContent()}</div>
         </div>
     );
 }
-
-function TabRouter() {
-    const { path, url } = useRouteMatch();
-    return (
-        <Switch>
-            <Route path={`${url}/:tab`}>
-                <TownhallLiveTabs url={url} />
-            </Route>
-            <Route path={path} exact>
-                <Redirect to={`${path}/my-questions`} />
-            </Route>
-        </Switch>
-    );
-}
-
 const useMobileStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -68,9 +46,6 @@ const useMobileStyles = makeStyles((theme) => ({
     bottom: {
         paddingBottom: theme.spacing(3),
     },
-    // button: {
-    //     padding: `0px ${theme.spacing(1)}px 0px ${theme.spacing(1)}px`,
-    // },
     paper: {
         paddingBottom: theme.spacing(1),
         borderRadius: '0px',
@@ -79,7 +54,7 @@ const useMobileStyles = makeStyles((theme) => ({
 }));
 
 function MobileLive() {
-    const townhall = React.useContext(TownhallContext);
+    const { form } = React.useContext(TownhallContext);
     const classes = useMobileStyles();
 
     return (
@@ -87,10 +62,10 @@ function MobileLive() {
             <Paper className={classes.paper}>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
-                        <VideoPlayer url={townhall.url} />
+                        <VideoPlayer url={form.url} />
                     </Grid>
                     <Grid item xs={12} className={classes.bottom}>
-                        <TabRouter />
+                        <TownhallLiveTabs />
                     </Grid>
                 </Grid>
             </Paper>
@@ -100,23 +75,22 @@ function MobileLive() {
 
 const useDesktopStyles = makeStyles((theme) => ({
     paper: {
-        borderRadius: theme.custom.borderRadius,
         padding: theme.spacing(3),
     },
 }));
 
 function DesktopLive() {
-    const townhall = React.useContext(TownhallContext);
+    const { form } = React.useContext(TownhallContext);
     const classes = useDesktopStyles();
 
     return (
         <Paper className={classes.paper}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <VideoPlayer url={townhall.url} />
+                    <VideoPlayer url={form.url} />
                 </Grid>
                 <Grid item xs={12}>
-                    <TabRouter />
+                    <TownhallLiveTabs />
                 </Grid>
             </Grid>
         </Paper>

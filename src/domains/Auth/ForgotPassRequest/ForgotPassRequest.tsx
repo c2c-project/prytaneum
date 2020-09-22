@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import TextField from 'components/TextField';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 
@@ -61,17 +61,21 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
                 <Grid item xs={12}>
                     <TextField
                         id='email'
-                        required
-                        fullWidth
                         variant='outlined'
                         type='email'
                         value={form.email}
                         onChange={(e) => handleChange(e, 'email')}
                         label='Email'
+                        autoFocus
                     />
                 </Grid>
                 <Grid container item xs={12} justify='flex-end'>
-                    <Button type='submit' variant='contained' color='primary'>
+                    <Button
+                        fullWidth
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                    >
                         Send Reset Email
                     </Button>
                 </Grid>

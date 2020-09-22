@@ -18,3 +18,6 @@ export interface Team {
     name: string;
     members: TeamMember[];
 }
+export interface User {
+    _id: string;
+}
