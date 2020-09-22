@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-import { Team, TeamMember } from 'types';
+import { Team } from 'types';
 
 interface Props {
     team: Team;
@@ -21,13 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function Contributors({ team }: Props) {
     const classes = useStyles();
-
-    const [subTeam, setSubTeam] = React.useState<TeamMember[]>([]);
-
-    React.useEffect(() => {
-        setSubTeam(team.members.slice(0, 10));
-    }, []);
-
     return (
         <Grid container spacing={5}>
             <Grid
@@ -37,7 +30,7 @@ export default function Contributors({ team }: Props) {
                 alignItems='center'
                 spacing={3}
             >
-                {subTeam.map((member, index) => (
+                {team.members.slice(0, 10).map((member, index) => (
                     <Grid item xs={6} sm={2} key={index}>
                         <Grid
                             container
@@ -68,7 +61,7 @@ export default function Contributors({ team }: Props) {
             </Grid>
             <Grid container item justify='center'>
                 {/* TODO: When clicked redirect to a page that displays the entire team using the Team component  */}
-                <Link href='wwww.google.com '>{`+ ${team.members.length} Contributors`}</Link>
+                <Link href='www.todo.add.href'>{`+ ${team.members.length} Contributors`}</Link>
             </Grid>
         </Grid>
     );

@@ -1,10 +1,10 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import Component from '.';
+import Component from './DevTeam';
 
 export default {
-    title: 'CreditsDev/DevTeam',
+    title: 'Domains/DevTeam',
     component: Component,
 };
 
