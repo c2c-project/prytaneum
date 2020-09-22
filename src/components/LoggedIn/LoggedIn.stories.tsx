@@ -10,7 +10,7 @@ export default {
 
 const path = '/';
 
-export function LoggedIn_JwtTrue() {
+export function LoggedInJwtTrue() {
     return (
         <MemoryRouter initialEntries={['/']}>
             <Route path={path}>
@@ -22,7 +22,7 @@ export function LoggedIn_JwtTrue() {
     );
 }
 
-export function LoggedIn_JwtFalse() {
+export function LoggedInJwtFalse() {
     return (
         <MemoryRouter initialEntries={['/']}>
             <Route path={path} exact>
