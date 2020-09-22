@@ -7,7 +7,7 @@ const makeNewClip = () => ({
     title: faker.random.words(),
     user: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.random.words(),
-    tags: new Array(5).fill(null).map( item => faker.random.word()),
+    tags: new Array(Math.floor(Math.random() * 5) + 1).fill(null).map( item => faker.random.word()),
 });
 
 const getClipList = () => [makeNewClip(), makeNewClip(), makeNewClip()];
