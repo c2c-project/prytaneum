@@ -24,7 +24,7 @@ export default function ScrollTo({ active, children, direction }: Props) {
         const ref = direction === 'top' ? topRef : bottomRef;
         // this is needed for testing as window is null and there is no scrollIntoView fcn
         if (NODE_ENV === 'test') {
-            window.HTMLElement.prototype.scrollIntoView = function() {};
+            window.HTMLElement.prototype.scrollIntoView = function () {};
         }
         if (active && ref.current) {
             ref.current.scrollIntoView({
