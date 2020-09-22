@@ -68,8 +68,8 @@ export default function SectionList({ sections }: Props) {
                                 { image, title: listItemTitle, subtitle },
                                 idx
                             ) => (
-                                <span key={idx}>
-                                    <ListItem divider>
+                                <li key={idx}>
+                                    <ListItem divider button>
                                         {image && (
                                             <ListItemAvatar>
                                                 <Avatar
@@ -83,7 +83,7 @@ export default function SectionList({ sections }: Props) {
                                             secondary={subtitle}
                                         />
                                     </ListItem>
-                                </span>
+                                </li>
                             )
                         )}
                     </ul>
