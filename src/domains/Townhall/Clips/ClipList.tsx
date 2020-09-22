@@ -13,7 +13,10 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
 } from '@material-ui/core';
+import useEndpoint from 'hooks/useEndpoint';
+import Loader from 'components/Loader';
 import { ClipData } from '.';
+import { getTownhallClips } from '../api';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -83,8 +86,23 @@ const tempRows = [
 
 export default function ClipList() {
     const classes = useStyles();
+    const [clips, setClips] = React.useState<ClipData[] | null>(null);
+    const [sendRequest, isLoading] = useEndpoint(
+        () => getTownhallClips('1234'),
+        {
+            onSuccess: ({ data }) => {
+                console.log(data);
+                setClips(data.clips);
+            },
+        }
+    );
+    React.useEffect(() => {
+        sendRequest();
+    }, []);
 
-    return (
+    return isLoading ? (
+        <Loader />
+    ) : (
         <section>
             <Toolbar className={classes.toolbar} disableGutters>
                 <IconButton>
@@ -96,24 +114,44 @@ export default function ClipList() {
             </Toolbar>
             <div>
                 <List>
-                    {tempRows.map((row) => {
-                        return (
-                            <ListItem button onClick={() => {}}>
-                                <ListItemIcon>
-                                    <FolderIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary='Luke SkyWalker'
-                                    secondary={row.title}
-                                />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge='end' aria-label='delete'>
-                                        <FavoriteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        );
-                    })}
+                    {clips ? (
+                        clips.map((row, index) => {
+                            return (
+                                <ListItem key={index} button onClick={() => {}}>
+                                    <ListItemIcon>
+                                        <FolderIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={row.user}
+                                        secondary={row.title}
+                                    />
+                                    <ListItemSecondaryAction>
+                                        <IconButton
+                                            edge='end'
+                                            aria-label='delete'
+                                        >
+                                            <FavoriteIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            );
+                        })
+                    ) : (
+                        <ListItem button onClick={() => {}}>
+                            <ListItemIcon>
+                                <FolderIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary='Null title'
+                                secondary='Null secondary title'
+                            />
+                            <ListItemSecondaryAction>
+                                <IconButton edge='end' aria-label='delete'>
+                                    <FavoriteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    )}
                 </List>
             </div>
         </section>

@@ -28,6 +28,7 @@ const useStyles = makeStyles(() => ({
     },
     chips: {
         display: 'flex',
+        flexWrap: 'wrap',
         columnGap: '2px'
     }
 }));
@@ -61,9 +62,9 @@ export default function ClipsPortal({ clipData }: Props) {
                     src={Thumbnail}
                 />
                 <div className={classes.chips}>
-                    {clipData.tags.map((tag, index) => {
+                    { clip ? clip.tags.map((tag, index) => {
                         return <Chip key={index} color='primary' clickable size='small' label={tag} />;
-                    })}
+                    }): 'clip tags'}
                 </div>
                 <Typography variant='h4' gutterBottom>
                     { clip ? clip.user: 'Clip UserName'}
