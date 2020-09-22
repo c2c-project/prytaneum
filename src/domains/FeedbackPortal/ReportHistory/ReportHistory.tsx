@@ -241,7 +241,7 @@ export default function ReportHistory() {
             </AppBar>
 
             {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
-            <Grid container justify='center' alignItems='center' xs={12}>
+            <Grid container item justify='center' alignItems='center' xs={12}>
                 {isLoadingFeedback || isLoadingBug ? (
                     <Loader />
                 ) : (
@@ -253,7 +253,13 @@ export default function ReportHistory() {
 
             {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
             {reports.length !== 0 && (
-                <Grid container justify='center' alignItems='center' xs={12}>
+                <Grid
+                    container
+                    item
+                    justify='center'
+                    alignItems='center'
+                    xs={12}
+                >
                     <Pagination
                         siblingCount={0}
                         color='primary'

@@ -37,7 +37,7 @@ export default function SimpleList(props: Props) {
             <List>
                 {history.map(({ action, link, date }) => {
                     return (
-                        <div>
+                        <div key={action}>
                             <ListItem button>
                                 <ListItemIcon>
                                     <ListItemAvatar>

@@ -2,26 +2,26 @@ import axios from 'utils/axios';
 import errors from 'utils/errors';
 import * as AuthTypes from '../types';
 
-export async function login(username?: string, password?: string) {
-    if (!username || !password) {
+export async function login(email?: string, password?: string) {
+    if (!email || !password) {
         throw errors.fieldError();
     }
     // check if valid
-    if (!username.match(/\w+/g) || !password.match(/\w+/g)) {
+    if (!email.match(/\w+/g) || !password.match(/\w+/g)) {
         throw errors.fieldError();
     }
     return axios.post('/api/users/login', {
-        username,
+        email,
         password,
     });
 }
 
-export async function loginTemp(username: string) {
-    if (!username.match(/\w+/g)) {
+export async function loginTemp(email: string) {
+    if (!email.match(/\w+/g)) {
         throw errors.fieldError();
     }
     return axios.post('/api/users/login-temporary', {
-        username,
+        email,
     });
 }
 
@@ -61,9 +61,9 @@ export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
 }
 
 export async function register(form: AuthTypes.RegisterForm) {
-    const { username, password, email, confirmPassword } = form;
+    const { password, email, confirmPassword } = form;
 
-    if (!username || !password || !email || !confirmPassword) {
+    if (!password || !email || !confirmPassword) {
         throw errors.fieldError();
     }
 

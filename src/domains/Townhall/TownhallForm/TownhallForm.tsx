@@ -1,36 +1,40 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
-// import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { AxiosResponse } from 'axios';
 
 import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import { createTownhall, updateTownhall } from '../api';
-import { TownhallForm } from '../types';
+import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallForm as TownhallFormType } from '../types';
 
-interface FormProps {
-    onSubmit: () => void;
-    initialState?: TownhallForm;
-    endpoint: (form: TownhallForm) => Promise<AxiosResponse<unknown>>;
+interface Props {
+    onSubmit?: () => void;
 }
 
-interface DefaultFormProps {
-    initialState: TownhallForm;
-}
+export default function TownhallForm({ onSubmit: cb }: Props) {
+    // this works even if it's not wrapped in the townhall context
+    // the default value set for the townhall context has the appropriate form
+    const townhall = React.useContext(TownhallContext);
+    const [state, setState] = React.useState<TownhallFormType>(townhall.form);
 
-function TownhallFormBase({
-    onSubmit: cb,
-    initialState,
-    endpoint,
-}: FormProps & DefaultFormProps) {
-    const [state, setState] = React.useState<TownhallForm>(initialState);
-    const apiRequest = React.useCallback(() => endpoint(state), [state]);
+    // if the townhall._id is falsy, then I know I'm creating a townhall
+    // else it's an update to a current townhall
+    const apiRequest = React.useCallback(
+        () =>
+            townhall._id
+                ? updateTownhall(state, townhall._id)
+                : createTownhall(state),
+        [state]
+    );
+
+    // after this point in the code,
+    // whether or not the form is an update or create does not matter
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess: cb,
     });
@@ -43,7 +47,7 @@ function TownhallFormBase({
     type ChangeEvent =
         | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
         | { target: { value: MaterialUiPickersDate } };
-    const handleChange = (e: ChangeEvent, key: string) => {
+    const buildHandler = (key: keyof TownhallFormType) => (e: ChangeEvent) => {
         const { value } = e.target;
         setState((prev) => ({ ...prev, [key]: value }));
     };
@@ -51,25 +55,27 @@ function TownhallFormBase({
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <Typography variant='h4'>Session Form</Typography>
+                <Typography variant='h4'>Townhall Form</Typography>
             </Grid>
             <Grid item xs={12}>
                 <form onSubmit={onSubmit}>
                     <Grid container spacing={2}>
+                        {/* 
+                        // FIXME:
                         <Grid item xs={12}>
                             <TextField
                                 required
                                 label='Speaker'
-                                value={state.speaker}
-                                onChange={(e) => handleChange(e, 'speaker')}
+                                value={state.speaker.name}
+                                onChange={buildHandler('speaker')}
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12}>
                             <TextField
                                 required
                                 label='Moderator'
                                 value={state.moderator}
-                                onChange={(e) => handleChange(e, 'moderator')}
+                                onChange={buildHandler('moderator')}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -77,7 +83,7 @@ function TownhallFormBase({
                                 required
                                 label='Session URL'
                                 value={state.url}
-                                onChange={(e) => handleChange(e, 'url')}
+                                onChange={buildHandler('url')}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -90,7 +96,7 @@ function TownhallFormBase({
                                 inputVariant='outlined'
                                 value={state.date}
                                 onChange={(value) =>
-                                    handleChange({ target: { value } }, 'date')
+                                    buildHandler('date')({ target: { value } })
                                 }
                             />
                         </Grid>
@@ -99,11 +105,15 @@ function TownhallFormBase({
                                 required
                                 label='Description'
                                 value={state.description}
-                                onChange={(e) => handleChange(e, 'description')}
+                                onChange={buildHandler('description')}
                             />
                         </Grid>
                         <Grid container item xs={12} justify='flex-end'>
-                            <Button type='submit' variant='contained'>
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                color='secondary'
+                            >
                                 Submit
                             </Button>
                         </Grid>
@@ -114,83 +124,10 @@ function TownhallFormBase({
     );
 }
 
-TownhallFormBase.defaultProps = {
+TownhallForm.defaultProps = {
     onSubmit: () => {},
-    initialState: {
-        speaker: '',
-        moderator: '',
-        date: new Date(),
-        description: '',
-        url: '',
-    },
 };
 
-TownhallFormBase.propTypes = {
+TownhallForm.propTypes = {
     onSubmit: PropTypes.func,
-    initialState: PropTypes.object,
-    endpoint: PropTypes.func.isRequired,
 };
-
-interface CreateTownhallProps {
-    onSubmit: () => void;
-}
-
-function CreateTownhall(props: CreateTownhallProps) {
-    return (
-        <TownhallFormBase
-            endpoint={(form) => createTownhall(form)}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props}
-        />
-    );
-}
-
-interface UpdateSessionProps {
-    onSubmit: () => void;
-    updateTarget: string;
-}
-
-function UpdateTownhall(props: UpdateSessionProps) {
-    const { updateTarget } = props;
-    return (
-        <TownhallFormBase
-            endpoint={(form) => updateTownhall(form, updateTarget)}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props}
-        />
-    );
-}
-
-interface GenericProps {
-    type: 'create' | 'update';
-    onSubmit: () => void;
-}
-
-interface UpdateProps extends GenericProps {
-    type: 'update';
-    updateTarget: string;
-}
-
-interface CreateProps extends GenericProps {
-    type: 'create';
-    updateTarget?: never;
-}
-
-type Props = CreateProps | UpdateProps;
-
-export default function TownhallForm({ type, onSubmit, updateTarget }: Props) {
-    switch (type) {
-        case 'create':
-            return <CreateTownhall onSubmit={onSubmit} />;
-        case 'update':
-            return (
-                <UpdateTownhall
-                    // typescript can't detect that this is a string I guess so I had to cast it
-                    updateTarget={updateTarget as string}
-                    onSubmit={onSubmit}
-                />
-            );
-        default:
-            return <CreateTownhall onSubmit={onSubmit} />;
-    }
-}
