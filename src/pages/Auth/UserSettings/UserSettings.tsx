@@ -63,43 +63,49 @@ export default function UserSettings({ id }: Props) {
     const optionsDialog = () => {
         return dialogData[0].component.map(({ text, component }) => (
             <List>
-                <ListItem
-                    key={text}
-                    button
-                    onClick={() => setContent(component)}
-                >
-                    <ListItemText primary={text} />
-                </ListItem>
+                <li>
+                    <ListItem
+                        key={text}
+                        button
+                        onClick={() => setContent(component)}
+                    >
+                        <ListItemText primary={text} />
+                    </ListItem>
+                </li>
             </List>
         ));
     };
     const accountSettingsDialog = () => {
         return dialogData[1].component.map(({ text, component }) => (
             <List>
-                <ListItem
-                    key={text}
-                    button
-                    onClick={() => setContent(component)}
-                >
-                    <ListItemText primary={text} />
-                </ListItem>
+                <li>
+                    <ListItem
+                        key={text}
+                        button
+                        onClick={() => setContent(component)}
+                    >
+                        <ListItemText primary={text} />
+                    </ListItem>
+                </li>
             </List>
         ));
     };
     const infoDialog = () => {
         return dialogData[2].component.map(({ text, component }) => (
             <List>
-                <ListItem
-                    key={text}
-                    button
-                    onClick={() => setContent(component)}
-                >
-                    <ListItemText primary={text} />
-                </ListItem>
+                <li>
+                    <ListItem
+                        key={text}
+                        button
+                        onClick={() => setContent(component)}
+                    >
+                        <ListItemText primary={text} />
+                    </ListItem>
+                </li>
             </List>
         ));
     };
-    
+
     const sections = [
         {
             title: UserProfile().title,

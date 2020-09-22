@@ -31,8 +31,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
-        "storybook": "NODE_PATH=src start-storybook --port 3000 -s public",
-        "postbuild": "mkdir ../server/dist/client && mv build ../server/dist/client",
+        "storybook": "start-storybook --port 3000 -s public",
         "lint": "eslint src/**/*.ts src/**/*.tsx",
         "docs": "jsdoc -c jsdoc.conf.json",
         "storybook-docs": "yarn storybook --docs"
@@ -99,7 +98,6 @@
         "msw": "^0.20.5",
         "react-is": "^16.13.1",
         "react-test-renderer": "^16.13.1",
-        "typedoc": "^0.17.8",
         "typescript": "^3.9.5"
     },
     "peerDependencies": {

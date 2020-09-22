@@ -7,32 +7,41 @@ export default {
     component: Component,
 };
 
-function Spam() {
-    const toAdd = document.createElement('p');
+function Spam(n: number) {
+    const toAdd =
+        document.getElementById('scrollTo') || document.createElement('p');
     toAdd.innerHTML = '';
     toAdd.innerHTML = '<br/>';
 
-    // eslint-disable-next-line
-    toAdd.innerHTML = toAdd.innerHTML + 'spam' + '<br/>';
+    let x = n;
+    while (x > 0) {
+        // eslint-disable-next-line
+        toAdd.innerHTML = toAdd.innerHTML + 'spam' + '<br/>';
+        x -= 1;
+    }
     document.body.appendChild(toAdd);
 }
 
 export function ScrollToTop() {
     return (
-        <Component active direction='top'>
-            <button type='button' onClick={() => Spam()}>
-                click to add spam
-            </button>
-        </Component>
+        <div id='scrollTo'>
+            <Component active direction='top'>
+                <button type='button' onClick={() => Spam(10)}>
+                    click to add spam
+                </button>
+            </Component>
+        </div>
     );
 }
 
 export function ScrollToBottom() {
     return (
-        <Component active direction='bottom'>
-            <button type='button' onClick={() => Spam()}>
-                click to add spam
-            </button>
-        </Component>
+        <div id='scrollTo'>
+            <Component active direction='bottom'>
+                <button type='button' onClick={() => Spam(10)}>
+                    click to add spam
+                </button>
+            </Component>
+        </div>
     );
 }

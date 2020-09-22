@@ -36,7 +36,7 @@ describe('ScrollTo', function () {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
-                    <ScrollTo active={true} direction='top'>
+                    <ScrollTo active direction='top'>
                         <h1 id='testing'>Test</h1>
                     </ScrollTo>
                 </ThemeProvider>,
