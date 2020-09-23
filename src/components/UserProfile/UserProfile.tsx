@@ -11,6 +11,7 @@ export default function UserProfile() {
             <Grid component='span' container spacing={2} alignContent='center'>
                 <Grid component='span' item xs={12}>
                     <Avatar src={image} alt='Profile Avatar' />
+                    {/* ROUTING: to page to upload new photo?*/}
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField

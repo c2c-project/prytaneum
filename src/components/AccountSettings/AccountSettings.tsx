@@ -18,7 +18,7 @@ export default function AccountSettings() {
                     <span>
                         <button
                             type='button'
-                            onClick={() => {}} // TODO: go to home page
+                            onClick={() => {}} // ROUTING: to /Login or /TownhallList
                         >
                             Click here to return to the home page
                         </button>
@@ -26,7 +26,7 @@ export default function AccountSettings() {
                 ),
             },
             {
-                text: 'Disable Account',
+                text: 'Disable Account', // ROUTING: to /Login once disabled
                 component: (
                     <span>
                         <h1>
@@ -37,7 +37,7 @@ export default function AccountSettings() {
                                 Halls. You will still be able to log into your
                                 account. Please enter your password below twice
                                 to confirm.
-                            </p>
+                            </p> 
                         </h1>
                         <TextField
                             id='Disable Account Password Entry One'
@@ -71,7 +71,7 @@ export default function AccountSettings() {
                 ),
             },
             {
-                text: 'Delete Account',
+                text: 'Delete Account', // ROUTING: to /Login after deleted
                 component: (
                     <span>
                         <h1>
