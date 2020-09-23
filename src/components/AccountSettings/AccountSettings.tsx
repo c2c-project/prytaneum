@@ -8,6 +8,15 @@ import TextField from '@material-ui/core/TextField';
  * @constructor AccountSettings
  */
 
+/**
+ * cahnge this to look/fcn like other components
+ * ideas
+ * 1. have separate fcns that return separate parts, so we have an ASLogout() => return (<button>)
+ * 2. move them outside of components
+ * 3. make each usersettings a diff page, so usersettings just has buttons that routes to pages
+ * 4. make a wrapper for them: pass in a title and section, it returns the JSON
+ */
+
 export default function AccountSettings() {
     return {
         title: 'Account Settings',
@@ -37,7 +46,7 @@ export default function AccountSettings() {
                                 Halls. You will still be able to log into your
                                 account. Please enter your password below twice
                                 to confirm.
-                            </p> 
+                            </p>
                         </h1>
                         <TextField
                             id='Disable Account Password Entry One'
