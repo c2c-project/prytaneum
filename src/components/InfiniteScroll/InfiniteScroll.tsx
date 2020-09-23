@@ -49,11 +49,11 @@ Props) {
     };
     return (
         // TODO: onScroll does not work with div
-        <main onScroll={handleScroll}>
+        <div onScroll={handleScroll}>
             {children}
             {/* {isLoading && <Loader />} */}
             {isLoading && <h1>Loading...</h1>}
             <div id='bottom-of-page' ref={ref} />
-        </main>
+        </div>
     );
 }
