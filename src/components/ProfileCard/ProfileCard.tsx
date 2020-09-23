@@ -8,11 +8,23 @@ import OpenIcon from '@material-ui/icons/Launch';
 import Dialog from 'components/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import GithubIcon from '@material-ui/icons/GitHub';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import ResumeIcon from '@material-ui/icons/Description';
+import PersonalWebsiteIcon from '@material-ui/icons/Web';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
 import { TeamMember } from 'types';
+
+type IconNames = 'Github' | 'LinkedIn' | 'resume' | 'personalWebsite';
+
+const IconDictionary: { [IconName: IconNames]: JSX.Element } = {
+    Github: <GithubIcon />,
+    LinkedIn: <LinkedInIcon />,
+    Resume: <ResumeIcon />,
+    PersonalWebsite: <PersonalWebsiteIcon />,
+};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,7 +81,7 @@ export default function ProfileCard({ teamMember }: Props) {
                     <IconButton
                         id='openDialogButton'
                         size='small'
-                        onClick={() => handleClickOpen()}
+                        onClick={handleClickOpen}
                         aria-label='open-dialog'
                         color='primary'
                     >
@@ -118,7 +130,7 @@ export default function ProfileCard({ teamMember }: Props) {
                                     color='primary'
                                     aria-label={reference.name}
                                 >
-                                    {reference.icon}
+                                    {I}
                                 </IconButton>
                             </Grid>
                         ))}

@@ -1,7 +1,7 @@
 interface Reference {
     link: string;
-    name: string;
-    icon: JSX.Element;
+    // TODO: IFf necessary, add more types of references in the future. There must be an icon for each referenceName
+    name: 'Github' | 'LinkedIn' | 'resume' | 'personalWebsite';
 }
 
 export interface TeamMember {

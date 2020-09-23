@@ -9,6 +9,7 @@ import { Team } from 'types';
 
 interface Props {
     team: Team;
+    maxDisplayCount: number;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-export default function Contributors({ team }: Props) {
+export default function Contributors({ team, maxDisplayCount }: Props) {
     const classes = useStyles();
     return (
         <Grid container spacing={5}>
@@ -30,7 +31,7 @@ export default function Contributors({ team }: Props) {
                 alignItems='center'
                 spacing={3}
             >
-                {team.members.slice(0, 10).map((member, index) => (
+                {team.members.slice(0, maxDisplayCount).map((member, index) => (
                     <Grid item xs={6} sm={2} key={index}>
                         <Grid
                             container
@@ -61,7 +62,9 @@ export default function Contributors({ team }: Props) {
             </Grid>
             <Grid container item justify='center'>
                 {/* TODO: When clicked redirect to a page that displays the entire team using the Team component  */}
-                <Link href='www.todo.add.href'>{`+ ${team.members.length} Contributors`}</Link>
+                <Link href='www.todo.add.href'>
+                    {`+ ${team.members.length - maxDisplayCount} Contributors`}
+                </Link>
             </Grid>
         </Grid>
     );

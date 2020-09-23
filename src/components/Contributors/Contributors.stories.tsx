@@ -18,33 +18,20 @@ const makeBaseTeam = () => ({
 
 const makeTeam = (num: number) => {
     const teamMembers = [];
+    const linkedIn = {
+        icon: <></>,
+        name: 'LinkedIn',
+        link: 'https://www.linkedin.com',
+    };
+    const email = { icon: <></>, name: 'Email', link: 'https://www.gmail.com' };
     for (let i = 0; i < num; i += 1) {
         const tempMem = makeBaseTeam();
-        if (i % 2 === 0) {
-            teamMembers.push({
-                ...tempMem,
-                picturePath: faker.image.imageUrl(),
-                references: [
-                    {
-                        icon: <></>,
-                        name: 'LinkedIn',
-                        link: 'https://www.linkedin.com',
-                    },
-                ],
-            });
-        } else {
-            teamMembers.push({
-                ...tempMem,
-                picturePath: faker.image.imageUrl(),
-                references: [
-                    {
-                        icon: <></>,
-                        name: 'Email',
-                        link: 'https://www.gmail.com',
-                    },
-                ],
-            });
-        }
+        teamMembers.push({
+            ...tempMem,
+            picturePath: faker.image.imageUrl(),
+            // this is just creating a copy of linkedIn or email object each time
+            references: i % 2 === 0 ? [{ ...linkedIn }] : [{ ...email }],
+        });
     }
     return {
         name: faker.company.companyName(),
@@ -55,7 +42,7 @@ const makeTeam = (num: number) => {
 export function Contributors() {
     return (
         <Container>
-            <Component team={makeTeam(35)} />
+            <Component team={makeTeam(35)} maxDisplayCount={10} />
         </Container>
     );
 }
