@@ -1,3 +1,4 @@
+import Loader from 'components/Loader';
 import React from 'react';
 /**
  * Brainstorming
@@ -15,7 +16,7 @@ import React from 'react';
 // Could use an already existing infinite scroll package such as
 interface Props {
     children: JSX.Element | JSX.Element[];
-    loadMore: () => void;
+    loadMore: null | (() => void);
     isLoading: boolean;
     // hasMore: boolean;
 }
@@ -42,16 +43,17 @@ Props) {
         //  - The API has more pages to return
         if (top >= 0 && top <= window.innerHeight && !isLoading) {
             console.log('visible');
-            loadMore();
+            if (loadMore) loadMore();
             // TODO: trigger something because they've reached the bottom of the page
         }
     };
     return (
-        <div onScroll={handleScroll}>
+        // TODO: onScroll does not work with div
+        <main onScroll={handleScroll}>
             {children}
             {/* {isLoading && <Loader />} */}
             {isLoading && <h1>Loading...</h1>}
             <div id='bottom-of-page' ref={ref} />
-        </div>
+        </main>
     );
 }
