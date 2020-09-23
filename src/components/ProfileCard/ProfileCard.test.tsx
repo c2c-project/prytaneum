@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
-
+import { ReferenceNames } from 'types';
 import ProfileCard from './ProfileCard';
 
 describe('ProfileCard', () => {
@@ -16,8 +16,7 @@ describe('ProfileCard', () => {
         endDate: faker.date.future(),
         references: [
             {
-                icon: <></>,
-                name: 'Github',
+                name: 'Github' as ReferenceNames,
                 link: 'https://github.com',
             },
         ],

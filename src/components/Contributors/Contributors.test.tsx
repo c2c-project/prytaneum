@@ -3,6 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 
+import { ReferenceNames } from 'types';
 import Contributors from './Contributors';
 
 describe('Contributors', () => {
@@ -36,8 +37,7 @@ describe('Contributors', () => {
                     picturePath: faker.image.imageUrl(),
                     references: [
                         {
-                            icon: <></>,
-                            name: 'Email',
+                            name: 'Email' as ReferenceNames,
                             link: 'https://www.gmail.com',
                         },
                     ],
@@ -46,7 +46,10 @@ describe('Contributors', () => {
         };
 
         ReactTestUtils.act(() => {
-            render(<Contributors team={dummyTeam} />, container);
+            render(
+                <Contributors team={dummyTeam} maxDisplayCount={10} />,
+                container
+            );
         });
     });
 });

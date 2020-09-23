@@ -1,9 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import GithubIcon from '@material-ui/icons/GitHub';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import faker from 'faker';
 
+import { ReferenceNames } from 'types';
 import Component from '.';
 
 export default {
@@ -20,13 +19,11 @@ const dummyTeamMember = {
     endDate: faker.date.future(),
     references: [
         {
-            icon: <GithubIcon />,
-            name: 'Github',
+            name: 'Github' as ReferenceNames,
             link: 'https://github.com',
         },
         {
-            icon: <LinkedInIcon />,
-            name: 'LinkedIn',
+            name: 'LinkedIn' as ReferenceNames,
             link: 'https://www.linkedin.com',
         },
     ],

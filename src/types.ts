@@ -1,7 +1,16 @@
+export type ReferenceNames =
+    | 'Github'
+    | 'LinkedIn'
+    | 'resume'
+    | 'personalWebsite'
+    | 'email'
+    | 'phone'
+    | 'other';
+
 interface Reference {
     link: string;
-    // TODO: IFf necessary, add more types of references in the future. There must be an icon for each referenceName
-    name: 'Github' | 'LinkedIn' | 'resume' | 'personalWebsite';
+    // Note: IFf necessary, add more types of references in the future. There must be an icon for each Reference.name
+    name: ReferenceNames;
 }
 
 export interface TeamMember {

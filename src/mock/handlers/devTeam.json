@@ -1,0 +1,163 @@
+{
+    "devTeam": [
+        {
+            "name": "Front-end Developers",
+            "members": [
+                {
+                    "fullName": "Anthony Hallak",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Carolyn Kong",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "David Silva",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Francisco Gallego",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Back-end Developers",
+            "members": [
+                {
+                    "fullName": "Jerry Tan",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Johan Guzman",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com/johan1505"
+                        },
+                        {
+                            "name": "resume",
+                            "link": "https://johan1505.github.io/Personal-Website/Documents/Resume.pdf"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Kelton Adey",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Karan Singh",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                },
+                {
+                    "fullName": "Stanley Muzhuthettu",
+                    "description": "Fake description",
+                    "subtitle": "Fake subtitle",
+                    "startDate": "07/20/2020",
+                    "endDate": "09/25/2020",
+                    "references": [
+                        {
+                            "name": "Github",
+                            "link": "https://github.com"
+                        },
+                        {
+                            "name": "LinkedIn",
+                            "link": "https://www.linkedin.com"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

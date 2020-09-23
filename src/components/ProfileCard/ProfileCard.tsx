@@ -12,18 +12,32 @@ import GithubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import ResumeIcon from '@material-ui/icons/Description';
 import PersonalWebsiteIcon from '@material-ui/icons/Web';
+import EmailIcon from '@material-ui/icons/Email';
+import PhoneIcon from '@material-ui/icons/Phone';
+import OtherIcon from '@material-ui/icons/PermContactCalendar';
+
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
-import { TeamMember } from 'types';
+import { TeamMember, ReferenceNames } from 'types';
 
-type IconNames = 'Github' | 'LinkedIn' | 'resume' | 'personalWebsite';
-
-const IconDictionary: { [IconName: IconNames]: JSX.Element } = {
-    Github: <GithubIcon />,
-    LinkedIn: <LinkedInIcon />,
-    Resume: <ResumeIcon />,
-    PersonalWebsite: <PersonalWebsiteIcon />,
+const IconFactory = (IconName: ReferenceNames): JSX.Element => {
+    switch (IconName) {
+        case 'Github':
+            return <GithubIcon />;
+        case 'LinkedIn':
+            return <LinkedInIcon />;
+        case 'resume':
+            return <ResumeIcon />;
+        case 'personalWebsite':
+            return <PersonalWebsiteIcon />;
+        case 'email':
+            return <EmailIcon />;
+        case 'phone':
+            return <PhoneIcon />;
+        default:
+            return <OtherIcon />;
+    }
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -130,7 +144,7 @@ export default function ProfileCard({ teamMember }: Props) {
                                     color='primary'
                                     aria-label={reference.name}
                                 >
-                                    {I}
+                                    {IconFactory(reference.name)}
                                 </IconButton>
                             </Grid>
                         ))}

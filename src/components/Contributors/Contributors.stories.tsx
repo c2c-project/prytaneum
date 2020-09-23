@@ -1,6 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker';
+
+import { ReferenceNames } from 'types';
 import Component from '.';
 
 export default {
@@ -19,18 +21,19 @@ const makeBaseTeam = () => ({
 const makeTeam = (num: number) => {
     const teamMembers = [];
     const linkedIn = {
-        icon: <></>,
-        name: 'LinkedIn',
+        name: 'LinkedIn' as ReferenceNames,
         link: 'https://www.linkedin.com',
     };
-    const email = { icon: <></>, name: 'Email', link: 'https://www.gmail.com' };
+    const email = {
+        name: 'email' as ReferenceNames,
+        link: 'https://www.gmail.com',
+    };
     for (let i = 0; i < num; i += 1) {
         const tempMem = makeBaseTeam();
         teamMembers.push({
             ...tempMem,
             picturePath: faker.image.imageUrl(),
-            // this is just creating a copy of linkedIn or email object each time
-            references: i % 2 === 0 ? [{ ...linkedIn }] : [{ ...email }],
+            references: i % 2 === 0 ? [linkedIn] : [email],
         });
     }
     return {

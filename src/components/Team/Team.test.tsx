@@ -3,6 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
 
+import { ReferenceNames } from 'types';
 import Team from './Team';
 
 describe('Team', () => {
@@ -36,8 +37,7 @@ describe('Team', () => {
                     picturePath: faker.image.imageUrl(),
                     references: [
                         {
-                            icon: <></>,
-                            name: 'Email',
+                            name: 'Email' as ReferenceNames,
                             link: 'https://www.gmail.com',
                         },
                     ],

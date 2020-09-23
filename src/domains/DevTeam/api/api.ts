@@ -3,10 +3,9 @@ import errors from 'utils/errors';
 import { Team, TeamMember } from 'types';
 
 export function getDevTeams() {
-    return axios.get('/api/dev-team/get-teams');
+    return axios.get<{ devTeam: Team[] }>('/api/dev-team/get-teams');
 }
 
-// TODO: Change the type of reference to be a string so that it can store it in the backend
 export function addMemberToTeam(newMember: TeamMember, team: string) {
     if (
         !newMember.description ||
