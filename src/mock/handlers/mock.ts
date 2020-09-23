@@ -11,15 +11,19 @@ const createNames = (num: number) => {
 
 export default [
     rest.get('/api/mock/get-names', (req, res, ctx) => {
-        // we do nothing with the password for now
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const page = req.url.searchParams.get('page');
+        const limit = req.url.searchParams.get('limit');
+        if (!limit || !page) {
+            return res(ctx.status(400));
+        }
+
         function getRandomInt(max: number) {
             return Math.floor(Math.random() * Math.floor(max));
         }
         return res(
             ctx.status(200),
             ctx.json({
-                names: createNames(40),
+                names: createNames(parseInt(limit, 10)),
                 hasNext: !(getRandomInt(5) === 2),
             })
         );
