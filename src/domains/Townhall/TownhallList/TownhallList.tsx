@@ -37,13 +37,20 @@ function formatSections(list: Townhall[]): Section[] {
     });
 }
 
-export default function TownhallList() {
+interface Props {
+    userId?: string;
+}
+
+export default function TownhallList({ userId }: Props) {
     const [list, setList] = React.useState<Townhall[] | null>(null);
-    const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
-        onSuccess: (results) => {
-            setList(results.data.list);
-        },
-    });
+    const [sendRequest, isLoading] = useEndpoint(
+        () => getTownhallList(userId),
+        {
+            onSuccess: (results) => {
+                setList(results.data.list);
+            },
+        }
+    );
 
     React.useEffect(sendRequest, []);
     if (isLoading || !list) {
@@ -68,3 +75,7 @@ export default function TownhallList() {
         </Fade>
     );
 }
+
+TownhallList.defaultProps = {
+    userId: undefined,
+};

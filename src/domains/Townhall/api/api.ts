@@ -33,8 +33,9 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
     return axios.post<unknown>('/api/townhalls/update', body);
 }
 
-export async function getTownhallList() {
-    return axios.get<{ list: Townhall[] }>('/api/townhalls/list');
+export async function getTownhallList(userId?: string) {
+    const query = userId ? `?owner=${userId}` : '';
+    return axios.get<{ list: Townhall[] }>(`/api/townhalls/list${query}`);
 }
 
 export async function getTownhall(id: string) {
