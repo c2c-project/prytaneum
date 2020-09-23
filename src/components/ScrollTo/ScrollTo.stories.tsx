@@ -8,25 +8,25 @@ export default {
 };
 
 function Spam(n: number) {
-    const toAdd =
-        document.getElementById('scrollTo') || document.createElement('p');
-    toAdd.innerHTML = '';
-    toAdd.innerHTML = '<br/>';
+    const doc = document.getElementById('scrollTo');
+    let toAdd = '<p><br />';
 
     let x = n;
     while (x > 0) {
         // eslint-disable-next-line
-        toAdd.innerHTML = toAdd.innerHTML + 'spam' + '<br/>';
+        toAdd = toAdd + 'spam' + '<br />';
         x -= 1;
     }
-    document.body.appendChild(toAdd);
+    toAdd += '</p>';
+
+    doc?.insertAdjacentHTML('afterend', toAdd);
 }
 
 export function ScrollToTop() {
     return (
         <div id='scrollTo'>
             <Component active direction='top'>
-                <button type='button' onClick={() => Spam(10)}>
+                <button type='button' onClick={() => Spam(1000)}>
                     click to add spam
                 </button>
             </Component>
@@ -38,7 +38,7 @@ export function ScrollToBottom() {
     return (
         <div id='scrollTo'>
             <Component active direction='bottom'>
-                <button type='button' onClick={() => Spam(10)}>
+                <button type='button' onClick={() => Spam(1000)}>
                     click to add spam
                 </button>
             </Component>
