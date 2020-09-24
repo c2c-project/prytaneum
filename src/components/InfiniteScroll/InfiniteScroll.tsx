@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Loader from 'components/Loader';
+
 interface Props {
     children: JSX.Element | JSX.Element[];
     loadMore: null | (() => void);
@@ -26,8 +28,11 @@ export default function InfiniteScroll({
         // TODO: onScroll does not work with div. Might need to use a ref and state in the main element (https://github.com/Bedrock-Layouts/Bedrock/blob/master/packages/use-stateful-ref/examples/basic.example.tsx)
         <main onScroll={handleScroll}>
             {children}
-            {/* TODO: Add Laoder  */}
-            {isLoading && <h1>...Loading</h1>}
+            {isLoading && (
+                <div style={{ height: 1 }}>
+                    <Loader />
+                </div>
+            )}
             <div id='bottom-of-page' ref={ref} />
         </main>
     );

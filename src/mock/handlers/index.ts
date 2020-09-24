@@ -1,6 +1,6 @@
 import auth from './auth';
 import feedbackPortal from './feedbackPortal';
 import townhall from './townhall';
-import mock from './mock';
+import forExample from './for-example';
 
-export default [...auth, ...townhall, ...feedbackPortal, ...mock];
+export default [...auth, ...townhall, ...feedbackPortal, ...forExample];

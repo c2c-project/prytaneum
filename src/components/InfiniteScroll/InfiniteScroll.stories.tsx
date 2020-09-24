@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Component from './ExampleInfiniteScroll';
+import Component from './InfiniteScroll.example';
 
 export default { title: 'Components/InfiniteScroll' };
 
