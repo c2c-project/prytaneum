@@ -42,7 +42,7 @@ export default function ClipsPortal({ clipData }: Props) {
     const [clip, setClip] = React.useState<ClipData | null>(null);
     const [sendRequest, isLoading] = useEndpoint(() => getTownhallClip('1234', '1'), {
         onSuccess: ({data}) => {
-            console.log(data);
+            // console.log(data);
             setClip(data.clip);
         }
     });

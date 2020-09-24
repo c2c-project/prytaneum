@@ -30,60 +30,6 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function createData(
-    timeStamp: string,
-    duration: string,
-    title: string,
-    user: string,
-    description: string,
-    tags: string[]
-): ClipData {
-    return { timeStamp, duration, title, user, description, tags };
-}
-
-const tempRows = [
-    createData(
-        '00:40-1:53',
-        '1 min, 23 secs',
-        'Question title 1',
-        'Mark Takano',
-        'Session Title',
-        ['History', 'Philosophy', 'Prop 60']
-    ),
-    createData(
-        '1:34-2:23',
-        '1 min, 23 secs',
-        'Question title 2',
-        'Gavin Newsom',
-        'Session Title',
-        ['History', 'A.I']
-    ),
-    createData(
-        '3:40-5:00',
-        '1 min, 23 secs',
-        'Question title 3',
-        'Batman',
-        'Session Title',
-        ['History', 'Philosophy', 'Prop 60']
-    ),
-    createData(
-        '00:40-1:53',
-        '1 min, 23 secs',
-        'Question title 4',
-        'Batman',
-        'Session Title',
-        ['History', 'Philosophy', 'Prop 60']
-    ),
-    createData(
-        '00:40-1:53',
-        '1 min, 23 secs',
-        'Question title 5',
-        'Batman',
-        'Session Title',
-        ['History', 'Philosophy', 'Prop 60']
-    ),
-];
-
 export default function ClipList() {
     const classes = useStyles();
     const [clips, setClips] = React.useState<ClipData[] | null>(null);
@@ -91,7 +37,7 @@ export default function ClipList() {
         () => getTownhallClips('1234'),
         {
             onSuccess: ({ data }) => {
-                console.log(data);
+                // console.log(data);
                 setClips(data.clips);
             },
         }
