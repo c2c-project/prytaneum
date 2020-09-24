@@ -41,21 +41,21 @@ describe('LoginForm', () => {
         });
 
         // find fields
-        const usernameNode = document.querySelector(
-            '#username'
+        const emailNode = document.querySelector(
+            '#email'
         ) as HTMLInputElement;
         const passwordNode = document.querySelector(
             '#password'
         ) as HTMLInputElement;
 
         // expect them to be initially empty
-        expect(usernameNode.value).toBe('');
+        expect(emailNode.value).toBe('');
         expect(passwordNode.value).toBe('');
 
         // change the fields
         ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(usernameNode, {
-                target: ({ value: 'username' } as unknown) as EventTarget,
+            ReactTestUtils.Simulate.change(emailNode, {
+                target: ({ value: 'email' } as unknown) as EventTarget,
             });
             ReactTestUtils.Simulate.change(passwordNode, {
                 target: ({ value: 'password' } as unknown) as EventTarget,
@@ -64,7 +64,7 @@ describe('LoginForm', () => {
 
         // expect them to reflect the changed values
         expect(passwordNode.value).toBe('password');
-        expect(usernameNode.value).toBe('username');
+        expect(emailNode.value).toBe('email');
     });
 
     it('should call handleSubmit & onSuccess appropriately', async () => {

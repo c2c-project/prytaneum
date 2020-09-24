@@ -20,39 +20,39 @@ describe('#login', () => {
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
-        await expect(API.login('username', '')).rejects.toThrow(
+        await expect(API.login('email', '')).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
     });
-    it('should accept a username and password pair', async () => {
+    it('should accept a email and password pair', async () => {
         const resolvedValue = { status: 200 };
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
-        await expect(API.login('username', 'password')).resolves.toBe(
+        await expect(API.login('email', 'password')).resolves.toBe(
             resolvedValue
         );
         expect(axios.post).toHaveBeenCalledWith('/api/users/login', {
-            username: 'username',
+            email: 'email',
             password: 'password',
         });
     });
 });
 
 describe('#loginTemp', () => {
-    it('should reject blank username', async () => {
+    it('should reject blank email', async () => {
         await expect(API.loginTemp('')).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
     });
-    it('should accept a username', async () => {
+    it('should accept a email', async () => {
         const resolvedValue = { status: 200 };
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
-        await expect(API.loginTemp('username')).resolves.toBe(resolvedValue);
+        await expect(API.loginTemp('email')).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith('/api/users/login-temporary', {
-            username: 'username',
+            email: 'email',
         });
     });
 });

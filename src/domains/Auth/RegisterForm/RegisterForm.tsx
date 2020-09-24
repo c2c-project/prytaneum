@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import { Grid, Button, IconButton, InputAdornment } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import TextField from 'components/TextField';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
@@ -27,8 +28,8 @@ interface Props {
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, setForm] = React.useState<RegisterFormType>({
-        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -42,18 +43,23 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
         onFailure,
     });
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        id: string
+    const handleChange = (key: keyof RegisterFormType) => (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         e.preventDefault();
         const { value } = e.target;
-        setForm((state) => ({ ...state, [id]: value }));
+        setForm((state) => ({ ...state, [key]: value }));
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         sendRequest();
+    };
+
+    const handleMouseDownPassword = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
     };
 
     return (
@@ -66,26 +72,13 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
             >
                 <Grid item xs={12}>
                     <TextField
-                        id='username'
-                        required
-                        fullWidth
-                        variant='outlined'
-                        type='text'
-                        value={form.username}
-                        onChange={(e) => handleChange(e, 'username')}
-                        label='Username'
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
                         id='email'
                         required
-                        fullWidth
-                        variant='outlined'
                         type='email'
                         value={form.email}
-                        onChange={(e) => handleChange(e, 'email')}
+                        onChange={handleChange('email')}
                         label='Email'
+                        autoFocus
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -94,10 +87,30 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         required
                         fullWidth
                         variant='outlined'
-                        type='password'
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
-                        onChange={(e) => handleChange(e, 'password')}
+                        onChange={handleChange('password')}
                         label='Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() =>
+                                            setIsPassVisible(!isPassVisible)
+                                        }
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -106,10 +119,30 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         required
                         fullWidth
                         variant='outlined'
-                        type='password'
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.confirmPassword}
-                        onChange={(e) => handleChange(e, 'confirmPassword')}
+                        onChange={handleChange('confirmPassword')}
                         label='Confirm Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() =>
+                                            setIsPassVisible(!isPassVisible)
+                                        }
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
                 <Grid container item xs={12} justify='flex-end'>
@@ -117,6 +150,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         loading={isLoading}
                         component={
                             <Button
+                                fullWidth
                                 type='submit'
                                 variant='contained'
                                 color='primary'
