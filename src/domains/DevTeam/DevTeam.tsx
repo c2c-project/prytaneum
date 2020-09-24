@@ -23,23 +23,23 @@ export default function DevTeam() {
     });
     React.useEffect(() => sendRequest(), []);
 
-    return (
-        <Grid container spacing={5}>
-            <Grid container item justify='center'>
+    return isLoading ? (
+        <div style={{ height: '100vh' }}>
+            <Loader />
+        </div>
+    ) : (
+        <Grid container spacing={4}>
+            <Grid container item justify='center' alignItems='center'>
                 <Typography variant='h4' align='center'>
                     Lab Research Team
                 </Typography>
             </Grid>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                devTeam.map((subTeam, index) => (
-                    <Grid item key={index}>
-                        <Divider style={{ marginBottom: 30 }} />
-                        <Team team={subTeam} />
-                    </Grid>
-                ))
-            )}
+            {devTeam.map((subTeam, index) => (
+                <Grid item key={index}>
+                    <Divider style={{ marginBottom: 30 }} />
+                    <Team team={subTeam} />
+                </Grid>
+            ))}
         </Grid>
     );
 }
