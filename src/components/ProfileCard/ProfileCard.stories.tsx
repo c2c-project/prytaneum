@@ -15,8 +15,8 @@ const dummyTeamMember = {
     fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.lorem.paragraph(2),
     subtitle: faker.random.words(2),
-    startDate: faker.date.recent(),
-    endDate: faker.date.future(),
+    startDate: faker.date.recent().toISOString(),
+    endDate: faker.date.future().toISOString(),
     references: [
         {
             name: 'Github' as ReferenceNames,

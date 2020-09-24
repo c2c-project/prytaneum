@@ -18,8 +18,8 @@ export interface TeamMember {
     fullName: string;
     subtitle: string;
     description: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     references?: Reference[];
 }
 

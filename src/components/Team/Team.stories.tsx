@@ -14,8 +14,8 @@ const makeBaseTeam = () => ({
     fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.lorem.paragraph(),
     subtitle: faker.random.words(2),
-    startDate: faker.date.recent(),
-    endDate: faker.date.future(),
+    startDate: faker.date.recent().toISOString(),
+    endDate: faker.date.future().toISOString(),
 });
 
 const makeTeam = (num: number) => {
