@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { TeamMember } from 'types';
-import devTeam, { addTeamMember } from './devTeam';
+import devTeam, { addTeamMember } from 'domains/DevTeam/devTeamData';
 
 export default [
     rest.get('/api/dev-team/get-teams', (req, res, ctx) => {
