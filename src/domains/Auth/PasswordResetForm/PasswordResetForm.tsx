@@ -36,7 +36,7 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
     );
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack('Successfully reset password!', 'success');
+            snack('Successfully reset password!');
             onSuccess();
         },
     });
