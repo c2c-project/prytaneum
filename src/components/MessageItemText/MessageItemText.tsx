@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 interface Props {
-    id?: string;
     text: string;
+    id?: string;
 }
 
 /** Returns the text in proper typography so it is consistent with the current theme throughout the app
@@ -28,4 +28,5 @@ MessageItemText.defaultProps = {
 
 MessageItemText.propTypes = {
     text: PropTypes.string.isRequired,
+    id: PropTypes.string,
 };
