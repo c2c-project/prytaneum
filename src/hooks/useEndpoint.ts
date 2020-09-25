@@ -97,11 +97,11 @@ export default function useEndpoint<T>(
                     Button,
                     {
                         onClick: () => {
+                            window.removeEventListener('beforeunload', closeFunction, false);
                             if (isMounted === true) {
                                 _onUndo();
                                 isStopped = true;
                                 setIsLoading(false);
-                                window.removeEventListener('beforeunload', closeFunction, false);
                             }
                         },
                         variant: 'text',
@@ -110,11 +110,11 @@ export default function useEndpoint<T>(
                     'Undo'
                 ),
                 onExited: () => {
+                    window.removeEventListener('beforeunload', closeFunction, false);
                     if (isStopped === false && sentRequest === false) {
                         sentRequest = true;
                         // eslint-disable-next-line no-void
                         void request();
-                        window.removeEventListener('beforeunload', closeFunction, false);
                     }
                 }
             });            
