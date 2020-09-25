@@ -11,7 +11,7 @@ export default [
             })
         );
     }),
-    rest.post('/api/dev-team/add-member', async (req, res, ctx) => {
+    rest.post('/api/dev-team/add-member', (req, res, ctx) => {
         const { newMember, teamName } = req.body as {
             newMember: TeamMember;
             teamName: string;
@@ -20,5 +20,6 @@ export default [
             return res(ctx.status(400));
         }
         addTeamMember(newMember, teamName);
+        return res(ctx.status(200));
     }),
 ];
