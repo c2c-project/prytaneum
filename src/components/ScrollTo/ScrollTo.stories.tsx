@@ -18,12 +18,12 @@ function Spam(n: number, dir: string) {
     const [spam, updateSpam] = React.useState(n);
     React.useEffect(() => {
         const effect = document.getElementById('scrollTo');
+        const toAdd =
+            "<div style={{ height: '500px' }}><h1>SPAM #`${spam}`</h1></div>";
+        if (dir === 'top') {
+            effect?.insertAdjacentHTML('beforebegin', toAdd);
+        }
     });
-    return (
-        <div style={{ height: '500px' }}>
-            <h1>SPAM</h1>
-        </div>
-    );
 
     // const doc = document.getElementById('scrollTo');
     // let toAdd = '<p><br />';

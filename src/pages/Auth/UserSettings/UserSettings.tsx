@@ -50,11 +50,11 @@ const options_list = [
         component: <AppearAnonymous />, // what the button opens -- dialog content
     },
     {
-        text: 'Disable Account',
+        text: 'Notifications',
         component: <Notifications />,
     },
     {
-        text: 'Delete Account',
+        text: 'Appearance',
         component: <Appearance />,
     },
 ];
@@ -92,7 +92,6 @@ const information_list = [
         component: <TermsOfService />,
     },
 ];
-
 
 /**
  * Displays the settings for User, using SettingsMenu, it displays the User information like first name, last name, username, email and obfuscated password, so they can change it. To be pulled and pushed from/to database later <br/></br>
