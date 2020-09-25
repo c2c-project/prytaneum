@@ -26,17 +26,10 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-<<<<<<< HEAD
                 <SnackContext maxSnack={1}>
-                    <BrowserRouter>
-                        <Pages />
-                    </BrowserRouter>
-=======
-                <SnackContext maxSnack={3}>
                     <UserContext.Provider value={{ user, setUser }}>
                         <Routes />
                     </UserContext.Provider>
->>>>>>> upstream/master
                 </SnackContext>
             </MuiPickersUtilsProvider>
         </ThemeProvider>
