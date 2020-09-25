@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -6,13 +10,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
-import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import UserProfile from 'components/UserProfile';
-import Options from 'components/Options';
-import AccountSettings from 'components/AccountSettings';
-import Information from 'components/Information';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
+import {
+    ButtonList,
+    AppearAnonymous,
+    Notifications,
+    Appearance,
+    Logout,
+    DisableAccount,
+    DeleteAccount,
+    Feedback,
+    AboutUs,
+    PrivacyPolicy,
+    TermsOfService,
+} from './helpers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +43,56 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
     id?: string;
 }
+
+const options_list = [
+    {
+        text: 'Appear Anonymous', // button text
+        component: <AppearAnonymous />, // what the button opens -- dialog content
+    },
+    {
+        text: 'Disable Account',
+        component: <Notifications />,
+    },
+    {
+        text: 'Delete Account',
+        component: <Appearance />,
+    },
+];
+
+const account_settings_list = [
+    {
+        text: 'Logout', // button text
+        component: <Logout />, // what the button opens -- dialog content
+    },
+    {
+        text: 'Disable Account',
+        component: <DisableAccount />,
+    },
+    {
+        text: 'Delete Account',
+        component: <DeleteAccount />,
+    },
+];
+
+const information_list = [
+    {
+        text: 'Feedback',
+        component: <Feedback />,
+    },
+    {
+        text: 'About Us',
+        component: <AboutUs />,
+    },
+    {
+        text: 'Privacy Policy',
+        component: <PrivacyPolicy />,
+    },
+    {
+        text: 'Terms of Service',
+        component: <TermsOfService />,
+    },
+];
+
 
 /**
  * Displays the settings for User, using SettingsMenu, it displays the User information like first name, last name, username, email and obfuscated password, so they can change it. To be pulled and pushed from/to database later <br/></br>
@@ -51,77 +114,29 @@ export default function UserSettings({ id }: Props) {
         if (cont === null) setOpen(false);
     }, [cont]);
 
-    const dialogData = [
-        { text: Options().title, component: Options().dialogData },
-        {
-            text: AccountSettings().title,
-            component: AccountSettings().dialogData,
-        },
-        { text: Information().title, component: Information().dialogData },
-    ];
-
-    const optionsDialog = () => {
-        return dialogData[0].component.map(({ text, component }) => (
-            <List>
-                <li>
-                    <ListItem
-                        key={text}
-                        button
-                        onClick={() => setContent(component)}
-                    >
-                        <ListItemText primary={text} />
-                    </ListItem>
-                </li>
-            </List>
-        ));
-    };
-    const accountSettingsDialog = () => {
-        return dialogData[1].component.map(({ text, component }) => (
-            <List>
-                <li>
-                    <ListItem
-                        key={text}
-                        button
-                        onClick={() => setContent(component)}
-                    >
-                        <ListItemText primary={text} />
-                    </ListItem>
-                </li>
-            </List>
-        ));
-    };
-    const infoDialog = () => {
-        return dialogData[2].component.map(({ text, component }) => (
-            <List>
-                <li>
-                    <ListItem
-                        key={text}
-                        button
-                        onClick={() => setContent(component)}
-                    >
-                        <ListItemText primary={text} />
-                    </ListItem>
-                </li>
-            </List>
-        ));
-    };
-
     const sections = [
         {
-            title: UserProfile().title,
-            content: UserProfile().content,
+            title: 'fName lName',
+            content: <UserProfile img='image src' />,
         },
         {
-            title: Options().title,
-            content: optionsDialog(),
+            title: 'Options',
+            content: <ButtonList list={options_list} setContent={setContent} />,
         },
         {
-            title: AccountSettings().title,
-            content: accountSettingsDialog(),
+            title: 'Account Settings',
+            content: (
+                <ButtonList
+                    list={account_settings_list}
+                    setContent={setContent}
+                />
+            ),
         },
         {
-            title: Information().title,
-            content: infoDialog(),
+            title: 'Information',
+            content: (
+                <ButtonList list={information_list} setContent={setContent} />
+            ),
         },
     ];
 

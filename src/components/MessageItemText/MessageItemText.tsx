@@ -28,4 +28,5 @@ MessageItemText.defaultProps = {
 
 MessageItemText.propTypes = {
     text: PropTypes.string.isRequired,
+    id: PropTypes.string,
 };

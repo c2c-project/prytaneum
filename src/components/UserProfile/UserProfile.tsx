@@ -2,66 +2,64 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { Avatar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-export default function UserProfile() {
-    const image = 'https://i.imgur.com/3beQH5s.jpeg';
-    return {
-        title: 'fName lName',
-        content: (
-            <Grid component='span' container spacing={2} alignContent='center'>
+interface Props {
+    img?: string;
+}
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: `${theme.spacing(2)}px 0 ${theme.spacing(2)}px 10px`,
+        height: '100%',
+        width: '100%',
+    },
+}));
+
+export default function UserProfile({ img }: Props) {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <Grid component='span' container alignContent='center'>
                 <Grid component='span' item xs={12}>
-                    <Avatar src={image} alt='Profile Avatar' />
+                    <Avatar src={img} alt='Profile Avatar' />
                     {/* ROUTING: to page to upload new photo?*/}
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
-                        id='username'
+                        label='Username'
+                        aria-label='Username'
                         required
-                        fullWidth
-                        variant='outlined'
                         type='text'
                         value='pull from db for username'
                         onChange={() => {}}
-                        label='Username'
                         spellCheck={false}
-                        autoComplete='off'
-                        autoCorrect='off'
-                        autoCapitalize='off'
                     />
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
-                        id='email'
+                        label='Email'
+                        aria-label='Email'
                         required
-                        fullWidth
-                        variant='outlined'
                         type='email'
                         value='push to db for email'
                         onChange={() => {}}
-                        label='Email'
                         spellCheck={false}
-                        autoComplete='off'
-                        autoCorrect='off'
-                        autoCapitalize='off'
                     />
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
-                        id='password'
+                        label='Password'
+                        aria-label='Password'
                         required
-                        fullWidth
-                        variant='outlined'
                         type='password'
                         value='push to db for password'
                         onChange={() => {}}
-                        label='Password'
                         spellCheck={false}
-                        autoComplete='off'
-                        autoCorrect='off'
-                        autoCapitalize='off'
                     />
                 </Grid>
             </Grid>
-        ),
-    };
+        </div>
+    );
 }
