@@ -1,90 +1,78 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import Grow from '@material-ui/core/Grow';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import { Link as MUILink, Grid, Typography, Avatar } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Paper from 'components/Paper';
 import LoginForm from 'domains/Auth/LoginForm';
-import banner from 'assets/spp-banner.png';
-
-import routeNames from '../route-names';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '100%',
-    },
     paper: {
-        // not necessary anymore?
-        // marginTop: '64-px', // slight offset to make the component feel more vertically centered
-        padding: theme.spacing(2),
+        marginTop: theme.spacing(12),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
     },
-    img: {
-        width: '100%',
-        height: 'auto',
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(4),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    nav: {
+        paddingTop: theme.spacing(2),
     },
 }));
 
-export default function Login() {
-    const history = useHistory();
+interface Props {
+    onLogin: () => void;
+    registerRoute: string;
+    forgotPassRoute: string;
+}
+
+export default function Login({
+    onLogin,
+    registerRoute,
+    forgotPassRoute,
+}: Props) {
     const classes = useStyles();
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <Paper className={classes.paper}>
-                        <img
-                            className={classes.img}
-                            src={banner}
-                            alt='University of California Riverside School of Public Policy Logo'
-                        />
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <LoginForm
-                                    onSuccess={() => history.push('/app/home')} // TODO: CHANGE THIS
-                                />
-                            </Grid>
-                            <Grid
-                                container
-                                item
-                                xs={12}
-                                justify='space-between'
-                            >
-                                <Button
-                                    onClick={() =>
-                                        history.push(routeNames.register)
-                                    }
-                                >
-                                    Register
-                                </Button>
-                                <Button
-                                    aria-label='Forgot Password'
-                                    onClick={() =>
-                                        history.push(routeNames.forgotPassRequest)
-                                    }
-                                >
-                                    Forgot Password?
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        history.push(routeNames.loginTemp)
-                                    }
-                                >
-                                    Temporarily Login
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
+        <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+            </Avatar>
+            <Typography component='h1' variant='h5'>
+                Sign in
+            </Typography>
+            <div className={classes.form}>
+                <LoginForm onSuccess={onLogin} />
+            </div>
+            <Grid container className={classes.nav}>
+                <Grid item xs>
+                    <MUILink
+                        href={forgotPassRoute}
+                        variant='body2'
+                        component='a'
+                    >
+                        Forgot password?
+                    </MUILink>
                 </Grid>
-            </Grow>
-        </Container>
+                <Grid item>
+                    <MUILink
+                        href={registerRoute}
+                        variant='body2'
+                        component='a'
+                    >
+                        Don&#39;t have an account? Sign Up
+                    </MUILink>
+                </Grid>
+            </Grid>
+        </div>
     );
 }
