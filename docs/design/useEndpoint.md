@@ -1,6 +1,6 @@
 # Use Endpoint
 ## Overview
-This feature provides the user the option to undo a given request after it has been sent.
+This component is used when a request needs to be made to the server. An optional undo parameter allows users to undo a request by clicking on a snack.
 
 # Index
 - [Functions](#f)
