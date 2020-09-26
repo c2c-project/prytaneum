@@ -1,9 +1,7 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core';
 import { MemoryRouter, Route } from 'react-router-dom';
 
 import Component from './LoggedIn';
-import theme from 'theme';
 
 export default {
     title: 'Components/LoggedIn',
@@ -11,13 +9,12 @@ export default {
 };
 
 const path = '/';
-let logout: any;
 
-export function LoggedIn_JwtTrue() {
+export function LoggedInJwtTrue() {
     return (
         <MemoryRouter initialEntries={['/']}>
             <Route path={path}>
-                <Component jwt={true}>
+                <Component jwt>
                     <h1>this should be rendered</h1>
                 </Component>
             </Route>
@@ -25,14 +22,14 @@ export function LoggedIn_JwtTrue() {
     );
 }
 
-export function LoggedIn_JwtFalse() {
+export function LoggedInJwtFalse() {
     return (
         <MemoryRouter initialEntries={['/']}>
             <Route path={path} exact>
                 <Component jwt={false}>
                     <h1>
-                        This should be rendered, but console.log should say 'not
-                        redirecting'
+                        This should be rendered, but console.log should say
+                        &quot not redirecting &quot
                     </h1>
                 </Component>
             </Route>

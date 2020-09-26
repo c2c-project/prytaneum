@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
+import renderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import MessageItemTimestamp from './MessageItemTimestamp';
@@ -23,21 +24,19 @@ describe('MessageItemTimestamp', function () {
 
     it('should render', () => {
         const time = 10;
-        const toTest =
-            '<div id="MessageItemTimestamp"><p class="MuiTypography-root MuiTypography-body1">"+format(new Date(time), \'hh:mm\')+"</p></div>';
+        // eslint-disable-next-line
+        const snapshot = renderer
+            .create(
+                <MessageItemTimestamp id='MessageItemTimestamp' time={time} />
+            )
+            .toJSON();
         ReactTestUtils.act(() => {
             render(
-                <div id='MessageItemTimestamp'>
-                    <MessageItemTimestamp time={time} />
-                </div>,
+                <MessageItemTimestamp id='MessageItemTimestamp' time={time} />,
                 container
             );
         });
-        expect(
-            document.getElementById('MessageItemTimestamp')?.childElementCount
-        ).toBe(1);
-        expect(document.getElementById('MessageItemTimestamp')).toContainHTML(
-            toTest
-        );
+        expect(document.getElementById('MessageItemTimestamp')).toBeTruthy();
+        expect(snapshot).toMatchSnapshot();
     });
 });

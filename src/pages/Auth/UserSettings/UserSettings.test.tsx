@@ -36,9 +36,7 @@ describe('UserSettings', () => {
                 <ThemeProvider theme={theme}>
                     <MemoryRouter initialEntries={['/']}>
                         <Route path='/'>
-                            <span id='test'>
-                                <UserSettings />
-                            </span>
+                            <UserSettings id='test' />
                         </Route>
                     </MemoryRouter>
                 </ThemeProvider>,

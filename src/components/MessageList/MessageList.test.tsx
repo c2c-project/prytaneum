@@ -30,16 +30,14 @@ describe('MessageList', () => {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider theme={theme}>
-                    <div id='test'>
-                        <MessageList>
-                            <h1>Child</h1>
-                            <h2>child2</h2>
-                        </MessageList>
-                    </div>
+                    <MessageList id='test'>
+                        <h1>Child</h1>
+                        <h2>child2</h2>
+                    </MessageList>
                 </ThemeProvider>,
                 container
             );
         });
-        expect(document.getElementById('test')?.childElementCount).toBe(1);
+        expect(document.getElementById('test')).toBeTruthy();
     });
 });

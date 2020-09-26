@@ -17,11 +17,10 @@ const useStyles = makeStyles({
     },
 });
 
-
 /** Transition used by FullScreenDialog -- it slides up
  *  @category Component
  *  @constructor Dialog
-*/
+ */
 const Transition = React.forwardRef(function Transition(
     props: SlideProps,
     ref: React.Ref<unknown>
@@ -47,6 +46,7 @@ export default function Dialog(props: Props) {
     const classes = useStyles();
 
     return (
+        <div>
             <MUIDialog
                 fullScreen
                 open={open}
@@ -65,13 +65,18 @@ export default function Dialog(props: Props) {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Typography component="span" variant='h6' className={classes.title}>
+                        <Typography
+                            component='span'
+                            variant='h6'
+                            className={classes.title}
+                        >
                             {title}
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 {open && children}
             </MUIDialog>
+        </div>
     );
 }
 

@@ -1,65 +1,39 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { ListItem } from '@material-ui/core';
 
-import { DialogType } from 'pages/Auth/UserSettings/types';
-
-const [openAppearance, setOpenAppearance] = React.useState(false);
+/**
+ * Template/config for displaying Options section on user settings page
+ * contains dialogs for Appear anonymous, Notifications, and Appearance
+ * @category Component
+ * @constructor Options
+ */
 
 export default function Options() {
     return {
         title: 'Options',
-        sectionData: [
+        dialogData: [
             {
-                title: '',
-                subtitle: (
-                    <Grid
-                        component='span'
-                        container
-                        spacing={2}
-                        alignContent='center'
-                    >
-                        <Grid component='span' item xs={12}>
-                            <Button
-                                component='span'
-                                // use state for options
-                                // flag in userProfile should have a field for anonymous
-                                // react is only re-rendered when use/set state is used
-                                // same value of variable is not kept upon refreshing
-                                onClick={() => {}}
-                            >
-                                Appear anonymous:
-                            </Button>
-                        </Grid>
-                        <Grid component='span' item xs={12}>
-                            <Button component='span' onClick={() => {}}>
-                                Notify me about upcoming Townhalls:
-                            </Button>
-                        </Grid>
-                        <Grid component='span' item xs={12}>
-                            <ListItem
-                                button
-                                hidden={false}
-                                onClick={() => setOpenAppearance(true)}
-                            >
-                                Appearance
-                            </ListItem>
-                        </Grid>
-                    </Grid>
+                text: 'Appear Anonymous',
+                component: (
+                    <span>
+                        {/* TODO: dialog text depends on if they are already anonymous */}
+                        You will now appear anonymous.
+                    </span>
                 ),
             },
+            {
+                text: 'Notifications',
+                component: (
+                    <span>
+                        <button type='button' onClick={() => {}}>
+                            Notify me about upcoming Townhalls
+                        </button>
+                    </span>
+                ),
+            },
+            {
+                text: 'Appearance',
+                component: <span>Dark mode Color Scheme</span>,
+            },
         ],
-        dialogData: [
-            [
-                'Appearance',
-                <>
-                    <h1>Dark mode: </h1>
-                    <h2>Color scheme: </h2>
-                </>,
-                openAppearance,
-                setOpenAppearance,
-            ],
-        ] as DialogType,
     };
 }

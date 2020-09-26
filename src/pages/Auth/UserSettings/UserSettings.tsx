@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -6,12 +10,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 import AppBar from 'layout/AppBar';
-import SectionList from 'components/SectionList';
 
 import UserProfile from 'components/UserProfile';
-import Options from 'components/Options';
-import AccountSettings from 'components/AccountSettings';
-import Information from 'components/Information';
+import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
+import {
+    ButtonList,
+    AppearAnonymous,
+    Notifications,
+    Appearance,
+    Logout,
+    DisableAccount,
+    DeleteAccount,
+    Feedback,
+    AboutUs,
+    PrivacyPolicy,
+    TermsOfService,
+} from './helpers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,48 +45,108 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserSettings() {
-    const classes = useStyles();
+interface Props {
+    id?: string;
+}
 
-    const openStateArr: {
-        s: [
-            string,
-            JSX.Element,
-            boolean,
-            React.Dispatch<React.SetStateAction<boolean>>
-        ];
-    }[] = [
-        { s: Options().dialogData[0] },
-        { s: AccountSettings().dialogData[0] },
-        { s: AccountSettings().dialogData[1] },
-        { s: AccountSettings().dialogData[2] },
-        { s: Information().dialogData[0] },
-        { s: Information().dialogData[1] },
-        { s: Information().dialogData[2] },
-        { s: Information().dialogData[3] },
-    ];
+const options_list = [
+    {
+        text: 'Appear Anonymous', // button text
+        component: <AppearAnonymous />, // what the button opens -- dialog content
+    },
+    {
+        text: 'Notifications',
+        component: <Notifications />,
+    },
+    {
+        text: 'Appearance',
+        component: <Appearance />,
+    },
+];
+
+const account_settings_list = [
+    {
+        text: 'Logout', // button text
+        component: <Logout />, // what the button opens -- dialog content
+    },
+    {
+        text: 'Disable Account',
+        component: <DisableAccount />,
+    },
+    {
+        text: 'Delete Account',
+        component: <DeleteAccount />,
+    },
+];
+
+const information_list = [
+    {
+        text: 'Feedback',
+        component: <Feedback />,
+    },
+    {
+        text: 'About Us',
+        component: <AboutUs />,
+    },
+    {
+        text: 'Privacy Policy',
+        component: <PrivacyPolicy />,
+    },
+    {
+        text: 'Terms of Service',
+        component: <TermsOfService />,
+    },
+];
+
+/**
+ * Displays the settings for User, using SettingsMenu, it displays the User information like first name, last name, username, email and obfuscated password, so they can change it. To be pulled and pushed from/to database later <br/></br>
+ * It also displays options for appearing anonymously, notifcations for upcoming townhalls, darkmode and color scheme (like material UIs website) <br/></br>
+ * Account settings shows an option to logout, disable or delete account, each one opens a dialog box, see components/dialog
+ * Information is info about us, feedback, ToS and privacy policy
+ * @category Pages/Auth
+ * @constructor UserSettings
+ * @param Props
+ * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
+ */
+export default function UserSettings({ id }: Props) {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [cont, setContent] = React.useState<JSX.Element | null>(null);
+
+    React.useEffect(() => {
+        if (cont !== null) setOpen(true);
+        if (cont === null) setOpen(false);
+    }, [cont]);
 
     const sections = [
         {
-            title: UserProfile().title,
-            sectionData: UserProfile().sectionData,
+            title: 'fName lName',
+            content: <UserProfile img='image src' />,
         },
         {
-            title: Options().title,
-            sectionData: Options().sectionData,
+            title: 'Options',
+            content: <ButtonList list={options_list} setContent={setContent} />,
         },
         {
-            title: AccountSettings().title,
-            sectionData: AccountSettings().sectionData,
+            title: 'Account Settings',
+            content: (
+                <ButtonList
+                    list={account_settings_list}
+                    setContent={setContent}
+                />
+            ),
         },
         {
-            title: Information().title,
-            sectionData: Information().sectionData,
+            title: 'Information',
+            content: (
+                <ButtonList list={information_list} setContent={setContent} />
+            ),
         },
     ];
 
     return (
         <Container
+            id={id}
             maxWidth='md'
             disableGutters
             style={{
@@ -87,30 +161,19 @@ export default function UserSettings() {
                         <AppBar back />
                     </Route>
                 </MemoryRouter>
-                <SectionList sections={sections} />
-                {openStateArr.map(({ s }) => (
-                    <Dialog
-                        open={s[2]}
-                        title={s[0]}
-                        onClose={() => s[3](false)}
-                    >
-                        {s[1]}
-                    </Dialog>
+                {sections.map(({ title, content }) => (
+                    <div style={{ height: '100%', top: '0' }}>
+                        <SettingsMenu title={title} content={content} />
+                    </div>
                 ))}
+                <Dialog open={open} onClose={() => setContent(null)}>
+                    {cont || <div />}
+                </Dialog>
             </Paper>
         </Container>
     );
 }
 
-/*
- - React components can be saved in state
- - make own list instead of using seciton list, to get rid of clickable area that does nothing 
-    - look at listcomponent and make a new one
- - TODO:
-    - [DONE?] move sections to their own file
-    - [DONE] Separate Dialog from Dialog Content (pass them in as children)
-    - [DONE] Move Dialogs into return
-    - [DONE] dont use var
-    - [DONE] fix eslint errors
-    - [DONE, bc we got rid of button in SectionList] make own list component
-*/
+UserSettings.defaultProps = {
+    id: 'UserSettings',
+};
