@@ -4,13 +4,13 @@ import List from 'domains/Townhall/TownhallList';
 
 // TODO: re-evaluate if this file is even needed
 interface Props {
-    userId?: string;
+    currentUser?: boolean;
 }
 
-export default function TownhallList({ userId }: Props) {
-    return <List userId={userId} />;
+export default function TownhallList({ currentUser }: Props) {
+    return <List currentUser={currentUser} />;
 }
 
 TownhallList.defaultProps = {
-    userId: undefined,
+    currentUser: false,
 };

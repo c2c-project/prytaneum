@@ -1,11 +1,11 @@
 import React from 'react';
 
-import history from 'utils/history';
-
 import Login from 'pages/Auth/Login';
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallForm from 'pages/Townhall/TownhallForm';
+import { get as getFromStorage } from 'utils/storage';
+import history from 'utils/history';
 import { addRoutes } from './utils';
 
 const Settings = () => {
@@ -21,6 +21,9 @@ addRoutes([
         // user id is the currently logged in user only
         path: '/user',
         action: (ctx) => {
+            if (!getFromStorage('isLoggedIn')) {
+                return <Login onLogin={() => history.push(ctx.pathname)} />;
+            }
             return ctx.next();
         },
         children: [
@@ -29,8 +32,7 @@ addRoutes([
                 action: (ctx) => {
                     const child = ctx.next();
                     if (child) return child;
-                    // TODO: real user id here
-                    return <TownhallList userId='123' />;
+                    return <TownhallList currentUser />;
                 },
                 children: [
                     {

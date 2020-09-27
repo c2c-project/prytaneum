@@ -1,8 +1,18 @@
 import React from 'react';
+import Loader from 'components/Loader';
+import history from 'utils/history';
+import { clear } from 'utils/storage';
 
 export default function Logout() {
-    // TODO: remove localstorage clear when stop using jwt for session tokens
-    // FIXME:
-    window.localStorage.clear();
-    return <div />;
+    // FIXME: send the request to the server too as well
+    React.useEffect(() => {
+        clear();
+        history.push('/auth/login');
+    }, []);
+
+    return (
+        <div style={{ height: '500px', width: '100%' }}>
+            <Loader />
+        </div>
+    );
 }

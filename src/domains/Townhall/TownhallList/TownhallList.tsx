@@ -38,19 +38,16 @@ function formatSections(list: Townhall[]): Section[] {
 }
 
 interface Props {
-    userId?: string;
+    currentUser?: boolean;
 }
 
-export default function TownhallList({ userId }: Props) {
+export default function TownhallList({ currentUser }: Props) {
     const [list, setList] = React.useState<Townhall[] | null>(null);
-    const [sendRequest, isLoading] = useEndpoint(
-        () => getTownhallList(userId),
-        {
-            onSuccess: (results) => {
-                setList(results.data.list);
-            },
-        }
-    );
+    const [sendRequest, isLoading] = useEndpoint(() => getTownhallList(currentUser), {
+        onSuccess: (results) => {
+            setList(results.data.list);
+        },
+    });
 
     React.useEffect(sendRequest, []);
     if (isLoading || !list) {
@@ -77,5 +74,5 @@ export default function TownhallList({ userId }: Props) {
 }
 
 TownhallList.defaultProps = {
-    userId: undefined,
+    currentUser: false,
 };
