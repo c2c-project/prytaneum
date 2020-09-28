@@ -30,7 +30,7 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     ]);
     const [sendRequest] = useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack(`Email sent to ${form.email}`, 'success');
+            snack(`Email sent to ${form.email}`);
             onSuccess();
         },
         onFailure,

@@ -28,15 +28,15 @@ export default function FormQuestion({ onSubmit, roomId }) {
         })
             .then(res => {
                 if (res.status === 200) {
-                    snack('Successfully sent the question!', 'success');
+                    snack('Successfully sent the question!');
                     onSubmit();
                 } else {
-                    snack('Something went wrong! Try again.', 'error');
+                    snack('Something went wrong! Try again.');
                 }
             })
             .catch(err => {
                 console.log(err);
-                snack('Oh no something went wrong, please try again', 'error');
+                snack('Oh no something went wrong, please try again');
             });
     };
     return (

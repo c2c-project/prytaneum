@@ -27,7 +27,7 @@ export default function TownhallQuestionForm({
     const [snack] = useSnack();
     const [sendQuestion, isLoading] = useEndpoint(() => createQuestion(form), {
         onSuccess: () => {
-            snack('Successfully submitted your question!', 'success');
+            snack('Successfully submitted your question!');
             onSubmit();
         },
     });
