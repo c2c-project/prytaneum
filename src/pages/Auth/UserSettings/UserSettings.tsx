@@ -46,23 +46,23 @@ interface Props {
 
 const options_list = [
     {
-        text: 'Appear Anonymous', // button text
-        component: <AppearAnonymous />, // what the button opens -- dialog content
+        text: 'Appear Anonymous',
+        component: <AppearAnonymous />,
     },
     {
-        text: 'Disable Account',
+        text: 'Notifications',
         component: <Notifications />,
     },
     {
-        text: 'Delete Account',
+        text: 'Appearance',
         component: <Appearance />,
     },
 ];
 
 const account_settings_list = [
     {
-        text: 'Logout', // button text
-        component: <Logout />, // what the button opens -- dialog content
+        text: 'Logout',
+        component: <Logout />,
     },
     {
         text: 'Disable Account',
@@ -117,7 +117,7 @@ export default function UserSettings({ id }: Props) {
     const sections = [
         {
             title: 'fName lName',
-            content: <UserProfile img='image src' />,
+            content: <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />,
         },
         {
             title: 'Options',

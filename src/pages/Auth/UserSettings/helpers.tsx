@@ -84,6 +84,7 @@ export const DisableAccount = () => (
             </p>
         </h1>
         <TextField
+            inputProps={{ 'aria-label': 'Enter your password'}}
             label='Please enter your password'
             required
             type='password'
@@ -93,6 +94,7 @@ export const DisableAccount = () => (
             spellCheck={false}
         />
         <TextField
+            inputProps={{ 'aria-label': 'Enter your password again'}}
             label='Please enter your password again to DISABLE your account'
             required
             type='password'
@@ -115,6 +117,7 @@ export const DeleteAccount = () => (
             </p>
         </h1>
         <TextField
+            inputProps={{ 'aria-label': 'Enter your password'}}
             label='Please enter your password'
             required
             variant='outlined'
@@ -124,6 +127,7 @@ export const DeleteAccount = () => (
             spellCheck={false}
         />
         <TextField
+            inputProps={{ 'aria-label': 'Enter your password again'}}
             label='Please enter your password again to DELETE your account'
             required
             variant='outlined'

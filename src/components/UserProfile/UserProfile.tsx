@@ -24,10 +24,11 @@ export default function UserProfile({ img }: Props) {
             <Grid component='span' container alignContent='center'>
                 <Grid component='span' item xs={12}>
                     <Avatar src={img} alt='Profile Avatar' />
-                    {/* ROUTING: to page to upload new photo?*/}
+                    {/* ROUTING: to page to upload new photo*/}
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
+                        inputProps={{ 'aria-label': 'Username'}}
                         label='Username'
                         aria-label='Username'
                         required
@@ -39,6 +40,7 @@ export default function UserProfile({ img }: Props) {
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
+                        inputProps={{ 'aria-label': 'Email'}}
                         label='Email'
                         aria-label='Email'
                         required
@@ -50,6 +52,7 @@ export default function UserProfile({ img }: Props) {
                 </Grid>
                 <Grid component='span' item xs={12}>
                     <TextField
+                        inputProps={{ 'aria-label': 'Password'}}
                         label='Password'
                         aria-label='Password'
                         required
