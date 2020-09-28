@@ -15,6 +15,7 @@ interface Props {
  * @param props
  * @param {boolean} props.active tells whether or not the button is active to be used
  * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
+ * @param {'top' | 'bottom'} props.direction tells to component to scroll up or down continuously, like how twich chat updates, the window scrolls down to update it
  */
 export default function ScrollTo({ active, children, direction }: Props) {
     const bottomRef = React.useRef<HTMLDivElement>(null);

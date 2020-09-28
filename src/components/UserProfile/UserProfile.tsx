@@ -10,9 +10,12 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: `${theme.spacing(2)}px 0 ${theme.spacing(2)}px 10px`,
+        padding: `${theme.spacing(0)}px 5px ${theme.spacing(1)}px 5px`,
         height: '100%',
         width: '100%',
+    },
+    grid: {
+        padding: '10px 5px 10px 5px',
     },
 }));
 
@@ -21,12 +24,17 @@ export default function UserProfile({ img }: Props) {
 
     return (
         <div className={classes.root}>
-            <Grid component='span' container alignContent='center'>
-                <Grid component='span' item xs={12}>
+            <Grid
+                component='span'
+                container
+                alignContent='center'
+                className={classes.grid}
+            >
+                <Grid component='span' item xs={12} className={classes.grid}>
                     <Avatar src={img} alt='Profile Avatar' />
                     {/* ROUTING: to page to upload new photo*/}
                 </Grid>
-                <Grid component='span' item xs={12}>
+                <Grid component='span' item xs={12} className={classes.grid}>
                     <TextField
                         inputProps={{ 'aria-label': 'Username'}}
                         label='Username'
@@ -38,7 +46,7 @@ export default function UserProfile({ img }: Props) {
                         spellCheck={false}
                     />
                 </Grid>
-                <Grid component='span' item xs={12}>
+                <Grid component='span' item xs={12} className={classes.grid}>
                     <TextField
                         inputProps={{ 'aria-label': 'Email'}}
                         label='Email'
@@ -50,7 +58,7 @@ export default function UserProfile({ img }: Props) {
                         spellCheck={false}
                     />
                 </Grid>
-                <Grid component='span' item xs={12}>
+                <Grid component='span' item xs={12} className={classes.grid}>
                     <TextField
                         inputProps={{ 'aria-label': 'Password'}}
                         label='Password'

@@ -9,12 +9,10 @@ import TextField from '@material-ui/core/TextField';
  */
 
 /**
- * cahnge this to look/fcn like other components
+ * change this to look/fcn like other components
  * ideas
  * 1. have separate fcns that return separate parts, so we have an ASLogout() => return (<button>)
- * 2. move them outside of components
- * 3. make each usersettings a diff page, so usersettings just has buttons that routes to pages
- * 4. make a wrapper for them: pass in a title and section, it returns the JSON
+ * 2. make each usersettings a diff page, so usersettings just has buttons that routes to pages
  */
 
 export default function AccountSettings() {

@@ -31,12 +31,17 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
     },
+    grid: {
+        height: '125%',
+    },
     paper: {
         padding: theme.spacing(2),
+        alignItems: 'top',
     },
-    img: {
-        width: '100%',
-        height: 'auto',
+    ul: {
+        backgroundColor: 'inherit',
+        padding: 0,
+        listStyle: 'none',
     },
 }));
 
@@ -92,7 +97,6 @@ const information_list = [
         component: <TermsOfService />,
     },
 ];
-
 
 /**
  * Displays the settings for User, using SettingsMenu, it displays the User information like first name, last name, username, email and obfuscated password, so they can change it. To be pulled and pushed from/to database later <br/></br>
