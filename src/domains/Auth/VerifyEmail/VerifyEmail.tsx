@@ -20,7 +20,7 @@ export default function VerifyEmail({ onSuccess, onFailure, userId }: Props) {
     const [snack] = useSnack();
     const [sendRequest] = useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack('Successfully validated your email', 'success');
+            snack('Successfully validated your email');
             onSuccess();
         },
         onFailure,

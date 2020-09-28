@@ -35,17 +35,17 @@ export default function MessageActions({ targetMsg, onClick }: Props) {
             .then((res) => {
                 if (res.status === 200) {
                     if (targetMsg.moderated) {
-                        snack('Successfully unmoderated messsage', 'success');
+                        snack('Successfully unmoderated messsage');
                     } else {
-                        snack('Successfully moderated messsage', 'success');
+                        snack('Successfully moderated messsage');
                     }
                     onClick();
                 } else {
-                    snack('Something went wrong! Try again.', 'error');
+                    snack('Something went wrong! Try again.');
                 }
             })
             .catch(() => {
-                snack('Something went wrong! Try again.', 'error');
+                snack('Something went wrong! Try again.');
             });
     };
 
