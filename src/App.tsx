@@ -26,7 +26,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <SnackContext maxSnack={3}>
+                <SnackContext maxSnack={1}>
                     <UserContext.Provider value={{ user, setUser }}>
                         <Routes />
                     </UserContext.Provider>

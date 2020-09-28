@@ -60,13 +60,13 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
                 }),
             });
             if (response.status === 200) {
-                snack('Message edited successfully', 'success');
+                snack('Message edited successfully');
                 onClick();
             } else {
-                snack('Something went wrong! Try again.', 'error');
+                snack('Something went wrong! Try again.');
             }
         } catch {
-            snack('Something went wrong! Try again.', 'error');
+            snack('Something went wrong! Try again.');
         }
     };
 
@@ -84,13 +84,13 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
                 }),
             });
             if (response.status === 200) {
-                snack('Successfully deleted message', 'success');
+                snack('Successfully deleted message');
                 onClick();
             } else {
-                snack('Something went wrong! Try again.', 'error');
+                snack('Something went wrong! Try again.');
             }
         } catch {
-            snack('Something went wrong! Try again.', 'error');
+            snack('Something went wrong! Try again.');
         }
     };
 
