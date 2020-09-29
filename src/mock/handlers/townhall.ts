@@ -20,6 +20,7 @@ const makeTownhall = (): TownhallTypes.Townhall => ({
         date: faker.date.between(recent, future),
         url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
         description: faker.lorem.paragraph(),
+        scope: 'Scope',
     },
 });
 

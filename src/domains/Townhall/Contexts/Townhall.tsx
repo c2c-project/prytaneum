@@ -27,6 +27,7 @@ export const TownhallContext = React.createContext<Townhall>({
         date: new Date(),
         url: '',
         description: '',
+        scope: '',
     },
 });
 

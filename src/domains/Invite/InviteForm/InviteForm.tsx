@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useCallback, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -11,8 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import useEndpoint from 'hooks/useEndpoint';
-import API from '../api';
+import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+
 import { InviteForm, InvitePreview } from '../types';
 import Steps from './Steps';
 
@@ -81,6 +81,7 @@ function getSteps() {
 }
 
 export default function InviteFormStepper() {
+    const townHall = useContext(TownhallContext);
     const classes = useStyles();
     const [file, setFile]: [File | undefined, Function] = useState();
     const [fileSelected, setFileSelected] = useState(false);
@@ -101,28 +102,6 @@ export default function InviteFormStepper() {
         region: '',
         deliveryTime: new Date(),
         townHallId: '',
-    }); // TODO Some of these fields can be pre-filled and/or set from db values.
-
-    const apiRequest = useCallback(() => API.getInviteData(), [
-        inviteForm,
-        file,
-    ]);
-    const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: ({ data }: { data: InviteForm }) => {
-            setInviteForm({
-                ...inviteForm,
-                MoC: data.MoC,
-                topic: data.topic,
-                eventDateTime: data.eventDateTime,
-                constituentScope: data.constituentScope,
-                region: data.region,
-                townHallId: data.townHallId,
-            });
-        },
-        onFailure: (e) => {
-            // TODO Handle error
-            console.log('Fail', e);
-        },
     });
 
     const handleNext = () => {
@@ -138,7 +117,15 @@ export default function InviteFormStepper() {
     };
 
     useEffect(() => {
-        sendRequest();
+        setInviteForm({
+            ...inviteForm,
+            MoC: townHall.form.speaker.name,
+            topic: townHall.form.topic,
+            eventDateTime: townHall.form.date,
+            constituentScope: townHall.form.scope,
+            region: townHall.form.speaker.territory,
+            townHallId: townHall._id,
+        });
     }, []);
 
     useEffect(() => {
