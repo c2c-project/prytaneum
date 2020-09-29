@@ -5,6 +5,10 @@ import TownhallProfile from 'pages/Townhall/TownhallProfile';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallForm from 'pages/Townhall/TownhallForm';
 
+import HandleInviteLink from 'domains/Invite/HandleInviteLink';
+import InviteForm from 'domains/Invite/InviteForm';
+
+import history from 'utils/history';
 import { addRoutes } from './utils';
 
 const Invite = () => {
@@ -52,8 +56,33 @@ addRoutes([
                     {
                         path: '/invite',
                         action: () => {
-                            return <Invite />;
+                            return <InviteForm />;
                         },
+                    },
+                    {
+                        path: '/invited',
+                        action: (ctx) => {
+                            const child = ctx.next();
+                            if (!child) {
+                                history.back(); // TODO change this?
+                            }
+                            return child;
+                        },
+                        children: [
+                            {
+                                path: '/:inviteToken',
+                                action: (ctx) => {
+                                    const { inviteToken } = ctx.params as {
+                                        inviteToken: string;
+                                    };
+                                    return (
+                                        <HandleInviteLink
+                                            inviteToken={inviteToken}
+                                        />
+                                    );
+                                },
+                            },
+                        ],
                     },
                     {
                         path: '/settings',
