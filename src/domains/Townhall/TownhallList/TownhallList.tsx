@@ -1,9 +1,9 @@
 import React from 'react';
-
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import SectionList, { Section, Datum } from 'components/SectionList';
 import { formatDate } from 'utils/format';
+import { Typography, Fade } from '@material-ui/core';
 
 import { getTownhallList } from '../api';
 import { Townhall } from '../types';
@@ -13,13 +13,14 @@ function formatSections(list: Townhall[]): Section[] {
         [index: string]: Datum[];
     }
     const intermediateVal: Intermediate = list.reduce<Intermediate>(
-        (accum, townhall) => {
-            const formattedDate = formatDate(new Date(townhall.date), 'P');
+        (accum, { _id, form }) => {
+            const formattedDate = formatDate(new Date(form.date), 'P');
             const copy = { ...accum };
             const datum: Datum = {
-                image: townhall.picture,
-                title: townhall.speaker.name,
-                subtitle: `${townhall.speaker.party}, ${townhall.speaker.territory}`,
+                image: form.picture,
+                title: form.speaker.name,
+                subtitle: `${form.speaker.party}, ${form.speaker.territory}`,
+                href: `/townhalls/${_id}`,
             };
             if (copy[formattedDate] !== undefined) {
                 copy[formattedDate].push(datum);
@@ -38,34 +39,32 @@ function formatSections(list: Townhall[]): Section[] {
 
 export default function TownhallList() {
     const [list, setList] = React.useState<Townhall[] | null>(null);
-    // const isMounted = React.useRef(true);
-    // const renderCount = React.useRef(0);
     const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
         onSuccess: (results) => {
-            // if (isMounted.current) {
             setList(results.data.list);
-            // }
         },
     });
 
     React.useEffect(sendRequest, []);
     if (isLoading || !list) {
-        return <Loader />;
+        return (
+            <div style={{ height: '500px' }}>
+                <Loader />
+            </div>
+        );
     }
-
-    // React.useEffect(() => {
-    //     renderCount.current += 1;
-    // });
-
-    // React.useEffect(() => {
-    //     isMounted.current = true;
-    //     sendRequest();
-    //     return () => {
-    //         isMounted.current = false;
-    //     };
-    // }, [sendRequest]);
-    // if (renderCount.current < 1 || isLoading) {
-    //     return <Loader />;
-    // }
-    return <SectionList sections={formatSections(list)} />;
+    if (list.length === 0) {
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <Typography variant='h4'>No Townhalls to display</Typography>
+            </div>
+        );
+    }
+    return (
+        <Fade in={!isLoading || !list} timeout={400} unmountOnExit>
+            <div>
+                <SectionList sections={formatSections(list)} />
+            </div>
+        </Fade>
+    );
 }

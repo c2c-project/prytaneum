@@ -34,10 +34,10 @@ export default function QuestionActions({ targetMsg, onClick, currentQuestion })
             }
         }).then(res => {
             if (res.status === 200) {
-                snack('Successfully set the current question', 'success');
+                snack('Successfully set the current question');
                 onClick();
             } else {
-                snack('Something went wrong, please try again', 'error');
+                snack('Something went wrong, please try again');
             }
         });
     };

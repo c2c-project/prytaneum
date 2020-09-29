@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     children: JSX.Element | JSX.Element[];
-    justify: string;
+    justify: 'flex-start' | 'flex-end' | 'center';
 }
 
 
