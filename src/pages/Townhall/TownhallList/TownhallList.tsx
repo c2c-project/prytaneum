@@ -3,7 +3,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import List from 'domains/Townhall/TownhallList';
 import Fab from 'components/Fab';
-import history from 'utils/history';
+import history, { makeRelativeLink } from 'utils/history';
 
 interface Props {
     currentUser?: boolean;
@@ -14,9 +14,11 @@ export default function TownhallList({ currentUser }: Props) {
         <div>
             <List
                 currentUser={currentUser}
-                onClickTownhall={(id) => history.push(`/user/townhalls/${id}`)}
+                onClickTownhall={(id) =>
+                    history.push(makeRelativeLink(`/${id}`))
+                }
             />
-            <Fab onClick={() => history.push('/user/townhalls/create')}>
+            <Fab onClick={() => history.push(makeRelativeLink('/create'))}>
                 <AddIcon />
             </Fab>
         </div>

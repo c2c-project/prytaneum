@@ -8,7 +8,7 @@ import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
 
-const Settings = () => {
+const SettingsMenu = () => {
     return <div />;
 };
 
@@ -46,7 +46,7 @@ addRoutes([
                             const { townhallId } = ctx.params as {
                                 townhallId: string;
                             };
-                            const component = ctx.next() || <Settings />;
+                            const component = ctx.next() || <SettingsMenu />;
 
                             return (
                                 <TownhallContextProvider
@@ -64,7 +64,7 @@ addRoutes([
                             {
                                 path: '/settings',
                                 action: () => {
-                                    return <Settings />;
+                                    return <SettingsMenu />;
                                 },
                             },
                             {
