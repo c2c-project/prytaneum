@@ -56,10 +56,10 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
         onSuccess: () => {
             callBack();
             refetchReports();
-            snack('Report successfully deleted', 'success');
+            snack('Report successfully deleted');
         },
         onFailure: () => {
-            snack('Something went wrong! Try again', 'error');
+            snack('Something went wrong! Try again');
         },
     });
 

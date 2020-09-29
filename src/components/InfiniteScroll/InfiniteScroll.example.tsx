@@ -30,13 +30,13 @@ export default function ExampleInfiniteScroll() {
             // If the Initial request (page 1) has no data then we let the user know that there is no data.
             // The response must have a hasNext = false, so we know sendRequest will not be called by InfiniteScroll anymore
             if (results.data.names.length === 0)
-                snack('No names were found', 'warning');
+                snack('No names were found');
             setNames((prev) => [...prev, ...results.data.names]);
             setHasNext(results.data.hasNext);
             setPage(page + 1);
         },
         onFailure: () =>
-            snack('Something went wrong, please try again!', 'error'),
+            snack('Something went wrong, please try again!'),
     });
     /* ********************************************************************* */
     return (

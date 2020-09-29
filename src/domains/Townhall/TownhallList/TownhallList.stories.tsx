@@ -5,5 +5,5 @@ import Component from '.';
 export default { title: 'Domains/Townhall' };
 
 export function TownhallList() {
-    return <Component />;
+    return <Component onClickTownhall={console.log} />;
 }

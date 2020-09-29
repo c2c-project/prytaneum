@@ -2,7 +2,7 @@ import { rest } from 'msw';
 import faker from 'faker';
 import * as TownhallTypes from 'domains/Townhall/types';
 
-const recent = faker.date.recent();
+const past = faker.date.past();
 const future = faker.date.future();
 
 const makeTownhall = (): TownhallTypes.Townhall => ({
@@ -17,7 +17,7 @@ const makeTownhall = (): TownhallTypes.Townhall => ({
         topic: faker.random.word(),
         picture: faker.image.imageUrl(),
         readingMaterials: '',
-        date: faker.date.between(recent, future),
+        date: faker.date.between(past, future),
         url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
         description: faker.lorem.paragraph(),
     },

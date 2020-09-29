@@ -1,14 +1,26 @@
 import React from 'react';
+import AddIcon from '@material-ui/icons/Add';
 
 import List from 'domains/Townhall/TownhallList';
+import Fab from 'components/Fab';
+import history from 'utils/history';
 
-// TODO: re-evaluate if this file is even needed
 interface Props {
     currentUser?: boolean;
 }
 
 export default function TownhallList({ currentUser }: Props) {
-    return <List currentUser={currentUser} />;
+    return (
+        <div>
+            <List
+                currentUser={currentUser}
+                onClickTownhall={(id) => history.push(`/user/townhalls/${id}`)}
+            />
+            <Fab onClick={() => history.push('/user/townhalls/create')}>
+                <AddIcon />
+            </Fab>
+        </div>
+    );
 }
 
 TownhallList.defaultProps = {
