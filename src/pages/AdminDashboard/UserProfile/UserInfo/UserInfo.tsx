@@ -24,8 +24,8 @@ const UserInfo = ({ profileInfo }: Props) => {
 
     const formatedInfo = profileInfo.info.map((row) => {
         return (
-            <Typography className={classes.typographySpacing} key={row.status}>
-                {row.status}:{row.count}
+            <Typography className={classes.typographySpacing} key={row.role}>
+                {row.role}:{row.count}
             </Typography>
         );
     });
@@ -47,7 +47,7 @@ UserInfo.propTypes = {
         primary: PropTypes.string.isRequired,
         info: PropTypes.arrayOf(
             PropTypes.shape({
-                status: PropTypes.string.isRequired,
+                role: PropTypes.string.isRequired,
                 count: PropTypes.number.isRequired,
                 active: PropTypes.bool.isRequired,
             }).isRequired

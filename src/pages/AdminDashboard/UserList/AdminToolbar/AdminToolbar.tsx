@@ -8,7 +8,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import CheckBox from 'components/CheckBox';
 import SearchToolbar from 'components/SearchToolbar';
 import { UserProfile } from 'domains/AdminDashboard/types';
-import { getUserList } from 'domains/AdminDashboard/api/api';
+import API from 'domains/AdminDashboard/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -38,7 +38,7 @@ const AdminToolbar = ({
     const open = Boolean(filterAnchorEl);
     const [enteredFilter, setEnteredFilter] = useState<string>('');
     const [enteredFilterTags, setEnteredFilterTags] = useState<string[]>([]);
-    const [sendRequest, isLoading] = useEndpoint(getUserList, {
+    const [sendRequest, isLoading] = useEndpoint(API.getUserList, {
         onSuccess: (results) => {
             let loadedUsers = results.data.list;
             const copy: UserProfile[] = [...loadedUsers];

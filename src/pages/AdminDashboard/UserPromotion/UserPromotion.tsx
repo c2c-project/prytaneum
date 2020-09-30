@@ -6,7 +6,7 @@ import { Container, Paper, Grid, Switch, Typography } from '@material-ui/core';
 
 import useEndpoint from 'hooks/useEndpoint';
 import { promoteUser } from 'domains/AdminDashboard/api/api';
-import { UserPromotionType } from 'domains/AdminDashboard/types';
+import { UserProfile } from 'domains/AdminDashboard/types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     promotionOptions: string[];
-    userData: UserPromotionType;
+    userData: UserProfile;
     onChange?: () => void;
 }
 
 const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
     const classes = useStyles();
-    const [user, setUser] = useState<UserPromotionType>(userData);
+    const [user, setUser] = useState<UserProfile>(userData);
     const [post] = useEndpoint(() => promoteUser(user, user._id), {
         onSuccess: cb,
     });
@@ -35,7 +35,7 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
         const { name, checked } = event.target;
         const copyUser = user;
         const newStatus = user.status.map((x) => {
-            if (x.status === name) {
+            if (x.role === name) {
                 return {
                     ...x,
                     active: checked,
@@ -50,24 +50,24 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
     };
 
     const switches = user.status.reduce((acc: JSX.Element[], curr) => {
-        const { status, active } = curr;
-        if (promotionOptions.includes(status)) {
+        const { role, active } = curr;
+        if (promotionOptions.includes(role)) {
             acc.push(
                 <Grid
                     container
                     item
-                    key={status}
+                    key={role}
                     spacing={2}
                     alignContent='center'
                 >
                     <Grid item xs={10}>
-                        <Typography>{status}</Typography>
+                        <Typography>{role}</Typography>
                     </Grid>
                     <Grid item xs={2}>
                         <Switch
                             checked={active}
                             onChange={onChangeHandler}
-                            name={status}
+                            name={role}
                         />
                     </Grid>
                 </Grid>

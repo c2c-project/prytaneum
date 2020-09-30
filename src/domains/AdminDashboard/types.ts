@@ -8,17 +8,18 @@ export interface UserProfile {
     status: UserStatus[];
     actionHistoryData: UserActionHistory[];
 }
-
 export interface UserActionHistory {
     timeStamp: Date;
     action: string;
 }
 
 interface UserStatus {
-    status: string;
+    role: string;
     count: number;
     active: boolean;
 }
+
+//* Types used used in component for Profile
 
 export interface UserProfileFormat {
     _id: string;

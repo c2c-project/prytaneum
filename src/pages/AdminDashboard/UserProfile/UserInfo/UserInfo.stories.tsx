@@ -9,7 +9,7 @@ const userInfo = makeUser();
 
 const profileInfo = {
     primary: userInfo.name,
-    info: userInfo.status.filter((x) => filterList.includes(x.status)),
+    info: userInfo.status.filter((x) => filterList.includes(x.role)),
 };
 
 export function Primary() {

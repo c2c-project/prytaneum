@@ -4,7 +4,7 @@ import UserTags from './UserTags';
 
 export default { title: 'AdminDashboard/UserProfile/UserTags' };
 
-const userTags = makeUser().status.map((stat) => stat.status);
+const userTags = makeUser().status.map((stat) => stat.role);
 
 export function Primary() {
     return <UserTags tags={userTags} primaryHeader='User Tags' />;

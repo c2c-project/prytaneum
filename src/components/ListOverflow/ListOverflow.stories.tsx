@@ -21,3 +21,7 @@ export function Secondary() {
         />
     );
 }
+
+export function Empty() {
+    return <ListOverflow rowTraits={[]} />;
+}

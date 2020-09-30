@@ -15,8 +15,8 @@ export function userProfileFormat(data: UserProfile) {
         }),
         profileInfo: {
             primary: data.name,
-            info: data.status.filter((x) => filterList.includes(x.status)),
+            info: data.status.filter((x) => filterList.includes(x.role)),
         },
-        tags: data.status.map((stat) => stat.status),
+        tags: data.status.map((stat) => stat.role),
     };
 }
