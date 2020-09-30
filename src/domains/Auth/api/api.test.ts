@@ -40,23 +40,6 @@ describe('#login', () => {
     });
 });
 
-describe('#loginTemp', () => {
-    it('should reject blank email', async () => {
-        await expect(API.loginTemp('')).rejects.toThrow(errors.fieldError());
-        expect(axios.post).not.toHaveBeenCalled();
-    });
-    it('should accept a email', async () => {
-        const resolvedValue = { status: 200 };
-        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
-            resolvedValue
-        );
-        await expect(API.loginTemp('email')).resolves.toBe(resolvedValue);
-        expect(axios.post).toHaveBeenCalledWith('/api/users/login-temporary', {
-            email: 'email',
-        });
-    });
-});
-
 describe('#forgotPassReset', () => {
     it('should reject mismatching passwords', async () => {
         await expect(
