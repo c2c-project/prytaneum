@@ -31,6 +31,15 @@ interface Props {
     modeOff: () => void;
 }
 
+/** This function clips a dialog clip in a text field and returns it as a form to submit
+ *  @category Component
+ *  @constructor ClipDialog
+ *  @param {Clip} currentClip the current clip
+ *  @param {"() => void"} confirm function to call when handleing submits
+ *  @param {boolean} openState used when calling FullScreenDialog to determine if its open or not
+ *  @param {"(a: Clip) => void"} edit function to call to edit the current clip from a start and end time
+ *  @param {"() => void"} modeOff called when we handleClose
+*/
 export default function ClipDialog({
     currentClip,
     confirm,

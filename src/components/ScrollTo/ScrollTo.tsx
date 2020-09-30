@@ -1,18 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const { NODE_ENV } = process.env;
+
 interface Props {
     active: boolean;
     children: JSX.Element | JSX.Element[];
     direction: 'top' | 'bottom';
 }
 
+/** Scrolls to the top|bottom of the current page
+ * @category Component
+ * @constructor ScrollTo
+ * @param props
+ * @param {boolean} props.active tells whether or not the button is active to be used
+ * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
+ * @param {'top' | 'bottom'} props.direction tells to component to scroll up or down continuously, like how twich chat updates, the window scrolls down to update it
+ */
 export default function ScrollTo({ active, children, direction }: Props) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
     const topRef = React.useRef<HTMLDivElement>(null);
     const firstRender = React.useRef(true);
     const scrollTo = () => {
         const ref = direction === 'top' ? topRef : bottomRef;
+        // this is needed for testing as window is null and there is no scrollIntoView fcn
+        if (NODE_ENV === 'test') {
+            window.HTMLElement.prototype.scrollIntoView = function () {};
+        }
         if (active && ref.current) {
             ref.current.scrollIntoView({
                 behavior: firstRender.current ? 'smooth' : 'auto',
@@ -25,7 +39,7 @@ export default function ScrollTo({ active, children, direction }: Props) {
     }, []);
     return (
         <>
-            <div ref={bottomRef} />
+            <div ref={topRef} />
             {children}
             <div ref={bottomRef} />
         </>

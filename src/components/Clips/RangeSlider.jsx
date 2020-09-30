@@ -16,6 +16,10 @@ function valuetext(value) {
     return `${minutes}:${sec}`;
 }
 
+/** Test Description
+ *  @category Component
+ *  @constructor RangeSlider
+*/
 export default function RangeSlider({ timeStamp, confirm }) {
     const classes = useStyles();
     const initStart = parseInt(timeStamp.start, 10);

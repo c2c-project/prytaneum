@@ -50,6 +50,10 @@ export interface Props {
         | 12;
 }
 
+/** Test Description
+ *  @category Component
+ *  @constructor GridMenu
+*/
 export default function GridMenu({ children, btnCols }: Props) {
     const classes = useStyles();
     const value = React.useContext(DeviceContext);

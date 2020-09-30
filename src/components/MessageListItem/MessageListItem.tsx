@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ListItem from '@material-ui/core/ListItem';
+import { default as MUIListItem } from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -21,8 +21,23 @@ export default function MessageListItem(props: Props) {
     const { button, onClick, children, hidden } = props;
     const classes = useStyles();
     // const isOwnerOrModerator = moderator || checkIsOwner(user, userId);
-    return (
-        <ListItem
+
+    const base = (
+        <Grid container spacing={1}>
+            {React.Children.map(children, (child) => (
+                <Grid item xs='auto'>
+                    {child}
+                </Grid>
+            ))}
+        </Grid>
+    );
+
+    const ListItem = ({
+        children: innerChildren,
+    }: {
+        children: JSX.Element;
+    }) => (
+        <MUIListItem
             hidden={hidden}
             // If user is moderator on the owner of the message then this ListItem is rendered as a button
             // https://github.com/mui-org/material-ui/issues/14971
@@ -32,14 +47,22 @@ export default function MessageListItem(props: Props) {
             onClick={button ? onClick : undefined}
             className={classes.message}
         >
-            <Grid container spacing={1}>
-                {React.Children.map(children, (child) => (
-                    <Grid item xs='auto'>
-                        {child}
-                    </Grid>
-                ))}
-            </Grid>
-        </ListItem>
+            {innerChildren}
+        </MUIListItem>
+    );
+
+    const ButtonWrapper = ({
+        children: innerChildren,
+    }: {
+        children: JSX.Element;
+    }) => <li>{innerChildren}</li>;
+
+    return button ? (
+        <ButtonWrapper>
+            <ListItem>{base}</ListItem>
+        </ButtonWrapper>
+    ) : (
+        <ListItem>{base}</ListItem>
     );
 }
 
