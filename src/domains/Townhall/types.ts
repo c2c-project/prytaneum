@@ -32,6 +32,13 @@ export interface TownhallSettings {
             list: string[]; // userid[]
             primary: string; // primary user id
         };
+        registration: {
+            reminders: {
+                enabled: true;
+                customTimes: string[]; // TODO: ISO times, don't need this now
+            };
+            registrants: string[]; // TODO: emails or userIds idk yet -- how to prevent abuse?
+        };
     };
     general: {
         private: boolean; // TODO: what does this mean? might put this in the form itself
@@ -49,7 +56,7 @@ export interface TownhallForm {
     title: string;
     date: Date;
     description: string;
-    scope: string;
+    scope: 'state' | 'district';
 }
 
 export interface TownhallQuestionForm {

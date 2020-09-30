@@ -5,7 +5,7 @@ import { DeviceContext } from 'contexts/Device';
 import Component from './SelectFile';
 
 export default {
-    title: 'Components/Invite',
+    title: 'Components/Invite/SelectFile',
     component: Component,
     argTypes: {
         DeviceType: {
@@ -21,7 +21,7 @@ interface Props {
     DeviceType: 'desktop' | 'mobile';
 }
 
-export function SelectFile({ DeviceType }: Props) {
+export function Basic({ DeviceType }: Props) {
     return (
         <DeviceContext.Provider value={DeviceType}>
             <Component initialState={undefined} onComplete={() => {}} />
@@ -29,6 +29,6 @@ export function SelectFile({ DeviceType }: Props) {
     );
 }
 
-SelectFile.args = {
+Basic.args = {
     DeviceType: 'desktop',
 };

@@ -8,7 +8,7 @@ import { DeviceContext } from 'contexts/Device';
 import Component, { Props as EmailPreviewProps } from './EmailPreview';
 
 export default {
-    title: 'Components/Invite',
+    title: 'Components/Invite/Email Preview',
     component: Component,
     argTypes: {
         DeviceType: {
@@ -30,7 +30,7 @@ interface Props extends EmailPreviewProps {
     DeviceType: 'desktop' | 'mobile';
 }
 
-export function EmailPreview({
+export function Basic({
     DeviceType,
     fName,
     MoC,
@@ -53,7 +53,7 @@ export function EmailPreview({
     );
 }
 
-EmailPreview.args = {
+Basic.args = {
     DeviceType: 'desktop',
     fName: faker.name.firstName(),
     MoC: faker.name.firstName(),
@@ -61,7 +61,7 @@ EmailPreview.args = {
     eventDateTime: faker.date.future().toUTCString(),
     constituentScope: 'state',
     registrationLink: `https://prytaneum.io/invite/${jwt.sign(
-        { email: faker.internet.email(), townHallId: 'test' },
+        { email: faker.internet.email(), townhallId: 'test' },
         'secret'
     )}`,
 };

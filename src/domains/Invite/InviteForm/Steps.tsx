@@ -248,7 +248,7 @@ function CreateInviteStep({
 }): JSX.Element {
     const apiRequest = useCallback(
         () => API.createInvite(inviteForm, file, preview),
-        [inviteForm, file]
+        [inviteForm, file, preview]
     );
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess,
@@ -256,7 +256,7 @@ function CreateInviteStep({
     });
     useEffect(() => {
         sendRequest();
-    }, []);
+    }, [sendRequest]);
     return (
         <Grid container justify='center'>
             <Loader style={{ marginTop: '8em' }} />

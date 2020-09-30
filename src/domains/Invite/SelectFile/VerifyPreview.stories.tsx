@@ -6,7 +6,7 @@ import { DeviceContext } from 'contexts/Device';
 import Component from './VerifyPreview';
 
 export default {
-    title: 'Components/Invite',
+    title: 'Components/Invite/Verify Preview',
     component: Component,
     argTypes: {
         DeviceType: {
@@ -22,7 +22,7 @@ interface Props {
     DeviceType: 'desktop' | 'mobile';
 }
 
-export function VerifyPreview({ DeviceType }: Props) {
+export function Basic({ DeviceType }: Props) {
     const previewData = [];
     const preview = 5;
     for (let i = 0; i < preview; i += 1) {
@@ -41,6 +41,6 @@ export function VerifyPreview({ DeviceType }: Props) {
     );
 }
 
-VerifyPreview.args = {
+Basic.args = {
     DeviceType: 'desktop',
 };

@@ -20,7 +20,7 @@ export async function createInvite(
         constituentScope,
         region,
         deliveryTime,
-        townHallId,
+        townhallId,
     } = inviteData;
     if (
         MoC === undefined ||
@@ -28,7 +28,7 @@ export async function createInvite(
         eventDateTime === undefined ||
         region === undefined ||
         deliveryTime === undefined ||
-        townHallId === undefined
+        townhallId === undefined
     )
         throw errors.fieldError();
     // Set formData
@@ -40,7 +40,7 @@ export async function createInvite(
     formData.append('constituentScope', constituentScope);
     formData.append('region', region);
     formData.append('deliveryTimeString', deliveryTime.toISOString());
-    formData.append('townHallId', townHallId);
+    formData.append('townhallId', townhallId);
     if (preview.sendPreview)
         formData.append('previewEmail', preview.previewEmail);
     if (!MoC || !topic || !eventDateTime || !region || !deliveryTime) {

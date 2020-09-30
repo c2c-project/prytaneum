@@ -81,7 +81,7 @@ function getSteps() {
 }
 
 export default function InviteFormStepper() {
-    const townHall = useContext(TownhallContext);
+    const townhall = useContext(TownhallContext);
     const classes = useStyles();
     const [file, setFile]: [File | undefined, (f: File) => void] = useState();
     const [fileSelected, setFileSelected] = useState(false);
@@ -95,13 +95,13 @@ export default function InviteFormStepper() {
     const steps = getSteps();
     const expectedKeys = ['email', 'fName', 'lName'];
     const [inviteForm, setInviteForm]: [InviteForm, Function] = useState({
-        MoC: '',
-        topic: '',
-        eventDateTime: '',
-        constituentScope: 'district',
-        region: '',
+        MoC: townhall.settings.general.speaker.name,
+        topic: townhall.settings.general.topic,
+        eventDateTime: townhall.form.date.toUTCString(),
+        constituentScope: townhall.form.scope || 'district',
+        region: townhall.settings.general.speaker.territory,
         deliveryTime: new Date(),
-        townHallId: '',
+        townhallId: townhall._id,
     });
 
     const handleNext = () => {
@@ -115,18 +115,6 @@ export default function InviteFormStepper() {
     const handleReset = () => {
         dispatch({ type: 'reset-step' });
     };
-
-    useEffect(() => {
-        setInviteForm({
-            ...inviteForm,
-            MoC: '',
-            topic: '',
-            eventDateTime: townHall.form.date.toUTCString(),
-            constituentScope: townHall.form.scope,
-            region: '',
-            townHallId: townHall._id,
-        }); // FIXME:
-    }, []);
 
     useEffect(() => {
         if (file?.size) setFileSelected(true);

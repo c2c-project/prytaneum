@@ -5,7 +5,7 @@ export interface InviteForm {
     constituentScope: 'state' | 'district';
     region?: string;
     deliveryTime?: Date;
-    townHallId?: string;
+    townhallId?: string;
 }
 
 export interface InvitePreview {
@@ -15,5 +15,5 @@ export interface InvitePreview {
 
 export interface InviteTokenResult {
     email: string;
-    townHallId: string;
+    townhallId: string;
 }

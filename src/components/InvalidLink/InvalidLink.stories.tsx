@@ -5,7 +5,7 @@ import { DeviceContext } from 'contexts/Device';
 import Component from './InvalidLink';
 
 export default {
-    title: 'Components/Invite',
+    title: 'Components/Invite/Invalid Link',
     component: Component,
     argTypes: {
         DeviceType: {
@@ -22,7 +22,7 @@ interface Props {
     errorMessage: string;
 }
 
-export function InvalidLink({ DeviceType, errorMessage }: Props) {
+export function Basic({ DeviceType, errorMessage }: Props) {
     return (
         <DeviceContext.Provider value={DeviceType}>
             <Component errorMessage={errorMessage} />
@@ -30,7 +30,7 @@ export function InvalidLink({ DeviceType, errorMessage }: Props) {
     );
 }
 
-InvalidLink.args = {
+Basic.args = {
     DeviceType: 'desktop',
     errorMessage: 'Invalid Link',
 };

@@ -29,7 +29,7 @@ interface Props {
 }
 
 export default function HandleInviteLink({ inviteToken }: Props) {
-    const townHall = useContext(TownhallContext);
+    const townhall = useContext(TownhallContext);
     const [open, setOpen] = useState(false);
     const loginRequest = useCallback(() => API.loginWithJWT(inviteToken), [
         inviteToken,
@@ -39,7 +39,7 @@ export default function HandleInviteLink({ inviteToken }: Props) {
     };
     const [sendLoginRequest] = useEndpoint(loginRequest, {
         onSuccess() {
-            history.push(`/townhalls/${townHall._id}`);
+            history.push(`/townhalls/${townhall._id}`);
         },
         onFailure(e) {
             console.error(e);
