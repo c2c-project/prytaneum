@@ -119,19 +119,18 @@ export default function InviteFormStepper() {
     useEffect(() => {
         setInviteForm({
             ...inviteForm,
-            MoC: townHall.form.speaker.name,
-            topic: townHall.form.topic,
+            MoC: '',
+            topic: '',
             eventDateTime: townHall.form.date.toUTCString(),
             constituentScope: townHall.form.scope,
-            region: townHall.form.speaker.territory,
+            region: '',
             townHallId: townHall._id,
-        });
+        }); // FIXME:
     }, []);
 
     useEffect(() => {
         if (file?.size) setFileSelected(true);
         else setFileSelected(false);
-        console.log(file);
     }, [file]);
 
     function getStepContent(step: number) {
