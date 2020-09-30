@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
-import AppBar from 'layout/AppBar';
+// import AppBar from 'layout/AppBar';
 
 import UserProfile from 'components/UserProfile';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
