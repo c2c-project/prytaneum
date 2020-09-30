@@ -11,7 +11,7 @@ const makeTownhall = (): TownhallTypes.Townhall => ({
         title: faker.lorem.words(),
         date: faker.date.between(past, future),
         description: faker.lorem.paragraph(),
-        scope: 'Scope',
+        scope: 'Scope', // FIXME:
     },
     settings: {
         general: {
