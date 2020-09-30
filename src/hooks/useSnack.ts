@@ -6,17 +6,20 @@ interface Options {
     onExited?: () => void;
 }
 
+/**
+ *
+ * @category hooks
+ *
+ */
 export default function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     return [
-        (message: string, 
-            options?: Options
-        ) => {
-            enqueueSnackbar(message, { 
+        (message: string, options?: Options) => {
+            enqueueSnackbar(message, {
                 variant: 'default',
                 action: options?.action,
                 onExited: options?.onExited,
-                color: 'inherit'
+                color: 'inherit',
             });
         },
         closeSnackbar,

@@ -26,6 +26,17 @@ interface Form {
     password: string;
 }
 
+/** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
+ * @category Domains/Auth
+ * @constructor ForgotPassRequest
+ * @param props
+ * @param {"() => void"} onSuccess function to call if successful
+ * @param {"() => void"} onFailure function to call if failed
+ * @example 
+ * const onS = () => {};
+ * const onF = () => {};
+ * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
+ */
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
 

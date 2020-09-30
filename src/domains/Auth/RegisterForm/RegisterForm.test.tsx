@@ -60,8 +60,12 @@ describe('RegisterForm', () => {
     });
 
     it('should submit and succeed', async () => {
+        // setup
+
+        // props
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
+
         const resolvedVal = { status: 200 };
         const spy = jest
             .spyOn(API, 'register')
@@ -73,6 +77,7 @@ describe('RegisterForm', () => {
         };
         jest.useFakeTimers();
 
+        // render
         ReactTestUtils.act(() => {
             render(
                 <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
@@ -87,6 +92,7 @@ describe('RegisterForm', () => {
         ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
+        // modify input fields in the DOM
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(emailNode, {
                 target: ({ value: form.email } as unknown) as EventTarget,
@@ -102,9 +108,12 @@ describe('RegisterForm', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
+        // make sure the external API gets called
         expect(spy).toBeCalledWith(form);
+        // make sure all timers run
         jest.runAllTimers();
 
+        // wait for any async results to resolve
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(spy.mock.results);
         });

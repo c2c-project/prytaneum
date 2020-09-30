@@ -57,6 +57,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/** Displays the stats in a nice layout
+ *  @category Component
+ *  @constructor Stats
+ *  @param {any} sent total sent messages
+ *  @param {any} asked total asked questions
+ *  @param {any} unanswered total unanswered questions
+ *  @param {any} duration total time the session lasted
+ *  @param {any} speaker name of the Congressmember who was leading the TownHall
+ *  @param {any} tdata console.log tdata inside Grid
+*/
 function Stats({ sent, asked, unanswered, duration, speaker }, tdata) {
     const classes = useStyles();
 

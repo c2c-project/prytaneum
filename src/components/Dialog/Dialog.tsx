@@ -17,8 +17,9 @@ const useStyles = makeStyles({
     },
 });
 
-/**
- *  Transition used by FullScreenDialog -- it slides up
+/** Transition used by FullScreenDialog -- it slides up
+ *  @category Component
+ *  @constructor Dialog
  */
 const Transition = React.forwardRef(function Transition(
     props: SlideProps,
@@ -64,7 +65,11 @@ export default function Dialog(props: Props) {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Typography variant='h6' className={classes.title}>
+                        <Typography
+                            component='span'
+                            variant='h6'
+                            className={classes.title}
+                        >
                             {title}
                         </Typography>
                     </Toolbar>

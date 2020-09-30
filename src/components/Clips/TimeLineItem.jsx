@@ -6,6 +6,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 
+/** Test Description
+ *  @category Component
+ *  @constructor TimeLineItem
+*/
 export default function TimeLineItem({ data, onClickPlay, onClickEdit, onClickDelete }) {
     return (
         // wrapper

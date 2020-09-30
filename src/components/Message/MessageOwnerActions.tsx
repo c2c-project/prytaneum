@@ -35,6 +35,10 @@ interface Params {
     roomId: string;
 }
 
+/** Test Description
+ *  @category Component
+ *  @constructor MessageOwnerAction
+*/
 export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const classes = useStyles();
     const [message, setMessage] = React.useState(targetMessage.message);
