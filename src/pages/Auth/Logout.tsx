@@ -1,1 +1,1 @@
-export { default } from '../../domains/Auth/Logout';
+export { default } from 'domains/Auth/Logout';

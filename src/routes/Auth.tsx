@@ -5,6 +5,7 @@ import history from 'utils/history';
 import Login from 'pages/Auth/Login';
 import Register from 'pages/Auth/Register';
 import ForgotPasswordRequest from 'pages/Auth/ForgotPassRequest';
+import Logout from 'pages/Auth/Logout';
 import { addRoutes } from './utils';
 
 addRoutes([
@@ -33,5 +34,11 @@ addRoutes([
                 action: () => <ForgotPasswordRequest />,
             },
         ],
+    },
+    {
+        path: '/logout',
+        action: () => {
+            return <Logout />;
+        },
     },
 ]);

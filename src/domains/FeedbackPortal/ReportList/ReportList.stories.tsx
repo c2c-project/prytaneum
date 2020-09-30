@@ -5,7 +5,7 @@ import Component from '.';
 import { makeFeedbackReport } from '../reportMaker.mock';
 
 export default {
-    title: 'Domains/ReportList',
+    title: 'Domains/Feedback/Report List',
     component: Component,
 };
 

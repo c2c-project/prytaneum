@@ -10,8 +10,8 @@ type Create = RequestBody;
 type Update = RequestBody & { townhallId: string };
 
 export async function createTownhall(form: TownhallForm) {
-    const { speaker, moderator, date, description, url } = form;
-    if (!speaker || !moderator || !date || !url || !description) {
+    const { date, description, title } = form;
+    if (!title || !date || !description) {
         throw errors.fieldError();
     }
     const body: Create = { form };
@@ -19,8 +19,8 @@ export async function createTownhall(form: TownhallForm) {
 }
 
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
-    const { speaker, moderator, date, description, url } = form;
-    if (!speaker || !moderator || !date || !url || !description) {
+    const { date, description, title } = form;
+    if (!date || !title || !description) {
         throw errors.fieldError();
     }
 
@@ -33,8 +33,9 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
     return axios.post<unknown>('/api/townhalls/update', body);
 }
 
-export async function getTownhallList() {
-    return axios.get<{ list: Townhall[] }>('/api/townhalls/list');
+export async function getTownhallList(currentUser?: boolean) {
+    const query = currentUser ? '?currentUser=true' : '';
+    return axios.get<{ list: Townhall[] }>(`/api/townhalls/list${query}`);
 }
 
 export async function getTownhall(id: string) {

@@ -37,7 +37,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const builtRequest = React.useCallback(() => API.register(form), [form]);
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack('Successfully registered!', 'success');
+            snack('Successfully registered!');
             onSuccess();
         },
         onFailure,

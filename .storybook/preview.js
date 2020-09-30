@@ -5,6 +5,8 @@ import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import DeviceContext from '../src/contexts/Device';
 import theme from '../src/theme';
 import './main.css';
@@ -14,16 +16,20 @@ worker.start();
 
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <SnackContext maxSnack={1}>
-            <UserContext.Provider value={{ _id: '1', username: 'anonymous' }}>
-                <DeviceContext>
-                    <div style={{ height: '100%', width: '100%' }}>
-                        {storyFn()}
-                    </div>
-                </DeviceContext>
-            </UserContext.Provider>
-        </SnackContext>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <CssBaseline />
+            <SnackContext maxSnack={1}>
+                <UserContext.Provider
+                    value={{ _id: '1', username: 'anonymous' }}
+                >
+                    <DeviceContext>
+                        <div style={{ height: '100%', width: '100%' }}>
+                            {storyFn()}
+                        </div>
+                    </DeviceContext>
+                </UserContext.Provider>
+            </SnackContext>
+        </MuiPickersUtilsProvider>
     </ThemeProvider>
 ));
 

@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 
 import Component, { PieDatum } from './TownhallNivo';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Domains/Townhall/Townhall Nivo' };
 
 const Nivo: PieDatum[] = [
     {
@@ -38,7 +38,7 @@ const Nivo: PieDatum[] = [
     },
 ];
 
-export function TownhallNivo() {
+export function Basic() {
     return (
         <Container>
             <Component height={500} data={Nivo} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import Component, { DataEntry } from './ProgressBar';
 
-export default { title: 'components' };
+export default { title: 'components/Progress Bar' };
 
 const timelineData: DataEntry[] = [
     {
@@ -18,6 +18,6 @@ const timelineData: DataEntry[] = [
     },
 ];
 
-export function ProgressBar() {
+export function Basic() {
     return <Component timeline={timelineData} currentVal={50} />;
 }

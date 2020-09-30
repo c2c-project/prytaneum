@@ -1,51 +1,55 @@
 import React from 'react';
+import {
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    Fade,
+    ListItemSecondaryAction,
+} from '@material-ui/core';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+
+import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
-import SectionList, { Section, Datum } from 'components/SectionList';
-import { formatDate } from 'utils/format';
-import { Typography, Fade } from '@material-ui/core';
-
+import ListFilter from 'components/ListFilter';
 import { getTownhallList } from '../api';
 import { Townhall } from '../types';
+import { filters as filterFuncs, HelperFunc, search } from './helpers';
 
-function formatSections(list: Townhall[]): Section[] {
-    interface Intermediate {
-        [index: string]: Datum[];
-    }
-    const intermediateVal: Intermediate = list.reduce<Intermediate>(
-        (accum, { _id, form }) => {
-            const formattedDate = formatDate(new Date(form.date), 'P');
-            const copy = { ...accum };
-            const datum: Datum = {
-                image: form.picture,
-                title: form.speaker.name,
-                subtitle: `${form.speaker.party}, ${form.speaker.territory}`,
-                href: `/townhalls/${_id}`,
-            };
-            if (copy[formattedDate] !== undefined) {
-                copy[formattedDate].push(datum);
-            } else {
-                copy[formattedDate] = [datum];
-            }
-            return copy;
-        },
-        {}
-    );
-    return Object.keys(intermediateVal).map((key) => {
-        const datums: Datum[] = intermediateVal[key];
-        return { title: key, sectionData: datums };
-    });
+interface Props {
+    currentUser?: boolean;
+    onClickTownhall: (id: string) => void;
 }
 
-export default function TownhallList() {
+export default function TownhallList({ currentUser, onClickTownhall }: Props) {
     const [list, setList] = React.useState<Townhall[] | null>(null);
-    const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
-        onSuccess: (results) => {
-            setList(results.data.list);
-        },
-    });
+
+    // search is always the first element in the filter array
+    const [filters, setFilters] = React.useState<HelperFunc[]>([
+        (townhalls: Townhall[]) => townhalls,
+    ]);
+    const [sendRequest, isLoading] = useEndpoint(
+        () => getTownhallList(currentUser),
+        {
+            onSuccess: (results) => {
+                setList(results.data.list);
+            },
+        }
+    );
+
+    const applyFilters = () => {
+        let filteredArr = [...(list || [])]; // dirty, but it's late and yea
+        for (let i = 0; i < filters.length; i += 1) {
+            filteredArr = filters[i](filteredArr);
+        }
+        return filteredArr;
+    };
 
     React.useEffect(sendRequest, []);
+
     if (isLoading || !list) {
         return (
             <div style={{ height: '500px' }}>
@@ -53,6 +57,7 @@ export default function TownhallList() {
             </div>
         );
     }
+
     if (list.length === 0) {
         return (
             <div style={{ width: '100%', height: '100%' }}>
@@ -60,11 +65,64 @@ export default function TownhallList() {
             </div>
         );
     }
+
     return (
-        <Fade in={!isLoading || !list} timeout={400} unmountOnExit>
-            <div>
-                <SectionList sections={formatSections(list)} />
+        <Fade in timeout={400}>
+            <div style={{ width: '100%' }}>
+                <div>
+                    <ListFilter
+                        onSearch={(text) =>
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                            setFilters(([_prevSearch, ...prevFilters]) => [
+                                (filteredList) => search(text, filteredList),
+                                ...prevFilters,
+                            ])
+                        }
+                        onFilter={(filterSet) => {
+                            const filterArr = Array.from(filterSet);
+                            const state: HelperFunc[] = filterArr.map(
+                                (key) => filterFuncs[key]
+                            );
+                            setFilters(([prevSearch]) => [
+                                prevSearch,
+                                ...state,
+                            ]);
+                        }}
+                        filterOptions={['Upcoming', 'Past', 'Ongoing']}
+                    />
+                </div>
+                <List>
+                    {applyFilters().map(({ settings, form, _id }) => (
+                        <ListItem
+                            key={_id}
+                            divider
+                            button
+                            alignItems='flex-start'
+                            onClick={() => onClickTownhall(_id)}
+                        >
+                            <ListItemAvatar>
+                                <Avatar
+                                    alt='Speaker'
+                                    src={settings.general.speaker.picture}
+                                >
+                                    {form.title[0]}
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={form.title}
+                                secondary={formatDate(form.date)}
+                            />
+                            <ListItemSecondaryAction>
+                                <ChevronRight />
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
+                </List>
             </div>
         </Fade>
     );
 }
+
+TownhallList.defaultProps = {
+    currentUser: false,
+};

@@ -5,7 +5,7 @@ import { BugReport as BugReportIcon } from '@material-ui/icons';
 import Component from '.';
 
 export default {
-    title: 'Domains/ReportForm',
+    title: 'Domains/Feedback/Report Form',
     component: Component,
 };
 
@@ -16,7 +16,7 @@ const dummyBugReportForm = {
     icon: <BugReportIcon />,
 };
 
-export function ReportForm() {
+export function Basic() {
     return (
         <Container maxWidth='sm'>
             <Component

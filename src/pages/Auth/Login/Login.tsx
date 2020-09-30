@@ -4,6 +4,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
 import LoginForm from 'domains/Auth/LoginForm';
+import { set } from 'utils/storage';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -32,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     onLogin: () => void;
-    registerRoute: string;
-    forgotPassRoute: string;
+    registerRoute?: string;
+    forgotPassRoute?: string;
 }
 
 export default function Login({
@@ -51,28 +52,42 @@ export default function Login({
                 Sign in
             </Typography>
             <div className={classes.form}>
-                <LoginForm onSuccess={onLogin} />
+                <LoginForm
+                    onSuccess={() => {
+                        set({ isLoggedIn: true });
+                        onLogin();
+                    }}
+                />
             </div>
             <Grid container className={classes.nav}>
-                <Grid item xs>
-                    <MUILink
-                        href={forgotPassRoute}
-                        variant='body2'
-                        component='a'
-                    >
-                        Forgot password?
-                    </MUILink>
-                </Grid>
-                <Grid item>
-                    <MUILink
-                        href={registerRoute}
-                        variant='body2'
-                        component='a'
-                    >
-                        Don&#39;t have an account? Sign Up
-                    </MUILink>
-                </Grid>
+                {forgotPassRoute && (
+                    <Grid item xs>
+                        <MUILink
+                            href={forgotPassRoute}
+                            variant='body2'
+                            component='a'
+                        >
+                            Forgot password?
+                        </MUILink>
+                    </Grid>
+                )}
+                {registerRoute && (
+                    <Grid item>
+                        <MUILink
+                            href={registerRoute}
+                            variant='body2'
+                            component='a'
+                        >
+                            Don&#39;t have an account? Sign Up
+                        </MUILink>
+                    </Grid>
+                )}
             </Grid>
         </div>
     );
 }
+
+Login.defaultProps = {
+    registerRoute: undefined,
+    forgotPassRoute: undefined,
+};

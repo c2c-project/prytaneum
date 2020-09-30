@@ -15,18 +15,46 @@ interface Props {
 export const TownhallContext = React.createContext<Townhall>({
     _id: '',
     form: {
-        speaker: {
-            name: '',
-            party: '',
-            territory: '',
-        },
-        moderator: '',
-        topic: '',
-        picture: '',
-        readingMaterials: '',
+        title: '',
         date: new Date(),
-        url: '',
         description: '',
+    },
+    settings: {
+        general: {
+            private: false,
+            speaker: {
+                name: '',
+                party: '',
+                territory: '',
+                picture: '',
+            },
+            topic: '',
+        },
+        components: {
+            waitingRoom: {
+                enabled: false,
+                scheduled: null,
+            },
+            chat: {
+                enabled: false,
+                automated: false,
+            },
+            questionQueue: {
+                transparent: false,
+                automated: false,
+            },
+            credits: {
+                enabled: true,
+            },
+            links: {
+                enabled: false,
+                links: [],
+            },
+            moderators: {
+                list: [],
+                primary: '',
+            },
+        },
     },
 });
 
@@ -47,7 +75,7 @@ export default function TownhallProvider({
         if (!townhall) {
             get();
         }
-    }, []);
+    }, [townhall, get]);
 
     return !townhall ? (
         <div style={{ height: '500px' }}>

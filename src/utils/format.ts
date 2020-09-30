@@ -13,3 +13,11 @@ export function formatDate(
 export function pluralize(count: number, str: string): string {
     return count === 1 ? str : `${str}s`;
 }
+
+export function truncateText(text: string, limit: number): string {
+    return text
+        .split(' ')
+        .slice(0, limit - 1)
+        .concat(['...'])
+        .join(' ');
+}

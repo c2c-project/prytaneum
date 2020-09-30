@@ -11,7 +11,7 @@ interface EndpointOptions<T> {
     undo?: {
         message?: string;
         onClick: () => void;
-    }
+    };
 }
 type SendRequest = () => void;
 type IsLoading = boolean;
@@ -93,11 +93,15 @@ export default function useEndpoint<T>(
 
             window.addEventListener('beforeunload', closeFunction, false);
             snack(undo?.message || 'Request Sent', {
-                action: React.createElement( 
+                action: React.createElement(
                     Button,
                     {
                         onClick: () => {
-                            window.removeEventListener('beforeunload', closeFunction, false);
+                            window.removeEventListener(
+                                'beforeunload',
+                                closeFunction,
+                                false
+                            );
                             if (isMounted === true) {
                                 _onUndo();
                                 isStopped = true;
@@ -105,19 +109,23 @@ export default function useEndpoint<T>(
                             }
                         },
                         variant: 'text',
-                        color: 'inherit'
+                        color: 'inherit',
                     },
                     'Undo'
                 ),
                 onExited: () => {
-                    window.removeEventListener('beforeunload', closeFunction, false);
+                    window.removeEventListener(
+                        'beforeunload',
+                        closeFunction,
+                        false
+                    );
                     if (isStopped === false && sentRequest === false) {
                         sentRequest = true;
                         // eslint-disable-next-line no-void
                         void request();
                     }
-                }
-            });            
+                },
+            });
         };
 
         // sendRequest sets loading to true, I use this as the trigger to send the request
@@ -125,7 +133,7 @@ export default function useEndpoint<T>(
             // I use callbacks after the request completes, so I don't care about "await"-ing the promise
             if (isUndo === true) {
                 undoableRequest();
-            } else { 
+            } else {
                 // eslint-disable-next-line no-void
                 void request();
             }
@@ -134,7 +142,7 @@ export default function useEndpoint<T>(
         return () => {
             isMounted = false;
         };
-    }, [isLoading, endpoint, handleError, options]);
+    }, [isLoading, endpoint, handleError, options, snack]);
 
     return [sendRequest, isLoading];
 }

@@ -2,8 +2,8 @@ import React from 'react';
 
 import Component from '.';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Domains/Townhall/Townhall List' };
 
-export function TownhallList() {
-    return <Component />;
+export function Basic() {
+    return <Component onClickTownhall={console.log} />;
 }

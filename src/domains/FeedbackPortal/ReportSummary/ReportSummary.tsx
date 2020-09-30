@@ -49,17 +49,17 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
 
     const deleteApiRequest = React.useCallback(
         () => endpoints[report.type](report._id),
-        [report]
+        [report, endpoints]
     );
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
             callBack();
             refetchReports();
-            snack('Report successfully deleted', 'success');
+            snack('Report successfully deleted');
         },
         onFailure: () => {
-            snack('Something went wrong! Try again', 'error');
+            snack('Something went wrong! Try again');
         },
     });
 

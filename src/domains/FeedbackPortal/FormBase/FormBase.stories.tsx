@@ -4,9 +4,9 @@ import Container from '@material-ui/core/Container';
 import Component from '.';
 import { makeFeedbackReport } from '../reportMaker.mock';
 
-export default { title: 'Domains/FormBase' };
+export default { title: 'Domains/Feedback/Form Base' };
 
-export function FormBase() {
+export function Basic() {
     return (
         <Container maxWidth='sm'>
             <Component

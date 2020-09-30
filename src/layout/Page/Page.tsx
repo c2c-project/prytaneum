@@ -4,19 +4,27 @@ import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        // position: 'relative',
+        // overflowY: 'auto',
+        // height: '100%',
+        // width: '100%',
+    },
     outerContainer: {
         position: 'relative',
         width: '100%',
         height: '100%',
     },
     innerContainer: {
-        position: 'absolute',
+        // FIXME: if I want to make it so taht slide in works properly I'll need to mess with this
+        // position: 'absolute',
         width: '100%',
         height: '100vh',
-        // overflowY: 'auto',
     },
     main: {
         marginBottom: '100px',
+        width: '100%',
+        height: '100%',
     },
     appBar: theme.mixins.toolbar,
 }));
@@ -33,17 +41,21 @@ export default React.forwardRef<HTMLDivElement, Props>(function Page(
     const { children, maxWidth } = props;
     const classes = useStyles();
     return (
-        <Container
-            maxWidth={maxWidth || 'md'}
-            disableGutters
-            className={classes.outerContainer}
-            ref={ref}
-        >
-            <div className={classes.innerContainer}>
-                <div className={classes.appBar} />
-                <main className={classes.main}>{children}</main>
-                <div className={classes.appBar} />
-            </div>
-        </Container>
+        <div>
+            <div className={classes.appBar} />
+            <main className={classes.main}>
+                <Container
+                    maxWidth={maxWidth || 'md'}
+                    disableGutters
+                    className={classes.outerContainer}
+                    ref={ref}
+                >
+                    <div className={classes.innerContainer}>
+                        {children}
+                        <div className={classes.appBar} />
+                    </div>
+                </Container>
+            </main>
+        </div>
     );
 });

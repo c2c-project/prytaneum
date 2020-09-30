@@ -3,7 +3,9 @@
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import faker from 'faker';
 import * as API from '.';
+import { TownhallForm } from '../types';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');
@@ -15,14 +17,12 @@ afterEach(() => {
 
 describe('#createTownhall', () => {
     const form = {
-        speaker: 'asdf',
-        moderator: 'asdf',
         date: new Date(),
-        description: 'asdf',
-        url: 'asdf',
+        description: faker.lorem.text(),
+        title: faker.lorem.text(),
     };
     it('should reject a town hall', async () => {
-        await expect(API.createTownhall({})).rejects.toThrow(
+        await expect(API.createTownhall({} as TownhallForm)).rejects.toThrow(
             errors.fieldError()
         );
         expect(axios.post).not.toHaveBeenCalled();
@@ -41,17 +41,15 @@ describe('#createTownhall', () => {
 
 describe('#updateTownhall', () => {
     const form = {
-        speaker: 'asdf',
-        moderator: 'asdf',
         date: new Date(),
-        description: 'asdf',
-        url: 'asdf',
+        description: faker.lorem.text(),
+        title: faker.lorem.text(),
     };
     const townhallId = 'blah';
     it('should reject update', async () => {
-        await expect(API.updateTownhall({}, townhallId)).rejects.toThrow(
-            errors.fieldError()
-        );
+        await expect(
+            API.updateTownhall({} as TownhallForm, townhallId)
+        ).rejects.toThrow(errors.fieldError());
         expect(axios.post).not.toHaveBeenCalled();
         await expect(API.updateTownhall(form, '')).rejects.toThrow(
             errors.internalError()

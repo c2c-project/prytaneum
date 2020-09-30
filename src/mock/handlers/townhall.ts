@@ -2,24 +2,52 @@ import { rest } from 'msw';
 import faker from 'faker';
 import * as TownhallTypes from 'domains/Townhall/types';
 
-const recent = faker.date.recent();
+const past = faker.date.past();
 const future = faker.date.future();
 
 const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     form: {
-        speaker: {
-            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-            party: faker.company.companyName(),
-            territory: 'CA-41',
-        },
-        moderator: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        topic: faker.random.word(),
-        picture: faker.image.imageUrl(),
-        readingMaterials: '',
-        date: faker.date.between(recent, future),
-        url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
+        title: faker.lorem.words(),
+        date: faker.date.between(past, future),
         description: faker.lorem.paragraph(),
+    },
+    settings: {
+        general: {
+            private: false,
+            speaker: {
+                name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+                party: faker.company.companyName(),
+                territory: 'CA-41',
+                picture: faker.image.imageUrl(),
+            },
+            topic: faker.random.word(),
+        },
+        components: {
+            waitingRoom: {
+                enabled: false,
+                scheduled: null,
+            },
+            chat: {
+                enabled: false,
+                automated: false,
+            },
+            questionQueue: {
+                transparent: false,
+                automated: false,
+            },
+            credits: {
+                enabled: false,
+            },
+            links: {
+                enabled: false,
+                links: [],
+            },
+            moderators: {
+                list: [],
+                primary: '',
+            },
+        },
     },
 });
 

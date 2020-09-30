@@ -7,37 +7,29 @@ import { makeStyles } from '@material-ui/core/styles';
 import Page from 'layout/Page';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
+import Redirect from 'components/Redirect';
 
 // for side effects (adding the routes)
 import './Auth';
 import './Townhall';
+import './User';
 
 import { addRoutes, routes } from './utils';
 
 addRoutes([
     {
         path: '/',
-        action: () => (
-            <div>
-                <h1>Page One</h1>
-                <a href='/two'>Page Two</a>
-                <br />
-                <a href='/eh'>404</a>
-            </div>
-        ),
+        action: () => {
+            return <Redirect href='/auth/login' />;
+        },
     },
     {
-        path: '/two',
-        action: () => (
-            <div>
-                <h1>Page Two</h1>
-                <a href='/'>Page One</a>
-                <br />
-                <a href='/eh'>404</a>
-            </div>
-        ),
+        path: '/home',
+        action: () => {
+            return <Redirect replace href='/user/my-townhalls' />;
+        },
     },
-    { path: '(.*)', action: () => <h1>404</h1> },
+    { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> },
 ]);
 const router = new UniversalRouter<JSX.Element>(routes);
 
@@ -111,7 +103,7 @@ export default function App() {
 
     React.useEffect(() => {
         if (currPage.component === null) setCurrPage(destPage);
-    }, [destPage]);
+    }, [destPage, currPage.component]);
 
     return (
         <div>

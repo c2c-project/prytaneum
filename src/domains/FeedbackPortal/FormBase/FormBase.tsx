@@ -71,17 +71,17 @@ export default function FormBase({
 
     const submitRequest = React.useCallback(
         () => endpoints[reportType][submitType](reportState),
-        [reportState]
+        [reportState, submitType, endpoints, reportType]
     );
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
             onSuccess(reportState);
-            snack('Report successfully submitted', 'success');
+            snack('Report successfully submitted');
         },
         onFailure: () => {
             onFailure();
-            snack('Something went wrong! Try again', 'error');
+            snack('Something went wrong! Try again');
         },
     });
 

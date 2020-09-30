@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-    Grid,
     Button,
-    Zoom,
     IconButton,
     Drawer,
     List,
@@ -11,8 +9,6 @@ import {
     Typography,
     Menu,
     MenuItem,
-    ListItemIcon,
-    Divider,
 } from '@material-ui/core';
 import {
     Menu as MenuIcon,
@@ -22,6 +18,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { User } from 'types';
 
+import { get } from 'utils/storage';
 import history from 'utils/history';
 import AppBar from '../AppBar';
 
@@ -55,17 +52,9 @@ export default function Nav() {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const isLoggedIn = localStorage.getItem('logged-in');
+    const isLoggedIn = get('isLoggedIn');
 
     const handleClick = () => setOpen(false);
-
-    const noUserMenu = (
-        <div className={classes.rightMenu}>
-            <Button color='inherit' onClick={() => history.push('/auth/login')}>
-                Login
-            </Button>
-        </div>
-    );
 
     const userMenu = (
         <div className={classes.rightMenu}>
@@ -80,68 +69,67 @@ export default function Nav() {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
+                onClick={() => setAnchorEl(null)}
             >
                 <MenuItem button>
                     <ListItemText primary='Profile' />
                 </MenuItem>
-                <MenuItem button>
+                <MenuItem
+                    button
+                    onClick={() => {
+                        history.push('/logout');
+                    }}
+                >
                     <ListItemText primary='Logout' />
                 </MenuItem>
             </Menu>
         </div>
     );
-
-    const loggedInDrawer = (
-        <li>
-            <ListItem
-                button
-                onClick={(e) => {
-                    e.preventDefault();
-                    history.push('/user/townhalls');
-                }}
+    const title = (
+        <Typography align='left' variant='h6' noWrap>
+            {formatTitle('prytaneum')}
+        </Typography>
+    );
+    const loggedInBar = (
+        <AppBar>
+            <IconButton
+                onClick={() => setOpen(true)}
+                className={classes.menuButton}
+                color='inherit'
             >
-                <ListItemText primary='My Townhalls' />
-            </ListItem>
-        </li>
+                <MenuIcon />
+            </IconButton>
+            {title}
+            {userMenu}
+        </AppBar>
     );
 
     return (
         <div>
-            <AppBar>
-                <IconButton
-                    onClick={() => setOpen(true)}
-                    className={classes.menuButton}
-                    color='inherit'
+            <AppBar>{isLoggedIn ? loggedInBar : title}</AppBar>
+            {isLoggedIn && (
+                <Drawer
+                    classes={{ paper: classes.drawer }}
+                    open={open}
+                    onClose={() => setOpen(false)}
                 >
-                    <MenuIcon />
-                </IconButton>
-                <Typography align='left' variant='h6' noWrap>
-                    {formatTitle('prytaneum')}
-                </Typography>
-                {isLoggedIn ? userMenu : noUserMenu}
-            </AppBar>
-            <Drawer
-                classes={{ paper: classes.drawer }}
-                open={open}
-                onClose={() => setOpen(false)}
-            >
-                <nav>
-                    <List onClick={handleClick}>
-                        <li>
-                            <ListItem
-                                button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    history.push('/townhalls');
-                                }}
-                            >
-                                <ListItemText primary='Townhalls' />
-                            </ListItem>
-                        </li>
-                        {loggedInDrawer}
-                    </List>
-                </nav>
-            </Drawer>
+                    <nav>
+                        <List onClick={handleClick}>
+                            <li>
+                                <ListItem
+                                    button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        history.push('/user/my-townhalls');
+                                    }}
+                                >
+                                    <ListItemText primary='My Townhalls' />
+                                </ListItem>
+                            </li>
+                        </List>
+                    </nav>
+                </Drawer>
+            )}
         </div>
     );
 }
