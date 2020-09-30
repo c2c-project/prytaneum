@@ -10,12 +10,7 @@ export default function InvalidLink({ errorMessage }: Props) {
     return (
         <Grid container justify='center' direction='column'>
             <Grid container justify='center'>
-                <Typography variant='h4' component='div'>
-                    Invalid Invite Link
-                </Typography>
-            </Grid>
-            <Grid container justify='center'>
-                <Typography variant='h5' component='div' color='error'>
+                <Typography variant='h4' component='div' color='error'>
                     {errorMessage}
                 </Typography>
             </Grid>
