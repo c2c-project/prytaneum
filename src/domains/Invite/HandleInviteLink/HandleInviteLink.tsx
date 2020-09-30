@@ -63,7 +63,7 @@ export default function HandleInviteLink({ inviteToken }: Props) {
             history.push('/');
         }
         sendValidateRequest();
-    }, [sendValidateRequest, townHall]);
+    }, []);
     return (
         <Grid container justify='center'>
             <InvalidInviteDialog open={open} onClose={handleClose} />

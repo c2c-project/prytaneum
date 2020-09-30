@@ -38,7 +38,7 @@ function SelectFileStep({
 }: {
     expectedKeys: string[];
     file: File | undefined;
-    setFile: Function;
+    setFile: (f: File) => void;
 }) {
     return (
         <Grid container spacing={2}>

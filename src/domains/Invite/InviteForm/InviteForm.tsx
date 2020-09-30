@@ -83,7 +83,7 @@ function getSteps() {
 export default function InviteFormStepper() {
     const townHall = useContext(TownhallContext);
     const classes = useStyles();
-    const [file, setFile]: [File | undefined, Function] = useState();
+    const [file, setFile]: [File | undefined, (f: File) => void] = useState();
     const [fileSelected, setFileSelected] = useState(false);
     const [preview, setPreview]: [
         object[] | undefined,
@@ -121,7 +121,7 @@ export default function InviteFormStepper() {
             ...inviteForm,
             MoC: townHall.form.speaker.name,
             topic: townHall.form.topic,
-            eventDateTime: townHall.form.date,
+            eventDateTime: townHall.form.date.toUTCString(),
             constituentScope: townHall.form.scope,
             region: townHall.form.speaker.territory,
             townHallId: townHall._id,

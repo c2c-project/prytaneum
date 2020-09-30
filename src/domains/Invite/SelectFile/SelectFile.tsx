@@ -5,8 +5,7 @@ import UploadField from './UploadField';
 
 interface Props {
     initialState: File;
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    onComplete: Function;
+    onComplete: (f: File) => void;
 }
 
 export default function SelectFile({ initialState, onComplete }: Props) {

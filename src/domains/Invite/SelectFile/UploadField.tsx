@@ -23,8 +23,7 @@ function UploadField({
     onChange,
     fileName,
 }: {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    onChange: Function;
+    onChange: (f: File) => void;
     fileName?: string;
 }) {
     const classes = useStyles();
@@ -32,7 +31,7 @@ function UploadField({
         e.preventDefault();
         const { files } = e.target;
         if (files && files.length > 0) {
-            onChange(files.item(0));
+            onChange(files.item(0) as File);
         }
     };
     // NOTE: must have this b/c if state changes type something weird happens
