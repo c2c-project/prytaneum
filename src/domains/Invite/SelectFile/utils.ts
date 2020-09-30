@@ -1,16 +1,15 @@
-import Papa from 'papaparse';
+import Papa, { ParseConfig, ParseResult } from 'papaparse';
 
-const defaultConfig = {
+const defaultConfig: ParseConfig = {
     header: true,
     skipEmptyLines: true,
-    complete: (results: Array<string>) => {
+    complete: (results: ParseResult<Array<string>>) => {
         console.log(results);
     },
 };
 
 function csv(file: File, config = {}) {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const merged: object = { ...defaultConfig, ...config };
+    const merged: ParseConfig = { ...defaultConfig, ...config };
     Papa.parse(file, merged);
 }
 
