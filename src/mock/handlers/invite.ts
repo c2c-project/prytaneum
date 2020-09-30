@@ -22,7 +22,7 @@ export default [
     }),
     rest.post('/api/invite/validate-jwt', (req, res, ctx) => {
         const { token } = req.body as { token: string };
-        if (!token) return res(ctx.status(400));
+        if (!token || token === 'invalid') return res(ctx.status(400));
         return res(ctx.status(200));
     }),
 ];
