@@ -49,6 +49,7 @@ export interface TownhallForm {
     title: string;
     date: Date;
     description: string;
+    scope: string;
 }
 
 export interface TownhallQuestionForm {

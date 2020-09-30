@@ -32,7 +32,7 @@ interface Form {
  * @param props
  * @param {"() => void"} onSuccess function to call if successful
  * @param {"() => void"} onFailure function to call if failed
- * @example 
+ * @example
  * const onS = () => {};
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
