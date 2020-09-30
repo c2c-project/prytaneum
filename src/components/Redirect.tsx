@@ -15,6 +15,6 @@ export default function Redirect({ href, replace }: Props) {
         } else {
             history.push(href);
         }
-    }, []);
+    }, [href, replace]);
     return <div />;
 }

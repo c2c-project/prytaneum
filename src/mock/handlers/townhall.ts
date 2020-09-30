@@ -8,18 +8,46 @@ const future = faker.date.future();
 const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     form: {
-        speaker: {
-            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-            party: faker.company.companyName(),
-            territory: 'CA-41',
-        },
-        moderator: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        topic: faker.random.word(),
-        picture: faker.image.imageUrl(),
-        readingMaterials: '',
+        title: faker.lorem.words(),
         date: faker.date.between(past, future),
-        url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
         description: faker.lorem.paragraph(),
+    },
+    settings: {
+        general: {
+            private: false,
+            speaker: {
+                name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+                party: faker.company.companyName(),
+                territory: 'CA-41',
+                picture: faker.image.imageUrl(),
+            },
+            topic: faker.random.word(),
+        },
+        components: {
+            waitingRoom: {
+                enabled: false,
+                scheduled: null,
+            },
+            chat: {
+                enabled: false,
+                automated: false,
+            },
+            questionQueue: {
+                transparent: false,
+                automated: false,
+            },
+            credits: {
+                enabled: false,
+            },
+            links: {
+                enabled: false,
+                links: [],
+            },
+            moderators: {
+                list: [],
+                primary: '',
+            },
+        },
     },
 });
 

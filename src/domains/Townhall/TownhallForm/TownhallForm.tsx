@@ -30,7 +30,7 @@ export default function TownhallForm({ onSubmit: cb }: Props) {
             townhall._id
                 ? updateTownhall(state, townhall._id)
                 : createTownhall(state),
-        [state]
+        [state, townhall._id]
     );
 
     // after this point in the code,
@@ -60,30 +60,12 @@ export default function TownhallForm({ onSubmit: cb }: Props) {
             <Grid item xs={12}>
                 <form onSubmit={onSubmit}>
                     <Grid container spacing={2}>
-                        {/* 
-                        // FIXME:
                         <Grid item xs={12}>
                             <TextField
                                 required
-                                label='Speaker'
-                                value={state.speaker.name}
-                                onChange={buildHandler('speaker')}
-                            />
-                        </Grid> */}
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                label='Moderator'
-                                value={state.moderator}
-                                onChange={buildHandler('moderator')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                label='Session URL'
-                                value={state.url}
-                                onChange={buildHandler('url')}
+                                label='Title'
+                                value={state.title}
+                                onChange={buildHandler('title')}
                             />
                         </Grid>
                         <Grid item xs={12}>

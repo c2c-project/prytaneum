@@ -29,7 +29,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     // search is always the first element in the filter array
     const [filters, setFilters] = React.useState<HelperFunc[]>([
-        () => search('', []),
+        (townhalls: Townhall[]) => townhalls,
     ]);
     const [sendRequest, isLoading] = useEndpoint(
         () => getTownhallList(currentUser),
@@ -92,7 +92,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                     />
                 </div>
                 <List>
-                    {applyFilters().map(({ form, _id }) => (
+                    {applyFilters().map(({ settings, form, _id }) => (
                         <ListItem
                             key={_id}
                             divider
@@ -101,12 +101,15 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                             onClick={() => onClickTownhall(_id)}
                         >
                             <ListItemAvatar>
-                                <Avatar alt='asdf' src={form.picture}>
-                                    {form.speaker.name[0]}
+                                <Avatar
+                                    alt='Speaker'
+                                    src={settings.general.speaker.picture}
+                                >
+                                    {form.title[0]}
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                primary={form.speaker.name}
+                                primary={form.title}
                                 secondary={formatDate(form.date)}
                             />
                             <ListItemSecondaryAction>

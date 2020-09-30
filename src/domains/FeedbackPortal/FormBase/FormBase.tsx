@@ -71,7 +71,7 @@ export default function FormBase({
 
     const submitRequest = React.useCallback(
         () => endpoints[reportType][submitType](reportState),
-        [reportState]
+        [reportState, submitType, endpoints, reportType]
     );
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {

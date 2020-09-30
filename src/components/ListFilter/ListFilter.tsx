@@ -46,6 +46,7 @@ export default function ListFilter({
     const immutableTransform = (op: Op) => (prevFilters: Filters) => {
         const copy = new Set(prevFilters);
         op(copy);
+        onFilter(copy);
         return copy;
     };
 
@@ -56,14 +57,6 @@ export default function ListFilter({
             setFilters(immutableTransform((set) => set.add(filter)));
         }
     };
-
-    React.useEffect(() => {
-        onFilter(filters);
-    }, [filters]);
-
-    React.useEffect(() => {
-        onSearch(search);
-    }, [search]);
 
     return (
         <div className={classes.root}>
@@ -78,6 +71,7 @@ export default function ListFilter({
                             e.preventDefault();
                             const copy = e.target.value;
                             setSearch(copy);
+                            onSearch(copy);
                         }}
                         InputProps={{
                             endAdornment: (

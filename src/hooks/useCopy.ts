@@ -29,7 +29,8 @@ export default function useCopy() {
         return () => {
             isMounted = false;
         };
-    }, [data, dummy]);
+    }, [data, dummy, snack]);
+    // NOTE: snack should technically never change as long as the context doesn't, which it won't
 
     const copy = (str: string) => {
         setData(str);

@@ -84,7 +84,7 @@ export default function QuestionQueue() {
     const [count, setCount] = React.useState(0);
     React.useEffect(() => {
         setCount(state.length - questions.length);
-    }, [state]);
+    }, [state, questions.length]);
 
     function refresh() {
         setQuestions(state);

@@ -6,10 +6,10 @@ import { Townhall } from '../types';
 export type HelperFunc = (data: Townhall[]) => Townhall[];
 
 export function search(searchText: string, data: Townhall[]) {
+    console.log(data);
     return data.filter(
         ({ form }) =>
-            form.speaker.name.match(new RegExp(`.*${searchText}.*`, 'gi')) !==
-            null
+            form.title.match(new RegExp(`.*${searchText}.*`, 'gi')) !== null
     );
 }
 

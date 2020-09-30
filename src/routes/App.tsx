@@ -103,7 +103,7 @@ export default function App() {
 
     React.useEffect(() => {
         if (currPage.component === null) setCurrPage(destPage);
-    }, [destPage]);
+    }, [destPage, currPage.component]);
 
     return (
         <div>

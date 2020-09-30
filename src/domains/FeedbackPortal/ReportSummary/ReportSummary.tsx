@@ -49,7 +49,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
 
     const deleteApiRequest = React.useCallback(
         () => endpoints[report.type](report._id),
-        [report]
+        [report, endpoints]
     );
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
