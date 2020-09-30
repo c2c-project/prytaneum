@@ -4,6 +4,7 @@ import Login from 'pages/Auth/Login';
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallForm from 'pages/Townhall/TownhallForm';
+import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
@@ -46,7 +47,9 @@ addRoutes([
                             const { townhallId } = ctx.params as {
                                 townhallId: string;
                             };
-                            const component = ctx.next() || <SettingsMenu />;
+                            const component = ctx.next() || (
+                                <TownhallSettings />
+                            );
 
                             return (
                                 <TownhallContextProvider
