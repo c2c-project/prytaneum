@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -49,7 +45,7 @@ interface Props {
     id?: string;
 }
 
-const options_list = [
+const optionsList = [
     {
         text: 'Appear Anonymous',
         component: <AppearAnonymous />,
@@ -64,7 +60,7 @@ const options_list = [
     },
 ];
 
-const account_settings_list = [
+const accountSettingsList = [
     {
         text: 'Logout',
         component: <Logout />,
@@ -79,7 +75,7 @@ const account_settings_list = [
     },
 ];
 
-const information_list = [
+const informationList = [
     {
         text: 'Feedback',
         component: <Feedback />,
@@ -125,13 +121,13 @@ export default function UserSettings({ id }: Props) {
         },
         {
             title: 'Options',
-            content: <ButtonList list={options_list} setContent={setContent} />,
+            content: <ButtonList list={optionsList} setContent={setContent} />,
         },
         {
             title: 'Account Settings',
             content: (
                 <ButtonList
-                    list={account_settings_list}
+                    list={accountSettingsList}
                     setContent={setContent}
                 />
             ),
@@ -139,7 +135,7 @@ export default function UserSettings({ id }: Props) {
         {
             title: 'Information',
             content: (
-                <ButtonList list={information_list} setContent={setContent} />
+                <ButtonList list={informationList} setContent={setContent} />
             ),
         },
     ];
