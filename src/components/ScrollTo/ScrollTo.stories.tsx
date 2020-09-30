@@ -7,45 +7,43 @@ export default {
     component: Component,
 };
 
-export function ScrollToTop() {
-    const [cnt, setCount] = React.useState(0);
-    const [spam, updateSpam] = React.useState<JSX.Element[]>([<span key={cnt}><br/><br/><br/><h1>SPAM</h1><br/><br/><br/></span>]);
-    const update = () => {
-        setCount(cnt + 1);
-        spam.push(<span key={cnt}><br/><h1>SPAM</h1><br/></span>);
-        updateSpam(spam);
+const update = (previousSpam: string[]) => {
+    const newSpam = [...previousSpam];
+    for (let i = 0; i < 100; i += 1) {
+        newSpam.push('SPAM');
     }
-    
+    return newSpam;
+};
+
+export function ScrollToTop() {
+    const [spam, setSpam] = React.useState<string[]>([]);
+
     return (
         <div id='scrollTo'>
             <Component active direction='top'>
-                <p>{spam}</p>
-                <p>{cnt}</p>
-                <button type='button' onClick={() => update()}>
+                <button type='button' onClick={() => setSpam(update)}>
                     click to add spam
                 </button>
+                {spam.map(() => (
+                    <div>SPAM</div>
+                ))}
             </Component>
         </div>
     );
 }
 
 export function ScrollToBottom() {
-    const [cnt, setCount] = React.useState(0);
-    const [spam, updateSpam] = React.useState<JSX.Element[]>([<span key={cnt}><br/><br/><br/><h1>SPAM</h1><br/><br/><br/></span>]);
-    const update = () => {
-        setCount(cnt + 1);
-        spam.push(<span key={cnt}><br/><h1>SPAM</h1><br/></span>);
-        updateSpam(spam);
-    }
+    const [spam, setSpam] = React.useState<string[]>([]);
 
     return (
         <div id='scrollTo'>
             <Component active direction='bottom'>
-                <button type='button' onClick={() => update()}>
+                <button type='button' onClick={() => setSpam(update)}>
                     click to add spam
                 </button>
-                <p>{spam}</p>
-                <p>{cnt}</p>
+                {spam.map(() => (
+                    <div>SPAM</div>
+                ))}
             </Component>
         </div>
     );
