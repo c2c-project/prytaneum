@@ -2,7 +2,7 @@ import React from 'react';
 
 import Component, { TownHallHistoryEntry } from './TownHallHistory';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Domains/Townhall/Townhall History' };
 
 const historyEntries: TownHallHistoryEntry[] = [
     {
@@ -27,6 +27,6 @@ const historyEntries: TownHallHistoryEntry[] = [
     },
 ];
 
-export function TownhallHistory() {
+export function Basic() {
     return <Component history={historyEntries} />;
 }

@@ -1,9 +1,9 @@
 import React from 'react';
 import Component from './JoinUrl';
 
-export default { title: 'domains/Townhall' };
+export default { title: 'Domains/Townhall/JoinUrl' };
 
-export function JoinUrl() {
+export function Basic() {
     return (
         <div style={{ maxWidth: '1000px' }}>
             <Component />

@@ -1,16 +1,16 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
 
-import Component from '.';
+// import Component from '.';
 import TownhallContextProvider from '../Contexts/Townhall';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Domains/Townhall/Townhall Profile' };
 
-export function TownhallProfile() {
+export function Basic() {
     return (
         <TownhallContextProvider townhallId='1234'>
             <Container maxWidth='md' disableGutters>
-                <Component />
+                <div />
             </Container>
         </TownhallContextProvider>
     );

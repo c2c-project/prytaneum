@@ -5,7 +5,7 @@ import { EventEmitter } from 'events';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from '.';
 
-export default { title: 'Domains/Townhall' };
+export default { title: 'Domains/Townhall/Question Queue' };
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 function sendMessage() {
@@ -23,7 +23,7 @@ function sendMessage() {
     });
 }
 
-export function QuestionQueue() {
+export function Basic() {
     return (
         <div>
             <button type='button' onClick={sendMessage}>
