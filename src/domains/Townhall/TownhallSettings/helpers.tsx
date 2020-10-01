@@ -7,7 +7,6 @@ import {
     Checkbox,
     // FormGroup,
     Collapse,
-    Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
