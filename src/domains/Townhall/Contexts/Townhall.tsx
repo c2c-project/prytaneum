@@ -18,43 +18,47 @@ export const TownhallContext = React.createContext<Townhall>({
         title: '',
         date: new Date(),
         description: '',
-        scope: '',
+        scope: 'district',
+        private: false,
+        speaker: {
+            name: '',
+            party: '',
+            territory: '',
+            picture: '',
+        },
+        topic: '',
     },
     settings: {
-        general: {
-            private: false,
-            speaker: {
-                name: '',
-                party: '',
-                territory: '',
-                picture: '',
-            },
-            topic: '',
+        waitingRoom: {
+            enabled: false,
+            scheduled: null,
         },
-        components: {
-            waitingRoom: {
-                enabled: false,
-                scheduled: null,
-            },
-            chat: {
-                enabled: false,
-                automated: false,
-            },
-            questionQueue: {
-                transparent: false,
-                automated: false,
-            },
-            credits: {
+        chat: {
+            enabled: false,
+            automated: false,
+        },
+        questionQueue: {
+            transparent: false,
+            automated: false,
+        },
+        credits: {
+            enabled: false,
+            list: [],
+        },
+        links: {
+            enabled: false,
+            links: [],
+        },
+        moderators: {
+            list: [],
+            primary: '',
+        },
+        registration: {
+            reminders: {
                 enabled: true,
+                customTimes: [],
             },
-            links: {
-                enabled: false,
-                links: [],
-            },
-            moderators: {
-                list: [],
-                primary: '',
-            },
+            registrants: [],
         },
     },
 });

@@ -11,43 +11,47 @@ const makeTownhall = (): TownhallTypes.Townhall => ({
         title: faker.lorem.words(),
         date: faker.date.between(past, future),
         description: faker.lorem.paragraph(),
-        scope: 'Scope', // FIXME:
+        scope: 'district', // FIXME:
+        private: false,
+        speaker: {
+            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+            party: faker.company.companyName(),
+            territory: 'CA-41',
+            picture: faker.image.imageUrl(),
+        },
+        topic: faker.random.word(),
     },
     settings: {
-        general: {
-            private: false,
-            speaker: {
-                name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-                party: faker.company.companyName(),
-                territory: 'CA-41',
-                picture: faker.image.imageUrl(),
-            },
-            topic: faker.random.word(),
+        waitingRoom: {
+            enabled: false,
+            scheduled: null,
         },
-        components: {
-            waitingRoom: {
-                enabled: false,
-                scheduled: null,
+        chat: {
+            enabled: false,
+            automated: false,
+        },
+        questionQueue: {
+            transparent: false,
+            automated: false,
+        },
+        credits: {
+            enabled: false,
+            list: [],
+        },
+        links: {
+            enabled: false,
+            links: [],
+        },
+        moderators: {
+            list: [],
+            primary: '',
+        },
+        registration: {
+            reminders: {
+                enabled: true,
+                customTimes: [],
             },
-            chat: {
-                enabled: false,
-                automated: false,
-            },
-            questionQueue: {
-                transparent: false,
-                automated: false,
-            },
-            credits: {
-                enabled: false,
-            },
-            links: {
-                enabled: false,
-                links: [],
-            },
-            moderators: {
-                list: [],
-                primary: '',
-            },
+            registrants: [],
         },
     },
 });

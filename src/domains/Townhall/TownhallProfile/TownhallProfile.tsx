@@ -55,7 +55,7 @@ import React from 'react';
 //     const Title = () => (
 //         <Grid container spacing={0} item xs={12}>
 //             <Grid item xs={12}>
-//                 <Typography variant='h5'>{settings.general}</Typography>
+//                 <Typography variant='h5'>{form}</Typography>
 //             </Grid>
 //             <Grid item xs={12}>
 //                 <Typography variant='body2' color='textSecondary'>

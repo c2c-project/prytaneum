@@ -10,8 +10,24 @@ type Create = RequestBody;
 type Update = RequestBody & { townhallId: string };
 
 export async function createTownhall(form: TownhallForm) {
-    const { date, description, title } = form;
-    if (!title || !date || !description) {
+    const {
+        title,
+        date,
+        description,
+        scope,
+        private: isPrivate,
+        speaker,
+        topic,
+    } = form;
+    if (
+        !title ||
+        !date ||
+        !description ||
+        !scope ||
+        !speaker ||
+        !topic ||
+        isPrivate === undefined
+    ) {
         throw errors.fieldError();
     }
     const body: Create = { form };
@@ -19,8 +35,24 @@ export async function createTownhall(form: TownhallForm) {
 }
 
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
-    const { date, description, title } = form;
-    if (!date || !title || !description) {
+    const {
+        title,
+        date,
+        description,
+        scope,
+        private: isPrivate,
+        speaker,
+        topic,
+    } = form;
+    if (
+        !title ||
+        !date ||
+        !description ||
+        !scope ||
+        !speaker ||
+        !topic ||
+        isPrivate === undefined
+    ) {
         throw errors.fieldError();
     }
 

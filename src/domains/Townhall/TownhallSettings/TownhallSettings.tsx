@@ -12,6 +12,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import TownhallForm from '../TownhallForm';
 import JoinUrl from '../JoinUrl';
+import {
+    ChatSettings,
+    CreditsSettings,
+    QuestionQueueSettings,
+    Links,
+    Moderators,
+    ExportData,
+    Preview,
+} from './helpers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,25 +46,60 @@ interface Config {
     component: React.ReactNode;
 }
 
+const componentSections = [
+    {
+        title: 'Chat',
+        component: <ChatSettings />,
+    },
+    {
+        title: 'Credits',
+        component: <CreditsSettings />,
+    },
+    {
+        title: 'Question Queue',
+        component: <QuestionQueueSettings />,
+    },
+    {
+        title: 'Links',
+        component: <Links />,
+    },
+];
+
 const config: Config[] = [
     {
-        title: 'Townhall Information',
-        description: 'Update the townhall information form',
-        component: <TownhallForm onSubmit={console.log} />, // TODO:
+        title: 'Form',
+        description: 'Modify Townhall Form',
+        component: <TownhallForm buttonText='Save' />,
     },
     {
         title: 'Components',
         description: 'Turn on and off optional components',
-        component: <div>TODO</div>,
+        component: (
+            <Grid container spacing={2}>
+                {componentSections.map(({ title, component }) => (
+                    <React.Fragment key={title}>
+                        <Grid item xs={12}>
+                            <Typography variant='body1'>{title}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {component}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Divider />
+                        </Grid>
+                    </React.Fragment>
+                ))}
+            </Grid>
+        ),
     },
     {
         title: 'Moderators',
         description: 'Designate question queue moderators',
-        component: <div>TODO</div>,
+        component: <Moderators />,
     },
     {
         title: 'Invite',
-        description: 'Manage invitations to this townhall',
+        description: 'Manage invitations',
         component: (
             <Grid container spacing={3}>
                 <Grid
@@ -81,12 +125,12 @@ const config: Config[] = [
     {
         title: 'Data',
         description: 'Export data from this townhall',
-        component: <div>TODO</div>,
+        component: <ExportData />,
     },
     {
         title: 'Preview',
         description: 'Preview the townhall as...',
-        component: <div>TODO</div>,
+        component: <Preview />,
     },
 ];
 

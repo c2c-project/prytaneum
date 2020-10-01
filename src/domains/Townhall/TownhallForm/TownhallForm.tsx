@@ -1,9 +1,13 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import {
+    Typography,
+    Grid,
+    Button,
+    FormControlLabel,
+    Checkbox,
+} from '@material-ui/core';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 import TextField from 'components/TextField';
@@ -12,12 +16,17 @@ import useEndpoint from 'hooks/useEndpoint';
 import { createTownhall, updateTownhall } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
 import { TownhallForm as TownhallFormType } from '../types';
+import SpeakerField from '../SpeakerField';
 
-interface Props {
-    onSubmit?: () => void;
+interface DefaultProps {
+    onSubmit: () => void;
+    buttonText: string;
 }
 
-export default function TownhallForm({ onSubmit: cb }: Props) {
+export default function TownhallForm({
+    onSubmit: cb,
+    buttonText,
+}: Partial<DefaultProps>) {
     // this works even if it's not wrapped in the townhall context
     // the default value set for the townhall context has the appropriate form
     const townhall = React.useContext(TownhallContext);
@@ -61,11 +70,37 @@ export default function TownhallForm({ onSubmit: cb }: Props) {
                 <form onSubmit={onSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={state.private}
+                                        onChange={(e) => {
+                                            const { checked } = e.target;
+                                            setState((prev) => ({
+                                                ...prev,
+                                                private: checked,
+                                            }));
+                                        }}
+                                        name='private-checkbox'
+                                    />
+                                }
+                                label='Private'
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 required
                                 label='Title'
                                 value={state.title}
                                 onChange={buildHandler('title')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label='Topic'
+                                value={state.topic}
+                                onChange={buildHandler('topic')}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -90,13 +125,27 @@ export default function TownhallForm({ onSubmit: cb }: Props) {
                                 onChange={buildHandler('description')}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <SpeakerField
+                                value={state.speaker}
+                                onChange={(key, value) => {
+                                    setState((prevState) => ({
+                                        ...prevState,
+                                        speaker: {
+                                            ...state.speaker,
+                                            [key]: value,
+                                        },
+                                    }));
+                                }}
+                            />
+                        </Grid>
                         <Grid container item xs={12} justify='flex-end'>
                             <Button
                                 type='submit'
                                 variant='contained'
                                 color='secondary'
                             >
-                                Submit
+                                {buttonText}
                             </Button>
                         </Grid>
                     </Grid>
@@ -108,8 +157,10 @@ export default function TownhallForm({ onSubmit: cb }: Props) {
 
 TownhallForm.defaultProps = {
     onSubmit: () => {},
+    buttonText: 'Submit',
 };
 
 TownhallForm.propTypes = {
     onSubmit: PropTypes.func,
+    buttonText: PropTypes.string,
 };
