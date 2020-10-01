@@ -16,6 +16,7 @@ export interface TownhallSettings {
     questionQueue: {
         transparent: boolean;
         automated: boolean;
+        // TODO: prepopulated questions (if transparent then users can see these)
     };
     credits: {
         enabled: boolean;
@@ -60,4 +61,18 @@ export interface Speaker {
 
 export interface TownhallQuestionForm {
     question: string;
+}
+
+export interface Question {
+    _id: string;
+    meta: {
+        townhallId: string;
+        user: {
+            _id: string;
+            name: string;
+        };
+        timestamp: string;
+    };
+    question: string;
+    asked: boolean;
 }

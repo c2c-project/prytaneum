@@ -4,6 +4,7 @@ import { EventEmitter } from 'events';
 
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from '.';
+import { Question } from '../types';
 
 export default { title: 'Domains/Townhall/Question Queue' };
 
@@ -13,13 +14,17 @@ function sendMessage() {
         type: 'new-question',
         payload: {
             _id: faker.random.alphaNumeric(12),
-            user: {
-                _id: faker.random.alphaNumeric(12),
-                name: faker.internet.userName(),
+            meta: {
+                user: {
+                    _id: faker.random.alphaNumeric(12),
+                    name: faker.internet.userName(),
+                },
+                timestamp: new Date().toISOString(),
+                townhallId: faker.random.alphaNumeric(12),
             },
             question: faker.lorem.sentences(),
-            timestamp: new Date().toISOString(),
-        },
+            asked: Math.random() > 0.5,
+        } as Question,
     });
 }
 

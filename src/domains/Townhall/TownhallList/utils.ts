@@ -1,25 +1,24 @@
 /* eslint-disable @typescript-eslint/prefer-regexp-exec */
 import { add } from 'date-fns';
 
+import { search as utilSearch, FilterFunc } from 'utils/filters';
 import { Townhall } from '../types';
 
-export type HelperFunc = (data: Townhall[]) => Townhall[];
+export { applyFilters } from 'utils/filters';
+
+export type TonwhallFilterFunc = FilterFunc<Townhall>;
 
 export function search(searchText: string, data: Townhall[]) {
-    console.log(data);
-    return data.filter(
-        ({ form }) =>
-            form.title.match(new RegExp(`.*${searchText}.*`, 'gi')) !== null
-    );
+    const accessor = (t: Townhall) => t.form.title;
+    return utilSearch(searchText, data, [accessor]);
 }
 
 // FIXME: probably gonna end up having a "completed" status on the Townhall
 
 export interface Filters {
-    [index: string]: HelperFunc;
-    Upcoming: HelperFunc;
-    Past: HelperFunc;
-    Ongoing: HelperFunc;
+    Upcoming: TonwhallFilterFunc;
+    Past: TonwhallFilterFunc;
+    Ongoing: TonwhallFilterFunc;
 }
 
 export const filters: Filters = {

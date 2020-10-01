@@ -12,7 +12,16 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 
 import useSocketio from 'hooks/useSocketio';
+import ListFilter from 'components/ListFilter';
 import { formatDate, pluralize } from 'utils/format';
+import { Question } from '../types';
+import {
+    search,
+    applyFilters,
+    QuestionFilterFunc,
+    filters as filterFuncs,
+    Filters,
+} from './utils';
 
 const useStyles = makeStyles((theme) => ({
     notify: {
@@ -24,16 +33,6 @@ const useStyles = makeStyles((theme) => ({
         zIndex: 1,
     },
 }));
-
-interface Question {
-    _id: string;
-    user: {
-        _id: string;
-        name: string;
-    };
-    question: string;
-    timestamp: string;
-}
 
 interface NewQuestionAction {
     type: 'new-question';
@@ -82,6 +81,8 @@ export default function QuestionQueue() {
     });
     const [questions, setQuestions] = React.useState<Question[]>([]);
     const [count, setCount] = React.useState(0);
+    const [filters, setFilters] = React.useState([(q: Question[]) => q]);
+
     React.useEffect(() => {
         setCount(state.length - questions.length);
     }, [state, questions.length]);
@@ -91,6 +92,7 @@ export default function QuestionQueue() {
         setCount(0);
         topRef?.current?.scrollIntoView({ behavior: 'smooth' });
     }
+
     const RefreshBar = () => (
         <Grid
             container
@@ -110,6 +112,9 @@ export default function QuestionQueue() {
             </Grid>
         </Grid>
     );
+
+    const filterOptions: Array<keyof Filters> = ['asked'];
+
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <Slide in={Boolean(count)} direction='down'>
@@ -118,20 +123,44 @@ export default function QuestionQueue() {
                 </div>
             </Slide>
             <div ref={topRef} />
+            <ListFilter
+                onFilter={(filterSet) => {
+                    // TODO: optimize typings
+                    const filterArr: Array<keyof Filters> = Array.from(
+                        filterSet as Set<keyof Filters>
+                    );
+                    const newState: QuestionFilterFunc[] = filterArr.map(
+                        (key) => filterFuncs[key]
+                    );
+                    setFilters(([prevSearch]) => [prevSearch, ...newState]);
+                }}
+                onSearch={(text) =>
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    setFilters(([_prevSearch, ...otherFilters]) => [
+                        (filteredList) => search(text, filteredList),
+                        ...otherFilters,
+                    ])
+                }
+                filterOptions={filterOptions}
+            />
             <Grid container>
                 <Grid container item xs={12} justify='center'>
                     <List>
-                        {questions.map(({ question, _id, user, timestamp }) => (
-                            <ListItem button dense key={_id}>
-                                <ListItemText
-                                    primary={question}
-                                    secondary={`${user.name} - ${formatDate(
-                                        new Date(timestamp),
-                                        'Pp'
-                                    )}`}
-                                />
-                            </ListItem>
-                        ))}
+                        {applyFilters(questions, filters).map(
+                            ({ question, _id, meta }) => (
+                                <ListItem button dense key={_id}>
+                                    <ListItemText
+                                        primary={question}
+                                        secondary={`${
+                                            meta.user.name
+                                        } - ${formatDate(
+                                            new Date(meta.timestamp),
+                                            'Pp'
+                                        )}`}
+                                    />
+                                </ListItem>
+                            )
+                        )}
                     </List>
                 </Grid>
             </Grid>
