@@ -10,9 +10,15 @@ import DateFnsUtils from '@date-io/date-fns';
 import DeviceContext from '../src/contexts/Device';
 import theme from '../src/theme';
 import './main.css';
-import { worker } from '../src/mock/browser';
 
-worker.start();
+if (typeof global.process === 'undefined') {
+    const { worker } = require('../src/mock/browser');
+
+    // Start the mocking when each story is loaded.
+    // Repetitive calls to the `.start()` method do not register a new worker,
+    // but check whether there's an existing once, reusing it, if so.
+    worker.start();
+}
 
 addDecorator((storyFn) => (
     <ThemeProvider theme={theme}>

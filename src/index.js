@@ -6,13 +6,27 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-init();
+function startup() {
+    init(); // initializes local storage
+    ReactDOM.render(React.createElement(App), document.getElementById('root'));
+}
 
-ReactDOM.render(<App />, document.getElementById('root'));
+if (process.env.NODE_ENV === 'development') {
+    console.log('am I getting called');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment, global-require
+    const { worker } = require('mock/browser');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    worker
+        .start()
+        .then(() => startup())
+        // eslint-disable-next-line no-console
+        .catch(console.error);
+} else {
+    // If you want your app to work offline and load faster, you can change
+    // unregister() to register() below. Note this comes with some pitfalls.
+    // Learn more about service workers: https://bit.ly/CRA-PWA
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-
-// serviceWorker.unregister();
-serviceWorker.register();
+    // serviceWorker.unregister();
+    serviceWorker.register();
+    startup();
+}

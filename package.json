@@ -98,10 +98,10 @@
         "eslint-plugin-react-hooks": "^4.0.8",
         "faker": "^4.1.0",
         "jest-environment-jsdom-sixteen": "^1.0.3",
-        "jsonwebtoken": "^8.5.1",
         "jsdoc": "^3.6.5",
         "jsdoc-mermaid": "^1.0.0",
-        "msw": "^0.20.5",
+        "jsonwebtoken": "^8.5.1",
+        "msw": "^0.21.2",
         "react-is": "^16.13.1",
         "react-test-renderer": "^16.13.1",
         "typescript": "^3.9.5"
