@@ -14,18 +14,20 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
+        // marginLeft: theme.spacing(1),
+        // marginRight: theme.spacing(1),
     },
 }));
 
-function UploadField({
-    onChange,
-    fileName,
-}: {
+interface RequiredProps {
     onChange: (f: File) => void;
+}
+
+interface DefaultProps {
     fileName?: string;
-}) {
+}
+
+function UploadField({ onChange, fileName }: RequiredProps & DefaultProps) {
     const classes = useStyles();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         e.preventDefault();
