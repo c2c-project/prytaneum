@@ -5,14 +5,13 @@ import {
     Menu,
     MenuItem,
     ListItemText,
-    Grow,
     InputAdornment,
     Badge,
+    Checkbox,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
-import Done from '@material-ui/icons/DoneSharp';
 
 import TextField from 'components/TextField';
 
@@ -106,9 +105,7 @@ export default function ListFilter({
                         button
                         onClick={() => toggleFilter(option)}
                     >
-                        <Grow in={filters.has(option)}>
-                            <Done color='primary' />
-                        </Grow>
+                        <Checkbox checked={filters.has(option)} />
                         <ListItemText primary={option} />
                     </MenuItem>
                 ))}
