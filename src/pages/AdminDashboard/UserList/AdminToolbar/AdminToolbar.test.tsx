@@ -5,6 +5,8 @@ import AdminToolbar from './AdminToolbar';
 
 let container: HTMLDivElement | null = null;
 
+jest.mock('hooks/useSnack');
+
 beforeEach(() => {
     // setup a DOM element as a render target
     container = document.createElement('div');
@@ -21,25 +23,19 @@ afterEach(() => {
     jest.restoreAllMocks();
 });
 
-// TODO Snack enqueueSnackBar error
-
 describe('<AdminToolbar/> rendering', () => {
-    it('renders correctly', () => {});
+    // eslint-disable-next-line jest/expect-expect
+    it('renders correctly', () => {
+        const onLoadUsers = jest.fn();
+        const setLoading = jest.fn();
+        ReactTestUtils.act(() => {
+            render(
+                <AdminToolbar
+                    onLoadUsers={onLoadUsers}
+                    setLoading={setLoading}
+                />,
+                container
+            );
+        });
+    });
 });
-
-// describe('<AdminToolbar/> rendering', () => {
-//     // eslint-disable-next-line jest/expect-expect
-//     it('renders correctly', () => {
-//         const onLoadUsers = jest.fn();
-//         const setLoading = jest.fn();
-//         ReactTestUtils.act(() => {
-//             render(
-//                 <AdminToolbar
-//                     onLoadUsers={onLoadUsers}
-//                     setLoading={setLoading}
-//                 />,
-//                 container
-//             );
-//         });
-//     });
-// });

@@ -54,7 +54,7 @@ const AdminToolbar = ({
             if (enteredFilterTags.length > 0) {
                 loadedUsers = loadedUsers.filter((usr) => {
                     return usr.status.some((u) => {
-                        return enteredFilterTags.includes(u.status) && u.active;
+                        return enteredFilterTags.includes(u.role) && u.active;
                     });
                 });
             }

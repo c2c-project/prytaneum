@@ -9,6 +9,8 @@ import UserList from './UserList';
     PropTypes does rest of checking
 */
 
+jest.mock('hooks/useSnack');
+
 let container: HTMLDivElement | null = null;
 beforeEach(() => {
     // setup a DOM element as a render target
@@ -26,18 +28,11 @@ afterEach(() => {
     jest.restoreAllMocks();
 });
 
-// TODO Snack Problem
-
 describe('<UserList/> rendering', () => {
     // eslint-disable-next-line jest/expect-expect
-    it('render correctly', () => {});
+    it('render correctly', () => {
+        ReactTestUtils.act(() => {
+            render(<UserList />, container);
+        });
+    });
 });
-
-// describe('<UserList/> rendering', () => {
-//     // eslint-disable-next-line jest/expect-expect
-//     it('render correctly', () => {
-//         ReactTestUtils.act(() => {
-//             render(<UserList />, container);
-//         });
-//     });
-// });

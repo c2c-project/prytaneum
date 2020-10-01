@@ -13,7 +13,7 @@ export interface UserActionHistory {
     action: string;
 }
 
-interface UserStatus {
+export interface UserStatus {
     role: string;
     count: number;
     active: boolean;
