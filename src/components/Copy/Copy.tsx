@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
-import CopyIcon from '@material-ui/icons/FileCopy';
+import CopyIcon from '@material-ui/icons/ContentCopy';
 
 import useCopy from 'hooks/useCopy';
 
