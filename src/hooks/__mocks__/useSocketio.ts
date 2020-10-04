@@ -28,7 +28,7 @@ function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
     const [state, dispatch] = React.useReducer(reducer, initialState);
     React.useEffect(() => {
         socket.on(event, dispatch);
-    }, [socket]);
+    }, [socket, event]);
     return [state, dispatch, socket];
 }
 

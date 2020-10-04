@@ -1,24 +1,33 @@
 import { rest } from 'msw';
+import faker from 'faker';
+
 import * as AuthTypes from 'domains/Auth/types';
 
 export default [
     rest.post('/api/users/login', (req, res, ctx) => {
         // we do nothing with the password for now
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { email, password } = req.body as {
+        const { password } = req.body as {
             email: string;
             password: string;
         };
-        if (email === 'fail') {
+        if (password === 'fail') {
             return res(ctx.status(400));
         }
-        return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
+        return res(
+            ctx.cookie('jwt', 'not a real jwt'),
+            ctx.status(200),
+            ctx.json({
+                _id: faker.random.alphaNumeric(5),
+                roles: ['user', 'admin', 'organizer'],
+            })
+        );
     }),
     rest.post('/api/users/login-temporary', (req, res, ctx) => {
-        const { email } = req.body as {
-            email: string;
+        const { password } = req.body as {
+            password: string;
         };
-        if (email === 'fail') {
+        if (password === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
