@@ -66,7 +66,7 @@ export function UserQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={<UserBar />}
+                actionBar={<UserBar onClick={console.log} />}
             >
                 {faker.lorem.sentences(4)}
             </Question>

@@ -45,26 +45,31 @@ function QuestionLabels({ labels }: QuestionLabelProps) {
     );
 }
 
-export function UserBar() {
+export type UserAction = 'Like' | 'Modify Question' | 'Reply';
+interface UserBarProps {
+    onClick: (a: UserAction) => void;
+}
+
+export function UserBar({ onClick }: UserBarProps) {
     return (
         <Grid container justify='space-evenly'>
             <Grid item xs='auto'>
                 <Tooltip title='Like'>
-                    <IconButton>
+                    <IconButton onClick={() => onClick('Like')}>
                         <ThumbUpIcon fontSize='small' />
                     </IconButton>
                 </Tooltip>
             </Grid>
             <Grid item xs='auto'>
                 <Tooltip title='Modify Question'>
-                    <IconButton>
+                    <IconButton onClick={() => onClick('Modify Question')}>
                         <EditIcon fontSize='small' />
                     </IconButton>
                 </Tooltip>
             </Grid>
             <Grid item xs='auto'>
                 <Tooltip title='Reply'>
-                    <IconButton>
+                    <IconButton onClick={() => onClick('Reply')}>
                         <ReplyIcon fontSize='small' />
                     </IconButton>
                 </Tooltip>
@@ -155,7 +160,7 @@ export function CurrentQuestion({ children }: CurrentQuestionProps) {
     return (
         <Grid container style={{ backgroundColor: 'rgba(255,255,20,.1)' }}>
             <Grid item xs={12} container justify='center' alignItems='center'>
-                <PushPinIcon />
+                <PushPinIcon fontSize='small' />
                 <Typography variant='overline'>Current Question</Typography>
             </Grid>
             <Grid item xs={12}>

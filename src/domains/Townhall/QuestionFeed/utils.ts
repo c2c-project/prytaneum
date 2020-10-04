@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Question, QuestionState } from '../types';
+import { Question, QuestionState, Question as QuestionType } from '../types';
+import { UserAction } from './components';
 
 export { applyFilters } from 'utils/filters';
 
@@ -27,3 +28,61 @@ export const filters: Filters = {
     'Current Question': (questions) =>
         questions.filter((q) => q.state === 'CURRENT'),
 };
+
+interface NewQuestionAction {
+    type: 'new-question';
+    payload: QuestionType;
+}
+interface UpdateQuestionAction {
+    type: 'update-question';
+    payload: Pick<QuestionType, 'question' | '_id'>;
+}
+interface DeleteQuestionAction {
+    type: 'hide-question';
+    payload: Pick<QuestionType, '_id'>;
+}
+
+export type Actions =
+    | NewQuestionAction
+    | UpdateQuestionAction
+    | DeleteQuestionAction;
+
+export function questionReducer(state: QuestionType[], action: Actions) {
+    switch (action.type) {
+        case 'new-question':
+            return [action.payload, ...state];
+        case 'update-question':
+            return state.map((question) => {
+                if (question._id === action.payload._id) {
+                    return { ...question, ...action.payload };
+                }
+                return question;
+            });
+        case 'hide-question':
+            return state.filter(
+                (question) => question._id !== action.payload._id
+            );
+        default:
+            return state;
+    }
+}
+
+export function handleUserAction(action: {
+    type: UserAction;
+    payload: string; // question id
+}) {
+    switch (action.type) {
+        case 'Like': {
+            return;
+        }
+        case 'Modify Question': {
+            return;
+        }
+        case 'Reply': {
+            return;
+        }
+        default: {
+            return;
+        }
+    }
+}
