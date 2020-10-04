@@ -35,9 +35,7 @@ interface OptionalProps {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: `${theme.spacing(2)}px ${theme.spacing(1)}px 0 ${theme.spacing(
-            1
-        )}px`,
+        padding: `${theme.spacing(2)}px 0 0 0`,
     },
     resultsText: {
         padding: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px 0`,

@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
         padding: theme.spacing(1),
     },
+    listFilter: {
+        padding: theme.spacing(1),
+    },
 }));
 
 interface Props {
@@ -83,7 +86,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                 <Typography className={classes.title} variant='h4'>
                     Townhalls
                 </Typography>
-                <div>
+                <div className={classes.listFilter}>
                     <ListFilter
                         filterMap={filterFuncs}
                         onSearch={(text) =>
