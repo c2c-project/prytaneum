@@ -93,10 +93,10 @@ export default function ClipDialog({
                             }}
                             fullWidth
                         />
-                        <RangeSlider
+                        {/* <RangeSlider
                             timeStamp={currentClip}
                             confirm={handleClipTime}
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color='primary'>

@@ -24,9 +24,11 @@ export function ScrollToTop() {
                 <button type='button' onClick={() => setSpam(update)}>
                     click to add spam
                 </button>
-                {spam.map(() => (
-                    <div>SPAM</div>
-                ))}
+                <div>
+                    {spam.map(() => (
+                        <div>SPAM</div>
+                    ))}
+                </div>
             </Component>
         </div>
     );
@@ -41,9 +43,11 @@ export function ScrollToBottom() {
                 <button type='button' onClick={() => setSpam(update)}>
                     click to add spam
                 </button>
-                {spam.map(() => (
-                    <div>SPAM</div>
-                ))}
+                <div>
+                    {spam.map(() => (
+                        <div>SPAM</div>
+                    ))}
+                </div>
             </Component>
         </div>
     );

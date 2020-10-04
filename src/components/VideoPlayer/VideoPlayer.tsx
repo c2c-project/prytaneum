@@ -7,16 +7,16 @@ import ReactPlayer, { ReactPlayerProps } from 'react-player';
  *  @category Component
  *  @constructor VideoPlayer
  *  @param ReactPlayerProps
- *  @param {string | string[] | SourceProps[] | MediaStream} ReactPlayerProps.url URL 
+ *  @param {string | string[] | SourceProps[] | MediaStream} ReactPlayerProps.url URL
  *  @param {any} ReactPlayerProps.rest rest of props to pass to ReactPlayer
-*/
+ */
 function VideoPlayer({ url, rest }: ReactPlayerProps) {
     return (
         <ReactPlayer
             url={url}
             playing={process.env.NODE_ENV === 'production'}
             width='100%'
-            height='240px'
+            height='720px'
             playsinline
             controls
             // eslint-disable-next-line react/jsx-props-no-spreading
