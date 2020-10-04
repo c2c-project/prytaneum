@@ -1,4 +1,5 @@
 import React from 'react';
+import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import TownhallFormComponent from 'domains/Townhall/TownhallForm';
@@ -12,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
 export default function TownhallFormPage() {
     const classes = useStyles();
     return (
-        <div className={classes.paper}>
+        <Paper className={classes.paper}>
             <TownhallFormComponent />
-        </div>
+        </Paper>
     );
 }

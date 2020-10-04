@@ -4,11 +4,11 @@ import { EventEmitter } from 'events';
 import { Container } from '@material-ui/core';
 
 import FixtureSocket from 'mock/Fixture.socket';
-import Component from './TownhallLive';
+import Component from '.';
 import { Question as QuestionType, QuestionState } from '../types';
-import TownhallProvider from '../Contexts/Townhall';
+import { Question, UserBar, ModBar, CurrentQuestion } from './components';
 
-export default { title: 'Domains/Townhall/Townhall Live' };
+export default { title: 'Domains/Townhall/Question Feed' };
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
@@ -49,18 +49,57 @@ function sendMessage(num?: number) {
 
 export function Basic() {
     return (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div>
             <button type='button' onClick={() => sendMessage(20)}>
                 Add Message
             </button>
-            <div style={{ height: '100%' }}>
-                {/* <div style={{ position: 'sticky', top: 0 }}>asdf</div> */}
-                <TownhallProvider townhallId='1234'>
-                    <FixtureSocket.Provider value={emitter}>
-                        <Component />
-                    </FixtureSocket.Provider>
-                </TownhallProvider>
-            </div>
+            <FixtureSocket.Provider value={emitter}>
+                <Component />
+            </FixtureSocket.Provider>
         </div>
+    );
+}
+
+export function UserQuestion() {
+    return (
+        <Container maxWidth='sm'>
+            <Question
+                user={faker.internet.userName()}
+                timestamp={new Date().toISOString()}
+                actionBar={<UserBar />}
+            >
+                {faker.lorem.sentences(4)}
+            </Question>
+        </Container>
+    );
+}
+
+export function ModQuestion() {
+    return (
+        <Container maxWidth='sm'>
+            <Question
+                user={faker.internet.userName()}
+                timestamp={new Date().toISOString()}
+                actionBar={<ModBar />}
+            >
+                {faker.lorem.sentences(4)}
+            </Question>
+        </Container>
+    );
+}
+
+export function Current() {
+    return (
+        <Container maxWidth='sm'>
+            <CurrentQuestion>
+                <Question
+                    user={faker.internet.userName()}
+                    timestamp={new Date().toISOString()}
+                    actionBar={<ModBar />}
+                >
+                    {faker.lorem.sentences(4)}
+                </Question>
+            </CurrentQuestion>
+        </Container>
     );
 }

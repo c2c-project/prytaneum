@@ -16,6 +16,7 @@ export function search(searchText: string, data: Townhall[]) {
 // FIXME: probably gonna end up having a "completed" status on the Townhall
 
 export interface Filters {
+    [index: string]: TonwhallFilterFunc;
     Upcoming: TonwhallFilterFunc;
     Past: TonwhallFilterFunc;
     Ongoing: TonwhallFilterFunc;

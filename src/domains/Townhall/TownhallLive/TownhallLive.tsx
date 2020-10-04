@@ -1,11 +1,21 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Divider, AppBar, Tabs, Tab, Grid, Paper } from '@material-ui/core';
+import {
+    Divider,
+    AppBar,
+    Tabs,
+    Tab,
+    Grid,
+    Paper,
+    Typography,
+    useScrollTrigger,
+} from '@material-ui/core';
 
 import VideoPlayer from 'components/VideoPlayer';
 import { DeviceContext } from 'contexts/Device';
 import { TownhallContext } from '../Contexts/Townhall';
 import MyQuestions from '../MyQuestions';
+import QuestionFeed from '../QuestionFeed';
 
 type TabNames = 'my-questions' | 'all-questions';
 function TownhallLiveTabs() {
@@ -49,7 +59,11 @@ const useMobileStyles = makeStyles((theme) => ({
     paper: {
         paddingBottom: theme.spacing(1),
         borderRadius: '0px',
-        height: '100%',
+        minHeight: '100%',
+        overflow: 'hidden',
+    },
+    feed: {
+        overflowY: 'scroll',
     },
 }));
 
@@ -58,25 +72,42 @@ function MobileLive() {
     const classes = useMobileStyles();
 
     return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Grid container spacing={0}>
-                    <Grid item xs={12}>
-                        <VideoPlayer url={form.url} />
-                    </Grid>
-                    <Grid item xs={12} className={classes.bottom}>
-                        <TownhallLiveTabs />
-                    </Grid>
+        <Paper className={classes.paper}>
+            <Grid container>
+                <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
+                <Grid container item xs={12}>
+                    <Typography variant='subtitle2'>Question Feed</Typography>
+                    <QuestionFeed />
                 </Grid>
-            </Paper>
-        </div>
+            </Grid>
+        </Paper>
     );
 }
 
 const useDesktopStyles = makeStyles((theme) => ({
+    root: {
+        height: '100%',
+        width: '100%',
+    },
     paper: {
         padding: theme.spacing(3),
+        overflowY: 'scroll',
+        maxHeight: '100%',
     },
+    video: {
+        flexGrow: 2,
+        paddingRight: theme.spacing(3),
+    },
+    feedContainer: {
+        maxHeight: '100%',
+    },
+    // saving these for future
+    // sticky: {
+    //     top: 0,
+    //     zIndex: theme.zIndex.appBar,
+    //     position: 'sticky',
+    //     width: '100%',
+    // },
 }));
 
 function DesktopLive() {
@@ -84,16 +115,21 @@ function DesktopLive() {
     const classes = useDesktopStyles();
 
     return (
-        <Paper className={classes.paper}>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <VideoPlayer url={form.url} />
-                </Grid>
-                <Grid item xs={12}>
-                    <TownhallLiveTabs />
+        <Grid container className={classes.root}>
+            <Grid item xs='auto' className={classes.video}>
+                <Grid container>
+                    {/* <div className={classes.sticky}> */}
+                    <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
+                    {/* </div> */}
                 </Grid>
             </Grid>
-        </Paper>
+            <Grid container item xs={4} className={classes.feedContainer}>
+                <Paper className={classes.paper}>
+                    <Typography variant='subtitle2'>Question Feed</Typography>
+                    <QuestionFeed />
+                </Paper>
+            </Grid>
+        </Grid>
     );
 }
 

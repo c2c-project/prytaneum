@@ -63,6 +63,7 @@ export interface TownhallQuestionForm {
     question: string;
 }
 
+export type QuestionState = '' | 'IN_QUEUE' | 'ASKED' | 'CURRENT';
 export interface Question {
     _id: string;
     meta: {
@@ -74,5 +75,5 @@ export interface Question {
         timestamp: string;
     };
     question: string;
-    asked: boolean;
+    state: QuestionState;
 }

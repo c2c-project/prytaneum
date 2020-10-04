@@ -8,8 +8,10 @@ import {
     Avatar,
     Fade,
     ListItemSecondaryAction,
+    Paper,
 } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
@@ -25,12 +27,19 @@ import {
     Filters,
 } from './utils';
 
+const useStyles = makeStyles((theme) => ({
+    title: {
+        padding: theme.spacing(1),
+    },
+}));
+
 interface Props {
     currentUser?: boolean;
     onClickTownhall: (id: string) => void;
 }
 
 export default function TownhallList({ currentUser, onClickTownhall }: Props) {
+    const classes = useStyles();
     const [list, setList] = React.useState<Townhall[] | null>(null);
 
     // search is always the first element in the filter array
@@ -45,7 +54,10 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
             },
         }
     );
-    const filterOptions: Array<keyof Filters> = ['Ongoing', 'Past', 'Upcoming'];
+    const filteredResults = React.useMemo(
+        () => applyFilters(list || [], filters),
+        [list, filters]
+    );
 
     React.useEffect(sendRequest, []);
 
@@ -67,9 +79,13 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     return (
         <Fade in timeout={400}>
-            <div style={{ width: '100%' }}>
+            <Paper style={{ width: '100%' }}>
+                <Typography className={classes.title} variant='h4'>
+                    Townhalls
+                </Typography>
                 <div>
                     <ListFilter
+                        filterMap={filterFuncs}
                         onSearch={(text) =>
                             // eslint-disable-next-line @typescript-eslint/no-unused-vars
                             setFilters(([_prevSearch, ...otherFilters]) => [
@@ -77,52 +93,43 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                                 ...otherFilters,
                             ])
                         }
-                        onFilter={(filterSet) => {
-                            // TODO: optimize typings
-                            const filterArr: Array<keyof Filters> = Array.from(
-                                filterSet as Set<keyof Filters>
-                            );
-                            const state: TonwhallFilterFunc[] = filterArr.map(
-                                (key) => filterFuncs[key]
-                            );
-                            setFilters(([prevSearch]) => [
-                                prevSearch,
-                                ...state,
-                            ]);
-                        }}
-                        filterOptions={filterOptions}
+                        onFilterChange={(newFilters) =>
+                            setFilters(([searchFunc]) => [
+                                searchFunc,
+                                ...newFilters,
+                            ])
+                        }
+                        length={filteredResults.length}
                     />
                 </div>
                 <List>
-                    {applyFilters(list, filters).map(
-                        ({ settings, form, _id }) => (
-                            <ListItem
-                                key={_id}
-                                divider
-                                button
-                                alignItems='flex-start'
-                                onClick={() => onClickTownhall(_id)}
-                            >
-                                <ListItemAvatar>
-                                    <Avatar
-                                        alt='Speaker'
-                                        src={form.speaker.picture}
-                                    >
-                                        {form.title[0]}
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={form.title}
-                                    secondary={formatDate(form.date)}
-                                />
-                                <ListItemSecondaryAction>
-                                    <ChevronRight />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        )
-                    )}
+                    {filteredResults.map(({ form, _id }) => (
+                        <ListItem
+                            key={_id}
+                            divider
+                            button
+                            alignItems='flex-start'
+                            onClick={() => onClickTownhall(_id)}
+                        >
+                            <ListItemAvatar>
+                                <Avatar
+                                    alt='Speaker'
+                                    src={form.speaker.picture}
+                                >
+                                    {form.title[0]}
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={form.title}
+                                secondary={formatDate(form.date)}
+                            />
+                            <ListItemSecondaryAction>
+                                <ChevronRight />
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
                 </List>
-            </div>
+            </Paper>
         </Fade>
     );
 }

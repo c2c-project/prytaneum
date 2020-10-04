@@ -15,12 +15,12 @@ import JoinUrl from '../JoinUrl';
 import {
     ChatSettings,
     CreditsSettings,
-    QuestionQueueSettings,
+    QuestionFeedSettings,
     Links,
     Moderators,
     ExportData,
     Preview,
-} from './helpers';
+} from './components';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -57,7 +57,7 @@ const componentSections = [
     },
     {
         title: 'Question Queue',
-        component: <QuestionQueueSettings />,
+        component: <QuestionFeedSettings />,
     },
     {
         title: 'Links',

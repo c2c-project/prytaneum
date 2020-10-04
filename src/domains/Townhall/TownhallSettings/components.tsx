@@ -119,7 +119,7 @@ export function CreditsSettings() {
     );
 }
 
-export function QuestionQueueSettings() {
+export function QuestionFeedSettings() {
     const townhall = React.useContext(TownhallContext);
     const [state, setState] = React.useState(townhall.settings.questionQueue);
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);

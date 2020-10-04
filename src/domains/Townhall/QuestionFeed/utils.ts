@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Question } from '../types';
+import { Question, QuestionState } from '../types';
 
 export { applyFilters } from 'utils/filters';
 
@@ -15,9 +15,15 @@ export function search(searchText: string, data: Question[]) {
 }
 
 export interface Filters {
-    asked: QuestionFilterFunc;
+    [index: string]: QuestionFilterFunc;
+    'In Queue': QuestionFilterFunc;
+    Asked: QuestionFilterFunc;
+    'Current Question': QuestionFilterFunc;
 }
 
 export const filters: Filters = {
-    asked: (questions) => questions.filter((q) => q.asked),
+    'In Queue': (questions) => questions.filter((q) => q.state === 'IN_QUEUE'),
+    Asked: (questions) => questions.filter((q) => q.state === 'ASKED'),
+    'Current Question': (questions) =>
+        questions.filter((q) => q.state === 'CURRENT'),
 };
