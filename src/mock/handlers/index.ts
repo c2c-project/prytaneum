@@ -3,6 +3,7 @@ import feedbackPortal from './feedbackPortal';
 import invite from './invite';
 import townhall from './townhall';
 import forExample from './for-example';
+import team from './teams';
 
 export default [
     ...auth,
@@ -10,4 +11,5 @@ export default [
     ...invite,
     ...feedbackPortal,
     ...forExample,
+    ...team,
 ];
