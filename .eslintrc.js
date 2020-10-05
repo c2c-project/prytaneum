@@ -29,6 +29,7 @@ module.exports = {
                 devDependencies: [
                     '**/__mocks__/*',
                     '**/mock/**',
+                    '**/*.mock.ts',
                     '**/*.tests.js',
                     '**/*.test.ts',
                     '**/*.test.tsx',

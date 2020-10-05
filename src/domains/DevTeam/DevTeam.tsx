@@ -18,13 +18,12 @@ export default function DevTeam() {
         onSuccess: (results) => {
             setDevTeam(results.data.devTeam);
         },
-        onFailure: () =>
-            snack('Something went wrong, please try again', 'error'),
+        onFailure: () => snack('Something went wrong, please try again'),
     });
     React.useEffect(() => sendRequest(), []);
 
     return isLoading ? (
-        <div style={{ height: '100vh' }}>
+        <div style={{ height: '500px' }}>
             <Loader />
         </div>
     ) : (

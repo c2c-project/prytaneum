@@ -32,7 +32,7 @@ describe('DevTeam', () => {
             render(<DevTeam />, container);
         });
     });
-    // Note: These tests do not pass because DevTeam component gets data from a mock API when is mounted.
+    // FIXME: These tests do not pass because DevTeam component gets data from a mock API when is mounted.
     // However, I believe mocks don't work in tests. So undefined data is returned which makes rendering the component throw an error.
     // it('should get devTeam data', async () => {
     //     const resolvedVal: AxiosResponse = {

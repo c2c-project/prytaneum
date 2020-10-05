@@ -63,7 +63,10 @@ export default function Contributors({ team, maxDisplayCount }: Props) {
             <Grid container item justify='center'>
                 {/* TODO: When clicked redirect to a page that displays the entire team using the Team component  */}
                 <Link href='www.todo.add.href'>
-                    {`+ ${team.members.length - maxDisplayCount} Contributors`}
+                    {`+ ${Math.max(
+                        team.members.length - maxDisplayCount,
+                        0
+                    )} Contributors`}
                 </Link>
             </Grid>
         </Grid>
