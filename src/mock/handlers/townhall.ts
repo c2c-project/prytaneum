@@ -40,7 +40,7 @@ const makeTownhall = (): TownhallTypes.Townhall => ({
         },
         links: {
             enabled: false,
-            links: [],
+            list: [],
         },
         moderators: {
             list: [],

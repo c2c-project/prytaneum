@@ -47,7 +47,7 @@ export const TownhallContext = React.createContext<Townhall>({
         },
         links: {
             enabled: false,
-            links: [],
+            list: [],
         },
         moderators: {
             list: [],
@@ -63,12 +63,14 @@ export const TownhallContext = React.createContext<Townhall>({
     },
 });
 
+// TODO: optimize this so that a request doesn't get sent every single page load? maybe?
 export default function TownhallProvider({
     value,
     children,
     townhallId,
 }: Props) {
     const [townhall, setTownhall] = React.useState(value);
+    console.log(townhallId, townhall);
     const [get] = useEndpoint(() => getTownhall(townhallId), {
         onSuccess: (res) => {
             const { townhall: fetchedTownhall } = res.data;
@@ -80,6 +82,9 @@ export default function TownhallProvider({
         if (!townhall) {
             get();
         }
+        return () => {
+            console.log('umounting?');
+        };
     }, [townhall, get]);
 
     return !townhall ? (

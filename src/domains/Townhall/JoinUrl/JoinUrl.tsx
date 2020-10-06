@@ -8,7 +8,7 @@ export default function JoinUrl() {
     const townhall = React.useContext(TownhallContext);
     const joinUrl = `${process.env.HOST}/${townhall._id}`;
     return (
-        <Grid container justify='space-between' alignItems='center' spacing={3}>
+        <Grid container alignItems='center' spacing={3}>
             <Grid item xs='auto'>
                 <Typography variant='body1'>{joinUrl}</Typography>
             </Grid>

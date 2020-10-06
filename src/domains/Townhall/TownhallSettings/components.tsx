@@ -7,9 +7,15 @@ import {
     Checkbox,
     // FormGroup,
     Collapse,
+    Typography,
+    Button,
+    IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 
+import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import Help from 'components/Help';
 import { TownhallContext } from '../Contexts/Townhall';
@@ -194,7 +200,72 @@ export function Registration() {
 }
 
 export function Links() {
-    return <div />;
+    const townhall = React.useContext(TownhallContext);
+    const [state, setState] = React.useState(townhall.settings.links.list);
+
+    function buildHandler(idx: number, key: 'name' | 'url') {
+        return (e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            const { value } = e.target;
+            setState(
+                [...state].splice(idx, 1, { ...state[idx], [key]: value })
+            );
+        };
+    }
+
+    function handleAdd() {
+        setState([...state, { name: '', url: '' }]);
+    }
+
+    function handleRemove(idx: number) {
+        setState([...state].splice(idx, 1));
+    }
+
+    // FIXME:
+    return (
+        <Grid container>
+            {state.length === 0 && (
+                <Grid item xs={12}>
+                    <Typography>No Links to display</Typography>
+                </Grid>
+            )}
+            {state.map(({ url, name }, idx) => (
+                <Grid container item xs={12} alignItems='center'>
+                    <Grid item xs={11} container spacing={2}>
+                        <Grid item xs={6}>
+                            <TextField
+                                label='Name'
+                                value={name}
+                                onChange={buildHandler(idx, 'name')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label='URL'
+                                value={url}
+                                onChange={buildHandler(idx, 'url')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs='auto' style={{ flexGrow: 1 }}>
+                        <Grid container justify='flex-end' item xs='auto'>
+                            <IconButton
+                                onClick={() => handleRemove(idx)}
+                                edge='end'
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            ))}
+            <Grid item xs={12}>
+                <Button onClick={handleAdd} startIcon={<AddIcon />}>
+                    Add Link
+                </Button>
+            </Grid>
+        </Grid>
+    );
 }
 
 export function ExportData() {

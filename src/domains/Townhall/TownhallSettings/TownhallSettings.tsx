@@ -7,9 +7,12 @@ import {
     Grid,
     Typography,
     Divider,
+    Button,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRight from '@material-ui/icons/ChevronRight';
 
+import history, { makeRelativeLink } from 'utils/history';
 import TownhallForm from '../TownhallForm';
 import JoinUrl from '../JoinUrl';
 import {
@@ -59,9 +62,29 @@ const componentSections = [
         title: 'Question Queue',
         component: <QuestionFeedSettings />,
     },
+    // TODO:
+    // {
+    //     title: 'Links',
+    //     component: <Links />,
+    // },
+];
+
+const inviteSections = [
     {
-        title: 'Links',
-        component: <Links />,
+        title: 'Join URL',
+        component: <JoinUrl />,
+    },
+    {
+        title: 'Invitation Wizard',
+        component: (
+            <Button
+                onClick={() => history.push(makeRelativeLink('/invite'))}
+                endIcon={<ChevronRight />}
+                variant='outlined'
+            >
+                Go To Invitation Wizard
+            </Button>
+        ),
     },
 ];
 
@@ -101,24 +124,20 @@ const config: Config[] = [
         title: 'Invite',
         description: 'Manage invitations',
         component: (
-            <Grid container spacing={3}>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    justify='space-between'
-                    alignItems='center'
-                >
-                    <Grid item xs='auto'>
-                        <Typography variant='body1'>Join URL</Typography>
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <JoinUrl />
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Divider />
-                </Grid>
+            <Grid container spacing={2}>
+                {inviteSections.map(({ title, component }) => (
+                    <React.Fragment key={title}>
+                        <Grid item xs={12}>
+                            <Typography variant='body1'>{title}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {component}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Divider />
+                        </Grid>
+                    </React.Fragment>
+                ))}
             </Grid>
         ),
     },

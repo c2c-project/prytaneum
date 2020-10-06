@@ -6,16 +6,10 @@ import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallForm from 'pages/Townhall/TownhallForm';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import { get as getFromStorage } from 'utils/storage';
+import HandleInviteLink from 'domains/Invite/HandleInviteLink';
+import InviteForm from 'domains/Invite/InviteForm';
 import history from 'utils/history';
 import { addRoutes } from './utils';
-
-const SettingsMenu = () => {
-    return <div />;
-};
-
-const Invite = () => {
-    return <div />;
-};
 
 addRoutes([
     {
@@ -50,7 +44,7 @@ addRoutes([
                             const component = ctx.next() || (
                                 <TownhallSettings />
                             );
-
+                            // FIXME: need to move the context up in the tree before the routing somehow
                             return (
                                 <TownhallContextProvider
                                     townhallId={townhallId}
@@ -61,20 +55,37 @@ addRoutes([
                         },
                         children: [
                             {
-                                path: '/update',
-                                action: () => <h1>TODO</h1>,
-                            },
-                            {
-                                path: '/settings',
-                                action: () => {
-                                    return <SettingsMenu />;
-                                },
-                            },
-                            {
                                 path: '/invite',
                                 action: () => {
-                                    return <Invite />;
+                                    return <InviteForm />;
                                 },
+                            },
+                            {
+                                path: '/invited',
+                                action: (ctx) => {
+                                    const child = ctx.next();
+                                    if (!child) {
+                                        history.back(); // TODO: change this?
+                                    }
+                                    return child;
+                                },
+                                children: [
+                                    {
+                                        path: '/:inviteToken',
+                                        action: (ctx) => {
+                                            const {
+                                                inviteToken,
+                                            } = ctx.params as {
+                                                inviteToken: string;
+                                            };
+                                            return (
+                                                <HandleInviteLink
+                                                    inviteToken={inviteToken}
+                                                />
+                                            );
+                                        },
+                                    },
+                                ],
                             },
                         ],
                     },

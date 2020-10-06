@@ -1,11 +1,12 @@
 import React from 'react';
-import { IconButton, Grid, Badge, Collapse } from '@material-ui/core';
+import { IconButton, Grid, Badge, Collapse, Button } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
 import Dialog from 'components/Dialog';
+import DialogContent from 'components/DialogContent';
 import { Question as QuestionType } from '../types';
 import {
     search,
@@ -16,17 +17,23 @@ import {
     handleUserAction,
     QuestionFilterFunc,
 } from './utils';
-import { CurrentQuestion, Question, UserBar } from './components';
+import { CurrentQuestion, Question, UserBar, AskQuestion } from './components';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
+        paddingTop: theme.spacing(1),
     },
 }));
 
 export default function QuestionFeed() {
     const classes = useStyles();
+
+    const [
+        dialogContent,
+        setDialogContent,
+    ] = React.useState<JSX.Element | null>(null);
 
     // full question feed from socketio
     const [questions] = useSocketio<QuestionType[], Actions>({
@@ -87,8 +94,27 @@ export default function QuestionFeed() {
         setFilters(updateSearch);
     }
 
+    function handleAskQuestion() {
+        setDialogContent(<div>Hello World</div>);
+    }
+
     return (
         <div className={classes.root}>
+            <Dialog
+                open={Boolean(dialogContent)}
+                onClose={() => setDialogContent(null)}
+            >
+                <DialogContent>{dialogContent || <div />}</DialogContent>
+            </Dialog>
+            <Button
+                variant='contained'
+                color='primary'
+                fullWidth
+                disableElevation
+                onClick={handleAskQuestion}
+            >
+                Ask A Question
+            </Button>
             <ListFilter
                 filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
@@ -136,6 +162,7 @@ export default function QuestionFeed() {
                                         handleUserAction({
                                             type: action,
                                             payload: _id,
+                                            setDialogContent,
                                         })
                                     }
                                 />

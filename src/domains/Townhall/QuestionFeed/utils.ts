@@ -70,19 +70,25 @@ export function questionReducer(state: QuestionType[], action: Actions) {
 export function handleUserAction(action: {
     type: UserAction;
     payload: string; // question id
+    setDialogContent: React.Dispatch<JSX.Element | null>;
 }) {
     switch (action.type) {
         case 'Like': {
-            return;
+            // socket stuff here
+            break;
         }
-        case 'Modify Question': {
-            return;
+        case 'Quote': {
+            // open dialog with the quote in there
+            // setDialogContent();
+            break;
         }
         case 'Reply': {
-            return;
+            // open dialog with the reply option
+            break;
         }
         default: {
-            return;
+            // do nothing
+            break;
         }
     }
 }

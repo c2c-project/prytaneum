@@ -24,9 +24,9 @@ export interface TownhallSettings {
     };
     links: {
         enabled: boolean;
-        links: {
+        list: {
             name: string;
-            link: string;
+            url: string;
         }[];
     };
     moderators: {
@@ -44,7 +44,7 @@ export interface TownhallSettings {
 
 export interface TownhallForm {
     title: string;
-    date: Date;
+    date: Date | string;
     description: string;
     scope: 'state' | 'district';
     private: boolean; // TODO: what does this mean? might put this in the form itself
@@ -67,6 +67,7 @@ export type QuestionState = '' | 'IN_QUEUE' | 'ASKED' | 'CURRENT';
 export interface Question {
     _id: string;
     meta: {
+        original?: string; // will be a question id if it's an edit of something else
         townhallId: string;
         user: {
             _id: string;
@@ -76,4 +77,5 @@ export interface Question {
     };
     question: string;
     state: QuestionState;
+    likes: string[]; // array of user id's
 }

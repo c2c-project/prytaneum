@@ -6,7 +6,13 @@ import { Container } from '@material-ui/core';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from '.';
 import { Question as QuestionType, QuestionState } from '../types';
-import { Question, UserBar, ModBar, CurrentQuestion } from './components';
+import {
+    Question,
+    UserBar,
+    ModBar,
+    CurrentQuestion,
+    AskQuestion,
+} from './components';
 
 export default { title: 'Domains/Townhall/Question Feed' };
 
@@ -25,24 +31,30 @@ function makeState(): QuestionState {
     }
     return '';
 }
+
+function makeQuestion(): QuestionType {
+    return {
+        _id: faker.random.alphaNumeric(12),
+        meta: {
+            user: {
+                _id: faker.random.alphaNumeric(12),
+                name: faker.internet.userName(),
+            },
+            timestamp: new Date().toISOString(),
+            townhallId: faker.random.alphaNumeric(12),
+        },
+        question: faker.lorem.sentences(5),
+        state: makeState(),
+        likes: [],
+    };
+}
+
 function sendMessage(num?: number) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
         emitter.emit('townhall-question-state', {
             type: 'new-question',
-            payload: {
-                _id: faker.random.alphaNumeric(12),
-                meta: {
-                    user: {
-                        _id: faker.random.alphaNumeric(12),
-                        name: faker.internet.userName(),
-                    },
-                    timestamp: new Date().toISOString(),
-                    townhallId: faker.random.alphaNumeric(12),
-                },
-                question: faker.lorem.sentences(5),
-                state: makeState(),
-            } as QuestionType,
+            payload: makeQuestion(),
         });
     }
 }
@@ -100,6 +112,27 @@ export function Current() {
                     {faker.lorem.sentences(4)}
                 </Question>
             </CurrentQuestion>
+        </Container>
+    );
+}
+
+export function AskBasic() {
+    return (
+        <Container maxWidth='sm'>
+            <AskQuestion />
+        </Container>
+    );
+}
+
+export function AskQuote() {
+    const [quote, setQuote] = React.useState<QuestionType>();
+    // TODO: sep dialog component? I don't know aaaaaaaaaaaaaaaa
+    return (
+        <Container maxWidth='sm'>
+            <button type='button' onClick={() => setQuote(makeQuestion())}>
+                Quote Something
+            </button>
+            <AskQuestion quote={quote} onSubmit={() => setQuote(undefined)} />
         </Container>
     );
 }
