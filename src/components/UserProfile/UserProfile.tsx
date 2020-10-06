@@ -1,10 +1,13 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import { Avatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import DoneIcon from '@material-ui/icons/Done';
+
+import TextField from 'components/TextField';
 
 interface Props {
+    // eslint-disable-next-line react/require-default-props
     img?: string;
 }
 
@@ -14,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         width: '100%',
     },
-    grid: {
-        padding: '10px 5px 10px 5px',
-    },
 }));
 
 export default function UserProfile({ img }: Props) {
@@ -24,50 +24,31 @@ export default function UserProfile({ img }: Props) {
 
     return (
         <div className={classes.root}>
-            <Grid
-                component='span'
-                container
-                alignContent='center'
-                className={classes.grid}
-            >
-                <Grid component='span' item xs={12} className={classes.grid}>
+            <Grid container alignContent='center' spacing={2}>
+                <Grid component='span' item xs={12}>
                     <Avatar src={img} alt='Profile Avatar' />
                     {/* ROUTING: to page to upload new photo */}
                 </Grid>
-                <Grid component='span' item xs={12} className={classes.grid}>
+                <Grid component='span' item xs={12}>
                     <TextField
-                        inputProps={{ 'aria-label': 'Username'}}
-                        label='Username'
-                        aria-label='Username'
+                        inputProps={{ 'aria-label': 'E-mail' }}
+                        label='E-mail'
+                        aria-label='E-mail'
                         required
                         type='text'
-                        value='pull from db for username'
+                        value='TODO'
                         onChange={() => {}}
-                        spellCheck={false}
                     />
                 </Grid>
-                <Grid component='span' item xs={12} className={classes.grid}>
+                <Grid component='span' item xs={12}>
                     <TextField
-                        inputProps={{ 'aria-label': 'Email'}}
-                        label='Email'
-                        aria-label='Email'
-                        required
-                        type='email'
-                        value='push to db for email'
-                        onChange={() => {}}
-                        spellCheck={false}
-                    />
-                </Grid>
-                <Grid component='span' item xs={12} className={classes.grid}>
-                    <TextField
-                        inputProps={{ 'aria-label': 'Password'}}
+                        inputProps={{ 'aria-label': 'Password' }}
                         label='Password'
                         aria-label='Password'
                         required
                         type='password'
-                        value='push to db for password'
+                        value='TODO'
                         onChange={() => {}}
-                        spellCheck={false}
                     />
                 </Grid>
             </Grid>
