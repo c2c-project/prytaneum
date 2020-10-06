@@ -130,8 +130,8 @@ export default function ListFilter<T>({
                             </IconButton>
                         </Tooltip>
                     </Grid>
-                    {menuIcons?.map((icon) => (
-                        <Grid item xs='auto'>
+                    {menuIcons?.map((icon, idx) => (
+                        <Grid key={idx} item xs='auto'>
                             {icon}
                         </Grid>
                     ))}

@@ -7,6 +7,7 @@ import {
     Grow,
     ClickAwayListener,
     Typography,
+    PopperPlacementType,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
@@ -17,7 +18,7 @@ interface RequiredProps {
 
 interface OptionalProps {
     edge?: 'end' | 'start';
-    placement?: 'top' | 'bottom' | 'left' | 'right';
+    placement?: PopperPlacementType;
 }
 
 const defaultProps: OptionalProps = {

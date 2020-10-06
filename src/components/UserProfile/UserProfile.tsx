@@ -32,7 +32,7 @@ export default function UserProfile({ img }: Props) {
             >
                 <Grid component='span' item xs={12} className={classes.grid}>
                     <Avatar src={img} alt='Profile Avatar' />
-                    {/* ROUTING: to page to upload new photo*/}
+                    {/* ROUTING: to page to upload new photo */}
                 </Grid>
                 <Grid component='span' item xs={12} className={classes.grid}>
                     <TextField
