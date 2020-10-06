@@ -25,15 +25,11 @@ addDecorator((storyFn) => (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
             <SnackContext maxSnack={1}>
-                <UserContext.Provider
-                    value={{ _id: '1', username: 'anonymous' }}
-                >
-                    <DeviceContext>
-                        <div style={{ height: '100%', width: '100%' }}>
-                            {storyFn()}
-                        </div>
-                    </DeviceContext>
-                </UserContext.Provider>
+                <DeviceContext>
+                    <div style={{ height: '100%', width: '100%' }}>
+                        {storyFn()}
+                    </div>
+                </DeviceContext>
             </SnackContext>
         </MuiPickersUtilsProvider>
     </ThemeProvider>
