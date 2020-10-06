@@ -1,25 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Grid,
-    Typography,
-    Divider,
-    Button,
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
 import history, { makeRelativeLink } from 'utils/history';
+import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
 import TownhallForm from '../TownhallForm';
 import JoinUrl from '../JoinUrl';
 import {
     ChatSettings,
     CreditsSettings,
     QuestionFeedSettings,
-    Links,
     Moderators,
     ExportData,
     Preview,
@@ -29,25 +20,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },
-    heading: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
-        flexShrink: 0,
-    },
-    title: {
-        padding: theme.spacing(2),
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-    },
 }));
-
-interface Config {
-    title: string;
-    description: string;
-    component: React.ReactNode;
-}
 
 const componentSections = [
     {
@@ -88,7 +61,7 @@ const inviteSections = [
     },
 ];
 
-const config: Config[] = [
+const config: AccordionData[] = [
     {
         title: 'Form',
         description: 'Modify Townhall Form',
@@ -99,17 +72,19 @@ const config: Config[] = [
         description: 'Turn on and off optional components',
         component: (
             <Grid container spacing={2}>
-                {componentSections.map(({ title, component }) => (
+                {componentSections.map(({ title, component }, idx) => (
                     <React.Fragment key={title}>
                         <Grid item xs={12}>
-                            <Typography variant='body1'>{title}</Typography>
+                            <Typography variant='overline'>{title}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             {component}
                         </Grid>
-                        <Grid item xs={12}>
-                            <Divider />
-                        </Grid>
+                        {idx !== componentSections.length - 1 && (
+                            <Grid item xs={12}>
+                                <Divider />
+                            </Grid>
+                        )}
                     </React.Fragment>
                 ))}
             </Grid>
@@ -155,41 +130,10 @@ const config: Config[] = [
 
 export default function TownhallSettings() {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState<string | false>(false);
-
-    const handleChange = (panel: string) => (
-        event: React.ChangeEvent<unknown>,
-        isExpanded: boolean
-    ) => {
-        setExpanded(isExpanded ? panel : false);
-    };
 
     return (
         <div className={classes.root}>
-            <Typography className={classes.title} variant='h4'>
-                Settings
-            </Typography>
-            {config.map(({ title, description, component }) => (
-                <Accordion
-                    key={title}
-                    expanded={expanded === title}
-                    onChange={handleChange(title)}
-                >
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={`${title}-content`}
-                        id={`${title}-header`}
-                    >
-                        <Typography className={classes.heading}>
-                            {title}
-                        </Typography>
-                        <Typography className={classes.secondaryHeading}>
-                            {description}
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>{component}</AccordionDetails>
-                </Accordion>
-            ))}
+            <SettingsMenu config={config} title='Townhall Settings' />
         </div>
     );
 }

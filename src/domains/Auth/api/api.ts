@@ -1,5 +1,6 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import { User } from 'types';
 import * as AuthTypes from '../types';
 
 /** Function to POST to /api/users/login if email is valid
@@ -95,4 +96,9 @@ export async function verifyEmail(userId: string) {
         throw errors.invalidInfo();
     }
     return axios.post('/api/confirm/user-email', { userId });
+}
+
+export async function getMyInfo() {
+    // gets user info from the token in header
+    return axios.get<User>('/api/users/me');
 }

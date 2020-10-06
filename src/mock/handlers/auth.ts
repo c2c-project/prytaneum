@@ -2,6 +2,25 @@ import { rest } from 'msw';
 import faker from 'faker';
 
 import * as AuthTypes from 'domains/Auth/types';
+import { User } from 'types';
+
+const makeUser = (): User => ({
+    _id: faker.random.alphaNumeric(5),
+    roles: ['admin', 'organizer', 'user'],
+    email: {
+        address: faker.internet.email(),
+        verified: Math.random() > 0.5,
+    },
+    settings: {
+        townhall: {
+            anonymous: Math.random() > 0.5,
+        },
+        notifications: {
+            enabled: Math.random() > 0.5,
+            types: [],
+        },
+    },
+});
 
 export default [
     rest.post('/api/users/login', (req, res, ctx) => {
@@ -71,5 +90,10 @@ export default [
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
+    }),
+    rest.get('/api/users/me', (req, res, ctx) => {
+        const { jwt } = req.cookies;
+        if (jwt) return res(ctx.status(200), ctx.json(makeUser()));
+        return res(ctx.status(401));
     }),
 ];

@@ -1,13 +1,19 @@
 import React from 'react';
 
 import Login from 'pages/Auth/Login';
+
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
+import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallForm from 'pages/Townhall/TownhallForm';
-import TownhallSettings from 'domains/Townhall/TownhallSettings';
-import { get as getFromStorage } from 'utils/storage';
+
 import HandleInviteLink from 'domains/Invite/HandleInviteLink';
 import InviteForm from 'domains/Invite/InviteForm';
+
+import UserSettings from 'domains/Auth/UserSettings';
+import UserContextProvider from 'contexts/User';
+
+import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
 
@@ -93,7 +99,11 @@ addRoutes([
             },
             {
                 path: '/settings',
-                action: () => <h1>TODO: User profile</h1>,
+                action: () => (
+                    <UserContextProvider>
+                        <UserSettings />
+                    </UserContextProvider>
+                ),
             },
         ],
     },

@@ -71,8 +71,13 @@ export default function Nav() {
                 onClose={() => setAnchorEl(null)}
                 onClick={() => setAnchorEl(null)}
             >
-                <MenuItem button>
-                    <ListItemText primary='Profile' />
+                <MenuItem
+                    button
+                    onClick={() => {
+                        history.push('/user/settings');
+                    }}
+                >
+                    <ListItemText primary='Settings' />
                 </MenuItem>
                 <MenuItem
                     button

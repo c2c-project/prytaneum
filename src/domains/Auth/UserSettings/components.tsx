@@ -1,11 +1,47 @@
 import React from 'react';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import {
+    List,
+    ListItem,
+    ListItemText,
+    Switch,
+    Collapse,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import Help from 'components/Help';
 
 import TextField from 'components/TextField';
+import { User } from 'types';
+
+import SettingsItem from 'components/SettingsItem';
+import text from './help-text';
+
+/* DEPTH = 3 CURRYING HERE, 
+    top to bottom: 
+        1. Pass in the setState function
+        2. Pass in the key of the checkbox in the state
+        3. handle the change in checkboxes state
+*/
+const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
+    setState: React.Dispatch<React.SetStateAction<U>>
+) => (id: keyof U) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.preventDefault();
+    const { checked } = e.target;
+    setState((prev) => ({ ...prev, [id]: checked }));
+};
+
+const useStyles = makeStyles((theme) => ({
+    indent: {
+        paddingLeft: theme.spacing(4),
+    },
+    fullWidth: {
+        width: '100%',
+    },
+}));
 
 // all really small one time user components go here
 interface DisplayItem {
-    text: string;
+    title: string;
     component: JSX.Element;
 }
 
@@ -13,16 +49,60 @@ interface Props {
     list: DisplayItem[];
     setContent: (c: JSX.Element) => void;
 }
+
+export function TownhallUserSettings({ user }: { user: User }) {
+    const [state, setState] = React.useState(user.settings.townhall);
+    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    // TODO: API Request
+    return (
+        <div style={{ width: '100%' }}>
+            <SettingsItem
+                helpText={text.townhall.anonymous}
+                name='Appear Anonymous'
+            >
+                <Switch
+                    checked={state.anonymous}
+                    onChange={buildHandler('anonymous')}
+                />
+            </SettingsItem>
+        </div>
+    );
+}
+
+export function NotificationSettings({ user }: { user: User }) {
+    const [state, setState] = React.useState(user.settings.notifications);
+    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    // TODO: API Request
+    return (
+        <div style={{ width: '100%' }}>
+            <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
+                <Switch
+                    checked={state.enabled}
+                    onChange={buildHandler('enabled')}
+                />
+            </SettingsItem>
+            <Collapse in={state.enabled} style={{ width: '100%' }}>
+                <SettingsItem
+                    helpText={text.notifications.types}
+                    name='Notification Types'
+                >
+                    <div>TODO</div>
+                </SettingsItem>
+            </Collapse>
+        </div>
+    );
+}
+
 export const ButtonList = ({ list, setContent }: Props) => (
     <List>
-        {list.map(({ text, component }) => (
-            <li key={text}>
+        {list.map(({ title, component }) => (
+            <li key={title}>
                 <ListItem
-                    key={text}
+                    key={title}
                     button
                     onClick={() => setContent(component)}
                 >
-                    <ListItemText primary={text} />
+                    <ListItemText primary={title} />
                 </ListItem>
             </li>
         ))}

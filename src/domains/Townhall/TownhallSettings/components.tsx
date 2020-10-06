@@ -4,7 +4,7 @@ import {
     Grid,
     // Button,
     FormControlLabel,
-    Checkbox,
+    Switch,
     // FormGroup,
     Collapse,
     Typography,
@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
+import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import Help from 'components/Help';
@@ -27,7 +28,7 @@ import text from './help-text';
         2. Pass in the key of the checkbox in the state
         3. handle the change in checkboxes state
 */
-const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
+const buildSwitchUpdate = <U extends Record<string, boolean | string[]>>(
     setState: React.Dispatch<React.SetStateAction<U>>
 ) => (id: keyof U) => (e: React.ChangeEvent<HTMLInputElement>) => {
     // e.preventDefault();
@@ -36,9 +37,6 @@ const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
 };
 
 const useStyles = makeStyles((theme) => ({
-    indent: {
-        paddingLeft: theme.spacing(4),
-    },
     fullWidth: {
         width: '100%',
     },
@@ -47,44 +45,30 @@ const useStyles = makeStyles((theme) => ({
 export function ChatSettings() {
     const townhall = React.useContext(TownhallContext);
     const [state, setState] = React.useState(townhall.settings.chat);
-    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    const buildHandler = buildSwitchUpdate<typeof state>(setState);
     const classes = useStyles();
     // TODO: API Request
     return (
         <Grid container>
-            <Grid item container justify='space-between' xs={12}>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={state.enabled}
-                            onChange={buildHandler('enabled')}
-                            name='chat-enabled-checkbox'
-                        />
-                    }
-                    label='Enabled'
-                />
-                <Help edge='end'>{text.chat.enabled}</Help>
+            <Grid item xs={12}>
+                <SettingsItem helpText={text.chat.enabled} name='Enabled'>
+                    <Switch
+                        checked={state.enabled}
+                        onChange={buildHandler('enabled')}
+                    />
+                </SettingsItem>
             </Grid>
             <Collapse in={state.enabled} className={classes.fullWidth}>
-                <Grid
-                    item
-                    xs={12}
-                    container
-                    justify='space-between'
-                    className={classes.indent}
-                >
-                    <FormControlLabel
-                        disabled={!state.enabled}
-                        control={
-                            <Checkbox
-                                checked={state.automated && state.enabled}
-                                onChange={buildHandler('automated')}
-                                name='chat-automated-checkbox'
-                            />
-                        }
-                        label='Automate Chat'
-                    />
-                    <Help edge='end'>{text.chat.automated}</Help>
+                <Grid item xs={12}>
+                    <SettingsItem
+                        helpText={text.chat.automated}
+                        name='Automated'
+                    >
+                        <Switch
+                            checked={state.enabled && state.automated}
+                            onChange={buildHandler('automated')}
+                        />
+                    </SettingsItem>
                 </Grid>
             </Collapse>
         </Grid>
@@ -94,26 +78,21 @@ export function ChatSettings() {
 export function CreditsSettings() {
     const townhall = React.useContext(TownhallContext);
     const [state, setState] = React.useState(townhall.settings.credits);
-    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    const buildHandler = buildSwitchUpdate<typeof state>(setState);
     const classes = useStyles();
     return (
         <Grid container>
             <Grid container item xs={12} justify='space-between'>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={state.enabled}
-                            onChange={buildHandler('enabled')}
-                            name='credits-enabled-checkbox'
-                        />
-                    }
-                    label='Enabled'
-                />
-                <Help edge='end'>{text.credits.enabled}</Help>
+                <SettingsItem helpText={text.credits.enabled} name='Enabled'>
+                    <Switch
+                        onChange={buildHandler('enabled')}
+                        checked={state.enabled}
+                    />
+                </SettingsItem>
             </Grid>
             <Collapse in={state.enabled} className={classes.fullWidth}>
                 <Grid container justify='space-between' item xs={12}>
-                    <Grid item xs='auto' className={classes.indent}>
+                    <Grid item xs='auto'>
                         <UploadField onChange={console.log} />
                     </Grid>
                     <Grid item xs='auto'>
@@ -128,34 +107,30 @@ export function CreditsSettings() {
 export function QuestionFeedSettings() {
     const townhall = React.useContext(TownhallContext);
     const [state, setState] = React.useState(townhall.settings.questionQueue);
-    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    const buildHandler = buildSwitchUpdate<typeof state>(setState);
     return (
         <Grid container>
             <Grid item xs={12} container justify='space-between'>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={state.transparent}
-                            onChange={buildHandler('transparent')}
-                            name='question-queue-transparent-checkbox'
-                        />
-                    }
-                    label='Transparent'
-                />
-                <Help edge='end'>{text.questionQueue.transparent}</Help>
+                <SettingsItem
+                    helpText={text.questionQueue.transparent}
+                    name='Transparent'
+                >
+                    <Switch
+                        checked={state.transparent}
+                        onChange={buildHandler('transparent')}
+                    />
+                </SettingsItem>
             </Grid>
             <Grid item xs={12} container justify='space-between'>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={state.automated}
-                            onChange={buildHandler('automated')}
-                            name='question-queue-automated-checkbox'
-                        />
-                    }
-                    label='Automated'
-                />
-                <Help edge='end'>{text.questionQueue.automated}</Help>
+                <SettingsItem
+                    name='Automated'
+                    helpText={text.questionQueue.automated}
+                >
+                    <Switch
+                        checked={state.automated}
+                        onChange={buildHandler('automated')}
+                    />
+                </SettingsItem>
             </Grid>
         </Grid>
     );
@@ -171,14 +146,14 @@ export function Registration() {
     const [state, setState] = React.useState(
         townhall.settings.registration.reminders
     );
-    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    const buildHandler = buildSwitchUpdate<typeof state>(setState);
     const classes = useStyles();
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <FormControlLabel
                     control={
-                        <Checkbox
+                        <Switch
                             checked={state.enabled}
                             onChange={buildHandler('enabled')}
                             name='credits-enabled-checkbox'
@@ -189,9 +164,7 @@ export function Registration() {
             </Grid>
             <Collapse in={state.enabled}>
                 <Grid item xs={12}>
-                    <div className={classes.indent}>
-                        <UploadField onChange={console.log} />
-                    </div>
+                    <UploadField onChange={console.log} />
                 </Grid>
             </Collapse>
             <div>TODO: upload registrants</div>
