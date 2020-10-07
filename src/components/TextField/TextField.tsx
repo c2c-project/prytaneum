@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import MUITextField, { TextFieldProps } from '@material-ui/core/TextField';
@@ -16,13 +17,14 @@ function labelToId(label: string) {
  * @constructor TextField
  * @todo params
  */
-export default function TextField(props: TextFieldProps & { label: string }) {
-    const { children, ...passThroughProps } = props;
+export default function TextField(props: TextFieldProps & { label?: string }) {
+    const { children, label, ...passThroughProps } = props;
     return (
         <MUITextField
             variant='outlined'
             fullWidth
-            id={labelToId(passThroughProps.label)}
+            id={labelToId(label || '')}
+            label={label}
             autoComplete='off'
             autoCorrect='off'
             autoCapitalize='off'
