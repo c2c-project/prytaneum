@@ -2,7 +2,6 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-// import Paper from 'components/Paper';
 import Dialog from 'components/Dialog';
 // import AppBar from 'layout/AppBar';
 

@@ -4,58 +4,14 @@ import TownhallIcon from '@material-ui/icons/AccountBalance';
 
 import Component from './IconBar';
 
-export default { title: 'Icon Bar' };
+export default { title: 'Components/Icon Bar' };
 
-export function CenterIconBar() {
+export function Basic() {
     return (
-        <Component justify='center'>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <SettingsIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-        </Component>
-    );
-}
-
-export function TopIconBar() {
-    return (
-        <Component justify='flex-start'>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-        </Component>
-    );
-}
-
-export function IconBarFooter() {
-    return (
-        <Component justify='flex-end'>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
-            <div>
-                <TownhallIcon />
-            </div>
+        <Component>
+            <TownhallIcon />
+            <SettingsIcon />
+            <TownhallIcon />
         </Component>
     );
 }

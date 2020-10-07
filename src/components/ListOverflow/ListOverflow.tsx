@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    rowTraits: Array<{
+    rowProps: Array<{
         _id: string | number;
         primary: string;
         secondary?: string;
@@ -23,14 +23,14 @@ export interface Props {
     emptyMessage?: string;
 }
 
-const ListOverflow = ({ rowTraits, emptyMessage }: Props) => {
+const ListOverflow = ({ rowProps, emptyMessage }: Props) => {
     const classes = useStyles();
 
-    if (rowTraits.length === 0) {
+    if (rowProps.length === 0) {
         return <Typography>{emptyMessage}</Typography>;
     }
 
-    const structuredUserList = rowTraits.map((row) => (
+    const structuredUserList = rowProps.map((row) => (
         <Fragment key={row._id}>
             <ListCell primary={row.primary} secondary={row.secondary} />
             <li>
@@ -47,7 +47,7 @@ ListOverflow.defaultProps = {
 };
 
 ListOverflow.propTypes = {
-    rowTraits: PropTypes.arrayOf(
+    rowProps: PropTypes.arrayOf(
         PropTypes.shape({
             _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             primary: PropTypes.string.isRequired,

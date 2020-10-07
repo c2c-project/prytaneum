@@ -17,7 +17,7 @@ const UserActionHistory = ({ ListsTraits }: Props) => {
             </Grid>
             <Grid item>
                 <ListOverflow
-                    rowTraits={ListsTraits}
+                    rowProps={ListsTraits}
                     emptyMessage='No Action History'
                 />
             </Grid>

@@ -34,7 +34,7 @@ export interface Props {
     label: string;
 }
 
-const CheckBox = ({ options, onChange, selectedFilter, label }: Props) => {
+const ComboSelect = ({ options, onChange, selectedFilter, label }: Props) => {
     const selectedSet = React.useMemo(() => new Set(selectedFilter), [
         selectedFilter,
     ]);
@@ -75,10 +75,10 @@ const CheckBox = ({ options, onChange, selectedFilter, label }: Props) => {
     );
 };
 
-CheckBox.propTypes = {
+ComboSelect.propTypes = {
     options: PropTypes.arrayOf(PropTypes.string).isRequired,
     selectedFilter: PropTypes.arrayOf(PropTypes.string).isRequired,
     onChange: PropTypes.func.isRequired,
 };
 
-export default CheckBox;
+export default ComboSelect;

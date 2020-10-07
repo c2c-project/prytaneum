@@ -9,13 +9,13 @@ const usersPrimary = makeUsers(10).map((user) => {
 });
 
 export function Primary() {
-    return <ListOverflow rowTraits={usersPrimary} />;
+    return <ListOverflow rowProps={usersPrimary} />;
 }
 
 export function Secondary() {
     return (
         <ListOverflow
-            rowTraits={usersPrimary.map((user) => {
+            rowProps={usersPrimary.map((user) => {
                 return { ...user, secondary: 'regular' };
             })}
         />
@@ -23,5 +23,5 @@ export function Secondary() {
 }
 
 export function Empty() {
-    return <ListOverflow rowTraits={[]} />;
+    return <ListOverflow rowProps={[]} />;
 }
