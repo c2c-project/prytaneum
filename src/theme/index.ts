@@ -66,13 +66,14 @@ const themes: Themes = {
     dark: createMuiTheme({
         palette: {
             primary: { main: '#2C3D4E' },
-            secondary: { main: '#DDDABB' },
+            secondary: { main: '#fca06f' },
         },
         ...base,
     }),
     light: createMuiTheme({
         palette: {
-            primary: { main: '#FEF7EC' },
+            primary: { main: '#fff5e6' },
+            // primary: { main: '#fef7ec' },
             secondary: { main: '#003C8F' },
         },
         ...base,
