@@ -27,64 +27,64 @@ import {
     NotificationSettings,
 } from './components';
 
-const useStyles = makeStyles((theme) => ({
-    title: {
-        padding: theme.spacing(2),
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     title: {
+//         padding: theme.spacing(2),
+//     },
+// }));
 
 interface Props {
     id?: string;
 }
 
-const optionsList = [
-    {
-        title: 'Townhall',
-        component: <TownhallUserSettings />,
-    },
-    {
-        title: 'Notifications',
-        component: <Notifications />,
-    },
-    {
-        title: 'Appearance',
-        component: <Appearance />,
-    },
-];
+// const optionsList = [
+//     {
+//         title: 'Townhall',
+//         component: <TownhallUserSettings />,
+//     },
+//     {
+//         title: 'Notifications',
+//         component: <Notifications />,
+//     },
+//     {
+//         title: 'Appearance',
+//         component: <Appearance />,
+//     },
+// ];
 
-const accountSettingsList = [
-    {
-        title: 'Logout',
-        component: <Logout />,
-    },
-    {
-        title: 'Disable Account',
-        component: <DisableAccount />,
-    },
-    {
-        title: 'Delete Account',
-        component: <DeleteAccount />,
-    },
-];
+// const accountSettingsList = [
+//     {
+//         title: 'Logout',
+//         component: <Logout />,
+//     },
+//     {
+//         title: 'Disable Account',
+//         component: <DisableAccount />,
+//     },
+//     {
+//         title: 'Delete Account',
+//         component: <DeleteAccount />,
+//     },
+// ];
 
-const informationList = [
-    {
-        title: 'Feedback',
-        component: <Feedback />,
-    },
-    {
-        title: 'About Us',
-        component: <AboutUs />,
-    },
-    {
-        title: 'Privacy Policy',
-        component: <PrivacyPolicy />,
-    },
-    {
-        title: 'Terms of Service',
-        component: <TermsOfService />,
-    },
-];
+// const informationList = [
+//     {
+//         title: 'Feedback',
+//         component: <Feedback />,
+//     },
+//     {
+//         title: 'About Us',
+//         component: <AboutUs />,
+//     },
+//     {
+//         title: 'Privacy Policy',
+//         component: <PrivacyPolicy />,
+//     },
+//     {
+//         title: 'Terms of Service',
+//         component: <TermsOfService />,
+//     },
+// ];
 
 /**
  * Displays the settings for User, using SettingsMenu,
@@ -99,7 +99,7 @@ const informationList = [
  * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
  */
 export default function UserSettings({ id }: Props) {
-    const classes = useStyles();
+    // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
     const _user = React.useContext(UserContext);

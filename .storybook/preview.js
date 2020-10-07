@@ -1,14 +1,13 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
 
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import DateFnsUtils from '@date-io/date-fns';
 import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import ThemeProvider from '../src/contexts/Theme';
 import DeviceContext from '../src/contexts/Device';
-import theme from '../src/theme';
 import './main.css';
 
 if (typeof global.process === 'undefined') {
@@ -21,7 +20,7 @@ if (typeof global.process === 'undefined') {
 }
 
 addDecorator((storyFn) => (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
             <SnackContext maxSnack={1}>
