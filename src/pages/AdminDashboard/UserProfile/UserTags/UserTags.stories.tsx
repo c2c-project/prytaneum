@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeUser } from 'mock/handlers/adminDashboard';
+import { makeUser } from 'mock/handlers/auth';
 import UserTags from './UserTags';
 
 export default { title: 'AdminDashboard/UserProfile/UserTags' };

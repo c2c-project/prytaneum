@@ -4,7 +4,7 @@ import faker from 'faker';
 import * as AuthTypes from 'domains/Auth/types';
 import { User } from 'types';
 
-const makeUser = (): User => ({
+export const makeUser = () => ({
     _id: faker.random.alphaNumeric(5),
     roles: ['admin', 'organizer', 'user'],
     email: {
@@ -21,6 +21,15 @@ const makeUser = (): User => ({
         },
     },
 });
+
+export const makeUsers = (num?: number): User[] => {
+    const ret = [];
+    const iterations = num || 1;
+    for (let i = 0; i < iterations; i += 1) {
+        ret.push(makeUser());
+    }
+    return ret;
+};
 
 export default [
     rest.post('/api/users/login', (req, res, ctx) => {

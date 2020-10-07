@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useEndpoint from 'hooks/useEndpoint';
@@ -36,12 +35,10 @@ const useStyles = makeStyles((theme) => ({
 
 export interface Props {
     fabMenuItems: Array<string>;
-}
-interface Params {
     userId: string;
 }
 
-const UserProfile = ({ fabMenuItems }: Props) => {
+const UserProfile = ({ fabMenuItems, userId }: Props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const open = Boolean(anchorEl);
@@ -49,7 +46,6 @@ const UserProfile = ({ fabMenuItems }: Props) => {
         user,
         setUser,
     ] = useState<AdminDashboardTypes.UserProfileFormat | null>(null);
-    const { userId } = useParams<Params>();
     const [get] = useEndpoint(() => getUser(userId), {
         onSuccess: (res) => {
             const { user: fetchedUser } = res.data;

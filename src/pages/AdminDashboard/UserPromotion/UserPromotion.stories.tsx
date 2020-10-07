@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeUser } from 'mock/handlers/adminDashboard';
+import { makeUser } from 'mock/handlers/auth';
 import UserPromotion from './UserPromotion';
 
 export default { title: 'AdminDashboard/UserPromotion' };

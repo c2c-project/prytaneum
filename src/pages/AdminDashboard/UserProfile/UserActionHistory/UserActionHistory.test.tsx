@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { makeUser } from 'mock/handlers/adminDashboard';
+import { makeUser } from 'mock/handlers/auth';
 import UserActionHistory from './UserActionHistory';
 
 /* 
