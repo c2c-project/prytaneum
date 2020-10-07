@@ -48,7 +48,7 @@ export function SettingsMenu() {
     const sections = makeSections(50);
     return (
         <div>
-            <Component config={sections} />
+            <Component config={sections} title='Storybook' />
         </div>
     );
 }

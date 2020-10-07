@@ -6,9 +6,12 @@ import {
     AccordionDetails,
     AccordionSummary,
     Grid,
-    Button,
+    IconButton,
+    Menu,
+    MenuItem,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,7 +28,14 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     title: {
-        padding: theme.spacing(2),
+        flexGrow: 1,
+        [theme.breakpoints.down('md')]: {
+            paddingLeft: theme.spacing(1),
+        },
+    },
+    titlebar: {
+        paddingTop: theme.spacing(2),
+        paddingRight: theme.spacing(2)
     },
 }));
 
@@ -37,8 +47,7 @@ export interface AccordionData {
 
 interface Props {
     config: AccordionData[];
-    // eslint-disable-next-line react/require-default-props
-    title?: string;
+    title: string;
 }
 
 /**
@@ -52,6 +61,7 @@ interface Props {
 export default function SettingsMenu({ config, title }: Props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
     const handleChange = (panel: string) => () => {
         const copy = new Set(expanded);
@@ -66,28 +76,42 @@ export default function SettingsMenu({ config, title }: Props) {
         else setExpanded(new Set(config.map((item) => item.title)));
     };
 
+    type MyEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
+    const handleClick = ({ currentTarget }: MyEvent) => {
+        setAnchorEl(currentTarget);
+    };
+
     return (
         <div className={classes.root}>
+            <Menu
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+            >
+                <MenuItem onClick={toggleExpandAll}>
+                    {`${expanded.size > 1 ? 'Hide' : 'Expand'} All`}
+                </MenuItem>
+            </Menu>
             <Grid container>
                 <Grid
                     item
                     xs={12}
                     container
                     justify='space-between'
-                    alignItems='flex-end'
+                    alignItems='center'
+                    className={classes.titlebar}
                 >
-                    <Grid item xs='auto'>
-                        {title && (
-                            <Typography variant='h4' className={classes.title}>
-                                {title}
-                            </Typography>
-                        )}
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <Button onClick={toggleExpandAll}>
-                            {`${expanded.size > 1 ? 'Hide' : 'Expand'} All`}
-                        </Button>
-                    </Grid>
+                    <Typography variant='h4' className={classes.title}>
+                        {title}
+                    </Typography>
+
+                    <IconButton
+                        onClick={handleClick}
+                        color='inherit'
+                        edge='end'
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
                 </Grid>
                 <Grid item xs={12}>
                     {config.map(
