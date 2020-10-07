@@ -28,7 +28,8 @@
         "react-scripts": "^3.4.3",
         "react-webcam": "^4.0.0",
         "socket.io-client": "^2.2.0",
-        "universal-router": "^9.0.1"
+        "universal-router": "^9.0.1",
+        "react-window": "^1.8.5"
     },
     "scripts": {
         "start": "react-scripts start",
