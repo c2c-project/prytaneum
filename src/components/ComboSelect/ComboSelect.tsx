@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete, {
-    AutocompleteRenderOptionState,
+    AutocompleteChangeReason,
+    AutocompleteChangeDetails,
 } from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -24,11 +25,21 @@ const checkedIcon = <CheckBoxIcon fontSize='small' />;
 export interface Props {
     options: Array<string>;
     selectedFilter: Array<string>;
-    onChange: () => void;
+    onChange: (
+        event: React.ChangeEvent<unknown>,
+        value: string[],
+        reason: AutocompleteChangeReason,
+        details?: AutocompleteChangeDetails<string> | undefined
+    ) => void;
+    label: string;
 }
 
-const CheckBox = ({ options, onChange, selectedFilter }: Props) => {
+const CheckBox = ({ options, onChange, selectedFilter, label }: Props) => {
+    const selectedSet = React.useMemo(() => new Set(selectedFilter), [
+        selectedFilter,
+    ]);
     const classes = useStyles();
+
     return (
         <Autocomplete
             multiple
@@ -45,20 +56,18 @@ const CheckBox = ({ options, onChange, selectedFilter }: Props) => {
                         className={classes.checkBoxIcon}
                         icon={icon}
                         checkedIcon={checkedIcon}
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        checked={selectedFilter.includes(option)}
+                        checked={selectedSet.has(option)}
                     />
                     {option}
                 </>
             )}
-            // style={{ width: 500 }}
             className={classes.TextField}
             renderInput={(params) => (
                 <TextField
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...params}
                     variant='outlined'
-                    label='Status tags'
+                    label={label}
                 />
             )}
             onChange={onChange}
