@@ -5,6 +5,7 @@ import {
     ListItemText,
     Switch,
     Collapse,
+    Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -92,6 +93,14 @@ export function NotificationSettings({ user }: { user: User }) {
         </div>
     );
 }
+
+// export function ModifyUserEmail({ user }: { user: User }) {
+//     return (
+//         <Typography>
+//             todo
+//         </Typography>
+//     )
+// }
 
 export const ButtonList = ({ list, setContent }: Props) => (
     <List>
