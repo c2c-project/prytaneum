@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import Component, { Bill } from './TownhallBillSummary';
+import Component, { Bill } from './BillSummary';
 
 export default { title: 'Domains/Townhall/Townhall Bill Summary' };
 

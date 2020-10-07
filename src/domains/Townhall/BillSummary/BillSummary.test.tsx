@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Component, { Bill } from './TownhallBillSummary';
+import Component, { Bill } from './BillSummary';
 
 const bill1: Bill = {
     name: 'Anikin SkyWalker',
