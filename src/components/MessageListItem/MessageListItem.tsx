@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { default as MUIListItem } from '@material-ui/core/ListItem';
+import MUIListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 

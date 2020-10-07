@@ -5,7 +5,7 @@ import * as TownhallTypes from 'domains/Townhall/types';
 const past = faker.date.past();
 const future = faker.date.future();
 
-const makeTownhall = (): TownhallTypes.Townhall => ({
+export const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     form: {
         title: faker.lorem.words(),

@@ -16,10 +16,19 @@ afterEach(() => {
 });
 
 describe('#createTownhall', () => {
-    const form = {
+    const form: TownhallForm = {
+        title: faker.lorem.words(3),
         date: new Date(),
-        description: faker.lorem.text(),
-        title: faker.lorem.text(),
+        description: faker.lorem.words(10),
+        scope: 'state',
+        private: Math.random() > 0.5,
+        speaker: {
+            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+            territory: faker.company.bsAdjective(),
+            party: faker.company.bsNoun(),
+            picture: faker.image.avatar(),
+        },
+        topic: faker.lorem.word(),
     };
     it('should reject a town hall', async () => {
         await expect(API.createTownhall({} as TownhallForm)).rejects.toThrow(
@@ -40,10 +49,19 @@ describe('#createTownhall', () => {
 });
 
 describe('#updateTownhall', () => {
-    const form = {
+    const form: TownhallForm = {
+        title: faker.lorem.words(3),
         date: new Date(),
-        description: faker.lorem.text(),
-        title: faker.lorem.text(),
+        description: faker.lorem.words(10),
+        scope: 'state',
+        private: Math.random() > 0.5,
+        speaker: {
+            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+            territory: faker.company.bsAdjective(),
+            party: faker.company.bsNoun(),
+            picture: faker.image.avatar(),
+        },
+        topic: faker.lorem.word(),
     };
     const townhallId = 'blah';
     it('should reject update', async () => {

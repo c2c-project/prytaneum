@@ -147,7 +147,7 @@ export default function UserSettings({ id }: Props) {
     ];
 
     return (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div id={id} style={{ width: '100%', height: '100%' }}>
             <SettingsMenu config={sections} title='User Settings' />
             <Dialog open={open} onClose={() => setContent(null)}>
                 {cont || <div />}
