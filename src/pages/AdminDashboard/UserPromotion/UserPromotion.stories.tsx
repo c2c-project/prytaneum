@@ -11,4 +11,4 @@
 //     return <UserPromotion promotionOptions={options} userData={userInfo} />;
 // }
 
-export default {};
+export default { title: 'User Promotion' };

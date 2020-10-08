@@ -1,93 +1,26 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Divider,
-    AppBar,
-    Tabs,
-    Tab,
     Grid,
-    Paper,
     Typography,
-    useScrollTrigger,
+    Avatar,
+    useMediaQuery,
+    useTheme,
+    IconButton,
+    Collapse,
 } from '@material-ui/core';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import clsx from 'clsx';
 
+import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
-import { DeviceContext } from 'contexts/Device';
 import { TownhallContext } from '../Contexts/Townhall';
-// import MyQuestions from '../MyQuestions';
 import QuestionFeed from '../QuestionFeed';
-
-type TabNames = 'my-questions' | 'all-questions';
-// function TownhallLiveTabs() {
-//     const [currentTab, setCurrentTab] = React.useState<TabNames>(
-//         'my-questions'
-//     );
-//     const getContent = () =>
-//         ({
-//             'my-questions': <MyQuestions />,
-//             'all-questions': <div>TODO</div>,
-//         }[currentTab]);
-//     return (
-//         <div>
-//             <AppBar position='static' color='transparent' elevation={0}>
-//                 <Tabs value={currentTab} variant='fullWidth'>
-//                     <Tab
-//                         value='my-questions'
-//                         label='My Questions'
-//                         onClick={() => setCurrentTab('my-questions')}
-//                     />
-//                     <Tab
-//                         value='all-questions'
-//                         label='All Questions'
-//                         onClick={() => setCurrentTab('all-questions')}
-//                     />
-//                 </Tabs>
-//                 <Divider />
-//             </AppBar>
-//             <div style={{ overflowX: 'hidden' }}>{getContent()}</div>
-//         </div>
-//     );
-// }
-const useMobileStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        height: '100%',
-    },
-    bottom: {
-        paddingBottom: theme.spacing(3),
-    },
-    paper: {
-        paddingBottom: theme.spacing(1),
-        borderRadius: '0px',
-        minHeight: '100%',
-        overflow: 'hidden',
-    },
-    feed: {
-        overflowY: 'scroll',
-    },
-}));
-
-function MobileLive() {
-    const { form } = React.useContext(TownhallContext);
-    const classes = useMobileStyles();
-
-    return (
-        <Paper className={classes.paper}>
-            <Grid container>
-                <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
-                <Grid container item xs={12}>
-                    <Typography variant='subtitle2'>Question Feed</Typography>
-                    <QuestionFeed />
-                </Grid>
-            </Grid>
-        </Paper>
-    );
-}
 
 const useDesktopStyles = makeStyles((theme) => ({
     root: {
-        height: '100%',
-        width: '100%',
+        height: 'inherit',
+        width: 'inherit',
         display: 'flex',
         flex: 1,
         [theme.breakpoints.up('md')]: {
@@ -95,9 +28,11 @@ const useDesktopStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             flexFlow: 'column',
+            overflowY: 'auto',
         },
     },
-    paper: {
+    questionFeed: {
+        backgroundColor: theme.palette.background.paper,
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
             maxHeight: '100%',
@@ -109,10 +44,9 @@ const useDesktopStyles = makeStyles((theme) => ({
         width: '100%',
     },
     video: {
-        // paddingRight: theme.spacing(3),
         [theme.breakpoints.up('md')]: {
             flexGrow: 2,
-            maxHeight: `calc((9/16) * 66vw - ${theme.spacing(2)}px)`,
+            maxHeight: `calc(((9/16) * 63vw) - ${theme.spacing(2)}px)`,
         },
         [theme.breakpoints.down('sm')]: {
             minHeight: '33vh',
@@ -122,14 +56,29 @@ const useDesktopStyles = makeStyles((theme) => ({
     },
     feedContainer: {
         height: '100%',
-        // [theme.breakpoints.up('md')]: {
-        //     flexGrow: 1,
-        //     height: '100%',
-        //     paddingLeft: theme.spacing(1),
-        // },
-        // [theme.breakpoints.down('sm')]: {
-        //     flexGrow: 1,
-        // },
+    },
+    titleBar: {
+        width: 'inherit',
+        display: 'flex',
+        flex: 1,
+        padding: theme.spacing(2),
+    },
+    title: {
+        textTransform: 'uppercase',
+    },
+    largeAvatar: {
+        width: theme.spacing(7),
+        height: theme.spacing(7),
+    },
+    expand: {
+        transform: 'rotate(180deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(0deg)',
     },
     // saving these for future
     // sticky: {
@@ -140,18 +89,88 @@ const useDesktopStyles = makeStyles((theme) => ({
     // },
 }));
 
-function DesktopLive() {
+export default function TownhallLive() {
     const { form } = React.useContext(TownhallContext);
     const classes = useDesktopStyles();
+    const topRef = React.useRef<HTMLDivElement | null>(null);
+    const [isFabVisible, setIsFabVisible] = React.useState(false);
+    const theme = useTheme();
+    const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+    const [isIn, setIsIn] = React.useState(false);
+
+    const handleScroll = () => {
+        const top = topRef.current?.getBoundingClientRect()?.top;
+        if (top && top < -100) {
+            setIsFabVisible(true);
+        } else {
+            setIsFabVisible(false);
+        }
+    };
+
+    const handleClick = () => {
+        topRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest',
+        });
+    };
+
+    const description = (
+        <Grid
+            container
+            alignContent='flex-start'
+            spacing={2}
+            alignItems='center'
+        >
+            <Typography className={classes.title} variant='overline'>
+                {form.title}
+            </Typography>
+            <Grid item xs={12} container alignItems='center' spacing={2}>
+                <Grid item xs='auto'>
+                    <Avatar
+                        src={form.speaker.picture}
+                        className={classes.largeAvatar}
+                    />
+                </Grid>
+                <Grid item xs='auto'>
+                    <Typography>{form.speaker.name}</Typography>
+                    <Typography variant='caption'>
+                        {form.speaker.party}
+                    </Typography>
+                    &nbsp; &middot; &nbsp;
+                    <Typography display='inline' variant='caption'>
+                        {form.speaker.territory}
+                    </Typography>
+                </Grid>
+                {!isMdUp && (
+                    <IconButton
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: isIn,
+                        })}
+                        onClick={() => setIsIn(!isIn)}
+                    >
+                        <KeyboardArrowUpIcon />
+                    </IconButton>
+                )}
+            </Grid>
+            {!isMdUp ? (
+                <Collapse in={isIn}>
+                    <Typography paragraph>{form.description}</Typography>
+                </Collapse>
+            ) : (
+                <Typography paragraph>{form.description}</Typography>
+            )}
+        </Grid>
+    );
 
     return (
-        <div className={classes.root}>
-            <Grid item xs='auto' className={classes.video}>
-                {/* <Grid container> */}
-                {/* <div className={classes.sticky}> */}
-                <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
-                {/* </div> */}
-                {/* </Grid> */}
+        <div className={classes.root} onScroll={handleScroll}>
+            {!isMdUp && <div ref={topRef} />}
+            <Grid item xs={12} md={8} container direction='column'>
+                <div className={classes.video}>
+                    <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
+                </div>
+                <div className={classes.titleBar}>{description}</div>
             </Grid>
             <Grid
                 container
@@ -160,24 +179,15 @@ function DesktopLive() {
                 md={4}
                 className={classes.feedContainer}
             >
-                <Paper className={classes.paper}>
+                <div className={classes.questionFeed} onScroll={handleScroll}>
+                    {isMdUp && <div ref={topRef} />}
                     <Typography variant='subtitle2'>Question Feed</Typography>
                     <QuestionFeed />
-                </Paper>
+                </div>
             </Grid>
+            <Fab onClick={handleClick} zoomProps={{ in: isFabVisible }}>
+                <KeyboardArrowUpIcon />
+            </Fab>
         </div>
     );
-}
-
-export default function TownhallLive() {
-    const device = React.useContext(DeviceContext);
-
-    switch (device) {
-        // case 'desktop':
-        //     return <DesktopLive />;
-        // case 'mobile':
-        //     return <MobileLive />;
-        default:
-            return <DesktopLive />;
-    }
 }

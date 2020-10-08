@@ -10,7 +10,7 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
     form: {
         title: faker.lorem.words(),
         date: faker.date.between(past, future),
-        description: faker.lorem.paragraph(),
+        description: faker.lorem.paragraph(10),
         scope: 'district', // FIXME:
         private: false,
         speaker: {

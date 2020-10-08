@@ -1,5 +1,12 @@
 import React from 'react';
-import { IconButton, Grid, Badge, Collapse, Button } from '@material-ui/core';
+import {
+    IconButton,
+    Grid,
+    Badge,
+    Collapse,
+    Button,
+    Tooltip,
+} from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -27,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function QuestionFeed() {
+function QuestionFeed() {
     const classes = useStyles();
 
     const [
@@ -121,15 +128,22 @@ export default function QuestionFeed() {
                 onSearch={handleSearch}
                 length={filteredList.length}
                 menuIcons={[
-                    <IconButton
-                        onClick={handleRefresh}
-                        color='inherit'
-                        disabled={difference === 0}
-                    >
-                        <Badge badgeContent={difference} color='secondary'>
-                            <RefreshIcon />
-                        </Badge>
-                    </IconButton>,
+                    <Tooltip title='Load New'>
+                        <span>
+                            <IconButton
+                                onClick={handleRefresh}
+                                color='inherit'
+                                disabled={difference === 0}
+                            >
+                                <Badge
+                                    badgeContent={difference}
+                                    color='secondary'
+                                >
+                                    <RefreshIcon />
+                                </Badge>
+                            </IconButton>
+                        </span>
+                    </Tooltip>,
                 ]}
             />
             <Grid container>
@@ -176,3 +190,5 @@ export default function QuestionFeed() {
         </div>
     );
 }
+
+export default React.memo(QuestionFeed);

@@ -16,4 +16,4 @@
 //     return <UserInfo profileInfo={profileInfo} />;
 // }
 
-export default {};
+export default { title: 'TODO/User Info' };
