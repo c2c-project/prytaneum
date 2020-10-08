@@ -9,14 +9,6 @@ const useStyles = makeStyles((theme) => ({
         // height: '100%',
         width: '100%',
     },
-    title: {
-        flexGrow: 1,
-        transition: 'inherit 2s ease-in 10s',
-    },
-    main: {
-        width: '100%',
-        flex: 1,
-    },
 }));
 
 interface Props {

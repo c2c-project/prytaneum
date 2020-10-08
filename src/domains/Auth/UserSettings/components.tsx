@@ -6,9 +6,11 @@ import {
     Switch,
     Collapse,
     Typography,
+    Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ConfirmationDialog from 'components/ConfirmationDialog';
 import Help from 'components/Help';
 
 import TextField from 'components/TextField';
@@ -153,38 +155,37 @@ export const Logout = () => (
     </span>
 );
 
-export const DisableAccount = () => (
-    // ROUTING: to /Login after disabled
-    <span>
-        <h1>
-            Disable Account?
-            <p>
+export const DisableAccount = () => {
+    const [open, setOpen] = React.useState(false);
+    return (
+        <div>
+            <SettingsItem
+                helpText='You will no longer receive notifications about Town Halls and
+                    you can no longer join live Town Halls. You will still be able
+                    to log into your account.'
+                name='Disable Account'
+            >
+                <Button
+                    variant='outlined'
+                    onClick={() => setOpen(true)}
+                    style={{ color: 'red', borderColor: 'red' }}
+                >
+                    Disable
+                </Button>
+            </SettingsItem>
+            <ConfirmationDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                onConfirm={() => console.log('TODO')}
+                title='Disable Account?'
+            >
                 You will no longer receive notifications about Town Halls and
                 you can no longer join live Town Halls. You will still be able
-                to log into your account. Please enter your password below twice
-                to confirm.
-            </p>
-        </h1>
-        <TextField
-            inputProps={{ 'aria-label': 'Enter your password' }}
-            label='Please enter your password'
-            required
-            type='password'
-            value=''
-            onChange={() => {}}
-            spellCheck={false}
-        />
-        <TextField
-            inputProps={{ 'aria-label': 'Enter your password again' }}
-            label='Please enter your password again to DISABLE your account'
-            required
-            type='password'
-            value=''
-            onChange={() => {}}
-            spellCheck={false}
-        />
-    </span>
-);
+                to log into your account.
+            </ConfirmationDialog>
+        </div>
+    );
+};
 
 export const DeleteAccount = () => (
     // ROUTING: to /Login after deleted

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography, Grid, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Dialog from 'components/Dialog';
@@ -115,7 +115,19 @@ export default function UserSettings({ id }: Props) {
         {
             title: 'General',
             description: 'General User Settings',
-            component: <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />,
+            component: (
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DisableAccount />
+                    </Grid>
+                </Grid>
+            ),
         },
         {
             title: 'Townhall',

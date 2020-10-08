@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
+
+import { DeviceContext } from 'contexts/Device';
 // import Clipper from '../Clipper';
 
 /** Displays the video stream that plays during the townhall
@@ -11,12 +13,13 @@ import ReactPlayer, { ReactPlayerProps } from 'react-player';
  *  @param {any} ReactPlayerProps.rest rest of props to pass to ReactPlayer
  */
 function VideoPlayer({ url, rest }: ReactPlayerProps) {
+    const device = React.useContext(DeviceContext);
     return (
         <ReactPlayer
             url={url}
             playing={process.env.NODE_ENV === 'production'}
             width='100%'
-            height='720px'
+            height='100%'
             playsinline
             controls
             // eslint-disable-next-line react/jsx-props-no-spreading

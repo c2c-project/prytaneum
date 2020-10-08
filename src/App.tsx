@@ -6,9 +6,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import ThemeProvider from 'contexts/Theme';
 import UserContextProvider from 'contexts/User';
 import SnackContext from 'contexts/Snack';
-// import Pages from './pages';
 import Routes from './routes';
-import { User } from './types';
 
 export default function App() {
     // TODO: update when user fetching/logging in is figured out

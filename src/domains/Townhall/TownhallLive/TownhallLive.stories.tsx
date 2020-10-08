@@ -1,9 +1,10 @@
 import React from 'react';
 import faker from 'faker';
 import { EventEmitter } from 'events';
-import { Container } from '@material-ui/core';
 
 import FixtureSocket from 'mock/Fixture.socket';
+import AppBar from 'layout/AppBar';
+import Page from 'layout/Page';
 import Component from './TownhallLive';
 import { Question as QuestionType, QuestionState } from '../types';
 import TownhallProvider from '../Contexts/Townhall';
@@ -50,17 +51,21 @@ function sendMessage(num?: number) {
 export function Basic() {
     return (
         <div style={{ width: '100%', height: '100%' }}>
-            <button type='button' onClick={() => sendMessage(20)}>
-                Add Message
-            </button>
-            <div style={{ height: '100%' }}>
-                {/* <div style={{ position: 'sticky', top: 0 }}>asdf</div> */}
-                <TownhallProvider townhallId='1234'>
-                    <FixtureSocket.Provider value={emitter}>
-                        <Component />
-                    </FixtureSocket.Provider>
-                </TownhallProvider>
-            </div>
+            <AppBar>
+                <button type='button' onClick={() => sendMessage(20)}>
+                    Add Message
+                </button>
+            </AppBar>
+            <Page maxWidth='xl'>
+                <div style={{ height: '100%' }}>
+                    {/* <div style={{ position: 'sticky', top: 0 }}>asdf</div> */}
+                    <TownhallProvider townhallId='1234'>
+                        <FixtureSocket.Provider value={emitter}>
+                            <Component />
+                        </FixtureSocket.Provider>
+                    </TownhallProvider>
+                </div>
+            </Page>
         </div>
     );
 }

@@ -14,40 +14,40 @@ import {
 import VideoPlayer from 'components/VideoPlayer';
 import { DeviceContext } from 'contexts/Device';
 import { TownhallContext } from '../Contexts/Townhall';
-import MyQuestions from '../MyQuestions';
+// import MyQuestions from '../MyQuestions';
 import QuestionFeed from '../QuestionFeed';
 
 type TabNames = 'my-questions' | 'all-questions';
-function TownhallLiveTabs() {
-    const [currentTab, setCurrentTab] = React.useState<TabNames>(
-        'my-questions'
-    );
-    const getContent = () =>
-        ({
-            'my-questions': <MyQuestions />,
-            'all-questions': <div>TODO</div>,
-        }[currentTab]);
-    return (
-        <div>
-            <AppBar position='static' color='transparent' elevation={0}>
-                <Tabs value={currentTab} variant='fullWidth'>
-                    <Tab
-                        value='my-questions'
-                        label='My Questions'
-                        onClick={() => setCurrentTab('my-questions')}
-                    />
-                    <Tab
-                        value='all-questions'
-                        label='All Questions'
-                        onClick={() => setCurrentTab('all-questions')}
-                    />
-                </Tabs>
-                <Divider />
-            </AppBar>
-            <div style={{ overflowX: 'hidden' }}>{getContent()}</div>
-        </div>
-    );
-}
+// function TownhallLiveTabs() {
+//     const [currentTab, setCurrentTab] = React.useState<TabNames>(
+//         'my-questions'
+//     );
+//     const getContent = () =>
+//         ({
+//             'my-questions': <MyQuestions />,
+//             'all-questions': <div>TODO</div>,
+//         }[currentTab]);
+//     return (
+//         <div>
+//             <AppBar position='static' color='transparent' elevation={0}>
+//                 <Tabs value={currentTab} variant='fullWidth'>
+//                     <Tab
+//                         value='my-questions'
+//                         label='My Questions'
+//                         onClick={() => setCurrentTab('my-questions')}
+//                     />
+//                     <Tab
+//                         value='all-questions'
+//                         label='All Questions'
+//                         onClick={() => setCurrentTab('all-questions')}
+//                     />
+//                 </Tabs>
+//                 <Divider />
+//             </AppBar>
+//             <div style={{ overflowX: 'hidden' }}>{getContent()}</div>
+//         </div>
+//     );
+// }
 const useMobileStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -88,18 +88,48 @@ const useDesktopStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         width: '100%',
+        display: 'flex',
+        flex: 1,
+        [theme.breakpoints.up('md')]: {
+            flexFlow: 'row',
+        },
+        [theme.breakpoints.down('sm')]: {
+            flexFlow: 'column',
+        },
     },
     paper: {
+        [theme.breakpoints.up('md')]: {
+            overflowY: 'scroll',
+            maxHeight: '100%',
+        },
+        [theme.breakpoints.down('sm')]: {
+            minHeight: '100%',
+        },
         padding: theme.spacing(3),
-        overflowY: 'scroll',
-        maxHeight: '100%',
+        width: '100%',
     },
     video: {
-        flexGrow: 2,
-        paddingRight: theme.spacing(3),
+        // paddingRight: theme.spacing(3),
+        [theme.breakpoints.up('md')]: {
+            flexGrow: 2,
+            maxHeight: `calc((9/16) * 66vw - ${theme.spacing(2)}px)`,
+        },
+        [theme.breakpoints.down('sm')]: {
+            minHeight: '33vh',
+            height: '33vh',
+            width: '100%',
+        },
     },
     feedContainer: {
-        maxHeight: '100%',
+        height: '100%',
+        // [theme.breakpoints.up('md')]: {
+        //     flexGrow: 1,
+        //     height: '100%',
+        //     paddingLeft: theme.spacing(1),
+        // },
+        // [theme.breakpoints.down('sm')]: {
+        //     flexGrow: 1,
+        // },
     },
     // saving these for future
     // sticky: {
@@ -115,21 +145,27 @@ function DesktopLive() {
     const classes = useDesktopStyles();
 
     return (
-        <Grid container className={classes.root}>
+        <div className={classes.root}>
             <Grid item xs='auto' className={classes.video}>
-                <Grid container>
-                    {/* <div className={classes.sticky}> */}
-                    <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
-                    {/* </div> */}
-                </Grid>
+                {/* <Grid container> */}
+                {/* <div className={classes.sticky}> */}
+                <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
+                {/* </div> */}
+                {/* </Grid> */}
             </Grid>
-            <Grid container item xs={4} className={classes.feedContainer}>
+            <Grid
+                container
+                item
+                xs={12}
+                md={4}
+                className={classes.feedContainer}
+            >
                 <Paper className={classes.paper}>
                     <Typography variant='subtitle2'>Question Feed</Typography>
                     <QuestionFeed />
                 </Paper>
             </Grid>
-        </Grid>
+        </div>
     );
 }
 
@@ -137,10 +173,10 @@ export default function TownhallLive() {
     const device = React.useContext(DeviceContext);
 
     switch (device) {
-        case 'desktop':
-            return <DesktopLive />;
-        case 'mobile':
-            return <MobileLive />;
+        // case 'desktop':
+        //     return <DesktopLive />;
+        // case 'mobile':
+        //     return <MobileLive />;
         default:
             return <DesktopLive />;
     }

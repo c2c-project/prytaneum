@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Page from 'layout/Page';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
@@ -12,7 +13,11 @@ addRoutes([
         action: (ctx) => {
             const child = ctx.next();
             if (child) return child;
-            return <TownhallList />;
+            return (
+                <Page>
+                    <TownhallList />
+                </Page>
+            );
         },
         children: [
             {

@@ -13,6 +13,7 @@ import Redirect from 'components/Redirect';
 import './Auth';
 import './Townhall';
 import './User';
+import './Join';
 
 import { addRoutes, routes } from './utils';
 
@@ -106,16 +107,24 @@ export default function App() {
     }, [destPage, currPage.component]);
 
     return (
-        <div>
+        <>
             <Nav />
-            <Page key={currPage.key}>
-                <Fade
-                    in={history.location.key === currPage.key}
-                    onExited={() => setCurrPage(destPage)}
+            {/* <Page key={currPage.key}> */}
+            <Fade
+                key={currPage.key}
+                in={history.location.key === currPage.key}
+                onExited={() => setCurrPage(destPage)}
+            >
+                <div
+                    style={{
+                        height: 'inherit',
+                        width: 'inherit',
+                    }}
                 >
-                    <div>{currPage.component}</div>
-                </Fade>
-            </Page>
+                    {currPage.component}
+                </div>
+            </Fade>
+            {/* </Page> */}
             {/* <Slide
                 key={currPage.key}
                 in={history.location.key === currPage.key}
@@ -140,6 +149,6 @@ export default function App() {
                     <div>{destPage.component}</div>
                 </Page>
             </Slide> */}
-        </div>
+        </>
     );
 }

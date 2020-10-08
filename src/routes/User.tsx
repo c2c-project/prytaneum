@@ -13,6 +13,8 @@ import InviteForm from 'domains/Invite/InviteForm';
 import UserSettings from 'domains/Auth/UserSettings';
 import UserContextProvider from 'contexts/User';
 
+import Page from 'layout/Page';
+
 import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
@@ -25,7 +27,7 @@ addRoutes([
             if (!getFromStorage('isLoggedIn')) {
                 return <Login onLogin={() => history.push(ctx.pathname)} />;
             }
-            return ctx.next();
+            return <Page>{ctx.next()}</Page>;
         },
         children: [
             {

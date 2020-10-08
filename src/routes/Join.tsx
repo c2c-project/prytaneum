@@ -1,5 +1,8 @@
 import React from 'react';
 
+import Page from 'layout/Page';
+import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
+import TownhallLive from 'domains/Townhall/TownhallLive';
 import { addRoutes } from './utils';
 
 addRoutes([
@@ -8,14 +11,20 @@ addRoutes([
         action: (ctx) => {
             // TODO: verify/login user here
             // user context here too
-            return ctx.next();
+            return <Page maxWidth='xl'>{ctx.next()}</Page>;
         },
         children: [
             {
                 path: '/:townhallId',
                 action: (ctx) => {
+                    const { townhallId } = ctx.params as { townhallId: string };
+
                     // TODO: wrap in townhall context here
-                    return <div />;
+                    return (
+                        <TownhallProvider townhallId={townhallId}>
+                            <TownhallLive />
+                        </TownhallProvider>
+                    );
                 },
             },
         ],
