@@ -6,7 +6,7 @@ import { TownhallContext } from '../Contexts/Townhall';
 
 export default function JoinUrl() {
     const townhall = React.useContext(TownhallContext);
-    const joinUrl = `${process.env.HOST}/${townhall._id}`;
+    const joinUrl = `${window.origin}/${townhall._id}`;
     return (
         <Grid container alignItems='center' spacing={3}>
             <Grid item xs='auto'>

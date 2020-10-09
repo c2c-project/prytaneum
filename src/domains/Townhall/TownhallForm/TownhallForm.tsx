@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
+import Help from 'components/Help';
 import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
@@ -86,6 +87,10 @@ export default function TownhallForm({
                                 }
                                 label='Private'
                             />
+                            <Help placement='right'>
+                                The townhall will not be listed publicly and
+                                will be invite only.
+                            </Help>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

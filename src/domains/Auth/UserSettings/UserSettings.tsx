@@ -1,6 +1,10 @@
 import React from 'react';
-import { Typography, Grid, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+    // Typography,
+    Grid,
+    Divider,
+} from '@material-ui/core';
+// import { makeStyles } from '@material-ui/core/styles';
 
 import Dialog from 'components/Dialog';
 // import AppBar from 'layout/AppBar';
@@ -11,17 +15,17 @@ import { UserContext } from 'contexts/User';
 import Redirect from 'components/Redirect';
 
 import {
-    ButtonList,
-    AppearAnonymous,
-    Notifications,
-    Appearance,
-    Logout,
+    // ButtonList,
+    // AppearAnonymous,
+    // Notifications,
+    // Appearance,
+    // Logout,
     DisableAccount,
-    DeleteAccount,
-    Feedback,
-    AboutUs,
-    PrivacyPolicy,
-    TermsOfService,
+    // DeleteAccount,
+    // Feedback,
+    // AboutUs,
+    // PrivacyPolicy,
+    // TermsOfService,
     TownhallUserSettings,
     NotificationSettings,
 } from './components';

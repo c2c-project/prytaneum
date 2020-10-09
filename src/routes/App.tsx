@@ -4,7 +4,7 @@ import { Fade } from '@material-ui/core';
 import { Update, State } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Page from 'layout/Page';
+// import Page from 'layout/Page';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';
@@ -14,8 +14,9 @@ import './Auth';
 import './Townhall';
 import './User';
 import './Join';
+import './Preview';
 
-import { addRoutes, routes } from './utils';
+import { addRoutes, routes, parseQueryString, MyContext } from './utils';
 
 addRoutes([
     {
@@ -32,7 +33,7 @@ addRoutes([
     },
     { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> },
 ]);
-const router = new UniversalRouter<JSX.Element>(routes);
+const router = new UniversalRouter<JSX.Element, MyContext>(routes);
 
 type PageState = {
     component: JSX.Element | null | undefined;
@@ -82,7 +83,10 @@ export default function App() {
     const [destPage, setDestPage] = React.useState<PageState>(initialState);
 
     const handleLocationChange = ({ location }: Update<State>) => {
-        const result = router.resolve(location.pathname);
+        const result = router.resolve({
+            pathname: location.pathname,
+            query: parseQueryString(location.search),
+        });
         const state = {
             component: result,
             key: location.key,

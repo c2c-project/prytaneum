@@ -1,6 +1,7 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
+import { User } from 'types';
 import { Townhall, TownhallForm, TownhallQuestionForm } from '../types';
 
 interface RequestBody {
@@ -74,7 +75,16 @@ export async function getTownhall(id: string) {
     return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
 }
 
-export async function createQuestion(form: TownhallQuestionForm) {
+export async function createQuestion(
+    townhallId: string,
+    form: TownhallQuestionForm
+) {
     const body: { form: TownhallQuestionForm } = { form };
-    return axios.post('/api/townhalls/:_id/create-question', body);
+    return axios.post(`/api/townhalls/${townhallId}/create-question`, body);
+}
+
+export async function getModInfo(townhallId: string) {
+    return axios.get<{ moderators: Pick<User, 'email' | '_id'>[] }>(
+        `/api/townhalls/${townhallId}/organizer/mod-info`
+    );
 }

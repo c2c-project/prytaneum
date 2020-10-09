@@ -5,13 +5,13 @@ import {
     ListItemText,
     Switch,
     Collapse,
-    Typography,
+    // Typography,
     Button,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
-import Help from 'components/Help';
+// import Help from 'components/Help';
 
 import TextField from 'components/TextField';
 import { User } from 'types';
@@ -33,14 +33,14 @@ const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
     setState((prev) => ({ ...prev, [id]: checked }));
 };
 
-const useStyles = makeStyles((theme) => ({
-    indent: {
-        paddingLeft: theme.spacing(4),
-    },
-    fullWidth: {
-        width: '100%',
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     indent: {
+//         paddingLeft: theme.spacing(4),
+//     },
+//     fullWidth: {
+//         width: '100%',
+//     },
+// }));
 
 // all really small one time user components go here
 interface DisplayItem {

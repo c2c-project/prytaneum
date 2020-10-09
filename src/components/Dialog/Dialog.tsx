@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide, { SlideProps } from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { DialogTitle } from '@material-ui/core';
 
 const useStyles = makeStyles({
     appBar: {
@@ -79,6 +80,7 @@ export default function Dialog(props: Props) {
                         </Toolbar>
                     </AppBar>
                 )}
+                {title && !fullScreen && <DialogTitle>{title}</DialogTitle>}
                 {open && children}
             </MUIDialog>
         </div>

@@ -19,6 +19,7 @@ import {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        padding: theme.spacing(0, 0, 2, 0),
     },
 }));
 
@@ -93,7 +94,16 @@ const config: AccordionData[] = [
     {
         title: 'Moderators',
         description: 'Designate question queue moderators',
-        component: <Moderators />,
+        component: (isOpen) => (
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant='overline'>Moderators</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Moderators isOpen={isOpen} />
+                </Grid>
+            </Grid>
+        ),
     },
     {
         title: 'Invite',
@@ -123,7 +133,7 @@ const config: AccordionData[] = [
     },
     {
         title: 'Preview',
-        description: 'Preview the townhall as...',
+        description: 'View townhall as different types of users',
         component: <Preview />,
     },
 ];

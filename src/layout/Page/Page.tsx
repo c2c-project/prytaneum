@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Container } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import clsx from 'clsx';
 
 interface Props {
     children: JSX.Element | JSX.Element[] | React.ReactNode;
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     disableGutters?: boolean;
-    gutterBottom?: boolean;
 }
 
 const useStyles = makeStyles<Theme, Props>((theme) => ({
@@ -37,9 +35,6 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
         },
     },
     appBar: theme.mixins.toolbar,
-    gutter: ({ gutterBottom }) => ({
-        height: gutterBottom ? theme.spacing(5) : 0,
-    }),
 }));
 
 const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
@@ -57,7 +52,6 @@ const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
                 >
                     {/* <div className={classes.innerContainer}> */}
                     {children}
-                    <div className={classes.gutter} />
                     {/* </div> */}
                 </Container>
             </main>
@@ -68,7 +62,6 @@ const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 Page.defaultProps = {
     disableGutters: true,
     maxWidth: 'md',
-    gutterBottom: false,
 };
 
 Page.propTypes = {
@@ -78,8 +71,6 @@ Page.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    gutterBottom: PropTypes.bool, // used in makeStyles
 };
 
 export default Page;

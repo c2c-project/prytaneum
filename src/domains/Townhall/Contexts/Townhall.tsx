@@ -84,9 +84,7 @@ export default function TownhallProvider({
     }, [townhall, get]);
 
     return !townhall ? (
-        <div style={{ height: '500px' }}>
-            <Loader />
-        </div>
+        <Loader />
     ) : (
         <TownhallContext.Provider value={townhall}>
             {children}

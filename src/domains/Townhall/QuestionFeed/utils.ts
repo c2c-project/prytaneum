@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Question, QuestionState, Question as QuestionType } from '../types';
+import { Question, Question as QuestionType } from '../types';
 
 export { applyFilters } from 'utils/filters';
 

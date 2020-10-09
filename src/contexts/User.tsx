@@ -26,14 +26,9 @@ export default function UserProvider({ children, value }: Props) {
     });
     React.useEffect(() => {
         if (user === undefined) get();
-    }, []);
+    }, [get, user]);
 
-    if (isLoading || user === undefined)
-        return (
-            <div style={{ height: '500px' }}>
-                <Loader />
-            </div>
-        );
+    if (isLoading || user === undefined) return <Loader />;
     if (user === null) return <Redirect href='/home' />; // means that theres something wrong
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;

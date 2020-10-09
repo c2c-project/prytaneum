@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme) => ({
     },
     titlebar: {
         paddingTop: theme.spacing(2),
-        paddingRight: theme.spacing(2)
+        paddingRight: theme.spacing(2),
     },
 }));
 
 export interface AccordionData {
     title: string;
     description: string;
-    component: JSX.Element;
+    component: JSX.Element | ((b: boolean) => JSX.Element);
 }
 
 interface Props {
@@ -135,7 +135,11 @@ export default function SettingsMenu({ config, title }: Props) {
                                         {description}
                                     </Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>{component}</AccordionDetails>
+                                <AccordionDetails>
+                                    {typeof component === 'function'
+                                        ? component(expanded.has(sectionTitle))
+                                        : component}
+                                </AccordionDetails>
                             </Accordion>
                         )
                     )}

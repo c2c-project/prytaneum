@@ -10,7 +10,7 @@ export function Basic() {
     return (
         <>
             <AppBar />
-            <Page gutterBottom>
+            <Page>
                 <Component />
             </Page>
         </>

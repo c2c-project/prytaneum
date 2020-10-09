@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 import faker from 'faker';
 import * as TownhallTypes from 'domains/Townhall/types';
+import { makeUsers } from './auth';
 
 const past = faker.date.past();
 const future = faker.date.future();
@@ -124,5 +125,15 @@ export default [
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
+    }),
+    rest.get('/api/townhalls/:_id/organizer/mod-info', (req, res, ctx) => {
+        const { id } = req.params as { id: string };
+        if (id === 'fail') {
+            return res(ctx.status(400));
+        }
+        if (id === 'unauthorized') {
+            return res(ctx.status(401));
+        }
+        return res(ctx.json({ moderators: makeUsers(10) }), ctx.status(200));
     }),
 ];

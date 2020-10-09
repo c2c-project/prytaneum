@@ -23,9 +23,7 @@ export default function DevTeam() {
     React.useEffect(() => sendRequest(), []);
 
     return isLoading ? (
-        <div style={{ height: '500px' }}>
-            <Loader />
-        </div>
+        <Loader />
     ) : (
         <Grid container spacing={4}>
             <Grid container item justify='center' alignItems='center'>

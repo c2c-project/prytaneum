@@ -24,7 +24,6 @@ import {
     TonwhallFilterFunc,
     search,
     applyFilters,
-    Filters,
 } from './utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,13 +63,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     React.useEffect(sendRequest, []);
 
-    if (isLoading || !list) {
-        return (
-            <div style={{ height: '500px' }}>
-                <Loader />
-            </div>
-        );
-    }
+    if (isLoading || !list) return <Loader />;
 
     if (list.length === 0) {
         return (

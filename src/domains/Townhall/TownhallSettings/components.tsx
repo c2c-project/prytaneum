@@ -15,10 +15,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
+import Loader from 'components/Loader';
+import useEndpoint from 'hooks/useEndpoint';
 import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
+import ConfirmationDialog from 'components/ConfirmationDialog';
+import { User } from 'types';
 import Help from 'components/Help';
+import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
 
@@ -136,9 +141,48 @@ export function QuestionFeedSettings() {
     );
 }
 
-export function Moderators() {
-    // TODO:
-    return <div />;
+export function Moderators({ isOpen }: { isOpen: boolean }) {
+    const townhall = React.useContext(TownhallContext);
+    const [mods, setMods] = React.useState<Pick<User, 'email' | '_id'>[]>([]);
+    const [dialogContent, setDialogContent] = React.useState<string | null>(
+        null
+    );
+    const [get, isLoading] = useEndpoint(() => getModInfo(townhall._id), {
+        onSuccess: ({ data }) => {
+            setMods(data.moderators);
+        },
+    });
+    React.useEffect(() => {
+        if (isOpen) get();
+    }, [isOpen, get]);
+
+    if (isLoading) return <Loader />;
+
+    if (mods.length === 0)
+        return <Typography>No Moderators to display</Typography>;
+
+    return (
+        <Grid container>
+            <ConfirmationDialog
+                title={`Remove ${dialogContent || ''} from Moderators`}
+                open={Boolean(dialogContent)}
+                onClose={() => setDialogContent(null)}
+                onConfirm={console.log}
+            >
+                {`Are you sure you want to remove ${
+                    dialogContent || ''
+                } as a moderator?`}
+            </ConfirmationDialog>
+            {mods.map(({ _id, email }) => (
+                <Grid container justify='space-between' item xs={12} key={_id}>
+                    <Typography>{email.address}</Typography>
+                    <IconButton onClick={() => setDialogContent(email.address)}>
+                        <CloseIcon />
+                    </IconButton>
+                </Grid>
+            ))}
+        </Grid>
+    );
 }
 
 export function Registration() {
@@ -147,7 +191,6 @@ export function Registration() {
         townhall.settings.registration.reminders
     );
     const buildHandler = buildSwitchUpdate<typeof state>(setState);
-    const classes = useStyles();
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>

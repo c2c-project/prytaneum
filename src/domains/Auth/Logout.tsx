@@ -6,7 +6,7 @@ import { clear } from 'utils/storage';
 /** Logs the user out by redirecting to /login after clearing the window's local storage
  *  @category Domains/Auth
  *  @constructor Logout
-*/
+ */
 export default function Logout() {
     // FIXME: send the request to the server too as well
     React.useEffect(() => {
@@ -14,9 +14,5 @@ export default function Logout() {
         history.push('/auth/login');
     }, []);
 
-    return (
-        <div style={{ height: '500px', width: '100%' }}>
-            <Loader />
-        </div>
-    );
+    return <Loader />;
 }

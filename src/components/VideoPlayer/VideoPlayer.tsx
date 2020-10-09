@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
 
-import { DeviceContext } from 'contexts/Device';
-// import Clipper from '../Clipper';
-
 /** Displays the video stream that plays during the townhall
  *  @category Component
  *  @constructor VideoPlayer
@@ -13,7 +10,6 @@ import { DeviceContext } from 'contexts/Device';
  *  @param {any} ReactPlayerProps.rest rest of props to pass to ReactPlayer
  */
 function VideoPlayer({ url, rest }: ReactPlayerProps) {
-    const device = React.useContext(DeviceContext);
     return (
         <ReactPlayer
             url={url}
