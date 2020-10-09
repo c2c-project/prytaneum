@@ -255,6 +255,7 @@ function QuestionFeed() {
                                 <Question
                                     user={currentQuestion.meta.user.name}
                                     timestamp={currentQuestion.meta.timestamp}
+                                    isModerator={isModerator}
                                     actionBar={
                                         isModerator ? (
                                             <div />
@@ -290,6 +291,7 @@ function QuestionFeed() {
                                 key={_id}
                                 user={meta.user.name}
                                 timestamp={meta.timestamp}
+                                isModerator={isModerator}
                                 divider
                                 actionBar={
                                     isModerator ? (

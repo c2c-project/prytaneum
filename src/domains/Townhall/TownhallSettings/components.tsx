@@ -10,11 +10,15 @@ import {
     Typography,
     Button,
     IconButton,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
+import Dialog from 'components/Dialog';
 import Loader from 'components/Loader';
 import useEndpoint from 'hooks/useEndpoint';
 import SettingsItem from 'components/SettingsItem';
@@ -141,12 +145,41 @@ export function QuestionFeedSettings() {
     );
 }
 
+function AddModeratorForm({
+    open,
+    onClose,
+}: {
+    open: boolean;
+    onClose: () => void;
+}) {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+    };
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Add New Moderator</DialogTitle>
+            <form onSubmit={handleSubmit}>
+                <DialogContent>
+                    <TextField label='Email' type='email' />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button type='submit' variant='contained' color='primary'>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </form>
+        </Dialog>
+    );
+}
+
 export function Moderators({ isOpen }: { isOpen: boolean }) {
     const townhall = React.useContext(TownhallContext);
     const [mods, setMods] = React.useState<Pick<User, 'email' | '_id'>[]>([]);
     const [dialogContent, setDialogContent] = React.useState<string | null>(
         null
     );
+    const [isFormOpen, setIsFormopen] = React.useState(false);
     const [get, isLoading] = useEndpoint(() => getModInfo(townhall._id), {
         onSuccess: ({ data }) => {
             setMods(data.moderators);
@@ -156,13 +189,30 @@ export function Moderators({ isOpen }: { isOpen: boolean }) {
         if (isOpen) get();
     }, [isOpen, get]);
 
+    const addMod = (
+        <Button
+            fullWidth
+            onClick={() => setIsFormopen(true)}
+            startIcon={<AddIcon />}
+        >
+            Add Moderator
+        </Button>
+    );
+
     if (isLoading) return <Loader />;
 
     if (mods.length === 0)
-        return <Typography>No Moderators to display</Typography>;
+        return (
+            <Grid container spacing={1}>
+                <Typography>No Moderators to display</Typography>
+                <Grid item xs={12}>
+                    {addMod}
+                </Grid>
+            </Grid>
+        );
 
     return (
-        <Grid container>
+        <Grid container spacing={1}>
             <ConfirmationDialog
                 title={`Remove ${dialogContent || ''} from Moderators`}
                 open={Boolean(dialogContent)}
@@ -173,6 +223,13 @@ export function Moderators({ isOpen }: { isOpen: boolean }) {
                     dialogContent || ''
                 } as a moderator?`}
             </ConfirmationDialog>
+            <AddModeratorForm
+                open={isFormOpen}
+                onClose={() => setIsFormopen(false)}
+            />
+            <Grid item xs={12}>
+                {addMod}
+            </Grid>
             {mods.map(({ _id, email }) => (
                 <Grid container justify='space-between' item xs={12} key={_id}>
                     <Typography>{email.address}</Typography>

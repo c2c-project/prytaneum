@@ -88,3 +88,10 @@ export async function getModInfo(townhallId: string) {
         `/api/townhalls/${townhallId}/organizer/mod-info`
     );
 }
+
+export async function addMod(townhallId: string, moderatorEmail: string) {
+    return axios.post<unknown>(
+        `/api/townhalls/${townhallId}/organizer/add-mod`,
+        { emai: moderatorEmail }
+    );
+}

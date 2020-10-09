@@ -9,8 +9,11 @@ import {
     Chip,
     Button,
     Container,
+    Popper,
+    ClickAwayListener,
+    Paper,
 } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, Theme } from '@material-ui/core/styles';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ReplyIcon from '@material-ui/icons/Reply';
 import QuoteIcon from '@material-ui/icons/FormatQuote';
@@ -23,19 +26,19 @@ import TextField from 'components/TextField';
 import { formatDate } from 'utils/format';
 import { Question as QuestionType, QuestionState } from '../types';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(1),
-    },
-}));
-
-interface QuestionProps {
-    children: JSX.Element | string;
-    user: string;
-    timestamp: string;
-    divider?: boolean;
-    actionBar: JSX.Element;
-}
+const useStyles = makeStyles<Theme, Pick<QuestionProps, 'isModerator'>>(
+    (theme) => ({
+        root: {
+            padding: theme.spacing(1),
+        },
+        user: ({ isModerator }) => ({
+            cursor: isModerator ? 'pointer' : 'auto',
+        }),
+        paper: {
+            padding: theme.spacing(1),
+        },
+    })
+);
 
 interface QuestionLabelProps {
     labels: string[];
@@ -161,20 +164,51 @@ export function ModBar({ questionState, labels, onClick }: ModBarProps) {
     );
 }
 
+interface QuestionProps {
+    children: JSX.Element | string;
+    user: string;
+    timestamp: string;
+    divider?: boolean;
+    actionBar: JSX.Element;
+    isModerator?: boolean;
+}
+
 export function Question({
     children,
     user,
     timestamp,
     divider,
     actionBar,
+    isModerator,
 }: QuestionProps) {
+    const [anchorEl, setAnchorEl] = React.useState<HTMLSpanElement | null>(
+        null
+    );
     const date = React.useMemo(() => formatDate(timestamp, 'p-P'), [timestamp]);
     const [time, month] = date.split('-');
-    const classes = useStyles();
+    const classes = useStyles({ isModerator });
+    // TODO: optimize -- each question has it's own instance of popper, which is inefficient
     return (
         <Grid container className={classes.root} spacing={1}>
+            <Popper
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                placement='bottom'
+            >
+                <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+                    <Paper className={classes.paper}>
+                        TODO: User Profile todo with mod actions possibly
+                    </Paper>
+                </ClickAwayListener>
+            </Popper>
             <Grid item xs={12}>
-                <Typography variant='subtitle2'>{user}</Typography>
+                <Typography
+                    onClick={({ currentTarget }) => setAnchorEl(currentTarget)}
+                    className={classes.user}
+                    variant='subtitle2'
+                >
+                    {user}
+                </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Typography>{children}</Typography>
@@ -200,6 +234,7 @@ export function Question({
 
 Question.defaultProps = {
     divider: false,
+    isModerator: undefined,
 };
 
 interface CurrentQuestionProps {
