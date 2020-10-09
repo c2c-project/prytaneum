@@ -1,15 +1,18 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-import { Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-const useStyles = makeStyles((theme) => ({
-    // root: {
-    //     position: 'relative',
-    //     overflowY: 'auto',
-    //     height: '100%',
-    //     width: '100%',
-    // },
+import { Container } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import clsx from 'clsx';
+
+interface Props {
+    children: JSX.Element | JSX.Element[] | React.ReactNode;
+    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    disableGutters?: boolean;
+    gutterBottom?: boolean;
+}
+
+const useStyles = makeStyles<Theme, Props>((theme) => ({
     outerContainer: {
         position: 'relative',
         width: '100%',
@@ -23,46 +26,60 @@ const useStyles = makeStyles((theme) => ({
     //     // overflowY: 'auto', // TODO: fix
     // },
     main: {
-        // height: `calc(100% - ${theme.mixins.toolbar.minHeight || 56}px)`,
-        // [theme.breakpoints.up('sm')]: {
-        //     height: `calc(100% - (2 * ${
-        //         theme.mixins.toolbar.minHeight || 64
-        //     }px))`,
-        // },
-        // [theme.breakpoints.down('xs')]: {
-        //     height: `calc(100% - ${theme.mixins.toolbar.minHeight || 48}px)`,
-        // },
+        height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 56}px)`,
+        [theme.breakpoints.up('sm')]: {
+            height: `calc(100vh - ( ${
+                theme.mixins.toolbar.minHeight || 64
+            }px))`,
+        },
+        [theme.breakpoints.down('xs')]: {
+            height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 48}px)`,
+        },
     },
     appBar: theme.mixins.toolbar,
+    gutter: ({ gutterBottom }) => ({
+        height: gutterBottom ? theme.spacing(5) : 0,
+    }),
 }));
 
-interface Props {
-    children: JSX.Element | JSX.Element[] | React.ReactNode;
-    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-}
-
-export default React.forwardRef<HTMLDivElement, Props>(function Page(
-    props,
-    ref
-): JSX.Element {
-    const { children, maxWidth } = props;
-    const classes = useStyles();
+const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+    const { children, maxWidth, disableGutters } = props;
+    const classes = useStyles(props);
     return (
         <>
             <div className={classes.appBar} />
             <main className={classes.main}>
                 <Container
                     maxWidth={maxWidth || 'md'}
-                    disableGutters
+                    disableGutters={disableGutters}
                     className={classes.outerContainer}
                     ref={ref}
                 >
                     {/* <div className={classes.innerContainer}> */}
                     {children}
-                    {/* <div className={classes.appBar} /> */}
+                    <div className={classes.gutter} />
                     {/* </div> */}
                 </Container>
             </main>
         </>
     );
 });
+
+Page.defaultProps = {
+    disableGutters: true,
+    maxWidth: 'md',
+    gutterBottom: false,
+};
+
+Page.propTypes = {
+    disableGutters: PropTypes.bool,
+    maxWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    gutterBottom: PropTypes.bool, // used in makeStyles
+};
+
+export default Page;

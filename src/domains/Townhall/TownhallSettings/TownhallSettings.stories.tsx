@@ -1,13 +1,18 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
+
+import Page from 'layout/Page';
+import AppBar from 'layout/AppBar';
 import Component from './TownhallSettings';
 
 export default { title: 'Domains/Townhall/Townhall Settings' };
 
 export function Basic() {
     return (
-        <Container maxWidth='md'>
-            <Component />
-        </Container>
+        <>
+            <AppBar />
+            <Page gutterBottom>
+                <Component />
+            </Page>
+        </>
     );
 }

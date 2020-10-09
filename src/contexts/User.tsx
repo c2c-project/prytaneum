@@ -10,11 +10,12 @@ export const UserContext = React.createContext<User | undefined>(undefined);
 
 interface Props {
     children: JSX.Element | JSX.Element[];
+    value?: User;
 }
 
-export default function UserContextProvider({ children }: Props) {
+export default function UserProvider({ children, value }: Props) {
     // starts as undefined then becomes either null or User
-    const [user, setUser] = React.useState<User | undefined | null>();
+    const [user, setUser] = React.useState<User | undefined | null>(value);
     const [get, isLoading] = useEndpoint(getMyInfo, {
         onSuccess: ({ data }) => {
             setUser(data);
@@ -37,3 +38,7 @@ export default function UserContextProvider({ children }: Props) {
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
+
+UserProvider.defaultProps = {
+    value: undefined,
+};

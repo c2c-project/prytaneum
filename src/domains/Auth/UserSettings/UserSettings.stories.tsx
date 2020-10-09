@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import UserContextProvider from 'contexts/User';
+import UserProvider from 'contexts/User';
 import Component from './UserSettings';
 
 export default { title: 'Domains/Auth' };
@@ -9,9 +9,9 @@ export default { title: 'Domains/Auth' };
 export function UserSettings() {
     return (
         <Container maxWidth='md'>
-            <UserContextProvider>
+            <UserProvider>
                 <Component />
-            </UserContextProvider>
+            </UserProvider>
         </Container>
     );
 }

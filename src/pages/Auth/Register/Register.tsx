@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar, Typography, Grid, Paper } from '@material-ui/core';
 import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -8,13 +8,24 @@ import RegisterForm from 'domains/Auth/RegisterForm';
 import history from 'utils/history';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+    },
     paper: {
-        marginTop: theme.spacing(12),
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        [theme.breakpoints.up('md')]: {
+            padding: theme.spacing(3),
+            marginTop: '-10vh',
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(0, 1),
+            paddingTop: '10vh',
+            height: '100%',
+        },
     },
     avatar: {
         margin: theme.spacing(1),
@@ -24,31 +35,32 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    nav: {
-        paddingTop: theme.spacing(2),
-    },
 }));
 
 export default function RegisterPage() {
     const classes = useStyles();
 
     return (
-        <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <AccountCirlceOutline />
-            </Avatar>
-            <Typography component='h1' variant='h5'>
-                Register
-            </Typography>
-            <div className={classes.form}>
-                <RegisterForm
-                    onSuccess={() => history.push('/login')}
-                    onFailure={() => history.push('/login')}
-                />
-            </div>
-        </div>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <AccountCirlceOutline />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Register
+                </Typography>
+                <div className={classes.form}>
+                    <RegisterForm
+                        onSuccess={() => history.push('/login')}
+                        onFailure={() => history.push('/login')}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }

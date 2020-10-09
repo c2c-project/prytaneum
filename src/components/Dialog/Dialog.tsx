@@ -58,25 +58,27 @@ export default function Dialog(props: Props) {
                 onExit={onExit}
                 TransitionComponent={Transition}
             >
-                <AppBar elevation={0} className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton
-                            edge='start'
-                            color='inherit'
-                            onClick={onClose}
-                            aria-label='close'
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography
-                            component='span'
-                            variant='h6'
-                            className={classes.title}
-                        >
-                            {title}
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+                {fullScreen && (
+                    <AppBar elevation={0} className={classes.appBar}>
+                        <Toolbar>
+                            <IconButton
+                                edge='start'
+                                color='inherit'
+                                onClick={onClose}
+                                aria-label='close'
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                            <Typography
+                                component='span'
+                                variant='h6'
+                                className={classes.title}
+                            >
+                                {title}
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                )}
                 {open && children}
             </MUIDialog>
         </div>

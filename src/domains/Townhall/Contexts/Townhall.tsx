@@ -70,7 +70,6 @@ export default function TownhallProvider({
     townhallId,
 }: Props) {
     const [townhall, setTownhall] = React.useState(value);
-    console.log(townhallId, townhall);
     const [get] = useEndpoint(() => getTownhall(townhallId), {
         onSuccess: (res) => {
             const { townhall: fetchedTownhall } = res.data;
@@ -82,9 +81,6 @@ export default function TownhallProvider({
         if (!townhall) {
             get();
         }
-        return () => {
-            console.log('umounting?');
-        };
     }, [townhall, get]);
 
     return !townhall ? (

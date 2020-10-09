@@ -19,10 +19,10 @@ import QuestionFeed from '../QuestionFeed';
 
 const useDesktopStyles = makeStyles((theme) => ({
     root: {
-        height: 'inherit',
+        height: '100%',
         width: 'inherit',
         display: 'flex',
-        flex: 1,
+        flexGrow: 1,
         [theme.breakpoints.up('md')]: {
             flexFlow: 'row',
         },
@@ -53,9 +53,6 @@ const useDesktopStyles = makeStyles((theme) => ({
             height: '33vh',
             width: '100%',
         },
-    },
-    feedContainer: {
-        height: '100%',
     },
     titleBar: {
         width: 'inherit',
@@ -172,13 +169,7 @@ export default function TownhallLive() {
                 </div>
                 <div className={classes.titleBar}>{description}</div>
             </Grid>
-            <Grid
-                container
-                item
-                xs={12}
-                md={4}
-                className={classes.feedContainer}
-            >
+            <Grid container item xs={12} md={4}>
                 <div className={classes.questionFeed} onScroll={handleScroll}>
                     {isMdUp && <div ref={topRef} />}
                     <Typography variant='subtitle2'>Question Feed</Typography>

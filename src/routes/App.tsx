@@ -95,8 +95,9 @@ export default function App() {
         // setup listener
         const unlisten = history.listen(handleLocationChange);
 
-        // push initial state into the history
-        history.push(history.location);
+        // replace initial state into the history
+        // replace so that refreshing isn't a push
+        history.replace(history.location);
 
         // cleanup and unlisten on unrender
         return unlisten;

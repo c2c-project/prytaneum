@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         height: '100%',
         width: '100%',
-        padding: `0px ${theme.spacing(2)}px 0px ${theme.spacing(6)}px`,
+        padding: theme.spacing(0, 2, 0, 6),
     },
 }));
 

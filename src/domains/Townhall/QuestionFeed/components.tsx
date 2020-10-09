@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Grid,
     Typography,
@@ -7,7 +8,7 @@ import {
     Tooltip,
     Chip,
     Button,
-    Container
+    Container,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -16,11 +17,11 @@ import QuoteIcon from '@material-ui/icons/FormatQuote';
 import QueueIcon from '@material-ui/icons/Queue';
 import RemoveFromQueueIcon from '@material-ui/icons/RemoveFromQueue';
 import PushPinIcon from '@material-ui/icons/PushPin';
+import PlayIcon from '@material-ui/icons/PlayArrow';
 
-import Dialog from 'components/Dialog';
 import TextField from 'components/TextField';
 import { formatDate } from 'utils/format';
-import { Question as QuestionType } from '../types';
+import { Question as QuestionType, QuestionState } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,18 +42,25 @@ interface QuestionLabelProps {
 }
 
 function QuestionLabels({ labels }: QuestionLabelProps) {
+    const theme = useTheme();
     return (
         <>
             {labels.map((label) => (
-                <Chip key={label} label={label} />
+                <Grid
+                    item
+                    key={label}
+                    style={{ paddingRight: theme.spacing(1) }}
+                >
+                    <Chip label={label} />
+                </Grid>
             ))}
         </>
     );
 }
 
-export type UserAction = 'Like' | 'Quote' | 'Reply';
+export type UserActionTypes = 'Like' | 'Quote' | 'Reply';
 interface UserBarProps {
-    onClick: (a: UserAction) => void;
+    onClick: (a: UserActionTypes) => void;
 }
 
 export function UserBar({ onClick }: UserBarProps) {
@@ -90,27 +98,64 @@ export function UserBar({ onClick }: UserBarProps) {
     );
 }
 
-export function ModBar() {
+export type ModActionTypes =
+    | 'Set Current'
+    | 'Remove From Queue'
+    | 'Queue Question';
+
+interface ModBarProps {
+    questionState: QuestionState;
+    onClick: (s: ModActionTypes) => void;
+    labels: string[];
+}
+
+export function ModBar({ questionState, labels, onClick }: ModBarProps) {
+    const getComponent = () => {
+        if (questionState === 'IN_QUEUE') {
+            return (
+                <>
+                    <Grid item xs='auto'>
+                        <Tooltip title='Use as Current'>
+                            <IconButton onClick={() => onClick('Set Current')}>
+                                <PlayIcon fontSize='small' />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item xs='auto'>
+                        <Tooltip title='Remove From Queue'>
+                            <IconButton
+                                onClick={() => onClick('Remove From Queue')}
+                            >
+                                <RemoveFromQueueIcon fontSize='small' />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
+                </>
+            );
+        }
+        if (questionState === 'ASKED') {
+            return <div />;
+        }
+        if (questionState === 'CURRENT') {
+            return <div />;
+        }
+        return (
+            <Grid item xs='auto'>
+                <Tooltip title='Queue Question'>
+                    <IconButton onClick={() => onClick('Queue Question')}>
+                        <QueueIcon fontSize='small' />
+                    </IconButton>
+                </Tooltip>
+            </Grid>
+        );
+    };
     return (
-        <Grid container>
-            <Grid container item xs={12}>
-                <QuestionLabels labels={['Off topic', 'Asked', 'etc']} />
+        <Grid container spacing={2}>
+            <Grid container item xs={12} spacing={1}>
+                <QuestionLabels labels={labels} />
             </Grid>
             <Grid item xs={12} container justify='space-evenly'>
-                <Grid item xs='auto'>
-                    <Tooltip title='Queue Question'>
-                        <IconButton>
-                            <QueueIcon fontSize='small' />
-                        </IconButton>
-                    </Tooltip>
-                </Grid>
-                <Grid item xs='auto'>
-                    <Tooltip title='Remove From Queue'>
-                        <IconButton>
-                            <RemoveFromQueueIcon fontSize='small' />
-                        </IconButton>
-                    </Tooltip>
-                </Grid>
+                {getComponent()}
             </Grid>
         </Grid>
     );
@@ -176,13 +221,12 @@ export function CurrentQuestion({ children }: CurrentQuestionProps) {
 }
 
 interface QuestionFormProps {
-    // eslint-disable-next-line react/require-default-props
     quote?: QuestionType;
-    // eslint-disable-next-line react/require-default-props
     onSubmit?: () => void;
+    onCancel?: () => void;
 }
 
-export function QuestionForm({ onSubmit, quote }: QuestionFormProps) {
+export function QuestionForm({ onSubmit, quote, onCancel }: QuestionFormProps) {
     const [question, setQuestion] = React.useState('');
     const theme = useTheme();
     function handleSubmit(e: React.FormEvent) {
@@ -190,104 +234,200 @@ export function QuestionForm({ onSubmit, quote }: QuestionFormProps) {
         if (onSubmit) onSubmit();
     }
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        label='Your Question...'
-                        autoFocus
-                        multiline
-                        value={question}
-                        onChange={(e) => {
-                            const { value } = e.target;
-                            setQuestion(value);
-                        }}
-                    />
-                </Grid>
-                {quote && (
-                    <Grid container item xs={12}>
-                        <Grid
-                            item
-                            xs={12}
-                            style={{
-                                border: `1px solid ${theme.palette.divider}`,
-                                borderRadius: '25px',
-                            }}
-                        >
-                            <Question
-                                user={quote.meta.user.name}
-                                timestamp={quote.meta.timestamp}
-                                actionBar={<div />}
-                            >
-                                {quote.question}
-                            </Question>
-                        </Grid>
-                    </Grid>
-                )}
-                <Grid item xs={12}>
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                        fullWidth
-                        disableElevation
-                    >
-                        Ask
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
-    );
-}
-
-interface AskQuestionProps {
-    // eslint-disable-next-line react/require-default-props
-    quote?: QuestionType;
-    // eslint-disable-next-line react/require-default-props
-    onSubmit?: () => void;
-}
-
-export function AskQuestion({ quote }: AskQuestionProps) {
-    const [isOpen, setIsOpen] = React.useState<boolean>(false);
-
-    const theme = useTheme();
-
-    function handleclose() {
-        setIsOpen(false);
+    function handleCancel() {
+        if (onCancel) onCancel();
     }
 
-    React.useEffect(() => {
-        if (quote) setIsOpen(true);
-    }, [quote]);
-
     return (
-        <div>
-            <Button
-                variant='contained'
-                color='primary'
-                fullWidth
-                disableElevation
-                onClick={() => setIsOpen(true)}
-            >
-                Ask A Question
-            </Button>
-            <Dialog open={isOpen} onClose={handleclose}>
-                <Container
-                    maxWidth='sm'
-                    style={{ paddingTop: theme.spacing(2) }}
-                >
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Typography variant='h4'>Question Form</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography variant='h4'>Question Form</Typography>
+                            <TextField
+                                label='Your Question...'
+                                autoFocus
+                                multiline
+                                value={question}
+                                onChange={(e) => {
+                                    const { value } = e.target;
+                                    setQuestion(value);
+                                }}
+                            />
                         </Grid>
-                        <Grid item xs={12}>
-                            <QuestionForm onSubmit={() => setIsOpen(false)} />
+                        {quote && (
+                            <Grid container item xs={12}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    style={{
+                                        border: `1px solid ${theme.palette.divider}`,
+                                        borderRadius: '25px',
+                                    }}
+                                >
+                                    <Question
+                                        user={quote.meta.user.name}
+                                        timestamp={quote.meta.timestamp}
+                                        actionBar={<div />}
+                                    >
+                                        {quote.question}
+                                    </Question>
+                                </Grid>
+                            </Grid>
+                        )}
+                        <Grid container item xs={12} justify='flex-end'>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                disableElevation
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </Button>
+                            <div style={{ padding: theme.spacing(0, 1) }} />
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                                disableElevation
+                            >
+                                Ask
+                            </Button>
                         </Grid>
                     </Grid>
-                </Container>
-            </Dialog>
-        </div>
+                </form>
+            </Grid>
+        </Grid>
     );
 }
 
+QuestionForm.defaultProps = {
+    quote: '',
+    onSubmit: undefined,
+    onCancel: undefined,
+};
+
+QuestionForm.propTypes = {
+    quote: PropTypes.string,
+    onSubmit: PropTypes.func,
+    onCancel: PropTypes.func,
+};
+
+export function EmptyMessage() {
+    return (
+        <Container maxWidth='sm'>
+            <Typography variant='h5' component='div' align='center'>
+                <p>Nothing to display here :(</p>
+                <Typography variant='body1' align='center'>
+                    Click or tap the button above to start asking questions!
+                </Typography>
+            </Typography>
+        </Container>
+    );
+}
+
+interface ReplyFormProps {
+    reply: QuestionType;
+    onSubmit?: () => void;
+    onCancel?: () => void;
+}
+
+export function ReplyForm({ reply, onSubmit, onCancel }: ReplyFormProps) {
+    const [question, setQuestion] = React.useState('');
+    const theme = useTheme();
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        if (onSubmit) onSubmit();
+    }
+
+    function handleCancel() {
+        if (onCancel) onCancel();
+    }
+
+    return (
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Typography variant='h4'>{`Reply to ${reply.meta.user.name}`}</Typography>
+                {reply && (
+                    <Typography variant='body2'>
+                        This will not show up in the normal question feed. If
+                        you meant to quote this person while asking your own
+                        question, then click on the
+                        <QuoteIcon fontSize='small' />
+                        instead of the
+                        <ReplyIcon fontSize='small' />
+                    </Typography>
+                )}
+            </Grid>
+            <Grid item xs={12}>
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid container item xs={12}>
+                            <Grid
+                                item
+                                xs={12}
+                                style={{
+                                    border: `1px solid ${theme.palette.divider}`,
+                                    borderRadius: '25px',
+                                }}
+                            >
+                                <Question
+                                    user={reply.meta.user.name}
+                                    timestamp={reply.meta.timestamp}
+                                    actionBar={<div />}
+                                >
+                                    {reply.question}
+                                </Question>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label='Your Reply...'
+                                autoFocus
+                                multiline
+                                value={question}
+                                onChange={(e) => {
+                                    const { value } = e.target;
+                                    setQuestion(value);
+                                }}
+                            />
+                        </Grid>
+                        <Grid container item xs={12} justify='flex-end'>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                disableElevation
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </Button>
+                            <div style={{ padding: theme.spacing(0, 1) }} />
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                color='primary'
+                                disableElevation
+                            >
+                                Reply
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Grid>
+        </Grid>
+    );
+}
+
+ReplyForm.defaultProps = {
+    onSubmit: undefined,
+    onCancel: undefined,
+};
+
+ReplyForm.propTypes = {
+    reply: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func,
+    onCancel: PropTypes.func,
+};

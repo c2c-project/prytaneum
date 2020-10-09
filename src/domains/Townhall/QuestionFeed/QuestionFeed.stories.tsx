@@ -4,15 +4,9 @@ import { EventEmitter } from 'events';
 import { Container } from '@material-ui/core';
 
 import FixtureSocket from 'mock/Fixture.socket';
-import Component from '.';
+import QuestionFeed from '.';
 import { Question as QuestionType, QuestionState } from '../types';
-import {
-    Question,
-    UserBar,
-    ModBar,
-    CurrentQuestion,
-    AskQuestion,
-} from './components';
+import { Question, UserBar, ModBar, CurrentQuestion } from './components';
 
 export default { title: 'Domains/Townhall/Question Feed' };
 
@@ -46,6 +40,9 @@ function makeQuestion(): QuestionType {
         question: faker.lorem.sentences(5),
         state: makeState(),
         likes: [],
+        aiml: {
+            labels: Array.from(new Set(faker.random.words(10).split(' '))),
+        },
     };
 }
 
@@ -66,7 +63,7 @@ export function Basic() {
                 Add Message
             </button>
             <FixtureSocket.Provider value={emitter}>
-                <Component />
+                <QuestionFeed />
             </FixtureSocket.Provider>
         </div>
     );
@@ -89,10 +86,51 @@ export function UserQuestion() {
 export function ModQuestion() {
     return (
         <Container maxWidth='sm'>
+            <h4>Not In Queue</h4>
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={<ModBar />}
+                actionBar={
+                    <ModBar
+                        questionState=''
+                        labels={Array.from(
+                            new Set(faker.random.words(10).split(' '))
+                        )}
+                        onClick={console.log}
+                    />
+                }
+            >
+                {faker.lorem.sentences(4)}
+            </Question>
+            <h4>In Queue</h4>
+            <Question
+                user={faker.internet.userName()}
+                timestamp={new Date().toISOString()}
+                actionBar={
+                    <ModBar
+                        questionState='IN_QUEUE'
+                        labels={Array.from(
+                            new Set(faker.random.words(10).split(' '))
+                        )}
+                        onClick={console.log}
+                    />
+                }
+            >
+                {faker.lorem.sentences(4)}
+            </Question>
+            <h4>Asked</h4>
+            <Question
+                user={faker.internet.userName()}
+                timestamp={new Date().toISOString()}
+                actionBar={
+                    <ModBar
+                        questionState='ASKED'
+                        labels={Array.from(
+                            new Set(faker.random.words(10).split(' '))
+                        )}
+                        onClick={console.log}
+                    />
+                }
             >
                 {faker.lorem.sentences(4)}
             </Question>
@@ -107,32 +145,11 @@ export function Current() {
                 <Question
                     user={faker.internet.userName()}
                     timestamp={new Date().toISOString()}
-                    actionBar={<ModBar />}
+                    actionBar={<UserBar onClick={console.log} />}
                 >
                     {faker.lorem.sentences(4)}
                 </Question>
             </CurrentQuestion>
-        </Container>
-    );
-}
-
-export function AskBasic() {
-    return (
-        <Container maxWidth='sm'>
-            <AskQuestion />
-        </Container>
-    );
-}
-
-export function AskQuote() {
-    const [quote, setQuote] = React.useState<QuestionType>();
-    // TODO: sep dialog component? I don't know aaaaaaaaaaaaaaaa
-    return (
-        <Container maxWidth='sm'>
-            <button type='button' onClick={() => setQuote(makeQuestion())}>
-                Quote Something
-            </button>
-            <AskQuestion quote={quote} onSubmit={() => setQuote(undefined)} />
         </Container>
     );
 }

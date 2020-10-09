@@ -1,7 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { search as utilSearch, FilterFunc } from 'utils/filters';
 import { Question, QuestionState, Question as QuestionType } from '../types';
-import { UserAction } from './components';
 
 export { applyFilters } from 'utils/filters';
 
@@ -64,31 +63,5 @@ export function questionReducer(state: QuestionType[], action: Actions) {
             );
         default:
             return state;
-    }
-}
-
-export function handleUserAction(action: {
-    type: UserAction;
-    payload: string; // question id
-    setDialogContent: React.Dispatch<JSX.Element | null>;
-}) {
-    switch (action.type) {
-        case 'Like': {
-            // socket stuff here
-            break;
-        }
-        case 'Quote': {
-            // open dialog with the quote in there
-            // setDialogContent();
-            break;
-        }
-        case 'Reply': {
-            // open dialog with the reply option
-            break;
-        }
-        default: {
-            // do nothing
-            break;
-        }
     }
 }

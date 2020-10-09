@@ -11,7 +11,7 @@ import HandleInviteLink from 'domains/Invite/HandleInviteLink';
 import InviteForm from 'domains/Invite/InviteForm';
 
 import UserSettings from 'domains/Auth/UserSettings';
-import UserContextProvider from 'contexts/User';
+import UserProvider from 'contexts/User';
 
 import Page from 'layout/Page';
 
@@ -102,9 +102,9 @@ addRoutes([
             {
                 path: '/settings',
                 action: () => (
-                    <UserContextProvider>
+                    <UserProvider>
                         <UserSettings />
-                    </UserContextProvider>
+                    </UserProvider>
                 ),
             },
         ],

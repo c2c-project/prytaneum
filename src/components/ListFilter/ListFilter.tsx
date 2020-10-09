@@ -35,10 +35,10 @@ interface OptionalProps {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: `${theme.spacing(2)}px 0 0 0`,
+        padding: theme.spacing(2, 0, 0, 0),
     },
     resultsText: {
-        padding: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px 0`,
+        padding: theme.spacing(1, 0),
     },
     search: {
         flexBasis: 'content',

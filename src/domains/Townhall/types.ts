@@ -78,4 +78,7 @@ export interface Question {
     question: string;
     state: QuestionState;
     likes: string[]; // array of user id's
+    aiml: {
+        labels: string[];
+    };
 }

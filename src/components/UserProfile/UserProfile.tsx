@@ -13,7 +13,7 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: `${theme.spacing(0)}px 5px ${theme.spacing(1)}px 5px`,
+        padding: theme.spacing(0, 1, 1, 1),
         height: '100%',
         width: '100%',
     },

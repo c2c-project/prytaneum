@@ -6,6 +6,9 @@ import {
     Collapse,
     Button,
     Tooltip,
+    Typography,
+    Grow,
+    DialogContent,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +16,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
 import Dialog from 'components/Dialog';
-import DialogContent from 'components/DialogContent';
+import { UserContext } from 'contexts/User';
+import { TownhallContext } from '../Contexts/Townhall';
 import { Question as QuestionType } from '../types';
 import {
     search,
@@ -21,10 +25,19 @@ import {
     filters as filterFuncs,
     questionReducer,
     Actions,
-    handleUserAction,
     QuestionFilterFunc,
 } from './utils';
-import { CurrentQuestion, Question, UserBar, AskQuestion } from './components';
+import {
+    CurrentQuestion,
+    Question,
+    UserBar,
+    QuestionForm,
+    EmptyMessage,
+    UserActionTypes,
+    ReplyForm,
+    ModBar,
+    ModActionTypes,
+} from './components';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestionFeed() {
     const classes = useStyles();
-
+    const townhall = React.useContext(TownhallContext);
+    const user = React.useContext(UserContext);
     const [
         dialogContent,
         setDialogContent,
@@ -44,7 +58,7 @@ function QuestionFeed() {
 
     // full question feed from socketio
     const [questions] = useSocketio<QuestionType[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url
+        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
         event: 'townhall-question-state',
         reducer: questionReducer,
         initialState: [],
@@ -69,6 +83,11 @@ function QuestionFeed() {
     const currentQuestion = React.useMemo(
         () => displayed.find((q) => q.state === 'CURRENT'),
         [displayed]
+    );
+
+    const isModerator = React.useMemo(
+        () => user && townhall.settings.moderators.list.includes(user._id),
+        [townhall.settings.moderators.list, user]
     );
 
     // updating difference when one of the boundaries change
@@ -101,16 +120,95 @@ function QuestionFeed() {
         setFilters(updateSearch);
     }
 
+    function closeDialog() {
+        setDialogContent(null);
+    }
+
     function handleAskQuestion() {
-        setDialogContent(<div>Hello World</div>);
+        setDialogContent(
+            <QuestionForm
+                onSubmit={console.log} // FIXME:
+                onCancel={closeDialog}
+            />
+        );
+    }
+
+    interface UserAction {
+        type: UserActionTypes;
+        payload: string; // question id
+    }
+    function handleUserAction(action: UserAction) {
+        const target = questions.find(({ _id }) => _id === action.payload);
+
+        // this should never happen, but to keep ts happy I have to
+        if (!target) return;
+
+        switch (action.type) {
+            case 'Like': {
+                // TODO: socket stuff here
+                console.log('liked');
+                break;
+            }
+            case 'Quote': {
+                // open dialog with the quoted question
+                // TODO: onSubmit
+                setDialogContent(
+                    <QuestionForm
+                        quote={target}
+                        onCancel={closeDialog}
+                        onSubmit={console.log}
+                    />
+                );
+                break;
+            }
+            case 'Reply': {
+                // open dialog with the replied quote
+                // TODO: onSubmit
+                setDialogContent(
+                    <ReplyForm
+                        reply={target}
+                        onSubmit={console.log}
+                        onCancel={closeDialog}
+                    />
+                );
+                break;
+            }
+            default: {
+                // do nothing
+                break;
+            }
+        }
+    }
+    type ModAction = { type: ModActionTypes; payload: string };
+    function handleModAction(action: ModAction) {
+        const target = questions.find(({ _id }) => _id === action.payload);
+
+        // this should never happen, but to keep ts happy I have to
+        if (!target) return;
+
+        switch (action.type) {
+            case 'Queue Question': {
+                // TODO: queue question
+                break;
+            }
+            case 'Remove From Queue': {
+                // TODO: remove question from queue
+                break;
+            }
+            case 'Set Current': {
+                // TODO: set as current question
+                break;
+            }
+            default: {
+                // do nothing
+                break;
+            }
+        }
     }
 
     return (
         <div className={classes.root}>
-            <Dialog
-                open={Boolean(dialogContent)}
-                onClose={() => setDialogContent(null)}
-            >
+            <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
                 <DialogContent>{dialogContent || <div />}</DialogContent>
             </Dialog>
             <Button
@@ -157,34 +255,70 @@ function QuestionFeed() {
                                 <Question
                                     user={currentQuestion.meta.user.name}
                                     timestamp={currentQuestion.meta.timestamp}
-                                    actionBar={<div />}
+                                    actionBar={
+                                        isModerator ? (
+                                            <div />
+                                        ) : (
+                                            <UserBar
+                                                onClick={(action) =>
+                                                    handleUserAction({
+                                                        type: action,
+                                                        payload:
+                                                            currentQuestion._id,
+                                                    })
+                                                }
+                                            />
+                                        )
+                                    }
                                 >
                                     {currentQuestion.question}
                                 </Question>
                             </CurrentQuestion>
                         )}
                     </Collapse>
-                    {filteredList.map(({ question, _id, meta }) => (
-                        <Question
-                            key={_id}
-                            user={meta.user.name}
-                            timestamp={meta.timestamp}
-                            divider
-                            actionBar={
-                                <UserBar
-                                    onClick={(action) =>
-                                        handleUserAction({
-                                            type: action,
-                                            payload: _id,
-                                            setDialogContent,
-                                        })
-                                    }
-                                />
-                            }
-                        >
-                            {question}
-                        </Question>
-                    ))}
+                    {displayed.length === 0 && <EmptyMessage />}
+                    {difference > 0 && difference === questions.length && (
+                        <Grow in>
+                            <Typography align='center'>
+                                Click the Refresh Button Above!
+                            </Typography>
+                        </Grow>
+                    )}
+                    {filteredList.map(
+                        ({ question, _id, meta, aiml, state }) => (
+                            <Question
+                                key={_id}
+                                user={meta.user.name}
+                                timestamp={meta.timestamp}
+                                divider
+                                actionBar={
+                                    isModerator ? (
+                                        <ModBar
+                                            labels={aiml.labels}
+                                            questionState={state}
+                                            onClick={(action) =>
+                                                handleModAction({
+                                                    type: action,
+                                                    payload: _id,
+                                                })
+                                            }
+                                        />
+                                    ) : (
+                                        <UserBar
+                                            onClick={(action) =>
+                                                handleUserAction({
+                                                    type: action,
+                                                    payload: _id,
+                                                })
+                                            }
+                                        />
+                                    )
+                                }
+                            >
+                                {question}
+                            </Question>
+                        )
+                    )}
                 </Grid>
             </Grid>
         </div>
