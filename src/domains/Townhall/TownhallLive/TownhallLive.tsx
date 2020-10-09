@@ -165,7 +165,7 @@ export default function TownhallLive() {
             {!isMdUp && <div ref={topRef} />}
             <Grid item xs={12} md={8} container direction='column'>
                 <div className={classes.video}>
-                    <VideoPlayer url='https://www.youtube.com/watch?v=5qap5aO4i9A' />
+                    <VideoPlayer url='https://www.youtube.com/watch?v=wW1lY5jFNcQ' />
                 </div>
                 <div className={classes.titleBar}>{description}</div>
             </Grid>
