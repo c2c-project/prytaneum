@@ -24,38 +24,29 @@ export function LoadingButton() {
         <Container maxWidth='md' style={{ height: '100%', width: '100%' }}>
             <Grid container style={{ paddingTop: '30vh' }} spacing={4}>
                 <Grid item xs={12}>
-                    <Component
-                        loading={loading}
-                        component={
-                            <Button
-                                variant='contained'
-                                onClick={() => setIsLoading(true)}
-                                fullWidth
-                            >
-                                Interactive
-                            </Button>
-                        }
-                    />
+                    <Component loading={loading}>
+                        <Button
+                            variant='contained'
+                            onClick={() => setIsLoading(true)}
+                            fullWidth
+                        >
+                            Interactive
+                        </Button>
+                    </Component>
                 </Grid>
                 <Grid item xs={12}>
-                    <Component
-                        loading
-                        component={
-                            <Button variant='contained' fullWidth>
-                                Perma Loading
-                            </Button>
-                        }
-                    />
+                    <Component loading>
+                        <Button variant='contained' fullWidth>
+                            Perma Loading
+                        </Button>
+                    </Component>
                 </Grid>
                 <Grid item xs={12}>
-                    <Component
-                        loading={false}
-                        component={
-                            <Button variant='contained' fullWidth>
-                                No Loading
-                            </Button>
-                        }
-                    />
+                    <Component loading={false}>
+                        <Button variant='contained' fullWidth>
+                            No Loading
+                        </Button>
+                    </Component>
                 </Grid>
             </Grid>
         </Container>
