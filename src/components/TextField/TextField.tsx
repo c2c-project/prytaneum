@@ -3,12 +3,23 @@
 import React from 'react';
 import MUITextField, { TextFieldProps } from '@material-ui/core/TextField';
 
-function labelToId(label: string) {
-    return label
+function toSnakeCase(str?: string) {
+    if (!str) return undefined;
+    return str
         .split(' ')
-        .map((word) => {
-            return word.slice(0, 1).toLowerCase() + word.slice(1);
-        })
+        .map((word) => word[0].toLowerCase() + word.slice(1))
+        .join('');
+}
+
+function toCamelCase(str?: string) {
+    if (!str) return undefined;
+    return str
+        .split(' ')
+        .map((word, idx) =>
+            idx > 0
+                ? word[0].toUpperCase() + word.slice(1)
+                : word.toLocaleLowerCase()
+        )
         .join('');
 }
 
@@ -23,7 +34,8 @@ export default function TextField(props: TextFieldProps & { label?: string }) {
         <MUITextField
             variant='outlined'
             fullWidth
-            id={labelToId(label || '')}
+            id={toSnakeCase(label)}
+            name={toCamelCase(label)}
             label={label}
             autoComplete='off'
             autoCorrect='off'
