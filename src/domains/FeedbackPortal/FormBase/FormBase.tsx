@@ -112,19 +112,16 @@ export default function FormBase({
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <LoadingButton
-                                loading={isLoading}
-                                component={
-                                    <Button
-                                        variant='contained'
-                                        fullWidth
-                                        type='submit'
-                                        color='primary'
-                                    >
-                                        Submit
-                                    </Button>
-                                }
-                            />
+                            <LoadingButton loading={isLoading}>
+                                <Button
+                                    variant='contained'
+                                    fullWidth
+                                    type='submit'
+                                    color='primary'
+                                >
+                                    Submit
+                                </Button>
+                            </LoadingButton>
                         </Grid>
                     </Grid>
                 </form>
