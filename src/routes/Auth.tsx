@@ -21,8 +21,6 @@ addRoutes([
                 action: () => (
                     <Login
                         onLogin={() => history.push('/home')}
-                        forgotPassRoute='/auth/forgot-password/request'
-                        registerRoute='/auth/register'
                     />
                 ),
             },

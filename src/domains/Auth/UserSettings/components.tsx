@@ -11,7 +11,7 @@ import {
 // import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
-// import Help from 'components/Help';
+import SettingsList from 'components/SettingsList';
 
 import TextField from 'components/TextField';
 import { User } from 'types';
@@ -58,7 +58,7 @@ export function TownhallUserSettings({ user }: { user: User }) {
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request
     return (
-        <div style={{ width: '100%' }}>
+        <SettingsList>
             <SettingsItem
                 helpText={text.townhall.anonymous}
                 name='Appear Anonymous'
@@ -68,7 +68,7 @@ export function TownhallUserSettings({ user }: { user: User }) {
                     onChange={buildHandler('anonymous')}
                 />
             </SettingsItem>
-        </div>
+        </SettingsList>
     );
 }
 
@@ -77,14 +77,14 @@ export function NotificationSettings({ user }: { user: User }) {
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request
     return (
-        <div style={{ width: '100%' }}>
+        <SettingsList>
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
                     checked={state.enabled}
                     onChange={buildHandler('enabled')}
                 />
             </SettingsItem>
-            <Collapse in={state.enabled} style={{ width: '100%' }}>
+            <Collapse in={state.enabled}>
                 <SettingsItem
                     helpText={text.notifications.types}
                     name='Notification Types'
@@ -92,7 +92,7 @@ export function NotificationSettings({ user }: { user: User }) {
                     <div>TODO</div>
                 </SettingsItem>
             </Collapse>
-        </div>
+        </SettingsList>
     );
 }
 
