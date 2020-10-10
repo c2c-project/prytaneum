@@ -48,7 +48,7 @@ export interface TownhallForm {
     description: string;
     scope: 'state' | 'district';
     private: boolean; // TODO: what does this mean? might put this in the form itself
-    speaker: Speaker;
+    // speaker: Speaker;
     topic: string;
 }
 

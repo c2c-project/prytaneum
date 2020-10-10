@@ -58,9 +58,9 @@ export default function TownhallProfile() {
                 <Typography variant='h5'>{form}</Typography>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant='body2' color='textSecondary'>
+                {/* <Typography variant='body2' color='textSecondary'>
                     {`${form.speaker.party}, ${form.speaker.territory}`}
-                </Typography>
+                </Typography> */}
             </Grid>
         </Grid>
     );
@@ -114,7 +114,7 @@ export default function TownhallProfile() {
             <Grid item xs={12} className={classes.color}>
                 <img
                     className={classes.picture}
-                    src={form.speaker.picture}
+                    // src={form.speaker.picture}
                     alt='Member of Congress'
                 />
             </Grid>

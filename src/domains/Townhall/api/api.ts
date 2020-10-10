@@ -17,7 +17,7 @@ export async function createTownhall(form: TownhallForm) {
         description,
         scope,
         private: isPrivate,
-        speaker,
+        // speaker,
         topic,
     } = form;
     if (
@@ -25,7 +25,7 @@ export async function createTownhall(form: TownhallForm) {
         !date ||
         !description ||
         !scope ||
-        !speaker ||
+        // !speaker ||
         !topic ||
         isPrivate === undefined
     ) {
@@ -42,7 +42,7 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
         description,
         scope,
         private: isPrivate,
-        speaker,
+        // speaker,
         topic,
     } = form;
     if (
@@ -50,7 +50,7 @@ export async function updateTownhall(form: TownhallForm, townhallId: string) {
         !date ||
         !description ||
         !scope ||
-        !speaker ||
+        // !speaker ||
         !topic ||
         isPrivate === undefined
     ) {

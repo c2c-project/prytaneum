@@ -20,12 +20,12 @@ export const TownhallContext = React.createContext<Townhall>({
         description: '',
         scope: 'district',
         private: false,
-        speaker: {
-            name: '',
-            party: '',
-            territory: '',
-            picture: '',
-        },
+        // speaker: {
+        //     name: '',
+        //     party: '',
+        //     territory: '',
+        //     picture: '',
+        // },
         topic: '',
     },
     settings: {

@@ -110,7 +110,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                             <ListItemAvatar>
                                 <Avatar
                                     alt='Speaker'
-                                    src={form.speaker.picture}
+                                    src='' // FIXME:
                                 >
                                     {form.title[0]}
                                 </Avatar>

@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
+import SettingsList from 'components/SettingsList';
 import Dialog from 'components/Dialog';
 import Loader from 'components/Loader';
 import useEndpoint from 'hooks/useEndpoint';
@@ -26,7 +27,6 @@ import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import { User } from 'types';
-import Help from 'components/Help';
 import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
@@ -58,29 +58,22 @@ export function ChatSettings() {
     const classes = useStyles();
     // TODO: API Request
     return (
-        <Grid container>
-            <Grid item xs={12}>
-                <SettingsItem helpText={text.chat.enabled} name='Enabled'>
+        <SettingsList>
+            <SettingsItem helpText={text.chat.enabled} name='Enabled'>
+                <Switch
+                    checked={state.enabled}
+                    onChange={buildHandler('enabled')}
+                />
+            </SettingsItem>
+            <Collapse in={state.enabled} className={classes.fullWidth}>
+                <SettingsItem helpText={text.chat.automated} name='Automated'>
                     <Switch
-                        checked={state.enabled}
-                        onChange={buildHandler('enabled')}
+                        checked={state.enabled && state.automated}
+                        onChange={buildHandler('automated')}
                     />
                 </SettingsItem>
-            </Grid>
-            <Collapse in={state.enabled} className={classes.fullWidth}>
-                <Grid item xs={12}>
-                    <SettingsItem
-                        helpText={text.chat.automated}
-                        name='Automated'
-                    >
-                        <Switch
-                            checked={state.enabled && state.automated}
-                            onChange={buildHandler('automated')}
-                        />
-                    </SettingsItem>
-                </Grid>
             </Collapse>
-        </Grid>
+        </SettingsList>
     );
 }
 
@@ -90,26 +83,19 @@ export function CreditsSettings() {
     const buildHandler = buildSwitchUpdate<typeof state>(setState);
     const classes = useStyles();
     return (
-        <Grid container>
-            <Grid container item xs={12} justify='space-between'>
-                <SettingsItem helpText={text.credits.enabled} name='Enabled'>
-                    <Switch
-                        onChange={buildHandler('enabled')}
-                        checked={state.enabled}
-                    />
-                </SettingsItem>
-            </Grid>
+        <SettingsList>
+            <SettingsItem helpText={text.credits.enabled} name='Enabled'>
+                <Switch
+                    onChange={buildHandler('enabled')}
+                    checked={state.enabled}
+                />
+            </SettingsItem>
             <Collapse in={state.enabled} className={classes.fullWidth}>
-                <Grid container justify='space-between' item xs={12}>
-                    <Grid item xs='auto'>
-                        <UploadField onChange={console.log} />
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <Help edge='end'>{text.credits.list}</Help>
-                    </Grid>
-                </Grid>
+                <SettingsItem name='TODO' helpText='TODO'>
+                    <div>TODO</div>
+                </SettingsItem>
             </Collapse>
-        </Grid>
+        </SettingsList>
     );
 }
 
@@ -118,30 +104,26 @@ export function QuestionFeedSettings() {
     const [state, setState] = React.useState(townhall.settings.questionQueue);
     const buildHandler = buildSwitchUpdate<typeof state>(setState);
     return (
-        <Grid container>
-            <Grid item xs={12} container justify='space-between'>
-                <SettingsItem
-                    helpText={text.questionQueue.transparent}
-                    name='Transparent'
-                >
-                    <Switch
-                        checked={state.transparent}
-                        onChange={buildHandler('transparent')}
-                    />
-                </SettingsItem>
-            </Grid>
-            <Grid item xs={12} container justify='space-between'>
-                <SettingsItem
-                    name='Automated'
-                    helpText={text.questionQueue.automated}
-                >
-                    <Switch
-                        checked={state.automated}
-                        onChange={buildHandler('automated')}
-                    />
-                </SettingsItem>
-            </Grid>
-        </Grid>
+        <SettingsList>
+            <SettingsItem
+                helpText={text.questionQueue.transparent}
+                name='Transparent'
+            >
+                <Switch
+                    checked={state.transparent}
+                    onChange={buildHandler('transparent')}
+                />
+            </SettingsItem>
+            <SettingsItem
+                name='Automated'
+                helpText={text.questionQueue.automated}
+            >
+                <Switch
+                    checked={state.automated}
+                    onChange={buildHandler('automated')}
+                />
+            </SettingsItem>
+        </SettingsList>
     );
 }
 

@@ -123,7 +123,7 @@ export default function TownhallLive() {
                 {form.title}
             </Typography>
             <Grid item xs={12} container alignItems='center' spacing={2}>
-                <Grid item xs='auto'>
+                {/* <Grid item xs='auto'>
                     <Avatar
                         src={form.speaker.picture}
                         className={classes.largeAvatar}
@@ -138,7 +138,7 @@ export default function TownhallLive() {
                     <Typography display='inline' variant='caption'>
                         {form.speaker.territory}
                     </Typography>
-                </Grid>
+                </Grid> */}
                 {!isMdUp && (
                     <IconButton
                         className={clsx(classes.expand, {
