@@ -4,8 +4,6 @@ import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import Help from 'components/Help';
-
 const useStyles = makeStyles({
     grow: {
         flexGrow: 1,
@@ -28,18 +26,21 @@ export default function SettingsItem({
     const classes = useStyles();
     return (
         <Grid
+            item
+            xs={12}
             container
             justify='flex-start'
             alignItems='center'
             className={helpText ? className : clsx([className, classes.grow])}
-            spacing={1}
         >
-            <Typography>{name}</Typography>
-            {helpText && (
-                <Grid item xs='auto' className={classes.grow}>
-                    <Help>{helpText}</Help>
-                </Grid>
-            )}
+            <Grid item className={classes.grow}>
+                <Typography>{name}</Typography>
+                {helpText && (
+                    <Typography variant='caption' color='textSecondary'>
+                        {helpText}
+                    </Typography>
+                )}
+            </Grid>
             {children}
         </Grid>
     );
