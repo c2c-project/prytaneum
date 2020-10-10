@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
+import Page from 'layout/Page';
 
 import Component from './DevTeam';
 
@@ -10,8 +10,8 @@ export default {
 
 export function DevTeam() {
     return (
-        <Container>
+        <Page maxWidth='lg'>
             <Component />
-        </Container>
+        </Page>
     );
 }
