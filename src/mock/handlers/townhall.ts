@@ -14,12 +14,12 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
         description: faker.lorem.paragraph(10),
         scope: 'district', // FIXME:
         private: false,
-        speaker: {
-            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-            party: faker.company.companyName(),
-            territory: 'CA-41',
-            picture: faker.image.imageUrl(),
-        },
+        // speaker: {
+        //     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        //     party: faker.company.companyName(),
+        //     territory: 'CA-41',
+        //     picture: faker.image.imageUrl(),
+        // },
         topic: faker.random.word(),
     },
     settings: {
