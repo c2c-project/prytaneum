@@ -83,6 +83,16 @@ export default function ListFilter<T>({
         }
     };
 
+    React.useEffect(() => {
+        const cache = search.slice(0);
+        const handle = setTimeout(() => {
+            if (search === cache) onSearch(search);
+        }, 300);
+        return () => {
+            clearTimeout(handle);
+        };
+    }, [search]);
+
     return (
         <div className={classes.root}>
             <Grid container alignItems='center'>
@@ -94,7 +104,6 @@ export default function ListFilter<T>({
                             e.preventDefault();
                             const copy = e.target.value;
                             setSearch(copy);
-                            onSearch(copy);
                         }}
                         InputProps={{
                             endAdornment: (
