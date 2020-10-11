@@ -93,6 +93,7 @@ export default function ListFilter<T>({
         };
     }, [search]);
 
+    //  TODO: cancel button, pressing escape will clear the search instantly rather than waiting for that delay
     return (
         <div className={classes.root}>
             <Grid container alignItems='center'>
