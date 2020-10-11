@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode | React.ReactNodeArray;
     className?: string;
 }
 

@@ -23,19 +23,21 @@ function toCamelCase(str?: string) {
         .join('');
 }
 
+export type Props = TextFieldProps & { label?: string };
+
 /** TextField in the MaterialUI format and theme
  * @category Component
  * @constructor TextField
  * @todo params
  */
-export default function TextField(props: TextFieldProps & { label?: string }) {
-    const { children, label, ...passThroughProps } = props;
+export default function TextField(props: Props) {
+    const { children, label, name, id, ...passThroughProps } = props;
     return (
         <MUITextField
             variant='outlined'
             fullWidth
-            id={toSnakeCase(label)}
-            name={toCamelCase(label)}
+            id={id || toSnakeCase(label)}
+            name={name || toCamelCase(label)}
             label={label}
             autoComplete='off'
             autoCorrect='off'

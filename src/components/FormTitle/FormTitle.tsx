@@ -6,7 +6,7 @@ import { Grid, Typography, TypographyProps } from '@material-ui/core';
 interface Props {
     title: string;
     subtitle?: string;
-    description?: string;
+    description?: React.ReactNode | string;
     titleTypographyProps?: TypographyProps;
 }
 
@@ -32,7 +32,11 @@ export default function FormTitle({
             )}
             {description && (
                 <Grid item xs={12}>
-                    <Typography paragraph>{description}</Typography>
+                    {typeof description === 'string' ? (
+                        <Typography paragraph>{description}</Typography>
+                    ) : (
+                        description
+                    )}
                 </Grid>
             )}
         </Grid>
@@ -47,6 +51,6 @@ FormTitle.defaultProps = {
 
 FormTitle.propTypes = {
     subtitle: PropTypes.string,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     titleTypographyProps: PropTypes.object,
 };

@@ -1,10 +1,13 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Grid, GridProps } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 interface Props {
     children: JSX.Element | JSX.Element[];
+    gridProps?: GridProps;
+    disableGrow?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -16,10 +19,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FormActions({ children }: Props) {
+export default function FormActions({
+    children,
+    gridProps,
+    disableGrow,
+}: Props) {
     const classes = useStyles();
     const count = React.Children.count(children);
     const getClassName = (idx: number) => {
+        // if disableGrow, then don't apply grow to all items
+        if (disableGrow) {
+            if (idx < count - 1) return classes.item;
+            return '';
+        }
         if (idx < count - 1) return clsx([classes.item, classes.grow]);
         return classes.grow;
     };
@@ -31,6 +43,8 @@ export default function FormActions({ children }: Props) {
             justify='space-evenly'
             alignContent='flex-end'
             alignItems='center'
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...gridProps}
         >
             {React.Children.map(children, (child, idx) => (
                 <Grid item xs='auto' className={getClassName(idx)}>
@@ -40,3 +54,17 @@ export default function FormActions({ children }: Props) {
         </Grid>
     );
 }
+
+FormActions.defaultProps = {
+    gridProps: {},
+    disableGrow: false,
+};
+
+FormActions.propTypes = {
+    gridProps: PropTypes.object,
+    disableGrow: PropTypes.bool,
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+};

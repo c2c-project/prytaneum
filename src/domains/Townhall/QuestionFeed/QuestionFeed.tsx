@@ -7,8 +7,10 @@ import {
     Button,
     Tooltip,
     Typography,
-    Grow,
     DialogContent,
+    Zoom,
+    Card,
+    CardContent,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +21,9 @@ import Dialog from 'components/Dialog';
 import { UserContext } from 'contexts/User';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Question as QuestionType } from '../types';
+import QuestionForm from '../QuestionForm';
+import QuestionFeedItem from '../QuestionFeedItem';
+import QuestionReplyForm from '../QuestionReplyForm';
 import {
     search,
     applyFilters,
@@ -29,12 +34,9 @@ import {
 } from './utils';
 import {
     CurrentQuestion,
-    Question,
     UserBar,
-    QuestionForm,
     EmptyMessage,
     UserActionTypes,
-    ReplyForm,
     ModBar,
     ModActionTypes,
 } from './components';
@@ -42,8 +44,16 @@ import {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        height: '100%',
-        paddingTop: theme.spacing(1),
+        // height: '100%',
+        // paddingTop: theme.spacing(1),
+    },
+    item: {
+        paddingBottom: theme.spacing(2),
+    },
+    askQuestion: {
+        position: 'sticky',
+        top: 0,
+        zIndex: theme.zIndex.tooltip,
     },
 }));
 
@@ -124,15 +134,6 @@ function QuestionFeed() {
         setDialogContent(null);
     }
 
-    function handleAskQuestion() {
-        setDialogContent(
-            <QuestionForm
-                onSubmit={console.log} // FIXME:
-                onCancel={closeDialog}
-            />
-        );
-    }
-
     interface UserAction {
         type: UserActionTypes;
         payload: string; // question id
@@ -165,8 +166,8 @@ function QuestionFeed() {
                 // open dialog with the replied quote
                 // TODO: onSubmit
                 setDialogContent(
-                    <ReplyForm
-                        reply={target}
+                    <QuestionReplyForm
+                        replyTo={target}
                         onSubmit={console.log}
                         onCancel={closeDialog}
                     />
@@ -211,15 +212,6 @@ function QuestionFeed() {
             <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
                 <DialogContent>{dialogContent || <div />}</DialogContent>
             </Dialog>
-            <Button
-                variant='contained'
-                color='primary'
-                fullWidth
-                disableElevation
-                onClick={handleAskQuestion}
-            >
-                Ask A Question
-            </Button>
             <ListFilter
                 filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
@@ -246,79 +238,96 @@ function QuestionFeed() {
             />
             <Grid container>
                 <Grid container item xs={12} justify='center'>
-                    <Collapse
-                        key={currentQuestion?._id}
-                        in={Boolean(currentQuestion)}
-                    >
-                        {currentQuestion && (
-                            <CurrentQuestion>
-                                <Question
-                                    user={currentQuestion.meta.user.name}
-                                    timestamp={currentQuestion.meta.timestamp}
-                                    isModerator={isModerator}
+                    <Grid item xs={12} className={classes.item}>
+                        <Collapse
+                            key={currentQuestion?._id}
+                            in={Boolean(currentQuestion)}
+                        >
+                            {currentQuestion && (
+                                <CurrentQuestion>
+                                    <QuestionFeedItem
+                                        user={currentQuestion.meta.user.name}
+                                        timestamp={
+                                            currentQuestion.meta.timestamp
+                                        }
+                                        actionBar={
+                                            isModerator ? (
+                                                <div />
+                                            ) : (
+                                                <UserBar
+                                                    onClick={(action) =>
+                                                        handleUserAction({
+                                                            type: action,
+                                                            payload:
+                                                                currentQuestion._id,
+                                                        })
+                                                    }
+                                                />
+                                            )
+                                        }
+                                    >
+                                        {currentQuestion.question}
+                                    </QuestionFeedItem>
+                                </CurrentQuestion>
+                            )}
+                        </Collapse>
+                    </Grid>
+                    {displayed.length === 0 && (
+                        <Grid item xs={12} className={classes.item}>
+                            <EmptyMessage />
+                        </Grid>
+                    )}
+                    {difference > 0 && difference === questions.length && (
+                        <Grid item xs={12} className={classes.item}>
+                            <Zoom in>
+                                <Card>
+                                    <CardContent>
+                                        <Typography align='center'>
+                                            Click the Refresh Button Above!
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Zoom>
+                        </Grid>
+                    )}
+                    {filteredList.map(
+                        ({ question, _id, meta, aiml, state }) => (
+                            <Grid
+                                item
+                                xs={12}
+                                className={classes.item}
+                                key={_id}
+                            >
+                                <QuestionFeedItem
+                                    user={meta.user.name}
+                                    timestamp={meta.timestamp}
                                     actionBar={
                                         isModerator ? (
-                                            <div />
+                                            <ModBar
+                                                labels={aiml.labels}
+                                                questionState={state}
+                                                onClick={(action) =>
+                                                    handleModAction({
+                                                        type: action,
+                                                        payload: _id,
+                                                    })
+                                                }
+                                            />
                                         ) : (
                                             <UserBar
                                                 onClick={(action) =>
                                                     handleUserAction({
                                                         type: action,
-                                                        payload:
-                                                            currentQuestion._id,
+                                                        payload: _id,
                                                     })
                                                 }
                                             />
                                         )
                                     }
                                 >
-                                    {currentQuestion.question}
-                                </Question>
-                            </CurrentQuestion>
-                        )}
-                    </Collapse>
-                    {displayed.length === 0 && <EmptyMessage />}
-                    {difference > 0 && difference === questions.length && (
-                        <Grow in>
-                            <Typography align='center'>
-                                Click the Refresh Button Above!
-                            </Typography>
-                        </Grow>
-                    )}
-                    {filteredList.map(
-                        ({ question, _id, meta, aiml, state }) => (
-                            <Question
-                                key={_id}
-                                user={meta.user.name}
-                                timestamp={meta.timestamp}
-                                isModerator={isModerator}
-                                divider
-                                actionBar={
-                                    isModerator ? (
-                                        <ModBar
-                                            labels={aiml.labels}
-                                            questionState={state}
-                                            onClick={(action) =>
-                                                handleModAction({
-                                                    type: action,
-                                                    payload: _id,
-                                                })
-                                            }
-                                        />
-                                    ) : (
-                                        <UserBar
-                                            onClick={(action) =>
-                                                handleUserAction({
-                                                    type: action,
-                                                    payload: _id,
-                                                })
-                                            }
-                                        />
-                                    )
-                                }
-                            >
-                                {question}
-                            </Question>
+                                    {question}
+                                </QuestionFeedItem>
+                            </Grid>
                         )
                     )}
                 </Grid>

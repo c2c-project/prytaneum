@@ -56,7 +56,12 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
             </FormContent>
             <FormActions>
                 <LoadingButton loading={isLoading}>
-                    <Button type='submit' variant='contained' color='primary'>
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        fullWidth
+                    >
                         Submit
                     </Button>
                 </LoadingButton>

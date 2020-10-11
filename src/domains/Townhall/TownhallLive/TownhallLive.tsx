@@ -8,6 +8,7 @@ import {
     useTheme,
     IconButton,
     Collapse,
+    Paper,
 } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import clsx from 'clsx';
@@ -16,6 +17,8 @@ import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
 import { TownhallContext } from '../Contexts/Townhall';
 import QuestionFeed from '../QuestionFeed';
+import AskQuestion from '../AskQuestion';
+import PaneSelect from '../PaneSelect';
 
 const useDesktopStyles = makeStyles((theme) => ({
     root: {
@@ -32,15 +35,14 @@ const useDesktopStyles = makeStyles((theme) => ({
         },
     },
     questionFeed: {
-        backgroundColor: theme.palette.background.paper,
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
             maxHeight: '100%',
+            padding: theme.spacing(2), // TODO: work on spacing with this
         },
         [theme.breakpoints.down('sm')]: {
             minHeight: '100%',
         },
-        padding: theme.spacing(3),
         width: '100%',
     },
     video: {
@@ -55,6 +57,7 @@ const useDesktopStyles = makeStyles((theme) => ({
         },
     },
     titleBar: {
+        backgroundColor: theme.palette.background.paper,
         width: 'inherit',
         display: 'flex',
         flex: 1,
@@ -76,6 +79,9 @@ const useDesktopStyles = makeStyles((theme) => ({
     },
     expandOpen: {
         transform: 'rotate(0deg)',
+    },
+    toolbar: {
+        padding: theme.spacing(1),
     },
     // saving these for future
     // sticky: {
@@ -167,12 +173,26 @@ export default function TownhallLive() {
                 <div className={classes.video}>
                     <VideoPlayer url='https://www.youtube.com/watch?v=wW1lY5jFNcQ' />
                 </div>
-                <div className={classes.titleBar}>{description}</div>
+                <Paper className={classes.titleBar}>{description}</Paper>
             </Grid>
             <Grid container item xs={12} md={4}>
                 <div className={classes.questionFeed} onScroll={handleScroll}>
                     {isMdUp && <div ref={topRef} />}
-                    <Typography variant='subtitle2'>Question Feed</Typography>
+                    <Paper className={classes.toolbar}>
+                        <PaneSelect
+                            options={[
+                                'Chat',
+                                'Users',
+                                'Stats',
+                                'Question Feed',
+                            ]} // TODO: finish pane select
+                            value='Question Feed'
+                        />
+                        {/* <Typography paragraph variant='subtitle2'>
+                            Question Feed
+                        </Typography> */}
+                        <AskQuestion />
+                    </Paper>
                     <QuestionFeed />
                 </div>
             </Grid>
