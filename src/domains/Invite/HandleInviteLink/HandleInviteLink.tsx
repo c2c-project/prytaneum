@@ -28,6 +28,7 @@ interface Props {
     inviteToken: string;
 }
 
+// FIXME:
 export default function HandleInviteLink({ inviteToken }: Props) {
     console.log(inviteToken);
     // const townhall = useContext(TownhallContext);

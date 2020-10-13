@@ -19,8 +19,6 @@ import TextField from 'components/TextField';
 import { FilterFunc } from 'utils/filters';
 
 interface Props<T> {
-    // filterOptions: string[];
-    // onFilter: (f: Set<string>) => void;
     onSearch: (s: string) => void;
     length: number;
     filterMap: {
