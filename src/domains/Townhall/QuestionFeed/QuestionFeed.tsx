@@ -89,9 +89,12 @@ function QuestionFeed() {
             // NOTE: would have to change this in the future
             // if we have more system messages
         ) {
-            setSystem([makeSystemMessage(<RefreshMessage />), ...system]);
+            setSystem((prev) => [
+                makeSystemMessage(<RefreshMessage />),
+                ...prev,
+            ]);
         }
-    }, [questions.length, displayed.length]);
+    }, [questions.length, displayed.length, system.length]);
 
     // onClick refresh button
     function handleRefresh() {
@@ -149,7 +152,7 @@ function QuestionFeed() {
                     <FeedList
                         variant={isModerator ? 'moderator' : 'user'}
                         current={currentQuestion}
-                        questions={displayed}
+                        questions={filteredList}
                         systemMessages={system}
                     />
                 </Grid>

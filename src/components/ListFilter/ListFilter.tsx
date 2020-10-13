@@ -89,7 +89,7 @@ export default function ListFilter<T>({
         return () => {
             clearTimeout(handle);
         };
-    }, [search]);
+    }, [search, onSearch]);
 
     //  TODO: cancel button, pressing escape will clear the search instantly rather than waiting for that delay
     return (
