@@ -1,115 +1,123 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import {
+    Button,
+    FormControlLabel,
+    Switch,
+    FormControl,
+    FormHelperText,
+} from '@material-ui/core';
 
+import FormActions from 'components/FormActions';
+import FormContent from 'components/FormContent';
+import FormTitle from 'components/FormTitle';
+import Form from 'components/Form';
 import TextField from 'components/TextField';
 import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
+import useForm from 'hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
-import { TownhallForm as TownhallFormType } from '../types';
 
 interface Props {
     onSubmit?: () => void;
+    buttonText?: string;
 }
 
-export default function TownhallForm({ onSubmit: cb }: Props) {
+export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
     // this works even if it's not wrapped in the townhall context
-    // the default value set for the townhall context has the appropriate form
-    const townhall = React.useContext(TownhallContext);
-    const [state, setState] = React.useState<TownhallFormType>(townhall.form);
+    // the default value set for the townhall context has the appropriate form initial state
+    const { form, _id } = React.useContext(TownhallContext);
+    const [state, errors, handleSubmit, handleChange, setState] = useForm(form);
 
-    // if the townhall._id is falsy, then I know I'm creating a townhall
+    // if the _id is falsy, then I know I'm creating a townhall
     // else it's an update to a current townhall
     const apiRequest = React.useCallback(
-        () =>
-            townhall._id
-                ? updateTownhall(state, townhall._id)
-                : createTownhall(state),
-        [state, townhall._id]
+        () => (_id ? updateTownhall(state, _id) : createTownhall(state)),
+        [state, _id]
     );
 
     // after this point in the code,
     // whether or not the form is an update or create does not matter
-    const [sendRequest] = useEndpoint(apiRequest, {
-        onSuccess: cb,
-    });
-
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        sendRequest();
-    };
-
-    type ChangeEvent =
-        | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-        | { target: { value: MaterialUiPickersDate } };
-    const buildHandler = (key: keyof TownhallFormType) => (e: ChangeEvent) => {
-        const { value } = e.target;
-        setState((prev) => ({ ...prev, [key]: value }));
-    };
+    const [sendRequest] = useEndpoint(apiRequest, { onSuccess: cb });
 
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <Typography variant='h4'>Townhall Form</Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <form onSubmit={onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                label='Title'
-                                value={state.title}
-                                onChange={buildHandler('title')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <DateTimePicker
-                                fullWidth
-                                required
-                                autoComplete='off'
-                                id='date'
-                                label='Date & Time'
-                                inputVariant='outlined'
-                                value={state.date}
-                                onChange={(value) =>
-                                    buildHandler('date')({ target: { value } })
+        <Form onSubmit={handleSubmit(sendRequest)}>
+            <FormTitle title='Townhall Form' />
+            <FormContent>
+                <FormControl>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.private}
+                                onChange={(_e, checked) =>
+                                    setState({ ...state, private: checked })
                                 }
+                                name='private-checkbox'
                             />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                label='Description'
-                                value={state.description}
-                                onChange={buildHandler('description')}
-                            />
-                        </Grid>
-                        <Grid container item xs={12} justify='flex-end'>
-                            <Button
-                                type='submit'
-                                variant='contained'
-                                color='secondary'
-                            >
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-        </Grid>
+                        }
+                        label='Private'
+                    />
+                    <FormHelperText>
+                        Turning on the Private Option means the Townhall will
+                        NOT be listed publicly and will be invite only.
+                    </FormHelperText>
+                </FormControl>
+                <TextField
+                    error={Boolean(errors.title)}
+                    helperText={errors.title}
+                    required
+                    label='Title'
+                    value={state.title}
+                    onChange={handleChange('title')}
+                />
+                <TextField
+                    error={Boolean(errors.topic)}
+                    helperText={errors.topic}
+                    required
+                    label='Topic'
+                    value={state.topic}
+                    onChange={handleChange('topic')}
+                />
+                <DateTimePicker
+                    error={Boolean(errors.date)}
+                    helperText={errors.date}
+                    fullWidth
+                    required
+                    autoComplete='off'
+                    id='date'
+                    label='Date & Time'
+                    inputVariant='outlined'
+                    value={state.date}
+                    onChange={(value) =>
+                        setState({ ...state, date: value as Date })
+                    }
+                />
+                <TextField
+                    error={Boolean(errors.description)}
+                    helperText={errors.description}
+                    required
+                    label='Description'
+                    value={state.description}
+                    onChange={handleChange('description')}
+                />
+            </FormContent>
+            <FormActions>
+                <Button type='submit' variant='contained' color='secondary'>
+                    {buttonText}
+                </Button>
+            </FormActions>
+        </Form>
     );
 }
 
 TownhallForm.defaultProps = {
     onSubmit: () => {},
+    buttonText: 'Submit',
 };
 
 TownhallForm.propTypes = {
     onSubmit: PropTypes.func,
+    buttonText: PropTypes.string,
 };

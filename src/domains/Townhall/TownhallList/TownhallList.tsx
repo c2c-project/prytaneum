@@ -8,8 +8,10 @@ import {
     Avatar,
     Fade,
     ListItemSecondaryAction,
+    Paper,
 } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
@@ -17,7 +19,21 @@ import Loader from 'components/Loader';
 import ListFilter from 'components/ListFilter';
 import { getTownhallList } from '../api';
 import { Townhall } from '../types';
-import { filters as filterFuncs, HelperFunc, search } from './helpers';
+import {
+    filters as filterFuncs,
+    TonwhallFilterFunc,
+    search,
+    applyFilters,
+} from './utils';
+
+const useStyles = makeStyles((theme) => ({
+    title: {
+        padding: theme.spacing(1),
+    },
+    listFilter: {
+        padding: theme.spacing(1),
+    },
+}));
 
 interface Props {
     currentUser?: boolean;
@@ -25,10 +41,11 @@ interface Props {
 }
 
 export default function TownhallList({ currentUser, onClickTownhall }: Props) {
+    const classes = useStyles();
     const [list, setList] = React.useState<Townhall[] | null>(null);
 
     // search is always the first element in the filter array
-    const [filters, setFilters] = React.useState<HelperFunc[]>([
+    const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([
         (townhalls: Townhall[]) => townhalls,
     ]);
     const [sendRequest, isLoading] = useEndpoint(
@@ -39,24 +56,14 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
             },
         }
     );
-
-    const applyFilters = () => {
-        let filteredArr = [...(list || [])]; // dirty, but it's late and yea
-        for (let i = 0; i < filters.length; i += 1) {
-            filteredArr = filters[i](filteredArr);
-        }
-        return filteredArr;
-    };
+    const filteredResults = React.useMemo(
+        () => applyFilters(list || [], filters),
+        [list, filters]
+    );
 
     React.useEffect(sendRequest, []);
 
-    if (isLoading || !list) {
-        return (
-            <div style={{ height: '500px' }}>
-                <Loader />
-            </div>
-        );
-    }
+    if (isLoading || !list) return <Loader />;
 
     if (list.length === 0) {
         return (
@@ -68,31 +75,31 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     return (
         <Fade in timeout={400}>
-            <div style={{ width: '100%' }}>
-                <div>
+            <Paper style={{ width: '100%' }}>
+                <Typography className={classes.title} variant='h4'>
+                    Townhalls
+                </Typography>
+                <div className={classes.listFilter}>
                     <ListFilter
+                        filterMap={filterFuncs}
                         onSearch={(text) =>
                             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                            setFilters(([_prevSearch, ...prevFilters]) => [
+                            setFilters(([_prevSearch, ...otherFilters]) => [
                                 (filteredList) => search(text, filteredList),
-                                ...prevFilters,
+                                ...otherFilters,
                             ])
                         }
-                        onFilter={(filterSet) => {
-                            const filterArr = Array.from(filterSet);
-                            const state: HelperFunc[] = filterArr.map(
-                                (key) => filterFuncs[key]
-                            );
-                            setFilters(([prevSearch]) => [
-                                prevSearch,
-                                ...state,
-                            ]);
-                        }}
-                        filterOptions={['Upcoming', 'Past', 'Ongoing']}
+                        onFilterChange={(newFilters) =>
+                            setFilters(([searchFunc]) => [
+                                searchFunc,
+                                ...newFilters,
+                            ])
+                        }
+                        length={filteredResults.length}
                     />
                 </div>
                 <List>
-                    {applyFilters().map(({ settings, form, _id }) => (
+                    {filteredResults.map(({ form, _id }) => (
                         <ListItem
                             key={_id}
                             divider
@@ -103,7 +110,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                             <ListItemAvatar>
                                 <Avatar
                                     alt='Speaker'
-                                    src={settings.general.speaker.picture}
+                                    src='' // FIXME:
                                 >
                                     {form.title[0]}
                                 </Avatar>
@@ -118,7 +125,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                         </ListItem>
                     ))}
                 </List>
-            </div>
+            </Paper>
         </Fade>
     );
 }

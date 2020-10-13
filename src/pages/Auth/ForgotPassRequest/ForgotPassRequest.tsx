@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Avatar } from '@material-ui/core';
+import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/VpnKey';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -7,13 +7,24 @@ import history from 'utils/history';
 import ForgotPassRequestForm from 'domains/Auth/ForgotPassRequest';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+    },
     paper: {
-        marginTop: theme.spacing(12),
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        [theme.breakpoints.up('md')]: {
+            padding: theme.spacing(3),
+            marginTop: '-10vh',
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(0, 1),
+            paddingTop: '10vh',
+            height: '100%',
+        },
     },
     avatar: {
         margin: theme.spacing(1),
@@ -34,20 +45,27 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgotPassRequest() {
     const classes = useStyles();
     return (
-        <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <RefreshIcon />
-            </Avatar>
-            <Typography component='h1' variant='h5'>
-                Forgot Password
-            </Typography>
-            <div className={classes.form}>
-                <ForgotPassRequestForm
-                    onSuccess={() => {
-                        history.push('/auth/login');
-                    }}
-                />
-            </div>
-        </div>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <RefreshIcon />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Forgot Password
+                </Typography>
+                <div className={classes.form}>
+                    <ForgotPassRequestForm
+                        onSuccess={() => {
+                            history.push('/auth/login');
+                        }}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }

@@ -3,24 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
-        // height: '100%',
         width: '100%',
-    },
-    title: {
-        flexGrow: 1,
-        transition: 'inherit 2s ease-in 10s',
-    },
-    main: {
-        width: '100%',
-        flex: 1,
     },
 }));
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    children?: JSX.Element | JSX.Element[];
 }
 
 export default function AppBar({ children }: Props) {
@@ -34,3 +25,7 @@ export default function AppBar({ children }: Props) {
         </div>
     );
 }
+
+AppBar.defaultProps = {
+    children: undefined,
+};

@@ -1,27 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, InputAdornment, IconButton } from '@material-ui/core';
+import { Button, InputAdornment, IconButton, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import Form from 'components/Form';
+import FormContent from 'components/FormContent';
+import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
+import history from 'utils/history';
+import useForm from 'hooks/useForm';
 
 import API from '../api';
 
-const useStyles = makeStyles({
-    root: {
-        height: '100%',
+const useStyles = makeStyles((theme) => ({
+    link: {
+        padding: theme.spacing(1, 0, 0, 0),
     },
-});
+}));
 
 interface Props {
     onSuccess: () => void;
 }
 
-interface Form {
+interface SignInForm {
     email: string;
     password: string;
 }
@@ -37,69 +42,41 @@ interface Form {
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
+
+const intialState: SignInForm = { email: '', password: '' };
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
-
-    const [form, setForm] = React.useState<Form>({
-        email: '',
-        password: '',
-    });
+    const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [isPassVisible, setIsPassVisible] = React.useState(false);
-
-    const builtRequest = React.useCallback(
+    const apiRequest = React.useCallback(
         () => API.login(form.email, form.password),
         [form]
     );
-
-    const [sendRequest, isLoading] = useEndpoint(builtRequest, {
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
         onSuccess,
     });
 
-    const handleChange = (key: keyof Form) => (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-        e.preventDefault();
-        const { value } = e.target;
-        setForm((state) => ({ ...state, [key]: value }));
-    };
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        sendRequest();
-    };
-
-    const handleMouseDownPassword = (
-        event: React.MouseEvent<HTMLButtonElement>
-    ) => {
-        event.preventDefault();
-    };
-
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid
-                container
-                spacing={2}
-                className={classes.root}
-                alignContent='center'
-            >
-                <Grid item xs={12}>
+        <Form onSubmit={handleSubmit(sendRequest)}>
+            <FormContent>
+                <TextField
+                    required
+                    type='email'
+                    value={form.email}
+                    helperText={errors.email}
+                    error={Boolean(errors.email)}
+                    onChange={handleChange('email')}
+                    label='Email'
+                    autoFocus
+                />
+                <>
                     <TextField
-                        id='email'
                         required
-                        type='email'
-                        value={form.email}
-                        onChange={handleChange('email')}
-                        label='Email'
-                        autoFocus
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id='password'
-                        required
+                        error={Boolean(errors.password)}
                         type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
                         onChange={handleChange('password')}
+                        helperText={errors.password}
                         label='Password'
                         InputProps={{
                             endAdornment: (
@@ -109,37 +86,60 @@ export default function LoginForm({ onSuccess }: Props) {
                                         onClick={() =>
                                             setIsPassVisible(!isPassVisible)
                                         }
-                                        onMouseDown={handleMouseDownPassword}
+                                        onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
                                     >
                                         {isPassVisible ? (
-                                            <VisibilityOff />
+                                            <VisibilityOff
+                                                color={
+                                                    errors.password
+                                                        ? 'error'
+                                                        : undefined
+                                                }
+                                            />
                                         ) : (
-                                            <Visibility />
+                                            <Visibility
+                                                color={
+                                                    errors.password
+                                                        ? 'error'
+                                                        : undefined
+                                                }
+                                            />
                                         )}
                                     </IconButton>
                                 </InputAdornment>
                             ),
                         }}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <LoadingButton
-                        loading={isLoading}
-                        component={
-                            <Button
-                                fullWidth
-                                type='submit'
-                                variant='contained'
-                                color='primary'
-                            >
-                                Login
-                            </Button>
-                        }
-                    />
-                </Grid>
-            </Grid>
-        </form>
+                    <Link
+                        className={classes.link}
+                        color='primary'
+                        href='/auth/forgot-password/request' // TODO: make it so that routing doesn't need to be here
+                    >
+                        Forgot Password?
+                    </Link>
+                </>
+            </FormContent>
+            <FormActions>
+                <Button
+                    fullWidth
+                    variant='outlined'
+                    onClick={() => history.push('/auth/register')} // TODO: routing fixes
+                >
+                    Sign Up
+                </Button>
+                <LoadingButton loading={isLoading}>
+                    <Button
+                        fullWidth
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                    >
+                        Login
+                    </Button>
+                </LoadingButton>
+            </FormActions>
+        </Form>
     );
 }
 

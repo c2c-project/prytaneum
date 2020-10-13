@@ -1,9 +1,8 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { ThemeProvider } from '@material-ui/core/styles';
+import ThemeProvider from 'contexts/Theme';
 
-import theme from 'theme';
 import TextField from './TextField';
 
 describe('TextField', function () {
@@ -36,8 +35,8 @@ describe('TextField', function () {
         const onClick = jest.fn();
         ReactTestUtils.act(() => {
             render(
-                <ThemeProvider theme={theme}>
-                    <TextField 
+                <ThemeProvider>
+                    <TextField
                         id='testing'
                         required
                         label='Test Label'
@@ -51,17 +50,16 @@ describe('TextField', function () {
 
         // find the input field
         const valueNode = document.querySelector('#testing') as HTMLElement;
-        const simVal = { v:'test'};
+        const simVal = { v: 'test' };
 
         // enter in our simVal into the form
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(valueNode, {
-                target : { value : simVal.v }
+                target: { value: simVal.v },
             } as any);
         });
 
         expect(onClick).toBeCalledTimes(1);
         expect(document.getElementById('testing')).toBeTruthy();
     });
-
 });

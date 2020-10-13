@@ -6,7 +6,6 @@ import Component from './SettingsMenu';
 
 export default { title: 'Components/SettingsMenu' };
 
-// const content = <h1>content here</h1>;
 const content2 = (
     <List>
         <li>
@@ -36,7 +35,11 @@ const makeSections = (num?: number) => {
     const iterations = num || 1;
     const data = [];
     for (let i = 0; i < iterations; i += 1) {
-        data.push({ title: faker.random.word(), content: content2 });
+        data.push({
+            title: faker.random.word(),
+            component: content2,
+            description: faker.random.words(5),
+        });
     }
     return data;
 };
@@ -45,11 +48,7 @@ export function SettingsMenu() {
     const sections = makeSections(50);
     return (
         <div>
-            {sections.map(({ title, content }) => (
-                <div style={{ height: '100%', top: '0' }}>
-                    <Component title={title} content={content} />
-                </div>
-            ))}
+            <Component config={sections} title='Storybook' />
         </div>
     );
 }

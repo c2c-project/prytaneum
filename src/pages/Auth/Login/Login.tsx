@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as MUILink, Grid, Typography, Avatar } from '@material-ui/core';
+import { Grid, Typography, Avatar, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -7,13 +7,24 @@ import LoginForm from 'domains/Auth/LoginForm';
 import { set } from 'utils/storage';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        height: '100%',
+    },
     paper: {
-        marginTop: theme.spacing(12),
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        [theme.breakpoints.up('md')]: {
+            padding: theme.spacing(3),
+            marginTop: '-10vh',
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(0, 1),
+            paddingTop: '10vh',
+            height: '100%',
+        },
     },
     avatar: {
         margin: theme.spacing(1),
@@ -33,61 +44,33 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     onLogin: () => void;
-    registerRoute?: string;
-    forgotPassRoute?: string;
 }
 
-export default function Login({
-    onLogin,
-    registerRoute,
-    forgotPassRoute,
-}: Props) {
+export default function Login({ onLogin }: Props) {
     const classes = useStyles();
     return (
-        <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-            </Avatar>
-            <Typography component='h1' variant='h5'>
-                Sign in
-            </Typography>
-            <div className={classes.form}>
-                <LoginForm
-                    onSuccess={() => {
-                        set({ isLoggedIn: true });
-                        onLogin();
-                    }}
-                />
-            </div>
-            <Grid container className={classes.nav}>
-                {forgotPassRoute && (
-                    <Grid item xs>
-                        <MUILink
-                            href={forgotPassRoute}
-                            variant='body2'
-                            component='a'
-                        >
-                            Forgot password?
-                        </MUILink>
-                    </Grid>
-                )}
-                {registerRoute && (
-                    <Grid item>
-                        <MUILink
-                            href={registerRoute}
-                            variant='body2'
-                            component='a'
-                        >
-                            Don&#39;t have an account? Sign Up
-                        </MUILink>
-                    </Grid>
-                )}
-            </Grid>
-        </div>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Login
+                </Typography>
+                <div className={classes.form}>
+                    <LoginForm
+                        onSuccess={() => {
+                            set({ isLoggedIn: true });
+                            onLogin();
+                        }}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }
-
-Login.defaultProps = {
-    registerRoute: undefined,
-    forgotPassRoute: undefined,
-};

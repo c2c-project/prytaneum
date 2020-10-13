@@ -1,6 +1,7 @@
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
+import { User } from 'types';
 import { Townhall, TownhallForm, TownhallQuestionForm } from '../types';
 
 interface RequestBody {
@@ -10,8 +11,24 @@ type Create = RequestBody;
 type Update = RequestBody & { townhallId: string };
 
 export async function createTownhall(form: TownhallForm) {
-    const { date, description, title } = form;
-    if (!title || !date || !description) {
+    const {
+        title,
+        date,
+        description,
+        scope,
+        private: isPrivate,
+        // speaker,
+        topic,
+    } = form;
+    if (
+        !title ||
+        !date ||
+        !description ||
+        !scope ||
+        // !speaker ||
+        !topic ||
+        isPrivate === undefined
+    ) {
         throw errors.fieldError();
     }
     const body: Create = { form };
@@ -19,8 +36,24 @@ export async function createTownhall(form: TownhallForm) {
 }
 
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
-    const { date, description, title } = form;
-    if (!date || !title || !description) {
+    const {
+        title,
+        date,
+        description,
+        scope,
+        private: isPrivate,
+        // speaker,
+        topic,
+    } = form;
+    if (
+        !title ||
+        !date ||
+        !description ||
+        !scope ||
+        // !speaker ||
+        !topic ||
+        isPrivate === undefined
+    ) {
         throw errors.fieldError();
     }
 
@@ -42,7 +75,23 @@ export async function getTownhall(id: string) {
     return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
 }
 
-export async function createQuestion(form: TownhallQuestionForm) {
+export async function createQuestion(
+    townhallId: string,
+    form: TownhallQuestionForm
+) {
     const body: { form: TownhallQuestionForm } = { form };
-    return axios.post('/api/townhalls/:_id/create-question', body);
+    return axios.post(`/api/townhalls/${townhallId}/create-question`, body);
+}
+
+export async function getModInfo(townhallId: string) {
+    return axios.get<{ moderators: Pick<User, 'email' | '_id'>[] }>(
+        `/api/townhalls/${townhallId}/organizer/mod-info`
+    );
+}
+
+export async function addMod(townhallId: string, moderatorEmail: string) {
+    return axios.post<unknown>(
+        `/api/townhalls/${townhallId}/organizer/add-mod`,
+        { emai: moderatorEmail }
+    );
 }

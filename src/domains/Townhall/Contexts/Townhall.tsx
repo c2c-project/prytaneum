@@ -18,47 +18,52 @@ export const TownhallContext = React.createContext<Townhall>({
         title: '',
         date: new Date(),
         description: '',
-        scope: '',
+        scope: 'district',
+        private: false,
+        // speaker: {
+        //     name: '',
+        //     party: '',
+        //     territory: '',
+        //     picture: '',
+        // },
+        topic: '',
     },
     settings: {
-        general: {
-            private: false,
-            speaker: {
-                name: '',
-                party: '',
-                territory: '',
-                picture: '',
-            },
-            topic: '',
+        waitingRoom: {
+            enabled: false,
+            scheduled: null,
         },
-        components: {
-            waitingRoom: {
-                enabled: false,
-                scheduled: null,
-            },
-            chat: {
-                enabled: false,
-                automated: false,
-            },
-            questionQueue: {
-                transparent: false,
-                automated: false,
-            },
-            credits: {
+        chat: {
+            enabled: false,
+            automated: false,
+        },
+        questionQueue: {
+            transparent: false,
+            automated: false,
+        },
+        credits: {
+            enabled: false,
+            list: [],
+        },
+        links: {
+            enabled: false,
+            list: [],
+        },
+        moderators: {
+            list: [],
+            primary: '',
+        },
+        registration: {
+            reminders: {
                 enabled: true,
+                customTimes: [],
             },
-            links: {
-                enabled: false,
-                links: [],
-            },
-            moderators: {
-                list: [],
-                primary: '',
-            },
+            registrants: [],
         },
     },
 });
 
+// TODO: optimize this so that a request doesn't get sent every single page load? maybe?
 export default function TownhallProvider({
     value,
     children,
@@ -79,9 +84,7 @@ export default function TownhallProvider({
     }, [townhall, get]);
 
     return !townhall ? (
-        <div style={{ height: '500px' }}>
-            <Loader />
-        </div>
+        <Loader />
     ) : (
         <TownhallContext.Provider value={townhall}>
             {children}

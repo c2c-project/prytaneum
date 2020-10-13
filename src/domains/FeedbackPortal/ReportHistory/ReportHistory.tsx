@@ -224,16 +224,15 @@ export default function ReportHistory() {
                             <Grid item>
                                 <LoadingButton
                                     loading={isLoadingFeedback || isLoadingBug}
-                                    component={
-                                        <Button
-                                            type='submit'
-                                            color='inherit'
-                                            endIcon={<SearchIcon />}
-                                        >
-                                            Search
-                                        </Button>
-                                    }
-                                />
+                                >
+                                    <Button
+                                        type='submit'
+                                        color='inherit'
+                                        endIcon={<SearchIcon />}
+                                    >
+                                        Search
+                                    </Button>
+                                </LoadingButton>
                             </Grid>
                         </Grid>
                     </form>

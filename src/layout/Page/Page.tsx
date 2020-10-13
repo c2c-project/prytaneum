@@ -1,61 +1,76 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-import { Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        // position: 'relative',
-        // overflowY: 'auto',
-        // height: '100%',
-        // width: '100%',
-    },
+import { Container } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+interface Props {
+    children: JSX.Element | JSX.Element[] | React.ReactNode;
+    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    disableGutters?: boolean;
+}
+
+const useStyles = makeStyles<Theme, Props>((theme) => ({
     outerContainer: {
         position: 'relative',
         width: '100%',
         height: '100%',
     },
-    innerContainer: {
-        // FIXME: if I want to make it so taht slide in works properly I'll need to mess with this
-        // position: 'absolute',
-        width: '100%',
-        height: '100vh',
-    },
+    // innerContainer: {
+    //     // FIXME: if I want to make it so taht slide in works properly I'll need to mess with this
+    //     // position: 'absolute',
+    //     width: '100%',
+    //     height: '100%',
+    //     // overflowY: 'auto', // TODO: fix
+    // },
     main: {
-        marginBottom: '100px',
-        width: '100%',
-        height: '100%',
+        height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 56}px)`,
+        [theme.breakpoints.up('sm')]: {
+            height: `calc(100vh - ( ${
+                theme.mixins.toolbar.minHeight || 64
+            }px))`,
+        },
+        [theme.breakpoints.down('xs')]: {
+            height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 48}px)`,
+        },
     },
     appBar: theme.mixins.toolbar,
 }));
 
-interface Props {
-    children: JSX.Element | JSX.Element[] | React.ReactNode;
-    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-}
-
-export default React.forwardRef<HTMLDivElement, Props>(function Page(
-    props,
-    ref
-): JSX.Element {
-    const { children, maxWidth } = props;
-    const classes = useStyles();
+const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+    const { children, maxWidth, disableGutters } = props;
+    const classes = useStyles(props);
     return (
-        <div>
+        <>
             <div className={classes.appBar} />
             <main className={classes.main}>
                 <Container
                     maxWidth={maxWidth || 'md'}
-                    disableGutters
+                    disableGutters={disableGutters}
                     className={classes.outerContainer}
                     ref={ref}
                 >
-                    <div className={classes.innerContainer}>
-                        {children}
-                        <div className={classes.appBar} />
-                    </div>
+                    {/* <div className={classes.innerContainer}> */}
+                    {children}
+                    {/* </div> */}
                 </Container>
             </main>
-        </div>
+        </>
     );
 });
+
+Page.defaultProps = {
+    disableGutters: true,
+    maxWidth: 'md',
+};
+
+Page.propTypes = {
+    disableGutters: PropTypes.bool,
+    maxWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+};
+
+export default Page;

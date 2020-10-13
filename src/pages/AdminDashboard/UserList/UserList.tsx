@@ -43,7 +43,7 @@ const UserList = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <ListOverflow
-                            rowTraits={users.map((user) => {
+                            rowProps={users.map((user) => {
                                 return { ...user, primary: user.name };
                             })}
                         />

@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import { Typography, Box, Button, Grid } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
-import Bold from '../Bold';
+
 // import useJwt from 'hooks/useJwt';
+import TextField from 'components/TextField';
 import useSnack from '../../hooks/useSnack';
 import { Message } from './types';
 
@@ -38,7 +37,7 @@ interface Params {
 /** Test Description
  *  @category Component
  *  @constructor MessageOwnerAction
-*/
+ */
 export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
     const classes = useStyles();
     const [message, setMessage] = React.useState(targetMessage.message);
@@ -103,7 +102,9 @@ export default function MessageOwnerActions({ targetMessage, onClick }: Props) {
             <Grid item xs={12}>
                 <Grid container justify='center'>
                     <Grid item xs='auto' className={classes.UserName}>
-                        <Bold>{`${targetMessage.username}:`}</Bold>
+                        <Typography>
+                            <Box fontWeight='fontWeightBold'>{`${targetMessage.username}:`}</Box>
+                        </Typography>
                     </Grid>
                     <Grid item xs='auto' className={classes.Message}>
                         <form>

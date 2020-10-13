@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-// import GridList from '@material-ui/core/GridList';
-// import GridListTile from '@material-ui/core/GridListTile';
 import clsx from 'clsx';
 
 import { DeviceContext } from 'contexts/Device';
@@ -14,10 +12,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
-    // gridList: {
-    //     width: '100%',
-    //     height: '100%',
-    // },
     btn: {
         width: '100%',
         height: '100%',
@@ -53,7 +47,7 @@ export interface Props {
 /** Test Description
  *  @category Component
  *  @constructor GridMenu
-*/
+ */
 export default function GridMenu({ children, btnCols }: Props) {
     const classes = useStyles();
     const value = React.useContext(DeviceContext);
@@ -79,27 +73,6 @@ export default function GridMenu({ children, btnCols }: Props) {
                     );
                 })}
             </Grid>
-            {/* <GridList cellHeight={160} className={classes.gridList} cols={12}>
-                {React.Children.map(children, (child, idx) => {
-                    // clone the child and apply the button styles
-                    const StylizedChild = React.cloneElement(child, {
-                        className: clsx([classes.btn, child.props.className]),
-                        size: 'large',
-                        variant: 'contained',
-                        color: 'primary',
-                        elevation: 5,
-                    });
-
-                    return (
-                        <GridListTile
-                            key={idx}
-                            cols={btnCols || sizing[value] || 3}
-                        >
-                            {StylizedChild}
-                        </GridListTile>
-                    );
-                })}
-            </GridList> */}
         </div>
     );
 }

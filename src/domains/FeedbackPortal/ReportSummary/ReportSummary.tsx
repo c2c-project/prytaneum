@@ -93,21 +93,18 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 />
             </Grid>
             <Grid item xs={12}>
-                <LoadingButton
-                    loading={isLoading}
-                    component={
-                        <Button
-                            id='deleteButton'
-                            variant='contained'
-                            fullWidth
-                            className={classes.DangerButton}
-                            startIcon={<DeleteIcon />}
-                            onClick={() => sendDeleteRequest()}
-                        >
-                            Delete
-                        </Button>
-                    }
-                />
+                <LoadingButton loading={isLoading}>
+                    <Button
+                        id='deleteButton'
+                        variant='contained'
+                        fullWidth
+                        className={classes.DangerButton}
+                        startIcon={<DeleteIcon />}
+                        onClick={() => sendDeleteRequest()}
+                    >
+                        Delete
+                    </Button>
+                </LoadingButton>
             </Grid>
         </Grid>
     );

@@ -5,53 +5,80 @@ export interface Townhall {
 }
 
 export interface TownhallSettings {
-    components: {
-        waitingRoom: {
-            enabled: boolean;
-            scheduled: null | Date;
-        };
-        chat: {
-            enabled: boolean;
-            automated: boolean;
-        };
-        questionQueue: {
-            transparent: boolean;
-            automated: boolean;
-        };
-        credits: {
-            enabled: boolean;
-        };
-        links: {
-            enabled: boolean;
-            links: {
-                name: string;
-                link: string;
-            }[];
-        };
-        moderators: {
-            list: string[]; // userid[]
-            primary: string; // primary user id
-        };
+    waitingRoom: {
+        enabled: boolean;
+        scheduled: null | Date;
     };
-    general: {
-        private: boolean; // TODO: what does this mean? might put this in the form itself
-        speaker: {
+    chat: {
+        enabled: boolean;
+        automated: boolean;
+    };
+    questionQueue: {
+        transparent: boolean;
+        automated: boolean;
+        // TODO: prepopulated questions (if transparent then users can see these)
+    };
+    credits: {
+        enabled: boolean;
+        list: string[]; // user id's
+    };
+    links: {
+        enabled: boolean;
+        list: {
             name: string;
-            party: string;
-            territory: string;
-            picture: string;
+            url: string;
+        }[];
+    };
+    moderators: {
+        list: string[]; // userid[]
+        primary: string; // primary user id
+    };
+    registration: {
+        reminders: {
+            enabled: true;
+            customTimes: string[]; // TODO: ISO times, don't need this now
         };
-        topic: string;
+        registrants: string[]; // TODO: emails or userIds idk yet -- how to prevent abuse?
     };
 }
 
 export interface TownhallForm {
     title: string;
-    date: Date;
+    date: Date | string;
     description: string;
-    scope: string;
+    scope: 'state' | 'district';
+    private: boolean; // TODO: what does this mean? might put this in the form itself
+    // speaker: Speaker;
+    topic: string;
+}
+
+export interface Speaker {
+    name: string;
+    party: string;
+    territory: string;
+    picture: string;
 }
 
 export interface TownhallQuestionForm {
     question: string;
+}
+
+export type QuestionState = '' | 'IN_QUEUE' | 'ASKED' | 'CURRENT';
+export interface Question {
+    _id: string;
+    meta: {
+        original?: string; // will be a question id if it's an edit of something else
+        townhallId: string;
+        user: {
+            _id: string;
+            name: string;
+        };
+        timestamp: string;
+    };
+    question: string;
+    state: QuestionState;
+    likes: string[]; // array of user id's
+    aiml: {
+        labels: string[];
+    };
 }

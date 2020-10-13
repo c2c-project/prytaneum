@@ -1,23 +1,16 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     root: {
         width: '100%',
         height: '100%',
-        position: 'relative',
-        display: 'flex',
-        flex: 1,
-        justifyContent: 'center',
-        transform: 'translateX(-5%)', // wasn't quite centered without this offset
     },
     loader: {
-        position: 'absolute',
-    },
-    container: {
-        position: 'relative',
-        top: '35%',
+        flex: 1,
+        display: 'flex',
     },
 });
 
@@ -30,11 +23,17 @@ const useStyles = makeStyles({
 const Loader = () => {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            <div className={classes.container}>
+        <Grid container justify='center' className={classes.root}>
+            <Grid
+                item
+                xs={12}
+                container
+                direction='column'
+                alignContent='center'
+            >
                 <CircularProgress className={classes.loader} />
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     );
 };
 

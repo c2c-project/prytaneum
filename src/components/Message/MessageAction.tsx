@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import Bold from '../Bold';
+import { Typography, Box } from '@material-ui/core';
 import useSnack from '../../hooks/useSnack';
 import { Message } from './types';
 
@@ -19,7 +18,7 @@ interface Params {
 /** Test Description
  *  @category Component
  *  @constructor MessageActions
-*/
+ */
 export default function MessageActions({ targetMsg, onClick }: Props) {
     const jwt = '';
     // const [jwt] = useJwt(); // TODO: fix this
@@ -70,7 +69,9 @@ export default function MessageActions({ targetMsg, onClick }: Props) {
                 <Grid container>
                     <Grid container>
                         <Grid item xs='auto'>
-                            <Bold>{`${targetMsg.username}:`}</Bold>
+                            <Typography>
+                                <Box fontWeight='fontWeightBold'>{`${targetMsg.username}:`}</Box>
+                            </Typography>
                         </Grid>
                         <Grid item xs='auto'>
                             <Typography color='textPrimary' variant='body1'>

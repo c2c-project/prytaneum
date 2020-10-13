@@ -1,15 +1,14 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { ThemeProvider } from '@material-ui/core/styles';
+import ThemeProvider from 'contexts/Theme';
 
-import theme from 'theme';
 import ForgotPassRequest from './ForgotPassRequest';
 
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
-describe('Register', () => {
+describe('ForgotPassRequest', () => {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
@@ -32,7 +31,7 @@ describe('Register', () => {
     it('should render', () => {
         ReactTestUtils.act(() => {
             render(
-                <ThemeProvider theme={theme}>
+                <ThemeProvider>
                     <ForgotPassRequest />
                 </ThemeProvider>,
                 container

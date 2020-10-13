@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Bold from '../Bold';
+import { Box, Typography } from '@material-ui/core';
 
 interface Props {
     name: string;
@@ -11,9 +11,13 @@ interface Props {
  *  @constructor MessageItemAuthor
  *  @param props
  *  @param {string} props.name The name to return in Bold
-*/
+ */
 export default function MessageItemAuthor({ name }: Props) {
-    return <Bold>{`${name}:`}</Bold>;
+    return (
+        <Typography component='div'>
+            <Box fontWeight='fontWeightBold'>{`${name}:`}</Box>
+        </Typography>
+    );
 }
 
 MessageItemAuthor.propTypes = {

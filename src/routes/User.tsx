@@ -1,21 +1,23 @@
 import React from 'react';
 
 import Login from 'pages/Auth/Login';
+
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
+import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallForm from 'pages/Townhall/TownhallForm';
-import TownhallSettings from 'domains/Townhall/TownhallSettings';
+
+import HandleInviteLink from 'domains/Invite/HandleInviteLink';
+import InviteForm from 'domains/Invite/InviteForm';
+
+import UserSettings from 'domains/Auth/UserSettings';
+import UserProvider from 'contexts/User';
+
+import Page from 'layout/Page';
+
 import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
-
-const SettingsMenu = () => {
-    return <div />;
-};
-
-const Invite = () => {
-    return <div />;
-};
 
 addRoutes([
     {
@@ -25,7 +27,7 @@ addRoutes([
             if (!getFromStorage('isLoggedIn')) {
                 return <Login onLogin={() => history.push(ctx.pathname)} />;
             }
-            return ctx.next();
+            return <Page>{ctx.next()}</Page>;
         },
         children: [
             {
@@ -50,7 +52,7 @@ addRoutes([
                             const component = ctx.next() || (
                                 <TownhallSettings />
                             );
-
+                            // FIXME: need to move the context up in the tree before the routing somehow
                             return (
                                 <TownhallContextProvider
                                     townhallId={townhallId}
@@ -61,20 +63,37 @@ addRoutes([
                         },
                         children: [
                             {
-                                path: '/update',
-                                action: () => <h1>TODO</h1>,
-                            },
-                            {
-                                path: '/settings',
-                                action: () => {
-                                    return <SettingsMenu />;
-                                },
-                            },
-                            {
                                 path: '/invite',
                                 action: () => {
-                                    return <Invite />;
+                                    return <InviteForm />;
                                 },
+                            },
+                            {
+                                path: '/invited',
+                                action: (ctx) => {
+                                    const child = ctx.next();
+                                    if (!child) {
+                                        history.back(); // TODO: change this?
+                                    }
+                                    return child;
+                                },
+                                children: [
+                                    {
+                                        path: '/:inviteToken',
+                                        action: (ctx) => {
+                                            const {
+                                                inviteToken,
+                                            } = ctx.params as {
+                                                inviteToken: string;
+                                            };
+                                            return (
+                                                <HandleInviteLink
+                                                    inviteToken={inviteToken}
+                                                />
+                                            );
+                                        },
+                                    },
+                                ],
                             },
                         ],
                     },
@@ -82,7 +101,11 @@ addRoutes([
             },
             {
                 path: '/settings',
-                action: () => <h1>TODO: User profile</h1>,
+                action: () => (
+                    <UserProvider>
+                        <UserSettings />
+                    </UserProvider>
+                ),
             },
         ],
     },

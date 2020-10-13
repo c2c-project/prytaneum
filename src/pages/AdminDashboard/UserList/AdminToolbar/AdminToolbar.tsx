@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { IconButton, Grid, Popper, Paper } from '@material-ui/core';
+import {
+    IconButton,
+    Grid,
+    Popper,
+    Paper,
+    ClickAwayListener,
+} from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 import useEndpoint from 'hooks/useEndpoint';
-import CheckBox from 'components/CheckBox';
+import ComboSelect from 'components/ComboSelect';
 import SearchToolbar from 'components/SearchToolbar';
 import { UserProfile } from 'domains/AdminDashboard/types';
 import API from 'domains/AdminDashboard/api';
@@ -13,7 +19,8 @@ import API from 'domains/AdminDashboard/api';
 const useStyles = makeStyles((theme) => ({
     root: {},
     filterPopper: {
-        maxWidth: '300px',
+        // maxWidth: '300px',
+        width: '500px', // TODO: explore this more later on
         marginRight: theme.spacing(1),
     },
 }));
@@ -97,17 +104,20 @@ const AdminToolbar = ({
                         open={open}
                         anchorEl={filterAnchorEl}
                     >
-                        <Paper className={classes.filterPopper}>
-                            <CheckBox
-                                options={statusTags}
-                                selectedFilter={enteredFilterTags}
-                                onChange={(
-                                    event: React.ChangeEvent<{}>,
-                                    value: React.SetStateAction<Array<string>>,
-                                    reason: any
-                                ) => setEnteredFilterTags(value)}
-                            />
-                        </Paper>
+                        <ClickAwayListener
+                            onClickAway={() => setFilterAnchorEl(null)}
+                        >
+                            <Paper className={classes.filterPopper}>
+                                <ComboSelect
+                                    options={statusTags}
+                                    selectedFilter={enteredFilterTags}
+                                    onChange={(e, value) =>
+                                        setEnteredFilterTags(value)
+                                    }
+                                    label='Status Tags'
+                                />
+                            </Paper>
+                        </ClickAwayListener>
                     </Popper>
                 </Grid>
             </Grid>

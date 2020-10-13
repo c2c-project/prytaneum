@@ -1,24 +1,61 @@
 import { rest } from 'msw';
+import faker from 'faker';
+
 import * as AuthTypes from 'domains/Auth/types';
+import { User } from 'types';
+
+export const makeUser = () => ({
+    _id: faker.random.alphaNumeric(5),
+    roles: ['admin', 'organizer', 'user'],
+    email: {
+        address: faker.internet.email(),
+        verified: Math.random() > 0.5,
+    },
+    settings: {
+        townhall: {
+            anonymous: Math.random() > 0.5,
+        },
+        notifications: {
+            enabled: Math.random() > 0.5,
+            types: [],
+        },
+    },
+});
+
+export const makeUsers = (num?: number): User[] => {
+    const ret = [];
+    const iterations = num || 1;
+    for (let i = 0; i < iterations; i += 1) {
+        ret.push(makeUser());
+    }
+    return ret;
+};
 
 export default [
     rest.post('/api/users/login', (req, res, ctx) => {
         // we do nothing with the password for now
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { email, password } = req.body as {
+        const { password } = req.body as {
             email: string;
             password: string;
         };
-        if (email === 'fail') {
+        if (password === 'fail') {
             return res(ctx.status(400));
         }
-        return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
+        return res(
+            ctx.cookie('jwt', 'not a real jwt'),
+            ctx.status(200),
+            ctx.json({
+                _id: faker.random.alphaNumeric(5),
+                roles: ['user', 'admin', 'organizer'],
+            })
+        );
     }),
     rest.post('/api/users/login-temporary', (req, res, ctx) => {
-        const { email } = req.body as {
-            email: string;
+        const { password } = req.body as {
+            password: string;
         };
-        if (email === 'fail') {
+        if (password === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.cookie('jwt', 'not a real jwt'), ctx.status(200));
@@ -62,5 +99,10 @@ export default [
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
+    }),
+    rest.get('/api/users/me', (req, res, ctx) => {
+        const { jwt } = req.cookies;
+        if (jwt) return res(ctx.status(200), ctx.json(makeUser()));
+        return res(ctx.status(401));
     }),
 ];

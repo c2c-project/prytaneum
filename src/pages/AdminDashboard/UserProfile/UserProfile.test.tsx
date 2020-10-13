@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
-import { MemoryRouter, Route } from 'react-router-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import UserProfile from './UserProfile';
 
@@ -34,26 +33,10 @@ afterEach(() => {
 });
 
 describe('<UserInfo/> rendering', () => {
-    let _location = { pathname: '' };
-
+    // eslint-disable-next-line jest/expect-expect
     it('renders correctly', () => {
         ReactTestUtils.act(() => {
-            render(
-                <MemoryRouter initialEntries={['/123456']}>
-                    <Route
-                        path='/:userId'
-                        render={({ location }) => {
-                            _location = location;
-                            return null;
-                        }}
-                    >
-                        <UserProfile />
-                    </Route>
-                </MemoryRouter>,
-                container
-            );
+            render(<UserProfile userId='123456' />, container);
         });
-
-        expect(_location.pathname).toBe('');
     });
 });

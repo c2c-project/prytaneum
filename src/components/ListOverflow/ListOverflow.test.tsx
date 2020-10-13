@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { makeUsers } from 'mock/handlers/adminDashboard';
+import { makeUsers } from 'mock/handlers/auth';
 import ListOverflow from './ListOverflow';
 
 const usersPrimary = makeUsers(2).map((user) => {
-    return { _id: user._id, primary: user.name };
+    return { _id: user._id, primary: user.email.address };
 });
 
 let container: HTMLDivElement | null = null;
@@ -29,7 +29,7 @@ describe('<ListOverflow/> rendering', () => {
     // eslint-disable-next-line jest/expect-expect
     it('renders correctly', () => {
         ReactTestUtils.act(() => {
-            render(<ListOverflow rowTraits={usersPrimary} />, container);
+            render(<ListOverflow rowProps={usersPrimary} />, container);
         });
     });
 });

@@ -2,6 +2,7 @@ import React from 'react';
 
 import history from 'utils/history';
 
+import Page from 'layout/Page';
 import Login from 'pages/Auth/Login';
 import Register from 'pages/Auth/Register';
 import ForgotPasswordRequest from 'pages/Auth/ForgotPassRequest';
@@ -12,7 +13,7 @@ addRoutes([
     {
         path: '/auth',
         action: (ctx) => {
-            return ctx.next();
+            return <Page>{ctx.next()}</Page>;
         },
         children: [
             {
@@ -20,8 +21,6 @@ addRoutes([
                 action: () => (
                     <Login
                         onLogin={() => history.push('/home')}
-                        forgotPassRoute='/auth/forgot-password/request'
-                        registerRoute='/auth/register'
                     />
                 ),
             },

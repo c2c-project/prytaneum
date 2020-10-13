@@ -11,7 +11,7 @@ interface Props {
 
 export default function TownhallList({ currentUser }: Props) {
     return (
-        <div>
+        <>
             <List
                 currentUser={currentUser}
                 onClickTownhall={(id) =>
@@ -21,7 +21,7 @@ export default function TownhallList({ currentUser }: Props) {
             <Fab onClick={() => history.push(makeRelativeLink('/create'))}>
                 <AddIcon />
             </Fab>
-        </div>
+        </>
     );
 }
 

@@ -1,53 +1,58 @@
 import { rest } from 'msw';
 import faker from 'faker';
 import * as TownhallTypes from 'domains/Townhall/types';
+import { makeUsers } from './auth';
 
 const past = faker.date.past();
 const future = faker.date.future();
 
-const makeTownhall = (): TownhallTypes.Townhall => ({
+export const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     form: {
         title: faker.lorem.words(),
         date: faker.date.between(past, future),
-        description: faker.lorem.paragraph(),
-        scope: 'Scope', // FIXME:
+        description: faker.lorem.paragraph(10),
+        scope: 'district', // FIXME:
+        private: false,
+        // speaker: {
+        //     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        //     party: faker.company.companyName(),
+        //     territory: 'CA-41',
+        //     picture: faker.image.imageUrl(),
+        // },
+        topic: faker.random.word(),
     },
     settings: {
-        general: {
-            private: false,
-            speaker: {
-                name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-                party: faker.company.companyName(),
-                territory: 'CA-41',
-                picture: faker.image.imageUrl(),
-            },
-            topic: faker.random.word(),
+        waitingRoom: {
+            enabled: false,
+            scheduled: null,
         },
-        components: {
-            waitingRoom: {
-                enabled: false,
-                scheduled: null,
+        chat: {
+            enabled: false,
+            automated: false,
+        },
+        questionQueue: {
+            transparent: false,
+            automated: false,
+        },
+        credits: {
+            enabled: false,
+            list: [],
+        },
+        links: {
+            enabled: false,
+            list: [],
+        },
+        moderators: {
+            list: [],
+            primary: '',
+        },
+        registration: {
+            reminders: {
+                enabled: true,
+                customTimes: [],
             },
-            chat: {
-                enabled: false,
-                automated: false,
-            },
-            questionQueue: {
-                transparent: false,
-                automated: false,
-            },
-            credits: {
-                enabled: false,
-            },
-            links: {
-                enabled: false,
-                links: [],
-            },
-            moderators: {
-                list: [],
-                primary: '',
-            },
+            registrants: [],
         },
     },
 });
@@ -120,5 +125,15 @@ export default [
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
+    }),
+    rest.get('/api/townhalls/:_id/organizer/mod-info', (req, res, ctx) => {
+        const { id } = req.params as { id: string };
+        if (id === 'fail') {
+            return res(ctx.status(400));
+        }
+        if (id === 'unauthorized') {
+            return res(ctx.status(401));
+        }
+        return res(ctx.json({ moderators: makeUsers(10) }), ctx.status(200));
     }),
 ];

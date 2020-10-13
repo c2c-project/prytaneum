@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { ParseResult } from 'papaparse';
 
 import useEndpoint from 'hooks/useEndpoint';
@@ -47,6 +48,15 @@ function SelectFileStep({
                     Expected Headers:{' '}
                     {expectedKeys.map((header) => ` "${header}" `)}
                 </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    component='a'
+                    href='/example-invite.csv'
+                    variant='outlined'
+                >
+                    Download Example File
+                </Button>
             </Grid>
             <Grid item xs={12}>
                 <Typography>Case matters, order does not</Typography>
@@ -248,7 +258,7 @@ function CreateInviteStep({
 }): JSX.Element {
     const apiRequest = useCallback(
         () => API.createInvite(inviteForm, file, preview),
-        [inviteForm, file]
+        [inviteForm, file, preview]
     );
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess,
@@ -256,7 +266,7 @@ function CreateInviteStep({
     });
     useEffect(() => {
         sendRequest();
-    }, []);
+    }, [sendRequest]);
     return (
         <Grid container justify='center'>
             <Loader style={{ marginTop: '8em' }} />
