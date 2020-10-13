@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { search as utilSearch, FilterFunc } from 'utils/filters';
 import { Question, Question as QuestionType } from '../types';
+import { QuestionProps } from '../QuestionFeedItem';
 
 export { applyFilters } from 'utils/filters';
 
@@ -64,4 +65,12 @@ export function questionReducer(state: QuestionType[], action: Actions) {
         default:
             return state;
     }
+}
+
+export function makeSystemMessage(message: React.ReactNode): QuestionProps {
+    return {
+        user: 'Prytaneum',
+        timestamp: new Date(),
+        children: message,
+    };
 }

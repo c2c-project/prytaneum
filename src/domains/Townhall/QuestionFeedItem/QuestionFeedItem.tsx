@@ -8,6 +8,7 @@ import {
     CardHeader,
     Avatar,
     IconButton,
+    Grid,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -15,12 +16,13 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { formatDate } from 'utils/format';
 
 export interface QuestionProps {
-    children: JSX.Element | string;
+    children: React.ReactNode | React.ReactNodeArray;
     user: string;
-    timestamp: string;
-    actionBar?: JSX.Element;
+    timestamp: string | Date;
+    actions?: JSX.Element | false;
     onClickMore?: (e: React.MouseEvent) => void;
     compact?: boolean;
+    className?: string;
 }
 
 const useStyles = makeStyles<Theme, Pick<QuestionProps, 'compact'>>(() => ({
@@ -31,56 +33,59 @@ const useStyles = makeStyles<Theme, Pick<QuestionProps, 'compact'>>(() => ({
     }),
 }));
 
-export default function QuestionFeedItem(props: QuestionProps) {
+// TODO: maybe do something like if it's >24 hours ago it displays the full date? otherwise use formatdistancetonow
+function QuestionFeedItem(props: QuestionProps) {
     const {
         children,
         user,
         timestamp,
-        actionBar,
+        actions,
         onClickMore,
         compact,
+        className,
     } = props;
     const date = React.useMemo(() => formatDate(timestamp, 'p-P'), [timestamp]);
     const [time, month] = date.split('-');
     const classes = useStyles({ compact });
     return (
-        <Card>
-            <CardHeader
-                classes={{ root: classes.cardHeader }}
-                avatar={!compact && <Avatar>{user[0]}</Avatar>}
-                title={user}
-                titleTypographyProps={{
-                    variant: 'subtitle2',
-                }}
-                subheader={
-                    !compact && (
-                        <Typography variant='caption' color='textSecondary'>
-                            {time}
-                            &nbsp; &middot; &nbsp;
-                            {month}
-                        </Typography>
-                    )
-                }
-                action={
-                    onClickMore && (
-                        <IconButton onClick={onClickMore}>
-                            <MoreVertIcon />
-                        </IconButton>
-                    )
-                }
-            />
-            <CardContent>
-                <Typography>{children}</Typography>
-            </CardContent>
-            {!compact && actionBar && <CardActions>{actionBar}</CardActions>}
-        </Card>
+        <Grid item xs={12} className={className}>
+            <Card>
+                <CardHeader
+                    classes={{ root: classes.cardHeader }}
+                    avatar={!compact && <Avatar>{user[0]}</Avatar>}
+                    title={user}
+                    titleTypographyProps={{
+                        variant: 'subtitle2',
+                    }}
+                    subheader={
+                        !compact && (
+                            <Typography variant='caption' color='textSecondary'>
+                                {time}
+                                &nbsp; &middot; &nbsp;
+                                {month}
+                            </Typography>
+                        )
+                    }
+                    action={
+                        onClickMore && (
+                            <IconButton onClick={onClickMore}>
+                                <MoreVertIcon />
+                            </IconButton>
+                        )
+                    }
+                />
+                <CardContent>{children}</CardContent>
+                {!compact && actions && <CardActions>{actions}</CardActions>}
+            </Card>
+        </Grid>
     );
 }
 
 QuestionFeedItem.defaultProps = {
     onClickMore: undefined,
     compact: false,
-    actionBar: undefined,
+    actions: undefined,
+    className: undefined,
 };
 
 QuestionFeedItem.propTypes = {
@@ -90,7 +95,10 @@ QuestionFeedItem.propTypes = {
     ]).isRequired,
     user: PropTypes.string.isRequired,
     timestamp: PropTypes.string.isRequired,
-    actionBar: PropTypes.node,
+    actions: PropTypes.node,
     onClickMore: PropTypes.func,
     compact: PropTypes.bool,
+    className: PropTypes.string,
 };
+
+export default React.memo(QuestionFeedItem);

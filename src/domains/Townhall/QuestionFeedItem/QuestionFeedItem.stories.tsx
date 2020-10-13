@@ -2,7 +2,7 @@ import React from 'react';
 import faker from 'faker';
 
 import Page from 'layout/Page';
-import { UserBar, ModBar } from '../QuestionFeed/components';
+import { UserBar, ModActions } from '../QuestionFeed/components';
 import Question from './QuestionFeedItem';
 
 export default { title: 'Domains/Townhall/QuestionFeed Item' };
@@ -14,7 +14,7 @@ export function UserQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={<UserBar onClick={console.log} />}
+                actions={<UserBar onClick={console.log} />}
             >
                 {faker.lorem.sentences(4)}
             </Question>
@@ -23,7 +23,7 @@ export function UserQuestion() {
                 compact
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={<UserBar onClick={console.log} />}
+                actions={<UserBar onClick={console.log} />}
             >
                 {faker.lorem.sentences(4)}
             </Question>
@@ -38,8 +38,8 @@ export function ModQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
+                actions={
+                    <ModActions
                         questionState=''
                         labels={Array.from(
                             new Set(faker.random.words(10).split(' '))
@@ -55,8 +55,8 @@ export function ModQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
+                actions={
+                    <ModActions
                         questionState=''
                         labels={Array.from(
                             new Set(faker.random.words(10).split(' '))
@@ -71,8 +71,8 @@ export function ModQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
+                actions={
+                    <ModActions
                         questionState='IN_QUEUE'
                         labels={Array.from(
                             new Set(faker.random.words(10).split(' '))
@@ -87,8 +87,8 @@ export function ModQuestion() {
             <Question
                 user={faker.internet.userName()}
                 timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
+                actions={
+                    <ModActions
                         questionState='ASKED'
                         labels={Array.from(
                             new Set(faker.random.words(10).split(' '))

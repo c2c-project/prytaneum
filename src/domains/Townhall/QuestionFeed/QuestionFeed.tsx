@@ -1,29 +1,17 @@
 import React from 'react';
-import {
-    IconButton,
-    Grid,
-    Badge,
-    Collapse,
-    Button,
-    Tooltip,
-    Typography,
-    DialogContent,
-    Zoom,
-    Card,
-    CardContent,
-} from '@material-ui/core';
+import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
-import Dialog from 'components/Dialog';
 import { UserContext } from 'contexts/User';
+import { QuestionProps } from '../QuestionFeedItem';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Question as QuestionType } from '../types';
-import QuestionForm from '../QuestionForm';
-import QuestionFeedItem from '../QuestionFeedItem';
-import QuestionReplyForm from '../QuestionReplyForm';
+import FeedList from './FeedList';
+
+import { EmptyMessage, RefreshMessage } from './components';
 import {
     search,
     applyFilters,
@@ -31,21 +19,12 @@ import {
     questionReducer,
     Actions,
     QuestionFilterFunc,
+    makeSystemMessage,
 } from './utils';
-import {
-    CurrentQuestion,
-    UserBar,
-    EmptyMessage,
-    UserActionTypes,
-    ModBar,
-    ModActionTypes,
-} from './components';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        // height: '100%',
-        // paddingTop: theme.spacing(1),
     },
     item: {
         paddingBottom: theme.spacing(2),
@@ -61,10 +40,6 @@ function QuestionFeed() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
-    const [
-        dialogContent,
-        setDialogContent,
-    ] = React.useState<JSX.Element | null>(null);
 
     // full question feed from socketio
     const [questions] = useSocketio<QuestionType[], Actions>({
@@ -82,6 +57,10 @@ function QuestionFeed() {
 
     // the first filter will always be the "search" filter, which initially just returns the full question list
     const [filters, setFilters] = React.useState([(q: QuestionType[]) => q]);
+
+    const [system, setSystem] = React.useState<QuestionProps[]>(() => [
+        makeSystemMessage(<EmptyMessage />),
+    ]);
 
     // list of questions with all filters applied
     const filteredList = React.useMemo(() => applyFilters(displayed, filters), [
@@ -103,6 +82,15 @@ function QuestionFeed() {
     // updating difference when one of the boundaries change
     React.useEffect(() => {
         setDifference(questions.length - displayed.length);
+        if (
+            questions.length - displayed.length === questions.length &&
+            questions.length > 0 &&
+            system.length < 2
+            // NOTE: would have to change this in the future
+            // if we have more system messages
+        ) {
+            setSystem([makeSystemMessage(<RefreshMessage />), ...system]);
+        }
     }, [questions.length, displayed.length]);
 
     // onClick refresh button
@@ -130,88 +118,8 @@ function QuestionFeed() {
         setFilters(updateSearch);
     }
 
-    function closeDialog() {
-        setDialogContent(null);
-    }
-
-    interface UserAction {
-        type: UserActionTypes;
-        payload: string; // question id
-    }
-    function handleUserAction(action: UserAction) {
-        const target = questions.find(({ _id }) => _id === action.payload);
-
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
-
-        switch (action.type) {
-            case 'Like': {
-                // TODO: socket stuff here
-                console.log('liked');
-                break;
-            }
-            case 'Quote': {
-                // open dialog with the quoted question
-                // TODO: onSubmit
-                setDialogContent(
-                    <QuestionForm
-                        quote={target}
-                        onCancel={closeDialog}
-                        onSubmit={console.log}
-                    />
-                );
-                break;
-            }
-            case 'Reply': {
-                // open dialog with the replied quote
-                // TODO: onSubmit
-                setDialogContent(
-                    <QuestionReplyForm
-                        replyTo={target}
-                        onSubmit={console.log}
-                        onCancel={closeDialog}
-                    />
-                );
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
-    type ModAction = { type: ModActionTypes; payload: string };
-    function handleModAction(action: ModAction) {
-        const target = questions.find(({ _id }) => _id === action.payload);
-
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
-
-        switch (action.type) {
-            case 'Queue Question': {
-                // TODO: queue question
-                break;
-            }
-            case 'Remove From Queue': {
-                // TODO: remove question from queue
-                break;
-            }
-            case 'Set Current': {
-                // TODO: set as current question
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
-
     return (
         <div className={classes.root}>
-            <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
-                <DialogContent>{dialogContent || <div />}</DialogContent>
-            </Dialog>
             <ListFilter
                 filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
@@ -238,98 +146,12 @@ function QuestionFeed() {
             />
             <Grid container>
                 <Grid container item xs={12} justify='center'>
-                    <Grid item xs={12} className={classes.item}>
-                        <Collapse
-                            key={currentQuestion?._id}
-                            in={Boolean(currentQuestion)}
-                        >
-                            {currentQuestion && (
-                                <CurrentQuestion>
-                                    <QuestionFeedItem
-                                        user={currentQuestion.meta.user.name}
-                                        timestamp={
-                                            currentQuestion.meta.timestamp
-                                        }
-                                        actionBar={
-                                            isModerator ? (
-                                                <div />
-                                            ) : (
-                                                <UserBar
-                                                    onClick={(action) =>
-                                                        handleUserAction({
-                                                            type: action,
-                                                            payload:
-                                                                currentQuestion._id,
-                                                        })
-                                                    }
-                                                />
-                                            )
-                                        }
-                                    >
-                                        {currentQuestion.question}
-                                    </QuestionFeedItem>
-                                </CurrentQuestion>
-                            )}
-                        </Collapse>
-                    </Grid>
-                    {displayed.length === 0 && (
-                        <Grid item xs={12} className={classes.item}>
-                            <EmptyMessage />
-                        </Grid>
-                    )}
-                    {difference > 0 && difference === questions.length && (
-                        <Grid item xs={12} className={classes.item}>
-                            <Zoom in>
-                                <Card>
-                                    <CardContent>
-                                        <Typography align='center'>
-                                            Click the Refresh Button Above!
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Zoom>
-                        </Grid>
-                    )}
-                    {filteredList.map(
-                        ({ question, _id, meta, aiml, state }) => (
-                            <Grid
-                                item
-                                xs={12}
-                                className={classes.item}
-                                key={_id}
-                            >
-                                <QuestionFeedItem
-                                    user={meta.user.name}
-                                    timestamp={meta.timestamp}
-                                    actionBar={
-                                        isModerator ? (
-                                            <ModBar
-                                                labels={aiml.labels}
-                                                questionState={state}
-                                                onClick={(action) =>
-                                                    handleModAction({
-                                                        type: action,
-                                                        payload: _id,
-                                                    })
-                                                }
-                                            />
-                                        ) : (
-                                            <UserBar
-                                                onClick={(action) =>
-                                                    handleUserAction({
-                                                        type: action,
-                                                        payload: _id,
-                                                    })
-                                                }
-                                            />
-                                        )
-                                    }
-                                >
-                                    {question}
-                                </QuestionFeedItem>
-                            </Grid>
-                        )
-                    )}
+                    <FeedList
+                        variant={isModerator ? 'moderator' : 'user'}
+                        current={currentQuestion}
+                        questions={displayed}
+                        systemMessages={system}
+                    />
                 </Grid>
             </Grid>
         </div>

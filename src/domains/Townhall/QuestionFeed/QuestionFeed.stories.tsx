@@ -1,14 +1,11 @@
 import React from 'react';
 import faker from 'faker';
 import { EventEmitter } from 'events';
-import { Container } from '@material-ui/core';
 
 import Page from 'layout/Page';
 import FixtureSocket from 'mock/Fixture.socket';
 import QuestionFeed from '.';
 import { Question as QuestionType, QuestionState } from '../types';
-import { UserBar, ModBar, CurrentQuestion } from './components';
-import Question from '../QuestionFeedItem';
 
 export default { title: 'Domains/Townhall/Question Feed' };
 
@@ -70,100 +67,5 @@ export function Basic() {
                 </Page>
             </FixtureSocket.Provider>
         </div>
-    );
-}
-
-export function UserQuestion() {
-    return (
-        <Page maxWidth='sm'>
-            <h4>Normal</h4>
-            <Question
-                user={faker.internet.userName()}
-                timestamp={new Date().toISOString()}
-                actionBar={<UserBar onClick={console.log} />}
-            >
-                {faker.lorem.sentences(4)}
-            </Question>
-            <h4>Compact</h4>
-            <Question
-                compact
-                user={faker.internet.userName()}
-                timestamp={new Date().toISOString()}
-                actionBar={<UserBar onClick={console.log} />}
-            >
-                {faker.lorem.sentences(4)}
-            </Question>
-        </Page>
-    );
-}
-
-export function ModQuestion() {
-    return (
-        <Page maxWidth='sm'>
-            <h4>Not In Queue</h4>
-            <Question
-                user={faker.internet.userName()}
-                timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
-                        questionState=''
-                        labels={Array.from(
-                            new Set(faker.random.words(10).split(' '))
-                        )}
-                        onClick={console.log}
-                    />
-                }
-            >
-                {faker.lorem.sentences(4)}
-            </Question>
-            <h4>In Queue</h4>
-            <Question
-                user={faker.internet.userName()}
-                timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
-                        questionState='IN_QUEUE'
-                        labels={Array.from(
-                            new Set(faker.random.words(10).split(' '))
-                        )}
-                        onClick={console.log}
-                    />
-                }
-            >
-                {faker.lorem.sentences(4)}
-            </Question>
-            <h4>Asked</h4>
-            <Question
-                user={faker.internet.userName()}
-                timestamp={new Date().toISOString()}
-                actionBar={
-                    <ModBar
-                        questionState='ASKED'
-                        labels={Array.from(
-                            new Set(faker.random.words(10).split(' '))
-                        )}
-                        onClick={console.log}
-                    />
-                }
-            >
-                {faker.lorem.sentences(4)}
-            </Question>
-        </Page>
-    );
-}
-
-export function Current() {
-    return (
-        <Container maxWidth='sm'>
-            <CurrentQuestion>
-                <Question
-                    user={faker.internet.userName()}
-                    timestamp={new Date().toISOString()}
-                    actionBar={<UserBar onClick={console.log} />}
-                >
-                    {faker.lorem.sentences(4)}
-                </Question>
-            </CurrentQuestion>
-        </Container>
     );
 }
