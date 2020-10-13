@@ -32,7 +32,7 @@ export default function QuestionActions<T extends keyof typeof actions>({
     return (
         <Grid container justify='space-evenly'>
             {actionKeys.map((key) => (
-                <Grid item xs='auto'>
+                <Grid item xs='auto' key={key}>
                     <Tooltip title={key}>
                         <IconButton onClick={(e) => onClick(e, key)}>
                             {actions[key]}

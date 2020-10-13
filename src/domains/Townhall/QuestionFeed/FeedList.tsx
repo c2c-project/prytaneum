@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function QuestionFeed({ questions, variant, current, systemMessages }: Props) {
+function FeedList({ questions, variant, current, systemMessages }: Props) {
     const classes = useStyles();
     const [
         dialogContent,
@@ -142,8 +142,9 @@ function QuestionFeed({ questions, variant, current, systemMessages }: Props) {
             <Grid container>
                 <Grid container item xs={12} justify='center'>
                     {questions.length === 0 &&
-                        systemMessages.map((props) => (
+                        systemMessages.map((props, idx) => (
                             <QuestionFeedItem
+                                key={idx}
                                 {...props}
                                 className={classes.item}
                             />
@@ -168,9 +169,10 @@ function QuestionFeed({ questions, variant, current, systemMessages }: Props) {
                         </CurrentQuestion>
                     )}
                     {questions.map((question) => {
-                        const { question: text, meta, aiml } = question;
+                        const { _id, question: text, meta, aiml } = question;
                         return (
                             <QuestionFeedItem
+                                key={_id}
                                 user={meta.user.name}
                                 timestamp={meta.timestamp}
                                 actions={getActions(question)}
@@ -189,4 +191,4 @@ function QuestionFeed({ questions, variant, current, systemMessages }: Props) {
     );
 }
 
-export default React.memo(QuestionFeed);
+export default React.memo(FeedList);

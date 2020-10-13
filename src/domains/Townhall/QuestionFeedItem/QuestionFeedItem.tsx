@@ -94,7 +94,10 @@ QuestionFeedItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
     user: PropTypes.string.isRequired,
-    timestamp: PropTypes.string.isRequired,
+    timestamp: PropTypes.oneOfType([
+        PropTypes.instanceOf(Date),
+        PropTypes.string,
+    ]).isRequired,
     actions: PropTypes.node,
     onClickMore: PropTypes.func,
     compact: PropTypes.bool,
