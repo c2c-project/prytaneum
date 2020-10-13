@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Page from 'layout/Page';
 import Component from './TextField';
 
 export default {
@@ -9,12 +10,14 @@ export default {
 
 export function TextField() {
     return (
-        <Component
-            required
-            label='Storybook Label'
-            value='start typing here, or change it and it will `alert(1)`'
-            /* eslint-disable-next-line no-alert */
-            onChange={() => alert('onChange alert')}
-        />
+        <Page>
+            <Component
+                required
+                label='Storybook Label'
+                value='start typing here, or change it and it will `alert(1)`'
+                /* eslint-disable-next-line no-alert */
+                onChange={() => alert('onChange alert')}
+            />
+        </Page>
     );
 }
