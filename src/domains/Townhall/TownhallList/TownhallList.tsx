@@ -63,6 +63,16 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     React.useEffect(sendRequest, []);
 
+    const handleSearch = React.useCallback(
+        (text: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            setFilters(([_prevSearch, ...otherFilters]) => [
+                (filteredList) => search(text, filteredList),
+                ...otherFilters,
+            ]),
+        []
+    );
+
     if (isLoading || !list) return <Loader />;
 
     if (list.length === 0) {
@@ -82,13 +92,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
                 <div className={classes.listFilter}>
                     <ListFilter
                         filterMap={filterFuncs}
-                        onSearch={(text) =>
-                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                            setFilters(([_prevSearch, ...otherFilters]) => [
-                                (filteredList) => search(text, filteredList),
-                                ...otherFilters,
-                            ])
-                        }
+                        onSearch={handleSearch}
                         onFilterChange={(newFilters) =>
                             setFilters(([searchFunc]) => [
                                 searchFunc,

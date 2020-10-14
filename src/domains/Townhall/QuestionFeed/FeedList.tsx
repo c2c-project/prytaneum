@@ -33,6 +33,7 @@ interface Props {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        maxHeight: 'inherit',
     },
     item: {
         paddingBottom: theme.spacing(2),
@@ -168,23 +169,30 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                             </QuestionFeedItem>
                         </CurrentQuestion>
                     )}
-                    {questions.map((question) => {
-                        const { _id, question: text, meta, aiml } = question;
-                        return (
-                            <QuestionFeedItem
-                                key={_id}
-                                user={meta.user.name}
-                                timestamp={meta.timestamp}
-                                actions={getActions(question)}
-                                className={classes.item}
-                            >
-                                <Typography paragraph>{text}</Typography>
-                                {variant === 'moderator' && (
-                                    <QuestionLabels labels={aiml.labels} />
-                                )}
-                            </QuestionFeedItem>
-                        );
-                    })}
+                    <Grid item xs={12} style={{ maxHeight: '100%' }}>
+                        {questions.map((question) => {
+                            const {
+                                _id,
+                                question: text,
+                                meta,
+                                aiml,
+                            } = question;
+                            return (
+                                <QuestionFeedItem
+                                    key={_id}
+                                    user={meta.user.name}
+                                    timestamp={meta.timestamp}
+                                    actions={getActions(question)}
+                                    className={classes.item}
+                                >
+                                    <Typography paragraph>{text}</Typography>
+                                    {variant === 'moderator' && (
+                                        <QuestionLabels labels={aiml.labels} />
+                                    )}
+                                </QuestionFeedItem>
+                            );
+                        })}
+                    </Grid>
                 </Grid>
             </Grid>
         </div>

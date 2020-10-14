@@ -25,6 +25,7 @@ import {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        maxHeight: '100%',
     },
     item: {
         paddingBottom: theme.spacing(2),
@@ -101,16 +102,19 @@ function QuestionFeed() {
         setDisplayed(questions);
     }
 
-    function handleFilterChange(newFilters: QuestionFilterFunc[]) {
-        // replace everything BUT the first index
-        const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
-            prevSearch,
-            ...newFilters,
-        ];
-        setFilters(updateFilters);
-    }
+    const handleFilterChange = React.useCallback(
+        (newFilters: QuestionFilterFunc[]) => {
+            // replace everything BUT the first index
+            const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
+                prevSearch,
+                ...newFilters,
+            ];
+            setFilters(updateFilters);
+        },
+        []
+    );
 
-    function handleSearch(searchText: string) {
+    const handleSearch = React.useCallback((searchText: string) => {
         // replace ONLY the search filter -- the first index
         const updateSearch = (filtersWithOldSearch: QuestionFilterFunc[]) => {
             const [, ...currentFilters] = filtersWithOldSearch;
@@ -119,7 +123,7 @@ function QuestionFeed() {
             return [newSearch, ...currentFilters];
         };
         setFilters(updateSearch);
-    }
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -147,15 +151,13 @@ function QuestionFeed() {
                     </Tooltip>,
                 ]}
             />
-            <Grid container>
-                <Grid container item xs={12} justify='center'>
-                    <FeedList
-                        variant={isModerator ? 'moderator' : 'user'}
-                        current={currentQuestion}
-                        questions={filteredList}
-                        systemMessages={system}
-                    />
-                </Grid>
+            <Grid container justify='center'>
+                <FeedList
+                    variant={isModerator ? 'moderator' : 'user'}
+                    current={currentQuestion}
+                    questions={filteredList}
+                    systemMessages={system}
+                />
             </Grid>
         </div>
     );
