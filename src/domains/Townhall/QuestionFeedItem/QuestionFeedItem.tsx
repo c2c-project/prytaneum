@@ -46,7 +46,7 @@ function QuestionFeedItem(props: QuestionProps) {
     } = props;
     const date = React.useMemo(() => formatDate(timestamp, 'p-P'), [timestamp]);
     const [time, month] = date.split('-');
-    const classes = useStyles({ compact }); // FIXME: probably will get a perf boost if I remove this somehow
+    const classes = useStyles({ compact }); // NOTE: probably will get a perf boost if I remove this somehow
     return (
         <Grid item xs={12} className={className}>
             <Card>

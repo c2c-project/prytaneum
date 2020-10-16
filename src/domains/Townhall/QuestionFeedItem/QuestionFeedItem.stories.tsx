@@ -2,7 +2,7 @@ import React from 'react';
 import faker from 'faker';
 import Typography from '@material-ui/core/Typography';
 
-import Page from 'layout/Page';
+import VList from 'components/VList';
 import QuestionFeedItem from './QuestionFeedItem';
 import { Question as QuestionType, QuestionState } from '../types';
 
@@ -59,7 +59,7 @@ export function Basic() {
             <button
                 type='button'
                 onClick={() =>
-                    setState((prev) => [...prev, ...makeQuestions(100)])
+                    setState((prev) => [...makeQuestions(50), ...prev])
                 }
             >
                 Add 100 questions
@@ -68,20 +68,24 @@ export function Basic() {
                 count:
                 {state.length}
             </div>
-            <Page>
-                {state.map((question) => {
-                    const { _id, question: text, meta, aiml } = question;
-                    return (
-                        <QuestionFeedItem
-                            key={_id}
-                            user={meta.user.name}
-                            timestamp={meta.timestamp}
-                        >
-                            <Typography paragraph>{text}</Typography>
-                        </QuestionFeedItem>
-                    );
-                })}
-            </Page>
+            <div style={{ height: '80%' }}>
+                <VList loadDir='top' onLoadMore={() => {}}>
+                    {state.map((question, idx) => {
+                        const { _id, question: text, meta } = question;
+                        return (
+                            <QuestionFeedItem
+                                key={_id}
+                                user={meta.user.name}
+                                timestamp={meta.timestamp}
+                            >
+                                <Typography paragraph>
+                                    {`${text} idx: ${idx}`}
+                                </Typography>
+                            </QuestionFeedItem>
+                        );
+                    })}
+                </VList>
+            </div>
         </div>
     );
 }
