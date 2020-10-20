@@ -12,7 +12,7 @@ const data = new Array(1000)
 
 export function Basic() {
     return (
-        <VList>
+        <VList loadDir='top' onLoadMore={() => {}}>
             {data.map(({ _id }) => (
                 <Card
                     id={_id}
