@@ -46,8 +46,9 @@ const useStyles = makeStyles((theme) => ({
     },
     video: {
         [theme.breakpoints.up('md')]: {
-            flexGrow: 2,
+            flexGrow: 0,
             maxHeight: `calc(((9/16) * 63vw) - ${theme.spacing(2)}px)`,
+            height: '100%',
         },
         [theme.breakpoints.down('sm')]: {
             minHeight: '33vh',
@@ -55,14 +56,17 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
-    titleBar: {
-        backgroundColor: theme.palette.background.paper,
-        width: 'inherit',
-        display: 'flex',
-        flex: 1,
+    paper: {
         padding: theme.spacing(2),
+        width: '100%',
     },
-    title: {
+    description: {
+        flexGrow: 1,
+    },
+    descriptionTitle: {
+        flexGrow: 1,
+    },
+    titleText: {
         textTransform: 'uppercase',
     },
     largeAvatar: {
@@ -121,10 +125,12 @@ export default function TownhallLive() {
             spacing={2}
             alignItems='center'
         >
-            <Typography className={classes.title} variant='overline'>
-                {form.title}
-            </Typography>
-            <Grid item xs={12} container alignItems='center' spacing={2}>
+            <Grid item xs='auto' className={classes.descriptionTitle}>
+                <Typography variant='overline' className={classes.titleText}>
+                    {form.title}
+                </Typography>
+            </Grid>
+            <Grid item xs='auto'>
                 {/* <Grid item xs='auto'>
                     <Avatar
                         src={form.speaker.picture}
@@ -154,10 +160,14 @@ export default function TownhallLive() {
             </Grid>
             {!isMdUp ? (
                 <Collapse in={isIn}>
-                    <Typography paragraph>{form.description}</Typography>
+                    <Grid item xs={12}>
+                        <Typography paragraph>{form.description}</Typography>
+                    </Grid>
                 </Collapse>
             ) : (
-                <Typography paragraph>{form.description}</Typography>
+                <Grid item xs={12}>
+                    <Typography paragraph>{form.description}</Typography>
+                </Grid>
             )}
         </Grid>
     );
@@ -169,7 +179,9 @@ export default function TownhallLive() {
                 <div className={classes.video}>
                     <VideoPlayer url='https://www.youtube.com/watch?v=wW1lY5jFNcQ' />
                 </div>
-                <Paper className={classes.titleBar}>{description}</Paper>
+                <Grid container item xs='auto' className={classes.description}>
+                    <Paper className={classes.paper}>{description}</Paper>
+                </Grid>
             </Grid>
             <Grid container item xs={12} md={4}>
                 <div className={classes.panes} onScroll={handleScroll}>
