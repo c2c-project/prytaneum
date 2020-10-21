@@ -15,11 +15,9 @@ import clsx from 'clsx';
 import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
 import { TownhallContext } from '../Contexts/Townhall';
-import QuestionFeed from '../QuestionFeed';
-import AskQuestion from '../AskQuestion';
-import PaneSelect from '../PaneSelect';
+import TownhallPanes from '../TownhallPanes';
 
-const useDesktopStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         width: 'inherit',
@@ -33,7 +31,7 @@ const useDesktopStyles = makeStyles((theme) => ({
             overflowY: 'auto',
         },
     },
-    questionFeed: {
+    panes: {
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
             maxHeight: '100%',
@@ -41,8 +39,10 @@ const useDesktopStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             minHeight: '100%',
+            paddingTop: theme.spacing(1),
         },
         width: '100%',
+        display: 'flex',
     },
     video: {
         [theme.breakpoints.up('md')]: {
@@ -79,9 +79,6 @@ const useDesktopStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(0deg)',
     },
-    toolbar: {
-        padding: theme.spacing(1),
-    },
     // saving these for future
     // sticky: {
     //     top: 0,
@@ -93,7 +90,7 @@ const useDesktopStyles = makeStyles((theme) => ({
 
 export default function TownhallLive() {
     const { form } = React.useContext(TownhallContext);
-    const classes = useDesktopStyles();
+    const classes = useStyles();
     const topRef = React.useRef<HTMLDivElement | null>(null);
     const [isFabVisible, setIsFabVisible] = React.useState(false);
     const theme = useTheme();
@@ -175,24 +172,9 @@ export default function TownhallLive() {
                 <Paper className={classes.titleBar}>{description}</Paper>
             </Grid>
             <Grid container item xs={12} md={4}>
-                <div className={classes.questionFeed} onScroll={handleScroll}>
+                <div className={classes.panes} onScroll={handleScroll}>
                     {isMdUp && <div ref={topRef} />}
-                    <Paper className={classes.toolbar}>
-                        <PaneSelect
-                            options={[
-                                'Chat',
-                                'Users',
-                                'Stats',
-                                'Question Feed',
-                            ]} // TODO: finish pane select
-                            value='Question Feed'
-                        />
-                        {/* <Typography paragraph variant='subtitle2'>
-                            Question Feed
-                        </Typography> */}
-                        <AskQuestion />
-                    </Paper>
-                    <QuestionFeed />
+                    <TownhallPanes />
                 </div>
             </Grid>
             <Fab onClick={handleClick} zoomProps={{ in: isFabVisible }}>

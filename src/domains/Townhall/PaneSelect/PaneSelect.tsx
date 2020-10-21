@@ -15,6 +15,7 @@ export default function PaneSelect({
     return (
         <TextField
             select
+            variant='standard'
             {...rest}
             SelectProps={{
                 MenuProps: {
