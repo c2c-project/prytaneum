@@ -45,7 +45,7 @@ const buildSwitchUpdate = <U extends Record<string, boolean | string[]>>(
     setState((prev) => ({ ...prev, [id]: checked }));
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     fullWidth: {
         width: '100%',
     },
