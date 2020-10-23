@@ -1,22 +1,22 @@
 import React from 'react';
 
 type MessageBadge = {
-    type: 'messages-badge';
+    type: 'Chat';
     payload: string;
 };
 
 type ClearMessageBadge = {
-    type: 'messages-badge';
+    type: 'Chat';
     payload: null;
 };
 
 type QuestionsBadge = {
-    type: 'questions-badge';
+    type: 'Question Feed';
     payload: string;
 };
 
 type ClearQuestionsBadge = {
-    type: 'questions-badge';
+    type: 'Question Feed';
     payload: null;
 };
 
@@ -37,10 +37,10 @@ interface Props {
 function reducer(state: State, action: Actions): State {
     // for now, it always does the same thing regardless -- could change in the future?
     switch (action.type) {
-        case 'messages-badge': {
+        case 'Chat': {
             return { ...state, [action.type]: action.payload };
         }
-        case 'questions-badge': {
+        case 'Question Feed': {
             return { ...state, [action.type]: action.payload };
         }
         default:
