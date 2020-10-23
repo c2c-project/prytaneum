@@ -48,6 +48,7 @@ export type Actions =
     | DeleteQuestionAction;
 
 export function questionReducer(state: QuestionType[], action: Actions) {
+    console.log(state, action);
     switch (action.type) {
         case 'new-question':
             return [action.payload, ...state];

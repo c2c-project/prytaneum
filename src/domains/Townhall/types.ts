@@ -82,3 +82,21 @@ export interface Question {
         labels: string[];
     };
 }
+
+export interface ChatMessage {
+    _id: string;
+    meta: {
+        user: {
+            _id: string;
+            name: {
+                first: string;
+                last: string;
+            };
+        };
+        townhallId: string;
+        timestamp: string | Date | number;
+    };
+    message: string;
+}
+
+export type Panes = 'Question Feed' | 'Chat';

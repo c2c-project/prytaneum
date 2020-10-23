@@ -19,9 +19,7 @@ interface Props {
 export default function MessageItemTimestamp({ id, time }: Props) {
     return (
         <span id={id}>
-            <Typography variant='body1'>
-                {format(new Date(time), 'hh:mm')}
-            </Typography>
+            <Typography variant='caption'>{format(time, 'hh:mm')}</Typography>
         </span>
     );
 }

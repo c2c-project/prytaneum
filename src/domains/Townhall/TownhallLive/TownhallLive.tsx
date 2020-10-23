@@ -19,6 +19,7 @@ import TownhallPanes from '../TownhallPanes';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        '--root-width': 'calc(100%)',
         height: '100%',
         width: 'inherit',
         display: 'flex',
@@ -46,28 +47,27 @@ const useStyles = makeStyles((theme) => ({
     },
     video: {
         [theme.breakpoints.up('md')]: {
-            flexGrow: 0,
-            maxHeight: `calc(((9/16) * 63vw) - ${theme.spacing(2)}px)`,
-            height: '100%',
+            // height: '100%',
         },
         [theme.breakpoints.down('sm')]: {
-            minHeight: '33vh',
-            height: '33vh',
-            width: '100%',
+            // width: '100%',
         },
+        // minHeight: 'calc((9/16) * var(--video-width) - 10px)',
+        // maxHeight: 'calc((9/16) * var(--video-width) - 10px)',
+        // height: 'calc((9/16) * 100%)',
+        // display: 'flex',
+        // flex: '1 0 content',
+        // paddingTop: '56.25%' /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */,
+        // flex: '0 0 56.25%',
+        // position: 'relative',
+        // paddingTop: '56.25%',
     },
     paper: {
         padding: theme.spacing(2),
-        width: '100%',
-    },
-    description: {
-        flexGrow: 1,
+        flex: 1,
     },
     descriptionTitle: {
         flexGrow: 1,
-    },
-    titleText: {
-        textTransform: 'uppercase',
     },
     largeAvatar: {
         width: theme.spacing(7),
@@ -119,16 +119,9 @@ export default function TownhallLive() {
     };
 
     const description = (
-        <Grid
-            container
-            alignContent='flex-start'
-            spacing={2}
-            alignItems='center'
-        >
+        <Grid container alignContent='flex-start' alignItems='center'>
             <Grid item xs='auto' className={classes.descriptionTitle}>
-                <Typography variant='overline' className={classes.titleText}>
-                    {form.title}
-                </Typography>
+                <Typography variant='overline'>{form.title}</Typography>
             </Grid>
             <Grid item xs='auto'>
                 {/* <Grid item xs='auto'>
@@ -176,10 +169,8 @@ export default function TownhallLive() {
         <div className={classes.root} onScroll={handleScroll}>
             {!isMdUp && <div ref={topRef} />}
             <Grid item xs={12} md={8} container direction='column'>
-                <div className={classes.video}>
+                <Grid container item xs='auto'>
                     <VideoPlayer url='https://www.youtube.com/watch?v=wW1lY5jFNcQ' />
-                </div>
-                <Grid container item xs='auto' className={classes.description}>
                     <Paper className={classes.paper}>{description}</Paper>
                 </Grid>
             </Grid>
