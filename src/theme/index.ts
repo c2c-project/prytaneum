@@ -69,6 +69,9 @@ const themes: Themes = {
             secondary: { main: '#fca06f' },
         },
         ...base,
+        shape: {
+            borderRadius: 24,
+        },
     }),
     light: createMuiTheme({
         palette: {
