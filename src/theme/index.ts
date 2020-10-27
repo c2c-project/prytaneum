@@ -55,6 +55,9 @@ const base = {
             sharp: easingFunc,
         },
     },
+    shape: {
+        borderRadius: 24,
+    },
 };
 
 export interface Themes {
@@ -69,9 +72,6 @@ const themes: Themes = {
             secondary: { main: '#fca06f' },
         },
         ...base,
-        shape: {
-            borderRadius: 24,
-        },
     }),
     light: createMuiTheme({
         palette: {
