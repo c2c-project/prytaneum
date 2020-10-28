@@ -11,6 +11,9 @@ declare module '@material-ui/core/styles/createMuiTheme' {
             media: {
                 minHeight: string;
             };
+            clipPath: {
+                slope: string;
+            };
         };
     }
     // allow configuration using `createMuiTheme`
@@ -23,6 +26,9 @@ declare module '@material-ui/core/styles/createMuiTheme' {
             };
             media?: {
                 minHeight: string;
+            };
+            clipPath?: {
+                slope: string;
             };
         };
     }
@@ -45,6 +51,9 @@ const base = {
         },
         media: {
             minHeight: '300px',
+        },
+        clipPath: {
+            slope: 'polygon(0 0, 100% 0%, 100% 84%, 0% 100%)',
         },
     },
     transitions: {
