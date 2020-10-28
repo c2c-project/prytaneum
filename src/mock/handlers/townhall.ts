@@ -6,6 +6,13 @@ import { makeUsers } from './auth';
 const past = faker.date.past();
 const future = faker.date.future();
 
+export const makeSpeaker = (): TownhallTypes.Speaker => ({
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    picture: faker.image.imageUrl(),
+    title: faker.name.jobTitle(),
+    description: faker.lorem.lines(5),
+});
+
 export const makeTownhall = (): TownhallTypes.Townhall => ({
     _id: faker.random.alphaNumeric(5),
     form: {
@@ -14,12 +21,6 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
         description: faker.lorem.paragraph(5),
         scope: 'district', // FIXME:
         private: false,
-        // speaker: {
-        //     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        //     party: faker.company.companyName(),
-        //     territory: 'CA-41',
-        //     picture: faker.image.imageUrl(),
-        // },
         topic: faker.random.word(),
     },
     settings: {
@@ -46,6 +47,9 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
         moderators: {
             list: [],
             primary: '',
+        },
+        speakers: {
+            list: [makeSpeaker()],
         },
         registration: {
             reminders: {
