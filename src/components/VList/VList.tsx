@@ -118,7 +118,7 @@ export default function VList({ children, onLoadMore, loadDir }: Props) {
         }
 
         // save previous average
-        const previousAverage = cache.average;
+        // const previousAverage = cache.average;
 
         // re-initalize
         const nonZeroHeights = cache.heights.filter((n) => n !== 0);

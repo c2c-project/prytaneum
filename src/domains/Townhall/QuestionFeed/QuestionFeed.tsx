@@ -97,7 +97,7 @@ function QuestionFeed() {
                 ...prev,
             ]);
         }
-    }, [questions.length, displayed.length, system.length]);
+    }, [questions.length, displayed.length, system.length, dispatch]);
 
     // onClick refresh button
     function handleRefresh() {

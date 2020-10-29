@@ -1,17 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {
-    MenuItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    Grid,
-} from '@material-ui/core';
+import { MenuItem, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
 import TextField, { Props as TextFieldProps } from 'components/TextField';
 import { PaneContext } from '../Contexts/Pane';
-import { Panes } from '../types';
 
 // source for constants and other seemingly random stuff https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
 const RADIUS_STANDARD = 10;
@@ -36,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
         transform: 'rotate(0deg)',
         fontSize: '2.25em',
-        top: 'calc(50% - 18px)', // magic number is just from looking at mui source and visually testing
+        top: 'calc(50% - 18px)', // magic number just from looking at mui source and visually testing
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
         }),
@@ -46,15 +40,12 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         marginTop: theme.spacing(1),
-        // maxWidth: '60vw'
     },
     select: {
-        // minWidth: 200,
         display: 'flex',
         background: theme.palette.background.paper,
         fontWeight: theme.typography.fontWeightBold,
         borderStyle: 'none',
-        // borderWidth: 2,
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(2),
         boxShadow: theme.shadows[10],
@@ -83,9 +74,6 @@ const useStyles = makeStyles((theme) => ({
         '& li.Mui-selected:hover': {
             background: theme.palette.primary.dark,
         },
-        // '& li.MuiListItem-button:hover': {
-
-        // },
     },
     input: {
         paddingLeft: theme.spacing(2),
@@ -126,10 +114,6 @@ export default function PaneSelect({
                         vertical: 'top',
                         horizontal: 'left',
                     },
-                    // anchorPosition: {
-                    //     top: 200,
-                    //     left: 400,
-                    // },
                     getContentAnchorEl: null,
                     PaperProps: {
                         className: classes.paper,

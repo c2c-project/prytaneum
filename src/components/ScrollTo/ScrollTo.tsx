@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grow, Typography, Paper, ButtonBase } from '@material-ui/core';
+import { Grow, Typography, ButtonBase } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import useDebounce from 'hooks/useDebounce';
@@ -80,7 +80,7 @@ export default function ScrollTo({ children, direction }: Props) {
     React.useEffect(() => {
         firstRender.current = false;
         return () => io.disconnect();
-    }, []);
+    }, [io]);
 
     React.useLayoutEffect(handleAutoScroll);
 
@@ -90,7 +90,7 @@ export default function ScrollTo({ children, direction }: Props) {
         if (!scrollTarget.current) return;
         io.disconnect();
         io.observe(scrollTarget.current);
-    }, [scrollTarget.current]);
+    }, [io]);
 
     const jumpTo = (
         <div className={classes.container}>

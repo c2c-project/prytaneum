@@ -29,9 +29,7 @@ import ConfirmationDialog from 'components/ConfirmationDialog';
 import { User } from 'types';
 import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
-import SpeakerForm from '../SpeakerForm';
 import text from './help-text';
-import SpeakerCard from '../SpeakerCard';
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 

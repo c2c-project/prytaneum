@@ -11,7 +11,8 @@ import ScrollTo from 'components/ScrollTo';
 import useSocketio from 'hooks/useSocketio';
 import { ChatMessage } from '../types';
 import { chatReducer, Actions } from './utils';
-import { PaneContext } from '../Contexts/Pane';
+// TODO:
+// import { PaneContext } from '../Contexts/Pane'; 
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,8 +28,10 @@ interface ChatContentProps {
 }
 
 function ChatContent({ messages }: ChatContentProps) {
-    const [, dispatch] = React.useContext(PaneContext);
-    const ref = React.useRef(0);
+    // TODO: use to calculate how many new messages there are
+    // and update the pane context so it can display in the menu
+    // const [, dispatch] = React.useContext(PaneContext);
+    // const ref = React.useRef(0);
     const emptyMessage = (
         <Grid container item xs={12} justify='center' direction='column'>
             <Typography variant='h5' paragraph align='center'>

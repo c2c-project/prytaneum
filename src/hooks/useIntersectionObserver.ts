@@ -6,14 +6,14 @@ export default function useIntersectionObserver(
 ) {
     const ref = React.useRef<IntersectionObserver | null>(null);
 
-    function getObserver() {
+    const getObserver = React.useCallback(() => {
         if (ref.current === null) {
             ref.current = new IntersectionObserver(onIntersect, options);
         }
         return ref.current;
-    }
+    }, [onIntersect, options]);
 
-    React.useEffect(() => getObserver().disconnect(), []);
+    React.useEffect(() => getObserver().disconnect(), [getObserver]);
 
     return getObserver();
 }
