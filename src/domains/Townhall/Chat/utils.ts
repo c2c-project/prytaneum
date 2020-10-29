@@ -18,7 +18,6 @@ export interface DeleteMessage {
 export type Actions = NewMessage | UpdateMessage | DeleteMessage;
 
 export function chatReducer(state: ChatMessage[], action: Actions) {
-    console.log(action, state);
     switch (action.type) {
         case 'new-message':
             return [...state, action.payload];

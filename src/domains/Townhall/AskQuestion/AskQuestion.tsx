@@ -20,8 +20,8 @@ function AskQuestion() {
                 variant='contained'
                 color='primary'
                 fullWidth
-                disableElevation
                 onClick={() => setOpen(true)}
+                disableElevation
             >
                 Ask A Question
             </Button>

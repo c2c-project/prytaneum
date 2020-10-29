@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import PushPinIcon from '@material-ui/icons/PushPin';
 
 import { QuestionProps } from '../QuestionFeedItem';
@@ -11,31 +11,34 @@ interface CurrentQuestionProps {
     className?: string;
 }
 
+const useStyles = makeStyles((theme) => ({
+    currentQuestion: {
+        zIndex: 2,
+        boxShadow: theme.shadows[2],
+        borderRadius: theme.shape.borderRadius,
+        marginBottom: -theme.spacing(1.5),
+        backgroundColor: theme.palette.secondary.light,
+        padding: theme.spacing(0, 1),
+    },
+    text: {
+        color: theme.palette.secondary.contrastText,
+    },
+}));
+
 export function CurrentQuestion({ children, className }: CurrentQuestionProps) {
-    const theme = useTheme();
+    const classes = useStyles();
     return (
-        <Grid container className={className}>
-            <Grid
-                item
-                xs={12}
-                container
-                justify='center'
-                alignItems='center'
-                style={{
-                    backgroundColor: theme.palette.secondary.light,
-                    borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`,
-                }}
-            >
-                <PushPinIcon
-                    fontSize='small'
-                    style={{ color: theme.palette.secondary.contrastText }}
-                />
-                <Typography
-                    variant='overline'
-                    style={{ color: theme.palette.secondary.contrastText }}
-                >
-                    Current Question
-                </Typography>
+        <Grid container className={className} justify='center'>
+            <Grid item xs='auto' className={classes.currentQuestion}>
+                <Grid container justify='center' alignItems='center' style={{}}>
+                    <PushPinIcon fontSize='small' className={classes.text} />
+                    <Typography
+                        variant='overline'
+                        classes={{ root: classes.text }}
+                    >
+                        Current Question
+                    </Typography>
+                </Grid>
             </Grid>
             {children}
         </Grid>

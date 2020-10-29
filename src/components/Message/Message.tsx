@@ -1,108 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+    Typography,
+    Avatar,
+    Grid /* Menu, MenuItem */,
+} from '@material-ui/core';
 
-import MessageList from '../MessageList';
-import MessageListItem from '../MessageListItem';
-import MessageItemText from '../MessageItemText';
-import MessageItemAuthor from '../MessageItemAuthor';
-import MessageItemTimestamp from '../MessageItemTimestamp';
-import ScrollTo from '../ScrollTo';
-import { Message } from './types';
-
-// const checkIsOwner = (user: { _id: string }, messageUserId = '') =>
-//     user._id === messageUserId;
-
-// export const MessageContext = React.createContext(false);
-// interface Message {
-//     _id: string;
-//     userId: string;
-//     username: string;
-//     message: string;
-//     moderated: boolean;
-//     sent: number;
-// }
+import { formatDate } from 'utils/format';
 
 interface Props {
-    messages: Message[];
-    button?: boolean;
-    onClickMessage?: (_id: string) => void;
+    name: string;
+    timestamp: string | number | Date;
+    message: string;
 }
 
-interface PropDefaults {
-    onClickMessage: () => void;
-    button: false;
-}
-
-/** Test Description
- *  @category Component
- *  @constructor Messages
+/** @category Component
+ *  @constructor Message
+ *  @param props
+ *  @param {string} props.name name of the author
+ *  @param props.timestamp time of message send
+ *  @param props.message the message that was sent
  */
-function Messages({ messages, button, onClickMessage }: Props & PropDefaults) {
-    // const [, user] = useJwt();
-    // const user = { _id: '' }; // PLACEHOLDER TODO: remove this/fix this
-
-    // const filterQuestions = () => {
-    //     if (!Array.isArray(messages)) {
-    //         console.log('message is not an array');
-    //         return [];
-    //     }
-    //     if (moderator) {
-    //         return messages.filter((m) => {
-    //             if (filter.moderated && m.moderated) {
-    //                 // show message that m.moderated === true
-    //                 return true;
-    //             }
-    //             if (filter.normal && !m.moderated) {
-    //                 return true;
-    //             }
-    //             return false;
-    //         });
-    //     }
-    //     return messages.filter((m) => !m.moderated);
-    // };
-    // const isOwnerOrModerator = (sentBy) => checkIsOwner(user, sentBy);
-    // console.log(isOwnerOrModerator());
+export default function MessageItemAuthor({ name, timestamp, message }: Props) {
     return (
-        <ScrollTo active direction='bottom'>
-            {/* <MessageContext.Provider value={moderator}> */}
-            <MessageList>
-                {messages.map(({ _id, username, message, moderated, sent }) => (
-                    <MessageListItem
-                        key={_id}
-                        hidden={moderated}
-                        button={button}
-                        onClick={() => onClickMessage(_id)}
+        <Grid
+            container
+            alignItems='flex-start'
+            style={{ paddingBottom: '8px' }}
+        >
+            <Grid item xs='auto'>
+                <Avatar>{name[0].toUpperCase()}</Avatar>
+            </Grid>
+            <Grid
+                container
+                item
+                xs='auto'
+                style={{ flex: 1, paddingLeft: '8px' }}
+                alignContent='flex-start'
+            >
+                <Grid item xs={12}>
+                    <Typography
+                        variant='body2'
+                        display='inline'
+                        style={{ fontWeight: 700 }}
                     >
-                        <MessageItemTimestamp time={sent} />
-                        <MessageItemAuthor name={username} />
-                        <MessageItemText text={message} />
-                    </MessageListItem>
-                ))}
-            </MessageList>
-            {/* </MessageContext.Provider> */}
-        </ScrollTo>
+                        {name}
+                    </Typography>
+                    &nbsp;
+                    <Typography variant='caption' color='textSecondary'>
+                        {formatDate(timestamp, 'M/dd/yy p')}
+                    </Typography>
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    // onContextMenu={(e) => {
+                    //     e.preventDefault();
+                    // }}
+                >
+                    <Typography>{message}</Typography>
+                </Grid>
+            </Grid>
+        </Grid>
     );
 }
 
-Messages.defaultProps = {
-    messages: [],
-    button: false,
-    onClickMessage: () => {},
+MessageItemAuthor.propTypes = {
+    name: PropTypes.string.isRequired,
 };
-
-Messages.propTypes = {
-    messages: PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string,
-            userId: PropTypes.string,
-            username: PropTypes.string,
-            message: PropTypes.string,
-            moderated: PropTypes.bool,
-        })
-    ),
-    onClickMessage: PropTypes.func,
-    button: PropTypes.bool,
-    // moderator: PropTypes.bool.isRequired,
-};
-
-export default Messages;

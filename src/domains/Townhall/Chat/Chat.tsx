@@ -1,14 +1,17 @@
 import React from 'react';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SendIcon from '@material-ui/icons/Send';
 
 import TextField from 'components/TextField';
 import MessageList from 'components/MessageList';
 import MessageListItem from 'components/MessageListItem';
-import MessageItemAuthor from 'components/MessageItemAuthor';
+import Message from 'components/Message';
+import ScrollTo from 'components/ScrollTo';
 import useSocketio from 'hooks/useSocketio';
 import { ChatMessage } from '../types';
 import { chatReducer, Actions } from './utils';
+import { PaneContext } from '../Contexts/Pane';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,18 +22,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ChatContent() {
-    // full question feed from socketio
-    const [messages] = useSocketio<ChatMessage[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
-        event: 'townhall-chat-state',
-        reducer: chatReducer,
-        initialState: [],
-    });
-    const ref = React.useRef<HTMLDivElement | null>(null);
-    React.useLayoutEffect(() => {
-        // TODO: use intersection observer to see if I should keep scrolling bot etc.
-    }, []);
+interface ChatContentProps {
+    messages: ChatMessage[];
+}
+
+function ChatContent({ messages }: ChatContentProps) {
+    const [, dispatch] = React.useContext(PaneContext);
+    const ref = React.useRef(0);
     const emptyMessage = (
         <Grid container item xs={12} justify='center' direction='column'>
             <Typography variant='h5' paragraph align='center'>
@@ -41,46 +39,100 @@ function ChatContent() {
             </Typography>
         </Grid>
     );
+
     return (
-        <Grid item xs='auto' style={{ flex: 1, overflowY: 'auto' }} container>
+        <Grid
+            item
+            xs='auto'
+            style={{ flex: 1, overflowY: 'auto', position: 'relative' }}
+            container
+        >
             {messages.length === 0 && emptyMessage}
-            <MessageList>
-                {messages.map(({ meta, message }, idx) => (
-                    <MessageListItem
-                        button={false}
-                        onClick={() => {}}
-                        hidden={false}
-                        key={idx}
-                    >
-                        <MessageItemAuthor
-                            name={meta.user.name.first}
-                            timestamp={meta.timestamp}
-                            message={message}
-                        />
-                        {/* <MessageItemText text='asdf' /> */}
-                    </MessageListItem>
-                ))}
-            </MessageList>
-            <div ref={ref} />
+            <ScrollTo direction='bottom'>
+                <MessageList>
+                    {messages.map(({ meta, message }, idx) => (
+                        <MessageListItem
+                            button={false}
+                            onClick={() => {}}
+                            hidden={false}
+                            key={idx}
+                        >
+                            <Message
+                                name={meta.user.name.first}
+                                timestamp={meta.timestamp}
+                                message={message}
+                            />
+                        </MessageListItem>
+                    ))}
+                </MessageList>
+            </ScrollTo>
         </Grid>
     );
 }
 
-function MessageInput() {
+interface MessageInputProps {
+    onSubmit: (m: string) => void;
+}
+
+function MessageInput({ onSubmit }: MessageInputProps) {
+    const [message, setMessage] = React.useState('');
+
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        onSubmit(message);
+    }
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+        const { value } = e.target;
+        setMessage(value);
+    }
     return (
-        <Grid item xs='auto'>
-            <TextField label='Message' />
+        <Grid component='form' onSubmit={handleSubmit} container item xs='auto'>
+            <Grid item xs='auto' style={{ flex: 1 }}>
+                <TextField
+                    label='Message'
+                    value={message}
+                    onChange={handleChange}
+                />
+            </Grid>
+            <Grid
+                item
+                xs='auto'
+                style={{ paddingLeft: '8px', display: 'flex' }}
+            >
+                <Button
+                    variant='contained'
+                    color='primary'
+                    endIcon={<SendIcon />}
+                    style={{ flexGrow: 1 }}
+                    type='submit'
+                >
+                    Send
+                </Button>
+            </Grid>
         </Grid>
     );
 }
 
 export default function Chat() {
     const classes = useStyles();
+    // full question feed from socketio
+    const [messages, , socket] = useSocketio<ChatMessage[], Actions>({
+        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
+        event: 'townhall-chat-state',
+        reducer: chatReducer,
+        initialState: [],
+    });
+
+    function handleSubmit(message: string) {
+        socket.emit('new-chat-message', { message }); // FIXME: when I work on socketio more on server
+    }
     return (
-        <Paper className={classes.root}>
+        <Paper className={classes.root} elevation={10}>
             <Grid container direction='column'>
-                <ChatContent />
-                <MessageInput />
+                <ChatContent messages={messages} />
+                <MessageInput onSubmit={handleSubmit} />
             </Grid>
         </Paper>
     );

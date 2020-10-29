@@ -43,8 +43,9 @@ export default function TownhallPanes() {
                 </>
             ),
             Chat: <Chat />,
-            Users: <div>USERS TODO</div>,
-            Stats: <div>TODO</div>,
+            // TODO:
+            // Users: <div>USERS TODO</div>,
+            // Stats: <div>TODO</div>,
             Information: <Information />,
         }),
         []

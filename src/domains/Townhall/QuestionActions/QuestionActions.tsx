@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, IconButton, Tooltip } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ReplyIcon from '@material-ui/icons/Reply';
 import QuoteIcon from '@material-ui/icons/FormatQuote';
@@ -32,12 +32,15 @@ export default function QuestionActions<T extends keyof typeof actions>({
     return (
         <Grid container justify='space-evenly'>
             {actionKeys.map((key) => (
-                <Grid item xs='auto' key={key}>
-                    <Tooltip title={key}>
-                        <IconButton onClick={(e) => onClick(e, key)}>
-                            {actions[key]}
-                        </IconButton>
-                    </Tooltip>
+                <Grid item xs='auto' key={key} style={{ flexGrow: 1 }}>
+                    <Button
+                        color='inherit'
+                        onClick={(e) => onClick(e, key)}
+                        endIcon={actions[key]}
+                        fullWidth
+                    >
+                        {key}
+                    </Button>
                 </Grid>
             ))}
         </Grid>

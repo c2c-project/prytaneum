@@ -9,8 +9,9 @@ import { UserContext } from 'contexts/User';
 import { QuestionProps } from '../QuestionFeedItem';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Question as QuestionType } from '../types';
-import FeedList from './FeedList';
+import { PaneContext } from '../Contexts/Pane';
 
+import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 import {
     search,
@@ -30,17 +31,13 @@ const useStyles = makeStyles((theme) => ({
     item: {
         paddingBottom: theme.spacing(2),
     },
-    askQuestion: {
-        position: 'sticky',
-        top: 0,
-        zIndex: theme.zIndex.tooltip,
-    },
 }));
 
 function QuestionFeed() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
+    const [, dispatch] = React.useContext(PaneContext);
 
     // full question feed from socketio
     const [questions] = useSocketio<QuestionType[], Actions>({
@@ -82,6 +79,11 @@ function QuestionFeed() {
 
     // updating difference when one of the boundaries change
     React.useEffect(() => {
+        dispatch({
+            type: 'Question Feed',
+            payload: questions.length - displayed.length,
+        });
+
         setDifference(questions.length - displayed.length);
         if (
             questions.length - displayed.length === questions.length &&

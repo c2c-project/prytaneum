@@ -2,30 +2,16 @@ import React from 'react';
 
 type MessageBadge = {
     type: 'Chat';
-    payload: string;
-};
-
-type ClearMessageBadge = {
-    type: 'Chat';
-    payload: null;
+    payload: number;
 };
 
 type QuestionsBadge = {
     type: 'Question Feed';
-    payload: string;
+    payload: number;
 };
 
-type ClearQuestionsBadge = {
-    type: 'Question Feed';
-    payload: null;
-};
-
-type Actions =
-    | MessageBadge
-    | QuestionsBadge
-    | ClearMessageBadge
-    | ClearQuestionsBadge;
-type State = Record<string, string | number | null>;
+type Actions = MessageBadge | QuestionsBadge;
+type State = Record<string, number>;
 // type Reducer = (s: State, a: Actions) => State;
 type Context = [State, React.Dispatch<Actions>];
 export const PaneContext = React.createContext<Context>([{}, () => {}]);
