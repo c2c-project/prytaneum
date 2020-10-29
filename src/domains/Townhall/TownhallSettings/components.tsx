@@ -29,7 +29,9 @@ import ConfirmationDialog from 'components/ConfirmationDialog';
 import { User } from 'types';
 import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
+import SpeakerForm from '../SpeakerForm';
 import text from './help-text';
+import SpeakerCard from '../SpeakerCard';
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
@@ -329,4 +331,24 @@ export function ExportData() {
 
 export function Preview() {
     return <div />;
+}
+
+export function Speakers() {
+    const townhall = React.useContext(TownhallContext);
+    const speakers = townhall.settings.speakers.list;
+    // FIXME: finish how i will display the speakers
+    return (
+        <Grid container>
+            {speakers.map((speaker) => (
+                <Grid container item xs={12}>
+                    <Grid item xs='auto' style={{ flexGrow: 1 }}>
+                        <Typography>{speaker.name}</Typography>
+                    </Grid>
+                    <Grid item xs='auto'>
+                        <Button>Edit</Button>
+                    </Grid>
+                </Grid>
+            ))}
+        </Grid>
+    );
 }

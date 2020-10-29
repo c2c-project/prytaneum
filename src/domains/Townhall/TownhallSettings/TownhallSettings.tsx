@@ -14,6 +14,7 @@ import {
     Moderators,
     ExportData,
     Preview,
+    Speakers,
 } from './components';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +68,11 @@ const config: AccordionData[] = [
         title: 'Form',
         description: 'Modify Townhall Form',
         component: <TownhallForm buttonText='Save' />,
+    },
+    {
+        title: 'Speakers',
+        description: 'Add and Modify speakers at this event',
+        component: <Speakers />,
     },
     {
         title: 'Components',

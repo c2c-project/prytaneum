@@ -2,7 +2,12 @@ import axios from 'utils/axios';
 import errors from 'utils/errors';
 
 import { User } from 'types';
-import { Townhall, TownhallForm, TownhallQuestionForm } from '../types';
+import {
+    Townhall,
+    TownhallForm,
+    TownhallQuestionForm,
+    Speaker,
+} from '../types';
 
 interface RequestBody {
     form: TownhallForm;
@@ -93,5 +98,26 @@ export async function addMod(townhallId: string, moderatorEmail: string) {
     return axios.post<unknown>(
         `/api/townhalls/${townhallId}/organizer/add-mod`,
         { emai: moderatorEmail }
+    );
+}
+
+export async function getSpeakers(townhallId: string) {
+    return axios.get(`/api/townhalls/${townhallId}/organizer/speakers`);
+}
+
+export async function createSpeaker(townhallId: string, speaker: Speaker) {
+    return axios.post(`/api/townhalls/${townhallId}/organizer/speakers`, {
+        speaker,
+    });
+}
+
+export async function updateSpeaker(townhallId: string, speaker: Speaker) {
+    return axios.post(`/api/townhalls/${townhallId}/organizer/speakers`, {
+        speaker,
+    });
+}
+export async function deleteSpeaker(townhallId: string, speakerId: string) {
+    return axios.delete(
+        `/api/townhalls/${townhallId}/organizer/speakers/${speakerId}`
     );
 }
