@@ -24,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 const UserList = () => {
     const classes = useStyles();
     const [users, setUsers] = useState<UserProfile[]>([]);
+    // FIXME:
+    // eslint-disable-next-line
     const [loading, setLoading] = useState<boolean>(false);
 
     const filteredUsersHandler = useCallback((filteredUsers: UserProfile[]) => {

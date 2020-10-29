@@ -103,7 +103,7 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
                     onChange={handleChange('description')}
                 />
             </FormContent>
-            <FormActions>
+            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
                 <Button type='submit' variant='contained' color='secondary'>
                     {buttonText}
                 </Button>

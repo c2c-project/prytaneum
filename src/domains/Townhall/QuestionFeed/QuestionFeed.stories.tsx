@@ -2,7 +2,6 @@ import React from 'react';
 import faker from 'faker';
 import { EventEmitter } from 'events';
 
-import Page from 'layout/Page';
 import FixtureSocket from 'mock/Fixture.socket';
 import QuestionFeed from '.';
 import { Question as QuestionType, QuestionState } from '../types';
@@ -57,14 +56,16 @@ function sendMessage(num?: number) {
 
 export function Basic() {
     return (
-        <div>
+        <div style={{ maxHeight: '100%' }}>
             <button type='button' onClick={() => sendMessage(20)}>
                 Add Message
             </button>
             <FixtureSocket.Provider value={emitter}>
-                <Page>
-                    <QuestionFeed />
-                </Page>
+                {/* <Page> */}
+                {/* <div style={{ maxHeight: '100%' }}> */}
+                <QuestionFeed />
+                {/* </div> */}
+                {/* </Page> */}
             </FixtureSocket.Provider>
         </div>
     );

@@ -60,6 +60,9 @@ export const TownhallContext = React.createContext<Townhall>({
             },
             registrants: [],
         },
+        speakers: {
+            list: [],
+        },
     },
 });
 

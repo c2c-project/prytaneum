@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode | React.ReactNodeArray;
     gridProps?: GridProps;
     disableGrow?: boolean;
 }

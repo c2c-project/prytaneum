@@ -1,14 +1,14 @@
 import React from 'react';
 import io from 'socket.io-client';
 
-type Events =
+type ServerEvents =
     | 'townhall-chat-state'
     | 'townhall-question-state'
     | 'townhall-moderator-chat-state';
 interface Settings<T, U> {
     url: string;
     query?: Record<string, string>;
-    event: Events;
+    event: ServerEvents;
     reducer: (a: T, b: U) => T;
     initialState: T;
 }

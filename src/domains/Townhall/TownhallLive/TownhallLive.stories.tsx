@@ -9,7 +9,7 @@ import AppBar from 'layout/AppBar';
 import Page from 'layout/Page';
 import UserProvider from 'contexts/User';
 import Component from './TownhallLive';
-import { Question as QuestionType, QuestionState } from '../types';
+import { Question as QuestionType, QuestionState, ChatMessage } from '../types';
 import TownhallProvider from '../Contexts/Townhall';
 
 export default {
@@ -62,12 +62,40 @@ function makeQuestion(): QuestionType {
     };
 }
 
-function sendMessage(num: number, emitter: SocketIOClient.Socket) {
+function makeChatMessage(): ChatMessage {
+    return {
+        _id: faker.random.alphaNumeric(12),
+        meta: {
+            user: {
+                _id: faker.random.alphaNumeric(12),
+                name: {
+                    first: faker.internet.userName(),
+                    last: faker.internet.userName(),
+                },
+            },
+            timestamp: new Date().toISOString(),
+            townhallId: faker.random.alphaNumeric(12),
+        },
+        message: faker.lorem.lines(3),
+    };
+}
+
+function sendQuestions(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
         emitter.emit('townhall-question-state', {
             type: 'new-question',
             payload: makeQuestion(),
+        });
+    }
+}
+
+function sendMessages(num: number, emitter: SocketIOClient.Socket) {
+    const iterations = num || 1;
+    for (let i = 0; i < iterations; i += 1) {
+        emitter.emit('townhall-chat-state', {
+            type: 'new-message',
+            payload: makeChatMessage(),
         });
     }
 }
@@ -85,12 +113,17 @@ export function Basic(/* { userType }: Props */) {
     //     user._id = id;
     // }
     const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
-
     return (
         <>
             <AppBar>
-                <button type='button' onClick={() => sendMessage(20, emitter)}>
-                    Add Message
+                <button
+                    type='button'
+                    onClick={() => sendQuestions(20, emitter)}
+                >
+                    Add Questions
+                </button>
+                <button type='button' onClick={() => sendMessages(20, emitter)}>
+                    Add Messages
                 </button>
             </AppBar>
             <Page maxWidth='xl'>
@@ -118,8 +151,14 @@ export function AsMod() {
     return (
         <>
             <AppBar>
-                <button type='button' onClick={() => sendMessage(20, emitter)}>
+                <button
+                    type='button'
+                    onClick={() => sendQuestions(20, emitter)}
+                >
                     Add Message
+                </button>
+                <button type='button' onClick={() => sendMessages(20, emitter)}>
+                    Add Messages
                 </button>
             </AppBar>
             <Page maxWidth='xl'>

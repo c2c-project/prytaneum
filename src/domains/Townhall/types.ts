@@ -33,6 +33,9 @@ export interface TownhallSettings {
         list: string[]; // userid[]
         primary: string; // primary user id
     };
+    speakers: {
+        list: Speaker[];
+    };
     registration: {
         reminders: {
             enabled: true;
@@ -48,15 +51,14 @@ export interface TownhallForm {
     description: string;
     scope: 'state' | 'district';
     private: boolean; // TODO: what does this mean? might put this in the form itself
-    // speaker: Speaker;
     topic: string;
 }
 
 export interface Speaker {
-    name: string;
-    party: string;
-    territory: string;
-    picture: string;
+    name: string; // speaker's name written however, first and last don't matter
+    title: string; // speaker's official title
+    picture: string; // speaker's picture
+    description: string; // description of who the speaker is
 }
 
 export interface TownhallQuestionForm {
@@ -82,3 +84,21 @@ export interface Question {
         labels: string[];
     };
 }
+
+export interface ChatMessage {
+    _id: string;
+    meta: {
+        user: {
+            _id: string;
+            name: {
+                first: string;
+                last: string;
+            };
+        };
+        townhallId: string;
+        timestamp: string | Date | number;
+    };
+    message: string;
+}
+
+export type Panes = 'Question Feed' | 'Chat' | 'Information';

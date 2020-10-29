@@ -45,7 +45,7 @@ const buildSwitchUpdate = <U extends Record<string, boolean | string[]>>(
     setState((prev) => ({ ...prev, [id]: checked }));
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     fullWidth: {
         width: '100%',
     },
@@ -329,4 +329,24 @@ export function ExportData() {
 
 export function Preview() {
     return <div />;
+}
+
+export function Speakers() {
+    const townhall = React.useContext(TownhallContext);
+    const speakers = townhall.settings.speakers.list;
+    // FIXME: finish how i will display the speakers
+    return (
+        <Grid container>
+            {speakers.map((speaker) => (
+                <Grid container item xs={12}>
+                    <Grid item xs='auto' style={{ flexGrow: 1 }}>
+                        <Typography>{speaker.name}</Typography>
+                    </Grid>
+                    <Grid item xs='auto'>
+                        <Button>Edit</Button>
+                    </Grid>
+                </Grid>
+            ))}
+        </Grid>
+    );
 }

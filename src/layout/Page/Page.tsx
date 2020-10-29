@@ -24,14 +24,14 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
     //     // overflowY: 'auto', // TODO: fix
     // },
     main: {
-        height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 56}px)`,
+        height: `calc(100vh - ${theme.mixins.toolbar.height || 56}px)`,
         [theme.breakpoints.up('sm')]: {
             height: `calc(100vh - ( ${
-                theme.mixins.toolbar.minHeight || 64
+                theme.mixins.toolbar.height || 64
             }px))`,
         },
         [theme.breakpoints.down('xs')]: {
-            height: `calc(100vh - ${theme.mixins.toolbar.minHeight || 48}px)`,
+            height: `calc(100vh - ${theme.mixins.toolbar.height || 48}px)`,
         },
     },
     appBar: theme.mixins.toolbar,

@@ -20,7 +20,7 @@ export default function DevTeam() {
         },
         onFailure: () => snack('Something went wrong, please try again'),
     });
-    React.useEffect(() => sendRequest(), []);
+    React.useEffect(sendRequest, [sendRequest]);
 
     return isLoading ? (
         <Loader />

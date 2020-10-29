@@ -9,8 +9,9 @@ import { UserContext } from 'contexts/User';
 import { QuestionProps } from '../QuestionFeedItem';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Question as QuestionType } from '../types';
-import FeedList from './FeedList';
+import { PaneContext } from '../Contexts/Pane';
 
+import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 import {
     search,
@@ -25,14 +26,10 @@ import {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        maxHeight: '100%',
     },
     item: {
         paddingBottom: theme.spacing(2),
-    },
-    askQuestion: {
-        position: 'sticky',
-        top: 0,
-        zIndex: theme.zIndex.tooltip,
     },
 }));
 
@@ -40,6 +37,7 @@ function QuestionFeed() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
+    const [, dispatch] = React.useContext(PaneContext);
 
     // full question feed from socketio
     const [questions] = useSocketio<QuestionType[], Actions>({
@@ -81,6 +79,11 @@ function QuestionFeed() {
 
     // updating difference when one of the boundaries change
     React.useEffect(() => {
+        dispatch({
+            type: 'Question Feed',
+            payload: questions.length - displayed.length,
+        });
+
         setDifference(questions.length - displayed.length);
         if (
             questions.length - displayed.length === questions.length &&
@@ -94,23 +97,26 @@ function QuestionFeed() {
                 ...prev,
             ]);
         }
-    }, [questions.length, displayed.length, system.length]);
+    }, [questions.length, displayed.length, system.length, dispatch]);
 
     // onClick refresh button
     function handleRefresh() {
         setDisplayed(questions);
     }
 
-    function handleFilterChange(newFilters: QuestionFilterFunc[]) {
-        // replace everything BUT the first index
-        const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
-            prevSearch,
-            ...newFilters,
-        ];
-        setFilters(updateFilters);
-    }
+    const handleFilterChange = React.useCallback(
+        (newFilters: QuestionFilterFunc[]) => {
+            // replace everything BUT the first index
+            const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
+                prevSearch,
+                ...newFilters,
+            ];
+            setFilters(updateFilters);
+        },
+        []
+    );
 
-    function handleSearch(searchText: string) {
+    const handleSearch = React.useCallback((searchText: string) => {
         // replace ONLY the search filter -- the first index
         const updateSearch = (filtersWithOldSearch: QuestionFilterFunc[]) => {
             const [, ...currentFilters] = filtersWithOldSearch;
@@ -119,7 +125,7 @@ function QuestionFeed() {
             return [newSearch, ...currentFilters];
         };
         setFilters(updateSearch);
-    }
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -147,15 +153,13 @@ function QuestionFeed() {
                     </Tooltip>,
                 ]}
             />
-            <Grid container>
-                <Grid container item xs={12} justify='center'>
-                    <FeedList
-                        variant={isModerator ? 'moderator' : 'user'}
-                        current={currentQuestion}
-                        questions={filteredList}
-                        systemMessages={system}
-                    />
-                </Grid>
+            <Grid container justify='center'>
+                <FeedList
+                    variant={isModerator ? 'moderator' : 'user'}
+                    current={currentQuestion}
+                    questions={filteredList}
+                    systemMessages={system}
+                />
             </Grid>
         </div>
     );

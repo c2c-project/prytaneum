@@ -1,8 +1,8 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import MessageItemAuthor from './MessageItemAuthor';
+import Message from './Message';
 
 describe('MessageItemAuthor', function () {
     let container: HTMLDivElement | null = null;
@@ -22,16 +22,15 @@ describe('MessageItemAuthor', function () {
     });
 
     it('should render', () => {
-        const name = "toTest";
+        const name = 'toTest';
         ReactTestUtils.act(() => {
             render(
                 <div id='MessageItemAuthor'>
-                    <MessageItemAuthor name={name} />
+                    <Message name={name} timestamp={Date.now()} message='123' />
                 </div>,
                 container
-            )
+            );
         });
         expect(document.getElementById('MessageItemAuthor')).toBeTruthy();
     });
-
 });

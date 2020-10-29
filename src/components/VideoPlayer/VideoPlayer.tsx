@@ -1,6 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
+
+const useStyles = makeStyles({
+    outerContainer: {
+        position: 'relative',
+        width: '100%',
+        paddingTop: '56.25%', // 16:9 Aspect Ratio (divide 9 by 16 = 0.5625)
+    },
+    innerContainer: {
+        position: 'absolute',
+        inset: 0, // sets top,bot,left,right to 0
+    },
+});
 
 /** Displays the video stream that plays during the townhall
  *  @category Component
@@ -10,17 +23,22 @@ import ReactPlayer, { ReactPlayerProps } from 'react-player';
  *  @param {any} ReactPlayerProps.rest rest of props to pass to ReactPlayer
  */
 function VideoPlayer({ url, rest }: ReactPlayerProps) {
+    const classes = useStyles();
     return (
-        <ReactPlayer
-            url={url}
-            playing={process.env.NODE_ENV === 'production'}
-            width='100%'
-            height='100%'
-            playsinline
-            controls
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...rest}
-        />
+        <div className={classes.outerContainer}>
+            <div className={classes.innerContainer}>
+                <ReactPlayer
+                    url={url}
+                    playing={process.env.NODE_ENV === 'production'}
+                    width='100%'
+                    height='100%'
+                    playsinline
+                    controls
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...rest}
+                />
+            </div>
+        </div>
     );
 }
 
