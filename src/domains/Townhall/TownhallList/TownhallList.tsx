@@ -28,10 +28,20 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     title: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(3, 0, 2, 2),
     },
     listFilter: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(0, 2),
+    },
+    paper: {
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            borderRadius: 0,
+        },
+        [theme.breakpoints.up('md')]: {
+            margin: theme.spacing(3, 0),
+        },
+        boxShadow: theme.shadows[10],
     },
 }));
 
@@ -85,7 +95,7 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
 
     return (
         <Fade in timeout={400}>
-            <Paper style={{ width: '100%' }}>
+            <Paper className={classes.paper}>
                 <Typography className={classes.title} variant='h4'>
                     Townhalls
                 </Typography>

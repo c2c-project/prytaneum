@@ -28,10 +28,12 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     title: {
-        flexGrow: 1,
+        flex: 1,
         [theme.breakpoints.down('md')]: {
             paddingLeft: theme.spacing(1),
         },
+        marginBottom: theme.spacing(2),
+        marginLeft: theme.spacing(1),
     },
     titlebar: {
         paddingTop: theme.spacing(2),

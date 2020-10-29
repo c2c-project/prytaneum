@@ -20,11 +20,13 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             padding: theme.spacing(3),
             marginTop: '-10vh',
+            boxShadow: theme.shadows[10],
         },
         [theme.breakpoints.down('sm')]: {
             padding: theme.spacing(0, 1),
             paddingTop: '10vh',
             height: '100%',
+            borderRadius: 0,
         },
     },
     avatar: {

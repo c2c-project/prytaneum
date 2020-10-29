@@ -18,7 +18,7 @@ import API from '../api';
 
 const useStyles = makeStyles((theme) => ({
     link: {
-        padding: theme.spacing(1, 0, 0, 0),
+        padding: theme.spacing(2, 0, 0, 2),
     },
 }));
 

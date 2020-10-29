@@ -13,6 +13,12 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         padding: theme.spacing(2),
+        [theme.breakpoints.up('md')]: {
+            boxShadow: theme.shadows[10],
+        },
+        [theme.breakpoints.down('sm')]: {
+            borderRadius: 0,
+        },
     },
 }));
 
