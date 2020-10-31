@@ -47,6 +47,7 @@ const initialState: PageState = {
 
 // eslint-disable-next-line
 const useStyles = makeStyles((theme) => ({
+    // only keeping the below for example purposes, but it is not necessary
     '@keyframes slideInRight': {
         from: { transform: 'translateX(-100vw)' },
         to: { transform: 'translateX(0)' },
@@ -76,12 +77,31 @@ const useStyles = makeStyles((theme) => ({
         animationDuration: '400ms',
         overflow: 'visible',
     },
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+    },
+    animationContainer: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        top: 0,
+    },
+    main: {
+        flex: 1,
+        position: 'relative',
+        overflow: 'hidden',
+        overflowY: 'auto',
+    },
 }));
 
 const variants = {
     enter: (direction: number) => {
         if (direction === 0) return { opacity: 0 };
         return {
+            zIndex: 0,
             x: direction > 0 ? 300 : -300,
             opacity: 0,
         };
@@ -95,20 +115,20 @@ const variants = {
         if (direction === 0) return { opacity: 0 };
         return {
             zIndex: 0,
-            x: direction < 0 ? -300 : 300,
+            x: direction < 0 ? 300 : -300,
             opacity: 0,
         };
     },
 };
 
 export default function App() {
-    // TODO: NEED TO DETERMINE DIRECTION BETTER
-    // const classes = useStyles();
-    const [[currPage, dir], setCurrPage] = React.useState<
-        [PageState, 1 | 0 | -1]
-    >([initialState, 0]);
+    type PageDir = [PageState, 1 | 0 | -1];
+    const [[currPage, dir], setCurrPage] = React.useState<PageDir>([
+        initialState,
+        0,
+    ]);
     let depth = useCache<number>(0);
-    // const [dir, setDir] = React.useState<-1 | 0 | 1>(1);
+    const classes = useStyles();
 
     const handleLocationChange = ({ location }: Update<State>) => {
         const result = router.resolve({
@@ -130,12 +150,9 @@ export default function App() {
         } else {
             newDir = -1;
         }
-        // console.log(newDir, depth, destDepth);
+
         depth = destDepth;
         setCurrPage([state, newDir]);
-        // setTimeout(() => {
-        // setCurrPage(state);
-        // }, 25);
     };
 
     React.useEffect(() => {
@@ -150,19 +167,12 @@ export default function App() {
         return unlisten;
     }, []);
 
-    // React.useEffect(() => {
-    //     if (currPage.component === null) setCurrPage(destPage);
-    // }, [destPage, currPage.component]);
-
-    // React.useEffect(() => {}, [history.location.key]);
-    // console.log(dir);
     return (
-        <>
-            {/* <Page key={currPage.key}> */}
+        <div className={classes.root}>
             <Nav />
-            <h1 style={{ position: 'absolute', top: '50px' }}>{dir}</h1>
-            <main style={{ overflow: 'hidden' }}>
-                <AnimatePresence initial={false}>
+
+            <main className={classes.main}>
+                <AnimatePresence initial={false} custom={dir}>
                     <motion.div
                         key={currPage.key}
                         custom={dir}
@@ -170,61 +180,13 @@ export default function App() {
                         initial='enter'
                         animate='center'
                         exit='exit'
-                        // initial={{ x: 300, opacity: 0 }}
-                        // animate={{ x: 0, opacity: 1 }}
-                        // exit={{ x: -300, opacity: 0 }}
                         transition={{ ease: 'easeInOut' }}
-                        style={{
-                            position: 'absolute',
-                            height: '100%',
-                            width: '100%',
-                        }}
+                        className={classes.animationContainer}
                     >
                         {currPage.component}
                     </motion.div>
                 </AnimatePresence>
             </main>
-
-            {/* <Fade
-                key={currPage.key}
-                in={history.location.key === currPage.key}
-                onExited={() => setCurrPage(destPage)}
-            >
-                <div
-                    style={{
-                        height: 'inherit',
-                        width: 'inherit',
-                    }}
-                >
-                    {currPage.component}
-                </div>
-            </Fade> */}
-
-            {/* </Page> */}
-            {/* <Slide
-                key={currPage.key}
-                in={history.location.key === currPage.key}
-                direction='right'
-                timeout={400}
-            >
-                <Page>
-                    <div>{currPage.component}</div>
-                </Page>
-            </Slide>
-            <Slide
-                key={destPage.key || 'nextPage'}
-                in={history.location.key === destPage.key}
-                direction='left'
-                onEntered={() => {
-                    setCurrPage(destPage);
-                    setDestPage(initialState);
-                }}
-                timeout={400}
-            >
-                <Page>
-                    <div>{destPage.component}</div>
-                </Page>
-            </Slide> */}
-        </>
+        </div>
     );
 }
