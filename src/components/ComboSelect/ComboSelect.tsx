@@ -11,11 +11,18 @@ import { TextField, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+    '@keyframes grow': {
+        from: { transform: 'scale(0%)' },
+        to: { transform: 'scale(100%)' },
+    },
     checkBoxIcon: {
         marginRight: theme.spacing(1),
     },
     TextField: {
         width: '100%',
+    },
+    chip: {
+        animation: '$grow 200ms',
     },
 }));
 
@@ -45,6 +52,8 @@ const ComboSelect = ({ options, onChange, selectedFilter, label }: Props) => {
             multiple
             id='checkboxes-tags-demo'
             options={options}
+            // TODO: there's no exit animation, but w/e for now -- very low prio
+            classes={{ tag: classes.chip }}
             disableCloseOnSelect
             defaultValue={selectedFilter}
             getOptionLabel={(option: string) => {

@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(3, 0),
         },
         boxShadow: theme.shadows[10],
+        paddingBottom: theme.spacing(3),
     },
 }));
 

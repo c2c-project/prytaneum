@@ -18,7 +18,7 @@ export const TownhallContext = React.createContext<Townhall>({
         title: '',
         date: new Date(),
         description: '',
-        scope: 'district',
+        // scope: 'district',
         private: false,
         // speaker: {
         //     name: '',

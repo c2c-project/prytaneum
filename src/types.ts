@@ -43,4 +43,16 @@ export interface User {
             types: string[];
         };
     };
+    history: {
+        actions: {
+            timestamp: Date | number | string;
+            action: string;
+        }[];
+        townhall: {
+            _id: string;
+            title: string;
+            timestamp: Date | number | string;
+            tags: string[]; // stuff like attended/moderated/banned/viewed/etc
+        }[];
+    };
 }

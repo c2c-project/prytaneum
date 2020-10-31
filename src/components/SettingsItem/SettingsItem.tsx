@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles({
     grow: {
-        flexGrow: 1,
+        flex: 1,
     },
 });
 

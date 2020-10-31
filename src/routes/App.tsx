@@ -170,7 +170,6 @@ export default function App() {
     return (
         <div className={classes.root}>
             <Nav />
-
             <main className={classes.main}>
                 <AnimatePresence initial={false} custom={dir}>
                     <motion.div

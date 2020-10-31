@@ -4,8 +4,33 @@ import faker from 'faker';
 import * as AuthTypes from 'domains/Auth/types';
 import { User } from 'types';
 
-export const makeUser = () => ({
+const makeTownhallHistory = (num = 50) => {
+    const result = [];
+    for (let i = 0; i < num; i += 1) {
+        result.push({
+            _id: faker.random.alphaNumeric(5),
+            title: faker.company.bsAdjective(),
+            timestamp: faker.date.past(),
+            tags: faker.lorem.slug(5).split(' '),
+        });
+    }
+    return result;
+};
+
+const makeActionHistory = (num = 50) => {
+    const result = [];
+    for (let i = 0; i < num; i += 1) {
+        result.push({
+            timestamp: faker.date.past(),
+            action: faker.random.word(),
+        });
+    }
+    return result;
+};
+
+export const makeUser = (): User => ({
     _id: faker.random.alphaNumeric(5),
+    // TODO: generate roles randomly
     roles: ['admin', 'organizer', 'user'],
     email: {
         address: faker.internet.email(),
@@ -19,6 +44,10 @@ export const makeUser = () => ({
             enabled: Math.random() > 0.5,
             types: [],
         },
+    },
+    history: {
+        townhall: makeTownhallHistory(),
+        actions: makeActionHistory(),
     },
 });
 

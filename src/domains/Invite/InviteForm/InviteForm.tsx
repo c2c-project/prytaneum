@@ -95,10 +95,10 @@ export default function InviteFormStepper() {
     const steps = getSteps();
     const expectedKeys = ['email', 'fName', 'lName'];
     const [inviteForm, setInviteForm]: [InviteForm, Function] = useState({
-        MoC:  '', // FIXME:
+        MoC: '', // FIXME:
         topic: townhall.form.topic,
         eventDateTime: new Date(townhall.form.date).toUTCString(),
-        constituentScope: townhall.form.scope || 'district',
+        constituentScope: 'district',
         region: '', // FIXME:
         deliveryTime: new Date(),
         townhallId: townhall._id,

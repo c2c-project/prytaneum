@@ -39,12 +39,11 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1, 0),
     },
     search: {
-        flexBasis: 'content',
-        flexGrow: 4,
+        flex: 1,
     },
-    icons: {
+    iconContainer: {
         flexBasis: 'content',
-        flexGrow: 1,
+        marginLeft: theme.spacing(0.5),
     },
 }));
 
@@ -82,6 +81,7 @@ export default function ListFilter<T>({
     };
 
     React.useEffect(() => {
+        // TODO: replace with a useThrottle hook in the future
         const cache = search.slice(0);
         const handle = setTimeout(() => {
             if (search === cache) onSearch(search);
@@ -119,7 +119,7 @@ export default function ListFilter<T>({
                     justify='space-evenly'
                     xs='auto'
                     alignItems='center'
-                    className={classes.icons}
+                    className={classes.iconContainer}
                 >
                     <Grid item xs='auto'>
                         <Tooltip title='Filter'>
