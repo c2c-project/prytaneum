@@ -43,7 +43,7 @@ const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     return (
         <>
             <div className={classes.appBar} />
-            <main className={classes.main}>
+            <div className={classes.main}>
                 <Container
                     maxWidth={maxWidth || 'md'}
                     disableGutters={disableGutters}
@@ -54,7 +54,7 @@ const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
                     {children}
                     {/* </div> */}
                 </Container>
-            </main>
+            </div>
         </>
     );
 });

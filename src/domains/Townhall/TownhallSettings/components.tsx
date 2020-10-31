@@ -338,7 +338,7 @@ export function Speakers() {
     return (
         <Grid container>
             {speakers.map((speaker) => (
-                <Grid container item xs={12}>
+                <Grid container key={speaker.picture} item xs={12}>
                     <Grid item xs='auto' style={{ flexGrow: 1 }}>
                         <Typography>{speaker.name}</Typography>
                     </Grid>

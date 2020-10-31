@@ -1,13 +1,14 @@
 import React from 'react';
 import UniversalRouter from 'universal-router/sync';
-import { Fade } from '@material-ui/core';
 import { Update, State } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // import Page from 'layout/Page';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';
+import useCache from 'hooks/useCache';
 
 // for side effects (adding the routes)
 import './Auth';
@@ -77,10 +78,37 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const variants = {
+    enter: (direction: number) => {
+        if (direction === 0) return { opacity: 0 };
+        return {
+            x: direction > 0 ? 300 : -300,
+            opacity: 0,
+        };
+    },
+    center: {
+        zIndex: 1,
+        x: 0,
+        opacity: 1,
+    },
+    exit: (direction: number) => {
+        if (direction === 0) return { opacity: 0 };
+        return {
+            zIndex: 0,
+            x: direction < 0 ? -300 : 300,
+            opacity: 0,
+        };
+    },
+};
+
 export default function App() {
+    // TODO: NEED TO DETERMINE DIRECTION BETTER
     // const classes = useStyles();
-    const [currPage, setCurrPage] = React.useState<PageState>(initialState);
-    const [destPage, setDestPage] = React.useState<PageState>(initialState);
+    const [[currPage, dir], setCurrPage] = React.useState<
+        [PageState, 1 | 0 | -1]
+    >([initialState, 0]);
+    let depth = useCache<number>(0);
+    // const [dir, setDir] = React.useState<-1 | 0 | 1>(1);
 
     const handleLocationChange = ({ location }: Update<State>) => {
         const result = router.resolve({
@@ -91,8 +119,23 @@ export default function App() {
             component: result,
             key: location.key,
         };
-
-        setDestPage(state);
+        let newDir: 1 | 0 | -1 = 0;
+        const destDepth = location.pathname.split('/').length;
+        if (depth === 0) {
+            newDir = 0;
+        } else if (depth === destDepth) {
+            newDir = 0;
+        } else if (depth < destDepth) {
+            newDir = 1;
+        } else {
+            newDir = -1;
+        }
+        // console.log(newDir, depth, destDepth);
+        depth = destDepth;
+        setCurrPage([state, newDir]);
+        // setTimeout(() => {
+        // setCurrPage(state);
+        // }, 25);
     };
 
     React.useEffect(() => {
@@ -107,15 +150,42 @@ export default function App() {
         return unlisten;
     }, []);
 
-    React.useEffect(() => {
-        if (currPage.component === null) setCurrPage(destPage);
-    }, [destPage, currPage.component]);
+    // React.useEffect(() => {
+    //     if (currPage.component === null) setCurrPage(destPage);
+    // }, [destPage, currPage.component]);
 
+    // React.useEffect(() => {}, [history.location.key]);
+    // console.log(dir);
     return (
         <>
-            <Nav />
             {/* <Page key={currPage.key}> */}
-            <Fade
+            <Nav />
+            <h1 style={{ position: 'absolute', top: '50px' }}>{dir}</h1>
+            <main style={{ overflow: 'hidden' }}>
+                <AnimatePresence initial={false}>
+                    <motion.div
+                        key={currPage.key}
+                        custom={dir}
+                        variants={variants}
+                        initial='enter'
+                        animate='center'
+                        exit='exit'
+                        // initial={{ x: 300, opacity: 0 }}
+                        // animate={{ x: 0, opacity: 1 }}
+                        // exit={{ x: -300, opacity: 0 }}
+                        transition={{ ease: 'easeInOut' }}
+                        style={{
+                            position: 'absolute',
+                            height: '100%',
+                            width: '100%',
+                        }}
+                    >
+                        {currPage.component}
+                    </motion.div>
+                </AnimatePresence>
+            </main>
+
+            {/* <Fade
                 key={currPage.key}
                 in={history.location.key === currPage.key}
                 onExited={() => setCurrPage(destPage)}
@@ -128,7 +198,8 @@ export default function App() {
                 >
                     {currPage.component}
                 </div>
-            </Fade>
+            </Fade> */}
+
             {/* </Page> */}
             {/* <Slide
                 key={currPage.key}

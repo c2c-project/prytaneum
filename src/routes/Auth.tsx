@@ -18,19 +18,23 @@ addRoutes([
         children: [
             {
                 path: '/login',
-                action: () => (
-                    <Login
-                        onLogin={() => history.push('/home')}
-                    />
-                ),
-            },
-            {
-                path: '/register',
-                action: () => <Register />,
-            },
-            {
-                path: '/forgot-password/request',
-                action: () => <ForgotPasswordRequest />,
+                action: (ctx) => {
+                    return (
+                        ctx.next() || (
+                            <Login onLogin={() => history.push('/home')} />
+                        )
+                    );
+                },
+                children: [
+                    {
+                        path: '/register',
+                        action: () => <Register />,
+                    },
+                    {
+                        path: '/forgot-password/request',
+                        action: () => <ForgotPasswordRequest />,
+                    },
+                ],
             },
         ],
     },
