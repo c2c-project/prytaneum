@@ -132,6 +132,10 @@ export default [
     rest.get('/api/users/me', (req, res, ctx) => {
         const { jwt } = req.cookies;
         if (jwt) return res(ctx.status(200), ctx.json(makeUser()));
-        return res(ctx.status(401));
+        return res(ctx.status(204));
+    }),
+    rest.get('/api/users/logout', (req, res, ctx) => {
+        // deletes the cookie
+        return res(ctx.cookie('jwt', ''));
     }),
 ];
