@@ -14,6 +14,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@material-ui/icons/Close';
 
 import TextField from 'components/TextField';
 import { FilterFunc } from 'utils/filters';
@@ -42,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
     },
     iconContainer: {
-        flexBasis: 'content',
+        flexBasis: 'auto',
+        width: 'auto',
         marginLeft: theme.spacing(0.5),
     },
 }));
@@ -80,6 +82,12 @@ export default function ListFilter<T>({
         }
     };
 
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const copy = e.target.value;
+        setSearch(copy);
+    };
+
     React.useEffect(() => {
         // TODO: replace with a useThrottle hook in the future
         const cache = search.slice(0);
@@ -91,7 +99,12 @@ export default function ListFilter<T>({
         };
     }, [search, onSearch]);
 
-    //  TODO: cancel button, pressing escape will clear the search instantly rather than waiting for that delay
+    const clearSearch = () => setSearch('');
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Escape') clearSearch();
+    };
+
     return (
         <div className={classes.root}>
             <Grid container alignItems='center'>
@@ -99,17 +112,25 @@ export default function ListFilter<T>({
                     <TextField
                         label='Search'
                         value={search}
-                        onChange={(e) => {
-                            e.preventDefault();
-                            const copy = e.target.value;
-                            setSearch(copy);
-                        }}
+                        onChange={handleSearch}
+                        onKeyDown={handleKeyPress}
                         InputProps={{
-                            endAdornment: (
-                                <InputAdornment position='end'>
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
+                            // TODO: animation change here
+                            endAdornment:
+                                search === '' ? (
+                                    <InputAdornment position='end'>
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ) : (
+                                    <InputAdornment position='end'>
+                                        <IconButton
+                                            edge='end'
+                                            onClick={clearSearch}
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
                         }}
                     />
                 </Grid>
