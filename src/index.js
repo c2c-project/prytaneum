@@ -12,7 +12,6 @@ function startup() {
 }
 
 if (process.env.NODE_ENV === 'development') {
-    console.log('am I getting called');
     // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment, global-require
     const { worker } = require('mock/browser');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access

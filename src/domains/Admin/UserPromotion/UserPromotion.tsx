@@ -1,3 +1,5 @@
+// TODO: change to use components/SettingsItem & components/SettingsList
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,8 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Paper, Grid, Switch, Typography } from '@material-ui/core';
 
 import useEndpoint from 'hooks/useEndpoint';
-import { promoteUser } from 'domains/AdminDashboard/api/api';
-import { UserProfile } from 'domains/AdminDashboard/types';
+import { promoteUser } from 'domains/Admin/api/api';
+import { User } from 'types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     promotionOptions: string[];
-    userData: UserProfile;
+    userData: User;
     onChange?: () => void;
 }
 
 const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
     const classes = useStyles();
-    const [user, setUser] = useState<UserProfile>(userData);
+    const [user, setUser] = useState<User>(userData);
     const [post] = useEndpoint(() => promoteUser(user, user._id), {
         onSuccess: cb,
     });
@@ -34,14 +36,14 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
         const copyUser = user;
-        const newStatus = user.status.map((x) => {
-            if (x.role === name) {
+        const newStatus = user.roles.map((role) => {
+            if (role === name) {
                 return {
-                    ...x,
-                    active: checked,
+                    ...user.roles,
+                    role,
                 };
             }
-            return x;
+            return user.roles;
         });
 
         const updatedUser = { ...copyUser, status: newStatus };
@@ -49,32 +51,22 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
         post();
     };
 
-    const switches = user.status.reduce((acc: JSX.Element[], curr) => {
-        const { role, active } = curr;
-        if (promotionOptions.includes(role)) {
-            acc.push(
-                <Grid
-                    container
-                    item
-                    key={role}
-                    spacing={2}
-                    alignContent='center'
-                >
-                    <Grid item xs={10}>
-                        <Typography>{role}</Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Switch
-                            checked={active}
-                            onChange={onChangeHandler}
-                            name={role}
-                        />
-                    </Grid>
+    const switches = promotionOptions.map((role) => {
+        return (
+            <Grid container item key={role} spacing={2} alignContent='center'>
+                <Grid item xs={10}>
+                    <Typography>{role}</Typography>
                 </Grid>
-            );
-        }
-        return acc;
-    }, []);
+                <Grid item xs={2}>
+                    <Switch
+                        checked={user.roles.includes(role)}
+                        onChange={onChangeHandler}
+                        name={role}
+                    />
+                </Grid>
+            </Grid>
+        );
+    });
 
     return (
         <Container maxWidth='md' className={classes.root}>

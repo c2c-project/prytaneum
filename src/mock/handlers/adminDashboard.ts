@@ -1,60 +1,61 @@
 import { rest } from 'msw';
 import faker from 'faker';
-import * as AdminDashboardTypes from 'domains/AdminDashboard/types';
+import * as AdminDashboardTypes from 'domains/Admin/types';
+import { makeUsers, makeUser } from './auth';
 
 const recent = faker.date.recent();
 const future = faker.date.future();
 
-export const makeUser = (): AdminDashboardTypes.UserProfile => {
-    const iterationsActions = 10;
-    const statusType = [
-        'Admin',
-        'Moderator',
-        'Organizer',
-        'Attended',
-        'Banned',
-    ];
-    const userActionHistory: AdminDashboardTypes.UserActionHistory[] = [];
+// export const makeUser = (): AdminDashboardTypes.UserProfile => {
+//     const iterationsActions = 10;
+//     const statusType = [
+//         'Admin',
+//         'Moderator',
+//         'Organizer',
+//         'Attended',
+//         'Banned',
+//     ];
+//     const userActionHistory: AdminDashboardTypes.UserActionHistory[] = [];
 
-    for (let i = 0; i < iterationsActions; i += 1) {
-        userActionHistory.push({
-            timeStamp: faker.date.between(recent, future),
-            action: faker.random.words(3),
-        });
-    }
+//     for (let i = 0; i < iterationsActions; i += 1) {
+//         userActionHistory.push({
+//             timeStamp: faker.date.between(recent, future),
+//             action: faker.random.words(3),
+//         });
+//     }
 
-    return {
-        _id: faker.random.alphaNumeric(10),
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        timeStamp: faker.date.between(recent, future),
-        status: statusType.map((s) => {
-            return {
-                role: s,
-                count: faker.random.number(),
-                active: faker.random.boolean(),
-            };
-        }),
-        actionHistoryData: userActionHistory,
-    };
-};
+//     return {
+//         _id: faker.random.alphaNumeric(10),
+//         name: faker.name.findName(),
+//         email: faker.internet.email(),
+//         timeStamp: faker.date.between(recent, future),
+//         status: statusType.map((s) => {
+//             return {
+//                 role: s,
+//                 count: faker.random.number(),
+//                 active: faker.random.boolean(),
+//             };
+//         }),
+//         actionHistoryData: userActionHistory,
+//     };
+// };
 
-export const makeUsers = (num?: number): AdminDashboardTypes.UserProfile[] => {
-    const iterations = num || 1;
-    const users: AdminDashboardTypes.UserProfile[] = [];
+// export const makeUsers = (num?: number): AdminDashboardTypes.UserProfile[] => {
+//     const iterations = num || 1;
+//     const users: AdminDashboardTypes.UserProfile[] = [];
 
-    for (let i = 0; i < iterations; i += 1) {
-        users.push(makeUser());
-    }
+//     for (let i = 0; i < iterations; i += 1) {
+//         users.push(makeUser());
+//     }
 
-    return users;
-};
+//     return users;
+// };
 
 export default [
     rest.get('/api/users/list', (req, res, ctx) => {
         return res(
             ctx.json({
-                list: makeUsers(5),
+                list: makeUsers(50),
             }),
             ctx.status(200)
         );

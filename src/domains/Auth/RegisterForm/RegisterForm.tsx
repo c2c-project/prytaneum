@@ -22,7 +22,13 @@ interface Props {
     onFailure: () => void;
 }
 
-const initialState: FormType = { email: '', password: '', confirmPassword: '' };
+const initialState: FormType = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+};
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const [snack] = useSnack();
     const [isPassVisible, setIsPassVisible] = React.useState(false);

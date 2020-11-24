@@ -1,13 +1,14 @@
 import React from 'react';
 import UniversalRouter from 'universal-router/sync';
-import { Fade } from '@material-ui/core';
 import { Update, State } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // import Page from 'layout/Page';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';
+import useCache from 'hooks/useCache';
 
 // for side effects (adding the routes)
 import './Auth';
@@ -46,6 +47,7 @@ const initialState: PageState = {
 
 // eslint-disable-next-line
 const useStyles = makeStyles((theme) => ({
+    // only keeping the below for example purposes, but it is not necessary
     '@keyframes slideInRight': {
         from: { transform: 'translateX(-100vw)' },
         to: { transform: 'translateX(0)' },
@@ -75,12 +77,58 @@ const useStyles = makeStyles((theme) => ({
         animationDuration: '400ms',
         overflow: 'visible',
     },
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+    },
+    animationContainer: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        top: 0,
+    },
+    main: {
+        flex: 1,
+        position: 'relative',
+        overflow: 'hidden',
+        overflowY: 'auto',
+    },
 }));
 
+const variants = {
+    enter: (direction: number) => {
+        if (direction === 0) return { opacity: 0 };
+        return {
+            zIndex: 0,
+            x: direction > 0 ? 300 : -300,
+            opacity: 0,
+        };
+    },
+    center: {
+        zIndex: 1,
+        x: 0,
+        opacity: 1,
+    },
+    exit: (direction: number) => {
+        if (direction === 0) return { opacity: 0 };
+        return {
+            zIndex: 0,
+            x: direction < 0 ? 300 : -300,
+            opacity: 0,
+        };
+    },
+};
+
 export default function App() {
-    // const classes = useStyles();
-    const [currPage, setCurrPage] = React.useState<PageState>(initialState);
-    const [destPage, setDestPage] = React.useState<PageState>(initialState);
+    type PageDir = [PageState, 1 | 0 | -1];
+    const [[currPage, dir], setCurrPage] = React.useState<PageDir>([
+        initialState,
+        0,
+    ]);
+    let depth = useCache<number>(0);
+    const classes = useStyles();
 
     const handleLocationChange = ({ location }: Update<State>) => {
         const result = router.resolve({
@@ -91,8 +139,20 @@ export default function App() {
             component: result,
             key: location.key,
         };
+        let newDir: 1 | 0 | -1 = 0;
+        const destDepth = location.pathname.split('/').length;
+        if (depth === 0) {
+            newDir = 0;
+        } else if (depth === destDepth) {
+            newDir = 0;
+        } else if (depth < destDepth) {
+            newDir = 1;
+        } else {
+            newDir = -1;
+        }
 
-        setDestPage(state);
+        depth = destDepth;
+        setCurrPage([state, newDir]);
     };
 
     React.useEffect(() => {
@@ -107,53 +167,25 @@ export default function App() {
         return unlisten;
     }, []);
 
-    React.useEffect(() => {
-        if (currPage.component === null) setCurrPage(destPage);
-    }, [destPage, currPage.component]);
-
     return (
-        <>
+        <div className={classes.root}>
             <Nav />
-            {/* <Page key={currPage.key}> */}
-            <Fade
-                key={currPage.key}
-                in={history.location.key === currPage.key}
-                onExited={() => setCurrPage(destPage)}
-            >
-                <div
-                    style={{
-                        height: 'inherit',
-                        width: 'inherit',
-                    }}
-                >
-                    {currPage.component}
-                </div>
-            </Fade>
-            {/* </Page> */}
-            {/* <Slide
-                key={currPage.key}
-                in={history.location.key === currPage.key}
-                direction='right'
-                timeout={400}
-            >
-                <Page>
-                    <div>{currPage.component}</div>
-                </Page>
-            </Slide>
-            <Slide
-                key={destPage.key || 'nextPage'}
-                in={history.location.key === destPage.key}
-                direction='left'
-                onEntered={() => {
-                    setCurrPage(destPage);
-                    setDestPage(initialState);
-                }}
-                timeout={400}
-            >
-                <Page>
-                    <div>{destPage.component}</div>
-                </Page>
-            </Slide> */}
-        </>
+            <main className={classes.main}>
+                <AnimatePresence initial={false} custom={dir}>
+                    <motion.div
+                        key={currPage.key}
+                        custom={dir}
+                        variants={variants}
+                        initial='enter'
+                        animate='center'
+                        exit='exit'
+                        transition={{ ease: 'easeInOut' }}
+                        className={classes.animationContainer}
+                    >
+                        {currPage.component}
+                    </motion.div>
+                </AnimatePresence>
+            </main>
+        </div>
     );
 }

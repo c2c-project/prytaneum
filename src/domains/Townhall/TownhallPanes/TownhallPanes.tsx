@@ -10,6 +10,8 @@ import Chat from '../Chat';
 import PaneSelect from '../PaneSelect';
 import AskQuestion from '../AskQuestion';
 import Information from '../Information';
+import { TownhallContext } from '../Contexts/Townhall';
+import { Townhall, Panes } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     navigation: {
@@ -33,26 +35,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function buildPanes(townhall: Townhall) {
+    const panes: Partial<Record<Panes, JSX.Element>> = {
+        Information: <Information />,
+    };
+    if (townhall.settings.questionQueue.transparent)
+        panes['Question Feed'] = (
+            <>
+                <AskQuestion />
+                <QuestionFeed />
+            </>
+        );
+
+    if (townhall.settings.chat.enabled) panes.Chat = <Chat />;
+    return panes;
+}
+
 export default function TownhallPanes() {
-    const panes = React.useMemo(
-        () => ({
-            'Question Feed': (
-                <>
-                    <AskQuestion />
-                    <QuestionFeed />
-                </>
-            ),
-            Chat: <Chat />,
-            // TODO:
-            // Users: <div>USERS TODO</div>,
-            // Stats: <div>TODO</div>,
-            Information: <Information />,
-        }),
-        []
-    );
+    const townhall = React.useContext(TownhallContext);
+    const panes = React.useMemo(() => buildPanes(townhall), [townhall]);
     type PaneKey = keyof typeof panes;
     const classes = useStyles();
-    const [state, setState] = React.useState<PaneKey>('Chat');
+    const [state, setState] = React.useState<PaneKey>('Information');
 
     function getClassName(key: string) {
         return key === state

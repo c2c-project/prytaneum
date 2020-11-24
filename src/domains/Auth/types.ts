@@ -2,6 +2,8 @@ export interface RegisterForm {
     password?: string;
     email?: string;
     confirmPassword?: string;
+    firstName: string;
+    lastName: string;
 }
 
 export interface ForgotPassRequestForm {

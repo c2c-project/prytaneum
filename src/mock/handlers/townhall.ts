@@ -19,29 +19,28 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
         title: faker.lorem.words(),
         date: faker.date.between(past, future),
         description: faker.lorem.paragraph(5),
-        scope: 'district', // FIXME:
-        private: false,
+        private: Math.random() > 0.5,
         topic: faker.random.word(),
     },
     settings: {
         waitingRoom: {
-            enabled: false,
+            enabled: Math.random() > 0.5,
             scheduled: null,
         },
         chat: {
-            enabled: false,
-            automated: false,
+            enabled: Math.random() > 0.5,
+            automated: Math.random() > 0.5,
         },
         questionQueue: {
-            transparent: false,
-            automated: false,
+            transparent: Math.random() > 0.5,
+            automated: Math.random() > 0.5,
         },
         credits: {
-            enabled: false,
+            enabled: Math.random() > 0.5,
             list: [],
         },
         links: {
-            enabled: false,
+            enabled: Math.random() > 0.5,
             list: [],
         },
         moderators: {
@@ -53,7 +52,7 @@ export const makeTownhall = (): TownhallTypes.Townhall => ({
         },
         registration: {
             reminders: {
-                enabled: true,
+                enabled: Math.random() > 0.5,
                 customTimes: [],
             },
             registrants: [],

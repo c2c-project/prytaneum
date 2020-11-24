@@ -2,60 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Container } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 interface Props {
-    children: JSX.Element | JSX.Element[] | React.ReactNode;
+    children: React.ReactNodeArray | React.ReactNode;
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     disableGutters?: boolean;
 }
 
-const useStyles = makeStyles<Theme, Props>((theme) => ({
-    outerContainer: {
-        position: 'relative',
-        width: '100%',
+const useStyles = makeStyles(() => ({
+    root: {
         height: '100%',
+        width: '100%',
+        display: 'flex',
     },
-    // innerContainer: {
-    //     // FIXME: if I want to make it so taht slide in works properly I'll need to mess with this
-    //     // position: 'absolute',
-    //     width: '100%',
-    //     height: '100%',
-    //     // overflowY: 'auto', // TODO: fix
-    // },
     main: {
-        height: `calc(100vh - ${theme.mixins.toolbar.height || 56}px)`,
-        [theme.breakpoints.up('sm')]: {
-            height: `calc(100vh - ( ${
-                theme.mixins.toolbar.height || 64
-            }px))`,
-        },
-        [theme.breakpoints.down('xs')]: {
-            height: `calc(100vh - ${theme.mixins.toolbar.height || 48}px)`,
-        },
+        flexGrow: 1,
     },
-    appBar: theme.mixins.toolbar,
 }));
 
 const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, maxWidth, disableGutters } = props;
-    const classes = useStyles(props);
+    const classes = useStyles();
     return (
-        <>
-            <div className={classes.appBar} />
-            <main className={classes.main}>
-                <Container
-                    maxWidth={maxWidth || 'md'}
-                    disableGutters={disableGutters}
-                    className={classes.outerContainer}
-                    ref={ref}
-                >
-                    {/* <div className={classes.innerContainer}> */}
-                    {children}
-                    {/* </div> */}
-                </Container>
-            </main>
-        </>
+        <div id='page-root' className={classes.root}>
+            <Container
+                maxWidth={maxWidth || 'md'}
+                disableGutters={disableGutters}
+                className={classes.main}
+                ref={ref}
+            >
+                {/* I know that this will always be a valid element so... */}
+                {children as React.ReactElement}
+            </Container>
+        </div>
     );
 });
 

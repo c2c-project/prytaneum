@@ -38,7 +38,7 @@ export interface TownhallSettings {
     };
     registration: {
         reminders: {
-            enabled: true;
+            enabled: boolean;
             customTimes: string[]; // TODO: ISO times, don't need this now
         };
         registrants: string[]; // TODO: emails or userIds idk yet -- how to prevent abuse?
@@ -49,7 +49,6 @@ export interface TownhallForm {
     title: string;
     date: Date | string;
     description: string;
-    scope: 'state' | 'district';
     private: boolean; // TODO: what does this mean? might put this in the form itself
     topic: string;
 }

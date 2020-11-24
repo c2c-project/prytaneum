@@ -102,3 +102,7 @@ export async function getMyInfo() {
     // gets user info from the token in header
     return axios.get<User>('/api/users/me');
 }
+
+export async function logout() {
+    return axios.get('/api/users/logout');
+}

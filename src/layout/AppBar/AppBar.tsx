@@ -5,8 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles(() => ({
     root: {
-        flexGrow: 1,
-        width: '100%',
+        flex: 1,
     },
 }));
 
@@ -19,7 +18,7 @@ export default function AppBar({ children }: Props) {
 
     return (
         <div className={classes.root}>
-            <MUIAppBar position='absolute' elevation={0}>
+            <MUIAppBar position='sticky' elevation={0}>
                 <Toolbar>{children}</Toolbar>
             </MUIAppBar>
         </div>

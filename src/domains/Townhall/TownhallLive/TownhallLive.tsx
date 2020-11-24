@@ -88,14 +88,14 @@ export default function TownhallLive() {
             inline: 'nearest',
         });
     };
-
+    // TODO: video url
     return (
         <PaneProvider>
             <div className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid item xs={12} md={8} container direction='column'>
                     <Grid container item xs='auto'>
-                        <VideoPlayer url='https://www.youtube.com/watch?v=wW1lY5jFNcQ' />
+                        <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
                     </Grid>
                 </Grid>
                 <Grid container item xs={12} md={4}>
