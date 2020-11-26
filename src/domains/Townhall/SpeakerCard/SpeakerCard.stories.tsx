@@ -1,6 +1,6 @@
 import React from 'react';
+import { makeSpeaker } from 'prytaneum-typings';
 
-import { makeSpeaker } from 'mock/handlers/townhall';
 import Component from './SpeakerCard';
 
 export default { title: 'Domains/Townhall/Speaker Card' };

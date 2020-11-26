@@ -1,7 +1,7 @@
+import type { User, ForgotPassForm, ForgotPassRequestForm, RegisterForm } from 'prytaneum-typings';
+
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import { User } from 'types';
-import * as AuthTypes from '../types';
 
 /** Function to POST to /api/users/login if email is valid
  *  @category Domains/Auth
@@ -25,7 +25,7 @@ export async function login(email?: string, password?: string) {
 
 export async function forgotPassReset(
     token: string | unknown,
-    form: AuthTypes.ForgotPassForm
+    form: ForgotPassForm
 ) {
     const { password, confirmPassword } = form;
 
@@ -52,7 +52,7 @@ export async function forgotPassReset(
  *  @constructor forgotPassRequest
  *  @param {ForgotPassForm} form the form to submit the reset through
  */
-export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
+export async function forgotPassRequest(form: ForgotPassRequestForm) {
     if (!form.email) {
         throw errors.fieldError();
     }
@@ -68,7 +68,7 @@ export async function forgotPassRequest(form: AuthTypes.ForgotPassRequestForm) {
  *  @constructor register
  *  @param {RegisterForm} form the form to submit the new user registration through
  */
-export async function register(form: AuthTypes.RegisterForm) {
+export async function register(form: RegisterForm) {
     const { password, email, confirmPassword } = form;
 
     if (!password || !email || !confirmPassword) {

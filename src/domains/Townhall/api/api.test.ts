@@ -3,9 +3,9 @@
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
+import { TownhallForm } from 'prytaneum-typings';
 import faker from 'faker';
 import * as API from '.';
-import { TownhallForm } from '../types';
 
 beforeEach(() => {
     jest.spyOn(axios, 'post');
@@ -20,14 +20,7 @@ describe('#createTownhall', () => {
         title: faker.lorem.words(3),
         date: new Date(),
         description: faker.lorem.words(10),
-        scope: 'state',
         private: Math.random() > 0.5,
-        speaker: {
-            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-            territory: faker.company.bsAdjective(),
-            party: faker.company.bsNoun(),
-            picture: faker.image.avatar(),
-        },
         topic: faker.lorem.word(),
     };
     it('should reject a town hall', async () => {
@@ -53,14 +46,7 @@ describe('#updateTownhall', () => {
         title: faker.lorem.words(3),
         date: new Date(),
         description: faker.lorem.words(10),
-        scope: 'state',
         private: Math.random() > 0.5,
-        speaker: {
-            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-            territory: faker.company.bsAdjective(),
-            party: faker.company.bsNoun(),
-            picture: faker.image.avatar(),
-        },
         topic: faker.lorem.word(),
     };
     const townhallId = 'blah';

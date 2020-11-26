@@ -11,9 +11,9 @@ import {
     ListItemText,
     Button,
 } from '@material-ui/core';
+import type { User } from 'prytaneum-typings';
 
 import { formatDate } from 'utils/format';
-import { User } from 'types';
 import SettingsItem from 'components/SettingsItem';
 import SettingsList from 'components/SettingsList';
 
@@ -90,33 +90,34 @@ Tags.propTypes = {
     emptyMessage: PropTypes.string,
 };
 
-export type UserHistoryProps = Pick<User, 'history'>;
+// FIXME:
+// export type UserHistoryProps = Pick<User, 'history'>;
 
-export function UserHistory({ history }: UserHistoryProps) {
-    return (
-        <SettingsList>
-            <List dense>
-                {history.actions
-                    .slice(0, 5)
-                    .map(({ action, timestamp }, idx) => (
-                        <ListItem key={idx}>
-                            <ListItemText
-                                primary={action}
-                                secondary={formatDate(timestamp, 'P p')}
-                            />
-                        </ListItem>
-                    ))}
-            </List>
-            <List dense>
-                {history.townhall.slice(0, 5).map(({ title, tags }, idx) => (
-                    <ListItem key={idx}>
-                        <ListItemText primary={title} secondary={tags} />
-                    </ListItem>
-                ))}
-            </List>
-        </SettingsList>
-    );
-}
+// export function UserHistory({ history }: UserHistoryProps) {
+//     return (
+//         <SettingsList>
+//             <List dense>
+//                 {history.actions
+//                     .slice(0, 5)
+//                     .map(({ action, timestamp }, idx) => (
+//                         <ListItem key={idx}>
+//                             <ListItemText
+//                                 primary={action}
+//                                 secondary={formatDate(timestamp, 'P p')}
+//                             />
+//                         </ListItem>
+//                     ))}
+//             </List>
+//             <List dense>
+//                 {history.townhall.slice(0, 5).map(({ title, tags }, idx) => (
+//                     <ListItem key={idx}>
+//                         <ListItemText primary={title} secondary={tags} />
+//                     </ListItem>
+//                 ))}
+//             </List>
+//         </SettingsList>
+//     );
+// }
 
 export function AccountActions() {
     const theme = useTheme();

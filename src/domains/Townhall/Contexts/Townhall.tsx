@@ -1,9 +1,9 @@
 import React from 'react';
+import type { Townhall } from 'prytaneum-typings';
 
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import { getTownhall } from '../api';
-import { Townhall } from '../types';
 
 interface Props {
     // TODO: add defaults here
@@ -14,6 +14,33 @@ interface Props {
 
 export const TownhallContext = React.createContext<Townhall>({
     _id: '',
+    meta: {
+        createdAt: new Date(),
+        createdBy: {
+            _id: '',
+            name: {
+                first: '',
+                last: '',
+            },
+        },
+        updatedAt: new Date(),
+        updatedBy: {
+            _id: '',
+            name: {
+                first: '',
+                last: '',
+            },
+        },
+    },
+    state: {
+        active: false,
+        start: null,
+        end: null,
+        attendees: {
+            max: 0,
+            current: 0,
+        },
+    },
     form: {
         title: '',
         date: new Date(),
@@ -45,7 +72,7 @@ export const TownhallContext = React.createContext<Townhall>({
             enabled: false,
             list: [],
         },
-        links: {
+        attachments: {
             enabled: false,
             list: [],
         },
@@ -75,8 +102,7 @@ export default function TownhallProvider({
     const [townhall, setTownhall] = React.useState(value);
     const [get] = useEndpoint(() => getTownhall(townhallId), {
         onSuccess: (res) => {
-            const { townhall: fetchedTownhall } = res.data;
-            setTownhall(fetchedTownhall);
+            setTownhall(res.data);
         },
     });
 

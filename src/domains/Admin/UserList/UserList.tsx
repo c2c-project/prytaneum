@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Paper, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import type { User } from 'prytaneum-typings';
 
 import ListFilter from 'components/ListFilter';
 import ListOverflow from 'components/ListOverflow';
 import { search as utilSearch, FilterFunc, applyFilters } from 'utils/filters';
-import { User } from 'types';
 import useEndpoint from 'hooks/useEndpoint';
 import API from 'domains/Admin/api';
 import Loader from 'components/Loader';

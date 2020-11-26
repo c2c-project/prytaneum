@@ -17,6 +17,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
+import type { User, TownhallAttachment } from 'prytaneum-typings';
 
 import SettingsList from 'components/SettingsList';
 import Dialog from 'components/Dialog';
@@ -26,7 +27,6 @@ import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
-import { User } from 'types';
 import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
@@ -256,7 +256,9 @@ export function Registration() {
 
 export function Links() {
     const townhall = React.useContext(TownhallContext);
-    const [state, setState] = React.useState(townhall.settings.links.list);
+    const [state, setState] = React.useState(
+        townhall.settings.attachments.list
+    );
 
     function buildHandler(idx: number, key: 'name' | 'url') {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,8 +270,8 @@ export function Links() {
         };
     }
 
-    function handleAdd() {
-        setState([...state, { name: '', url: '' }]);
+    function handleAdd(attachment: TownhallAttachment) {
+        setState([...state, attachment]);
     }
 
     function handleRemove(idx: number) {
@@ -284,7 +286,7 @@ export function Links() {
                     <Typography>No Links to display</Typography>
                 </Grid>
             )}
-            {state.map(({ url, name }, idx) => (
+            {/* {state.map(({ name, type }, idx) => (
                 <Grid container item xs={12} alignItems='center'>
                     <Grid item xs={11} container spacing={2}>
                         <Grid item xs={6}>
@@ -313,9 +315,12 @@ export function Links() {
                         </Grid>
                     </Grid>
                 </Grid>
-            ))}
+            ))} */}
             <Grid item xs={12}>
-                <Button onClick={handleAdd} startIcon={<AddIcon />}>
+                <Button
+                    onClick={() => console.log('unimplemented')}
+                    startIcon={<AddIcon />}
+                >
                     Add Link
                 </Button>
             </Grid>

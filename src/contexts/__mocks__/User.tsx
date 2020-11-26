@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeUser } from 'mock/handlers/auth';
+import { makeUser } from 'prytaneum-typings';
 
 export const UserContext = React.createContext(makeUser());
 

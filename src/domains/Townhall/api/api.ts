@@ -1,91 +1,81 @@
+import qs from 'qs';
+import type {
+    TownhallForm,
+    Townhall,
+    TownhallSettings,
+    QuestionForm,
+    Speaker,
+    User,
+} from 'prytaneum-typings';
+
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
-import { User } from 'types';
-import {
-    Townhall,
-    TownhallForm,
-    TownhallQuestionForm,
-    Speaker,
-} from '../types';
-
-interface RequestBody {
-    form: TownhallForm;
-}
-type Create = RequestBody;
-type Update = RequestBody & { townhallId: string };
-
+/**
+ * create a townhall
+ */
 export async function createTownhall(form: TownhallForm) {
-    const {
-        title,
-        date,
-        description,
-        // scope,
-        private: isPrivate,
-        // speaker,
-        topic,
-    } = form;
-    if (
-        !title ||
-        !date ||
-        !description ||
-        // !scope ||
-        // !speaker ||
-        !topic ||
-        isPrivate === undefined
-    ) {
-        throw errors.fieldError();
-    }
-    const body: Create = { form };
-    return axios.post<unknown>('/api/townhalls/create', body);
+    return axios.post<never>('/api/townhalls', qs.stringify(form));
 }
 
+/**
+ * update a townhall
+ */
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
-    const {
-        title,
-        date,
-        description,
-        // scope,
-        private: isPrivate,
-        // speaker,
-        topic,
-    } = form;
-    if (
-        !title ||
-        !date ||
-        !description ||
-        // !scope ||
-        // !speaker ||
-        !topic ||
-        isPrivate === undefined
-    ) {
-        throw errors.fieldError();
-    }
-
-    // townhallId should be a part of the url
-    if (!townhallId) {
-        throw errors.internalError();
-    }
-
-    const body: Update = { form, townhallId };
-    return axios.post<unknown>('/api/townhalls/update', body);
+    return axios.put<never>(`/api/townhalls/${townhallId}`, qs.stringify(form));
 }
 
-export async function getTownhallList(currentUser?: boolean) {
-    const query = currentUser ? '?currentUser=true' : '';
-    return axios.get<{ list: Townhall[] }>(`/api/townhalls/list${query}`);
+/**
+ * delete a townhall
+ */
+export async function deleteTownhall(townhallId: string) {
+    return axios.delete<never>(`/api/townhalls/${townhallId}`);
 }
-
-export async function getTownhall(id: string) {
-    return axios.get<{ townhall: Townhall }>(`/api/townhalls/${id}`);
-}
-
-export async function createQuestion(
+/**
+ * configure a townhall
+ */
+export async function configureTownhall(
     townhallId: string,
-    form: TownhallQuestionForm
+    settings: TownhallSettings
 ) {
-    const body: { form: TownhallQuestionForm } = { form };
-    return axios.post(`/api/townhalls/${townhallId}/create-question`, body);
+    const url = `/api/townhalls/${townhallId}/configure`;
+    return axios.post(url, qs.stringify(settings));
+}
+
+/**
+ * start a townhall
+ */
+export async function startTownhall(townhallId: string) {
+    const url = `/api/townhalls/${townhallId}/start`;
+    return axios.post(url);
+}
+
+/**
+ * end a townhall that is currently in progress
+ */
+export async function endTownhall(townhallId: string) {
+    const url = `/api/townhalls/${townhallId}/end`;
+    return axios.post(url);
+}
+
+/**
+ * retrieve a list of townhalls
+ */
+export async function getTownhallList() {
+    return axios.get<Townhall[]>('/api/townhalls');
+}
+
+/**
+ * retrieve a specific townhall
+ */
+export async function getTownhall(id: string) {
+    return axios.get<Townhall>(`/api/townhalls/${id}`);
+}
+
+export async function createQuestion(townhallId: string, form: QuestionForm) {
+    if (!townhallId) throw errors.internalError();
+    const url = `/api/townhalls/${townhallId}/questions`;
+    return axios.post(url, qs.stringify(form));
 }
 
 export async function getModInfo(townhallId: string) {

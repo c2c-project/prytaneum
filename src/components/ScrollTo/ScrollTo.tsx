@@ -44,8 +44,6 @@ const useStyles = makeStyles((theme) => ({
  * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
  * @param {'top' | 'bottom'} props.direction tells to component to scroll up or down continuously, like how twich chat updates, the window scrolls down to update it
  */
-
-// FIXME: on render, the jumpTo button will promptly display then fade out
 export default function ScrollTo({ children, direction }: Props) {
     const classes = useStyles();
     const scrollTarget = React.useRef<HTMLDivElement | null>(null);
@@ -86,7 +84,7 @@ export default function ScrollTo({ children, direction }: Props) {
 
     // whenever scrollTarget.current changes, disconnect and observe
     // may be optimizations I could do here
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         if (!scrollTarget.current) return;
         io.disconnect();
         io.observe(scrollTarget.current);

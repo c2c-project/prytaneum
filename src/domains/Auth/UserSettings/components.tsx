@@ -8,13 +8,13 @@ import {
     // Typography,
     Button,
 } from '@material-ui/core';
+import type { User } from 'prytaneum-typings';
 // import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import SettingsList from 'components/SettingsList';
 
 import TextField from 'components/TextField';
-import { User } from 'types';
 
 import SettingsItem from 'components/SettingsItem';
 import text from './help-text';

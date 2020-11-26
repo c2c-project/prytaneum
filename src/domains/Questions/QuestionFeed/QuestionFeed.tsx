@@ -2,14 +2,14 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
+import type { Question as QuestionType } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
 import { UserContext } from 'contexts/User';
+import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 import { QuestionProps } from '../QuestionFeedItem';
-import { TownhallContext } from '../Contexts/Townhall';
-import { Question as QuestionType } from '../types';
-import { PaneContext } from '../Contexts/Pane';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
@@ -68,7 +68,7 @@ function QuestionFeed() {
 
     // there should never be more than 1 current question, so we can stop at the first one found
     const currentQuestion = React.useMemo(
-        () => displayed.find((q) => q.state === 'CURRENT'),
+        () => displayed.find((q) => q.state === 'current'),
         [displayed]
     );
 

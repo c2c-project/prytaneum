@@ -1,10 +1,10 @@
 import React from 'react';
-import { makeUser } from 'mock/handlers/auth';
+import { makeUser, Roles } from 'prytaneum-typings';
 import UserPromotion from './UserPromotion';
 
 export default { title: 'Domains/Admin/User Promotion' };
 
-const options = ['Admin', 'Organizer'];
+const options: Roles[] = ['admin', 'organizer'];
 const userInfo = makeUser();
 
 export function Basic() {

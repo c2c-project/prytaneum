@@ -1,6 +1,6 @@
+import type { User } from 'prytaneum-typings';
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import { User } from 'types';
 
 interface RequestBody {
     form: User;

@@ -27,32 +27,3 @@ export interface Team {
     name: string;
     members: TeamMember[];
 }
-export interface User {
-    _id: string;
-    roles: string[];
-    email: {
-        verified: boolean;
-        address: string;
-    };
-    settings: {
-        townhall: {
-            anonymous: boolean;
-        };
-        notifications: {
-            enabled: boolean;
-            types: string[];
-        };
-    };
-    history: {
-        actions: {
-            timestamp: Date | number | string;
-            action: string;
-        }[];
-        townhall: {
-            _id: string;
-            title: string;
-            timestamp: Date | number | string;
-            tags: string[]; // stuff like attended/moderated/banned/viewed/etc
-        }[];
-    };
-}

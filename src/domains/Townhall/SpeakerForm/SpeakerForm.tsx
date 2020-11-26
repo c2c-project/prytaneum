@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import type { Speaker } from 'prytaneum-typings';
 
 import Form from 'components/Form';
 import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
-import { Speaker } from '../types';
 
 interface Props {
     value?: Speaker;

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-regexp-exec */
 import { add } from 'date-fns';
+import type { Townhall } from 'prytaneum-typings';
 
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Townhall } from '../types';
 
 export { applyFilters } from 'utils/filters';
 

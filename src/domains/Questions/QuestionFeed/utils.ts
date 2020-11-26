@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
+import type { Question, Question as QuestionType } from 'prytaneum-typings';
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Question, Question as QuestionType } from '../types';
 import { QuestionProps } from '../QuestionFeedItem';
 
 export { applyFilters } from 'utils/filters';
@@ -10,7 +10,7 @@ export type QuestionFilterFunc = FilterFunc<Question>;
 export function search(searchText: string, data: Question[]) {
     const accessors = [
         (q: Question) => q.question,
-        (q: Question) => q.meta.user.name,
+        (q: Question) => q.meta.createdBy.name.first,
     ];
     return utilSearch(searchText, data, accessors);
 }
@@ -23,10 +23,10 @@ export interface Filters {
 }
 
 export const filters: Filters = {
-    'In Queue': (questions) => questions.filter((q) => q.state === 'IN_QUEUE'),
-    Asked: (questions) => questions.filter((q) => q.state === 'ASKED'),
+    'In Queue': (questions) => questions.filter((q) => q.state === 'in_queue'),
+    Asked: (questions) => questions.filter((q) => q.state === 'asked'),
     'Current Question': (questions) =>
-        questions.filter((q) => q.state === 'CURRENT'),
+        questions.filter((q) => q.state === 'current'),
 };
 
 interface NewQuestionAction {

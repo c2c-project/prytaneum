@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
+import type { Question as QuestionType } from 'prytaneum-typings';
 
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
@@ -8,7 +9,6 @@ import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useForm from 'hooks/useForm';
-import { Question as QuestionType } from '../types';
 
 interface Props {
     quote?: QuestionType;
