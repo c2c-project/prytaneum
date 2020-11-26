@@ -17,17 +17,14 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import type { User, TownhallAttachment } from 'prytaneum-typings';
+import type { TownhallAttachment } from 'prytaneum-typings';
 
 import SettingsList from 'components/SettingsList';
 import Dialog from 'components/Dialog';
-import Loader from 'components/Loader';
-import useEndpoint from 'hooks/useEndpoint';
 import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
-import { getModInfo } from '../api';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
 
@@ -155,21 +152,13 @@ function AddModeratorForm({
     );
 }
 
-export function Moderators({ isOpen }: { isOpen: boolean }) {
+export function Moderators() {
     const townhall = React.useContext(TownhallContext);
-    const [mods, setMods] = React.useState<Pick<User, 'email' | '_id'>[]>([]);
+    const { list: mods } = townhall.settings.moderators;
     const [dialogContent, setDialogContent] = React.useState<string | null>(
         null
     );
     const [isFormOpen, setIsFormopen] = React.useState(false);
-    const [get, isLoading] = useEndpoint(() => getModInfo(townhall._id), {
-        onSuccess: ({ data }) => {
-            setMods(data.moderators);
-        },
-    });
-    React.useEffect(() => {
-        if (isOpen) get();
-    }, [isOpen, get]);
 
     const addMod = (
         <Button
@@ -180,8 +169,6 @@ export function Moderators({ isOpen }: { isOpen: boolean }) {
             Add Moderator
         </Button>
     );
-
-    if (isLoading) return <Loader />;
 
     if (mods.length === 0)
         return (
@@ -212,10 +199,14 @@ export function Moderators({ isOpen }: { isOpen: boolean }) {
             <Grid item xs={12}>
                 {addMod}
             </Grid>
-            {mods.map(({ _id, email }) => (
+            {mods.map(({ _id, name }) => (
                 <Grid container justify='space-between' item xs={12} key={_id}>
-                    <Typography>{email.address}</Typography>
-                    <IconButton onClick={() => setDialogContent(email.address)}>
+                    <Typography>{`${name.first} ${name.last}`}</Typography>
+                    <IconButton
+                        onClick={() =>
+                            setDialogContent(`${name.first} ${name.last}`)
+                        }
+                    >
                         <CloseIcon />
                     </IconButton>
                 </Grid>

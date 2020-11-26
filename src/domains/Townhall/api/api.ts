@@ -72,42 +72,11 @@ export async function getTownhall(id: string) {
     return axios.get<Townhall>(`/api/townhalls/${id}`);
 }
 
+/**
+ * creates a new question
+ */
 export async function createQuestion(townhallId: string, form: QuestionForm) {
     if (!townhallId) throw errors.internalError();
     const url = `/api/townhalls/${townhallId}/questions`;
     return axios.post(url, qs.stringify(form));
-}
-
-export async function getModInfo(townhallId: string) {
-    return axios.get<{ moderators: Pick<User, 'email' | '_id'>[] }>(
-        `/api/townhalls/${townhallId}/organizer/mod-info`
-    );
-}
-
-export async function addMod(townhallId: string, moderatorEmail: string) {
-    return axios.post<unknown>(
-        `/api/townhalls/${townhallId}/organizer/add-mod`,
-        { emai: moderatorEmail }
-    );
-}
-
-export async function getSpeakers(townhallId: string) {
-    return axios.get(`/api/townhalls/${townhallId}/organizer/speakers`);
-}
-
-export async function createSpeaker(townhallId: string, speaker: Speaker) {
-    return axios.post(`/api/townhalls/${townhallId}/organizer/speakers`, {
-        speaker,
-    });
-}
-
-export async function updateSpeaker(townhallId: string, speaker: Speaker) {
-    return axios.post(`/api/townhalls/${townhallId}/organizer/speakers`, {
-        speaker,
-    });
-}
-export async function deleteSpeaker(townhallId: string, speakerId: string) {
-    return axios.delete(
-        `/api/townhalls/${townhallId}/organizer/speakers/${speakerId}`
-    );
 }
