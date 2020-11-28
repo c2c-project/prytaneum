@@ -100,13 +100,13 @@ const config: AccordionData[] = [
     {
         title: 'Moderators',
         description: 'Designate question queue moderators',
-        component: (isOpen) => (
+        component: () => (
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Typography variant='overline'>Moderators</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Moderators isOpen={isOpen} />
+                    <Moderators />
                 </Grid>
             </Grid>
         ),

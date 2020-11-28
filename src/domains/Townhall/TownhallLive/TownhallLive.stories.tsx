@@ -92,7 +92,14 @@ export function AsMod() {
     const townhall = makeTownhall();
     const user = makeUser();
 
-    townhall.settings.moderators.list.push(id);
+    townhall.settings.moderators.list.push({
+        _id: id,
+        name: {
+            first: faker.name.firstName(),
+            last: faker.name.lastName(),
+        },
+        permissions: [],
+    });
     user._id = id;
     const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 

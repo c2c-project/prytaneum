@@ -122,8 +122,8 @@ export default function Chat() {
     const classes = useStyles();
     // full question feed from socketio
     const [messages, , socket] = useSocketio<ChatMessage[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
-        event: 'townhall-chat-state',
+        url: '/chat-messages', // FIXME: update the url when I know what it should it should be
+        event: 'chat-message-state',
         reducer: chatReducer,
         initialState: [],
     });

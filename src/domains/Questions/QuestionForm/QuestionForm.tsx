@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
-import type { Question as QuestionType } from 'prytaneum-typings';
+import type {
+    Question as QuestionType,
+    QuestionForm as QuestionFormType,
+} from 'prytaneum-typings';
 
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
@@ -12,7 +15,7 @@ import useForm from 'hooks/useForm';
 
 interface Props {
     quote?: QuestionType;
-    onSubmit?: () => void;
+    onSubmit?: (form: QuestionFormType) => void;
     onCancel?: () => void;
 }
 
@@ -23,8 +26,11 @@ interface FormType {
 const initialState: FormType = { question: '' };
 export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
+    const callback = React.useCallback(() => {
+        if (onSubmit) onSubmit(form);
+    }, [onSubmit, form]);
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(callback)}>
             <FormTitle title='Question Form' />
             <FormContent>
                 <TextField

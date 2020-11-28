@@ -107,7 +107,7 @@
         "msw": "^0.21.3",
         "react-is": "^16.13.1",
         "react-test-renderer": "^16.13.1",
-        "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.37",
+        "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.40",
         "typescript": "^3.9.5"
     },
     "peerDependencies": {

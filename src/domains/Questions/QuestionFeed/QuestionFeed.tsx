@@ -2,7 +2,7 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
-import type { Question as QuestionType } from 'prytaneum-typings';
+import type { Question as QuestionType, QuestionPayloads } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
@@ -18,7 +18,6 @@ import {
     applyFilters,
     filters as filterFuncs,
     questionReducer,
-    Actions,
     QuestionFilterFunc,
     makeSystemMessage,
 } from './utils';
@@ -40,9 +39,9 @@ function QuestionFeed() {
     const [, dispatch] = React.useContext(PaneContext);
 
     // full question feed from socketio
-    const [questions] = useSocketio<QuestionType[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
-        event: 'townhall-question-state',
+    const [questions] = useSocketio<QuestionType[], QuestionPayloads>({
+        url: '/questions',
+        event: 'question-state',
         reducer: questionReducer,
         initialState: [],
     });
@@ -73,7 +72,11 @@ function QuestionFeed() {
     );
 
     const isModerator = React.useMemo(
-        () => user && townhall.settings.moderators.list.includes(user._id),
+        () =>
+            user &&
+            townhall.settings.moderators.list.find(
+                ({ _id }) => user._id === _id
+            ),
         [townhall.settings.moderators.list, user]
     );
 

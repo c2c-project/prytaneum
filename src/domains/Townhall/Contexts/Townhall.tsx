@@ -78,7 +78,6 @@ export const TownhallContext = React.createContext<Townhall>({
         },
         moderators: {
             list: [],
-            primary: '',
         },
         registration: {
             reminders: {

@@ -12,7 +12,7 @@ const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 function sendMessage(num?: number) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
-        emitter.emit('townhall-question-state', {
+        emitter.emit('question-state', {
             type: 'new-question',
             payload: makeQuestion(),
         });

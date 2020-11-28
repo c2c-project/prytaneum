@@ -1,5 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import type { Question, Question as QuestionType } from 'prytaneum-typings';
+import type {
+    Question,
+    Question as QuestionType,
+    QuestionPayloads,
+} from 'prytaneum-typings';
 import { search as utilSearch, FilterFunc } from 'utils/filters';
 import { QuestionProps } from '../QuestionFeedItem';
 
@@ -29,27 +33,12 @@ export const filters: Filters = {
         questions.filter((q) => q.state === 'current'),
 };
 
-interface NewQuestionAction {
-    type: 'new-question';
-    payload: QuestionType;
-}
-interface UpdateQuestionAction {
-    type: 'update-question';
-    payload: Pick<QuestionType, 'question' | '_id'>;
-}
-interface DeleteQuestionAction {
-    type: 'hide-question';
-    payload: Pick<QuestionType, '_id'>;
-}
-
-export type Actions =
-    | NewQuestionAction
-    | UpdateQuestionAction
-    | DeleteQuestionAction;
-
-export function questionReducer(state: QuestionType[], action: Actions) {
+export function questionReducer(
+    state: QuestionType[],
+    action: QuestionPayloads
+) {
     switch (action.type) {
-        case 'new-question':
+        case 'create-question':
             return [action.payload, ...state];
         case 'update-question':
             return state.map((question) => {
@@ -58,10 +47,12 @@ export function questionReducer(state: QuestionType[], action: Actions) {
                 }
                 return question;
             });
-        case 'hide-question':
+        case 'delete-question':
             return state.filter(
                 (question) => question._id !== action.payload._id
             );
+        case 'initial-state':
+            return action.payload;
         default:
             return state;
     }
