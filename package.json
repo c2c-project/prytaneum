@@ -39,7 +39,8 @@
         "storybook": "start-storybook --port 3000 -s public",
         "lint": "eslint src/**/*.ts src/**/*.tsx",
         "docs": "jsdoc -c jsdoc.conf.json",
-        "storybook-docs": "yarn storybook --docs"
+        "storybook-docs": "yarn storybook --docs",
+        "eslint:github-action": "eslint src/**/*.ts --max-warnings 0"
     },
     "alias": {
         "assets": "./src/assets",
