@@ -2,6 +2,8 @@ version: '3.8'
 services:
     sut:
         container_name: prytaneum-front-end
+        environment: 
+            - CI=true
         build:
             context: .
             dockerfile: Dockerfile
