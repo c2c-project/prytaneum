@@ -24,7 +24,7 @@ type Filter = FilterFunc<Datum>;
 
 const filterMap: Record<string, Filter> = {
     // simple filters for demonstration purposes
-    'Letter a ': (data) =>
+    'Letter a': (data) =>
         data.filter(({ title }) => title.toLowerCase().split('').includes('a')),
     'Letter b': (data) =>
         data.filter(({ title }) => title.toLowerCase().split('').includes('b')),
@@ -76,7 +76,7 @@ export function Basic() {
         <div style={{ height: '100%', overflow: 'auto' }}>
             <ListFilter
                 onSearch={handleSearch}
-                length={data.length}
+                length={filteredResults.length}
                 filterMap={filterMap}
                 onFilterChange={handleFilterChange}
             />
