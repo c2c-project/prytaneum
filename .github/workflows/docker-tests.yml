@@ -17,5 +17,5 @@ jobs:
                   file_name: .env
             - name: Build + Test in Docker
               run: |
-                  docker-compose --file docker-compose.test.yaml build sut
-                  docker-compose --file docker-compose.test.yaml run sut
+                  docker-compose --file docker-compose.test.yml build sut
+                  docker-compose --file docker-compose.test.yml run sut
