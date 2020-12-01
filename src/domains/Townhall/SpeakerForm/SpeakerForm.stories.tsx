@@ -5,9 +5,9 @@ import SpeakerForm from './SpeakerForm';
 export default { title: 'Domains/Townhall/Speaker Form' };
 
 export function Basic() {
-    return <SpeakerForm />;
+    return <SpeakerForm onSubmit={console.log} />;
 }
 
 export function WithCancel() {
-    return <SpeakerForm onCancel={() => {}} />;
+    return <SpeakerForm onCancel={() => {}} onSubmit={console.log} />;
 }

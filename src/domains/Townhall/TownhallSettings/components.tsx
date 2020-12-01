@@ -14,6 +14,8 @@ import {
     ListItem,
     ListItemText,
     ListItemSecondaryAction,
+    ListItemAvatar,
+    Avatar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,6 +25,7 @@ import type {
     TownhallAttachment,
     TownhallSettings,
     Moderator,
+    Speaker,
 } from 'prytaneum-typings';
 
 import useSnack from 'hooks/useSnack';
@@ -32,6 +35,7 @@ import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
+import SpeakerForm from '../SpeakerForm';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
 
@@ -206,7 +210,7 @@ function AddModeratorForm({
     );
 }
 
-const useModStyles = makeStyles((theme) => ({
+const useModStyles = makeStyles(() => ({
     listRoot: {
         width: '100%',
         '& .MuiListItem-gutters': {
@@ -221,7 +225,7 @@ const useModStyles = makeStyles((theme) => ({
 export function Moderators({ onChange, value }: Props<'moderators'>) {
     const { list: mods } = value;
     const [targetMod, setTargetMod] = React.useState<Moderator | null>(null);
-    const [isFormOpen, setIsFormopen] = React.useState(false);
+    const [isFormOpen, setIsFormOpen] = React.useState(false);
     const classes = useModStyles();
     const [snack] = useSnack();
     function removeModerator(emailToRemove: string) {
@@ -238,7 +242,7 @@ export function Moderators({ onChange, value }: Props<'moderators'>) {
             onChange({
                 list: [...value.list, { email: emailToAdd, permissions: [] }],
             });
-            setIsFormopen(false);
+            setIsFormOpen(false);
         }
     }
 
@@ -262,7 +266,7 @@ export function Moderators({ onChange, value }: Props<'moderators'>) {
             </ConfirmationDialog>
             <AddModeratorForm
                 open={isFormOpen}
-                onClose={() => setIsFormopen(false)}
+                onClose={() => setIsFormOpen(false)}
                 onSubmit={({ email }) => addModerator(email)}
             />
         </>
@@ -274,7 +278,7 @@ export function Moderators({ onChange, value }: Props<'moderators'>) {
                 Moderator List
             </Typography>
             <IconButton
-                onClick={() => setIsFormopen(true)}
+                onClick={() => setIsFormOpen(true)}
                 aria-label='add'
                 edge='end'
             >
@@ -360,7 +364,7 @@ export function Registration() {
     );
 }
 
-export function Links() {
+export function Attachments() {
     const townhall = React.useContext(TownhallContext);
     const [state, setState] = React.useState(
         townhall.settings.attachments.list
@@ -442,22 +446,157 @@ export function Preview() {
     return <div />;
 }
 
-export function Speakers() {
-    const townhall = React.useContext(TownhallContext);
-    const speakers = townhall.settings.speakers.list;
-    // FIXME: finish how i will display the speakers
+const useSpeakerStyles = makeStyles(() => ({
+    listRoot: {
+        width: '100%',
+        '& .MuiListItem-gutters': {
+            paddingLeft: 0,
+        },
+        '& .MuiListItemSecondaryAction-root': {
+            marginRight: '-16px', // icon alignment
+        },
+    },
+}));
+
+const SpeakerDialogForm = ({
+    isOpen,
+    onSubmit,
+    onClose,
+    value,
+}: {
+    isOpen: boolean;
+    onSubmit: (form: Speaker) => void;
+    onClose: () => void;
+    value?: Speaker;
+}) => {
+    return (
+        <Dialog open={isOpen} onClose={onClose}>
+            <DialogTitle>Speaker Form</DialogTitle>
+            <DialogContent>
+                <SpeakerForm value={value} onSubmit={onSubmit} />
+            </DialogContent>
+            {/* <DialogActions>asdf</DialogActions> */}
+        </Dialog>
+    );
+};
+SpeakerDialogForm.defaultProps = {
+    value: undefined,
+};
+
+export function Speakers({ value, onChange }: Props<'speakers'>) {
+    const classes = useSpeakerStyles();
+    const speakers = value.list;
+    const [isFormOpen, setIsFormOpen] = React.useState(false);
+    type EditTarget = undefined | [Speaker, number];
+    const [editTarget, setEditTarget] = React.useState<EditTarget>(undefined);
+    const [removeTarget, setRemoveTarget] = React.useState<EditTarget>(
+        undefined
+    );
+
+    function removeSpeaker(speakerToRemove: Speaker) {
+        onChange({
+            list: value.list.filter(
+                (speaker) => speaker.name !== speakerToRemove.name
+            ),
+        });
+        setRemoveTarget(undefined);
+    }
+    function closeDialog() {
+        if (isFormOpen) setIsFormOpen(false);
+        if (editTarget) setEditTarget(undefined);
+    }
+
+    const dialogs = (
+        <>
+            <SpeakerDialogForm
+                isOpen={isFormOpen || Boolean(editTarget)}
+                onSubmit={(form) => {
+                    if (editTarget) {
+                        const [, idx] = editTarget;
+                        const listCopy = [...value.list];
+                        listCopy[idx] = form;
+                        onChange({ list: listCopy });
+                    } else onChange({ list: [...value.list, form] });
+                    closeDialog();
+                }}
+                onClose={closeDialog}
+                value={editTarget && editTarget[0]}
+            />
+            <ConfirmationDialog
+                title={`Remove ${
+                    removeTarget ? removeTarget[0].name : ''
+                } from speakers`}
+                open={Boolean(removeTarget)}
+                onClose={() => setRemoveTarget(undefined)}
+                onConfirm={
+                    removeTarget
+                        ? () => removeSpeaker(removeTarget[0])
+                        : () => {}
+                }
+            >
+                {`Are you sure you want to remove ${
+                    removeTarget ? removeTarget[0].name : ''
+                } as a speaker?`}
+            </ConfirmationDialog>
+        </>
+    );
+    const title = (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Typography style={{ flexGrow: 1 }} variant='overline'>
+                Speaker List
+            </Typography>
+            <IconButton
+                onClick={() => setIsFormOpen(true)}
+                aria-label='add'
+                edge='end'
+            >
+                <AddIcon />
+            </IconButton>
+        </div>
+    );
+
     return (
         <Grid container>
-            {speakers.map((speaker) => (
-                <Grid container key={speaker.picture} item xs={12}>
-                    <Grid item xs='auto' style={{ flexGrow: 1 }}>
-                        <Typography>{speaker.name}</Typography>
-                    </Grid>
-                    <Grid item xs='auto'>
-                        <Button>Edit</Button>
-                    </Grid>
-                </Grid>
-            ))}
+            {dialogs}
+            <Typography style={{ flexGrow: 1 }} variant='overline'>
+                {title}
+            </Typography>
+            <Grid item xs={12}>
+                <List className={classes.listRoot}>
+                    {speakers.map((speaker, idx) => (
+                        <ListItem key={speaker.name}>
+                            <ListItemAvatar>
+                                <Avatar src={speaker.picture}>
+                                    {speaker.name[0]}
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={speaker.name}
+                                secondary={speaker.title}
+                            />
+                            <ListItemSecondaryAction>
+                                <IconButton
+                                    aria-label='edit'
+                                    onClick={() =>
+                                        setEditTarget([speaker, idx])
+                                    }
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    aria-label='delete'
+                                    edge='end'
+                                    onClick={() =>
+                                        setRemoveTarget([speaker, idx])
+                                    }
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
+                </List>
+            </Grid>
         </Grid>
     );
 }

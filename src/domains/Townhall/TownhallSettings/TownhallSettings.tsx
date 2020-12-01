@@ -6,7 +6,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
 
 import history, { makeRelativeLink } from 'utils/history';
-import Loader from 'components/Loader';
+import LoadingButton from 'components/LoadingButton';
 import Fab from 'components/Fab';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
@@ -24,7 +24,6 @@ import {
     Speakers,
 } from './components';
 import { configureTownhall } from '../api';
-import LoadingButton from 'components/LoadingButton';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -131,7 +130,12 @@ export default function TownhallSettings() {
             {
                 title: 'Speakers',
                 description: 'Add and Modify speakers at this event',
-                component: <Speakers />,
+                component: (
+                    <Speakers
+                        value={state.speakers}
+                        onChange={handleChange('speakers')}
+                    />
+                ),
             },
             {
                 title: 'Components',

@@ -7,11 +7,12 @@ import Form from 'components/Form';
 import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
+import useForm from 'hooks/useForm';
 
 interface Props {
     value?: Speaker;
-    errors?: Speaker;
     onCancel?: () => void;
+    onSubmit: (form: Speaker) => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -26,27 +27,17 @@ const initialState: Speaker = {
     picture: '',
     description: '',
 };
-export default function SpeakerField({
+export default function SpeakerForm({
     value: speaker,
-    errors,
     onCancel,
+    onSubmit,
 }: Props) {
-    const [state, setState] = React.useState(speaker || initialState);
+    const [state, errors, handleSubmit, handleChange] = useForm(
+        speaker || initialState
+    );
     const classes = useStyles();
-    const buildHandler = (id: keyof Speaker) => (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        e.preventDefault();
-        const { value } = e.target;
-        setState({ ...state, [id]: value });
-    };
-
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        console.log(state);
-    }
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(() => onSubmit(state))}>
             <FormContent className={classes.root}>
                 <TextField
                     error={Boolean(errors?.name)}
@@ -54,7 +45,7 @@ export default function SpeakerField({
                     required
                     label='Speaker Name'
                     value={state.name}
-                    onChange={buildHandler('name')}
+                    onChange={handleChange('name')}
                 />
                 <TextField
                     error={Boolean(errors?.title)}
@@ -62,7 +53,7 @@ export default function SpeakerField({
                     required
                     label='Speaker Title'
                     value={state.title}
-                    onChange={buildHandler('title')}
+                    onChange={handleChange('title')}
                 />
                 <TextField
                     error={Boolean(errors?.description)}
@@ -70,7 +61,7 @@ export default function SpeakerField({
                     required
                     label='Speaker Description'
                     value={state.description}
-                    onChange={buildHandler('description')}
+                    onChange={handleChange('description')}
                 />
                 <TextField
                     error={Boolean(errors?.picture)}
@@ -78,7 +69,7 @@ export default function SpeakerField({
                     required
                     label='Picture URL'
                     value={state.picture}
-                    onChange={buildHandler('picture')}
+                    onChange={handleChange('picture')}
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
@@ -91,8 +82,7 @@ export default function SpeakerField({
     );
 }
 
-SpeakerField.defaultProps = {
-    errors: undefined,
+SpeakerForm.defaultProps = {
     value: undefined,
     onCancel: undefined,
 };
