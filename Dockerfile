@@ -15,6 +15,12 @@ RUN yarn build \
     && yarn cache clean \
     && yarn autoclean --force
 
+ARG NODE_ENV
+ARG REACT_APPP_SERVER
+
+ENV NODE_ENV = $NODE_ENV
+ENV REACT_APPP_SERVER = $REACT_APPP_SERVER
+
 # PROD
 FROM nginx:1.18.0-alpine
 WORKDIR /usr/app
