@@ -2,7 +2,10 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
-import type { Question as QuestionType, QuestionPayloads } from 'prytaneum-typings';
+import type {
+    Question as QuestionType,
+    QuestionPayloads,
+} from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
@@ -75,7 +78,7 @@ function QuestionFeed() {
         () =>
             user &&
             townhall.settings.moderators.list.find(
-                ({ _id }) => user._id === _id
+                ({ email }) => user.email.address === email
             ),
         [townhall.settings.moderators.list, user]
     );

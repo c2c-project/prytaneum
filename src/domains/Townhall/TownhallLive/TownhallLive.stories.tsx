@@ -31,8 +31,8 @@ export default {
 function sendQuestions(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
-        emitter.emit('townhall-question-state', {
-            type: 'new-question',
+        emitter.emit('question-state', {
+            type: 'create-question',
             payload: makeQuestion(),
         });
     }
@@ -41,8 +41,8 @@ function sendQuestions(num: number, emitter: SocketIOClient.Socket) {
 function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
-        emitter.emit('townhall-chat-state', {
-            type: 'new-message',
+        emitter.emit('chat-message-state', {
+            type: 'create-message',
             payload: makeChatMessage(),
         });
     }
@@ -93,11 +93,7 @@ export function AsMod() {
     const user = makeUser();
 
     townhall.settings.moderators.list.push({
-        _id: id,
-        name: {
-            first: faker.name.firstName(),
-            last: faker.name.lastName(),
-        },
+        email: user.email.address,
         permissions: [],
     });
     user._id = id;

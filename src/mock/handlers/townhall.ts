@@ -4,6 +4,7 @@ import {
     makeTownhall,
     TownhallForm,
     QuestionForm,
+    TownhallSettings,
 } from 'prytaneum-typings';
 
 export default [
@@ -51,6 +52,12 @@ export default [
         if (form.question === 'fail' || townhallId === '0') {
             return res(ctx.status(400));
         }
+        return res(ctx.status(200));
+    }),
+    rest.post('/api/townhalls/:townhallId/configure', (req, res, ctx) => {
+        // const { townhallId } = req.params as { townhallId: string };
+        // const form = req.body as TownhallSettings;
+        // TODO: way for this to fail
         return res(ctx.status(200));
     }),
 ];

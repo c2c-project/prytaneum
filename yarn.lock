@@ -13684,9 +13684,9 @@ prr@~1.0.1:
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
   integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
 
-"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.40":
+"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.42":
   version "1.0.0"
-  resolved "https://github.com/c2c-project/prytaneum-typings#55e073594144b18fbd392f7415154b7c2d9ff150"
+  resolved "https://github.com/c2c-project/prytaneum-typings#4cdd75f5ec5b1ad26b7be8189d2976b6c5ead810"
   dependencies:
     "@types/faker" "^5.1.4"
     "@types/mongodb" "^3.5.32"
