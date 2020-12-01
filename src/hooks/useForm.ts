@@ -49,6 +49,5 @@ export default function useForm<T>(initialState: T): UseFormTuple<T> {
             setState({ ...state, [key]: value });
         };
     };
-
     return [state, errors, buildHandleSubmit, buildHandleChange, setState];
 }

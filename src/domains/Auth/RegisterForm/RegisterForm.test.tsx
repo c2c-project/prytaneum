@@ -38,27 +38,6 @@ describe('RegisterForm', () => {
         });
     });
 
-    it('should submit on button click', async () => {
-        const onSuccess = jest.fn();
-        const onFailure = jest.fn();
-        const spy = jest.spyOn(API, 'register');
-        ReactTestUtils.act(() => {
-            render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
-                container
-            );
-        });
-        const button = document.querySelector('[type="submit"]');
-        ReactTestUtils.act(() => {
-            if (button) {
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
-        });
-        expect(spy).toBeCalled();
-    });
-
     it('should submit and succeed', async () => {
         // setup
 
@@ -74,6 +53,8 @@ describe('RegisterForm', () => {
             email: 'email@email.com',
             password: 'password',
             confirmPassword: 'password',
+            firstName: 'name',
+            lastName: 'lastname',
         };
         jest.useFakeTimers();
 
@@ -90,6 +71,12 @@ describe('RegisterForm', () => {
         const confirmNode = document.querySelector(
             '#confirm-password'
         ) as HTMLElement;
+        const firstnameNode = document.querySelector(
+            '#first-name'
+        ) as HTMLElement;
+        const lastNameNode = document.querySelector(
+            '#last-name'
+        ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         // modify input fields in the DOM
@@ -97,14 +84,34 @@ describe('RegisterForm', () => {
             ReactTestUtils.Simulate.change(emailNode, {
                 target: ({ value: form.email } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(passwordNode, {
                 target: ({ value: form.password } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(confirmNode, {
                 target: ({
                     value: form.confirmPassword,
                 } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(firstnameNode, {
+                target: ({
+                    value: form.firstName,
+                } as unknown) as EventTarget,
+            });
+        });
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(lastNameNode, {
+                target: ({
+                    value: form.lastName,
+                } as unknown) as EventTarget,
+            });
+        });
+        ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
@@ -131,6 +138,8 @@ describe('RegisterForm', () => {
             email: 'email@email.com',
             password: 'password',
             confirmPassword: 'password',
+            firstName: 'name',
+            lastName: 'lastname',
         };
         jest.useFakeTimers();
 
@@ -146,20 +155,47 @@ describe('RegisterForm', () => {
         const confirmNode = document.querySelector(
             '#confirm-password'
         ) as HTMLElement;
+        const firstnameNode = document.querySelector(
+            '#first-name'
+        ) as HTMLElement;
+        const lastNameNode = document.querySelector(
+            '#last-name'
+        ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
+        // modify input fields in the DOM
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(emailNode, {
                 target: ({ value: form.email } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(passwordNode, {
                 target: ({ value: form.password } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(confirmNode, {
                 target: ({
                     value: form.confirmPassword,
                 } as unknown) as EventTarget,
             });
+        });
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(firstnameNode, {
+                target: ({
+                    value: form.firstName,
+                } as unknown) as EventTarget,
+            });
+        });
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(lastNameNode, {
+                target: ({
+                    value: form.lastName,
+                } as unknown) as EventTarget,
+            });
+        });
+        ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

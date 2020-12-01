@@ -4,6 +4,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import Dialog from './Dialog';
 
+jest.mock('@material-ui/core/useMediaQuery', () => () => true);
+
 describe('Dialog', function () {
     let container: HTMLDivElement | null = null;
 
@@ -44,7 +46,9 @@ describe('Dialog', function () {
                 container
             );
         });
-        const button = document.querySelector('button') as HTMLButtonElement;
+        const button = document.querySelector(
+            '[aria-label="close"]'
+        ) as HTMLButtonElement;
         ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });

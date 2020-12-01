@@ -46,6 +46,24 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormContent>
                 <TextField
+                    helperText={errors.firstName}
+                    required
+                    value={form.firstName}
+                    onChange={handleChange('firstName')}
+                    label='First Name'
+                    autoFocus
+                    error={Boolean(errors.firstName)}
+                />
+                <TextField
+                    helperText={errors.lastName}
+                    required
+                    value={form.lastName}
+                    onChange={handleChange('lastName')}
+                    label='Last Name'
+                    autoFocus
+                    error={Boolean(errors.lastName)}
+                />
+                <TextField
                     helperText={errors.email || 'Well Never share your email'}
                     required
                     type='email'
@@ -58,7 +76,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                 <TextField
                     required
                     error={Boolean(errors.password)}
-                    helperText={errors.confirmPassword}
+                    helperText={errors.password}
                     type={isPassVisible ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange('password')}
@@ -96,7 +114,6 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                         ),
                     }}
                 />
-
                 <TextField
                     required
                     error={Boolean(errors.confirmPassword)}

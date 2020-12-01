@@ -8,12 +8,13 @@ function toSnakeCase(str?: string) {
     return str
         .split(' ')
         .map((word) => word[0].toLowerCase() + word.slice(1))
-        .join('');
+        .join('-');
 }
 
 function toCamelCase(str?: string) {
     if (!str) return undefined;
     return str
+        .toLowerCase()
         .split(' ')
         .map((word, idx) =>
             idx > 0

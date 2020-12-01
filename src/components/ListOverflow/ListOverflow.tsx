@@ -30,7 +30,6 @@ const ListOverflow = ({ rowProps, emptyMessage }: Props) => {
         return <Typography>{emptyMessage}</Typography>;
     }
 
-    console.log(rowProps);
     const structuredUserList = rowProps.map((row) => (
         <Fragment key={row._id}>
             <ListCell primary={row.primary} secondary={row.secondary} />
