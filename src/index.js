@@ -26,6 +26,7 @@ if (process.env.NODE_ENV === 'development') {
     // Learn more about service workers: https://bit.ly/CRA-PWA
 
     // serviceWorker.unregister();
+
     serviceWorker.register();
     startup();
 }
