@@ -1,0 +1,23 @@
+name: ESLint
+
+on:
+    - push
+    - pull_request
+
+jobs:
+    build:
+        name: Run ESLint
+        runs-on: ubuntu-latest
+        steps:
+            # Check out the repository
+            - uses: actions/checkout@v1
+
+            # Install dependences
+            - uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: install
+
+            # Run ESLint
+            - uses: borales/actions-yarn@v2.0.0
+              with:
+                  cmd: eslint:github-action
