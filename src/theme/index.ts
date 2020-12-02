@@ -1,4 +1,5 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
+// TODO: implement user prefers schema for dark or light mode
 
 declare module '@material-ui/core/styles/createMuiTheme' {
     interface Theme {

@@ -5,15 +5,10 @@ import List from 'domains/Townhall/TownhallList';
 import Fab from 'components/Fab';
 import history, { makeRelativeLink } from 'utils/history';
 
-interface Props {
-    currentUser?: boolean;
-}
-
-export default function TownhallList({ currentUser }: Props) {
+export default function TownhallList() {
     return (
         <>
             <List
-                currentUser={currentUser}
                 onClickTownhall={(id) =>
                     history.push(makeRelativeLink(`/${id}`))
                 }
@@ -24,7 +19,3 @@ export default function TownhallList({ currentUser }: Props) {
         </>
     );
 }
-
-TownhallList.defaultProps = {
-    currentUser: false,
-};

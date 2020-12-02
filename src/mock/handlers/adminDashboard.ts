@@ -1,7 +1,8 @@
 import { rest } from 'msw';
 import faker from 'faker';
+import { makeUser } from 'prytaneum-typings';
 import * as AdminDashboardTypes from 'domains/Admin/types';
-import { makeUsers, makeUser } from './auth';
+import { makeUsers } from './auth';
 
 const recent = faker.date.recent();
 const future = faker.date.future();

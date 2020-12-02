@@ -1,30 +1,11 @@
 import React from 'react';
-import faker from 'faker';
 import { EventEmitter } from 'events';
+import { makeChatMessage } from 'prytaneum-typings';
 
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from './Chat';
-import { ChatMessage } from '../types';
 
 export default { title: 'Domains/Townhall/Chat' };
-
-function makeChatMessage(): ChatMessage {
-    return {
-        _id: faker.random.alphaNumeric(12),
-        meta: {
-            user: {
-                _id: faker.random.alphaNumeric(12),
-                name: {
-                    first: faker.internet.userName(),
-                    last: faker.internet.userName(),
-                },
-            },
-            timestamp: new Date().toISOString(),
-            townhallId: faker.random.alphaNumeric(12),
-        },
-        message: faker.lorem.lines(3),
-    };
-}
 
 function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;

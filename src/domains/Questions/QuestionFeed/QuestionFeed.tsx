@@ -2,14 +2,17 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
+import type {
+    Question as QuestionType,
+    QuestionPayloads,
+} from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
 import { UserContext } from 'contexts/User';
+import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 import { QuestionProps } from '../QuestionFeedItem';
-import { TownhallContext } from '../Contexts/Townhall';
-import { Question as QuestionType } from '../types';
-import { PaneContext } from '../Contexts/Pane';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
@@ -18,7 +21,6 @@ import {
     applyFilters,
     filters as filterFuncs,
     questionReducer,
-    Actions,
     QuestionFilterFunc,
     makeSystemMessage,
 } from './utils';
@@ -40,9 +42,9 @@ function QuestionFeed() {
     const [, dispatch] = React.useContext(PaneContext);
 
     // full question feed from socketio
-    const [questions] = useSocketio<QuestionType[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
-        event: 'townhall-question-state',
+    const [questions] = useSocketio<QuestionType[], QuestionPayloads>({
+        url: '/questions',
+        event: 'question-state',
         reducer: questionReducer,
         initialState: [],
     });
@@ -68,12 +70,16 @@ function QuestionFeed() {
 
     // there should never be more than 1 current question, so we can stop at the first one found
     const currentQuestion = React.useMemo(
-        () => displayed.find((q) => q.state === 'CURRENT'),
+        () => displayed.find((q) => q.state === 'current'),
         [displayed]
     );
 
     const isModerator = React.useMemo(
-        () => user && townhall.settings.moderators.list.includes(user._id),
+        () =>
+            user &&
+            townhall.settings.moderators.list.find(
+                ({ email }) => user.email.address === email
+            ),
         [townhall.settings.moderators.list, user]
     );
 

@@ -1,4 +1,4 @@
-import { ChatMessage } from '../types';
+import type { ChatMessage } from 'prytaneum-typings';
 
 export interface NewMessage {
     type: 'new-message';

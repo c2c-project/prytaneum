@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-axios.defaults.headers = {
-    post: {
-        'Content-Type': 'application/json',
-    },
-};
+// NOTE: remove this later
+// axios.defaults.headers = {
+//     post: {
+//         'Content-Type': 'application/json',
+//     },
+// };
 
 export default axios;

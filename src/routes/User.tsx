@@ -35,7 +35,7 @@ addRoutes([
                 action: (ctx) => {
                     const child = ctx.next();
                     if (child) return child;
-                    return <TownhallList currentUser />;
+                    return <TownhallList />;
                 },
                 children: [
                     {

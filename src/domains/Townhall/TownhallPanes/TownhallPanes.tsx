@@ -2,16 +2,16 @@ import React from 'react';
 import { Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import type { Townhall } from 'prytaneum-typings';
 
+import QuestionFeed from 'domains/Questions/QuestionFeed';
+import AskQuestion from 'domains/Questions/AskQuestion';
 import { Pane, PaneContent, PaneNavigation } from './Panes';
-
-import QuestionFeed from '../QuestionFeed';
 import Chat from '../Chat';
 import PaneSelect from '../PaneSelect';
-import AskQuestion from '../AskQuestion';
 import Information from '../Information';
 import { TownhallContext } from '../Contexts/Townhall';
-import { Townhall, Panes } from '../types';
+import { Panes } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     navigation: {
@@ -64,21 +64,27 @@ export default function TownhallPanes() {
             : clsx([classes.innerContainer, classes.hidden]);
     }
 
+    const options = Object.keys(panes);
+
     return (
         <Pane>
-            <PaneNavigation>
-                <div className={classes.container}>
-                    <PaneSelect
-                        options={Object.keys(panes)} // TODO: finish pane select
-                        value={state}
-                        label='Select Pane'
-                        onChange={(e) => {
-                            const copy = e.target;
-                            setState(copy.value as PaneKey);
-                        }}
-                    />
-                </div>
-            </PaneNavigation>
+            {options.length > 1 ? (
+                <PaneNavigation>
+                    <div className={classes.container}>
+                        <PaneSelect
+                            options={options} // TODO: finish pane select
+                            value={state}
+                            label='Select Pane'
+                            onChange={(e) => {
+                                const copy = e.target;
+                                setState(copy.value as PaneKey);
+                            }}
+                        />
+                    </div>
+                </PaneNavigation>
+            ) : (
+                <></>
+            )}
             <PaneContent>
                 <div className={classes.outerContainer}>
                     {Object.entries(panes).map(([key, value]) => (

@@ -9,7 +9,6 @@ import SnackContext from 'contexts/Snack';
 import Routes from './routes';
 
 export default function App() {
-    // TODO: update when user fetching/logging in is figured out
     return (
         <ThemeProvider>
             <CssBaseline />

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Typography, Button } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
 import QuoteIcon from '@material-ui/icons/FormatQuote';
+import type { Question as QuestionType } from 'prytaneum-typings';
 
 import TextField from 'components/TextField';
 import Form from 'components/Form';
@@ -11,7 +12,6 @@ import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import useForm from 'hooks/useForm';
 import QuestionFeedItem from '../QuestionFeedItem';
-import { Question as QuestionType } from '../types';
 
 interface Props {
     replyTo: QuestionType;
@@ -30,7 +30,7 @@ export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle
-                title={`Reply to ${replyTo.meta.user.name}`}
+                title={`Reply to ${replyTo.meta.createdBy.name.first}`}
                 description={
                     replyTo && (
                         <Typography variant='body2'>
@@ -46,8 +46,8 @@ export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
             />
             <FormContent>
                 <QuestionFeedItem
-                    user={replyTo.meta.user.name}
-                    timestamp={replyTo.meta.timestamp}
+                    user={replyTo.meta.createdBy.name.first}
+                    timestamp={replyTo.meta.createdAt}
                 >
                     {replyTo.question}
                 </QuestionFeedItem>

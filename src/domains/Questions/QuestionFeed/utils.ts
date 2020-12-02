@@ -1,6 +1,10 @@
 /* eslint-disable import/prefer-default-export */
+import type {
+    Question,
+    Question as QuestionType,
+    QuestionPayloads,
+} from 'prytaneum-typings';
 import { search as utilSearch, FilterFunc } from 'utils/filters';
-import { Question, Question as QuestionType } from '../types';
 import { QuestionProps } from '../QuestionFeedItem';
 
 export { applyFilters } from 'utils/filters';
@@ -10,7 +14,7 @@ export type QuestionFilterFunc = FilterFunc<Question>;
 export function search(searchText: string, data: Question[]) {
     const accessors = [
         (q: Question) => q.question,
-        (q: Question) => q.meta.user.name,
+        (q: Question) => q.meta.createdBy.name.first,
     ];
     return utilSearch(searchText, data, accessors);
 }
@@ -23,33 +27,18 @@ export interface Filters {
 }
 
 export const filters: Filters = {
-    'In Queue': (questions) => questions.filter((q) => q.state === 'IN_QUEUE'),
-    Asked: (questions) => questions.filter((q) => q.state === 'ASKED'),
+    'In Queue': (questions) => questions.filter((q) => q.state === 'in_queue'),
+    Asked: (questions) => questions.filter((q) => q.state === 'asked'),
     'Current Question': (questions) =>
-        questions.filter((q) => q.state === 'CURRENT'),
+        questions.filter((q) => q.state === 'current'),
 };
 
-interface NewQuestionAction {
-    type: 'new-question';
-    payload: QuestionType;
-}
-interface UpdateQuestionAction {
-    type: 'update-question';
-    payload: Pick<QuestionType, 'question' | '_id'>;
-}
-interface DeleteQuestionAction {
-    type: 'hide-question';
-    payload: Pick<QuestionType, '_id'>;
-}
-
-export type Actions =
-    | NewQuestionAction
-    | UpdateQuestionAction
-    | DeleteQuestionAction;
-
-export function questionReducer(state: QuestionType[], action: Actions) {
+export function questionReducer(
+    state: QuestionType[],
+    action: QuestionPayloads
+) {
     switch (action.type) {
-        case 'new-question':
+        case 'create-question':
             return [action.payload, ...state];
         case 'update-question':
             return state.map((question) => {
@@ -58,10 +47,12 @@ export function questionReducer(state: QuestionType[], action: Actions) {
                 }
                 return question;
             });
-        case 'hide-question':
+        case 'delete-question':
             return state.filter(
                 (question) => question._id !== action.payload._id
             );
+        case 'initial-state':
+            return action.payload;
         default:
             return state;
     }

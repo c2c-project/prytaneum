@@ -2,9 +2,9 @@
 import React from 'react';
 import { Grid, Typography, DialogContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import type { Question } from 'prytaneum-typings';
 
 import Dialog from 'components/Dialog';
-import { Question } from '../types';
 import QuestionForm from '../QuestionForm';
 import QuestionFeedItem, { QuestionProps } from '../QuestionFeedItem';
 import QuestionReplyForm from '../QuestionReplyForm';
@@ -153,8 +153,8 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                     {current && (
                         <CurrentQuestion className={classes.item}>
                             <QuestionFeedItem
-                                user={current.meta.user.name}
-                                timestamp={current.meta.timestamp}
+                                user={current.meta.createdBy.name.first}
+                                timestamp={current.meta.createdAt}
                                 actions={
                                     variant === 'moderator' &&
                                     getActions(current)
@@ -173,15 +173,15 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                         {questions.map((question) => {
                             const {
                                 _id,
-                                question: text,
                                 meta,
                                 aiml,
+                                question: text,
                             } = question;
                             return (
                                 <QuestionFeedItem
                                     key={_id}
-                                    user={meta.user.name}
-                                    timestamp={meta.timestamp}
+                                    user={meta.createdBy.name.first}
+                                    timestamp={meta.createdAt}
                                     actions={getActions(question)}
                                     className={classes.item}
                                 >

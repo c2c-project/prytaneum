@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import type { User } from 'prytaneum-typings';
 
 import useEndpoint from 'hooks/useEndpoint';
 import { getUser } from 'domains/Admin/api/api';
@@ -17,8 +18,7 @@ import { userProfileFormat } from 'domains/Admin/helper/helper';
 
 import Fab from 'components/Fab';
 import Loader from 'components/Loader';
-import { User } from 'types';
-import { UserHistory, Tags, MiniProfile, AccountActions } from './components';
+import { Tags, MiniProfile, AccountActions } from './components';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,12 +79,12 @@ const UserProfile = ({ userId }: Props) => {
                           description: 'Modify user permissions and roles',
                           component: <div>TODO</div>,
                       },
-                      {
-                          title: 'Logs',
-                          description:
-                              'Logs of activity associated with this account',
-                          component: <UserHistory history={user.history} />,
-                      },
+                      //   {
+                      //       title: 'Logs',
+                      //       description:
+                      //           'Logs of activity associated with this account',
+                      //       component: <UserHistory history={user.history} />,
+                      //   },
                       {
                           title: 'Account Actions',
                           description:

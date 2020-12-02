@@ -1,4 +1,5 @@
 import React from 'react';
+import type { User } from 'prytaneum-typings';
 
 import UserProvider from 'contexts/User';
 
@@ -6,7 +7,7 @@ import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallLive from 'domains/Townhall/TownhallLive';
 
 import Page from 'layout/Page';
-import { User } from 'types';
+
 
 import { addRoutes } from './utils';
 

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, IconButton, InputAdornment } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import type { RegisterForm as FormType } from 'prytaneum-typings';
 
 import Form from 'components/Form';
 import FormContent from 'components/FormContent';
@@ -15,7 +16,6 @@ import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
 
 import API from '../api';
-import { RegisterForm as FormType } from '../types';
 
 interface Props {
     onSuccess: () => void;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
+import type { ChatMessage } from 'prytaneum-typings';
 
 import TextField from 'components/TextField';
 import MessageList from 'components/MessageList';
@@ -9,10 +10,9 @@ import MessageListItem from 'components/MessageListItem';
 import Message from 'components/Message';
 import ScrollTo from 'components/ScrollTo';
 import useSocketio from 'hooks/useSocketio';
-import { ChatMessage } from '../types';
 import { chatReducer, Actions } from './utils';
 // TODO:
-// import { PaneContext } from '../Contexts/Pane'; 
+// import { PaneContext } from '../Contexts/Pane';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,8 +61,8 @@ function ChatContent({ messages }: ChatContentProps) {
                             key={idx}
                         >
                             <Message
-                                name={meta.user.name.first}
-                                timestamp={meta.timestamp}
+                                name={meta.createdBy.name.first}
+                                timestamp={meta.createdAt}
                                 message={message}
                             />
                         </MessageListItem>
@@ -122,8 +122,8 @@ export default function Chat() {
     const classes = useStyles();
     // full question feed from socketio
     const [messages, , socket] = useSocketio<ChatMessage[], Actions>({
-        url: '/moderator/questions', // FIXME: update the url when I know what it should it should be
-        event: 'townhall-chat-state',
+        url: '/chat-messages', // FIXME: update the url when I know what it should it should be
+        event: 'chat-message-state',
         reducer: chatReducer,
         initialState: [],
     });

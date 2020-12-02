@@ -12,13 +12,13 @@ import {
 } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import { makeStyles } from '@material-ui/core/styles';
+import type { Townhall } from 'prytaneum-typings';
 
 import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import ListFilter from 'components/ListFilter';
 import { getTownhallList } from '../api';
-import { Townhall } from '../types';
 import {
     filters as filterFuncs,
     TonwhallFilterFunc,
@@ -47,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    currentUser?: boolean;
     onClickTownhall: (id: string) => void;
 }
 
-export default function TownhallList({ currentUser, onClickTownhall }: Props) {
+export default function TownhallList({ onClickTownhall }: Props) {
+    console.log('what');
     const classes = useStyles();
     const [list, setList] = React.useState<Townhall[] | null>(null);
 
@@ -59,14 +59,12 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
     const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([
         (townhalls: Townhall[]) => townhalls,
     ]);
-    const [sendRequest, isLoading] = useEndpoint(
-        () => getTownhallList(currentUser),
-        {
-            onSuccess: (results) => {
-                setList(results.data.list);
-            },
-        }
-    );
+    const [sendRequest, isLoading] = useEndpoint(() => getTownhallList(), {
+        onSuccess: (results) => {
+            console.log(results.data);
+            setList(results.data);
+        },
+    });
     const filteredResults = React.useMemo(
         () => applyFilters(list || [], filters),
         [list, filters]
@@ -144,7 +142,3 @@ export default function TownhallList({ currentUser, onClickTownhall }: Props) {
         </Fade>
     );
 }
-
-TownhallList.defaultProps = {
-    currentUser: false,
-};

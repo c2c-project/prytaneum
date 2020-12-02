@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
+import type { User } from 'prytaneum-typings';
 import { timeStamp } from 'console';
 import { UserProfile } from 'domains/Admin/types';
-import { User } from 'types';
 
 const filterList = ['Attended', 'Moderator', 'Banned'];
 

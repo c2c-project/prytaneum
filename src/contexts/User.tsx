@@ -1,7 +1,7 @@
 import React from 'react';
+import type { User } from 'prytaneum-typings';
 
 import Loader from 'components/Loader';
-import { User } from 'types';
 import useEndpoint from 'hooks/useEndpoint';
 import { getMyInfo } from 'domains/Auth/api';
 import Redirect from 'components/Redirect';

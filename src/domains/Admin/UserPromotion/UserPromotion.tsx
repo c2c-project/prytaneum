@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import type { User, Roles } from 'prytaneum-typings';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Paper, Grid, Switch, Typography } from '@material-ui/core';
 
 import useEndpoint from 'hooks/useEndpoint';
 import { promoteUser } from 'domains/Admin/api/api';
-import { User } from 'types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    promotionOptions: string[];
+    promotionOptions: Roles[];
     userData: User;
     onChange?: () => void;
 }

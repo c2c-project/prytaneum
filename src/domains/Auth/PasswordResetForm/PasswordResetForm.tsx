@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import type { ForgotPassForm } from 'prytaneum-typings';
 
 import TextField from 'components/TextField';
 import Form from 'components/Form';
@@ -12,7 +13,6 @@ import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
 
 import API from '../api';
-import { ForgotPassForm } from '../types';
 
 interface Props {
     token: string;
