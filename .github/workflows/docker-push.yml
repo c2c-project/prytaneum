@@ -33,4 +33,5 @@ jobs:
                   project_id: ${{ secrets.GCP_PROJECT_ID }}
                   service_account_key: ${{ secrets.GAR_JSON_KEY }}
                   export_default_credentials: true
+            - name: Use gcloud api
               run: gcloud info
