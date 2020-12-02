@@ -1,0 +1,25 @@
+name: Docker Testing
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  # push:
+  #   branches:
+  #     - master
+  pull_request:
+
+jobs:
+    run-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Make envfile
+              uses: SpicyPizza/create-envfile@v1
+              with:
+                  envkey_NODE_ENV: ${{ secrets.NODE_ENV }}
+                  envKey_REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
+                  file_name: .env
+            - name: Build + Test in Docker
+              run: |
+                  docker-compose --file docker-compose.test.yml build sut
+                  docker-compose --file docker-compose.test.yml run sut

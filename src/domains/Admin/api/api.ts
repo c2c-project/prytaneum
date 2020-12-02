@@ -19,8 +19,9 @@ export async function getUser(_id: string) {
     return axios.get<{ user: User }>(`/api/users/${_id}`);
 }
 
+// FIXME:
 export async function promoteUser(form: User, id: string) {
-    // const { _id, name, email, timeStamp, status, actionHistoryData } = form;
+    // const { _id, email, timeStamp, status, actionHistoryData } = form;
 
     // if (
     //     !_id ||

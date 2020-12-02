@@ -5,6 +5,8 @@ import faker from 'faker';
 import { ReferenceNames } from 'types';
 import ProfileCard from './ProfileCard';
 
+jest.mock('@material-ui/core/useMediaQuery', () => () => true);
+
 describe('ProfileCard', () => {
     let container: HTMLDivElement | null = null;
     const dummyTeamMember = {

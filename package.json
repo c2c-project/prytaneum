@@ -34,13 +34,14 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "tsc -p tsconfig.prod.json && react-scripts build",
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
         "storybook": "start-storybook --port 3000 -s public",
         "lint": "eslint src/**/*.ts src/**/*.tsx",
         "docs": "jsdoc -c jsdoc.conf.json",
-        "storybook-docs": "yarn storybook --docs"
+        "storybook-docs": "yarn storybook --docs",
+        "eslint:github-action": "eslint src/**/*.ts --max-warnings 0"
     },
     "alias": {
         "assets": "./src/assets",

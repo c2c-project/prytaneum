@@ -30,7 +30,7 @@ interface Props {
 
 // FIXME:
 export default function HandleInviteLink({ inviteToken }: Props) {
-    console.log(inviteToken);
+    // console.log(inviteToken);
     // const townhall = useContext(TownhallContext);
     // const [open, setOpen] = useState(false);
     // const loginRequest = useCallback(() => API.loginWithJWT(inviteToken), [

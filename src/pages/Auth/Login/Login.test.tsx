@@ -32,11 +32,7 @@ describe('Login', () => {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider>
-                    <Login
-                        onLogin={() => {}}
-                        registerRoute='/register'
-                        forgotPassRoute='/forgot-password'
-                    />
+                    <Login onLogin={() => {}} />
                 </ThemeProvider>,
                 container
             );
