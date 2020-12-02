@@ -4,8 +4,6 @@ import type {
     Townhall,
     TownhallSettings,
     QuestionForm,
-    Speaker,
-    User,
 } from 'prytaneum-typings';
 
 import axios from 'utils/axios';

@@ -4,7 +4,6 @@ import {
     makeTownhall,
     TownhallForm,
     QuestionForm,
-    TownhallSettings,
 } from 'prytaneum-typings';
 
 export default [

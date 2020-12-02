@@ -22,7 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import type {
-    TownhallAttachment,
+    // TownhallAttachment,
     TownhallSettings,
     Moderator,
     Speaker,
@@ -33,7 +33,7 @@ import SettingsList from 'components/SettingsList';
 import Dialog from 'components/Dialog';
 import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
-import UploadField from 'components/UploadField';
+// import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import SpeakerForm from '../SpeakerForm';
 import { TownhallContext } from '../Contexts/Townhall';
@@ -366,27 +366,28 @@ export function Registration() {
 
 export function Attachments() {
     const townhall = React.useContext(TownhallContext);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, setState] = React.useState(
         townhall.settings.attachments.list
     );
 
-    function buildHandler(idx: number, key: 'name' | 'url') {
-        return (e: React.ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            const { value } = e.target;
-            setState(
-                [...state].splice(idx, 1, { ...state[idx], [key]: value })
-            );
-        };
-    }
+    // function buildHandler(idx: number, key: 'name' | 'url') {
+    //     return (e: React.ChangeEvent<HTMLInputElement>) => {
+    //         e.preventDefault();
+    //         const { value } = e.target;
+    //         setState(
+    //             [...state].splice(idx, 1, { ...state[idx], [key]: value })
+    //         );
+    //     };
+    // }
 
-    function handleAdd(attachment: TownhallAttachment) {
-        setState([...state, attachment]);
-    }
+    // function handleAdd(attachment: TownhallAttachment) {
+    //     setState([...state, attachment]);
+    // }
 
-    function handleRemove(idx: number) {
-        setState([...state].splice(idx, 1));
-    }
+    // function handleRemove(idx: number) {
+    //     setState([...state].splice(idx, 1));
+    // }
 
     // FIXME:
     return (
