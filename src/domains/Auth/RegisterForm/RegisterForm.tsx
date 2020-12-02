@@ -60,7 +60,6 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     value={form.lastName}
                     onChange={handleChange('lastName')}
                     label='Last Name'
-                    autoFocus
                     error={Boolean(errors.lastName)}
                 />
                 <TextField
@@ -70,7 +69,6 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     value={form.email}
                     onChange={handleChange('email')}
                     label='Email'
-                    autoFocus
                     error={Boolean(errors.email)}
                 />
                 <TextField
