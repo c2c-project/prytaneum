@@ -37,6 +37,6 @@ jobs:
             - name: Use gcloud api
               run: |
                 gcloud auth configure-docker us-west2-docker.pkg.dev
-                docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test .
+                docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test ./Dockerfile
                 docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
 
