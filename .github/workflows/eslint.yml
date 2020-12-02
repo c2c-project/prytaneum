@@ -16,10 +16,15 @@ jobs:
             # Check out the repository
             - uses: actions/checkout@v2
 
+            # Clean cache
+            - uses: borales/actions-yarn@v2.3.0
+              with:
+                  cmd: cache clean
+
             # Install dependences
             - uses: borales/actions-yarn@v2.3.0
               with:
-                  cmd: install
+                  cmd: install --force --frozen-lockfile
 
             # Run ESLint
             - uses: borales/actions-yarn@v2.3.0
