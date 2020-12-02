@@ -11,7 +11,7 @@ EXPOSE 3000
 FROM base-stage as build-stage
 COPY . .
 RUN chmod +x scripts/*.sh
-RUN scripts/clean.sh
+# RUN scripts/clean.sh
 RUN scripts/build.sh
 
 ARG NODE_ENV

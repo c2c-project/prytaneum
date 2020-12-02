@@ -18,14 +18,14 @@
     },
     "include": ["src"],
     "exclude": [
+        "**/setupTests.ts",
         "node_modules",
-        "**/__mocks__/**",
+        "**/__tests__/*",
+        "**/__mocks__/*",
         "**/mock/**",
         "**/*.mock.*",
         "**/*.test.*",
-        "**/*.stories.*",
-        "**/__tests__/**",
-        "**/setupTests.ts"
+        "**/*.stories.*"
     ],
     "typedocOptions": {
         "mode": "modules",
