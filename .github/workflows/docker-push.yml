@@ -10,6 +10,8 @@ on:
 jobs:
     docker-push:
         runs-on: ubuntu-latest
+        env:
+            BUILD_ID: ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
         steps:
             - uses: actions/checkout@v2
             - name: Set up QEMU
@@ -35,10 +37,10 @@ jobs:
                   service_account_key: ${{ secrets.GAR_JSON_KEY }}
                   export_default_credentials: true
 
-            # gcloud beta auth configure-docker us-west2-docker.pkg.dev
-            # docker build -t us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test .
-            # docker push us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
-            - name: gcloud
+            - name: Build
+              run: docker build -t $BUILD_ID
+
+            - name: Configure gcloud and push
               run: |
-                  gcloud info
-                  gcloud artifacts locations list
+                  gcloud beta auth configure-docker us-west2-docker.pkg.dev
+                  docker push $BUILD_ID
