@@ -28,15 +28,17 @@ jobs:
             #       username: gar-720
             #       password: ${{ secrets.GAR_JSON_KEY }}
 
-            - name: Build and push
+            - name: Setup gcloud
               uses: google-github-actions/setup-gcloud@v0.2.0
               with:
                   project_id: ${{ secrets.GCP_PROJECT_ID }}
                   service_account_key: ${{ secrets.GAR_JSON_KEY }}
                   export_default_credentials: true
 
-            - name: Use gcloud api
+            # gcloud beta auth configure-docker us-west2-docker.pkg.dev
+            # docker build -t us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test .
+            # docker push us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
+            - name: gcloud
               run: |
-                  gcloud auth configure-docker us-west2-docker.pkg.dev
-                  docker build -t us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test .
-                  docker push us-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
+                  gcloud info
+                  gcloud artifacts locations list
