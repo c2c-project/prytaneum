@@ -14,7 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             # Check out the repository
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
 
             # Install dependences
             - uses: borales/actions-yarn@v2.3.0
