@@ -11,6 +11,7 @@ jobs:
     docker-push:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v2
             - name: Set up QEMU
               if: ${{ !env.ACT }}
               uses: docker/setup-qemu-action@v1
@@ -33,10 +34,9 @@ jobs:
                   project_id: ${{ secrets.GCP_PROJECT_ID }}
                   service_account_key: ${{ secrets.GAR_JSON_KEY }}
                   export_default_credentials: true
-                  
+
             - name: Use gcloud api
               run: |
-                gcloud auth configure-docker us-west2-docker.pkg.dev
-                docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test ./Dockerfile
-                docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
-
+                  gcloud auth configure-docker us-west2-docker.pkg.dev
+                  docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test .
+                  docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}:test
