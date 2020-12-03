@@ -8,7 +8,7 @@ on:
             - master
 
 env:
-    BUILD_ID: '${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:${GITHUB_SHA}'
+    BUILD_ID: ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
 jobs:
     docker-push:
         runs-on: ubuntu-latest
@@ -38,9 +38,9 @@ jobs:
                   export_default_credentials: true
 
             - name: Build
-              run: docker build -t "${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA" .
+              run: docker build -t $BUILD_ID .
 
             - name: Configure gcloud and push
               run: |
                   gcloud beta auth configure-docker us-west2-docker.pkg.dev
-                  docker push ${BUILD_ID}
+                  docker push BUILD_ID
