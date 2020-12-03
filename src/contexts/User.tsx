@@ -29,7 +29,7 @@ export default function UserProvider({ children, value }: Props) {
     }, [get, user]);
 
     if (isLoading || user === undefined) return <Loader />;
-    if (user === null) return <Redirect href='/home' />; // means that theres something wrong
+    if (user === null) return <Redirect href='/auth/login' />; // means that theres something wrong
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
