@@ -1,6 +1,7 @@
 import React from 'react';
 import type { User } from 'prytaneum-typings';
 
+import RequireLogin from 'components/RequireLogin';
 import UserProvider from 'contexts/User';
 
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
@@ -8,14 +9,17 @@ import TownhallLive from 'domains/Townhall/TownhallLive';
 
 import Page from 'layout/Page';
 
-
 import { addRoutes } from './utils';
 
 addRoutes([
     {
         path: '/preview',
         action: (ctx) => {
-            return <Page maxWidth='xl'>{ctx.next()}</Page>;
+            return (
+                <RequireLogin>
+                    <Page maxWidth='xl'>{ctx.next()}</Page>
+                </RequireLogin>
+            );
         },
         children: [
             {

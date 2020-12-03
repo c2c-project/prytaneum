@@ -41,12 +41,7 @@ export default function useEndpoint<T>(
         const _onSuccess = onSuccess || defaultSucess;
         const _onUndo = undo?.onClick || defaultUndo;
         const isUndo = Boolean(undo);
-        const _onFailure = (err: Error) => {
-            defaultFailure(err);
-            if (onFailure) {
-                onFailure(err);
-            }
-        };
+        const _onFailure = onFailure || defaultFailure;
 
         const request = async function () {
             try {

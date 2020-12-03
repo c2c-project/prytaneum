@@ -25,19 +25,18 @@ addRoutes([
                         )
                     );
                 },
-                children: [
-                    {
-                        path: '/register',
-                        action: () => <Register />,
-                    },
-                    {
-                        path: '/forgot-password/request',
-                        action: () => <ForgotPasswordRequest />,
-                    },
-                ],
+            },
+            {
+                path: '/register',
+                action: () => <Register />,
+            },
+            {
+                path: '/forgot-password/request',
+                action: () => <ForgotPasswordRequest />,
             },
         ],
     },
+
     {
         path: '/logout',
         action: () => {
