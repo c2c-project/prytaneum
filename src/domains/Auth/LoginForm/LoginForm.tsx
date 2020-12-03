@@ -31,6 +31,7 @@ interface SignInForm {
     password: string;
 }
 
+const intialState: SignInForm = { email: '', password: '' };
 /** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
  * @category Domains/Auth
  * @constructor ForgotPassRequest
@@ -42,8 +43,6 @@ interface SignInForm {
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-
-const intialState: SignInForm = { email: '', password: '' };
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
