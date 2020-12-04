@@ -29,6 +29,7 @@ jobs:
 
             # setup the actions cache
             - name: Cache node modules
+              id: cache
               uses: actions/cache@v2
               env:
                   cache-name: cache-node-modules
@@ -38,8 +39,9 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
-            # install dependencies
+            # install dependencies if no cache hit
             - name: Install dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
               run: yarn install
     test:
         needs: cache-dependencies
@@ -63,7 +65,7 @@ jobs:
               id: cache
               with:
                   path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+                  key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
@@ -98,7 +100,7 @@ jobs:
               id: cache
               with:
                   path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+                  key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
