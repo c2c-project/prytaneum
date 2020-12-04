@@ -7,8 +7,9 @@ on:
     #   branches:
     #     - master
     pull_request:
+        
 env:
-    REACT_APP_SERVER: { { secrets.REACT_APP_SERVER } }
+    REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
 jobs:
     test:
         runs-on: ubuntu-20.04
