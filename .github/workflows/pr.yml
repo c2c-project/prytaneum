@@ -74,12 +74,9 @@ jobs:
               if: steps.cache.outputs.cache-hit != 'true'
               run: exit 1
 
-            - name: Build + Test in Docker
-              env:
-                  CACHE_PATH: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-              run: |
-                  docker-compose --file docker-compose.test.yml build sut
-                  docker-compose --file docker-compose.test.yml run -e REACT_APP_SERVER,CACHE_PATH sut
+            - name: Run tests
+              uses: docker://node:14-alpine
+              run: yarn test
     lint:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
