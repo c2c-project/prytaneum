@@ -46,6 +46,7 @@ jobs:
     test:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
+        container: docker://node:14-alpine
         steps:
             # checkout code
             - uses: actions/checkout@v2
@@ -74,9 +75,8 @@ jobs:
               if: steps.cache.outputs.cache-hit != 'true'
               run: exit 1
 
-            - name: Run tests
-              uses: docker://node:14-alpine
-              run: yarn test
+            # Run the tests
+            - run: yarn test
     lint:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
