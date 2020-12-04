@@ -65,7 +65,7 @@ jobs:
               id: cache
               with:
                   path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
@@ -76,6 +76,7 @@ jobs:
 
             - name: Build + Test in Docker
               run: |
+                  yarn install --offline
                   docker-compose --file docker-compose.test.yml build sut
                   docker-compose -e REACT_APP_SERVER --file docker-compose.test.yml run sut
     lint:
@@ -100,7 +101,7 @@ jobs:
               id: cache
               with:
                   path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
@@ -110,4 +111,5 @@ jobs:
               run: exit 1
 
             # lint
+            - run: yarn install --offline
             - run: yarn lint
