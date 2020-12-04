@@ -12,6 +12,7 @@ env:
     REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
 jobs:
     cache-dependencies:
+        runs-on: ubuntu-20.04
         steps:
             # checkout code
             - uses: actions/checkout@v2
