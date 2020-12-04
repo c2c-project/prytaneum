@@ -1,0 +1,29 @@
+name: Lint + Test
+
+on:
+    # Trigger the workflow on push or pull request,
+    # but only for the main branch
+    # push:
+    #   branches:
+    #     - master
+    pull_request:
+env:
+    REACT_APP_SERVER: { { secrets.REACT_APP_SERVER } }
+jobs:
+    test:
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build + Test in Docker
+              run: |
+                  docker-compose --file docker-compose.test.yml build sut
+                  docker-compose -e REACT_APP_SERVER --file docker-compose.test.yml run sut
+    lint:
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+            - run: yarn install --frozen-lockfile
+            - run: yarn lint
