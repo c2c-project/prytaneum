@@ -4,7 +4,7 @@ WORKDIR /usr/app
 COPY package.json yarn.lock ./
 RUN apk update \
 && apk add --no-cache git\
-&& yarn install --frozen-lockfile && yarn cache clean
+&& yarn install --frozen-lockfile --verbose
 EXPOSE 3000
 
 # BUILD
