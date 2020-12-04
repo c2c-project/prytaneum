@@ -78,7 +78,7 @@ jobs:
               run: |
                   yarn install --offline
                   docker-compose --file docker-compose.test.yml build sut
-                  docker-compose -e REACT_APP_SERVER --file docker-compose.test.yml run sut
+                  docker-compose --file docker-compose.test.yml run -e REACT_APP_SERVER sut
     lint:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
