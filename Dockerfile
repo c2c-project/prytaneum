@@ -2,10 +2,10 @@
 FROM node:14-alpine as base-stage
 WORKDIR /usr/app
 COPY package.json yarn.lock ./
+COPY ${CACHE_PATH} .cache
 RUN apk update \
-&& apk add --no-cache git
-# EXPECTS NODE MODULES TO BE COPIED FROM THE SYSTEM
-# && yarn install --frozen-lockfile
+&& apk add --no-cache git \
+&& yarn install --offline --frozen-lockfile --cache-folder .cache
 EXPOSE 3000
 
 # BUILD

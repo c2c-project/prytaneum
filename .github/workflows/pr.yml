@@ -75,10 +75,11 @@ jobs:
               run: exit 1
 
             - name: Build + Test in Docker
+              env:
+                  CACHE_PATH: ${{ steps.yarn-cache-dir-path.outputs.dir }}
               run: |
-                  yarn install --offline
                   docker-compose --file docker-compose.test.yml build sut
-                  docker-compose --file docker-compose.test.yml run -e REACT_APP_SERVER sut
+                  docker-compose --file docker-compose.test.yml run -e REACT_APP_SERVER,CACHE_PATH sut
     lint:
         needs: cache-dependencies
         runs-on: ubuntu-20.04

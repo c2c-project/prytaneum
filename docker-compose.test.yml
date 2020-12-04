@@ -10,7 +10,6 @@ services:
             target: base-stage
         command: 'yarn test'
         volumes:
-            - ./node_modules:/usr/app/node_modules
             - ./src:/usr/app/src
             - ./public:/usr/app/public
             - ./.env:/usr/app/.env
