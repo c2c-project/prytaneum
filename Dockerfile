@@ -4,7 +4,8 @@ WORKDIR /usr/app
 COPY package.json yarn.lock ./
 RUN apk update \
 && apk add --no-cache git\
-&& yarn install --frozen-lockfile
+# EXPECTS NODE MODULES TO BE COPIED FROM THE SYSTEM
+# && yarn install --frozen-lockfile
 EXPOSE 3000
 
 # BUILD
