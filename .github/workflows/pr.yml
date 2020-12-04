@@ -26,7 +26,8 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: '14'
-            - run: export YARN_CACHE_FOLDER=$(yarn cache dir)
+            - name: Save yarn cache directory
+              run: export YARN_CACHE_FOLDER=$(yarn cache dir)
             - name: Cache node modules
               uses: actions/cache@v2
               env:
