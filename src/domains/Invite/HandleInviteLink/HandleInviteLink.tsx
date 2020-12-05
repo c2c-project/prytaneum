@@ -29,6 +29,7 @@ interface Props {
 }
 
 // FIXME:
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function HandleInviteLink({ inviteToken }: Props) {
     // console.log(inviteToken);
     // const townhall = useContext(TownhallContext);

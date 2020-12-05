@@ -58,6 +58,7 @@ describe('#updateUserStatus', () => {
     };
 
     // FIXME:
+    // eslint-disable-next-line jest/no-commented-out-tests
     // it('should reject a user status update incorrect form', async () => {
     //     await expect(API.promoteUser({}, userId)).rejects.toThrow(
     //         errors.fieldError()

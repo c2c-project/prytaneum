@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable */ // FIXME:
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';

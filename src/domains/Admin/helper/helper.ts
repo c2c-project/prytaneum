@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable */ // FIXME:
 import type { User } from 'prytaneum-typings';
 import { timeStamp } from 'console';
 import { UserProfile } from 'domains/Admin/types';
