@@ -73,13 +73,9 @@ jobs:
             - name: Exit if no cache hit
               if: steps.cache.outputs.cache-hit != 'true'
               run: exit 1
-            # Install deps
-            - name: Install Deps
-              run: yarn install --offline
 
-            # Run the tests
-            - name: Run tests
-              run: yarn test
+            - run: yarn install --offline
+            - run: yarn test
     lint:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
