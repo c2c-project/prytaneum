@@ -50,6 +50,11 @@ jobs:
             # checkout code
             - uses: actions/checkout@v2
 
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
             # save cache directory
             - name: Save yarn cache directory
               id: yarn-cache-dir-path
