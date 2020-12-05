@@ -52,35 +52,50 @@ function QuestionFeedItem(props: QuestionProps) {
         compact,
         className,
     } = props;
-    const date = React.useMemo(() => formatDate(timestamp, 'p-P'), [timestamp]);
-    const [time, month] = date.split('-');
     const classes = useStyles(); // NOTE: probably will get a perf boost if I remove this somehow
+
+    const [time, month] = React.useMemo(
+        () => formatDate(timestamp, 'p-P').split('-'),
+        [timestamp]
+    );
+    const subheader = React.useMemo(
+        () =>
+            compact ? (
+                <Typography variant='caption' color='textSecondary'>
+                    {time}
+                    &nbsp; &middot; &nbsp;
+                    {month}
+                </Typography>
+            ) : undefined,
+        [compact, time, month]
+    );
+
+    const action = React.useMemo(
+        () =>
+            onClickMore ? (
+                <IconButton onClick={onClickMore}>
+                    <MoreVertIcon />
+                </IconButton>
+            ) : undefined,
+        [onClickMore]
+    );
+    const avatar = React.useMemo(
+        () => (compact ? <Avatar>{user[0]}</Avatar> : undefined),
+        [compact, user]
+    );
+
     return (
         <Grid item xs={12} className={className}>
             <Card classes={{ root: classes.card }} elevation={10}>
                 <CardHeader
                     classes={{ root: classes.cardHeader }}
-                    avatar={!compact && <Avatar>{user[0]}</Avatar>}
+                    avatar={avatar}
                     title={user}
                     titleTypographyProps={{
                         variant: 'subtitle2',
                     }}
-                    subheader={
-                        !compact && (
-                            <Typography variant='caption' color='textSecondary'>
-                                {time}
-                                &nbsp; &middot; &nbsp;
-                                {month}
-                            </Typography>
-                        )
-                    }
-                    action={
-                        onClickMore && (
-                            <IconButton onClick={onClickMore}>
-                                <MoreVertIcon />
-                            </IconButton>
-                        )
-                    }
+                    subheader={subheader}
+                    action={action}
                 />
                 <CardContent>{children}</CardContent>
                 {!compact && actions && (
