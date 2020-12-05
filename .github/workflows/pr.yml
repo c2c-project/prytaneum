@@ -46,7 +46,6 @@ jobs:
     test:
         needs: cache-dependencies
         runs-on: ubuntu-20.04
-        container: docker://node:14-alpine
         steps:
             # checkout code
             - uses: actions/checkout@v2
