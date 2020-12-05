@@ -176,6 +176,8 @@ export const DisableAccount = () => {
             <ConfirmationDialog
                 open={open}
                 onClose={() => setOpen(false)}
+                // FIXME:
+                // eslint-disable-next-line no-console
                 onConfirm={() => console.log('TODO')}
                 title='Disable Account?'
             >

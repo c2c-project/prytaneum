@@ -1,5 +1,5 @@
+/* eslint-disable */ // FIXME:
 // TODO: change to use components/SettingsItem & components/SettingsList
-
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import type { User, Roles } from 'prytaneum-typings';

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable */ // FIXME:
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import type { User } from 'prytaneum-typings';
