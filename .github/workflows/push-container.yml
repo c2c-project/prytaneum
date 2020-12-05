@@ -26,7 +26,7 @@ jobs:
 
             # configure gcloud auth
             - name: Configure gcloud
-            - run: gcloud auth configure-docker ${{ secrets.GCP_SERVER }}-docker.pkg.dev
+              run: gcloud auth configure-docker ${{ secrets.GCP_SERVER }}-docker.pkg.dev
 
             # build + push
             - name: Build
