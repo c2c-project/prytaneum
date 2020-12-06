@@ -8,24 +8,7 @@ networks:
         driver: bridge
 services:
     frontend:
-<<<<<<< HEAD
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: base-stage
-        command: 'yarn start'
-        volumes:
-            - ./src:/usr/app/src
-            - ./public:/usr/app/public
-            - ./.env:/usr/app/.env
-            - ./tsconfig.json:/usr/app/tsconfig.json
-        # ports:
-        #     - '3000:3000'
-        # tty: true
-        stdin_open: true
-=======
         image: prytaneum/frontend:latest
->>>>>>> 689543b04b604a99f3a7e84da9dd2c8ce8a91577
         networks:
             - traefik-network
         labels:
