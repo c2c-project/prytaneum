@@ -12,7 +12,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
-import SpeakerCard from '../SpeakerCard';
+import SpeakerCard from '../../Speaker/SpeakerCard';
 import { TownhallContext } from '../Contexts/Townhall';
 
 function TownhallCard() {
