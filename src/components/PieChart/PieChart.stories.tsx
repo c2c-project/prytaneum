@@ -1,9 +1,9 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import Component, { PieDatum } from './TownhallNivo';
+import Component, { PieDatum } from './PieChart';
 
-export default { title: 'Domains/Townhall/Townhall Nivo' };
+export default { title: 'Components/Pie Chart' };
 
 const Nivo: PieDatum[] = [
     {

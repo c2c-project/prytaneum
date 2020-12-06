@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Component, { TownHallHistoryEntry } from './TownHallHistory';
+import Component, { TownHallHistoryEntry } from './SpeakerHistory';
 
-export default { title: 'Domains/Townhall/Townhall History' };
+export default { title: 'Domains/Speaker/Speaker Townhall History' };
 
 const historyEntries: TownHallHistoryEntry[] = [
     {

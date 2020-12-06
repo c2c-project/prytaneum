@@ -7,7 +7,7 @@ import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import TextField, { Props as TextFieldProps } from 'components/TextField';
 import { PaneContext } from '../Contexts/Pane';
 
-// source for constants and other seemingly random stuff https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
+// source for constants and other seemingly random variables https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
 const RADIUS_STANDARD = 10;
 
 interface Props {

@@ -2,32 +2,33 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Component, { TownHallHistoryEntry } from './TownHallHistory';
+import Component, { PieDatum } from './PieChart';
 
-const entries: TownHallHistoryEntry[] = [
+const Nivo: PieDatum[] = [
     {
-        action: 'Event 1',
-        link: 'https://i.imgur.com/3beQH5s.jpeg',
-        date: 'Jan 9, 2014',
+        id: 'php',
+        value: 344,
     },
     {
-        action: 'Event 2',
-        link: 'https://i.imgur.com/3beQH5s.jpeg',
-        date: 'Jan 10, 2015',
+        id: 'go',
+        value: 262,
     },
     {
-        action: 'Event 3',
-        link: 'https://i.imgur.com/3beQH5s.jpeg',
-        date: 'Jan 11, 2016',
+        id: 'javascript',
+        value: 411,
     },
     {
-        action: 'Event 4',
-        link: 'https://i.imgur.com/3beQH5s.jpeg',
-        date: 'Jan 12, 2017',
+        id: 'ruby',
+        value: 191,
+    },
+    {
+        id: 'hack',
+        value: 234,
+   
     },
 ];
 
-describe('TownHallNivo', function () {
+describe('Pie Chart', function () {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
@@ -47,7 +48,7 @@ describe('TownHallNivo', function () {
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
         ReactTestUtils.act(() => {
-            render(<Component history={entries} />, container);
+            render(<Component data={Nivo} height={200} />, container);
         });
     });
 });

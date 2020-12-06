@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 
 import Component from './MoCDropDown';
 
-export default { title: 'Domains/Townhall/MoC Dropdown' };
+export default { title: 'Components/MoC Dropdown' };
 
 export function Basic() {
     return (

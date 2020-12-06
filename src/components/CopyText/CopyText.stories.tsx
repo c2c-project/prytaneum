@@ -1,8 +1,8 @@
 import React from 'react';
-import Component from './Copy';
+import Component from './CopyText';
 
 export default { title: 'Components/Copy' };
 
 export function Basic() {
-    return <Component data='storybook data' />;
+    return <Component text='storybook data' />;
 }

@@ -9,7 +9,7 @@ import AskQuestion from 'domains/Questions/AskQuestion';
 import { Pane, PaneContent, PaneNavigation } from './Panes';
 import Chat from '../Chat';
 import PaneSelect from '../PaneSelect';
-import Information from '../Information';
+import Information from '../TownhallPane';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Panes } from '../types';
 

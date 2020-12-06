@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import DropDown from './MoCDropDown';
 
-describe('DropDown', () => {
+describe('MoCDropDown', () => {
     let container: HTMLElement | null = null;
 
     beforeEach(() => {
