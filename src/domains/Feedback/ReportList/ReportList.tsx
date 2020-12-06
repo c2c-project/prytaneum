@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import Dialog from 'components/Dialog';
-import ReportSummary from 'domains/FeedbackPortal/ReportSummary';
+import ReportSummary from 'domains/Feedback/ReportSummary';
 import { formatDate } from 'utils/format';
 import { FeedbackReport, BugReport } from '../types';
 

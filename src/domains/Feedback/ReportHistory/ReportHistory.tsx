@@ -18,7 +18,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import LoadingButton from 'components/LoadingButton';
-import ReportList from 'domains/FeedbackPortal/ReportList';
+import ReportList from 'domains/Feedback/ReportList';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import {
     getFeedbackReportsBySubmitter,
