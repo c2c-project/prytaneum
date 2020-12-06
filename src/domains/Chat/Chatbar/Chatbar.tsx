@@ -5,11 +5,11 @@ import SendIcon from '@material-ui/icons/Send';
 
 import TextField from 'components/TextField';
 
-interface MessageInputProps {
+export interface Props {
     onSubmit: (m: string) => void;
 }
 
-export default function Chatbar({ onSubmit }: MessageInputProps) {
+export default function Chatbar({ onSubmit }: Props) {
     const [message, setMessage] = React.useState('');
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

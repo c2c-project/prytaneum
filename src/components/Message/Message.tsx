@@ -21,7 +21,7 @@ interface Props {
  *  @param props.timestamp time of message send
  *  @param props.message the message that was sent
  */
-export default function MessageItemAuthor({ name, timestamp, message }: Props) {
+export default function Message({ name, timestamp, message }: Props) {
     return (
         <Grid
             container
@@ -65,6 +65,6 @@ export default function MessageItemAuthor({ name, timestamp, message }: Props) {
     );
 }
 
-MessageItemAuthor.propTypes = {
+Message.propTypes = {
     name: PropTypes.string.isRequired,
 };

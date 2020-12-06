@@ -119,7 +119,7 @@ export default function TownhallSettings() {
                 ),
             },
         ],
-        []
+        [townhall._id]
     );
 
     const config: AccordionData[] = React.useMemo(

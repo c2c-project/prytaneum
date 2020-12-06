@@ -10,11 +10,11 @@ import ScrollTo from 'components/ScrollTo';
 // TODO:
 // import { PaneContext } from '../Contexts/Pane';
 
-interface ChatContentProps {
+export interface Props {
     messages: ChatMessage[];
 }
 
-export default function ChatContent({ messages }: ChatContentProps) {
+export default function ChatContent({ messages }: Props) {
     // TODO: use to calculate how many new messages there are
     // and update the pane context so it can display in the menu
     // const [, dispatch] = React.useContext(PaneContext);
@@ -43,7 +43,7 @@ export default function ChatContent({ messages }: ChatContentProps) {
                     {messages.map(({ meta, message }, idx) => (
                         <MessageListItem
                             button={false}
-                            onClick={() => {}}
+                            onClick={() => {}} // TODO:
                             hidden={false}
                             key={idx}
                         >

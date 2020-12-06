@@ -1,11 +1,12 @@
 import React from 'react';
-import { Paper, Grid } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { ChatMessage } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import Chatbar from 'domains/Chat/Chatbar';
 import ChatContent from 'domains/Chat/ChatContent';
+import ChatWrapper from 'domains/Chat/ChatWrapper';
 import { chatReducer, Actions } from './utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,10 +33,10 @@ export default function Chat() {
     }
     return (
         <Paper className={classes.root} elevation={10}>
-            <Grid container direction='column'>
+            <ChatWrapper>
                 <ChatContent messages={messages} />
                 <Chatbar onSubmit={handleSubmit} />
-            </Grid>
+            </ChatWrapper>
         </Paper>
     );
 }
