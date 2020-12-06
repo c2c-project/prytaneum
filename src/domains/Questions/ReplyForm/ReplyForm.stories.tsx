@@ -4,7 +4,7 @@ import { makeQuestion } from 'prytaneum-typings';
 import Page from 'layout/Page';
 import Component from './ReplyForm';
 
-export default { title: 'Domains/Townhall/Question Reply Form' };
+export default { title: 'Domains/Questions/Reply Form' };
 
 export function Basic() {
     return (

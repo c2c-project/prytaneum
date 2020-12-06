@@ -3,7 +3,7 @@ import React from 'react';
 
 import SpeakerForm from './SpeakerForm';
 
-export default { title: 'Domains/Townhall/Speaker Form' };
+export default { title: 'Domains/Speaker/Speaker Form' };
 
 export function Basic() {
     return <SpeakerForm onSubmit={console.log} />;

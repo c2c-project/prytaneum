@@ -3,7 +3,7 @@ import { makeSpeaker } from 'prytaneum-typings';
 
 import Component from './SpeakerCard';
 
-export default { title: 'Domains/Townhall/Speaker Card' };
+export default { title: 'Domains/Speaker/Speaker Card' };
 
 export function Basic() {
     const { name, title, description, picture } = makeSpeaker();

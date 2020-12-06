@@ -45,7 +45,7 @@ interface Props {
     bill: Bill;
 }
 
-export default function TownhallBillSummary(props: Props) {
+export default function BillSummary(props: Props) {
     const classes = useStyles();
     const { bill } = props;
     const [expanded, setExpanded] = React.useState(false);

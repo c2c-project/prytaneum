@@ -5,7 +5,7 @@ import { makeQuestion } from 'prytaneum-typings';
 import VList from 'components/VList';
 import QuestionFeedItem from './QuestionFeedItem';
 
-export default { title: 'Domains/Townhall/QuestionFeed Item' };
+export default { title: 'Domains/Questions/QuestionFeed Item' };
 
 function makeQuestions(num: number) {
     const arr = [];

@@ -9,7 +9,7 @@ const bill1: Bill = {
     summaryText: 'This is my story',
 };
 
-describe('TownHallBillSummary', function () {
+describe('BillSummary', function () {
     let container: HTMLDivElement | null = null;
 
     beforeEach(() => {
