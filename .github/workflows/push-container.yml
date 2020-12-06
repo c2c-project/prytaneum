@@ -1,0 +1,35 @@
+name: Push Container to GCP
+
+on:
+    # Trigger the workflow on push or pull request,
+    # but only for the main branch
+    # push:
+    #     branches:
+    #         - master
+
+env:
+    BUILD_ID: ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
+jobs:
+    push-container:
+        runs-on: ubuntu-latest
+        steps:
+            # checkout code
+            - uses: actions/checkout@v2
+
+            # setup gcloud service account
+            - name: Setup gcloud
+              uses: google-github-actions/setup-gcloud@v0.2.0
+              with:
+                  project_id: ${{ secrets.GCP_PROJECT_ID }}
+                  service_account_key: ${{ secrets.GAR_JSON_KEY }}
+                  export_default_credentials: true
+
+            # configure gcloud auth
+            - name: Configure gcloud
+              run: gcloud auth configure-docker ${{ secrets.GCP_SERVER }}-docker.pkg.dev
+
+            # build + push
+            - name: Build
+              run: |
+                  docker build -t ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA .
+                  docker push ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA

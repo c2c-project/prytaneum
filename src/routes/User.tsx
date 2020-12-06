@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Login from 'pages/Auth/Login';
+// import Login from 'pages/Auth/Login';
 
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
@@ -12,10 +12,11 @@ import InviteForm from 'domains/Invite/InviteForm';
 
 import UserSettings from 'domains/Auth/UserSettings';
 import UserProvider from 'contexts/User';
+import RequireLogin from 'components/RequireLogin';
 
 import Page from 'layout/Page';
 
-import { get as getFromStorage } from 'utils/storage';
+// import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
 
@@ -24,10 +25,14 @@ addRoutes([
         // user id is the currently logged in user only
         path: '/user',
         action: (ctx) => {
-            if (!getFromStorage('isLoggedIn')) {
-                return <Login onLogin={() => history.push(ctx.pathname)} />;
-            }
-            return <Page>{ctx.next()}</Page>;
+            // if (!getFromStorage('isLoggedIn')) {
+            //     return <Login onLogin={() => history.push(ctx.pathname)} />;
+            // }
+            return (
+                <RequireLogin>
+                    <Page>{ctx.next()}</Page>
+                </RequireLogin>
+            );
         },
         children: [
             {

@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Information() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
-    console.log(townhall);
 
     return (
         <Grid container>

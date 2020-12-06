@@ -55,8 +55,8 @@ describe('TextField', function () {
         // enter in our simVal into the form
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(valueNode, {
-                target: { value: simVal.v },
-            } as any);
+                target: ({ value: simVal.v } as unknown) as EventTarget,
+            });
         });
 
         expect(onClick).toBeCalledTimes(1);

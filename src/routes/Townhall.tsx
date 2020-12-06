@@ -1,5 +1,6 @@
 import React from 'react';
 
+import RequireLogin from 'components/RequireLogin';
 import Page from 'layout/Page';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
@@ -14,9 +15,11 @@ addRoutes([
             const child = ctx.next();
             if (child) return child;
             return (
-                <Page>
-                    <TownhallList />
-                </Page>
+                <RequireLogin>
+                    <Page>
+                        <TownhallList />
+                    </Page>
+                </RequireLogin>
             );
         },
         children: [

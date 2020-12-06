@@ -54,6 +54,7 @@ export default function MoCDropdown() {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 setData2(response.data.results[0].members);
             })
+            // eslint-disable-next-line no-console
             .catch(console.error); // FIXME:
     }, [chamber]);
 

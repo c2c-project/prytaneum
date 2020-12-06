@@ -58,8 +58,8 @@ export default function RegisterPage() {
                 </Typography>
                 <div className={classes.form}>
                     <RegisterForm
-                        onSuccess={() => history.push('/login')}
-                        onFailure={() => history.push('/login')}
+                        onSuccess={() => history.push('/auth/login')}
+                        onFailure={() => history.push('/auth/login')}
                     />
                 </div>
             </Paper>

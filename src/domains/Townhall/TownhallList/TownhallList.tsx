@@ -51,7 +51,6 @@ interface Props {
 }
 
 export default function TownhallList({ onClickTownhall }: Props) {
-    console.log('what');
     const classes = useStyles();
     const [list, setList] = React.useState<Townhall[] | null>(null);
 
@@ -61,7 +60,6 @@ export default function TownhallList({ onClickTownhall }: Props) {
     ]);
     const [sendRequest, isLoading] = useEndpoint(() => getTownhallList(), {
         onSuccess: (results) => {
-            console.log(results.data);
             setList(results.data);
         },
     });

@@ -13,7 +13,8 @@ export interface Props {
     secondary?: string;
     avatar?: string;
 }
-
+// FIXME:
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListCell = ({ primary, secondary, avatar }: Props) => {
     return (
         <li>

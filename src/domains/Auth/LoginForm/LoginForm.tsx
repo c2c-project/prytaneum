@@ -11,7 +11,7 @@ import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
-import history, { makeRelativeLink } from 'utils/history';
+import history from 'utils/history';
 import useForm from 'hooks/useForm';
 
 import API from '../api';
@@ -31,6 +31,7 @@ interface SignInForm {
     password: string;
 }
 
+const intialState: SignInForm = { email: '', password: '' };
 /** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
  * @category Domains/Auth
  * @constructor ForgotPassRequest
@@ -42,8 +43,6 @@ interface SignInForm {
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-
-const intialState: SignInForm = { email: '', password: '' };
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
@@ -114,7 +113,7 @@ export default function LoginForm({ onSuccess }: Props) {
                     <Link
                         className={classes.link}
                         color='primary'
-                        href={makeRelativeLink('/forgot-password/request')} // TODO: make it so that routing doesn't need to be here
+                        href='/auth/forgot-password/request' // TODO: make it so that routing doesn't need to be here
                     >
                         Forgot Password?
                     </Link>
@@ -124,7 +123,7 @@ export default function LoginForm({ onSuccess }: Props) {
                 <Button
                     fullWidth
                     variant='outlined'
-                    onClick={() => history.push(makeRelativeLink('/register'))} // TODO: routing fixes
+                    onClick={() => history.push('/auth/register')}
                 >
                     Sign Up
                 </Button>

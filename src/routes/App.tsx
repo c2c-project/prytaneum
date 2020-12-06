@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';
-import useCache from 'hooks/useCache';
 
 // for side effects (adding the routes)
 import './Auth';
@@ -127,33 +126,36 @@ export default function App() {
         initialState,
         0,
     ]);
-    let depth = useCache<number>(0);
+    const depth = React.useRef<number>(0);
     const classes = useStyles();
 
-    const handleLocationChange = ({ location }: Update<State>) => {
-        const result = router.resolve({
-            pathname: location.pathname,
-            query: parseQueryString(location.search),
-        });
-        const state = {
-            component: result,
-            key: location.key,
-        };
-        let newDir: 1 | 0 | -1 = 0;
-        const destDepth = location.pathname.split('/').length;
-        if (depth === 0) {
-            newDir = 0;
-        } else if (depth === destDepth) {
-            newDir = 0;
-        } else if (depth < destDepth) {
-            newDir = 1;
-        } else {
-            newDir = -1;
-        }
+    const handleLocationChange = React.useCallback(
+        ({ location }: Update<State>) => {
+            const result = router.resolve({
+                pathname: location.pathname,
+                query: parseQueryString(location.search),
+            });
+            const state = {
+                component: result,
+                key: location.key,
+            };
+            let newDir: 1 | 0 | -1 = 0;
+            const destDepth = location.pathname.split('/').length;
+            if (depth.current === 0) {
+                newDir = 0;
+            } else if (depth.current === destDepth) {
+                newDir = 0;
+            } else if (depth.current < destDepth) {
+                newDir = 1;
+            } else {
+                newDir = -1;
+            }
 
-        depth = destDepth;
-        setCurrPage([state, newDir]);
-    };
+            depth.current = destDepth;
+            setCurrPage([state, newDir]);
+        },
+        [setCurrPage]
+    );
 
     React.useEffect(() => {
         // setup listener
@@ -165,7 +167,7 @@ export default function App() {
 
         // cleanup and unlisten on unrender
         return unlisten;
-    }, []);
+    }, [handleLocationChange]);
 
     return (
         <div className={classes.root}>

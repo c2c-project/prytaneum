@@ -8,6 +8,7 @@ networks:
         driver: bridge
 services:
     frontend:
+<<<<<<< HEAD
         build:
             context: .
             dockerfile: Dockerfile
@@ -22,13 +23,18 @@ services:
         #     - '3000:3000'
         # tty: true
         stdin_open: true
+=======
+        image: prytaneum/frontend:latest
+>>>>>>> 689543b04b604a99f3a7e84da9dd2c8ce8a91577
         networks:
             - traefik-network
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.routers.frontend.rule=PathPrefix(`/`)'
     backend:
-        image: prytaneum/backend:1.0.0
+        environment: 
+          - DB_URL=mongodb://mongo
+        image: prytaneum/backend:latest
         networks:
             - backend-network
             - traefik-network

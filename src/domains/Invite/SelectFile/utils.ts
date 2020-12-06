@@ -4,6 +4,8 @@ const defaultConfig: ParseConfig = {
     header: true,
     skipEmptyLines: true,
     complete: (results: ParseResult<Array<string>>) => {
+        // FIXME: something not console.log or remove this altogether
+        // eslint-disable-next-line no-console
         console.log(results);
     },
 };

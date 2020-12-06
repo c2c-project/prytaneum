@@ -1,0 +1,112 @@
+name: Lint + Test
+
+on:
+    # Trigger the workflow on push or pull request,
+    # but only for the main branch
+    # push:
+    #   branches:
+    #     - master
+    pull_request:
+
+env:
+    REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
+jobs:
+    cache-dependencies:
+        runs-on: ubuntu-20.04
+        steps:
+            # checkout code
+            - uses: actions/checkout@v2
+
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache directory
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            # setup the actions cache
+            - name: Cache node modules
+              id: cache
+              uses: actions/cache@v2
+              env:
+                  cache-name: cache-node-modules
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            # install dependencies if no cache hit
+            - name: Install dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: yarn install
+    test:
+        needs: cache-dependencies
+        runs-on: ubuntu-20.04
+        steps:
+            # checkout code
+            - uses: actions/checkout@v2
+
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache directory
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            # use the cache
+            - uses: actions/cache@v2
+              id: cache
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            # exit if no cache hit
+            - name: Exit if no cache hit
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: exit 1
+
+            - run: yarn install --offline
+            - run: yarn test
+    lint:
+        needs: cache-dependencies
+        runs-on: ubuntu-20.04
+        steps:
+            # checkout code
+            - uses: actions/checkout@v2
+
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache directory
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            # use the cache
+            - uses: actions/cache@v2
+              id: cache
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            # exit if no cache hit
+            - name: Exit if no cache hit
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: exit 1
+
+            # lint
+            - run: yarn install --offline
+            - run: yarn lint

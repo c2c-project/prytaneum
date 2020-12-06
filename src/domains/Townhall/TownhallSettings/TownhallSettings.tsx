@@ -206,7 +206,7 @@ export default function TownhallSettings() {
                 component: <Preview />,
             },
         ],
-        [componentSections, inviteSections, state]
+        [componentSections, inviteSections, state, handleChange]
     );
 
     return (

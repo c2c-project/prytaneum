@@ -215,6 +215,8 @@ export const Tick = ({
     // eslint-disable-next-line react/prop-types
     tick,
     count,
+    // TODO: what is this even for?
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     format = (num) => num.toString(),
 }: TickProps) => {
     return (
