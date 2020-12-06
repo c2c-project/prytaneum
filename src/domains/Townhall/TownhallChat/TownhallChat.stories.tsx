@@ -3,9 +3,9 @@ import { EventEmitter } from 'events';
 import { makeChatMessage } from 'prytaneum-typings';
 
 import FixtureSocket from 'mock/Fixture.socket';
-import Component from './Chat';
+import Component from './TownhallChat';
 
-export default { title: 'Domains/Townhall/Chat' };
+export default { title: 'Domains/Townhall/Townhall Chat' };
 
 function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;

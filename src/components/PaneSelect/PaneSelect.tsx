@@ -5,26 +5,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
 import TextField, { Props as TextFieldProps } from 'components/TextField';
-import { PaneContext } from '../Contexts/Pane';
 
 // source for constants and other seemingly random variables https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
-const RADIUS_STANDARD = 10;
 
-interface Props {
-    options: string[];
+interface Props<T extends string[] = string[]> {
+    options: T;
+    getSecondary: (s: T[number]) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
-    badge: {
-        backgroundColor: theme.palette.secondary.main,
-        borderRadius: RADIUS_STANDARD,
-        color: theme.palette.getContrastText(theme.palette.secondary.main),
-        padding: theme.spacing(0, 1),
-        minWidth: RADIUS_STANDARD * 2,
-        fontSize: theme.typography.fontSize,
-        fontWeight: theme.typography.fontWeightBold,
-        marginRight: theme.spacing(2),
-    },
     icon: {
         alignSelf: 'center',
         marginRight: theme.spacing(2),
@@ -83,20 +72,11 @@ const useStyles = makeStyles((theme) => ({
 export default function PaneSelect({
     options,
     value,
+    getSecondary,
     ...rest
 }: Props & TextFieldProps) {
     const classes = useStyles();
-    const [state] = React.useContext(PaneContext);
 
-    function getSecondary(option: string) {
-        if (!state[option]) return null;
-        if (value === option) return null;
-        return (
-            <div>
-                <span className={classes.badge}>{state[option]}</span>
-            </div>
-        );
-    }
     return (
         <TextField
             select

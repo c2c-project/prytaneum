@@ -4,9 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import type { ChatMessage } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
-import Chatbar from 'domains/Chat/Chatbar';
-import ChatContent from 'domains/Chat/ChatContent';
-import ChatWrapper from 'domains/Chat/ChatWrapper';
+import Chatbar from 'components/Chatbar';
+import ChatContent from 'components/ChatContent';
+import Chat from 'components/Chat';
 import { chatReducer, Actions } from './utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Chat() {
+export default function TownhallChat() {
     const classes = useStyles();
     // full question feed from socketio
     const [messages, , socket] = useSocketio<ChatMessage[], Actions>({
@@ -33,10 +33,10 @@ export default function Chat() {
     }
     return (
         <Paper className={classes.root} elevation={10}>
-            <ChatWrapper>
+            <Chat>
                 <ChatContent messages={messages} />
                 <Chatbar onSubmit={handleSubmit} />
-            </ChatWrapper>
+            </Chat>
         </Paper>
     );
 }

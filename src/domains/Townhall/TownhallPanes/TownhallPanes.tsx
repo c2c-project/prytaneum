@@ -6,14 +6,30 @@ import type { Townhall } from 'prytaneum-typings';
 
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
-import { Pane, PaneContent, PaneNavigation } from './Panes';
-import Chat from '../Chat';
-import PaneSelect from '../PaneSelect';
+import Pane from 'components/Pane';
+import PaneContent from 'components/PaneContent';
+import PaneNavigation from 'components/PaneNavigation';
+import TownhallChat from '../TownhallChat';
+import PaneSelect from '../../../components/PaneSelect';
 import Information from '../TownhallPane';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Panes } from '../types';
+import { PaneContext } from '../Contexts/Pane';
+
+// source for constants and other seemingly random variables https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
+const RADIUS_STANDARD = 10;
 
 const useStyles = makeStyles((theme) => ({
+    badge: {
+        backgroundColor: theme.palette.secondary.main,
+        borderRadius: RADIUS_STANDARD,
+        color: theme.palette.getContrastText(theme.palette.secondary.main),
+        padding: theme.spacing(0, 1),
+        minWidth: RADIUS_STANDARD * 2,
+        fontSize: theme.typography.fontSize,
+        fontWeight: theme.typography.fontWeightBold,
+        marginRight: theme.spacing(2),
+    },
     navigation: {
         paddingBottom: theme.spacing(2),
     },
@@ -47,7 +63,7 @@ function buildPanes(townhall: Townhall) {
             </>
         );
 
-    if (townhall.settings.chat.enabled) panes.Chat = <Chat />;
+    if (townhall.settings.chat.enabled) panes.Chat = <TownhallChat />;
     return panes;
 }
 
@@ -57,6 +73,7 @@ export default function TownhallPanes() {
     type PaneKey = keyof typeof panes;
     const classes = useStyles();
     const [state, setState] = React.useState<PaneKey>('Information');
+    const [context] = React.useContext(PaneContext);
 
     function getClassName(key: string) {
         return key === state
@@ -78,6 +95,17 @@ export default function TownhallPanes() {
                             onChange={(e) => {
                                 const copy = e.target;
                                 setState(copy.value as PaneKey);
+                            }}
+                            getSecondary={(option) => {
+                                if (!context[option]) return null;
+                                if (state === option) return null;
+                                return (
+                                    <div>
+                                        <span className={classes.badge}>
+                                            {context[option]}
+                                        </span>
+                                    </div>
+                                );
                             }}
                         />
                     </div>
