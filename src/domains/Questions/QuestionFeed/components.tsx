@@ -14,7 +14,7 @@ interface CurrentQuestionProps {
 const useStyles = makeStyles((theme) => ({
     currentQuestion: {
         zIndex: 2,
-        boxShadow: theme.shadows[6],
+        boxShadow: theme.shadows[3],
         borderRadius: theme.shape.borderRadius,
         marginBottom: -theme.spacing(1.5),
         backgroundColor: theme.palette.secondary.light,
