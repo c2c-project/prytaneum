@@ -48,6 +48,7 @@ export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
                 <QuestionFeedItem
                     user={replyTo.meta.createdBy.name.first}
                     timestamp={replyTo.meta.createdAt}
+                    elevation={3}
                 >
                     {replyTo.question}
                 </QuestionFeedItem>

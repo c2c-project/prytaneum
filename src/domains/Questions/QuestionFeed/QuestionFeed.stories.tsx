@@ -1,6 +1,7 @@
 import React from 'react';
 import { EventEmitter } from 'events';
 import { makeQuestion } from 'prytaneum-typings';
+import Page from 'layout/Page';
 
 import FixtureSocket from 'mock/Fixture.socket';
 import QuestionFeed from '.';
@@ -13,7 +14,7 @@ function sendMessage(num?: number) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
         emitter.emit('question-state', {
-            type: 'new-question',
+            type: 'create-question',
             payload: makeQuestion(),
         });
     }
@@ -26,11 +27,11 @@ export function Basic() {
                 Add Message
             </button>
             <FixtureSocket.Provider value={emitter}>
-                {/* <Page> */}
-                {/* <div style={{ maxHeight: '100%' }}> */}
-                <QuestionFeed />
-                {/* </div> */}
-                {/* </Page> */}
+                <main>
+                    <Page>
+                        <QuestionFeed />
+                    </Page>
+                </main>
             </FixtureSocket.Provider>
         </div>
     );

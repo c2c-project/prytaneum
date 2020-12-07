@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     cardActions: {
         padding: 0,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.contrastText,
     },
     card: {
@@ -53,7 +53,7 @@ function QuestionFeedItem(props: QuestionProps) {
         onClickMore,
         compact,
         className,
-        elevation: _elevation,
+        elevation,
     } = props;
     const classes = useStyles(); // NOTE: probably will get a perf boost if I remove this somehow
 
@@ -63,7 +63,7 @@ function QuestionFeedItem(props: QuestionProps) {
     );
     const subheader = React.useMemo(
         () =>
-            compact ? (
+            !compact ? (
                 <Typography variant='caption' color='textSecondary'>
                     {time}
                     &nbsp; &middot; &nbsp;
@@ -85,10 +85,6 @@ function QuestionFeedItem(props: QuestionProps) {
     const avatar = React.useMemo(
         () => (compact ? <Avatar>{user[0]}</Avatar> : undefined),
         [compact, user]
-    );
-    const elevation = React.useMemo(
-        () => (_elevation !== undefined ? _elevation : 10),
-        [_elevation]
     );
 
     return (

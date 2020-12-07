@@ -37,7 +37,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                 <Question
                     user={quote.meta.createdBy.name.first}
                     timestamp={quote.meta.createdAt}
-                    elevation={1}
+                    elevation={3}
                 >
                     {quote.question}
                 </Question>

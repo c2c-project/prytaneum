@@ -38,3 +38,19 @@ export async function deleteQuestion(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}`;
     return axios.delete(url);
 }
+
+/**
+ * adds a user's like to a question
+ */
+export async function createLike(townhallId: string, questionId: string) {
+    const url = `/api/townhalls/${townhallId}/questions/${questionId}/like`;
+    return axios.post(url);
+}
+
+/**
+ * deletes the current user's like from a question
+ */
+export async function deleteLike(townhallId: string, questionId: string) {
+    const url = `/api/townhalls/${townhallId}/questions/${questionId}/like`;
+    return axios.delete(url);
+}

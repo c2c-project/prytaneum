@@ -214,16 +214,9 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
         setDialogContent(null);
     }
 
-    function handleUserAction(questionId: string, actionType: UserActionTypes) {
-        const target = questions.find(({ _id }) => _id === questionId);
-
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
-
+    function handleUserAction(question: Question, actionType: UserActionTypes) {
         switch (actionType) {
             case 'Like': {
-                // TODO: socket stuff here
-                console.log('liked');
                 break;
             }
             case 'Quote': {
@@ -231,7 +224,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 // TODO: onSubmit
                 setDialogContent(
                     <QuestionForm
-                        quote={target}
+                        quote={question}
                         onCancel={closeDialog}
                         onSubmit={console.log}
                     />
@@ -243,7 +236,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 // TODO: onSubmit
                 setDialogContent(
                     <ReplyForm
-                        replyTo={target}
+                        replyTo={question}
                         onSubmit={console.log}
                         onCancel={closeDialog}
                     />
@@ -256,12 +249,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
             }
         }
     }
-    function handleModAction(questionId: string, actionType: ModActionTypes) {
-        const target = questions.find(({ _id }) => _id === questionId);
-
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
-
+    function handleModAction(question: Question, actionType: ModActionTypes) {
         switch (actionType) {
             case 'Queue Question': {
                 // TODO: queue question
@@ -282,18 +270,18 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
         }
     }
 
-    function getActions({ _id }: Question) {
+    function getActions(question: Question) {
         if (variant === 'moderator')
             return (
                 <QuestionActions
                     actionKeys={modActions}
-                    onClick={(_e, key) => handleModAction(_id, key)}
+                    onClick={(_e, key) => handleModAction(question, key)}
                 />
             );
         return (
             <QuestionActions
                 actionKeys={userActions}
-                onClick={(_e, key) => handleUserAction(_id, key)}
+                onClick={(_e, key) => handleUserAction(question, key)}
             />
         );
     }
