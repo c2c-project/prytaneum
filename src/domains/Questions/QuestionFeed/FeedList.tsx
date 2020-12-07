@@ -42,166 +42,166 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO: complete this component
-function ModList({ questions }: Pick<Props, 'questions'>) {
-    const classes = useStyles();
-    const [
-        dialogContent,
-        setDialogContent,
-    ] = React.useState<JSX.Element | null>(null);
+// function ModList({ questions }: Pick<Props, 'questions'>) {
+//     const classes = useStyles();
+//     const [
+//         dialogContent,
+//         setDialogContent,
+//     ] = React.useState<JSX.Element | null>(null);
 
-    function closeDialog() {
-        setDialogContent(null);
-    }
+//     function closeDialog() {
+//         setDialogContent(null);
+//     }
 
-    function handleModAction(questionId: string, actionType: ModActionTypes) {
-        const target = questions.find(({ _id }) => _id === questionId);
+//     function handleModAction(questionId: string, actionType: ModActionTypes) {
+//         const target = questions.find(({ _id }) => _id === questionId);
 
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
+//         // this should never happen, but to keep ts happy I have to
+//         if (!target) return;
 
-        switch (actionType) {
-            case 'Queue Question': {
-                // TODO: queue question
-                break;
-            }
-            case 'Remove From Queue': {
-                // TODO: remove question from queue
-                break;
-            }
-            case 'Set Current': {
-                // TODO: set as current question
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
+//         switch (actionType) {
+//             case 'Queue Question': {
+//                 // TODO: queue question
+//                 break;
+//             }
+//             case 'Remove From Queue': {
+//                 // TODO: remove question from queue
+//                 break;
+//             }
+//             case 'Set Current': {
+//                 // TODO: set as current question
+//                 break;
+//             }
+//             default: {
+//                 // do nothing
+//                 break;
+//             }
+//         }
+//     }
 
-    function getActions({ _id }: Question) {
-        return (
-            <QuestionActions
-                actionKeys={modActions}
-                onClick={(_e, key) => handleModAction(_id, key)}
-            />
-        );
-    }
+//     function getActions({ _id }: Question) {
+//         return (
+//             <QuestionActions
+//                 actionKeys={modActions}
+//                 onClick={(_e, key) => handleModAction(_id, key)}
+//             />
+//         );
+//     }
 
-    return (
-        <>
-            <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
-                <DialogContent>{dialogContent || <div />}</DialogContent>
-            </Dialog>
-            <Grid item xs={12} style={{ maxHeight: '100%' }}>
-                {questions.map((question) => {
-                    const { _id, meta, aiml, question: text } = question;
-                    return (
-                        <QuestionFeedItem
-                            key={_id}
-                            user={meta.createdBy.name.first}
-                            timestamp={meta.createdAt}
-                            actions={getActions(question)}
-                            className={classes.item}
-                        >
-                            <Typography paragraph>{text}</Typography>
-                            <QuestionLabels labels={aiml.labels} />
-                        </QuestionFeedItem>
-                    );
-                })}
-            </Grid>
-        </>
-    );
-}
+//     return (
+//         <>
+//             <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
+//                 <DialogContent>{dialogContent || <div />}</DialogContent>
+//             </Dialog>
+//             <Grid item xs={12} style={{ maxHeight: '100%' }}>
+//                 {questions.map((question) => {
+//                     const { _id, meta, aiml, question: text } = question;
+//                     return (
+//                         <QuestionFeedItem
+//                             key={_id}
+//                             user={meta.createdBy.name.first}
+//                             timestamp={meta.createdAt}
+//                             actions={getActions(question)}
+//                             className={classes.item}
+//                         >
+//                             <Typography paragraph>{text}</Typography>
+//                             <QuestionLabels labels={aiml.labels} />
+//                         </QuestionFeedItem>
+//                     );
+//                 })}
+//             </Grid>
+//         </>
+//     );
+// }
 
-function UserList({ questions }: Pick<Props, 'questions'>) {
-    const classes = useStyles();
-    const [
-        dialogContent,
-        setDialogContent,
-    ] = React.useState<JSX.Element | null>(null);
+// function UserList({ questions }: Pick<Props, 'questions'>) {
+//     const classes = useStyles();
+//     const [
+//         dialogContent,
+//         setDialogContent,
+//     ] = React.useState<JSX.Element | null>(null);
 
-    function closeDialog() {
-        setDialogContent(null);
-    }
+//     function closeDialog() {
+//         setDialogContent(null);
+//     }
 
-    function handleUserAction(questionId: string, actionType: UserActionTypes) {
-        const target = questions.find(({ _id }) => _id === questionId);
+//     function handleUserAction(questionId: string, actionType: UserActionTypes) {
+//         const target = questions.find(({ _id }) => _id === questionId);
 
-        // this should never happen, but to keep ts happy I have to
-        if (!target) return;
+//         // this should never happen, but to keep ts happy I have to
+//         if (!target) return;
 
-        switch (actionType) {
-            case 'Like': {
-                // TODO: socket stuff here
-                console.log('liked');
-                break;
-            }
-            case 'Quote': {
-                // open dialog with the quoted question
-                // TODO: onSubmit
-                setDialogContent(
-                    <QuestionForm
-                        quote={target}
-                        onCancel={closeDialog}
-                        onSubmit={console.log}
-                    />
-                );
-                break;
-            }
-            case 'Reply': {
-                // open dialog with the replied quote
-                // TODO: onSubmit
-                setDialogContent(
-                    <ReplyForm
-                        replyTo={target}
-                        onSubmit={console.log}
-                        onCancel={closeDialog}
-                    />
-                );
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
+//         switch (actionType) {
+//             case 'Like': {
+//                 // TODO: socket stuff here
+//                 console.log('liked');
+//                 break;
+//             }
+//             case 'Quote': {
+//                 // open dialog with the quoted question
+//                 // TODO: onSubmit
+//                 setDialogContent(
+//                     <QuestionForm
+//                         quote={target}
+//                         onCancel={closeDialog}
+//                         onSubmit={console.log}
+//                     />
+//                 );
+//                 break;
+//             }
+//             case 'Reply': {
+//                 // open dialog with the replied quote
+//                 // TODO: onSubmit
+//                 setDialogContent(
+//                     <ReplyForm
+//                         replyTo={target}
+//                         onSubmit={console.log}
+//                         onCancel={closeDialog}
+//                     />
+//                 );
+//                 break;
+//             }
+//             default: {
+//                 // do nothing
+//                 break;
+//             }
+//         }
+//     }
 
-    function getActions({ _id }: Question) {
-        return (
-            <QuestionActions
-                actionKeys={userActions}
-                onClick={(_e, key) => handleUserAction(_id, key)}
-            />
-        );
-    }
+//     function getActions({ _id }: Question) {
+//         return (
+//             <QuestionActions
+//                 actionKeys={userActions}
+//                 onClick={(_e, key) => handleUserAction(_id, key)}
+//             />
+//         );
+//     }
 
-    return (
-        <>
-            <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
-                <DialogContent>{dialogContent || <div />}</DialogContent>
-            </Dialog>
+//     return (
+//         <>
+//             <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
+//                 <DialogContent>{dialogContent || <div />}</DialogContent>
+//             </Dialog>
 
-            <Grid item xs={12} style={{ maxHeight: '100%' }}>
-                {questions.map((question) => {
-                    const { _id, meta, question: text } = question;
-                    return (
-                        <QuestionFeedItem
-                            key={_id}
-                            user={meta.createdBy.name.first}
-                            timestamp={meta.createdAt}
-                            actions={getActions(question)}
-                            className={classes.item}
-                        >
-                            <Typography paragraph>{text}</Typography>
-                        </QuestionFeedItem>
-                    );
-                })}
-            </Grid>
-        </>
-    );
-}
+//             <Grid item xs={12} style={{ maxHeight: '100%' }}>
+//                 {questions.map((question) => {
+//                     const { _id, meta, question: text } = question;
+//                     return (
+//                         <QuestionFeedItem
+//                             key={_id}
+//                             user={meta.createdBy.name.first}
+//                             timestamp={meta.createdAt}
+//                             actions={getActions(question)}
+//                             className={classes.item}
+//                         >
+//                             <Typography paragraph>{text}</Typography>
+//                         </QuestionFeedItem>
+//                     );
+//                 })}
+//             </Grid>
+//         </>
+//     );
+// }
 
 function FeedList({ questions, variant, current, systemMessages }: Props) {
     const classes = useStyles();
