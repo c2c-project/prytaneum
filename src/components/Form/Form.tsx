@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 
 interface Props {
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode | React.ReactNodeArray;
     className?: string;
 }
 
