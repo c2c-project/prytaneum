@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         [theme.breakpoints.up('md')]: {
-            boxShadow: theme.shadows[10],
+            // boxShadow: theme.shadows[10],
             margin: theme.spacing(3, 0),
         },
         [theme.breakpoints.down('sm')]: {
