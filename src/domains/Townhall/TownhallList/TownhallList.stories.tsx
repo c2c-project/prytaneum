@@ -10,7 +10,9 @@ export default { title: 'Domains/Townhall/Townhall List' };
 export function Basic() {
     return (
         <main>
-            <Component onClickTownhall={console.log} />
+            <Page>
+                <Component onClickTownhall={console.log} />
+            </Page>
         </main>
     );
 }

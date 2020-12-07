@@ -32,7 +32,7 @@ export default function TownhallChat() {
         socket.emit('new-chat-message', { message }); // FIXME: when I work on socketio more on server
     }
     return (
-        <Paper className={classes.root} elevation={10}>
+        <Paper className={classes.root}>
             <Chat>
                 <ChatContent messages={messages} />
                 <Chatbar onSubmit={handleSubmit} />

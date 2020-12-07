@@ -16,7 +16,7 @@ import { TownhallContext } from '../Contexts/Townhall';
 export default function TownhallCard() {
     const townhall = React.useContext(TownhallContext);
     return (
-        <Card elevation={10}>
+        <Card>
             <CardHeader
                 title={townhall.form.title}
                 subheader={townhall.form.topic}
