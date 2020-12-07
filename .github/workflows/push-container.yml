@@ -3,9 +3,9 @@ name: Push Container to GCP
 on:
     # Trigger the workflow on push or pull request,
     # but only for the main branch
-    push:
-        branches:
-            - master
+    # push:
+    #     branches:
+    #         - master
 
 env:
     BUILD_ID: ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
