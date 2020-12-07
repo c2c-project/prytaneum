@@ -10,7 +10,7 @@ import TownhallForm from 'pages/Townhall/TownhallForm';
 import HandleInviteLink from 'domains/Invite/HandleInviteLink';
 import InviteForm from 'domains/Invite/InviteForm';
 
-import UserSettings from 'domains/Auth/UserSettings';
+import UserSettings from 'domains/User/UserSettings';
 import UserProvider from 'contexts/User';
 import RequireLogin from 'components/RequireLogin';
 

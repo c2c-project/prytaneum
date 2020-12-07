@@ -35,7 +35,7 @@ import SettingsItem from 'components/SettingsItem';
 import TextField from 'components/TextField';
 // import UploadField from 'components/UploadField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
-import SpeakerForm from '../SpeakerForm';
+import SpeakerForm from '../../Speaker/SpeakerForm';
 import { TownhallContext } from '../Contexts/Townhall';
 import text from './help-text';
 

@@ -7,13 +7,13 @@ import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
 
 import history, { makeRelativeLink } from 'utils/history';
 import LoadingButton from 'components/LoadingButton';
+import CopyText from 'components/CopyText';
 import Fab from 'components/Fab';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
 import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
 import TownhallForm from '../TownhallForm';
-import JoinUrl from '../JoinUrl';
 import {
     ChatSettings,
     // CreditsSettings,
@@ -100,7 +100,9 @@ export default function TownhallSettings() {
         () => [
             {
                 title: 'Join URL',
-                component: <JoinUrl />,
+                component: (
+                    <CopyText text={`${window.origin}/join/${townhall._id}`} />
+                ),
             },
             {
                 title: 'Invitation Wizard',
@@ -117,7 +119,7 @@ export default function TownhallSettings() {
                 ),
             },
         ],
-        []
+        [townhall._id]
     );
 
     const config: AccordionData[] = React.useMemo(

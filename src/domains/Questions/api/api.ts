@@ -3,6 +3,9 @@ import type { QuestionForm } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 
+/**
+ * gets a specific question
+ */
 export async function getQuestion(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}`;
     return axios.post(url);

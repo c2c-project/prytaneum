@@ -20,7 +20,7 @@ import { ParseResult } from 'papaparse';
 
 import useEndpoint from 'hooks/useEndpoint';
 
-import EmailPreview from 'domains/Townhall/EmailPreview';
+import EmailPreview from 'domains/Invite/EmailPreview';
 import SelectFile from 'domains/Invite/SelectFile';
 import VerifyPreview from 'domains/Invite/SelectFile/VerifyPreview';
 import Parse from 'domains/Invite/SelectFile/utils';

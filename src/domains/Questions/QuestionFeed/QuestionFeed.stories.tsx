@@ -5,7 +5,7 @@ import { makeQuestion } from 'prytaneum-typings';
 import FixtureSocket from 'mock/Fixture.socket';
 import QuestionFeed from '.';
 
-export default { title: 'Domains/Townhall/Question Feed' };
+export default { title: 'Domains/Questions/Question Feed' };
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 

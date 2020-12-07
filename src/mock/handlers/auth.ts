@@ -1,8 +1,12 @@
 import { rest } from 'msw';
 import faker from 'faker';
-import { makeUser, User } from 'prytaneum-typings';
-
-import * as AuthTypes from 'domains/Auth/types';
+import {
+    makeUser,
+    User,
+    ForgotPassForm,
+    RegisterForm,
+    ForgotPassRequestForm,
+} from 'prytaneum-typings';
 
 export const makeUsers = (num?: number): User[] => {
     const ret = [];
@@ -38,7 +42,7 @@ export default [
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { token, form } = req.body as {
             token: string;
-            form: AuthTypes.ForgotPassForm;
+            form: ForgotPassForm;
         };
         if (form.password === 'fail') {
             return res(ctx.status(400));
@@ -48,7 +52,7 @@ export default [
 
     rest.post('/api/users/request-password-reset', (req, res, ctx) => {
         const { form } = req.body as {
-            form: AuthTypes.ForgotPassRequestForm;
+            form: ForgotPassRequestForm;
         };
         if (form.email === 'fail1234@gmail.com') {
             res(ctx.status(400));
@@ -58,7 +62,7 @@ export default [
 
     rest.post('/api/users/register', (req, res, ctx) => {
         const { form } = req.body as {
-            form: AuthTypes.RegisterForm;
+            form: RegisterForm;
         };
         if (form.email === 'fail') {
             return res(ctx.status(400));
