@@ -9,6 +9,7 @@ import {
     Avatar,
     IconButton,
     Grid,
+    CardProps,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,6 +24,7 @@ export interface QuestionProps {
     onClickMore?: (e: React.MouseEvent) => void;
     compact?: boolean;
     className?: string;
+    elevation?: CardProps['elevation'];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +53,7 @@ function QuestionFeedItem(props: QuestionProps) {
         onClickMore,
         compact,
         className,
+        elevation: _elevation,
     } = props;
     const classes = useStyles(); // NOTE: probably will get a perf boost if I remove this somehow
 
@@ -83,10 +86,14 @@ function QuestionFeedItem(props: QuestionProps) {
         () => (compact ? <Avatar>{user[0]}</Avatar> : undefined),
         [compact, user]
     );
+    const elevation = React.useMemo(
+        () => (_elevation !== undefined ? _elevation : 10),
+        [_elevation]
+    );
 
     return (
         <Grid item xs={12} className={className}>
-            <Card classes={{ root: classes.card }} elevation={10}>
+            <Card classes={{ root: classes.card }} elevation={elevation}>
                 <CardHeader
                     classes={{ root: classes.cardHeader }}
                     avatar={avatar}
