@@ -44,7 +44,7 @@ export async function deleteQuestion(townhallId: string, questionId: string) {
  */
 export async function createLike(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}/like`;
-    return axios.post(url);
+    return axios.put(url);
 }
 
 /**
