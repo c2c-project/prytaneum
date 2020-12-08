@@ -1,4 +1,4 @@
-name: Push Container to GCP
+name: Send build to google cloud bucket
 
 on:
     # Trigger the workflow on push or pull request,
@@ -6,9 +6,6 @@ on:
     push:
         branches:
             - master
-
-env:
-    BUILD_ID: ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
 jobs:
     push-container:
         runs-on: ubuntu-latest
@@ -16,20 +13,49 @@ jobs:
             # checkout code
             - uses: actions/checkout@v2
 
-            # setup gcloud service account
-            - name: Setup gcloud
-              uses: google-github-actions/setup-gcloud@v0.2.0
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache dir
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            # setup the actions cache
+            - name: Cache node modules
+              id: cache
+              uses: actions/cache@v2
+              env:
+                  cache-name: cache-node-modules
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            # install dependencies if no cache hit
+            - name: Install dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: yarn install
+
+            # install offline if there was a cache hit
+            - name: Install dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: yarn install --offline
+
+            # build
+            - name: Build
+              run: yarn build
+
+            # Upload to cloud storage
+            - name: Set up Cloud SDK
+              uses: google-github-actions/setup-gcloud@master
               with:
                   project_id: ${{ secrets.GCP_PROJECT_ID }}
-                  service_account_key: ${{ secrets.GAR_JSON_KEY }}
+                  service_account_key: ${{ secrets.GCS_KEY }}
                   export_default_credentials: true
 
             # configure gcloud auth
-            - name: Configure gcloud
-              run: gcloud auth configure-docker ${{ secrets.GCP_SERVER }}-docker.pkg.dev
-
-            # build + push
-            - name: Build
-              run: |
-                  docker build -t ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA .
-                  docker push ${{ secrets.GCP_SERVER }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:$GITHUB_SHA
+            - run: gsutil -m rsync -r build gs://prytaneum-project-demo
