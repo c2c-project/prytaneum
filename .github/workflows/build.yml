@@ -57,4 +57,4 @@ jobs:
                   export_default_credentials: true
 
             # configure gcloud auth
-            - run: gsutil -m rsync -r build gs://{{ secrets.GCS_BUCKET }}
+            - run: gsutil -m rsync -r build gs://${{ secrets.GCS_BUCKET }}
