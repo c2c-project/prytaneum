@@ -16,6 +16,7 @@ export function Basic() {
                     const { value } = e.target;
                     setState(value);
                 }}
+                getSecondary={() => {}}
             />
         </div>
     );
