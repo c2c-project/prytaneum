@@ -36,13 +36,12 @@ jobs:
                       ${{ runner.os }}-yarn-
 
             # install dependencies if no cache hit
-            - name: Install dependencies
+            - name: Install dependencies from online if no cache hit
               if: steps.cache.outputs.cache-hit != 'true'
               run: yarn install
 
             # install offline if there was a cache hit
-            - name: Install dependencies
-              if: steps.cache.outputs.cache-hit != 'true'
+            - name: Install dependencies from cache if there was a cache hit
               run: yarn install --offline
 
             # build
