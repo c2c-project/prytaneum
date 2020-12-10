@@ -56,5 +56,10 @@ jobs:
                   service_account_key: ${{ secrets.GCS_KEY }}
                   export_default_credentials: true
 
-            # configure gcloud auth
+            # stuff to run, i know that I have a script for this but yeah
+            - run: rm build/mockServiceWorker.js
+
+            # remove before rsync because the hash is different so,
+            # some things don't get removed properly in the bucket as a result
+            - run: gsutil -m rm gs://${{ secrets.GCS_BUCKET }}/**
             - run: gsutil -m rsync -r build gs://${{ secrets.GCS_BUCKET }}
