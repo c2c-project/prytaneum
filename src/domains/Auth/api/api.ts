@@ -1,4 +1,9 @@
-import type { User, ForgotPassForm, ForgotPassRequestForm, RegisterForm } from 'prytaneum-typings';
+import type {
+    User,
+    ForgotPassForm,
+    ForgotPassRequestForm,
+    RegisterForm,
+} from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
@@ -23,10 +28,7 @@ export async function login(email?: string, password?: string) {
     });
 }
 
-export async function forgotPassReset(
-    token: string | unknown,
-    form: ForgotPassForm
-) {
+export async function forgotPassReset(token: string, form: ForgotPassForm) {
     const { password, confirmPassword } = form;
 
     if (!password || !confirmPassword) {
@@ -41,9 +43,8 @@ export async function forgotPassReset(
         throw errors.missingToken();
     }
 
-    return axios.post('/api/users/consume-password-reset-token', {
-        token,
-        form,
+    return axios.post(`/api/users/reset-password/${token}`, {
+        ...form,
     });
 }
 
@@ -60,7 +61,7 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
     if (!match || match[0].length !== form.email.length) {
         throw errors.invalidEmail();
     }
-    return axios.post('/api/users/request-password-reset', { form });
+    return axios.post('/api/users/forgot-password', { ...form });
 }
 
 /** Function to register a new user, pulls the data from the form, checks if its valid, then returns either a POST, or an error if something is invalid
@@ -83,7 +84,7 @@ export async function register(form: RegisterForm) {
     if (password !== confirmPassword) {
         throw errors.passMatch();
     }
-    return axios.post('/api/users/register', { form });
+    return axios.post('/api/users/register', { ...form });
 }
 
 /** Function to confirm user from email
