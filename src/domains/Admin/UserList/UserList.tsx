@@ -13,7 +13,7 @@ import Loader from 'components/Loader';
 const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2, 0),
-        boxShadow: theme.shadows[10],
+        // boxShadow: theme.shadows[10],
         margin: theme.spacing(2, 0),
     },
     toolbar: {

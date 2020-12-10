@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ReplyIcon from '@material-ui/icons/Reply';
 import QuoteIcon from '@material-ui/icons/FormatQuote';
@@ -16,6 +17,12 @@ const actions = {
     'Queue Question': <QueueIcon fontSize='small' />,
 };
 
+const useStyles = makeStyles(() => ({
+    button: {
+        borderRadius: 0,
+    },
+}));
+
 interface Props<T> {
     // feels kinda dirty but w/e
     actionKeys: T[];
@@ -29,6 +36,7 @@ export default function QuestionActions<T extends keyof typeof actions>({
     actionKeys,
     onClick,
 }: Props<T>) {
+    const classes = useStyles();
     return (
         <Grid container justify='space-evenly'>
             {actionKeys.map((key) => (
@@ -38,6 +46,7 @@ export default function QuestionActions<T extends keyof typeof actions>({
                         onClick={(e) => onClick(e, key)}
                         endIcon={actions[key]}
                         fullWidth
+                        className={classes.button}
                     >
                         {key}
                     </Button>

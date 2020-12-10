@@ -15,7 +15,7 @@ function makeQuestions(num: number) {
     return arr;
 }
 
-// FIXME:
+// FIXME: will be fixed by fixing the vlist component
 export function Basic() {
     const [state, setState] = React.useState(() => makeQuestions(100));
 

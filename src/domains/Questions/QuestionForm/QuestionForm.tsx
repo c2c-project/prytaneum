@@ -12,6 +12,7 @@ import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useForm from 'hooks/useForm';
+import Question from '../QuestionFeedItem';
 
 interface Props {
     quote?: QuestionType;
@@ -26,12 +27,21 @@ interface FormType {
 const initialState: FormType = { question: '' };
 export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const callback = React.useCallback(() => {
+    const submitCb = React.useCallback(() => {
         if (onSubmit) onSubmit(form);
     }, [onSubmit, form]);
     return (
-        <Form onSubmit={handleSubmit(callback)}>
+        <Form onSubmit={handleSubmit(submitCb)}>
             <FormTitle title='Question Form' />
+            {quote && (
+                <Question
+                    user={quote.meta.createdBy.name.first}
+                    timestamp={quote.meta.createdAt}
+                    elevation={3}
+                >
+                    {quote.question}
+                </Question>
+            )}
             <FormContent>
                 <TextField
                     id='question-field'
@@ -45,7 +55,6 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                     value={form.question}
                     onChange={handleChange('question')}
                 />
-                {quote && <div>TODO: quote here</div>}
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
                 <Button
@@ -70,34 +79,13 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
 }
 
 QuestionForm.defaultProps = {
-    quote: '',
+    quote: undefined,
     onSubmit: undefined,
     onCancel: undefined,
 };
 
 QuestionForm.propTypes = {
-    quote: PropTypes.string,
+    quote: PropTypes.object,
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func,
 };
-
-// {quote && (
-//     <Grid container item xs={12}>
-//         <Grid
-//             item
-//             xs={12}
-//             style={{
-//                 border: `1px solid ${theme.palette.divider}`,
-//                 borderRadius: '25px',
-//             }}
-//         >
-//             <Question
-//                 user={quote.meta.user.name}
-//                 timestamp={quote.meta.timestamp}
-//                 actionBar={<div />}
-//             >
-//                 {quote.question}
-//             </Question>
-//         </Grid>
-//     </Grid>
-// )}

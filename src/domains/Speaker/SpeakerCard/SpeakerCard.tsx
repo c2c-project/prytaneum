@@ -46,7 +46,7 @@ export default function SpeakerCard({
 }: SpeakerCardProps) {
     const classes = useStyles();
     return (
-        <Card classes={{ root: classes.root }} elevation={10}>
+        <Card classes={{ root: classes.root }}>
             <CardMedia
                 classes={{ root: classes.media }}
                 component='img'

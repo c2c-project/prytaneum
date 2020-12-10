@@ -64,8 +64,8 @@ export default [
         const { form } = req.body as {
             form: RegisterForm;
         };
-        if (form.email === 'fail') {
-            return res(ctx.status(400));
+        if (form.email === 'fail@fail.com') {
+            return res(ctx.status(400, 'Deliberate failure'));
         }
         return res(ctx.status(200));
     }),

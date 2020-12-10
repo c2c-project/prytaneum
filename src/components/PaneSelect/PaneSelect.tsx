@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         borderStyle: 'none',
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(2),
-        boxShadow: theme.shadows[10],
+        boxShadow: theme.shadows[1],
         '&:focus': {
             borderRadius: theme.shape.borderRadius,
             background: theme.palette.background.paper,

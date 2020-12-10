@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             margin: theme.spacing(3, 0),
         },
-        boxShadow: theme.shadows[10],
+        // boxShadow: theme.shadows[3],
         paddingBottom: theme.spacing(3),
     },
 }));
