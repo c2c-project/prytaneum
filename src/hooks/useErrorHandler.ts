@@ -10,8 +10,8 @@ export default function useErrorHandler() {
     const [snack] = useSnack();
     const handleError = <T extends Error>(err: T) => {
         if (isAxiosError(err)) {
-            const message = err.response?.statusText || err.message;
-            snack(`Error: ${message}`);
+            const body = err.response?.data || 'Error';
+            snack(`Error: ${body}`);
         } else {
             snack(`Error: ${err.message}`);
         }

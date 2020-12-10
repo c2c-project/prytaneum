@@ -47,7 +47,7 @@ export default [
         if (form.password === 'fail') {
             return res(ctx.status(400));
         }
-        return res(ctx.status(200, 'Password Reset'));
+        return res(ctx.status(200), ctx.text('Password has been reset'));
     }),
 
     rest.post('/api/users/request-password-reset', (req, res, ctx) => {
@@ -65,7 +65,7 @@ export default [
             form: RegisterForm;
         };
         if (form.email === 'fail@fail.com') {
-            return res(ctx.status(400, 'Deliberate failure'));
+            return res(ctx.status(400), ctx.text('Deliberate failure'));
         }
         return res(ctx.status(200));
     }),
