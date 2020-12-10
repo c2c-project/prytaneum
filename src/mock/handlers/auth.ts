@@ -65,7 +65,7 @@ export default [
             form: RegisterForm;
         };
         if (form.email === 'fail@fail.com') {
-            return res(ctx.status(400));
+            return res(ctx.status(400, 'Deliberate failure'));
         }
         return res(ctx.status(200));
     }),
