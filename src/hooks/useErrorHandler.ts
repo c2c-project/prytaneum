@@ -1,3 +1,4 @@
+import React from 'react';
 import { AxiosError } from 'axios';
 
 import useSnack from './useSnack';
@@ -8,14 +9,17 @@ function isAxiosError(error: Error): error is AxiosError<string> {
 
 export default function useErrorHandler() {
     const [snack] = useSnack();
-    const handleError = <T extends Error>(err: T) => {
-        if (isAxiosError(err)) {
-            const body = err.response?.data || 'Error';
-            snack(`Error: ${body}`);
-        } else {
-            snack(`Error: ${err.message}`);
-        }
-    };
+    const handleError = React.useCallback(
+        <T extends Error>(err: T) => {
+            if (isAxiosError(err)) {
+                const body = err.response?.data || 'Error';
+                snack(`Error: ${body}`);
+            } else {
+                snack(`Error: ${err.message}`);
+            }
+        },
+        [snack]
+    );
     // TODO: log this to server?
     return [handleError];
 }

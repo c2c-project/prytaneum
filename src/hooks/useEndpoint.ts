@@ -19,29 +19,35 @@ type EndpointUtils = [SendRequest, IsLoading];
 
 export default function useEndpoint<T>(
     endpoint: () => Promise<AxiosResponse<T>>,
-    options: EndpointOptions<T> = {}
+    options?: EndpointOptions<T>
 ): EndpointUtils {
     const [isLoading, setIsLoading] = React.useState(false);
     const [handleError] = useErrorHandler();
     const sendRequest = React.useCallback(() => setIsLoading(true), []);
     const [snack] = useSnack();
-
-    React.useEffect(() => {
-        let isMounted = true;
-        const { onSuccess, onFailure, undo } = options;
-        const minWaitTime = () =>
-            new Promise((resolve) => {
-                setTimeout(resolve, 600);
-            });
-
+    const getOptions = React.useCallback(() => {
         const defaultFailure = handleError;
         const defaultSucess = () => {};
         const defaultUndo = () => {};
 
-        const _onSuccess = onSuccess || defaultSucess;
-        const _onUndo = undo?.onClick || defaultUndo;
-        const isUndo = Boolean(undo);
-        const _onFailure = onFailure || defaultFailure;
+        const onSuccess = options?.onSuccess || defaultSucess;
+        const onUndo = options?.undo?.onClick || defaultUndo;
+        const onFailure = options?.onFailure || defaultFailure;
+        const undo = {
+            onUndo,
+            message: options?.undo?.message || '',
+        };
+
+        return { onSuccess, undo, onFailure, isUndo: Boolean(options?.undo) };
+    }, [options, handleError]);
+
+    React.useEffect(() => {
+        let isMounted = true;
+        const { onSuccess, onFailure, undo, isUndo } = getOptions();
+        const minWaitTime = () =>
+            new Promise((resolve) => {
+                setTimeout(resolve, 600);
+            });
 
         const request = async function () {
             try {
@@ -56,9 +62,9 @@ export default function useEndpoint<T>(
                     setIsLoading(false);
                     // there might be a better way to do this? other than just checking the status string :\
                     if (response.status === 'rejected') {
-                        _onFailure(response.reason);
+                        onFailure(response.reason);
                     } else {
-                        _onSuccess(response.value);
+                        onSuccess(response.value);
                     }
                 }
             } catch (e) {
@@ -69,7 +75,7 @@ export default function useEndpoint<T>(
                  */
                 if (isMounted === true) {
                     setIsLoading(false);
-                    _onFailure(e);
+                    onFailure(e);
                 }
             }
         };
@@ -87,7 +93,7 @@ export default function useEndpoint<T>(
             };
 
             window.addEventListener('beforeunload', closeFunction, false);
-            snack(undo?.message || 'Request Sent', {
+            snack(undo.message || 'Request Sent', {
                 action: React.createElement(
                     Button,
                     {
@@ -98,7 +104,7 @@ export default function useEndpoint<T>(
                                 false
                             );
                             if (isMounted === true) {
-                                _onUndo();
+                                undo.onUndo();
                                 isStopped = true;
                                 setIsLoading(false);
                             }
@@ -137,7 +143,7 @@ export default function useEndpoint<T>(
         return () => {
             isMounted = false;
         };
-    }, [isLoading, endpoint, handleError, options, snack]);
+    }, [isLoading, endpoint, handleError, snack, getOptions]);
 
     return [sendRequest, isLoading];
 }
