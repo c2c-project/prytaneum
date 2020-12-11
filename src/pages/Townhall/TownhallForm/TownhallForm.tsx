@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import history from 'utils/history';
 import TownhallFormComponent from 'domains/Townhall/TownhallForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,9 @@ export default function TownhallFormPage() {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>
-            <TownhallFormComponent />
+            <TownhallFormComponent
+                onSubmit={() => history.push('/users/my-townhalls')}
+            />
         </Paper>
     );
 }

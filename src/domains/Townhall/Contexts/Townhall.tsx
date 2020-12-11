@@ -40,6 +40,12 @@ export const TownhallContext = React.createContext<Townhall>({
             max: 0,
             current: 0,
         },
+        playing: null,
+        playlist: {
+            list: [],
+            queued: [],
+            played: [],
+        },
     },
     form: {
         title: '',

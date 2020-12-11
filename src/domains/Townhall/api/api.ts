@@ -37,7 +37,7 @@ export async function configureTownhall(
     settings: TownhallSettings
 ) {
     const url = `/api/townhalls/${townhallId}/configure`;
-    return axios.post(url, qs.stringify(settings));
+    return axios.post(url, settings);
 }
 
 /**

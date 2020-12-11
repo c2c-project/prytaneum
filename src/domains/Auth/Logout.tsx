@@ -11,12 +11,16 @@ import { logout } from './api';
  *  @constructor Logout
  */
 export default function Logout() {
+    const [isLoggedOut, setState] = React.useState(false);
     const [sendRequest, isLoading] = useEndpoint(logout, {
-        onSuccess: clear,
+        onSuccess: () => {
+            clear();
+            setState(true);
+        },
     });
     React.useEffect(sendRequest, []);
 
-    if (isLoading) return <Loader />;
+    if (isLoading || !isLoggedOut) return <Loader />;
 
     return <Redirect href='/auth/login' />;
 }

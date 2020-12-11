@@ -8,6 +8,7 @@ import Chatbar from 'components/Chatbar';
 import ChatContent from 'components/ChatContent';
 import Chat from 'components/Chat';
 import { chatReducer, Actions } from './utils';
+import { TownhallContext } from '../Contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,12 +21,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TownhallChat() {
     const classes = useStyles();
+    const townhall = React.useContext(TownhallContext);
     // full question feed from socketio
     const [messages, , socket] = useSocketio<ChatMessage[], Actions>({
-        url: '/chat-messages', // FIXME: update the url when I know what it should it should be
+        url: '/chat-messages',
         event: 'chat-message-state',
         reducer: chatReducer,
         initialState: [],
+        query: { townhallId: townhall._id },
     });
 
     function handleSubmit(message: string) {

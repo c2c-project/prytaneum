@@ -12,10 +12,15 @@ interface Settings<T, U> {
 type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
 
 function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
-    const { url, event, reducer, initialState } = settings;
-    const socket = io.connect(url);
+    const { url, event, reducer, initialState, query } = settings;
+    const socket = io.connect(url, { query });
     const [state, dispatch] = React.useReducer(reducer, initialState);
     socket.on(event, dispatch);
+    React.useEffect(() => {
+        return () => {
+            socket.disconnect();
+        };
+    }, [socket]);
     return [state, dispatch, socket];
 }
 

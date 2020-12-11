@@ -11,7 +11,10 @@ function startup() {
     ReactDOM.render(React.createElement(App), document.getElementById('root'));
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (
+    process.env.NODE_ENV === 'development' &&
+    process.env.REACT_APP_MSW === 'true'
+) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment, global-require
     const { worker } = require('mock/browser');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access

@@ -105,5 +105,5 @@ export async function getMyInfo() {
 }
 
 export async function logout() {
-    return axios.get('/api/users/logout');
+    return axios.post('/api/users/logout');
 }
