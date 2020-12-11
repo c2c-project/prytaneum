@@ -52,7 +52,7 @@ export function questionReducer(
                 (question) => question._id !== action.payload._id
             );
         case 'initial-state':
-            return action.payload;
+            return action.payload.reverse();
         default:
             return state;
     }

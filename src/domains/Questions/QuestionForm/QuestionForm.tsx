@@ -6,6 +6,7 @@ import type {
     QuestionForm as QuestionFormType,
 } from 'prytaneum-typings';
 
+import LoadingButton from 'components/LoadingButton';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
 import FormContent from 'components/FormContent';
@@ -18,6 +19,7 @@ interface Props {
     quote?: QuestionType;
     onSubmit?: (form: QuestionFormType) => void;
     onCancel?: () => void;
+    isLoading?: boolean;
 }
 
 interface FormType {
@@ -25,7 +27,12 @@ interface FormType {
 }
 
 const initialState: FormType = { question: '' };
-export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
+export default function QuestionForm({
+    isLoading,
+    quote,
+    onSubmit,
+    onCancel,
+}: Props) {
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     const submitCb = React.useCallback(() => {
         if (onSubmit) onSubmit(form);
@@ -65,14 +72,16 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                 >
                     Cancel
                 </Button>
-                <Button
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    disableElevation
-                >
-                    Ask
-                </Button>
+                <LoadingButton loading={isLoading as boolean}> 
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        disableElevation
+                    >
+                        Ask
+                    </Button>
+                </LoadingButton>
             </FormActions>
         </Form>
     );
@@ -82,10 +91,12 @@ QuestionForm.defaultProps = {
     quote: undefined,
     onSubmit: undefined,
     onCancel: undefined,
+    isLoading: false,
 };
 
 QuestionForm.propTypes = {
     quote: PropTypes.object,
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func,
+    isLoading: PropTypes.bool,
 };
