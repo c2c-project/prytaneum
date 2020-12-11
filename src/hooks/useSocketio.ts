@@ -38,7 +38,7 @@ function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
             isMounted = false;
             socket.close();
         };
-    }, [socket]);
+    }, [socket, event]);
     return [state, dispatch, socket];
 }
 

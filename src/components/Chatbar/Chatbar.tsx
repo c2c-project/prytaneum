@@ -1,4 +1,5 @@
 import React from 'react';
+import type { ChatMessageForm } from 'prytaneum-typings';
 import { Grid, Button } from '@material-ui/core';
 
 import SendIcon from '@material-ui/icons/Send';
@@ -6,15 +7,17 @@ import SendIcon from '@material-ui/icons/Send';
 import TextField from 'components/TextField';
 
 export interface Props {
-    onSubmit: (m: string) => void;
+    onSubmit: (m: ChatMessageForm) => void;
+    disabled?: boolean;
 }
 
-export default function Chatbar({ onSubmit }: Props) {
+export default function Chatbar({ onSubmit, disabled }: Props) {
     const [message, setMessage] = React.useState('');
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        onSubmit(message);
+        onSubmit({ message });
+        setMessage('');
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -26,6 +29,7 @@ export default function Chatbar({ onSubmit }: Props) {
         <Grid component='form' onSubmit={handleSubmit} container item xs='auto'>
             <Grid item xs='auto' style={{ flex: 1 }}>
                 <TextField
+                    disabled={disabled}
                     label='Message'
                     value={message}
                     onChange={handleChange}
