@@ -13,10 +13,23 @@ type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
 
 function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
     const { url, event, reducer, initialState, query } = settings;
-    const socket = io.connect(url, { query });
+    const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
+    const getSocket = React.useCallback(() => {
+        if (socketRef.current) return socketRef.current;
+        socketRef.current = io.connect(url, { query });
+        return socketRef.current;
+    }, [query, url]);
+    const socket = getSocket();
     const [state, dispatch] = React.useReducer(reducer, initialState);
     socket.on(event, dispatch);
     React.useEffect(() => {
+        // TODO: blank out ui or snack or something for the client
+        // eslint-disable-next-line
+        socket.on('connect_error', (e: Error) => console.log(e.message));
+        // eslint-disable-next-line
+        socket.on('connect', () => console.log('connected'));
+        // eslint-disable-next-line
+        socket.on('disconnect', () => console.log('disconnected'));
         return () => {
             socket.disconnect();
         };

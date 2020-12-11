@@ -47,6 +47,7 @@ function QuestionFeed() {
         event: 'question-state',
         reducer: questionReducer,
         initialState: [],
+        query: { townhallId: townhall._id },
     });
 
     // displayed questions, which differs from the full feed

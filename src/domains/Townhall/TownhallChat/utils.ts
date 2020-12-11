@@ -15,7 +15,9 @@ export interface DeleteMessage {
     payload: Pick<ChatMessage, '_id'>;
 }
 
-export type Actions = NewMessage | UpdateMessage | DeleteMessage;
+export type InitialState = { type: 'initial-state'; payload: ChatMessage[] };
+
+export type Actions = NewMessage | UpdateMessage | DeleteMessage | InitialState;
 
 export function chatReducer(state: ChatMessage[], action: Actions) {
     switch (action.type) {
@@ -27,7 +29,8 @@ export function chatReducer(state: ChatMessage[], action: Actions) {
 
         case 'delete-message':
             return state;
-
+        case 'initial-state':
+            return [...action.payload];
         default:
             return state;
     }
