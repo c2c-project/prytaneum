@@ -3,7 +3,7 @@ import React from 'react';
 import Page from 'layout/Page';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallLive from 'domains/Townhall/TownhallLive';
-import RequireLogin from 'components/RequireLogin';
+// import RequireLogin from 'components/RequireLogin';
 import { addRoutes } from './utils';
 
 addRoutes([
@@ -13,9 +13,9 @@ addRoutes([
             // TODO: verify/login user here
             // user context here too
             return (
-                <RequireLogin>
-                    <Page maxWidth='xl'>{ctx.next()}</Page>
-                </RequireLogin>
+                // <RequireLogin>
+                <Page maxWidth='xl'>{ctx.next()}</Page>
+                // </RequireLogin>
             );
         },
         children: [
