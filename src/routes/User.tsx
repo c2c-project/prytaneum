@@ -29,9 +29,11 @@ addRoutes([
             //     return <Login onLogin={() => history.push(ctx.pathname)} />;
             // }
             return (
-                <RequireLogin>
-                    <Page>{ctx.next()}</Page>
-                </RequireLogin>
+                <UserProvider>
+                    <RequireLogin>
+                        <Page>{ctx.next()}</Page>
+                    </RequireLogin>
+                </UserProvider>
             );
         },
         children: [

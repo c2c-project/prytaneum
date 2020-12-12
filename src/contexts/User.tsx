@@ -5,7 +5,7 @@ import Loader from 'components/Loader';
 import useEndpoint from 'hooks/useEndpoint';
 import { getMyInfo } from 'domains/Auth/api';
 
-export const UserContext = React.createContext<User | null>(null);
+export const UserContext = React.createContext<User | undefined>(undefined);
 
 interface Props {
     children: JSX.Element | JSX.Element[];
@@ -13,21 +13,23 @@ interface Props {
 }
 
 export default function UserProvider({ children, value }: Props) {
+    // check if I'm a child of any other userProvider
+    const userFromContext = React.useContext(UserContext);
     // starts as undefined then becomes either null or User
-    const [user, setUser] = React.useState<User | undefined | null>(value);
+    const [user, setUser] = React.useState<User | undefined>(
+        value || userFromContext
+    );
     const [get, isLoading] = useEndpoint(getMyInfo, {
         onSuccess: ({ data }) => {
             setUser(data);
         },
-        onFailure: () => {
-            setUser(null);
-        },
     });
+
     React.useEffect(() => {
-        if (user === undefined) get();
+        if (!user) get();
     }, [get, user]);
 
-    if (isLoading || user === undefined) return <Loader />;
+    if (isLoading || !user) return <Loader />;
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
