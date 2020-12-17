@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
 import LoginForm from 'domains/Auth/LoginForm';
-import { set } from 'utils/storage';
+import useStorage from 'hooks/useStorage';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,6 +50,7 @@ interface Props {
 
 export default function Login({ onLogin }: Props) {
     const classes = useStyles();
+    const [, setIsLoggedIn] = useStorage('isLoggedIn');
     return (
         <Grid
             container
@@ -67,7 +68,7 @@ export default function Login({ onLogin }: Props) {
                 <div className={classes.form}>
                     <LoginForm
                         onSuccess={() => {
-                            set({ isLoggedIn: true });
+                            setIsLoggedIn(true);
                             onLogin();
                         }}
                     />

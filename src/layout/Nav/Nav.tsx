@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
 import { ThemeSelector } from 'contexts/Theme';
-import { get } from 'utils/storage';
+import useStorage from 'hooks/useStorage';
 import history from 'utils/history';
 import AppBar from '../AppBar';
 
@@ -48,7 +48,7 @@ export default function Nav() {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const isLoggedIn = get('isLoggedIn');
+    const [isLoggedIn] = useStorage('isLoggedIn');
 
     const handleClick = () => setOpen(false);
 

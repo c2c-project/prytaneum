@@ -23,13 +23,14 @@ export default function UserProvider({ children, value }: Props) {
         onSuccess: ({ data }) => {
             setUser(data);
         },
+        onFailure: () => {},
     });
 
     React.useEffect(() => {
         if (!user) get();
     }, [get, user]);
 
-    if (isLoading || !user) return <Loader />;
+    if (isLoading) return <Loader />;
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }

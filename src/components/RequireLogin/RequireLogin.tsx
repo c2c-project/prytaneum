@@ -1,20 +1,20 @@
 import React from 'react';
-import { UserContext } from 'contexts/User';
 
 import Page from 'layout/Page';
 import Login from 'pages/Auth/Login';
+import useStorage from 'hooks/useStorage';
 
 interface Props {
     children: JSX.Element | JSX.Element[];
 }
 
 export default function RequireLogin({ children }: Props) {
-    const user = React.useContext(UserContext);
-    const [state, setState] = React.useState(Boolean(user));
-    if (!state)
+    const [isLoggedIn] = useStorage('isLoggedIn');
+    // FIXME: onLogin should do what?
+    if (!isLoggedIn)
         return (
             <Page>
-                <Login onLogin={() => setState(true)} />
+                <Login onLogin={() => {}} />
             </Page>
         );
     return <>{children}</>;
