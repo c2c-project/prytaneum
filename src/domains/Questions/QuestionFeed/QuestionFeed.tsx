@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
-import type {
-    Question as QuestionType,
-    QuestionPayloads,
-} from 'prytaneum-typings';
+import type { Question as QuestionType } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import ListFilter from 'components/ListFilter';
 import { UserContext } from 'contexts/User';
 import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import useEndpoint from 'hooks/useEndpoint';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
+import Loader from 'components/Loader';
 import { QuestionProps } from '../QuestionFeedItem';
 
+import { getQuestions } from '../api';
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 import {
@@ -40,15 +41,6 @@ function QuestionFeed() {
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
     const [, dispatch] = React.useContext(PaneContext);
-
-    // full question feed from socketio
-    const [questions] = useSocketio<QuestionType[], QuestionPayloads>({
-        url: '/questions',
-        event: 'question-state',
-        reducer: questionReducer,
-        initialState: [],
-        query: { townhallId: townhall._id },
-    });
 
     // displayed questions, which differs from the full feed
     const [displayed, setDisplayed] = React.useState<QuestionType[]>([]);
@@ -83,6 +75,22 @@ function QuestionFeed() {
             ),
         [townhall.settings.moderators.list, user]
     );
+
+    const [questions, dispatchQuestion] = React.useReducer(questionReducer, []);
+    const [get, isLoading] = useEndpoint(() => getQuestions(townhall._id), {
+        onSuccess: ({ data }) => {
+            dispatchQuestion({ type: 'initial-state', payload: data });
+            setDisplayed(data);
+        },
+    });
+    const socket = useSocketio('/questions', {
+        query: { townhallId: townhall._id },
+    });
+    React.useEffect(() => {
+        // socket disconnection is handled in useSocketio
+        socket.on('question-state', dispatchQuestion);
+    }, [socket]);
+    React.useEffect(get, []);
 
     // updating difference when one of the boundaries change
     React.useEffect(() => {
@@ -133,6 +141,8 @@ function QuestionFeed() {
         };
         setFilters(updateSearch);
     }, []);
+
+    if (isLoading) return <Loader />;
 
     return (
         <div className={classes.root}>

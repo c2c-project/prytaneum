@@ -40,11 +40,13 @@ export const TownhallContext = React.createContext<Townhall>({
             max: 0,
             current: 0,
         },
-        playing: null,
         playlist: {
+            position: {
+                current: -1,
+                timestamps: [],
+            },
             list: [],
-            queued: [],
-            played: [],
+            queue: [],
         },
     },
     form: {
@@ -110,6 +112,13 @@ export default function TownhallProvider({
             setTownhall(res.data);
         },
     });
+
+    // const [questions] = useSocketio({
+    //     url: '/townhall-state',
+    //     event: 'townhall-state',
+    //     reducer: () => {},
+    //     initialState
+    // });
 
     React.useEffect(() => {
         if (!townhall) {

@@ -2,7 +2,7 @@
 import type {
     Question,
     Question as QuestionType,
-    QuestionPayloads,
+    SocketIOEvents,
 } from 'prytaneum-typings';
 import { search as utilSearch, FilterFunc } from 'utils/filters';
 import { QuestionProps } from '../QuestionFeedItem';
@@ -35,7 +35,7 @@ export const filters: Filters = {
 
 export function questionReducer(
     state: QuestionType[],
-    action: QuestionPayloads
+    action: SocketIOEvents['question-state']
 ) {
     switch (action.type) {
         case 'create-question':

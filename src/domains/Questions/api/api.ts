@@ -1,5 +1,5 @@
 import qs from 'qs';
-import type { QuestionForm } from 'prytaneum-typings';
+import type { QuestionForm, Question } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 
@@ -9,6 +9,14 @@ import axios from 'utils/axios';
 export async function getQuestion(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}`;
     return axios.post(url);
+}
+
+/**
+ * gets a list of questions
+ */
+export async function getQuestions(townhallId: string) {
+    const url = `/api/townhalls/${townhallId}/questions`;
+    return axios.get<Question[]>(url);
 }
 
 /**

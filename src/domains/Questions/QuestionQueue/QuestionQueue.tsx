@@ -4,9 +4,8 @@ import React from 'react';
 
 export default function QuestionQueue() {
     // const [state, dispatch, socket] = useSocketio({
-    //     url: '/moderator/questions',
+    //     url: '/question-',
     //     event: 'queue-state',
-
     // });
     return <h1>hello world</h1>;
 }
