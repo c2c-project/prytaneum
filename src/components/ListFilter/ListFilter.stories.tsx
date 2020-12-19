@@ -4,6 +4,7 @@ import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
 import ListFilter from './ListFilter';
+import useFilters from './useFilters';
 
 export default { title: 'Components/List Filter' };
 
@@ -39,7 +40,7 @@ const search = (searchText: string, data: Datum[]) => {
     return utilSearch(searchText, data, [titleAccessor, subAccessor]);
 };
 
-export function Basic() {
+export function WithoutHook() {
     // normally setData would be used to set the data after a fetch or something similar,
     // but we don't have that here since we initialize with the function
     // eslint-disable-next-line
@@ -71,6 +72,33 @@ export function Basic() {
         // index of the filter array
         setFilters(([searchFilter]) => [searchFilter, ...newFilters]);
     };
+
+    return (
+        <div style={{ height: '100%', overflow: 'auto' }}>
+            <ListFilter
+                onSearch={handleSearch}
+                length={filteredResults.length}
+                filterMap={filterMap}
+                onFilterChange={handleFilterChange}
+            />
+            <List>
+                {filteredResults.map(({ title, subtitle, _id }) => (
+                    <ListItem key={_id}>
+                        <ListItemText primary={title} secondary={subtitle} />
+                    </ListItem>
+                ))}
+            </List>
+        </div>
+    );
+}
+
+export function WithHook() {
+    // eslint-disable-next-line
+    const [data, setData] = React.useState(makeList);
+    const [filteredResults, handleSearch, handleFilterChange] = useFilters(
+        data,
+        [(d) => d.title, (d) => d.subtitle]
+    );
 
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>
