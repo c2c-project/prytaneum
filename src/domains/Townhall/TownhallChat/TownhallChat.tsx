@@ -35,12 +35,14 @@ export default function TownhallChat() {
         }
     );
 
-    const socket = useSocketio('/chat-messages', {
-        query: { townhallId: townhall._id },
-    });
-    React.useEffect(() => {
-        socket.on('chat-message-state', dispatchMessage);
-    }, [socket]);
+    useSocketio(
+        '/chat-messages',
+        { query: { townhallId: townhall._id } },
+        (socket) => {
+            socket.on('chat-message-state', dispatchMessage);
+        },
+        [dispatchMessage]
+    );
 
     React.useEffect(get, []);
 

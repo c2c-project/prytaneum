@@ -5,13 +5,13 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question as QuestionType } from 'prytaneum-typings';
 
-import useSocketio from 'hooks/useSocketio';
-import ListFilter from 'components/ListFilter';
 import { UserContext } from 'contexts/User';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
-import useEndpoint from 'hooks/useEndpoint';
-import { PaneContext } from 'domains/Townhall/Contexts/Pane';
+import ListFilter from 'components/ListFilter';
 import Loader from 'components/Loader';
+import useSocketio from 'hooks/useSocketio';
+import useEndpoint from 'hooks/useEndpoint';
+import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 import { QuestionProps } from '../QuestionFeedItem';
 
 import { getQuestions } from '../api';
@@ -75,7 +75,6 @@ function QuestionFeed() {
             ),
         [townhall.settings.moderators.list, user]
     );
-
     const [questions, dispatchQuestion] = React.useReducer(questionReducer, []);
     const [get, isLoading] = useEndpoint(() => getQuestions(townhall._id), {
         onSuccess: ({ data }) => {
@@ -83,13 +82,15 @@ function QuestionFeed() {
             setDisplayed(data);
         },
     });
-    const socket = useSocketio('/questions', {
-        query: { townhallId: townhall._id },
-    });
-    React.useEffect(() => {
-        // socket disconnection is handled in useSocketio
-        socket.on('question-state', dispatchQuestion);
-    }, [socket]);
+
+    useSocketio(
+        '/questions',
+        { query: { townhallId: townhall._id } },
+        (socket) => {
+            socket.on('question-state', dispatchQuestion);
+        },
+        [dispatchQuestion]
+    );
     React.useEffect(get, []);
 
     // updating difference when one of the boundaries change
