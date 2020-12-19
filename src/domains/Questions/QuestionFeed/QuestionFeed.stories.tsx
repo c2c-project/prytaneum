@@ -4,6 +4,7 @@ import { makeQuestion } from 'prytaneum-typings';
 import Page from 'layout/Page';
 
 import FixtureSocket from 'mock/Fixture.socket';
+import TownhallProvider from '../../Townhall/Contexts/Townhall';
 import QuestionFeed from '.';
 
 export default { title: 'Domains/Questions/Question Feed' };
@@ -24,15 +25,17 @@ export function Basic() {
     return (
         <div style={{ maxHeight: '100%' }}>
             <button type='button' onClick={() => sendMessage(20)}>
-                Add Message
+                Add Question
             </button>
-            <FixtureSocket.Provider value={emitter}>
-                <main>
-                    <Page>
-                        <QuestionFeed />
-                    </Page>
-                </main>
-            </FixtureSocket.Provider>
+            <TownhallProvider townhallId='12345'>
+                <FixtureSocket.Provider value={emitter}>
+                    <main>
+                        <Page>
+                            <QuestionFeed />
+                        </Page>
+                    </main>
+                </FixtureSocket.Provider>
+            </TownhallProvider>
         </div>
     );
 }

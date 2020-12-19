@@ -3,28 +3,18 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
-import type { Question as QuestionType } from 'prytaneum-typings';
 
 import { UserContext } from 'contexts/User';
-import ListFilter from 'components/ListFilter';
+import ListFilter, { useFilters } from 'components/ListFilter';
 import Loader from 'components/Loader';
-import useSocketio from 'hooks/useSocketio';
-import useEndpoint from 'hooks/useEndpoint';
 import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
-import { QuestionProps } from '../QuestionFeedItem';
 
-import { getQuestions } from '../api';
+import { QuestionProps } from '../QuestionFeedItem';
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
-import {
-    search,
-    applyFilters,
-    filters as filterFuncs,
-    questionReducer,
-    QuestionFilterFunc,
-    makeSystemMessage,
-} from './utils';
+import { filters as filterFuncs, makeSystemMessage } from './utils';
+import useQuestionFeed from './useQuestionFeed';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,30 +31,21 @@ function QuestionFeed() {
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
     const [, dispatch] = React.useContext(PaneContext);
-
-    // displayed questions, which differs from the full feed
-    const [displayed, setDisplayed] = React.useState<QuestionType[]>([]);
-
-    // difference between displayed count and full question feed count
-    const [difference, setDifference] = React.useState(0);
-
-    // the first filter will always be the "search" filter, which initially just returns the full question list
-    const [filters, setFilters] = React.useState([(q: QuestionType[]) => q]);
-
-    const [system, setSystem] = React.useState<QuestionProps[]>(() => [
-        makeSystemMessage(<EmptyMessage />),
-    ]);
-
-    // list of questions with all filters applied
-    const filteredList = React.useMemo(() => applyFilters(displayed, filters), [
-        displayed,
-        filters,
-    ]);
+    const [sysMessages, setSysMessages] = React.useState<QuestionProps[]>([]);
+    const [questions, buffer, flush, isLoading] = useQuestionFeed(townhall._id);
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(
+        questions,
+        [
+            (q) => q.question, // question text itself
+            (q) => q.meta.createdBy.name.first, // first name of the user
+        ]
+    );
 
     // there should never be more than 1 current question, so we can stop at the first one found
+    // TODO: update to use the townhall state instead
     const currentQuestion = React.useMemo(
-        () => displayed.find((q) => q.state === 'current'),
-        [displayed]
+        () => questions.find((q) => q.state === 'current'),
+        [questions]
     );
 
     const isModerator = React.useMemo(
@@ -75,73 +56,24 @@ function QuestionFeed() {
             ),
         [townhall.settings.moderators.list, user]
     );
-    const [questions, dispatchQuestion] = React.useReducer(questionReducer, []);
-    const [get, isLoading] = useEndpoint(() => getQuestions(townhall._id), {
-        onSuccess: ({ data }) => {
-            dispatchQuestion({ type: 'initial-state', payload: data });
-            setDisplayed(data);
-        },
-    });
-
-    useSocketio(
-        '/questions',
-        { query: { townhallId: townhall._id } },
-        (socket) => {
-            socket.on('question-state', dispatchQuestion);
-        },
-        [dispatchQuestion]
-    );
-    React.useEffect(get, []);
-
-    // updating difference when one of the boundaries change
     React.useEffect(() => {
         dispatch({
             type: 'Question Feed',
-            payload: questions.length - displayed.length,
+            payload: buffer.length,
         });
+    }, [buffer.length, dispatch]);
 
-        setDifference(questions.length - displayed.length);
-        if (
-            questions.length - displayed.length === questions.length &&
-            questions.length > 0 &&
-            system.length < 2
-            // NOTE: would have to change this in the future
-            // if we have more system messages
-        ) {
-            setSystem((prev) => [
-                makeSystemMessage(<RefreshMessage />),
-                ...prev,
-            ]);
+    React.useEffect(() => {
+        if (questions.length === 0) {
+            setSysMessages([makeSystemMessage(<EmptyMessage />)]);
+            if (buffer.length > 0) {
+                setSysMessages((prev) => [
+                    makeSystemMessage(<RefreshMessage />),
+                    ...prev,
+                ]);
+            }
         }
-    }, [questions.length, displayed.length, system.length, dispatch]);
-
-    // onClick refresh button
-    function handleRefresh() {
-        setDisplayed(questions);
-    }
-
-    const handleFilterChange = React.useCallback(
-        (newFilters: QuestionFilterFunc[]) => {
-            // replace everything BUT the first index
-            const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
-                prevSearch,
-                ...newFilters,
-            ];
-            setFilters(updateFilters);
-        },
-        []
-    );
-
-    const handleSearch = React.useCallback((searchText: string) => {
-        // replace ONLY the search filter -- the first index
-        const updateSearch = (filtersWithOldSearch: QuestionFilterFunc[]) => {
-            const [, ...currentFilters] = filtersWithOldSearch;
-            const newSearch: QuestionFilterFunc = (data) =>
-                search(searchText, data);
-            return [newSearch, ...currentFilters];
-        };
-        setFilters(updateSearch);
-    }, []);
+    }, [buffer.length, questions.length]);
 
     if (isLoading) return <Loader />;
 
@@ -156,12 +88,12 @@ function QuestionFeed() {
                     <Tooltip title='Load New'>
                         <span>
                             <IconButton
-                                onClick={handleRefresh}
+                                onClick={flush}
                                 color='inherit'
-                                disabled={difference === 0}
+                                disabled={buffer.length === 0}
                             >
                                 <Badge
-                                    badgeContent={difference}
+                                    badgeContent={buffer.length}
                                     color='secondary'
                                 >
                                     <RefreshIcon />
@@ -176,7 +108,7 @@ function QuestionFeed() {
                     variant={isModerator ? 'moderator' : 'user'}
                     current={currentQuestion}
                     questions={filteredList}
-                    systemMessages={system}
+                    systemMessages={sysMessages}
                 />
             </Grid>
         </div>

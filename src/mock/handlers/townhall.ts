@@ -2,6 +2,7 @@ import { rest } from 'msw';
 import {
     makeTownhalls,
     makeTownhall,
+    makeQuestion,
     TownhallForm,
     QuestionForm,
 } from 'prytaneum-typings';
@@ -58,5 +59,10 @@ export default [
         // const form = req.body as TownhallSettings;
         // TODO: way for this to fail
         return res(ctx.status(200));
+    }),
+    rest.get('/api/townhalls/:townhallId/questions', (req, res, ctx) => {
+        if (Math.random() > 0.5)
+            return res(ctx.status(200), ctx.json([makeQuestion()]));
+        return res(ctx.status(200), ctx.json([]));
     }),
 ];

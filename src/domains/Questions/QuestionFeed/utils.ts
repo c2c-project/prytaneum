@@ -1,23 +1,16 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable import/prefer-default-export */
 import type {
     Question,
     Question as QuestionType,
     SocketIOEvents,
 } from 'prytaneum-typings';
-import { search as utilSearch, FilterFunc } from 'utils/filters';
+import { FilterFunc } from 'utils/filters';
 import { QuestionProps } from '../QuestionFeedItem';
 
 export { applyFilters } from 'utils/filters';
 
 export type QuestionFilterFunc = FilterFunc<Question>;
-
-export function search(searchText: string, data: Question[]) {
-    const accessors = [
-        (q: Question) => q.question,
-        (q: Question) => q.meta.createdBy.name.first,
-    ];
-    return utilSearch(searchText, data, accessors);
-}
 
 export interface Filters {
     [index: string]: QuestionFilterFunc;
@@ -35,7 +28,10 @@ export const filters: Filters = {
 
 export function questionReducer(
     state: QuestionType[],
-    action: SocketIOEvents['question-state']
+    action:
+        | SocketIOEvents['question-state']
+        | { type: 'flush'; payload: [] }
+        | { type: 'system-message'; payload: QuestionType }
 ) {
     switch (action.type) {
         case 'create-question':
@@ -53,6 +49,10 @@ export function questionReducer(
             );
         case 'initial-state':
             return action.payload.reverse();
+        case 'flush':
+            return [];
+        case 'system-message':
+            return [...state, action.payload];
         default:
             return state;
     }
