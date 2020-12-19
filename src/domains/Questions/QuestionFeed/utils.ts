@@ -28,10 +28,7 @@ export const filters: Filters = {
 
 export function questionReducer(
     state: QuestionType[],
-    action:
-        | SocketIOEvents['question-state']
-        | { type: 'flush'; payload: [] }
-        | { type: 'system-message'; payload: QuestionType }
+    action: SocketIOEvents['question-state'] | { type: 'flush'; payload: [] }
 ) {
     switch (action.type) {
         case 'create-question':
@@ -51,8 +48,6 @@ export function questionReducer(
             return action.payload.reverse();
         case 'flush':
             return [];
-        case 'system-message':
-            return [...state, action.payload];
         default:
             return state;
     }
