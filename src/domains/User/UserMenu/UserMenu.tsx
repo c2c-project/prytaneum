@@ -25,9 +25,6 @@ import { UserContext } from 'contexts/User';
 import history from 'utils/history';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        color: theme.palette.getContrastText('#fff'),
-    },
     button: {
         borderRadius: 0,
         height: '100%',
@@ -118,7 +115,7 @@ export default function UserMenu() {
     }, [isSmUp]);
 
     return (
-        <div className={classes.root}>
+        <div>
             <Tooltip title='User Menu'>{menuButton}</Tooltip>
             <Menu
                 anchorEl={anchorEl}
