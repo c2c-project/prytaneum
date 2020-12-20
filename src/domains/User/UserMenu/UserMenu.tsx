@@ -83,7 +83,7 @@ export default function UserMenu() {
             ) : (
                 <> </>
             ),
-        []
+        [classes]
     );
 
     const menuButton = React.useMemo(() => {
@@ -112,7 +112,7 @@ export default function UserMenu() {
                 <MoreVert />
             </IconButton>
         );
-    }, [isSmUp]);
+    }, [isSmUp, classes, userInfo]);
 
     return (
         <div>
