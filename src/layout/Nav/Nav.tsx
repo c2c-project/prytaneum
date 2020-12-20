@@ -6,15 +6,14 @@ import {
     ListItem,
     ListItemText,
     Typography,
-    Menu,
-    MenuItem,
-    Tooltip,
+    Divider,
 } from '@material-ui/core';
-import { Menu as MenuIcon, AccountCircleOutlined } from '@material-ui/icons';
+import { Menu as MenuIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
-import { ThemeSelector } from 'contexts/Theme';
+import UserNotifications from 'domains/User/UserNotifications';
+import UserMenu from 'domains/User/UserMenu';
+import UserTheme from 'domains/User/UserTheme';
 import useStorage from 'hooks/useStorage';
 import history from 'utils/history';
 import AppBar from '../AppBar';
@@ -41,59 +40,23 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
     },
+    divider: {
+        width: 1,
+        height: '2em',
+        marginRight: theme.spacing(1.5),
+    },
+    item: {
+        marginRight: theme.spacing(1),
+    },
 }));
 
 export default function Nav() {
-    const [toggle] = React.useContext(ThemeSelector);
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [isLoggedIn] = useStorage('isLoggedIn');
 
     const handleClick = () => setOpen(false);
 
-    const userMenu = (
-        <div>
-            <Tooltip title='Toggle Dark or Light Mode'>
-                <IconButton color='inherit' edge='start' onClick={toggle}>
-                    <InvertColorsIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title='User Menu'>
-                <IconButton
-                    color='inherit'
-                    onClick={({ currentTarget }) => setAnchorEl(currentTarget)}
-                    aria-label='user-menu'
-                    edge='end'
-                >
-                    <AccountCircleOutlined />
-                </IconButton>
-            </Tooltip>
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-                onClick={() => setAnchorEl(null)}
-            >
-                <MenuItem
-                    button
-                    onClick={() => {
-                        history.push('/user/settings');
-                    }}
-                >
-                    <ListItemText primary='Settings' />
-                </MenuItem>
-                <MenuItem
-                    button
-                    onClick={() => {
-                        history.push('/logout');
-                    }}
-                >
-                    <ListItemText primary='Logout' />
-                </MenuItem>
-            </Menu>
-        </div>
-    );
     const title = (
         <Typography align='left' variant='h6' noWrap className={classes.title}>
             {formatTitle('prytaneum')}
@@ -110,7 +73,15 @@ export default function Nav() {
                 <MenuIcon />
             </IconButton>
             {title}
-            {userMenu}
+            <UserNotifications className={classes.item} />
+            <UserTheme className={classes.item} />
+            <Divider
+                orientation='vertical'
+                classes={{
+                    vertical: classes.divider,
+                }}
+            />
+            <UserMenu />
         </>
     );
 
