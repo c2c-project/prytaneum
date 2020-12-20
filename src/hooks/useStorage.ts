@@ -16,7 +16,7 @@ export default function useStorage<T extends keyof Storage.Storage>(
     const set: SetFn = React.useCallback((value) => Storage.set(key, value), [
         key,
     ]);
-    const get = React.useCallback(() => Storage.get(key), [key]);
+    // const get = React.useCallback(() => Storage.get(key), [key]);
 
     // We could check if just the key changed is a key of the Storage interface
     // and only update if the key is a member of the Storage interface
@@ -39,5 +39,5 @@ export default function useStorage<T extends keyof Storage.Storage>(
         return () => window.removeEventListener('storage', handleStorageChange);
     }, [handleStorageChange]);
 
-    return [get(), set];
+    return [state, set];
 }
