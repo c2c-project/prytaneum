@@ -56,6 +56,12 @@ const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(0deg)',
     },
+    video: {
+        [theme.breakpoints.up('md')]: {
+            marginTop: theme.spacing(2),
+            marginLeft: theme.spacing(2),
+        },
+    },
     // saving these for future
     // sticky: {
     //     top: 0,
@@ -93,7 +99,14 @@ export default function TownhallLive() {
         <PaneProvider>
             <div className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
-                <Grid item xs={12} md={8} container direction='column'>
+                <Grid
+                    item
+                    xs={12}
+                    md={8}
+                    container
+                    direction='column'
+                    className={classes.video}
+                >
                     <Grid container item xs='auto'>
                         <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
                     </Grid>
