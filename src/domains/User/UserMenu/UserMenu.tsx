@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import {
     Menu,
@@ -54,7 +55,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserMenu() {
+interface Props {
+    className?: string;
+}
+
+export default function UserMenu({ className }: Props) {
     const user = React.useContext(UserContext);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const classes = useStyles();
@@ -115,7 +120,7 @@ export default function UserMenu() {
     }, [isSmUp, classes, userInfo]);
 
     return (
-        <div>
+        <div className={className}>
             <Tooltip title='User Menu'>{menuButton}</Tooltip>
             <Menu
                 anchorEl={anchorEl}
