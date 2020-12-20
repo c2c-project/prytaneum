@@ -88,7 +88,7 @@ export default function UserMenu({ className }: Props) {
             ) : (
                 <> </>
             ),
-        [classes]
+        [classes, user]
     );
 
     const menuButton = React.useMemo(() => {
@@ -117,7 +117,7 @@ export default function UserMenu({ className }: Props) {
                 <MoreVert />
             </IconButton>
         );
-    }, [isSmUp, classes, userInfo]);
+    }, [isSmUp, classes, userInfo, isOpen]);
 
     return (
         <div className={className}>
