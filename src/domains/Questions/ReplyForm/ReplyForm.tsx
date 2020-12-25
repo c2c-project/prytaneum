@@ -11,7 +11,7 @@ import FormTitle from 'components/FormTitle';
 import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import useForm from 'hooks/useForm';
-import QuestionFeedItem from '../QuestionFeedItem';
+import QuestionCard from '../QuestionCard';
 
 interface Props {
     replyTo: QuestionType;
@@ -45,13 +45,7 @@ export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
                 }
             />
             <FormContent>
-                <QuestionFeedItem
-                    user={replyTo.meta.createdBy.name.first}
-                    timestamp={replyTo.meta.createdAt}
-                    elevation={3}
-                >
-                    {replyTo.question}
-                </QuestionFeedItem>
+                <QuestionCard question={replyTo} />
                 <TextField
                     error={Boolean(errors.reply)}
                     helperText={errors.reply}
