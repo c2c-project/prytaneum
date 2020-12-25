@@ -11,7 +11,10 @@ interface Options {
  * @category hooks
  *
  */
-export default function useSnack() {
+export default function useSnack(): [
+    (message: string, options?: Options) => void,
+    ReturnType<typeof useSnackbar>['closeSnackbar']
+] {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const makeSnack = React.useCallback(
         (message: string, options?: Options) => {
