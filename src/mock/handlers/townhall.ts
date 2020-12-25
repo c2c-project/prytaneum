@@ -65,4 +65,10 @@ export default [
             return res(ctx.status(200), ctx.json([makeQuestion()]));
         return res(ctx.status(200), ctx.json([]));
     }),
+    rest.put(
+        '/api/townhalls/:townhallId/questions/:questionId/like',
+        (req, res, ctx) => {
+            return res(ctx.status(200));
+        }
+    ),
 ];
