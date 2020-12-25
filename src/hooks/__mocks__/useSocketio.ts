@@ -20,7 +20,7 @@ function useSocketio(
 
         // cleanup
         return () => {
-            socket.close();
+            // socket.close();
         };
     }, [curriedSocketFn, socket]);
 }
