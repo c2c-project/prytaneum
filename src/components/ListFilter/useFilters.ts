@@ -3,7 +3,7 @@ import React from 'react';
 
 import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
 
-type Accessors<T> = (arg: T) => string;
+export type Accessors<T> = (arg: T) => string;
 
 export default function useFilters<Datum>(
     data: Datum[],
@@ -43,9 +43,12 @@ export default function useFilters<Datum>(
     );
 
     // replaces everythign but the first filter, b/c that is the search filter
-    const handleFilterChange = (newFilters: FilterFunc<Datum>[]) => {
-        setFilters(([searchFilter]) => [searchFilter, ...newFilters]);
-    };
+    const handleFilterChange = React.useCallback(
+        (newFilters: FilterFunc<Datum>[]) => {
+            setFilters(([searchFilter]) => [searchFilter, ...newFilters]);
+        },
+        [setFilters]
+    );
 
     return [filteredResults, handleSearch, handleFilterChange];
 }
