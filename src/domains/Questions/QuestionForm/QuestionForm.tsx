@@ -13,7 +13,7 @@ import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useForm from 'hooks/useForm';
-import Question from '../QuestionFeedItem';
+import QuestionCard from '../QuestionCard';
 
 interface Props {
     quote?: QuestionType;
@@ -41,13 +41,10 @@ export default function QuestionForm({
         <Form onSubmit={handleSubmit(submitCb)}>
             <FormTitle title='Question Form' />
             {quote && (
-                <Question
-                    user={quote.meta.createdBy.name.first}
-                    timestamp={quote.meta.createdAt}
-                    elevation={3}
-                >
-                    {quote.question}
-                </Question>
+                <QuestionCard
+                    style={{ marginBottom: '8px' }}
+                    question={quote}
+                />
             )}
             <FormContent>
                 <TextField
@@ -72,7 +69,7 @@ export default function QuestionForm({
                 >
                     Cancel
                 </Button>
-                <LoadingButton loading={isLoading as boolean}> 
+                <LoadingButton loading={isLoading as boolean}>
                     <Button
                         type='submit'
                         variant='contained'
