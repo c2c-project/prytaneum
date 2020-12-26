@@ -44,11 +44,11 @@ export default function useEndpoint<T>(
     const sendRequest = React.useCallback(async () => {
         try {
             const results = await wrappedEndpoint();
-            if (!isMounted) return;
+            if (!isMounted()) return;
             if (options?.onSuccess) options.onSuccess(results);
             setIsLoading(false);
         } catch (e) {
-            if (!isMounted) return;
+            if (!isMounted()) return;
             if (options?.onFailure) options.onFailure(e);
             else errorHandler(e);
             setIsLoading(false);

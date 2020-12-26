@@ -3,7 +3,7 @@ import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunc = (...args: any) => void;
 type Return = [
-    boolean,
+    () => boolean,
     <T extends AnyFunc>(fn: T) => (...args: Parameters<T>) => void
 ];
 
@@ -21,5 +21,5 @@ export default function useIsMounted(): Return {
         },
         []
     );
-    return [isMountedRef.current, wrapper];
+    return [() => isMountedRef.current, wrapper];
 }
