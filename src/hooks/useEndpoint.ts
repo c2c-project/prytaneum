@@ -8,15 +8,13 @@ type Endpoint<T> = () => Promise<AxiosResponse<T>>;
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
-    undo?: {
-        message?: string;
-        onClick: () => void;
-    };
+    runOnFirstRender?: boolean;
 }
 
 type SendRequest = () => void;
 type IsLoading = boolean;
-type EndpointUtils = [SendRequest, IsLoading];
+type HasRun = boolean;
+type EndpointUtils = [SendRequest, IsLoading, HasRun];
 
 async function wrapMinWaitTime<T>(endpoint: Endpoint<T>, time = 600) {
     const minWaitTime = () =>
@@ -32,11 +30,10 @@ export default function useEndpoint<T>(
     endpoint: Endpoint<T>,
     options?: EndpointOptions<T>
 ): EndpointUtils {
+    const hasRun = React.useRef(false);
     const [errorHandler] = useErrorHandler();
     const [isMounted] = useIsMounted();
-
     const [isLoading, setIsLoading] = React.useState(false);
-    const start = React.useCallback(() => setIsLoading(true), [setIsLoading]);
 
     // calling this will invoke the request while waiting a minimum amount of time
     const wrappedEndpoint = React.useCallback(() => wrapMinWaitTime(endpoint), [
@@ -56,16 +53,20 @@ export default function useEndpoint<T>(
             else errorHandler(e);
             setIsLoading(false);
         }
-    }, [wrappedEndpoint, isMounted, options, setIsLoading]);
+    }, [wrappedEndpoint, isMounted, options, setIsLoading, errorHandler]);
 
     // runs the async function
     const runAsync = React.useCallback(() => {
-        // setting isLoading to true triggers the request
+        hasRun.current = true;
+        setIsLoading(true);
+
         // eslint-disable-next-line no-void
-        if (isLoading) void sendRequest();
-    }, [sendRequest, isLoading]);
+        void sendRequest();
+    }, [sendRequest]);
 
-    React.useEffect(runAsync, [runAsync]);
+    React.useEffect(() => {
+        if (!hasRun.current && options?.runOnFirstRender) runAsync();
+    }, [runAsync, options]);
 
-    return [start, isLoading];
+    return [runAsync, isLoading, hasRun.current];
 }
