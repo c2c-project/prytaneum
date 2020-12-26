@@ -15,7 +15,7 @@ export default function useErrorHandler() {
                 const body = err.response?.data || 'Error';
                 snack(`Error: ${body}`);
             } else {
-                snack(`Error: ${err.message}`);
+                snack(`${err.message}`);
             }
         },
         [snack]
