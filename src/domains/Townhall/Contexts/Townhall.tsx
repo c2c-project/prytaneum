@@ -107,28 +107,24 @@ export default function TownhallProvider({
     townhallId,
 }: Props) {
     const [townhall, setTownhall] = React.useState(value);
-    const [get] = useEndpoint(() => getTownhall(townhallId), {
-        onSuccess: (res) => {
-            setTownhall(res.data);
-        },
-    });
-
-    // const [questions] = useSocketio({
-    //     url: '/townhall-state',
-    //     event: 'townhall-state',
-    //     reducer: () => {},
-    //     initialState
-    // });
+    const [run, isLoading, getHasRun] = useEndpoint(
+        () => getTownhall(townhallId),
+        {
+            onSuccess: (res) => {
+                setTownhall(res.data);
+            },
+        }
+    );
 
     React.useEffect(() => {
-        if (!townhall) {
-            get();
-        }
-    }, [townhall, get]);
+        if (!townhall && !getHasRun()) run();
+    }, [townhall, getHasRun, run]);
 
-    return !townhall ? (
-        <Loader />
-    ) : (
+    // TODO: some sort of redirect if there's no townhall
+    // "something broke try refreshing" page?
+    if (isLoading || !townhall) return <Loader />;
+
+    return (
         <TownhallContext.Provider value={townhall}>
             {children}
         </TownhallContext.Provider>

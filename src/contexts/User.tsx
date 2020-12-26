@@ -8,7 +8,7 @@ import { getMyInfo } from 'domains/Auth/api';
 export const UserContext = React.createContext<User | undefined>(undefined);
 
 interface Props {
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode | React.ReactNodeArray;
     value?: User;
 }
 
@@ -19,18 +19,18 @@ export default function UserProvider({ children, value }: Props) {
     const [user, setUser] = React.useState<User | undefined>(
         value || userFromContext
     );
-    const [get, isLoading] = useEndpoint(getMyInfo, {
+    const [run, isLoading, getHasRun] = useEndpoint(getMyInfo, {
         onSuccess: ({ data }) => {
             setUser(data);
         },
         onFailure: () => {},
     });
-
     React.useEffect(() => {
-        if (!user) get();
-    }, [get, user]);
+        if (!getHasRun() && !user) run();
+    }, [getHasRun, user, run]);
 
-    if (isLoading) return <Loader />;
+    // TODO: redirect to login?
+    if (isLoading && !user) return <Loader />;
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
