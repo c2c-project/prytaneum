@@ -81,7 +81,7 @@ export default function Dialog(props: Props) {
                     </AppBar>
                 )}
                 {title && !fullScreen && <DialogTitle>{title}</DialogTitle>}
-                {open && children}
+                {children}
             </MUIDialog>
         </div>
     );
