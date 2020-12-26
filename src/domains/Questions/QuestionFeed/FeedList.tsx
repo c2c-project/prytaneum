@@ -12,14 +12,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
 
 import Dialog from 'components/Dialog';
-import QuestionForm from '../QuestionForm';
-import ReplyForm from '../ReplyForm';
 import QuestionLabels from '../QuestionLabels';
 import { Like, Quote, Reply } from '../QuestionActions';
 import { CurrentQuestion } from './components';
 import QuestionCard from '../QuestionCard';
-
-type UserActionTypes = 'Like' | 'Quote' | 'Reply';
 
 interface Props {
     questions: Question[];
@@ -58,46 +54,6 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
         setDialogContent(null);
     }
 
-    const handleClick = React.useCallback(
-        (question: Question, actionType: UserActionTypes) => {
-            switch (actionType) {
-                case 'Like': {
-                    console.log('liked question ', question);
-                    break;
-                }
-                case 'Quote': {
-                    // open dialog with the quoted question
-                    // TODO: onSubmit
-                    setDialogContent(
-                        <QuestionForm
-                            quote={question}
-                            onCancel={closeDialog}
-                            onSubmit={console.log}
-                        />
-                    );
-                    break;
-                }
-                case 'Reply': {
-                    // open dialog with the replied quote
-                    // TODO: onSubmit
-                    setDialogContent(
-                        <ReplyForm
-                            replyTo={question}
-                            onSubmit={console.log}
-                            onCancel={closeDialog}
-                        />
-                    );
-                    break;
-                }
-                default: {
-                    // do nothing
-                    break;
-                }
-            }
-        },
-        [setDialogContent]
-    );
-
     const questionList = React.useMemo(() => {
         return questions.map((question) => {
             const { townhallId } = question.meta;
@@ -109,11 +65,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                     CardProps={{ className: classes.item }}
                 >
                     <CardActions className={classes.questionActions}>
-                        <Like
-                            townhallId={townhallId}
-                            questionId={questionId}
-                            onLike={() => handleClick(question, 'Like')}
-                        />
+                        <Like townhallId={townhallId} questionId={questionId} />
                         <Quote question={question} />
                         <Reply question={question} />
                     </CardActions>
@@ -123,7 +75,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 </QuestionCard>
             );
         });
-    }, [questions, handleClick]);
+    }, [questions]);
 
     return (
         <div className={classes.root}>

@@ -9,28 +9,19 @@ import { createLike, deleteLike } from '../api';
 interface Props {
     townhallId: string;
     questionId: string;
-    onLike: () => void;
+    onLike?: () => void;
     className?: string;
     liked?: boolean;
 }
 
-export default function Like({
-    className,
-    questionId,
-    townhallId,
-    liked,
-    onLike,
-}: Props) {
-    const apiFnMemo = React.useMemo(() => {
+function Like({ className, questionId, townhallId, liked, onLike }: Props) {
+    const apiFn = React.useMemo(() => {
         if (liked) return deleteLike;
         return createLike;
-    }, [liked]);
-    const apiFn = React.useCallback(() => apiFnMemo(townhallId, questionId), [
-        townhallId,
-        questionId,
-        apiFnMemo,
-    ]);
-    const [run, isLoading] = useEndpoint(apiFn, { onSuccess: onLike });
+    }, []);
+    const [run, isLoading] = useEndpoint(() => apiFn(townhallId, questionId), {
+        onSuccess: onLike,
+    });
 
     return (
         <LoadingButton loading={isLoading}>
@@ -50,4 +41,7 @@ export default function Like({
 Like.defaultProps = {
     className: undefined,
     liked: false,
+    onLike: undefined,
 };
+
+export default React.memo(Like);

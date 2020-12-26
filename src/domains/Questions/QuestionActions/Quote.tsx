@@ -11,7 +11,7 @@ interface Props {
     question: Question;
 }
 
-export default function Quote({ className, question }: Props) {
+function Quote({ className, question }: Props) {
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleClose = () => setIsOpen(false);
@@ -43,3 +43,5 @@ export default function Quote({ className, question }: Props) {
 Quote.defaultProps = {
     className: undefined,
 };
+
+export default React.memo(Quote);
