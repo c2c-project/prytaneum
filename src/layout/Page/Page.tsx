@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container, ContainerProps } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 type Props = {
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     disableGutters?: boolean;
-} & Pick<ContainerProps, 'children'>;
+    children: React.ReactNodeArray | React.ReactNode;
+};
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -31,7 +32,7 @@ const Page = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
                 className={classes.main}
                 ref={ref}
             >
-                {children}
+                {children as React.ReactChild}
             </Container>
         </div>
     );
