@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { makeQuestion } from 'prytaneum-typings';
 import CardActions from '@material-ui/core/CardActions';
