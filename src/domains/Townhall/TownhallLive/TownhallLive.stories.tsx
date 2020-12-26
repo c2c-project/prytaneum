@@ -4,8 +4,8 @@ import { EventEmitter } from 'events';
 import {
     makeQuestion,
     makeChatMessage,
-    makeTownhall,
     makeUser,
+    makeTownhall,
 } from 'prytaneum-typings';
 
 import FixtureSocket from 'mock/Fixture.socket';
