@@ -11,10 +11,12 @@ export default function useQuestionFeed(
     townhallId: string
 ): [QuestionType[], QuestionType[], () => void, boolean] {
     const [questions, setQuestions] = React.useState<QuestionType[]>([]);
-    const [run, isLoading] = useEndpoint(() => getQuestions(townhallId), {
+    const endpoint = () => getQuestions(townhallId);
+    const [, isLoading] = useEndpoint(endpoint, {
         onSuccess: ({ data }) => {
             setQuestions(data);
         },
+        runOnFirstRender: true,
     });
 
     const [buffer, dispatch] = React.useReducer(questionReducer, []);
@@ -27,12 +29,10 @@ export default function useQuestionFeed(
         [dispatch]
     );
 
-    React.useEffect(run, []);
-
-    function flushBuffer() {
+    const flushBuffer = () => {
         setQuestions((prevQuestions) => [...prevQuestions, ...buffer]);
         dispatch({ type: 'flush', payload: [] });
-    }
+    };
 
     return [questions, buffer, flushBuffer, isLoading];
 }

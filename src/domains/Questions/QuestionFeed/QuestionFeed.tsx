@@ -3,17 +3,17 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
+import type { Question } from 'prytaneum-typings';
 
 import { UserContext } from 'contexts/User';
-import ListFilter, { useFilters } from 'components/ListFilter';
+import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import Loader from 'components/Loader';
 import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 
-import { QuestionProps } from '../QuestionFeedItem';
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
-import { filters as filterFuncs, makeSystemMessage } from './utils';
+import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,14 +31,20 @@ function QuestionFeed() {
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
     const [, dispatch] = React.useContext(PaneContext);
-    const [sysMessages, setSysMessages] = React.useState<QuestionProps[]>([]);
+    const [sysMessages, setSysMessages] = React.useState<React.ReactNodeArray>(
+        []
+    );
     const [questions, buffer, flush, isLoading] = useQuestionFeed(townhall._id);
-    const [filteredList, handleSearch, handleFilterChange] = useFilters(
-        questions,
-        [
+    const accessors = React.useMemo<Accessors<Question>[]>(
+        () => [
             (q) => q.question, // question text itself
             (q) => q.meta.createdBy.name.first, // first name of the user
-        ]
+        ],
+        []
+    );
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(
+        questions,
+        accessors
     );
 
     // there should never be more than 1 current question, so we can stop at the first one found
@@ -65,12 +71,9 @@ function QuestionFeed() {
 
     React.useEffect(() => {
         if (questions.length === 0) {
-            setSysMessages([makeSystemMessage(<EmptyMessage />)]);
+            setSysMessages([<EmptyMessage />]);
             if (buffer.length > 0) {
-                setSysMessages((prev) => [
-                    makeSystemMessage(<RefreshMessage />),
-                    ...prev,
-                ]);
+                setSysMessages((prev) => [<RefreshMessage />, ...prev]);
             }
         }
     }, [buffer.length, questions.length]);

@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PushPinIcon from '@material-ui/icons/PushPin';
 
-import { QuestionProps } from '../QuestionFeedItem';
+import { Props as QuestionProps } from '../QuestionCard';
 
 interface CurrentQuestionProps {
     children: React.ReactElement<QuestionProps>;

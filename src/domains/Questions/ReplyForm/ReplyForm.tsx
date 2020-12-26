@@ -3,15 +3,23 @@ import PropTypes from 'prop-types';
 import { Typography, Button } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
 import QuoteIcon from '@material-ui/icons/FormatQuote';
-import type { Question as QuestionType } from 'prytaneum-typings';
+import type {
+    Question as QuestionType,
+    ReplyForm as FormType,
+} from 'prytaneum-typings';
 
 import TextField from 'components/TextField';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
 import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
+import LoadingButton from 'components/LoadingButton';
+import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
+import useEndpoint from 'hooks/useEndpoint';
+import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
 import QuestionCard from '../QuestionCard';
+import { createReply } from '../api';
 
 interface Props {
     replyTo: QuestionType;
@@ -19,16 +27,22 @@ interface Props {
     onCancel?: () => void;
 }
 
-interface FormType {
-    reply: '';
-}
-
 const initialState: FormType = { reply: '' };
 export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
+    const townhall = React.useContext(TownhallContext);
+    const [snack] = useSnack();
+
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
 
+    const endpoint = () => createReply(townhall._id, replyTo._id, form);
+    const onSuccess = () => {
+        snack('Successfully submitted reply');
+        if (onSubmit) onSubmit();
+    };
+    const [run, isLoading] = useEndpoint(endpoint, { onSuccess });
+
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(run)}>
             <FormTitle
                 title={`Reply to ${replyTo.meta.createdBy.name.first}`}
                 description={
@@ -68,14 +82,16 @@ export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
                 >
                     Cancel
                 </Button>
-                <Button
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    disableElevation
-                >
-                    Reply
-                </Button>
+                <LoadingButton loading={isLoading}>
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        disableElevation
+                    >
+                        Reply
+                    </Button>
+                </LoadingButton>
             </FormActions>
         </Form>
     );

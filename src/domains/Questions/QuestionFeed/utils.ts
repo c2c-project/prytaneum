@@ -6,7 +6,6 @@ import type {
     SocketIOEvents,
 } from 'prytaneum-typings';
 import { FilterFunc } from 'utils/filters';
-import { QuestionProps } from '../QuestionFeedItem';
 
 export { applyFilters } from 'utils/filters';
 
@@ -51,12 +50,4 @@ export function questionReducer(
         default:
             return state;
     }
-}
-
-export function makeSystemMessage(message: React.ReactNode): QuestionProps {
-    return {
-        user: 'Prytaneum',
-        timestamp: new Date(),
-        children: message,
-    };
 }

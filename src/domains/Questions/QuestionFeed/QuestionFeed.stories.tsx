@@ -23,7 +23,7 @@ function sendMessage(num?: number) {
 
 export function Basic() {
     return (
-        <div style={{ maxHeight: '100%' }}>
+        <div style={{ maxHeight: '100%', overflowY: 'scroll' }}>
             <button type='button' onClick={() => sendMessage(20)}>
                 Add Question
             </button>

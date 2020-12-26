@@ -59,7 +59,7 @@ export default function QuestionThread({ question }: Props) {
         }
         return (
             <List className={classes.replies}>
-                {question.replies.map(({ _id, text, meta }) => (
+                {question.replies.map(({ _id, reply, meta }) => (
                     <ListItem key={_id}>
                         <ListItemAvatar>
                             <Avatar>{meta.createdBy.name.first[0]}</Avatar>
@@ -83,7 +83,7 @@ export default function QuestionThread({ question }: Props) {
                                     </Typography>
                                 </>
                             }
-                            secondary={text}
+                            secondary={reply}
                             secondaryTypographyProps={{
                                 color: 'textPrimary',
                             }}

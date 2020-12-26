@@ -1,5 +1,5 @@
 import qs from 'qs';
-import type { QuestionForm, Question } from 'prytaneum-typings';
+import type { QuestionForm, Question, ReplyForm } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 
@@ -61,4 +61,16 @@ export async function createLike(townhallId: string, questionId: string) {
 export async function deleteLike(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}/like`;
     return axios.delete(url);
+}
+
+/**
+ * creates a reply
+ */
+export async function createReply(
+    townhallId: string,
+    questionId: string,
+    form: ReplyForm
+) {
+    const url = `/api/townhalls/${townhallId}/questions/${questionId}/reply`;
+    return axios.post(url, qs.stringify(form));
 }
