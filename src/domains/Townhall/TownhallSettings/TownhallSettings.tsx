@@ -118,7 +118,12 @@ export default function TownhallSettings() {
             {
                 title: 'Video',
                 description: 'Modify video settings',
-                component: <VideoSettings />,
+                component: (
+                    <VideoSettings
+                        value={state.video}
+                        onChange={handleChange('video')}
+                    />
+                ),
             },
             {
                 title: 'Speakers',
