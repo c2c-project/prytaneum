@@ -13,8 +13,8 @@ interface EndpointOptions<T> {
 
 type SendRequest = () => void;
 type IsLoading = boolean;
-type HasRun = boolean;
-type EndpointUtils = [SendRequest, IsLoading, HasRun];
+type getHasRun = () => boolean;
+type EndpointUtils = [SendRequest, IsLoading, getHasRun];
 
 async function wrapMinWaitTime<T>(endpoint: Endpoint<T>, time = 600) {
     const minWaitTime = () =>
@@ -68,5 +68,5 @@ export default function useEndpoint<T>(
         if (!hasRun.current && options?.runOnFirstRender) runAsync();
     }, [runAsync, options]);
 
-    return [runAsync, isLoading, hasRun.current];
+    return [runAsync, isLoading, () => hasRun.current];
 }
