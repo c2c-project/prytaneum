@@ -27,8 +27,8 @@ addDecorator((storyFn) => (
                 <DeviceContext>
                     <div
                         style={{
-                            display: 'flex',
-                            flexDirection: 'column',
+                            // display: 'flex',
+                            // flexDirection: 'column',
                             height: '100%',
                             width: '100%',
                         }}
