@@ -30,7 +30,7 @@ export default function UserProvider({ children, value }: Props) {
     }, [getHasRun, user, run]);
 
     // TODO: redirect to login?
-    if (isLoading && !user) return <Loader />;
+    if (isLoading || !user) return <Loader />;
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
