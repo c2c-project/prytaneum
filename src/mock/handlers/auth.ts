@@ -80,8 +80,9 @@ export default [
     rest.get('/api/users/me', (req, res, ctx) => {
         const { jwt } = req.cookies;
         // return res(ctx.status(401));
-        if (jwt) return res(ctx.status(200), ctx.json(makeUser()));
-        return res(ctx.status(204));
+        // if (jwt) return res(ctx.status(200), ctx.json(makeUser()));
+        // return res(ctx.status(204));
+        return res(ctx.status(200), ctx.json(makeUser()));
     }),
     rest.get('/api/users/logout', (req, res, ctx) => {
         // deletes the cookie
