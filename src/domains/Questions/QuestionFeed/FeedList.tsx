@@ -7,13 +7,15 @@ import {
     CardActions,
     Card,
     CardContent,
+    // IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import Dialog from 'components/Dialog';
 import QuestionLabels from '../QuestionLabels';
-import { Like, Quote, Reply } from '../QuestionActions';
+import { Like, Quote /* Reply */ } from '../QuestionActions';
 import { CurrentQuestion } from './components';
 import QuestionCard from '../QuestionCard';
 
@@ -32,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
     item: {
         marginBottom: theme.spacing(2),
         flex: '1 1 100%',
+        display: 'flex',
+        flexDirection: 'column',
     },
     questionActions: {
         padding: 0,
@@ -62,12 +66,22 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 <QuestionCard
                     key={questionId}
                     question={question}
-                    CardProps={{ className: classes.item }}
+                    CardProps={{
+                        className: classes.item,
+                    }}
+                    // CardHeaderProps={{
+                    //     action: (
+                    //         <IconButton>
+                    //             <MoreVertIcon />
+                    //         </IconButton>
+                    //     ),
+                    // }}
+                    quote={question.quote}
                 >
                     <CardActions className={classes.questionActions}>
                         <Like townhallId={townhallId} questionId={questionId} />
                         <Quote question={question} />
-                        <Reply question={question} />
+                        {/* <Reply question={question} /> */}
                     </CardActions>
                     {variant === 'moderator' && (
                         <QuestionLabels labels={question.aiml.labels} />
@@ -104,7 +118,15 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                             </QuestionCard>
                         </CurrentQuestion>
                     )}
-                    <Grid item xs={12} style={{ maxHeight: '100%' }}>
+                    <Grid
+                        item
+                        xs={12}
+                        style={{
+                            maxHeight: '100%',
+                            flex: 1,
+                            flexBasis: '100%',
+                        }}
+                    >
                         {questionList}
                     </Grid>
                 </Grid>

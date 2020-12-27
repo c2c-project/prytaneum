@@ -22,6 +22,7 @@ export interface Props {
     CardContentProps?: CardContentProps;
     style?: React.CSSProperties;
     className?: string;
+    quote?: Question | null;
 }
 
 /**
@@ -35,6 +36,7 @@ function QuestionCard({
     CardHeaderProps: cardHeaderProps,
     style,
     className,
+    quote,
 }: Props) {
     const [time, month] = React.useMemo(
         () => formatDate(question.meta.createdAt, 'p-P').split('-'),
@@ -51,7 +53,7 @@ function QuestionCard({
         [time, month]
     );
     return (
-        <Card style={style} className={className} {...cardProps}>
+        <Card raised style={style} className={className} {...cardProps}>
             <CardHeader
                 title={question.meta.createdBy.name.first}
                 subheader={subheader}
@@ -60,6 +62,13 @@ function QuestionCard({
                 }
                 {...cardHeaderProps}
             />
+            {quote && (
+                <QuestionCard
+                    question={quote}
+                    style={{ margin: '0 32px', border: '1px solid lightgrey' }}
+                    CardProps={{ elevation: 0 }}
+                />
+            )}
             <CardContent {...cardContentProps}>
                 <Typography>{question.question}</Typography>
             </CardContent>
