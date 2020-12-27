@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             flexFlow: 'column',
-            overflowY: 'auto',
+            overflowY: 'scroll',
         },
     },
     panes: {
@@ -101,7 +101,6 @@ export default function TownhallLive() {
                 {!isMdUp && <div ref={topRef} />}
                 <Grid
                     item
-                    xs={12}
                     md={8}
                     container
                     direction='column'
