@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fade } from '@material-ui/core';
+import { Fade, Chip, Badge } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Townhall } from 'prytaneum-typings';
@@ -10,7 +10,6 @@ import Pane from 'components/Pane';
 import PaneContent from 'components/PaneContent';
 import PaneNavigation from 'components/PaneNavigation';
 import TownhallChat from '../TownhallChat';
-import PaneSelect from '../../../components/PaneSelect';
 import Information from '../TownhallPane';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Panes } from '../types';
@@ -49,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
     hidden: {
         display: 'none',
     },
+    chip: {
+        marginRight: theme.spacing(1),
+        border: '1px solid grey',
+        ...theme.typography.subtitle2,
+    },
 }));
 
 function buildPanes(townhall: Townhall) {
@@ -81,33 +85,34 @@ export default function TownhallPanes() {
             : clsx([classes.innerContainer, classes.hidden]);
     }
 
-    const options = Object.keys(panes);
+    const options = Object.keys(panes) as PaneKey[];
 
+    // TODO: make the new chip tabs accessible
     return (
         <Pane>
             {options.length > 1 ? (
                 <PaneNavigation>
                     <div className={classes.container}>
-                        <PaneSelect
-                            options={options} // TODO: finish pane select
-                            value={state}
-                            label='Select Pane'
-                            onChange={(e) => {
-                                const copy = e.target;
-                                setState(copy.value as PaneKey);
-                            }}
-                            getSecondary={(option) => {
-                                if (!context[option]) return null;
-                                if (state === option) return null;
-                                return (
-                                    <div>
-                                        <span className={classes.badge}>
-                                            {context[option]}
-                                        </span>
-                                    </div>
-                                );
-                            }}
-                        />
+                        {options.map((option) => (
+                            <Badge
+                                badgeContent={context[option]}
+                                overlap='circle'
+                                color='secondary'
+                            >
+                                <Chip
+                                    aria-selected={option === state}
+                                    aria-controls={`${option}-panel`}
+                                    role='tab'
+                                    className={classes.chip}
+                                    key={option}
+                                    label={option}
+                                    color={
+                                        option === state ? 'primary' : 'default'
+                                    }
+                                    onClick={() => setState(option)}
+                                />
+                            </Badge>
+                        ))}
                     </div>
                 </PaneNavigation>
             ) : (
@@ -117,7 +122,13 @@ export default function TownhallPanes() {
                 <div className={classes.outerContainer}>
                     {Object.entries(panes).map(([key, value]) => (
                         <Fade in={key === state} key={key} timeout={400}>
-                            <div className={getClassName(key)}>{value}</div>
+                            <div
+                                id={`${key}-panel`}
+                                role='tabpanel'
+                                className={getClassName(key)}
+                            >
+                                {value}
+                            </div>
                         </Fade>
                     ))}
                 </div>
