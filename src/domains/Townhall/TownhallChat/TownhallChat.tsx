@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         display: 'flex',
         flex: 1,
+        minHeight: 500,
     },
 }));
 
@@ -59,7 +60,6 @@ export default function TownhallChat() {
 
     if (areMessagesLoading) return <Loader />;
 
-    // TODO: messages aren't displaying properly??
     return (
         <Paper className={classes.root}>
             <Chat>
