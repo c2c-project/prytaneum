@@ -6,12 +6,17 @@ import { Props as ChatbarProps } from 'components/Chatbar';
 
 interface Props {
     children: React.ReactElement<ChatContentProps | ChatbarProps>[];
+    className?: string;
 }
 
-export default function Chat({ children }: Props) {
+export default function Chat({ children, className }: Props) {
     return (
-        <Grid container direction='column'>
+        <Grid container direction='column' className={className}>
             {children}
         </Grid>
     );
 }
+
+Chat.defaultProps = {
+    className: undefined,
+};
