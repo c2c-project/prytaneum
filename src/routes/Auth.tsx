@@ -2,7 +2,7 @@ import React from 'react';
 
 import history from 'utils/history';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Login from 'pages/Auth/Login';
 import Register from 'pages/Auth/Register';
 import ForgotPasswordRequest from 'pages/Auth/ForgotPassRequest';
@@ -18,7 +18,7 @@ addRoutes([
             if (get('isLoggedIn')) {
                 return <Redirect href='/user/my-townhalls' />;
             }
-            return <Page>{ctx.next()}</Page>;
+            return <Container>{ctx.next()}</Container>;
         },
         children: [
             {

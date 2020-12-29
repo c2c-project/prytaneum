@@ -7,7 +7,7 @@ import UserProvider from 'contexts/User';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallLive from 'domains/Townhall/TownhallLive';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 
 import { addRoutes } from './utils';
 
@@ -17,7 +17,7 @@ addRoutes([
         action: (ctx) => {
             return (
                 <RequireLogin>
-                    <Page maxWidth='xl'>{ctx.next()}</Page>
+                    <Container maxWidth='xl'>{ctx.next()}</Container>
                 </RequireLogin>
             );
         },

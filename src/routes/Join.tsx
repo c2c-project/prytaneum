@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallLive from 'domains/Townhall/TownhallLive';
 import RequireLogin from 'components/RequireLogin';
@@ -14,7 +14,7 @@ addRoutes([
             // user context here too
             return (
                 <RequireLogin>
-                    <Page maxWidth='xl'>{ctx.next()}</Page>
+                    <Container maxWidth='xl'>{ctx.next()}</Container>
                 </RequireLogin>
             );
         },

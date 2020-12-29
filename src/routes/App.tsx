@@ -4,7 +4,7 @@ import { Update, State } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// import Page from 'layout/Page';
+// import Container from 'layout/Page';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';

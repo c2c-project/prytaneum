@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Page from '.';
+import Container from '.';
 
 export default { title: 'Pages/Auth/Login' };
 

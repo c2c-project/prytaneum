@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RequireLogin from 'components/RequireLogin';
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
@@ -16,9 +16,9 @@ addRoutes([
             if (child) return child;
             return (
                 <RequireLogin>
-                    <Page>
+                    <Container>
                         <TownhallList />
-                    </Page>
+                    </Container>
                 </RequireLogin>
             );
         },
