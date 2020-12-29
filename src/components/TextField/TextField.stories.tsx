@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Component from './TextField';
 
 export default {
@@ -10,7 +10,7 @@ export default {
 
 export function TextField() {
     return (
-        <Page>
+        <Container>
             <Component
                 required
                 label='Storybook Label'
@@ -18,6 +18,6 @@ export function TextField() {
                 /* eslint-disable-next-line no-alert */
                 onChange={() => alert('onChange alert')}
             />
-        </Page>
+        </Container>
     );
 }
