@@ -3,6 +3,7 @@ import type { Townhall } from 'prytaneum-typings';
 
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
+import useIsMounted from 'hooks/useIsMounted';
 import { getTownhall } from '../api';
 
 interface Props {
@@ -98,8 +99,8 @@ export const TownhallContext = React.createContext<Townhall>({
             list: [],
         },
         video: {
-            url: ''
-        }
+            url: '',
+        },
     },
 });
 
@@ -110,10 +111,12 @@ export default function TownhallProvider({
     townhallId,
 }: Props) {
     const [townhall, setTownhall] = React.useState(value);
+    const [getIsMounted] = useIsMounted();
     const [run, isLoading, getHasRun] = useEndpoint(
         () => getTownhall(townhallId),
         {
             onSuccess: (res) => {
+                if (!getIsMounted()) return;
                 setTownhall(res.data);
             },
         }
