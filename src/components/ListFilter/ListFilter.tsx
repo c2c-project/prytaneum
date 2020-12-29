@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
+import clsx from 'clsx';
 
 import TextField from 'components/TextField';
 import { FilterFunc } from 'utils/filters';
@@ -26,6 +27,7 @@ interface Props<T> {
         [index: string]: (t: T[]) => T[];
     };
     onFilterChange: (f: FilterFunc<T>[]) => void;
+    className?: string;
 }
 
 interface OptionalProps {
@@ -58,6 +60,7 @@ export default function ListFilter<T>({
     length,
     onFilterChange,
     menuIcons,
+    className
 }: Props<T> & OptionalProps) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
@@ -106,7 +109,11 @@ export default function ListFilter<T>({
     };
 
     return (
-        <div className={classes.root}>
+        <div
+            className={
+                className ? clsx([classes.root, className]) : classes.root
+            }
+        >
             <Grid container alignItems='center'>
                 <Grid item xs='auto' className={classes.search}>
                     <TextField
@@ -193,4 +200,5 @@ export default function ListFilter<T>({
 
 ListFilter.defaultProps = {
     menuIcons: [],
+    className: undefined,
 };
