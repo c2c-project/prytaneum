@@ -16,6 +16,7 @@ import UserMenu from 'domains/User/UserMenu';
 import UserTheme from 'domains/User/UserTheme';
 import useStorage from 'hooks/useStorage';
 import history from 'utils/history';
+import { UserContext } from 'contexts/User';
 import AppBar from '../AppBar';
 
 function formatTitle(str: string | undefined): string | undefined {
@@ -54,6 +55,11 @@ export default function Nav() {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const [isLoggedIn] = useStorage('isLoggedIn');
+    const user = React.useContext(UserContext);
+
+    const isAdmin = React.useMemo(() => user && user.roles.includes('admin'), [
+        user,
+    ]);
 
     const handleClick = () => setOpen(false);
 
@@ -107,6 +113,19 @@ export default function Nav() {
                                     <ListItemText primary='My Townhalls' />
                                 </ListItem>
                             </li>
+                            {isAdmin && (
+                                <li>
+                                    <ListItem
+                                        button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            history.push('/admin/dashboard');
+                                        }}
+                                    >
+                                        <ListItemText primary='Admin Dashboard' />
+                                    </ListItem>
+                                </li>
+                            )}
                         </List>
                     </nav>
                 </Drawer>
