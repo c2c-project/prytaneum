@@ -29,7 +29,6 @@
         "react-player": "^1.11.1",
         "react-scripts": "^3.4.3",
         "react-webcam": "^4.0.0",
-        "react-window": "^1.8.5",
         "socket.io-client": "^3.0.4",
         "universal-router": "^9.0.1"
     },
@@ -107,7 +106,7 @@
         "jsdoc-mermaid": "^1.0.0",
         "jsonwebtoken": "^8.5.1",
         "msw": "^0.21.3",
-        "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.55",
+        "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.60",
         "react-is": "^16.13.1",
         "react-test-renderer": "^16.13.1",
         "typescript": "^3.9.5"
