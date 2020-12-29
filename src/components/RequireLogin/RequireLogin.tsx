@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Login from 'pages/Auth/Login';
 import useStorage from 'hooks/useStorage';
 
@@ -13,9 +13,9 @@ export default function RequireLogin({ children }: Props) {
     // FIXME: onLogin should do what?
     if (!isLoggedIn)
         return (
-            <Page>
+            <Container>
                 <Login onLogin={() => {}} />
-            </Page>
+            </Container>
         );
     return <>{children}</>;
 }
