@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from 'react';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Nav from 'layout/Nav';
 import Component from '.';
 
@@ -10,9 +10,9 @@ export default { title: 'Domains/Townhall/Townhall List' };
 export function Basic() {
     return (
         <main>
-            <Page>
+            <Container>
                 <Component onClickTownhall={console.log} />
-            </Page>
+            </Container>
         </main>
     );
 }
@@ -22,9 +22,9 @@ export function WithNav() {
         <>
             <Nav />
             <main>
-                <Page>
+                <Container>
                     <Component onClickTownhall={console.log} />
-                </Page>
+                </Container>
             </main>
         </>
     );

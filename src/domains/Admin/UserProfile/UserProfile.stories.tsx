@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Nav from 'layout/Nav';
 
 import UserProfile from './UserProfile';
@@ -12,9 +12,9 @@ export function Basic() {
         <>
             <Nav />
             <main>
-                <Page>
+                <Container>
                     <UserProfile userId='1234' />
-                </Page>
+                </Container>
             </main>
         </>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from 'layout/Page';
+import Container from 'layout/Container';
 import Nav from 'layout/Nav';
 
 import UserList from './UserList';
@@ -11,9 +11,9 @@ export function Basic() {
         <>
             <Nav />
             <main>
-                <Page>
+                <Container>
                     <UserList />
-                </Page>
+                </Container>
             </main>
         </>
     );
