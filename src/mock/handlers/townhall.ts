@@ -71,4 +71,7 @@ export default [
             return res(ctx.status(200));
         }
     ),
+    rest.get('/api/townhalls/:townhallId/chat-messages', (req, res, ctx) => {
+        return res(ctx.status(200));
+    }),
 ];
