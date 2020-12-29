@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: -theme.spacing(1.5),
         backgroundColor: theme.palette.secondary.light,
         padding: theme.spacing(0, 1),
+        maxHeight: 32, // size of chip from MUI spec on material.io
     },
     text: {
         color: theme.palette.secondary.contrastText,
@@ -28,19 +29,26 @@ const useStyles = makeStyles((theme) => ({
 export function CurrentQuestion({ children, className }: CurrentQuestionProps) {
     const classes = useStyles();
     return (
-        <Grid container className={className} justify='center'>
-            <Grid item xs='auto' className={classes.currentQuestion}>
-                <Grid container justify='center' alignItems='center' style={{}}>
-                    <PushPinIcon fontSize='small' className={classes.text} />
-                    <Typography
-                        variant='overline'
-                        classes={{ root: classes.text }}
-                    >
-                        Current Question
-                    </Typography>
-                </Grid>
+        <Grid container className={className}>
+            <Grid item container xs={12} justify='center'>
+                <div className={classes.currentQuestion}>
+                    <Grid container justify='center' alignItems='center'>
+                        <PushPinIcon
+                            fontSize='small'
+                            className={classes.text}
+                        />
+                        <Typography
+                            variant='overline'
+                            classes={{ root: classes.text }}
+                        >
+                            Current Question
+                        </Typography>
+                    </Grid>
+                </div>
             </Grid>
-            {children}
+            <Grid item xs={12}>
+                {children}
+            </Grid>
         </Grid>
     );
 }

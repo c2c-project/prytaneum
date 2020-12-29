@@ -9,8 +9,9 @@ import {
 } from 'prytaneum-typings';
 
 import FixtureSocket from 'mock/Fixture.socket';
-import AppBar from 'layout/AppBar';
 import Page from 'layout/Page';
+import AppBar from 'layout/AppBar';
+import Container from 'layout/Container';
 import UserProvider from 'contexts/User';
 import Component from './TownhallLive';
 import TownhallProvider from '../Contexts/Townhall';
@@ -48,6 +49,10 @@ function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     }
 }
 
+const townhall = makeTownhall();
+townhall.settings.chat.enabled = true;
+townhall.settings.questionQueue.transparent = true;
+
 // interface Props {
 //     userType: 'user' | 'moderator';
 // }
@@ -62,7 +67,7 @@ export function Basic(/* { userType }: Props */) {
     // }
     const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
     return (
-        <>
+        <Page>
             <AppBar>
                 <button
                     type='button'
@@ -74,25 +79,24 @@ export function Basic(/* { userType }: Props */) {
                     Add Messages
                 </button>
             </AppBar>
-            <Page maxWidth='xl'>
+            <Container maxWidth='xl'>
                 <UserProvider>
-                    <TownhallProvider townhallId='123'>
+                    <TownhallProvider value={townhall} townhallId='123'>
                         <FixtureSocket.Provider value={emitter}>
                             <Component />
                         </FixtureSocket.Provider>
                     </TownhallProvider>
                 </UserProvider>
-            </Page>
-        </>
+            </Container>
+        </Page>
     );
 }
 
 export function AsMod() {
     const id = faker.random.alphaNumeric(5);
-    const townhall = makeTownhall();
     const user = makeUser();
-
-    townhall.settings.moderators.list.push({
+    const copy = { ...townhall };
+    copy.settings.moderators.list.push({
         email: user.email.address,
         permissions: [],
     });
@@ -112,7 +116,7 @@ export function AsMod() {
                     Add Messages
                 </button>
             </AppBar>
-            <Page maxWidth='xl'>
+            <Container maxWidth='xl'>
                 <div style={{ height: '100%' }}>
                     <UserProvider value={user}>
                         <TownhallProvider townhallId='123' value={townhall}>
@@ -122,7 +126,7 @@ export function AsMod() {
                         </TownhallProvider>
                     </UserProvider>
                 </div>
-            </Page>
+            </Container>
         </>
     );
 }

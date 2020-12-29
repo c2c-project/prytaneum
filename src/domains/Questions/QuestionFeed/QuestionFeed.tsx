@@ -3,6 +3,7 @@ import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import type { Question } from 'prytaneum-typings';
 
 import { UserContext } from 'contexts/User';
@@ -16,17 +17,25 @@ import { EmptyMessage, RefreshMessage } from './components';
 import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
 
+interface Props {
+    className?: string;
+    style?: React.CSSProperties;
+}
+
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
-        maxHeight: '100%',
+        padding: theme.spacing(1.5),
     },
-    item: {
-        paddingBottom: theme.spacing(2),
+    listFilter: {
+        flex: 1,
+    },
+    content: {
+        height: 0, // flex box recalculates this -- explanation:  https://stackoverflow.com/a/14964944
+        flex: '1 1 100%',
     },
 }));
 
-function QuestionFeed() {
+function QuestionFeed({ className, style }: Props) {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
     const user = React.useContext(UserContext);
@@ -50,7 +59,8 @@ function QuestionFeed() {
     // there should never be more than 1 current question, so we can stop at the first one found
     // TODO: update to use the townhall state instead
     const currentQuestion = React.useMemo(
-        () => questions.find((q) => q.state === 'current'),
+        // () => questions.find((q) => q.state === 'current'),
+        () => (questions.length > 0 ? questions[0] : undefined),
         [questions]
     );
 
@@ -81,8 +91,16 @@ function QuestionFeed() {
     if (isLoading) return <Loader />;
 
     return (
-        <div className={classes.root}>
+        <Grid
+            alignContent='flex-start'
+            container
+            className={
+                className ? clsx([classes.root, className]) : classes.root
+            }
+            style={style}
+        >
             <ListFilter
+                className={classes.listFilter}
                 filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
@@ -106,16 +124,20 @@ function QuestionFeed() {
                     </Tooltip>,
                 ]}
             />
-            <Grid container justify='center'>
-                <FeedList
-                    variant={isModerator ? 'moderator' : 'user'}
-                    current={currentQuestion}
-                    questions={filteredList}
-                    systemMessages={sysMessages}
-                />
-            </Grid>
-        </div>
+            <FeedList
+                className={classes.content}
+                variant={isModerator ? 'moderator' : 'user'}
+                current={currentQuestion}
+                questions={filteredList}
+                systemMessages={sysMessages}
+            />
+        </Grid>
     );
 }
+
+QuestionFeed.defaultProps = {
+    className: undefined,
+    style: undefined,
+};
 
 export default React.memo(QuestionFeed);

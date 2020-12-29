@@ -11,56 +11,30 @@ import TownhallPanes from '../TownhallPanes';
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
-        width: 'inherit',
-        display: 'flex',
-        flexGrow: 1,
         [theme.breakpoints.up('md')]: {
-            flexFlow: 'row',
+            flexDirection: 'row',
+            flexWrap: 'nowrap',
         },
         [theme.breakpoints.down('sm')]: {
-            flexFlow: 'column',
+            flexDirection: 'column',
             overflowY: 'scroll',
         },
     },
     panes: {
+        flex: 1,
+        padding: theme.spacing(1.5), // TODO: work on spacing with this
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
-            maxHeight: '100%',
-            padding: theme.spacing(2), // TODO: work on spacing with this
         },
-        [theme.breakpoints.down('sm')]: {
-            minHeight: '100%',
-            paddingTop: theme.spacing(1),
-        },
-        width: '100%',
-        display: 'flex',
-    },
-    paper: {
-        padding: theme.spacing(2),
-        flex: 1,
-    },
-    descriptionTitle: {
-        flexGrow: 1,
-    },
-    largeAvatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
-    expand: {
-        transform: 'rotate(180deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(0deg)',
     },
     video: {
         [theme.breakpoints.up('md')]: {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(2),
         },
+    },
+    target: {
+        scrollMarginTop: '1rem',
     },
     // saving these for future
     // sticky: {
@@ -97,7 +71,12 @@ export default function TownhallLive() {
     // TODO: video url
     return (
         <PaneProvider>
-            <div className={classes.root} onScroll={handleScroll}>
+            <Grid
+                id='123'
+                container
+                className={classes.root}
+                onScroll={handleScroll}
+            >
                 {!isMdUp && <div ref={topRef} />}
                 <Grid
                     item
@@ -110,16 +89,18 @@ export default function TownhallLive() {
                         <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
                     </Grid>
                 </Grid>
-                <Grid container item xs={12} md={4}>
+                <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
-                        {isMdUp && <div ref={topRef} />}
+                        {isMdUp && (
+                            <div ref={topRef} className={classes.target} />
+                        )}
                         <TownhallPanes />
                     </div>
                 </Grid>
                 <Fab onClick={handleClick} zoomProps={{ in: isFabVisible }}>
                     <KeyboardArrowUpIcon />
                 </Fab>
-            </div>
+            </Grid>
         </PaneProvider>
     );
 }

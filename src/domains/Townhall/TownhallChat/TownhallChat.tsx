@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         height: '100%',
         display: 'flex',
-        flex: 1,
         minHeight: 500,
     },
 }));

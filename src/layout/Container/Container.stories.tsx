@@ -2,13 +2,13 @@ import React from 'react';
 
 import Container from '.';
 import AppBar from '../AppBar';
-import StyleContainer from '../Page';
+import Page from '../Page';
 
 export default { title: 'Layout/Page' };
 
 export function Basic() {
     return (
-        <StyleContainer>
+        <Page>
             <AppBar>Appbar</AppBar>
             <Container>
                 <div
@@ -23,6 +23,6 @@ export function Basic() {
                     content
                 </div>
             </Container>
-        </StyleContainer>
+        </Page>
     );
 }

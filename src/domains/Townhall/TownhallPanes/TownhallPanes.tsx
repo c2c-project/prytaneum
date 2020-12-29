@@ -1,33 +1,20 @@
 import React from 'react';
-import { Fade, Chip, Badge } from '@material-ui/core';
+import { Fade, Chip, Badge, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Townhall } from 'prytaneum-typings';
 
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
-import Pane from 'components/Pane';
-import PaneContent from 'components/PaneContent';
-import PaneNavigation from 'components/PaneNavigation';
 import TownhallChat from '../TownhallChat';
 import Information from '../TownhallPane';
 import { TownhallContext } from '../Contexts/Townhall';
 import { Panes } from '../types';
 import { PaneContext } from '../Contexts/Pane';
 
-// source for constants and other seemingly random variables https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
-const RADIUS_STANDARD = 10;
-
 const useStyles = makeStyles((theme) => ({
-    badge: {
-        backgroundColor: theme.palette.secondary.main,
-        borderRadius: RADIUS_STANDARD,
-        color: theme.palette.getContrastText(theme.palette.secondary.main),
-        padding: theme.spacing(0, 1),
-        minWidth: RADIUS_STANDARD * 2,
-        fontSize: theme.typography.fontSize,
-        fontWeight: theme.typography.fontWeightBold,
-        marginRight: theme.spacing(2),
+    root: {
+        height: '100%',
     },
     navigation: {
         paddingBottom: theme.spacing(2),
@@ -53,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid grey',
         ...theme.typography.subtitle2,
     },
+    paneContainer: {
+        width: '100%',
+        flexBasis: '100%',
+    },
 }));
 
 function buildPanes(townhall: Townhall) {
@@ -63,7 +54,7 @@ function buildPanes(townhall: Townhall) {
         panes['Question Feed'] = (
             <>
                 <AskQuestion />
-                <QuestionFeed />
+                <QuestionFeed style={{ padding: 0 }} />
             </>
         );
 
@@ -89,12 +80,20 @@ export default function TownhallPanes() {
 
     // TODO: make the new chip tabs accessible
     return (
-        <Pane>
-            {options.length > 1 ? (
-                <PaneNavigation>
+        <Grid
+            container
+            className={classes.root}
+            direction='column'
+            alignContent='flex-start'
+            alignItems='flex-start'
+            wrap='nowrap'
+        >
+            {options.length > 1 && (
+                <Grid item xs='auto'>
                     <div className={classes.container}>
                         {options.map((option) => (
                             <Badge
+                                key={option}
                                 badgeContent={context[option]}
                                 overlap='circle'
                                 color='secondary'
@@ -114,11 +113,9 @@ export default function TownhallPanes() {
                             </Badge>
                         ))}
                     </div>
-                </PaneNavigation>
-            ) : (
-                <></>
+                </Grid>
             )}
-            <PaneContent>
+            <Grid item xs='auto' className={classes.paneContainer}>
                 <div className={classes.outerContainer}>
                     {Object.entries(panes).map(([key, value]) => (
                         <Fade in={key === state} key={key} timeout={400}>
@@ -132,7 +129,7 @@ export default function TownhallPanes() {
                         </Fade>
                     ))}
                 </div>
-            </PaneContent>
-        </Pane>
+            </Grid>
+        </Grid>
     );
 }

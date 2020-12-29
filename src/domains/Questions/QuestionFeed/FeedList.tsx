@@ -24,16 +24,14 @@ interface Props {
     variant: 'moderator' | 'user';
     current: Question | undefined;
     systemMessages: React.ReactNodeArray;
+    className?: string;
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxHeight: 'inherit',
-    },
+    root: {},
     item: {
         marginBottom: theme.spacing(2),
-        flex: '1 1 100%',
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -42,9 +40,16 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.contrastText,
     },
+    card: {},
 }));
 
-function FeedList({ questions, variant, current, systemMessages }: Props) {
+function FeedList({
+    questions,
+    variant,
+    current,
+    systemMessages,
+    className,
+}: Props) {
     const classes = useStyles();
     const [
         dialogContent,
@@ -66,9 +71,7 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 <QuestionCard
                     key={questionId}
                     question={question}
-                    CardProps={{
-                        className: classes.item,
-                    }}
+                    className={classes.item}
                     // CardHeaderProps={{
                     //     action: (
                     //         <IconButton>
@@ -89,50 +92,45 @@ function FeedList({ questions, variant, current, systemMessages }: Props) {
                 </QuestionCard>
             );
         });
-    }, [questions]);
+    }, [questions, classes.item, classes.questionActions, variant]);
 
     return (
-        <div className={classes.root}>
+        <div className={className}>
             <Dialog open={isDialogOpen} onClose={closeDialog}>
                 <DialogContent>{dialogContent || <div />}</DialogContent>
             </Dialog>
             <Grid container>
-                <Grid container item xs={12} justify='center'>
-                    {questions.length === 0 &&
-                        systemMessages.map((node, idx) => (
+                {questions.length === 0 && (
+                    <Grid item xs={12}>
+                        {systemMessages.map((node, idx) => (
                             <Card key={idx} className={classes.item}>
                                 <CardContent>{node}</CardContent>
                             </Card>
                         ))}
-                    {current && (
-                        <CurrentQuestion>
-                            <QuestionCard
-                                question={current}
-                                className={classes.item}
-                            >
-                                {variant === 'moderator' && (
-                                    <QuestionLabels
-                                        labels={current.aiml.labels}
-                                    />
-                                )}
-                            </QuestionCard>
-                        </CurrentQuestion>
-                    )}
-                    <Grid
-                        item
-                        xs={12}
-                        style={{
-                            maxHeight: '100%',
-                            flex: 1,
-                            flexBasis: '100%',
-                        }}
-                    >
-                        {questionList}
                     </Grid>
+                )}
+                {current && (
+                    <CurrentQuestion>
+                        <QuestionCard
+                            question={current}
+                            className={classes.item}
+                        >
+                            {variant === 'moderator' && (
+                                <QuestionLabels labels={current.aiml.labels} />
+                            )}
+                        </QuestionCard>
+                    </CurrentQuestion>
+                )}
+                <Grid item xs={12}>
+                    {questionList}
                 </Grid>
             </Grid>
         </div>
     );
 }
+
+FeedList.defaultProps = {
+    className: undefined,
+};
 
 export default React.memo(FeedList);
