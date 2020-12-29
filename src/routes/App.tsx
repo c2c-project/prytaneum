@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import history from 'utils/history';
 import Nav from 'layout/Nav';
 import Redirect from 'components/Redirect';
+import Page from 'layout/Page';
 
 // for side effects (adding the routes)
 import './Auth';
@@ -75,12 +76,6 @@ const useStyles = makeStyles((theme) => ({
         animationName: '$fadeIn',
         animationDuration: '400ms',
         overflow: 'visible',
-    },
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        width: '100%',
     },
     animationContainer: {
         height: '100%',
@@ -170,7 +165,7 @@ export default function App() {
     }, [handleLocationChange]);
 
     return (
-        <div className={classes.root}>
+        <Page>
             <Nav />
             <main className={classes.main}>
                 <AnimatePresence initial={false} custom={dir}>
@@ -188,6 +183,6 @@ export default function App() {
                     </motion.div>
                 </AnimatePresence>
             </main>
-        </div>
+        </Page>
     );
 }
