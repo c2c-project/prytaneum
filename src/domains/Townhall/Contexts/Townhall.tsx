@@ -97,6 +97,9 @@ export const TownhallContext = React.createContext<Townhall>({
         speakers: {
             list: [],
         },
+        video: {
+            url: ''
+        }
     },
 });
 
