@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    children?: JSX.Element | JSX.Element[];
+    children?: React.ReactElement | React.ReactNode;
 }
 
 export default function AppBar({ children }: Props) {
