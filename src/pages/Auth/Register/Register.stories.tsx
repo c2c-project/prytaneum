@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Container from '.';
+import Component from '.';
 
 export default { title: 'Pages/Auth/Register' };
 
 export function Basic() {
-    return <Page />;
+    return <Component />;
 }

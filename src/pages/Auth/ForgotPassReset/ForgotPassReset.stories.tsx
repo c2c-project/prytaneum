@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Container from '.';
+import Component from '.';
 
 export default { title: 'Pages/Auth/Forgot Pass Reset' };
 
 export function Basic() {
     // FIXME:
-    return <Page token='asdf' />;
+    return <Component token='asdf' />;
 }

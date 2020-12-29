@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Container from '.';
+import Component from '.';
 
 export default { title: 'Pages/Auth/Forgot Pass Request' };
 
 export function Basic() {
-    return <Page />;
+    return <Component />;
 }

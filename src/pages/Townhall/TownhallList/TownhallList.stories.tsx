@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Container from '.';
+import Component from '.';
 
 export default { title: 'Pages/Townhall' };
 
 export function TownhallList() {
-    return <Page />;
+    return <Component />;
 }

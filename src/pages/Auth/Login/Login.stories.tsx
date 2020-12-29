@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Container from '.';
+import Component from '.';
 
 export default { title: 'Pages/Auth/Login' };
 
 export function Basic() {
-    return <Page onLogin={() => {}} />;
+    return <Component onLogin={() => {}} />;
 }
