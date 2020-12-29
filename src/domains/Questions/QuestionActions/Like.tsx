@@ -18,7 +18,7 @@ function Like({ className, questionId, townhallId, liked, onLike }: Props) {
     const apiFn = React.useMemo(() => {
         if (liked) return deleteLike;
         return createLike;
-    }, []);
+    }, [liked]);
     const [run, isLoading] = useEndpoint(() => apiFn(townhallId, questionId), {
         onSuccess: onLike,
     });
