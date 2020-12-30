@@ -7,7 +7,11 @@ export default function UserNotifications({
     className,
 }: Pick<IconButtonProps, 'className'>) {
     return (
-        <IconButton color='inherit' className={className}>
+        <IconButton
+            aria-label='notifications'
+            color='inherit'
+            className={className}
+        >
             <NotificationsOutlined />
         </IconButton>
     );
