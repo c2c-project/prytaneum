@@ -50,7 +50,9 @@ const urls: Record<Keys, string> = {
 function getInitialState(): Keys {
     const { location } = history;
     const curr = location.pathname;
-    const found = Object.entries(urls).find(([, path]) => curr === path);
+
+    const found = Object.entries(urls).find(([, path]) => curr.includes(path));
+
     if (found) return found[0] as Keys;
     return 'Dashboard';
 }
