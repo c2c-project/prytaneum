@@ -11,7 +11,6 @@ import HandleInviteLink from 'domains/Invite/HandleInviteLink';
 import InviteForm from 'domains/Invite/InviteForm';
 
 import UserSettings from 'domains/User/UserSettings';
-import UserProvider from 'contexts/User';
 import RequireLogin from 'components/RequireLogin';
 
 // import { get as getFromStorage } from 'utils/storage';
@@ -104,11 +103,7 @@ addRoutes([
             },
             {
                 path: '/settings',
-                action: () => (
-                    <UserProvider>
-                        <UserSettings />
-                    </UserProvider>
-                ),
+                action: () => <UserSettings />,
             },
         ],
     },
