@@ -4,11 +4,12 @@ import { List, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ListIcon from '@material-ui/icons/List';
 import AdminPanelSettingsIcon from '@material-ui/icons/AdminPanelSettings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { AnimateSharedLayout } from 'framer-motion';
 import type { User } from 'prytaneum-typings';
 
+import history from 'utils/history';
 import {
     StyledSubheader,
     StyledDivider,
@@ -31,6 +32,7 @@ enum Nav {
     'Townhall List',
     'User List',
     'Admin Settings',
+    'Dashboard',
 }
 type Keys = keyof typeof Nav;
 
@@ -38,62 +40,94 @@ interface Props {
     user: User;
 }
 
+const urls: Record<Keys, string> = {
+    'Townhall List': '/user/my-townhalls',
+    'User List': '/admin/user-list',
+    'Admin Settings': '/admin/settings',
+    Dashboard: '/app/home',
+};
+
 // TODO: (low) maybe some way to get the white text effect as the background moves? idk
 export default function SideNav({ user }: Props) {
     const classes = useStyles();
-    const [selected, setSelected] = React.useState<Keys>('Townhall List');
+    const [selected, setSelected] = React.useState<Keys>('Dashboard');
+    const isAdmin = React.useMemo(() => user.roles.includes('admin'), [
+        user.roles,
+    ]);
+    const isOrganizer = React.useMemo(() => user.roles.includes('organizer'), [
+        user.roles,
+    ]);
+
+    function handleClick(key: Keys) {
+        return () => {
+            setSelected(key);
+            history.push(urls[key]);
+        };
+    }
 
     return (
         <List component='nav' className={classes.root}>
-            <StyledListItem button>
-                <StyledListItemIcon>
-                    <ArrowBackIcon />
-                </StyledListItemIcon>
-                <ListItemText primary='Back' />
-            </StyledListItem>
-
             <AnimateSharedLayout>
-                <StyledSubheader>Organizer</StyledSubheader>
-                <StyledDivider />
-
                 <StyledListItem
                     button
-                    onClick={() => setSelected('Townhall List')}
-                    selected={selected === 'Townhall List'}
+                    onClick={handleClick('Dashboard')}
+                    selected={selected === 'Dashboard'}
                 >
-                    {selected === 'Townhall List' && <MovingBg />}
+                    {selected === 'Dashboard' && <MovingBg />}
                     <StyledListItemIcon>
-                        <ListIcon />
+                        <DashboardIcon />
                     </StyledListItemIcon>
-                    <ListItemText primary='Townhall List' />
+                    <ListItemText primary='Dashboard' />
                 </StyledListItem>
+                {isOrganizer && (
+                    <>
+                        <StyledSubheader>Organizer</StyledSubheader>
+                        <StyledDivider />
 
-                <StyledSubheader>Administrator</StyledSubheader>
-                <StyledDivider />
+                        <StyledListItem
+                            button
+                            onClick={handleClick('Townhall List')}
+                            selected={selected === 'Townhall List'}
+                        >
+                            {selected === 'Townhall List' && <MovingBg />}
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='Townhall List' />
+                        </StyledListItem>
+                    </>
+                )}
 
-                <StyledListItem
-                    button
-                    onClick={() => setSelected('User List')}
-                    selected={selected === 'User List'}
-                >
-                    {selected === 'User List' && <MovingBg />}
-                    <StyledListItemIcon>
-                        <ListAltIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='User List' />
-                </StyledListItem>
+                {isAdmin && (
+                    <>
+                        <StyledSubheader>Administrator</StyledSubheader>
+                        <StyledDivider />
 
-                <StyledListItem
-                    button
-                    onClick={() => setSelected('Admin Settings')}
-                    selected={selected === 'Admin Settings'}
-                >
-                    {selected === 'Admin Settings' && <MovingBg />}
-                    <StyledListItemIcon>
-                        <AdminPanelSettingsIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='Admin Settings' />
-                </StyledListItem>
+                        <StyledListItem
+                            button
+                            onClick={handleClick('User List')}
+                            selected={selected === 'User List'}
+                        >
+                            {selected === 'User List' && <MovingBg />}
+                            <StyledListItemIcon>
+                                <ListAltIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='User List' />
+                        </StyledListItem>
+
+                        <StyledListItem
+                            button
+                            onClick={handleClick('Admin Settings')}
+                            selected={selected === 'Admin Settings'}
+                        >
+                            {selected === 'Admin Settings' && <MovingBg />}
+                            <StyledListItemIcon>
+                                <AdminPanelSettingsIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='Admin Settings' />
+                        </StyledListItem>
+                    </>
+                )}
             </AnimateSharedLayout>
         </List>
     );
