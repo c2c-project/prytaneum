@@ -1,19 +1,13 @@
 import React from 'react';
 
+import Main from 'layout/Main';
 import Component from './TitleCard';
 
 export default { title: 'components/Title Card' };
 
 export function Basic() {
     return (
-        <div
-            style={{
-                maxWidth: '1000px',
-                maxHeight: '240px',
-                width: '100%',
-                height: '100%',
-            }}
-        >
+        <Main>
             <Component
                 title='Townhalls'
                 stats={[
@@ -22,6 +16,6 @@ export function Basic() {
                     ['Total', 13],
                 ]}
             />
-        </div>
+        </Main>
     );
 }

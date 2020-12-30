@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {
@@ -12,6 +13,9 @@ import {
     ListSubheader,
     Hidden,
 } from '@material-ui/core';
+import { motion } from 'framer-motion';
+
+import { growProps } from 'components/Grow';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,6 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             height: '100%',
             width: '100%',
+            maxHeight: 225,
+            minHeight: 150,
         },
         card: {
             display: 'flex',
@@ -57,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignSelf: 'center',
         },
         title: {
-            color: 'white',
+            color: theme.palette.primary.contrastText,
             position: 'absolute',
             bottom: theme.spacing(3),
             left: theme.spacing(3),
@@ -76,7 +82,8 @@ export default function TitleCard({ stats, title }: Props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <motion.div {...growProps} className={classes.root}>
+            {/* <div className={classes.root}> */}
             <Card raised className={classes.card}>
                 <CardMedia className={classes.media}>
                     <Typography className={classes.title}>{title}</Typography>
@@ -86,7 +93,7 @@ export default function TitleCard({ stats, title }: Props) {
                         <List>
                             <ListSubheader>Townhall Stats</ListSubheader>
                             {stats.map(([name, number]) => (
-                                <ListItem>
+                                <ListItem key={JSON.stringify([name, number])}>
                                     <ListItemIcon className={classes.numbers}>
                                         {number}
                                     </ListItemIcon>
@@ -102,6 +109,7 @@ export default function TitleCard({ stats, title }: Props) {
                     </CardContent>
                 </Hidden>
             </Card>
-        </div>
+            {/* </div> */}
+        </motion.div>
     );
 }

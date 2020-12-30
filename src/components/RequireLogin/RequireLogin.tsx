@@ -1,6 +1,6 @@
 import React from 'react';
+import { Container } from '@material-ui/core';
 
-import Container from 'layout/Container';
 import Login from 'pages/Auth/Login';
 import useStorage from 'hooks/useStorage';
 
