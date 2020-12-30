@@ -7,8 +7,15 @@ import { Props, areEqual } from './utils';
 
 export default React.memo(function VideoSettings({
     onChange,
-    value,
+    value: _value,
 }: Props<'video'>) {
+    const value = React.useMemo(
+        () =>
+            _value || {
+                url: '',
+            },
+        [_value]
+    );
     function handleChange(key: keyof typeof value) {
         return (newValue: string) => {
             onChange({
