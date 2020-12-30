@@ -122,6 +122,7 @@ export default function SettingsMenu({ config, title }: Props) {
                                 key={sectionTitle}
                                 expanded={expanded.has(sectionTitle)}
                                 onChange={handleChange(sectionTitle)}
+                                elevation={expanded.has(sectionTitle) ? 8 : 1}
                             >
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
