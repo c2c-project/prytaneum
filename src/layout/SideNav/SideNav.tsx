@@ -47,10 +47,18 @@ const urls: Record<Keys, string> = {
     Dashboard: '/app/home',
 };
 
+function getInitialState(): Keys {
+    const { location } = history;
+    const curr = location.pathname;
+    const found = Object.entries(urls).find(([, path]) => curr === path);
+    if (found) return found[0] as Keys;
+    return 'Dashboard';
+}
+
 // TODO: (low) maybe some way to get the white text effect as the background moves? idk
 export default function SideNav({ user }: Props) {
     const classes = useStyles();
-    const [selected, setSelected] = React.useState<Keys>('Dashboard');
+    const [selected, setSelected] = React.useState<Keys>(getInitialState);
     const isAdmin = React.useMemo(() => user.roles.includes('admin'), [
         user.roles,
     ]);
