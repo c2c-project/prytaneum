@@ -72,6 +72,9 @@ const base = createMuiTheme({
         MuiPaper: {
             elevation: 8,
         },
+        MuiCard: {
+            raised: true,
+        },
     },
 });
 
