@@ -9,7 +9,8 @@ const useStyles = makeStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        flex: '1 1 100%',
+        overflowY: 'auto',
     },
 });
 

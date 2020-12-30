@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 type Props = {
     disableGutters?: boolean;
-    children: React.ReactNodeArray | React.ReactNode;
+    children?: React.ReactNodeArray | React.ReactNode;
 } & Pick<ContainerProps, 'maxWidth'>;
 
 const useStyles = makeStyles(() => ({
@@ -15,6 +15,10 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         flex: '1 1 100%',
     },
+    main: {
+        height: '100%',
+        width: '100%',
+    },
 }));
 
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
@@ -22,13 +26,12 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const classes = useStyles();
     return (
         <MUIContainer
-            id='container-wrapper'
             maxWidth={maxWidth || 'md'}
             disableGutters={disableGutters}
             ref={ref}
             className={classes.root}
         >
-            {children as React.ReactChild}
+            <main className={classes.main}>{children}</main>
         </MUIContainer>
     );
 });
@@ -36,6 +39,7 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 Container.defaultProps = {
     disableGutters: true,
     maxWidth: 'md',
+    children: undefined,
 };
 
 Container.propTypes = {
@@ -44,7 +48,7 @@ Container.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
-    ]).isRequired,
+    ]),
 };
 
 export default Container;

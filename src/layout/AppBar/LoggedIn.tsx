@@ -1,0 +1,41 @@
+import React from 'react';
+import { Divider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import UserNotifications from 'domains/User/UserNotifications';
+import UserMenu from 'domains/User/UserMenu';
+import UserTheme from 'domains/User/UserTheme';
+import Title from './Title';
+
+const useStyles = makeStyles((theme) => ({
+    title: {
+        flexGrow: 1,
+    },
+    divider: {
+        width: 1,
+        height: '2em',
+        marginRight: theme.spacing(1.5),
+    },
+    item: {
+        marginRight: theme.spacing(1),
+    },
+}));
+
+export default function Nav() {
+    const classes = useStyles();
+
+    return (
+        <>
+            <Title />
+            <UserNotifications className={classes.item} />
+            <UserTheme className={classes.item} />
+            <Divider
+                orientation='vertical'
+                classes={{
+                    vertical: classes.divider,
+                }}
+            />
+            <UserMenu />
+        </>
+    );
+}

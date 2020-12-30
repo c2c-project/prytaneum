@@ -4,11 +4,9 @@ import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flex: 1,
-    },
     appbar: {
         backgroundColor: '#fff',
+        flexGrow: 0,
         color: theme.palette.getContrastText('#fff'),
         '&::after': {
             content: '""',
@@ -32,15 +30,9 @@ export default function AppBar({ children }: Props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <MUIAppBar
-                className={classes.appbar}
-                position='sticky'
-                elevation={6}
-            >
-                <Toolbar>{children}</Toolbar>
-            </MUIAppBar>
-        </div>
+        <MUIAppBar className={classes.appbar} position='sticky' elevation={6}>
+            <Toolbar>{children}</Toolbar>
+        </MUIAppBar>
     );
 }
 
