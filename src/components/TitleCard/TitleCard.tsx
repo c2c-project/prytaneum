@@ -74,16 +74,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     // [name, number]
-    stats: [string, number][];
+    stats?: [string, number][];
+    statsTitle?: string;
     title: string;
 }
 
-export default function TitleCard({ stats, title }: Props) {
+export default function TitleCard({ stats, title, statsTitle }: Props) {
     const classes = useStyles();
 
     return (
-        <motion.div {...growProps} className={classes.root}>
-            {/* <div className={classes.root}> */}
+        <motion.div key='title-card' {...growProps} className={classes.root}>
             <Card raised className={classes.card}>
                 <CardMedia className={classes.media}>
                     <Typography className={classes.title}>{title}</Typography>
@@ -91,25 +91,34 @@ export default function TitleCard({ stats, title }: Props) {
                 <Hidden xsDown>
                     <CardContent className={classes.content}>
                         <List>
-                            <ListSubheader>Townhall Stats</ListSubheader>
-                            {stats.map(([name, number]) => (
-                                <ListItem key={JSON.stringify([name, number])}>
-                                    <ListItemIcon className={classes.numbers}>
-                                        {number}
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primaryTypographyProps={{
-                                            variant: 'body2',
-                                        }}
-                                        primary={name}
-                                    />
-                                </ListItem>
-                            ))}
+                            <ListSubheader>{statsTitle}</ListSubheader>
+                            {stats &&
+                                stats.map(([name, number]) => (
+                                    <ListItem
+                                        key={JSON.stringify([name, number])}
+                                    >
+                                        <ListItemIcon
+                                            className={classes.numbers}
+                                        >
+                                            {number}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primaryTypographyProps={{
+                                                variant: 'body2',
+                                            }}
+                                            primary={name}
+                                        />
+                                    </ListItem>
+                                ))}
                         </List>
                     </CardContent>
                 </Hidden>
             </Card>
-            {/* </div> */}
         </motion.div>
     );
 }
+
+TitleCard.defaultProps = {
+    stats: undefined,
+    statsTitle: undefined,
+};
