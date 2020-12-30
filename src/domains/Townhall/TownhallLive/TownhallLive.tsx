@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
             overflowY: 'scroll',
+            flexWrap: 'nowrap',
         },
     },
     panes: {
