@@ -11,7 +11,7 @@ import {
 import FixtureSocket from 'mock/Fixture.socket';
 import Page from 'layout/Page';
 import AppBar from 'layout/AppBar';
-import Container from 'layout/Container';
+import Main from 'layout/Main';
 import UserProvider from 'contexts/User';
 import Component from './TownhallLive';
 import TownhallProvider from '../Contexts/Townhall';
@@ -79,7 +79,7 @@ export function Basic(/* { userType }: Props */) {
                     Add Messages
                 </button>
             </AppBar>
-            <Container maxWidth='xl'>
+            <Main maxWidth='xl'>
                 <UserProvider>
                     <TownhallProvider value={townhall} townhallId='123'>
                         <FixtureSocket.Provider value={emitter}>
@@ -87,7 +87,7 @@ export function Basic(/* { userType }: Props */) {
                         </FixtureSocket.Provider>
                     </TownhallProvider>
                 </UserProvider>
-            </Container>
+            </Main>
         </Page>
     );
 }
@@ -116,7 +116,7 @@ export function AsMod() {
                     Add Messages
                 </button>
             </AppBar>
-            <Container maxWidth='xl'>
+            <Main maxWidth='xl'>
                 <div style={{ height: '100%' }}>
                     <UserProvider value={user}>
                         <TownhallProvider townhallId='123' value={townhall}>
@@ -126,7 +126,7 @@ export function AsMod() {
                         </TownhallProvider>
                     </UserProvider>
                 </div>
-            </Container>
+            </Main>
         </>
     );
 }

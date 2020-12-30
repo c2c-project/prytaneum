@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from 'layout/Container';
+import Main from 'layout/Main';
 
 import Component from './DevTeam';
 
@@ -10,8 +10,8 @@ export default {
 
 export function DevTeam() {
     return (
-        <Container maxWidth='lg'>
+        <Main maxWidth='lg'>
             <Component />
-        </Container>
+        </Main>
     );
 }

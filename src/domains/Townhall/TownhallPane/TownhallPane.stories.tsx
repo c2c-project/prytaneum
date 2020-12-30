@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Container from 'layout/Container';
+import Main from 'layout/Main';
 import TownhallProvider from '../Contexts/Townhall';
 import Component from './TownhallPane';
 
@@ -8,10 +8,10 @@ export default { title: 'Domains/Townhall/Townhall Pane' };
 
 export function Basic() {
     return (
-        <Container maxWidth='sm'>
+        <Main maxWidth='sm'>
             <TownhallProvider townhallId='123'>
                 <Component />
             </TownhallProvider>
-        </Container>
+        </Main>
     );
 }

@@ -1,23 +1,23 @@
 import React from 'react';
 import { makeQuestion } from 'prytaneum-typings';
 
-import Container from 'layout/Container';
+import Main from 'layout/Main';
 import Component from './QuestionForm';
 
 export default { title: 'Domains/Questions/Question Form' };
 
 export function Basic() {
     return (
-        <Container>
+        <Main>
             <Component />
-        </Container>
+        </Main>
     );
 }
 
 export function WithQuote() {
     return (
-        <Container>
+        <Main>
             <Component quote={makeQuestion()} />
-        </Container>
+        </Main>
     );
 }

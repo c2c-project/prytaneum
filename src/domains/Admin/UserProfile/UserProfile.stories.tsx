@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Container from 'layout/Container';
-import Nav from 'layout/Nav';
+import Main from 'layout/Main';
+import AppBar from 'layout/AppBar';
 
 import UserProfile from './UserProfile';
 
@@ -10,11 +10,11 @@ export default { title: 'Domains/Admin/User Profile' };
 export function Basic() {
     return (
         <>
-            <Nav />
+            <AppBar />
             <main>
-                <Container>
+                <Main>
                     <UserProfile userId='1234' />
-                </Container>
+                </Main>
             </main>
         </>
     );

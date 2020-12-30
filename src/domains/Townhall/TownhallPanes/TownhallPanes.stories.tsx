@@ -4,7 +4,7 @@ import { makeQuestion, makeTownhall } from 'prytaneum-typings';
 import { Grid } from '@material-ui/core';
 
 import Page from 'layout/Page';
-import Container from 'layout/Container';
+import Main from 'layout/Main';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from '../Contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
@@ -31,7 +31,7 @@ townhall.settings.questionQueue.transparent = true;
 export function Layout() {
     return (
         <Page>
-            <Container maxWidth='xl'>
+            <Main maxWidth='xl'>
                 <Grid
                     container
                     direction='column'
@@ -70,7 +70,7 @@ export function Layout() {
                         </Grid>
                     </div>
                 </Grid>
-            </Container>
+            </Main>
         </Page>
     );
 }

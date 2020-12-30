@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
 
-import Container from 'layout/Container';
-import Nav from 'layout/Nav';
+import Main from 'layout/Main';
+import AppBar from 'layout/AppBar';
 import Component from '.';
 
 export default { title: 'Domains/Townhall/Townhall List' };
@@ -10,9 +10,12 @@ export default { title: 'Domains/Townhall/Townhall List' };
 export function Basic() {
     return (
         <main>
-            <Container>
-                <Component onClickTownhall={console.log} />
-            </Container>
+            <Main>
+                <Component
+                    title='Test Title here'
+                    onClickTownhall={console.log}
+                />
+            </Main>
         </main>
     );
 }
@@ -20,11 +23,11 @@ export function Basic() {
 export function WithNav() {
     return (
         <>
-            <Nav />
+            <AppBar />
             <main>
-                <Container>
+                <Main>
                     <Component onClickTownhall={console.log} />
-                </Container>
+                </Main>
             </main>
         </>
     );
