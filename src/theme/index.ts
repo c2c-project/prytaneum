@@ -37,7 +37,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 
 const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
-const base = {
+const base = createMuiTheme({
     typography: {
         button: {
             lineHeight: '1.75em',
@@ -68,7 +68,12 @@ const base = {
     shape: {
         borderRadius: 24,
     },
-};
+    props: {
+        MuiPaper: {
+            elevation: 8,
+        },
+    },
+});
 
 export interface Themes {
     light: Theme;
@@ -77,19 +82,19 @@ export interface Themes {
 
 const themes: Themes = {
     dark: createMuiTheme({
+        ...base,
         palette: {
             primary: { main: '#2C3D4E' },
             secondary: { main: '#fca06f' },
         },
-        ...base,
     }),
     light: createMuiTheme({
+        ...base,
         palette: {
             primary: { main: '#fff5e6' },
             // primary: { main: '#fef7ec' },
             secondary: { main: '#003C8F' },
         },
-        ...base,
     }),
 };
 
