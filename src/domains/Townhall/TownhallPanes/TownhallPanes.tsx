@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     navigation: {
         paddingBottom: theme.spacing(2),
     },
-    container: {
+    chipContainer: {
         marginBottom: theme.spacing(2),
     },
     outerContainer: {
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         border: '1px solid grey',
         ...theme.typography.subtitle2,
+        [theme.breakpoints.down('md')]: {
+            marginBottom: theme.spacing(1),
+        },
     },
     paneContainer: {
         width: '100%',
@@ -90,7 +93,7 @@ export default function TownhallPanes() {
         >
             {options.length > 1 && (
                 <Grid item xs='auto'>
-                    <div className={classes.container}>
+                    <div className={classes.chipContainer}>
                         {options.map((option) => (
                             <Badge
                                 key={option}
