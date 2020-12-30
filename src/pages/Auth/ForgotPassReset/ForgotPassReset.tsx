@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container, Grid, Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Grow from '@material-ui/core/Grow';
 
+import Grow from 'components/Grow';
 import history from 'utils/history';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 
@@ -31,23 +31,21 @@ export default function ForgotPasswordReset({ token }: Props) {
     const classes = useStyles();
 
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Grow timeout={300} in>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    <Paper className={classes.paper}>
-                        <PasswordResetForm
-                            token={token}
-                            onSuccess={() => history.push('/auth/login')}
-                        />
-                    </Paper>
-                </Grid>
-            </Grow>
-        </Container>
+        <Grow animKey='forgot-pass-reset'>
+            <Grid
+                container
+                direction='column'
+                className={classes.root}
+                alignContent='center'
+                justify='center'
+            >
+                <Paper className={classes.paper}>
+                    <PasswordResetForm
+                        token={token}
+                        onSuccess={() => history.push('/auth/login')}
+                    />
+                </Paper>
+            </Grid>
+        </Grow>
     );
 }

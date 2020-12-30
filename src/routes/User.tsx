@@ -14,8 +14,6 @@ import UserSettings from 'domains/User/UserSettings';
 import UserProvider from 'contexts/User';
 import RequireLogin from 'components/RequireLogin';
 
-import Container from 'layout/Container';
-
 // import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
 import { addRoutes } from './utils';
@@ -31,7 +29,7 @@ addRoutes([
             return (
                 <UserProvider>
                     <RequireLogin>
-                        <Container>{ctx.next()}</Container>
+                        <>{ctx.next() || <div />}</>
                     </RequireLogin>
                 </UserProvider>
             );

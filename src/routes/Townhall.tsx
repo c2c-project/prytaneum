@@ -1,7 +1,7 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
 
 import RequireLogin from 'components/RequireLogin';
-import Container from 'layout/Container';
 import TownhallList from 'pages/Townhall/TownhallList';
 import TownhallProfile from 'pages/Townhall/TownhallProfile';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';

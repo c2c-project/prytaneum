@@ -3,6 +3,7 @@ import { Grid, Typography, Avatar, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Grow from 'components/Grow';
 import LoginForm from 'domains/Auth/LoginForm';
 import useStorage from 'hooks/useStorage';
 
@@ -10,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
+        display: 'flex',
     },
     paper: {
         width: '100%',
@@ -19,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             padding: theme.spacing(3),
             marginTop: '-10vh',
-            // boxShadow: theme.shadows[10],
         },
         [theme.breakpoints.down('sm')]: {
             padding: theme.spacing(0, 1),
@@ -52,28 +53,30 @@ export default function Login({ onLogin }: Props) {
     const classes = useStyles();
     const [, setIsLoggedIn] = useStorage('isLoggedIn');
     return (
-        <Grid
-            container
-            alignContent='center'
-            className={classes.root}
-            justify='center'
-        >
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component='h1' variant='h5'>
-                    Login
-                </Typography>
-                <div className={classes.form}>
-                    <LoginForm
-                        onSuccess={() => {
-                            setIsLoggedIn(true);
-                            onLogin();
-                        }}
-                    />
-                </div>
-            </Paper>
-        </Grid>
+        <Grow animKey='login'>
+            <Grid
+                container
+                alignContent='center'
+                className={classes.root}
+                justify='center'
+            >
+                <Paper className={classes.paper} elevation={8}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component='h1' variant='h5'>
+                        Login
+                    </Typography>
+                    <div className={classes.form}>
+                        <LoginForm
+                            onSuccess={() => {
+                                setIsLoggedIn(true);
+                                onLogin();
+                            }}
+                        />
+                    </div>
+                </Paper>
+            </Grid>
+        </Grow>
     );
 }

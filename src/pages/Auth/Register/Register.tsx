@@ -4,6 +4,7 @@ import { Avatar, Typography, Grid, Paper } from '@material-ui/core';
 import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Grow from 'components/Grow';
 import RegisterForm from 'domains/Auth/RegisterForm';
 import history from 'utils/history';
 
@@ -20,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             padding: theme.spacing(3),
             marginTop: '-10vh',
-            // boxShadow: theme.shadows[10],
         },
         [theme.breakpoints.down('sm')]: {
             padding: theme.spacing(0, 1),
@@ -43,25 +43,27 @@ export default function RegisterPage() {
     const classes = useStyles();
 
     return (
-        <Grid
-            container
-            alignContent='center'
-            className={classes.root}
-            justify='center'
-        >
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <AccountCirlceOutline />
-                </Avatar>
-                <Typography component='h1' variant='h5'>
-                    Register
-                </Typography>
-                <div className={classes.form}>
-                    <RegisterForm
-                        onSuccess={() => history.push('/auth/login')}
-                    />
-                </div>
-            </Paper>
-        </Grid>
+        <Grow animKey='register'>
+            <Grid
+                container
+                alignContent='center'
+                className={classes.root}
+                justify='center'
+            >
+                <Paper className={classes.paper} elevation={8}>
+                    <Avatar className={classes.avatar}>
+                        <AccountCirlceOutline />
+                    </Avatar>
+                    <Typography component='h1' variant='h5'>
+                        Register
+                    </Typography>
+                    <div className={classes.form}>
+                        <RegisterForm
+                            onSuccess={() => history.push('/auth/login')}
+                        />
+                    </div>
+                </Paper>
+            </Grid>
+        </Grow>
     );
 }
