@@ -7,6 +7,7 @@ import { AnimatePresence } from 'framer-motion';
 import history from 'utils/history';
 import Layout from 'layout';
 import Redirect from 'components/Redirect';
+import Dashboard from 'pages/Dashboard';
 
 // for side effects (adding the routes)
 import './Auth';
@@ -27,7 +28,13 @@ addRoutes([
     {
         path: '/home',
         action: () => {
-            return <Redirect replace href='/user/my-townhalls' />;
+            return <Redirect replace href='/app/home' />;
+        },
+    },
+    {
+        path: '/app/home',
+        action: () => {
+            return <Dashboard />;
         },
     },
     { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> },
