@@ -1,10 +1,10 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
+import { AnimatePresence } from 'framer-motion';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import DateFnsUtils from '@date-io/date-fns';
-import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import ThemeProvider from '../src/contexts/Theme';
 import DeviceContext from '../src/contexts/Device';
@@ -25,16 +25,7 @@ addDecorator((storyFn) => (
             <CssBaseline />
             <SnackContext maxSnack={1}>
                 <DeviceContext>
-                    <div
-                        style={{
-                            // display: 'flex',
-                            // flexDirection: 'column',
-                            height: '100%',
-                            width: '100%',
-                        }}
-                    >
-                        {storyFn()}
-                    </div>
+                    <AnimatePresence>{storyFn()}</AnimatePresence>
                 </DeviceContext>
             </SnackContext>
         </MuiPickersUtilsProvider>
