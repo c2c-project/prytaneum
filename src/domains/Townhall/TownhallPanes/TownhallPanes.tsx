@@ -3,6 +3,7 @@ import { Fade, Chip, Badge, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Townhall } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
 
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
@@ -47,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         flexBasis: '100%',
     },
+    animContainer: {
+        display: 'inline-flex',
+        position: 'relative',
+        flexShrink: 0,
+    },
 }));
 
 function buildPanes(townhall: Townhall) {
@@ -64,6 +70,13 @@ function buildPanes(townhall: Townhall) {
     if (townhall.settings.chat.enabled) panes.Chat = <TownhallChat />;
     return panes;
 }
+
+const makeTransition = (idx: number) => ({
+    delay: (idx + 1) * 0.1,
+    type: 'spring',
+    damping: 12,
+    stiffness: 150,
+});
 
 export default function TownhallPanes() {
     const townhall = React.useContext(TownhallContext);
@@ -94,32 +107,46 @@ export default function TownhallPanes() {
             {options.length > 1 && (
                 <Grid item xs='auto'>
                     <div className={classes.chipContainer}>
-                        {options.map((option) => (
-                            <Badge
+                        {options.map((option, idx) => (
+                            <motion.div
                                 key={option}
-                                badgeContent={context[option]}
-                                overlap='circle'
-                                color='secondary'
+                                initial={{ opacity: 0, x: 40 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={makeTransition(idx)}
+                                className={classes.animContainer}
                             >
-                                <Chip
-                                    aria-selected={option === state}
-                                    aria-controls={`${option}-panel`}
-                                    role='tab'
-                                    className={classes.chip}
-                                    key={option}
-                                    label={option}
-                                    color={
-                                        option === state ? 'primary' : 'default'
-                                    }
-                                    onClick={() => setState(option)}
-                                />
-                            </Badge>
+                                <Badge
+                                    badgeContent={context[option]}
+                                    overlap='circle'
+                                    color='secondary'
+                                >
+                                    <Chip
+                                        aria-selected={option === state}
+                                        aria-controls={`${option}-panel`}
+                                        role='tab'
+                                        className={classes.chip}
+                                        key={option}
+                                        label={option}
+                                        color={
+                                            option === state
+                                                ? 'primary'
+                                                : 'default'
+                                        }
+                                        onClick={() => setState(option)}
+                                    />
+                                </Badge>
+                            </motion.div>
                         ))}
                     </div>
                 </Grid>
             )}
             <Grid item xs='auto' className={classes.paneContainer}>
-                <div className={classes.outerContainer}>
+                <motion.div
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={makeTransition(0)}
+                    className={classes.outerContainer}
+                >
                     {Object.entries(panes).map(([key, value]) => (
                         <Fade in={key === state} key={key} timeout={400}>
                             <div
@@ -131,7 +158,7 @@ export default function TownhallPanes() {
                             </div>
                         </Fade>
                     ))}
-                </div>
+                </motion.div>
             </Grid>
         </Grid>
     );
