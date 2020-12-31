@@ -1,9 +1,10 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, ListItem } from '@material-ui/core';
 import type { ChatMessage } from 'prytaneum-typings';
+import { motion, AnimateSharedLayout } from 'framer-motion';
 
 import MessageList from 'components/MessageList';
-import MessageListItem from 'components/MessageListItem';
+// import MessageListItem from 'components/MessageListItem';
 import Message from 'components/Message';
 import ScrollTo from 'components/ScrollTo';
 
@@ -30,32 +31,40 @@ export default function ChatContent({ messages }: Props) {
     if (messages.length === 0) return emptyMessage;
 
     return (
-        <Grid
-            item
-            style={{
-                overflowY: 'auto', // for scrolling
-            }}
-            container
-            xs={12}
-        >
-            <ScrollTo active={messages.length > 10} direction='bottom'>
-                <MessageList>
-                    {messages.map(({ meta, message }, idx) => (
-                        <MessageListItem
-                            button={false}
-                            onClick={() => {}} // TODO:
-                            hidden={false}
-                            key={idx}
-                        >
-                            <Message
-                                name={meta.createdBy.name.first}
-                                timestamp={meta.createdAt}
-                                message={message}
-                            />
-                        </MessageListItem>
-                    ))}
-                </MessageList>
-            </ScrollTo>
-        </Grid>
+        <AnimateSharedLayout>
+            <Grid
+                item
+                style={{
+                    overflowY: 'auto', // for scrolling
+                    overflowX: 'hidden', // otherwise a horizontal scrollbar will appear during load anim
+                }}
+                container
+                xs={12}
+            >
+                <ScrollTo active={messages.length > 3} direction='bottom'>
+                    <MessageList>
+                        {messages.map(({ meta, message, _id }) => (
+                            <motion.li
+                                layout
+                                key={_id}
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                            >
+                                <ListItem
+                                    onClick={() => {}} // TODO:
+                                    component='div'
+                                >
+                                    <Message
+                                        name={meta.createdBy.name.first}
+                                        timestamp={meta.createdAt}
+                                        message={message}
+                                    />
+                                </ListItem>
+                            </motion.li>
+                        ))}
+                    </MessageList>
+                </ScrollTo>
+            </Grid>
+        </AnimateSharedLayout>
     );
 }

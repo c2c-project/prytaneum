@@ -37,7 +37,7 @@ export function Basic() {
                 <div style={{ flex: 1 }}>
                     <button
                         type='button'
-                        onClick={() => sendMessages(10, emitter)}
+                        onClick={() => sendMessages(1, emitter)}
                     >
                         Add Messages
                     </button>
