@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        padding: theme.spacing(2),
+        padding: theme.spacing(0, 0, 2, 0),
     },
-    paper: {
+    card: {
         width: '100%',
         paddingBottom: theme.spacing(3),
     },
@@ -92,7 +92,7 @@ export default function TownhallList({ onClickTownhall, title }: Props) {
     return (
         <Fade in timeout={400}>
             <div className={classes.root}>
-                <Card raised className={classes.paper}>
+                <Card raised className={classes.card}>
                     {title && (
                         <CardHeader title={title} className={classes.title} />
                     )}

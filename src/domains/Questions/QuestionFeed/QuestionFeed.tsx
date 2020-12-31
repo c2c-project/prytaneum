@@ -22,9 +22,9 @@ interface Props {
     style?: React.CSSProperties;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        padding: theme.spacing(1.5),
+        // padding: theme.spacing(1.5),
     },
     listFilter: {
         flex: 1,

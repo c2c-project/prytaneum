@@ -20,7 +20,7 @@ import { growProps } from 'components/Grow';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            padding: theme.spacing(1.5),
+            padding: theme.spacing(0, 0, 2, 0),
             display: 'flex',
             height: '100%',
             width: '100%',

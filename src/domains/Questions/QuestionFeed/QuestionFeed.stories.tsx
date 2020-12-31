@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import { makeQuestion } from 'prytaneum-typings';
 import { Grid } from '@material-ui/core';
 
+import Main from 'layout/Main';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from '../../Townhall/Contexts/Townhall';
 import QuestionFeed from '.';
@@ -25,32 +26,31 @@ function sendMessage(num?: number) {
 
 export function Basic() {
     return (
-        <Grid
-            container
-            direction='column'
-            style={{ height: '100%', overflowY: 'scroll' }}
-            wrap='nowrap'
-        >
-            <div style={{ flex: 1 }}>
-                <button type='button' onClick={() => sendMessage(20)}>
-                    Add Questions
-                </button>
-            </div>
-            <div style={{ flex: '1 1 100%' }}>
-                <TownhallProvider townhallId='12345'>
-                    <FixtureSocket.Provider value={emitter}>
-                        <QuestionFeed />
-                    </FixtureSocket.Provider>
-                </TownhallProvider>
-            </div>
-        </Grid>
+        <Main>
+            <Grid container direction='column' wrap='nowrap'>
+                <div style={{ flex: 1 }}>
+                    <button type='button' onClick={() => sendMessage(20)}>
+                        Add Questions
+                    </button>
+                </div>
+                <div style={{ flex: '1 1 100%' }}>
+                    <TownhallProvider townhallId='12345'>
+                        <FixtureSocket.Provider value={emitter}>
+                            <QuestionFeed />
+                        </FixtureSocket.Provider>
+                    </TownhallProvider>
+                </div>
+            </Grid>
+        </Main>
     );
 }
 
 export function CurrentQuestion() {
     return (
-        <CurrentQuestionWrapper>
-            <QuestionCard question={makeQuestion()} />
-        </CurrentQuestionWrapper>
+        <Main>
+            <CurrentQuestionWrapper>
+                <QuestionCard question={makeQuestion()} />
+            </CurrentQuestionWrapper>
+        </Main>
     );
 }

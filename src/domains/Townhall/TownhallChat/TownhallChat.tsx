@@ -15,7 +15,7 @@ import { TownhallContext } from '../Contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: theme.spacing(1.5),
+        // padding: theme.spacing(1.5),
         width: '100%',
         height: '100%',
         minHeight: 500,

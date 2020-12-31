@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core';
 import { EventEmitter } from 'events';
 import { makeChatMessage } from 'prytaneum-typings';
 
+import Main from 'layout/Main';
 import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from './TownhallChat';
@@ -23,32 +24,34 @@ export function Basic() {
     const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
     return (
-        <TownhallProvider townhallId='123'>
-            <Grid
-                item
-                xs={12}
-                style={{
-                    height: '100%',
-                    display: 'flex',
-                    flexFlow: 'column nowrap',
-                    alignContent: 'flex-start',
-                }}
-            >
-                <div style={{ flex: 1 }}>
-                    <button
-                        type='button'
-                        onClick={() => sendMessages(1, emitter)}
-                    >
-                        Add Messages
-                    </button>
-                </div>
-                {/* flex will recalculate height, but height: 0 is necessary so that the paper does not infinitely grow */}
-                <div style={{ flex: '1 1 100%', height: 0 }}>
-                    <FixtureSocket.Provider value={emitter}>
-                        <Component />
-                    </FixtureSocket.Provider>
-                </div>
-            </Grid>
-        </TownhallProvider>
+        <Main>
+            <TownhallProvider townhallId='123'>
+                <Grid
+                    item
+                    xs={12}
+                    style={{
+                        height: '100%',
+                        display: 'flex',
+                        flexFlow: 'column nowrap',
+                        alignContent: 'flex-start',
+                    }}
+                >
+                    <div style={{ flex: 1 }}>
+                        <button
+                            type='button'
+                            onClick={() => sendMessages(1, emitter)}
+                        >
+                            Add Messages
+                        </button>
+                    </div>
+                    {/* flex will recalculate height, but height: 0 is necessary so that the paper does not infinitely grow */}
+                    <div style={{ flex: '1 1 100%', height: 0 }}>
+                        <FixtureSocket.Provider value={emitter}>
+                            <Component />
+                        </FixtureSocket.Provider>
+                    </div>
+                </Grid>
+            </TownhallProvider>
+        </Main>
     );
 }

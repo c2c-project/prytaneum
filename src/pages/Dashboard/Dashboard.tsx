@@ -14,7 +14,6 @@ export default function Dashboard() {
                 <motion.div {...growProps}>
                     <Card
                         style={{
-                            margin: '12px',
                             minHeight: 500,
                             display: 'flex',
                         }}
