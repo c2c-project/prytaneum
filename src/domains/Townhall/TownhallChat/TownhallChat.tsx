@@ -15,10 +15,16 @@ import { TownhallContext } from '../Contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(1.5),
+        width: '100%',
         height: '100%',
-        display: 'flex',
         minHeight: 500,
+        display: 'flex',
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        flex: '1 1 100%',
     },
 }));
 
@@ -60,17 +66,19 @@ export default function TownhallChat() {
     if (areMessagesLoading) return <Loader />;
 
     return (
-        <Paper className={classes.root}>
-            <Chat>
-                <ChatContent messages={messages} />
-                <Chatbar
-                    disabled={isLoading}
-                    onSubmit={(form) => {
-                        messageRef.current = form;
-                        postMesssage();
-                    }}
-                />
-            </Chat>
-        </Paper>
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <Chat>
+                    <ChatContent messages={messages} />
+                    <Chatbar
+                        disabled={isLoading}
+                        onSubmit={(form) => {
+                            messageRef.current = form;
+                            postMesssage();
+                        }}
+                    />
+                </Chat>
+            </Paper>
+        </div>
     );
 }

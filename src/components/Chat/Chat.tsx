@@ -11,7 +11,7 @@ interface Props {
 
 export default function Chat({ children, className }: Props) {
     return (
-        <Grid container direction='column' className={className}>
+        <Grid container direction='column' className={className} wrap='nowrap'>
             {children}
         </Grid>
     );

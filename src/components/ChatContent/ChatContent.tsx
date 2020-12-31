@@ -27,35 +27,35 @@ export default function ChatContent({ messages }: Props) {
         </Grid>
     );
 
+    if (messages.length === 0) return emptyMessage;
+
     return (
         <Grid
             item
-            xs='auto'
-            style={{ flex: 1, overflowY: 'auto', position: 'relative' }}
+            style={{
+                overflowY: 'auto', // for scrolling
+            }}
             container
+            xs={12}
         >
-            {messages.length === 0 ? (
-                emptyMessage
-            ) : (
-                <ScrollTo active={messages.length > 10} direction='bottom'>
-                    <MessageList>
-                        {messages.map(({ meta, message }, idx) => (
-                            <MessageListItem
-                                button={false}
-                                onClick={() => {}} // TODO:
-                                hidden={false}
-                                key={idx}
-                            >
-                                <Message
-                                    name={meta.createdBy.name.first}
-                                    timestamp={meta.createdAt}
-                                    message={message}
-                                />
-                            </MessageListItem>
-                        ))}
-                    </MessageList>
-                </ScrollTo>
-            )}
+            <ScrollTo active={messages.length > 10} direction='bottom'>
+                <MessageList>
+                    {messages.map(({ meta, message }, idx) => (
+                        <MessageListItem
+                            button={false}
+                            onClick={() => {}} // TODO:
+                            hidden={false}
+                            key={idx}
+                        >
+                            <Message
+                                name={meta.createdBy.name.first}
+                                timestamp={meta.createdAt}
+                                message={message}
+                            />
+                        </MessageListItem>
+                    ))}
+                </MessageList>
+            </ScrollTo>
         </Grid>
     );
 }

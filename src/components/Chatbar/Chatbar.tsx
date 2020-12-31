@@ -26,8 +26,15 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
         setMessage(value);
     }
     return (
-        <Grid component='form' onSubmit={handleSubmit} container item xs='auto'>
-            <Grid item xs='auto' style={{ flex: 1 }}>
+        <Grid
+            component='form'
+            onSubmit={handleSubmit}
+            container
+            item
+            xs='auto'
+            wrap='nowrap'
+        >
+            <Grid item style={{ flex: '1 1 100%' }}>
                 <TextField
                     disabled={disabled}
                     label='Message'
@@ -38,7 +45,7 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
             <Grid
                 item
                 xs='auto'
-                style={{ paddingLeft: '8px', display: 'flex' }}
+                style={{ paddingLeft: '8px', display: 'flex', flex: 1 }}
             >
                 <Button
                     variant='contained'

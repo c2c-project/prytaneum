@@ -43,7 +43,7 @@ function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
         emitter.emit('chat-message-state', {
-            type: 'create-message',
+            type: 'create-chat-message',
             payload: makeChatMessage(),
         });
     }
