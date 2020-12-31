@@ -21,10 +21,11 @@ import MovingBg from './MovingBg';
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 240, // think this is from material.io spec, I just know this number
-        padding: theme.spacing(3, 1.5),
+        padding: theme.spacing(0, 1.5),
         position: 'sticky',
         flex: 1,
-        top: 64, // visual testing for height of the toolbar
+        // height + margin
+        top: 64 + theme.spacing(3), // visual testing for height of the toolbar
     },
 }));
 

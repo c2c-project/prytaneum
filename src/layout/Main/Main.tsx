@@ -2,29 +2,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container as MUIContainer, ContainerProps } from '@material-ui/core';
+import {
+    Container as MUIContainer,
+    ContainerProps,
+    Theme,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
 type Props = {
     children?: React.ReactNodeArray | React.ReactNode;
+    spacing?: number;
 } & Omit<ContainerProps, 'children'>;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme, Props>((theme) => ({
     root: {
         height: '100%',
         width: '100%',
         flex: '1 1 100%',
-        padding: theme.spacing(3, 0),
+        display: 'flex',
     },
     main: {
-        height: '100%',
-        width: '100%',
+        flex: '1 1 100%',
     },
+    spacing: ({ spacing }) => ({
+        padding: spacing ? theme.spacing(spacing) : 0,
+    }),
 }));
 
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, ...passThroughProps } = props;
-    const classes = useStyles();
+    const classes = useStyles(props);
     return (
         <MUIContainer
             disableGutters
@@ -33,7 +41,9 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
             className={classes.root}
             {...passThroughProps}
         >
-            <main className={classes.main}>{children}</main>
+            <main className={clsx([classes.main, classes.spacing])}>
+                {children}
+            </main>
         </MUIContainer>
     );
 });
