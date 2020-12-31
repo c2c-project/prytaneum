@@ -38,12 +38,10 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
             disableGutters
             maxWidth='md'
             ref={ref}
-            className={classes.root}
+            className={clsx([classes.root, classes.spacing])}
             {...passThroughProps}
         >
-            <main className={clsx([classes.main, classes.spacing])}>
-                {children}
-            </main>
+            <main className={classes.main}>{children}</main>
         </MUIContainer>
     );
 });
