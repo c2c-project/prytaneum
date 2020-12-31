@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,15 +6,15 @@ import { Container as MUIContainer, ContainerProps } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 type Props = {
-    disableGutters?: boolean;
     children?: React.ReactNodeArray | React.ReactNode;
-} & Pick<ContainerProps, 'maxWidth'>;
+} & Omit<ContainerProps, 'children'>;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         width: '100%',
         flex: '1 1 100%',
+        padding: theme.spacing(3, 0),
     },
     main: {
         height: '100%',
@@ -22,14 +23,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-    const { children, maxWidth, disableGutters } = props;
+    const { children, ...passThroughProps } = props;
     const classes = useStyles();
     return (
         <MUIContainer
-            maxWidth={maxWidth || 'md'}
-            disableGutters={disableGutters}
+            disableGutters
+            maxWidth='md'
             ref={ref}
             className={classes.root}
+            {...passThroughProps}
         >
             <main className={classes.main}>{children}</main>
         </MUIContainer>
@@ -37,14 +39,10 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 });
 
 Container.defaultProps = {
-    disableGutters: true,
-    maxWidth: 'md',
     children: undefined,
 };
 
 Container.propTypes = {
-    disableGutters: PropTypes.bool,
-    maxWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),

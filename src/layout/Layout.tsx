@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
 
 import { UserContext } from 'contexts/User';
-import Container from './Main';
+import Main from './Main';
 import Page from './Page';
 import AppBar, { Public, LoggedIn } from './AppBar';
 import SideNav from './SideNav';
@@ -41,7 +41,7 @@ export default function Layout({
             {!isLoggedIn && <PublicBar />}
             <Grid container alignItems='flex-start' item xs={12}>
                 {!isMdDown && user && <SideNav user={user} />}
-                <Container>{children}</Container>
+                <Main>{children}</Main>
             </Grid>
         </Page>
     );
