@@ -12,7 +12,8 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { motion } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion';
+import { PopmotionTransitionProps } from 'framer-motion/types/types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,6 +53,12 @@ interface Props {
     config: AccordionData[];
     title: string;
 }
+
+const spring: PopmotionTransitionProps = {
+    type: 'spring',
+    damping: 13,
+    stiffness: 150,
+};
 
 /**
  * Similar to SectionList, but does not use material UI list* and instead just uses the grid to display JSX elements passed in with a title and layout.
@@ -113,13 +120,21 @@ export default function SettingsMenu({ config, title }: Props) {
                     alignItems='center'
                     className={classes.titlebar}
                 >
-                    <motion.div initial={{ x: -50 }} animate={{ x: 0 }}>
+                    <motion.div
+                        initial={{ x: -50 }}
+                        animate={{ x: 0 }}
+                        transition={spring}
+                    >
                         <Typography variant='h4' className={classes.title}>
                             {title}
                         </Typography>
                     </motion.div>
 
-                    <motion.div initial={{ y: -50 }} animate={{ y: 0 }}>
+                    <motion.div
+                        initial={{ y: -50 }}
+                        animate={{ y: 0 }}
+                        transition={spring}
+                    >
                         <IconButton
                             onClick={handleClick}
                             color='inherit'
@@ -130,7 +145,11 @@ export default function SettingsMenu({ config, title }: Props) {
                     </motion.div>
                 </Grid>
                 <Grid item xs={12}>
-                    <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
+                    <motion.div
+                        initial={{ y: 50 }}
+                        animate={{ y: 0 }}
+                        transition={spring}
+                    >
                         {config.map(
                             ({
                                 title: sectionTitle,
