@@ -5,22 +5,15 @@ import history from 'utils/history';
 import Login from 'pages/Auth/Login';
 import Register from 'pages/Auth/Register';
 import ForgotPasswordRequest from 'pages/Auth/ForgotPassRequest';
+import ForgotPasswordReset from 'pages/Auth/ForgotPassReset';
 import Logout from 'pages/Auth/Logout';
-import Redirect from 'components/Redirect';
-import { get } from 'utils/storage';
+
 import { addRoutes } from './utils';
 
 addRoutes([
     {
         path: '/login',
-        action: (ctx) => {
-            if (get('isLoggedIn')) {
-                return <Redirect href='/user/my-townhalls' />;
-            }
-            return (
-                ctx.next() || <Login onLogin={() => history.push('/home')} />
-            );
-        },
+        action: () => <Login onLogin={() => history.push('/home')} />,
     },
     {
         path: '/register',
@@ -29,6 +22,10 @@ addRoutes([
     {
         path: '/forgot-password/request',
         action: () => <ForgotPasswordRequest />,
+    },
+    {
+        path: '/forgot-password/reset',
+        // action: () => <ForgotPassword
     },
     {
         path: '/logout',

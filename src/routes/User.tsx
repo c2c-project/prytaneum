@@ -1,105 +1,84 @@
 import React from 'react';
+import { Routes } from 'universal-router/sync';
 
 // import Login from 'pages/Auth/Login';
 
 import TownhallContextProvider from 'domains/Townhall/Contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/Townhall/TownhallList';
-import TownhallForm from 'pages/Townhall/TownhallForm';
 
-import HandleInviteLink from 'domains/Invite/HandleInviteLink';
 import InviteForm from 'domains/Invite/InviteForm';
 
 import UserSettings from 'domains/User/UserSettings';
 import RequireLogin from 'components/RequireLogin';
 
-// import { get as getFromStorage } from 'utils/storage';
 import history from 'utils/history';
-import { addRoutes } from './utils';
+import Redirect from 'components/Redirect';
+import RequireRoles from 'components/RequireRoles';
+import { addRoutes, areParamsValid, MyContext } from './utils';
+
+const organizerRoutes: Routes<JSX.Element, MyContext> = [
+    {
+        path: '/my-townhalls',
+        action: (ctx) => {
+            const child = ctx.next();
+            if (child) return child;
+            return <TownhallList />;
+        },
+        children: [
+            {
+                path: '/:townhallId',
+                action: (ctx) => {
+                    if (!areParamsValid(ctx.params, ['townhallId']))
+                        return <Redirect href='/login' />;
+
+                    const { townhallId } = ctx.params;
+                    return (
+                        <TownhallContextProvider townhallId={townhallId}>
+                            {ctx.next() || <TownhallSettings />}
+                        </TownhallContextProvider>
+                    );
+                },
+                children: [
+                    {
+                        path: '/invite',
+                        action: () => {
+                            return <InviteForm />;
+                        },
+                    },
+                    {
+                        path: '/invited',
+                        action: (ctx) => {
+                            const child = ctx.next();
+                            if (!child) {
+                                history.back(); // TODO: change this?
+                            }
+                            return child;
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+];
 
 addRoutes([
     {
         // user id is the currently logged in user only
+        // the context is already higher up in the tree
         path: '/user',
         action: (ctx) => {
-            // if (!getFromStorage('isLoggedIn')) {
-            //     return <Login onLogin={() => history.push(ctx.pathname)} />;
-            // }
-            return (
-                <RequireLogin>
-                    <>{ctx.next() || <div />}</>
-                </RequireLogin>
-            );
+            return <RequireLogin>{ctx.next()}</RequireLogin>;
         },
         children: [
             {
-                path: '/my-townhalls',
-                action: (ctx) => {
-                    const child = ctx.next();
-                    if (child) return child;
-                    return <TownhallList />;
-                },
-                children: [
-                    {
-                        // this must go before :townhallId, otherwise the router will think "create" is an id
-                        path: '/create',
-                        action: () => <TownhallForm />,
-                    },
-                    {
-                        path: '/:townhallId',
-                        action: (ctx) => {
-                            const { townhallId } = ctx.params as {
-                                townhallId: string;
-                            };
-                            const component = ctx.next() || (
-                                <TownhallSettings />
-                            );
-                            // FIXME: need to move the context up in the tree before the routing somehow
-                            return (
-                                <TownhallContextProvider
-                                    townhallId={townhallId}
-                                >
-                                    {component}
-                                </TownhallContextProvider>
-                            );
-                        },
-                        children: [
-                            {
-                                path: '/invite',
-                                action: () => {
-                                    return <InviteForm />;
-                                },
-                            },
-                            {
-                                path: '/invited',
-                                action: (ctx) => {
-                                    const child = ctx.next();
-                                    if (!child) {
-                                        history.back(); // TODO: change this?
-                                    }
-                                    return child;
-                                },
-                                children: [
-                                    {
-                                        path: '/:inviteToken',
-                                        action: (ctx) => {
-                                            const {
-                                                inviteToken,
-                                            } = ctx.params as {
-                                                inviteToken: string;
-                                            };
-                                            return (
-                                                <HandleInviteLink
-                                                    inviteToken={inviteToken}
-                                                />
-                                            );
-                                        },
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                ],
+                path: '/organizer',
+                action: (ctx) => (
+                    <RequireRoles requiredRoles={['organizer']}>
+                        {ctx.next()}
+                    </RequireRoles>
+                ),
+                children: organizerRoutes,
             },
             {
                 path: '/settings',

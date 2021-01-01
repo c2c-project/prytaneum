@@ -20,3 +20,14 @@ export function parseQueryString(str: string): Record<string, string> {
         .map((pair) => pair.split('=')) as [string, string][];
     return Object.fromEntries(entries);
 }
+
+export function areParamsValid<T extends string>(
+    params: Record<string, string | string[]>,
+    keys: T[]
+): params is Record<T, string> {
+    for (let i = 0; i < keys.length; i += 1) {
+        if (!params[keys[i]]) return false;
+        if (Array.isArray(params[keys[i]])) return false;
+    }
+    return true;
+}

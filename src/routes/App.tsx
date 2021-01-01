@@ -11,10 +11,8 @@ import Dashboard from 'pages/Dashboard';
 
 // for side effects (adding the routes)
 import './Auth';
-import './Townhall';
 import './User';
 import './Join';
-import './Preview';
 
 import { addRoutes, routes, parseQueryString, MyContext } from './utils';
 
