@@ -51,7 +51,11 @@ interface Props {
 
 export default function Login({ onLogin }: Props) {
     const classes = useStyles();
-    const [, setIsLoggedIn] = useStorage('isLoggedIn');
+    const [isLoggedIn, setIsLoggedIn] = useStorage('isLoggedIn');
+    React.useEffect(() => {
+        if (isLoggedIn) onLogin();
+    }, [onLogin]);
+
     return (
         <Grow animKey='login'>
             <Grid
