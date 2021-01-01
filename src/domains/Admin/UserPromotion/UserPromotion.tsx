@@ -15,20 +15,18 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         height: '100%',
     },
-    paper: {
-        padding: theme.spacing(2),
-    },
 }));
 
 interface Props {
     promotionOptions: Roles[];
-    userData: User;
+    user: User;
     onChange?: () => void;
 }
 
-const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
+const UserPromotion = ({ promotionOptions, user, onChange: cb }: Props) => {
     const classes = useStyles();
-    const [user, setUser] = useState<User>(userData);
+    // const [user, setUser] = useState<User>(user);
+    console.log(user);
     const [post] = useEndpoint(() => promoteUser(user, user._id), {
         onSuccess: cb,
     });
@@ -47,7 +45,7 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
         });
 
         const updatedUser = { ...copyUser, status: newStatus };
-        setUser(updatedUser);
+        // setUser(updatedUser);
         post();
     };
 
@@ -69,19 +67,15 @@ const UserPromotion = ({ promotionOptions, userData, onChange: cb }: Props) => {
     });
 
     return (
-        <Container maxWidth='md' className={classes.root}>
-            <Paper className={classes.paper}>
-                <Grid
-                    container
-                    direction='column'
-                    className={classes.root}
-                    alignContent='center'
-                    justify='center'
-                >
-                    {switches}
-                </Grid>
-            </Paper>
-        </Container>
+        <Grid
+            container
+            direction='column'
+            className={classes.root}
+            alignContent='center'
+            justify='center'
+        >
+            {switches}
+        </Grid>
     );
 };
 
