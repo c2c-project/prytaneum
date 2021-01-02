@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { motion, MotionProps } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { PopmotionTransitionProps } from 'framer-motion/types/types';
 
 const useStyles = makeStyles((theme) => ({

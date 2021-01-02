@@ -54,7 +54,7 @@ export default function Login({ onLogin }: Props) {
     const [isLoggedIn, setIsLoggedIn] = useStorage('isLoggedIn');
     React.useEffect(() => {
         if (isLoggedIn) onLogin();
-    }, [onLogin]);
+    }, [onLogin, isLoggedIn]);
 
     return (
         <Grow animKey='login'>

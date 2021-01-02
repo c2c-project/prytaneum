@@ -13,7 +13,7 @@ export default function RequireRoles({ requiredRoles, children }: Props) {
     const user = React.useContext(UserContext);
     const isUserAllowed = React.useMemo(
         () => user && user.roles.some((role) => requiredRoles.includes(role)),
-        [requiredRoles, requiredRoles]
+        [requiredRoles, user]
     );
 
     // TODO: make more robust
