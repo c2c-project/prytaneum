@@ -12,7 +12,7 @@ import Fab from 'components/Fab';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { TownhallContext } from 'contexts/Townhall';
 
 import TownhallForm from '../TownhallForm';
 import ChatSettings from './ChatSettings';

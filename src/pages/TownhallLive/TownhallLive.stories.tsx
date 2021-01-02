@@ -13,8 +13,8 @@ import Page from 'layout/Page';
 import AppBar from 'layout/AppBar';
 import Main from 'layout/Main';
 import UserProvider from 'contexts/User';
+import TownhallProvider from 'contexts/Townhall';
 import Component from './TownhallLive';
-import TownhallProvider from '../Contexts/Townhall';
 
 export default {
     title: 'Domains/Townhall/Townhall Live',

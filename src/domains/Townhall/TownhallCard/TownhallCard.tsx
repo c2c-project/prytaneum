@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 
 import { formatDate } from 'utils/format';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 export default function TownhallCard() {
     const townhall = React.useContext(TownhallContext);

@@ -13,7 +13,9 @@ export function Basic() {
         <UserProvider value={makeUser()}>
             <AppBar>
                 <Grid container justify='flex-end'>
-                    <UserMenu />
+                    <UserMenu
+                        links={{ settings: '/settings', logout: '/logout' }}
+                    />
                 </Grid>
             </AppBar>
         </UserProvider>

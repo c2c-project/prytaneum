@@ -3,7 +3,7 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SpeakerCard from 'domains/Speaker/SpeakerCard';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 import TownhallCard from '../TownhallCard';
 
 const useStyles = makeStyles((theme) => ({

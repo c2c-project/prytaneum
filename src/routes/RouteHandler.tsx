@@ -6,41 +6,13 @@ import { AnimatePresence } from 'framer-motion';
 // import Container from 'layout/Page';
 import history from 'utils/history';
 import Layout from 'layout';
-import Redirect from 'components/Redirect';
-import Dashboard from 'pages/Dashboard';
 
-// for side effects (adding the routes)
-import './Auth';
-import './User';
-import './Join';
+import { routes, parseQueryString, MyContext } from './utils';
 
-import { addRoutes, routes, parseQueryString, MyContext } from './utils';
-
-addRoutes([
-    {
-        path: '/',
-        action: () => {
-            return <Redirect href='/login' />;
-        },
-    },
-    {
-        path: '/home',
-        action: () => {
-            return <Redirect replace href='/app/home' />;
-        },
-    },
-    {
-        path: '/app/home',
-        action: () => {
-            return <Dashboard />;
-        },
-    },
-    { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> },
-]);
-const router = new UniversalRouter<JSX.Element, MyContext>(routes);
+const router = new UniversalRouter<React.ReactNode, MyContext>(routes);
 
 type PageState = {
-    component: JSX.Element | null | undefined;
+    component: React.ReactNode;
     key: string | null;
 };
 const initialState: PageState = {
@@ -48,7 +20,7 @@ const initialState: PageState = {
     key: null,
 };
 
-export default function App() {
+export default function RouteHandler() {
     type PageDir = [PageState, 1 | 0 | -1];
     const [[currPage], setCurrPage] = React.useState<PageDir>([
         initialState,

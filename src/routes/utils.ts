@@ -1,12 +1,12 @@
 import { Routes } from 'universal-router/sync';
 
-export const routes: Routes<JSX.Element, MyContext> = [];
+export const routes: Routes<React.ReactNode, MyContext> = [];
 
 export interface MyContext {
     query: Record<string, string>;
 }
 
-export function addRoutes(newRoutes: Routes<JSX.Element, MyContext>) {
+export function addRoutes(newRoutes: Routes<React.ReactNode, MyContext>) {
     routes.push(...newRoutes);
 }
 

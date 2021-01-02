@@ -5,8 +5,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
-import PaneProvider from '../Contexts/Pane';
-import TownhallPanes from '../TownhallPanes';
+import PaneProvider from 'domains/Townhall/Contexts/Pane';
+import TownhallPanes from 'domains/Townhall/TownhallPanes';
 
 const useStyles = makeStyles((theme) => ({
     root: {

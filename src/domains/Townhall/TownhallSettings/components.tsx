@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 // TODO: credits settings
 // export const CreditsSettings = React.memo(function CreditsSettings({

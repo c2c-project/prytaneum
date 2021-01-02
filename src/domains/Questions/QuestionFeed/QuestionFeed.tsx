@@ -9,7 +9,7 @@ import type { Question } from 'prytaneum-typings';
 import { UserContext } from 'contexts/User';
 import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import Loader from 'components/Loader';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { TownhallContext } from 'contexts/Townhall';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 
 import FeedList from './FeedList';

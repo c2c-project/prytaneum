@@ -42,9 +42,9 @@ interface Props {
 }
 
 const urls: Record<Keys, string> = {
-    'Townhall List': '/user/my-townhalls',
-    'User List': '/admin/user-list',
-    'Admin Settings': '/admin/settings',
+    'Townhall List': '/app/organizer/my-townhalls',
+    'User List': '/app/admin/user-list',
+    'Admin Settings': '/app/admin/settings',
     Dashboard: '/app/home',
 };
 

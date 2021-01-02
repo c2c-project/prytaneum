@@ -4,12 +4,12 @@ import type { Townhall } from 'prytaneum-typings';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import useIsMounted from 'hooks/useIsMounted';
-import { getTownhall } from '../api';
+import { getTownhall } from 'domains/Townhall/api';
 
 interface Props {
     // TODO: add defaults here
     value?: Townhall; // we may not need this?
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode | React.ReactNodeArray;
     townhallId: string;
 }
 

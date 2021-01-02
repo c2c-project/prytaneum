@@ -6,7 +6,7 @@ import type {
     QuestionForm as FormType,
 } from 'prytaneum-typings';
 
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { TownhallContext } from 'contexts/Townhall';
 import LoadingButton from 'components/LoadingButton';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';

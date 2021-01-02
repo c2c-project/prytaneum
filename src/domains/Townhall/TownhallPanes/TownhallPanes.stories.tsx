@@ -6,7 +6,7 @@ import { Grid } from '@material-ui/core';
 import Page from 'layout/Page';
 import Main from 'layout/Main';
 import FixtureSocket from 'mock/Fixture.socket';
-import TownhallProvider from '../Contexts/Townhall';
+import TownhallProvider from '../../../contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
 import TownhallPanes from './TownhallPanes';
 

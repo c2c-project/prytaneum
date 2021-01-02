@@ -1,7 +1,6 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
 
-import Login from 'pages/Auth/Login';
+import Login from 'pages/Login';
 import useStorage from 'hooks/useStorage';
 
 interface Props {

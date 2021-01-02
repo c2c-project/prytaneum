@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core';
 
 import Main from 'layout/Main';
 import FixtureSocket from 'mock/Fixture.socket';
-import TownhallProvider from '../../Townhall/Contexts/Townhall';
+import TownhallProvider from '../../../contexts/Townhall';
 import QuestionFeed from '.';
 import QuestionCard from '../QuestionCard';
 import { CurrentQuestion as CurrentQuestionWrapper } from './components';
