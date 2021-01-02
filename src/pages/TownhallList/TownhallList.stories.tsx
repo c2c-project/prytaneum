@@ -4,9 +4,9 @@ import UserProvider from 'contexts/User';
 import Layout from 'layout';
 import Component from '.';
 
-export default { title: 'Pages/Townhall' };
+export default { title: 'Pages/Townhall List' };
 
-export function TownhallList() {
+export function Basic() {
     return (
         <UserProvider>
             <Layout showAsLoggedIn>

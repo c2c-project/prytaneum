@@ -17,7 +17,7 @@ import TownhallProvider from 'contexts/Townhall';
 import Component from './TownhallLive';
 
 export default {
-    title: 'Domains/Townhall/Townhall Live',
+    title: 'Pages/Townhall Live',
     component: Component,
     // argTypes: {
     //     userType: {
