@@ -9,7 +9,7 @@ import { growProps } from 'components/Grow';
 export default function Dashboard() {
     return (
         <Grid container>
-            <TitleCard title='Dashboard' />
+            <TitleCard animKey='dashboard-title' title='Dashboard' />
             <Grid item xs={12}>
                 <motion.div {...growProps}>
                     <Card

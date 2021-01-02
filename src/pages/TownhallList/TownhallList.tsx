@@ -32,7 +32,11 @@ export default function TownhallList() {
                     />
                 </DialogContent>
             </Dialog>
-            <TitleCard title='Townhalls' stats={[['total', 1]]} />
+            <TitleCard
+                animKey='townhall-list-title'
+                title='Townhalls'
+                stats={[['total', 1]]}
+            />
             <Grid item xs={12}>
                 <List
                     onClickTownhall={(id) =>

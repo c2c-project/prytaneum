@@ -77,13 +77,19 @@ interface Props {
     stats?: [string, number][];
     statsTitle?: string;
     title: string;
+    animKey: string;
 }
 
-export default function TitleCard({ stats, title, statsTitle }: Props) {
+export default function TitleCard({
+    stats,
+    title,
+    statsTitle,
+    animKey,
+}: Props) {
     const classes = useStyles();
 
     return (
-        <motion.div key='title-card' {...growProps} className={classes.root}>
+        <motion.div key={animKey} {...growProps} className={classes.root}>
             <Card raised className={classes.card}>
                 <CardMedia className={classes.media}>
                     <Typography className={classes.title}>{title}</Typography>
