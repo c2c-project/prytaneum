@@ -16,13 +16,11 @@ interface Props {
 }
 
 export const growProps: AnimationProps & MotionProps = {
-    initial: { transform: 'scale(0)' },
-    exit: { transform: 'scale(0)' },
-    animate: { transform: 'scale(1)' },
+    initial: { transform: 'scale(0)', opacity: 0 },
+    exit: { transform: 'scale(0)', opacity: 0 },
+    animate: { transform: 'scale(1)', opacity: 1 },
     transition: {
-        type: 'spring',
-        damping: 13,
-        stiffness: 110,
+        ease: 'easeOut',
     },
 };
 
