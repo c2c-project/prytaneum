@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
-import { motion } from 'framer-motion';
 
 import TitleCard from 'components/TitleCard';
-import { growProps } from 'components/Grow';
+import FadeThrough from 'components/FadeThrough';
 
 export default function Dashboard() {
     return (
-        <Grid container>
-            <TitleCard animKey='dashboard-title' title='Dashboard' />
-            <Grid item xs={12}>
-                <motion.div {...growProps}>
+        <FadeThrough animKey='dashboard-page'>
+            <Grid container>
+                <TitleCard title='Dashboard' />
+                <Grid item xs={12}>
                     <Card
                         style={{
                             minHeight: 500,
@@ -32,8 +31,8 @@ export default function Dashboard() {
                             </Grid>
                         </CardContent>
                     </Card>
-                </motion.div>
+                </Grid>
             </Grid>
-        </Grid>
+        </FadeThrough>
     );
 }

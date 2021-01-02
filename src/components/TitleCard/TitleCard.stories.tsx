@@ -9,7 +9,6 @@ export function Basic() {
     return (
         <Main>
             <Component
-                animKey='storybook-title'
                 title='Townhalls'
                 stats={[
                     ['Past', 10],

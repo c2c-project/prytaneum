@@ -118,7 +118,7 @@ export default function LoginForm({ onSuccess }: Props) {
                     <Link
                         className={classes.link}
                         color='primary'
-                        href='/forgot-password/request' // TODO: make it so that routing doesn't need to be here
+                        href='/forgot-password/request'
                     >
                         Forgot Password?
                     </Link>

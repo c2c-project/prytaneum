@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import { motion } from 'framer-motion';
 
 import useUser from 'hooks/useUser';
 import Main from './Main';
@@ -77,17 +76,7 @@ export default function Layout({
 
     const getSideNav = () => {
         if (!user || noSideNav) return undefined;
-        const nav = (
-            <motion.div
-                key='side-nav'
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -100, opacity: 0 }}
-                transition={{ ease: 'easeOut' }}
-            >
-                <SideNav user={user} />
-            </motion.div>
-        );
+        const nav = <SideNav user={user} />;
         if (isMdDown)
             return (
                 <Drawer

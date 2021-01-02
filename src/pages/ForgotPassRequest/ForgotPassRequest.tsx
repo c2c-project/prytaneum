@@ -2,7 +2,6 @@ import React from 'react';
 import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/VpnKey';
 import { makeStyles } from '@material-ui/core/styles';
-import Grow from 'components/Grow';
 
 import history from 'utils/history';
 import ForgotPassRequestForm from 'domains/Auth/ForgotPassRequest';
@@ -48,29 +47,27 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgotPassRequest() {
     const classes = useStyles();
     return (
-        <Grow animKey='forgot-pass-request'>
-            <Grid
-                container
-                alignContent='center'
-                className={classes.root}
-                justify='center'
-            >
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <RefreshIcon />
-                    </Avatar>
-                    <Typography component='h1' variant='h5'>
-                        Forgot Password
-                    </Typography>
-                    <div className={classes.form}>
-                        <ForgotPassRequestForm
-                            onSuccess={() => {
-                                history.push('/auth/login');
-                            }}
-                        />
-                    </div>
-                </Paper>
-            </Grid>
-        </Grow>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <RefreshIcon />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Forgot Password
+                </Typography>
+                <div className={classes.form}>
+                    <ForgotPassRequestForm
+                        onSuccess={() => {
+                            history.push('/auth/login');
+                        }}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }

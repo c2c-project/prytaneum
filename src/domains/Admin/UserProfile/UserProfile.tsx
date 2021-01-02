@@ -19,7 +19,7 @@ import { userProfileFormat } from 'domains/Admin/helper/helper';
 
 import Fab from 'components/Fab';
 import Loader from 'components/Loader';
-import { growProps } from 'components/Grow';
+import { fadeThroughProps } from 'components/FadeThrough';
 import { Tags, MiniProfile, AccountActions } from './components';
 import UserPromotion from '../UserPromotion';
 
@@ -103,7 +103,7 @@ const UserProfile = ({ userId }: Props) => {
             <Grid container justify='center'>
                 <motion.div
                     className={classes.miniProfileContainer}
-                    {...growProps}
+                    {...fadeThroughProps}
                 >
                     <div className={classes.innerMiniProfile}>
                         <MiniProfile name={user.email.address} />

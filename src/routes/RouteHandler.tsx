@@ -21,12 +21,12 @@ const router = new UniversalRouter<ActionReturn, MyContext>(routes);
 
 type PageState = {
     component: React.ReactNode;
-    key: string | null;
+    key: string;
     layoutProps: Omit<LayoutProps, 'children'>;
 };
 const initialState: PageState = {
     component: null,
-    key: null,
+    key: '',
     layoutProps: {},
 };
 

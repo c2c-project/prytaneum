@@ -13,9 +13,6 @@ import {
     ListSubheader,
     Hidden,
 } from '@material-ui/core';
-import { motion } from 'framer-motion';
-
-import { growProps } from 'components/Grow';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -77,19 +74,13 @@ interface Props {
     stats?: [string, number][];
     statsTitle?: string;
     title: string;
-    animKey: string;
 }
 
-export default function TitleCard({
-    stats,
-    title,
-    statsTitle,
-    animKey,
-}: Props) {
+export default function TitleCard({ stats, title, statsTitle }: Props) {
     const classes = useStyles();
 
     return (
-        <motion.div key={animKey} {...growProps} className={classes.root}>
+        <div className={classes.root}>
             <Card raised className={classes.card}>
                 <CardMedia className={classes.media}>
                     <Typography className={classes.title}>{title}</Typography>
@@ -120,7 +111,7 @@ export default function TitleCard({
                     </CardContent>
                 </Hidden>
             </Card>
-        </motion.div>
+        </div>
     );
 }
 

@@ -4,12 +4,12 @@ import Login from 'pages/Login';
 import useUser from 'hooks/useUser';
 
 interface Props {
-    children: React.ReactNode | React.ReactNodeArray;
+    children: React.ReactElement;
 }
 
 export default function RequireLogin({ children }: Props) {
     const [user] = useUser();
     // FIXME: onLogin should do what?
     if (!user) return <Login onLogin={() => {}} />;
-    return <>{children}</>;
+    return children;
 }

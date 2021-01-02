@@ -4,6 +4,7 @@ import TownhallProvider from 'contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/TownhallList';
 import TownhallLive from 'pages/TownhallLive';
+import FadeThrough from 'components/FadeThrough';
 
 import Dashboard from 'pages/Dashboard';
 
@@ -29,7 +30,7 @@ const organizerRoutes: PrytaneumRoutes = [
         action: (ctx) => {
             const child = ctx.next();
             if (child) return child;
-            return <TownhallList />;
+            return <TownhallList key={ctx.path} />;
         },
         children: [
             {
@@ -84,19 +85,27 @@ addRoutes([
     },
     {
         path: '/login',
-        action: () => <Login onLogin={() => history.push('/app/home')} />,
+        action: (ctx) => (
+            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                <Login onLogin={() => history.push('/app/home')} />
+            </FadeThrough>
+        ),
     },
     {
         path: '/register',
-        action: () => <Register />,
+        action: (ctx) => (
+            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                <Register />
+            </FadeThrough>
+        ),
     },
     {
         path: '/forgot-password/request',
-        action: () => <ForgotPasswordRequest />,
-    },
-    {
-        path: '/forgot-password/reset',
-        // action: () => <ForgotPassword
+        action: (ctx) => (
+            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                <ForgotPasswordRequest />
+            </FadeThrough>
+        ),
     },
     {
         path: '/logout',
@@ -109,22 +118,34 @@ addRoutes([
         // the context is already higher up in the tree
         path: '/app',
         action: (ctx) => {
-            return <RequireLogin>{ctx.next()}</RequireLogin>;
+            const element = ctx.next();
+            if (!React.isValidElement(element))
+                return <Redirect href='/login' />;
+            return (
+                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                    <RequireLogin key={ctx.pathname}>{element}</RequireLogin>
+                </FadeThrough>
+            );
         },
         children: [
             {
                 path: '/home',
-                action: () => {
-                    return <Dashboard />;
-                },
+                action: (ctx) => <Dashboard key={ctx.path} />,
             },
             {
                 path: '/organizer',
-                action: (ctx) => (
-                    <RequireRoles requiredRoles={['organizer']}>
-                        {ctx.next()}
-                    </RequireRoles>
-                ),
+                action: (ctx) => {
+                    const element = ctx.next();
+                    if (!React.isValidElement(element))
+                        return <Redirect href='/login' />;
+
+                    return (
+                        <RequireRoles requiredRoles={['organizer']}>
+                            {element}
+                        </RequireRoles>
+                    );
+                },
+
                 children: organizerRoutes,
             },
             {
@@ -137,13 +158,18 @@ addRoutes([
     {
         path: '/join',
         // TODO: prompt login here
-        action: (ctx) => ({
-            component: <RequireLogin>{ctx.next()}</RequireLogin>,
-            layoutProps: {
-                hideSideNav: true,
-                ContainerProps: { maxWidth: 'xl' },
-            },
-        }),
+        action: (ctx) => {
+            const element = ctx.next();
+            if (!React.isValidElement(element))
+                return <Redirect href='/login' />;
+            return {
+                component: <RequireLogin>{element}</RequireLogin>,
+                layoutProps: {
+                    hideSideNav: true,
+                    ContainerProps: { maxWidth: 'xl' },
+                },
+            };
+        },
         children: joinRoutes,
     },
     { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page

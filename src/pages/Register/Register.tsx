@@ -1,10 +1,8 @@
-/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import { Avatar, Typography, Grid, Paper } from '@material-ui/core';
 import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Grow from 'components/Grow';
 import RegisterForm from 'domains/Auth/RegisterForm';
 import history from 'utils/history';
 
@@ -43,27 +41,25 @@ export default function RegisterPage() {
     const classes = useStyles();
 
     return (
-        <Grow animKey='register'>
-            <Grid
-                container
-                alignContent='center'
-                className={classes.root}
-                justify='center'
-            >
-                <Paper className={classes.paper} elevation={8}>
-                    <Avatar className={classes.avatar}>
-                        <AccountCirlceOutline />
-                    </Avatar>
-                    <Typography component='h1' variant='h5'>
-                        Register
-                    </Typography>
-                    <div className={classes.form}>
-                        <RegisterForm
-                            onSuccess={() => history.push('/auth/login')}
-                        />
-                    </div>
-                </Paper>
-            </Grid>
-        </Grow>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <AccountCirlceOutline />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Register
+                </Typography>
+                <div className={classes.form}>
+                    <RegisterForm
+                        onSuccess={() => history.push('/auth/login')}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }

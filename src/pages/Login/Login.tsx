@@ -3,7 +3,6 @@ import { Grid, Typography, Avatar, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Grow from 'components/Grow';
 import LoginForm from 'domains/Auth/LoginForm';
 import useIsMounted from 'hooks/useIsMounted';
 import useUser from 'hooks/useUser';
@@ -12,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        display: 'flex',
     },
     paper: {
         width: '100%',
@@ -59,29 +57,27 @@ export default function Login({ onLogin }: Props) {
     }, [onLogin, user, getIsMounted]);
 
     return (
-        <Grow animKey='login'>
-            <Grid
-                container
-                alignContent='center'
-                className={classes.root}
-                justify='center'
-            >
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component='h1' variant='h5'>
-                        Login
-                    </Typography>
-                    <div className={classes.form}>
-                        <LoginForm
-                            onSuccess={() => {
-                                onLogin();
-                            }}
-                        />
-                    </div>
-                </Paper>
-            </Grid>
-        </Grow>
+        <Grid
+            container
+            alignContent='center'
+            className={classes.root}
+            justify='center'
+        >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Login
+                </Typography>
+                <div className={classes.form}>
+                    <LoginForm
+                        onSuccess={() => {
+                            onLogin();
+                        }}
+                    />
+                </div>
+            </Paper>
+        </Grid>
     );
 }

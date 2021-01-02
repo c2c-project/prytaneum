@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Grow from 'components/Grow';
+import FadeThrough from 'components/FadeThrough';
 import history from 'utils/history';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 
@@ -31,7 +31,7 @@ export default function ForgotPasswordReset({ token }: Props) {
     const classes = useStyles();
 
     return (
-        <Grow animKey='forgot-pass-reset'>
+        <FadeThrough animKey='forgot-pass-reset'>
             <Grid
                 container
                 direction='column'
@@ -46,6 +46,6 @@ export default function ForgotPasswordReset({ token }: Props) {
                     />
                 </Paper>
             </Grid>
-        </Grow>
+        </FadeThrough>
     );
 }
