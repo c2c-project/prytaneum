@@ -19,6 +19,11 @@ export const growProps: AnimationProps & MotionProps = {
     initial: { transform: 'scale(0)' },
     exit: { transform: 'scale(0)' },
     animate: { transform: 'scale(1)' },
+    transition: {
+        type: 'spring',
+        damping: 13,
+        stiffness: 90,
+    },
 };
 
 /**
