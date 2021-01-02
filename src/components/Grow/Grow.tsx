@@ -22,7 +22,7 @@ export const growProps: AnimationProps & MotionProps = {
     transition: {
         type: 'spring',
         damping: 13,
-        stiffness: 90,
+        stiffness: 110,
     },
 };
 
