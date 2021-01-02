@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Roles } from 'prytaneum-typings';
 
-import { UserContext } from 'contexts/User';
+import useUser from 'hooks/useUser';
 import Redirect from '../Redirect';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function RequireRoles({ requiredRoles, children }: Props) {
-    const user = React.useContext(UserContext);
+    const [user] = useUser();
     const isUserAllowed = React.useMemo(
         () => user && user.roles.some((role) => requiredRoles.includes(role)),
         [requiredRoles, user]

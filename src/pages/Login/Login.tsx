@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Grow from 'components/Grow';
 import LoginForm from 'domains/Auth/LoginForm';
-import useStorage from 'hooks/useStorage';
+import useIsMounted from 'hooks/useIsMounted';
+import useUser from 'hooks/useUser';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,10 +52,11 @@ interface Props {
 
 export default function Login({ onLogin }: Props) {
     const classes = useStyles();
-    const [isLoggedIn, setIsLoggedIn] = useStorage('isLoggedIn');
+    const [user] = useUser();
+    const [getIsMounted] = useIsMounted();
     React.useEffect(() => {
-        if (isLoggedIn) onLogin();
-    }, [onLogin, isLoggedIn]);
+        if (user && getIsMounted) onLogin();
+    }, [onLogin, user, getIsMounted]);
 
     return (
         <Grow animKey='login'>
@@ -64,7 +66,7 @@ export default function Login({ onLogin }: Props) {
                 className={classes.root}
                 justify='center'
             >
-                <Paper className={classes.paper} elevation={8}>
+                <Paper className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
@@ -74,7 +76,6 @@ export default function Login({ onLogin }: Props) {
                     <div className={classes.form}>
                         <LoginForm
                             onSuccess={() => {
-                                setIsLoggedIn(true);
                                 onLogin();
                             }}
                         />

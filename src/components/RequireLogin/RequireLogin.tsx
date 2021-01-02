@@ -1,15 +1,15 @@
 import React from 'react';
 
 import Login from 'pages/Login';
-import useStorage from 'hooks/useStorage';
+import useUser from 'hooks/useUser';
 
 interface Props {
     children: React.ReactNode | React.ReactNodeArray;
 }
 
 export default function RequireLogin({ children }: Props) {
-    const [isLoggedIn] = useStorage('isLoggedIn');
+    const [user] = useUser();
     // FIXME: onLogin should do what?
-    if (!isLoggedIn) return <Login onLogin={() => {}} />;
+    if (!user) return <Login onLogin={() => {}} />;
     return <>{children}</>;
 }

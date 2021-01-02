@@ -1,5 +1,4 @@
 import React from 'react';
-import { Routes } from 'universal-router/sync';
 
 import TownhallProvider from 'contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
@@ -22,9 +21,9 @@ import RequireLogin from 'components/RequireLogin';
 import Redirect from 'components/Redirect';
 import RequireRoles from 'components/RequireRoles';
 import history from 'utils/history';
-import { addRoutes, areParamsValid, MyContext } from './utils';
+import { addRoutes, areParamsValid, PrytaneumRoutes } from './utils';
 
-const organizerRoutes: Routes<React.ReactNode, MyContext> = [
+const organizerRoutes: PrytaneumRoutes = [
     {
         path: '/my-townhalls',
         action: (ctx) => {
@@ -59,7 +58,7 @@ const organizerRoutes: Routes<React.ReactNode, MyContext> = [
     },
 ];
 
-const joinRoutes: Routes<React.ReactNode, MyContext> = [
+const joinRoutes: PrytaneumRoutes = [
     {
         path: '/:townhallId',
         action: (ctx) => {
@@ -138,7 +137,13 @@ addRoutes([
     {
         path: '/join',
         // TODO: prompt login here
-        action: (ctx) => <RequireLogin>{ctx.next()}</RequireLogin>,
+        action: (ctx) => ({
+            component: <RequireLogin>{ctx.next()}</RequireLogin>,
+            layoutProps: {
+                hideSideNav: true,
+                ContainerProps: { maxWidth: 'xl' },
+            },
+        }),
         children: joinRoutes,
     },
     { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page

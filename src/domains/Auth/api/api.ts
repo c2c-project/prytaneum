@@ -22,7 +22,8 @@ export async function login(email?: string, password?: string) {
     if (!email.match(/\w+/g) || !password.match(/\w+/g)) {
         throw errors.fieldError();
     }
-    return axios.post('/api/users/login', {
+    // TODO: clientSafeUser instead of user
+    return axios.post<{ user: User }>('/api/users/login', {
         email,
         password,
     });

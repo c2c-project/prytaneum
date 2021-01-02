@@ -1,12 +1,19 @@
 import { Routes } from 'universal-router/sync';
+import { Props as LayoutProps } from 'layout';
 
-export const routes: Routes<React.ReactNode, MyContext> = [];
+export type CustomLayout = {
+    component: React.ReactElement;
+    layoutProps: Omit<LayoutProps, 'children'>;
+};
+export type ActionReturn = React.ReactElement | CustomLayout;
+export type PrytaneumRoutes = Routes<ActionReturn, MyContext>;
+export const routes: PrytaneumRoutes = [];
 
 export interface MyContext {
     query: Record<string, string>;
 }
 
-export function addRoutes(newRoutes: Routes<React.ReactNode, MyContext>) {
+export function addRoutes(newRoutes: PrytaneumRoutes) {
     routes.push(...newRoutes);
 }
 
