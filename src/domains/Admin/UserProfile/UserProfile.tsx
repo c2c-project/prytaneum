@@ -15,7 +15,7 @@ import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
 import SettingsList from 'components/SettingsList';
 import SettingsItem from 'components/SettingsItem';
 import * as AdminDashboardTypes from 'domains/Admin/types';
-import { userProfileFormat } from 'domains/Admin/helper/helper';
+import { userProfileFormat } from 'domains/Admin/helper';
 
 import Fab from 'components/Fab';
 import Loader from 'components/Loader';
