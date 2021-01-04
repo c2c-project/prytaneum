@@ -37,13 +37,6 @@ const useStyles = makeStyles((theme) => ({
     target: {
         scrollMarginTop: '1rem',
     },
-    // saving these for future
-    // sticky: {
-    //     top: 0,
-    //     zIndex: theme.zIndex.appBar,
-    //     position: 'sticky',
-    //     width: '100%',
-    // },
 }));
 
 export default function TownhallLive() {

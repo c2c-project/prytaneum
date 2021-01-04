@@ -1,5 +1,6 @@
 import React from 'react';
 
+import RegPrompt from 'domains/Auth/RegPrompt';
 import TownhallProvider from 'contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/TownhallList';
@@ -69,6 +70,7 @@ const joinRoutes: PrytaneumRoutes = [
             const { townhallId } = ctx.params;
             return (
                 <TownhallProvider townhallId={townhallId}>
+                    <RegPrompt />
                     <TownhallLive />
                 </TownhallProvider>
             );
