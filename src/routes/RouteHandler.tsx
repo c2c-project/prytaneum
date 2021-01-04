@@ -1,23 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
-import UniversalRouter, { RouteResultSync } from 'universal-router/sync';
+import { RouteResultSync } from 'universal-router/sync';
 import { Update, State } from 'history';
 import { AnimatePresence } from 'framer-motion';
 
 // import Container from 'layout/Page';
 import history from 'utils/history';
 import Layout, { Props as LayoutProps } from 'layout';
+import useRouter from 'hooks/useRouter';
 
-import {
-    routes,
-    parseQueryString,
-    MyContext,
-    ActionReturn,
-    CustomLayout,
-} from './utils';
-
-const router = new UniversalRouter<ActionReturn, MyContext>(routes);
+import { routes, parseQueryString, ActionReturn, CustomLayout } from './utils';
 
 type PageState = {
     component: React.ReactNode;
@@ -39,28 +32,13 @@ function isCustomLayout(
 // type PageDir = [PageState, 1 | 0 | -1];
 export default function RouteHandler() {
     const [page, setPage] = React.useState<PageState>(initialState);
-    // const [layoutProps, setLayoutProps] = React.useState<
-    //     Omit<LayoutProps, 'children'>
-    // >({});
-    // const depth = React.useRef<number>(0);
+    const router = useRouter(routes);
     const handleLocationChange = React.useCallback(
         ({ location }: Update<State>) => {
             const result = router.resolve({
                 pathname: location.pathname,
                 query: parseQueryString(location.search),
             });
-
-            // let newDir: 1 | 0 | -1 = 0;
-            // const destDepth = location.pathname.split('/').length;
-            // if (depth.current === 0) {
-            //     newDir = 0;
-            // } else if (depth.current === destDepth) {
-            //     newDir = 0;
-            // } else if (depth.current < destDepth) {
-            //     newDir = 1;
-            // } else {
-            //     newDir = -1;
-            // }
 
             if (!result) return;
             let component: React.ReactNode;
@@ -73,13 +51,11 @@ export default function RouteHandler() {
                 component = result;
             }
 
-            // depth.current = destDepth;
             setPage({
                 component,
                 key: location.key,
                 layoutProps: newLayoutProps,
             });
-            // if (newLayoutProps) setLayoutProps(newLayoutProps);
         },
         [setPage]
     );
