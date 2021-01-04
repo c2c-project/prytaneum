@@ -78,6 +78,9 @@ const base = createMuiTheme({
         MuiTextField: {
             variant: 'outlined',
         },
+        MuiSelect: {
+            variant: 'outlined',
+        },
     },
 });
 
