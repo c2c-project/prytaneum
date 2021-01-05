@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: '4px',
             // borderBottom: `3px solid ${theme.palette.primary.light}`,
         },
-        marginBottom: theme.spacing(3),
+        [theme.breakpoints.up('lg')]: {
+            marginBottom: theme.spacing(3),
+        },
     },
 }));
 

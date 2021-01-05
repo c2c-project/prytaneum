@@ -19,7 +19,7 @@ import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import useForm from 'hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 interface Props {
     onSubmit?: () => void;

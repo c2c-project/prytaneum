@@ -17,7 +17,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
 import useEndpoint from 'hooks/useEndpoint';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { TownhallContext } from 'contexts/Townhall';
 import QuestionCard from '../QuestionCard';
 import { createReply } from '../api';
 

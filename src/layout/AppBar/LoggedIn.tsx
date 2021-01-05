@@ -35,7 +35,9 @@ export default function Nav() {
                     vertical: classes.divider,
                 }}
             />
-            <UserMenu />
+            <UserMenu
+                links={{ settings: '/app/settings', logout: '/logout' }}
+            />
         </>
     );
 }

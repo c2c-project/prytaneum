@@ -75,6 +75,12 @@ const base = createMuiTheme({
         MuiCard: {
             raised: true,
         },
+        MuiTextField: {
+            variant: 'outlined',
+        },
+        MuiSelect: {
+            variant: 'outlined',
+        },
     },
 });
 

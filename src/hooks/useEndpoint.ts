@@ -46,11 +46,18 @@ export default function useEndpoint<T>(
             const results = await wrappedEndpoint();
             if (!isMounted()) return;
             if (options?.onSuccess) options.onSuccess(results);
+
+            // onSuccess may navigate away from the page
+            // so we must check if the component is still mounted
+            if (!isMounted()) return;
             setIsLoading(false);
         } catch (e) {
             if (!isMounted()) return;
             if (options?.onFailure) options.onFailure(e);
             else errorHandler(e);
+
+            // read onSuccess comment above
+            if (!isMounted()) return;
             setIsLoading(false);
         }
     }, [wrappedEndpoint, isMounted, options, setIsLoading, errorHandler]);

@@ -3,7 +3,7 @@ import React from 'react';
 import Page from 'layout/Page';
 import Main from 'layout/Main';
 import AppBar from 'layout/AppBar';
-import TownhallProvider from '../Contexts/Townhall';
+import TownhallProvider from '../../../contexts/Townhall';
 import Component from './TownhallSettings';
 
 export default { title: 'Domains/Townhall/Townhall Settings' };

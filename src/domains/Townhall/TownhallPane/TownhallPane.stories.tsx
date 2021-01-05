@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Main from 'layout/Main';
-import TownhallProvider from '../Contexts/Townhall';
+import TownhallProvider from '../../../contexts/Townhall';
 import Component from './TownhallPane';
 
 export default { title: 'Domains/Townhall/Townhall Pane' };

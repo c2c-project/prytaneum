@@ -1,16 +1,15 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
 
-import Login from 'pages/Auth/Login';
-import useStorage from 'hooks/useStorage';
+import Login from 'pages/Login';
+import useUser from 'hooks/useUser';
 
 interface Props {
-    children: React.ReactNode | React.ReactNodeArray;
+    children: React.ReactElement;
 }
 
 export default function RequireLogin({ children }: Props) {
-    const [isLoggedIn] = useStorage('isLoggedIn');
+    const [user] = useUser();
     // FIXME: onLogin should do what?
-    if (!isLoggedIn) return <Login onLogin={() => {}} />;
-    return <>{children}</>;
+    if (!user) return <Login onLogin={() => {}} />;
+    return children;
 }

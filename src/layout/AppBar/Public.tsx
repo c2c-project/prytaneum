@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { handleNavigation } from 'utils/history';
 
 import Title from './Title';
 
@@ -20,10 +21,15 @@ export default function Public() {
                 color='primary'
                 variant='contained'
                 className={classes.item}
+                onClick={handleNavigation('/login')}
             >
                 Login
             </Button>
-            <Button color='primary' variant='outlined'>
+            <Button
+                color='primary'
+                variant='outlined'
+                onClick={handleNavigation('/register')}
+            >
                 Sign Up
             </Button>
         </>

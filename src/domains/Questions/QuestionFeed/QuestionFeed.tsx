@@ -6,10 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Question } from 'prytaneum-typings';
 
-import { UserContext } from 'contexts/User';
+import useUser from 'hooks/useUser';
 import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import Loader from 'components/Loader';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import { TownhallContext } from 'contexts/Townhall';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 
 import FeedList from './FeedList';
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 function QuestionFeed({ className, style }: Props) {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
-    const user = React.useContext(UserContext);
+    const [user] = useUser();
     const [, dispatch] = React.useContext(PaneContext);
     const [sysMessages, setSysMessages] = React.useState<React.ReactNodeArray>(
         []

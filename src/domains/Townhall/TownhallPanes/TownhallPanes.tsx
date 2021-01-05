@@ -9,7 +9,7 @@ import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
 import TownhallChat from '../TownhallChat';
 import Information from '../TownhallPane';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 import { Panes } from '../types';
 import { PaneContext } from '../Contexts/Pane';
 

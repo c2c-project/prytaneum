@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { motion, MotionProps } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { PopmotionTransitionProps } from 'framer-motion/types/types';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,10 +54,11 @@ interface Props {
     title: string;
 }
 
-const spring: PopmotionTransitionProps = {
-    type: 'spring',
-    damping: 13,
-    stiffness: 150,
+const transition: PopmotionTransitionProps = {
+    // type: 'spring',
+    // damping: 13,
+    // stiffness: 150,
+    ease: 'easeOut',
 };
 
 /**
@@ -123,7 +124,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ x: -50 }}
                         animate={{ x: 0 }}
-                        transition={spring}
+                        transition={transition}
                     >
                         <Typography variant='h4' className={classes.title}>
                             {title}
@@ -133,7 +134,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ y: -50 }}
                         animate={{ y: 0 }}
-                        transition={spring}
+                        transition={transition}
                     >
                         <IconButton
                             onClick={handleClick}
@@ -148,7 +149,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ y: 50 }}
                         animate={{ y: 0 }}
-                        transition={spring}
+                        transition={transition}
                     >
                         {config.map(
                             ({

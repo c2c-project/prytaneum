@@ -8,9 +8,11 @@ export default { title: 'Domains/Admin/User List' };
 
 export function Basic() {
     return (
-        <Layout>
-            <UserList />
-        </Layout>
+        <UserProvider>
+            <Layout>
+                <UserList />
+            </Layout>
+        </UserProvider>
     );
 }
 

@@ -11,7 +11,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import { createChatMessage, getChatmessages } from '../api';
 import { chatReducer } from './utils';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {

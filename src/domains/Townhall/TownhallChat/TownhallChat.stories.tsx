@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import { makeChatMessage } from 'prytaneum-typings';
 
 import Main from 'layout/Main';
-import TownhallProvider from 'domains/Townhall/Contexts/Townhall';
+import TownhallProvider from 'contexts/Townhall';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from './TownhallChat';
 

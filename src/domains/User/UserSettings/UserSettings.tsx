@@ -11,7 +11,7 @@ import Dialog from 'components/Dialog';
 
 import UserProfile from 'components/UserProfile';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
-import { UserContext } from 'contexts/User';
+import useUser from 'hooks/useUser';
 import Redirect from 'components/Redirect';
 
 import {
@@ -105,7 +105,7 @@ export default function UserSettings({ id }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
-    const _user = React.useContext(UserContext);
+    const [user] = useUser();
 
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
@@ -113,7 +113,7 @@ export default function UserSettings({ id }: Props) {
     }, [cont]);
 
     // this is a dev mistake, there's no <User> context higher up in the tree
-    if (!_user) return <Redirect href='home' />;
+    if (!user) return <Redirect href='home' />;
 
     const sections = [
         {
@@ -136,12 +136,12 @@ export default function UserSettings({ id }: Props) {
         {
             title: 'Townhall',
             description: 'Change townhall settings',
-            component: <TownhallUserSettings user={_user} />,
+            component: <TownhallUserSettings user={user} />,
         },
         {
             title: 'Notifications',
             description: 'Customize notifications receieved',
-            component: <NotificationSettings user={_user} />,
+            component: <NotificationSettings user={user} />,
         },
         // {
         //     title: 'Account Settings',

@@ -22,7 +22,8 @@ export async function login(email?: string, password?: string) {
     if (!email.match(/\w+/g) || !password.match(/\w+/g)) {
         throw errors.fieldError();
     }
-    return axios.post('/api/users/login', {
+    // TODO: clientSafeUser instead of user
+    return axios.post<{ user: User }>('/api/users/login', {
         email,
         password,
     });
@@ -69,8 +70,10 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
  *  @constructor register
  *  @param {RegisterForm} form the form to submit the new user registration through
  */
-export async function register(form: RegisterForm) {
+export async function register(form: RegisterForm, query?: string) {
     const { password, email, confirmPassword } = form;
+    let url = '/api/users/register';
+    if (query) url = `${url}${query}`;
 
     if (!password || !email || !confirmPassword) {
         throw errors.fieldError();
@@ -84,7 +87,7 @@ export async function register(form: RegisterForm) {
     if (password !== confirmPassword) {
         throw errors.passMatch();
     }
-    return axios.post('/api/users/register', { ...form });
+    return axios.post(url, { ...form });
 }
 
 /** Function to confirm user from email

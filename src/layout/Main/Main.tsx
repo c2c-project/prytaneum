@@ -24,6 +24,7 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
     },
     main: {
         flex: '1 1 100%',
+        position: 'relative',
     },
     spacing: ({ spacing }) => ({
         padding: spacing ? theme.spacing(spacing) : 0,

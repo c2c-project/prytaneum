@@ -22,8 +22,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import { UserContext } from 'contexts/User';
-import history from 'utils/history';
+import useUser from 'hooks/useUser';
+import { handleNavigation } from 'utils/history';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -57,10 +57,14 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     className?: string;
+    links: {
+        settings: string;
+        logout: string;
+    };
 }
 
-export default function UserMenu({ className }: Props) {
-    const user = React.useContext(UserContext);
+export default function UserMenu({ className, links }: Props) {
+    const [user] = useUser();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const classes = useStyles();
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
@@ -146,23 +150,13 @@ export default function UserMenu({ className }: Props) {
                         {userInfo}
                     </MenuItem>
                 )}
-                <MenuItem
-                    button
-                    onClick={() => {
-                        history.push('/user/settings');
-                    }}
-                >
+                <MenuItem button onClick={handleNavigation(links.settings)}>
                     <ListItemIcon>
                         <Settings />
                     </ListItemIcon>
                     <ListItemText primary='Settings' />
                 </MenuItem>
-                <MenuItem
-                    button
-                    onClick={() => {
-                        history.push('/logout');
-                    }}
-                >
+                <MenuItem button onClick={handleNavigation(links.logout)}>
                     <ListItemIcon>
                         <ExitToApp />
                     </ListItemIcon>
