@@ -14,7 +14,6 @@ export function Basic() {
 }
 
 export function ShouldStick() {
-    // TODO: fix
     return (
         <Grid
             container
