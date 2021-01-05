@@ -13,24 +13,33 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     text: string;
+    className?: string;
 }
 
-export default function Copy({ text }: Props) {
-    const [copy] = useCopy();
-    const classes = useStyles();
+const Copy = React.forwardRef<HTMLDivElement, Props>(
+    ({ text, className }: Props, ref) => {
+        const [copy] = useCopy();
+        const classes = useStyles();
 
-    return (
-        <Grid container alignItems='center'>
-            <Grid item xs='auto' className={classes.text}>
-                {text}
+        return (
+            <Grid ref={ref} className={className} container alignItems='center'>
+                <Grid item xs='auto' className={classes.text}>
+                    {text}
+                </Grid>
+                <Grid item xs='auto'>
+                    <Tooltip title='Copy' aria-label='copy'>
+                        <IconButton onClick={() => copy(text)} edge='end'>
+                            <CopyIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Grid>
             </Grid>
-            <Grid item xs='auto'>
-                <Tooltip title='Copy' aria-label='copy'>
-                    <IconButton onClick={() => copy(text)} edge='end'>
-                        <CopyIcon />
-                    </IconButton>
-                </Tooltip>
-            </Grid>
-        </Grid>
-    );
-}
+        );
+    }
+);
+
+Copy.defaultProps = {
+    className: undefined,
+};
+
+export default Copy;
