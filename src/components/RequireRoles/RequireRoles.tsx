@@ -7,9 +7,14 @@ import Redirect from '../Redirect';
 interface Props {
     requiredRoles: Roles[];
     children: React.ReactElement;
+    redirect?: boolean;
 }
 
-export default function RequireRoles({ requiredRoles, children }: Props) {
+export default function RequireRoles({
+    requiredRoles,
+    children,
+    redirect,
+}: Props) {
     const [user] = useUser();
     const isUserAllowed = React.useMemo(
         () => user && user.roles.some((role) => requiredRoles.includes(role)),
@@ -17,7 +22,12 @@ export default function RequireRoles({ requiredRoles, children }: Props) {
     );
 
     // TODO: make more robust
-    if (!user && !isUserAllowed) return <Redirect href='/logout' />;
+    if (!user && !isUserAllowed)
+        return redirect ? <Redirect href='/logout' /> : <></>;
 
     return children;
 }
+
+RequireRoles.defaultProps = {
+    redirect: true,
+};

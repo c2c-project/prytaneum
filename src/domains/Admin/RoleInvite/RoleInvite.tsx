@@ -6,7 +6,6 @@ import {
     CardHeader,
     Grid,
     Button,
-    Typography,
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import type { Roles } from 'prytaneum-typings';
@@ -31,6 +30,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     text: {
         fontSize: '1.3em',
+    },
+    textContainer: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
 }));
 
@@ -79,31 +82,13 @@ export default function RoleInvite() {
                         Make Invite
                     </Button>
                 </LoadingButton>
-                <Grid item xs={12}>
+                <Grid item container justify='center' xs={12}>
                     <Collapse in={Boolean(link)}>
-                        <Grid
-                            container
-                            justify='center'
-                            alignItems='center'
-                            wrap='nowrap'
-                        >
-                            <Grid item>
-                                <Typography
-                                    display='inline'
-                                    variant='subtitle2'
-                                    className={classes.text}
-                                >
-                                    Invite Link:
-                                </Typography>
-                            </Grid>
-                            &nbsp; &nbsp;
-                            <Grid item>
-                                <CopyText
-                                    className={classes.text}
-                                    text={link}
-                                />
-                            </Grid>
-                        </Grid>
+                        <CopyText
+                            TextFieldProps={{ label: 'Invite Link' }}
+                            className={classes.text}
+                            text={link}
+                        />
                     </Collapse>
                 </Grid>
             </CardContent>
