@@ -10,7 +10,7 @@ import history from 'utils/history';
 import Layout, { Props as LayoutProps } from 'layout';
 import useRouter from 'hooks/useRouter';
 
-import { routes, parseQueryString, ActionReturn, CustomLayout } from './utils';
+import { routes, ActionResult, CustomLayout } from './utils';
 
 type PageState = {
     component: React.ReactNode;
@@ -24,7 +24,7 @@ const initialState: PageState = {
 };
 
 function isCustomLayout(
-    result: RouteResultSync<ActionReturn>
+    result: RouteResultSync<ActionResult>
 ): result is CustomLayout {
     return (result as CustomLayout).layoutProps !== undefined;
 }
@@ -37,7 +37,7 @@ export default function RouteHandler() {
         ({ location }: Update<State>) => {
             const result = router.resolve({
                 pathname: location.pathname,
-                query: parseQueryString(location.search),
+                query: location.search,
             });
 
             if (!result) return;

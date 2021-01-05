@@ -1,5 +1,7 @@
 import React from 'react';
 
+import QueryProvider from 'contexts/Query';
+
 import RegPrompt from 'domains/Auth/RegPrompt';
 import TownhallProvider from 'contexts/Townhall';
 import TownhallSettings from 'domains/Townhall/TownhallSettings';
@@ -96,9 +98,11 @@ addRoutes([
     {
         path: '/register',
         action: (ctx) => (
-            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                <Register />
-            </FadeThrough>
+            <QueryProvider query={ctx.query}>
+                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                    <Register />
+                </FadeThrough>
+            </QueryProvider>
         ),
     },
     {
