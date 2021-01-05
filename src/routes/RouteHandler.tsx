@@ -57,7 +57,7 @@ export default function RouteHandler() {
                 layoutProps: newLayoutProps,
             });
         },
-        [setPage]
+        [setPage, router]
     );
 
     React.useEffect(() => {

@@ -110,7 +110,7 @@ export default function Prompt({ forceOpen }: PromptProps) {
     const router = useRouter(routes);
     const component = React.useMemo(
         () => router.resolve(path) as React.ReactElement,
-        [path]
+        [path, router]
     );
     return (
         <Dialog open={open} onClose={() => setOpen(false)}>
