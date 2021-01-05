@@ -10,7 +10,7 @@ import TextField, { Props as TextFieldProps } from 'components/TextField';
 
 interface Props<T extends string[] = string[]> {
     options: T;
-    getSecondary: (s: T[number]) => void;
+    getSecondary?: (s: T[number]) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PaneSelect({
+export default function Select({
     options,
     value,
     getSecondary,
@@ -120,10 +120,14 @@ export default function PaneSelect({
                 <MenuItem key={option} value={option}>
                     <Grid container>
                         <div style={{ flex: 1 }}>{option}</div>
-                        {getSecondary(option)}
+                        {getSecondary && getSecondary(option)}
                     </Grid>
                 </MenuItem>
             ))}
         </TextField>
     );
 }
+
+Select.defaultProps = {
+    getSecondary: undefined,
+};
