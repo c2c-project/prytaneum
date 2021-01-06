@@ -15,10 +15,7 @@ export default () => {
             }}
             style={{
                 position: 'absolute',
-                top: '0px',
-                left: '0px',
-                right: '0px',
-                bottom: '0px',
+                inset: 0,
                 borderRadius: 25,
                 zIndex: -1,
             }}
