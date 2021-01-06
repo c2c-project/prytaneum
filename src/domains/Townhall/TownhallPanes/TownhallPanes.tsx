@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
+import useUser from 'hooks/useUser';
+import QuestionQueue from 'domains/Questions/QuestionQueue';
 import TownhallChat from '../TownhallChat';
 import Information from '../TownhallPane';
 import { TownhallContext } from '../../../contexts/Townhall';
@@ -55,10 +57,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function buildPanes(townhall: Townhall) {
+function buildPanes(townhall: Townhall, isModerator: boolean) {
     const panes: Partial<Record<Panes, JSX.Element>> = {
         Information: <Information />,
     };
+    if (isModerator) {
+        panes['Question Queue'] = <QuestionQueue />;
+    }
     if (townhall.settings.questionQueue.transparent)
         panes['Question Feed'] = (
             <>
@@ -79,8 +84,21 @@ const makeTransition = (idx: number) => ({
 });
 
 export default function TownhallPanes() {
+    const [user] = useUser();
     const townhall = React.useContext(TownhallContext);
-    const panes = React.useMemo(() => buildPanes(townhall), [townhall]);
+    const isModerator = React.useMemo(
+        () =>
+            (user &&
+                townhall.settings.moderators.list.some(
+                    ({ email }) => email === user.email.address
+                )) ||
+            townhall.meta.createdBy._id === user?._id,
+        [townhall, user]
+    );
+    const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
+        townhall,
+        isModerator,
+    ]);
     type PaneKey = keyof typeof panes;
     const classes = useStyles();
     const [state, setState] = React.useState<PaneKey>('Information');

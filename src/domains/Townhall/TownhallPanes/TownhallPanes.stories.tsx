@@ -1,10 +1,10 @@
 import React from 'react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeTownhall } from 'prytaneum-typings';
+import { makeQuestion, makeTownhall, makeUser } from 'prytaneum-typings';
 import { Grid } from '@material-ui/core';
 
-import Page from 'layout/Page';
-import Main from 'layout/Main';
+import Layout from 'layout';
+import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from '../../../contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
@@ -24,14 +24,15 @@ function sendMessage(num?: number) {
     }
 }
 
+const user = makeUser();
 const townhall = makeTownhall();
 townhall.settings.chat.enabled = true;
 townhall.settings.questionQueue.transparent = true;
 
-export function Layout() {
+export function Basic() {
     return (
-        <Page>
-            <Main maxWidth='xl'>
+        <UserProvider value={user}>
+            <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
                 <Grid
                     container
                     direction='column'
@@ -70,7 +71,59 @@ export function Layout() {
                         </Grid>
                     </div>
                 </Grid>
-            </Main>
-        </Page>
+            </Layout>
+        </UserProvider>
+    );
+}
+
+export function AsMod() {
+    const copy = { ...townhall };
+    copy.settings.moderators.list.push({
+        email: user.email.address,
+        permissions: [],
+    });
+    return (
+        <UserProvider value={user}>
+            <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
+                <Grid
+                    container
+                    direction='column'
+                    style={{ height: '100%' }}
+                    alignContent='flex-start'
+                    wrap='nowrap'
+                >
+                    <div style={{ flex: 1 }}>
+                        <button type='button' onClick={() => sendMessage(20)}>
+                            Add Questions
+                        </button>
+                    </div>
+                    <div
+                        style={{
+                            flex: '1 1 100%',
+                            display: 'flex',
+                            backgroundColor: 'honeydew',
+                            width: '100%',
+                        }}
+                    >
+                        <Grid item xs={12} md={8} />
+                        <Grid
+                            item
+                            xs={12}
+                            md={4}
+                            container
+                            style={{ padding: '8px' }}
+                        >
+                            <TownhallProvider townhallId='123' value={townhall}>
+                                <FixtureSocket.Provider value={emitter}>
+                                    <PaneProvider>
+                                        <TownhallPanes />
+                                    </PaneProvider>
+                                </FixtureSocket.Provider>
+                            </TownhallProvider>
+                        </Grid>
+                    </div>
+                </Grid>
+            </Layout>
+        </UserProvider>
     );
 }
