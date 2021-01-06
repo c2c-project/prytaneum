@@ -35,7 +35,6 @@ const Copy = React.forwardRef<HTMLDivElement, Props>(
             >
                 <Grid item xs='auto' className={classes.text}>
                     <TextField
-                        contentEditable='false'
                         fullWidth
                         variant='filled'
                         value={text}
