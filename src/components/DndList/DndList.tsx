@@ -53,7 +53,7 @@ export default function DndList() {
     const itemStyle = React.useCallback(
         (isDragging: boolean): React.CSSProperties => ({
             userSelect: 'none',
-            margin: `0 0 ${theme.spacing(3)}px 0 `,
+            margin: theme.spacing(0, 0, 2, 0),
             filter: isDragging
                 ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})`
                 : '',
@@ -78,7 +78,7 @@ export default function DndList() {
                 items,
             });
         },
-        [state]
+        [state, reorder]
     );
 
     return (
