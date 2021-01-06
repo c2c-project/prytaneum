@@ -22,7 +22,7 @@ export default function RequireRoles({
     );
 
     // TODO: make more robust
-    if (!user && !isUserAllowed)
+    if (!user || !isUserAllowed)
         return redirect ? <Redirect href='/logout' /> : <></>;
 
     return children;
