@@ -21,9 +21,9 @@ import InviteForm from 'domains/Invite/InviteForm';
 
 import UserSettings from 'domains/User/UserSettings';
 
-import RequireLogin from 'components/RequireLogin';
-import Redirect from 'components/Redirect';
-import RequireRoles from 'components/RequireRoles';
+import RequireLogin from 'domains/Logical/RequireLogin';
+import Redirect from 'domains/Logical/Redirect';
+import RequireRoles from 'domains/Logical/RequireRoles';
 import history from 'utils/history';
 import { addRoutes, areParamsValid, PrytaneumRoutes } from './utils';
 

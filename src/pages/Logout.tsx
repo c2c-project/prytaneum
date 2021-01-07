@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Redirect from 'components/Redirect';
+import Redirect from 'domains/Logical/Redirect';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import useUser from 'hooks/useUser';

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import TitleCard from 'components/TitleCard';
 import FadeThrough from 'components/FadeThrough';
-import RequireRoles from 'components/RequireRoles';
+import RequireRoles from 'domains/Logical/RequireRoles';
 import RoleInvite from 'domains/Admin/RoleInvite';
 
 const useStyles = makeStyles((theme) => ({

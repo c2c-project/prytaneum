@@ -9,10 +9,10 @@ import {
 import Dialog from 'components/Dialog';
 // import AppBar from 'layout/AppBar';
 
-import UserProfile from 'components/UserProfile';
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
 import useUser from 'hooks/useUser';
-import Redirect from 'components/Redirect';
+import Redirect from 'domains/Logical/Redirect';
+import UserProfile from '../UserProfile';
 
 import {
     // ButtonList,
