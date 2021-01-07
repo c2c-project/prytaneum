@@ -1,25 +1,24 @@
 import React from 'react';
 import { CardHeader, useTheme, Grid } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { AnimateSharedLayout } from 'framer-motion';
 import type { Question } from 'prytaneum-typings';
 
 import DropArea from 'components/DropArea';
 
 import QueueControls from './QueueControls';
 import DraggableList from './DraggableList';
-import StaticList from './StaticList';
+import StaticList, { StaticListWrapper } from './StaticList';
 import useListStyles from './useListStyles';
 
 interface Props {
     questions: Question[];
 }
 
-export default function Queue({ questions }: Props) {
+export default function Queue({ questions: _questions }: Props) {
     const theme = useTheme();
     const classes = useListStyles();
     const [current, setCurrent] = React.useState(0);
-    const [state, setState] = React.useState(questions);
+    const [questions, setQuestions] = React.useState(_questions);
     const reorder = React.useCallback(
         (list: Question[], startIndex: number, endIndex: number) => {
             const result = Array.from(list);
@@ -60,30 +59,30 @@ export default function Queue({ questions }: Props) {
             }
 
             const newState = reorder(
-                state,
+                questions,
                 result.source.index,
                 result.destination.index
             );
 
-            setState(newState);
+            setQuestions(newState);
         },
-        [state, reorder]
+        [questions, reorder]
     );
 
     const handleClick = (dir: -1 | 1) => () => {
-        if (current + dir >= state.length) return setCurrent(0);
-        if (current + dir < 0) return setCurrent(state.length - 1);
+        if (current + dir >= questions.length) return setCurrent(0);
+        if (current + dir < 0) return setCurrent(questions.length - 1);
         return setCurrent(current + dir);
     };
 
-    const draggableCards = React.useMemo(() => state.slice(current + 1), [
-        state,
+    const draggableCards = React.useMemo(() => questions.slice(current + 1), [
+        questions,
         current,
     ]);
-    const notDraggableCards = React.useMemo(() => state.slice(0, current + 1), [
-        state,
-        current,
-    ]);
+    const notDraggableCards = React.useMemo(
+        () => questions.slice(0, current + 1),
+        [questions, current]
+    );
 
     return (
         <Grid container direction='column' wrap='nowrap'>
@@ -92,26 +91,24 @@ export default function Queue({ questions }: Props) {
                 onClickPrev={handleClick(-1)}
                 className={classes.listItem}
             />
-            <div style={{ paddingBottom: theme.spacing(3) }}>
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <DropArea getStyle={getListStyle} droppableId='droppable'>
-                        <AnimateSharedLayout>
-                            <CardHeader
-                                title='Queue'
-                                titleTypographyProps={{
-                                    variant: 'h6',
-                                }}
-                            />
-                            <StaticList questions={notDraggableCards} />
-                            <DraggableList
-                                questions={draggableCards}
-                                itemStyle={itemStyle}
-                                offset={current + 1}
-                            />
-                        </AnimateSharedLayout>
-                    </DropArea>
-                </DragDropContext>
-            </div>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <DropArea getStyle={getListStyle} droppableId='droppable'>
+                    <CardHeader
+                        title='Queue'
+                        titleTypographyProps={{
+                            variant: 'h6',
+                        }}
+                    />
+                    <StaticListWrapper>
+                        <StaticList questions={notDraggableCards} />
+                    </StaticListWrapper>
+                    <DraggableList
+                        questions={draggableCards}
+                        itemStyle={itemStyle}
+                        offset={current + 1}
+                    />
+                </DropArea>
+            </DragDropContext>
         </Grid>
     );
 }
