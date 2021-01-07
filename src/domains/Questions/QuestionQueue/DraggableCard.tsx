@@ -10,7 +10,6 @@ interface Props {
     question: Question;
     index: number;
     itemStyle: (isDragging: boolean) => React.CSSProperties;
-
     isCurrent: boolean;
     draggable: boolean;
 }

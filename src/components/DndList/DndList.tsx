@@ -83,7 +83,7 @@ export default function DndList() {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <DropArea getStyle={getListStyle} dropId='droppable'>
+            <DropArea getStyle={getListStyle} droppableId='droppable'>
                 <CardHeader
                     title='Suggested'
                     titleTypographyProps={{
