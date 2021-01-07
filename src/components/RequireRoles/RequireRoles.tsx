@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Roles } from 'prytaneum-typings';
 
+import useRoleQuery from 'hooks/useRoleQuery';
 import useUser from 'hooks/useUser';
 import Redirect from '../Redirect';
 
@@ -16,13 +17,10 @@ export default function RequireRoles({
     redirect,
 }: Props) {
     const [user] = useUser();
-    const isUserAllowed = React.useMemo(
-        () => user && user.roles.some((role) => requiredRoles.includes(role)),
-        [requiredRoles, user]
-    );
+    const isAllowed = useRoleQuery(requiredRoles);
 
     // TODO: make more robust
-    if (!user || !isUserAllowed)
+    if (!user || !isAllowed)
         return redirect ? <Redirect href='/logout' /> : <></>;
 
     return children;
