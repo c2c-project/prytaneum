@@ -7,7 +7,7 @@ import DropArea from 'components/DropArea';
 
 import QueueControls from './QueueControls';
 import DraggableList from './DraggableList';
-import StaticList, { StaticListWrapper } from './StaticList';
+import StaticList from './StaticList';
 import useListStyles from './useListStyles';
 
 interface Props {
@@ -99,9 +99,7 @@ export default function Queue({ questions: _questions }: Props) {
                             variant: 'h6',
                         }}
                     />
-                    <StaticListWrapper>
-                        <StaticList questions={notDraggableCards} />
-                    </StaticListWrapper>
+                    <StaticList questions={notDraggableCards} />
                     <DraggableList
                         questions={draggableCards}
                         itemStyle={itemStyle}

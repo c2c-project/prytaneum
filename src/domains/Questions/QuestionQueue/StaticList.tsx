@@ -9,12 +9,12 @@ import clsx from 'clsx';
 import StaticCard from './StaticCard';
 import useListStyles from './useListStyles';
 
-interface InnerProps {
+interface SharedProps {
     questions: Question[];
 }
 
-const StaticList = React.memo(
-    ({ questions }: InnerProps) => {
+const StaticListInner = React.memo(
+    ({ questions }: SharedProps) => {
         const classes = useListStyles();
         return (
             <AnimateSharedLayout>
@@ -43,13 +43,10 @@ const StaticList = React.memo(
         prevProps.questions.length === nextProps.questions.length
 );
 
-interface WrapperProps {
-    children: React.ReactNodeArray | React.ReactNode;
-}
 /**
  * counterpart to draggable list
  */
-export const StaticListWrapper = React.memo(({ children }: WrapperProps) => {
+export const StaticListWrapper = React.memo(({ questions }: SharedProps) => {
     const classes = useListStyles();
     return (
         <Droppable droppableId='disabled-area' isDropDisabled>
@@ -60,7 +57,7 @@ export const StaticListWrapper = React.memo(({ children }: WrapperProps) => {
                     className={classes.listItem}
                 >
                     {/* only re-render if the students array reference changes */}
-                    {children}
+                    <StaticListInner questions={questions} />
                     {provided.placeholder}
                 </div>
             )}
@@ -68,4 +65,4 @@ export const StaticListWrapper = React.memo(({ children }: WrapperProps) => {
     );
 });
 
-export default StaticList;
+export default StaticListWrapper;
