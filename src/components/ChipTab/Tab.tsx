@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Tab as MUITab, TabProps } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -30,9 +29,5 @@ function Tab(props: TabProps) {
     const classes = useStyles();
     return <MUITab {...props} classes={classes} />;
 }
-
-Tab.propTypes = {
-    title: PropTypes.string.isRequired,
-};
 
 export default Tab;

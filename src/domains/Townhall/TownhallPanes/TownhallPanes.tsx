@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fade, Chip, Badge, Grid } from '@material-ui/core';
+import { Fade, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Townhall } from 'prytaneum-typings';
@@ -7,20 +7,17 @@ import { motion } from 'framer-motion';
 
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
-import useUser from 'hooks/useUser';
 import QuestionQueue from 'domains/Questions/QuestionQueue';
 import TownhallChat from '../TownhallChat';
 import Information from '../TownhallPane';
 import { TownhallContext } from '../../../contexts/Townhall';
 import { Panes } from '../types';
-import { PaneContext } from '../Contexts/Pane';
+import useIsModerator from '../useIsModerator';
+import StyledTab from './StyledTab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
-    },
-    navigation: {
-        paddingBottom: theme.spacing(2),
     },
     chipContainer: {
         marginBottom: theme.spacing(2),
@@ -38,22 +35,9 @@ const useStyles = makeStyles((theme) => ({
     hidden: {
         display: 'none',
     },
-    chip: {
-        marginRight: theme.spacing(1),
-        border: '1px solid grey',
-        ...theme.typography.subtitle2,
-        [theme.breakpoints.down('md')]: {
-            marginBottom: theme.spacing(1),
-        },
-    },
     paneContainer: {
         width: '100%',
         flexBasis: '100%',
-    },
-    animContainer: {
-        display: 'inline-flex',
-        position: 'relative',
-        flexShrink: 0,
     },
 }));
 
@@ -84,17 +68,8 @@ const makeTransition = (idx: number) => ({
 });
 
 export default function TownhallPanes() {
-    const [user] = useUser();
     const townhall = React.useContext(TownhallContext);
-    const isModerator = React.useMemo(
-        () =>
-            (user &&
-                townhall.settings.moderators.list.some(
-                    ({ email }) => email === user.email.address
-                )) ||
-            townhall.meta.createdBy._id === user?._id,
-        [townhall, user]
-    );
+    const isModerator = useIsModerator();
     const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
         townhall,
         isModerator,
@@ -102,7 +77,6 @@ export default function TownhallPanes() {
     type PaneKey = keyof typeof panes;
     const classes = useStyles();
     const [state, setState] = React.useState<PaneKey>('Information');
-    const [context] = React.useContext(PaneContext);
 
     function getClassName(key: string) {
         return key === state
@@ -111,7 +85,6 @@ export default function TownhallPanes() {
     }
 
     const options = Object.keys(panes) as PaneKey[];
-
     // TODO: make the new chip tabs accessible
     return (
         <Grid
@@ -123,39 +96,17 @@ export default function TownhallPanes() {
             wrap='nowrap'
         >
             {options.length > 1 && (
-                <Grid item xs='auto'>
-                    <div className={classes.chipContainer}>
-                        {options.map((option, idx) => (
-                            <motion.div
-                                key={option}
-                                initial={{ opacity: 0, x: 40 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={makeTransition(idx)}
-                                className={classes.animContainer}
-                            >
-                                <Badge
-                                    badgeContent={context[option]}
-                                    overlap='circle'
-                                    color='secondary'
-                                >
-                                    <Chip
-                                        aria-selected={option === state}
-                                        aria-controls={`${option}-panel`}
-                                        role='tab'
-                                        className={classes.chip}
-                                        key={option}
-                                        label={option}
-                                        color={
-                                            option === state
-                                                ? 'primary'
-                                                : 'default'
-                                        }
-                                        onClick={() => setState(option)}
-                                    />
-                                </Badge>
-                            </motion.div>
-                        ))}
-                    </div>
+                <Grid item xs='auto' className={classes.chipContainer}>
+                    {options.map((option, idx) => (
+                        <StyledTab
+                            key={option}
+                            label={option}
+                            index={idx}
+                            value={option}
+                            onClick={() => setState(option)}
+                            selected={option === state}
+                        />
+                    ))}
                 </Grid>
             )}
             <Grid item xs='auto' className={classes.paneContainer}>

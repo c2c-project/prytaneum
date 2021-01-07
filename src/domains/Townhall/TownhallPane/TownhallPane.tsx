@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TownhallPane() {
+function TownhallPane() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
 
@@ -43,3 +43,5 @@ export default function TownhallPane() {
         </Grid>
     );
 }
+
+export default React.memo(TownhallPane);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
 import { AnimatePresence } from 'framer-motion';
+import { withPerformance } from 'storybook-addon-performance';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -32,6 +33,7 @@ addDecorator((storyFn) => (
     </ThemeProvider>
 ));
 
+addDecorator(withPerformance);
 addParameters({
     a11y: {
         element: '#root',

@@ -11,6 +11,7 @@ module.exports = {
                 docs: false,
             },
         },
+        'storybook-addon-performance/register',
     ],
     typescript: {
         reactDocgen: 'none',
