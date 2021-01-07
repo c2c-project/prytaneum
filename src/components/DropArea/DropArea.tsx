@@ -1,20 +1,25 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import {
     Droppable,
     DroppableProvided,
     DroppableStateSnapshot,
+    DroppableProps,
 } from 'react-beautiful-dnd';
 import Card from '@material-ui/core/Card';
 
 interface Props {
-    children: React.ReactNode | React.ReactNodeArray;
     getStyle?: (isDraggingOver: boolean) => React.CSSProperties;
-    dropId: string;
+    children: React.ReactNodeArray | React.ReactNode;
 }
 
-export default function DropArea({ children, getStyle, dropId }: Props) {
+export default function DropArea(
+    props: Omit<DroppableProps, 'children'> & Props
+) {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { children, getStyle, ...rest } = props;
     return (
-        <Droppable droppableId={dropId}>
+        <Droppable {...rest}>
             {(
                 provided: DroppableProvided,
                 snapshot: DroppableStateSnapshot

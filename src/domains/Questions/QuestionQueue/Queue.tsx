@@ -10,11 +10,18 @@ import {
     CardActions,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import {
+    DragDropContext,
+    DropResult,
+    Droppable,
+    DroppableProvided,
+} from 'react-beautiful-dnd';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import type { Question } from 'prytaneum-typings';
 import NextIcon from '@material-ui/icons/SkipNext';
 import PrevIcon from '@material-ui/icons/SkipPrevious';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import clsx from 'clsx';
 
 import DropArea from 'components/DropArea';
 import DragArea from 'components/DragArea';
@@ -24,7 +31,7 @@ import QuestionCard from '../QuestionCard';
 interface Props {
     questions: Question[];
 }
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         position: 'relative',
         overflow: 'visible',
@@ -33,6 +40,9 @@ const useStyles = makeStyles(() => ({
         // setting margin here will cause the drop to hang for a bit
         // instead set the margin on the dragarea
         // margin: 7,
+    },
+    item: {
+        marginBottom: theme.spacing(3),
     },
 }));
 
@@ -68,21 +78,45 @@ const DraggableCard = React.memo(
         itemStyle,
         cardStyle,
         isCurrent,
+        draggable,
     }: {
         question: Question;
         index: number;
         itemStyle: (isDragging: boolean) => React.CSSProperties;
         cardStyle: string;
         isCurrent: boolean;
+        draggable: boolean;
     }) => {
+        const getStyle: (
+            d: boolean
+        ) => React.CSSProperties = React.useMemo(() => {
+            if (draggable || isCurrent) return itemStyle;
+            return (dragging) => ({
+                ...itemStyle(dragging),
+                filter: 'brightness(.7)',
+            });
+        }, [draggable, isCurrent]);
+        const icon: React.ReactNode = React.useMemo(() => {
+            if (!draggable || isCurrent) return undefined;
+            return <DragHandleIcon />;
+        }, [draggable, isCurrent]);
         return (
             <DragArea
                 key={question._id}
                 draggableId={question._id}
                 index={index}
-                getStyle={itemStyle}
+                getStyle={getStyle}
+                isDragDisabled={!draggable}
             >
-                <QuestionCard className={cardStyle} question={question}>
+                <QuestionCard
+                    CardHeaderProps={{
+                        action: icon,
+                        avatar: undefined,
+                        subheader: undefined,
+                    }}
+                    className={cardStyle}
+                    question={question}
+                >
                     <MovingPointer key='ptr' isIn={isCurrent} />
                 </QuestionCard>
             </DragArea>
@@ -94,12 +128,14 @@ const Controls = React.memo(
     ({
         onClickNext,
         onClickPrev,
+        className,
     }: {
         onClickNext: () => void;
         onClickPrev: () => void;
+        className: string;
     }) => {
         return (
-            <Card>
+            <Card className={className}>
                 <CardHeader title='Controls' />
                 <CardActions>
                     <IconButton onClick={onClickPrev}>
@@ -110,6 +146,74 @@ const Controls = React.memo(
                     </IconButton>
                 </CardActions>
             </Card>
+        );
+    }
+);
+
+const DraggableCards = React.memo(
+    ({
+        questions,
+        itemStyle,
+        className,
+        offset,
+    }: {
+        questions: Question[];
+        itemStyle: (d: boolean) => React.CSSProperties;
+        className: string;
+        offset: number;
+    }) => {
+        return (
+            <>
+                {questions.map((question, index) => (
+                    <DraggableCard
+                        key={question._id}
+                        question={question}
+                        cardStyle={className}
+                        isCurrent={false}
+                        itemStyle={itemStyle}
+                        index={index + offset}
+                        draggable
+                    />
+                ))}
+            </>
+        );
+    }
+);
+
+const NotDraggableCards = React.memo(
+    ({
+        questions,
+        className,
+    }: {
+        questions: Question[];
+        className: string;
+    }) => {
+        return (
+            <>
+                {questions.map((question, idx) => (
+                    <QuestionCard
+                        key={question._id}
+                        CardHeaderProps={{
+                            action: undefined,
+                            avatar: undefined,
+                            subheader: undefined,
+                        }}
+                        className={className}
+                        question={question}
+                        style={{
+                            filter:
+                                idx !== questions.length - 1
+                                    ? 'brightness(.7)'
+                                    : undefined,
+                        }}
+                    >
+                        <MovingPointer
+                            key='ptr'
+                            isIn={idx === questions.length - 1}
+                        />
+                    </QuestionCard>
+                ))}
+            </>
         );
     }
 );
@@ -195,34 +299,64 @@ export default function DndList({ questions }: Props) {
         return setCurrent(current + dir);
     };
 
+    const draggableCards = React.useMemo(() => state.slice(current + 1), [
+        state,
+        current,
+    ]);
+    const notDraggableCards = React.useMemo(() => state.slice(0, current + 1), [
+        state,
+        current,
+    ]);
+
     return (
         <Grid container direction='column' wrap='nowrap'>
             <Controls
                 onClickNext={handleClick(1)}
                 onClickPrev={handleClick(-1)}
+                className={classes.item}
             />
-            <DragDropContext onDragEnd={onDragEnd}>
-                <DropArea getStyle={getListStyle} dropId='droppable'>
-                    <CardHeader
-                        title='Queue'
-                        titleTypographyProps={{
-                            variant: 'h6',
-                        }}
-                    />
-                    <AnimateSharedLayout>
-                        {state.map((question, index) => (
-                            <DraggableCard
-                                key={question._id}
-                                question={question}
-                                cardStyle={classes.card}
-                                isCurrent={state[current]._id === question._id}
-                                itemStyle={itemStyle}
-                                index={index}
+            <div style={{ paddingBottom: theme.spacing(3) }}>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <DropArea getStyle={getListStyle} droppableId='droppable'>
+                        <AnimateSharedLayout>
+                            <CardHeader
+                                title='Queue'
+                                titleTypographyProps={{
+                                    variant: 'h6',
+                                }}
                             />
-                        ))}
-                    </AnimateSharedLayout>
-                </DropArea>
-            </DragDropContext>
+                            <Droppable
+                                droppableId='disabled-area'
+                                isDropDisabled
+                            >
+                                {(provided: DroppableProvided) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                        className={classes.item}
+                                    >
+                                        {/* only re-render if the students array reference changes */}
+                                        <NotDraggableCards
+                                            questions={notDraggableCards}
+                                            className={clsx([
+                                                classes.card,
+                                                classes.item,
+                                            ])}
+                                        />
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                            <DraggableCards
+                                questions={draggableCards}
+                                itemStyle={itemStyle}
+                                className={classes.card}
+                                offset={current + 1}
+                            />
+                        </AnimateSharedLayout>
+                    </DropArea>
+                </DragDropContext>
+            </div>
         </Grid>
     );
 }

@@ -13,6 +13,7 @@ export function Basic() {
 }
 
 const questions = makeGenFn(makeQuestion)(15);
+questions[1]._id = '1';
 
 export function Queue() {
     return (
