@@ -14,11 +14,11 @@ interface Props {
     questions: Question[];
 }
 
-export default function Queue({ questions: _questions }: Props) {
+/**
+ * abstracting most of the styling/generic logic away
+ */
+function useQueue() {
     const theme = useTheme();
-    const classes = useListStyles();
-    const [current, setCurrent] = React.useState(0);
-    const [questions, setQuestions] = React.useState(_questions);
     const reorder = React.useCallback(
         (list: Question[], startIndex: number, endIndex: number) => {
             const result = Array.from(list);
@@ -29,7 +29,6 @@ export default function Queue({ questions: _questions }: Props) {
         },
         []
     );
-
     const getListStyle = React.useCallback(
         (isDraggingOver: boolean): React.CSSProperties => ({
             background: isDraggingOver ? 'lightblue' : 'lightgrey',
@@ -50,6 +49,15 @@ export default function Queue({ questions: _questions }: Props) {
         }),
         [theme]
     );
+    return [reorder, getListStyle, itemStyle] as const;
+}
+
+export default function Queue({ questions: _questions }: Props) {
+    const [reorder, getListStyle, itemStyle] = useQueue();
+    const classes = useListStyles();
+    const [current, setCurrent] = React.useState(0);
+    const [questions, setQuestions] = React.useState(_questions);
+    const [hidePast, setHidePast] = React.useState(false);
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -78,10 +86,12 @@ export default function Queue({ questions: _questions }: Props) {
     const draggableCards = React.useMemo(() => questions.slice(current + 1), [
         questions,
         current,
+        hidePast,
     ]);
-    const notDraggableCards = React.useMemo(
-        () => questions.slice(0, current + 1),
-        [questions, current]
+    const staticCards = React.useMemo(
+        () =>
+            hidePast ? [questions[current]] : questions.slice(0, current + 1),
+        [questions, current, hidePast]
     );
 
     return (
@@ -90,6 +100,8 @@ export default function Queue({ questions: _questions }: Props) {
                 onClickNext={handleClick(1)}
                 onClickPrev={handleClick(-1)}
                 className={classes.listItem}
+                onClickToggleVisibility={() => setHidePast(!hidePast)}
+                hidePast={hidePast}
             />
             <DragDropContext onDragEnd={onDragEnd}>
                 <DropArea getStyle={getListStyle} droppableId='droppable'>
@@ -99,7 +111,7 @@ export default function Queue({ questions: _questions }: Props) {
                             variant: 'h6',
                         }}
                     />
-                    <StaticList questions={notDraggableCards} />
+                    <StaticList questions={staticCards} />
                     <DraggableList
                         questions={draggableCards}
                         itemStyle={itemStyle}

@@ -35,12 +35,26 @@ const StaticListInner = React.memo(
             </AnimateSharedLayout>
         );
     },
-    /**
-     * somewhat clever; all that should ever change is the size,
-     * so we can just compare to know if we should update
-     */
-    (prevProps, nextProps) =>
-        prevProps.questions.length === nextProps.questions.length
+
+    (prevProps, nextProps) => {
+        /**
+         * somewhat clever; all that should ever change is the size,
+         * so we can just compare to know if we should update
+         */
+        const areLengthsEqual =
+            prevProps.questions.length === nextProps.questions.length;
+
+        /**
+         * if the user is hiding the past questions, length will always be 1
+         * , and we should update if the single question is different
+         */
+
+        if (areLengthsEqual && prevProps.questions.length === 1) {
+            return prevProps.questions[0]._id === nextProps.questions[0]._id;
+        }
+
+        return areLengthsEqual;
+    }
 );
 
 /**
