@@ -14,11 +14,14 @@ import {
     ArrowDropDown as ArrowDownIcon,
 } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
+import { isToday, isThisWeek, isThisMonth, isThisQuarter, isThisYear} from 'date-fns';
 
+import ListFilter from 'components/ListFilter';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
+import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import {
     getFeedbackReportsBySubmitter,
@@ -101,6 +104,7 @@ export default function ReportHistory() {
                 ...report,
                 type: 'Bug',
             })) as Report[];
+            console.log(bugReports);
             setNumOfPages(results.data.count / pageSize);
             setReports(bugReports);
         },
@@ -160,6 +164,52 @@ export default function ReportHistory() {
     const customReportFunctions = {
         updateReport,
         refetchReports: () => sendRequest(),
+    };
+
+
+    type Filter = FilterFunc<Report>;
+    const filterMap: Record<string, Filter> = {
+        'Today': (data) =>
+            data.filter(({ date }) => isToday(new Date(date))),
+
+        'This week': (data) =>
+            data.filter(({ date }) => isThisWeek(new Date(date))),
+
+        'This month': (data) =>
+            data.filter(({ date }) => isThisMonth(new Date(date))),
+
+        'Last 3 months': (data) =>
+            data.filter(({ date }) => isThisQuarter(new Date(date))),
+
+        'This year': (data) =>
+            data.filter(({ date }) => isThisYear(new Date(date))),
+    };
+
+    const search = (searchText: string, data: Report[]) => {
+        const descriptionAccessor = (d: Report) => d.description;
+        return utilSearch(searchText, data, [descriptionAccessor]);
+    };
+
+    const [filters, setFilters] = React.useState<Filter[]>([
+        (reportList: Report[]) => reportList,
+    ]);
+
+    const handleSearch = React.useCallback(
+        (text: string) =>
+            setFilters(([, ...otherFilters]) => [
+                (filteredList) => search(text, filteredList),
+                ...otherFilters,
+            ]),
+        [setFilters]
+    );
+
+    const filteredReports = React.useMemo(
+        () => applyFilters(reports || [], filters),
+        [reports, filters]
+    );
+
+    const handleFilterChange = (newFilters: Filter[]) => {
+        setFilters(([searchFilter]) => [searchFilter, ...newFilters]);
     };
 
     return (
@@ -241,16 +291,28 @@ export default function ReportHistory() {
 
             {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container item justify='center' alignItems='center' xs={12}>
-                {isLoadingFeedback || isLoadingBug ? (
-                    <Loader />
-                ) : (
-                    <ReportStateContext.Provider value={customReportFunctions}>
-                        <ReportList reports={reports} />
-                    </ReportStateContext.Provider>
-                )}
+                <Grid item xs={12}>
+                    <ListFilter
+                        onSearch={handleSearch}
+                        length={filteredReports.length}
+                        filterMap={filterMap}
+                        onFilterChange={handleFilterChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    {isLoadingFeedback || isLoadingBug ? (
+                        <Loader />
+                    ) : (
+                        <ReportStateContext.Provider
+                            value={customReportFunctions}
+                        >
+                            <ReportList reports={filteredReports} />
+                        </ReportStateContext.Provider>
+                    )}
+                </Grid>
             </Grid>
 
-            {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
+            {/* When infinite scrolling is complete, this pagination section can be removed since it is suboptimal */}
             {reports.length !== 0 && (
                 <Grid
                     container
