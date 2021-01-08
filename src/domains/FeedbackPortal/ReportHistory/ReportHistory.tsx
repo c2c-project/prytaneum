@@ -14,7 +14,13 @@ import {
     ArrowDropDown as ArrowDownIcon,
 } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
-import { isToday, isThisWeek, isThisMonth, isThisQuarter, isThisYear} from 'date-fns';
+import {
+    isToday,
+    isThisWeek,
+    isThisMonth,
+    isThisQuarter,
+    isThisYear,
+} from 'date-fns';
 
 import ListFilter from 'components/ListFilter';
 import useEndpoint from 'hooks/useEndpoint';
@@ -166,11 +172,11 @@ export default function ReportHistory() {
         refetchReports: () => sendRequest(),
     };
 
-
+    // Code for filters start here
+    
     type Filter = FilterFunc<Report>;
     const filterMap: Record<string, Filter> = {
-        'Today': (data) =>
-            data.filter(({ date }) => isToday(new Date(date))),
+        'Today': (data) => data.filter(({ date }) => isToday(new Date(date))),
 
         'This week': (data) =>
             data.filter(({ date }) => isThisWeek(new Date(date))),
