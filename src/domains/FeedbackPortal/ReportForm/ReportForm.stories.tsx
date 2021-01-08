@@ -1,7 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { BugReport as BugReportIcon } from '@material-ui/icons';
-
+import faker from 'faker';
 import Component from '.';
 
 export default {
@@ -12,8 +11,7 @@ export default {
 const dummyBugReportForm = {
     title: 'Bug Report Form',
     mainDescription:
-        'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
-    icon: <BugReportIcon />,
+        'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form.',
 };
 
 export function Basic() {
@@ -21,9 +19,9 @@ export function Basic() {
         <Container maxWidth='sm'>
             <Component
                 title={dummyBugReportForm.title}
-                mainDescription={dummyBugReportForm.mainDescription}
-                icon={dummyBugReportForm.icon}
+                description={dummyBugReportForm.mainDescription}
                 reportType='Bug'
+                townhallId={faker.random.alphaNumeric(12)}
             />
         </Container>
     );

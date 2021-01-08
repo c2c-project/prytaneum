@@ -34,8 +34,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Feedback'
                     />,
                     container
@@ -49,8 +48,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Feedback'
                     />,
                     container
@@ -90,8 +88,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Feedback'
                     />,
                     container
@@ -116,7 +113,6 @@ describe('create report form', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            // Can't know the date the function was called with
             expect(spy).toBeCalled();
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -136,8 +132,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Feedback'
                     />,
                     container
@@ -179,8 +174,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Bug'
                         townhallId={townhallId}
                     />,
@@ -195,8 +189,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Bug'
                         townhallId={townhallId}
                     />,
@@ -237,8 +230,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Bug'
                         townhallId={townhallId}
                     />,
@@ -286,8 +278,7 @@ describe('create report form', () => {
                 render(
                     <ReportForm
                         title={faker.random.word()}
-                        mainDescription={faker.lorem.paragraph()}
-                        icon={<></>}
+                        description={faker.lorem.paragraph()}
                         reportType='Bug'
                         townhallId={townhallId}
                     />,

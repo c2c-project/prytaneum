@@ -1,12 +1,16 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
+
+import Form from 'components/Form';
+import FormActions from 'components/FormActions';
+import FormContent from 'components/FormContent';
 import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
 import { AxiosResponse } from 'axios';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
+import useForm from 'hooks/useForm';
 import {
     createBugReport,
     createFeedbackReport,
@@ -21,13 +25,6 @@ import {
 } from '../types';
 
 type Report = FeedbackReport | BugReport;
-
-interface DefaultProps {
-    onSuccess: (report: Report) => void;
-    onFailure: () => void;
-    townhallId: string;
-}
-
 interface Props {
     report: Report;
     reportType: 'Feedback' | 'Bug';
@@ -41,17 +38,18 @@ export default function FormBase({
     report,
     reportType,
     submitType,
-    onSuccess,
-    onFailure,
-    townhallId,
-}: Props & DefaultProps) {
+    onSuccess = () => {},
+    onFailure = () => {},
+    townhallId = '',
+}: Props) {
     const [snack] = useSnack();
-    const [reportState, setReportState] = React.useState<Report>(report);
+    const [reportState, errors, handleSubmit, handleChange] = useForm(report);
 
     interface EndpointFunctions<T> {
         create: (form: T) => Promise<AxiosResponse<unknown>>;
         update: (form: T) => Promise<AxiosResponse<unknown>>;
     }
+
     // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
     const endpoints: {
         Feedback: EndpointFunctions<FeedbackForm>;
@@ -85,48 +83,34 @@ export default function FormBase({
         },
     });
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        sendRequest();
-    };
-
-    type MyEvent = React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>;
-    const handleChange = (e: MyEvent, key: string) => {
-        const { value } = e.target;
-        setReportState((prev) => ({ ...prev, [key]: value }));
-    };
-
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
-                <form onSubmit={onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                id='reportDescription'
-                                required
-                                multiline
-                                label='Report Description'
-                                value={reportState.description}
-                                onChange={(e) => handleChange(e, 'description')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <LoadingButton loading={isLoading}>
-                                <Button
-                                    variant='contained'
-                                    fullWidth
-                                    type='submit'
-                                    color='primary'
-                                >
-                                    Submit
-                                </Button>
-                            </LoadingButton>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-        </Grid>
+        <Form onSubmit={handleSubmit(sendRequest)}>
+            <FormContent>
+                <TextField
+                    id='reportDescription'
+                    name='description'
+                    label='Report Description'
+                    error={Boolean(errors.description)}
+                    helperText={errors.description}
+                    required
+                    multiline
+                    value={reportState.description}
+                    onChange={handleChange('description')}
+                />
+            </FormContent>
+            <FormActions>
+                <LoadingButton loading={isLoading}>
+                    <Button
+                        variant='contained'
+                        fullWidth
+                        type='submit'
+                        color='primary'
+                    >
+                        Submit
+                    </Button>
+                </LoadingButton>
+            </FormActions>
+        </Form>
     );
 }
 

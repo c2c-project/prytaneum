@@ -110,7 +110,6 @@ export default function ReportHistory() {
                 ...report,
                 type: 'Bug',
             })) as Report[];
-            console.log(bugReports);
             setNumOfPages(results.data.count / pageSize);
             setReports(bugReports);
         },
@@ -172,8 +171,8 @@ export default function ReportHistory() {
         refetchReports: () => sendRequest(),
     };
 
-    // Code for filters start here
-    
+    // Code for filters starts here
+
     type Filter = FilterFunc<Report>;
     const filterMap: Record<string, Filter> = {
         'Today': (data) => data.filter(({ date }) => isToday(new Date(date))),
