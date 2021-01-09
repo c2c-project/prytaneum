@@ -11,8 +11,8 @@ export default function VerifyEmail({ userId }: Props) {
     return (
         <VerifyEmailComponent
             userId={userId}
-            onSuccess={() => history.push('/auth/login')}
-            onFailure={() => history.push('/auth/login')}
+            onSuccess={() => history.push('/login')}
+            onFailure={() => history.push('/login')}
         />
     );
 }

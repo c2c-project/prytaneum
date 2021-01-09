@@ -19,12 +19,16 @@ export const UserDispatch = React.createContext<Dispatch>(null);
 interface Props {
     children: React.ReactNode | React.ReactNodeArray;
     value?: User;
+    /**
+     * should only be used for storybook purposes
+     */
+    forceNoLogin?: boolean;
 }
 
 /**
  * This component attempts to fetch the user once on load of the app
  */
-export default function UserProvider({ children, value }: Props) {
+export default function UserProvider({ children, value, forceNoLogin }: Props) {
     // this is initially undefined due to defaultProps declaration
     const [user, setUser] = React.useState<State>(value);
 
@@ -38,14 +42,15 @@ export default function UserProvider({ children, value }: Props) {
 
     // runs only if the request hasn't run once and there's no user
     React.useEffect(() => {
-        if (!getHasRun() && !user) run();
-    }, [getHasRun, user, run]);
+        if (!getHasRun() && !user && !forceNoLogin) run();
+    }, [getHasRun, user, run, forceNoLogin]);
 
     // TODO: redirect to login?
 
     // if the request is either loading or hasn't run AND there's no user
     // then show a loader
-    if ((isLoading || !getHasRun()) && !user) return <Loader />;
+    if (!forceNoLogin && (isLoading || !getHasRun()) && !user)
+        return <Loader />;
 
     return (
         <UserContext.Provider value={user}>
@@ -58,4 +63,5 @@ export default function UserProvider({ children, value }: Props) {
 
 UserProvider.defaultProps = {
     value: undefined,
+    forceNoLogin: false,
 };
