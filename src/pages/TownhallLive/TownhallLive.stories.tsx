@@ -104,7 +104,7 @@ export function AsMod() {
     const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
     return (
-        <>
+        <Page>
             <AppBar>
                 <button
                     type='button'
@@ -127,7 +127,7 @@ export function AsMod() {
                     </UserProvider>
                 </div>
             </Main>
-        </>
+        </Page>
     );
 }
 
