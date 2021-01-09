@@ -4,7 +4,6 @@ import { motion, AnimationProps, MotionProps } from 'framer-motion';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-    root: { position: 'relative', width: '100%', height: '100%' },
     motion: { inset: 0, position: 'absolute' },
 });
 
@@ -22,11 +21,6 @@ export const fadeThroughProps: AnimationProps & MotionProps = {
     },
 };
 
-/**
- * This is a Page transition, hence the relative and absolute positioning,
- * if you want to make a component just fadeThrough, import the fadeThroughProps above and use
- * a motion.div
- */
 export default function FadeThrough({ children, animKey: key }: Props) {
     const classes = useStyles();
     return (
