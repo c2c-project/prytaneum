@@ -86,7 +86,6 @@ export default function Queue({ questions: _questions }: Props) {
     const draggableCards = React.useMemo(() => questions.slice(current + 1), [
         questions,
         current,
-        hidePast,
     ]);
     const staticCards = React.useMemo(
         () =>

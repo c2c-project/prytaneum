@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CurrentQuestion({ className }: CurrentQuestionProps) {
     const classes = useStyles();
     return (
-        <Grid container justify='center'>
+        <Grid container justify='center' className={className}>
             <div className={classes.currentQuestion}>
                 <Grid container justify='center' alignItems='center'>
                     <PushPinIcon fontSize='small' className={classes.text} />

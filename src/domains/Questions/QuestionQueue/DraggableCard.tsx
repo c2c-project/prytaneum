@@ -28,7 +28,7 @@ export default React.memo(
                 ...itemStyle(dragging),
                 filter: 'brightness(.7)',
             });
-        }, [draggable, isCurrent]);
+        }, [draggable, isCurrent, itemStyle]);
         const icon: React.ReactNode = React.useMemo(() => {
             if (!draggable || isCurrent) return undefined;
             return <DragHandleIcon />;

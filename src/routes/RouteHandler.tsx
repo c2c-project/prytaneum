@@ -29,7 +29,6 @@ function isCustomLayout(
     return (result as CustomLayout).layoutProps !== undefined;
 }
 
-// type PageDir = [PageState, 1 | 0 | -1];
 export default function RouteHandler() {
     const [page, setPage] = React.useState<PageState>(initialState);
     const router = useRouter(routes);
