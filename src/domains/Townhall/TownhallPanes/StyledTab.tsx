@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import ChipTab from 'components/ChipTab';
 import { Panes } from '../types';
 import { PaneContext } from '../Contexts/Pane';
+import makeTransition from './makeTransition';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,21 +16,12 @@ const useStyles = makeStyles((theme) => ({
         flexShrink: 0,
     },
     chip: {
-        [theme.breakpoints.down('md')]: {
-            marginBottom: theme.spacing(1),
-        },
+        marginTop: theme.spacing(1),
     },
     badge: {
         marginRight: -theme.spacing(0.5),
     },
 }));
-
-const makeTransition = (idx: number) => ({
-    delay: (idx + 1) * 0.1,
-    type: 'spring',
-    damping: 12,
-    stiffness: 150,
-});
 
 interface Props {
     label: string;
