@@ -17,7 +17,7 @@ interface Props {
 /**
  * abstracting most of the styling/generic logic away
  */
-function useQueue() {
+function useStyledQueue() {
     const theme = useTheme();
     const reorder = React.useCallback(
         (list: Question[], startIndex: number, endIndex: number) => {
@@ -53,7 +53,7 @@ function useQueue() {
 }
 
 export default function Queue({ questions: _questions }: Props) {
-    const [reorder, getListStyle, itemStyle] = useQueue();
+    const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const classes = useListStyles();
     const [current, setCurrent] = React.useState(0);
     const [questions, setQuestions] = React.useState(_questions);
