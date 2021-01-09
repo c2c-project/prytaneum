@@ -15,7 +15,7 @@ function useSocketio(
         return socketRef.current;
     }, [uri, opts]);
     const socket = getSocket();
-    // curry the callback passed in that receives the socket and isMountedWrapper
+    // curry the callback passed in that receives the socket
     const curriedSocketFn = React.useCallback(fn, deps);
 
     // TODO: on disconnect display a snack that you have been
