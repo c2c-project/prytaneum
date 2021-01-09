@@ -66,6 +66,7 @@ export default function ListFilter<T>({
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [search, setSearch] = React.useState('');
+    const prevSearch = React.useRef('');
 
     const immutableTransform = (op: Op) => (prevFilters: Filters) => {
         const copy = new Set(prevFilters);
@@ -97,7 +98,10 @@ export default function ListFilter<T>({
         // TODO: replace with a useThrottle hook in the future
         const cache = search.slice(0);
         const handle = setTimeout(() => {
-            if (search === cache && search !== '') onSearch(search);
+            if (search === cache && search !== prevSearch.current) {
+                prevSearch.current = search;
+                onSearch(search);
+            }
         }, 300);
         return () => {
             clearTimeout(handle);

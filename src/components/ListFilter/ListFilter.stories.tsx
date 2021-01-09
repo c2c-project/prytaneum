@@ -4,7 +4,7 @@ import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
 import ListFilter from './ListFilter';
-import useFilters from './useFilters';
+import useFilters, { Accessors } from './useFilters';
 
 export default { title: 'Components/List Filter' };
 
@@ -95,9 +95,13 @@ export function WithoutHook() {
 export function WithHook() {
     // eslint-disable-next-line
     const [data, setData] = React.useState(makeList);
+    const accessors = React.useMemo<Accessors<Datum>[]>(
+        () => [(d) => d.title, (d) => d.subtitle],
+        []
+    );
     const [filteredResults, handleSearch, handleFilterChange] = useFilters(
         data,
-        [(d) => d.title, (d) => d.subtitle]
+        accessors
     );
 
     return (
