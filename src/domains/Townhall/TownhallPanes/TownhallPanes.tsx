@@ -93,7 +93,9 @@ export default function TownhallPanes() {
             <Grid item xs='auto' className={classes.paneContainer}>
                 <StyledTabPanels>
                     {Object.entries(panes).map(([key, value]) => (
-                        <TabPanel visible={key === state}>{value}</TabPanel>
+                        <TabPanel key={key} visible={key === state}>
+                            {value}
+                        </TabPanel>
                     ))}
                 </StyledTabPanels>
             </Grid>

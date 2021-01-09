@@ -30,11 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SuggestedFeed({
-    questions,
-    bufferSize,
-    onFlushBuffer,
-}: Props) {
+function SuggestedFeed({ questions, bufferSize, onFlushBuffer }: Props) {
     const classes = useStyles();
     const accessors = React.useMemo<Accessors<Question>[]>(
         () => [
@@ -107,3 +103,5 @@ export default function SuggestedFeed({
         </Grid>
     );
 }
+
+export default React.memo(SuggestedFeed);

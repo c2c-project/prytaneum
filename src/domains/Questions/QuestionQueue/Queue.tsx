@@ -52,7 +52,7 @@ function useStyledQueue() {
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-export default function Queue({ questions: _questions }: Props) {
+function Queue({ questions: _questions }: Props) {
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const classes = useListStyles();
     const [current, setCurrent] = React.useState(0);
@@ -121,3 +121,5 @@ export default function Queue({ questions: _questions }: Props) {
         </Grid>
     );
 }
+
+export default React.memo(Queue);

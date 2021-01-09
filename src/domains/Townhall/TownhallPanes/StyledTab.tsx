@@ -75,4 +75,9 @@ StyledTab.defaultProps = {
     value: undefined,
 };
 
-export default React.memo(StyledTab);
+// realistically, this should only ever update if the selected property has changed
+// changes to onClick are ignored here because we don't need to care about those
+// onClick should effectively do the same thing every render
+export default React.memo(StyledTab, (prevProps, nextProps) => {
+    return prevProps.selected === nextProps.selected;
+});

@@ -55,7 +55,7 @@ export interface Props {
     visible: boolean;
     children: React.ReactNode | React.ReactNodeArray;
 }
-export default function TabPanel({ visible, children }: Props) {
+function TabPanel({ visible, children }: Props) {
     const classes = useStyles();
     const previouslyVisible = React.useRef(visible);
     const shouldExitPlay = React.useMemo(
@@ -85,3 +85,5 @@ export function TabPanels({ children }: Pick<Props, 'children'>) {
     const classes = useStyles();
     return <div className={classes.root}>{children}</div>;
 }
+
+export default React.memo(TabPanel);

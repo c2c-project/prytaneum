@@ -27,9 +27,9 @@ export default function QuestionQueue() {
     function handleTabChange(tabName: Tabs) {
         return () => setTab(tabName);
     }
-    const handleFlush = () => {
+    const handleFlush = React.useCallback(() => {
         dispatch({ type: 'flush-suggested-buffer' });
-    };
+    }, [dispatch]);
     return (
         <div className={classes.root}>
             <Grid container>
