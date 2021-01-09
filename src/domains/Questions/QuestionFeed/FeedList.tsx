@@ -81,14 +81,14 @@ function FeedList({
                     // }}
                     quote={question.quote}
                 >
+                    {variant === 'moderator' && (
+                        <QuestionLabels labels={question.aiml.labels} />
+                    )}
                     <CardActions className={classes.questionActions}>
                         <Like townhallId={townhallId} questionId={questionId} />
                         <Quote question={question} />
                         {/* <Reply question={question} /> */}
                     </CardActions>
-                    {variant === 'moderator' && (
-                        <QuestionLabels labels={question.aiml.labels} />
-                    )}
                 </QuestionCard>
             );
         });
