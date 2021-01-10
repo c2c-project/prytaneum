@@ -26,7 +26,7 @@ export function TabPanel() {
                             width: '100%',
                         }}
                     >
-                        {state}
+                        0
                     </Paper>
                 </Component>
                 <Component key='1' visible={state === 1}>
@@ -36,7 +36,7 @@ export function TabPanel() {
                             width: '100%',
                         }}
                     >
-                        {state}
+                        1
                     </Paper>
                 </Component>
                 <Component key='2' visible={state === 2}>

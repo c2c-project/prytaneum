@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core';
+import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 
 // time in ms it takes a component to exit
@@ -14,40 +15,67 @@ const useStyles = makeStyles(
         container: {
             inset: 0,
             position: 'absolute',
-            visibility: 'hidden',
-            opacity: 0,
+            display: 'none',
         },
-        exit: {
-            animation: `$fadeThroughExit ${exitTime}ms ease-in-out`,
-            animationFillMode: 'fowards',
+        visible: {
+            display: 'unset',
         },
         enter: {
-            animation: `$fadeThroughEnter 200ms ease-in-out ${exitTime}ms`,
-            animationFillMode: 'forwards',
+            opacity: 0,
+            transform: 'scale(.92)',
         },
-        '@keyframes fadeThroughEnter': {
-            '0%': {
-                transform: 'scale(0.92)',
-                opacity: 0,
-                visibility: 'visible',
-            },
-            '100%': {
-                transform: 'scale(1)',
-                opacity: 1,
-                visibility: 'visible',
-            },
+        enterActive: {
+            opacity: 1,
+            transform: 'scale(1)',
+            transition: `opacity 200ms ease-in-out ${
+                exitTime - 50
+            }ms, transform 200ms ease-in-out ${exitTime - 50}ms`,
         },
-        '@keyframes fadeThroughExit': {
-            '0%': {
-                opacity: 1,
-                visibility: 'visible',
-            },
-            '100%': {
-                opacity: 0,
-                visibility: 'hidden',
-                display: 'none',
-            },
+        enterDone: {},
+        exit: {
+            opacity: 1,
         },
+        exitActive: {
+            opacity: 0,
+            transition: `opacity ${exitTime}ms ease-in-out`,
+        },
+        exitDone: {
+            display: 'none',
+        },
+        // exit: {
+        //     animation: `$fadeThroughExit ${exitTime}ms ease-in-out`,
+        //     animationFillMode: 'forwards',
+        // },
+        // enter: {
+        //     animation: `$fadeThroughEnter 200ms ease-in-out ${exitTime - 50}ms`,
+        //     animationFillMode: 'forwards',
+        // },
+        // hide: {
+        //     display: 'none',
+        // },
+        // '@keyframes fadeThroughEnter': {
+        //     '0%': {
+        //         transform: 'scale(0.92)',
+        //         opacity: 0,
+        //         visibility: 'visible',
+        //     },
+        //     '100%': {
+        //         transform: 'scale(1)',
+        //         opacity: 1,
+        //         visibility: 'visible',
+        //     },
+        // },
+        // '@keyframes fadeThroughExit': {
+        //     '0%': {
+        //         opacity: 1,
+        //         visibility: 'visible',
+        //     },
+        //     '100%': {
+        //         opacity: 0,
+        //         visibility: 'hidden',
+        //         display: 'none',
+        //     },
+        // },
     })
 );
 
@@ -57,27 +85,25 @@ export interface Props {
 }
 function TabPanel({ visible, children }: Props) {
     const classes = useStyles();
-    const previouslyVisible = React.useRef(visible);
-    const shouldExitPlay = React.useMemo(
-        () =>
-            // if it's currently not visible and was previously visible
-            !visible && previouslyVisible.current === true,
-        [visible]
-    );
-
-    // update visibility, okay to be updated every render,
-    // but it must be updated after calculating the above
-    previouslyVisible.current = visible;
-
     return (
-        <div
-            className={clsx(classes.container, {
-                [classes.exit]: shouldExitPlay,
-                [classes.enter]: visible,
-            })}
+        <CSSTransition
+            timeout={400}
+            in={visible}
+            appear
+            classNames={{
+                appear: clsx(classes.enter, classes.visible),
+                appearActive: clsx(classes.enterActive, classes.visible),
+                appearDone: clsx(classes.enterDone, classes.visible),
+                enter: clsx(classes.enter, classes.visible),
+                enterActive: clsx(classes.enterActive, classes.visible),
+                enterDone: clsx(classes.enterDone, classes.visible),
+                exit: clsx(classes.exit, classes.visible),
+                exitActive: clsx(classes.exitActive, classes.visible),
+                exitDone: classes.exitDone,
+            }}
         >
-            {children}
-        </div>
+            <div className={classes.container}>{children}</div>
+        </CSSTransition>
     );
 }
 
