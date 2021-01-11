@@ -34,7 +34,7 @@ export default function TownhallList() {
                         />
                     </DialogContent>
                 </Dialog>
-                <TitleCard title='Townhalls' stats={[['total', 1]]} />
+                <TitleCard title='Townhalls' />
                 <Grid item xs={12}>
                     <List
                         onClickTownhall={(id) =>
