@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
-    FormControlLabel,
-    Switch,
-    FormControl,
-    FormHelperText,
+    // FormControlLabel,
+    // Switch,
+    // FormControl,
+    // FormHelperText,
 } from '@material-ui/core';
 
 import LoadingButton from 'components/LoadingButton';
@@ -52,7 +52,7 @@ export default function TownhallForm({
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormTitle title='Townhall Form' />
             <FormContent>
-                <FormControl>
+                {/* <FormControl>
                     <FormControlLabel
                         control={
                             <Switch
@@ -69,7 +69,7 @@ export default function TownhallForm({
                         Turning on the Private Option means the Townhall will
                         NOT be listed publicly and will be invite only.
                     </FormHelperText>
-                </FormControl>
+                </FormControl> */}
                 <TextField
                     error={Boolean(errors.title)}
                     helperText={errors.title}
