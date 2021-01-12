@@ -15,7 +15,8 @@ import {
 } from '@material-ui/core';
 import {
     ArrowDropDown,
-    Settings,
+    // TODO: finish up user settings
+    // Settings,
     ExitToApp,
     MoreVert,
 } from '@material-ui/icons';
@@ -150,12 +151,12 @@ export default function UserMenu({ className, links }: Props) {
                         {userInfo}
                     </MenuItem>
                 )}
-                <MenuItem button onClick={handleNavigation(links.settings)}>
+                {/* <MenuItem button onClick={handleNavigation(links.settings)}>
                     <ListItemIcon>
                         <Settings />
                     </ListItemIcon>
                     <ListItemText primary='Settings' />
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem button onClick={handleNavigation(links.logout)}>
                     <ListItemIcon>
                         <ExitToApp />
