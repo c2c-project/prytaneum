@@ -49,7 +49,7 @@ describe('VerifyEmail', () => {
             await Promise.allSettled(spy.mock.results);
         });
 
-        expect(historySpy).toBeCalledWith('/auth/login');
+        expect(historySpy).toBeCalledWith('/login');
     });
 
     it('should render, fail to verify, & go to /login', async () => {
@@ -69,6 +69,6 @@ describe('VerifyEmail', () => {
             await Promise.allSettled(spy.mock.results);
         });
 
-        expect(historySpy).toBeCalledWith('/auth/login');
+        expect(historySpy).toBeCalledWith('/login');
     });
 });

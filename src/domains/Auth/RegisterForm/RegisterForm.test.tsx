@@ -66,16 +66,20 @@ describe('RegisterForm', () => {
             );
         });
 
-        const emailNode = document.querySelector('#email') as HTMLElement;
-        const passwordNode = document.querySelector('#password') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
         const confirmNode = document.querySelector(
-            '#confirm-password'
+            '#register-confirm-password'
         ) as HTMLElement;
         const firstnameNode = document.querySelector(
-            '#first-name'
+            '#register-first-name'
         ) as HTMLElement;
         const lastNameNode = document.querySelector(
-            '#last-name'
+            '#register-last-name'
         ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
@@ -116,7 +120,7 @@ describe('RegisterForm', () => {
         });
 
         // make sure the external API gets called
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith(form, undefined);
         // make sure all timers run
         jest.runAllTimers();
 
@@ -150,16 +154,20 @@ describe('RegisterForm', () => {
             );
         });
 
-        const emailNode = document.querySelector('#email') as HTMLElement;
-        const passwordNode = document.querySelector('#password') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
         const confirmNode = document.querySelector(
-            '#confirm-password'
+            '#register-confirm-password'
         ) as HTMLElement;
         const firstnameNode = document.querySelector(
-            '#first-name'
+            '#register-first-name'
         ) as HTMLElement;
         const lastNameNode = document.querySelector(
-            '#last-name'
+            '#register-last-name'
         ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
@@ -199,7 +207,7 @@ describe('RegisterForm', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith(form, undefined);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

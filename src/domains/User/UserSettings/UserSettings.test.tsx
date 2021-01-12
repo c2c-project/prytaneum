@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
+import { makeUser } from 'prytaneum-typings';
 import ReactTestUtils from 'react-dom/test-utils';
 import ThemeProvider from 'contexts/Theme';
+import UserProvider from 'contexts/User';
 
 import UserSettings from './UserSettings';
 
-jest.mock('contexts/User');
 jest.mock('hooks/useSnack');
 jest.mock('utils/axios');
 
@@ -33,7 +34,9 @@ describe('UserSettings', () => {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProvider>
-                    <UserSettings id='test' />
+                    <UserProvider forceNoLogin value={makeUser()}>
+                        <UserSettings id='test' />
+                    </UserProvider>
                 </ThemeProvider>,
                 container
             );

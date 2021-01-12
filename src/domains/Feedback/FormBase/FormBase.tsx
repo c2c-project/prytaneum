@@ -103,7 +103,7 @@ export default function FormBase({
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                id='reportDescription'
+                                id='report-description'
                                 required
                                 multiline
                                 label='Report Description'

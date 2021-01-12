@@ -58,7 +58,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe('');
 
@@ -99,7 +99,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
 
             const button = document.querySelector(
@@ -145,7 +145,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
 
             const button = document.querySelector(
@@ -205,7 +205,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe('');
 
@@ -247,7 +247,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             const button = document.querySelector(
                 '[type="submit"]'
@@ -296,7 +296,7 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             const button = document.querySelector(
                 '[type="submit"]'

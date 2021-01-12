@@ -2,6 +2,8 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import ThemeProvider from 'contexts/Theme';
+import UserProvider from 'contexts/User';
+import { makeUser } from 'prytaneum-typings';
 
 import Login from './Login';
 
@@ -31,9 +33,11 @@ describe('Login', () => {
     it('should render', () => {
         ReactTestUtils.act(() => {
             render(
-                <ThemeProvider>
-                    <Login onLogin={() => {}} />
-                </ThemeProvider>,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <ThemeProvider>
+                        <Login onLogin={() => {}} />
+                    </ThemeProvider>
+                </UserProvider>,
                 container
             );
         });

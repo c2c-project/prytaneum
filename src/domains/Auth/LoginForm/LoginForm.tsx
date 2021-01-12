@@ -64,6 +64,7 @@ export default function LoginForm({ onSuccess }: Props) {
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormContent>
                 <TextField
+                    id='login-email'
                     required
                     type='email'
                     value={form.email}
@@ -75,6 +76,7 @@ export default function LoginForm({ onSuccess }: Props) {
                 />
                 <>
                     <TextField
+                        id='login-password'
                         required
                         error={Boolean(errors.password)}
                         type={isPassVisible ? 'text' : 'password'}

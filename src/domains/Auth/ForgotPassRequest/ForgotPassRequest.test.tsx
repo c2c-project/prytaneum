@@ -60,6 +60,9 @@ describe('ForgotPassRequest', () => {
             ReactTestUtils.Simulate.change(email, {
                 target: ({ value: 'not null' } as unknown) as EventTarget,
             });
+        });
+
+        ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
         expect(spy).toBeCalled();
@@ -90,19 +93,18 @@ describe('ForgotPassRequest', () => {
             );
         });
 
-        const emailNode = document.querySelector('#email');
-        const button = document.querySelector('[type="submit"]');
+        const emailNode = document.querySelector('#email') as HTMLElement;
+        const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         ReactTestUtils.act(() => {
-            if (emailNode && button) {
-                ReactTestUtils.Simulate.change(emailNode, {
-                    target: { value: 'email@email.com' },
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                } as any);
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            ReactTestUtils.Simulate.change(emailNode, {
+                target: { value: 'email@email.com' },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any);
+        });
+
+        ReactTestUtils.act(() => {
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
         expect(spy).toBeCalledWith({ email: 'email@email.com' });
@@ -135,19 +137,18 @@ describe('ForgotPassRequest', () => {
             );
         });
 
-        const emailNode = document.querySelector('#email');
-        const button = document.querySelector('[type="submit"]');
+        const emailNode = document.querySelector('#email') as HTMLElement;
+        const button = document.querySelector('[type="submit"]') as HTMLElement;
         ReactTestUtils.act(() => {
-            if (emailNode && button) {
-                ReactTestUtils.Simulate.change(emailNode, {
-                    target: ({
-                        value: 'email@email.com',
-                    } as unknown) as EventTarget,
-                });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
-            }
+            ReactTestUtils.Simulate.change(emailNode, {
+                target: ({
+                    value: 'email@email.com',
+                } as unknown) as EventTarget,
+            });
+        });
+
+        ReactTestUtils.act(() => {
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
         expect(spy).toBeCalledWith({ email: 'email@email.com' });
