@@ -169,7 +169,7 @@ addRoutes([
             if (!React.isValidElement(element))
                 return <Redirect href='/login' />;
             return {
-                component: <RequireLogin>{element}</RequireLogin>,
+                component: element,
                 layoutProps: {
                     hideSideNav: true,
                     ContainerProps: { maxWidth: 'xl' },
