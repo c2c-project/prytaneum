@@ -71,7 +71,8 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                 />
                 <TextField
                     id='register-email'
-                    helperText={errors.email || 'Well Never share your email'}
+                    // eslint-disable-next-line quotes
+                    helperText={errors.email || "We'll never share your email"}
                     required
                     type='email'
                     value={form.email}
