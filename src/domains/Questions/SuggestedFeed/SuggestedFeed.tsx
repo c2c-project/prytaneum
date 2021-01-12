@@ -7,12 +7,16 @@ import {
     Card,
     CardContent,
     Typography,
+    CardActions,
+    Divider,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import type { Question } from 'prytaneum-typings';
 
 import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import QuestionCard from '../QuestionCard';
+import { QueueButton } from '../QuestionActions';
+import QuestionStats from './QuestionStats';
 
 interface Props {
     questions: Question[];
@@ -27,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
     },
     item: {
         marginBottom: theme.spacing(3),
+    },
+    actions: {
+        padding: 0,
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+        display: 'flex',
+        justifyItems: 'center',
     },
 }));
 
@@ -49,7 +60,7 @@ function SuggestedFeed({ questions, bufferSize, onFlushBuffer }: Props) {
         <Grid container className={classes.root} alignContent='flex-start'>
             <Grid item xs={12}>
                 <ListFilter
-                    length={questions.length}
+                    length={filteredQuestions.length}
                     onSearch={handleSearch}
                     onFilterChange={handleFilterChange}
                     menuIcons={[
@@ -97,7 +108,18 @@ function SuggestedFeed({ questions, bufferSize, onFlushBuffer }: Props) {
                         key={question._id}
                         question={question}
                         className={classes.item}
-                    />
+                    >
+                        <Divider />
+                        <CardContent>
+                            <QuestionStats question={question} />
+                        </CardContent>
+                        <CardActions className={classes.actions}>
+                            <QueueButton
+                                townhallId={question.meta.townhallId}
+                                questionId={question._id}
+                            />
+                        </CardActions>
+                    </QuestionCard>
                 ))}
             </Grid>
         </Grid>

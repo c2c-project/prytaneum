@@ -5,19 +5,23 @@ import {
     Card,
     CardActions,
     Tooltip,
+    Badge,
 } from '@material-ui/core';
 
 import NextIcon from '@material-ui/icons/SkipNext';
 import PrevIcon from '@material-ui/icons/SkipPrevious';
 import HideIcon from '@material-ui/icons/Visibility';
 import ShowIcon from '@material-ui/icons/VisibilityOff';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 interface Props {
     onClickNext: () => void;
     onClickPrev: () => void;
     onClickToggleVisibility: () => void;
+    onClickRefresh: () => void;
     className: string;
     hidePast: boolean;
+    bufferLength: number;
 }
 
 /**
@@ -28,8 +32,10 @@ export default React.memo(
         onClickNext,
         onClickPrev,
         onClickToggleVisibility,
+        onClickRefresh,
         className,
         hidePast,
+        bufferLength,
     }: Props) => {
         return (
             <Card className={className}>
@@ -49,6 +55,21 @@ export default React.memo(
                         <IconButton onClick={onClickNext}>
                             <NextIcon />
                         </IconButton>
+                    </Tooltip>
+                    <Tooltip title='Refresh'>
+                        <span>
+                            <IconButton
+                                disabled={bufferLength === 0}
+                                onClick={onClickRefresh}
+                            >
+                                <Badge
+                                    color='secondary'
+                                    badgeContent={bufferLength}
+                                >
+                                    <RefreshIcon />
+                                </Badge>
+                            </IconButton>
+                        </span>
                     </Tooltip>
                 </CardActions>
             </Card>

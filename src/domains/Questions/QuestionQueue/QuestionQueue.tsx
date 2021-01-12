@@ -6,7 +6,7 @@ import TabPanel, { TabPanels } from 'components/TabPanel';
 import ChipTab from 'components/ChipTab';
 import Queue from './Queue';
 import useQuestionQueue from './useQuestionQueue';
-import SuggestedFeed from './SuggestedFeed';
+import SuggestedFeed from '../SuggestedFeed';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,8 +27,26 @@ export default function QuestionQueue() {
     function handleTabChange(tabName: Tabs) {
         return () => setTab(tabName);
     }
-    const handleFlush = React.useCallback(() => {
+
+    const suggestedMinusQueued = React.useMemo(
+        () =>
+            playlist.suggested.filter(({ _id }) => {
+                const isQueued =
+                    playlist.queue.find(({ _id: inner }) => _id === inner) ===
+                    undefined;
+                const isinBuffer =
+                    playlist.buffer.queue.find(
+                        ({ _id: inner }) => _id === inner
+                    ) === undefined;
+                return isQueued && isinBuffer;
+            }),
+        [playlist]
+    );
+    const handleSuggestedFlush = React.useCallback(() => {
         dispatch({ type: 'flush-suggested-buffer' });
+    }, [dispatch]);
+    const handleBufferFlush = React.useCallback(() => {
+        dispatch({ type: 'flush-queue-buffer' });
     }, [dispatch]);
     return (
         <div className={classes.root}>
@@ -47,13 +65,17 @@ export default function QuestionQueue() {
                 </Grid>
                 <TabPanels>
                     <TabPanel visible={tab === 'queued'}>
-                        <Queue questions={playlist.queue} />
+                        <Queue
+                            onFlushBuffer={handleBufferFlush}
+                            questions={playlist.queue}
+                            bufferLength={playlist.buffer.queue.length}
+                        />
                     </TabPanel>
                     <TabPanel visible={tab === 'suggested'}>
                         <SuggestedFeed
                             bufferSize={playlist.buffer.suggested.length}
-                            questions={playlist.suggested}
-                            onFlushBuffer={handleFlush}
+                            questions={suggestedMinusQueued}
+                            onFlushBuffer={handleSuggestedFlush}
                         />
                     </TabPanel>
                 </TabPanels>

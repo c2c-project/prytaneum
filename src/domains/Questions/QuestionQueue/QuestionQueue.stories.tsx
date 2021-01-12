@@ -1,12 +1,11 @@
 import React from 'react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeGenFn, Question } from 'prytaneum-typings';
+import { makeQuestion, makeGenFn } from 'prytaneum-typings';
 
 import SocketFixture from 'mock/Fixture.socket';
 import Main from 'layout/Main';
 import QuestionQueue from './QuestionQueue';
 import QueueComponent from './Queue';
-import FeedComponent from './SuggestedFeed';
 
 export default { title: 'Domains/Questions/Question Queue' };
 
@@ -44,32 +43,11 @@ questions[1]._id = '1';
 export function Queue() {
     return (
         <Main>
-            <QueueComponent questions={questions} />
-        </Main>
-    );
-}
-
-export function SuggestedFeed() {
-    const [_questions, setQuestions] = React.useState(questions);
-    const [buffer, setBuffer] = React.useState<Question[]>([]);
-    const handleClick = () => {
-        setBuffer([...buffer, ...makeGenFn(makeQuestion)(5)]);
-    };
-    const handleFlush = () => {
-        setQuestions([...buffer, ..._questions]);
-        setBuffer([]);
-    };
-    return (
-        <Main>
-            <div style={{ paddingBottom: '8px' }}>
-                <button onClick={handleClick} type='button'>
-                    Add questions to suggested
-                </button>
-            </div>
-            <FeedComponent
-                onFlushBuffer={handleFlush}
-                bufferSize={buffer.length}
-                questions={_questions}
+            <QueueComponent
+                bufferLength={0}
+                // eslint-disable-next-line no-console
+                onFlushBuffer={console.log}
+                questions={questions}
             />
         </Main>
     );

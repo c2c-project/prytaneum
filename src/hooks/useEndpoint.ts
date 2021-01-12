@@ -9,6 +9,10 @@ interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
     runOnFirstRender?: boolean;
+    /**
+     * number in ms for min wait time
+     */
+    minWaitTime?: number;
 }
 
 type SendRequest = () => void;
@@ -34,11 +38,13 @@ export default function useEndpoint<T>(
     const [errorHandler] = useErrorHandler();
     const [isMounted] = useIsMounted();
     const [isLoading, setIsLoading] = React.useState(false);
+    const minWaitTime = React.useMemo(() => options?.minWaitTime, [options]);
 
     // calling this will invoke the request while waiting a minimum amount of time
-    const wrappedEndpoint = React.useCallback(() => wrapMinWaitTime(endpoint), [
-        endpoint,
-    ]);
+    const wrappedEndpoint = React.useCallback(
+        () => wrapMinWaitTime(endpoint, minWaitTime),
+        [endpoint, minWaitTime]
+    );
 
     // calls wrappedEndpoint and performs actions necessary depending on success or failure
     const sendRequest = React.useCallback(async () => {

@@ -4,14 +4,18 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import type { Question } from 'prytaneum-typings';
 
 import DropArea from 'components/DropArea';
-
+import { TownhallContext } from 'contexts/Townhall';
+import useEndpoint from 'hooks/useEndpoint';
 import QueueControls from './QueueControls';
 import DraggableList from './DraggableList';
 import StaticList from './StaticList';
 import useListStyles from './useListStyles';
+import { updateQueueOrder } from '../api';
 
 interface Props {
     questions: Question[];
+    bufferLength: number;
+    onFlushBuffer: () => void;
 }
 
 /**
@@ -52,12 +56,22 @@ function useStyledQueue() {
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-function Queue({ questions: _questions }: Props) {
+function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const classes = useListStyles();
     const [current, setCurrent] = React.useState(0);
     const [questions, setQuestions] = React.useState(_questions);
     const [hidePast, setHidePast] = React.useState(false);
+    const townhall = React.useContext(TownhallContext);
+    const endpoint = React.useCallback(
+        () => updateQueueOrder(townhall._id, questions),
+        [townhall._id, questions]
+    );
+    const [run] = useEndpoint(endpoint, { minWaitTime: 0 });
+
+    React.useEffect(() => {
+        if (_questions.length !== questions.length) setQuestions(_questions);
+    }, [_questions]);
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -71,12 +85,13 @@ function Queue({ questions: _questions }: Props) {
                 result.source.index,
                 result.destination.index
             );
-
+            run();
             setQuestions(newState);
         },
-        [questions, reorder]
+        [questions, reorder, run]
     );
 
+    // TODO: api calls
     const handleClick = (dir: -1 | 1) => () => {
         if (current + dir >= questions.length) return setCurrent(0);
         if (current + dir < 0) return setCurrent(questions.length - 1);
@@ -99,6 +114,8 @@ function Queue({ questions: _questions }: Props) {
                 onClickNext={handleClick(1)}
                 onClickPrev={handleClick(-1)}
                 className={classes.listItem}
+                onClickRefresh={onFlushBuffer}
+                bufferLength={bufferLength}
                 onClickToggleVisibility={() => setHidePast(!hidePast)}
                 hidePast={hidePast}
             />

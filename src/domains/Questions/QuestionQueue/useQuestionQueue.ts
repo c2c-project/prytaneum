@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SocketIOEvents, Question } from 'prytaneum-typings';
+import type { SocketIOEvents, Question, Townhall } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
 import { TownhallContext } from 'contexts/Townhall';
@@ -85,11 +85,23 @@ function playlistReducer(state: State, action: Events): State {
     }
 }
 
+const makeInitialState = (state: Townhall['state']): State => {
+    const { playlist } = state;
+    return {
+        // only relevant locally (the buffer stuff)
+        ...initialState,
+        // state from server
+        current: playlist.position.current,
+        queue: playlist.queue,
+        suggested: playlist.list,
+    };
+};
+
 export default function useQuestionQueue() {
     const townhall = React.useContext(TownhallContext);
     const [playlist, dispatch] = React.useReducer(
         playlistReducer,
-        initialState
+        makeInitialState(townhall.state)
     );
     useSocketio(
         '/playlist',
