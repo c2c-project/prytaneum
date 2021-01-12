@@ -71,7 +71,7 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
 
     React.useEffect(() => {
         if (_questions.length !== questions.length) setQuestions(_questions);
-    }, [_questions]);
+    }, [_questions, questions]);
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
