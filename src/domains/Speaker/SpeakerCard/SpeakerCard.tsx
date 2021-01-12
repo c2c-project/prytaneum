@@ -5,17 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        width: '100%',
-        height: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        maxWidth: '400px'
-        // transition: 'transform .2s, box-shadow .2s',
-        // boxShadow: theme.shadows[10],
-        // '&:hover': {
-        //     transform: 'scale(1.05)',
-        //     boxShadow: theme.shadows[15],
-        // },
     },
     media: {
         width: '100%',

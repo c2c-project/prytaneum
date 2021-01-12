@@ -11,6 +11,7 @@ const { NODE_ENV } = process.env;
 interface Props {
     children: JSX.Element | JSX.Element[];
     direction: 'top' | 'bottom';
+    active: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -44,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
  * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
  * @param {'top' | 'bottom'} props.direction tells to component to scroll up or down continuously, like how twich chat updates, the window scrolls down to update it
  */
-export default function ScrollTo({ children, direction }: Props) {
+export default function ScrollTo({
+    children,
+    direction,
+    active: activeProp,
+}: Props) {
     const classes = useStyles();
     const scrollTarget = React.useRef<HTMLDivElement | null>(null);
-    const [active, setActive] = React.useState(true);
+    const [active, setActive] = React.useState(activeProp);
     type Cb = IntersectionObserverCallback;
     const onIntersect = useDebounce<Cb>(
         // there should only ever be one entry, so this is fine

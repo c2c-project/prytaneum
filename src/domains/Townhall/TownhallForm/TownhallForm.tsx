@@ -9,6 +9,7 @@ import {
     FormHelperText,
 } from '@material-ui/core';
 
+import LoadingButton from 'components/LoadingButton';
 import FormActions from 'components/FormActions';
 import FormContent from 'components/FormContent';
 import FormTitle from 'components/FormTitle';
@@ -18,14 +19,19 @@ import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import useForm from 'hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 interface Props {
     onSubmit?: () => void;
     buttonText?: string;
+    onCancel?: () => void;
 }
 
-export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
+export default function TownhallForm({
+    onCancel,
+    onSubmit: cb,
+    buttonText,
+}: Props) {
     // this works even if it's not wrapped in the townhall context
     // the default value set for the townhall context has the appropriate form initial state
     const { form, _id } = React.useContext(TownhallContext);
@@ -40,7 +46,7 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
 
     // after this point in the code,
     // whether or not the form is an update or create does not matter
-    const [sendRequest] = useEndpoint(apiRequest, { onSuccess: cb });
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, { onSuccess: cb });
 
     return (
         <Form onSubmit={handleSubmit(sendRequest)}>
@@ -104,9 +110,16 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <Button type='submit' variant='contained' color='secondary'>
-                    {buttonText}
-                </Button>
+                {onCancel && (
+                    <Button color='primary' disableElevation onClick={onCancel}>
+                        Cancel
+                    </Button>
+                )}
+                <LoadingButton loading={isLoading}>
+                    <Button type='submit' variant='contained' color='secondary'>
+                        {buttonText}
+                    </Button>
+                </LoadingButton>
             </FormActions>
         </Form>
     );
@@ -115,9 +128,11 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
 TownhallForm.defaultProps = {
     onSubmit: () => {},
     buttonText: 'Submit',
+    onCancel: () => {},
 };
 
 TownhallForm.propTypes = {
     onSubmit: PropTypes.func,
     buttonText: PropTypes.string,
+    onCancel: PropTypes.func,
 };

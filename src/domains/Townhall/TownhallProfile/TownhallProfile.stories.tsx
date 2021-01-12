@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from '@material-ui/core';
 
 // import Component from '.';
-import TownhallContextProvider from '../Contexts/Townhall';
+import TownhallContextProvider from '../../../contexts/Townhall';
 
 export default { title: 'Domains/Townhall/Townhall Profile' };
 

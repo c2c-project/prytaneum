@@ -63,7 +63,7 @@ describe('CreateReportRequest', () => {
         });
 
         const reportDescriptionNode = document.querySelector(
-            '#reportDescription'
+            '#report-description'
         ) as HTMLInputElement;
         expect(reportDescriptionNode.value).toBe(
             dummyFeedbackReport.description
@@ -106,7 +106,7 @@ describe('CreateReportRequest', () => {
         });
 
         const reportDescriptionNode = document.querySelector(
-            '#reportDescription'
+            '#report-description'
         ) as HTMLInputElement;
         const button = document.querySelector(
             '[type="submit"]'
@@ -116,6 +116,9 @@ describe('CreateReportRequest', () => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
                 target: ({ value: newDescription } as unknown) as EventTarget,
             });
+        });
+
+        ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
@@ -156,7 +159,7 @@ describe('CreateReportRequest', () => {
 
         // Get form nodes
         const reportDescriptionNode = document.querySelector(
-            '#reportDescription'
+            '#report-description'
         ) as HTMLInputElement;
         const button = document.querySelector(
             '[type="submit"]'
@@ -167,6 +170,9 @@ describe('CreateReportRequest', () => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
                 target: ({ value: newDescription } as unknown) as EventTarget,
             });
+        });
+
+        ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 

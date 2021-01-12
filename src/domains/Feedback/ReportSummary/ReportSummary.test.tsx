@@ -59,7 +59,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe(
                 dummyFeedbackReport.description
@@ -101,7 +101,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             const button = document.querySelector(
                 '[type="submit"]'
@@ -113,6 +113,9 @@ describe('Update report summary', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
+            });
+
+            ReactTestUtils.act(() => {
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );
@@ -150,7 +153,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             const button = document.querySelector(
                 '[type="submit"]'
@@ -162,6 +165,9 @@ describe('Update report summary', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
+            });
+
+            ReactTestUtils.act(() => {
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );
@@ -287,7 +293,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe(
                 dummyBugReport.description
@@ -329,7 +335,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLButtonElement;
             const button = document.querySelector(
                 '[type="submit"]'
@@ -341,6 +347,9 @@ describe('Update report summary', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
+            });
+
+            ReactTestUtils.act(() => {
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );
@@ -379,7 +388,7 @@ describe('Update report summary', () => {
             });
 
             const reportDescriptionNode = document.querySelector(
-                '#reportDescription'
+                '#report-description'
             ) as HTMLInputElement;
             const button = document.querySelector(
                 '[type="submit"]'
@@ -391,6 +400,8 @@ describe('Update report summary', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
+            });
+            ReactTestUtils.act(() => {
                 button.dispatchEvent(
                     new MouseEvent('click', { bubbles: true })
                 );

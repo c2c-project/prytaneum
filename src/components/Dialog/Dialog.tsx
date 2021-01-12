@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MUIDialog from '@material-ui/core/Dialog';
+import MUIDialog, { DialogProps } from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -31,59 +32,51 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction='up' ref={ref} {...props} />;
 });
 
-export interface Props {
-    children: JSX.Element | JSX.Element[];
-    open: boolean;
-    onClose: () => void;
+export type Props = {
     title?: string;
-    onEntered?: () => void;
-    onExit?: () => void;
-}
+    toolbar?: React.ReactElement;
+    onClose?: () => void;
+} & DialogProps;
 
 /**
  * Slide Up Dialog
  */
 export default function Dialog(props: Props) {
-    const { children, open, onClose, title, onEntered, onExit } = props;
+    const { children, title, ...rest } = props;
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <div>
-            <MUIDialog
-                fullScreen={fullScreen}
-                open={open}
-                onClose={onClose}
-                onEntered={onEntered}
-                onExit={onExit}
-                TransitionComponent={Transition}
-            >
-                {fullScreen && (
-                    <AppBar elevation={0} className={classes.appBar}>
-                        <Toolbar>
-                            <IconButton
-                                edge='start'
-                                color='inherit'
-                                onClick={onClose}
-                                aria-label='close'
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                            <Typography
-                                component='span'
-                                variant='h6'
-                                className={classes.title}
-                            >
-                                {title}
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
-                )}
-                {title && !fullScreen && <DialogTitle>{title}</DialogTitle>}
-                {open && children}
-            </MUIDialog>
-        </div>
+        <MUIDialog
+            fullScreen={fullScreen}
+            TransitionComponent={Transition}
+            {...rest}
+        >
+            {fullScreen && (
+                <AppBar elevation={0} className={classes.appBar}>
+                    <Toolbar>
+                        <IconButton
+                            edge='start'
+                            color='inherit'
+                            onClick={rest.onClose}
+                            aria-label='close'
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography
+                            component='span'
+                            variant='h6'
+                            className={classes.title}
+                        >
+                            {title}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+            )}
+            {title && !fullScreen && <DialogTitle>{title}</DialogTitle>}
+            {children}
+        </MUIDialog>
     );
 }
 

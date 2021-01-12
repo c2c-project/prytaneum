@@ -19,7 +19,7 @@ import ForumIcon from '@material-ui/icons/ForumOutlined';
 
 import { formatDate } from 'utils/format';
 
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {

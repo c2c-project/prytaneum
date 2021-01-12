@@ -1,31 +1,27 @@
 /* eslint-disable no-console */
 import React from 'react';
 
-import Page from 'layout/Page';
-import Nav from 'layout/Nav';
+import Main from 'layout/Main';
+import UserProvider from 'contexts/User';
+import Layout from 'layout';
 import Component from '.';
 
 export default { title: 'Domains/Townhall/Townhall List' };
 
 export function Basic() {
     return (
-        <main>
-            <Page>
-                <Component onClickTownhall={console.log} />
-            </Page>
-        </main>
+        <Main spacing={1}>
+            <Component title='Test Title here' onClickTownhall={console.log} />
+        </Main>
     );
 }
 
 export function WithNav() {
     return (
-        <>
-            <Nav />
-            <main>
-                <Page>
-                    <Component onClickTownhall={console.log} />
-                </Page>
-            </main>
-        </>
+        <UserProvider>
+            <Layout showAsLoggedIn>
+                <Component onClickTownhall={console.log} />
+            </Layout>
+        </UserProvider>
     );
 }

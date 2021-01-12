@@ -14,6 +14,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
+import useQuery from 'hooks/useQuery';
 
 import API from '../api';
 
@@ -31,9 +32,13 @@ const initialState: FormType = {
 };
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const [snack] = useSnack();
+    const query = useQuery();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const builtRequest = React.useCallback(() => API.register(form), [form]);
+    const builtRequest = React.useCallback(() => API.register(form, query), [
+        form,
+        query,
+    ]);
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
         onSuccess: () => {
             snack('Successfully registered!');
@@ -46,6 +51,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormContent>
                 <TextField
+                    id='register-first-name'
                     helperText={errors.firstName}
                     required
                     value={form.firstName}
@@ -55,6 +61,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     error={Boolean(errors.firstName)}
                 />
                 <TextField
+                    id='register-last-name'
                     helperText={errors.lastName}
                     required
                     value={form.lastName}
@@ -63,6 +70,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     error={Boolean(errors.lastName)}
                 />
                 <TextField
+                    id='register-email'
                     helperText={errors.email || 'Well Never share your email'}
                     required
                     type='email'
@@ -72,6 +80,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     error={Boolean(errors.email)}
                 />
                 <TextField
+                    id='register-password'
                     required
                     error={Boolean(errors.password)}
                     helperText={errors.password}
@@ -113,6 +122,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     }}
                 />
                 <TextField
+                    id='register-confirm-password'
                     required
                     error={Boolean(errors.confirmPassword)}
                     helperText={errors.confirmPassword}

@@ -3,7 +3,7 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SpeakerCard from 'domains/Speaker/SpeakerCard';
-import { TownhallContext } from '../Contexts/Townhall';
+import { TownhallContext } from '../../../contexts/Townhall';
 import TownhallCard from '../TownhallCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TownhallPane() {
+function TownhallPane() {
     const classes = useStyles();
     const townhall = React.useContext(TownhallContext);
 
@@ -43,3 +43,5 @@ export default function TownhallPane() {
         </Grid>
     );
 }
+
+export default React.memo(TownhallPane);

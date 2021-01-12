@@ -4,6 +4,7 @@ import type {
     Townhall,
     TownhallSettings,
     ChatMessageForm,
+    ChatMessage,
 } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
@@ -94,5 +95,11 @@ export async function deleteChatMessage(
 ) {
     return axios.delete(
         `/api/townhalls/${townhallId}/chat-messages/${chatMessageId}`
+    );
+}
+
+export async function getChatmessages(townhallId: string) {
+    return axios.get<ChatMessage[]>(
+        `/api/townhalls/${townhallId}/chat-messages`
     );
 }

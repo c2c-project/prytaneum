@@ -55,7 +55,7 @@ describe('CreateReportList', () => {
 
         // Get report description`
         const reportDescriptionNode = document.querySelector(
-            '#reportDescription'
+            '#report-description'
         ) as HTMLInputElement;
 
         expect(reportDescriptionNode.value).toBe(dummyBugReport.description);

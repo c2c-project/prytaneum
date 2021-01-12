@@ -1,20 +1,27 @@
 import React from 'react';
-import Page from 'layout/Page';
-import Nav from 'layout/Nav';
 
+import UserProvider from 'contexts/User';
+import Layout from 'layout';
 import UserList from './UserList';
 
 export default { title: 'Domains/Admin/User List' };
 
 export function Basic() {
     return (
-        <>
-            <Nav />
-            <main>
-                <Page>
-                    <UserList />
-                </Page>
-            </main>
-        </>
+        <UserProvider>
+            <Layout>
+                <UserList />
+            </Layout>
+        </UserProvider>
+    );
+}
+
+export function WithNav() {
+    return (
+        <UserProvider>
+            <Layout showAsLoggedIn>
+                <UserList />
+            </Layout>
+        </UserProvider>
     );
 }

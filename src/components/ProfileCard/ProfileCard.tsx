@@ -152,7 +152,7 @@ export default function ProfileCard({ teamMember }: Props) {
             </Grid>
             <Dialog open={open} onClose={handleClose}>
                 <Typography
-                    id='dialogTitle'
+                    id='profile-card-dialog-title'
                     align='center'
                     variant='h4'
                     className={classes.paddingTop}
@@ -169,7 +169,7 @@ export default function ProfileCard({ teamMember }: Props) {
                         />
                     </div>
                     <DialogContentText
-                        id='dialogDescription'
+                        id='profile-card-dialog-description'
                         className={classes.paddingTop}
                     >
                         {teamMember.description}

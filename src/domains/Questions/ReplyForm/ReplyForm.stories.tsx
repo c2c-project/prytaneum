@@ -1,15 +1,15 @@
 import React from 'react';
 import { makeQuestion } from 'prytaneum-typings';
 
-import Page from 'layout/Page';
+import Main from 'layout/Main';
 import Component from './ReplyForm';
 
 export default { title: 'Domains/Questions/Reply Form' };
 
 export function Basic() {
     return (
-        <Page>
+        <Main>
             <Component replyTo={makeQuestion()} />
-        </Page>
+        </Main>
     );
 }

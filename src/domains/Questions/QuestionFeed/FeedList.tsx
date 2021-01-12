@@ -1,353 +1,136 @@
 /* eslint-disable no-console */ // FIXME:
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Grid, Typography, DialogContent } from '@material-ui/core';
+import {
+    Grid,
+    DialogContent,
+    CardActions,
+    Card,
+    CardContent,
+    // IconButton,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import Dialog from 'components/Dialog';
-import QuestionForm from '../QuestionForm';
-import QuestionFeedItem, { QuestionProps } from '../QuestionFeedItem';
-import ReplyForm from '../ReplyForm';
 import QuestionLabels from '../QuestionLabels';
-import QuestionActions from '../QuestionActions';
+import { Like, Quote /* Reply */ } from '../QuestionActions';
 import { CurrentQuestion } from './components';
-
-type UserActionTypes = 'Like' | 'Quote' | 'Reply';
-type ModActionTypes = 'Set Current' | 'Remove From Queue' | 'Queue Question';
-
-const modActions: ModActionTypes[] = [
-    'Queue Question',
-    'Remove From Queue',
-    'Set Current',
-];
-
-const userActions: UserActionTypes[] = ['Like', 'Quote', 'Reply'];
+import QuestionCard from '../QuestionCard';
 
 interface Props {
     questions: Question[];
     variant: 'moderator' | 'user';
     current: Question | undefined;
-    systemMessages: QuestionProps[];
+    systemMessages: React.ReactNodeArray;
+    className?: string;
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxHeight: 'inherit',
-    },
+    root: {},
     item: {
-        paddingBottom: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
+    questionActions: {
+        padding: 0,
+        backgroundColor: theme.palette.primary.light,
+        color: theme.palette.primary.contrastText,
+    },
+    card: {},
 }));
 
-// TODO: complete this component
-// function ModList({ questions }: Pick<Props, 'questions'>) {
-//     const classes = useStyles();
-//     const [
-//         dialogContent,
-//         setDialogContent,
-//     ] = React.useState<JSX.Element | null>(null);
-
-//     function closeDialog() {
-//         setDialogContent(null);
-//     }
-
-//     function handleModAction(questionId: string, actionType: ModActionTypes) {
-//         const target = questions.find(({ _id }) => _id === questionId);
-
-//         // this should never happen, but to keep ts happy I have to
-//         if (!target) return;
-
-//         switch (actionType) {
-//             case 'Queue Question': {
-//                 // TODO: queue question
-//                 break;
-//             }
-//             case 'Remove From Queue': {
-//                 // TODO: remove question from queue
-//                 break;
-//             }
-//             case 'Set Current': {
-//                 // TODO: set as current question
-//                 break;
-//             }
-//             default: {
-//                 // do nothing
-//                 break;
-//             }
-//         }
-//     }
-
-//     function getActions({ _id }: Question) {
-//         return (
-//             <QuestionActions
-//                 actionKeys={modActions}
-//                 onClick={(_e, key) => handleModAction(_id, key)}
-//             />
-//         );
-//     }
-
-//     return (
-//         <>
-//             <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
-//                 <DialogContent>{dialogContent || <div />}</DialogContent>
-//             </Dialog>
-//             <Grid item xs={12} style={{ maxHeight: '100%' }}>
-//                 {questions.map((question) => {
-//                     const { _id, meta, aiml, question: text } = question;
-//                     return (
-//                         <QuestionFeedItem
-//                             key={_id}
-//                             user={meta.createdBy.name.first}
-//                             timestamp={meta.createdAt}
-//                             actions={getActions(question)}
-//                             className={classes.item}
-//                         >
-//                             <Typography paragraph>{text}</Typography>
-//                             <QuestionLabels labels={aiml.labels} />
-//                         </QuestionFeedItem>
-//                     );
-//                 })}
-//             </Grid>
-//         </>
-//     );
-// }
-
-// function UserList({ questions }: Pick<Props, 'questions'>) {
-//     const classes = useStyles();
-//     const [
-//         dialogContent,
-//         setDialogContent,
-//     ] = React.useState<JSX.Element | null>(null);
-
-//     function closeDialog() {
-//         setDialogContent(null);
-//     }
-
-//     function handleUserAction(questionId: string, actionType: UserActionTypes) {
-//         const target = questions.find(({ _id }) => _id === questionId);
-
-//         // this should never happen, but to keep ts happy I have to
-//         if (!target) return;
-
-//         switch (actionType) {
-//             case 'Like': {
-//                 // TODO: socket stuff here
-//                 console.log('liked');
-//                 break;
-//             }
-//             case 'Quote': {
-//                 // open dialog with the quoted question
-//                 // TODO: onSubmit
-//                 setDialogContent(
-//                     <QuestionForm
-//                         quote={target}
-//                         onCancel={closeDialog}
-//                         onSubmit={console.log}
-//                     />
-//                 );
-//                 break;
-//             }
-//             case 'Reply': {
-//                 // open dialog with the replied quote
-//                 // TODO: onSubmit
-//                 setDialogContent(
-//                     <ReplyForm
-//                         replyTo={target}
-//                         onSubmit={console.log}
-//                         onCancel={closeDialog}
-//                     />
-//                 );
-//                 break;
-//             }
-//             default: {
-//                 // do nothing
-//                 break;
-//             }
-//         }
-//     }
-
-//     function getActions({ _id }: Question) {
-//         return (
-//             <QuestionActions
-//                 actionKeys={userActions}
-//                 onClick={(_e, key) => handleUserAction(_id, key)}
-//             />
-//         );
-//     }
-
-//     return (
-//         <>
-//             <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
-//                 <DialogContent>{dialogContent || <div />}</DialogContent>
-//             </Dialog>
-
-//             <Grid item xs={12} style={{ maxHeight: '100%' }}>
-//                 {questions.map((question) => {
-//                     const { _id, meta, question: text } = question;
-//                     return (
-//                         <QuestionFeedItem
-//                             key={_id}
-//                             user={meta.createdBy.name.first}
-//                             timestamp={meta.createdAt}
-//                             actions={getActions(question)}
-//                             className={classes.item}
-//                         >
-//                             <Typography paragraph>{text}</Typography>
-//                         </QuestionFeedItem>
-//                     );
-//                 })}
-//             </Grid>
-//         </>
-//     );
-// }
-
-function FeedList({ questions, variant, current, systemMessages }: Props) {
+function FeedList({
+    questions,
+    variant,
+    current,
+    systemMessages,
+    className,
+}: Props) {
     const classes = useStyles();
     const [
         dialogContent,
         setDialogContent,
     ] = React.useState<JSX.Element | null>(null);
+    const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [
+        dialogContent,
+    ]);
 
     function closeDialog() {
         setDialogContent(null);
     }
 
-    function handleUserAction(question: Question, actionType: UserActionTypes) {
-        switch (actionType) {
-            case 'Like': {
-                break;
-            }
-            case 'Quote': {
-                // open dialog with the quoted question
-                // TODO: onSubmit
-                setDialogContent(
-                    <QuestionForm
-                        quote={question}
-                        onCancel={closeDialog}
-                        onSubmit={console.log}
-                    />
-                );
-                break;
-            }
-            case 'Reply': {
-                // open dialog with the replied quote
-                // TODO: onSubmit
-                setDialogContent(
-                    <ReplyForm
-                        replyTo={question}
-                        onSubmit={console.log}
-                        onCancel={closeDialog}
-                    />
-                );
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
-    function handleModAction(question: Question, actionType: ModActionTypes) {
-        switch (actionType) {
-            case 'Queue Question': {
-                // TODO: queue question
-                break;
-            }
-            case 'Remove From Queue': {
-                // TODO: remove question from queue
-                break;
-            }
-            case 'Set Current': {
-                // TODO: set as current question
-                break;
-            }
-            default: {
-                // do nothing
-                break;
-            }
-        }
-    }
-
-    function getActions(question: Question) {
-        if (variant === 'moderator')
+    const questionList = React.useMemo(() => {
+        return questions.map((question) => {
+            const { townhallId } = question.meta;
+            const questionId = question._id;
             return (
-                <QuestionActions
-                    actionKeys={modActions}
-                    onClick={(_e, key) => handleModAction(question, key)}
-                />
+                <QuestionCard
+                    key={questionId}
+                    question={question}
+                    className={classes.item}
+                    // CardHeaderProps={{
+                    //     action: (
+                    //         <IconButton>
+                    //             <MoreVertIcon />
+                    //         </IconButton>
+                    //     ),
+                    // }}
+                    quote={question.quote}
+                >
+                    {variant === 'moderator' && (
+                        <QuestionLabels labels={question.aiml.labels} />
+                    )}
+                    <CardActions className={classes.questionActions}>
+                        <Like townhallId={townhallId} questionId={questionId} />
+                        <Quote question={question} />
+                        {/* <Reply question={question} /> */}
+                    </CardActions>
+                </QuestionCard>
             );
-        return (
-            <QuestionActions
-                actionKeys={userActions}
-                onClick={(_e, key) => handleUserAction(question, key)}
-            />
-        );
-    }
+        });
+    }, [questions, classes.item, classes.questionActions, variant]);
 
     return (
-        <div className={classes.root}>
-            <Dialog open={Boolean(dialogContent)} onClose={closeDialog}>
+        <div className={className}>
+            <Dialog open={isDialogOpen} onClose={closeDialog}>
                 <DialogContent>{dialogContent || <div />}</DialogContent>
             </Dialog>
             <Grid container>
-                <Grid container item xs={12} justify='center'>
-                    {questions.length === 0 &&
-                        systemMessages.map((props, idx) => (
-                            <QuestionFeedItem
-                                key={idx}
-                                {...props}
-                                className={classes.item}
-                            />
+                {questions.length === 0 && (
+                    <Grid item xs={12}>
+                        {systemMessages.map((node, idx) => (
+                            <Card key={idx} className={classes.item}>
+                                <CardContent>{node}</CardContent>
+                            </Card>
                         ))}
-                    {current && (
-                        <CurrentQuestion className={classes.item}>
-                            <QuestionFeedItem
-                                user={current.meta.createdBy.name.first}
-                                timestamp={current.meta.createdAt}
-                                actions={
-                                    variant === 'moderator' &&
-                                    getActions(current)
-                                }
-                            >
-                                <Typography>{current.question}</Typography>
-                                {variant === 'moderator' && (
-                                    <QuestionLabels
-                                        labels={current.aiml.labels}
-                                    />
-                                )}
-                            </QuestionFeedItem>
-                        </CurrentQuestion>
-                    )}
-                    <Grid item xs={12} style={{ maxHeight: '100%' }}>
-                        {questions.map((question) => {
-                            const {
-                                _id,
-                                meta,
-                                aiml,
-                                question: text,
-                            } = question;
-                            return (
-                                <QuestionFeedItem
-                                    key={_id}
-                                    user={meta.createdBy.name.first}
-                                    timestamp={meta.createdAt}
-                                    actions={getActions(question)}
-                                    className={classes.item}
-                                >
-                                    <Typography paragraph>{text}</Typography>
-                                    {variant === 'moderator' && (
-                                        <QuestionLabels labels={aiml.labels} />
-                                    )}
-                                </QuestionFeedItem>
-                            );
-                        })}
                     </Grid>
+                )}
+                {current && (
+                    <CurrentQuestion>
+                        <QuestionCard
+                            question={current}
+                            className={classes.item}
+                        >
+                            {variant === 'moderator' && (
+                                <QuestionLabels labels={current.aiml.labels} />
+                            )}
+                        </QuestionCard>
+                    </CurrentQuestion>
+                )}
+                <Grid item xs={12}>
+                    {questionList}
                 </Grid>
             </Grid>
         </div>
     );
 }
+
+FeedList.defaultProps = {
+    className: undefined,
+};
 
 export default React.memo(FeedList);

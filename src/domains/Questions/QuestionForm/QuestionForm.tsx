@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import type {
     Question as QuestionType,
-    QuestionForm as QuestionFormType,
+    QuestionForm as FormType,
 } from 'prytaneum-typings';
 
+import { TownhallContext } from 'contexts/Townhall';
 import LoadingButton from 'components/LoadingButton';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
@@ -13,41 +14,42 @@ import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useForm from 'hooks/useForm';
-import Question from '../QuestionFeedItem';
+import useEndpoint from 'hooks/useEndpoint';
+import useSnack from 'hooks/useSnack';
+import QuestionCard from '../QuestionCard';
+import { createQuestion } from '../api';
 
 interface Props {
     quote?: QuestionType;
-    onSubmit?: (form: QuestionFormType) => void;
+    onSubmit?: () => void;
     onCancel?: () => void;
-    isLoading?: boolean;
-}
-
-interface FormType {
-    question: string;
 }
 
 const initialState: FormType = { question: '' };
-export default function QuestionForm({
-    isLoading,
-    quote,
-    onSubmit,
-    onCancel,
-}: Props) {
+export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
+    // context & snack
+    const [snack] = useSnack();
+    const townhall = React.useContext(TownhallContext);
+
+    // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const submitCb = React.useCallback(() => {
-        if (onSubmit) onSubmit(form);
-    }, [onSubmit, form]);
+    const endpoint = () => createQuestion(townhall._id, form);
+    const onSuccess = () => {
+        snack('Successfully submitted Question');
+        if (onSubmit) onSubmit();
+    };
+    const [run, isLoading] = useEndpoint(endpoint, { onSuccess });
+
     return (
-        <Form onSubmit={handleSubmit(submitCb)}>
+        <Form onSubmit={handleSubmit(run)}>
             <FormTitle title='Question Form' />
             {quote && (
-                <Question
-                    user={quote.meta.createdBy.name.first}
-                    timestamp={quote.meta.createdAt}
-                    elevation={3}
-                >
-                    {quote.question}
-                </Question>
+                <Grid item xs={12}>
+                    <QuestionCard
+                        style={{ marginBottom: '8px' }}
+                        question={quote}
+                    />
+                </Grid>
             )}
             <FormContent>
                 <TextField
@@ -64,15 +66,10 @@ export default function QuestionForm({
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <Button
-                    type='submit'
-                    color='primary'
-                    disableElevation
-                    onClick={onCancel}
-                >
+                <Button color='primary' disableElevation onClick={onCancel}>
                     Cancel
                 </Button>
-                <LoadingButton loading={isLoading as boolean}> 
+                <LoadingButton loading={isLoading}>
                     <Button
                         type='submit'
                         variant='contained'
@@ -91,12 +88,10 @@ QuestionForm.defaultProps = {
     quote: undefined,
     onSubmit: undefined,
     onCancel: undefined,
-    isLoading: false,
 };
 
 QuestionForm.propTypes = {
     quote: PropTypes.object,
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func,
-    isLoading: PropTypes.bool,
 };
