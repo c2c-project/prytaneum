@@ -55,9 +55,7 @@ export default function RegisterPage() {
                     Register
                 </Typography>
                 <div className={classes.form}>
-                    <RegisterForm
-                        onSuccess={() => history.push('/auth/login')}
-                    />
+                    <RegisterForm onSuccess={() => history.push('/login')} />
                 </div>
             </Paper>
         </Grid>

@@ -63,7 +63,7 @@ export default function ForgotPassRequest() {
                 <div className={classes.form}>
                     <ForgotPassRequestForm
                         onSuccess={() => {
-                            history.push('/auth/login');
+                            history.push('/login');
                         }}
                     />
                 </div>
