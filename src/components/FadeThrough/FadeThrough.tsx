@@ -4,7 +4,7 @@ import { motion, AnimationProps, MotionProps } from 'framer-motion';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-    motion: { inset: 0, position: 'absolute' },
+    motion: { top: 0, bottom: 0, left: 0, right: 0, position: 'absolute' },
 });
 
 interface Props {

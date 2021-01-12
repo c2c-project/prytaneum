@@ -13,7 +13,10 @@ const useStyles = makeStyles(
             position: 'relative',
         },
         container: {
-            inset: 0,
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
             position: 'absolute',
             display: 'none',
         },
