@@ -13,11 +13,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-function StyledTabPanel(props: Pick<TabPanelProps, 'children'>) {
-    const { children } = props;
+interface Props extends Pick<TabPanelProps, 'children'> {
+    classes: ReturnType<typeof useStyles>;
+}
 
-    const classes = useStyles();
-
+const StyledTabPanel = React.memo(({ children, classes }: Props) => {
     return (
         <motion.div
             initial={{ opacity: 0, x: 40 }}
@@ -28,6 +28,12 @@ function StyledTabPanel(props: Pick<TabPanelProps, 'children'>) {
             <TabPanels>{children}</TabPanels>
         </motion.div>
     );
+});
+
+function ContextSubscriber(props: Pick<Props, 'children'>) {
+    const classes = useStyles();
+    const { children } = props;
+    return <StyledTabPanel classes={classes}>{children}</StyledTabPanel>;
 }
 
-export default React.memo(StyledTabPanel);
+export default ContextSubscriber;
