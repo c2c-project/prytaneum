@@ -6,6 +6,7 @@ import type { Townhall } from 'prytaneum-typings';
 import SpeakerCard from 'domains/Speaker/SpeakerCard';
 import { TownhallContext } from 'contexts/Townhall';
 import TownhallCard from '../TownhallCard';
+import AskQuestion from '../../Questions/AskQuestion';
 
 const useStyles = makeStyles((theme) => ({
     item: {
@@ -25,6 +26,9 @@ interface Props {
 const TownhallPane = React.memo(({ classes, townhall }: Props) => {
     return (
         <Grid container>
+            <Grid item xs={12} className={classes.item}>
+                <AskQuestion />
+            </Grid>
             <Grid item xs={12} className={classes.item}>
                 <TownhallCard />
             </Grid>

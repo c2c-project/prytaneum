@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 
 import TabPanel, { TabPanels } from 'components/TabPanel';
 import ChipTab from 'components/ChipTab';
@@ -51,17 +51,21 @@ export default function QuestionQueue() {
     return (
         <div className={classes.root}>
             <Grid container>
-                <Grid item xs='auto' className={classes.item}>
-                    <ChipTab
-                        onClick={handleTabChange('queued')}
-                        selected={tab === 'queued'}
-                        label='Queued'
-                    />
-                    <ChipTab
-                        onClick={handleTabChange('suggested')}
-                        selected={tab === 'suggested'}
-                        label='Suggested'
-                    />
+                <Grid item xs={12} className={classes.item}>
+                    <Paper style={{ padding: 8, width: '100%' }}>
+                        <ChipTab
+                            onClick={handleTabChange('queued')}
+                            selected={tab === 'queued'}
+                            label='Queued'
+                            variant='secondary'
+                        />
+                        <ChipTab
+                            onClick={handleTabChange('suggested')}
+                            selected={tab === 'suggested'}
+                            label='Suggested'
+                            variant='secondary'
+                        />
+                    </Paper>
                 </Grid>
                 <TabPanels>
                     <TabPanel visible={tab === 'queued'}>
