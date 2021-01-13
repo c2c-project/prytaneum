@@ -11,7 +11,10 @@ function AskQuestion() {
         <>
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogContent>
-                    <QuestionForm onCancel={() => setOpen(false)} />
+                    <QuestionForm
+                        onCancel={() => setOpen(false)}
+                        onSubmit={() => setOpen(false)}
+                    />
                 </DialogContent>
             </Dialog>
             <Button

@@ -10,17 +10,29 @@ interface Props {
     townhallId: string;
     questionId: string;
     onLike?: () => void;
+    onDeleteLike?: () => void;
     className?: string;
     liked?: boolean;
 }
 
-function Like({ className, questionId, townhallId, liked, onLike }: Props) {
+function Like({
+    className,
+    questionId,
+    townhallId,
+    liked,
+    onLike,
+    onDeleteLike,
+}: Props) {
     const apiFn = React.useMemo(() => {
         if (liked) return deleteLike;
         return createLike;
     }, [liked]);
+    const onSuccess = React.useMemo(() => {
+        if (liked) return onDeleteLike;
+        return onLike;
+    }, [liked, onDeleteLike, onLike]);
     const [run, isLoading] = useEndpoint(() => apiFn(townhallId, questionId), {
-        onSuccess: onLike,
+        onSuccess,
     });
 
     return (
@@ -42,6 +54,7 @@ Like.defaultProps = {
     className: undefined,
     liked: false,
     onLike: undefined,
+    onDeleteLike: undefined,
 };
 
 export default React.memo(Like);

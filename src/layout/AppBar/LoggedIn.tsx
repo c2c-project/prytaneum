@@ -2,9 +2,11 @@ import React from 'react';
 import { Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import UserNotifications from 'domains/User/UserNotifications';
+// TODO: notifications
+// import UserNotifications from 'domains/User/UserNotifications';
 import UserMenu from 'domains/User/UserMenu';
-import UserTheme from 'domains/User/UserTheme';
+// TODO: user theme that doesn't make tabpanels disappear, interesting problem
+// import UserTheme from 'domains/User/UserTheme';
 import Title from './Title';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,8 +29,8 @@ export default function Nav() {
     return (
         <>
             <Title />
-            <UserNotifications className={classes.item} />
-            <UserTheme className={classes.item} />
+            {/* <UserNotifications className={classes.item} /> */}
+            {/* <UserTheme className={classes.item} /> */}
             <Divider
                 orientation='vertical'
                 classes={{

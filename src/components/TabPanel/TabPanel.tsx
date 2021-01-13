@@ -13,7 +13,10 @@ const useStyles = makeStyles(
             position: 'relative',
         },
         container: {
-            inset: 0,
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
             position: 'absolute',
             display: 'none',
         },
@@ -42,49 +45,15 @@ const useStyles = makeStyles(
         exitDone: {
             display: 'none',
         },
-        // exit: {
-        //     animation: `$fadeThroughExit ${exitTime}ms ease-in-out`,
-        //     animationFillMode: 'forwards',
-        // },
-        // enter: {
-        //     animation: `$fadeThroughEnter 200ms ease-in-out ${exitTime - 50}ms`,
-        //     animationFillMode: 'forwards',
-        // },
-        // hide: {
-        //     display: 'none',
-        // },
-        // '@keyframes fadeThroughEnter': {
-        //     '0%': {
-        //         transform: 'scale(0.92)',
-        //         opacity: 0,
-        //         visibility: 'visible',
-        //     },
-        //     '100%': {
-        //         transform: 'scale(1)',
-        //         opacity: 1,
-        //         visibility: 'visible',
-        //     },
-        // },
-        // '@keyframes fadeThroughExit': {
-        //     '0%': {
-        //         opacity: 1,
-        //         visibility: 'visible',
-        //     },
-        //     '100%': {
-        //         opacity: 0,
-        //         visibility: 'hidden',
-        //         display: 'none',
-        //     },
-        // },
     })
 );
 
 export interface Props {
     visible: boolean;
     children: React.ReactNode | React.ReactNodeArray;
+    classes: ReturnType<typeof useStyles>;
 }
-function TabPanel({ visible, children }: Props) {
-    const classes = useStyles();
+const TabPanel = React.memo(({ visible, children, classes }: Props) => {
     return (
         <CSSTransition
             timeout={400}
@@ -105,11 +74,23 @@ function TabPanel({ visible, children }: Props) {
             <div className={classes.container}>{children}</div>
         </CSSTransition>
     );
-}
+});
 
 export function TabPanels({ children }: Pick<Props, 'children'>) {
     const classes = useStyles();
     return <div className={classes.root}>{children}</div>;
 }
 
-export default React.memo(TabPanel);
+const TabPanelContextSubscriber = ({
+    visible,
+    children,
+}: Omit<Props, 'classes'>) => {
+    const classes = useStyles();
+    return (
+        <TabPanel visible={visible} classes={classes}>
+            {children}
+        </TabPanel>
+    );
+};
+
+export default React.memo(TabPanelContextSubscriber);

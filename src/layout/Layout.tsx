@@ -61,13 +61,15 @@ export default function Layout({
         if (isMdDown)
             return (
                 <>
-                    <IconButton
-                        className={classes.menuIcon}
-                        onClick={() => setOpen(!open)}
-                        color='inherit'
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {!noSideNav && (
+                        <IconButton
+                            className={classes.menuIcon}
+                            onClick={() => setOpen(!open)}
+                            color='inherit'
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
                     <LoggedIn />
                 </>
             );
@@ -76,7 +78,6 @@ export default function Layout({
 
     const getSideNav = () => {
         if (!user || noSideNav) return undefined;
-        const nav = <SideNav user={user} />;
         if (isMdDown)
             return (
                 <Drawer
@@ -84,10 +85,10 @@ export default function Layout({
                     open={open}
                     onClose={() => setOpen(!open)}
                 >
-                    {nav}
+                    <SideNav user={user} onClick={() => setOpen(false)} />
                 </Drawer>
             );
-        return nav;
+        return <SideNav user={user} />;
     };
 
     return (

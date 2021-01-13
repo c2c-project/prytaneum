@@ -20,9 +20,12 @@ export default React.memo(
                         initial={false}
                         style={{
                             position: 'absolute',
-                            inset: 0,
+
                             flex: 0,
                             top: -16,
+                            right: 0,
+                            bottom: 0,
+                            left: 0,
                         }}
                         transition={{ ease: 'easeInOut' }}
                     >

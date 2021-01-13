@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
@@ -31,10 +32,11 @@ export type Props = TextFieldProps & { label?: string };
  * @constructor TextField
  * @todo params
  */
-export default function TextField(props: Props) {
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, label, name, id, ...passThroughProps } = props;
     return (
         <MUITextField
+            ref={ref}
             variant='outlined'
             fullWidth
             id={id || toSnakeCase(label)}
@@ -49,4 +51,4 @@ export default function TextField(props: Props) {
             {children}
         </MUITextField>
     );
-}
+});

@@ -39,7 +39,15 @@ type Keys = keyof typeof Nav;
 
 interface Props {
     user: User;
+    /**
+     * this is mainly used as an extra affect of click an item
+     */
+    onClick?: () => void;
 }
+
+const defaultProps = {
+    onClick: undefined,
+};
 
 const urls: Record<Keys, string> = {
     'Townhall List': '/app/organizer/my-townhalls',
@@ -59,7 +67,7 @@ function getInitialState(): Keys {
 }
 
 // TODO: (low) maybe some way to get the white text effect as the background moves? idk
-export default function SideNav({ user }: Props) {
+export default function SideNav({ user, onClick }: Props) {
     const classes = useStyles();
     const [selected, setSelected] = React.useState<Keys>(getInitialState);
     const isAdmin = React.useMemo(() => user.roles.includes('admin'), [
@@ -73,6 +81,7 @@ export default function SideNav({ user }: Props) {
         return () => {
             setSelected(key);
             history.push(urls[key]);
+            if (onClick) onClick();
         };
     }
 
@@ -84,9 +93,6 @@ export default function SideNav({ user }: Props) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ ease: 'easeInOut' }}
-                // style={{
-                //     display: 'inline flex',
-                // }}
             >
                 <AnimateSharedLayout>
                     <StyledListItem
@@ -154,3 +160,5 @@ export default function SideNav({ user }: Props) {
         </List>
     );
 }
+
+SideNav.defaultProps = defaultProps;

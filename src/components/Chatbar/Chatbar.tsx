@@ -13,11 +13,14 @@ export interface Props {
 
 export default function Chatbar({ onSubmit, disabled }: Props) {
     const [message, setMessage] = React.useState('');
+    const ref = React.useRef<HTMLInputElement | null>(null);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        onSubmit({ message });
+        const copy = message;
         setMessage('');
+        ref.current?.focus();
+        onSubmit({ message: copy });
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -36,7 +39,7 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
         >
             <Grid item style={{ flex: '1 1 100%' }}>
                 <TextField
-                    disabled={disabled}
+                    ref={ref}
                     label='Message'
                     value={message}
                     onChange={handleChange}
@@ -48,6 +51,7 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
                 style={{ paddingLeft: '8px', display: 'flex', flex: 1 }}
             >
                 <Button
+                    disabled={disabled || message.length === 0}
                     variant='contained'
                     color='primary'
                     endIcon={<SendIcon />}

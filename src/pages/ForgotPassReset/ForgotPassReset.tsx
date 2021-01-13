@@ -42,7 +42,7 @@ export default function ForgotPasswordReset({ token }: Props) {
                 <Paper className={classes.paper}>
                     <PasswordResetForm
                         token={token}
-                        onSuccess={() => history.push('/auth/login')}
+                        onSuccess={() => history.push('/login')}
                     />
                 </Paper>
             </Grid>

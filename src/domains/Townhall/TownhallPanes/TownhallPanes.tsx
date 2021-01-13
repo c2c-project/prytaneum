@@ -54,51 +54,72 @@ function buildPanes(townhall: Townhall, isModerator: boolean) {
     return panes;
 }
 
-export default function TownhallPanes() {
-    const townhall = React.useContext(TownhallContext);
-    const isModerator = useIsModerator();
-    const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
-        townhall,
-        isModerator,
-    ]);
-    type PaneKey = keyof typeof panes;
-    const classes = useStyles();
-    const [state, setState] = React.useState<PaneKey>('Information');
+interface Props {
+    classes: ReturnType<typeof useStyles>;
+    townhall: Townhall;
+    isModerator: boolean;
+}
 
-    const options = Object.keys(panes) as PaneKey[];
+const TownhallPanes = React.memo(
+    ({ classes, townhall, isModerator }: Props) => {
+        const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
+            townhall,
+            isModerator,
+        ]);
+        type PaneKey = keyof typeof panes;
 
-    return (
-        <Grid
-            container
-            className={classes.root}
-            direction='column'
-            alignContent='flex-start'
-            alignItems='flex-start'
-            wrap='nowrap'
-        >
-            {options.length > 1 && (
-                <Grid item xs='auto' className={classes.chipContainer}>
-                    {options.map((option, idx) => (
-                        <StyledTab
-                            key={option}
-                            label={option}
-                            index={idx}
-                            value={option}
-                            onClick={() => setState(option)}
-                            selected={option === state}
-                        />
-                    ))}
+        const [state, setState] = React.useState<PaneKey>('Information');
+
+        const options = Object.keys(panes) as PaneKey[];
+
+        return (
+            <Grid
+                container
+                className={classes.root}
+                direction='column'
+                alignContent='flex-start'
+                alignItems='flex-start'
+                wrap='nowrap'
+            >
+                {options.length > 1 && (
+                    <Grid item xs='auto' className={classes.chipContainer}>
+                        {options.map((option, idx) => (
+                            <StyledTab
+                                key={option}
+                                label={option}
+                                index={idx}
+                                value={option}
+                                onClick={() => setState(option)}
+                                selected={option === state}
+                            />
+                        ))}
+                    </Grid>
+                )}
+                <Grid item xs='auto' className={classes.paneContainer}>
+                    <StyledTabPanels>
+                        {Object.entries(panes).map(([key, value]) => (
+                            <TabPanel key={key} visible={key === state}>
+                                {value}
+                            </TabPanel>
+                        ))}
+                    </StyledTabPanels>
                 </Grid>
-            )}
-            <Grid item xs='auto' className={classes.paneContainer}>
-                <StyledTabPanels>
-                    {Object.entries(panes).map(([key, value]) => (
-                        <TabPanel key={key} visible={key === state}>
-                            {value}
-                        </TabPanel>
-                    ))}
-                </StyledTabPanels>
             </Grid>
-        </Grid>
+        );
+    }
+);
+
+function ContextSubscriber() {
+    const townhall = React.useContext(TownhallContext);
+    const classes = useStyles();
+    const isModerator = useIsModerator();
+    return (
+        <TownhallPanes
+            classes={classes}
+            townhall={townhall}
+            isModerator={isModerator}
+        />
     );
 }
+
+export default ContextSubscriber;
