@@ -22,6 +22,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+// TODO: disable link if they're not logged in
 export default function Title() {
     const classes = useStyles();
     return (

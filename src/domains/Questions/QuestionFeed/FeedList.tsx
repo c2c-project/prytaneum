@@ -14,6 +14,7 @@ import type { Question } from 'prytaneum-typings';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import Dialog from 'components/Dialog';
+import useUser from 'hooks/useUser';
 import QuestionLabels from '../QuestionLabels';
 import { Like, Quote /* Reply */ } from '../QuestionActions';
 import { CurrentQuestion } from './components';
@@ -50,11 +51,14 @@ function FeedList({
     systemMessages,
     className,
 }: Props) {
+    const [user] = useUser();
     const classes = useStyles();
     const [
         dialogContent,
         setDialogContent,
     ] = React.useState<JSX.Element | null>(null);
+    // TODO: make this a subscription on the backend for "live data" rather than a local state here
+    const [liked, setLiked] = React.useState<Set<string>>(new Set());
     const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [
         dialogContent,
     ]);
@@ -62,7 +66,7 @@ function FeedList({
     function closeDialog() {
         setDialogContent(null);
     }
-
+    console.log(liked);
     const questionList = React.useMemo(() => {
         return questions.map((question) => {
             const { townhallId } = question.meta;
@@ -85,14 +89,46 @@ function FeedList({
                         <QuestionLabels labels={question.aiml.labels} />
                     )}
                     <CardActions className={classes.questionActions}>
-                        <Like townhallId={townhallId} questionId={questionId} />
+                        <Like
+                            townhallId={townhallId}
+                            questionId={questionId}
+                            liked={
+                                (user && question.likes.includes(user._id)) ||
+                                liked.has(question._id)
+                            }
+                            onLike={() =>
+                                setLiked((prev) => {
+                                    const nextState = new Set(prev).add(
+                                        question._id
+                                    );
+                                    console.log(nextState);
+                                    return nextState;
+                                })
+                            }
+                            onDeleteLike={() =>
+                                setLiked((prev) => {
+                                    const copy = new Set(prev);
+                                    copy.delete(question._id);
+                                    console.log(copy);
+                                    return copy;
+                                })
+                            }
+                        />
                         <Quote question={question} />
                         {/* <Reply question={question} /> */}
                     </CardActions>
                 </QuestionCard>
             );
         });
-    }, [questions, classes.item, classes.questionActions, variant]);
+    }, [
+        questions,
+        classes.item,
+        classes.questionActions,
+        variant,
+        liked,
+        user,
+        setLiked,
+    ]);
 
     return (
         <div className={className}>
