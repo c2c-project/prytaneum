@@ -61,13 +61,15 @@ export default function Layout({
         if (isMdDown)
             return (
                 <>
-                    <IconButton
-                        className={classes.menuIcon}
-                        onClick={() => setOpen(!open)}
-                        color='inherit'
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {!noSideNav && (
+                        <IconButton
+                            className={classes.menuIcon}
+                            onClick={() => setOpen(!open)}
+                            color='inherit'
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
                     <LoggedIn />
                 </>
             );
