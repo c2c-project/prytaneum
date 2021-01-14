@@ -9,9 +9,10 @@ import ChatContent from 'components/ChatContent';
 import Chat from 'components/Chat';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
+import { TownhallContext } from 'contexts/Townhall';
+import useUser from 'hooks/useUser';
 import { createChatMessage, getChatmessages } from '../api';
 import { chatReducer } from './utils';
-import { TownhallContext } from '../../../contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,7 @@ export default function TownhallChat() {
     const townhall = React.useContext(TownhallContext);
     const messageRef = React.useRef<ChatMessageForm>();
     const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
+    const [user] = useUser();
     const [get, areMessagesLoading] = useEndpoint(
         () => getChatmessages(townhall._id),
         {
@@ -71,7 +73,7 @@ export default function TownhallChat() {
                 <Chat>
                     <ChatContent messages={messages} />
                     <Chatbar
-                        disabled={isLoading}
+                        disabled={isLoading || !user}
                         onSubmit={(form) => {
                             messageRef.current = form;
                             postMesssage();
