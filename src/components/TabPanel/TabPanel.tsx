@@ -7,11 +7,6 @@ import clsx from 'clsx';
 const exitTime = 150;
 const useStyles = makeStyles(
     createStyles({
-        root: {
-            width: '100%',
-            height: '100%',
-            position: 'relative',
-        },
         container: {
             top: 0,
             right: 0,
@@ -76,8 +71,18 @@ const TabPanel = React.memo(({ visible, children, classes }: Props) => {
     );
 });
 
+const useRootStyles = makeStyles(
+    createStyles({
+        root: {
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+        },
+    })
+);
+
 export function TabPanels({ children }: Pick<Props, 'children'>) {
-    const classes = useStyles();
+    const classes = useRootStyles();
     return <div className={classes.root}>{children}</div>;
 }
 
