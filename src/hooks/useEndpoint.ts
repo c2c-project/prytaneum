@@ -26,7 +26,7 @@ async function wrapMinWaitTime<T>(endpoint: Endpoint<T>, time = 600) {
             setTimeout(resolve, time);
         });
     const [results] = await Promise.allSettled([endpoint(), minWaitTime()]);
-    if (results.status === 'rejected') throw new Error(results.reason);
+    if (results.status === 'rejected') throw results.reason;
     return results.value;
 }
 
