@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         flexGrow: 0,
         color: theme.palette.getContrastText('#fff'),
+        overscrollBehavior: 'contain',
         '&::after': {
             content: '""',
             width: '95%',

@@ -25,7 +25,22 @@ import RequireLogin from 'domains/Logical/RequireLogin';
 import Redirect from 'domains/Logical/Redirect';
 import RequireRoles from 'domains/Logical/RequireRoles';
 import history from 'utils/history';
-import { addRoutes, areParamsValid, PrytaneumRoutes } from './utils';
+import {
+    addRoutes,
+    areParamsValid,
+    PrytaneumRoutes,
+    PrytaneumRoute,
+} from './utils';
+
+// TODO: better 404 page
+const notFound: PrytaneumRoute = {
+    path: '(.*)',
+    action: (ctx) => (
+        <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+            <h1>Ooops! No page found.</h1>
+        </FadeThrough>
+    ),
+};
 
 const organizerRoutes: PrytaneumRoutes = [
     {
@@ -145,11 +160,7 @@ addRoutes([
             const element = ctx.next();
             if (!React.isValidElement(element))
                 return <Redirect href='/login' />;
-            return (
-                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                    <RequireLogin key={ctx.pathname}>{element}</RequireLogin>
-                </FadeThrough>
-            );
+            return <RequireLogin key={ctx.pathname}>{element}</RequireLogin>;
         },
         children: [
             {
@@ -176,7 +187,7 @@ addRoutes([
                 path: '/settings',
                 action: () => <UserSettings />,
             },
-            { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page
+            notFound,
         ],
     },
     {
@@ -199,5 +210,5 @@ addRoutes([
         },
         children: joinRoutes,
     },
-    { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page
+    notFound,
 ]);

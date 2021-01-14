@@ -96,7 +96,12 @@ export default function Layout({
                     <SideNav user={user} onClick={() => setOpen(false)} />
                 </Drawer>
             );
-        return <SideNav user={user} />;
+        return (
+            <>
+                <SideNav user={user} />
+                <div style={{ paddingRight: 240 }} />
+            </>
+        );
     };
 
     return (
