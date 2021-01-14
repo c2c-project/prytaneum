@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(2),
         },
+        [theme.breakpoints.down('sm')]: {
+            position: 'sticky',
+            top: 0,
+            zIndex: theme.zIndex.appBar,
+        },
     },
     target: {
         scrollMarginTop: '1rem',
@@ -46,9 +51,13 @@ export default function TownhallLive() {
     const theme = useTheme();
     const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
+    // increase the distance required to show the scroll to top fab
+    // bedcause of on screen keyboards on mobile
+    const distance = React.useMemo(() => (isMdUp ? 100 : 250), [isMdUp]);
+
     const handleScroll = () => {
         const top = topRef.current?.getBoundingClientRect()?.top;
-        if (top && top < -100) {
+        if (top && top < -distance) {
             setIsFabVisible(true);
         } else {
             setIsFabVisible(false);
@@ -65,23 +74,10 @@ export default function TownhallLive() {
     // TODO: video url
     return (
         <PaneProvider>
-            <Grid
-                id='123'
-                container
-                className={classes.root}
-                onScroll={handleScroll}
-            >
+            <Grid container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
-                <Grid
-                    item
-                    md={8}
-                    container
-                    direction='column'
-                    className={classes.video}
-                >
-                    <Grid container item xs='auto'>
-                        <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
-                    </Grid>
+                <Grid item md={8} className={classes.video}>
+                    <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
