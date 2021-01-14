@@ -6,7 +6,6 @@ import {
     ListItemText,
     ListItemAvatar,
     Avatar,
-    Fade,
     ListItemSecondaryAction,
     Card,
     CardContent,
@@ -90,56 +89,54 @@ export default function TownhallList({ onClickTownhall, title }: Props) {
     }
 
     return (
-        <Fade in timeout={400}>
-            <div className={classes.root}>
-                <Card raised className={classes.card}>
-                    {title && (
-                        <CardHeader title={title} className={classes.title} />
-                    )}
-                    <CardContent>
-                        <ListFilter
-                            filterMap={filterFuncs}
-                            onSearch={handleSearch}
-                            onFilterChange={(newFilters) =>
-                                setFilters(([searchFunc]) => [
-                                    searchFunc,
-                                    ...newFilters,
-                                ])
-                            }
-                            length={filteredResults.length}
-                        />
+        <div className={classes.root}>
+            <Card raised className={classes.card}>
+                {title && (
+                    <CardHeader title={title} className={classes.title} />
+                )}
+                <CardContent>
+                    <ListFilter
+                        filterMap={filterFuncs}
+                        onSearch={handleSearch}
+                        onFilterChange={(newFilters) =>
+                            setFilters(([searchFunc]) => [
+                                searchFunc,
+                                ...newFilters,
+                            ])
+                        }
+                        length={filteredResults.length}
+                    />
 
-                        <List>
-                            {filteredResults.map(({ form, _id }) => (
-                                <ListItem
-                                    key={_id}
-                                    divider
-                                    button
-                                    alignItems='flex-start'
-                                    onClick={() => onClickTownhall(_id)}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            alt='Speaker'
-                                            src='' // FIXME:
-                                        >
-                                            {form.title[0]}
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={form.title}
-                                        secondary={formatDate(form.date)}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <ChevronRight />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </CardContent>
-                </Card>
-            </div>
-        </Fade>
+                    <List>
+                        {filteredResults.map(({ form, _id }) => (
+                            <ListItem
+                                key={_id}
+                                divider
+                                button
+                                alignItems='flex-start'
+                                onClick={() => onClickTownhall(_id)}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt='Speaker'
+                                        src='' // FIXME:
+                                    >
+                                        {form.title[0]}
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={form.title}
+                                    secondary={formatDate(form.date)}
+                                />
+                                <ListItemSecondaryAction>
+                                    <ChevronRight />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        ))}
+                    </List>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
 

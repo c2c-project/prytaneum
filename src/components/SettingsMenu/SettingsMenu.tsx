@@ -124,6 +124,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ x: -50 }}
                         animate={{ x: 0 }}
+                        exit={{ x: -50, opacity: 0 }}
                         transition={transition}
                     >
                         <Typography variant='h4' className={classes.title}>
@@ -134,6 +135,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ y: -50 }}
                         animate={{ y: 0 }}
+                        exit={{ y: 50, opacity: 0 }}
                         transition={transition}
                     >
                         <IconButton
@@ -149,6 +151,7 @@ export default function SettingsMenu({ config, title }: Props) {
                     <motion.div
                         initial={{ y: 50 }}
                         animate={{ y: 0 }}
+                        exit={{ y: 50, opacity: 0 }}
                         transition={transition}
                     >
                         {config.map(

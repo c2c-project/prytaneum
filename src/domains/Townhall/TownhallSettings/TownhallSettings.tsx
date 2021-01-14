@@ -211,7 +211,7 @@ export default function TownhallSettings() {
     );
 
     return (
-        <div className={classes.root}>
+        <div id='settings-id' className={classes.root}>
             <SettingsMenu config={config} title='Townhall Settings' />
             <LoadingButton loading={isLoading}>
                 <Fab zoomProps={{ in: isDiff }} onClick={save}>

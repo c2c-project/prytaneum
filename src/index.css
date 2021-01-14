@@ -5,4 +5,5 @@ div#root {
     height: 100%;
     overflow: hidden;
     display: flex;
+    overscroll-behavior: none;
 }

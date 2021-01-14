@@ -1,8 +1,8 @@
 import type {
-    User,
     ForgotPassForm,
     ForgotPassRequestForm,
     RegisterForm,
+    ClientSafeUser,
 } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
@@ -23,7 +23,7 @@ export async function login(email?: string, password?: string) {
         throw errors.fieldError();
     }
     // TODO: clientSafeUser instead of user
-    return axios.post<{ user: User }>('/api/users/login', {
+    return axios.post<{ user: ClientSafeUser }>('/api/users/login', {
         email,
         password,
     });
@@ -87,7 +87,7 @@ export async function register(form: RegisterForm, query?: string) {
     if (password !== confirmPassword) {
         throw errors.passMatch();
     }
-    return axios.post(url, { ...form });
+    return axios.post<{ user: ClientSafeUser }>(url, { ...form });
 }
 
 /** Function to confirm user from email
@@ -104,7 +104,7 @@ export async function verifyEmail(userId: string) {
 
 export async function getMyInfo() {
     // gets user info from the token in header
-    return axios.get<User>('/api/users/me');
+    return axios.get<ClientSafeUser>('/api/users/me');
 }
 
 export async function logout() {

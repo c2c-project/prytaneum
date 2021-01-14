@@ -25,7 +25,22 @@ import RequireLogin from 'domains/Logical/RequireLogin';
 import Redirect from 'domains/Logical/Redirect';
 import RequireRoles from 'domains/Logical/RequireRoles';
 import history from 'utils/history';
-import { addRoutes, areParamsValid, PrytaneumRoutes } from './utils';
+import {
+    addRoutes,
+    areParamsValid,
+    PrytaneumRoutes,
+    PrytaneumRoute,
+} from './utils';
+
+// TODO: better 404 page
+const notFound: PrytaneumRoute = {
+    path: '(.*)',
+    action: (ctx) => (
+        <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+            <h1>Ooops! No page found.</h1>
+        </FadeThrough>
+    ),
+};
 
 const organizerRoutes: PrytaneumRoutes = [
     {
@@ -89,35 +104,53 @@ addRoutes([
     },
     {
         path: '/login',
-        action: (ctx) => (
-            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                <Login onLogin={() => history.push('/app/home')} />
-            </FadeThrough>
-        ),
+        action: (ctx) => ({
+            component: (
+                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                    <Login onLogin={() => history.push('/app/home')} />
+                </FadeThrough>
+            ),
+            layoutProps: {
+                disablePadding: true,
+            },
+        }),
     },
     {
         path: '/register',
-        action: (ctx) => (
-            <QueryProvider query={ctx.query}>
-                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                    <Register />
-                </FadeThrough>
-            </QueryProvider>
-        ),
+        action: (ctx) => ({
+            component: (
+                <QueryProvider query={ctx.query}>
+                    <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                        <Register />
+                    </FadeThrough>
+                </QueryProvider>
+            ),
+            layoutProps: {
+                disablePadding: true,
+            },
+        }),
     },
     {
         path: '/forgot-password/request',
-        action: (ctx) => (
-            <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                <ForgotPasswordRequest />
-            </FadeThrough>
-        ),
+        action: (ctx) => ({
+            component: (
+                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
+                    <ForgotPasswordRequest />
+                </FadeThrough>
+            ),
+            layoutProps: {
+                disablePadding: true,
+            },
+        }),
     },
     {
         path: '/logout',
-        action: () => {
-            return <Logout />;
-        },
+        action: () => ({
+            component: <Logout />,
+            layoutProps: {
+                disablePadding: true,
+            },
+        }),
     },
     {
         // user id is the currently logged in user
@@ -127,11 +160,7 @@ addRoutes([
             const element = ctx.next();
             if (!React.isValidElement(element))
                 return <Redirect href='/login' />;
-            return (
-                <FadeThrough key={ctx.pathname} animKey={ctx.pathname}>
-                    <RequireLogin key={ctx.pathname}>{element}</RequireLogin>
-                </FadeThrough>
-            );
+            return <RequireLogin key={ctx.pathname}>{element}</RequireLogin>;
         },
         children: [
             {
@@ -158,7 +187,7 @@ addRoutes([
                 path: '/settings',
                 action: () => <UserSettings />,
             },
-            { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page
+            notFound,
         ],
     },
     {
@@ -172,11 +201,14 @@ addRoutes([
                 component: element,
                 layoutProps: {
                     hideSideNav: true,
-                    ContainerProps: { maxWidth: 'xl' },
+                    ContainerProps: {
+                        maxWidth: 'xl',
+                    },
+                    disablePadding: true,
                 },
             };
         },
         children: joinRoutes,
     },
-    { path: '(.*)', action: () => <h1>Ooops! No page found.</h1> }, // TODO: better 404 page
+    notFound,
 ]);

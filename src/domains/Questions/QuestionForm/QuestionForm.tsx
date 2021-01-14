@@ -24,15 +24,16 @@ interface Props {
     onSubmit?: () => void;
     onCancel?: () => void;
 }
-
-const initialState: FormType = { question: '' };
 export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     // context & snack
     const [snack] = useSnack();
     const townhall = React.useContext(TownhallContext);
 
     // form related hooks
-    const [form, errors, handleSubmit, handleChange] = useForm(initialState);
+    const [form, errors, handleSubmit, handleChange] = useForm<FormType>({
+        question: '',
+        quoteId: quote?._id,
+    });
     const endpoint = () => createQuestion(townhall._id, form);
     const onSuccess = () => {
         snack('Successfully submitted Question');

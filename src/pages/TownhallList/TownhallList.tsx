@@ -24,28 +24,30 @@ export default function TownhallList() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     return (
-        <FadeThrough animKey='townhall-list-page'>
-            <Grid container className={classes.root}>
-                <Dialog open={open} onClose={() => setOpen(false)}>
-                    <DialogContent>
-                        <TownhallForm
-                            onCancel={() => setOpen(false)}
-                            onSubmit={() => setOpen(false)}
+        <>
+            <FadeThrough animKey='townhall-list-page'>
+                <Grid container>
+                    <Dialog open={open} onClose={() => setOpen(false)}>
+                        <DialogContent>
+                            <TownhallForm
+                                onCancel={() => setOpen(false)}
+                                onSubmit={() => setOpen(false)}
+                            />
+                        </DialogContent>
+                    </Dialog>
+                    <TitleCard title='Townhalls' />
+                    <Grid item xs={12}>
+                        <List
+                            onClickTownhall={(id) =>
+                                history.push(makeRelativeLink(`/${id}`))
+                            }
                         />
-                    </DialogContent>
-                </Dialog>
-                <TitleCard title='Townhalls' />
-                <Grid item xs={12}>
-                    <List
-                        onClickTownhall={(id) =>
-                            history.push(makeRelativeLink(`/${id}`))
-                        }
-                    />
+                    </Grid>
                 </Grid>
-                <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
-                    <AddIcon className={classes.fab} />
-                </Fab>
-            </Grid>
-        </FadeThrough>
+            </FadeThrough>
+            <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
+                <AddIcon className={classes.fab} />
+            </Fab>
+        </>
     );
 }

@@ -2,7 +2,9 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import ThemeProviderContext from 'contexts/Theme';
+import { makeUser } from 'prytaneum-typings';
 
+import UserProvider from 'contexts/User';
 import Register from './Register';
 
 jest.mock('hooks/useSnack');
@@ -32,7 +34,9 @@ describe('Register', () => {
         ReactTestUtils.act(() => {
             render(
                 <ThemeProviderContext>
-                    <Register />
+                    <UserProvider forceNoLogin value={makeUser()}>
+                        <Register />
+                    </UserProvider>
                 </ThemeProviderContext>,
                 container
             );

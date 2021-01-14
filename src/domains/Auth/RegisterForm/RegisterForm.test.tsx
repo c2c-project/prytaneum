@@ -3,7 +3,9 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
+import { makeUser } from 'prytaneum-typings';
 
+import UserProvider from 'contexts/User';
 import RegisterForm from './RegisterForm';
 import API from '../api';
 
@@ -32,7 +34,9 @@ describe('RegisterForm', () => {
     it('should render', async () => {
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={jest.fn()} onFailure={jest.fn()} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={jest.fn()} onFailure={jest.fn()} />
+                </UserProvider>,
                 container
             );
         });
@@ -45,10 +49,14 @@ describe('RegisterForm', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
 
-        const resolvedVal = { status: 200 };
-        const spy = jest
-            .spyOn(API, 'register')
-            .mockResolvedValue(resolvedVal as AxiosResponse);
+        const resolvedVal: AxiosResponse = {
+            status: 200,
+            data: { user: makeUser() },
+            statusText: '',
+            headers: {},
+            config: {},
+        };
+        const spy = jest.spyOn(API, 'register').mockResolvedValue(resolvedVal);
         const form = {
             email: 'email@email.com',
             password: 'password',
@@ -61,7 +69,9 @@ describe('RegisterForm', () => {
         // render
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />
+                </UserProvider>,
                 container
             );
         });
@@ -149,7 +159,9 @@ describe('RegisterForm', () => {
 
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />
+                </UserProvider>,
                 container
             );
         });

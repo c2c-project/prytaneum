@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react';
-import type { User } from 'prytaneum-typings';
+import type { ClientSafeUser } from 'prytaneum-typings';
 
 import Loader from 'components/Loader';
 import useEndpoint from 'hooks/useEndpoint';
@@ -8,7 +8,7 @@ import { getMyInfo } from 'domains/Auth/api';
 // NOTE: don't use React.useContext with either of the below,
 // instead use the "useUser" hook found in the hooks folder
 
-type State = User | undefined | null; // null = means it's not in the tree
+type State = ClientSafeUser | undefined | null; // null = means it's not in the tree
 // read note above
 export const UserContext = React.createContext<State>(null);
 
@@ -18,7 +18,7 @@ export const UserDispatch = React.createContext<Dispatch>(null);
 
 interface Props {
     children: React.ReactNode | React.ReactNodeArray;
-    value?: User;
+    value?: ClientSafeUser;
     /**
      * should only be used for storybook purposes
      */

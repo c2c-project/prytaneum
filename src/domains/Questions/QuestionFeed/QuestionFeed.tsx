@@ -14,7 +14,7 @@ import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
-import { filters as filterFuncs } from './utils';
+// import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
 
 interface Props {
@@ -60,8 +60,13 @@ function QuestionFeed({ className, style }: Props) {
     // TODO: update to use the townhall state instead
     const currentQuestion = React.useMemo(
         // () => questions.find((q) => q.state === 'current'),
-        () => (questions.length > 0 ? questions[0] : undefined),
-        [questions]
+        () => {
+            const { position, list } = townhall.state.playlist;
+            if (position.current === -1) return undefined;
+            if (position.current >= list.length) return undefined;
+            return list[position.current];
+        },
+        [townhall]
     );
 
     const isModerator = React.useMemo(
@@ -101,7 +106,7 @@ function QuestionFeed({ className, style }: Props) {
         >
             <ListFilter
                 className={classes.listFilter}
-                filterMap={filterFuncs}
+                // filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
                 length={filteredList.length}

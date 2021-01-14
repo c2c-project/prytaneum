@@ -3,7 +3,7 @@ import React from 'react';
 import {
     Menu,
     MenuItem,
-    Tooltip,
+    // Tooltip,
     ListItemText,
     Avatar,
     ButtonBase,
@@ -126,7 +126,7 @@ export default function UserMenu({ className, links }: Props) {
 
     return (
         <div className={className}>
-            <Tooltip title='User Menu'>{menuButton}</Tooltip>
+            {menuButton}
             <Menu
                 anchorEl={anchorEl}
                 open={isOpen}

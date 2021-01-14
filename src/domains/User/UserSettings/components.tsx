@@ -8,7 +8,7 @@ import {
     // Typography,
     Button,
 } from '@material-ui/core';
-import type { User } from 'prytaneum-typings';
+import type { ClientSafeUser } from 'prytaneum-typings';
 // import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
@@ -53,7 +53,7 @@ interface Props {
     setContent: (c: JSX.Element) => void;
 }
 
-export function TownhallUserSettings({ user }: { user: User }) {
+export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
     const [state, setState] = React.useState(user.settings.townhall);
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request
@@ -72,7 +72,7 @@ export function TownhallUserSettings({ user }: { user: User }) {
     );
 }
 
-export function NotificationSettings({ user }: { user: User }) {
+export function NotificationSettings({ user }: { user: ClientSafeUser }) {
     const [state, setState] = React.useState(user.settings.notifications);
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request

@@ -15,6 +15,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
 import useQuery from 'hooks/useQuery';
+import useUser from 'hooks/useUser';
 
 import API from '../api';
 
@@ -33,6 +34,7 @@ const initialState: FormType = {
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const [snack] = useSnack();
     const query = useQuery();
+    const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     const builtRequest = React.useCallback(() => API.register(form, query), [
@@ -40,7 +42,8 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
         query,
     ]);
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
+            setUser(data.user);
             snack('Successfully registered!');
             onSuccess();
         },

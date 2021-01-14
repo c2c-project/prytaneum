@@ -1,4 +1,4 @@
-import { Routes } from 'universal-router/sync';
+import { Routes, Route } from 'universal-router/sync';
 import { Props as LayoutProps } from 'layout';
 import { ParsedQs } from 'qs';
 
@@ -11,6 +11,7 @@ export type CustomLayout = {
 };
 export type ActionResult = React.ReactElement | CustomLayout;
 export type PrytaneumRoutes = Routes<ActionResult, QueryContext>;
+export type PrytaneumRoute = Route<ActionResult, QueryContext>;
 export const routes: PrytaneumRoutes = [];
 
 export function addRoutes(newRoutes: PrytaneumRoutes) {
