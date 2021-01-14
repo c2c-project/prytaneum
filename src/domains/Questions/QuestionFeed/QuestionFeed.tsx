@@ -60,8 +60,13 @@ function QuestionFeed({ className, style }: Props) {
     // TODO: update to use the townhall state instead
     const currentQuestion = React.useMemo(
         // () => questions.find((q) => q.state === 'current'),
-        () => (questions.length > 0 ? questions[0] : undefined),
-        [questions]
+        () => {
+            const { position, list } = townhall.state.playlist;
+            if (position.current === -1) return undefined;
+            if (position.current >= list.length) return undefined;
+            return list[position.current];
+        },
+        [townhall]
     );
 
     const isModerator = React.useMemo(
