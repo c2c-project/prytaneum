@@ -2,11 +2,12 @@ import React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 
 import Dialog from 'components/Dialog';
+import useUser from 'hooks/useUser';
 import QuestionForm from '../QuestionForm';
 
 function AskQuestion() {
     const [open, setOpen] = React.useState(false);
-
+    const [user] = useUser();
     return (
         <>
             <Dialog open={open} onClose={() => setOpen(false)}>
@@ -18,6 +19,7 @@ function AskQuestion() {
                 </DialogContent>
             </Dialog>
             <Button
+                disabled={!user}
                 variant='contained'
                 color='primary'
                 fullWidth
