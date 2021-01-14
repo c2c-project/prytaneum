@@ -31,6 +31,10 @@ export interface Props {
      * these are mui container props
      */
     ContainerProps?: Omit<ContainerProps, 'children'>;
+    /**
+     * disable default page padding
+     */
+    disablePadding?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     drawer: {
         padding: theme.spacing(2, 0),
     },
+    main: {
+        padding: theme.spacing(3),
+    },
 }));
 
 export default function Layout({
@@ -47,6 +54,7 @@ export default function Layout({
     showAsLoggedIn: loggedInOverride,
     hideSideNav: noSideNav,
     ContainerProps: _ContainerProps,
+    disablePadding,
 }: Props) {
     const [user] = useUser();
     const isLoggedIn = user || loggedInOverride;
@@ -96,7 +104,12 @@ export default function Layout({
             <AppBar>{getAppBarContent()}</AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
                 {getSideNav()}
-                <Main {..._ContainerProps}>{children}</Main>
+                <Main
+                    className={disablePadding ? undefined : classes.main}
+                    {..._ContainerProps}
+                >
+                    {children}
+                </Main>
             </Grid>
         </Page>
     );
@@ -106,4 +119,5 @@ Layout.defaultProps = {
     showAsLoggedIn: false,
     noSideNav: false,
     ContainerProps: {},
+    disablePadding: false,
 };

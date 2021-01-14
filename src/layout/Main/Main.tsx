@@ -32,14 +32,14 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
 }));
 
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-    const { children, ...passThroughProps } = props;
+    const { children, className, ...passThroughProps } = props;
     const classes = useStyles(props);
     return (
         <MUIContainer
             disableGutters
             maxWidth='md'
             ref={ref}
-            className={clsx([classes.root, classes.spacing])}
+            className={clsx([classes.root, classes.spacing, className])}
             {...passThroughProps}
         >
             <main className={classes.main}>{children}</main>
@@ -49,6 +49,7 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 
 Container.defaultProps = {
     children: undefined,
+    className: undefined,
 };
 
 Container.propTypes = {
@@ -56,6 +57,7 @@ Container.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    className: PropTypes.string,
 };
 
 export default Container;

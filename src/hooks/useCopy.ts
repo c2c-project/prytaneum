@@ -17,7 +17,7 @@ export default function useCopy() {
                 if (isMounted) {
                     snack('Copied!');
                 }
-            } catch {
+            } catch (e) {
                 if (isMounted) {
                     snack('Unable to copy :(');
                 }
