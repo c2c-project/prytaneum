@@ -14,7 +14,7 @@ import { PaneContext } from 'domains/Townhall/Contexts/Pane';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
-import { filters as filterFuncs } from './utils';
+// import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
 
 interface Props {
@@ -106,7 +106,7 @@ function QuestionFeed({ className, style }: Props) {
         >
             <ListFilter
                 className={classes.listFilter}
-                filterMap={filterFuncs}
+                // filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
                 length={filteredList.length}
