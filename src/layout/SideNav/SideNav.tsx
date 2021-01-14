@@ -7,7 +7,7 @@ import AdminPanelSettingsIcon from '@material-ui/icons/AdminPanelSettings';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
-import type { User } from 'prytaneum-typings';
+import type { ClientSafeUser } from 'prytaneum-typings';
 import { Update, State } from 'history';
 
 import history from 'utils/history';
@@ -41,7 +41,7 @@ enum Nav {
 type Keys = keyof typeof Nav;
 
 interface Props {
-    user: User;
+    user: ClientSafeUser;
     /**
      * this is mainly used as an extra affect of click an item
      */
