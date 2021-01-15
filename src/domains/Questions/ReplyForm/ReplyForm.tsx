@@ -17,7 +17,7 @@ import LoadingButton from 'components/LoadingButton';
 import useSnack from 'hooks/useSnack';
 import useForm from 'hooks/useForm';
 import useEndpoint from 'hooks/useEndpoint';
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 import QuestionCard from '../QuestionCard';
 import { createReply } from '../api';
 
@@ -29,7 +29,7 @@ interface Props {
 
 const initialState: FormType = { reply: '' };
 export default function ReplyForm({ replyTo, onSubmit, onCancel }: Props) {
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const [snack] = useSnack();
 
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);

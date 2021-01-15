@@ -4,8 +4,8 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import type { Question } from 'prytaneum-typings';
 
 import DropArea from 'components/DropArea';
-import { TownhallContext } from 'contexts/Townhall';
 import useEndpoint from 'hooks/useEndpoint';
+import useTownhall from 'hooks/useTownhall';
 import QueueControls from './QueueControls';
 import DraggableList from './DraggableList';
 import StaticList from './StaticList';
@@ -62,7 +62,7 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
     const [current, setCurrent] = React.useState(0);
     const [questions, setQuestions] = React.useState(_questions);
     const [hidePast, setHidePast] = React.useState(false);
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const endpoint = React.useCallback(
         () => updateQueueOrder(townhall._id, questions),
         [townhall._id, questions]

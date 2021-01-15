@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 
 import { formatDate } from 'utils/format';
-import { TownhallContext } from '../../../contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 
 export default function TownhallCard() {
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     return (
         <Card>
             <CardHeader

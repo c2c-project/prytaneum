@@ -9,7 +9,7 @@ import ChatContent from 'components/ChatContent';
 import Chat from 'components/Chat';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 import useUser from 'hooks/useUser';
 import { createChatMessage, getChatmessages } from '../api';
 import { chatReducer } from './utils';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TownhallChat() {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const messageRef = React.useRef<ChatMessageForm>();
     const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
     const [user] = useUser();

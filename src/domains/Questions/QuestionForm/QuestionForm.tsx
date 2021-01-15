@@ -6,7 +6,7 @@ import type {
     QuestionForm as FormType,
 } from 'prytaneum-typings';
 
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 import LoadingButton from 'components/LoadingButton';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
@@ -27,7 +27,7 @@ interface Props {
 export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     // context & snack
     const [snack] = useSnack();
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
 
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm<FormType>({

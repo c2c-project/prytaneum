@@ -16,10 +16,9 @@ import {
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import ForumIcon from '@material-ui/icons/ForumOutlined';
+import useTownhall from 'hooks/useTownhall';
 
 import { formatDate } from 'utils/format';
-
-import { TownhallContext } from '../../../contexts/Townhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
 export default function TownhallProfile() {
     // FIXME:
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { form, settings } = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
+    const { form } = townhall;
     const classes = useStyles();
 
     const Title = () => (

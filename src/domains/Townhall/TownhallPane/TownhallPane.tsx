@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import type { Townhall } from 'prytaneum-typings';
 
 import SpeakerCard from 'domains/Speaker/SpeakerCard';
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 import TownhallCard from '../TownhallCard';
 import AskQuestion from '../../Questions/AskQuestion';
 
@@ -62,7 +62,7 @@ const TownhallPane = React.memo(({ classes, townhall }: Props) => {
 
 const ContextSubscriber = () => {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     return <TownhallPane classes={classes} townhall={townhall} />;
 };
 
