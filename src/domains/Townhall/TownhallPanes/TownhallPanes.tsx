@@ -41,7 +41,7 @@ function buildPanes(townhall: Townhall, isModerator: boolean) {
     if (isModerator) {
         panes['Question Queue'] = <QuestionQueue />;
     }
-    if (townhall.settings.questionQueue.transparent)
+    if (townhall.settings.questionQueue.transparent || isModerator)
         panes['Question Feed'] = (
             <>
                 <AskQuestion />

@@ -10,7 +10,7 @@ import QueueControls from './QueueControls';
 import DraggableList from './DraggableList';
 import StaticList from './StaticList';
 import useListStyles from './useListStyles';
-import { updateQueueOrder } from '../api';
+import { updateQueueOrder, nextQuestion, prevQuestion } from '../api';
 
 interface Props {
     questions: Question[];
@@ -59,15 +59,25 @@ function useStyledQueue() {
 function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const classes = useListStyles();
-    const [current, setCurrent] = React.useState(0);
+    const [townhall] = useTownhall();
+    const [current, setCurrent] = React.useState(
+        townhall.state.playlist.position.current
+    );
     const [questions, setQuestions] = React.useState(_questions);
     const [hidePast, setHidePast] = React.useState(false);
-    const [townhall] = useTownhall();
-    const endpoint = React.useCallback(
-        () => updateQueueOrder(townhall._id, questions),
-        [townhall._id, questions]
-    );
-    const [run] = useEndpoint(endpoint, { minWaitTime: 0 });
+    // const reorderEndpoint = React.useCallback(
+    //     () => updateQueueOrder(townhall._id, questions),
+    //     [townhall._id, questions]
+    // );
+    const goNextEndpoint = React.useCallback(() => nextQuestion(townhall._id), [
+        townhall,
+    ]);
+    const goPrevEndpoint = React.useCallback(() => prevQuestion(townhall._id), [
+        townhall,
+    ]);
+    // const [runUpdateQueue] = useEndpoint(reorderEndpoint, { minWaitTime: 0 });
+    const [runNext] = useEndpoint(goNextEndpoint, { minWaitTime: 0 });
+    const [runPrev] = useEndpoint(goPrevEndpoint, { minWaitTime: 0 });
 
     React.useEffect(() => {
         if (_questions.length !== questions.length) setQuestions(_questions);
@@ -85,15 +95,20 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
                 result.source.index,
                 result.destination.index
             );
-            run();
+            // FIXME: just bad lol
+            // eslint-disable-next-line no-void
+            void updateQueueOrder(townhall._id, newState);
             setQuestions(newState);
         },
-        [questions, reorder, run]
+        [questions, reorder, townhall]
     );
 
-    // TODO: api calls
     const handleClick = (dir: -1 | 1) => () => {
-        if (current + dir >= questions.length) return setCurrent(0);
+        if (dir === -1) runPrev();
+        else runNext();
+        if (current + dir >= questions.length) {
+            return setCurrent(0);
+        }
         if (current + dir < 0) return setCurrent(questions.length - 1);
         return setCurrent(current + dir);
     };

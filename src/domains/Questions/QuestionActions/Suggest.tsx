@@ -15,10 +15,10 @@ interface Props {
 function Suggest({ questionId, suggested, className, townhallId }: Props) {
     const endpoint = React.useCallback(
         () =>
-            suggested
+            !suggested
                 ? addToPlaylist(townhallId, questionId)
                 : deleteFromPlaylist(townhallId, questionId),
-        [townhallId, questionId]
+        [townhallId, questionId, suggested]
     );
     const [run] = useEndpoint(endpoint);
     return (
@@ -36,7 +36,7 @@ function Suggest({ questionId, suggested, className, townhallId }: Props) {
 
 Suggest.defaultProps = {
     suggested: false,
-    className: false,
+    className: undefined,
 };
 
 export default React.memo(Suggest);

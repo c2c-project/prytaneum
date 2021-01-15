@@ -78,7 +78,7 @@ function FeedList({
     function closeDialog() {
         setDialogContent(null);
     }
-    console.log(liked);
+
     const questionList = React.useMemo(() => {
         return questions.map((question) => {
             const { townhallId } = question.meta;
@@ -151,6 +151,7 @@ function FeedList({
         user,
         setLiked,
         isModerator,
+        isSuggested,
     ]);
 
     return (

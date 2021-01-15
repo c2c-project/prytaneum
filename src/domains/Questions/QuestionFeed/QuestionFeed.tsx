@@ -66,7 +66,7 @@ function QuestionFeed({ className, style }: Props) {
             // if (position.current >= list.length) return undefined;
             // return list[position.current];
         },
-        [townhall]
+        []
     );
 
     React.useEffect(() => {
