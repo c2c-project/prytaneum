@@ -1,99 +1,123 @@
 import React from 'react';
-import { Fade } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import type { Townhall } from 'prytaneum-typings';
 
+import TabPanel from 'components/TabPanel';
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
-import { Pane, PaneContent, PaneNavigation } from './Panes';
-import Chat from '../Chat';
-import PaneSelect from '../PaneSelect';
-import Information from '../Information';
-import { TownhallContext } from '../Contexts/Townhall';
+import QuestionQueue from 'domains/Questions/QuestionQueue';
+import useTownhall from 'hooks/useTownhall';
+import TownhallChat from '../TownhallChat';
+import Information from '../TownhallPane';
 import { Panes } from '../types';
+import StyledTabPanels from './StyledTabPanels';
+import StyledTab from './StyledTab';
 
 const useStyles = makeStyles((theme) => ({
-    navigation: {
-        paddingBottom: theme.spacing(2),
+    root: {
+        height: '100%',
     },
-    container: {
+    chipContainer: {
         marginBottom: theme.spacing(2),
-    },
-    outerContainer: {
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-    },
-    innerContainer: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
     },
     hidden: {
         display: 'none',
     },
+    paneContainer: {
+        width: '100%',
+        flexBasis: '100%',
+    },
+    animContainer: {
+        width: '100%',
+        height: '100%',
+    },
 }));
 
-function buildPanes(townhall: Townhall) {
+function buildPanes(townhall: Townhall, isModerator: boolean) {
     const panes: Partial<Record<Panes, JSX.Element>> = {
         Information: <Information />,
     };
-    if (townhall.settings.questionQueue.transparent)
+    if (isModerator) {
+        panes['Question Queue'] = <QuestionQueue />;
+    }
+    if (townhall.settings.questionQueue.transparent || isModerator)
         panes['Question Feed'] = (
             <>
                 <AskQuestion />
-                <QuestionFeed />
+                <QuestionFeed style={{ padding: 0 }} />
             </>
         );
 
-    if (townhall.settings.chat.enabled) panes.Chat = <Chat />;
+    if (townhall.settings.chat.enabled) panes.Chat = <TownhallChat />;
     return panes;
 }
 
-export default function TownhallPanes() {
-    const townhall = React.useContext(TownhallContext);
-    const panes = React.useMemo(() => buildPanes(townhall), [townhall]);
-    type PaneKey = keyof typeof panes;
-    const classes = useStyles();
-    const [state, setState] = React.useState<PaneKey>('Information');
+interface Props {
+    classes: ReturnType<typeof useStyles>;
+    townhall: Townhall;
+    isModerator: boolean;
+}
 
-    function getClassName(key: string) {
-        return key === state
-            ? classes.innerContainer
-            : clsx([classes.innerContainer, classes.hidden]);
+const TownhallPanes = React.memo(
+    ({ classes, townhall, isModerator }: Props) => {
+        const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
+            townhall,
+            isModerator,
+        ]);
+        type PaneKey = keyof typeof panes;
+
+        const [state, setState] = React.useState<PaneKey>('Information');
+
+        const options = Object.keys(panes) as PaneKey[];
+
+        return (
+            <Grid
+                container
+                className={classes.root}
+                direction='column'
+                alignContent='flex-start'
+                alignItems='flex-start'
+                wrap='nowrap'
+            >
+                {options.length > 1 && (
+                    <Grid item xs='auto' className={classes.chipContainer}>
+                        {options.map((option, idx) => (
+                            <StyledTab
+                                key={option}
+                                label={option}
+                                index={idx}
+                                value={option}
+                                onClick={() => setState(option)}
+                                selected={option === state}
+                            />
+                        ))}
+                    </Grid>
+                )}
+                <Grid item xs='auto' className={classes.paneContainer}>
+                    <StyledTabPanels>
+                        {Object.entries(panes).map(([key, value]) => (
+                            <TabPanel key={key} visible={key === state}>
+                                {value}
+                            </TabPanel>
+                        ))}
+                    </StyledTabPanels>
+                </Grid>
+            </Grid>
+        );
     }
+);
 
-    const options = Object.keys(panes);
-
+function ContextSubscriber() {
+    const classes = useStyles();
+    const [townhall, isModerator] = useTownhall();
     return (
-        <Pane>
-            {options.length > 1 ? (
-                <PaneNavigation>
-                    <div className={classes.container}>
-                        <PaneSelect
-                            options={options} // TODO: finish pane select
-                            value={state}
-                            label='Select Pane'
-                            onChange={(e) => {
-                                const copy = e.target;
-                                setState(copy.value as PaneKey);
-                            }}
-                        />
-                    </div>
-                </PaneNavigation>
-            ) : (
-                <></>
-            )}
-            <PaneContent>
-                <div className={classes.outerContainer}>
-                    {Object.entries(panes).map(([key, value]) => (
-                        <Fade in={key === state} key={key} timeout={400}>
-                            <div className={getClassName(key)}>{value}</div>
-                        </Fade>
-                    ))}
-                </div>
-            </PaneContent>
-        </Pane>
+        <TownhallPanes
+            classes={classes}
+            townhall={townhall}
+            isModerator={isModerator}
+        />
     );
 }
+
+export default ContextSubscriber;

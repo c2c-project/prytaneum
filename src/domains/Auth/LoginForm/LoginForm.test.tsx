@@ -2,6 +2,8 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
+import UserProvider from 'contexts/User';
+import { makeUser, User } from 'prytaneum-typings';
 
 import LoginForm from './LoginForm';
 import API from '../api';
@@ -30,20 +32,32 @@ describe('LoginForm', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
         ReactTestUtils.act(() => {
-            render(<LoginForm onSuccess={jest.fn()} />, container);
+            render(
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <LoginForm onSuccess={jest.fn()} />
+                </UserProvider>,
+                container
+            );
         });
     });
 
     it('should change state appropriately', () => {
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm onSuccess={jest.fn()} />, container);
+            render(
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <LoginForm onSuccess={jest.fn()} />
+                </UserProvider>,
+                container
+            );
         });
 
         // find fields
-        const emailNode = document.querySelector('#email') as HTMLInputElement;
+        const emailNode = document.querySelector(
+            '#login-email'
+        ) as HTMLInputElement;
         const passwordNode = document.querySelector(
-            '#password'
+            '#login-password'
         ) as HTMLInputElement;
 
         // expect them to be initially empty
@@ -75,18 +89,30 @@ describe('LoginForm', () => {
 
     it('should call handleSubmit & onSuccess appropriately', async () => {
         const onSuccess = jest.fn();
-        const resolveVal = { status: 200 } as AxiosResponse<unknown>;
+        const resolveVal = {
+            status: 200,
+            data: { user: makeUser() },
+        } as AxiosResponse<{
+            user: User;
+        }>;
         const loginSpy = jest.spyOn(API, 'login').mockResolvedValue(resolveVal);
         jest.useFakeTimers();
 
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm onSuccess={onSuccess} />, container);
+            render(
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <LoginForm onSuccess={onSuccess} />
+                </UserProvider>,
+                container
+            );
         });
 
-        const emailNode = document.querySelector('#email') as HTMLInputElement;
+        const emailNode = document.querySelector(
+            '#login-email'
+        ) as HTMLInputElement;
         const passwordNode = document.querySelector(
-            '#password'
+            '#login-password'
         ) as HTMLInputElement;
         const button = document.querySelector(
             '[type="submit"]'
@@ -121,8 +147,8 @@ describe('LoginForm', () => {
          */
         expect(onSuccess).not.toBeCalled();
         expect(API.login).toBeCalledWith('email@email.com', 'password');
-        jest.runAllTimers();
 
+        jest.runAllTimers();
         // let useEffect handle changes due to login request resolving
         await ReactTestUtils.act(async () => {
             await Promise.allSettled(loginSpy.mock.results);
@@ -143,13 +169,20 @@ describe('LoginForm', () => {
 
         // initial render
         ReactTestUtils.act(() => {
-            render(<LoginForm onSuccess={onSuccess} />, container);
+            render(
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <LoginForm onSuccess={onSuccess} />
+                </UserProvider>,
+                container
+            );
         });
 
         // find fields
-        const emailNode = document.querySelector('#email') as HTMLInputElement;
+        const emailNode = document.querySelector(
+            '#login-email'
+        ) as HTMLInputElement;
         const passwordNode = document.querySelector(
-            '#password'
+            '#login-password'
         ) as HTMLInputElement;
         const button = document.querySelector(
             '[type="submit"]'

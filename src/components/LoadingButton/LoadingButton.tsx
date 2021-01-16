@@ -6,6 +6,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 interface Props {
     loading: boolean;
     children: JSX.Element;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
 /**
@@ -13,14 +15,28 @@ interface Props {
  * @category Component
  * @constructor LoadingButton
  */
-export default function LoadingButton({ loading, children }: Props) {
+export default function LoadingButton({
+    loading,
+    children,
+    className,
+    style,
+}: Props) {
     const theme = useTheme();
     if (loading) {
         try {
             return React.cloneElement(
                 React.Children.only(children),
-                { disabled: loading, 'aria-label': 'Loading Button' },
-                <CircularProgress size={theme.typography.button.lineHeight} />
+                {
+                    disabled: loading,
+                    'aria-label': 'Loading Button',
+                    endIcon: undefined,
+                    startIcon: undefined,
+                },
+                <CircularProgress
+                    className={className}
+                    style={style}
+                    size={theme.typography.button.lineHeight}
+                />
             );
         } catch (e) {
             // eslint-disable-next-line no-console
@@ -30,6 +46,11 @@ export default function LoadingButton({ loading, children }: Props) {
     }
     return children;
 }
+
+LoadingButton.defaultProps = {
+    className: undefined,
+    style: undefined,
+};
 
 LoadingButton.propTypes = {
     loading: PropTypes.bool.isRequired,

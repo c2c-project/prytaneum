@@ -13,6 +13,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import history from 'utils/history';
 import useForm from 'hooks/useForm';
+import useUser from 'hooks/useUser';
 
 import API from '../api';
 
@@ -45,6 +46,7 @@ const intialState: SignInForm = { email: '', password: '' };
  */
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
+    const [, setUser] = useUser();
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const apiRequest = React.useCallback(
@@ -52,13 +54,17 @@ export default function LoginForm({ onSuccess }: Props) {
         [form]
     );
     const [sendRequest, isLoading] = useEndpoint(apiRequest, {
-        onSuccess,
+        onSuccess: ({ data }) => {
+            setUser(data.user);
+            onSuccess();
+        },
     });
 
     return (
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormContent>
                 <TextField
+                    id='login-email'
                     required
                     type='email'
                     value={form.email}
@@ -70,6 +76,7 @@ export default function LoginForm({ onSuccess }: Props) {
                 />
                 <>
                     <TextField
+                        id='login-password'
                         required
                         error={Boolean(errors.password)}
                         type={isPassVisible ? 'text' : 'password'}
@@ -113,7 +120,7 @@ export default function LoginForm({ onSuccess }: Props) {
                     <Link
                         className={classes.link}
                         color='primary'
-                        href='/auth/forgot-password/request' // TODO: make it so that routing doesn't need to be here
+                        href='/forgot-password/request'
                     >
                         Forgot Password?
                     </Link>
@@ -123,7 +130,7 @@ export default function LoginForm({ onSuccess }: Props) {
                 <Button
                     fullWidth
                     variant='outlined'
-                    onClick={() => history.push('/auth/register')}
+                    onClick={() => history.push('/register')}
                 >
                     Sign Up
                 </Button>

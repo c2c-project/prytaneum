@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
+import clsx from 'clsx';
 
 import TextField from 'components/TextField';
 import { FilterFunc } from 'utils/filters';
@@ -22,10 +23,11 @@ import { FilterFunc } from 'utils/filters';
 interface Props<T> {
     onSearch: (s: string) => void;
     length: number;
-    filterMap: {
+    filterMap?: {
         [index: string]: (t: T[]) => T[];
     };
     onFilterChange: (f: FilterFunc<T>[]) => void;
+    className?: string;
 }
 
 interface OptionalProps {
@@ -58,19 +60,23 @@ export default function ListFilter<T>({
     length,
     onFilterChange,
     menuIcons,
+    className,
 }: Props<T> & OptionalProps) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [search, setSearch] = React.useState('');
+    const prevSearch = React.useRef('');
 
     const immutableTransform = (op: Op) => (prevFilters: Filters) => {
         const copy = new Set(prevFilters);
         op(copy);
-        const filterFuncs = Array.from(copy).map(
-            (filterKey) => filterMap[filterKey]
-        );
-        onFilterChange(filterFuncs);
+        if (filterMap) {
+            const filterFuncs = Array.from(copy).map(
+                (filterKey) => filterMap[filterKey]
+            );
+            onFilterChange(filterFuncs);
+        }
         return copy;
     };
 
@@ -92,7 +98,10 @@ export default function ListFilter<T>({
         // TODO: replace with a useThrottle hook in the future
         const cache = search.slice(0);
         const handle = setTimeout(() => {
-            if (search === cache) onSearch(search);
+            if (search === cache && search !== prevSearch.current) {
+                prevSearch.current = search;
+                onSearch(search);
+            }
         }, 300);
         return () => {
             clearTimeout(handle);
@@ -106,7 +115,11 @@ export default function ListFilter<T>({
     };
 
     return (
-        <div className={classes.root}>
+        <div
+            className={
+                className ? clsx([classes.root, className]) : classes.root
+            }
+        >
             <Grid container alignItems='center'>
                 <Grid item xs='auto' className={classes.search}>
                     <TextField
@@ -142,23 +155,25 @@ export default function ListFilter<T>({
                     alignItems='center'
                     className={classes.iconContainer}
                 >
-                    <Grid item xs='auto'>
-                        <Tooltip title='Filter'>
-                            <IconButton
-                                color='inherit'
-                                onClick={({ currentTarget }) =>
-                                    setAnchorEl(currentTarget)
-                                }
-                            >
-                                <Badge
-                                    badgeContent={filters.size}
-                                    color='secondary'
+                    {filterMap && (
+                        <Grid item xs='auto'>
+                            <Tooltip title='Filter'>
+                                <IconButton
+                                    color='inherit'
+                                    onClick={({ currentTarget }) =>
+                                        setAnchorEl(currentTarget)
+                                    }
                                 >
-                                    <FilterIcon />
-                                </Badge>
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
+                                    <Badge
+                                        badgeContent={filters.size}
+                                        color='secondary'
+                                    >
+                                        <FilterIcon />
+                                    </Badge>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                    )}
                     {menuIcons?.map((icon, idx) => (
                         <Grid key={idx} item xs='auto'>
                             {icon}
@@ -171,26 +186,30 @@ export default function ListFilter<T>({
                     </Typography>
                 </Grid>
             </Grid>
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-            >
-                {Object.keys(filterMap).map((option) => (
-                    <MenuItem
-                        key={option}
-                        button
-                        onClick={() => toggleFilter(option)}
-                    >
-                        <Checkbox checked={filters.has(option)} />
-                        <ListItemText primary={option} />
-                    </MenuItem>
-                ))}
-            </Menu>
+            {filterMap && (
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={() => setAnchorEl(null)}
+                >
+                    {Object.keys(filterMap).map((option) => (
+                        <MenuItem
+                            key={option}
+                            button
+                            onClick={() => toggleFilter(option)}
+                        >
+                            <Checkbox checked={filters.has(option)} />
+                            <ListItemText primary={option} />
+                        </MenuItem>
+                    ))}
+                </Menu>
+            )}
         </div>
     );
 }
 
 ListFilter.defaultProps = {
     menuIcons: [],
+    className: undefined,
+    filterMap: undefined,
 };

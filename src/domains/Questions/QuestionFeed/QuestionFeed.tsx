@@ -1,142 +1,104 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
-import type {
-    Question as QuestionType,
-    QuestionPayloads,
-} from 'prytaneum-typings';
+import clsx from 'clsx';
+import type { Question } from 'prytaneum-typings';
 
-import useSocketio from 'hooks/useSocketio';
-import ListFilter from 'components/ListFilter';
-import { UserContext } from 'contexts/User';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
+import Loader from 'components/Loader';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
-import { QuestionProps } from '../QuestionFeedItem';
+import useTownhall from 'hooks/useTownhall';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
-import {
-    search,
-    applyFilters,
-    filters as filterFuncs,
-    questionReducer,
-    QuestionFilterFunc,
-    makeSystemMessage,
-} from './utils';
+// import { filters as filterFuncs } from './utils';
+import useQuestionFeed from './useQuestionFeed';
 
-const useStyles = makeStyles((theme) => ({
+interface Props {
+    className?: string;
+    style?: React.CSSProperties;
+}
+
+const useStyles = makeStyles(() => ({
     root: {
-        width: '100%',
-        maxHeight: '100%',
+        // padding: theme.spacing(1.5),
     },
-    item: {
-        paddingBottom: theme.spacing(2),
+    listFilter: {
+        flex: 1,
+    },
+    content: {
+        height: 0, // flex box recalculates this -- explanation:  https://stackoverflow.com/a/14964944
+        flex: '1 1 100%',
     },
 }));
 
-function QuestionFeed() {
+function QuestionFeed({ className, style }: Props) {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
-    const user = React.useContext(UserContext);
+    const [townhall, isModerator] = useTownhall();
     const [, dispatch] = React.useContext(PaneContext);
-
-    // full question feed from socketio
-    const [questions] = useSocketio<QuestionType[], QuestionPayloads>({
-        url: '/questions',
-        event: 'question-state',
-        reducer: questionReducer,
-        initialState: [],
-    });
-
-    // displayed questions, which differs from the full feed
-    const [displayed, setDisplayed] = React.useState<QuestionType[]>([]);
-
-    // difference between displayed count and full question feed count
-    const [difference, setDifference] = React.useState(0);
-
-    // the first filter will always be the "search" filter, which initially just returns the full question list
-    const [filters, setFilters] = React.useState([(q: QuestionType[]) => q]);
-
-    const [system, setSystem] = React.useState<QuestionProps[]>(() => [
-        makeSystemMessage(<EmptyMessage />),
-    ]);
-
-    // list of questions with all filters applied
-    const filteredList = React.useMemo(() => applyFilters(displayed, filters), [
-        displayed,
-        filters,
-    ]);
+    const [sysMessages, setSysMessages] = React.useState<React.ReactNodeArray>(
+        []
+    );
+    const [questions, buffer, flush, isLoading] = useQuestionFeed(townhall._id);
+    const accessors = React.useMemo<Accessors<Question>[]>(
+        () => [
+            (q) => q.question, // question text itself
+            (q) => q.meta.createdBy.name.first, // first name of the user
+        ],
+        []
+    );
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(
+        questions,
+        accessors
+    );
 
     // there should never be more than 1 current question, so we can stop at the first one found
+    // TODO: update to use the townhall state instead
     const currentQuestion = React.useMemo(
-        () => displayed.find((q) => q.state === 'current'),
-        [displayed]
-    );
-
-    const isModerator = React.useMemo(
-        () =>
-            user &&
-            townhall.settings.moderators.list.find(
-                ({ email }) => user.email.address === email
-            ),
-        [townhall.settings.moderators.list, user]
-    );
-
-    // updating difference when one of the boundaries change
-    React.useEffect(() => {
-        dispatch({
-            type: 'Question Feed',
-            payload: questions.length - displayed.length,
-        });
-
-        setDifference(questions.length - displayed.length);
-        if (
-            questions.length - displayed.length === questions.length &&
-            questions.length > 0 &&
-            system.length < 2
-            // NOTE: would have to change this in the future
-            // if we have more system messages
-        ) {
-            setSystem((prev) => [
-                makeSystemMessage(<RefreshMessage />),
-                ...prev,
-            ]);
-        }
-    }, [questions.length, displayed.length, system.length, dispatch]);
-
-    // onClick refresh button
-    function handleRefresh() {
-        setDisplayed(questions);
-    }
-
-    const handleFilterChange = React.useCallback(
-        (newFilters: QuestionFilterFunc[]) => {
-            // replace everything BUT the first index
-            const updateFilters = ([prevSearch]: QuestionFilterFunc[]) => [
-                prevSearch,
-                ...newFilters,
-            ];
-            setFilters(updateFilters);
+        // () => questions.find((q) => q.state === 'current'),
+        () => {
+            // FIXME:
+            return undefined;
+            // const { position, list } = townhall.state.playlist;
+            // if (position.current === -1) return undefined;
+            // if (position.current >= list.length) return undefined;
+            // return list[position.current];
         },
         []
     );
 
-    const handleSearch = React.useCallback((searchText: string) => {
-        // replace ONLY the search filter -- the first index
-        const updateSearch = (filtersWithOldSearch: QuestionFilterFunc[]) => {
-            const [, ...currentFilters] = filtersWithOldSearch;
-            const newSearch: QuestionFilterFunc = (data) =>
-                search(searchText, data);
-            return [newSearch, ...currentFilters];
-        };
-        setFilters(updateSearch);
-    }, []);
+    React.useEffect(() => {
+        dispatch({
+            type: 'Question Feed',
+            payload: buffer.length,
+        });
+    }, [buffer.length, dispatch]);
+
+    React.useEffect(() => {
+        if (questions.length === 0) {
+            setSysMessages([<EmptyMessage />]);
+            if (buffer.length > 0) {
+                setSysMessages((prev) => [<RefreshMessage />, ...prev]);
+            }
+        }
+    }, [buffer.length, questions.length]);
+
+    if (isLoading) return <Loader />;
 
     return (
-        <div className={classes.root}>
+        <Grid
+            alignContent='flex-start'
+            container
+            className={
+                className ? clsx([classes.root, className]) : classes.root
+            }
+            style={style}
+        >
             <ListFilter
-                filterMap={filterFuncs}
+                className={classes.listFilter}
+                // filterMap={filterFuncs}
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
                 length={filteredList.length}
@@ -144,12 +106,12 @@ function QuestionFeed() {
                     <Tooltip title='Load New'>
                         <span>
                             <IconButton
-                                onClick={handleRefresh}
+                                onClick={flush}
                                 color='inherit'
-                                disabled={difference === 0}
+                                disabled={buffer.length === 0}
                             >
                                 <Badge
-                                    badgeContent={difference}
+                                    badgeContent={buffer.length}
                                     color='secondary'
                                 >
                                     <RefreshIcon />
@@ -159,16 +121,20 @@ function QuestionFeed() {
                     </Tooltip>,
                 ]}
             />
-            <Grid container justify='center'>
-                <FeedList
-                    variant={isModerator ? 'moderator' : 'user'}
-                    current={currentQuestion}
-                    questions={filteredList}
-                    systemMessages={system}
-                />
-            </Grid>
-        </div>
+            <FeedList
+                className={classes.content}
+                variant={isModerator ? 'moderator' : 'user'}
+                current={currentQuestion}
+                questions={filteredList}
+                systemMessages={sysMessages}
+            />
+        </Grid>
     );
 }
+
+QuestionFeed.defaultProps = {
+    className: undefined,
+    style: undefined,
+};
 
 export default React.memo(QuestionFeed);

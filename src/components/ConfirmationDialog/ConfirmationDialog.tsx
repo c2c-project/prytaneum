@@ -3,10 +3,10 @@ import {
     Button,
     DialogActions,
     DialogContentText,
+    DialogContent,
 } from '@material-ui/core';
 
 import Dialog from '../Dialog';
-import DialogContent from '../DialogContent';
 
 interface Props {
     onConfirm: () => void;
@@ -26,7 +26,9 @@ export default function ConfirmationDialog({
     return (
         <Dialog open={open} onClose={onClose} title={title}>
             <DialogContent>
-                <DialogContentText color='textPrimary'>{children}</DialogContentText>
+                <DialogContentText color='textPrimary'>
+                    {children}
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>

@@ -7,22 +7,22 @@ import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
 
 import history, { makeRelativeLink } from 'utils/history';
 import LoadingButton from 'components/LoadingButton';
+import CopyText from 'components/CopyText';
 import Fab from 'components/Fab';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
+
 import TownhallForm from '../TownhallForm';
-import JoinUrl from '../JoinUrl';
-import {
-    ChatSettings,
-    // CreditsSettings,
-    QuestionFeedSettings,
-    Moderators,
-    ExportData,
-    Preview,
-    Speakers,
-} from './components';
+import ChatSettings from './ChatSettings';
+import DataSettings from './DataSettings';
+import QuestionFeedSettings from './QuestionFeedSettings';
+import SpeakerSettings from './SpeakerSettings';
+import ModeratorSettings from './ModeratorSettings';
+import PreviewSettings from './PreviewSettings';
+import VideoSettings from './VideoSettings';
+
 import { configureTownhall } from '../api';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TownhallSettings() {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const [state, setState] = React.useState<SettingsType>(townhall.settings);
     const [snack] = useSnack();
     const isDiff = React.useMemo(
@@ -58,7 +58,7 @@ export default function TownhallSettings() {
         }
     );
 
-    const componentSections = React.useMemo(
+    const componentSubSections = React.useMemo(
         () => [
             {
                 title: 'Chat',
@@ -69,15 +69,6 @@ export default function TownhallSettings() {
                     />
                 ),
             },
-            // {
-            //     title: 'Credits',
-            //     component: (
-            //         <CreditsSettings
-            //             onChange={handleChange('credits')}
-            //             value={state.credits}
-            //         />
-            //     ),
-            // },
             {
                 title: 'Question Queue',
                 component: (
@@ -87,20 +78,17 @@ export default function TownhallSettings() {
                     />
                 ),
             },
-            // TODO:
-            // {
-            //     title: 'Links',
-            //     component: <Links />,
-            // },
         ],
         [handleChange, state]
     );
 
-    const inviteSections = React.useMemo(
+    const inviteSubSections = React.useMemo(
         () => [
             {
                 title: 'Join URL',
-                component: <JoinUrl />,
+                component: (
+                    <CopyText text={`${window.origin}/join/${townhall._id}`} />
+                ),
             },
             {
                 title: 'Invitation Wizard',
@@ -117,7 +105,7 @@ export default function TownhallSettings() {
                 ),
             },
         ],
-        []
+        [townhall._id]
     );
 
     const config: AccordionData[] = React.useMemo(
@@ -128,10 +116,20 @@ export default function TownhallSettings() {
                 component: <TownhallForm buttonText='Save' />,
             },
             {
+                title: 'Video',
+                description: 'Modify video settings',
+                component: (
+                    <VideoSettings
+                        value={state.video}
+                        onChange={handleChange('video')}
+                    />
+                ),
+            },
+            {
                 title: 'Speakers',
                 description: 'Add and Modify speakers at this event',
                 component: (
-                    <Speakers
+                    <SpeakerSettings
                         value={state.speakers}
                         onChange={handleChange('speakers')}
                     />
@@ -142,23 +140,26 @@ export default function TownhallSettings() {
                 description: 'Turn on and off optional components',
                 component: (
                     <Grid container spacing={2}>
-                        {componentSections.map(({ title, component }, idx) => (
-                            <React.Fragment key={title}>
-                                <Grid item xs={12}>
-                                    <Typography variant='overline'>
-                                        {title}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {component}
-                                </Grid>
-                                {idx !== componentSections.length - 1 && (
+                        {componentSubSections.map(
+                            ({ title, component }, idx) => (
+                                <React.Fragment key={title}>
                                     <Grid item xs={12}>
-                                        <Divider />
+                                        <Typography variant='overline'>
+                                            {title}
+                                        </Typography>
                                     </Grid>
-                                )}
-                            </React.Fragment>
-                        ))}
+                                    <Grid item xs={12}>
+                                        {component}
+                                    </Grid>
+                                    {idx !==
+                                        componentSubSections.length - 1 && (
+                                        <Grid item xs={12}>
+                                            <Divider />
+                                        </Grid>
+                                    )}
+                                </React.Fragment>
+                            )
+                        )}
                     </Grid>
                 ),
             },
@@ -166,7 +167,7 @@ export default function TownhallSettings() {
                 title: 'Moderators',
                 description: 'Designate individuals as moderators',
                 component: () => (
-                    <Moderators
+                    <ModeratorSettings
                         value={state.moderators}
                         onChange={handleChange('moderators')}
                     />
@@ -177,7 +178,7 @@ export default function TownhallSettings() {
                 description: 'Manage invitations',
                 component: (
                     <Grid container spacing={2}>
-                        {inviteSections.map(({ title, component }) => (
+                        {inviteSubSections.map(({ title, component }) => (
                             <React.Fragment key={title}>
                                 <Grid item xs={12}>
                                     <Typography variant='body1'>
@@ -198,19 +199,19 @@ export default function TownhallSettings() {
             {
                 title: 'Data',
                 description: 'Export data from this townhall',
-                component: <ExportData />,
+                component: <DataSettings />,
             },
             {
                 title: 'Preview',
                 description: 'View townhall as different types of users',
-                component: <Preview />,
+                component: <PreviewSettings />,
             },
         ],
-        [componentSections, inviteSections, state, handleChange]
+        [componentSubSections, inviteSubSections, state, handleChange]
     );
 
     return (
-        <div className={classes.root}>
+        <div id='settings-id' className={classes.root}>
             <SettingsMenu config={config} title='Townhall Settings' />
             <LoadingButton loading={isLoading}>
                 <Fab zoomProps={{ in: isDiff }} onClick={save}>

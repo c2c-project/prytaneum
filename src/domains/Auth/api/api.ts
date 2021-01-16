@@ -1,4 +1,9 @@
-import type { User, ForgotPassForm, ForgotPassRequestForm, RegisterForm } from 'prytaneum-typings';
+import type {
+    ForgotPassForm,
+    ForgotPassRequestForm,
+    RegisterForm,
+    ClientSafeUser,
+} from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
@@ -17,16 +22,14 @@ export async function login(email?: string, password?: string) {
     if (!email.match(/\w+/g) || !password.match(/\w+/g)) {
         throw errors.fieldError();
     }
-    return axios.post('/api/users/login', {
+    // TODO: clientSafeUser instead of user
+    return axios.post<{ user: ClientSafeUser }>('/api/users/login', {
         email,
         password,
     });
 }
 
-export async function forgotPassReset(
-    token: string | unknown,
-    form: ForgotPassForm
-) {
+export async function forgotPassReset(token: string, form: ForgotPassForm) {
     const { password, confirmPassword } = form;
 
     if (!password || !confirmPassword) {
@@ -41,9 +44,8 @@ export async function forgotPassReset(
         throw errors.missingToken();
     }
 
-    return axios.post('/api/users/consume-password-reset-token', {
-        token,
-        form,
+    return axios.post(`/api/users/reset-password/${token}`, {
+        ...form,
     });
 }
 
@@ -60,7 +62,7 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
     if (!match || match[0].length !== form.email.length) {
         throw errors.invalidEmail();
     }
-    return axios.post('/api/users/request-password-reset', { form });
+    return axios.post('/api/users/forgot-password', { ...form });
 }
 
 /** Function to register a new user, pulls the data from the form, checks if its valid, then returns either a POST, or an error if something is invalid
@@ -68,8 +70,10 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
  *  @constructor register
  *  @param {RegisterForm} form the form to submit the new user registration through
  */
-export async function register(form: RegisterForm) {
+export async function register(form: RegisterForm, query?: string) {
     const { password, email, confirmPassword } = form;
+    let url = '/api/users/register';
+    if (query) url = `${url}${query}`;
 
     if (!password || !email || !confirmPassword) {
         throw errors.fieldError();
@@ -83,7 +87,7 @@ export async function register(form: RegisterForm) {
     if (password !== confirmPassword) {
         throw errors.passMatch();
     }
-    return axios.post('/api/users/register', { form });
+    return axios.post<{ user: ClientSafeUser }>(url, { ...form });
 }
 
 /** Function to confirm user from email
@@ -100,9 +104,9 @@ export async function verifyEmail(userId: string) {
 
 export async function getMyInfo() {
     // gets user info from the token in header
-    return axios.get<User>('/api/users/me');
+    return axios.get<ClientSafeUser>('/api/users/me');
 }
 
 export async function logout() {
-    return axios.get('/api/users/logout');
+    return axios.post('/api/users/logout');
 }

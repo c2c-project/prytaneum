@@ -1,145 +1,85 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
-import { Button } from '@material-ui/core';
-import useSnack from 'hooks/useSnack';
 
+import useIsMounted from './useIsMounted';
 import useErrorHandler from './useErrorHandler';
 
+type Endpoint<T> = () => Promise<AxiosResponse<T>>;
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
-    undo?: {
-        message?: string;
-        onClick: () => void;
-    };
+    runOnFirstRender?: boolean;
+    /**
+     * number in ms for min wait time
+     */
+    minWaitTime?: number;
 }
+
 type SendRequest = () => void;
 type IsLoading = boolean;
-type EndpointUtils = [SendRequest, IsLoading];
+type getHasRun = () => boolean;
+type EndpointUtils = [SendRequest, IsLoading, getHasRun];
 
-export default function useEndpoint<T>(
-    endpoint: () => Promise<AxiosResponse<T>>,
-    options: EndpointOptions<T> = {}
-): EndpointUtils {
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [handleError] = useErrorHandler();
-    const sendRequest = React.useCallback(() => setIsLoading(true), []);
-    const [snack] = useSnack();
-
-    React.useEffect(() => {
-        let isMounted = true;
-        const { onSuccess, onFailure, undo } = options;
-        const minWaitTime = () =>
-            new Promise((resolve) => {
-                setTimeout(resolve, 600);
-            });
-
-        const defaultFailure = handleError;
-        const defaultSucess = () => {};
-        const defaultUndo = () => {};
-
-        const _onSuccess = onSuccess || defaultSucess;
-        const _onUndo = undo?.onClick || defaultUndo;
-        const isUndo = Boolean(undo);
-        const _onFailure = onFailure || defaultFailure;
-
-        const request = async function () {
-            try {
-                // the first indices is all I care about
-                const [response] = await Promise.allSettled([
-                    endpoint(),
-                    minWaitTime(),
-                ]);
-
-                // I need to check if I'm still mounted before continuing
-                if (isMounted === true) {
-                    setIsLoading(false);
-                    // there might be a better way to do this? other than just checking the status string :\
-                    if (response.status === 'rejected') {
-                        _onFailure(response.reason);
-                    } else {
-                        _onSuccess(response.value);
-                    }
-                }
-            } catch (e) {
-                /*
-                 * check if I'm still mounted before continuing
-                 * this catch only triggers if it is something on the client and not from the response
-                 * because allSettled doesn't throw an error even if one of the promises are rejected
-                 */
-                if (isMounted === true) {
-                    setIsLoading(false);
-                    _onFailure(e);
-                }
-            }
-        };
-
-        const undoableRequest = () => {
-            let isStopped = false;
-            let sentRequest = false;
-
-            const closeFunction = () => {
-                if (sentRequest === false) {
-                    sentRequest = true;
-                    // eslint-disable-next-line no-void
-                    void request();
-                }
-            };
-
-            window.addEventListener('beforeunload', closeFunction, false);
-            snack(undo?.message || 'Request Sent', {
-                action: React.createElement(
-                    Button,
-                    {
-                        onClick: () => {
-                            window.removeEventListener(
-                                'beforeunload',
-                                closeFunction,
-                                false
-                            );
-                            if (isMounted === true) {
-                                _onUndo();
-                                isStopped = true;
-                                setIsLoading(false);
-                            }
-                        },
-                        variant: 'text',
-                        color: 'inherit',
-                    },
-                    'Undo'
-                ),
-                onExited: () => {
-                    window.removeEventListener(
-                        'beforeunload',
-                        closeFunction,
-                        false
-                    );
-                    if (isStopped === false && sentRequest === false) {
-                        sentRequest = true;
-                        // eslint-disable-next-line no-void
-                        void request();
-                    }
-                },
-            });
-        };
-
-        // sendRequest sets loading to true, I use this as the trigger to send the request
-        if (isLoading) {
-            // I use callbacks after the request completes, so I don't care about "await"-ing the promise
-            if (isUndo === true) {
-                undoableRequest();
-            } else {
-                // eslint-disable-next-line no-void
-                void request();
-            }
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [isLoading, endpoint, handleError, options, snack]);
-
-    return [sendRequest, isLoading];
+async function wrapMinWaitTime<T>(endpoint: Endpoint<T>, time = 600) {
+    const minWaitTime = () =>
+        new Promise((resolve) => {
+            setTimeout(resolve, time);
+        });
+    const [results] = await Promise.allSettled([endpoint(), minWaitTime()]);
+    if (results.status === 'rejected') throw results.reason;
+    return results.value;
 }
 
-// request -> waiting -> response -> success or failure
+export default function useEndpoint<T>(
+    endpoint: Endpoint<T>,
+    options?: EndpointOptions<T>
+): EndpointUtils {
+    const hasRun = React.useRef(false);
+    const [errorHandler] = useErrorHandler();
+    const [isMounted] = useIsMounted();
+    const [isLoading, setIsLoading] = React.useState(false);
+    const minWaitTime = React.useMemo(() => options?.minWaitTime, [options]);
+
+    // calling this will invoke the request while waiting a minimum amount of time
+    const wrappedEndpoint = React.useCallback(
+        () => wrapMinWaitTime(endpoint, minWaitTime),
+        [endpoint, minWaitTime]
+    );
+
+    // calls wrappedEndpoint and performs actions necessary depending on success or failure
+    const sendRequest = React.useCallback(async () => {
+        try {
+            const results = await wrappedEndpoint();
+            if (!isMounted()) return;
+            if (options?.onSuccess) options.onSuccess(results);
+
+            // onSuccess may navigate away from the page
+            // so we must check if the component is still mounted
+            if (!isMounted()) return;
+            setIsLoading(false);
+        } catch (e) {
+            if (!isMounted()) return;
+            if (options?.onFailure) options.onFailure(e);
+            else errorHandler(e);
+
+            // read onSuccess comment above
+            if (!isMounted()) return;
+            setIsLoading(false);
+        }
+    }, [wrappedEndpoint, isMounted, options, setIsLoading, errorHandler]);
+
+    // runs the async function
+    const runAsync = React.useCallback(() => {
+        hasRun.current = true;
+        setIsLoading(true);
+
+        // eslint-disable-next-line no-void
+        void sendRequest();
+    }, [sendRequest]);
+
+    React.useEffect(() => {
+        if (!hasRun.current && options?.runOnFirstRender) runAsync();
+    }, [runAsync, options]);
+
+    return [runAsync, isLoading, () => hasRun.current];
+}

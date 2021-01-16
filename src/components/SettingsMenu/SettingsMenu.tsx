@@ -12,6 +12,8 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { motion } from 'framer-motion';
+import { PopmotionTransitionProps } from 'framer-motion/types/types';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,6 +54,13 @@ interface Props {
     title: string;
 }
 
+const transition: PopmotionTransitionProps = {
+    // type: 'spring',
+    // damping: 13,
+    // stiffness: 150,
+    ease: 'easeOut',
+};
+
 /**
  * Similar to SectionList, but does not use material UI list* and instead just uses the grid to display JSX elements passed in with a title and layout.
  * @category Component
@@ -83,6 +92,15 @@ export default function SettingsMenu({ config, title }: Props) {
         setAnchorEl(currentTarget);
     };
 
+    function getDetails(
+        component: JSX.Element | ((b: boolean) => JSX.Element),
+        sectionTitle: string
+    ) {
+        return typeof component === 'function'
+            ? component(expanded.has(sectionTitle))
+            : component;
+    }
+
     return (
         <div className={classes.root}>
             <Menu
@@ -103,48 +121,74 @@ export default function SettingsMenu({ config, title }: Props) {
                     alignItems='center'
                     className={classes.titlebar}
                 >
-                    <Typography variant='h4' className={classes.title}>
-                        {title}
-                    </Typography>
-
-                    <IconButton
-                        onClick={handleClick}
-                        color='inherit'
-                        edge='end'
+                    <motion.div
+                        initial={{ x: -50 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: -50, opacity: 0 }}
+                        transition={transition}
                     >
-                        <MoreVertIcon />
-                    </IconButton>
+                        <Typography variant='h4' className={classes.title}>
+                            {title}
+                        </Typography>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ y: -50 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 50, opacity: 0 }}
+                        transition={transition}
+                    >
+                        <IconButton
+                            onClick={handleClick}
+                            color='inherit'
+                            edge='end'
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                    </motion.div>
                 </Grid>
                 <Grid item xs={12}>
-                    {config.map(
-                        ({ title: sectionTitle, description, component }) => (
-                            <Accordion
-                                key={sectionTitle}
-                                expanded={expanded.has(sectionTitle)}
-                                onChange={handleChange(sectionTitle)}
-                            >
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls={`${sectionTitle}-content`}
-                                    id={`${sectionTitle}-header`}
+                    <motion.div
+                        initial={{ y: 50 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 50, opacity: 0 }}
+                        transition={transition}
+                    >
+                        {config.map(
+                            ({
+                                title: sectionTitle,
+                                description,
+                                component,
+                            }) => (
+                                <Accordion
+                                    key={sectionTitle}
+                                    expanded={expanded.has(sectionTitle)}
+                                    onChange={handleChange(sectionTitle)}
+                                    elevation={
+                                        expanded.has(sectionTitle) ? 8 : 1
+                                    }
                                 >
-                                    <Typography className={classes.heading}>
-                                        {sectionTitle}
-                                    </Typography>
-                                    <Typography
-                                        className={classes.secondaryHeading}
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls={`${sectionTitle}-content`}
+                                        id={`${sectionTitle}-header`}
                                     >
-                                        {description}
-                                    </Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    {typeof component === 'function'
-                                        ? component(expanded.has(sectionTitle))
-                                        : component}
-                                </AccordionDetails>
-                            </Accordion>
-                        )
-                    )}
+                                        <Typography className={classes.heading}>
+                                            {sectionTitle}
+                                        </Typography>
+                                        <Typography
+                                            className={classes.secondaryHeading}
+                                        >
+                                            {description}
+                                        </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        {getDetails(component, sectionTitle)}
+                                    </AccordionDetails>
+                                </Accordion>
+                            )
+                        )}
+                    </motion.div>
                 </Grid>
             </Grid>
         </div>

@@ -2,11 +2,13 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import { unmountComponentAtNode, render } from 'react-dom';
+import { makeTownhall, makeUser } from 'prytaneum-typings';
 
+import TownhallProvider from 'contexts/Townhall';
+import UserProvider from 'contexts/User';
 import InviteForm from '.';
 
 jest.mock('hooks/useSnack');
-jest.mock('hooks/useEndpoint');
 
 describe('Invite Form', () => {
     let container: HTMLElement | null = null;
@@ -29,7 +31,14 @@ describe('Invite Form', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render', async () => {
         ReactTestUtils.act(() => {
-            render(<InviteForm />, container);
+            render(
+                <TownhallProvider townhallId='123' value={makeTownhall()}>
+                    <UserProvider forceNoLogin value={makeUser()}>
+                        <InviteForm />
+                    </UserProvider>
+                </TownhallProvider>,
+                container
+            );
         });
     });
 });

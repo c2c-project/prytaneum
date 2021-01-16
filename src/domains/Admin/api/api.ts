@@ -1,4 +1,4 @@
-import type { User } from 'prytaneum-typings';
+import type { Roles, User } from 'prytaneum-typings';
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 
@@ -38,4 +38,8 @@ export async function promoteUser(form: User, id: string) {
     }
     const body: Update = { form, id };
     return axios.post<unknown>(`/api/users/${id}/update`, body);
+}
+
+export async function generateLink(role: Roles) {
+    return axios.post<{ token: string }>('/api/users/invite', { role });
 }

@@ -1,22 +1,34 @@
 import React from 'react';
 import io from 'socket.io-client';
-import type { ServerEmits } from 'prytaneum-typings';
 
-interface Settings<T, U> {
-    url: string;
-    query?: Record<string, string>;
-    event: ServerEmits;
-    reducer: (a: T, b: U) => T;
-    initialState: T;
-}
-type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
+function useSocketio(
+    uri: string,
+    opts: SocketIOClient.ConnectOpts,
+    fn: (socket: SocketIOClient.Socket) => void,
+    deps: React.DependencyList
+) {
+    // socketio ref where we connect just once; guaranteed singleton
+    const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
+    const getSocket = React.useCallback(() => {
+        if (socketRef.current) return socketRef.current;
+        socketRef.current = io.connect(uri, opts);
+        return socketRef.current;
+    }, [uri, opts]);
+    const socket = getSocket();
+    // curry the callback passed in that receives the socket
+    const curriedSocketFn = React.useCallback(fn, deps);
 
-function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
-    const { url, event, reducer, initialState } = settings;
-    const socket = io.connect(url);
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    socket.on(event, dispatch);
-    return [state, dispatch, socket];
+    // TODO: on disconnect display a snack that you have been
+    // disconnected & connection is retrying that type of thing
+    React.useEffect(() => {
+        // curry
+        curriedSocketFn(socket);
+
+        // cleanup
+        return () => {
+            socket.close();
+        };
+    }, [curriedSocketFn, socket]);
 }
 
 export default useSocketio;

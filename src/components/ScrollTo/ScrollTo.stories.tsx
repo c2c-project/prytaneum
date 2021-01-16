@@ -32,7 +32,7 @@ export function ScrollToTop() {
                 click to add spam
             </button>
             <div>
-                <Component direction='top'>
+                <Component active direction='top'>
                     <div>
                         {spam.map((key) => (
                             <div key={key}>SPAM</div>
@@ -60,7 +60,7 @@ export function ScrollToBottom() {
                 click to add spam
             </button>
             <div>
-                <Component direction='bottom'>
+                <Component active direction='bottom'>
                     <div>
                         {spam.map((key) => (
                             <div key={key}>SPAM</div>

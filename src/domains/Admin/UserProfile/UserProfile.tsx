@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import type { User } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
 
 import useEndpoint from 'hooks/useEndpoint';
 import { getUser } from 'domains/Admin/api/api';
@@ -14,11 +15,13 @@ import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
 import SettingsList from 'components/SettingsList';
 import SettingsItem from 'components/SettingsItem';
 import * as AdminDashboardTypes from 'domains/Admin/types';
-import { userProfileFormat } from 'domains/Admin/helper/helper';
+import { userProfileFormat } from 'domains/Admin/helper';
 
 import Fab from 'components/Fab';
 import Loader from 'components/Loader';
+import { fadeThroughProps } from 'components/FadeThrough';
 import { Tags, MiniProfile, AccountActions } from './components';
+import UserPromotion from '../UserPromotion';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -57,18 +60,13 @@ export interface Props {
 const UserProfile = ({ userId }: Props) => {
     const classes = useStyles();
     const [user, setUser] = useState<User | null>(null);
-    const [get] = useEndpoint(() => getUser(userId), {
+    const [, isLoading] = useEndpoint(() => getUser(userId), {
         onSuccess: (res) => {
             const { user: fetchedUser } = res.data;
             setUser(fetchedUser);
         },
+        runOnFirstRender: true,
     });
-
-    useEffect(() => {
-        if (!user) {
-            get();
-        }
-    }, []);
 
     const settingsConfig: AccordionData[] = React.useMemo(
         () =>
@@ -77,7 +75,7 @@ const UserProfile = ({ userId }: Props) => {
                       {
                           title: 'Roles',
                           description: 'Modify user permissions and roles',
-                          component: <div>TODO</div>,
+                          component: <UserPromotion user={user} />,
                       },
                       //   {
                       //       title: 'Logs',
@@ -96,19 +94,22 @@ const UserProfile = ({ userId }: Props) => {
         [user]
     );
 
-    if (!user) {
+    if (isLoading || !user) {
         return <Loader />;
     }
 
     return (
         <div className={classes.root}>
             <Grid container justify='center'>
-                <div className={classes.miniProfileContainer}>
+                <motion.div
+                    className={classes.miniProfileContainer}
+                    {...fadeThroughProps}
+                >
                     <div className={classes.innerMiniProfile}>
                         <MiniProfile name={user.email.address} />
                         <Tags tags={user.roles} emptyMessage='No Tags' />
                     </div>
-                </div>
+                </motion.div>
                 <div className={classes.settingsContainer}>
                     <SettingsMenu
                         config={settingsConfig}
