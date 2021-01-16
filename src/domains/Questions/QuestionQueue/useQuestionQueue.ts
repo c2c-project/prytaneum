@@ -2,7 +2,7 @@ import React from 'react';
 import type { SocketIOEvents, Question, Townhall } from 'prytaneum-typings';
 
 import useSocketio from 'hooks/useSocketio';
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 
 type State = {
     suggested: Question[];
@@ -98,7 +98,7 @@ const makeInitialState = (state: Townhall['state']): State => {
 };
 
 export default function useQuestionQueue() {
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const [playlist, dispatch] = React.useReducer(
         playlistReducer,
         makeInitialState(townhall.state)

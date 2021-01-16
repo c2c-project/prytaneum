@@ -6,11 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Question } from 'prytaneum-typings';
 
-import useUser from 'hooks/useUser';
 import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import Loader from 'components/Loader';
-import { TownhallContext } from 'contexts/Townhall';
 import { PaneContext } from 'domains/Townhall/Contexts/Pane';
+import useTownhall from 'hooks/useTownhall';
 
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
@@ -37,8 +36,7 @@ const useStyles = makeStyles(() => ({
 
 function QuestionFeed({ className, style }: Props) {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
-    const [user] = useUser();
+    const [townhall, isModerator] = useTownhall();
     const [, dispatch] = React.useContext(PaneContext);
     const [sysMessages, setSysMessages] = React.useState<React.ReactNodeArray>(
         []
@@ -61,22 +59,16 @@ function QuestionFeed({ className, style }: Props) {
     const currentQuestion = React.useMemo(
         // () => questions.find((q) => q.state === 'current'),
         () => {
-            const { position, list } = townhall.state.playlist;
-            if (position.current === -1) return undefined;
-            if (position.current >= list.length) return undefined;
-            return list[position.current];
+            // FIXME:
+            return undefined;
+            // const { position, list } = townhall.state.playlist;
+            // if (position.current === -1) return undefined;
+            // if (position.current >= list.length) return undefined;
+            // return list[position.current];
         },
-        [townhall]
+        []
     );
 
-    const isModerator = React.useMemo(
-        () =>
-            user &&
-            townhall.settings.moderators.list.find(
-                ({ email }) => user.email.address === email
-            ),
-        [townhall.settings.moderators.list, user]
-    );
     React.useEffect(() => {
         dispatch({
             type: 'Question Feed',

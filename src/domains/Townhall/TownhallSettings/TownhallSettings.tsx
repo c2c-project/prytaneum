@@ -12,7 +12,7 @@ import Fab from 'components/Fab';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
-import { TownhallContext } from 'contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 
 import TownhallForm from '../TownhallForm';
 import ChatSettings from './ChatSettings';
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TownhallSettings() {
     const classes = useStyles();
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const [state, setState] = React.useState<SettingsType>(townhall.settings);
     const [snack] = useSnack();
     const isDiff = React.useMemo(

@@ -7,11 +7,10 @@ import TabPanel from 'components/TabPanel';
 import QuestionFeed from 'domains/Questions/QuestionFeed';
 import AskQuestion from 'domains/Questions/AskQuestion';
 import QuestionQueue from 'domains/Questions/QuestionQueue';
+import useTownhall from 'hooks/useTownhall';
 import TownhallChat from '../TownhallChat';
 import Information from '../TownhallPane';
-import { TownhallContext } from '../../../contexts/Townhall';
 import { Panes } from '../types';
-import useIsModerator from '../useIsModerator';
 import StyledTabPanels from './StyledTabPanels';
 import StyledTab from './StyledTab';
 
@@ -42,7 +41,7 @@ function buildPanes(townhall: Townhall, isModerator: boolean) {
     if (isModerator) {
         panes['Question Queue'] = <QuestionQueue />;
     }
-    if (townhall.settings.questionQueue.transparent)
+    if (townhall.settings.questionQueue.transparent || isModerator)
         panes['Question Feed'] = (
             <>
                 <AskQuestion />
@@ -110,9 +109,8 @@ const TownhallPanes = React.memo(
 );
 
 function ContextSubscriber() {
-    const townhall = React.useContext(TownhallContext);
     const classes = useStyles();
-    const isModerator = useIsModerator();
+    const [townhall, isModerator] = useTownhall();
     return (
         <TownhallPanes
             classes={classes}

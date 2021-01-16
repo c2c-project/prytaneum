@@ -15,8 +15,9 @@ import type { Question } from 'prytaneum-typings';
 
 import Dialog from 'components/Dialog';
 import useUser from 'hooks/useUser';
+import useTownhall from 'hooks/useTownhall';
 import QuestionLabels from '../QuestionLabels';
-import { Like, Quote /* Reply */ } from '../QuestionActions';
+import { Like, Suggest, Quote /* Reply */ } from '../QuestionActions';
 import { CurrentQuestion } from './components';
 import QuestionCard from '../QuestionCard';
 
@@ -52,6 +53,7 @@ function FeedList({
     className,
 }: Props) {
     const [user] = useUser();
+    const [townhall, isModerator] = useTownhall();
     const classes = useStyles();
     const [
         dialogContent,
@@ -63,10 +65,20 @@ function FeedList({
         dialogContent,
     ]);
 
+    const isSuggested = React.useCallback(
+        (questionId: string) =>
+            Boolean(
+                townhall.state.playlist.list.find(
+                    ({ _id }) => _id === questionId
+                )
+            ),
+        [townhall]
+    );
+
     function closeDialog() {
         setDialogContent(null);
     }
-    console.log(liked);
+
     const questionList = React.useMemo(() => {
         return questions.map((question) => {
             const { townhallId } = question.meta;
@@ -89,32 +101,42 @@ function FeedList({
                         <QuestionLabels labels={question.aiml.labels} />
                     )}
                     <CardActions className={classes.questionActions}>
-                        <Like
-                            townhallId={townhallId}
-                            questionId={questionId}
-                            liked={
-                                (user && question.likes.includes(user._id)) ||
-                                liked.has(question._id)
-                            }
-                            onLike={() =>
-                                setLiked((prev) => {
-                                    const nextState = new Set(prev).add(
-                                        question._id
-                                    );
-                                    console.log(nextState);
-                                    return nextState;
-                                })
-                            }
-                            onDeleteLike={() =>
-                                setLiked((prev) => {
-                                    const copy = new Set(prev);
-                                    copy.delete(question._id);
-                                    console.log(copy);
-                                    return copy;
-                                })
-                            }
-                        />
-                        <Quote question={question} />
+                        {!isModerator && (
+                            <Like
+                                townhallId={townhallId}
+                                questionId={questionId}
+                                liked={
+                                    (user &&
+                                        question.likes.includes(user._id)) ||
+                                    liked.has(question._id)
+                                }
+                                onLike={() =>
+                                    setLiked((prev) => {
+                                        const nextState = new Set(prev).add(
+                                            question._id
+                                        );
+                                        console.log(nextState);
+                                        return nextState;
+                                    })
+                                }
+                                onDeleteLike={() =>
+                                    setLiked((prev) => {
+                                        const copy = new Set(prev);
+                                        copy.delete(question._id);
+                                        console.log(copy);
+                                        return copy;
+                                    })
+                                }
+                            />
+                        )}
+                        {!isModerator && <Quote question={question} />}
+                        {isModerator && (
+                            <Suggest
+                                questionId={question._id}
+                                townhallId={townhallId}
+                                suggested={isSuggested(question._id)}
+                            />
+                        )}
                         {/* <Reply question={question} /> */}
                     </CardActions>
                 </QuestionCard>
@@ -128,6 +150,8 @@ function FeedList({
         liked,
         user,
         setLiked,
+        isModerator,
+        isSuggested,
     ]);
 
     return (

@@ -7,6 +7,7 @@ import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
 import PaneProvider from 'domains/Townhall/Contexts/Pane';
 import TownhallPanes from 'domains/Townhall/TownhallPanes';
+import useTownhall from 'hooks/useTownhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,6 +50,7 @@ export default function TownhallLive() {
     const topRef = React.useRef<HTMLDivElement | null>(null);
     const [isFabVisible, setIsFabVisible] = React.useState(false);
     const theme = useTheme();
+    const [townhall] = useTownhall();
     const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
     // increase the distance required to show the scroll to top fab
@@ -71,13 +73,13 @@ export default function TownhallLive() {
             inline: 'nearest',
         });
     };
-    // TODO: video url
+
     return (
         <PaneProvider>
             <Grid container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid item md={8} className={classes.video}>
-                    <VideoPlayer url='https://youtu.be/h1o0l_dTV_s' />
+                    <VideoPlayer url={townhall.settings.video.url} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>

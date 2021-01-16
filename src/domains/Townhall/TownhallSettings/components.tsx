@@ -7,8 +7,7 @@ import {
     Button,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-
-import { TownhallContext } from '../../../contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 
 // TODO: credits settings
 // export const CreditsSettings = React.memo(function CreditsSettings({
@@ -79,7 +78,7 @@ export function Registration() {
 }
 
 export function Attachments() {
-    const townhall = React.useContext(TownhallContext);
+    const [townhall] = useTownhall();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, setState] = React.useState(
         townhall.settings.attachments.list

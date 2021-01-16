@@ -43,7 +43,8 @@
         "storybook": "start-storybook --port 3000 -s public",
         "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx --max-warnings 0",
         "docs": "jsdoc -c jsdoc.conf.json",
-        "storybook-docs": "yarn storybook --docs"
+        "storybook-docs": "yarn storybook --docs",
+        "typecheck": "tsc -p tsconfig.prod.json --noEmit"
     },
     "alias": {
         "assets": "./src/assets",

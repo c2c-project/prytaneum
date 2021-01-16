@@ -79,8 +79,11 @@ export async function createReply(
  * add to playlist
  */
 export async function addToPlaylist(townhallId: string, questionId: string) {
-    const url = `/api/townhalls/${townhallId}/playlist`;
-    return axios.post(url, qs.stringify({ questionId }));
+    // FIXME:
+    const url = `/api/townhalls/${townhallId}/playlist?${qs.stringify({
+        questionId,
+    })}`;
+    return axios.post(url);
 }
 
 /**
@@ -98,8 +101,11 @@ export async function deleteFromPlaylist(
  * add to queue
  */
 export async function addToQueue(townhallId: string, questionId: string) {
-    const url = `/api/townhalls/${townhallId}/playlist/queue`;
-    return axios.post(url, qs.stringify({ questionId }));
+    // FIXME:
+    const url = `/api/townhalls/${townhallId}/playlist/queue?${qs.stringify({
+        questionId,
+    })}`;
+    return axios.post(url);
 }
 
 export async function updateQueueOrder(
@@ -123,5 +129,13 @@ export async function deleteFromQueue(townhallId: string, questionId: string) {
  */
 export async function nextQuestion(townhallId: string) {
     const url = `/api/townhalls/${townhallId}/playlist/next`;
-    return axios.delete(url);
+    return axios.post(url);
+}
+
+/**
+ * goes to the next question
+ */
+export async function prevQuestion(townhallId: string) {
+    const url = `/api/townhalls/${townhallId}/playlist/previous`;
+    return axios.post(url);
 }
