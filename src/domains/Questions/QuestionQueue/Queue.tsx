@@ -117,11 +117,13 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
         questions,
         current,
     ]);
-    const staticCards = React.useMemo(
-        () =>
-            hidePast ? [questions[current]] : questions.slice(0, current + 1),
-        [questions, current, hidePast]
-    );
+    const staticCards = React.useMemo(() => {
+        if (hidePast) {
+            if (questions[current]) return [questions[current]];
+            return [];
+        }
+        return questions.slice(0, current + 1);
+    }, [questions, current, hidePast]);
 
     return (
         <Grid container direction='column' wrap='nowrap'>
