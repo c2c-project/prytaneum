@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import type { SocketIOEvents, Question, Townhall } from 'prytaneum-typings';
 
@@ -63,6 +64,48 @@ function playlistReducer(state: State, action: Events): State {
                 ...state.suggested.splice(idx + 1),
             ];
             return { ...state, suggested: newPlaylist };
+        }
+        case 'playlist-like-add': {
+            const addLike = (question: Question) =>
+                question._id === action.payload.questionId
+                    ? {
+                          ...question,
+                          likes: [...question.likes, action.payload.userId],
+                      }
+                    : question;
+            // don't update questions that are queu because i don't care about their like count atm
+            return {
+                ...state,
+                // if it's in suggsted
+                suggested: state.suggested.map(addLike),
+                // it could be in the buffer too...
+                buffer: {
+                    ...state.buffer,
+                    suggested: state.buffer.suggested.map(addLike),
+                },
+            };
+        }
+        case 'playlist-like-remove': {
+            const removeLike = (question: Question) =>
+                question._id === action.payload.questionId
+                    ? {
+                          ...question,
+                          likes: question.likes.filter(
+                              (userId) => action.payload.userId !== userId
+                          ),
+                      }
+                    : question;
+            // don't update questions that are queu because i don't care about their like count atm
+            return {
+                ...state,
+                // if it's in suggsted
+                suggested: state.suggested.map(removeLike),
+                // it could be in the buffer too...
+                buffer: {
+                    ...state.buffer,
+                    suggested: state.buffer.suggested.map(removeLike),
+                },
+            };
         }
         case 'flush-queue-buffer': {
             const queueBuffer = state.buffer.queue;
