@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Question as QuestionType } from 'prytaneum-typings';
 
-import useSocketio from 'hooks/useSocketio';
+import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import useEndpoint from 'hooks/useEndpoint';
 
 import { getQuestions } from '../api';
@@ -20,14 +20,13 @@ export default function useQuestionFeed(
     });
 
     const [buffer, dispatch] = React.useReducer(questionReducer, []);
-    useSocketio(
-        '/questions',
-        { query: { townhallId } },
+    const socketFn: SocketFn = React.useCallback(
         (socket) => {
             socket.on('question-state', dispatch);
         },
         [dispatch]
     );
+    useSocketio('/questions', { query: { townhallId } }, socketFn);
 
     const flushBuffer = () => {
         setQuestions((prevQuestions) => [...prevQuestions, ...buffer]);
