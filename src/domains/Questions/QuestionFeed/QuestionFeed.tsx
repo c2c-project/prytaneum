@@ -64,7 +64,7 @@ function QuestionFeed({ className, style }: Props) {
             if (position.current >= queue.length) return undefined;
             return queue[position.current];
         },
-        []
+        [townhall]
     );
 
     React.useEffect(() => {
