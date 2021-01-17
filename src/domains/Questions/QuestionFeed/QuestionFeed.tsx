@@ -59,14 +59,12 @@ function QuestionFeed({ className, style }: Props) {
     const currentQuestion = React.useMemo(
         // () => questions.find((q) => q.state === 'current'),
         () => {
-            // FIXME:
-            return undefined;
-            // const { position, list } = townhall.state.playlist;
-            // if (position.current === -1) return undefined;
-            // if (position.current >= list.length) return undefined;
-            // return list[position.current];
+            const { position, queue } = townhall.state.playlist;
+            if (position.current === -1) return undefined;
+            if (position.current >= queue.length) return undefined;
+            return queue[position.current];
         },
-        []
+        [townhall]
     );
 
     React.useEffect(() => {
