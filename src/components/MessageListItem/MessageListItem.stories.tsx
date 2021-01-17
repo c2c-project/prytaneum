@@ -21,7 +21,7 @@ export function MessageListItemDisplay() {
     );
 }
 
-export function MessageListItem_noButton() {
+export function MessageListItemNoButton() {
     return (
         <ul>
             <Component button={false} hidden={false}>

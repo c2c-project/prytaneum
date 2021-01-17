@@ -56,17 +56,16 @@ export default function TownhallList({ onClickTownhall, title }: Props) {
     const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([
         (townhalls: Townhall[]) => townhalls,
     ]);
-    const [sendRequest, isLoading] = useEndpoint(() => getTownhallList(), {
+    const [, isLoading] = useEndpoint(() => getTownhallList(), {
         onSuccess: (results) => {
             setList(results.data);
         },
+        runOnFirstRender: true,
     });
     const filteredResults = React.useMemo(
         () => applyFilters(list || [], filters),
         [list, filters]
     );
-
-    React.useEffect(sendRequest, []);
 
     const handleSearch = React.useCallback(
         (text: string) =>

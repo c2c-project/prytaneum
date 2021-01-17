@@ -35,11 +35,12 @@ export default function TownhallChat() {
     const messageRef = React.useRef<ChatMessageForm>();
     const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
     const [user] = useUser();
-    const [get, areMessagesLoading] = useEndpoint(
+    const [, areMessagesLoading] = useEndpoint(
         () => getChatmessages(townhall._id),
         {
             onSuccess: ({ data }) =>
                 dispatchMessage({ type: 'initial-state', payload: data }),
+            runOnFirstRender: true,
         }
     );
 
@@ -51,8 +52,6 @@ export default function TownhallChat() {
         },
         [dispatchMessage]
     );
-
-    React.useEffect(get, []);
 
     const create = React.useCallback(
         () =>

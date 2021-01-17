@@ -14,14 +14,14 @@ import { logout } from 'domains/Auth/api';
 export default function Logout() {
     const [isLoggedOut, setState] = React.useState(false);
     const [, setUser] = useUser();
-    const [sendRequest, isLoading] = useEndpoint(logout, {
+    const [, isLoading] = useEndpoint(logout, {
         onSuccess: () => {
             clear();
             setUser(undefined);
             setState(true);
         },
+        runOnFirstRender: true,
     });
-    React.useEffect(sendRequest, []);
 
     if (isLoading || !isLoggedOut) return <Loader />;
 

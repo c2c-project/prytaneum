@@ -10,7 +10,7 @@ function useSocketio(
     const socket = React.useContext(FixtureContext);
 
     // curry the callback passed in that receives the socket and isMountedWrapper
-    const curriedSocketFn = React.useCallback(fn, deps);
+    const curriedSocketFn = React.useCallback(fn, [...deps, fn]);
 
     // TODO: on disconnect display a snack that you have been
     // disconnected & connection is retrying that type of thing

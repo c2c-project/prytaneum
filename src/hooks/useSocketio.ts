@@ -16,7 +16,7 @@ function useSocketio(
     }, [uri, opts]);
     const socket = getSocket();
     // curry the callback passed in that receives the socket
-    const curriedSocketFn = React.useCallback(fn, deps);
+    const curriedSocketFn = React.useCallback(fn, [...deps, fn]);
 
     // TODO: on disconnect display a snack that you have been
     // disconnected & connection is retrying that type of thing
