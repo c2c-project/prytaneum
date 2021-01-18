@@ -109,7 +109,7 @@
         "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.78",
         "react-is": "^16.13.1",
         "react-test-renderer": "^16.13.1",
-        "storybook-addon-performance": "^0.13.0",
+        "storybook-addon-performance": "^0.14.0",
         "typescript": "^3.9.5"
     },
     "peerDependencies": {
