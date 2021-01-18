@@ -8,7 +8,7 @@ import List from 'domains/Townhall/TownhallList';
 import Dialog from 'components/Dialog';
 import TownhallForm from 'domains/Townhall/TownhallForm';
 import Fab from 'components/Fab';
-import history, { makeRelativeLink } from 'utils/history';
+import history, { makeRelativeLink as link } from 'utils/history';
 import FadeThrough from 'components/FadeThrough';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,28 +23,38 @@ const useStyles = makeStyles((theme) => ({
 export default function TownhallList() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [onExit, setOnExit] = React.useState<(() => void) | undefined>(
+        undefined
+    );
     return (
         <>
             <FadeThrough animKey='townhall-list-page'>
                 <Grid container>
-                    <Dialog open={open} onClose={() => setOpen(false)}>
-                        <DialogContent>
-                            <TownhallForm
-                                onCancel={() => setOpen(false)}
-                                onSubmit={() => setOpen(false)}
-                            />
-                        </DialogContent>
-                    </Dialog>
                     <TitleCard title='Townhalls' />
                     <Grid item xs={12}>
                         <List
                             onClickTownhall={(id) =>
-                                history.push(makeRelativeLink(`/${id}`))
+                                history.push(link(`/${id}`))
                             }
                         />
                     </Grid>
                 </Grid>
             </FadeThrough>
+            <Dialog
+                open={open}
+                onClose={() => setOpen(false)}
+                onExited={onExit}
+            >
+                <DialogContent>
+                    <TownhallForm
+                        onCancel={() => setOpen(false)}
+                        onSubmit={(id) => {
+                            setOnExit(() => history.push(link(`/${id}`)));
+                            setOpen(false);
+                        }}
+                    />
+                </DialogContent>
+            </Dialog>
             <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
                 <AddIcon className={classes.fab} />
             </Fab>

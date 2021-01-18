@@ -23,7 +23,7 @@ import useForm from 'hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
 
 interface Props {
-    onSubmit?: () => void;
+    onSubmit?: (id: string) => void;
     buttonText?: string;
     onCancel?: () => void;
 }
@@ -63,7 +63,11 @@ export default function TownhallForm({
 
     // after this point in the code,
     // whether or not the form is an update or create does not matter
-    const [sendRequest, isLoading] = useEndpoint(apiRequest, { onSuccess: cb });
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+        onSuccess: ({ data }) => {
+            if (cb) cb(data._id);
+        },
+    });
 
     return (
         <Form onSubmit={handleSubmit(sendRequest)}>

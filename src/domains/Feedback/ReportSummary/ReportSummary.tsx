@@ -32,24 +32,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+type DeleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
+const endpoints: {
+    Feedback: DeleteFunction;
+    Bug: DeleteFunction;
+} = {
+    Feedback: (_id: string) => deleteFeedbackReport(_id),
+    Bug: (_id: string) => deleteBugReport(_id),
+};
+
 export default function ReportSummary({ report, callBack }: SummaryProps) {
     const { updateReport, refetchReports } = React.useContext(
         ReportStateContext
     );
     const [snack] = useSnack();
 
-    type deleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
-    const endpoints: {
-        Feedback: deleteFunction;
-        Bug: deleteFunction;
-    } = {
-        Feedback: (_id: string) => deleteFeedbackReport(_id),
-        Bug: (_id: string) => deleteBugReport(_id),
-    };
-
     const deleteApiRequest = React.useCallback(
         () => endpoints[report.type](report._id),
-        [report, endpoints]
+        [report]
     );
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {

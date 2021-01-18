@@ -3,7 +3,7 @@ import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { ChatMessageForm } from 'prytaneum-typings';
 
-import useSocketio from 'hooks/useSocketio';
+import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import Chatbar from 'components/Chatbar';
 import ChatContent from 'components/ChatContent';
 import Chat from 'components/Chat';
@@ -35,24 +35,25 @@ export default function TownhallChat() {
     const messageRef = React.useRef<ChatMessageForm>();
     const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
     const [user] = useUser();
-    const [get, areMessagesLoading] = useEndpoint(
+    const [, areMessagesLoading] = useEndpoint(
         () => getChatmessages(townhall._id),
         {
             onSuccess: ({ data }) =>
                 dispatchMessage({ type: 'initial-state', payload: data }),
+            runOnFirstRender: true,
         }
     );
-
-    useSocketio(
-        '/chat-messages',
-        { query: { townhallId: townhall._id } },
+    const socketFn: SocketFn = React.useCallback(
         (socket) => {
             socket.on('chat-message-state', dispatchMessage);
         },
         [dispatchMessage]
     );
-
-    React.useEffect(get, []);
+    useSocketio(
+        '/chat-messages',
+        { query: { townhallId: townhall._id } },
+        socketFn
+    );
 
     const create = React.useCallback(
         () =>

@@ -2,7 +2,7 @@
 import React from 'react';
 import type { SocketIOEvents, Question, Townhall } from 'prytaneum-typings';
 
-import useSocketio from 'hooks/useSocketio';
+import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import useTownhall from 'hooks/useTownhall';
 
 type State = {
@@ -43,6 +43,8 @@ function playlistReducer(state: State, action: Events): State {
             };
         case 'playlist-queue-next':
             return { ...state, current: state.current + 1 };
+        case 'playlist-queue-previous':
+            return { ...state, current: state.current - 1 };
         case 'playlist-queue-order':
             return { ...state, queue: action.payload };
         case 'playlist-queue-remove': {
@@ -146,13 +148,16 @@ export default function useQuestionQueue() {
         playlistReducer,
         makeInitialState(townhall.state)
     );
+    const socketFn: SocketFn = React.useCallback(
+        (socket) => socket.on('playlist-state', dispatch),
+        [dispatch]
+    );
     useSocketio(
         '/playlist',
         {
             query: { townhallId: townhall._id },
         },
-        (socket) => socket.on('playlist-state', dispatch),
-        [dispatch]
+        socketFn
     );
     return [playlist, dispatch] as const;
 }

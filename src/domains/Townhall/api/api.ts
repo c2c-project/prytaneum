@@ -13,14 +13,17 @@ import axios from 'utils/axios';
  * create a townhall
  */
 export async function createTownhall(form: TownhallForm) {
-    return axios.post<never>('/api/townhalls', qs.stringify(form));
+    return axios.post<{ _id: string }>('/api/townhalls', qs.stringify(form));
 }
 
 /**
  * update a townhall
  */
 export async function updateTownhall(form: TownhallForm, townhallId: string) {
-    return axios.put<never>(`/api/townhalls/${townhallId}`, qs.stringify(form));
+    return axios.put<{ _id: string }>(
+        `/api/townhalls/${townhallId}`,
+        qs.stringify(form)
+    );
 }
 
 /**

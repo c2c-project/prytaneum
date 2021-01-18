@@ -15,6 +15,7 @@ import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
+import usePlaylist from '../usePlaylist';
 
 interface Props {
     className?: string;
@@ -53,19 +54,13 @@ function QuestionFeed({ className, style }: Props) {
         questions,
         accessors
     );
+    const [playlist] = usePlaylist();
 
-    // there should never be more than 1 current question, so we can stop at the first one found
-    // TODO: update to use the townhall state instead
-    const currentQuestion = React.useMemo(
-        // () => questions.find((q) => q.state === 'current'),
-        () => {
-            const { position, queue } = townhall.state.playlist;
-            if (position.current === -1) return undefined;
-            if (position.current >= queue.length) return undefined;
-            return queue[position.current];
-        },
-        [townhall]
-    );
+    const currentQuestion = React.useMemo(() => {
+        const { position, queue } = playlist;
+        if (position >= queue.length || position < 0) return undefined;
+        return queue[position];
+    }, [playlist]);
 
     React.useEffect(() => {
         dispatch({
