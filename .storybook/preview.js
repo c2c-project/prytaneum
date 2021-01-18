@@ -25,9 +25,7 @@ addDecorator((storyFn) => (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
             <SnackContext maxSnack={1}>
-                <DeviceContext>
-                    <AnimatePresence>{storyFn()}</AnimatePresence>
-                </DeviceContext>
+                <DeviceContext>{storyFn()}</DeviceContext>
             </SnackContext>
         </MuiPickersUtilsProvider>
     </ThemeProvider>
@@ -42,3 +40,7 @@ addParameters({
         manual: true,
     },
 });
+
+export const parameters = {
+    layout: 'centered',
+};

@@ -16,10 +16,10 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
     const ref = React.useRef<HTMLInputElement | null>(null);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        ref.current?.focus();
         e.preventDefault();
         const copy = message;
         setMessage('');
-        ref.current?.focus();
         onSubmit({ message: copy });
     }
 

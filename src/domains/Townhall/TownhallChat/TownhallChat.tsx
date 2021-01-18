@@ -1,6 +1,4 @@
 import React from 'react';
-import { Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import type { ChatMessageForm } from 'prytaneum-typings';
 
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
@@ -14,23 +12,7 @@ import useUser from 'hooks/useUser';
 import { createChatMessage, getChatmessages } from '../api';
 import { chatReducer } from './utils';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        // padding: theme.spacing(1.5),
-        width: '100%',
-        height: '100%',
-        minHeight: 500,
-        display: 'flex',
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        flex: '1 1 100%',
-    },
-}));
-
 export default function TownhallChat() {
-    const classes = useStyles();
     const [townhall] = useTownhall();
     const messageRef = React.useRef<ChatMessageForm>();
     const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
@@ -69,19 +51,15 @@ export default function TownhallChat() {
     if (areMessagesLoading) return <Loader />;
 
     return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Chat>
-                    <ChatContent messages={messages} />
-                    <Chatbar
-                        disabled={isLoading || !user}
-                        onSubmit={(form) => {
-                            messageRef.current = form;
-                            postMesssage();
-                        }}
-                    />
-                </Chat>
-            </Paper>
-        </div>
+        <Chat>
+            <ChatContent messages={messages} />
+            <Chatbar
+                disabled={isLoading || !user}
+                onSubmit={(form) => {
+                    messageRef.current = form;
+                    postMesssage();
+                }}
+            />
+        </Chat>
     );
 }

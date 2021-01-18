@@ -44,6 +44,7 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
+        'react/jsx-props-no-spreading': 'off',
     },
     overrides: [
         {
