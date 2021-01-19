@@ -1,13 +1,16 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { ChatMessage, makeChatMessage } from 'prytaneum-typings';
+import { ChatMessage as ChatMessageType, makeChatMessage } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
 
+import ChatMessage from 'components/ChatMessage';
 import Chat from './Chat';
 
 export default {
     title: 'components/Chat',
     argTypes: {
         onSubmit: { action: 'submitted' },
+        animated: { defaultValue: false },
     },
     decorators: [
         (MyStory) => (
@@ -19,10 +22,11 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
+    subcomponents: { ChatMessage },
 } as Meta;
 
 const makeChatMessages = (num: number) => {
-    const ret: ChatMessage[] = [];
+    const ret: ChatMessageType[] = [];
     for (let i = 0; i < num; i += 1) {
         ret.push(makeChatMessage());
     }
@@ -31,29 +35,37 @@ const makeChatMessages = (num: number) => {
 
 interface Props {
     onSubmit: () => void;
-    messages: ChatMessage[];
+    messages: ChatMessageType[];
 }
 
-const Template: Story<Props> = ({ onSubmit, messages }: Props) => <Chat onSubmit={onSubmit} messages={messages} />;
+const Template: Story<Props> = ({ onSubmit, messages }: Props) => (
+    <Chat onSubmit={onSubmit}>
+        {messages.map(({ _id, meta, message }) => (
+            <li key={_id}>
+                <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+            </li>
+        ))}
+    </Chat>
+);
 
 export const Empty = Template.bind({});
 Empty.args = {
     messages: [],
 };
 
-export const Few = Template.bind({});
-Few.args = {
+export const FewMessages = Template.bind({});
+FewMessages.args = {
     messages: makeChatMessages(3),
 };
 
-export const Full = Template.bind({});
-Full.args = {
+export const ManyMessages = Template.bind({});
+ManyMessages.args = {
     messages: makeChatMessages(20),
 };
 
 const MAX = 50;
-export const Active = ({ messages, onSubmit }: Props) => {
-    const [newMessages, setNewMessages] = React.useState<ChatMessage[]>([]);
+export const DynamicMessages = ({ messages, onSubmit }: Props) => {
+    const [newMessages, setNewMessages] = React.useState<ChatMessageType[]>([]);
     React.useEffect(() => {
         const handle = setInterval(
             () => newMessages.length < MAX && setNewMessages((prev) => [...prev, makeChatMessage()]),
@@ -63,6 +75,34 @@ export const Active = ({ messages, onSubmit }: Props) => {
     }, [messages, setNewMessages, newMessages.length]);
     return <Template messages={[...messages, ...newMessages]} onSubmit={onSubmit} />;
 };
-Active.args = {
+DynamicMessages.args = {
+    messages: [],
+};
+
+export const AnimatedDynamicMessages = ({ messages, onSubmit }: Props) => {
+    const [newMessages, setNewMessages] = React.useState<ChatMessageType[]>([]);
+    React.useEffect(() => {
+        const handle = setInterval(
+            () => newMessages.length < MAX && setNewMessages((prev) => [...prev, makeChatMessage()]),
+            300
+        );
+        return () => clearInterval(handle);
+    }, [messages, setNewMessages, newMessages.length]);
+    return (
+        <Chat onSubmit={onSubmit}>
+            {[...messages, ...newMessages].map(({ _id, meta, message }) => (
+                <motion.li
+                    key={_id}
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: 'keyframes' }}
+                >
+                    <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+                </motion.li>
+            ))}
+        </Chat>
+    );
+};
+AnimatedDynamicMessages.args = {
     messages: [],
 };

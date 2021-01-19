@@ -18,11 +18,11 @@ interface Props {
     className?: string;
 }
 
-export default function Chat({ className, messages, onSubmit, disabled }: Props & ChatContentProps & ChatbarProps) {
+export default function Chat({ className, children, onSubmit, disabled }: Props & ChatContentProps & ChatbarProps) {
     const classes = useStyles();
     return (
         <Grid container direction='column' className={clsx(className, classes.root)} wrap='nowrap' component={Paper}>
-            <ChatContent messages={messages} />
+            <ChatContent>{children}</ChatContent>
             <Chatbar onSubmit={onSubmit} disabled={disabled} />
         </Grid>
     );

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Grid, Typography, makeStyles } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ExpandMore';
-import type { ChatMessage as ChatMessageType } from 'prytaneum-typings';
-import { motion } from 'framer-motion';
 
-import ChatMessage, { Props as ChatMessageProps } from 'components/ChatMessage';
 import Fab from 'components/Fab';
 import useScrollTo from 'hooks/useScrollTo';
 
 export interface Props {
-    messages: ChatMessageType[];
-    ChatMessageProps?: ChatMessageProps | ((message: ChatMessageType) => ChatMessageProps);
+    children: React.ReactNode | React.ReactNodeArray;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -19,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
         flex: '1 1 100%',
         display: 'flex',
         position: 'relative',
-    },
-    item: {
-        paddingBottom: theme.spacing(1),
     },
     list: {
         padding: theme.spacing(1),
@@ -48,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ChatContent({ messages, ChatMessageProps: _ChatMessageProps }: Props) {
+export default function ChatContent({ children }: Props) {
     const classes = useStyles();
     const hasRun = React.useRef(false);
     const sentinelRef = React.useRef<HTMLLIElement | null>(null);
@@ -66,9 +59,9 @@ export default function ChatContent({ messages, ChatMessageProps: _ChatMessagePr
 
     React.useEffect(() => {
         if (isAnchorInView) scrollToAnchor('auto');
-    }, [messages, isAnchorInView, scrollToAnchor]);
+    }, [children, isAnchorInView, scrollToAnchor]);
 
-    if (messages.length === 0)
+    if (React.Children.count(children) === 0)
         return (
             <Grid container item xs={12} justify='center' direction='column' className={classes.root}>
                 <Typography variant='h5' paragraph align='center'>
@@ -83,28 +76,7 @@ export default function ChatContent({ messages, ChatMessageProps: _ChatMessagePr
         <Grid item container xs={12} className={classes.root}>
             <div className={classes.scrollContainer}>
                 <ul className={classes.list}>
-                    {messages.map((message) => {
-                        const { _id, meta, message: text } = message;
-                        const extraProps =
-                            typeof _ChatMessageProps === 'function' ? _ChatMessageProps(message) : _ChatMessageProps;
-                        return (
-                            <motion.li
-                                key={_id}
-                                initial={{ y: 5, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ type: 'keyframes' }}
-                                className={classes.item}
-                            >
-                                <ChatMessage
-                                    name={meta.createdBy.name.first}
-                                    timestamp={meta.createdAt}
-                                    message={text}
-                                    {...extraProps}
-                                />
-                            </motion.li>
-                        );
-                    })}
-
+                    {children}
                     <li key='sentinel' ref={sentinelRef} className={classes.sentinel} />
                 </ul>
             </div>
