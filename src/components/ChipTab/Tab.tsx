@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Tab as MUITab, TabProps, Theme } from '@material-ui/core';
 import { makeStyles, lighten, darken } from '@material-ui/core/styles';

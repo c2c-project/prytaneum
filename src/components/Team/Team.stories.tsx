@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 import faker from 'faker';
 
 import { ReferenceNames } from 'types';
@@ -42,10 +41,4 @@ const makeTeam = (num: number) => {
     };
 };
 
-export function Team() {
-    return (
-        <Container>
-            <Component team={makeTeam(8)} />
-        </Container>
-    );
-}
+export const Team = () => <Component team={makeTeam(8)} />;

@@ -19,7 +19,7 @@ import { userProfileFormat } from 'domains/Admin/helper';
 
 import Fab from 'components/Fab';
 import Loader from 'components/Loader';
-import { fadeThroughProps } from 'components/FadeThrough';
+import { fadeThroughProps } from 'animations/FadeThrough';
 import { Tags, MiniProfile, AccountActions } from './components';
 import UserPromotion from '../UserPromotion';
 

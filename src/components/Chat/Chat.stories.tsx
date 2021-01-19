@@ -9,7 +9,7 @@ import Chat from './Chat';
 export default {
     title: 'components/Chat',
     argTypes: {
-        onSubmit: { action: 'submitted' }, 
+        onSubmit: { action: 'submitted' },
     },
     decorators: [
         (MyStory) => (

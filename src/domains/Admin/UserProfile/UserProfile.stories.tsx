@@ -1,18 +1,8 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 
-import Layout from 'layout';
+import Component from './UserProfile';
 
-import UserProvider from 'contexts/User';
-import UserProfile from './UserProfile';
+export default { title: 'Domains/Admin/User Profile', parameters: { layout: 'centered' } } as Meta;
 
-export default { title: 'Domains/Admin/User Profile' };
-
-export function Basic() {
-    return (
-        <UserProvider>
-            <Layout>
-                <UserProfile userId='1234' />
-            </Layout>
-        </UserProvider>
-    );
-}
+export const UserProfile = () => <Component userId='1234' />;
