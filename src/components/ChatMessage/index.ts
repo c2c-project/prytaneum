@@ -1,1 +1,2 @@
-export { default } from './Message';
+export { default } from './ChatMessage';
+export * from './ChatMessage';

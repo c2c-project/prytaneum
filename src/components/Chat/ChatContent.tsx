@@ -4,12 +4,13 @@ import ArrowDownIcon from '@material-ui/icons/ExpandMore';
 import type { ChatMessage as ChatMessageType } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
 
-import ChatMessage from 'components/ChatMessage';
+import ChatMessage, { Props as ChatMessageProps } from 'components/ChatMessage';
 import Fab from 'components/Fab';
 import useScrollTo from 'hooks/useScrollTo';
 
 export interface Props {
     messages: ChatMessageType[];
+    ChatMessageProps?: ChatMessageProps | ((message: ChatMessageType) => ChatMessageProps);
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ChatContent({ messages }: Props) {
+export default function ChatContent({ messages, ChatMessageProps: _ChatMessageProps }: Props) {
     const classes = useStyles();
     const hasRun = React.useRef(false);
     const sentinelRef = React.useRef<HTMLLIElement | null>(null);
@@ -82,17 +83,27 @@ export default function ChatContent({ messages }: Props) {
         <Grid item container xs={12} className={classes.root}>
             <div className={classes.scrollContainer}>
                 <ul className={classes.list}>
-                    {messages.map(({ meta, message, _id }) => (
-                        <motion.li
-                            key={_id}
-                            initial={{ y: 5, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ type: 'keyframes' }}
-                            className={classes.item}
-                        >
-                            <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
-                        </motion.li>
-                    ))}
+                    {messages.map((message) => {
+                        const { _id, meta, message: text } = message;
+                        const extraProps =
+                            typeof _ChatMessageProps === 'function' ? _ChatMessageProps(message) : _ChatMessageProps;
+                        return (
+                            <motion.li
+                                key={_id}
+                                initial={{ y: 5, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ type: 'keyframes' }}
+                                className={classes.item}
+                            >
+                                <ChatMessage
+                                    name={meta.createdBy.name.first}
+                                    timestamp={meta.createdAt}
+                                    message={text}
+                                    {...extraProps}
+                                />
+                            </motion.li>
+                        );
+                    })}
 
                     <li key='sentinel' ref={sentinelRef} className={classes.sentinel} />
                 </ul>
@@ -103,3 +114,7 @@ export default function ChatContent({ messages }: Props) {
         </Grid>
     );
 }
+
+ChatContent.defaultProps = {
+    ChatMessageProps: {},
+};

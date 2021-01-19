@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Avatar, makeStyles, Grid /* Menu, MenuItem */ } from '@material-ui/core';
+import { Typography, Avatar, makeStyles, Grid } from '@material-ui/core';
 
 import { formatDate } from 'utils/format';
 
-interface Props {
+export interface Props {
     name: string;
     timestamp: string | number | Date;
     message: string;
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
  *  @param props.timestamp time of message send
  *  @param props.message the message that was sent
  */
-export default function Message({ name, timestamp, message }: Props) {
+export default function ChatMessage({ name, timestamp, message }: Props) {
     const classes = useStyles();
     return (
         <Grid container alignItems='flex-start' className={classes.root} wrap='nowrap'>
@@ -61,6 +61,6 @@ export default function Message({ name, timestamp, message }: Props) {
     );
 }
 
-Message.propTypes = {
+ChatMessage.propTypes = {
     name: PropTypes.string.isRequired,
 };
