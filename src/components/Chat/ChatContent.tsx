@@ -1,15 +1,15 @@
 import React from 'react';
 import { Grid, Typography, makeStyles } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ExpandMore';
-import type { ChatMessage } from 'prytaneum-typings';
+import type { ChatMessage as ChatMessageType } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
 
-import Message from 'components/Message';
+import ChatMessage from 'components/ChatMessage';
 import Fab from 'components/Fab';
 import useScrollTo from 'hooks/useScrollTo';
 
 export interface Props {
-    messages: ChatMessage[];
+    messages: ChatMessageType[];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -90,7 +90,7 @@ export default function ChatContent({ messages }: Props) {
                             transition={{ type: 'keyframes' }}
                             className={classes.item}
                         >
-                            <Message name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+                            <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
                         </motion.li>
                     ))}
 
