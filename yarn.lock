@@ -8373,7 +8373,7 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-faker@^5.1.0, "faker@https://github.com/bustle/faker.js#master":
+"faker@https://github.com/bustle/faker.js#master":
   version "5.1.0"
   resolved "https://github.com/bustle/faker.js#5a89ddf48af8baec84c8d562ca6dccf6f3e2466d"
 
@@ -13891,14 +13891,14 @@ prr@~1.0.1:
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
   integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
 
-"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.80":
+"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.81":
   version "1.0.0"
-  resolved "https://github.com/c2c-project/prytaneum-typings#fca9585f49eb32ffe995f5831f6d2de5a536d3cc"
+  resolved "https://github.com/c2c-project/prytaneum-typings#45e040f260f7ba5ea1d8f17aaf05ac3f8241c92c"
   dependencies:
     "@types/faker" "^4.1.4"
     "@types/mongodb" "^3.5.32"
     "@types/node" "^14.14.6"
-    faker "^5.1.0"
+    faker "https://github.com/bustle/faker.js#master"
 
 pseudomap@^1.0.2:
   version "1.0.2"
