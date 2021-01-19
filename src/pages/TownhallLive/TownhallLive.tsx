@@ -89,7 +89,7 @@ export default function TownhallLive() {
                         <TownhallPanes />
                     </div>
                 </Grid>
-                <Fab onClick={handleClick} zoomProps={{ in: isFabVisible }}>
+                <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
                     <KeyboardArrowUpIcon />
                 </Fab>
             </Grid>

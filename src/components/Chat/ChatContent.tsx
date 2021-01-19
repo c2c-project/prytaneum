@@ -97,7 +97,7 @@ export default function ChatContent({ messages }: Props) {
                     <li key='sentinel' ref={sentinelRef} className={classes.sentinel} />
                 </ul>
             </div>
-            <Fab zoomProps={{ in: !isAnchorInView }} className={classes.fab} onClick={() => scrollToAnchor('auto')}>
+            <Fab ZoomProps={{ in: !isAnchorInView }} className={classes.fab} onClick={() => scrollToAnchor('auto')}>
                 <ArrowDownIcon />
             </Fab>
         </Grid>

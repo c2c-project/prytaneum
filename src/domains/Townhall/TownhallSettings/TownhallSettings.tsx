@@ -214,7 +214,7 @@ export default function TownhallSettings() {
         <div id='settings-id' className={classes.root}>
             <SettingsMenu config={config} title='Townhall Settings' />
             <LoadingButton loading={isLoading}>
-                <Fab zoomProps={{ in: isDiff }} onClick={save}>
+                <Fab ZoomProps={{ in: isDiff }} onClick={save}>
                     <SaveIcon color='inherit' />
                 </Fab>
             </LoadingButton>

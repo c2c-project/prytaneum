@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import MUIFab, { FabProps } from '@material-ui/core/Fab';
-import Zoom, { ZoomProps } from '@material-ui/core/Zoom';
+import Zoom, { ZoomProps as _ZoomProps } from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
  *  @param props
  *  @param @todo
  */
-export default function Fab({ children, zoomProps, ...rest }: FabProps & { zoomProps?: ZoomProps }) {
+export default function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: _ZoomProps }) {
     const classes = useStyles();
     return (
-        <Zoom in timeout={300} {...zoomProps}>
+        <Zoom in timeout={300} {...ZoomProps}>
             <MUIFab className={classes.fab} color='secondary' {...rest}>
                 {children}
             </MUIFab>
@@ -32,5 +32,5 @@ export default function Fab({ children, zoomProps, ...rest }: FabProps & { zoomP
 }
 
 Fab.defaultProps = {
-    zoomProps: {},
+    ZoomProps: {},
 };
