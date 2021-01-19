@@ -1,17 +1,25 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Story, Meta } from '@storybook/react';
 import { ChatMessage, makeChatMessage } from 'prytaneum-typings';
 
 import Chat from './Chat';
-import ChatContent from '../ChatContent';
-import ChatBar from '../Chatbar';
 
 export default {
     title: 'components/Chat',
     argTypes: {
         onSubmit: { action: 'submitted' },
     },
-};
+    decorators: [
+        (MyStory) => (
+            <div style={{ padding: 30, flex: 1 }}>
+                <MyStory />
+            </div>
+        ),
+    ],
+    parameters: {
+        layout: 'fullscreen',
+    },
+} as Meta;
 
 const makeChatMessages = (num: number) => {
     const ret: ChatMessage[] = [];
@@ -26,12 +34,7 @@ interface Props {
     messages: ChatMessage[];
 }
 
-const Template: Story<Props> = ({ onSubmit, messages }: Props) => (
-    <Chat>
-        <ChatContent messages={messages} />
-        <ChatBar onSubmit={onSubmit} />
-    </Chat>
-);
+const Template: Story<Props> = ({ onSubmit, messages }: Props) => <Chat onSubmit={onSubmit} messages={messages} />;
 
 export const Empty = Template.bind({});
 Empty.args = {
@@ -46,4 +49,20 @@ Few.args = {
 export const Full = Template.bind({});
 Full.args = {
     messages: makeChatMessages(20),
+};
+
+const MAX = 50;
+export const Active = ({ messages, onSubmit }: Props) => {
+    const [newMessages, setNewMessages] = React.useState<ChatMessage[]>([]);
+    React.useEffect(() => {
+        const handle = setInterval(
+            () => newMessages.length < MAX && setNewMessages((prev) => [...prev, makeChatMessage()]),
+            300
+        );
+        return () => clearInterval(handle);
+    }, [messages, setNewMessages, newMessages.length]);
+    return <Template messages={[...messages, ...newMessages]} onSubmit={onSubmit} />;
+};
+Active.args = {
+    messages: [],
 };

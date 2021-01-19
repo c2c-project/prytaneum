@@ -1,10 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-    Typography,
-    Avatar,
-    Grid /* Menu, MenuItem */,
-} from '@material-ui/core';
+import { Typography, Avatar, makeStyles, Grid /* Menu, MenuItem */ } from '@material-ui/core';
 
 import { formatDate } from 'utils/format';
 
@@ -14,6 +10,25 @@ interface Props {
     message: string;
 }
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        paddingBottom: theme.spacing(1),
+        maxWidth: '100%',
+    },
+    avatar: {
+        flex: 1,
+    },
+    content: {
+        paddingLeft: theme.spacing(1),
+    },
+    bold: {
+        fontWeight: 700,
+    },
+    message: {
+        maxWidth: '100%',
+    },
+}));
+
 /** @category Component
  *  @constructor Message
  *  @param props
@@ -22,42 +37,23 @@ interface Props {
  *  @param props.message the message that was sent
  */
 export default function Message({ name, timestamp, message }: Props) {
+    const classes = useStyles();
     return (
-        <Grid
-            container
-            alignItems='flex-start'
-            style={{ paddingBottom: '8px' }}
-        >
+        <Grid container alignItems='flex-start' className={classes.root} wrap='nowrap'>
             <Grid item xs='auto'>
                 <Avatar>{name[0].toUpperCase()}</Avatar>
             </Grid>
-            <Grid
-                container
-                item
-                xs='auto'
-                style={{ flex: 1, paddingLeft: '8px' }}
-                alignContent='flex-start'
-            >
+            <Grid container item xs='auto' className={classes.content} alignContent='flex-start'>
                 <Grid item xs={12}>
-                    <Typography
-                        variant='body2'
-                        display='inline'
-                        style={{ fontWeight: 700 }}
-                    >
+                    <Typography variant='body2' display='inline' className={classes.bold}>
                         {name}
                     </Typography>
                     &nbsp;
                     <Typography variant='caption' color='textSecondary'>
-                        {formatDate(timestamp, 'M/dd/yy p')}
+                        {formatDate(timestamp, 'p')}
                     </Typography>
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    // onContextMenu={(e) => {
-                    //     e.preventDefault();
-                    // }}
-                >
+                <Grid item xs={12} className={classes.message}>
                     <Typography>{message}</Typography>
                 </Grid>
             </Grid>

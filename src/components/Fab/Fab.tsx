@@ -20,15 +20,11 @@ const useStyles = makeStyles((theme) => ({
  *  @param props
  *  @param @todo
  */
-export default function Fab({
-    children,
-    zoomProps,
-    ...rest
-}: FabProps & { zoomProps?: ZoomProps }) {
+export default function Fab({ children, zoomProps, ...rest }: FabProps & { zoomProps?: ZoomProps }) {
     const classes = useStyles();
     return (
         <Zoom in timeout={300} {...zoomProps}>
-            <MUIFab {...rest} className={classes.fab} color='secondary'>
+            <MUIFab className={classes.fab} color='secondary' {...rest}>
                 {children}
             </MUIFab>
         </Zoom>

@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     paneContainer: {
         width: '100%',
         flexBasis: '100%',
+        paddingbottom: theme.spacing(2),
     },
     animContainer: {
         width: '100%',
@@ -59,65 +60,54 @@ interface Props {
     isModerator: boolean;
 }
 
-const TownhallPanes = React.memo(
-    ({ classes, townhall, isModerator }: Props) => {
-        const panes = React.useMemo(() => buildPanes(townhall, isModerator), [
-            townhall,
-            isModerator,
-        ]);
-        type PaneKey = keyof typeof panes;
+const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => {
+    const panes = React.useMemo(() => buildPanes(townhall, isModerator), [townhall, isModerator]);
+    type PaneKey = keyof typeof panes;
 
-        const [state, setState] = React.useState<PaneKey>('Information');
+    const [state, setState] = React.useState<PaneKey>('Information');
 
-        const options = Object.keys(panes) as PaneKey[];
+    const options = Object.keys(panes) as PaneKey[];
 
-        return (
-            <Grid
-                container
-                className={classes.root}
-                direction='column'
-                alignContent='flex-start'
-                alignItems='flex-start'
-                wrap='nowrap'
-            >
-                {options.length > 1 && (
-                    <Grid item xs='auto' className={classes.chipContainer}>
-                        {options.map((option, idx) => (
-                            <StyledTab
-                                key={option}
-                                label={option}
-                                index={idx}
-                                value={option}
-                                onClick={() => setState(option)}
-                                selected={option === state}
-                            />
-                        ))}
-                    </Grid>
-                )}
-                <Grid item xs='auto' className={classes.paneContainer}>
-                    <StyledTabPanels>
-                        {Object.entries(panes).map(([key, value]) => (
-                            <TabPanel key={key} visible={key === state}>
-                                {value}
-                            </TabPanel>
-                        ))}
-                    </StyledTabPanels>
+    return (
+        <Grid
+            container
+            className={classes.root}
+            direction='column'
+            alignContent='flex-start'
+            alignItems='flex-start'
+            wrap='nowrap'
+        >
+            {options.length > 1 && (
+                <Grid item xs='auto' className={classes.chipContainer}>
+                    {options.map((option, idx) => (
+                        <StyledTab
+                            key={option}
+                            label={option}
+                            index={idx}
+                            value={option}
+                            onClick={() => setState(option)}
+                            selected={option === state}
+                        />
+                    ))}
                 </Grid>
+            )}
+            <Grid item xs='auto' className={classes.paneContainer}>
+                <StyledTabPanels>
+                    {Object.entries(panes).map(([key, value]) => (
+                        <TabPanel key={key} visible={key === state}>
+                            {value}
+                        </TabPanel>
+                    ))}
+                </StyledTabPanels>
             </Grid>
-        );
-    }
-);
+        </Grid>
+    );
+});
 
 function ContextSubscriber() {
     const classes = useStyles();
     const [townhall, isModerator] = useTownhall();
-    return (
-        <TownhallPanes
-            classes={classes}
-            townhall={townhall}
-            isModerator={isModerator}
-        />
-    );
+    return <TownhallPanes classes={classes} townhall={townhall} isModerator={isModerator} />;
 }
 
 export default ContextSubscriber;

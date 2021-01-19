@@ -16,8 +16,10 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        position: 'sticky',
+        position: 'absolute',
         bottom: 5,
+        left: 0,
+        right: 0,
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -45,11 +47,7 @@ const useStyles = makeStyles((theme) => ({
  * @param {JSX.Element | JSX.Element[]} props.children returns to the bottom of children
  * @param {'top' | 'bottom'} props.direction tells to component to scroll up or down continuously, like how twich chat updates, the window scrolls down to update it
  */
-export default function ScrollTo({
-    children,
-    direction,
-    active: activeProp,
-}: Props) {
+export default function ScrollTo({ children, direction, active: activeProp }: Props) {
     const classes = useStyles();
     const scrollTarget = React.useRef<HTMLDivElement | null>(null);
     const [active, setActive] = React.useState(activeProp);
@@ -98,10 +96,7 @@ export default function ScrollTo({
     const jumpTo = (
         <div className={classes.container}>
             <Grow in={!active}>
-                <ButtonBase
-                    className={classes.jumpButton}
-                    onClick={() => scrollToRef('smooth')}
-                >
+                <ButtonBase className={classes.jumpButton} onClick={() => scrollToRef('smooth')}>
                     <Typography>{`Jump to ${direction}`}</Typography>
                 </ButtonBase>
             </Grow>
