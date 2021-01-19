@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import TitleCard from 'components/TitleCard';
 import List from 'domains/Townhall/TownhallList';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import TownhallForm from 'domains/Townhall/TownhallForm';
 import Fab from 'components/Fab';
 import history, { makeRelativeLink as link } from 'utils/history';
@@ -40,7 +40,7 @@ export default function TownhallList() {
                     </Grid>
                 </Grid>
             </FadeThrough>
-            <Dialog
+            <ResponsiveDialog
                 open={open}
                 onClose={() => setOpen(false)}
                 onExited={onExit}
@@ -54,7 +54,7 @@ export default function TownhallList() {
                         }}
                     />
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
                 <AddIcon className={classes.fab} />
             </Fab>

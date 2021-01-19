@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-    Button,
-    DialogActions,
-    DialogContentText,
-    DialogContent,
-} from '@material-ui/core';
+import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
 
-import Dialog from '../Dialog';
+import ResponsiveDialog from '../ResponsiveDialog';
 
 interface Props {
     onConfirm: () => void;
@@ -16,19 +11,11 @@ interface Props {
     onClose: () => void;
 }
 
-export default function ConfirmationDialog({
-    open,
-    onConfirm,
-    title,
-    children,
-    onClose,
-}: Props) {
+export default function ConfirmationDialog({ open, onConfirm, title, children, onClose }: Props) {
     return (
-        <Dialog open={open} onClose={onClose} title={title}>
+        <ResponsiveDialog open={open} onClose={onClose} title={title}>
             <DialogContent>
-                <DialogContentText color='textPrimary'>
-                    {children}
-                </DialogContentText>
+                <DialogContentText color='textPrimary'>{children}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
@@ -36,6 +23,6 @@ export default function ConfirmationDialog({
                     Confirm
                 </Button>
             </DialogActions>
-        </Dialog>
+        </ResponsiveDialog>
     );
 }

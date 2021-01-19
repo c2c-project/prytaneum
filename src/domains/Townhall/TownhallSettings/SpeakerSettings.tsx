@@ -17,7 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import type { Speaker } from 'prytaneum-typings';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import SpeakerForm from '../../Speaker/SpeakerForm';
 
@@ -47,13 +47,13 @@ const SpeakerDialogForm = ({
     value?: Speaker;
 }) => {
     return (
-        <Dialog open={isOpen} onClose={onClose}>
+        <ResponsiveDialog open={isOpen} onClose={onClose}>
             <DialogTitle>Speaker Form</DialogTitle>
             <DialogContent>
                 <SpeakerForm value={value} onSubmit={onSubmit} />
             </DialogContent>
             {/* <DialogActions>asdf</DialogActions> */}
-        </Dialog>
+        </ResponsiveDialog>
     );
 };
 SpeakerDialogForm.defaultProps = {

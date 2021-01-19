@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import GithubIcon from '@material-ui/icons/GitHub';
@@ -150,7 +150,7 @@ export default function ProfileCard({ teamMember }: Props) {
                         ))}
                 </Grid>
             </Grid>
-            <Dialog open={open} onClose={handleClose}>
+            <ResponsiveDialog open={open} onClose={handleClose}>
                 <Typography
                     id='profile-card-dialog-title'
                     align='center'
@@ -175,7 +175,7 @@ export default function ProfileCard({ teamMember }: Props) {
                         {teamMember.description}
                     </DialogContentText>
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
         </Card>
     );
 }

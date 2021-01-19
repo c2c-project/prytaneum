@@ -9,7 +9,7 @@ import {
 import Container from '@material-ui/core/Container';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import ReportSummary from 'domains/Feedback/ReportSummary';
 import { formatDate } from 'utils/format';
 import { FeedbackReport, BugReport } from '../types';
@@ -81,7 +81,7 @@ export default function ReportList({ reports }: Props) {
                     </li>
                 ))}
             </List>
-            <Dialog
+            <ResponsiveDialog
                 open={Boolean(reportSelected)}
                 onClose={() => setReportSelected(null)}
             >
@@ -97,7 +97,7 @@ export default function ReportList({ reports }: Props) {
                 ) : (
                     <></>
                 )}
-            </Dialog>
+            </ResponsiveDialog>
         </div>
     );
 }

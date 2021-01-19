@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import useUser from 'hooks/useUser';
 import useTownhall from 'hooks/useTownhall';
 import QuestionLabels from '../QuestionLabels';
@@ -156,9 +156,9 @@ function FeedList({
 
     return (
         <div className={className}>
-            <Dialog open={isDialogOpen} onClose={closeDialog}>
+            <ResponsiveDialog open={isDialogOpen} onClose={closeDialog}>
                 <DialogContent>{dialogContent || <div />}</DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Grid container>
                 {questions.length === 0 && (
                     <Grid item xs={12}>
