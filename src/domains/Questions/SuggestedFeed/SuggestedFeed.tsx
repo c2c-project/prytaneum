@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    makeStyles,
     Grid,
     Badge,
     IconButton,
@@ -12,6 +11,7 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import type { Question } from 'prytaneum-typings';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
 import QuestionCard from '../QuestionCard';

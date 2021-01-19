@@ -1,12 +1,14 @@
 import React from 'react';
 import type { ChatMessageForm } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
 
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
-import Chat from 'components/Chat';
 import useEndpoint from 'hooks/useEndpoint';
-import Loader from 'components/Loader';
 import useTownhall from 'hooks/useTownhall';
 import useUser from 'hooks/useUser';
+import Chat from 'components/Chat';
+import Loader from 'components/Loader';
+import ChatMessage from 'components/ChatMessage';
 import { createChatMessage, getChatmessages } from '../api';
 import { chatReducer } from './utils';
 
@@ -38,11 +40,21 @@ export default function TownhallChat() {
     return (
         <Chat
             disabled={isLoading || !user}
-            messages={messages}
             onSubmit={(form) => {
                 messageRef.current = form;
                 postMesssage();
             }}
-        />
+        >
+            {messages.map(({ _id, meta, message }) => (
+                <motion.li
+                    key={_id}
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: 'keyframes' }}
+                >
+                    <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+                </motion.li>
+            ))}
+        </Chat>
     );
 }

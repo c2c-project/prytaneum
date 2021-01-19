@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import ChatContent, { Props as ChatContentProps } from './ChatContent';

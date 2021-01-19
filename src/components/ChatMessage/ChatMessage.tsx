@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Avatar, makeStyles, Grid, TypographyProps } from '@material-ui/core';
+import { Typography, Avatar, Grid, TypographyProps } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDate } from 'utils/format';
 
@@ -66,8 +67,8 @@ export default function ChatMessage({
                         {formatDate(timestamp, 'p')}
                     </Typography>
                 </Grid>
-                <Grid item xs={12} className={classes.message} {...messageTypographyProps}>
-                    <Typography>{message}</Typography>
+                <Grid item xs={12} className={classes.message}>
+                    <Typography {...messageTypographyProps}>{message}</Typography>
                 </Grid>
             </Grid>
         </Grid>

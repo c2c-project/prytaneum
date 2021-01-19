@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import { EventEmitter } from 'events';
 import { makeQuestion, makeChatMessage, makeUser, makeTownhall } from 'prytaneum-typings';
 

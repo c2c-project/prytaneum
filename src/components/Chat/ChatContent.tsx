@@ -1,6 +1,7 @@
 import React from 'react';
-import { Grid, Typography, makeStyles } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ExpandMore';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Fab from 'components/Fab';
 import useScrollTo from 'hooks/useScrollTo';

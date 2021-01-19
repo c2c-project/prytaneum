@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Divider, Typography, makeStyles } from '@material-ui/core';
+import { Grid, Divider, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Team from 'components/Team';
 import Loader from 'components/Loader';

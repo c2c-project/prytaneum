@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ChatMessageForm } from 'prytaneum-typings';
-import { Grid, Button, makeStyles } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import SendIcon from '@material-ui/icons/Send';
 

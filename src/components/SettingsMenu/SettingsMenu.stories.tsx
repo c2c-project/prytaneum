@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, ListItem, ListItemText } from '@material-ui/core';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 import Component from './SettingsMenu';
 

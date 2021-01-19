@@ -1,6 +1,6 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, useMediaQuery, useTheme } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import Fab from 'components/Fab';
@@ -83,9 +83,7 @@ export default function TownhallLive() {
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
-                        {isMdUp && (
-                            <div ref={topRef} className={classes.target} />
-                        )}
+                        {isMdUp && <div ref={topRef} className={classes.target} />}
                         <TownhallPanes />
                     </div>
                 </Grid>

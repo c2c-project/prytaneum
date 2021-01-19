@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Typography, makeStyles, Divider } from '@material-ui/core';
+import { Grid, Typography, Divider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 interface Props {
     errorMessage?: string;
