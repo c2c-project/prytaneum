@@ -2,14 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    useTheme,
-    IconButton,
-} from '@material-ui/core';
+import { Card, CardContent, CardHeader, IconButton } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useTheme } from '@material-ui/core/styles';
 
 import DropArea from '../DropArea';
 import DragArea from '../DragArea';
@@ -24,20 +19,13 @@ const getItems = (count: number) =>
 export default function DndList() {
     const theme = useTheme();
     const [state, setState] = React.useState({ items: getItems(10) });
-    const reorder = React.useCallback(
-        (
-            list: ReturnType<typeof getItems>,
-            startIndex: number,
-            endIndex: number
-        ) => {
-            const result = Array.from(list);
-            const [removed] = result.splice(startIndex, 1);
-            result.splice(endIndex, 0, removed);
+    const reorder = React.useCallback((list: ReturnType<typeof getItems>, startIndex: number, endIndex: number) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
 
-            return result;
-        },
-        []
-    );
+        return result;
+    }, []);
 
     const getListStyle = React.useCallback(
         (isDraggingOver: boolean): React.CSSProperties => ({
@@ -54,9 +42,7 @@ export default function DndList() {
         (isDragging: boolean): React.CSSProperties => ({
             userSelect: 'none',
             margin: theme.spacing(0, 0, 2, 0),
-            filter: isDragging
-                ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})`
-                : '',
+            filter: isDragging ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})` : '',
         }),
         [theme]
     );
@@ -68,11 +54,7 @@ export default function DndList() {
                 return;
             }
 
-            const items = reorder(
-                state.items,
-                result.source.index,
-                result.destination.index
-            );
+            const items = reorder(state.items, result.source.index, result.destination.index);
 
             setState({
                 items,
@@ -96,12 +78,7 @@ export default function DndList() {
                     }
                 />
                 {state.items.map((item, index) => (
-                    <DragArea
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                        getStyle={itemStyle}
-                    >
+                    <DragArea key={item.id} draggableId={item.id} index={index} getStyle={itemStyle}>
                         <Card>
                             <CardContent>{item.content}</CardContent>
                         </Card>

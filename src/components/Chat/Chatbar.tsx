@@ -1,25 +1,34 @@
 import React from 'react';
 import type { ChatMessageForm } from 'prytaneum-typings';
 import { Grid, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import SendIcon from '@material-ui/icons/Send';
 
 import TextField from 'components/TextField';
 
+const useStyles = makeStyles((theme) => ({
+    btn: {
+        paddingLeft: theme.spacing(1),
+        display: 'flex',
+        flex: 1,
+    },
+}));
 export interface Props {
     onSubmit: (m: ChatMessageForm) => void;
     disabled?: boolean;
 }
 
 export default function Chatbar({ onSubmit, disabled }: Props) {
+    const classes = useStyles();
     const [message, setMessage] = React.useState('');
     const ref = React.useRef<HTMLInputElement | null>(null);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        ref.current?.focus();
         e.preventDefault();
         const copy = message;
         setMessage('');
-        ref.current?.focus();
         onSubmit({ message: copy });
     }
 
@@ -29,27 +38,11 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
         setMessage(value);
     }
     return (
-        <Grid
-            component='form'
-            onSubmit={handleSubmit}
-            container
-            item
-            xs='auto'
-            wrap='nowrap'
-        >
-            <Grid item style={{ flex: '1 1 100%' }}>
-                <TextField
-                    ref={ref}
-                    label='Message'
-                    value={message}
-                    onChange={handleChange}
-                />
+        <Grid component='form' onSubmit={handleSubmit} container item xs='auto' wrap='nowrap'>
+            <Grid item xs={12}>
+                <TextField ref={ref} label='Message' value={message} onChange={handleChange} />
             </Grid>
-            <Grid
-                item
-                xs='auto'
-                style={{ paddingLeft: '8px', display: 'flex', flex: 1 }}
-            >
+            <div className={classes.btn}>
                 <Button
                     disabled={disabled || message.length === 0}
                     variant='contained'
@@ -60,7 +53,7 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
                 >
                     Send
                 </Button>
-            </Grid>
+            </div>
         </Grid>
     );
 }

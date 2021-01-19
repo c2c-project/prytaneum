@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 // import { makeStyles } from '@material-ui/core/styles';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 // import AppBar from 'layout/AppBar';
 
 import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
@@ -165,9 +165,9 @@ export default function UserSettings({ id }: Props) {
     return (
         <div id={id} style={{ width: '100%', height: '100%' }}>
             <SettingsMenu config={sections} title='User Settings' />
-            <Dialog open={open} onClose={() => setContent(null)}>
+            <ResponsiveDialog open={open} onClose={() => setContent(null)}>
                 {cont || <div />}
-            </Dialog>
+            </ResponsiveDialog>
         </div>
     );
 }

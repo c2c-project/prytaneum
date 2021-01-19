@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import FadeThrough from 'components/FadeThrough';
+import FadeThrough from 'animations/FadeThrough';
 import history from 'utils/history';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 

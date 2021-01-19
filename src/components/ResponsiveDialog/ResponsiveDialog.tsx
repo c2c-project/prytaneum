@@ -24,10 +24,7 @@ const useStyles = makeStyles({
  *  @category Component
  *  @constructor Dialog
  */
-const Transition = React.forwardRef(function Transition(
-    props: SlideProps,
-    ref: React.Ref<unknown>
-) {
+const Transition = React.forwardRef(function Transition(props: SlideProps, ref: React.Ref<unknown>) {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <Slide direction='up' ref={ref} {...props} />;
 });
@@ -41,34 +38,21 @@ export type Props = {
 /**
  * Slide Up Dialog
  */
-export default function Dialog(props: Props) {
+export default function ResponsiveDialog(props: Props) {
     const { children, title, ...rest } = props;
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <MUIDialog
-            fullScreen={fullScreen}
-            TransitionComponent={Transition}
-            {...rest}
-        >
+        <MUIDialog fullScreen={fullScreen} TransitionComponent={Transition} {...rest}>
             {fullScreen && (
                 <AppBar elevation={0} className={classes.appBar}>
                     <Toolbar>
-                        <IconButton
-                            edge='start'
-                            color='inherit'
-                            onClick={rest.onClose}
-                            aria-label='close'
-                        >
+                        <IconButton edge='start' color='inherit' onClick={rest.onClose} aria-label='close'>
                             <CloseIcon />
                         </IconButton>
-                        <Typography
-                            component='span'
-                            variant='h6'
-                            className={classes.title}
-                        >
+                        <Typography component='span' variant='h6' className={classes.title}>
                             {title}
                         </Typography>
                     </Toolbar>
@@ -80,7 +64,7 @@ export default function Dialog(props: Props) {
     );
 }
 
-Dialog.defaultProps = {
+ResponsiveDialog.defaultProps = {
     title: undefined,
     onEntered: undefined,
     onExit: undefined,

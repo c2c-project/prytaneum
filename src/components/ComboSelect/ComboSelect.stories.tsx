@@ -1,8 +1,9 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 
 import ComboSelect from './ComboSelect';
 
-export default { title: 'Components/Combo Select' };
+export default { title: 'Components/Combo Select', parameters: { layout: 'centered' } } as Meta;
 
 const statusTags = ['admin', 'moderator', 'organizer', 'regular', 'banned'];
 

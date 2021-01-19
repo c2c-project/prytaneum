@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 import AddIcon from '@material-ui/icons/Add';
 
 import Component from './Fab';
@@ -6,14 +7,16 @@ import Component from './Fab';
 export default {
     title: 'Components/Fab',
     component: Component,
-};
+    argTypes: {
+        onClick: { onClick: 'fab clicked' },
+    },
+} as Meta;
 
-const onClick = () => {
-    // eslint-disable-next-line no-alert
-    alert('onClick works');
-};
+interface Props {
+    onClick: () => void;
+}
 
-export function FabButton() {
+export function FabButton({ onClick }: Props) {
     return (
         <Component onClick={onClick}>
             <AddIcon />

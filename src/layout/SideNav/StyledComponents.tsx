@@ -1,14 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {
-    ListItem,
-    ListItemIcon,
-    ListSubheader,
-    withStyles,
-    ListSubheaderProps,
-    Divider,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ListItem, ListItemIcon, ListSubheader, ListSubheaderProps, Divider } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 export const StyledListItem = withStyles((theme) => ({
     selected: {
@@ -43,12 +36,5 @@ const useSubheaderStyles = makeStyles((theme) => ({
 
 export const StyledSubheader = (props: ListSubheaderProps<'div'>) => {
     const classes = useSubheaderStyles();
-    return (
-        <ListSubheader
-            disableSticky
-            classes={classes}
-            component='div'
-            {...props}
-        />
-    );
+    return <ListSubheader disableSticky classes={classes} component='div' {...props} />;
 };

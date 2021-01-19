@@ -1,18 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {
-    Typography,
-    Button,
-    DialogContent,
-    DialogActions,
-    DialogTitle,
-    IconButton,
-    Grid,
-} from '@material-ui/core';
+import { Typography, Button, DialogContent, DialogActions, DialogTitle, IconButton, Grid } from '@material-ui/core';
 import { PrytaneumRoutes } from 'routes/utils';
 import BackIcon from '@material-ui/icons/ArrowBack';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import useUser from 'hooks/useUser';
 import useRouter from 'hooks/useRouter';
 import LoginForm from '../LoginForm';
@@ -59,10 +51,7 @@ export default function Prompt({ forceOpen }: PromptProps) {
                         </Grid>
                         <DialogTitle>Register</DialogTitle>
                         <DialogContent>
-                            <RegisterForm
-                                onSuccess={() => setOpen(false)}
-                                onFailure={() => {}}
-                            />
+                            <RegisterForm onSuccess={() => setOpen(false)} onFailure={() => {}} />
                         </DialogContent>
                     </>
                 ),
@@ -74,8 +63,7 @@ export default function Prompt({ forceOpen }: PromptProps) {
                         <DialogTitle>Not Logged In!</DialogTitle>
                         <DialogContent>
                             <Typography>
-                                Login or Register to gain access to do the
-                                following:
+                                Login or Register to gain access to do the following:
                                 <ul>
                                     <li>Submit Questions</li>
                                     <li>Like Questions</li>
@@ -84,20 +72,11 @@ export default function Prompt({ forceOpen }: PromptProps) {
                             </Typography>
                         </DialogContent>
                         <DialogActions style={{ justifyContent: 'flex-end' }}>
-                            <Button onClick={() => setOpen(false)}>
-                                I just want to watch
-                            </Button>
-                            <Button
-                                variant='outlined'
-                                onClick={() => setPath('/register')}
-                            >
+                            <Button onClick={() => setOpen(false)}>I just want to watch</Button>
+                            <Button variant='outlined' onClick={() => setPath('/register')}>
                                 Register
                             </Button>
-                            <Button
-                                onClick={() => setPath('/login')}
-                                variant='contained'
-                                color='primary'
-                            >
+                            <Button onClick={() => setPath('/login')} variant='contained' color='primary'>
                                 Login
                             </Button>
                         </DialogActions>
@@ -108,14 +87,11 @@ export default function Prompt({ forceOpen }: PromptProps) {
         []
     );
     const router = useRouter(routes);
-    const component = React.useMemo(
-        () => router.resolve(path) as React.ReactElement,
-        [path, router]
-    );
+    const component = React.useMemo(() => router.resolve(path) as React.ReactElement, [path, router]);
     return (
-        <Dialog open={open} onClose={() => setOpen(false)}>
+        <ResponsiveDialog open={open} onClose={() => setOpen(false)}>
             {component}
-        </Dialog>
+        </ResponsiveDialog>
     );
 }
 

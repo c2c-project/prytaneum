@@ -1,6 +1,6 @@
 import React from 'react';
 import { EventEmitter } from 'events';
-// import faker from 'faker';
+// import faker from 'faker/locale/en';
 
 // export type Fixture = [SocketIOClient.Socket, NodeJS.Timeout];
 export type Fixture = SocketIOClient.Socket;

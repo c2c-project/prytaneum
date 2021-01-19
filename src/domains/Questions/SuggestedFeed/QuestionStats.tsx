@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Grid, Badge, Typography } from '@material-ui/core';
+import { Grid, Badge, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import type { Question } from 'prytaneum-typings';
 import LikeIcon from '@material-ui/icons/ThumbUp';

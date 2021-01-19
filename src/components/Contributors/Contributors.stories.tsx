@@ -1,6 +1,6 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import faker from 'faker';
+import { Meta } from '@storybook/react';
+import faker from 'faker/locale/en';
 
 import { ReferenceNames } from 'types';
 import Component from '.';
@@ -8,8 +8,12 @@ import Component from '.';
 export default {
     title: 'Components/Contributors',
     component: Component,
-};
+    parameters: {
+        layout: 'centered',
+    },
+} as Meta;
 
+// TODO: move this to prytaneum typings
 const makeBaseTeam = () => ({
     fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
     description: faker.lorem.paragraph(),
@@ -43,9 +47,5 @@ const makeTeam = (num: number) => {
 };
 
 export function Contributors() {
-    return (
-        <Container>
-            <Component team={makeTeam(35)} maxDisplayCount={10} />
-        </Container>
-    );
+    return <Component team={makeTeam(35)} maxDisplayCount={10} />;
 }

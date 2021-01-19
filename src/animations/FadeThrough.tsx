@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { motion, AnimationProps, MotionProps } from 'framer-motion';
 import { makeStyles } from '@material-ui/core/styles';

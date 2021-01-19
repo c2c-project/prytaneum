@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { BugReport as BugReportIcon } from '@material-ui/icons';
+import BugReportIcon from '@material-ui/icons/BugReport';
 
 import Component from '.';
 

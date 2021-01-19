@@ -13,7 +13,7 @@ export default function useIntersectionObserver(
         return ref.current;
     }, [onIntersect, options]);
 
-    React.useEffect(() => getObserver().disconnect(), [getObserver]);
+    React.useEffect(() => () => getObserver().disconnect(), [getObserver]);
 
     return getObserver();
 }

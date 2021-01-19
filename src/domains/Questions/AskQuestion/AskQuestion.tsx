@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import useUser from 'hooks/useUser';
 import QuestionForm from '../QuestionForm';
 
@@ -10,14 +10,14 @@ function AskQuestion() {
     const [user] = useUser();
     return (
         <>
-            <Dialog open={open} onClose={() => setOpen(false)}>
+            <ResponsiveDialog open={open} onClose={() => setOpen(false)}>
                 <DialogContent>
                     <QuestionForm
                         onCancel={() => setOpen(false)}
                         onSubmit={() => setOpen(false)}
                     />
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Button
                 disabled={!user}
                 variant='contained'

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { rest } from 'msw';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import {
     makeUser,
     User,

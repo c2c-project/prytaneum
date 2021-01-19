@@ -2,7 +2,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Message from './Message';
+import ChatMessage from './ChatMessage';
 
 describe('MessageItemAuthor', function () {
     let container: HTMLDivElement | null = null;
@@ -26,7 +26,7 @@ describe('MessageItemAuthor', function () {
         ReactTestUtils.act(() => {
             render(
                 <div id='MessageItemAuthor'>
-                    <Message name={name} timestamp={Date.now()} message='123' />
+                    <ChatMessage name={name} timestamp={Date.now()} message='123' />
                 </div>,
                 container
             );

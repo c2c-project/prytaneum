@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import Dialog from './Dialog';
+import ResponsiveDialog from './ResponsiveDialog';
 
 jest.mock('@material-ui/core/useMediaQuery', () => () => true);
 
@@ -29,9 +29,9 @@ describe('Dialog', function () {
     it('should render', () => {
         ReactTestUtils.act(() => {
             render(
-                <Dialog open onClose={jest.fn()}>
+                <ResponsiveDialog open onClose={jest.fn()}>
                     <div />
-                </Dialog>,
+                </ResponsiveDialog>,
                 container
             );
         });
@@ -40,9 +40,9 @@ describe('Dialog', function () {
         const onClose = jest.fn();
         ReactTestUtils.act(() => {
             render(
-                <Dialog open onClose={onClose}>
+                <ResponsiveDialog open onClose={onClose}>
                     <div />
-                </Dialog>,
+                </ResponsiveDialog>,
                 container
             );
         });
@@ -59,9 +59,9 @@ describe('Dialog', function () {
         const onClose = jest.fn();
         ReactTestUtils.act(() => {
             render(
-                <Dialog open={false} onClose={onClose}>
+                <ResponsiveDialog open={false} onClose={onClose}>
                     <div id='child' />
-                </Dialog>,
+                </ResponsiveDialog>,
                 container
             );
         });

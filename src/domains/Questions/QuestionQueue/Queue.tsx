@@ -1,7 +1,8 @@
 import React from 'react';
-import { CardHeader, useTheme, Grid } from '@material-ui/core';
+import { CardHeader, Grid } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import type { Question } from 'prytaneum-typings';
+import { useTheme } from '@material-ui/core/styles';
 
 import DropArea from 'components/DropArea';
 import useEndpoint from 'hooks/useEndpoint';

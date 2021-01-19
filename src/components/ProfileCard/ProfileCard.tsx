@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import GithubIcon from '@material-ui/icons/GitHub';
@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme: Theme) =>
         card: {
             maxWidth: 300,
             padding: 25,
+            maxHeight: 400,
+            minHeight: 400,
         },
         black: {
             color: theme.palette.common.black,
@@ -84,30 +86,14 @@ export default function ProfileCard({ teamMember }: Props) {
     };
     return (
         <Card className={classes.card}>
-            <Grid
-                spacing={2}
-                container
-                direction='column'
-                alignItems='center'
-                justify='center'
-            >
+            <Grid spacing={2} container direction='column' alignItems='center' justify='center'>
                 <Grid container item justify='flex-end'>
-                    <IconButton
-                        id='openDialogButton'
-                        size='small'
-                        onClick={handleClickOpen}
-                        aria-label='open-dialog'
-                        color='primary'
-                    >
+                    <IconButton size='small' onClick={handleClickOpen} aria-label='open-dialog' color='primary'>
                         <OpenIcon />
                     </IconButton>
                 </Grid>
                 <Grid item>
-                    <Avatar
-                        className={classes.medium}
-                        alt={teamMember.fullName}
-                        src={teamMember.picturePath}
-                    />
+                    <Avatar className={classes.medium} alt={teamMember.fullName} src={teamMember.picturePath} />
                 </Grid>
                 <Grid item>
                     <Typography align='center' variant='h5'>
@@ -115,23 +101,13 @@ export default function ProfileCard({ teamMember }: Props) {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Typography
-                        align='center'
-                        variant='h6'
-                        color='textSecondary'
-                    >
+                    <Typography align='center' variant='h6' color='textSecondary'>
                         {teamMember.subtitle}
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Typography
-                        align='center'
-                        variant='h6'
-                        color='textSecondary'
-                    >
-                        {`${formatDate(teamMember.startDate)} - ${formatDate(
-                            teamMember.endDate
-                        )}`}
+                    <Typography align='center' variant='h6' color='textSecondary'>
+                        {`${formatDate(teamMember.startDate)} - ${formatDate(teamMember.endDate)}`}
                     </Typography>
                 </Grid>
                 <Grid item container justify='center'>
@@ -150,9 +126,9 @@ export default function ProfileCard({ teamMember }: Props) {
                         ))}
                 </Grid>
             </Grid>
-            <Dialog open={open} onClose={handleClose}>
+            <ResponsiveDialog open={open} onClose={handleClose}>
                 <Typography
-                    id='profile-card-dialog-title'
+                    // id='profile-card-dialog-title'
                     align='center'
                     variant='h4'
                     className={classes.paddingTop}
@@ -162,20 +138,11 @@ export default function ProfileCard({ teamMember }: Props) {
                 </Typography>
                 <DialogContent>
                     <div className={classes.center}>
-                        <Avatar
-                            className={classes.large}
-                            alt={teamMember.fullName}
-                            src={teamMember.picturePath}
-                        />
+                        <Avatar className={classes.large} alt={teamMember.fullName} src={teamMember.picturePath} />
                     </div>
-                    <DialogContentText
-                        id='profile-card-dialog-description'
-                        className={classes.paddingTop}
-                    >
-                        {teamMember.description}
-                    </DialogContentText>
+                    <DialogContentText className={classes.paddingTop}>{teamMember.description}</DialogContentText>
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
         </Card>
     );
 }

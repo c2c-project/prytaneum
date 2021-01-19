@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Component from './Dialog';
+import Component from './ResponsiveDialog';
 
-export default { title: 'Components/Dialog', component: Component };
+export default { title: 'Components/Responsive Dialog', component: Component };
 
 export function Dialog() {
     const [open, setOpen] = React.useState(false);

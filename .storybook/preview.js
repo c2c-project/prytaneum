@@ -1,6 +1,5 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
-import { AnimatePresence } from 'framer-motion';
 import { withPerformance } from 'storybook-addon-performance';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -25,9 +24,7 @@ addDecorator((storyFn) => (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
             <SnackContext maxSnack={1}>
-                <DeviceContext>
-                    <AnimatePresence>{storyFn()}</AnimatePresence>
-                </DeviceContext>
+                <DeviceContext>{storyFn()}</DeviceContext>
             </SnackContext>
         </MuiPickersUtilsProvider>
     </ThemeProvider>
@@ -42,3 +39,7 @@ addParameters({
         manual: true,
     },
 });
+
+export const parameters = {
+    layout: 'fullscreen',
+};
