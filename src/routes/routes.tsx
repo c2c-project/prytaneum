@@ -180,7 +180,6 @@ addRoutes([
     },
     {
         path: '/join',
-        // TODO: prompt login here
         action: (ctx) => {
             const element = ctx.next();
             if (!React.isValidElement(element)) return <Redirect href='/login' />;
