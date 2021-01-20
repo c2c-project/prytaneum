@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderColor: theme.palette.common.white,
         color: theme.palette.common.white,
     },
+    root: {
+        width: '100%',
+        height: '100%',
+    },
 }));
 
 export default function ReportHistory() {
@@ -152,7 +156,7 @@ export default function ReportHistory() {
     };
 
     return (
-        <div>
+        <div className={classes.root}>
             <AppBar position='sticky'>
                 <Toolbar>
                     <form onSubmit={getReports}>
