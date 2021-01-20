@@ -183,9 +183,6 @@ export default function ReportHistory() {
         'This month': (data) =>
             data.filter(({ date }) => isThisMonth(new Date(date))),
 
-        'Last 3 months': (data) =>
-            data.filter(({ date }) => isThisQuarter(new Date(date))),
-
         'This year': (data) =>
             data.filter(({ date }) => isThisYear(new Date(date))),
     };
@@ -293,7 +290,6 @@ export default function ReportHistory() {
                     </form>
                 </Toolbar>
             </AppBar>
-
             {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container item justify='center' alignItems='center' xs={12}>
                 <Grid item xs={12}>
@@ -316,7 +312,6 @@ export default function ReportHistory() {
                     )}
                 </Grid>
             </Grid>
-
             {/* When infinite scrolling is complete, this pagination section can be removed since it is suboptimal */}
             {reports.length !== 0 && (
                 <Grid
