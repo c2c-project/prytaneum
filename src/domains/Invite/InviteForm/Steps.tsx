@@ -2,11 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { useState, useCallback, useEffect } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
-import {
-    KeyboardDatePicker,
-    KeyboardTimePicker,
-    MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Loader from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import Collapse from '@material-ui/core/Collapse';
@@ -21,9 +17,9 @@ import { ParseResult } from 'papaparse';
 import useEndpoint from 'hooks/useEndpoint';
 
 import EmailPreview from 'domains/Invite/EmailPreview';
-import SelectFile from 'domains/Invite/SelectFile';
-import VerifyPreview from 'domains/Invite/SelectFile/VerifyPreview';
-import Parse from 'domains/Invite/SelectFile/utils';
+import SelectFile from 'components/SelectFile';
+import VerifyPreview from 'domains/Invite/VerifyPreview';
+import Parse from 'domains/Invite/VerifyPreview/utils';
 import API from '../api';
 import { InviteForm, InvitePreview } from '../types';
 
@@ -44,17 +40,10 @@ function SelectFileStep({
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
-                <Typography>
-                    Expected Headers:{' '}
-                    {expectedKeys.map((header) => ` "${header}" `)}
-                </Typography>
+                <Typography>Expected Headers: {expectedKeys.map((header) => ` "${header}" `)}</Typography>
             </Grid>
             <Grid item xs={12}>
-                <Button
-                    component='a'
-                    href='/example-invite.csv'
-                    variant='outlined'
-                >
+                <Button component='a' href='/example-invite.csv' variant='outlined'>
                     Download Example File
                 </Button>
             </Grid>
@@ -106,13 +95,7 @@ function VerifyPreviewStep({
     );
 }
 
-function PickDeliveryDateStep({
-    inviteForm,
-    setInviteForm,
-}: {
-    inviteForm: InviteForm;
-    setInviteForm: Function;
-}) {
+function PickDeliveryDateStep({ inviteForm, setInviteForm }: { inviteForm: InviteForm; setInviteForm: Function }) {
     const handleDateChange = (date: Date | null) => {
         setInviteForm((val: InviteForm) => ({
             ...val,
@@ -220,19 +203,9 @@ function InvitePreviewStep({
                     <div id='email-preview'>
                         <EmailPreview
                             fName='NAME_PLACEHOLDER'
-                            MoC={
-                                inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'
-                            }
-                            topic={
-                                inviteForm.topic
-                                    ? inviteForm.topic
-                                    : 'Unknown Topic'
-                            }
-                            eventDateTime={
-                                inviteForm.eventDateTime
-                                    ? inviteForm.eventDateTime
-                                    : 'Unknown Event Date'
-                            }
+                            MoC={inviteForm.MoC ? inviteForm.MoC : 'Unknown MoC'}
+                            topic={inviteForm.topic ? inviteForm.topic : 'Unknown Topic'}
+                            eventDateTime={inviteForm.eventDateTime ? inviteForm.eventDateTime : 'Unknown Event Date'}
                             constituentScope={inviteForm.constituentScope}
                             registrationLink='https://connectingtocongress.org/register'
                         />
@@ -256,10 +229,7 @@ function CreateInviteStep({
     file: File | undefined;
     preview: InvitePreview;
 }): JSX.Element {
-    const apiRequest = useCallback(
-        () => API.createInvite(inviteForm, file, preview),
-        [inviteForm, file, preview]
-    );
+    const apiRequest = useCallback(() => API.createInvite(inviteForm, file, preview), [inviteForm, file, preview]);
     const [sendRequest] = useEndpoint(apiRequest, {
         onSuccess,
         onFailure,

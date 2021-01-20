@@ -1,5 +1,3 @@
-/* eslint-disable no-console */ // FIXME:
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import {
     Grid,
@@ -45,33 +43,17 @@ const useStyles = makeStyles((theme) => ({
     card: {},
 }));
 
-function FeedList({
-    questions,
-    variant,
-    current,
-    systemMessages,
-    className,
-}: Props) {
+function FeedList({ questions, variant, current, systemMessages, className }: Props) {
     const [user] = useUser();
     const [townhall, isModerator] = useTownhall();
     const classes = useStyles();
-    const [
-        dialogContent,
-        setDialogContent,
-    ] = React.useState<JSX.Element | null>(null);
+    const [dialogContent, setDialogContent] = React.useState<JSX.Element | null>(null);
     // TODO: make this a subscription on the backend for "live data" rather than a local state here
     const [liked, setLiked] = React.useState<Set<string>>(new Set());
-    const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [
-        dialogContent,
-    ]);
+    const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [dialogContent]);
 
     const isSuggested = React.useCallback(
-        (questionId: string) =>
-            Boolean(
-                townhall.state.playlist.list.find(
-                    ({ _id }) => _id === questionId
-                )
-            ),
+        (questionId: string) => Boolean(townhall.state.playlist.list.find(({ _id }) => _id === questionId)),
         [townhall]
     );
 
@@ -97,25 +79,16 @@ function FeedList({
                     // }}
                     quote={question.quote}
                 >
-                    {variant === 'moderator' && (
-                        <QuestionLabels labels={question.aiml.labels} />
-                    )}
+                    {variant === 'moderator' && <QuestionLabels labels={question.aiml.labels} />}
                     <CardActions className={classes.questionActions}>
                         {!isModerator && (
                             <Like
                                 townhallId={townhallId}
                                 questionId={questionId}
-                                liked={
-                                    (user &&
-                                        question.likes.includes(user._id)) ||
-                                    liked.has(question._id)
-                                }
+                                liked={(user && question.likes.includes(user._id)) || liked.has(question._id)}
                                 onLike={() =>
                                     setLiked((prev) => {
-                                        const nextState = new Set(prev).add(
-                                            question._id
-                                        );
-                                        console.log(nextState);
+                                        const nextState = new Set(prev).add(question._id);
                                         return nextState;
                                     })
                                 }
@@ -123,7 +96,6 @@ function FeedList({
                                     setLiked((prev) => {
                                         const copy = new Set(prev);
                                         copy.delete(question._id);
-                                        console.log(copy);
                                         return copy;
                                     })
                                 }
@@ -142,17 +114,7 @@ function FeedList({
                 </QuestionCard>
             );
         });
-    }, [
-        questions,
-        classes.item,
-        classes.questionActions,
-        variant,
-        liked,
-        user,
-        setLiked,
-        isModerator,
-        isSuggested,
-    ]);
+    }, [questions, classes.item, classes.questionActions, variant, liked, user, setLiked, isModerator, isSuggested]);
 
     return (
         <div className={className}>
@@ -171,13 +133,8 @@ function FeedList({
                 )}
                 {current && (
                     <CurrentQuestion>
-                        <QuestionCard
-                            question={current}
-                            className={classes.item}
-                        >
-                            {variant === 'moderator' && (
-                                <QuestionLabels labels={current.aiml.labels} />
-                            )}
+                        <QuestionCard question={current} className={classes.item}>
+                            {variant === 'moderator' && <QuestionLabels labels={current.aiml.labels} />}
                         </QuestionCard>
                     </CurrentQuestion>
                 )}

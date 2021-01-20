@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 import Container from '@material-ui/core/Container';
 import BugReportIcon from '@material-ui/icons/BugReport';
 
@@ -7,7 +8,10 @@ import Component from '.';
 export default {
     title: 'Domains/Feedback/Report Form',
     component: Component,
-};
+    parameters: {
+        layout: 'centered',
+    },
+} as Meta;
 
 const dummyBugReportForm = {
     title: 'Bug Report Form',

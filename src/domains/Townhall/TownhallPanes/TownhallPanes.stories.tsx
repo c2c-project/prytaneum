@@ -1,10 +1,9 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeTownhall, makeUser } from 'prytaneum-typings';
-import { Grid } from '@material-ui/core';
+import { makeQuestion, makeTownhall, makeUser, Townhall } from 'prytaneum-typings';
 
-import Layout from 'layout';
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from 'contexts/Townhall';
@@ -31,17 +30,18 @@ townhall.settings.questionQueue.transparent = true;
 export default {
     title: 'Domains/Townhall/Townhall Panes',
     decorators: [
-        (Story) => (
+        (MyStory) => (
             <UserProvider forceNoLogin value={user}>
-                <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
-                    <TownhallProvider townhallId='123' value={townhall}>
-                        <FixtureSocket.Provider value={emitter}>
-                            <PaneProvider>
-                                <Story />
-                            </PaneProvider>
-                        </FixtureSocket.Provider>
-                    </TownhallProvider>
-                </Layout>
+                <FixtureSocket.Provider value={emitter}>
+                    <PaneProvider>
+                        <div style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                            <button type='button' onClick={() => sendMessage(20)}>
+                                Add Questions
+                            </button>
+                            <MyStory />
+                        </div>
+                    </PaneProvider>
+                </FixtureSocket.Provider>
             </UserProvider>
         ),
     ],
@@ -50,85 +50,23 @@ export default {
     },
 } as Meta;
 
-export function Basic() {
-    return (
-        <Grid
-            container
-            direction='column'
-            style={{ height: '100%' }}
-            alignContent='flex-start'
-            wrap='nowrap'
-        >
-            <div style={{ flex: 1 }}>
-                <button type='button' onClick={() => sendMessage(20)}>
-                    Add Questions
-                </button>
-            </div>
-            <div
-                style={{
-                    flex: '1 1 100%',
-                    display: 'flex',
-                    backgroundColor: 'honeydew',
-                    width: '100%',
-                }}
-            >
-                <Grid item xs={12} md={8} />
-                <Grid item xs={12} md={4} container style={{ padding: '8px' }}>
-                    <TownhallPanes />
-                </Grid>
-            </div>
-        </Grid>
-    );
-}
+const Template: Story<{ townhall: Townhall }> = ({ townhall: _townhall }) => (
+    <TownhallProvider value={_townhall} townhallId='123'>
+        <TownhallPanes />
+    </TownhallProvider>
+);
 
-export function AsMod() {
-    const copy = { ...townhall };
-    copy.settings.moderators.list.push({
-        email: user.email.address,
-        permissions: [],
-    });
-    return (
-        <UserProvider value={user}>
-            <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
-                <Grid
-                    container
-                    direction='column'
-                    style={{ height: '100%' }}
-                    alignContent='flex-start'
-                    wrap='nowrap'
-                >
-                    <div style={{ flex: 1 }}>
-                        <button type='button' onClick={() => sendMessage(20)}>
-                            Add Questions
-                        </button>
-                    </div>
-                    <div
-                        style={{
-                            flex: '1 1 100%',
-                            display: 'flex',
-                            backgroundColor: 'honeydew',
-                            width: '100%',
-                        }}
-                    >
-                        <Grid item xs={12} md={8} />
-                        <Grid
-                            item
-                            xs={12}
-                            md={4}
-                            container
-                            style={{ padding: '8px' }}
-                        >
-                            <TownhallProvider townhallId='123' value={townhall}>
-                                <FixtureSocket.Provider value={emitter}>
-                                    <PaneProvider>
-                                        <TownhallPanes />
-                                    </PaneProvider>
-                                </FixtureSocket.Provider>
-                            </TownhallProvider>
-                        </Grid>
-                    </div>
-                </Grid>
-            </Layout>
-        </UserProvider>
-    );
-}
+export const User = Template.bind({});
+User.args = {
+    townhall,
+};
+
+const modCopy = { ...townhall };
+modCopy.settings.moderators.list.push({
+    email: user.email.address,
+    permissions: [],
+});
+export const Moderator = Template.bind({});
+Moderator.args = {
+    townhall: modCopy,
+};

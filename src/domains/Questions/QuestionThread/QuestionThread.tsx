@@ -14,7 +14,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDistanceToNow } from 'utils/format';
 import QuestionCard from '../QuestionCard';
-// import QuestionActions from '../QuestionActions';
 
 interface Props {
     question: Question;
@@ -25,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        width: '100%',
     },
     card: {
         // borderRadius: 0,
@@ -48,11 +48,7 @@ export default function QuestionThread({ question }: Props) {
     const replyContent = React.useMemo(() => {
         if (question.replies.length === 0) {
             return (
-                <Typography
-                    variant='body2'
-                    align='center'
-                    className={classes.emptyMessage}
-                >
+                <Typography variant='body2' align='center' className={classes.emptyMessage}>
                     No replies to display
                 </Typography>
             );
@@ -67,18 +63,11 @@ export default function QuestionThread({ question }: Props) {
                         <ListItemText
                             primary={
                                 <>
-                                    <Typography
-                                        variant='body2'
-                                        display='inline'
-                                    >
+                                    <Typography variant='body2' display='inline'>
                                         {meta.createdBy.name.first}
                                     </Typography>
                                     &nbsp;
-                                    <Typography
-                                        variant='caption'
-                                        display='inline'
-                                        color='textSecondary'
-                                    >
+                                    <Typography variant='caption' display='inline' color='textSecondary'>
                                         {formatDistanceToNow(meta.createdAt)}
                                     </Typography>
                                 </>
@@ -95,11 +84,8 @@ export default function QuestionThread({ question }: Props) {
     }, [question.replies, classes.replies, classes.emptyMessage]);
 
     return (
-        <Paper elevation={0} className={classes.root}>
-            <QuestionCard
-                question={question}
-                CardProps={{ className: classes.card, elevation: 6 }}
-            >
+        <Paper className={classes.root}>
+            <QuestionCard question={question} CardProps={{ className: classes.card, elevation: 6 }}>
                 <CardActions>
                     {/* <QuestionActions
                         actionKeys={['Like', 'Quote', 'Reply']}

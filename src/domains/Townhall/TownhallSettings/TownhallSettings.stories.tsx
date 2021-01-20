@@ -1,22 +1,27 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 
-import Page from 'layout/Page';
-import Main from 'layout/Main';
-import AppBar from 'layout/AppBar';
-import TownhallProvider from '../../../contexts/Townhall';
+import UserProvider from 'contexts/User';
+import TownhallProvider from 'contexts/Townhall';
 import Component from './TownhallSettings';
 
-export default { title: 'Domains/Townhall/Townhall Settings' };
+export default {
+    title: 'Domains/Townhall/Townhall Settings',
+    decorators: [
+        (MyStory) => (
+            <div style={{ flex: 1, padding: 60 }}>
+                <MyStory />
+            </div>
+        ),
+    ],
+} as Meta;
 
 export function Basic() {
     return (
-        <TownhallProvider townhallId='123'>
-            <Page>
-                <AppBar />
-                <Main>
-                    <Component />
-                </Main>
-            </Page>
-        </TownhallProvider>
+        <UserProvider>
+            <TownhallProvider townhallId='123'>
+                <Component />
+            </TownhallProvider>
+        </UserProvider>
     );
 }
