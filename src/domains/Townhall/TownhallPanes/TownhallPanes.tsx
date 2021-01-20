@@ -17,6 +17,7 @@ import StyledTab from './StyledTab';
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
+        maxWidth: 500,
     },
     chipContainer: {
         marginBottom: theme.spacing(2),

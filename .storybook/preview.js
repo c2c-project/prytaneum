@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import DateFnsUtils from '@date-io/date-fns';
 import SnackContext from '../src/contexts/Snack';
 import ThemeProvider from '../src/contexts/Theme';
-import DeviceContext from '../src/contexts/Device';
 import './main.css';
 
 if (typeof global.process === 'undefined') {
@@ -23,9 +22,7 @@ addDecorator((storyFn) => (
     <ThemeProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
-            <SnackContext maxSnack={1}>
-                <DeviceContext>{storyFn()}</DeviceContext>
-            </SnackContext>
+            <SnackContext maxSnack={1}>{storyFn()}</SnackContext>
         </MuiPickersUtilsProvider>
     </ThemeProvider>
 ));
