@@ -1,116 +1,128 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import { Button, InputAdornment, IconButton, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import Form from 'components/Form';
+import FormContent from 'components/FormContent';
+import FormActions from 'components/FormActions';
+import TextField from 'components/TextField';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
+import history from 'utils/history';
+import useForm from 'hooks/useForm';
+import useUser from 'hooks/useUser';
 
 import API from '../api';
 
-const useStyles = makeStyles({
-    root: {
-        height: '100%',
+const useStyles = makeStyles((theme) => ({
+    link: {
+        padding: theme.spacing(2, 0, 0, 2),
     },
-});
+}));
 
 interface Props {
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
+interface SignInForm {
+    email: string;
+    password: string;
+}
+
+const intialState: SignInForm = { email: '', password: '' };
+/** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
+ * @category Domains/Auth
+ * @constructor ForgotPassRequest
+ * @param props
+ * @param {"() => void"} onSuccess function to call if successful
+ * @param {"() => void"} onFailure function to call if failed
+ * @example
+ * const onS = () => {};
+ * const onF = () => {};
+ * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
+ */
 export default function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
-
-    const [form, setForm] = React.useState({
-        username: '',
-        password: '',
+    const [, setUser] = useUser();
+    const [form, errors, handleSubmit, handleChange] = useForm(intialState);
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
+    const apiRequest = React.useCallback(() => API.login(form.email, form.password), [form]);
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+        onSuccess: ({ data }) => {
+            setUser(data.user);
+            if (onSuccess) onSuccess();
+        },
     });
-
-    const builtRequest = React.useCallback(
-        () => API.login(form.username, form.password),
-        [form]
-    );
-
-    const [sendRequest, isLoading] = useEndpoint(builtRequest, {
-        onSuccess,
-    });
-
-    const handleChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-        id: string
-    ) => {
-        e.preventDefault();
-        const { value } = e.target;
-        setForm((state) => ({ ...state, [id]: value }));
-    };
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        sendRequest();
-    };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid
-                container
-                spacing={2}
-                className={classes.root}
-                alignContent='center'
-            >
-                <Grid item xs={12}>
+        <Form onSubmit={handleSubmit(sendRequest)}>
+            <FormContent>
+                <TextField
+                    id='login-email'
+                    required
+                    type='email'
+                    value={form.email}
+                    helperText={errors.email}
+                    error={Boolean(errors.email)}
+                    onChange={handleChange('email')}
+                    label='Email'
+                    autoFocus
+                />
+                <>
                     <TextField
-                        id='username'
+                        id='login-password'
                         required
-                        fullWidth
-                        variant='outlined'
-                        type='text'
-                        value={form.username}
-                        onChange={(e) => handleChange(e, 'username')}
-                        label='Username'
-                        spellCheck={false}
-                        autoComplete='off'
-                        autoCorrect='off'
-                        autoCapitalize='off'
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id='password'
-                        required
-                        fullWidth
-                        variant='outlined'
-                        type='password'
+                        error={Boolean(errors.password)}
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
-                        onChange={(e) => handleChange(e, 'password')}
+                        onChange={handleChange('password')}
+                        helperText={errors.password}
                         label='Password'
-                        spellCheck={false}
-                        autoComplete='off'
-                        autoCorrect='off'
-                        autoCapitalize='off'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <LoadingButton
-                        loading={isLoading}
-                        component={
-                            <Button
-                                fullWidth
-                                type='submit'
-                                variant='contained'
-                                color='primary'
-                            >
-                                Login
-                            </Button>
-                        }
-                    />
-                </Grid>
-            </Grid>
-        </form>
+                    <Link className={classes.link} color='primary' href='/forgot-password/request'>
+                        Forgot Password?
+                    </Link>
+                </>
+            </FormContent>
+            <FormActions>
+                <Button fullWidth variant='outlined' onClick={() => history.push('/register')}>
+                    Sign Up
+                </Button>
+                <LoadingButton loading={isLoading}>
+                    <Button fullWidth type='submit' variant='contained' color='primary'>
+                        Login
+                    </Button>
+                </LoadingButton>
+            </FormActions>
+        </Form>
     );
 }
 
+LoginForm.defaultProps = {
+    onSuccess: undefined,
+};
+
 LoginForm.propTypes = {
-    onSuccess: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func,
 };

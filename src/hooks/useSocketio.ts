@@ -1,25 +1,34 @@
 import React from 'react';
 import io from 'socket.io-client';
 
-type Events =
-    | 'townhall-chat-state'
-    | 'townhall-question-state'
-    | 'townhall-moderator-chat-state';
-interface Settings<T, U> {
-    url: string;
-    query?: Record<string, string>;
-    event: Events;
-    reducer: (a: T, b: U) => T;
-    initialState: T;
-}
-type ReturnType<T, U> = [T, React.Dispatch<U>, SocketIOClient.Socket];
+export type SocketFn = (socket: SocketIOClient.Socket) => void;
 
-function useSocketio<T, U>(settings: Settings<T, U>): ReturnType<T, U> {
-    const { url, event, reducer, initialState } = settings;
-    const socket = io.connect(url);
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    socket.on(event, dispatch);
-    return [state, dispatch, socket];
+function useSocketio(
+    uri: string,
+    opts: SocketIOClient.ConnectOpts,
+    fn: SocketFn
+) {
+    // socketio ref where we connect just once; guaranteed singleton
+    const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
+    const getSocket = React.useCallback(() => {
+        if (socketRef.current) return socketRef.current;
+        socketRef.current = io.connect(uri, opts);
+        return socketRef.current;
+    }, [uri, opts]);
+    const socket = getSocket();
+    // curry the callback passed in that receives the socket
+
+    // TODO: on disconnect display a snack that you have been
+    // disconnected & connection is retrying that type of thing
+    React.useEffect(() => {
+        // curry
+        fn(socket);
+
+        // cleanup
+        return () => {
+            socket.close();
+        };
+    }, [fn, socket]);
 }
 
 export default useSocketio;

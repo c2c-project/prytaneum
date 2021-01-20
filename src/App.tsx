@@ -1,22 +1,22 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import SnackContext from './contexts/Snack';
-import theme from './theme';
-import Pages from './pages';
+
+import UserProvider from 'contexts/User';
+import ThemeProvider from 'contexts/Theme';
+import SnackContext from 'contexts/Snack';
+import Routes from './routes';
 
 export default function App() {
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
             <CssBaseline />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <SnackContext maxSnack={3}>
-                    <BrowserRouter>
-                        <Pages />
-                    </BrowserRouter>
+                <SnackContext maxSnack={1}>
+                    <UserProvider>
+                        <Routes />
+                    </UserProvider>
                 </SnackContext>
             </MuiPickersUtilsProvider>
         </ThemeProvider>

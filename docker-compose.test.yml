@@ -1,10 +1,13 @@
 version: '3.8'
 services:
-    frontend:
+    sut:
+        container_name: prytaneum-front-end
+        environment: 
+            - CI=true
         build:
             context: .
             dockerfile: Dockerfile
-            target: BASE_IMAGE
+            target: base-stage
         command: 'yarn test'
         volumes:
             - ./src:/usr/app/src

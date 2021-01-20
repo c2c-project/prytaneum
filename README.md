@@ -1,23 +1,3 @@
-# Dev Notes
-
-Notes about development and progress go here.
-
-### Significant Parts of the Stack
-
-**NOTE:** More specific packages can be found in package.json
-
--   Framework: [Express](https://expressjs.com)
--   Front-End: [React](https://reactjs.org)
-    -   UI Library: [Material UI](https://material-ui.com)
--   Back-End: [Node](https://nodejs.org/en/) also express from above
--   Chat Connection: [Socket.IO](https://socket.io)
--   Database: [RethinkDB](https://www.rethinkdb.com)
--
-
-### Other Considerations
-
-Starting out with a more flat file structure, may change as project gets larger.
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

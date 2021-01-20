@@ -1,12 +1,31 @@
-// import React from 'react';
+import React from 'react';
 import { useSnackbar } from 'notistack';
 
-export default function useSnack() {
+interface Options {
+    action?: JSX.Element;
+    onExited?: () => void;
+}
+
+/**
+ *
+ * @category hooks
+ *
+ */
+export default function useSnack(): [
+    (message: string, options?: Options) => void,
+    ReturnType<typeof useSnackbar>['closeSnackbar']
+] {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    return [
-        (message: string, type: 'error' | 'success' | 'warning' | 'info') => {
-            enqueueSnackbar(message, { variant: type });
+    const makeSnack = React.useCallback(
+        (message: string, options?: Options) => {
+            enqueueSnackbar(message, {
+                variant: 'default',
+                action: options?.action,
+                onExited: options?.onExited,
+                color: 'inherit',
+            });
         },
-        closeSnackbar,
-    ];
+        [enqueueSnackbar]
+    );
+    return [makeSnack, closeSnackbar];
 }

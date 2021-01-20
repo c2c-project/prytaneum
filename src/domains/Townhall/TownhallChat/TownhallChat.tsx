@@ -1,110 +1,60 @@
 import React from 'react';
-import Popover from '@material-ui/core/Popover';
+import type { ChatMessageForm } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
 
-import ScrollToBottom from 'components/ScrollToBottom';
-import MessageList from 'components/MessageList';
-import MessageItemAuthor from 'components/MessageItemAuthor';
-import MessageItemText from 'components/MessageItemText';
-import MessageItemTimestamp from 'components/MessageItemTimestamp';
-import MessageListItem from 'components/MessageListItem';
-import useSocketio from 'hooks/useSocketio';
-
-interface Message {
-    _id: string;
-    message: string;
-    username: string;
-    moderated: boolean;
-    sent: number;
-    userId: string;
-}
-
-interface MessageProps {
-    messages: Message[];
-}
-
-type PayloadBase = { _id: string };
-interface NewMessageAction {
-    type: 'new-message';
-    payload: PayloadBase & Message;
-}
-interface UpdateMessageAction {
-    type: 'update-message';
-    payload: PayloadBase & Pick<Message, 'message'>;
-}
-interface DeleteMessageAction {
-    type: 'hide-message';
-    payload: PayloadBase;
-}
-
-type Actions = NewMessageAction | UpdateMessageAction | DeleteMessageAction;
-
-const chatReducer = (state: Message[], action: Actions): Message[] => {
-    switch (action.type) {
-        case 'new-message':
-            return [...state, action.payload];
-        case 'update-message':
-            return state.map((message) => {
-                // TODO: (maybe) better type checking? I never check if action.payload._id exists first
-                if (message._id === action.payload._id) {
-                    return { ...message, ...action.payload };
-                }
-                return message;
-            });
-        case 'hide-message':
-            return state.filter(
-                (message) => message._id !== action.payload._id
-            );
-        default:
-            // TODO: log that that we got some unimplemented action?
-            return state;
-    }
-};
+import useSocketio, { SocketFn } from 'hooks/useSocketio';
+import useEndpoint from 'hooks/useEndpoint';
+import useTownhall from 'hooks/useTownhall';
+import useUser from 'hooks/useUser';
+import Chat from 'components/Chat';
+import Loader from 'components/Loader';
+import ChatMessage from 'components/ChatMessage';
+import { createChatMessage, getChatmessages } from '../api';
+import { chatReducer } from './utils';
 
 export default function TownhallChat() {
-    const [state, dispatch, socket] = useSocketio<Message[], Actions>({
-        url: '/chat',
-        event: 'townhall-chat-state',
-        reducer: chatReducer,
-        initialState: [],
+    const [townhall] = useTownhall();
+    const messageRef = React.useRef<ChatMessageForm>();
+    const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
+    const [user] = useUser();
+    const [, areMessagesLoading] = useEndpoint(() => getChatmessages(townhall._id), {
+        onSuccess: ({ data }) => dispatchMessage({ type: 'initial-state', payload: data }),
+        runOnFirstRender: true,
     });
-
-    const [target, setTarget] = React.useState<Record<string, unknown> | null>(
-        null
+    const socketFn: SocketFn = React.useCallback(
+        (socket) => {
+            socket.on('chat-message-state', dispatchMessage);
+        },
+        [dispatchMessage]
     );
+    useSocketio('/chat-messages', { query: { townhallId: townhall._id } }, socketFn);
+
+    const create = React.useCallback(() => createChatMessage(townhall._id, messageRef.current as ChatMessageForm), [
+        townhall._id,
+    ]); // gross
+
+    const [postMesssage, isLoading] = useEndpoint(create);
+
+    if (areMessagesLoading) return <Loader />;
 
     return (
-        <div>
-            <ScrollToBottom active>
-                <MessageList>
-                    {state.map(
-                        ({ _id, username, message, moderated, sent }) => (
-                            <MessageListItem
-                                key={_id}
-                                hidden={moderated}
-                                button
-                                onClick={() => setTarget({ _id })}
-                            >
-                                <MessageItemTimestamp time={sent} />
-                                <MessageItemAuthor name={username} />
-                                <MessageItemText text={message} />
-                            </MessageListItem>
-                        )
-                    )}
-                </MessageList>
-            </ScrollToBottom>
-            <Popover
-                open={Boolean(target)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                The content of the Popover.
-            </Popover>
-        </div>
+        <Chat
+            disabled={isLoading || !user}
+            onSubmit={(form) => {
+                messageRef.current = form;
+                postMesssage();
+            }}
+        >
+            {messages.map(({ _id, meta, message }) => (
+                <motion.li
+                    key={_id}
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: 'keyframes' }}
+                >
+                    <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+                </motion.li>
+            ))}
+        </Chat>
     );
 }

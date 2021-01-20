@@ -1,8 +1,7 @@
 module.exports = {
-    // parser: 'babel-eslint',
     plugins: ['jest', '@typescript-eslint'],
-    //meteorjs/eslint-config-meteor uses airbnb
     extends: [
+        'react-app',
         'airbnb-typescript',
         'prettier',
         'plugin:@typescript-eslint/recommended',
@@ -29,8 +28,12 @@ module.exports = {
             'error',
             {
                 devDependencies: [
+                    '**/__mocks__/*',
+                    '**/mock/**',
+                    '**/*.mock.ts',
                     '**/*.tests.js',
-                    '**/*.test.js',
+                    '**/*.test.ts',
+                    '**/*.test.tsx',
                     '**/*.stories.*',
                     '**/__tests__/**',
                     '**/setupTests.ts',
@@ -41,25 +44,26 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
+        'react/jsx-props-no-spreading': 'off',
     },
+    overrides: [
+        {
+            files: ['**/*.ts?(x)', '**/*.js?(x)'],
+            rules: {
+                '@typescript-eslint/explicit-function-return-type': 'off',
+            },
+        },
+    ],
     env: {
         node: true,
         browser: true,
-        mocha: true,
         'jest/globals': true,
     },
     settings: {
-        // 'import/extensions': ['.js', '.jsx'],
-        // 'import/ignore': ['\.png$'],
-        // 'import/no-unresolved': [2, { ignore: ['\.png$'] }]
         'import/resolver': {
             node: {
                 paths: ['src'],
             },
-            // alias: {
-            //     // map: [['/src', './src']],
-            //     extensions: ['.ts', '.js', '.jsx', '.json']
-            // }
         },
     },
 };

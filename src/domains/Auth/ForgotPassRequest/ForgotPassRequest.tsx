@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import TextField from 'components/TextField';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 
@@ -19,6 +19,18 @@ interface Props {
     onSuccess: () => void;
     onFailure: () => void;
 }
+
+/** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
+ * @category Domains/Auth
+ * @constructor ForgotPassRequest
+ * @param props
+ * @param {"() => void"} onSuccess function to call if successful
+ * @param {"() => void"} onFailure function to call if failed
+ * @example 
+ * const onS = () => {};
+ * const onF = () => {};
+ * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
+ */
 export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     const classes = useStyles();
     const [snack] = useSnack();
@@ -30,7 +42,7 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
     ]);
     const [sendRequest] = useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack(`Email sent to ${form.email}`, 'success');
+            snack(`Email sent to ${form.email}`);
             onSuccess();
         },
         onFailure,
@@ -61,17 +73,21 @@ export default function ForgotPassRequest({ onSuccess, onFailure }: Props) {
                 <Grid item xs={12}>
                     <TextField
                         id='email'
-                        required
-                        fullWidth
                         variant='outlined'
                         type='email'
                         value={form.email}
                         onChange={(e) => handleChange(e, 'email')}
                         label='Email'
+                        autoFocus
                     />
                 </Grid>
                 <Grid container item xs={12} justify='flex-end'>
-                    <Button type='submit' variant='contained' color='primary'>
+                    <Button
+                        fullWidth
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                    >
                         Send Reset Email
                     </Button>
                 </Grid>

@@ -17,5 +17,16 @@
         "baseUrl": "src"
     },
     "include": ["src"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "typedocOptions": {
+        "mode": "modules",
+        "out": "docs",
+        "excludeNotExported": true,
+        "exclude": [
+            "**/*.test.ts",
+            "**/*.stories.*",
+            "**/*+(index|.spec|.e2e).ts"
+        ],
+        "categoryOrder": ["components", "hooks", "*"]
+    }
 }

@@ -1,101 +1,144 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
+import {
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    ListItemSecondaryAction,
+    Card,
+    CardContent,
+    CardHeader,
+} from '@material-ui/core';
+import ChevronRight from '@material-ui/icons/ChevronRight';
 import { makeStyles } from '@material-ui/core/styles';
-import { format } from 'date-fns';
-import clsx from 'clsx';
+import type { Townhall } from 'prytaneum-typings';
 
+import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
-import { getTownhallList, Townhall } from '../api';
+import ListFilter from 'components/ListFilter';
+import { getTownhallList } from '../api';
+import {
+    filters as filterFuncs,
+    TonwhallFilterFunc,
+    search,
+    applyFilters,
+} from './utils';
 
 const useStyles = makeStyles((theme) => ({
-    text: {
-        fontWeight: theme.typography.fontWeightLight,
+    root: {
+        width: '100%',
+        height: '100%',
+        padding: theme.spacing(0, 0, 2, 0),
+    },
+    card: {
+        width: '100%',
+        paddingBottom: theme.spacing(3),
     },
     title: {
-        fontSize: '25px',
-    },
-    avatar: {
-        paddingRight: theme.spacing(3),
-    },
-    largeAvatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
+        paddingBottom: 0,
+        marginBottom: 0,
     },
 }));
 
-export default function TownhallList() {
+interface Props {
+    onClickTownhall: (id: string) => void;
+    title?: string;
+}
+
+export default function TownhallList({ onClickTownhall, title }: Props) {
     const classes = useStyles();
-    const [list, setList] = React.useState<Townhall[]>([]);
-    const isMounted = React.useRef(true);
-    const renderCount = React.useRef(0);
-    const [sendRequest, isLoading] = useEndpoint(getTownhallList, {
+    const [list, setList] = React.useState<Townhall[] | null>(null);
+
+    // search is always the first element in the filter array
+    const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([
+        (townhalls: Townhall[]) => townhalls,
+    ]);
+    const [, isLoading] = useEndpoint(() => getTownhallList(), {
         onSuccess: (results) => {
-            if (isMounted.current) {
-                setList(results.data.list);
-            }
+            setList(results.data);
         },
+        runOnFirstRender: true,
     });
+    const filteredResults = React.useMemo(
+        () => applyFilters(list || [], filters),
+        [list, filters]
+    );
 
-    React.useEffect(() => {
-        renderCount.current += 1;
-    });
+    const handleSearch = React.useCallback(
+        (text: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            setFilters(([_prevSearch, ...otherFilters]) => [
+                (filteredList) => search(text, filteredList),
+                ...otherFilters,
+            ]),
+        []
+    );
 
-    React.useEffect(() => {
-        isMounted.current = true;
-        sendRequest();
-        return () => {
-            isMounted.current = false;
-        };
-    }, [sendRequest]);
-    if (renderCount.current < 1 || isLoading) {
-        return <Loader />;
+    if (isLoading || !list) return <Loader />;
+
+    if (list.length === 0) {
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <Typography variant='h4'>No Townhalls to display</Typography>
+            </div>
+        );
     }
 
     return (
-        <List>
-            {list.map((townhall) => {
-                return (
-                    <ListItem key={townhall._id} button divider>
-                        <ListItemAvatar className={classes.avatar}>
-                            <Avatar
-                                className={classes.largeAvatar}
-                                src={townhall.picture}
-                            />
-                        </ListItemAvatar>
-                        {/* <ListItemText
-                            primary={`${townhall.speaker} - ${townhall.topic}`}
-                            secondary={format(townhall.date, 'MM/dd/yyyy p')}
-                        /> */}
-                        <ListItemText
-                            primary={
-                                <>
-                                    <Typography
-                                        className={clsx([
-                                            classes.text,
-                                            classes.title,
-                                        ])}
+        <div className={classes.root}>
+            <Card raised className={classes.card}>
+                {title && (
+                    <CardHeader title={title} className={classes.title} />
+                )}
+                <CardContent>
+                    <ListFilter
+                        filterMap={filterFuncs}
+                        onSearch={handleSearch}
+                        onFilterChange={(newFilters) =>
+                            setFilters(([searchFunc]) => [
+                                searchFunc,
+                                ...newFilters,
+                            ])
+                        }
+                        length={filteredResults.length}
+                    />
+
+                    <List>
+                        {filteredResults.map(({ form, _id }) => (
+                            <ListItem
+                                key={_id}
+                                divider
+                                button
+                                alignItems='flex-start'
+                                onClick={() => onClickTownhall(_id)}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt='Speaker'
+                                        src='' // FIXME:
                                     >
-                                        {townhall.speaker}
-                                    </Typography>
-                                    <Typography className={classes.text}>
-                                        {townhall.topic}
-                                    </Typography>
-                                </>
-                            }
-                            secondary={format(townhall.date, 'MM/dd/yyyy p')}
-                            secondaryTypographyProps={{
-                                className: classes.text,
-                            }}
-                        />
-                    </ListItem>
-                );
-            })}
-        </List>
+                                        {form.title[0]}
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={form.title}
+                                    secondary={formatDate(form.date)}
+                                />
+                                <ListItemSecondaryAction>
+                                    <ChevronRight />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        ))}
+                    </List>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
+
+TownhallList.defaultProps = {
+    title: '',
+};

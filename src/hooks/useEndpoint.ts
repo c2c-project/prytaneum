@@ -1,116 +1,85 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 
-import FixtureContext, { Fixture } from 'contexts/Fixtures';
+import useIsMounted from './useIsMounted';
 import useErrorHandler from './useErrorHandler';
 
+type Endpoint<T> = () => Promise<AxiosResponse<T>>;
 interface EndpointOptions<T> {
     onSuccess?: (value: AxiosResponse<T>) => void;
     onFailure?: (err: Error) => void;
+    runOnFirstRender?: boolean;
+    /**
+     * number in ms for min wait time
+     */
+    minWaitTime?: number;
 }
+
 type SendRequest = () => void;
 type IsLoading = boolean;
-type EndpointUtils = [SendRequest, IsLoading];
+type getHasRun = () => boolean;
+type EndpointUtils = [SendRequest, IsLoading, getHasRun];
 
-/**
- * @arg {Function} endpoint
- * @arg {Object} options
- * @arg {Function} options.onSuccess
- * @arg {Function} options.onFailure
- * @returns {Array}
- */
-export default function useEndpoint<T>(
-    endpoint: () => Promise<AxiosResponse<T>>,
-    options: EndpointOptions<T> = {}
-): EndpointUtils {
-    const { meta, data } = React.useContext<Fixture<T>>(FixtureContext); // NOTE: only used in dev mode
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [handleError] = useErrorHandler();
-    const sendRequest = React.useCallback(() => setIsLoading(true), []);
-
-    React.useEffect(() => {
-        let isMounted = true;
-        const { onSuccess, onFailure } = options;
-        const minWaitTime = () =>
-            new Promise((resolve) => {
-                setTimeout(resolve, 600);
-            });
-
-        const defaultFailure = handleError;
-        const defaultSucess = () => {};
-
-        const _onSuccess = onSuccess || defaultSucess;
-        const _onFailure = (err: Error) => {
-            defaultFailure(err);
-            if (onFailure) {
-                onFailure(err);
-            }
-        };
-
-        const request = async function () {
-            try {
-                /*
-                 * THIS BLOCK OF CODE ONLY MATTERS IN test
-                 */
-                if (process.env.NODE_ENV === 'development') {
-                    await minWaitTime();
-                    setIsLoading(false);
-                    if (meta.status === 200) {
-                        _onSuccess({
-                            status: meta.status,
-                            statusText: meta.statusText,
-                            data,
-                            headers: meta.headers,
-                            config: meta.config,
-                        } as AxiosResponse<T>);
-                    } else {
-                        throw new Error(meta.statusText);
-                    }
-                    return;
-                }
-
-                // the first indices is all I care about
-                const [response] = await Promise.allSettled([
-                    endpoint(),
-                    minWaitTime(),
-                ]);
-
-                // I need to check if I'm still mounted before continuing
-                if (isMounted === true) {
-                    setIsLoading(false);
-                    // there might be a better way to do this? other than just checking the status string :\
-                    if (response.status === 'rejected') {
-                        _onFailure(response.reason);
-                    } else {
-                        _onSuccess(response.value);
-                    }
-                }
-            } catch (e) {
-                /*
-                 * check if I'm still mounted before continuing
-                 * this catch only triggers if it is something on the client and not from the response
-                 * because allSettled doesn't throw an error even if one of the promises are rejected
-                 */
-                if (isMounted === true) {
-                    setIsLoading(false);
-                    _onFailure(e);
-                }
-            }
-        };
-
-        // sendRequest sets loading to true, I use this as the trigger to send the request
-        if (isLoading) {
-            // I use callbacks after the request completes, so I don't care about "await"-ing the promise
-            // eslint-disable-next-line no-void
-            void request();
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [isLoading, endpoint, handleError, options, meta, data]);
-
-    return [sendRequest, isLoading];
+async function wrapMinWaitTime<T>(endpoint: Endpoint<T>, time = 600) {
+    const minWaitTime = () =>
+        new Promise((resolve) => {
+            setTimeout(resolve, time);
+        });
+    const [results] = await Promise.allSettled([endpoint(), minWaitTime()]);
+    if (results.status === 'rejected') throw results.reason;
+    return results.value;
 }
 
-// request -> waiting -> response -> success or failure
+export default function useEndpoint<T>(
+    endpoint: Endpoint<T>,
+    options?: EndpointOptions<T>
+): EndpointUtils {
+    const hasRun = React.useRef(false);
+    const [errorHandler] = useErrorHandler();
+    const [isMounted] = useIsMounted();
+    const [isLoading, setIsLoading] = React.useState(false);
+    const minWaitTime = React.useMemo(() => options?.minWaitTime, [options]);
+
+    // calling this will invoke the request while waiting a minimum amount of time
+    const wrappedEndpoint = React.useCallback(
+        () => wrapMinWaitTime(endpoint, minWaitTime),
+        [endpoint, minWaitTime]
+    );
+
+    // calls wrappedEndpoint and performs actions necessary depending on success or failure
+    const sendRequest = React.useCallback(async () => {
+        try {
+            const results = await wrappedEndpoint();
+            if (!isMounted()) return;
+            if (options?.onSuccess) options.onSuccess(results);
+
+            // onSuccess may navigate away from the page
+            // so we must check if the component is still mounted
+            if (!isMounted()) return;
+            setIsLoading(false);
+        } catch (e) {
+            if (!isMounted()) return;
+            if (options?.onFailure) options.onFailure(e);
+            else errorHandler(e);
+
+            // read onSuccess comment above
+            if (!isMounted()) return;
+            setIsLoading(false);
+        }
+    }, [wrappedEndpoint, isMounted, options, setIsLoading, errorHandler]);
+
+    // runs the async function
+    const runAsync = React.useCallback(() => {
+        hasRun.current = true;
+        setIsLoading(true);
+
+        // eslint-disable-next-line no-void
+        void sendRequest();
+    }, [sendRequest]);
+
+    React.useEffect(() => {
+        if (!hasRun.current && options?.runOnFirstRender) runAsync();
+    }, [runAsync, options]);
+
+    return [runAsync, isLoading, () => hasRun.current];
+}

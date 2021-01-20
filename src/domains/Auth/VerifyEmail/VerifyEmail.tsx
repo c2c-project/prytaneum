@@ -18,17 +18,14 @@ export default function VerifyEmail({ onSuccess, onFailure, userId }: Props) {
         userId,
     ]);
     const [snack] = useSnack();
-    const [sendRequest] = useEndpoint(builtRequest, {
+    useEndpoint(builtRequest, {
         onSuccess: () => {
-            snack('Successfully validated your email', 'success');
+            snack('Successfully validated your email');
             onSuccess();
         },
         onFailure,
+        runOnFirstRender: true,
     });
-
-    React.useEffect(() => {
-        sendRequest();
-    }, []);
 
     return <Loader />;
 }
