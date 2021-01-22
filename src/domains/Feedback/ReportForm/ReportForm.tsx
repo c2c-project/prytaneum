@@ -15,27 +15,14 @@ interface FormProps {
     townhallId?: string;
 }
 
-export default function ReportForm({
-    title,
-    description,
-    reportType,
-    townhallId,
-}: FormProps & DefaultProps) {
+export default function ReportForm({ title, description, reportType, townhallId }: FormProps & DefaultProps) {
     return (
-        <Grid container spacing={5}>
+        <Grid container>
             <Grid item xs={12}>
-                <FormTitle
-                    title={title}
-                    description={description}
-                    titleTypographyProps={{ align: 'center' }}
-                />
+                <FormTitle title={title} description={description} titleTypographyProps={{ align: 'center' }} />
             </Grid>
             <Grid item xs={12}>
-                <FormBase
-                    submitType='create'
-                    reportType={reportType}
-                    townhallId={townhallId}
-                />
+                <FormBase submitType='create' reportType={reportType} townhallId={townhallId} />
             </Grid>
         </Grid>
     );
