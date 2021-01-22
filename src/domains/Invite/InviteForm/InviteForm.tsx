@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -10,8 +10,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
+import useTownhall from 'hooks/useTownhall';
 
 import { InviteForm, InvitePreview } from '../types';
 import Steps from './Steps';
@@ -81,7 +80,7 @@ function getSteps() {
 }
 
 export default function InviteFormStepper() {
-    const townhall = useContext(TownhallContext);
+    const [townhall] = useTownhall();
     const classes = useStyles();
     const [file, setFile]: [File | undefined, (f: File) => void] = useState();
     const [fileSelected, setFileSelected] = useState(false);

@@ -3,12 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
-    FormControlLabel,
-    Switch,
-    FormControl,
-    FormHelperText,
+    // FormControlLabel,
+    // Switch,
+    // FormControl,
+    // FormHelperText,
 } from '@material-ui/core';
+import type { TownhallForm as FormType } from 'prytaneum-typings';
 
+import { TownhallContext } from 'contexts/Townhall';
+import LoadingButton from 'components/LoadingButton';
 import FormActions from 'components/FormActions';
 import FormContent from 'components/FormContent';
 import FormTitle from 'components/FormTitle';
@@ -18,35 +21,59 @@ import DateTimePicker from 'components/DateTimePicker';
 import useEndpoint from 'hooks/useEndpoint';
 import useForm from 'hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
-import { TownhallContext } from '../Contexts/Townhall';
 
 interface Props {
-    onSubmit?: () => void;
+    onSubmit?: (id: string) => void;
     buttonText?: string;
+    onCancel?: () => void;
 }
 
-export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
-    // this works even if it's not wrapped in the townhall context
-    // the default value set for the townhall context has the appropriate form initial state
-    const { form, _id } = React.useContext(TownhallContext);
-    const [state, errors, handleSubmit, handleChange, setState] = useForm(form);
+const initialState: FormType = {
+    private: false,
+    title: '',
+    description: '',
+    date: '',
+    topic: '',
+};
+export default function TownhallForm({
+    onCancel,
+    onSubmit: cb,
+    buttonText,
+}: Props) {
+    /**
+     * I want to use the regular context here instead of useTownhall because
+     * useTownhall with throw an error if it is not within the context,
+     * it's okay if this component is outside of a townhall context
+     * that just means it's a create townhall form
+     *  */
+    const townhall = React.useContext(TownhallContext);
+    const [state, errors, handleSubmit, handleChange, setState] = useForm(
+        townhall?.form || initialState
+    );
 
     // if the _id is falsy, then I know I'm creating a townhall
     // else it's an update to a current townhall
     const apiRequest = React.useCallback(
-        () => (_id ? updateTownhall(state, _id) : createTownhall(state)),
-        [state, _id]
+        () =>
+            townhall
+                ? updateTownhall(state, townhall._id)
+                : createTownhall(state),
+        [state, townhall]
     );
 
     // after this point in the code,
     // whether or not the form is an update or create does not matter
-    const [sendRequest] = useEndpoint(apiRequest, { onSuccess: cb });
+    const [sendRequest, isLoading] = useEndpoint(apiRequest, {
+        onSuccess: ({ data }) => {
+            if (cb) cb(data._id);
+        },
+    });
 
     return (
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormTitle title='Townhall Form' />
             <FormContent>
-                <FormControl>
+                {/* <FormControl>
                     <FormControlLabel
                         control={
                             <Switch
@@ -63,7 +90,7 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
                         Turning on the Private Option means the Townhall will
                         NOT be listed publicly and will be invite only.
                     </FormHelperText>
-                </FormControl>
+                </FormControl> */}
                 <TextField
                     error={Boolean(errors.title)}
                     helperText={errors.title}
@@ -104,9 +131,16 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <Button type='submit' variant='contained' color='secondary'>
-                    {buttonText}
-                </Button>
+                {onCancel && (
+                    <Button color='primary' disableElevation onClick={onCancel}>
+                        Cancel
+                    </Button>
+                )}
+                <LoadingButton loading={isLoading}>
+                    <Button type='submit' variant='contained' color='secondary'>
+                        {buttonText}
+                    </Button>
+                </LoadingButton>
             </FormActions>
         </Form>
     );
@@ -115,9 +149,11 @@ export default function TownhallForm({ onSubmit: cb, buttonText }: Props) {
 TownhallForm.defaultProps = {
     onSubmit: () => {},
     buttonText: 'Submit',
+    onCancel: () => {},
 };
 
 TownhallForm.propTypes = {
     onSubmit: PropTypes.func,
     buttonText: PropTypes.string,
+    onCancel: PropTypes.func,
 };

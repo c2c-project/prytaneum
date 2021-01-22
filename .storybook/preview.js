@@ -1,10 +1,10 @@
 import React from 'react';
 import { addDecorator, addParameters } from '@storybook/react';
+import { withPerformance } from 'storybook-addon-performance';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import DateFnsUtils from '@date-io/date-fns';
-import UserContext from '../src/contexts/User';
 import SnackContext from '../src/contexts/Snack';
 import ThemeProvider from '../src/contexts/Theme';
 import DeviceContext from '../src/contexts/Device';
@@ -24,23 +24,13 @@ addDecorator((storyFn) => (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
             <SnackContext maxSnack={1}>
-                <DeviceContext>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: '100%',
-                            width: '100%',
-                        }}
-                    >
-                        {storyFn()}
-                    </div>
-                </DeviceContext>
+                <DeviceContext>{storyFn()}</DeviceContext>
             </SnackContext>
         </MuiPickersUtilsProvider>
     </ThemeProvider>
 ));
 
+addDecorator(withPerformance);
 addParameters({
     a11y: {
         element: '#root',
@@ -49,3 +39,7 @@ addParameters({
         manual: true,
     },
 });
+
+export const parameters = {
+    layout: 'fullscreen',
+};

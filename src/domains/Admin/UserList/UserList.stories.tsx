@@ -1,20 +1,20 @@
 import React from 'react';
-import Page from 'layout/Page';
-import Nav from 'layout/Nav';
+import { Meta } from '@storybook/react';
 
-import UserList from './UserList';
+import Component from './UserList';
 
-export default { title: 'Domains/Admin/User List' };
+export default {
+    title: 'Domains/Admin/User List',
+    parameters: {
+        layout: 'fullscreen',
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ padding: 30, flex: 1 }}>
+                <Story />
+            </div>
+        ),
+    ],
+} as Meta;
 
-export function Basic() {
-    return (
-        <>
-            <Nav />
-            <main>
-                <Page>
-                    <UserList />
-                </Page>
-            </main>
-        </>
-    );
-}
+export const UserList = () => <Component />;

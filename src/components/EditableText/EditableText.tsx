@@ -22,11 +22,13 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     label: {
-        fontWeight: theme.typography.fontWeightBold,
-        paddingRight: theme.spacing(2),
+        marginRight: theme.spacing(2),
     },
     helperText: {
         marginBottom: '-2em', // I'm not sure where this comes from
+    },
+    form: {
+        top: '-0.35rem', // visual testing, probably the height of the underline + its margin
     },
 }));
 
@@ -36,6 +38,8 @@ interface Props {
     onChange: (s: string) => void;
     // eslint-disable-next-line react/require-default-props
     inputProps?: InputProps;
+    // eslint-disable-next-line react/require-default-props
+    helperText?: string;
 }
 
 export default function EditableText({
@@ -43,6 +47,7 @@ export default function EditableText({
     onChange,
     label,
     inputProps,
+    helperText,
 }: Props) {
     const [isEditing, setIsEditing] = React.useState(false);
     const ref = React.useRef<HTMLInputElement | null>(null);
@@ -56,13 +61,14 @@ export default function EditableText({
     return (
         <form className={classes.root} onSubmit={handleSubmit}>
             <Grid container alignItems='center'>
-                <Typography className={classes.label}>{`${label}:`}</Typography>
+                <Typography variant='subtitle1' className={classes.label}>
+                    {`${label}:`}
+                </Typography>
                 <div className={classes.text}>
                     {isEditing ? (
-                        <FormControl>
+                        <FormControl className={classes.form}>
                             <Input
                                 ref={ref}
-                                required
                                 id='component-simple'
                                 autoFocus
                                 onFocus={({ currentTarget }) =>
@@ -80,11 +86,18 @@ export default function EditableText({
                                 id='component-helper-text'
                                 className={classes.helperText}
                             >
-                                Some important helper text
+                                {helperText}
                             </FormHelperText>
                         </FormControl>
                     ) : (
-                        <Typography>{value}</Typography>
+                        <>
+                            {value && <Typography>{value}</Typography>}
+                            {!value && (
+                                <Typography color='textSecondary' component='i'>
+                                    Empty
+                                </Typography>
+                            )}
+                        </>
                     )}
                 </div>
                 <IconButton type='submit' edge='end'>

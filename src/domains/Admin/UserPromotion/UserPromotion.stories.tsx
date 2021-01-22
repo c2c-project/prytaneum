@@ -1,12 +1,12 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 import { makeUser, Roles } from 'prytaneum-typings';
-import UserPromotion from './UserPromotion';
 
-export default { title: 'Domains/Admin/User Promotion' };
+import Component from './UserPromotion';
+
+export default { title: 'Domains/Admin/User Promotion', parameters: { layout: 'centered' } } as Meta;
 
 const options: Roles[] = ['admin', 'organizer'];
 const userInfo = makeUser();
 
-export function Basic() {
-    return <UserPromotion promotionOptions={options} userData={userInfo} />;
-}
+export const UserPromotion = () => <Component promotionOptions={options} user={userInfo} />;

@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import { useSnackbar } from 'notistack';
 
 interface Options {
@@ -11,9 +11,12 @@ interface Options {
  * @category hooks
  *
  */
-export default function useSnack() {
+export default function useSnack(): [
+    (message: string, options?: Options) => void,
+    ReturnType<typeof useSnackbar>['closeSnackbar']
+] {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    return [
+    const makeSnack = React.useCallback(
         (message: string, options?: Options) => {
             enqueueSnackbar(message, {
                 variant: 'default',
@@ -22,6 +25,7 @@ export default function useSnack() {
                 color: 'inherit',
             });
         },
-        closeSnackbar,
-    ];
+        [enqueueSnackbar]
+    );
+    return [makeSnack, closeSnackbar];
 }

@@ -1,25 +1,25 @@
 import React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 
-import { TownhallContext } from 'domains/Townhall/Contexts/Townhall';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
+import useUser from 'hooks/useUser';
 import QuestionForm from '../QuestionForm';
-import { createQuestion } from '../api';
 
 function AskQuestion() {
     const [open, setOpen] = React.useState(false);
-    const townhall = React.useContext(TownhallContext);
+    const [user] = useUser();
     return (
         <>
-            <Dialog open={open} onClose={() => setOpen(false)}>
+            <ResponsiveDialog open={open} onClose={() => setOpen(false)}>
                 <DialogContent>
                     <QuestionForm
-                        onSubmit={(form) => createQuestion(townhall._id, form)}
                         onCancel={() => setOpen(false)}
+                        onSubmit={() => setOpen(false)}
                     />
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Button
+                disabled={!user}
                 variant='contained'
                 color='primary'
                 fullWidth

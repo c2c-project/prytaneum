@@ -44,4 +44,10 @@ export default [
         }
         return res(ctx.status(200));
     }),
+    rest.post('/api/users/invite', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({ token: 'test-jwt-not-real-please-do-not-use' })
+        );
+    }),
 ];

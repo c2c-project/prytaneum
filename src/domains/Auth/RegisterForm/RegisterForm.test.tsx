@@ -3,7 +3,9 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
+import { makeUser } from 'prytaneum-typings';
 
+import UserProvider from 'contexts/User';
 import RegisterForm from './RegisterForm';
 import API from '../api';
 
@@ -32,7 +34,9 @@ describe('RegisterForm', () => {
     it('should render', async () => {
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={jest.fn()} onFailure={jest.fn()} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={jest.fn()} onFailure={jest.fn()} />
+                </UserProvider>,
                 container
             );
         });
@@ -45,10 +49,14 @@ describe('RegisterForm', () => {
         const onSuccess = jest.fn();
         const onFailure = jest.fn();
 
-        const resolvedVal = { status: 200 };
-        const spy = jest
-            .spyOn(API, 'register')
-            .mockResolvedValue(resolvedVal as AxiosResponse);
+        const resolvedVal: AxiosResponse = {
+            status: 200,
+            data: { user: makeUser() },
+            statusText: '',
+            headers: {},
+            config: {},
+        };
+        const spy = jest.spyOn(API, 'register').mockResolvedValue(resolvedVal);
         const form = {
             email: 'email@email.com',
             password: 'password',
@@ -61,21 +69,27 @@ describe('RegisterForm', () => {
         // render
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />
+                </UserProvider>,
                 container
             );
         });
 
-        const emailNode = document.querySelector('#email') as HTMLElement;
-        const passwordNode = document.querySelector('#password') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
         const confirmNode = document.querySelector(
-            '#confirm-password'
+            '#register-confirm-password'
         ) as HTMLElement;
         const firstnameNode = document.querySelector(
-            '#first-name'
+            '#register-first-name'
         ) as HTMLElement;
         const lastNameNode = document.querySelector(
-            '#last-name'
+            '#register-last-name'
         ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
@@ -116,7 +130,7 @@ describe('RegisterForm', () => {
         });
 
         // make sure the external API gets called
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith(form, undefined);
         // make sure all timers run
         jest.runAllTimers();
 
@@ -145,21 +159,27 @@ describe('RegisterForm', () => {
 
         ReactTestUtils.act(() => {
             render(
-                <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />,
+                <UserProvider forceNoLogin value={makeUser()}>
+                    <RegisterForm onSuccess={onSuccess} onFailure={onFailure} />
+                </UserProvider>,
                 container
             );
         });
 
-        const emailNode = document.querySelector('#email') as HTMLElement;
-        const passwordNode = document.querySelector('#password') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
         const confirmNode = document.querySelector(
-            '#confirm-password'
+            '#register-confirm-password'
         ) as HTMLElement;
         const firstnameNode = document.querySelector(
-            '#first-name'
+            '#register-first-name'
         ) as HTMLElement;
         const lastNameNode = document.querySelector(
-            '#last-name'
+            '#register-last-name'
         ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
@@ -199,7 +219,7 @@ describe('RegisterForm', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(form);
+        expect(spy).toBeCalledWith(form, undefined);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

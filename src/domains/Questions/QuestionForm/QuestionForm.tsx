@@ -1,37 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import type {
     Question as QuestionType,
-    QuestionForm as QuestionFormType,
+    QuestionForm as FormType,
 } from 'prytaneum-typings';
 
+import useTownhall from 'hooks/useTownhall';
+import LoadingButton from 'components/LoadingButton';
 import Form from 'components/Form';
 import FormTitle from 'components/FormTitle';
 import FormContent from 'components/FormContent';
 import FormActions from 'components/FormActions';
 import TextField from 'components/TextField';
 import useForm from 'hooks/useForm';
+import useEndpoint from 'hooks/useEndpoint';
+import useSnack from 'hooks/useSnack';
+import QuestionCard from '../QuestionCard';
+import { createQuestion } from '../api';
 
 interface Props {
     quote?: QuestionType;
-    onSubmit?: (form: QuestionFormType) => void;
+    onSubmit?: () => void;
     onCancel?: () => void;
 }
-
-interface FormType {
-    question: string;
-}
-
-const initialState: FormType = { question: '' };
 export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
-    const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const callback = React.useCallback(() => {
-        if (onSubmit) onSubmit(form);
-    }, [onSubmit, form]);
+    // context & snack
+    const [snack] = useSnack();
+    const [townhall] = useTownhall();
+
+    // form related hooks
+    const [form, errors, handleSubmit, handleChange] = useForm<FormType>({
+        question: '',
+        quoteId: quote?._id,
+    });
+    const endpoint = () => createQuestion(townhall._id, form);
+    const onSuccess = () => {
+        snack('Successfully submitted Question');
+        if (onSubmit) onSubmit();
+    };
+    const [run, isLoading] = useEndpoint(endpoint, { onSuccess });
+
     return (
-        <Form onSubmit={handleSubmit(callback)}>
+        <Form onSubmit={handleSubmit(run)}>
             <FormTitle title='Question Form' />
+            {quote && (
+                <Grid item xs={12}>
+                    <QuestionCard
+                        style={{ marginBottom: '8px' }}
+                        question={quote}
+                    />
+                </Grid>
+            )}
             <FormContent>
                 <TextField
                     id='question-field'
@@ -45,59 +65,34 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                     value={form.question}
                     onChange={handleChange('question')}
                 />
-                {quote && <div>TODO: quote here</div>}
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <Button
-                    type='submit'
-                    color='primary'
-                    disableElevation
-                    onClick={onCancel}
-                >
+                <Button color='primary' disableElevation onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    disableElevation
-                >
-                    Ask
-                </Button>
+                <LoadingButton loading={isLoading}>
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        disableElevation
+                    >
+                        Ask
+                    </Button>
+                </LoadingButton>
             </FormActions>
         </Form>
     );
 }
 
 QuestionForm.defaultProps = {
-    quote: '',
+    quote: undefined,
     onSubmit: undefined,
     onCancel: undefined,
 };
 
 QuestionForm.propTypes = {
-    quote: PropTypes.string,
+    quote: PropTypes.object,
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func,
 };
-
-// {quote && (
-//     <Grid container item xs={12}>
-//         <Grid
-//             item
-//             xs={12}
-//             style={{
-//                 border: `1px solid ${theme.palette.divider}`,
-//                 borderRadius: '25px',
-//             }}
-//         >
-//             <Question
-//                 user={quote.meta.user.name}
-//                 timestamp={quote.meta.timestamp}
-//                 actionBar={<div />}
-//             >
-//                 {quote.question}
-//             </Question>
-//         </Grid>
-//     </Grid>
-// )}

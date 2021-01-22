@@ -1,5 +1,4 @@
 import React from 'react';
-import Page from 'layout/Page';
 
 import Component from './DevTeam';
 
@@ -8,10 +7,4 @@ export default {
     component: Component,
 };
 
-export function DevTeam() {
-    return (
-        <Page maxWidth='lg'>
-            <Component />
-        </Page>
-    );
-}
+export const DevTeam = () => <Component />;

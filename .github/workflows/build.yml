@@ -1,0 +1,65 @@
+name: Send build to google cloud bucket
+
+on:
+    # Trigger the workflow on push or pull request,
+    # but only for the main branch
+    push:
+        branches:
+            - master
+jobs:
+    push-container:
+        runs-on: ubuntu-latest
+        steps:
+            # checkout code
+            - uses: actions/checkout@v2
+
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache dir
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            # setup the actions cache
+            - name: Cache node modules
+              id: cache
+              uses: actions/cache@v2
+              env:
+                  cache-name: cache-node-modules
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            # install dependencies if no cache hit
+            - name: Install dependencies from online if no cache hit
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: yarn install
+
+            # install offline if there was a cache hit
+            - name: Install dependencies from cache if there was a cache hit
+              run: yarn install --offline
+
+            # build
+            - name: Build
+              run: yarn build
+
+            # Upload to cloud storage
+            - name: Set up Cloud SDK
+              uses: google-github-actions/setup-gcloud@master
+              with:
+                  project_id: ${{ secrets.GCP_PROJECT_ID }}
+                  service_account_key: ${{ secrets.GCS_KEY }}
+                  export_default_credentials: true
+
+            # stuff to run, i know that I have a script for this but yeah
+            - run: rm build/mockServiceWorker.js
+
+            # remove before rsync because the hash is different so,
+            # some things don't get removed properly in the bucket as a result
+            - run: gsutil -m rm gs://${{ secrets.GCS_BUCKET }}/**
+            - run: gsutil -m rsync -r build gs://${{ secrets.GCS_BUCKET }}

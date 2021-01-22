@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 import { ReferenceNames } from 'types';
 import Component from '.';
