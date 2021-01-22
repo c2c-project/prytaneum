@@ -1,15 +1,14 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
+import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
 import { makeQuestion, makeGenFn } from 'prytaneum-typings';
 
 import SocketFixture from 'mock/Fixture.socket';
-import Main from 'layout/Main';
 import UserProvider from 'contexts/User';
 import TownhallProvider from 'contexts/Townhall';
 import QuestionQueue from './QuestionQueue';
 import QueueComponent from './Queue';
-
-export default { title: 'Domains/Questions/Question Queue' };
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
@@ -33,47 +32,44 @@ function sendQueue(num?: number) {
     }
 }
 
-export function Basic() {
+export default {
+    title: 'Domains/Questions/Question Queue',
+    decorators: [
+        (MyStory) => (
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 60 }}>
+                <UserProvider>
+                    <TownhallProvider townhallId='123'>
+                        <SocketFixture.Provider value={emitter}>
+                            <MyStory />
+                        </SocketFixture.Provider>
+                    </TownhallProvider>
+                </UserProvider>
+            </div>
+        ),
+    ],
+} as Meta;
+
+export function FullExample() {
     return (
-        <UserProvider>
-            <TownhallProvider townhallId='123'>
-                <SocketFixture.Provider value={emitter}>
-                    <Main>
-                        <div style={{ paddingBottom: '8px' }}>
-                            <button
-                                onClick={() => sendMessage(5)}
-                                type='button'
-                            >
-                                Add questions to suggested
-                            </button>
-                            <button type='button' onClick={() => sendQueue(5)}>
-                                Add questions to queue
-                            </button>
-                        </div>
-                        <QuestionQueue />
-                    </Main>
-                </SocketFixture.Provider>
-            </TownhallProvider>
-        </UserProvider>
+        <>
+            <div style={{ paddingBottom: '8px' }}>
+                <button onClick={() => sendMessage(5)} type='button'>
+                    Add questions to suggested
+                </button>
+                <button type='button' onClick={() => sendQueue(5)}>
+                    Add questions to queue
+                </button>
+            </div>
+            <QuestionQueue />
+        </>
     );
 }
 
 const questions = makeGenFn(makeQuestion)(15);
-questions[1]._id = '1';
 
-export function Queue() {
-    return (
-        <UserProvider>
-            <TownhallProvider townhallId='123'>
-                <Main>
-                    <QueueComponent
-                        bufferLength={0}
-                        // eslint-disable-next-line no-console
-                        onFlushBuffer={console.log}
-                        questions={questions}
-                    />
-                </Main>
-            </TownhallProvider>
-        </UserProvider>
-    );
-}
+export const StaticQueue: Story<{ onFlush: () => void }> = ({ onFlush }) => {
+    return <QueueComponent bufferLength={5} onFlushBuffer={onFlush} questions={questions} />;
+};
+StaticQueue.argTypes = {
+    onFlush: { action: 'flushed' },
+};

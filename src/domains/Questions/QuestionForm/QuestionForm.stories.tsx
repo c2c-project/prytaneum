@@ -1,23 +1,36 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { makeQuestion } from 'prytaneum-typings';
+import { Meta, Story } from '@storybook/react';
+import { makeQuestion, Question } from 'prytaneum-typings';
 
-import Main from 'layout/Main';
+import TownhallProvider from 'contexts/Townhall';
+import UserProvider from 'contexts/User';
 import Component from './QuestionForm';
 
-export default { title: 'Domains/Questions/Question Form' };
+export default {
+    title: 'Domains/Questions/Question Form',
+    decorators: [
+        (MyStory) => (
+            <UserProvider>
+                <TownhallProvider townhallId='123'>
+                    <MyStory />
+                </TownhallProvider>
+            </UserProvider>
+        ),
+    ],
+    parameters: {
+        layout: 'centered',
+    },
+} as Meta;
 
-export function Basic() {
-    return (
-        <Main>
-            <Component />
-        </Main>
-    );
-}
+const Template: Story<{ quote: Question }> = ({ quote }) => <Component quote={quote} />;
 
-export function WithQuote() {
-    return (
-        <Main>
-            <Component quote={makeQuestion()} />
-        </Main>
-    );
-}
+export const Basic = Template.bind({});
+Basic.args = {
+    quote: undefined,
+};
+
+export const QuotedQuestion = Template.bind({});
+QuotedQuestion.args = {
+    quote: makeQuestion(),
+};

@@ -9,7 +9,6 @@ interface Props {
 
 export default function RequireLogin({ children }: Props) {
     const [user] = useUser();
-    // FIXME: onLogin should do what?
-    if (!user) return <Login onLogin={() => {}} />;
+    if (!user) return <Login />;
     return children;
 }

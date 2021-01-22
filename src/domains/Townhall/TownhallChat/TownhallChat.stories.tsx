@@ -29,14 +29,12 @@ export default {
             <UserProvider forceNoLogin value={makeUser()}>
                 <FixtureSocket.Provider value={emitter}>
                     <TownhallProvider value={makeTownhall()} townhallId='123'>
-                        <button
-                            type='button'
-                            style={{ flex: 1 }}
-                            onClick={() => sendMessages(5)}
-                        >
-                            Add Messages
-                        </button>
-                        <MyStory />
+                        <div style={{ flex: 1, padding: 60 }}>
+                            <button type='button' onClick={() => sendMessages(5)}>
+                                Add Messages
+                            </button>
+                            <MyStory />
+                        </div>
                     </TownhallProvider>
                 </FixtureSocket.Provider>
             </UserProvider>

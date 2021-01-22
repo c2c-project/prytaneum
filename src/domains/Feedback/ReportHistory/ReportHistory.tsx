@@ -46,8 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     root: {
         width: '100%',
-        display: 'flex',
-        flex: 1,
+        height: '100%',
     },
 }));
 

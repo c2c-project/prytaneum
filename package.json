@@ -39,10 +39,12 @@
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
         "eject": "react-scripts eject",
         "storybook": "start-storybook -h localhost --port 3000 -s public",
+        "build-storybook": "build-storybook",
         "lint": "eslint --ext .ts,.tsx,.js,.jsx src --max-warnings 0",
         "docs": "jsdoc -c jsdoc.conf.json",
         "storybook-docs": "yarn storybook --docs",
-        "typecheck": "tsc -p tsconfig.prod.json --noEmit"
+        "typecheck": "tsc -p tsconfig.prod.json --noEmit",
+        "chromatic": "npx chromatic --project-token CHROMATIC_TOKEN --exit-zero-on-changes"
     },
     "alias": {
         "assets": "./src/assets",
@@ -93,6 +95,7 @@
         "babel-loader": "^8.1.0",
         "babel-plugin-import": "^1.13.3",
         "better-docs": "^2.3.0",
+        "chromatic": "^5.6.0",
         "customize-cra": "^1.0.0",
         "eslint-config-airbnb-typescript": "^8.0.2",
         "eslint-config-prettier": "^6.4.0",

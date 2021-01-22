@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
 import { Meta } from '@storybook/react';
 import faker from 'faker';
 
@@ -6,7 +7,10 @@ import Component from '.';
 
 export default {
     title: 'Domains/Feedback/Report Form',
-    parameters: { layout: 'centered' },
+    component: Component,
+    parameters: {
+        layout: 'centered',
+    },
 } as Meta;
 
 const dummyBugReportForm = {
@@ -17,11 +21,13 @@ const dummyBugReportForm = {
 
 export function Basic() {
     return (
-        <Component
-            title={dummyBugReportForm.title}
-            description={dummyBugReportForm.mainDescription}
-            reportType='Bug'
-            townhallId={faker.random.alphaNumeric(12)}
-        />
+        <Container maxWidth='sm'>
+            <Component
+                title={dummyBugReportForm.title}
+                description={dummyBugReportForm.mainDescription}
+                reportType='Bug'
+                townhallId={faker.random.alphaNumeric(12)}
+            />
+        </Container>
     );
 }

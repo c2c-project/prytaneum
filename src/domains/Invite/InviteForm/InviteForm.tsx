@@ -10,8 +10,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import useTownhall from 'hooks/useTownhall';
 
+import useTownhall from 'hooks/useTownhall';
 import { InviteForm, InvitePreview } from '../types';
 import Steps from './Steps';
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(3),
         },
         step: {
-            minHeight: '300px',
+            minHeight: 300,
         },
     })
 );
@@ -84,10 +84,7 @@ export default function InviteFormStepper() {
     const classes = useStyles();
     const [file, setFile]: [File | undefined, (f: File) => void] = useState();
     const [fileSelected, setFileSelected] = useState(false);
-    const [preview, setPreview]: [
-        object[] | undefined,
-        Function
-    ] = React.useState();
+    const [preview, setPreview]: [object[] | undefined, Function] = React.useState();
     const [sendPreview, setSendPreview] = useState(false);
     const [previewEmail, setPreviewEmail] = useState('');
     const [activeStep, dispatch] = useReducer(stepReducer, 0);
@@ -125,11 +122,7 @@ export default function InviteFormStepper() {
             case 0:
                 return (
                     // steps[0].component({ expectedKeys, file, setFile })
-                    <Steps.SelectFileStep
-                        expectedKeys={expectedKeys}
-                        file={file}
-                        setFile={setFile}
-                    />
+                    <Steps.SelectFileStep expectedKeys={expectedKeys} file={file} setFile={setFile} />
                 );
             case 1:
                 return (
@@ -141,12 +134,7 @@ export default function InviteFormStepper() {
                     />
                 );
             case 2:
-                return (
-                    <Steps.PickDeliveryDateStep
-                        inviteForm={inviteForm}
-                        setInviteForm={setInviteForm}
-                    />
-                );
+                return <Steps.PickDeliveryDateStep inviteForm={inviteForm} setInviteForm={setInviteForm} />;
             case 3:
                 return (
                     <Steps.InvitePreviewStep
@@ -185,40 +173,28 @@ export default function InviteFormStepper() {
                     <Step key={item.title}>
                         <StepLabel>{item.title}</StepLabel>
                         <StepContent>
-                            <div className={classes.step}>
-                                {getStepContent(index)}
-                            </div>
+                            <div className={classes.step}>{getStepContent(index)}</div>
                             <div className={classes.actionsContainer}>
-                                <div>
-                                    <Button
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        className={classes.button}
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        variant='contained'
-                                        color='primary'
-                                        disabled={!fileSelected}
-                                        onClick={handleNext}
-                                        className={classes.button}
-                                    >
-                                        {activeStep === steps.length - 1
-                                            ? 'Finish'
-                                            : 'Next'}
-                                    </Button>
-                                </div>
+                                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                                    Back
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    disabled={!fileSelected}
+                                    onClick={handleNext}
+                                    className={classes.button}
+                                >
+                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                </Button>
                             </div>
                         </StepContent>
                     </Step>
                 ))}
             </Stepper>
             {activeStep === steps.length && (
-                <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>
-                        All steps completed - you&apos;re finished
-                    </Typography>
+                <Paper className={classes.resetContainer}>
+                    <Typography>All steps completed - you&apos;re finished</Typography>
                     <Button onClick={handleReset} className={classes.button}>
                         Reset
                     </Button>

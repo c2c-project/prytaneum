@@ -7,9 +7,7 @@ import useEndpoint from 'hooks/useEndpoint';
 import { getQuestions } from '../api';
 import { questionReducer } from './utils';
 
-export default function useQuestionFeed(
-    townhallId: string
-): [QuestionType[], QuestionType[], () => void, boolean] {
+export default function useQuestionFeed(townhallId: string): [QuestionType[], QuestionType[], () => void, boolean] {
     const [questions, setQuestions] = React.useState<QuestionType[]>([]);
     const endpoint = () => getQuestions(townhallId);
     const [, isLoading] = useEndpoint(endpoint, {
@@ -20,12 +18,7 @@ export default function useQuestionFeed(
     });
 
     const [buffer, dispatch] = React.useReducer(questionReducer, []);
-    const socketFn: SocketFn = React.useCallback(
-        (socket) => {
-            socket.on('question-state', dispatch);
-        },
-        [dispatch]
-    );
+    const socketFn: SocketFn = React.useCallback((socket) => socket.on('question-state', dispatch), [dispatch]);
     useSocketio('/questions', { query: { townhallId } }, socketFn);
 
     const flushBuffer = () => {

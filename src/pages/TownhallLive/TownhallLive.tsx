@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     panes: {
         flex: 1,
-        padding: theme.spacing(1.5), // TODO: work on spacing with this
+        padding: theme.spacing(1.5),
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
         },

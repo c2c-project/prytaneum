@@ -1,14 +1,21 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 import { makeQuestion, makeGenFn, Question } from 'prytaneum-typings';
-
-import Main from 'layout/Main';
 
 import FeedComponent from './SuggestedFeed';
 
-export default { title: 'Domains/Questions/Suggested Feed' };
+export default {
+    title: 'Domains/Questions/Suggested Feed',
+    decorators: [
+        (MyStory) => (
+            <div style={{ flex: 1, padding: 60 }}>
+                <MyStory />
+            </div>
+        ),
+    ],
+} as Meta;
 
 const questions = makeGenFn(makeQuestion)(15);
-questions[1]._id = '1';
 const likedQuestions = questions.map((question) => ({
     ...question,
     likes: new Array(Math.round(Math.random() * 10)).fill(0),
@@ -35,7 +42,7 @@ export function SuggestedFeed() {
         );
     };
     return (
-        <Main>
+        <>
             <div style={{ paddingBottom: '8px' }}>
                 <button onClick={handleClick} type='button'>
                     Add questions to suggested
@@ -44,11 +51,7 @@ export function SuggestedFeed() {
                     Randomize Likes
                 </button>
             </div>
-            <FeedComponent
-                onFlushBuffer={handleFlush}
-                bufferSize={buffer.length}
-                questions={_questions}
-            />
-        </Main>
+            <FeedComponent onFlushBuffer={handleFlush} bufferSize={buffer.length} questions={_questions} />
+        </>
     );
 }

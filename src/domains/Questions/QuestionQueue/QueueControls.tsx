@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-    CardHeader,
-    IconButton,
-    Card,
-    CardActions,
-    Tooltip,
-    Badge,
-} from '@material-ui/core';
+import { CardHeader, IconButton, Card, CardActions, Tooltip, Badge } from '@material-ui/core';
 
 import NextIcon from '@material-ui/icons/SkipNext';
 import PrevIcon from '@material-ui/icons/SkipPrevious';
@@ -60,12 +53,10 @@ export default React.memo(
                         <span>
                             <IconButton
                                 disabled={bufferLength === 0}
-                                onClick={onClickRefresh}
+                                // on purpose to get rid of synthetic event being passed up
+                                onClick={() => onClickRefresh()}
                             >
-                                <Badge
-                                    color='secondary'
-                                    badgeContent={bufferLength}
-                                >
+                                <Badge color='secondary' badgeContent={bufferLength}>
                                     <RefreshIcon />
                                 </Badge>
                             </IconButton>
