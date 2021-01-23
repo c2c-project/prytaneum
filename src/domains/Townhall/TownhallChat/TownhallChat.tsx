@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ChatMessageForm } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit';
 
+import { ChatActions } from 'reducers';
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import useEndpoint from 'hooks/useEndpoint';
 import useTownhall from 'hooks/useTownhall';
@@ -10,30 +13,50 @@ import Chat from 'components/Chat';
 import Loader from 'components/Loader';
 import ChatMessage from 'components/ChatMessage';
 import { createChatMessage, getChatmessages } from '../api';
-import { chatReducer } from './utils';
 
-export default function TownhallChat() {
+interface Props {
+    onDataChange?: (length: number) => void;
+}
+
+export default function TownhallChat({ onDataChange }: Props) {
     const [townhall] = useTownhall();
     const messageRef = React.useRef<ChatMessageForm>();
-    const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
     const [user] = useUser();
+    const countRef = React.useRef<number>(0);
+    const dispatch = useDispatch<Dispatch<ChatActions>>();
+    const messages = useSelector((store) => store.chat);
+
+    // load initial messages
     const [, areMessagesLoading] = useEndpoint(() => getChatmessages(townhall._id), {
-        onSuccess: ({ data }) => dispatchMessage({ type: 'initial-state', payload: data }),
+        onSuccess: ({ data }) => dispatch({ type: 'chat-initial-state', payload: data }),
         runOnFirstRender: true,
     });
-    const socketFn: SocketFn = React.useCallback(
-        (socket) => {
-            socket.on('chat-message-state', dispatchMessage);
-        },
-        [dispatchMessage]
-    );
+
+    const socketFn: SocketFn = React.useCallback((socket) => socket.on('chat-message-state', dispatch), [dispatch]);
     useSocketio('/chat-messages', { query: { townhallId: townhall._id } }, socketFn);
 
-    const create = React.useCallback(() => createChatMessage(townhall._id, messageRef.current as ChatMessageForm), [
-        townhall._id,
-    ]); // gross
+    const create = React.useCallback(() => {
+        // verify message exists
+        if (!messageRef.current) throw new Error('No message set');
 
-    const [postMesssage, isLoading] = useEndpoint(create);
+        // copy the current message
+        const copy = messageRef.current;
+
+        // clear the ref
+        messageRef.current = undefined;
+
+        // send
+        return createChatMessage(townhall._id, copy);
+    }, [townhall._id]);
+
+    const [postMesssage, isLoading] = useEndpoint(create, { minWaitTime: 0 });
+
+    React.useEffect(() => {
+        if (onDataChange && messages.length - countRef.current > 0) {
+            onDataChange(messages.length - countRef.current);
+            countRef.current = messages.length;
+        }
+    }, [messages.length, onDataChange]);
 
     if (areMessagesLoading) return <Loader />;
 
@@ -58,3 +81,7 @@ export default function TownhallChat() {
         </Chat>
     );
 }
+
+TownhallChat.defaultProps = {
+    onDataChange: undefined,
+};

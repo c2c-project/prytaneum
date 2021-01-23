@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid } from '@material-ui/core';
-import type {
-    Question as QuestionType,
-    QuestionForm as FormType,
-} from 'prytaneum-typings';
+import type { Question as QuestionType, QuestionForm as FormType } from 'prytaneum-typings';
 
 import useTownhall from 'hooks/useTownhall';
 import LoadingButton from 'components/LoadingButton';
@@ -46,10 +43,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
             <FormTitle title='Question Form' />
             {quote && (
                 <Grid item xs={12}>
-                    <QuestionCard
-                        style={{ marginBottom: '8px' }}
-                        question={quote}
-                    />
+                    <QuestionCard style={{ marginBottom: '8px' }} question={quote} />
                 </Grid>
             )}
             <FormContent>
@@ -71,12 +65,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                     Cancel
                 </Button>
                 <LoadingButton loading={isLoading}>
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                        disableElevation
-                    >
+                    <Button type='submit' variant='contained' color='primary' disableElevation>
                         Ask
                     </Button>
                 </LoadingButton>

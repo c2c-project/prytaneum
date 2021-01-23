@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable import/prefer-default-export */
-import type {
-    Question,
-    Question as QuestionType,
-    SocketIOEvents,
-} from 'prytaneum-typings';
+import type { Question, Question as QuestionType, SocketIOEvents } from 'prytaneum-typings';
 import { FilterFunc } from 'utils/filters';
 
 export { applyFilters } from 'utils/filters';
@@ -21,14 +17,12 @@ export interface Filters {
 export const filters: Filters = {
     'In Queue': (questions) => questions.filter((q) => q.state === 'in_queue'),
     Asked: (questions) => questions.filter((q) => q.state === 'asked'),
-    'Current Question': (questions) =>
-        questions.filter((q) => q.state === 'current'),
+    'Current Question': (questions) => questions.filter((q) => q.state === 'current'),
 };
 
-export function questionReducer(
-    state: QuestionType[],
-    action: SocketIOEvents['question-state'] | { type: 'flush'; payload: [] }
-) {
+export type Actions = SocketIOEvents['question-state'] | { type: 'flush'; payload: [] };
+
+export function questionReducer(state: QuestionType[], action: Actions) {
     switch (action.type) {
         case 'create-question':
             return [action.payload, ...state];
@@ -40,9 +34,7 @@ export function questionReducer(
                 return question;
             });
         case 'delete-question':
-            return state.filter(
-                (question) => question._id !== action.payload._id
-            );
+            return state.filter((question) => question._id !== action.payload._id);
         case 'initial-state':
             return action.payload.reverse();
         case 'flush':

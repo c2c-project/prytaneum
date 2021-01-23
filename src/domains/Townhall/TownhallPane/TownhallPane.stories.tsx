@@ -11,13 +11,14 @@ export default {
         (MyStory) => (
             <UserProvider>
                 <TownhallProvider townhallId='123'>
-                    <div style={{ padding: 30, flex: 1 }}>
-                        <MyStory />
-                    </div>
+                    <MyStory />
                 </TownhallProvider>
             </UserProvider>
         ),
     ],
+    parameters: {
+        layout: 'centered',
+    },
 } as Meta;
 
 export function Basic() {
