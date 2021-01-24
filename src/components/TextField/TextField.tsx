@@ -17,11 +17,7 @@ function toCamelCase(str?: string) {
     return str
         .toLowerCase()
         .split(' ')
-        .map((word, idx) =>
-            idx > 0
-                ? word[0].toUpperCase() + word.slice(1)
-                : word.toLocaleLowerCase()
-        )
+        .map((word, idx) => (idx > 0 ? word[0].toUpperCase() + word.slice(1) : word.toLocaleLowerCase()))
         .join('');
 }
 
@@ -33,7 +29,7 @@ export type Props = TextFieldProps & { label?: string };
  * @todo params
  */
 export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-    const { children, label, name, id, ...passThroughProps } = props;
+    const { children, label, name, id, type, ...passThroughProps } = props;
     return (
         <MUITextField
             ref={ref}
@@ -46,6 +42,7 @@ export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck={false}
+            type={type}
             {...passThroughProps}
         >
             {children}

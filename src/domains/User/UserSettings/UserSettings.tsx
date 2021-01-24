@@ -29,6 +29,7 @@ import {
     TownhallUserSettings,
     NotificationSettings,
 } from './components';
+import { UserProfileEditable } from '../UserProfile/UserProfile';
 
 // const useStyles = makeStyles((theme) => ({
 //     title: {
@@ -142,6 +143,17 @@ export default function UserSettings({ id }: Props) {
             title: 'Notifications',
             description: 'Customize notifications receieved',
             component: <NotificationSettings user={user} />,
+        },
+        {
+            title: 'GeneralEditableText',
+            description: 'General, but with EditableText instead of TextField',
+            component: (
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <UserProfileEditable img='https://i.imgur.com/3beQH5s.jpeg' />
+                    </Grid>
+                </Grid>
+            ),
         },
         // {
         //     title: 'Account Settings',
