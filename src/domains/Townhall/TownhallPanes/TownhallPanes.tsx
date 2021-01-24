@@ -49,7 +49,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
-        maxWidth: 500,
+        maxWidth: 600,
     },
     paneContainer: {
         flexBasis: '100%',
