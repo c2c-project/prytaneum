@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Avatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+// import axios, { AxiosResponse } from 'axios';
 // import DoneIcon from '@material-ui/icons/Done';
 
 import TextField from 'components/TextField';
 import EditableText from 'components/EditableText';
-import { SentimentSatisfied } from '@material-ui/icons';
+import PasswordResetForm from 'domains/Auth/PasswordResetForm';
+// import useEndpoint from 'hooks/useEndpoint';
+// import useSnack from 'hooks/useSnack';
+// import useForm from 'hooks/useForm';
+import { getMyInfo } from '../../Auth/api';
+// import { SentimentSatisfied } from '@material-ui/icons';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props
@@ -21,8 +28,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// const initialState: ForgotPassForm = { password: '', confirmPassword: '' };
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
+    // const [snack] = useSnack();
+    // const [form, errors, handleSubmit, handleChange] = useForm(initialState);
+    // const builtRequest = React.useCallback(() => API.forgotPassReset(token, form), [form, token]);
+    // const [sendRequest, isLoading] = useEndpoint(builtRequest, {
+    //     onSuccess: () => {
+    //         snack('Successfully reset password!');
+    //         onSuccess();
+    //     },
+    // });
+    // async function changePass(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    //     // const [data, setData] = React.useState<AxiosResponse | null | void>(null);
+    //     const [end, prom] = useEndpoint(changePassword, { token: e.target.value });
+    //     const req = React.useCallback(() => API.changePassword(e.target.value));
+    // }
+    // => {
+    //     useEndpoint(changePassword, { token: e.target.value });
+    // const [pass, setPass] = React.useState('');
+    const handlePassChange = async () => {
+        const info = await getMyInfo().then(function (res) {
+            return res;
+        });
+        return info.data.name;
+    };
 
     return (
         <div className={classes.root}>
@@ -37,6 +68,7 @@ export default function UserProfile({ img }: Props) {
                             inputProps={{ 'aria-label': 'First Name' }}
                             label='First Name'
                             aria-label='First Name'
+                            id='fName'
                             required
                             type='text'
                             placeholder='Your First Name Here'
@@ -50,22 +82,26 @@ export default function UserProfile({ img }: Props) {
                             aria-label='E-mail'
                             required
                             type='email'
-                            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email
-                            // pattern is not recoginzed as a prop but is valid html
-                            // pattern=""
                             placeholder='Your E-mail Here'
                             onChange={() => {}}
                         />
                     </Grid>
                     <Grid component='span' item xs={12}>
-                        <TextField
-                            inputProps={{ 'aria-label': 'Password' }}
-                            label='Password'
-                            aria-label='Password'
-                            required
-                            type='password'
-                            onChange={() => {}}
-                        />
+                        <h3>Reset Password Method #1</h3>
+                        <Button
+                            href='https://prytaneum.io/forgot-password/request'
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            fullWidth
+                        >
+                            Password Reset Request
+                        </Button>
+                    </Grid>
+                    <Grid component='span' item xs={12}>
+                        {/* TODO: fix token here */}
+                        <h3>Reset Password Method #2</h3>
+                        <PasswordResetForm onSuccess={() => {}} token={handlePassChange()} />
                     </Grid>
                 </Grid>
             </Grid>

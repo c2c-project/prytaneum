@@ -1,9 +1,4 @@
-import type {
-    ForgotPassForm,
-    ForgotPassRequestForm,
-    RegisterForm,
-    ClientSafeUser,
-} from 'prytaneum-typings';
+import type { ForgotPassForm, ForgotPassRequestForm, RegisterForm, ClientSafeUser } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
@@ -47,6 +42,34 @@ export async function forgotPassReset(token: string, form: ForgotPassForm) {
     return axios.post(`/api/users/reset-password/${token}`, {
         ...form,
     });
+}
+
+// TODO: this is just a mockup for a change endpoint
+// need to add confirmation!
+export async function changePassword(token: string) {
+    return axios.post(`/api/users/reset-password/${token}`);
+}
+
+// TODO: this is just a mockup for a change endpoint
+// need to add confirmation!
+export async function changeFName(fname: string) {
+    return axios.post(`/api/users/change-fname/${fname}`);
+}
+
+// TODO: this is just a mockup for a change endpoint
+// need to add confirmation!
+export async function changeLName(lname: string) {
+    return axios.post(`/api/users/change-lname/${lname}`);
+}
+
+// TODO: this is just a mockup for a change endpoint
+// need to add confirmation!
+export async function changeEmail(email: string) {
+    const match = email.match(/(\w+\.*)*\w+@(\w+\.)+\w+/gi);
+    if (!match || match[0].length !== email.length) {
+        throw errors.invalidEmail();
+    }
+    return axios.post(`/api/users/change-email/${email}`);
 }
 
 /** Function to request a password reset
