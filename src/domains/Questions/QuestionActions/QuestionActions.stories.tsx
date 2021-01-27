@@ -2,7 +2,7 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { CardActions } from '@material-ui/core';
-import { makeQuestion } from 'prytaneum-typings';
+import { makeQuestion, makeTownhall, makeUser } from 'prytaneum-typings';
 
 import TownhallProvider from 'contexts/Townhall';
 import UserProvider from 'contexts/User';
@@ -17,8 +17,8 @@ export default {
     parameters: { layout: 'centered' },
     decorators: [
         (MyStory) => (
-            <TownhallProvider townhallId='123'>
-                <UserProvider>
+            <TownhallProvider value={makeTownhall()} forceNoFetch townhallId='123'>
+                <UserProvider value={makeUser()} forceNoLogin>
                     <MyStory />
                 </UserProvider>
             </TownhallProvider>
