@@ -24,7 +24,7 @@ describe('IconBar', function () {
     it('should render using flex-start', () => {
         ReactTestUtils.act(() => {
             render(
-                <IconBar justify='flex-start'>
+                <IconBar>
                     <div id='test' />
                     <div id='test2' />
                 </IconBar>,
