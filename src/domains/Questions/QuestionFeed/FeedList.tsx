@@ -127,13 +127,6 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                         ))}
                     </Grid>
                 )}
-                {/* {current && (
-                    <CurrentQuestion>
-                        <QuestionCard question={current} className={classes.item}>
-                            {variant === 'moderator' && <QuestionLabels labels={current.aiml.labels} />}
-                        </QuestionCard>
-                    </CurrentQuestion>
-                )} */}
                 <Grid item xs={12}>
                     {questionList}
                 </Grid>

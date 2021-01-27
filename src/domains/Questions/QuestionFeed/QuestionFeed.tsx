@@ -6,10 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Question } from 'prytaneum-typings';
 
-import ListFilter, { useFilters, Accessors } from 'components/ListFilter';
-import Loader from 'components/Loader';
+import ListFilter, { useFilters, Accessors, ListFilterSkeleton } from 'components/ListFilter';
 import useTownhall from 'hooks/useTownhall';
 
+import { QuestionCardSkeleton } from '../QuestionCard';
 import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
@@ -32,6 +32,17 @@ const useStyles = makeStyles(() => ({
         flex: '1 1 100%',
     },
 }));
+
+export function QuestionFeedLoading() {
+    return (
+        <>
+            <ListFilterSkeleton />
+            {new Array(3).fill(0).map(() => (
+                <QuestionCardSkeleton />
+            ))}
+        </>
+    );
+}
 
 function QuestionFeed({ className, style }: Props) {
     const classes = useStyles();
@@ -59,9 +70,6 @@ function QuestionFeed({ className, style }: Props) {
             }
         }
     }, [buffer.length, questions.length]);
-
-    if (isLoading) return <Loader />;
-
     return (
         <Grid
             alignContent='flex-start'
@@ -69,30 +77,36 @@ function QuestionFeed({ className, style }: Props) {
             className={className ? clsx([classes.root, className]) : classes.root}
             style={style}
         >
-            <ListFilter
-                className={classes.listFilter}
-                // filterMap={filterFuncs}
-                onFilterChange={handleFilterChange}
-                onSearch={handleSearch}
-                length={filteredList.length}
-                menuIcons={[
-                    <Tooltip title='Load New'>
-                        <span>
-                            <IconButton onClick={flush} color='inherit' disabled={buffer.length === 0}>
-                                <Badge badgeContent={buffer.length} color='secondary'>
-                                    <RefreshIcon />
-                                </Badge>
-                            </IconButton>
-                        </span>
-                    </Tooltip>,
-                ]}
-            />
-            <FeedList
-                className={classes.content}
-                variant={isModerator ? 'moderator' : 'user'}
-                questions={filteredList}
-                systemMessages={sysMessages}
-            />
+            {isLoading ? (
+                <QuestionFeedLoading />
+            ) : (
+                <>
+                    <ListFilter
+                        className={classes.listFilter}
+                        // filterMap={filterFuncs}
+                        onFilterChange={handleFilterChange}
+                        onSearch={handleSearch}
+                        length={filteredList.length}
+                        menuIcons={[
+                            <Tooltip title='Load New'>
+                                <span>
+                                    <IconButton onClick={flush} color='inherit' disabled={buffer.length === 0}>
+                                        <Badge badgeContent={buffer.length} color='secondary'>
+                                            <RefreshIcon />
+                                        </Badge>
+                                    </IconButton>
+                                </span>
+                            </Tooltip>,
+                        ]}
+                    />
+                    <FeedList
+                        className={classes.content}
+                        variant={isModerator ? 'moderator' : 'user'}
+                        questions={filteredList}
+                        systemMessages={sysMessages}
+                    />
+                </>
+            )}
         </Grid>
     );
 }

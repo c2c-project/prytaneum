@@ -10,8 +10,10 @@ import {
     CardProps,
     CardHeaderProps,
     CardContentProps,
+    Paper,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
 
 import { formatDate } from 'utils/format';
 
@@ -24,6 +26,15 @@ export interface Props {
     style?: React.CSSProperties;
     className?: string;
     quote?: Question | null;
+}
+
+export function QuestionCardSkeleton() {
+    return (
+        <Paper style={{ width: '100%', padding: 8, marginBottom: 8 }}>
+            <Skeleton variant='circle' width={40} height={40} style={{ marginBottom: 12 }} />
+            <Skeleton variant='rect' width='100%' height={118} />
+        </Paper>
+    );
 }
 
 /**

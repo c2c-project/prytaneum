@@ -102,3 +102,24 @@ Packed.args = {
     },
     user: baseUser,
 };
+
+export const StaticNoTabs = Template.bind({});
+StaticNoTabs.args = {
+    townhall: {
+        ...baseTownhall,
+        settings: {
+            ...baseTownhall.settings,
+            chat: {
+                enabled: false,
+                automated: false,
+            },
+            questionQueue: {
+                transparent: false,
+                automated: false,
+            },
+        },
+    },
+};
+StaticNoTabs.parameters = {
+    chromatic: { disable: false },
+};

@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
+import { Skeleton, SkeletonProps } from '@material-ui/lab';
 import clsx from 'clsx';
 
 import TextField from 'components/TextField';
@@ -54,6 +55,12 @@ const useStyles = makeStyles((theme) => ({
 type Filters = Set<string>;
 type Op = (s: Filters) => void;
 
+export function ListFilterSkeleton(props: SkeletonProps) {
+    return (
+        <Skeleton variant='rect' style={{ margin: '8px 0', marginBottom: 12 }} width='100%' height={56} {...props} />
+    );
+}
+
 export default function ListFilter<T>({
     filterMap,
     onSearch,
@@ -72,9 +79,7 @@ export default function ListFilter<T>({
         const copy = new Set(prevFilters);
         op(copy);
         if (filterMap) {
-            const filterFuncs = Array.from(copy).map(
-                (filterKey) => filterMap[filterKey]
-            );
+            const filterFuncs = Array.from(copy).map((filterKey) => filterMap[filterKey]);
             onFilterChange(filterFuncs);
         }
         return copy;
@@ -115,11 +120,7 @@ export default function ListFilter<T>({
     };
 
     return (
-        <div
-            className={
-                className ? clsx([classes.root, className]) : classes.root
-            }
-        >
+        <div className={className ? clsx([classes.root, className]) : classes.root}>
             <Grid container alignItems='center'>
                 <Grid item xs='auto' className={classes.search}>
                     <TextField
@@ -136,10 +137,7 @@ export default function ListFilter<T>({
                                     </InputAdornment>
                                 ) : (
                                     <InputAdornment position='end'>
-                                        <IconButton
-                                            edge='end'
-                                            onClick={clearSearch}
-                                        >
+                                        <IconButton edge='end' onClick={clearSearch}>
                                             <CloseIcon />
                                         </IconButton>
                                     </InputAdornment>
@@ -158,16 +156,8 @@ export default function ListFilter<T>({
                     {filterMap && (
                         <Grid item xs='auto'>
                             <Tooltip title='Filter'>
-                                <IconButton
-                                    color='inherit'
-                                    onClick={({ currentTarget }) =>
-                                        setAnchorEl(currentTarget)
-                                    }
-                                >
-                                    <Badge
-                                        badgeContent={filters.size}
-                                        color='secondary'
-                                    >
+                                <IconButton color='inherit' onClick={({ currentTarget }) => setAnchorEl(currentTarget)}>
+                                    <Badge badgeContent={filters.size} color='secondary'>
                                         <FilterIcon />
                                     </Badge>
                                 </IconButton>
@@ -187,17 +177,9 @@ export default function ListFilter<T>({
                 </Grid>
             </Grid>
             {filterMap && (
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => setAnchorEl(null)}
-                >
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                     {Object.keys(filterMap).map((option) => (
-                        <MenuItem
-                            key={option}
-                            button
-                            onClick={() => toggleFilter(option)}
-                        >
+                        <MenuItem key={option} button onClick={() => toggleFilter(option)}>
                             <Checkbox checked={filters.has(option)} />
                             <ListItemText primary={option} />
                         </MenuItem>
