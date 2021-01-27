@@ -38,6 +38,10 @@ const useStyles = makeStyles(
         exitDone: {
             display: 'none',
         },
+        exiting: {
+            // entering component does not have weird scroll position
+            overflow: 'hidden',
+        },
     })
 );
 
@@ -59,9 +63,9 @@ const TabPanel = React.memo(({ visible, children, classes }: Props) => {
                 enter: clsx(classes.enter, classes.visible),
                 enterActive: clsx(classes.enterActive, classes.visible),
                 enterDone: clsx(classes.enterDone, classes.visible),
-                exit: clsx(classes.exit, classes.visible),
-                exitActive: clsx(classes.exitActive, classes.visible),
-                exitDone: classes.exitDone,
+                exit: clsx(classes.exit, classes.visible, classes.exiting),
+                exitActive: clsx(classes.exitActive, classes.visible, classes.exiting),
+                exitDone: clsx(classes.exitDone, classes.exiting),
             }}
         >
             <div className={classes.container}>{children}</div>

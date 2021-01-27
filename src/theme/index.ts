@@ -66,20 +66,26 @@ const base = createMuiTheme({
         },
     },
     shape: {
-        borderRadius: 24,
+        borderRadius: 18,
     },
     props: {
         MuiPaper: {
-            elevation: 8,
+            // elevation: 3,
         },
         MuiCard: {
-            raised: true,
+            // raised: true,
+            // elevation: 3
         },
         MuiTextField: {
             variant: 'outlined',
         },
         MuiSelect: {
             variant: 'outlined',
+        },
+    },
+    palette: {
+        background: {
+            default: '#F5F5F5',
         },
     },
 });
@@ -93,6 +99,7 @@ const themes: Themes = {
     dark: createMuiTheme({
         ...base,
         palette: {
+            ...base.palette,
             primary: { main: '#2C3D4E' },
             secondary: { main: '#fca06f' },
         },
@@ -100,6 +107,7 @@ const themes: Themes = {
     light: createMuiTheme({
         ...base,
         palette: {
+            ...base.palette,
             primary: { main: '#fff5e6' },
             // primary: { main: '#fef7ec' },
             secondary: { main: '#003C8F' },

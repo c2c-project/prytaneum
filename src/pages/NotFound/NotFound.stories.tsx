@@ -5,9 +5,6 @@ import Component from './NotFound';
 export default {
     title: 'Pages/Not Found',
     component: Component,
-    parameters: {
-        layout: 'centered',
-    },
 } as Meta;
 
 interface Props {

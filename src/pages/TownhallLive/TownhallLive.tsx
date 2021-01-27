@@ -5,7 +5,6 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
-import PaneProvider from 'domains/Townhall/Contexts/Pane';
 import TownhallPanes from 'domains/Townhall/TownhallPanes';
 import useTownhall from 'hooks/useTownhall';
 
@@ -24,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
     },
     panes: {
         flex: 1,
-        padding: theme.spacing(1.5),
+        display: 'flex',
+        justifyContent: 'center',
+        // padding: theme.spacing(1.5),
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
         },
@@ -55,7 +56,7 @@ export default function TownhallLive() {
 
     // increase the distance required to show the scroll to top fab
     // bedcause of on screen keyboards on mobile
-    const distance = React.useMemo(() => (isMdUp ? 100 : 250), [isMdUp]);
+    const distance = React.useMemo(() => (isMdUp ? 100 : 400), [isMdUp]);
 
     const handleScroll = () => {
         const top = topRef.current?.getBoundingClientRect()?.top;
@@ -75,22 +76,20 @@ export default function TownhallLive() {
     };
 
     return (
-        <PaneProvider>
-            <Grid container className={classes.root} onScroll={handleScroll}>
-                {!isMdUp && <div ref={topRef} />}
-                <Grid item md={8} className={classes.video}>
-                    <VideoPlayer url={townhall.settings.video.url} />
-                </Grid>
-                <Grid container item xs={12} md={4} direction='column'>
-                    <div className={classes.panes} onScroll={handleScroll}>
-                        {isMdUp && <div ref={topRef} className={classes.target} />}
-                        <TownhallPanes />
-                    </div>
-                </Grid>
-                <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
-                    <KeyboardArrowUpIcon />
-                </Fab>
+        <Grid container className={classes.root} onScroll={handleScroll}>
+            {!isMdUp && <div ref={topRef} />}
+            <Grid item md={8} className={classes.video}>
+                <VideoPlayer url={townhall.settings.video.url} />
             </Grid>
-        </PaneProvider>
+            <Grid container item xs={12} md={4} direction='column'>
+                <div className={classes.panes} onScroll={handleScroll}>
+                    {isMdUp && <div ref={topRef} className={classes.target} />}
+                    <TownhallPanes />
+                </div>
+            </Grid>
+            <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
+                <KeyboardArrowUpIcon />
+            </Fab>
+        </Grid>
     );
 }

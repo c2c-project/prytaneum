@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
-import { makeQuestion, Question } from 'prytaneum-typings';
+import { makeQuestion, makeTownhall, makeUser, Question } from 'prytaneum-typings';
 
 import TownhallProvider from 'contexts/Townhall';
 import UserProvider from 'contexts/User';
@@ -11,8 +11,8 @@ export default {
     title: 'Domains/Questions/Question Form',
     decorators: [
         (MyStory) => (
-            <UserProvider>
-                <TownhallProvider townhallId='123'>
+            <UserProvider value={makeUser()} forceNoLogin>
+                <TownhallProvider townhallId='123' value={makeTownhall()} forceNoFetch>
                     <MyStory />
                 </TownhallProvider>
             </UserProvider>

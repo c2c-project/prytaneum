@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import faker from 'faker/locale/en';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeChatMessage, makeUser, makeTownhall } from 'prytaneum-typings';
+import { makeQuestion, makeChatMessage, makeUser, makeTownhall, Townhall, User } from 'prytaneum-typings';
 
 import FixtureSocket from 'mock/Fixture.socket';
 import Page from 'layout/Page';
@@ -32,9 +33,13 @@ function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     }
 }
 
-const townhall = makeTownhall();
-townhall.settings.chat.enabled = true;
-townhall.settings.questionQueue.transparent = true;
+const baseTownhall = makeTownhall();
+baseTownhall.settings.chat.enabled = true;
+baseTownhall.settings.questionQueue.transparent = true;
+baseTownhall.settings.video.url = 'https://www.youtube.com/watch?v=5qap5aO4i9A';
+baseTownhall.form.title = 'Townhall Title';
+baseTownhall.form.topic = 'Townhall Topic';
+baseTownhall.form.description = 'Townhall Description';
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
 export default {
@@ -56,32 +61,46 @@ export default {
                     </button>
                 </AppBar>
                 <Main maxWidth='xl'>
-                    <UserProvider>
-                        <TownhallProvider value={townhall} townhallId='123'>
-                            <FixtureSocket.Provider value={emitter}>
-                                <MyStory />
-                            </FixtureSocket.Provider>
-                        </TownhallProvider>
-                    </UserProvider>
+                    <FixtureSocket.Provider value={emitter}>
+                        <MyStory />
+                    </FixtureSocket.Provider>
                 </Main>
             </Page>
         ),
     ],
 } as Meta;
 
-const Template: Story<{}> = () => <Component />;
+interface Props {
+    townhall: Townhall;
+    user: User;
+}
+
+const Template: Story<Props> = ({ townhall, user }) => (
+    <TownhallProvider value={townhall} townhallId='123'>
+        <UserProvider value={user} forceNoLogin>
+            <Component />
+        </UserProvider>
+    </TownhallProvider>
+);
 
 export const RegularUser = Template.bind({});
+RegularUser.args = {
+    townhall: baseTownhall,
+    user: makeUser(),
+};
 
-export function AsMod() {
+export const AsMod = Template.bind({});
+function asModerator(): Props {
     const id = faker.random.alphaNumeric(5);
     const user = makeUser();
-    const copy = { ...townhall };
+    const copy = { ...baseTownhall };
     copy.settings.moderators.list.push({
         email: user.email.address,
         permissions: [],
     });
     user._id = id;
-
-    return <Component />;
+    return { user, townhall: copy };
 }
+AsMod.args = {
+    ...asModerator(),
+};

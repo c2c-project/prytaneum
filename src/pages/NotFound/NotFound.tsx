@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
+        display: 'flex',
+        paddingBottom: '40vh',
     },
     secondary: {
         fontWeight: 100,
@@ -23,7 +25,7 @@ export default function NotFound({ errorMessage }: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Grid container justify='center' direction='column'>
+            <Grid container justify='center' direction='column' alignContent='stretch'>
                 <Grid container justify='center'>
                     <Typography variant='h3' color='error' display='inline'>
                         404

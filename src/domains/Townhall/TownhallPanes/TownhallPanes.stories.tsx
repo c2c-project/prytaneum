@@ -2,7 +2,8 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeTownhall, makeUser, Townhall } from 'prytaneum-typings';
+import { makeQuestion, makeTownhall, makeUser, Townhall, User, makeGenFn, makeSpeaker } from 'prytaneum-typings';
+import faker from 'faker';
 
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
@@ -10,7 +11,7 @@ import TownhallProvider from 'contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
 import TownhallPanes from './TownhallPanes';
 
-const user = makeUser();
+const baseUser = makeUser();
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
 function sendMessage(num?: number) {
@@ -23,26 +24,28 @@ function sendMessage(num?: number) {
     }
 }
 
-const townhall = makeTownhall();
-townhall.settings.chat.enabled = true;
-townhall.settings.questionQueue.transparent = true;
+const makeQuestions = makeGenFn(makeQuestion);
+
+const baseTownhall = makeTownhall();
+baseTownhall.settings.chat.enabled = true;
+baseTownhall.settings.questionQueue.transparent = true;
+baseTownhall.state.playlist.queue = makeQuestions(10);
+baseTownhall.state.playlist.position.current = 0;
 
 export default {
     title: 'Domains/Townhall/Townhall Panes',
     decorators: [
         (MyStory) => (
-            <UserProvider forceNoLogin value={user}>
-                <FixtureSocket.Provider value={emitter}>
-                    <PaneProvider>
-                        <div style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                            <button type='button' onClick={() => sendMessage(20)}>
-                                Add Questions
-                            </button>
-                            <MyStory />
-                        </div>
-                    </PaneProvider>
-                </FixtureSocket.Provider>
-            </UserProvider>
+            <FixtureSocket.Provider value={emitter}>
+                <PaneProvider>
+                    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+                        <button type='button' onClick={() => sendMessage(20)}>
+                            Add Questions
+                        </button>
+                        <MyStory />
+                    </div>
+                </PaneProvider>
+            </FixtureSocket.Provider>
         ),
     ],
     parameters: {
@@ -50,23 +53,52 @@ export default {
     },
 } as Meta;
 
-const Template: Story<{ townhall: Townhall }> = ({ townhall: _townhall }) => (
-    <TownhallProvider value={_townhall} townhallId='123'>
-        <TownhallPanes />
-    </TownhallProvider>
+const Template: Story<{ townhall: Townhall; user: User }> = ({ townhall, user }) => (
+    <UserProvider forceNoLogin value={user}>
+        <TownhallProvider forceNoFetch value={townhall} townhallId='123'>
+            <TownhallPanes />
+        </TownhallProvider>
+    </UserProvider>
 );
 
-export const User = Template.bind({});
-User.args = {
-    townhall,
+export const LoggedOut = Template.bind({});
+LoggedOut.args = {
+    townhall: baseTownhall,
+    user: undefined,
 };
 
-const modCopy = { ...townhall };
+export const RegularUser = Template.bind({});
+RegularUser.args = {
+    townhall: baseTownhall,
+    user: baseUser,
+};
+
+const modCopy = { ...baseTownhall };
 modCopy.settings.moderators.list.push({
-    email: user.email.address,
+    email: baseUser.email.address,
     permissions: [],
 });
 export const Moderator = Template.bind({});
 Moderator.args = {
     townhall: modCopy,
+    user: baseUser,
+};
+
+const makeSpeakers = makeGenFn(makeSpeaker);
+export const Packed = Template.bind({});
+Packed.args = {
+    townhall: {
+        ...baseTownhall,
+        form: {
+            ...baseTownhall.form,
+            description: faker.lorem.paragraph(5),
+        },
+        settings: {
+            ...baseTownhall.settings,
+            speakers: {
+                list: makeSpeakers(10),
+            },
+        },
+    },
+    user: baseUser,
 };
