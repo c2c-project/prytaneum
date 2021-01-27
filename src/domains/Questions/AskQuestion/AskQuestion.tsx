@@ -29,7 +29,6 @@ function AskQuestion({ className }: Props) {
                 variant='contained'
                 color='primary'
                 onClick={() => setOpen(true)}
-                fullWidth
                 startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
             >
                 {user ? 'Ask My Question' : 'Sign in to ask a question'}
