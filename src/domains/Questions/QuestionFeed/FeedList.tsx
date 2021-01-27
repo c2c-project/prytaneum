@@ -18,13 +18,11 @@ import useUser from 'hooks/useUser';
 import useTownhall from 'hooks/useTownhall';
 import QuestionLabels from '../QuestionLabels';
 import { Like, Suggest, Quote /* Reply */ } from '../QuestionActions';
-import { CurrentQuestion } from './components';
 import QuestionCard from '../QuestionCard';
 
 interface Props {
     questions: Question[];
     variant: 'moderator' | 'user';
-    current: Question | undefined;
     systemMessages: React.ReactNodeArray;
     className?: string;
 }
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     card: {},
 }));
 
-function FeedList({ questions, variant, current, systemMessages, className }: Props) {
+function FeedList({ questions, variant, systemMessages, className }: Props) {
     const [user] = useUser();
     const [townhall, isModerator] = useTownhall();
     const classes = useStyles();

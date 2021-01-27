@@ -14,7 +14,6 @@ import FeedList from './FeedList';
 import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
-import usePlaylist from '../usePlaylist';
 
 interface Props {
     className?: string;
@@ -47,13 +46,6 @@ function QuestionFeed({ className, style }: Props) {
         []
     );
     const [filteredList, handleSearch, handleFilterChange] = useFilters(questions, accessors);
-    const [playlist] = usePlaylist();
-
-    const currentQuestion = React.useMemo(() => {
-        const { position, queue } = playlist;
-        if (position >= queue.length || position < 0) return undefined;
-        return queue[position];
-    }, [playlist]);
 
     // React.useEffect(() => {
     //     if (buffer.length && onDataChange) onDataChange(buffer.length);
@@ -98,7 +90,6 @@ function QuestionFeed({ className, style }: Props) {
             <FeedList
                 className={classes.content}
                 variant={isModerator ? 'moderator' : 'user'}
-                current={currentQuestion}
                 questions={filteredList}
                 systemMessages={sysMessages}
             />
