@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Townhall, TownhallSettings } from 'prytaneum-typings';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 
 import TabPanel, { TabPanels } from 'components/TabPanel';
 import QuestionFeed from 'domains/Questions/QuestionFeed';
-import AskQuestion from 'domains/Questions/AskQuestion';
 import QuestionQueue from 'domains/Questions/QuestionQueue';
+import AskQuestion from 'domains/Questions/AskQuestion';
+import QuestionCarousel from 'domains/Questions/QuestionCarousel';
 import useTownhall from 'hooks/useTownhall';
 import TownhallChat from '../TownhallChat';
-import Information from '../TownhallPane';
 import StyledTab, { Props as StyledTabProps } from './StyledTab';
+import InfoCard from '../InfoCard';
+import SpeakerItem from './SpeakerItem';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 
@@ -24,7 +27,6 @@ const QuestionQueueTab = connect((store) => ({
     badgeContent: store.queue.buffer.suggested.length,
     label: 'Question Queue',
 }))(StyledTab);
-const InformationTab = (props: CustomTabProps) => <StyledTab {...props} badgeContent={0} label='Information' />;
 
 const getTabVisibility = (settings: TownhallSettings, isModerator: boolean) => ({
     isQuestionFeedVisible: settings.questionQueue.transparent,
@@ -34,8 +36,7 @@ const getTabVisibility = (settings: TownhallSettings, isModerator: boolean) => (
 
 type TabTuple = [React.JSXElementConstructor<CustomTabProps>, JSX.Element][];
 const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple => {
-    // information is always present
-    const tabs: TabTuple = [[InformationTab, <Information />]];
+    const tabs: TabTuple = [];
 
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
@@ -50,13 +51,34 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         maxWidth: 600,
+        padding: theme.spacing(1),
     },
     paneContainer: {
         flexBasis: '100%',
         paddingbottom: theme.spacing(2),
     },
+    divider: {
+        margin: theme.spacing(2, 0),
+    },
+    rightJustify: {
+        alignSelf: 'flex-end',
+    },
     item: {
-        marginBottom: theme.spacing(2),
+        flex: 1,
+        marginBottom: theme.spacing(1.5),
+    },
+    fullWidth: {
+        width: '100%',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+        padding: theme.spacing(1),
+        boxShadow: theme.shadows[3],
+        // border: `1px solid ${theme.palette.secondary.main}`,
+    },
+    pl: {
+        paddingLeft: theme.spacing(2),
     },
 }));
 interface Props {
@@ -71,6 +93,7 @@ const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => 
         townhall.settings,
         isModerator,
     ]);
+    const speakers = React.useMemo(() => townhall.settings.speakers.list, [townhall]);
     const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
     return (
@@ -82,14 +105,37 @@ const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => 
             alignItems='flex-start'
             wrap='nowrap'
         >
-            <AskQuestion className={classes.item} />
-            {tabs.length > 1 && (
-                <Grid item xs='auto'>
-                    {tabs.map(([Option], idx) => (
-                        <Option selected={state === idx} key={idx} onClick={() => setState(idx)} />
+            <Grid
+                container
+                direction='column'
+                wrap='nowrap'
+                className={clsx(classes.item, classes.paper, classes.fullWidth)}
+            >
+                <InfoCard />
+                <List className={clsx(classes.item, classes.fullWidth)}>
+                    {speakers.map((speaker) => (
+                        <SpeakerItem speaker={speaker} key={speaker.picture} />
                     ))}
-                </Grid>
-            )}
+                </List>
+                <AskQuestion className={classes.rightJustify} />
+            </Grid>
+
+            <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
+                <Typography className={classes.pl} variant='overline'>
+                    Current Question
+                </Typography>
+                <QuestionCarousel CardProps={{ elevation: 0 }} />
+            </Grid>
+
+            <div className={clsx(classes.item, classes.fullWidth)}>
+                {tabs.length > 1 && (
+                    <Grid item xs='auto'>
+                        {tabs.map(([Option], idx) => (
+                            <Option selected={state === idx} key={idx} onClick={() => setState(idx)} />
+                        ))}
+                    </Grid>
+                )}
+            </div>
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 {tabs.map(([, tabPanel], idx) => (

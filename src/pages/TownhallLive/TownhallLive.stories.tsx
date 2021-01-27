@@ -36,6 +36,10 @@ function sendMessages(num: number, emitter: SocketIOClient.Socket) {
 const baseTownhall = makeTownhall();
 baseTownhall.settings.chat.enabled = true;
 baseTownhall.settings.questionQueue.transparent = true;
+baseTownhall.settings.video.url = 'https://www.youtube.com/watch?v=5qap5aO4i9A';
+baseTownhall.form.title = 'Townhall Title';
+baseTownhall.form.topic = 'Townhall Topic';
+baseTownhall.form.description = 'Townhall Description';
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
 export default {

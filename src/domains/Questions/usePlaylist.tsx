@@ -1,63 +1,17 @@
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
-import type { SocketIOEvents, Question, Townhall } from 'prytaneum-typings';
+import { Dispatch } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { PlaylistActions } from 'reducers';
 
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import useTownhall from 'hooks/useTownhall';
 
-type State = {
-    queue: Question[];
-    position: number;
-};
-
-type Events = SocketIOEvents['playlist-state'];
-
-function playlistReducer(state: State, action: Events): State {
-    switch (action.type) {
-        case 'playlist-queue-add':
-            return {
-                ...state,
-                queue: [...state.queue, action.payload],
-            };
-        case 'playlist-queue-next':
-            return { ...state, position: state.position + 1 };
-        case 'playlist-queue-previous':
-            return { ...state, position: state.position - 1 };
-        case 'playlist-queue-order':
-            return { ...state, queue: action.payload };
-        case 'playlist-queue-remove': {
-            const idx = state.queue.findIndex(
-                (question) => question._id === action.payload
-            );
-            const newQueue = [
-                ...state.queue.splice(0, idx),
-                ...state.queue.splice(idx + 1),
-            ];
-            return { ...state, queue: newQueue };
-        }
-        default:
-            return state;
-    }
-}
-
-const makeInitialState = (state: Townhall['state']): State => {
-    const { playlist } = state;
-    return {
-        position: playlist.position.current,
-        queue: playlist.queue,
-    };
-};
-
 export default function usePlaylist() {
     const [townhall] = useTownhall();
-    const [playlist, dispatch] = React.useReducer(
-        playlistReducer,
-        makeInitialState(townhall.state)
-    );
-    const socketFn: SocketFn = React.useCallback(
-        (socket) => socket.on('playlist-state', dispatch),
-        [dispatch]
-    );
+    const playlist = useSelector((store) => store.playlist);
+    const dispatch = useDispatch<Dispatch<PlaylistActions>>();
+    const socketFn: SocketFn = React.useCallback((socket) => socket.on('playlist-state', dispatch), [dispatch]);
     useSocketio(
         '/playlist',
         {
@@ -65,5 +19,10 @@ export default function usePlaylist() {
         },
         socketFn
     );
+    React.useEffect(() => {
+        dispatch({ type: 'playlist-initialize', payload: townhall.state });
+        // NOTE: i only want this to run on the very first render
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return [playlist, dispatch] as const;
 }

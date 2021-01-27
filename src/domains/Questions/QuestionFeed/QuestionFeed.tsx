@@ -111,4 +111,4 @@ QuestionFeed.defaultProps = {
     style: undefined,
 };
 
-export default React.memo(QuestionFeed);
+export default QuestionFeed;

@@ -43,7 +43,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
             <FormTitle title='Question Form' />
             {quote && (
                 <Grid item xs={12}>
-                    <QuestionCard style={{ marginBottom: '8px' }} question={quote} />
+                    <QuestionCard CardProps={{ elevation: 3 }} style={{ marginBottom: '8px' }} question={quote} />
                 </Grid>
             )}
             <FormContent>
@@ -61,9 +61,11 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <Button color='primary' disableElevation onClick={onCancel}>
-                    Cancel
-                </Button>
+                {onCancel && (
+                    <Button color='primary' disableElevation onClick={onCancel}>
+                        Cancel
+                    </Button>
+                )}
                 <LoadingButton loading={isLoading}>
                     <Button type='submit' variant='contained' color='primary' disableElevation>
                         Ask

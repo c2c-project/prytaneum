@@ -6,6 +6,8 @@ import {
     Card,
     CardContent,
     // IconButton,
+    List,
+    ListItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
@@ -30,15 +32,15 @@ interface Props {
 const useStyles = makeStyles((theme) => ({
     root: {},
     item: {
-        marginBottom: theme.spacing(2),
+        // marginBottom: theme.spacing(1),
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
     },
     questionActions: {
         padding: 0,
-        backgroundColor: theme.palette.primary.light,
-        color: theme.palette.primary.contrastText,
+        // backgroundColor: theme.palette.primary.light,
+        color: theme.palette.primary.light,
     },
     card: {},
 }));
@@ -62,58 +64,54 @@ function FeedList({ questions, variant, current, systemMessages, className }: Pr
     }
 
     const questionList = React.useMemo(() => {
-        return questions.map((question) => {
-            const { townhallId } = question.meta;
-            const questionId = question._id;
-            return (
-                <QuestionCard
-                    key={questionId}
-                    question={question}
-                    className={classes.item}
-                    // CardHeaderProps={{
-                    //     action: (
-                    //         <IconButton>
-                    //             <MoreVertIcon />
-                    //         </IconButton>
-                    //     ),
-                    // }}
-                    quote={question.quote}
-                >
-                    {variant === 'moderator' && <QuestionLabels labels={question.aiml.labels} />}
-                    <CardActions className={classes.questionActions}>
-                        {!isModerator && (
-                            <Like
-                                townhallId={townhallId}
-                                questionId={questionId}
-                                liked={(user && question.likes.includes(user._id)) || liked.has(question._id)}
-                                onLike={() =>
-                                    setLiked((prev) => {
-                                        const nextState = new Set(prev).add(question._id);
-                                        return nextState;
-                                    })
-                                }
-                                onDeleteLike={() =>
-                                    setLiked((prev) => {
-                                        const copy = new Set(prev);
-                                        copy.delete(question._id);
-                                        return copy;
-                                    })
-                                }
-                            />
-                        )}
-                        {!isModerator && <Quote question={question} />}
-                        {isModerator && (
-                            <Suggest
-                                questionId={question._id}
-                                townhallId={townhallId}
-                                suggested={isSuggested(question._id)}
-                            />
-                        )}
-                        {/* <Reply question={question} /> */}
-                    </CardActions>
-                </QuestionCard>
-            );
-        });
+        return (
+            <List disablePadding>
+                {questions.map((question) => {
+                    const { townhallId } = question.meta;
+                    const questionId = question._id;
+                    return (
+                        <ListItem disableGutters key={questionId}>
+                            <QuestionCard question={question} className={classes.item} quote={question.quote}>
+                                {variant === 'moderator' && <QuestionLabels labels={question.aiml.labels} />}
+                                <CardActions className={classes.questionActions}>
+                                    {!isModerator && (
+                                        <Like
+                                            townhallId={townhallId}
+                                            questionId={questionId}
+                                            liked={
+                                                (user && question.likes.includes(user._id)) || liked.has(question._id)
+                                            }
+                                            onLike={() =>
+                                                setLiked((prev) => {
+                                                    const nextState = new Set(prev).add(question._id);
+                                                    return nextState;
+                                                })
+                                            }
+                                            onDeleteLike={() =>
+                                                setLiked((prev) => {
+                                                    const copy = new Set(prev);
+                                                    copy.delete(question._id);
+                                                    return copy;
+                                                })
+                                            }
+                                        />
+                                    )}
+                                    {!isModerator && <Quote question={question} />}
+                                    {isModerator && (
+                                        <Suggest
+                                            questionId={question._id}
+                                            townhallId={townhallId}
+                                            suggested={isSuggested(question._id)}
+                                        />
+                                    )}
+                                    {/* <Reply question={question} /> */}
+                                </CardActions>
+                            </QuestionCard>
+                        </ListItem>
+                    );
+                })}
+            </List>
+        );
     }, [questions, classes.item, classes.questionActions, variant, liked, user, setLiked, isModerator, isSuggested]);
 
     return (
@@ -131,13 +129,13 @@ function FeedList({ questions, variant, current, systemMessages, className }: Pr
                         ))}
                     </Grid>
                 )}
-                {current && (
+                {/* {current && (
                     <CurrentQuestion>
                         <QuestionCard question={current} className={classes.item}>
                             {variant === 'moderator' && <QuestionLabels labels={current.aiml.labels} />}
                         </QuestionCard>
                     </CurrentQuestion>
-                )}
+                )} */}
                 <Grid item xs={12}>
                     {questionList}
                 </Grid>

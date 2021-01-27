@@ -2,7 +2,8 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeTownhall, makeUser, Townhall, User } from 'prytaneum-typings';
+import { makeQuestion, makeTownhall, makeUser, Townhall, User, makeGenFn, makeSpeaker } from 'prytaneum-typings';
+import faker from 'faker';
 
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
@@ -23,9 +24,13 @@ function sendMessage(num?: number) {
     }
 }
 
+const makeQuestions = makeGenFn(makeQuestion);
+
 const baseTownhall = makeTownhall();
 baseTownhall.settings.chat.enabled = true;
 baseTownhall.settings.questionQueue.transparent = true;
+baseTownhall.state.playlist.queue = makeQuestions(10);
+baseTownhall.state.playlist.position.current = 0;
 
 export default {
     title: 'Domains/Townhall/Townhall Panes',
@@ -76,5 +81,24 @@ modCopy.settings.moderators.list.push({
 export const Moderator = Template.bind({});
 Moderator.args = {
     townhall: modCopy,
+    user: baseUser,
+};
+
+const makeSpeakers = makeGenFn(makeSpeaker);
+export const Packed = Template.bind({});
+Packed.args = {
+    townhall: {
+        ...baseTownhall,
+        form: {
+            ...baseTownhall.form,
+            description: faker.lorem.paragraph(5),
+        },
+        settings: {
+            ...baseTownhall.settings,
+            speakers: {
+                list: makeSpeakers(10),
+            },
+        },
+    },
     user: baseUser,
 };
