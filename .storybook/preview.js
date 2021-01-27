@@ -12,7 +12,7 @@ import ThemeProvider from '../src/contexts/Theme';
 import rootReducer from '../src/reducers';
 import './main.css';
 
-if (typeof global.process === 'undefined') {
+if (typeof global.process === 'undefined' && process.env.CI !== 'true') {
     const { worker } = require('../src/mock/browser');
 
     // Start the mocking when each story is loaded.
@@ -46,4 +46,5 @@ addParameters({
 
 export const parameters = {
     layout: 'fullscreen',
+    chromatic: { disable: true },
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion } from 'prytaneum-typings';
+import { makeQuestion, makeUser, makeTownhall } from 'prytaneum-typings';
 import { Grid } from '@material-ui/core';
 
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from 'contexts/Townhall';
-import QuestionFeed from '.';
+import QuestionFeed, { QuestionFeedLoading } from './QuestionFeed';
 import QuestionCard from '../QuestionCard';
 import { CurrentQuestion as CurrentQuestionWrapper } from './components';
 
@@ -28,8 +28,8 @@ export default {
     decorators: [
         (MyStory) => (
             <div style={{ flex: 1, padding: 60 }}>
-                <UserProvider>
-                    <TownhallProvider townhallId='123'>
+                <UserProvider value={makeUser()} forceNoLogin>
+                    <TownhallProvider townhallId='123' value={makeTownhall()} forceNoFetch>
                         <FixtureSocket.Provider value={emitter}>
                             <MyStory />
                         </FixtureSocket.Provider>
@@ -39,6 +39,10 @@ export default {
         ),
     ],
 } as Meta;
+
+export function Loading() {
+    return <QuestionFeedLoading />;
+}
 
 export function Basic() {
     return (

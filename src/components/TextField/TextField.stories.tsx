@@ -1,23 +1,21 @@
 import React from 'react';
+import { Meta, Story } from '@storybook/react';
 
-import Main from 'layout/Main';
-import Component from './TextField';
+import Component, { Props } from './TextField';
 
 export default {
     title: 'Components/TextField',
     component: Component,
+    parameters: {
+        layout: 'centered',
+    },
+} as Meta;
+
+export const TextField: Story<Props> = (props) => <Component {...props} />;
+TextField.args = {
+    label: 'sample label',
 };
 
-export function TextField() {
-    return (
-        <Main>
-            <Component
-                required
-                label='Storybook Label'
-                value='start typing here, or change it and it will `alert(1)`'
-                /* eslint-disable-next-line no-alert */
-                onChange={() => alert('onChange alert')}
-            />
-        </Main>
-    );
-}
+TextField.argTypes = {
+    onChange: { action: 'changed' },
+};
