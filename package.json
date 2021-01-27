@@ -45,7 +45,7 @@
         "lint": "eslint --ext .ts,.tsx,.js,.jsx src --max-warnings 0",
         "docs": "jsdoc -c jsdoc.conf.json",
         "storybook-docs": "yarn storybook --docs",
-        "typecheck": "tsc -p tsconfig.prod.json --noEmit",
+        "typecheck": "tsc --noEmit",
         "chromatic": "npx chromatic --project-token CHROMATIC_TOKEN --exit-zero-on-changes"
     },
     "alias": {

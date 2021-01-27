@@ -124,7 +124,7 @@ const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => 
                 <Typography className={classes.pl} variant='overline'>
                     Current Question
                 </Typography>
-                <QuestionCarousel CardProps={{ elevation: 0 }} />
+                <QuestionCarousel />
             </Grid>
 
             <div className={clsx(classes.item, classes.fullWidth)}>
