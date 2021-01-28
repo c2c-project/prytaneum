@@ -13,6 +13,7 @@ import EditableText from 'components/EditableText';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 import Redirect from 'domains/Logical/Redirect';
 import useEndpoint from 'hooks/useEndpoint';
+import Login from 'pages/Login';
 import Loader from 'components/Loader';
 import useSnack from 'hooks/useSnack';
 import useUser from 'hooks/useUser';
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
         1b. if they are, proceed
     2. Get user info
         2a. Fill in Fname, Lname, Email
+        2b. display the information
     3. Update User info
         3a. Check any changed field to be valid
             3ai. no blank names/emails, etc
@@ -56,58 +58,11 @@ export default function UserProfile({ img }: Props) {
     if (isLoggedIn === undefined) {
         // 1a. if not, redirect to /login
         console.log('Redirecting');
-        //return <Redirect href='https://prytaneum.io/login' />;
+        return <Redirect href='https://prytaneum.io/login' />;
     }
     // 1b. if they are, proceed
 
-    // const initialState: ForgotPassForm = { password: '', confirmPassword: '' };
-    // const [snack] = useSnack();
-    // const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    // const builtRequest = React.useCallback(() => API.forgotPassReset(token, form), [form, token]);
-    // const [sendRequest, isLoading] = useEndpoint(builtRequest, {
-    //     onSuccess: () => {
-    //         snack('Successfully reset password!');
-    //         onSuccess();
-    //     },
-    // });
-    // async function changePass(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    //     // const [data, setData] = React.useState<AxiosResponse | null | void>(null);
-    //     const [end, prom] = useEndpoint(changePassword, { token: e.target.value });
-    //     const req = React.useCallback(() => API.changePassword(e.target.value));
-    // }
-    // => {
-    //     useEndpoint(changePassword, { token: e.target.value });
-    // const [pass, setPass] = React.useState('');
-    // const handlePassChange = useEndpoint(getMyInfo, {});
-    // const [user, setUser] = React.useState<ClientSafeUser | undefined | null>(safeUser);
-
-    // const [run, isLoading, getHasRun] = useEndpoint(getMyInfo, {
-    //     onSuccess: ({ data }) => {
-    //         setUser(data);
-    //     },
-    //     // so the default error handler is not used
-    //     onFailure: () => {},
-    // });
-
-    /*
-        To handle password reset, we need to first, 
-            check they are logged in, if they are not, redirect to /login
-
-    */
-
-    // taken from src/contexts/User.tsx
-    // if the request is either loading or hasn't run AND there's no user
-    // then show a loader
-    // React.useEffect(() => {
-    //     if (!getHasRun() && !user && !forceNoLogin) run();
-    // }, [getHasRun, user, run, forceNoLogin]);
-
-    // TODO: redirect to login?
-
-    // if the request is either loading or hasn't run AND there's no user
-    // then show a loader
-    // if (!forceNoLogin && (isLoading || !getHasRun()) && !user) return <Loader />;
-
+    // 2,a,b
     return (
         <div className={classes.root}>
             <Grid container alignContent='center' spacing={2}>
@@ -168,15 +123,13 @@ export default function UserProfile({ img }: Props) {
                         </Button>
                     </Grid>
                     <Grid component='span' item xs={12}>
-                        {/* TODO: fix token here */}
                         <h3>Reset Password Method #2</h3>
-                        <PasswordResetForm onSuccess={() => {}} token={''} />
+                        <PasswordResetForm onSuccess={() => {}} token={user?._id || 'undefined'} />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid component='span' item xs={12}>
-                        {/* onClick={() => history.push('/logout')}  */}
                         <h3>Logout</h3>
                         <Button
                             href='https://prytaneum.io/logout'
