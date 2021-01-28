@@ -3,6 +3,7 @@ import { addDecorator, addParameters } from '@storybook/react';
 import { withPerformance } from 'storybook-addon-performance';
 import { createStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import isChromatic from 'chromatic/isChromatic';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +13,7 @@ import ThemeProvider from '../src/contexts/Theme';
 import rootReducer from '../src/reducers';
 import './main.css';
 
-if (typeof global.process === 'undefined' && process.env.CI !== 'true') {
+if (typeof global.process === 'undefined' && !isChromatic()) {
     const { worker } = require('../src/mock/browser');
 
     // Start the mocking when each story is loaded.

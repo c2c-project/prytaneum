@@ -71,12 +71,7 @@ function QuestionFeed({ className, style }: Props) {
         }
     }, [buffer.length, questions.length]);
     return (
-        <Grid
-            alignContent='flex-start'
-            container
-            className={className ? clsx([classes.root, className]) : classes.root}
-            style={style}
-        >
+        <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
             {isLoading ? (
                 <QuestionFeedLoading />
             ) : (

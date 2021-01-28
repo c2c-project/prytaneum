@@ -21,7 +21,7 @@ import clsx from 'clsx';
 import TextField from 'components/TextField';
 import { FilterFunc } from 'utils/filters';
 
-interface Props<T> {
+export interface Props<T> {
     onSearch: (s: string) => void;
     length: number;
     filterMap?: {
@@ -29,9 +29,6 @@ interface Props<T> {
     };
     onFilterChange: (f: FilterFunc<T>[]) => void;
     className?: string;
-}
-
-interface OptionalProps {
     menuIcons?: JSX.Element[];
 }
 
@@ -61,14 +58,7 @@ export function ListFilterSkeleton(props: SkeletonProps) {
     );
 }
 
-export default function ListFilter<T>({
-    filterMap,
-    onSearch,
-    length,
-    onFilterChange,
-    menuIcons,
-    className,
-}: Props<T> & OptionalProps) {
+export default function ListFilter<T>({ filterMap, onSearch, length, onFilterChange, menuIcons, className }: Props<T>) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

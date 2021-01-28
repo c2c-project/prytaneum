@@ -7,9 +7,9 @@ import { Grid } from '@material-ui/core';
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from 'contexts/Townhall';
-import QuestionFeed, { QuestionFeedLoading } from './QuestionFeed';
-import QuestionCard from '../QuestionCard';
-import { CurrentQuestion as CurrentQuestionWrapper } from './components';
+import QuestionFeed from './QuestionFeed';
+
+export { QuestionFeedLoading as Loading } from './QuestionFeed';
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
@@ -40,11 +40,7 @@ export default {
     ],
 } as Meta;
 
-export function Loading() {
-    return <QuestionFeedLoading />;
-}
-
-export function Basic() {
+export function AsyncInteractive() {
     return (
         <Grid container direction='column' wrap='nowrap'>
             <div style={{ flex: 1 }}>
@@ -56,13 +52,5 @@ export function Basic() {
                 <QuestionFeed />
             </div>
         </Grid>
-    );
-}
-
-export function CurrentQuestion() {
-    return (
-        <CurrentQuestionWrapper>
-            <QuestionCard question={makeQuestion()} />
-        </CurrentQuestionWrapper>
     );
 }
