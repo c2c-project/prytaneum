@@ -1,23 +1,30 @@
 import React, { ChangeEvent } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Avatar } from '@material-ui/core';
+import { Avatar, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-// import axios, { AxiosResponse } from 'axios';
-// import DoneIcon from '@material-ui/icons/Done';
+import type { ClientSafeUser } from 'prytaneum-typings';
+import axios, { AxiosResponse } from 'axios';
+import DoneIcon from '@material-ui/icons/Done';
 
+import history from 'utils/history';
 import TextField from 'components/TextField';
 import EditableText from 'components/EditableText';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
-// import useEndpoint from 'hooks/useEndpoint';
-// import useSnack from 'hooks/useSnack';
-// import useForm from 'hooks/useForm';
-import { getMyInfo } from '../../Auth/api';
-// import { SentimentSatisfied } from '@material-ui/icons';
+import Redirect from 'domains/Logical/Redirect';
+import useEndpoint from 'hooks/useEndpoint';
+import Loader from 'components/Loader';
+import useSnack from 'hooks/useSnack';
+import useUser from 'hooks/useUser';
+import useForm from 'hooks/useForm';
+import { getMyInfo } from 'domains/Auth/api';
+import { SentimentSatisfied } from '@material-ui/icons';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props
     img?: string;
+    // safeUser?: ClientSafeUser;
+    // forceNoLogin?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -28,9 +35,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// const initialState: ForgotPassForm = { password: '', confirmPassword: '' };
+/*
+    1. Check if user is logged in
+        1a. if not, redirect to /login
+        1b. if they are, proceed
+    2. Get user info
+        2a. Fill in Fname, Lname, Email
+    3. Update User info
+        3a. Check any changed field to be valid
+            3ai. no blank names/emails, etc
+        3b. POST to endpoint to update any changed field that **IS VALID**!
+        3c. display snack saying update successful if response is good
+            3ci. Refresh UserProfile to confirm it went into effect, might be annoying so maybe not
+*/
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
+    // 1. check if user is logged in
+    const [user] = useUser();
+    const isLoggedIn = user || undefined;
+    if (isLoggedIn === undefined) {
+        // 1a. if not, redirect to /login
+        console.log('Redirecting');
+        //return <Redirect href='https://prytaneum.io/login' />;
+    }
+    // 1b. if they are, proceed
+
+    // const initialState: ForgotPassForm = { password: '', confirmPassword: '' };
     // const [snack] = useSnack();
     // const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     // const builtRequest = React.useCallback(() => API.forgotPassReset(token, form), [form, token]);
@@ -48,12 +78,35 @@ export default function UserProfile({ img }: Props) {
     // => {
     //     useEndpoint(changePassword, { token: e.target.value });
     // const [pass, setPass] = React.useState('');
-    const handlePassChange = async () => {
-        const info = await getMyInfo().then(function (res) {
-            return res;
-        });
-        return info.data.name;
-    };
+    // const handlePassChange = useEndpoint(getMyInfo, {});
+    // const [user, setUser] = React.useState<ClientSafeUser | undefined | null>(safeUser);
+
+    // const [run, isLoading, getHasRun] = useEndpoint(getMyInfo, {
+    //     onSuccess: ({ data }) => {
+    //         setUser(data);
+    //     },
+    //     // so the default error handler is not used
+    //     onFailure: () => {},
+    // });
+
+    /*
+        To handle password reset, we need to first, 
+            check they are logged in, if they are not, redirect to /login
+
+    */
+
+    // taken from src/contexts/User.tsx
+    // if the request is either loading or hasn't run AND there's no user
+    // then show a loader
+    // React.useEffect(() => {
+    //     if (!getHasRun() && !user && !forceNoLogin) run();
+    // }, [getHasRun, user, run, forceNoLogin]);
+
+    // TODO: redirect to login?
+
+    // if the request is either loading or hasn't run AND there's no user
+    // then show a loader
+    // if (!forceNoLogin && (isLoading || !getHasRun()) && !user) return <Loader />;
 
     return (
         <div className={classes.root}>
@@ -72,18 +125,34 @@ export default function UserProfile({ img }: Props) {
                             required
                             type='text'
                             placeholder='Your First Name Here'
+                            value={user?.name.first}
                             onChange={() => {}}
+                        />
+                    </Grid>
+                    <Grid component='span' item xs={12}>
+                        {/* ROUTING: to page to upload new photo */}
+                        <TextField
+                            inputProps={{ 'aria-label': 'Last Name' }}
+                            label='Last Name'
+                            aria-label='Last Name'
+                            id='fName'
+                            required
+                            type='text'
+                            placeholder='Your Last Name Here'
+                            onChange={() => {}}
+                            value={user?.name.last}
                         />
                     </Grid>
                     <Grid component='span' item xs={12}>
                         <TextField
                             inputProps={{ 'aria-label': 'E-mail' }}
-                            label='E-mail'
+                            label='Email'
                             aria-label='E-mail'
                             required
                             type='email'
                             placeholder='Your E-mail Here'
                             onChange={() => {}}
+                            value={user?.email.address}
                         />
                     </Grid>
                     <Grid component='span' item xs={12}>
@@ -101,7 +170,23 @@ export default function UserProfile({ img }: Props) {
                     <Grid component='span' item xs={12}>
                         {/* TODO: fix token here */}
                         <h3>Reset Password Method #2</h3>
-                        <PasswordResetForm onSuccess={() => {}} token={handlePassChange()} />
+                        <PasswordResetForm onSuccess={() => {}} token={''} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid component='span' item xs={12}>
+                        {/* onClick={() => history.push('/logout')}  */}
+                        <h3>Logout</h3>
+                        <Button
+                            href='https://prytaneum.io/logout'
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            fullWidth
+                        >
+                            Logout
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
