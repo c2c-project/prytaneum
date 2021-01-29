@@ -7,7 +7,6 @@ import FormActions from 'components/FormActions';
 import FormContent from 'components/FormContent';
 import TextField from 'components/TextField';
 import LoadingButton from 'components/LoadingButton';
-import { AxiosResponse } from 'axios';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import useForm from 'hooks/useForm';
@@ -23,10 +22,6 @@ interface Props {
     onFailure?: () => void;
     townhallId?: string;
 }
-interface EndpointFunctions<T> {
-    create: (form: T) => Promise<AxiosResponse<unknown>>;
-    update: (form: T) => Promise<AxiosResponse<unknown>>;
-}
 
 // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
 const endpoints = (townhallId: string) => ({
@@ -40,7 +35,7 @@ const endpoints = (townhallId: string) => ({
     },
 });
 
-export default function FormBase({ 
+export default function FormBase({
     report,
     reportType,
     submitType,
@@ -73,7 +68,7 @@ export default function FormBase({
         <Form onSubmit={handleSubmit(sendRequest)}>
             <FormContent>
                 <TextField
-                    id='reportDescription'
+                    id='report-description'
                     name='description'
                     label='Report Description'
                     error={Boolean(errors.description)}
