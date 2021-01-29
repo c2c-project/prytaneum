@@ -55,9 +55,7 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe('');
 
             ReactTestUtils.act(() => {
@@ -78,9 +76,7 @@ describe('create report form', () => {
                 headers: {},
                 config: {},
             };
-            const spy = jest
-                .spyOn(API, 'createFeedbackReport')
-                .mockResolvedValue(resolvedVal);
+            const spy = jest.spyOn(API, 'createFeedbackReport').mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
             jest.useFakeTimers();
 
@@ -95,13 +91,9 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
 
-            const button = document.querySelector(
-                '[type="submit"]'
-            ) as HTMLButtonElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -109,10 +101,12 @@ describe('create report form', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
             });
+
+            ReactTestUtils.act(() => {
+                button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            });
+
             expect(spy).toBeCalled();
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -122,9 +116,7 @@ describe('create report form', () => {
 
         it('should submit feedback report form and fail', async () => {
             const rejectedVal = { status: 500 };
-            const spy = jest
-                .spyOn(API, 'createFeedbackReport')
-                .mockRejectedValue(rejectedVal);
+            const spy = jest.spyOn(API, 'createFeedbackReport').mockRejectedValue(rejectedVal);
             const newDescription = faker.lorem.paragraph();
             jest.useFakeTimers();
 
@@ -139,13 +131,9 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
 
-            const button = document.querySelector(
-                '[type="submit"]'
-            ) as HTMLButtonElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -153,10 +141,11 @@ describe('create report form', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
             });
+            ReactTestUtils.act(() => {
+                button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            });
+
             expect(spy).toBeCalled();
             jest.runAllTimers();
 
@@ -197,9 +186,7 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe('');
 
             ReactTestUtils.act(() => {
@@ -220,9 +207,7 @@ describe('create report form', () => {
                 headers: {},
                 config: {},
             };
-            const spy = jest
-                .spyOn(API, 'createBugReport')
-                .mockResolvedValue(resolvedVal);
+            const spy = jest.spyOn(API, 'createBugReport').mockResolvedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
             jest.useFakeTimers();
 
@@ -238,12 +223,8 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
-            const button = document.querySelector(
-                '[type="submit"]'
-            ) as HTMLButtonElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -251,9 +232,10 @@ describe('create report form', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
+            });
+
+            ReactTestUtils.act(() => {
+                button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
             // Can't tell with what date it is called
             expect(spy).toBeCalled();
@@ -268,9 +250,7 @@ describe('create report form', () => {
             const resolvedVal = {
                 status: 500,
             };
-            const spy = jest
-                .spyOn(API, 'createBugReport')
-                .mockRejectedValue(resolvedVal);
+            const spy = jest.spyOn(API, 'createBugReport').mockRejectedValue(resolvedVal);
             const newDescription = faker.lorem.paragraph();
             jest.useFakeTimers();
 
@@ -286,12 +266,8 @@ describe('create report form', () => {
                 );
             });
 
-            const reportDescriptionNode = document.querySelector(
-                '#report-description'
-            ) as HTMLInputElement;
-            const button = document.querySelector(
-                '[type="submit"]'
-            ) as HTMLButtonElement;
+            const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
+            const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -299,9 +275,10 @@ describe('create report form', () => {
                         value: newDescription,
                     } as unknown) as EventTarget,
                 });
-                button.dispatchEvent(
-                    new MouseEvent('click', { bubbles: true })
-                );
+            });
+
+            ReactTestUtils.act(() => {
+                button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
 
             expect(spy).toBeCalled();
