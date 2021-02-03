@@ -39,7 +39,7 @@ function useStyledQueue() {
             background: isDraggingOver ? 'lightblue' : 'lightgrey',
             padding: theme.spacing(2),
             borderRadius: theme.custom.borderRadius,
-            boxShadow: theme.shadows[10],
+            boxShadow: theme.shadows[3],
         }),
         [theme]
     );
