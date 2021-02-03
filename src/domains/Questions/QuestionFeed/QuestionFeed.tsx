@@ -37,8 +37,8 @@ export function QuestionFeedLoading() {
     return (
         <>
             <ListFilterSkeleton />
-            {new Array(3).fill(0).map(() => (
-                <QuestionCardSkeleton />
+            {new Array(3).fill(0).map((_zero, idx) => (
+                <QuestionCardSkeleton key={idx} />
             ))}
         </>
     );
