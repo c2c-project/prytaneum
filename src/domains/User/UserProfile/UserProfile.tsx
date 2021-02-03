@@ -3,11 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import { Avatar, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import type { ClientSafeUser } from 'prytaneum-typings';
+import type { ClientSafeUser, RegisterForm } from 'prytaneum-typings';
 import axios, { AxiosResponse } from 'axios';
 import DoneIcon from '@material-ui/icons/Done';
 
 import history from 'utils/history';
+import Form from 'components/Form';
 import TextField from 'components/TextField';
 import EditableText from 'components/EditableText';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
@@ -20,6 +21,8 @@ import useUser from 'hooks/useUser';
 import useForm from 'hooks/useForm';
 import { getMyInfo } from 'domains/Auth/api';
 import { SentimentSatisfied } from '@material-ui/icons';
+
+import API from '../../Auth/api';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props
@@ -50,10 +53,42 @@ const useStyles = makeStyles((theme) => ({
         3c. display snack saying update successful if response is good
             3ci. Refresh UserProfile to confirm it went into effect, might be annoying so maybe not
 */
+const initState: RegisterForm = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
+    const [user, setUser] = useUser();
+    const [snack] = useSnack();
+    const [regForm, errors, handleSubmit, handleChange] = useForm(initState);
+    // if we use passwordresetform, we dont need this
+    // const changePass = React.useCallback(() => API.changePassword(''), ['']);
+    // const [sendPass, isPassLoad] = useEndpoint(changePass, {
+    //     onSuccess: ({ data }) => {
+    //         setUser(data.user);
+    //     },
+    // });
+    const changeFN = React.useCallback(() => API.changeFName(user?.name.first || 'first name'), [user?.name.first]);
+    const [sendFName, isFNload] = useEndpoint(changeFN, {
+        onSuccess: ({ data }) => {
+            setUser(data.user);
+            snack(`Update ${data.user.name.first}!`);
+        },
+    });
+    const changeLN = React.useCallback(() => API.changeLName(user?.name.last || 'last name'), [user?.name.last]);
+    const [sendLName, isLNload] = useEndpoint(changeLN, {
+        onSuccess: ({ data }) => {
+            setUser(data.user);
+            snack(`Updated ${data.user.name.last}!`);
+        },
+    });
+    const changeEmail = React.useCallback(() => API.changeEmail(user?.email.address || "email"), [user?.email.address]);
+    const [sendEmail, isEMload] = useEndpoint(changeEmail, {
+        onSuccess: ({ data }) => {
+            setUser(data.user);
+            snack(`Updated ${data.user.email.address}!`);
+        },
+    });
+
     // 1. check if user is logged in
-    const [user] = useUser();
     const isLoggedIn = user || undefined;
     if (isLoggedIn === undefined) {
         // 1a. if not, redirect to /login
@@ -61,6 +96,12 @@ export default function UserProfile({ img }: Props) {
         return <Redirect href='https://prytaneum.io/login' />;
     }
     // 1b. if they are, proceed
+    // const handleChange = (text: string | undefined) => {
+    //     return (e: React.ChangeEvent<HTMLInputElement>) => {
+    //         setUser();
+    //         snack(text || "");
+    //     };
+    // };
 
     // 2,a,b
     return (
@@ -81,7 +122,7 @@ export default function UserProfile({ img }: Props) {
                             type='text'
                             placeholder='Your First Name Here'
                             value={user?.name.first}
-                            onChange={() => {}}
+                            onChange={handleChange()}
                         />
                     </Grid>
                     <Grid component='span' item xs={12}>
@@ -126,7 +167,7 @@ export default function UserProfile({ img }: Props) {
                         <h3>Reset Password Method #2</h3>
                         <PasswordResetForm onSuccess={() => {}} token={user?._id || 'undefined'} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid component='span' item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid component='span' item xs={12}>

@@ -53,13 +53,13 @@ export async function changePassword(token: string) {
 // TODO: this is just a mockup for a change endpoint
 // need to add confirmation!
 export async function changeFName(fname: string) {
-    return axios.post(`/api/users/change-fname/${fname}`);
+    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-fname/`, { fname });
 }
 
 // TODO: this is just a mockup for a change endpoint
 // need to add confirmation!
 export async function changeLName(lname: string) {
-    return axios.post(`/api/users/change-lname/${lname}`);
+    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-lname/`, { lname });
 }
 
 // TODO: this is just a mockup for a change endpoint
@@ -69,7 +69,7 @@ export async function changeEmail(email: string) {
     if (!match || match[0].length !== email.length) {
         throw errors.invalidEmail();
     }
-    return axios.post(`/api/users/change-email/${email}`);
+    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-email/`, { email });
 }
 
 /** Function to request a password reset
