@@ -29,7 +29,7 @@ const QuestionQueueTab = connect((store) => ({
 }))(StyledTab);
 
 const getTabVisibility = (settings: TownhallSettings, isModerator: boolean) => ({
-    isQuestionFeedVisible: settings.questionQueue.transparent,
+    isQuestionFeedVisible: settings.questionQueue.transparent || isModerator,
     isChatVisible: settings.chat.enabled,
     isQueueVisible: isModerator,
 });
