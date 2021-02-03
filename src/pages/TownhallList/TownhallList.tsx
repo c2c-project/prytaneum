@@ -2,6 +2,7 @@ import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import { Grid, DialogContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { motion } from 'framer-motion';
 
 import TitleCard from 'components/TitleCard';
 import List from 'domains/Townhall/TownhallList';
@@ -25,7 +26,7 @@ export default function TownhallList() {
     const [open, setOpen] = React.useState(false);
     const [onExit, setOnExit] = React.useState<(() => void) | undefined>(undefined);
     return (
-        <>
+        <motion.div>
             <FadeThrough animKey='townhall-list-page'>
                 <Grid container>
                     <TitleCard title='Townhalls' />
@@ -48,6 +49,6 @@ export default function TownhallList() {
             <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
                 <AddIcon className={classes.fab} />
             </Fab>
-        </>
+        </motion.div>
     );
 }
