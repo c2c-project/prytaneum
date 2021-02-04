@@ -23,6 +23,7 @@ import { getMyInfo } from 'domains/Auth/api';
 import { SentimentSatisfied } from '@material-ui/icons';
 
 import API from '../../Auth/api';
+import FormContent from 'components/FormContent';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props
@@ -53,24 +54,17 @@ const useStyles = makeStyles((theme) => ({
         3c. display snack saying update successful if response is good
             3ci. Refresh UserProfile to confirm it went into effect, might be annoying so maybe not
 */
-const initState: RegisterForm = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
     const [user, setUser] = useUser();
+    const initState: RegisterForm = { firstName: user?.name.first || "", lastName: user?.name.last || "", email: user?.email.address || "", password: '', confirmPassword: '' };
     const [snack] = useSnack();
     const [regForm, errors, handleSubmit, handleChange] = useForm(initState);
-    // if we use passwordresetform, we dont need this
-    // const changePass = React.useCallback(() => API.changePassword(''), ['']);
-    // const [sendPass, isPassLoad] = useEndpoint(changePass, {
-    //     onSuccess: ({ data }) => {
-    //         setUser(data.user);
-    //     },
-    // });
     const changeFN = React.useCallback(() => API.changeFName(user?.name.first || 'first name'), [user?.name.first]);
     const [sendFName, isFNload] = useEndpoint(changeFN, {
         onSuccess: ({ data }) => {
             setUser(data.user);
-            snack(`Update ${data.user.name.first}!`);
+            snack(`Updated ${data.user.name.first}!`);
         },
     });
     const changeLN = React.useCallback(() => API.changeLName(user?.name.last || 'last name'), [user?.name.last]);
@@ -96,12 +90,6 @@ export default function UserProfile({ img }: Props) {
         return <Redirect href='https://prytaneum.io/login' />;
     }
     // 1b. if they are, proceed
-    // const handleChange = (text: string | undefined) => {
-    //     return (e: React.ChangeEvent<HTMLInputElement>) => {
-    //         setUser();
-    //         snack(text || "");
-    //     };
-    // };
 
     // 2,a,b
     return (
@@ -109,48 +97,63 @@ export default function UserProfile({ img }: Props) {
             <Grid container alignContent='center' spacing={2}>
                 <Grid container spacing={2} id='userInfo'>
                     <Grid component='span' item xs={12}>
+                        {/* ROUTING: to page to upload new photo */}
                         <Avatar src={img} alt='Profile Avatar' />
                     </Grid>
+                    
                     <Grid component='span' item xs={12}>
-                        {/* ROUTING: to page to upload new photo */}
-                        <TextField
-                            inputProps={{ 'aria-label': 'First Name' }}
-                            label='First Name'
-                            aria-label='First Name'
-                            id='fName'
-                            required
-                            type='text'
-                            placeholder='Your First Name Here'
-                            value={user?.name.first}
-                            onChange={handleChange()}
-                        />
+                        <Form onSubmit={handleSubmit(sendFName)}>
+                            <FormContent>
+                                <TextField
+                                    inputProps={{ 'aria-label': 'First Name' }}
+                                    label='First Name'
+                                    aria-label='First Name'
+                                    id='fName'
+                                    required
+                                    type='text'
+                                    placeholder='Your First Name Here'
+                                    value={regForm.firstName}
+                                    onChange={handleChange("firstName")}
+                                />
+                            </FormContent>
+                        </Form>
                     </Grid>
+                    
                     <Grid component='span' item xs={12}>
-                        {/* ROUTING: to page to upload new photo */}
-                        <TextField
-                            inputProps={{ 'aria-label': 'Last Name' }}
-                            label='Last Name'
-                            aria-label='Last Name'
-                            id='fName'
-                            required
-                            type='text'
-                            placeholder='Your Last Name Here'
-                            onChange={() => {}}
-                            value={user?.name.last}
-                        />
+                        <Form onSubmit={handleSubmit(sendLName)}>
+                            <FormContent>
+                                <TextField
+                                    inputProps={{ 'aria-label': 'Last Name' }}
+                                    label='Last Name'
+                                    aria-label='Last Name'
+                                    id='fName'
+                                    required
+                                    type='text'
+                                    placeholder='Your Last Name Here'
+                                    value={regForm.lastName}
+                                    onChange={handleChange("lastName")}
+                                />
+                            </FormContent>
+                        </Form>
                     </Grid>
-                    <Grid component='span' item xs={12}>
-                        <TextField
-                            inputProps={{ 'aria-label': 'E-mail' }}
-                            label='Email'
-                            aria-label='E-mail'
-                            required
-                            type='email'
-                            placeholder='Your E-mail Here'
-                            onChange={() => {}}
-                            value={user?.email.address}
-                        />
+
+                    <Grid component='span' item xs={12}>                        
+                        <Form onSubmit={handleSubmit(sendEmail)}>
+                            <FormContent>
+                                <TextField
+                                    inputProps={{ 'aria-label': 'E-mail' }}
+                                    label='Email'
+                                    aria-label='E-mail'
+                                    required
+                                    type='email'
+                                    placeholder='Your E-mail Here'
+                                    value={regForm.email}
+                                    onChange={handleChange("email")}
+                                />
+                            </FormContent>
+                        </Form>    
                     </Grid>
+
                     <Grid component='span' item xs={12}>
                         <h3>Reset Password Method #1</h3>
                         <Button
