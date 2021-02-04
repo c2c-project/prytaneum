@@ -3,24 +3,17 @@ import Grid from '@material-ui/core/Grid';
 import { Avatar, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import type { ClientSafeUser, RegisterForm } from 'prytaneum-typings';
-import axios, { AxiosResponse } from 'axios';
-import DoneIcon from '@material-ui/icons/Done';
+import type { RegisterForm } from 'prytaneum-typings';
 
-import history from 'utils/history';
 import Form from 'components/Form';
 import TextField from 'components/TextField';
 import EditableText from 'components/EditableText';
 import PasswordResetForm from 'domains/Auth/PasswordResetForm';
 import Redirect from 'domains/Logical/Redirect';
 import useEndpoint from 'hooks/useEndpoint';
-import Login from 'pages/Login';
-import Loader from 'components/Loader';
 import useSnack from 'hooks/useSnack';
 import useUser from 'hooks/useUser';
 import useForm from 'hooks/useForm';
-import { getMyInfo } from 'domains/Auth/api';
-import { SentimentSatisfied } from '@material-ui/icons';
 
 import API from '../../Auth/api';
 import FormContent from 'components/FormContent';
@@ -40,20 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-/*
-    1. Check if user is logged in
-        1a. if not, redirect to /login
-        1b. if they are, proceed
-    2. Get user info
-        2a. Fill in Fname, Lname, Email
-        2b. display the information
-    3. Update User info
-        3a. Check any changed field to be valid
-            3ai. no blank names/emails, etc
-        3b. POST to endpoint to update any changed field that **IS VALID**!
-        3c. display snack saying update successful if response is good
-            3ci. Refresh UserProfile to confirm it went into effect, might be annoying so maybe not
-*/
+
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
     const [user, setUser] = useUser();
