@@ -21,7 +21,7 @@ export default function usePlaylist() {
     );
     React.useEffect(() => {
         dispatch({ type: 'playlist-initialize', payload: townhall.state });
-        // NOTE: i only want this to run on the very first render
+        // NOTE: this should only run on the first render
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return [playlist, dispatch] as const;
