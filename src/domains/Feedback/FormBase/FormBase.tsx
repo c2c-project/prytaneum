@@ -14,6 +14,13 @@ import { createBugReport, createFeedbackReport, updateBugReport, updateFeedbackR
 import { FeedbackReport, BugReport, FeedbackForm, BugReportForm } from '../types';
 
 type Report = FeedbackReport | BugReport;
+
+interface DefaultProps {
+    onSuccess: (report: Report) => void;
+    onFailure: () => void;
+    townhallId: string;
+}
+
 interface Props {
     report: Report;
     reportType: 'Feedback' | 'Bug';
@@ -39,10 +46,10 @@ export default function FormBase({
     report,
     reportType,
     submitType,
-    onSuccess = () => {},
-    onFailure = () => {},
-    townhallId = '',
-}: Props) {
+    onSuccess,
+    onFailure,
+    townhallId,
+}: Props & DefaultProps) {
     const [snack] = useSnack();
     const [reportState, errors, handleSubmit, handleChange] = useForm(report);
 
