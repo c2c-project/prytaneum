@@ -31,28 +31,14 @@ describe('create report form', () => {
         // eslint-disable-next-line jest/expect-expect
         it('should create feedback report form', async () => {
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Feedback'
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Feedback' />, container);
             });
         });
 
         it('should change state of feedback report form', async () => {
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Feedback'
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Feedback' />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
@@ -81,14 +67,7 @@ describe('create report form', () => {
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Feedback'
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Feedback' />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
@@ -121,14 +100,7 @@ describe('create report form', () => {
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Feedback'
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Feedback' />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
@@ -160,30 +132,14 @@ describe('create report form', () => {
         // eslint-disable-next-line jest/expect-expect
         it('should create bug report form', async () => {
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Bug'
-                        townhallId={townhallId}
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Bug' townhallId={townhallId} />, container);
             });
         });
 
         it('should change state of bug report form', async () => {
             const newDescription = faker.lorem.paragraph();
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Bug'
-                        townhallId={townhallId}
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Bug' townhallId={townhallId} />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
@@ -212,15 +168,7 @@ describe('create report form', () => {
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Bug'
-                        townhallId={townhallId}
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Bug' townhallId={townhallId} />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
@@ -255,15 +203,7 @@ describe('create report form', () => {
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
-                render(
-                    <ReportForm
-                        title={faker.random.word()}
-                        description={faker.lorem.paragraph()}
-                        reportType='Bug'
-                        townhallId={townhallId}
-                    />,
-                    container
-                );
+                render(<ReportForm reportType='Bug' townhallId={townhallId} />, container);
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
