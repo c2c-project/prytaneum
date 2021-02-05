@@ -15,9 +15,10 @@ import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import ListFilter from 'components/ListFilter';
+import useFilters, { Accessors } from 'components/ListFilter/useFilters';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/Feedback/ReportList';
-import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
+import { FilterFunc } from 'utils/filters';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import { getFeedbackReportsBySubmitter, getBugReportsBySubmitter } from '../api';
 
@@ -58,6 +59,8 @@ export default function ReportHistory() {
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
     const [reports, setReports] = React.useState<Report[]>([]);
+    const accessors = React.useMemo<Accessors<Report>[]>(() => [(report) => report.description], []);
+    const [filteredReports, handleSearch, handleFilterChange] = useFilters(reports, accessors);
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setReportType(e.target.value as string);
@@ -156,8 +159,6 @@ export default function ReportHistory() {
         refetchReports: () => sendRequest(),
     };
 
-    // Code for filters starts here
-
     type Filter = FilterFunc<Report>;
     const filterMap: Record<string, Filter> = {
         Today: (data) => data.filter(({ date }) => isToday(new Date(date))),
@@ -167,25 +168,6 @@ export default function ReportHistory() {
         'This month': (data) => data.filter(({ date }) => isThisMonth(new Date(date))),
 
         'This year': (data) => data.filter(({ date }) => isThisYear(new Date(date))),
-    };
-
-    const search = (searchText: string, data: Report[]) => {
-        const descriptionAccessor = (d: Report) => d.description;
-        return utilSearch(searchText, data, [descriptionAccessor]);
-    };
-
-    const [filters, setFilters] = React.useState<Filter[]>([(reportList: Report[]) => reportList]);
-
-    const handleSearch = React.useCallback(
-        (text: string) =>
-            setFilters(([, ...otherFilters]) => [(filteredList) => search(text, filteredList), ...otherFilters]),
-        [setFilters]
-    );
-
-    const filteredReports = React.useMemo(() => applyFilters(reports || [], filters), [reports, filters]);
-
-    const handleFilterChange = (newFilters: Filter[]) => {
-        setFilters(([searchFilter]) => [searchFilter, ...newFilters]);
     };
 
     return (
