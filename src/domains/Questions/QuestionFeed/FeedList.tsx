@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
+import { useSelector } from 'react-redux';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import ResponsiveDialog from 'components/ResponsiveDialog';
@@ -45,16 +46,18 @@ const useStyles = makeStyles((theme) => ({
 
 function FeedList({ questions, variant, systemMessages, className }: Props) {
     const [user] = useUser();
-    const [townhall, isModerator] = useTownhall();
+    const [, isModerator] = useTownhall();
     const classes = useStyles();
     const [dialogContent, setDialogContent] = React.useState<JSX.Element | null>(null);
     // TODO: make this a subscription on the backend for "live data" rather than a local state here
     const [liked, setLiked] = React.useState<Set<string>>(new Set());
     const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [dialogContent]);
+    const queue = useSelector((store) => store.queue);
 
     const isSuggested = React.useCallback(
-        (questionId: string) => Boolean(townhall.state.playlist.list.find(({ _id }) => _id === questionId)),
-        [townhall]
+        (questionId: string) =>
+            Boolean([...queue.suggested, ...queue.buffer.suggested].find(({ _id }) => _id === questionId)),
+        [queue]
     );
 
     function closeDialog() {
