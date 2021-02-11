@@ -44,34 +44,6 @@ export async function forgotPassReset(token: string, form: ForgotPassForm) {
     });
 }
 
-// TODO: this is just a mockup for a change endpoint
-// need to add confirmation!
-export async function changePassword(token: string) {
-    return axios.post(`/api/users/reset-password/${token}`);
-}
-
-// TODO: this is just a mockup for a change endpoint
-// need to add confirmation!
-export async function changeFName(fname: string) {
-    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-fname/`, { fname });
-}
-
-// TODO: this is just a mockup for a change endpoint
-// need to add confirmation!
-export async function changeLName(lname: string) {
-    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-lname/`, { lname });
-}
-
-// TODO: this is just a mockup for a change endpoint
-// need to add confirmation!
-export async function changeEmail(email: string) {
-    const match = email.match(/(\w+\.*)*\w+@(\w+\.)+\w+/gi);
-    if (!match || match[0].length !== email.length) {
-        throw errors.invalidEmail();
-    }
-    return axios.post<{ user: ClientSafeUser }>(`/api/users/change-email/`, { email });
-}
-
 /** Function to request a password reset
  *  @category Domains/Auth
  *  @constructor forgotPassRequest
@@ -125,11 +97,24 @@ export async function verifyEmail(userId: string) {
     return axios.post('/api/confirm/user-email', { userId });
 }
 
+export async function logout() {
+    return axios.post('/api/users/logout');
+}
+
 export async function getMyInfo() {
     // gets user info from the token in header
     return axios.get<ClientSafeUser>('/api/users/me');
 }
 
-export async function logout() {
-    return axios.post('/api/users/logout');
+// TODO: CHANGE THIS, not sure if we want to update passwords this way
+export async function changePassword(token: string) {
+    return axios.put<{ user: ClientSafeUser}>(`/api/users/me/reset-password/`, { token });
+}
+
+export async function changeName(name: string, choice: 'first' | 'last') {
+    return axios.put<{ user: ClientSafeUser}>(`/api/users/me/name/`, { name, choice });
+}
+
+export async function changeEmail(email: string) {
+    return axios.put<{ user: ClientSafeUser}>(`/api/users/email/`, { email });
 }

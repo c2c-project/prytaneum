@@ -40,14 +40,16 @@ export default function UserProfile({ img }: Props) {
     const initState: RegisterForm = { firstName: user?.name.first || "", lastName: user?.name.last || "", email: user?.email.address || "", password: '', confirmPassword: '' };
     const [snack] = useSnack();
     const [regForm, errors, handleSubmit, handleChange] = useForm(initState);
-    const changeFN = React.useCallback(() => API.changeFName(user?.name.first || 'first name'), [user?.name.first]);
+    const fname = (user?.name.first || 'first')
+    const lname = (user?.name.last || 'last')
+    const changeFN = React.useCallback(() => API.changeName(fname, 'first'), [fname, 'first']);
     const [sendFName, isFNload] = useEndpoint(changeFN, {
         onSuccess: ({ data }) => {
             setUser(data.user);
             snack(`Updated ${data.user.name.first}!`);
         },
     });
-    const changeLN = React.useCallback(() => API.changeLName(user?.name.last || 'last name'), [user?.name.last]);
+    const changeLN = React.useCallback(() => API.changeName(lname, 'last'), [lname, 'last']);
     const [sendLName, isLNload] = useEndpoint(changeLN, {
         onSuccess: ({ data }) => {
             setUser(data.user);
@@ -62,16 +64,14 @@ export default function UserProfile({ img }: Props) {
         },
     });
 
-    // 1. check if user is logged in
+    // check if user is logged in
     const isLoggedIn = user || undefined;
     if (isLoggedIn === undefined) {
-        // 1a. if not, redirect to /login
+        // if not, redirect to /login
         console.log('Redirecting');
         return <Redirect href='https://prytaneum.io/login' />;
     }
-    // 1b. if they are, proceed
 
-    // 2,a,b
     return (
         <div className={classes.root}>
             <Grid container alignContent='center' spacing={2}>
