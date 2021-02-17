@@ -7,7 +7,9 @@ import {
     ForgotPassForm,
     RegisterForm,
     ForgotPassRequestForm,
+    ClientSafeUser,
 } from 'prytaneum-typings';
+import { LinkedCamera } from '@material-ui/icons';
 
 export const makeUsers = (num?: number): User[] => {
     const ret = [];
@@ -88,5 +90,30 @@ export default [
     rest.get('/api/users/logout', (req, res, ctx) => {
         // deletes the cookie
         return res(ctx.cookie('jwt', ''), ctx.status(200));
+    }),
+
+    // TODO : this mock does not create a snack
+    rest.put('/api/users/me/name', (req, res, ctx) => {
+        const { fname, lname } = req.body as { fname: string, lname: string }
+        const toReturnUser = makeUser();
+        toReturnUser.name.first = fname;
+        toReturnUser.name.last = lname;
+        return res(ctx.status(200),  ctx.json({
+            data: toReturnUser
+        }));
+    }),
+    // TODO : this is just to send a confirmation of change
+    // not sure if we need to mock more stuff
+    rest.put('/api/users/me/reset-password', (req, res, ctx) => {
+        return res(ctx.status(200));
+    }),
+    // TODO : this mock does not create a snack
+    rest.put('/api/users/email', (req, res, ctx) => {
+        const { email } = req.body as { email: string };
+        const toReturnUser = makeUser();
+        toReturnUser.email.address = email
+        return res(ctx.status(200), ctx.json({
+            data: toReturnUser
+        }) );
     }),
 ];

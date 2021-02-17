@@ -111,9 +111,9 @@ export async function changePassword(token: string) {
     return axios.put<{ user: ClientSafeUser}>(`/api/users/me/reset-password/`, { token });
 }
 
-export async function changeName(name: string, choice: 'first' | 'last') {
-    return axios.put<{ user: ClientSafeUser}>(`/api/users/me/name/`, { name, choice });
-}
+export async function changeName(fname: string , lname: string) {
+    return axios.put<{ user: ClientSafeUser}>(`/api/users/me/name/`, { fname, lname });
+} 
 
 export async function changeEmail(email: string) {
     return axios.put<{ user: ClientSafeUser}>(`/api/users/email/`, { email });
