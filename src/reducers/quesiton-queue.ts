@@ -18,7 +18,7 @@ export type QueueActions =
     | SocketIOEvents['playlist-state']
     | { type: 'flush-queue-buffer' }
     | { type: 'flush-suggested-buffer' }
-    | { type: 'initialize'; payload: Townhall['state'] };
+    | { type: 'question-queue-initialize'; payload: Townhall['state'] };
 const initialState: QueueState = {
     suggested: [],
     queue: [],
@@ -128,7 +128,7 @@ export default function playlistReducer(state: QueueState, action: QueueActions)
                 buffer: { ...state.buffer, suggested: [] },
             };
         }
-        case 'initialize': {
+        case 'question-queue-initialize': {
             return makeInitialState(action.payload);
         }
         default:

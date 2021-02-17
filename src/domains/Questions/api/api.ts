@@ -1,5 +1,5 @@
 import qs from 'qs';
-import type { QuestionForm, Question, ReplyForm } from 'prytaneum-typings';
+import type { QuestionForm, Question, ReplyForm, Playlist } from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 
@@ -30,11 +30,7 @@ export async function createQuestion(townhallId: string, form: QuestionForm) {
 /**
  * updates a question
  */
-export async function updateQuestion(
-    townhallId: string,
-    form: QuestionForm,
-    questionId: string
-) {
+export async function updateQuestion(townhallId: string, form: QuestionForm, questionId: string) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}`;
     return axios.put(url, qs.stringify(form));
 }
@@ -66,11 +62,7 @@ export async function deleteLike(townhallId: string, questionId: string) {
 /**
  * creates a reply
  */
-export async function createReply(
-    townhallId: string,
-    questionId: string,
-    form: ReplyForm
-) {
+export async function createReply(townhallId: string, questionId: string, form: ReplyForm) {
     const url = `/api/townhalls/${townhallId}/questions/${questionId}/reply`;
     return axios.post(url, qs.stringify(form));
 }
@@ -89,10 +81,7 @@ export async function addToPlaylist(townhallId: string, questionId: string) {
 /**
  * deletes a question from the playlist
  */
-export async function deleteFromPlaylist(
-    townhallId: string,
-    questionId: string
-) {
+export async function deleteFromPlaylist(townhallId: string, questionId: string) {
     const url = `/api/townhalls/${townhallId}/playlist/${questionId}`;
     return axios.delete(url);
 }
@@ -108,12 +97,9 @@ export async function addToQueue(townhallId: string, questionId: string) {
     return axios.post(url);
 }
 
-export async function updateQueueOrder(
-    townhallId: string,
-    questions: Question[]
-) {
+export async function updateQueueOrder(townhallId: string, questions: Question[]) {
     const url = `/api/townhalls/${townhallId}/playlist/queue`;
-    return axios.put(url, { questions });
+    return axios.put<Playlist>(url, { questions });
 }
 
 /**

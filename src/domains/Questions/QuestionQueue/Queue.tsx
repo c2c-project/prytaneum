@@ -3,7 +3,10 @@ import { CardHeader, Grid } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import type { Question } from 'prytaneum-typings';
 import { useTheme } from '@material-ui/core/styles';
+import { Dispatch } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { QueueActions } from 'reducers';
 import DropArea from 'components/DropArea';
 import useEndpoint from 'hooks/useEndpoint';
 import useTownhall from 'hooks/useTownhall';
@@ -24,16 +27,13 @@ interface Props {
  */
 function useStyledQueue() {
     const theme = useTheme();
-    const reorder = React.useCallback(
-        (list: Question[], startIndex: number, endIndex: number) => {
-            const result = Array.from(list);
-            const [removed] = result.splice(startIndex, 1);
-            result.splice(endIndex, 0, removed);
+    const reorder = React.useCallback((list: Question[], startIndex: number, endIndex: number) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
 
-            return result;
-        },
-        []
-    );
+        return result;
+    }, []);
     const getListStyle = React.useCallback(
         (isDraggingOver: boolean): React.CSSProperties => ({
             background: isDraggingOver ? 'lightblue' : 'lightgrey',
@@ -48,41 +48,27 @@ function useStyledQueue() {
         (isDragging: boolean): React.CSSProperties => ({
             userSelect: 'none',
             margin: theme.spacing(0, 0, 4, 0),
-            filter: isDragging
-                ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})`
-                : '',
+            filter: isDragging ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})` : '',
         }),
         [theme]
     );
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
+function Queue({ questions, bufferLength, onFlushBuffer }: Props) {
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
+    const dispatch = useDispatch<Dispatch<QueueActions>>();
+    const { current } = useSelector((state) => state.queue);
     const classes = useListStyles();
     const [townhall] = useTownhall();
-    const [current, setCurrent] = React.useState(
-        townhall.state.playlist.position.current
-    );
-    const [questions, setQuestions] = React.useState(_questions);
+
     const [hidePast, setHidePast] = React.useState(false);
-    // const reorderEndpoint = React.useCallback(
-    //     () => updateQueueOrder(townhall._id, questions),
-    //     [townhall._id, questions]
-    // );
-    const goNextEndpoint = React.useCallback(() => nextQuestion(townhall._id), [
-        townhall,
-    ]);
-    const goPrevEndpoint = React.useCallback(() => prevQuestion(townhall._id), [
-        townhall,
-    ]);
-    // const [runUpdateQueue] = useEndpoint(reorderEndpoint, { minWaitTime: 0 });
+
+    const goNextEndpoint = React.useCallback(() => nextQuestion(townhall._id), [townhall]);
+    const goPrevEndpoint = React.useCallback(() => prevQuestion(townhall._id), [townhall]);
+
     const [runNext] = useEndpoint(goNextEndpoint, { minWaitTime: 0 });
     const [runPrev] = useEndpoint(goPrevEndpoint, { minWaitTime: 0 });
-
-    React.useEffect(() => {
-        if (_questions.length !== questions.length) setQuestions(_questions);
-    }, [_questions, questions]);
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -91,33 +77,20 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
                 return;
             }
 
-            const newState = reorder(
-                questions,
-                result.source.index,
-                result.destination.index
-            );
-            // FIXME: just bad lol
-            // eslint-disable-next-line no-void
+            const newState = reorder(questions, result.source.index, result.destination.index);
+            dispatch({ type: 'playlist-queue-order', payload: newState });
+            // eslint-disable-next-line
             void updateQueueOrder(townhall._id, newState);
-            setQuestions(newState);
         },
-        [questions, reorder, townhall]
+        [questions, reorder, dispatch, townhall]
     );
 
     const handleClick = (dir: -1 | 1) => () => {
         if (dir === -1) runPrev();
         else runNext();
-        if (current + dir >= questions.length) {
-            return setCurrent(0);
-        }
-        if (current + dir < 0) return setCurrent(questions.length - 1);
-        return setCurrent(current + dir);
     };
 
-    const draggableCards = React.useMemo(() => questions.slice(current + 1), [
-        questions,
-        current,
-    ]);
+    const draggableCards = React.useMemo(() => questions.slice(current + 1), [questions, current]);
     const staticCards = React.useMemo(() => {
         if (hidePast) {
             if (questions[current]) return [questions[current]];
@@ -146,11 +119,7 @@ function Queue({ questions: _questions, bufferLength, onFlushBuffer }: Props) {
                         }}
                     />
                     <StaticList questions={staticCards} />
-                    <DraggableList
-                        questions={draggableCards}
-                        itemStyle={itemStyle}
-                        offset={current + 1}
-                    />
+                    <DraggableList questions={draggableCards} itemStyle={itemStyle} offset={current + 1} />
                 </DropArea>
             </DragDropContext>
         </Grid>

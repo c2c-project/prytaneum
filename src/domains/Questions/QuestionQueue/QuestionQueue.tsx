@@ -31,13 +31,8 @@ export default function QuestionQueue() {
     const suggestedMinusQueued = React.useMemo(
         () =>
             playlist.suggested.filter(({ _id }) => {
-                const isQueued =
-                    playlist.queue.find(({ _id: inner }) => _id === inner) ===
-                    undefined;
-                const isinBuffer =
-                    playlist.buffer.queue.find(
-                        ({ _id: inner }) => _id === inner
-                    ) === undefined;
+                const isQueued = playlist.queue.find(({ _id: inner }) => _id === inner) === undefined;
+                const isinBuffer = playlist.buffer.queue.find(({ _id: inner }) => _id === inner) === undefined;
                 return isQueued && isinBuffer;
             }),
         [playlist]
