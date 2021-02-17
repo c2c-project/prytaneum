@@ -7,6 +7,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
 
+import { incrementQueue, decrementQueue } from 'reducers';
 import usePlaylist from '../usePlaylist';
 import QuestionCard from '../QuestionCard';
 
@@ -56,23 +57,23 @@ export function QuestionCarousel({ question, onClickNext, onClickPrev, hasNext, 
 }
 
 export default function CurrentQuestion() {
-    const [playlist] = usePlaylist();
-    const [position, setPosition] = React.useState(playlist.position);
+    const [playlist, dispatch] = usePlaylist();
+    const { position, queue, max } = playlist;
 
     function handleClick(dir: -1 | 1) {
         return () => {
             if (position + dir < 0) return;
-            if (position + dir > playlist.queue.length) return;
-            setPosition(position + dir);
+            if (position + dir > queue.length) return;
+            dispatch(dir === 1 ? incrementQueue() : decrementQueue());
         };
     }
 
     return (
         <QuestionCarousel
-            question={playlist.queue[position]}
+            question={queue[position]}
             onClickPrev={handleClick(-1)}
             onClickNext={handleClick(1)}
-            hasNext={position < playlist.position}
+            hasNext={position < max}
             hasPrev={position > 0}
         />
     );

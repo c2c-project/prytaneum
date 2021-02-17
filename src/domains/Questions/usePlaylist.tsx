@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     QueueActions,
     addToQueue,
-    incrementQueue,
-    decrementQueue,
     reorderQueue,
     removeFromQueue,
     playlistInit,
+    remoteDecrementQueue,
+    remoteIncrementQueue,
 } from 'reducers';
 
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
@@ -24,25 +24,25 @@ export default function usePlaylist() {
             socket.on('playlist-state', (action: QueueActions) => {
                 switch (action.type) {
                     case 'playlist-queue-add':
-                        addToQueue({ question: action.payload });
+                        dispatch(addToQueue({ question: action.payload }));
                         break;
                     case 'playlist-queue-next':
-                        incrementQueue();
+                        dispatch(remoteIncrementQueue());
                         break;
                     case 'playlist-queue-previous':
-                        decrementQueue();
+                        dispatch(remoteDecrementQueue());
                         break;
                     case 'playlist-queue-remove':
-                        removeFromQueue(action.payload);
+                        dispatch(removeFromQueue(action.payload));
                         break;
                     case 'playlist-queue-order':
-                        reorderQueue({ queue: action.payload });
+                        dispatch(reorderQueue({ queue: action.payload }));
                         break;
                     default:
                     // do nothing
                 }
             }),
-        []
+        [dispatch]
     );
     useSocketio(
         '/playlist',
@@ -53,10 +53,14 @@ export default function usePlaylist() {
     );
     React.useEffect(() => {
         dispatch(
-            playlistInit({ queue: townhall.state.playlist.queue, position: townhall.state.playlist.position.current })
+            playlistInit({
+                queue: townhall.state.playlist.queue,
+                position: townhall.state.playlist.position.current,
+                max: townhall.state.playlist.position.current,
+            })
         );
         // NOTE: this should only run on the first render
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return [playlist] as const;
+    return [playlist, dispatch] as const;
 }

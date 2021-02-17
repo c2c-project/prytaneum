@@ -10,6 +10,7 @@ declare module 'react-redux' {
 export type PlaylistState = {
     queue: Question[];
     position: number;
+    max: number;
 };
 
 export type PlaylistActions =
@@ -21,12 +22,26 @@ export const incrementQueue = createAction('playlist/queue/next');
 export const decrementQueue = createAction('playlist/queue/previous');
 export const reorderQueue = createAction<{ queue: Question[] }>('playlist/queue/reorder');
 export const removeFromQueue = createAction<string>('playlist/queue/remove');
-export const playlistInit = createAction<{ queue: Question[]; position: number }>('playlist/queue/init');
+export const playlistInit = createAction<{ queue: Question[]; position: number; max: number }>('playlist/queue/init');
+export const remoteIncrementQueue = createAction('playlist/queue/remote-next');
+export const remoteDecrementQueue = createAction('playlist/queue/remote-prev');
 
-export default createReducer<PlaylistState>({ queue: [], position: -1 }, (builder) => {
+export default createReducer<PlaylistState>({ queue: [], position: -1, max: -1 }, (builder) => {
     builder.addCase(addToQueue, (state, action) => ({ ...state, queue: [...state.queue, action.payload.question] }));
     builder.addCase(incrementQueue, (state) => ({ ...state, position: state.position + 1 }));
     builder.addCase(decrementQueue, (state) => ({ ...state, position: state.position - 1 }));
+    builder.addCase(remoteIncrementQueue, (state) => {
+        const newState = { ...state, max: state.max + 1 };
+        // auto increment question if we're at the current one already
+        if (state.position === state.max) newState.position = newState.max;
+        return newState;
+    });
+    builder.addCase(remoteDecrementQueue, (state) => {
+        const newState = { ...state, max: state.max - 1 };
+        // keep the view in sync with the max bound of the question queue
+        if (state.position > newState.max) newState.position = newState.max;
+        return newState;
+    });
     builder.addCase(reorderQueue, (state, action) => ({ ...state, ...action.payload }));
     builder.addCase(removeFromQueue, (state, action) => ({
         ...state,
