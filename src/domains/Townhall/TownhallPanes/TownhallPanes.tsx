@@ -22,7 +22,7 @@ type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.length, label: 'Question Feed' }))(
     StyledTab
 );
-const ChatTab = connect((store) => ({ badgeContent: store.chat.length, label: 'Chat' }))(StyledTab);
+const ChatTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Chat' }))(StyledTab);
 const QuestionQueueTab = connect((store) => ({
     badgeContent: store.queue.buffer.suggested.length,
     label: 'Question Queue',
