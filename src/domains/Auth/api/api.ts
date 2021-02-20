@@ -106,11 +106,6 @@ export async function getMyInfo() {
     return axios.get<ClientSafeUser>('/api/users/me');
 }
 
-// TODO: CHANGE THIS?, not sure if we want to update passwords this way
-export async function changePassword(token: string) {
-    return axios.put<{ user: ClientSafeUser}>(`/api/users/me/reset-password/`, { token });
-}
-
 export async function changeName(fname: string , lname: string) {
     return axios.put<{ user: ClientSafeUser}>(`/api/users/me/name/`, { fname, lname });
 } 
