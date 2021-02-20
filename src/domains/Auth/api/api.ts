@@ -108,13 +108,16 @@ export async function getMyInfo() {
 
 // TODO: CHANGE THIS, not sure if we want to update passwords this way
 export async function changePassword(token: string) {
+    console.log("changePassword");
     return axios.put<{ user: ClientSafeUser}>(`/api/users/me/reset-password/`, { token });
 }
 
 export async function changeName(fname: string , lname: string) {
+    console.log("changeName");
     return axios.put<{ user: ClientSafeUser}>(`/api/users/me/name/`, { fname, lname });
 } 
 
 export async function changeEmail(email: string) {
+    console.log("changeEmail")
     return axios.put<{ user: ClientSafeUser}>(`/api/users/email/`, { email });
 }

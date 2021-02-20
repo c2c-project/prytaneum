@@ -40,43 +40,24 @@ const RequiredUser = () => {
 
 export default function UserProfile({ img }: Props) {
     const classes = useStyles();
-    const [snack] = useSnack();
     const [user, setUser] = RequiredUser();
     const initState: RegisterForm = { firstName: user.name.first, lastName: user.name.last, email: user.email.address, password: '', confirmPassword: '' };
+    const [snack] = useSnack();
     const [regForm, errors, handleSubmit, handleChange] = useForm(initState);
-    const changeBothNames = React.useCallback(() => API.changeName(user.name.first, user.name.last), [user.name.first, user.name.last]);
+    const changeBothNames = React.useCallback(() => API.changeName(regForm.firstName, regForm.lastName), [regForm.firstName, regForm.lastName]);
     const [sendName, isNameloading] = useEndpoint(changeBothNames, {
         onSuccess: ({ data }) => {
             setUser(data.user);
             snack(`Updated ${data.user.name.first} ${data.user.name.last}!`);
         },
     });
-    const changeEmail = React.useCallback(() => API.changeEmail(user?.email.address || "email"), [user?.email.address]);
+    const changeEmail = React.useCallback(() => API.changeEmail(regForm.email), [regForm.email]);
     const [sendEmail, isEMload] = useEndpoint(changeEmail, {
         onSuccess: ({ data }) => {
             setUser(data.user);
             snack(`Updated ${data.user.email.address}!`);
         },
     });
-
-    // const handleTextChange = (
-    //     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    //     data: string
-    // ) => {
-    //     e.preventDefault();
-    //     const { value } = e.target;
-    //     setUser((state) => ({ data: value }))
-    // }
-
-    // const handleNameSubmit = (e: React.SyntheticEvent) => {
-    //     e.preventDefault();
-    //     sendName();
-    // }
-
-    // const handleEmailSubmit = (e: React.SyntheticEvent) => {
-    //     e.preventDefault();
-    //     sendEmail();
-    // }
 
     return (
         <div className={classes.root}>
@@ -89,7 +70,7 @@ export default function UserProfile({ img }: Props) {
                     
                     <Grid component='span' item xs={12}>
                         {/* <Form onSubmit={handleNameSubmit}> */}
-                        <Form onSubmit={handleSubmit()}>
+                        <Form onSubmit={handleSubmit(sendName)}>
                             <FormContent>
                                 <TextField
                                     inputProps={{ 'aria-label': 'First Name' }}
@@ -109,7 +90,7 @@ export default function UserProfile({ img }: Props) {
                     
                     <Grid component='span' item xs={12}>
                         {/* <Form onSubmit={handleNameSubmit}> */}
-                        <Form onSubmit={handleSubmit()}>
+                        <Form onSubmit={handleSubmit(sendName)}>
                             <FormContent>
                                 <TextField
                                     inputProps={{ 'aria-label': 'Last Name' }}
@@ -129,7 +110,7 @@ export default function UserProfile({ img }: Props) {
 
                     <Grid component='span' item xs={12}>                        
                         {/* <Form onSubmit={handleEmailSubmit}> */}
-                        <Form onSubmit={handleSubmit()}>
+                        <Form onSubmit={handleSubmit(sendEmail)}>
                             <FormContent>
                                 <TextField
                                     inputProps={{ 'aria-label': 'E-mail' }}
@@ -138,6 +119,7 @@ export default function UserProfile({ img }: Props) {
                                     required
                                     type='email'
                                     placeholder='Your E-mail Here'
+                                    // does not properly validate emails
                                     value={regForm.email}
                                     onChange={handleChange("email")}
                                 />
@@ -181,6 +163,25 @@ export default function UserProfile({ img }: Props) {
         </div>
     );
 }
+
+// const handleTextChange = (
+//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+//     data: string
+// ) => {
+//     e.preventDefault();
+//     const { value } = e.target;
+//     setUser((state) => ({ data: value }))
+// }
+
+// const handleNameSubmit = (e: React.SyntheticEvent) => {
+//     e.preventDefault();
+//     sendName();
+// }
+
+// const handleEmailSubmit = (e: React.SyntheticEvent) => {
+//     e.preventDefault();
+//     sendEmail();
+// }
 
 // less touch (mobile) friendly, but also works, if we want a `save` button
 export function UserProfileEditable({ img }: Props) {
