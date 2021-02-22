@@ -56,11 +56,11 @@ export default function TownhallSettings() {
     const componentSubSections = React.useMemo(
         () => [
             {
-                title: 'Chat',
+                title: 'Breakout Rooms',
                 component: <ChatSettings onChange={handleChange('chat')} value={state.chat} />,
             },
             {
-                title: 'Question Queue',
+                title: 'Question Feed',
                 component: (
                     <QuestionFeedSettings onChange={handleChange('questionQueue')} value={state.questionQueue} />
                 ),
