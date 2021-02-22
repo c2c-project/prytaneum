@@ -39,10 +39,10 @@ export type Props = {
  * Slide Up Dialog
  */
 export default function ResponsiveDialog(props: Props) {
-    const { children, title, ...rest } = props;
+    const { children, title, fullScreen: _fullscreen, ...rest } = props;
     const classes = useStyles();
     const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm')) || _fullscreen;
 
     return (
         <MUIDialog fullScreen={fullScreen} TransitionComponent={Transition} {...rest}>
