@@ -20,11 +20,11 @@ if (typeof global.process === 'undefined' && !isChromatic()) {
     // Repetitive calls to the `.start()` method do not register a new worker,
     // but check whether there's an existing once, reusing it, if so.
     worker.start({
-        serviceWorker: {
-            options: {
-                scope: '/api',
-            },
-        },
+        // serviceWorker: {
+        //     options: {
+        //         scope: '/api',
+        //     },
+        // },
     });
 }
 
