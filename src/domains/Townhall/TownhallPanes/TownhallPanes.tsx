@@ -23,8 +23,8 @@ const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.leng
     StyledTab
 );
 const ChatTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Chat' }))(StyledTab);
-const QuestionQueueTab = connect((store) => ({
-    badgeContent: store.queue.buffer.suggested.length,
+const QuestionQueueTab = connect(() => ({
+    badgeContent: 0,
     label: 'Question Queue',
 }))(StyledTab);
 
@@ -51,7 +51,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         maxWidth: 600,
-        padding: theme.spacing(1),
+        padding: theme.spacing(0, 1, 1, 1),
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(1),
+        },
     },
     paneContainer: {
         flexBasis: '100%',
