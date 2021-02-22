@@ -2,13 +2,13 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeGenFn } from 'prytaneum-typings';
+import { makeQuestion, makeGenFn, makeUser } from 'prytaneum-typings';
 
 import SocketFixture from 'mock/Fixture.socket';
 import UserProvider from 'contexts/User';
 import TownhallProvider from 'contexts/Townhall';
 import QuestionQueue from './QuestionQueue';
-import QueueComponent from './Queue';
+import QueuePreview, { Props as PreviewProps } from './QueuePreview';
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
@@ -36,8 +36,8 @@ export default {
     title: 'Domains/Questions/Question Queue',
     decorators: [
         (MyStory) => (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 60 }}>
-                <UserProvider>
+            <div style={{ maxWidth: 500, width: '100%', height: '100%' }}>
+                <UserProvider value={makeUser()} forceNoLogin>
                     <TownhallProvider townhallId='123'>
                         <SocketFixture.Provider value={emitter}>
                             <MyStory />
@@ -67,9 +67,39 @@ export function FullExample() {
 
 const questions = makeGenFn(makeQuestion)(15);
 
-export const StaticQueue: Story<{ onFlush: () => void }> = ({ onFlush }) => {
-    return <QueueComponent bufferLength={5} onFlushBuffer={onFlush} questions={questions} />;
+export const Preview: Story<PreviewProps> = (props) => <QueuePreview {...props} />;
+Preview.argTypes = {
+    onClickNext: {
+        action: 'next question',
+    },
+    onClickPrev: {
+        action: 'previous question',
+    },
+    onClickReorder: {
+        action: 'reorder',
+    },
 };
-StaticQueue.argTypes = {
-    onFlush: { action: 'flushed' },
+Preview.args = {
+    queue: questions,
+    current: 0,
+};
+Preview.parameters = {
+    layout: 'none',
+};
+
+export const EmptyPreview = Preview.bind({});
+EmptyPreview.argTypes = {
+    onClickNext: {
+        action: 'next question',
+    },
+    onClickPrev: {
+        action: 'previous question',
+    },
+};
+EmptyPreview.args = {
+    queue: questions,
+    current: -1,
+};
+EmptyPreview.parameters = {
+    layout: 'none',
 };
