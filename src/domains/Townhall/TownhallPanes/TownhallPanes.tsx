@@ -19,10 +19,10 @@ import SpeakerItem from './SpeakerItem';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 
-const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.length, label: 'Question Feed' }))(
+const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
     StyledTab
 );
-const ChatTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Chat' }))(StyledTab);
+const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
 const QuestionQueueTab = connect(() => ({
     badgeContent: 0,
     label: 'Question Queue',
@@ -42,7 +42,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionFeed />]);
-    if (tabVisibility.isChatVisible) tabs.push([ChatTab, <TownhallChat />]);
+    if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <TownhallChat />]);
 
     return tabs;
 };
