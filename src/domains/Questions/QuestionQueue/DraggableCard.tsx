@@ -40,6 +40,7 @@ export default React.memo(({ question, index, itemStyle, isCurrent, draggable }:
                 }}
                 className={classes.listItem}
                 question={question}
+                stats
             />
         </DragArea>
     );

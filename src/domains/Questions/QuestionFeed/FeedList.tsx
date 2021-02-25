@@ -57,7 +57,12 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                     const questionId = question._id;
                     return (
                         <ListItem disableGutters key={questionId}>
-                            <QuestionCard question={question} className={classes.item} quote={question.quote}>
+                            <QuestionCard
+                                stats={isModerator}
+                                question={question}
+                                className={classes.item}
+                                quote={question.quote}
+                            >
                                 {isModerator && <QuestionLabels labels={question.aiml.labels} />}
                                 <CardActions className={classes.questionActions}>
                                     {!isModerator && (

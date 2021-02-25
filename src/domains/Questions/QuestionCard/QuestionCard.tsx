@@ -11,6 +11,7 @@ import {
     CardHeaderProps,
     CardContentProps,
     Paper,
+    Divider,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
@@ -92,7 +93,12 @@ function QuestionCard({
                 )}
                 <CardContent {...cardContentProps}>
                     <Typography>{question.question}</Typography>
-                    {stats && <QuestionStats question={question} />}
+                    {stats && (
+                        <>
+                            <Divider />
+                            <QuestionStats question={question} />
+                        </>
+                    )}
                 </CardContent>
                 {children}
             </Card>
