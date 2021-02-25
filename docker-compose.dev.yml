@@ -20,7 +20,7 @@ services:
             context: .
             dockerfile: Dockerfile
             target: base-stage
-        command: 'yarn storybook'
+        command: 'yarn start-storybook --port 3000 -s public'
         volumes:
             - ./src:/usr/app/src
             - ./public:/usr/app/public

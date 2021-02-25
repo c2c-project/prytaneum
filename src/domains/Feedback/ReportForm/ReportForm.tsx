@@ -1,47 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import FormTitle from 'components/FormTitle';
 
 import FormBase from '../FormBase';
 
 interface DefaultProps {
     townhallId: string;
 }
-interface FormProps {
-    title: string;
-    mainDescription: string;
-    icon: JSX.Element;
+export interface FormProps {
     reportType: 'Feedback' | 'Bug';
     townhallId?: string;
 }
 
-export default function ReportForm({
-    title,
-    mainDescription,
-    icon,
-    reportType,
-    townhallId,
-}: FormProps & DefaultProps) {
+export default function ReportForm({ reportType, townhallId }: FormProps & DefaultProps) {
+    const description =
+        reportType === 'Feedback'
+            ? 'Thank you for your feedback! The Prytaneum team appreciates it and will take it into consideration to improve your future virtual town hall experiences.'
+            : 'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form.';
+
+    const title = reportType === 'Feedback' ? 'Feedback Report Form' : 'Bug Report Form';
+
     return (
-        <Grid container spacing={5}>
-            <Grid item xs={12}>
-                <Typography variant='h4' align='center'>
-                    {title}
-                    {icon}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant='body1'>{mainDescription}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <FormBase
-                    submitType='create'
-                    reportType={reportType}
-                    townhallId={townhallId}
-                />
-            </Grid>
-        </Grid>
+        <div>
+            <FormTitle title={title} description={description} titleTypographyProps={{ align: 'center' }} />
+            <FormBase submitType='create' reportType={reportType} townhallId={townhallId} />
+        </div>
     );
 }
 
