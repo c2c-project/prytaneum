@@ -92,11 +92,15 @@ export default [
         return res(ctx.cookie('jwt', ''), ctx.status(200));
     }),
 
-    rest.put('/api/users/me/reset-password', (req, res, ctx) => {
-        return res(ctx.status(200));
-    }),
     rest.put('/api/users/me/name', (req, res, ctx) => {
         const { fname, lname } = req.body as { fname: string, lname: string }
+
+        // fake fail case
+        if (fname === 'fail' || lname === 'fail') {
+            return res(ctx.status(400), ctx.text('failed on purpose for name change'));
+        }
+
+        // make a fake user and just reassign its names
         let toReturnUser = makeUser();
         toReturnUser.name.first = fname;
         toReturnUser.name.last = lname;
@@ -107,10 +111,25 @@ export default [
             })
         );
     }),
-    rest.put('/api/users/email', (req, res, ctx) => {
+    rest.put('/api/users/me/email', (req, res, ctx) => {
         const { email } = req.body as { email: string };
+
+        // fake fail case
+        if (email === 'fail@fail.com') {
+            return res(ctx.status(400), ctx.text('failed on purpose for email change'))
+        }
+
+        // make a fake user and just reassign its email
         let toReturnUser = makeUser();
         toReturnUser.email.address = email
+        return res(ctx.status(200), ctx.json({ user: toReturnUser }));
+    }),
+    rest.put('/api/users/me/notifs', (req, res, ctx) => {
+        const { enabled, types } = req.body as { enabled: boolean, types: string[] };
+        // make a fake user and reassign its settings
+        let toReturnUser = makeUser();
+        toReturnUser.settings.notifications.enabled = enabled;
+        toReturnUser.settings.notifications.types = types;
         return res(ctx.status(200), ctx.json({ user: toReturnUser }));
     }),
 ];

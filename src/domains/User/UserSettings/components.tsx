@@ -19,6 +19,8 @@ import TextField from 'components/TextField';
 import SettingsItem from 'components/SettingsItem';
 import text from './help-text';
 
+import useSnack from 'hooks/useSnack';
+
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
         1. Pass in the setState function
@@ -76,11 +78,14 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
     const [state, setState] = React.useState(user.settings.notifications);
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request
+    // const [snack] = useSnack();
+
     return (
         <SettingsList>
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
                     checked={state.enabled}
+                    // onChange={() => { buildHandler('enabled'); } }
                     onChange={buildHandler('enabled')}
                 />
             </SettingsItem>

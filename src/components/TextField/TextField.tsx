@@ -29,7 +29,7 @@ export type Props = TextFieldProps & { label?: string };
  * @todo params
  */
 export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-    const { children, label, name, id, type, ...passThroughProps } = props;
+    const { children, label, name, id, ...passThroughProps } = props;
     return (
         <MUITextField
             ref={ref}
@@ -42,7 +42,6 @@ export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck={false}
-            type={type}
             {...passThroughProps}
         >
             {children}

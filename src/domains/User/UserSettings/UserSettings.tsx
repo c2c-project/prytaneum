@@ -29,7 +29,6 @@ import {
     TownhallUserSettings,
     NotificationSettings,
 } from './components';
-import { UserProfileEditable } from '../UserProfile/UserProfile';
 
 // const useStyles = makeStyles((theme) => ({
 //     title: {
@@ -39,6 +38,7 @@ import { UserProfileEditable } from '../UserProfile/UserProfile';
 
 interface Props {
     id?: string;
+    onClickPasswordReset?: string;
 }
 
 // const optionsList = [
@@ -102,7 +102,7 @@ interface Props {
  * @param Props
  * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
  */
-export default function UserSettings({ id }: Props) {
+export default function UserSettings({ id, onClickPasswordReset }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
@@ -123,7 +123,7 @@ export default function UserSettings({ id }: Props) {
             component: (
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />
+                        <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' passReset={onClickPasswordReset} />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
@@ -144,17 +144,17 @@ export default function UserSettings({ id }: Props) {
             description: 'Customize notifications receieved',
             component: <NotificationSettings user={user} />,
         },
-        {
-            title: 'GeneralEditableText',
-            description: 'General, but with EditableText instead of TextField',
-            component: (
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <UserProfileEditable img='https://i.imgur.com/3beQH5s.jpeg' />
-                    </Grid>
-                </Grid>
-            ),
-        },
+        // {
+        //     title: 'GeneralEditableText',
+        //     description: 'General, but with EditableText instead of TextField',
+        //     component: (
+        //         <Grid container spacing={2}>
+        //             <Grid item xs={12}>
+        //                 <UserProfileEditable img='https://i.imgur.com/3beQH5s.jpeg' />
+        //             </Grid>
+        //         </Grid>
+        //     ),
+        // },
         // {
         //     title: 'Account Settings',
         //     description: 'View Account Settings',
