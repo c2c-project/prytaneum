@@ -1,23 +1,13 @@
 import React from 'react';
-import {
-    Grid,
-    DialogContent,
-    CardActions,
-    Card,
-    CardContent,
-    // IconButton,
-    List,
-    ListItem,
-} from '@material-ui/core';
+import { Grid, DialogContent, CardActions, Card, CardContent, List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
-// import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useSelector } from 'react-redux';
 
 import ResponsiveDialog from 'components/ResponsiveDialog';
 import useUser from 'hooks/useUser';
-import useTownhall from 'hooks/useTownhall';
 import QuestionLabels from '../QuestionLabels';
-import { Like, Suggest, Quote /* Reply */ } from '../QuestionActions';
+import { Like, QueueButton, Quote /* Reply */ } from '../QuestionActions';
 import QuestionCard from '../QuestionCard';
 
 interface Props {
@@ -30,14 +20,12 @@ interface Props {
 const useStyles = makeStyles((theme) => ({
     root: {},
     item: {
-        // marginBottom: theme.spacing(1),
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
     },
     questionActions: {
         padding: 0,
-        // backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.light,
     },
     card: {},
@@ -45,17 +33,17 @@ const useStyles = makeStyles((theme) => ({
 
 function FeedList({ questions, variant, systemMessages, className }: Props) {
     const [user] = useUser();
-    const [townhall, isModerator] = useTownhall();
+    const isModerator = React.useMemo(() => variant === 'moderator', [variant]);
     const classes = useStyles();
     const [dialogContent, setDialogContent] = React.useState<JSX.Element | null>(null);
     // TODO: make this a subscription on the backend for "live data" rather than a local state here
     const [liked, setLiked] = React.useState<Set<string>>(new Set());
     const isDialogOpen = React.useMemo(() => Boolean(dialogContent), [dialogContent]);
+    const { queue } = useSelector((store) => store.queue);
 
-    const isSuggested = React.useCallback(
-        (questionId: string) => Boolean(townhall.state.playlist.list.find(({ _id }) => _id === questionId)),
-        [townhall]
-    );
+    const isQueued = React.useCallback((questionId: string) => Boolean(queue.find(({ _id }) => _id === questionId)), [
+        queue,
+    ]);
 
     function closeDialog() {
         setDialogContent(null);
@@ -70,7 +58,7 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                     return (
                         <ListItem disableGutters key={questionId}>
                             <QuestionCard question={question} className={classes.item} quote={question.quote}>
-                                {variant === 'moderator' && <QuestionLabels labels={question.aiml.labels} />}
+                                {isModerator && <QuestionLabels labels={question.aiml.labels} />}
                                 <CardActions className={classes.questionActions}>
                                     {!isModerator && (
                                         <Like
@@ -96,10 +84,10 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                                     )}
                                     {!isModerator && <Quote question={question} />}
                                     {isModerator && (
-                                        <Suggest
-                                            questionId={question._id}
+                                        <QueueButton
+                                            isQueued={isQueued(questionId)}
                                             townhallId={townhallId}
-                                            suggested={isSuggested(question._id)}
+                                            questionId={questionId}
                                         />
                                     )}
                                     {/* <Reply question={question} /> */}
@@ -110,7 +98,7 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                 })}
             </List>
         );
-    }, [questions, classes.item, classes.questionActions, variant, liked, user, setLiked, isModerator, isSuggested]);
+    }, [questions, classes.item, classes.questionActions, liked, user, setLiked, isModerator, isQueued]);
 
     return (
         <div className={className}>

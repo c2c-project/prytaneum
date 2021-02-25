@@ -12,7 +12,7 @@ export default function useQuestionQueue() {
     const playlist = useSelector((store) => store.queue);
     const dispatch = useDispatch<Dispatch<QueueActions>>();
     React.useEffect(() => {
-        dispatch({ type: 'initialize', payload: townhall.state });
+        dispatch({ type: 'question-queue-initialize', payload: townhall.state });
         // NOTE: I only want this to run on first render, and be ignored after
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

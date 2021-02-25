@@ -22,14 +22,14 @@ type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.length, label: 'Question Feed' }))(
     StyledTab
 );
-const ChatTab = connect((store) => ({ badgeContent: store.chat.length, label: 'Chat' }))(StyledTab);
-const QuestionQueueTab = connect((store) => ({
-    badgeContent: store.queue.buffer.suggested.length,
+const ChatTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Chat' }))(StyledTab);
+const QuestionQueueTab = connect(() => ({
+    badgeContent: 0,
     label: 'Question Queue',
 }))(StyledTab);
 
 const getTabVisibility = (settings: TownhallSettings, isModerator: boolean) => ({
-    isQuestionFeedVisible: settings.questionQueue.transparent,
+    isQuestionFeedVisible: settings.questionQueue.transparent || isModerator,
     isChatVisible: settings.chat.enabled,
     isQueueVisible: isModerator,
 });
@@ -51,7 +51,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         maxWidth: 600,
-        padding: theme.spacing(1),
+        padding: theme.spacing(0, 1, 1, 1),
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(1),
+        },
     },
     paneContainer: {
         flexBasis: '100%',
@@ -74,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(1),
-        boxShadow: theme.shadows[3],
+        boxShadow: theme.shadows[1],
         // border: `1px solid ${theme.palette.secondary.main}`,
     },
     pl: {

@@ -37,10 +37,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const builtRequest = React.useCallback(() => API.register(form, query), [
-        form,
-        query,
-    ]);
+    const builtRequest = React.useCallback(() => API.register(form, query), [form, query]);
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
         onSuccess: ({ data }) => {
             setUser(data.user);
@@ -87,7 +84,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     id='register-password'
                     required
                     error={Boolean(errors.password)}
-                    helperText={errors.password}
+                    helperText={errors.password || 'Passwords must be at least 8 characters'}
                     type={isPassVisible ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange('password')}
@@ -97,28 +94,14 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                             <InputAdornment position='end'>
                                 <IconButton
                                     aria-label='toggle password visibility'
-                                    onClick={() =>
-                                        setIsPassVisible(!isPassVisible)
-                                    }
+                                    onClick={() => setIsPassVisible(!isPassVisible)}
                                     onMouseDown={(e) => e.preventDefault()}
                                     edge='end'
                                 >
                                     {isPassVisible ? (
-                                        <VisibilityOff
-                                            color={
-                                                errors.password
-                                                    ? 'error'
-                                                    : undefined
-                                            }
-                                        />
+                                        <VisibilityOff color={errors.password ? 'error' : undefined} />
                                     ) : (
-                                        <Visibility
-                                            color={
-                                                errors.password
-                                                    ? 'error'
-                                                    : undefined
-                                            }
-                                        />
+                                        <Visibility color={errors.password ? 'error' : undefined} />
                                     )}
                                 </IconButton>
                             </InputAdornment>
@@ -139,28 +122,14 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                             <InputAdornment position='end'>
                                 <IconButton
                                     aria-label='toggle password visibility'
-                                    onClick={() =>
-                                        setIsPassVisible(!isPassVisible)
-                                    }
+                                    onClick={() => setIsPassVisible(!isPassVisible)}
                                     onMouseDown={(e) => e.preventDefault()}
                                     edge='end'
                                 >
                                     {isPassVisible ? (
-                                        <VisibilityOff
-                                            color={
-                                                errors.confirmPassword
-                                                    ? 'error'
-                                                    : undefined
-                                            }
-                                        />
+                                        <VisibilityOff color={errors.confirmPassword ? 'error' : undefined} />
                                     ) : (
-                                        <Visibility
-                                            color={
-                                                errors.confirmPassword
-                                                    ? 'error'
-                                                    : undefined
-                                            }
-                                        />
+                                        <Visibility color={errors.confirmPassword ? 'error' : undefined} />
                                     )}
                                 </IconButton>
                             </InputAdornment>
@@ -170,12 +139,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
             </FormContent>
             <FormActions>
                 <LoadingButton loading={isLoading}>
-                    <Button
-                        fullWidth
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                    >
+                    <Button fullWidth type='submit' variant='contained' color='primary'>
                         Register
                     </Button>
                 </LoadingButton>

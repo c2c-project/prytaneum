@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
     video: {
         [theme.breakpoints.up('md')]: {
-            marginTop: theme.spacing(2),
+            // marginTop: theme.spacing(2),
             marginLeft: theme.spacing(2),
         },
         [theme.breakpoints.down('sm')]: {

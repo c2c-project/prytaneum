@@ -10,6 +10,7 @@ import LikeAction from './Like';
 import QuoteAction from './Quote';
 import ReplyAction from './Reply';
 import Suggest from './Suggest';
+import QueueButton from './QueueButton';
 import QuestionCard from '../QuestionCard';
 
 export default {
@@ -39,6 +40,7 @@ const Template: Story<Props> = ({ suggested, onLike, onDeleteLike, liked }) => (
         <LikeAction townhallId='123' questionId='123' onLike={onLike} liked={liked} onDeleteLike={onDeleteLike} />
         <QuoteAction question={makeQuestion()} />
         <ReplyAction question={makeQuestion()} />
+        <QueueButton isQueued={false} questionId={makeQuestion()._id} townhallId='123' />
     </>
 );
 

@@ -8739,6 +8739,10 @@ fake-tag@^2.0.0:
   resolved "https://registry.yarnpkg.com/fake-tag/-/fake-tag-2.0.0.tgz#08ea5df950ef8635833186247f569e8406ffb4da"
   integrity sha512-QDz+8qiNQ9AfBZ31EXlID5JIbUkU3e1nXDWk4tidFzd2gy8XJaEUW1HCuDY6DUy6t2Y0nvhD6PsUc+2WYy5w0w==
 
+"faker@https://github.com/DevelopmentByDavid/faker.js#delete-stuff":
+  version "5.1.0"
+  resolved "https://github.com/DevelopmentByDavid/faker.js#b6488ff0039b737819eed805e2fdd478e07e4b10"
+
 "faker@https://github.com/bustle/faker.js#master":
   version "5.1.0"
   resolved "https://github.com/bustle/faker.js#5a89ddf48af8baec84c8d562ca6dccf6f3e2466d"
@@ -14536,14 +14540,14 @@ prr@~1.0.1:
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
   integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
 
-"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.81":
+"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#25e4d32617cccf3e7e2b816845aa19aa956db486":
   version "1.0.0"
-  resolved "https://github.com/c2c-project/prytaneum-typings#45e040f260f7ba5ea1d8f17aaf05ac3f8241c92c"
+  resolved "https://github.com/c2c-project/prytaneum-typings#25e4d32617cccf3e7e2b816845aa19aa956db486"
   dependencies:
     "@types/faker" "^4.1.4"
     "@types/mongodb" "^3.5.32"
     "@types/node" "^14.14.6"
-    faker "https://github.com/bustle/faker.js#master"
+    faker "https://github.com/DevelopmentByDavid/faker.js#delete-stuff"
 
 pseudomap@^1.0.2:
   version "1.0.2"

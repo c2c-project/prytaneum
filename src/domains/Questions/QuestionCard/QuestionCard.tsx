@@ -16,6 +16,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 
 import { formatDate } from 'utils/format';
+import QuestionStats from './QuestionStats';
 
 export interface Props {
     question: Question;
@@ -26,6 +27,10 @@ export interface Props {
     style?: React.CSSProperties;
     className?: string;
     quote?: Question | null;
+    /**
+     * display stats for this question
+     */
+    stats?: boolean;
 }
 
 export function QuestionCardSkeleton() {
@@ -49,6 +54,7 @@ function QuestionCard({
     style,
     className,
     quote,
+    stats,
 }: Props) {
     const theme = useTheme();
     const [time, month] = React.useMemo(() => formatDate(question.meta.createdAt, 'p-P').split('-'), [
@@ -86,6 +92,7 @@ function QuestionCard({
                 )}
                 <CardContent {...cardContentProps}>
                     <Typography>{question.question}</Typography>
+                    {stats && <QuestionStats question={question} />}
                 </CardContent>
                 {children}
             </Card>
@@ -100,6 +107,7 @@ QuestionCard.defaultProps = {
     CardContentProps: {},
     style: {},
     className: undefined,
+    stats: false,
 };
 
 export default React.memo(QuestionCard);

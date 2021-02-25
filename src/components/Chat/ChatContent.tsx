@@ -8,6 +8,7 @@ import useScrollTo from 'hooks/useScrollTo';
 
 export interface Props {
     children: React.ReactNode | React.ReactNodeArray;
+    onScrollToBottom?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ChatContent({ children }: Props) {
+export default function ChatContent({ children, onScrollToBottom }: Props) {
     const classes = useStyles();
     const hasRun = React.useRef(false);
     const sentinelRef = React.useRef<HTMLLIElement | null>(null);
@@ -61,6 +62,10 @@ export default function ChatContent({ children }: Props) {
     React.useEffect(() => {
         if (isAnchorInView) scrollToAnchor('auto');
     }, [children, isAnchorInView, scrollToAnchor]);
+
+    React.useEffect(() => {
+        if (isAnchorInView && onScrollToBottom) onScrollToBottom();
+    }, [onScrollToBottom, isAnchorInView]);
 
     if (React.Children.count(children) === 0)
         return (
@@ -90,4 +95,5 @@ export default function ChatContent({ children }: Props) {
 
 ChatContent.defaultProps = {
     ChatMessageProps: {},
+    onScrollToBottom: undefined,
 };

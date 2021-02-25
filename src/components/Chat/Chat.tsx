@@ -17,13 +17,20 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     className?: string;
+    onScrollToBottom?: () => void;
 }
 
-export default function Chat({ className, children, onSubmit, disabled }: Props & ChatContentProps & ChatbarProps) {
+export default function Chat({
+    className,
+    children,
+    onSubmit,
+    disabled,
+    onScrollToBottom,
+}: Props & ChatContentProps & ChatbarProps) {
     const classes = useStyles();
     return (
         <Grid container direction='column' className={clsx(className, classes.root)} wrap='nowrap' component={Paper}>
-            <ChatContent>{children}</ChatContent>
+            <ChatContent onScrollToBottom={onScrollToBottom}>{children}</ChatContent>
             <Chatbar onSubmit={onSubmit} disabled={disabled} />
         </Grid>
     );
@@ -31,4 +38,5 @@ export default function Chat({ className, children, onSubmit, disabled }: Props 
 
 Chat.defaultProps = {
     className: undefined,
+    onScrollToBottom: undefined,
 };

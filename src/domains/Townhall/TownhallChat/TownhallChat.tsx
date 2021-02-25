@@ -1,10 +1,15 @@
 import React from 'react';
-import type { ChatMessageForm } from 'prytaneum-typings';
+import type { ChatMessageForm, SocketIOEvents } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from '@reduxjs/toolkit';
 
-import { ChatActions } from 'reducers';
+import {
+    initializeChatMessages,
+    addChatMessage,
+    updateChatMessage,
+    deleteChatMessage,
+    readChatMessages,
+} from 'reducers';
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
 import useEndpoint from 'hooks/useEndpoint';
 import useTownhall from 'hooks/useTownhall';
@@ -23,16 +28,38 @@ export default function TownhallChat({ onDataChange }: Props) {
     const messageRef = React.useRef<ChatMessageForm>();
     const [user] = useUser();
     const countRef = React.useRef<number>(0);
-    const dispatch = useDispatch<Dispatch<ChatActions>>();
-    const messages = useSelector((store) => store.chat);
+    const dispatch = useDispatch();
+    const { unread, read } = useSelector((store) => store.chat);
+    const messages = React.useMemo(() => [...read, ...unread], [read, unread]);
 
     // load initial messages
     const [, areMessagesLoading] = useEndpoint(() => getChatmessages(townhall._id), {
-        onSuccess: ({ data }) => dispatch({ type: 'chat-initial-state', payload: data }),
+        onSuccess: ({ data }) => dispatch(initializeChatMessages(data)),
         runOnFirstRender: true,
     });
 
-    const socketFn: SocketFn = React.useCallback((socket) => socket.on('chat-message-state', dispatch), [dispatch]);
+    const socketFn: SocketFn = React.useCallback(
+        (socket) =>
+            socket.on('chat-message-state', (action: SocketIOEvents['chat-message-state']) => {
+                switch (action.type) {
+                    case 'create-chat-message':
+                        dispatch(addChatMessage(action.payload));
+                        break;
+                    case 'update-chat-message':
+                        dispatch(updateChatMessage(action.payload));
+                        break;
+                    case 'delete-chat-message':
+                        dispatch(deleteChatMessage(action.payload._id));
+                        break;
+                    case 'moderate-chat-message':
+                        dispatch(deleteChatMessage(action.payload._id));
+                        break;
+                    default:
+                    // do nothing
+                }
+            }),
+        [dispatch]
+    );
     useSocketio('/chat-messages', { query: { townhallId: townhall._id } }, socketFn);
 
     const create = React.useCallback(() => {
@@ -58,6 +85,10 @@ export default function TownhallChat({ onDataChange }: Props) {
         }
     }, [messages.length, onDataChange]);
 
+    const readMessages = React.useCallback(() => {
+        dispatch(readChatMessages());
+    }, [dispatch]);
+
     if (areMessagesLoading) return <Loader />;
 
     return (
@@ -67,6 +98,7 @@ export default function TownhallChat({ onDataChange }: Props) {
                 messageRef.current = form;
                 postMesssage();
             }}
+            onScrollToBottom={readMessages}
         >
             {messages.map(({ _id, meta, message }) => (
                 <motion.li

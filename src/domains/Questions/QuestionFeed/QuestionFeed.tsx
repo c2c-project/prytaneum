@@ -37,8 +37,8 @@ export function QuestionFeedLoading() {
     return (
         <>
             <ListFilterSkeleton />
-            {new Array(3).fill(0).map(() => (
-                <QuestionCardSkeleton />
+            {new Array(3).fill(0).map((_zero, idx) => (
+                <QuestionCardSkeleton key={idx} />
             ))}
         </>
     );
@@ -71,12 +71,7 @@ function QuestionFeed({ className, style }: Props) {
         }
     }, [buffer.length, questions.length]);
     return (
-        <Grid
-            alignContent='flex-start'
-            container
-            className={className ? clsx([classes.root, className]) : classes.root}
-            style={style}
-        >
+        <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
             {isLoading ? (
                 <QuestionFeedLoading />
             ) : (
