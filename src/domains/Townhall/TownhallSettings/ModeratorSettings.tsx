@@ -18,7 +18,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import type { Moderator } from 'prytaneum-typings';
 
 import useSnack from 'hooks/useSnack';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import TextField from 'components/TextField';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import { Props } from './utils';
@@ -38,7 +38,7 @@ function AddModeratorForm({
         onSubmit(state);
     };
     return (
-        <Dialog open={open} onClose={onClose}>
+        <ResponsiveDialog open={open} onClose={onClose}>
             <DialogTitle>Add New Moderator</DialogTitle>
             <form onSubmit={handleSubmit}>
                 <DialogContent>
@@ -59,7 +59,7 @@ function AddModeratorForm({
                     </Button>
                 </DialogActions>
             </form>
-        </Dialog>
+        </ResponsiveDialog>
     );
 }
 

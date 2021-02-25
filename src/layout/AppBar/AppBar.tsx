@@ -34,7 +34,7 @@ export default function AppBar({ children }: Props) {
     const classes = useStyles();
 
     return (
-        <MUIAppBar className={classes.appbar} position='sticky' elevation={6}>
+        <MUIAppBar className={classes.appbar} position='sticky'>
             <Toolbar>{children}</Toolbar>
         </MUIAppBar>
     );

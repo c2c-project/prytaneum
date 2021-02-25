@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Tab as MUITab, TabProps, Theme } from '@material-ui/core';
 import { makeStyles, lighten, darken } from '@material-ui/core/styles';
@@ -14,7 +13,7 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
         height: 32, // material io spec for chips
         marginRight: theme.spacing(1),
         backgroundColor: theme.palette.grey[300],
-        borderRadius: theme.shape.borderRadius,
+        borderRadius: 24, // chip spec?
         border: '1px solid grey',
         minWidth: 'unset',
         minHeight: 'unset',
@@ -29,8 +28,8 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
                 color: darken(theme.palette.primary.main, 0.9),
             };
         return {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
+            backgroundColor: lighten(theme.palette.primary.main, 0.65),
+            color: theme.palette.primary.main,
         };
     },
 }));

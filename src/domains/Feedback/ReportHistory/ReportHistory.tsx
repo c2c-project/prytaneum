@@ -8,22 +8,19 @@ import Select from '@material-ui/core/Select';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {
-    Sort as SortIcon,
-    Search as SearchIcon,
-    ArrowDropDown as ArrowDownIcon,
-} from '@material-ui/icons';
+import { Sort as SortIcon, Search as SearchIcon, ArrowDropDown as ArrowDownIcon } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
+import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns';
 
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
+import ListFilter from 'components/ListFilter';
+import useFilters, { Accessors } from 'components/ListFilter/useFilters';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/Feedback/ReportList';
+import { FilterFunc } from 'utils/filters';
 import ReportStateContext from '../Contexts/ReportStateContext';
-import {
-    getFeedbackReportsBySubmitter,
-    getBugReportsBySubmitter,
-} from '../api';
+import { getFeedbackReportsBySubmitter, getBugReportsBySubmitter } from '../api';
 
 import { FeedbackReport, BugReport } from '../types';
 
@@ -48,6 +45,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderColor: theme.palette.common.white,
         color: theme.palette.common.white,
     },
+    root: {
+        width: '100%',
+        height: '100%',
+    },
 }));
 
 export default function ReportHistory() {
@@ -58,6 +59,8 @@ export default function ReportHistory() {
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
     const [reports, setReports] = React.useState<Report[]>([]);
+    const accessors = React.useMemo<Accessors<Report>[]>(() => [(report) => report.description], []);
+    const [filteredReports, handleSearch, handleFilterChange] = useFilters(reports, accessors);
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setReportType(e.target.value as string);
@@ -80,20 +83,17 @@ export default function ReportHistory() {
         [page, sortingOrder]
     );
 
-    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(
-        feedbackReportsAPIrequest,
-        {
-            onSuccess: (results) => {
-                // Adds type attribute to report objects. This will be needed in children components
-                const feedbackReports = results.data.reports.map((report) => ({
-                    ...report,
-                    type: 'Feedback',
-                })) as Report[];
-                setNumOfPages(results.data.count / pageSize);
-                setReports(feedbackReports);
-            },
-        }
-    );
+    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(feedbackReportsAPIrequest, {
+        onSuccess: (results) => {
+            // Adds type attribute to report objects. This will be needed in children components
+            const feedbackReports = results.data.reports.map((report) => ({
+                ...report,
+                type: 'Feedback',
+            })) as Report[];
+            setNumOfPages(results.data.count / pageSize);
+            setReports(feedbackReports);
+        },
+    });
 
     const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
         onSuccess: (results) => {
@@ -130,10 +130,7 @@ export default function ReportHistory() {
         }
     };
 
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
+    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         sendRequest();
     };
@@ -162,8 +159,19 @@ export default function ReportHistory() {
         refetchReports: () => sendRequest(),
     };
 
+    type Filter = FilterFunc<Report>;
+    const filterMap: Record<string, Filter> = {
+        Today: (data) => data.filter(({ date }) => isToday(new Date(date))),
+
+        'This week': (data) => data.filter(({ date }) => isThisWeek(new Date(date))),
+
+        'This month': (data) => data.filter(({ date }) => isThisMonth(new Date(date))),
+
+        'This year': (data) => data.filter(({ date }) => isThisYear(new Date(date))),
+    };
+
     return (
-        <div>
+        <div className={classes.root}>
             <AppBar position='sticky'>
                 <Toolbar>
                     <form onSubmit={getReports}>
@@ -185,10 +193,7 @@ export default function ReportHistory() {
                                         </MenuItem>
 
                                         {ReportOptions.map((ReportOption) => (
-                                            <MenuItem
-                                                key={ReportOption}
-                                                value={ReportOption}
-                                            >
+                                            <MenuItem key={ReportOption} value={ReportOption}>
                                                 {ReportOption}
                                             </MenuItem>
                                         ))}
@@ -211,10 +216,7 @@ export default function ReportHistory() {
                                             Sorting Order
                                         </MenuItem>
                                         {sortingOptions.map((sortingOption) => (
-                                            <MenuItem
-                                                key={sortingOption.name}
-                                                value={sortingOption.value}
-                                            >
+                                            <MenuItem key={sortingOption.name} value={sortingOption.value}>
                                                 {sortingOption.name}
                                             </MenuItem>
                                         ))}
@@ -222,14 +224,8 @@ export default function ReportHistory() {
                                 </FormControl>
                             </Grid>
                             <Grid item>
-                                <LoadingButton
-                                    loading={isLoadingFeedback || isLoadingBug}
-                                >
-                                    <Button
-                                        type='submit'
-                                        color='inherit'
-                                        endIcon={<SearchIcon />}
-                                    >
+                                <LoadingButton loading={isLoadingFeedback || isLoadingBug}>
+                                    <Button type='submit' color='inherit' endIcon={<SearchIcon />}>
                                         Search
                                     </Button>
                                 </LoadingButton>
@@ -238,27 +234,29 @@ export default function ReportHistory() {
                     </form>
                 </Toolbar>
             </AppBar>
-
             {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container item justify='center' alignItems='center' xs={12}>
-                {isLoadingFeedback || isLoadingBug ? (
-                    <Loader />
-                ) : (
-                    <ReportStateContext.Provider value={customReportFunctions}>
-                        <ReportList reports={reports} />
-                    </ReportStateContext.Provider>
-                )}
+                <Grid item xs={12}>
+                    <ListFilter
+                        onSearch={handleSearch}
+                        length={filteredReports.length}
+                        filterMap={filterMap}
+                        onFilterChange={handleFilterChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    {isLoadingFeedback || isLoadingBug ? (
+                        <Loader />
+                    ) : (
+                        <ReportStateContext.Provider value={customReportFunctions}>
+                            <ReportList reports={filteredReports} />
+                        </ReportStateContext.Provider>
+                    )}
+                </Grid>
             </Grid>
-
-            {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
+            {/* When infinite scrolling is complete, this pagination section can be removed since it is suboptimal */}
             {reports.length !== 0 && (
-                <Grid
-                    container
-                    item
-                    justify='center'
-                    alignItems='center'
-                    xs={12}
-                >
+                <Grid container item justify='center' alignItems='center' xs={12}>
                     <Pagination
                         siblingCount={0}
                         color='primary'

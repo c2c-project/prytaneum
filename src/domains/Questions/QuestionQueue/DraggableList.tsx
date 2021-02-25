@@ -7,7 +7,6 @@ import DraggableCard from './DraggableCard';
 interface Props {
     questions: Question[];
     itemStyle: (d: boolean) => React.CSSProperties;
-    offset: number;
 }
 
 /**
@@ -15,7 +14,7 @@ interface Props {
  * in functionality, the "droppablearea" component is higher up in the tree already
  * so all we need to do here is map over the items
  */
-export default React.memo(({ questions, itemStyle, offset }: Props) => {
+export default React.memo(({ questions, itemStyle }: Props) => {
     return (
         <>
             {questions.map((question, index) => (
@@ -24,7 +23,7 @@ export default React.memo(({ questions, itemStyle, offset }: Props) => {
                     question={question}
                     isCurrent={false}
                     itemStyle={itemStyle}
-                    index={index + offset}
+                    index={index}
                     draggable
                 />
             ))}

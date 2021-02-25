@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useTheme } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { motion } from 'framer-motion';
 
 export default () => {

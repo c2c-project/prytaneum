@@ -1,30 +1,34 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { BugReport as BugReportIcon } from '@material-ui/icons';
+import { Story, Meta } from '@storybook/react';
+import faker from 'faker';
 
-import Component from '.';
+import Component, { FormProps } from './ReportForm';
 
 export default {
     title: 'Domains/Feedback/Report Form',
     component: Component,
+    parameters: {
+        layout: 'centered',
+    },
+    decorators: [
+        (MyStory) => (
+            <Container maxWidth='sm'>
+                <MyStory />
+            </Container>
+        ),
+    ],
+} as Meta;
+
+const Template: Story<FormProps> = (props) => <Component {...props} />;
+
+export const BugReport = Template.bind({});
+BugReport.args = {
+    reportType: 'Bug',
+    townhallId: faker.random.alphaNumeric(12),
 };
 
-const dummyBugReportForm = {
-    title: 'Bug Report Form',
-    mainDescription:
-        'Let us know what went wrong during your virtual town hall experience. We strongly appreciate your time to complete this form',
-    icon: <BugReportIcon />,
+export const FeedbackReport = Template.bind({});
+FeedbackReport.args = {
+    reportType: 'Feedback',
 };
-
-export function Basic() {
-    return (
-        <Container maxWidth='sm'>
-            <Component
-                title={dummyBugReportForm.title}
-                mainDescription={dummyBugReportForm.mainDescription}
-                icon={dummyBugReportForm.icon}
-                reportType='Bug'
-            />
-        </Container>
-    );
-}

@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios';
 import axios from 'utils/axios';
 import errors from 'utils/errors';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import API from './index';
 import { InviteForm, InvitePreview } from '../types';
 

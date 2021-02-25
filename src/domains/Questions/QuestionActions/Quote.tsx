@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
-import QuoteIcon from '@material-ui/icons/FormatQuote';
+import QuoteIcon from '@material-ui/icons/FormatQuoteOutlined';
 import type { Question } from 'prytaneum-typings';
 
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import QuestionForm from '../QuestionForm';
 
 interface Props {
@@ -18,15 +18,11 @@ function Quote({ className, question }: Props) {
     const handleOpen = () => setIsOpen(true);
     return (
         <>
-            <Dialog open={isOpen} onClose={handleClose}>
+            <ResponsiveDialog open={isOpen} onClose={handleClose}>
                 <DialogContent>
-                    <QuestionForm
-                        onSubmit={handleClose}
-                        quote={question}
-                        onCancel={handleClose}
-                    />
+                    <QuestionForm onSubmit={handleClose} quote={question} onCancel={handleClose} />
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Button
                 color='inherit'
                 onClick={handleOpen}

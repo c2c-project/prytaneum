@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    onLogin: () => void;
+    onLogin?: () => void;
 }
 
 export default function Login({ onLogin }: Props) {
@@ -53,16 +53,11 @@ export default function Login({ onLogin }: Props) {
     const [user] = useUser();
     const [getIsMounted] = useIsMounted();
     React.useEffect(() => {
-        if (user && getIsMounted) onLogin();
+        if (onLogin && user && getIsMounted) onLogin();
     }, [onLogin, user, getIsMounted]);
 
     return (
-        <Grid
-            container
-            alignContent='center'
-            className={classes.root}
-            justify='center'
-        >
+        <Grid container alignContent='center' className={classes.root} justify='center'>
             <Paper className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -71,13 +66,13 @@ export default function Login({ onLogin }: Props) {
                     Login
                 </Typography>
                 <div className={classes.form}>
-                    <LoginForm
-                        onSuccess={() => {
-                            onLogin();
-                        }}
-                    />
+                    <LoginForm onSuccess={onLogin} />
                 </div>
             </Paper>
         </Grid>
     );
 }
+
+Login.defaultProps = {
+    onLogin: undefined,
+};

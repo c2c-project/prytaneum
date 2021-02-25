@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Team as TeamType } from 'types';
 import ProfileCard from '../ProfileCard';
@@ -9,28 +8,27 @@ import ProfileCard from '../ProfileCard';
 interface Props {
     team: TeamType;
 }
+
+const useStyles = makeStyles((theme) => ({
+    item: { marginBottom: theme.spacing(5) },
+}));
+
 export default function Team({ team }: Props) {
+    const classes = useStyles();
     return (
-        <Grid container alignItems='center' spacing={3}>
-            <Grid container item justify='center'>
+        <Grid container>
+            <Grid item xs={12} className={classes.item}>
                 <Typography align='center' variant='h5'>
                     {team.name}
                 </Typography>
             </Grid>
-            {team.members.map((teamMember, index) => (
-                <Grid
-                    item
-                    container
-                    justify='center'
-                    xs={12}
-                    sm={6}
-                    md={6}
-                    lg={3}
-                    key={index}
-                >
-                    <ProfileCard key={index} teamMember={teamMember} />
-                </Grid>
-            ))}
+            <Grid item xs={12} container justify='space-around'>
+                {team.members.map((teamMember, index) => (
+                    <Grid item key={index} className={classes.item}>
+                        <ProfileCard key={index} teamMember={teamMember} />
+                    </Grid>
+                ))}
+            </Grid>
         </Grid>
     );
 }

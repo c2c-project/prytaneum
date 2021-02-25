@@ -1,17 +1,17 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
+import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeTownhall, makeUser } from 'prytaneum-typings';
-import { Grid } from '@material-ui/core';
+import { makeQuestion, makeTownhall, makeUser, Townhall, User, makeGenFn, makeSpeaker } from 'prytaneum-typings';
+import faker from 'faker';
 
-import Layout from 'layout';
 import UserProvider from 'contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
 import TownhallProvider from 'contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
 import TownhallPanes from './TownhallPanes';
 
-export default { title: 'Domains/Townhall/Townhall Panes' };
-
+const baseUser = makeUser();
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
 function sendMessage(num?: number) {
@@ -24,106 +24,102 @@ function sendMessage(num?: number) {
     }
 }
 
-const user = makeUser();
-const townhall = makeTownhall();
-townhall.settings.chat.enabled = true;
-townhall.settings.questionQueue.transparent = true;
+const makeQuestions = makeGenFn(makeQuestion);
 
-export function Basic() {
-    return (
-        <UserProvider value={user}>
-            <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
-                <Grid
-                    container
-                    direction='column'
-                    style={{ height: '100%' }}
-                    alignContent='flex-start'
-                    wrap='nowrap'
-                >
-                    <div style={{ flex: 1 }}>
+const baseTownhall = makeTownhall();
+baseTownhall.settings.chat.enabled = true;
+baseTownhall.settings.questionQueue.transparent = true;
+baseTownhall.state.playlist.queue = makeQuestions(10);
+baseTownhall.state.playlist.position.current = 0;
+
+export default {
+    title: 'Domains/Townhall/Townhall Panes',
+    decorators: [
+        (MyStory) => (
+            <FixtureSocket.Provider value={emitter}>
+                <PaneProvider>
+                    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center' }}>
                         <button type='button' onClick={() => sendMessage(20)}>
                             Add Questions
                         </button>
+                        <MyStory />
                     </div>
-                    <div
-                        style={{
-                            flex: '1 1 100%',
-                            display: 'flex',
-                            backgroundColor: 'honeydew',
-                            width: '100%',
-                        }}
-                    >
-                        <Grid item xs={12} md={8} />
-                        <Grid
-                            item
-                            xs={12}
-                            md={4}
-                            container
-                            style={{ padding: '8px' }}
-                        >
-                            <TownhallProvider townhallId='123' value={townhall}>
-                                <FixtureSocket.Provider value={emitter}>
-                                    <PaneProvider>
-                                        <TownhallPanes />
-                                    </PaneProvider>
-                                </FixtureSocket.Provider>
-                            </TownhallProvider>
-                        </Grid>
-                    </div>
-                </Grid>
-            </Layout>
-        </UserProvider>
-    );
-}
+                </PaneProvider>
+            </FixtureSocket.Provider>
+        ),
+    ],
+    parameters: {
+        layout: 'fullscreen',
+    },
+} as Meta;
 
-export function AsMod() {
-    const copy = { ...townhall };
-    copy.settings.moderators.list.push({
-        email: user.email.address,
-        permissions: [],
-    });
-    return (
-        <UserProvider value={user}>
-            <Layout hideSideNav ContainerProps={{ maxWidth: 'xl' }}>
-                <Grid
-                    container
-                    direction='column'
-                    style={{ height: '100%' }}
-                    alignContent='flex-start'
-                    wrap='nowrap'
-                >
-                    <div style={{ flex: 1 }}>
-                        <button type='button' onClick={() => sendMessage(20)}>
-                            Add Questions
-                        </button>
-                    </div>
-                    <div
-                        style={{
-                            flex: '1 1 100%',
-                            display: 'flex',
-                            backgroundColor: 'honeydew',
-                            width: '100%',
-                        }}
-                    >
-                        <Grid item xs={12} md={8} />
-                        <Grid
-                            item
-                            xs={12}
-                            md={4}
-                            container
-                            style={{ padding: '8px' }}
-                        >
-                            <TownhallProvider townhallId='123' value={townhall}>
-                                <FixtureSocket.Provider value={emitter}>
-                                    <PaneProvider>
-                                        <TownhallPanes />
-                                    </PaneProvider>
-                                </FixtureSocket.Provider>
-                            </TownhallProvider>
-                        </Grid>
-                    </div>
-                </Grid>
-            </Layout>
-        </UserProvider>
-    );
-}
+const Template: Story<{ townhall: Townhall; user: User }> = ({ townhall, user }) => (
+    <UserProvider forceNoLogin value={user}>
+        <TownhallProvider forceNoFetch value={townhall} townhallId='123'>
+            <TownhallPanes />
+        </TownhallProvider>
+    </UserProvider>
+);
+
+export const LoggedOut = Template.bind({});
+LoggedOut.args = {
+    townhall: baseTownhall,
+    user: undefined,
+};
+
+export const RegularUser = Template.bind({});
+RegularUser.args = {
+    townhall: baseTownhall,
+    user: baseUser,
+};
+
+const modCopy = { ...baseTownhall };
+modCopy.settings.moderators.list.push({
+    email: baseUser.email.address,
+    permissions: [],
+});
+export const Moderator = Template.bind({});
+Moderator.args = {
+    townhall: modCopy,
+    user: baseUser,
+};
+
+const makeSpeakers = makeGenFn(makeSpeaker);
+export const Packed = Template.bind({});
+Packed.args = {
+    townhall: {
+        ...baseTownhall,
+        form: {
+            ...baseTownhall.form,
+            description: faker.lorem.paragraph(5),
+        },
+        settings: {
+            ...baseTownhall.settings,
+            speakers: {
+                list: makeSpeakers(10),
+            },
+        },
+    },
+    user: baseUser,
+};
+
+export const StaticNoTabs = Template.bind({});
+StaticNoTabs.args = {
+    townhall: {
+        ...baseTownhall,
+        settings: {
+            ...baseTownhall.settings,
+            chat: {
+                enabled: false,
+                automated: false,
+            },
+            questionQueue: {
+                transparent: false,
+                automated: false,
+            },
+        },
+    },
+};
+StaticNoTabs.parameters = {
+    chromatic: { disable: false },
+};

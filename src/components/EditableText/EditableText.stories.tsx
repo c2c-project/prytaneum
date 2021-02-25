@@ -1,9 +1,10 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 import Container from '@material-ui/core/Container';
 
 import Component from './EditableText';
 
-export default { title: 'Components/Editable Text' };
+export default { title: 'Components/Editable Text', parameters: { layout: 'centered' } } as Meta;
 
 export function Basic() {
     const [state, setState] = React.useState('email@email.com');

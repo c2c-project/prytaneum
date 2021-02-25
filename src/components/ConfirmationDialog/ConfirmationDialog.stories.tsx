@@ -1,26 +1,23 @@
-/* eslint-disable no-console */ // FIXME:
 import React from 'react';
-import { Container } from '@material-ui/core';
+import { Meta } from '@storybook/react';
 
 import ConfirmationDialog from './ConfirmationDialog';
 
-export default { title: 'Components/Confirmation Dialog' };
+export default {
+    title: 'Components/Confirmation Dialog',
+    parameters: { layout: 'centered' },
+    argTypes: { onConfirm: { action: 'confirmed' }, onClose: { action: 'closed' } },
+} as Meta;
 
-export function Basic() {
-    const [open, setOpen] = React.useState(false);
+interface Props {
+    onConfirm: () => void;
+    onClose: () => void;
+}
+
+export function Basic({ onConfirm, onClose }: Props) {
     return (
-        <Container maxWidth='md'>
-            <button onClick={() => setOpen(true)} type='button'>
-                open
-            </button>
-            <ConfirmationDialog
-                title='Storybook'
-                open={open}
-                onConfirm={() => console.log('confirmed')}
-                onClose={() => setOpen(false)}
-            >
-                Some text that should be read before proceeding further.
-            </ConfirmationDialog>
-        </Container>
+        <ConfirmationDialog title='Storybook' open onConfirm={onConfirm} onClose={onClose}>
+            Some text that should be read before proceeding further.
+        </ConfirmationDialog>
     );
 }

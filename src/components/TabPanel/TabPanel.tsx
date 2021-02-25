@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 
@@ -25,9 +25,7 @@ const useStyles = makeStyles(
         enterActive: {
             opacity: 1,
             transform: 'scale(1)',
-            transition: `opacity 200ms ease-in-out ${
-                exitTime - 50
-            }ms, transform 200ms ease-in-out ${exitTime - 50}ms`,
+            transition: `opacity 200ms ease-in-out ${exitTime - 50}ms, transform 200ms ease-in-out ${exitTime - 50}ms`,
         },
         enterDone: {},
         exit: {
@@ -39,6 +37,10 @@ const useStyles = makeStyles(
         },
         exitDone: {
             display: 'none',
+        },
+        exiting: {
+            // entering component does not have weird scroll position
+            overflow: 'hidden',
         },
     })
 );
@@ -61,9 +63,9 @@ const TabPanel = React.memo(({ visible, children, classes }: Props) => {
                 enter: clsx(classes.enter, classes.visible),
                 enterActive: clsx(classes.enterActive, classes.visible),
                 enterDone: clsx(classes.enterDone, classes.visible),
-                exit: clsx(classes.exit, classes.visible),
-                exitActive: clsx(classes.exitActive, classes.visible),
-                exitDone: classes.exitDone,
+                exit: clsx(classes.exit, classes.visible, classes.exiting),
+                exitActive: clsx(classes.exitActive, classes.visible, classes.exiting),
+                exitDone: clsx(classes.exitDone, classes.exiting),
             }}
         >
             <div className={classes.container}>{children}</div>
@@ -86,10 +88,7 @@ export function TabPanels({ children }: Pick<Props, 'children'>) {
     return <div className={classes.root}>{children}</div>;
 }
 
-const TabPanelContextSubscriber = ({
-    visible,
-    children,
-}: Omit<Props, 'classes'>) => {
+const TabPanelContextSubscriber = ({ visible, children }: Omit<Props, 'classes'>) => {
     const classes = useStyles();
     return (
         <TabPanel visible={visible} classes={classes}>

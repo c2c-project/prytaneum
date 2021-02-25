@@ -10,17 +10,13 @@ import {
     Typography,
     ListItemIcon,
     useMediaQuery,
-    useTheme,
     IconButton,
 } from '@material-ui/core';
-import {
-    ArrowDropDown,
-    // TODO: finish up user settings
-    // Settings,
-    ExitToApp,
-    MoreVert,
-} from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import MoreVert from '@material-ui/icons/MoreVert';
+import Settings from '@material-ui/icons/Settings';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import useUser from 'hooks/useUser';
@@ -83,9 +79,7 @@ export default function UserMenu({ className, links }: Props) {
         () =>
             user ? (
                 <>
-                    <Avatar className={classes.avatar}>
-                        {user.name.first[0]}
-                    </Avatar>
+                    <Avatar className={classes.avatar}>{user.name.first[0]}</Avatar>
                     <Typography variant='button' color='inherit'>
                         {`${user.name.first} ${user.name.last}`.toUpperCase()}
                     </Typography>
@@ -108,13 +102,7 @@ export default function UserMenu({ className, links }: Props) {
                     disableTouchRipple
                 >
                     {userInfo}
-                    <ArrowDropDown
-                        className={
-                            !isOpen
-                                ? classes.icon
-                                : clsx([classes.icon, classes.iconOpen])
-                        }
-                    />
+                    <ArrowDropDown className={!isOpen ? classes.icon : clsx([classes.icon, classes.iconOpen])} />
                 </ButtonBase>
             );
         return (
@@ -151,12 +139,12 @@ export default function UserMenu({ className, links }: Props) {
                         {userInfo}
                     </MenuItem>
                 )}
-                {/* <MenuItem button onClick={handleNavigation(links.settings)}>
+                <MenuItem button onClick={handleNavigation(links.settings)}>
                     <ListItemIcon>
                         <Settings />
                     </ListItemIcon>
                     <ListItemText primary='Settings' />
-                </MenuItem> */}
+                </MenuItem>
                 <MenuItem button onClick={handleNavigation(links.logout)}>
                     <ListItemIcon>
                         <ExitToApp />

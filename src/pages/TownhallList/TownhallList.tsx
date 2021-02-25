@@ -2,14 +2,15 @@ import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import { Grid, DialogContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { motion } from 'framer-motion';
 
 import TitleCard from 'components/TitleCard';
 import List from 'domains/Townhall/TownhallList';
-import Dialog from 'components/Dialog';
+import ResponsiveDialog from 'components/ResponsiveDialog';
 import TownhallForm from 'domains/Townhall/TownhallForm';
 import Fab from 'components/Fab';
 import history, { makeRelativeLink as link } from 'utils/history';
-import FadeThrough from 'components/FadeThrough';
+import FadeThrough from 'animations/FadeThrough';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,28 +24,18 @@ const useStyles = makeStyles((theme) => ({
 export default function TownhallList() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const [onExit, setOnExit] = React.useState<(() => void) | undefined>(
-        undefined
-    );
+    const [onExit, setOnExit] = React.useState<(() => void) | undefined>(undefined);
     return (
-        <>
+        <motion.div>
             <FadeThrough animKey='townhall-list-page'>
                 <Grid container>
                     <TitleCard title='Townhalls' />
                     <Grid item xs={12}>
-                        <List
-                            onClickTownhall={(id) =>
-                                history.push(link(`/${id}`))
-                            }
-                        />
+                        <List onClickTownhall={(id) => history.push(link(`/${id}`))} />
                     </Grid>
                 </Grid>
             </FadeThrough>
-            <Dialog
-                open={open}
-                onClose={() => setOpen(false)}
-                onExited={onExit}
-            >
+            <ResponsiveDialog open={open} onClose={() => setOpen(false)} onExited={onExit}>
                 <DialogContent>
                     <TownhallForm
                         onCancel={() => setOpen(false)}
@@ -54,10 +45,10 @@ export default function TownhallList() {
                         }}
                     />
                 </DialogContent>
-            </Dialog>
+            </ResponsiveDialog>
             <Fab aria-label='Add Townhall' onClick={() => setOpen(true)}>
                 <AddIcon className={classes.fab} />
             </Fab>
-        </>
+        </motion.div>
     );
 }

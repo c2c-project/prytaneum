@@ -3,7 +3,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 import { makeFeedbackReport } from '../reportMaker.mock';
 import FormBase from './FormBase';

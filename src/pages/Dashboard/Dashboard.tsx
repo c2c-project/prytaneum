@@ -4,7 +4,7 @@ import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import TitleCard from 'components/TitleCard';
-import FadeThrough from 'components/FadeThrough';
+import FadeThrough from 'animations/FadeThrough';
 import RequireRoles from 'domains/Logical/RequireRoles';
 import RoleInvite from 'domains/Admin/RoleInvite';
 

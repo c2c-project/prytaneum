@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import axios from 'utils/axios';
 import errors from 'utils/errors';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 import * as API from '.';
 

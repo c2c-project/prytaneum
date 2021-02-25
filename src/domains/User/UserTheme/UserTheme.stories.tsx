@@ -1,14 +1,9 @@
 import React from 'react';
 
-import AppBar from 'layout/AppBar';
 import Component from './Usertheme';
 
-export default { title: 'Domains/User/User Theme' };
+export default { title: 'Domains/User/User Theme', parameters: { layout: 'centered' } };
 
 export function Basic() {
-    return (
-        <AppBar>
-            <Component />
-        </AppBar>
-    );
+    return <Component />;
 }

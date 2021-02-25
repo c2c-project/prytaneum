@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         width: '100%',
     },
-    paper: {
+    card: {
         padding: theme.spacing(2, 0),
     },
     toolbar: {
@@ -30,8 +30,7 @@ type UserFilter = FilterFunc<User>;
 
 const filterMap: Record<string, UserFilter> = {
     Admin: (list) => list.filter(({ roles }) => roles.includes('admin')),
-    Organizer: (list) =>
-        list.filter(({ roles }) => roles.includes('organizer')),
+    Organizer: (list) => list.filter(({ roles }) => roles.includes('organizer')),
 };
 
 const UserList = () => {
@@ -43,10 +42,7 @@ const UserList = () => {
         ],
         []
     );
-    const [filteredResults, handleSearch, handleFilterChange] = useFilters(
-        users,
-        accessors
-    );
+    const [filteredResults, handleSearch, handleFilterChange] = useFilters(users, accessors);
 
     const [, isLoading] = useEndpoint(API.getUserList, {
         onSuccess: ({ data }) => {
@@ -60,11 +56,8 @@ const UserList = () => {
 
     return (
         <div className={classes.root}>
-            <Card className={classes.paper}>
-                <CardHeader
-                    title='User List'
-                    titleTypographyProps={{ className: classes.title }}
-                />
+            <Card className={classes.card}>
+                <CardHeader title='User List' titleTypographyProps={{ className: classes.title }} />
                 <CardContent>
                     <Grid item xs={12} className={classes.toolbar}>
                         <ListFilter

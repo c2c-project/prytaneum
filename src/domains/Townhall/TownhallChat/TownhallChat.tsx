@@ -1,87 +1,119 @@
 import React from 'react';
-import { Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import type { ChatMessageForm } from 'prytaneum-typings';
+import type { ChatMessageForm, SocketIOEvents } from 'prytaneum-typings';
+import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
 
+import {
+    initializeChatMessages,
+    addChatMessage,
+    updateChatMessage,
+    deleteChatMessage,
+    readChatMessages,
+} from 'reducers';
 import useSocketio, { SocketFn } from 'hooks/useSocketio';
-import Chatbar from 'components/Chatbar';
-import ChatContent from 'components/ChatContent';
-import Chat from 'components/Chat';
 import useEndpoint from 'hooks/useEndpoint';
-import Loader from 'components/Loader';
 import useTownhall from 'hooks/useTownhall';
 import useUser from 'hooks/useUser';
+import Chat from 'components/Chat';
+import Loader from 'components/Loader';
+import ChatMessage from 'components/ChatMessage';
 import { createChatMessage, getChatmessages } from '../api';
-import { chatReducer } from './utils';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        // padding: theme.spacing(1.5),
-        width: '100%',
-        height: '100%',
-        minHeight: 500,
-        display: 'flex',
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        flex: '1 1 100%',
-    },
-}));
+interface Props {
+    onDataChange?: (length: number) => void;
+}
 
-export default function TownhallChat() {
-    const classes = useStyles();
+export default function TownhallChat({ onDataChange }: Props) {
     const [townhall] = useTownhall();
     const messageRef = React.useRef<ChatMessageForm>();
-    const [messages, dispatchMessage] = React.useReducer(chatReducer, []);
     const [user] = useUser();
-    const [, areMessagesLoading] = useEndpoint(
-        () => getChatmessages(townhall._id),
-        {
-            onSuccess: ({ data }) =>
-                dispatchMessage({ type: 'initial-state', payload: data }),
-            runOnFirstRender: true,
-        }
-    );
+    const countRef = React.useRef<number>(0);
+    const dispatch = useDispatch();
+    const { unread, read } = useSelector((store) => store.chat);
+    const messages = React.useMemo(() => [...read, ...unread], [read, unread]);
+
+    // load initial messages
+    const [, areMessagesLoading] = useEndpoint(() => getChatmessages(townhall._id), {
+        onSuccess: ({ data }) => dispatch(initializeChatMessages(data)),
+        runOnFirstRender: true,
+    });
+
     const socketFn: SocketFn = React.useCallback(
-        (socket) => {
-            socket.on('chat-message-state', dispatchMessage);
-        },
-        [dispatchMessage]
+        (socket) =>
+            socket.on('chat-message-state', (action: SocketIOEvents['chat-message-state']) => {
+                switch (action.type) {
+                    case 'create-chat-message':
+                        dispatch(addChatMessage(action.payload));
+                        break;
+                    case 'update-chat-message':
+                        dispatch(updateChatMessage(action.payload));
+                        break;
+                    case 'delete-chat-message':
+                        dispatch(deleteChatMessage(action.payload._id));
+                        break;
+                    case 'moderate-chat-message':
+                        dispatch(deleteChatMessage(action.payload._id));
+                        break;
+                    default:
+                    // do nothing
+                }
+            }),
+        [dispatch]
     );
-    useSocketio(
-        '/chat-messages',
-        { query: { townhallId: townhall._id } },
-        socketFn
-    );
+    useSocketio('/chat-messages', { query: { townhallId: townhall._id } }, socketFn);
 
-    const create = React.useCallback(
-        () =>
-            createChatMessage(
-                townhall._id,
-                messageRef.current as ChatMessageForm
-            ),
-        [townhall._id]
-    ); // gross
+    const create = React.useCallback(() => {
+        // verify message exists
+        if (!messageRef.current) throw new Error('No message set');
 
-    const [postMesssage, isLoading] = useEndpoint(create);
+        // copy the current message
+        const copy = messageRef.current;
+
+        // clear the ref
+        messageRef.current = undefined;
+
+        // send
+        return createChatMessage(townhall._id, copy);
+    }, [townhall._id]);
+
+    const [postMesssage, isLoading] = useEndpoint(create, { minWaitTime: 0 });
+
+    React.useEffect(() => {
+        if (onDataChange && messages.length - countRef.current > 0) {
+            onDataChange(messages.length - countRef.current);
+            countRef.current = messages.length;
+        }
+    }, [messages.length, onDataChange]);
+
+    const readMessages = React.useCallback(() => {
+        dispatch(readChatMessages());
+    }, [dispatch]);
 
     if (areMessagesLoading) return <Loader />;
 
     return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Chat>
-                    <ChatContent messages={messages} />
-                    <Chatbar
-                        disabled={isLoading || !user}
-                        onSubmit={(form) => {
-                            messageRef.current = form;
-                            postMesssage();
-                        }}
-                    />
-                </Chat>
-            </Paper>
-        </div>
+        <Chat
+            disabled={isLoading || !user}
+            onSubmit={(form) => {
+                messageRef.current = form;
+                postMesssage();
+            }}
+            onScrollToBottom={readMessages}
+        >
+            {messages.map(({ _id, meta, message }) => (
+                <motion.li
+                    key={_id}
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: 'keyframes' }}
+                >
+                    <ChatMessage name={meta.createdBy.name.first} timestamp={meta.createdAt} message={message} />
+                </motion.li>
+            ))}
+        </Chat>
     );
 }
+
+TownhallChat.defaultProps = {
+    onDataChange: undefined,
+};
