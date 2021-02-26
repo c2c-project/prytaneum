@@ -9,17 +9,18 @@ import {
     Button,
 } from '@material-ui/core';
 import type { ClientSafeUser } from 'prytaneum-typings';
+import useRequiredUser from '../UserProfile'
 // import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import SettingsList from 'components/SettingsList';
-
 import TextField from 'components/TextField';
-
 import SettingsItem from 'components/SettingsItem';
+import API from 'domains/Auth/api'
 import text from './help-text';
 
 import useSnack from 'hooks/useSnack';
+import useEndpoint from 'hooks/useEndpoint';
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
@@ -59,6 +60,7 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
     const [state, setState] = React.useState(user.settings.townhall);
     const buildHandler = buildCheckboxUpdate<typeof state>(setState);
     // TODO: API Request
+
     return (
         <SettingsList>
             <SettingsItem
@@ -75,21 +77,28 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 }
 
 export function NotificationSettings({ user }: { user: ClientSafeUser }) {
-    const [state, setState] = React.useState(user.settings.notifications);
-    const buildHandler = buildCheckboxUpdate<typeof state>(setState);
+    const [notifState, setNotifState] = React.useState(user.settings.notifications);
     // TODO: API Request
-    // const [snack] = useSnack();
+    const [snack] = useSnack();
+    const changeNotifEnd = React.useCallback(() => API.changeNotif(notifState.enabled, notifState.types), [notifState.enabled, notifState.types]);
+    const [sendNotif, isNotifLoading]  = useEndpoint(changeNotifEnd, {
+        onSuccess: ({ data }) => {
+            setNotifState(data.user.settings.notifications);
+            snack('Updated Notification settings!');
+        }
+    });
+    const buildHandler = buildCheckboxUpdate<typeof notifState>(setNotifState);
 
     return (
         <SettingsList>
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
-                    checked={state.enabled}
+                    checked={notifState.enabled}
                     // onChange={() => { buildHandler('enabled'); } }
                     onChange={buildHandler('enabled')}
                 />
             </SettingsItem>
-            <Collapse in={state.enabled}>
+            <Collapse in={notifState.enabled}>
                 <SettingsItem
                     helpText={text.notifications.types}
                     name='Notification Types'

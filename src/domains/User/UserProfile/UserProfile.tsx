@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const useRequiredUser = () => {
+export function useRequiredUser() {
     const [user, setUser] = useUser();
     // if no user is logged in
     if (!user) throw new Error('useRequiredUser() should never be accessed in a context where the user may not be logged in');
@@ -130,7 +130,7 @@ export default function UserProfile({ img, links }: Props) {
                     </Grid>
                     
                     <Grid component='span' item xs={12}>
-                        <h3>Reset Password Method #1</h3>
+                        <h3>Reset Password</h3>
                         <Button 
                             onClick={handleNavigation('/forget-password/request')} 
                             type='submit'
