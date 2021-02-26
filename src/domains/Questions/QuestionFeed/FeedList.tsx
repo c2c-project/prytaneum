@@ -112,13 +112,15 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
             </ResponsiveDialog>
             <Grid container>
                 {questions.length === 0 && (
-                    <Grid item xs={12}>
+                    <List>
                         {systemMessages.map((node, idx) => (
-                            <Card key={idx} className={classes.item}>
-                                <CardContent>{node}</CardContent>
-                            </Card>
+                            <ListItem>
+                                <Card key={idx} className={classes.item}>
+                                    <CardContent>{node}</CardContent>
+                                </Card>
+                            </ListItem>
                         ))}
-                    </Grid>
+                    </List>
                 )}
                 <Grid item xs={12}>
                     {questionList}

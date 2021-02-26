@@ -1,7 +1,7 @@
 // KEEP IN SYNC WITH townhallsettings type
 export default {
-    chat: {
-        enabled: 'Enables the Chat component for this Townhall',
+    breakout: {
+        enabled: 'Enables the Breakout component for this Townhall',
         automated:
             'Automatically filters out toxic messages using Artificial Intelligence/Machine Learning',
     },

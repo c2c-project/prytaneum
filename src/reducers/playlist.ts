@@ -25,6 +25,7 @@ export const removeFromQueue = createAction<string>('playlist/queue/remove');
 export const playlistInit = createAction<{ queue: Question[]; position: number; max: number }>('playlist/queue/init');
 export const remoteIncrementQueue = createAction('playlist/queue/remote-next');
 export const remoteDecrementQueue = createAction('playlist/queue/remote-prev');
+export const jumpToCurrent = createAction('playlist/queue/current');
 
 export default createReducer<PlaylistState>({ queue: [], position: -1, max: -1 }, (builder) => {
     builder.addCase(addToQueue, (state, action) => ({ ...state, queue: [...state.queue, action.payload.question] }));
@@ -48,6 +49,7 @@ export default createReducer<PlaylistState>({ queue: [], position: -1, max: -1 }
         queue: state.queue.filter(({ _id }) => _id !== action.payload),
     }));
     builder.addCase(playlistInit, (_state, action) => ({ ...action.payload }));
+    builder.addCase(jumpToCurrent, (state) => ({ ...state, position: state.max }));
 });
 
 // export default function playlistReducer(state: PlaylistState, action: PlaylistActions): PlaylistState {
