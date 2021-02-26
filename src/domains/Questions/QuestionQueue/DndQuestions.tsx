@@ -13,7 +13,8 @@ import DraggableList from './DraggableList';
 import { updateQueueOrder } from '../api';
 
 interface Props {
-    questions: Question[];
+    queue: Question[];
+    position: number;
     // bufferLength: number;
     // onFlushBuffer: () => void;
 }
@@ -51,10 +52,12 @@ function useStyledQueue() {
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-function DndQuestions({ questions }: Props) {
+function DndQuestions({ queue, position }: Props) {
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const dispatch = useDispatch<Dispatch<QueueActions>>();
     const [townhall] = useTownhall();
+    const unaskedQuestions = React.useMemo(() => queue.slice(position + 1), [queue, position]);
+    const askedQuestions = React.useMemo(() => queue.slice(0, position + 1), [queue, position]);
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -63,23 +66,24 @@ function DndQuestions({ questions }: Props) {
                 return;
             }
 
-            const newState = reorder(questions, result.source.index, result.destination.index);
-            dispatch({ type: 'playlist-queue-order', payload: newState });
+            const newState = reorder(unaskedQuestions, result.source.index, result.destination.index);
+            dispatch({ type: 'playlist-queue-order', payload: [...askedQuestions, ...newState] });
+
             // eslint-disable-next-line
-            void updateQueueOrder(townhall._id, newState);
+            void updateQueueOrder(townhall._id, [...askedQuestions, ...newState]);
         },
-        [questions, reorder, dispatch, townhall]
+        [askedQuestions, unaskedQuestions, reorder, dispatch, townhall]
     );
 
     return (
         <DialogContent style={{ overflowY: 'scroll' }}>
             <Container maxWidth='md'>
-                {questions.length > 0 ? (
+                {unaskedQuestions.length > 0 ? (
                     <>
                         <Typography align='center'>Drag and drop the questions below to reorder</Typography>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <DropArea getStyle={getListStyle} droppableId='droppable'>
-                                <DraggableList questions={questions} itemStyle={itemStyle} />
+                                <DraggableList questions={unaskedQuestions} itemStyle={itemStyle} />
                             </DropArea>
                         </DragDropContext>
                     </>
