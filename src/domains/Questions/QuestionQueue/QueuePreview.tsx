@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Grid, List, ListItem, ListItemText, Typography, Divider, Button } from '@material-ui/core';
+import { Paper, Grid, Typography, Divider, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         marginLeft: theme.spacing(2),
+        // fontSize: 14,
     },
     divider: {
         margin: theme.spacing(2, 0),
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     },
     empty: {
         margin: theme.spacing(5, 0),
+    },
+    item: {
+        width: '100%',
     },
 }));
 
@@ -44,13 +48,30 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
 
     return (
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
+            <Grid container justify='space-around'>
+                <Typography variant='body2'>
+                    <b>{queue.length - (current < 0 ? 0 : current + 1)}</b>
+                    &nbsp;Remaining
+                </Typography>
+                <Typography variant='body2'>
+                    <b>{current + 1}</b>
+                    &nbsp;Asked (Includes Current)
+                </Typography>
+            </Grid>
+            <Divider className={classes.divider} />
             <Grid item xs={12}>
-                <Typography className={classes.title} align='left' variant='overline'>
+                <Typography className={classes.title} align='left' variant='h6'>
                     Current
                 </Typography>
             </Grid>
             {currentQuestion && (
-                <QuestionCard CardProps={{ elevation: 0 }} question={currentQuestion} quote={currentQuestion.quote} />
+                <QuestionCard
+                    stats
+                    className={classes.item}
+                    CardProps={{ elevation: 0 }}
+                    question={currentQuestion}
+                    quote={currentQuestion.quote}
+                />
             )}
             {!currentQuestion && (
                 <Typography color='textSecondary' variant='body2' className={classes.empty}>
@@ -67,45 +88,33 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
             </Grid>
             <Divider className={classes.divider} />
             <Grid item xs={12}>
-                <Typography className={classes.title} align='left' variant='overline'>
+                <Typography className={classes.title} align='left' variant='h6'>
                     Up Next
                 </Typography>
             </Grid>
-            <List>
-                <ListItem>
-                    {nextQuestion && (
-                        <ListItemText
-                            primary={nextQuestion.question}
-                            secondary={nextQuestion.meta.createdBy.name.first}
-                        />
-                    )}
-                    {!nextQuestion && (
-                        <ListItemText
-                            className={classes.empty}
-                            primary='There is no question to display'
-                            primaryTypographyProps={{ color: 'textSecondary', variant: 'body2' }}
-                        />
-                    )}
-                </ListItem>
-            </List>
+
+            {nextQuestion && (
+                <QuestionCard
+                    className={classes.item}
+                    stats
+                    CardProps={{ elevation: 0 }}
+                    question={nextQuestion}
+                    quote={nextQuestion.quote}
+                />
+            )}
+            {!nextQuestion && (
+                <Typography color='textSecondary' variant='body2' className={classes.empty}>
+                    There is no question to display
+                </Typography>
+            )}
+
             <Grid container item justify='flex-end'>
                 <Button variant='outlined' startIcon={<ReorderIcon />} onClick={() => setOpen(true)}>
                     Reorder
                 </Button>
             </Grid>
-            <Divider className={classes.divider} />
-            <Grid container justify='space-around'>
-                <Typography variant='body2'>
-                    <b>{queue.length - (current < 0 ? 0 : current + 1)}</b>
-                    &nbsp;Remaining
-                </Typography>
-                <Typography variant='body2'>
-                    <b>{current + 1}</b>
-                    &nbsp;Asked (Includes Current)
-                </Typography>
-            </Grid>
             <ResponsiveDialog title='In Queue' fullScreen open={open} onClose={() => setOpen(false)}>
-                <DndQuestions questions={queue.slice(current + 1)} />
+                <DndQuestions queue={queue} position={current} />
             </ResponsiveDialog>
         </Grid>
     );

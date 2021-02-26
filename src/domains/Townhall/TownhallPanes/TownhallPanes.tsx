@@ -83,6 +83,9 @@ const useStyles = makeStyles((theme) => ({
     pl: {
         paddingLeft: theme.spacing(2),
     },
+    pb: {
+        paddingBottom: theme.spacing(2),
+    },
 }));
 interface Props {
     classes: ReturnType<typeof useStyles>;
@@ -124,7 +127,7 @@ const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => 
             </Grid>
 
             <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
-                <Typography className={classes.pl} variant='overline'>
+                <Typography className={clsx(classes.pl, classes.pb)} variant='h5'>
                     Current Question
                 </Typography>
                 <QuestionCarousel />

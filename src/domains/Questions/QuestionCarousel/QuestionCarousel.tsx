@@ -1,13 +1,11 @@
 import React from 'react';
-
 import type { Question } from 'prytaneum-typings';
 import { makeStyles } from '@material-ui/core/styles';
-import { IconButton, Typography } from '@material-ui/core';
+import { IconButton, Typography, Divider, Grid, Button } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import clsx from 'clsx';
 
-import { incrementQueue, decrementQueue } from 'reducers';
+import { incrementQueue, decrementQueue, jumpToCurrent } from 'reducers';
 import usePlaylist from '../usePlaylist';
 import QuestionCard from '../QuestionCard';
 
@@ -17,41 +15,53 @@ export interface CarouselProps {
     onClickPrev: () => void;
     hasNext: boolean;
     hasPrev: boolean;
+    onClickJump: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
+        flexDirection: 'column',
     },
 
     flex: {
         flex: '1 1 100%',
         padding: theme.spacing(0, 1),
+        width: '100%',
     },
     hide: {
         visibility: 'hidden',
     },
 }));
 
-export function QuestionCarousel({ question, onClickNext, onClickPrev, hasNext, hasPrev }: CarouselProps) {
+export function QuestionCarousel({ question, onClickNext, onClickPrev, hasNext, hasPrev, onClickJump }: CarouselProps) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <div className={clsx({ [classes.hide]: !hasPrev })}>
-                <IconButton color='secondary' onClick={onClickPrev}>
+            {/* <div className={classes.flex}> */}
+            {question && (
+                <QuestionCard
+                    className={classes.flex}
+                    CardProps={{ elevation: 0 }}
+                    question={question}
+                    quote={question.quote}
+                />
+            )}
+            {!question && <Typography>No Question to display yet</Typography>}
+            {/* </div> */}
+            <Divider />
+            <Grid container justify='space-between'>
+                <IconButton onClick={onClickPrev} disabled={!hasPrev}>
                     <ChevronLeftIcon />
                 </IconButton>
-            </div>
-            <div className={classes.flex}>
-                {question && <QuestionCard CardProps={{ elevation: 0 }} question={question} />}
-                {!question && <Typography>No Question to display yet</Typography>}
-            </div>
-            <div className={clsx({ [classes.hide]: !hasNext })}>
-                <IconButton color='secondary' onClick={onClickNext}>
+                <Button disabled={!hasNext} onClick={onClickJump}>
+                    Go to Current
+                </Button>
+                <IconButton onClick={onClickNext} disabled={!hasNext}>
                     <ChevronRightIcon />
                 </IconButton>
-            </div>
+            </Grid>
         </div>
     );
 }
@@ -75,6 +85,7 @@ export default function CurrentQuestion() {
             onClickNext={handleClick(1)}
             hasNext={position < max}
             hasPrev={position > 0}
+            onClickJump={() => dispatch(jumpToCurrent())}
         />
     );
 }

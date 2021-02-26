@@ -56,7 +56,7 @@ export default function TownhallLive() {
 
     // increase the distance required to show the scroll to top fab
     // bedcause of on screen keyboards on mobile
-    const distance = React.useMemo(() => (isMdUp ? 100 : 400), [isMdUp]);
+    const distance = React.useMemo(() => (isMdUp ? 500 : 800), [isMdUp]);
 
     const handleScroll = () => {
         const top = topRef.current?.getBoundingClientRect()?.top;
