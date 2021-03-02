@@ -38,6 +38,7 @@ export default function UserProvider({ children, value, forceNoLogin }: Props) {
         },
         // so the default error handler is not used
         onFailure: () => {},
+        minWaitTime: 0,
     });
 
     // runs only if the request hasn't run once and there's no user
@@ -49,14 +50,11 @@ export default function UserProvider({ children, value, forceNoLogin }: Props) {
 
     // if the request is either loading or hasn't run AND there's no user
     // then show a loader
-    if (!forceNoLogin && (isLoading || !getHasRun()) && !user)
-        return <Loader />;
+    if (!forceNoLogin && (isLoading || !getHasRun()) && !user) return <Loader />;
 
     return (
         <UserContext.Provider value={user}>
-            <UserDispatch.Provider value={setUser}>
-                {children}
-            </UserDispatch.Provider>
+            <UserDispatch.Provider value={setUser}>{children}</UserDispatch.Provider>
         </UserContext.Provider>
     );
 }
