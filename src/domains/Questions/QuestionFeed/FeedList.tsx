@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.primary.light,
     },
     card: {},
+    list: {
+        width: '100%',
+    },
 }));
 
 function FeedList({ questions, variant, systemMessages, className }: Props) {
@@ -112,10 +115,10 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
             </ResponsiveDialog>
             <Grid container>
                 {questions.length === 0 && (
-                    <List>
+                    <List className={classes.list}>
                         {systemMessages.map((node, idx) => (
-                            <ListItem>
-                                <Card key={idx} className={classes.item}>
+                            <ListItem disableGutters key={idx}>
+                                <Card className={classes.item}>
                                     <CardContent>{node}</CardContent>
                                 </Card>
                             </ListItem>

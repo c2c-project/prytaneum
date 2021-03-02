@@ -1,11 +1,12 @@
 import React from 'react';
-import { Paper, Grid, Typography, Divider, Button } from '@material-ui/core';
+import { Paper, Grid, Typography, Divider, Button, List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import type { Question } from 'prytaneum-typings';
 
+import CommentArrowLeft from 'icons/CommentArrowLeft';
 import ResponsiveDialog from 'components/ResponsiveDialog';
 import QuestionCard from '../QuestionCard';
 import DndQuestions from './DndQuestions';
@@ -44,7 +45,9 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
     const currentQuestion = queue[current];
     const nextQuestion = queue[current + 1];
     const hasPrevious = Boolean(queue[current - 1]);
+    const pastQuestions = React.useMemo(() => queue.slice(0, current), [queue, current]);
     const [open, setOpen] = React.useState(false);
+    const [showPast, setShowPast] = React.useState(false);
 
     return (
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
@@ -108,11 +111,28 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
                 </Typography>
             )}
 
-            <Grid container item justify='flex-end'>
+            <Grid container item justify='space-between'>
+                <Button variant='outlined' startIcon={<CommentArrowLeft />} onClick={() => setShowPast(true)}>
+                    Past Questions
+                </Button>
                 <Button variant='outlined' startIcon={<ReorderIcon />} onClick={() => setOpen(true)}>
-                    Reorder
+                    In Queue
                 </Button>
             </Grid>
+            <ResponsiveDialog title='Past Questions' fullScreen open={showPast} onClose={() => setShowPast(false)}>
+                {pastQuestions.length === 0 && (
+                    <Typography align='center' variant='h5'>
+                        No Questions to display
+                    </Typography>
+                )}
+                <List>
+                    {pastQuestions.map((question) => (
+                        <ListItem key={question._id}>
+                            <QuestionCard stats className={classes.item} question={question} quote={question.quote} />
+                        </ListItem>
+                    ))}
+                </List>
+            </ResponsiveDialog>
             <ResponsiveDialog title='In Queue' fullScreen open={open} onClose={() => setOpen(false)}>
                 <DndQuestions queue={queue} position={current} />
             </ResponsiveDialog>
