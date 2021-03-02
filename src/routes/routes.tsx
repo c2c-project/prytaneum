@@ -8,6 +8,7 @@ import TownhallSettings from 'domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/TownhallList';
 import TownhallLive from 'pages/TownhallLive';
 import FadeThrough from 'animations/FadeThrough';
+import LoginWithToken from 'domains/Logical/LoginWithToken';
 
 import Dashboard from 'pages/Dashboard';
 
@@ -80,10 +81,14 @@ const joinRoutes: PrytaneumRoutes = [
 
             const { townhallId } = ctx.params;
             return (
-                <TownhallProvider townhallId={townhallId}>
-                    <RegPrompt />
-                    <TownhallLive />
-                </TownhallProvider>
+                <QueryProvider query={ctx.query}>
+                    <LoginWithToken>
+                        <TownhallProvider townhallId={townhallId}>
+                            <RegPrompt />
+                            <TownhallLive />
+                        </TownhallProvider>
+                    </LoginWithToken>
+                </QueryProvider>
             );
         },
     },
