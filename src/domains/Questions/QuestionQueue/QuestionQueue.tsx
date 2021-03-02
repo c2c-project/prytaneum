@@ -8,13 +8,10 @@ import useQuestionQueue from './useQuestionQueue';
 import QueuePreview from './QueuePreview';
 import { nextQuestion, prevQuestion } from '../api';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         height: '100%',
         width: '100%',
-    },
-    item: {
-        marginBottom: theme.spacing(2),
     },
 }));
 

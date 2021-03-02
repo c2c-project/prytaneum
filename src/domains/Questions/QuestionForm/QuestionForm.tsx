@@ -62,12 +62,12 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
                 {onCancel && (
-                    <Button color='primary' disableElevation onClick={onCancel}>
+                    <Button color='primary' onClick={onCancel}>
                         Cancel
                     </Button>
                 )}
                 <LoadingButton loading={isLoading}>
-                    <Button type='submit' variant='contained' color='primary' disableElevation>
+                    <Button type='submit' variant='contained' color='primary'>
                         Ask
                     </Button>
                 </LoadingButton>

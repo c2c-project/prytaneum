@@ -27,6 +27,7 @@ export default function TownhallProvider({ value, children, townhallId, forceNoF
             if (!getIsMounted()) return;
             setTownhall(res.data);
         },
+        minWaitTime: 0,
     });
 
     React.useEffect(() => {

@@ -12,7 +12,7 @@ import QuestionQueue from 'domains/Questions/QuestionQueue';
 import AskQuestion from 'domains/Questions/AskQuestion';
 import QuestionCarousel from 'domains/Questions/QuestionCarousel';
 import useTownhall from 'hooks/useTownhall';
-import TownhallChat from '../TownhallChat';
+import Breakout from '../Breakout';
 import StyledTab, { Props as StyledTabProps } from './StyledTab';
 import InfoCard from '../InfoCard';
 import SpeakerItem from './SpeakerItem';
@@ -42,7 +42,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionFeed />]);
-    if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <TownhallChat />]);
+    if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
 };
@@ -126,12 +126,14 @@ const TownhallPanes = React.memo(({ classes, townhall, isModerator }: Props) => 
                 <AskQuestion className={classes.rightJustify} />
             </Grid>
 
-            <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
-                <Typography className={clsx(classes.pl, classes.pb)} variant='h5'>
-                    Current Question
-                </Typography>
-                <QuestionCarousel />
-            </Grid>
+            {!isModerator && (
+                <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
+                    <Typography className={clsx(classes.pl, classes.pb)} variant='h5'>
+                        Current Question
+                    </Typography>
+                    <QuestionCarousel />
+                </Grid>
+            )}
 
             <div className={clsx(classes.item, classes.fullWidth)}>
                 {tabs.length > 1 && (
