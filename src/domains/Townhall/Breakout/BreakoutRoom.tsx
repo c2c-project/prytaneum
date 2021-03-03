@@ -54,10 +54,14 @@ export default function BreakoutRoom({ onDataChange, breakoutId }: Props) {
     });
 
     // load initial messages
-    const [, areMessagesLoading] = useEndpoint(() => getChatmessages(breakoutId, townhall._id), {
+    const [fetchMessages, areMessagesLoading] = useEndpoint(() => getChatmessages(breakoutId, townhall._id), {
         onSuccess: ({ data }) => dispatch(initializeChatMessages(data)),
         runOnFirstRender: true,
     });
+
+    // I only want to fetch messages each time breakoutId changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(fetchMessages, [breakoutId]);
 
     const socketFn: SocketFn = React.useCallback(
         (socket) =>
