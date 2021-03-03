@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { motion } from 'framer-motion';
 
 import Fab from 'components/Fab';
 import VideoPlayer from 'components/VideoPlayer';
@@ -76,7 +77,7 @@ export default function TownhallLive() {
     };
 
     return (
-        <Grid container className={classes.root} onScroll={handleScroll}>
+        <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
             {!isMdUp && <div ref={topRef} />}
             <Grid item md={8} className={classes.video}>
                 <VideoPlayer url={townhall.settings.video.url} />

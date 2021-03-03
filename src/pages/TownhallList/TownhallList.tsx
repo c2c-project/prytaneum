@@ -26,7 +26,7 @@ export default function TownhallList() {
     const [open, setOpen] = React.useState(false);
     const [onExit, setOnExit] = React.useState<(() => void) | undefined>(undefined);
     return (
-        <motion.div>
+        <motion.div key='townhall-list'>
             <FadeThrough animKey='townhall-list-page'>
                 <Grid container>
                     <TitleCard title='Townhalls' />

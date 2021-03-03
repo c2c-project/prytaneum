@@ -44,7 +44,7 @@ export default createReducer<ChatState>({ unread: [], read: [], breakoutId: '', 
         breakoutId: action.payload.breakoutId,
     }));
 
-    builder.addCase(breakoutEnd, (state) => ({ ...state, isActive: false, breakoutId: '' }));
+    builder.addCase(breakoutEnd, () => ({ read: [], unread: [], isActive: false, breakoutId: '' }));
 
     builder.addCase(initializeChatMessages, (state, action) => ({ ...state, read: [], unread: action.payload }));
     builder.addCase(breakoutRoomChange, (_state, action) => ({
