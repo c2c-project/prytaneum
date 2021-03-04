@@ -3,19 +3,16 @@ import io from 'socket.io-client';
 
 export type SocketFn = (socket: SocketIOClient.Socket) => void;
 
-function useSocketio(
-    uri: string,
-    opts: SocketIOClient.ConnectOpts,
-    fn: SocketFn
-) {
+function useSocketio(uri: string, opts: SocketIOClient.ConnectOpts, fn: SocketFn) {
     // socketio ref where we connect just once; guaranteed singleton
     const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
     const getSocket = React.useCallback(() => {
-        if (socketRef.current) return socketRef.current;
+        if (socketRef.current && socketRef.current.connected) return socketRef.current;
         socketRef.current = io.connect(uri, opts);
         return socketRef.current;
     }, [uri, opts]);
     const socket = getSocket();
+    const [_ignored, forceReconnect] = React.useReducer((x: number) => x + 1, 0);
     // curry the callback passed in that receives the socket
 
     // TODO: on disconnect display a snack that you have been
@@ -28,7 +25,8 @@ function useSocketio(
         return () => {
             socket.close();
         };
-    }, [fn, socket]);
+    }, [fn, socket, _ignored]);
+    return forceReconnect;
 }
 
 export default useSocketio;
