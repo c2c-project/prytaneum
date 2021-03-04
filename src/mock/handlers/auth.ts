@@ -1,15 +1,11 @@
 /* eslint-disable */
 import { rest } from 'msw';
 import faker from 'faker/locale/en';
-import {
-    makeUser,
-    User,
-    ForgotPassForm,
-    RegisterForm,
-    ForgotPassRequestForm,
-    ClientSafeUser,
-} from 'prytaneum-typings';
+import { makeUser, User, ForgotPassForm, RegisterForm, ForgotPassRequestForm, ClientSafeUser } from 'prytaneum-typings';
 import { LinkedCamera } from '@material-ui/icons';
+
+// used to decide whether or not to fail in mocks
+let failBit = 0;
 
 export const makeUsers = (num?: number): User[] => {
     const ret = [];
@@ -93,7 +89,7 @@ export default [
     }),
 
     rest.put('/api/users/me/name', (req, res, ctx) => {
-        const { fname, lname } = req.body as { fname: string, lname: string }
+        const { fname, lname } = req.body as { fname: string; lname: string };
 
         // fake fail case
         if (fname === 'fail' || lname === 'fail') {
@@ -107,7 +103,7 @@ export default [
         return res(
             ctx.status(200),
             ctx.json({
-                user: toReturnUser
+                user: toReturnUser,
             })
         );
     }),
@@ -116,20 +112,27 @@ export default [
 
         // fake fail case
         if (email === 'fail@fail.com') {
-            return res(ctx.status(400), ctx.text('failed on purpose for email change'))
+            return res(ctx.status(400), ctx.text('failed on purpose for email change'));
         }
 
         // make a fake user and just reassign its email
         let toReturnUser = makeUser();
-        toReturnUser.email.address = email
+        toReturnUser.email.address = email;
         return res(ctx.status(200), ctx.json({ user: toReturnUser }));
     }),
-    rest.put('/api/users/me/notifs', (req, res, ctx) => {
-        const { enabled, types } = req.body as { enabled: boolean, types: string[] };
+    rest.put('/api/users/me/notif', (req, res, ctx) => {
+        // to simulate failure, we just fail 50% of the time for this mock
+        if (failBit === 1) {
+            failBit ^= 1;
+            return res(ctx.status(400), ctx.text('failed on purpose for notif change'));
+        }
+
+        let { enabled, types } = req.body as { enabled: boolean; types: string[] };
         // make a fake user and reassign its settings
         let toReturnUser = makeUser();
-        toReturnUser.settings.notifications.enabled = enabled;
+        toReturnUser.settings.notifications.enabled = !enabled;
         toReturnUser.settings.notifications.types = types;
+        failBit ^= 1;
         return res(ctx.status(200), ctx.json({ user: toReturnUser }));
     }),
 ];

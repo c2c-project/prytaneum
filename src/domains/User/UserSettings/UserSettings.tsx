@@ -123,7 +123,7 @@ export default function UserSettings({ id, onClickPasswordReset }: Props) {
             component: (
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' passReset={onClickPasswordReset} />
+                        <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />

@@ -9,14 +9,13 @@ import {
     Button,
 } from '@material-ui/core';
 import type { ClientSafeUser } from 'prytaneum-typings';
-import useRequiredUser from '../UserProfile'
 // import { makeStyles } from '@material-ui/core/styles';
 
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import SettingsList from 'components/SettingsList';
 import TextField from 'components/TextField';
 import SettingsItem from 'components/SettingsItem';
-import API from 'domains/Auth/api'
+import API from 'domains/Auth/api';
 import text from './help-text';
 
 import useSnack from 'hooks/useSnack';
@@ -63,14 +62,8 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 
     return (
         <SettingsList>
-            <SettingsItem
-                helpText={text.townhall.anonymous}
-                name='Appear Anonymous'
-            >
-                <Switch
-                    checked={state.anonymous}
-                    onChange={buildHandler('anonymous')}
-                />
+            <SettingsItem helpText={text.townhall.anonymous} name='Appear Anonymous'>
+                <Switch checked={state.anonymous} onChange={buildHandler('anonymous')} />
             </SettingsItem>
         </SettingsList>
     );
@@ -79,13 +72,22 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 export function NotificationSettings({ user }: { user: ClientSafeUser }) {
     const [notifState, setNotifState] = React.useState(user.settings.notifications);
     // TODO: API Request
+    // done? look at lines 84-89
     const [snack] = useSnack();
-    const changeNotifEnd = React.useCallback(() => API.changeNotif(notifState.enabled, notifState.types), [notifState.enabled, notifState.types]);
-    const [sendNotif, isNotifLoading]  = useEndpoint(changeNotifEnd, {
+    const changeNotifEnd = React.useCallback(() => API.changeNotif(notifState.enabled, notifState.types), [
+        notifState.enabled,
+        notifState.types,
+    ]);
+
+    // send user notif, BACKEND flips it, sends it back, logic happens there
+    // this does make it a tad slow to update visually (at least in storybook)
+    // but this makes sense as what if the backend cannot update the notification?
+    // then it updates visually here? no, it should only update IF it succeeds
+    const [sendNotif, isNotifLoading] = useEndpoint(changeNotifEnd, {
         onSuccess: ({ data }) => {
             setNotifState(data.user.settings.notifications);
             snack('Updated Notification settings!');
-        }
+        },
     });
     const buildHandler = buildCheckboxUpdate<typeof notifState>(setNotifState);
 
@@ -94,15 +96,14 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
                     checked={notifState.enabled}
-                    // onChange={() => { buildHandler('enabled'); } }
-                    onChange={buildHandler('enabled')}
+                    onChange={() => {
+                        buildHandler('enabled');
+                        sendNotif();
+                    }}
                 />
             </SettingsItem>
             <Collapse in={notifState.enabled}>
-                <SettingsItem
-                    helpText={text.notifications.types}
-                    name='Notification Types'
-                >
+                <SettingsItem helpText={text.notifications.types} name='Notification Types'>
                     <div>TODO</div>
                 </SettingsItem>
             </Collapse>
@@ -122,11 +123,7 @@ export const ButtonList = ({ list, setContent }: Props) => (
     <List>
         {list.map(({ title, component }) => (
             <li key={title}>
-                <ListItem
-                    key={title}
-                    button
-                    onClick={() => setContent(component)}
-                >
+                <ListItem key={title} button onClick={() => setContent(component)}>
                     <ListItemText primary={title} />
                 </ListItem>
             </li>
@@ -179,11 +176,7 @@ export const DisableAccount = () => {
                     to log into your account.'
                 name='Disable Account'
             >
-                <Button
-                    variant='outlined'
-                    onClick={() => setOpen(true)}
-                    style={{ color: 'red', borderColor: 'red' }}
-                >
+                <Button variant='outlined' onClick={() => setOpen(true)} style={{ color: 'red', borderColor: 'red' }}>
                     Disable
                 </Button>
             </SettingsItem>
@@ -195,9 +188,8 @@ export const DisableAccount = () => {
                 onConfirm={() => console.log('TODO')}
                 title='Disable Account?'
             >
-                You will no longer receive notifications about Town Halls and
-                you can no longer join live Town Halls. You will still be able
-                to log into your account.
+                You will no longer receive notifications about Town Halls and you can no longer join live Town Halls.
+                You will still be able to log into your account.
             </ConfirmationDialog>
         </div>
     );
@@ -209,9 +201,8 @@ export const DeleteAccount = () => (
         <h1>
             Delete Account?
             <p>
-                All of your account information will be erased from Prytaneum.
-                This action is irreversible. Please enter your password below
-                twice to confirm.
+                All of your account information will be erased from Prytaneum. This action is irreversible. Please enter
+                your password below twice to confirm.
             </p>
         </h1>
         <TextField
