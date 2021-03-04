@@ -36,6 +36,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
         snack('Successfully submitted Question');
         if (onSubmit) onSubmit();
     };
+    const isQuestionValid = React.useMemo(() => form.question.trim().length !== 0, [form]);
     const [run, isLoading] = useEndpoint(endpoint, { onSuccess });
 
     return (
@@ -67,7 +68,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                     </Button>
                 )}
                 <LoadingButton loading={isLoading}>
-                    <Button type='submit' variant='contained' color='primary'>
+                    <Button disabled={!isQuestionValid} type='submit' variant='contained' color='primary'>
                         Ask
                     </Button>
                 </LoadingButton>

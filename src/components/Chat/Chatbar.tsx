@@ -44,7 +44,7 @@ export default function Chatbar({ onSubmit, disabled }: Props) {
             </Grid>
             <div className={classes.btn}>
                 <Button
-                    disabled={disabled || message.length === 0}
+                    disabled={disabled || message.trim().length === 0}
                     variant='contained'
                     color='primary'
                     endIcon={<SendIcon />}
