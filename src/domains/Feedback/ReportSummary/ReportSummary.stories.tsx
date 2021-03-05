@@ -11,12 +11,15 @@ export default {
     parameters: {
         layout: 'centered',
     },
+    decorators: [
+        (MyStory) => (
+            <Container maxWidth='sm'>
+                <MyStory />
+            </Container>
+        ),
+    ],
 } as Meta;
 
 export function ReportSummary() {
-    return (
-        <Container maxWidth='sm'>
-            <Component report={makeFeedbackReport()} callBack={() => {}} />
-        </Container>
-    );
+    return <Component report={makeFeedbackReport()} callBack={() => {}} />;
 }

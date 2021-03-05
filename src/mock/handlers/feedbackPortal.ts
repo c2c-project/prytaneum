@@ -1,12 +1,12 @@
 import { rest } from 'msw';
 import faker from 'faker/locale/en';
 
+const past = faker.date.past();
 const recent = faker.date.recent();
-const future = faker.date.future();
 
 const makeBaseReport = () => ({
     _id: faker.random.alphaNumeric(5),
-    date: faker.date.between(recent, future),
+    date: faker.date.between(past, recent),
     description: faker.lorem.paragraphs(),
     user: {
         _id: faker.random.alphaNumeric(5),
