@@ -8,11 +8,9 @@ import Select from '@material-ui/core/Select';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {
-    Sort as SortIcon,
-    Search as SearchIcon,
-    ArrowDropDown as ArrowDownIcon,
-} from '@material-ui/icons';
+import SortIcon from '@material-ui/icons/Sort';
+import SearchIcon from '@material-ui/icons/Search';
+import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
@@ -20,10 +18,7 @@ import Loader from 'components/Loader';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/Feedback/ReportList';
 import ReportStateContext from '../Contexts/ReportStateContext';
-import {
-    getFeedbackReportsBySubmitter,
-    getBugReportsBySubmitter,
-} from '../api';
+import { getFeedbackReportsBySubmitter, getBugReportsBySubmitter } from '../api';
 
 import { FeedbackReport, BugReport } from '../types';
 
@@ -47,6 +42,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     select: {
         borderColor: theme.palette.common.white,
         color: theme.palette.common.white,
+    },
+    root: {
+        width: '100%',
+        height: '100%',
     },
 }));
 
@@ -80,20 +79,17 @@ export default function ReportHistory() {
         [page, sortingOrder]
     );
 
-    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(
-        feedbackReportsAPIrequest,
-        {
-            onSuccess: (results) => {
-                // Adds type attribute to report objects. This will be needed in children components
-                const feedbackReports = results.data.reports.map((report) => ({
-                    ...report,
-                    type: 'Feedback',
-                })) as Report[];
-                setNumOfPages(results.data.count / pageSize);
-                setReports(feedbackReports);
-            },
-        }
-    );
+    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(feedbackReportsAPIrequest, {
+        onSuccess: (results) => {
+            // Adds type attribute to report objects. This will be needed in children components
+            const feedbackReports = results.data.reports.map((report) => ({
+                ...report,
+                type: 'Feedback',
+            })) as Report[];
+            setNumOfPages(results.data.count / pageSize);
+            setReports(feedbackReports);
+        },
+    });
 
     const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
         onSuccess: (results) => {
@@ -130,10 +126,7 @@ export default function ReportHistory() {
         }
     };
 
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
+    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         sendRequest();
     };
@@ -163,7 +156,7 @@ export default function ReportHistory() {
     };
 
     return (
-        <div>
+        <div className={classes.root}>
             <AppBar position='sticky'>
                 <Toolbar>
                     <form onSubmit={getReports}>
@@ -185,10 +178,7 @@ export default function ReportHistory() {
                                         </MenuItem>
 
                                         {ReportOptions.map((ReportOption) => (
-                                            <MenuItem
-                                                key={ReportOption}
-                                                value={ReportOption}
-                                            >
+                                            <MenuItem key={ReportOption} value={ReportOption}>
                                                 {ReportOption}
                                             </MenuItem>
                                         ))}
@@ -211,10 +201,7 @@ export default function ReportHistory() {
                                             Sorting Order
                                         </MenuItem>
                                         {sortingOptions.map((sortingOption) => (
-                                            <MenuItem
-                                                key={sortingOption.name}
-                                                value={sortingOption.value}
-                                            >
+                                            <MenuItem key={sortingOption.name} value={sortingOption.value}>
                                                 {sortingOption.name}
                                             </MenuItem>
                                         ))}
@@ -222,14 +209,8 @@ export default function ReportHistory() {
                                 </FormControl>
                             </Grid>
                             <Grid item>
-                                <LoadingButton
-                                    loading={isLoadingFeedback || isLoadingBug}
-                                >
-                                    <Button
-                                        type='submit'
-                                        color='inherit'
-                                        endIcon={<SearchIcon />}
-                                    >
+                                <LoadingButton loading={isLoadingFeedback || isLoadingBug}>
+                                    <Button type='submit' color='inherit' endIcon={<SearchIcon />}>
                                         Search
                                     </Button>
                                 </LoadingButton>
@@ -252,13 +233,7 @@ export default function ReportHistory() {
 
             {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
             {reports.length !== 0 && (
-                <Grid
-                    container
-                    item
-                    justify='center'
-                    alignItems='center'
-                    xs={12}
-                >
+                <Grid container item justify='center' alignItems='center' xs={12}>
                     <Pagination
                         siblingCount={0}
                         color='primary'

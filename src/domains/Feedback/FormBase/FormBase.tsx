@@ -36,6 +36,24 @@ interface Props {
     onFailure?: () => void;
     townhallId?: string;
 }
+interface EndpointFunctions<T> {
+    create: (form: T) => Promise<AxiosResponse<unknown>>;
+    update: (form: T) => Promise<AxiosResponse<unknown>>;
+}
+
+// This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
+const endpoints = (townhallId: string) => ({
+    Feedback: {
+        create: (form: FeedbackForm) =>
+            createFeedbackReport(form, new Date().toISOString()),
+        update: (form: FeedbackForm) => updateFeedbackReport(form),
+    },
+    Bug: {
+        create: (form: BugReportForm) =>
+            createBugReport(form, new Date().toISOString(), townhallId),
+        update: (form: BugReportForm) => updateBugReport(form),
+    },
+});
 
 export default function FormBase({
     report,
@@ -48,30 +66,9 @@ export default function FormBase({
     const [snack] = useSnack();
     const [reportState, setReportState] = React.useState<Report>(report);
 
-    interface EndpointFunctions<T> {
-        create: (form: T) => Promise<AxiosResponse<unknown>>;
-        update: (form: T) => Promise<AxiosResponse<unknown>>;
-    }
-    // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
-    const endpoints: {
-        Feedback: EndpointFunctions<FeedbackForm>;
-        Bug: EndpointFunctions<BugReportForm>;
-    } = {
-        Feedback: {
-            create: (form: FeedbackForm) =>
-                createFeedbackReport(form, new Date().toISOString()),
-            update: (form: FeedbackForm) => updateFeedbackReport(form),
-        },
-        Bug: {
-            create: (form: BugReportForm) =>
-                createBugReport(form, new Date().toISOString(), townhallId),
-            update: (form: BugReportForm) => updateBugReport(form),
-        },
-    };
-
     const submitRequest = React.useCallback(
-        () => endpoints[reportType][submitType](reportState),
-        [reportState, submitType, endpoints, reportType]
+        () => endpoints(townhallId)[reportType][submitType](reportState),
+        [reportState, submitType, reportType, townhallId]
     );
 
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {

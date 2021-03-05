@@ -1,15 +1,14 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
+import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeQuestion, makeGenFn } from 'prytaneum-typings';
+import { makeQuestion, makeGenFn, makeUser } from 'prytaneum-typings';
 
 import SocketFixture from 'mock/Fixture.socket';
-import Main from 'layout/Main';
 import UserProvider from 'contexts/User';
 import TownhallProvider from 'contexts/Townhall';
 import QuestionQueue from './QuestionQueue';
-import QueueComponent from './Queue';
-
-export default { title: 'Domains/Questions/Question Queue' };
+import QueuePreview, { Props as PreviewProps } from './QueuePreview';
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
@@ -33,47 +32,74 @@ function sendQueue(num?: number) {
     }
 }
 
-export function Basic() {
+export default {
+    title: 'Domains/Questions/Question Queue',
+    decorators: [
+        (MyStory) => (
+            <div style={{ maxWidth: 500, width: '100%', height: '100%' }}>
+                <UserProvider value={makeUser()} forceNoLogin>
+                    <TownhallProvider townhallId='123'>
+                        <SocketFixture.Provider value={emitter}>
+                            <MyStory />
+                        </SocketFixture.Provider>
+                    </TownhallProvider>
+                </UserProvider>
+            </div>
+        ),
+    ],
+} as Meta;
+
+export function FullExample() {
     return (
-        <UserProvider>
-            <TownhallProvider townhallId='123'>
-                <SocketFixture.Provider value={emitter}>
-                    <Main>
-                        <div style={{ paddingBottom: '8px' }}>
-                            <button
-                                onClick={() => sendMessage(5)}
-                                type='button'
-                            >
-                                Add questions to suggested
-                            </button>
-                            <button type='button' onClick={() => sendQueue(5)}>
-                                Add questions to queue
-                            </button>
-                        </div>
-                        <QuestionQueue />
-                    </Main>
-                </SocketFixture.Provider>
-            </TownhallProvider>
-        </UserProvider>
+        <>
+            <div style={{ paddingBottom: '8px' }}>
+                <button onClick={() => sendMessage(5)} type='button'>
+                    Add questions to suggested
+                </button>
+                <button type='button' onClick={() => sendQueue(5)}>
+                    Add questions to queue
+                </button>
+            </div>
+            <QuestionQueue />
+        </>
     );
 }
 
 const questions = makeGenFn(makeQuestion)(15);
-questions[1]._id = '1';
 
-export function Queue() {
-    return (
-        <UserProvider>
-            <TownhallProvider townhallId='123'>
-                <Main>
-                    <QueueComponent
-                        bufferLength={0}
-                        // eslint-disable-next-line no-console
-                        onFlushBuffer={console.log}
-                        questions={questions}
-                    />
-                </Main>
-            </TownhallProvider>
-        </UserProvider>
-    );
-}
+export const Preview: Story<PreviewProps> = (props) => <QueuePreview {...props} />;
+Preview.argTypes = {
+    onClickNext: {
+        action: 'next question',
+    },
+    onClickPrev: {
+        action: 'previous question',
+    },
+    onClickReorder: {
+        action: 'reorder',
+    },
+};
+Preview.args = {
+    queue: questions,
+    current: 0,
+};
+Preview.parameters = {
+    layout: 'none',
+};
+
+export const EmptyPreview = Preview.bind({});
+EmptyPreview.argTypes = {
+    onClickNext: {
+        action: 'next question',
+    },
+    onClickPrev: {
+        action: 'previous question',
+    },
+};
+EmptyPreview.args = {
+    queue: questions,
+    current: -1,
+};
+EmptyPreview.parameters = {
+    layout: 'none',
+};

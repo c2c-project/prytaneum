@@ -1,5 +1,4 @@
 import React from 'react';
-import Main from 'layout/Main';
 
 import Component from './DevTeam';
 
@@ -8,10 +7,4 @@ export default {
     component: Component,
 };
 
-export function DevTeam() {
-    return (
-        <Main maxWidth='lg'>
-            <Component />
-        </Main>
-    );
-}
+export const DevTeam = () => <Component />;

@@ -1,12 +1,9 @@
 import React from 'react';
 import io from 'socket.io-client';
 
-function useSocketio(
-    uri: string,
-    opts: SocketIOClient.ConnectOpts,
-    fn: (socket: SocketIOClient.Socket) => void,
-    deps: React.DependencyList
-) {
+export type SocketFn = (socket: SocketIOClient.Socket) => void;
+
+function useSocketio(uri: string, opts: SocketIOClient.ConnectOpts, fn: SocketFn) {
     // socketio ref where we connect just once; guaranteed singleton
     const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
     const getSocket = React.useCallback(() => {
@@ -15,20 +12,21 @@ function useSocketio(
         return socketRef.current;
     }, [uri, opts]);
     const socket = getSocket();
+    const [_ignored, forceReconnect] = React.useReducer((x: number) => x + 1, 0);
     // curry the callback passed in that receives the socket
-    const curriedSocketFn = React.useCallback(fn, deps);
 
     // TODO: on disconnect display a snack that you have been
     // disconnected & connection is retrying that type of thing
     React.useEffect(() => {
         // curry
-        curriedSocketFn(socket);
+        fn(socket);
 
         // cleanup
         return () => {
             socket.close();
         };
-    }, [curriedSocketFn, socket]);
+    }, [fn, socket, _ignored]);
+    return forceReconnect;
 }
 
 export default useSocketio;

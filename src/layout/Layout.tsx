@@ -1,14 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {
-    Grid,
-    useMediaQuery,
-    useTheme,
-    Drawer,
-    IconButton,
-    ContainerProps,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, useMediaQuery, Drawer, IconButton, ContainerProps } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import useUser from 'hooks/useUser';
@@ -70,11 +63,7 @@ export default function Layout({
             return (
                 <>
                     {!noSideNav && (
-                        <IconButton
-                            className={classes.menuIcon}
-                            onClick={() => setOpen(!open)}
-                            color='inherit'
-                        >
+                        <IconButton className={classes.menuIcon} onClick={() => setOpen(!open)} color='inherit'>
                             <MenuIcon />
                         </IconButton>
                     )}
@@ -88,11 +77,7 @@ export default function Layout({
         if (!user || noSideNav) return undefined;
         if (isMdDown)
             return (
-                <Drawer
-                    classes={{ paper: classes.drawer }}
-                    open={open}
-                    onClose={() => setOpen(!open)}
-                >
+                <Drawer classes={{ paper: classes.drawer }} open={open} onClose={() => setOpen(!open)}>
                     <SideNav user={user} onClick={() => setOpen(false)} />
                 </Drawer>
             );
@@ -109,10 +94,7 @@ export default function Layout({
             <AppBar>{getAppBarContent()}</AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
                 {getSideNav()}
-                <Main
-                    className={disablePadding ? undefined : classes.main}
-                    {..._ContainerProps}
-                >
+                <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}
                 </Main>
             </Grid>

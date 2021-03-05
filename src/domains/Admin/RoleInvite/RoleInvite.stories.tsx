@@ -1,17 +1,8 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 
-import Layout from 'layout';
-import UserProvider from 'contexts/User';
 import Component from './RoleInvite';
 
-export default { title: 'Domains/Admin/Role Invite' };
+export default { title: 'Domains/Admin/Role Invite', parameters: { layout: 'centered' } } as Meta;
 
-export function Basic() {
-    return (
-        <UserProvider>
-            <Layout showAsLoggedIn>
-                <Component />
-            </Layout>
-        </UserProvider>
-    );
-}
+export const RoleInvite = () => <Component />;

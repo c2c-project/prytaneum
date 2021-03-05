@@ -1,0 +1,50 @@
+# Workflow name
+name: 'Chromatic'
+
+# Event for the workflow
+on:
+    push:
+        branches:
+            - dev
+
+# List of jobs
+jobs:
+    chromatic-deployment:
+        # Operating System
+        runs-on: ubuntu-latest
+        # Job steps
+        steps:
+            - uses: actions/checkout@v1
+
+            # setup node
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '14'
+
+            # save cache directory
+            - name: Save yarn cache directory
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+              # setup the actions cache
+            - name: Cache node modules
+              id: cache
+              uses: actions/cache@v2
+              env:
+                  cache-name: cache-node-modules
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+
+            - name: Install dependencies
+              run: yarn
+              # 👇 Adds Chromatic as a step in the workflow
+            - name: Publish to Chromatic
+              uses: chromaui/action@v1
+              # Chromatic GitHub Action options
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+                  projectToken: ${{ secrets.CHROMATIC_TOKEN }}

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import jwt from 'jsonwebtoken';
 
 import { DeviceContext } from 'contexts/Device';

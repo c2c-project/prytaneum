@@ -28,14 +28,14 @@ export default React.memo(function ChatSettings({
     };
     return (
         <SettingsList>
-            <SettingsItem helpText={text.chat.enabled} name='Enabled'>
+            <SettingsItem helpText={text.breakout.enabled} name='Enabled'>
                 <Switch
                     checked={value.enabled}
                     onChange={handleChange('enabled')}
                 />
             </SettingsItem>
             <Collapse in={value.enabled} className={classes.fullWidth}>
-                <SettingsItem helpText={text.chat.automated} name='Automated'>
+                <SettingsItem helpText={text.breakout.automated} name='Automated'>
                     <Switch
                         checked={value.automated}
                         onChange={handleChange('automated')}

@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
 
 import Component, { Bill } from './BillSummary';
 
@@ -10,10 +9,4 @@ const bill: Bill = {
     summaryText: 'Summary Text',
 };
 
-export function Basic() {
-    return (
-        <Container maxWidth='sm' disableGutters>
-            <Component bill={bill} />
-        </Container>
-    );
-}
+export const Basic = () => <Component bill={bill} />;

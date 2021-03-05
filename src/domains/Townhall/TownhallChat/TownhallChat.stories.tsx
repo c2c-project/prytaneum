@@ -1,16 +1,16 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
-import { makeChatMessage } from 'prytaneum-typings';
+import { makeChatMessage, makeTownhall, makeUser } from 'prytaneum-typings';
 
-import Main from 'layout/Main';
+import UserProvider from 'contexts/User';
 import TownhallProvider from 'contexts/Townhall';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from './TownhallChat';
 
-export default { title: 'Domains/Townhall/Townhall Chat' };
+const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 
-function sendMessages(num: number, emitter: SocketIOClient.Socket) {
+function sendMessages(num: number) {
     const iterations = num || 1;
     for (let i = 0; i < iterations; i += 1) {
         emitter.emit('chat-message-state', {
@@ -20,38 +20,27 @@ function sendMessages(num: number, emitter: SocketIOClient.Socket) {
     }
 }
 
-export function Basic() {
-    const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
+const Template: Story<{}> = (props) => <Component {...props} />;
 
-    return (
-        <Main>
-            <TownhallProvider townhallId='123'>
-                <Grid
-                    item
-                    xs={12}
-                    style={{
-                        height: '100%',
-                        display: 'flex',
-                        flexFlow: 'column nowrap',
-                        alignContent: 'flex-start',
-                    }}
-                >
-                    <div style={{ flex: 1 }}>
-                        <button
-                            type='button'
-                            onClick={() => sendMessages(1, emitter)}
-                        >
-                            Add Messages
-                        </button>
-                    </div>
-                    {/* flex will recalculate height, but height: 0 is necessary so that the paper does not infinitely grow */}
-                    <div style={{ flex: '1 1 100%', height: 0 }}>
-                        <FixtureSocket.Provider value={emitter}>
-                            <Component />
-                        </FixtureSocket.Provider>
-                    </div>
-                </Grid>
-            </TownhallProvider>
-        </Main>
-    );
-}
+export default {
+    title: 'Domains/Townhall/Townhall Chat',
+    decorators: [
+        (MyStory) => (
+            <UserProvider forceNoLogin value={makeUser()}>
+                <FixtureSocket.Provider value={emitter}>
+                    <TownhallProvider value={makeTownhall()} townhallId='123'>
+                        <div style={{ flex: 1, padding: 60 }}>
+                            <button type='button' onClick={() => sendMessages(5)}>
+                                Add Messages
+                            </button>
+                            <MyStory />
+                        </div>
+                    </TownhallProvider>
+                </FixtureSocket.Provider>
+            </UserProvider>
+        ),
+    ],
+    component: Component,
+} as Meta;
+
+export const Basic = Template.bind({});

@@ -2,30 +2,21 @@
 import React from 'react';
 import { Badge } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { motion } from 'framer-motion';
 
 import ChipTab from 'components/ChipTab';
 import { Panes } from '../types';
-import { PaneContext } from '../Contexts/Pane';
-import makeTransition from './makeTransition';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'inline-flex',
-        position: 'relative',
-        flexShrink: 0,
-    },
-    chip: {
-        marginTop: theme.spacing(1),
-    },
     badge: {
         marginRight: -theme.spacing(0.5),
     },
+    root: {
+        margin: theme.spacing(1, 0),
+    },
 }));
 
-interface Props {
+export interface Props {
     label: string;
-    index: number;
     /**
      * tabs parent component passes this in
      */
@@ -36,48 +27,40 @@ interface Props {
      */
     // eslint-disable-next-line react/no-unused-prop-types
     value?: Panes;
+    badgeContent?: number | boolean;
 }
 
-function StyledTab({ label, index, selected, onClick }: Props) {
+function StyledTab({ label, selected, onClick, badgeContent }: Props) {
     const classes = useStyles();
-    const [context] = React.useContext(PaneContext);
-
     return (
-        <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={makeTransition(index)}
-            className={classes.root}
+        <Badge
+            badgeContent={badgeContent}
+            overlap='circle'
+            color='secondary'
+            classes={{ root: classes.root, badge: classes.badge }}
         >
-            <Badge
-                badgeContent={context[label]}
-                overlap='circle'
-                color='secondary'
-                classes={{ badge: classes.badge }}
-            >
-                <ChipTab
-                    aria-selected={selected}
-                    aria-controls={`${label}-panel`}
-                    role='tab'
-                    label={label}
-                    selected={selected}
-                    value={label}
-                    onClick={onClick}
-                    className={classes.chip}
-                />
-            </Badge>
-        </motion.div>
+            <ChipTab
+                aria-selected={selected}
+                aria-controls={`${label}-panel`}
+                role='tab'
+                label={label}
+                selected={selected}
+                value={label}
+                onClick={onClick}
+            />
+        </Badge>
     );
 }
 
 StyledTab.defaultProps = {
     selected: false,
     value: undefined,
+    badgeContent: 0,
 };
 
-// realistically, this should only ever update if the selected property has changed
+// realistically, this should only ever update if the selected or badgeContent property has changed
 // changes to onClick are ignored here because we don't need to care about those
 // onClick should effectively do the same thing every render
 export default React.memo(StyledTab, (prevProps, nextProps) => {
-    return prevProps.selected === nextProps.selected;
+    return prevProps.selected === nextProps.selected && prevProps.badgeContent === nextProps.badgeContent;
 });

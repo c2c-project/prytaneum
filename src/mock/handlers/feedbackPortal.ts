@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 const recent = faker.date.recent();
 const future = faker.date.future();

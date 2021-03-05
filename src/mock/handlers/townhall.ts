@@ -5,7 +5,11 @@ import {
     makeQuestion,
     TownhallForm,
     QuestionForm,
+    makeBreakout,
+    makeGenFn,
 } from 'prytaneum-typings';
+
+const makeBreakoutRooms = makeGenFn(makeBreakout);
 
 export default [
     rest.post('/api/townhalls', (req, res, ctx) => {
@@ -61,17 +65,23 @@ export default [
         return res(ctx.status(200));
     }),
     rest.get('/api/townhalls/:townhallId/questions', (req, res, ctx) => {
-        if (Math.random() > 0.5)
-            return res(ctx.status(200), ctx.json([makeQuestion()]));
+        if (Math.random() > 0.5) return res(ctx.status(200), ctx.json([makeQuestion()]));
         return res(ctx.status(200), ctx.json([]));
     }),
-    rest.put(
-        '/api/townhalls/:townhallId/questions/:questionId/like',
-        (req, res, ctx) => {
-            return res(ctx.status(200));
-        }
-    ),
+    rest.put('/api/townhalls/:townhallId/questions/:questionId/like', (req, res, ctx) => {
+        return res(ctx.status(200));
+    }),
     rest.get('/api/townhalls/:townhallId/chat-messages', (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]));
+    }),
+    rest.get('/api/townhalls/:townhallId/breakout-rooms/me', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json({ breakoutId: '123' }));
+        // return res(ctx.status(404), ctx.json({ breakoutId: null }));
+    }),
+    rest.get('/api/townhalls/:townhallId/breakout-rooms', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(makeBreakoutRooms(5)));
+    }),
+    rest.get('/api/townhalls/:townhallId/breakout-rooms/attendees', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json({ attendees: Math.random() * 10 }));
     }),
 ];

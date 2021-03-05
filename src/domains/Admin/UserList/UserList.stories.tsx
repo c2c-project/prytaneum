@@ -1,27 +1,20 @@
 import React from 'react';
+import { Meta } from '@storybook/react';
 
-import UserProvider from 'contexts/User';
-import Layout from 'layout';
-import UserList from './UserList';
+import Component from './UserList';
 
-export default { title: 'Domains/Admin/User List' };
+export default {
+    title: 'Domains/Admin/User List',
+    parameters: {
+        layout: 'fullscreen',
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ padding: 30, flex: 1 }}>
+                <Story />
+            </div>
+        ),
+    ],
+} as Meta;
 
-export function Basic() {
-    return (
-        <UserProvider>
-            <Layout>
-                <UserList />
-            </Layout>
-        </UserProvider>
-    );
-}
-
-export function WithNav() {
-    return (
-        <UserProvider>
-            <Layout showAsLoggedIn>
-                <UserList />
-            </Layout>
-        </UserProvider>
-    );
-}
+export const UserList = () => <Component />;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Delete as DeleteIcon } from '@material-ui/icons';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
@@ -32,25 +32,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+type DeleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
+const endpoints: {
+    Feedback: DeleteFunction;
+    Bug: DeleteFunction;
+} = {
+    Feedback: (_id: string) => deleteFeedbackReport(_id),
+    Bug: (_id: string) => deleteBugReport(_id),
+};
+
 export default function ReportSummary({ report, callBack }: SummaryProps) {
-    const { updateReport, refetchReports } = React.useContext(
-        ReportStateContext
-    );
+    const { updateReport, refetchReports } = React.useContext(ReportStateContext);
     const [snack] = useSnack();
 
-    type deleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
-    const endpoints: {
-        Feedback: deleteFunction;
-        Bug: deleteFunction;
-    } = {
-        Feedback: (_id: string) => deleteFeedbackReport(_id),
-        Bug: (_id: string) => deleteBugReport(_id),
-    };
-
-    const deleteApiRequest = React.useCallback(
-        () => endpoints[report.type](report._id),
-        [report, endpoints]
-    );
+    const deleteApiRequest = React.useCallback(() => endpoints[report.type](report._id), [report]);
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
         onSuccess: () => {
@@ -80,17 +75,11 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
             </Grid>
             <Grid item xs={12}>
                 <Typography variant='body1'>
-                    You can change the description of your report. Once you are
-                    done, just press the “Submit” button.
+                    You can change the description of your report. Once you are done, just press the “Submit” button.
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <FormBase
-                    report={report}
-                    reportType={report.type}
-                    onSuccess={onSuccess}
-                    submitType='update'
-                />
+                <FormBase report={report} reportType={report.type} onSuccess={onSuccess} submitType='update' />
             </Grid>
             <Grid item xs={12}>
                 <LoadingButton loading={isLoading}>

@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import { FeedbackReport, BugReport } from './types';
 
 const recent = faker.date.recent();

@@ -1,6 +1,6 @@
 import teamMember1 from 'assets/teamMembers/teamMember1.jpg';
 import { ReferenceNames, Team, TeamMember } from 'types';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 
 const devTeam = [
     {

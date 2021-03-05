@@ -7,6 +7,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        maxWidth: 400,
+        maxHeight: 600,
     },
     media: {
         width: '100%',
@@ -29,25 +31,12 @@ interface SpeakerCardProps {
     description: string;
 }
 
-export default function SpeakerCard({
-    image,
-    title,
-    subtitle,
-    description,
-}: SpeakerCardProps) {
+export default function SpeakerCard({ image, title, subtitle, description }: SpeakerCardProps) {
     const classes = useStyles();
     return (
         <Card classes={{ root: classes.root }}>
-            <CardMedia
-                classes={{ root: classes.media }}
-                component='img'
-                src={image}
-            />
-            <CardHeader
-                className={classes.header}
-                title={title}
-                subheader={subtitle}
-            />
+            <CardMedia classes={{ root: classes.media }} component='img' src={image} />
+            <CardHeader className={classes.header} title={title} subheader={subtitle} />
             <CardContent className={classes.content}>{description}</CardContent>
         </Card>
     );

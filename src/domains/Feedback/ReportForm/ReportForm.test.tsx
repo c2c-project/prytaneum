@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import faker from 'faker';
+import faker from 'faker/locale/en';
 import { AxiosResponse } from 'axios';
 
 import ReportForm from './ReportForm';

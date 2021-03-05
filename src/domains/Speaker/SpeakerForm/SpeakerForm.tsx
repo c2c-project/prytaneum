@@ -27,15 +27,10 @@ const initialState: Speaker = {
     picture: '',
     description: '',
 };
-export default function SpeakerForm({
-    value: speaker,
-    onCancel,
-    onSubmit,
-}: Props) {
-    const [state, errors, handleSubmit, handleChange] = useForm(
-        speaker || initialState
-    );
+export default function SpeakerForm({ value: speaker, onCancel, onSubmit }: Props) {
+    const [state, errors, handleSubmit, handleChange] = useForm(speaker || initialState);
     const classes = useStyles();
+
     return (
         <Form onSubmit={handleSubmit(() => onSubmit(state))}>
             <FormContent className={classes.root}>

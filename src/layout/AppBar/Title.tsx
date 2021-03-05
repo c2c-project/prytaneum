@@ -1,7 +1,9 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import { handleNavigation } from 'utils/history';
+import useUser from 'hooks/useUser';
 
 // function formatTitle(str: string | undefined): string | undefined {
 //     if (!str) {
@@ -27,18 +29,13 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// TODO: disable link if they're not logged in
 export default function Title() {
     const classes = useStyles();
+    const [user] = useUser();
     return (
         <div className={classes.titleContainer}>
             <div className={classes.title}>
-                <Typography
-                    align='left'
-                    variant='h6'
-                    noWrap
-                    onClick={handleNavigation('/app/home')}
-                >
+                <Typography align='left' variant='h6' noWrap onClick={user && handleNavigation('/app/home')}>
                     Prytaneum
                 </Typography>
             </div>

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
 interface SignInForm {
@@ -49,14 +49,11 @@ export default function LoginForm({ onSuccess }: Props) {
     const [, setUser] = useUser();
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [isPassVisible, setIsPassVisible] = React.useState(false);
-    const apiRequest = React.useCallback(
-        () => API.login(form.email, form.password),
-        [form]
-    );
+    const apiRequest = React.useCallback(() => API.login(form.email, form.password), [form]);
     const [sendRequest, isLoading] = useEndpoint(apiRequest, {
         onSuccess: ({ data }) => {
             setUser(data.user);
-            onSuccess();
+            if (onSuccess) onSuccess();
         },
     });
 
@@ -89,58 +86,31 @@ export default function LoginForm({ onSuccess }: Props) {
                                 <InputAdornment position='end'>
                                     <IconButton
                                         aria-label='toggle password visibility'
-                                        onClick={() =>
-                                            setIsPassVisible(!isPassVisible)
-                                        }
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
                                         onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
                                     >
                                         {isPassVisible ? (
-                                            <VisibilityOff
-                                                color={
-                                                    errors.password
-                                                        ? 'error'
-                                                        : undefined
-                                                }
-                                            />
+                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
                                         ) : (
-                                            <Visibility
-                                                color={
-                                                    errors.password
-                                                        ? 'error'
-                                                        : undefined
-                                                }
-                                            />
+                                            <Visibility color={errors.password ? 'error' : undefined} />
                                         )}
                                     </IconButton>
                                 </InputAdornment>
                             ),
                         }}
                     />
-                    <Link
-                        className={classes.link}
-                        color='primary'
-                        href='/forgot-password/request'
-                    >
+                    <Link className={classes.link} color='primary' href='/forgot-password/request'>
                         Forgot Password?
                     </Link>
                 </>
             </FormContent>
             <FormActions>
-                <Button
-                    fullWidth
-                    variant='outlined'
-                    onClick={() => history.push('/register')}
-                >
+                <Button fullWidth variant='outlined' onClick={() => history.push('/register')}>
                     Sign Up
                 </Button>
                 <LoadingButton loading={isLoading}>
-                    <Button
-                        fullWidth
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                    >
+                    <Button fullWidth type='submit' variant='contained' color='primary'>
                         Login
                     </Button>
                 </LoadingButton>
@@ -149,6 +119,10 @@ export default function LoginForm({ onSuccess }: Props) {
     );
 }
 
+LoginForm.defaultProps = {
+    onSuccess: undefined,
+};
+
 LoginForm.propTypes = {
-    onSuccess: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func,
 };

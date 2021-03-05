@@ -1,6 +1,7 @@
 module.exports = {
     plugins: ['jest', '@typescript-eslint'],
     extends: [
+        'react-app',
         'airbnb-typescript',
         'prettier',
         'plugin:@typescript-eslint/recommended',
@@ -43,7 +44,16 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
+        'react/jsx-props-no-spreading': 'off',
     },
+    overrides: [
+        {
+            files: ['**/*.ts?(x)', '**/*.js?(x)'],
+            rules: {
+                '@typescript-eslint/explicit-function-return-type': 'off',
+            },
+        },
+    ],
     env: {
         node: true,
         browser: true,
