@@ -18,6 +18,7 @@ import useForm from 'hooks/useForm';
 interface Props {
     // eslint-disable-next-line react/require-default-props
     img?: string;
+    id?: string
     // safeUser?: ClientSafeUser;
     // forceNoLogin?: boolean;
 }
@@ -48,7 +49,7 @@ const initRegForm = (user: Pick<User<string>, '_id' | 'email' | 'name' | 'roles'
     } as RegisterForm;
 };
 
-export default function UserProfile({ img }: Props) {
+export default function UserProfile({ img, id }: Props) {
     const classes = useStyles();
     const [user, setUser] = useRequiredUser();
     const initState = initRegForm(user);
@@ -73,7 +74,7 @@ export default function UserProfile({ img }: Props) {
     });
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} id={id}>
             <Grid container alignContent='center' spacing={2}>
                 <Grid container spacing={2} id='userInfo'>
                     <Grid component='span' item xs={12}>
@@ -122,6 +123,7 @@ export default function UserProfile({ img }: Props) {
                                     inputProps={{ 'aria-label': 'E-mail' }}
                                     label='Email'
                                     aria-label='E-mail'
+                                    id='email'
                                     required
                                     type='email'
                                     value={regForm.email}
