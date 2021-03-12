@@ -109,7 +109,11 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                     </Button>
                 </LoadingButton>
             </Grid>
-            {user?.roles.includes('admin') && <ReplyForm reportId={report._id} reportType={report.type} />}
+            {user?.roles.includes('admin') && (
+                <Grid item xs={12}>
+                    <ReplyForm reportId={report._id} reportType={report.type} />
+                </Grid>
+            )}
             {report.replies.length > 0 && (
                 <Grid item container>
                     <Grid item xs={12}>
