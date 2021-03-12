@@ -88,6 +88,7 @@ export default function ReportHistory() {
         onSuccess: (results) => {
             const bugReports = results.data.reports.map((report) => ({
                 ...report,
+                type: 'Bug',
             }));
             setNumOfPages(results.data.count / pageSize);
             setReports(bugReports as Report[]);
