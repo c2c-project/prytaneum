@@ -21,8 +21,7 @@ import ReportList from 'domains/Feedback/ReportList';
 import { FilterFunc } from 'utils/filters';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import { getFeedbackReportsBySubmitter, getBugReportsBySubmitter } from '../api';
-
-import { FeedbackReport, BugReport } from '../types';
+import { Report, ReportTypes } from '../types';
 
 const ReportOptions = ['Feedback', 'Bug'];
 
@@ -30,13 +29,6 @@ const sortingOptions = [
     { name: 'Ascending', value: 'true' },
     { name: 'Descending', value: 'false' },
 ];
-
-type Report = FeedbackReport | BugReport;
-
-// TODO: auth
-const user = {
-    _id: '123456789',
-};
 
 const pageSize = 10;
 
@@ -54,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function ReportHistory() {
     const classes = useStyles();
     const [prevReportType, setPrevReportType] = React.useState('');
-    const [reportType, setReportType] = React.useState('');
+    const [reportType, setReportType] = React.useState<ReportTypes | ''>('');
     const [sortingOrder, setSortingOrder] = React.useState('');
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
@@ -63,46 +55,42 @@ export default function ReportHistory() {
     const [filteredReports, handleSearch, handleFilterChange] = useFilters(reports, accessors);
 
     const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setReportType(e.target.value as string);
+        setReportType(e.target.value as ReportTypes | '');
     };
 
     const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setSortingOrder(e.target.value as string);
     };
 
-    const feedbackReportsAPIrequest = React.useCallback(
-        () =>
-            // TODO: Replace with user Id
-            getFeedbackReportsBySubmitter(page, sortingOrder, user._id),
-        [page, sortingOrder]
-    );
+    const feedbackReportsAPIRequest = React.useCallback(() => getFeedbackReportsBySubmitter(page, sortingOrder), [
+        page,
+        sortingOrder,
+    ]);
 
-    const bugReportsAPIrequest = React.useCallback(
-        // TODO: Replace with user Id
-        () => getBugReportsBySubmitter(page, sortingOrder, user._id),
-        [page, sortingOrder]
-    );
+    const bugReportsAPIRequest = React.useCallback(() => getBugReportsBySubmitter(page, sortingOrder), [
+        page,
+        sortingOrder,
+    ]);
 
-    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(feedbackReportsAPIrequest, {
+    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(feedbackReportsAPIRequest, {
         onSuccess: (results) => {
             // Adds type attribute to report objects. This will be needed in children components
             const feedbackReports = results.data.reports.map((report) => ({
                 ...report,
                 type: 'Feedback',
-            })) as Report[];
+            }));
             setNumOfPages(results.data.count / pageSize);
-            setReports(feedbackReports);
+            setReports(feedbackReports as Report[]);
         },
     });
 
-    const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
+    const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIRequest, {
         onSuccess: (results) => {
             const bugReports = results.data.reports.map((report) => ({
                 ...report,
-                type: 'Bug',
-            })) as Report[];
+            }));
             setNumOfPages(results.data.count / pageSize);
-            setReports(bugReports);
+            setReports(bugReports as Report[]);
         },
     });
 
@@ -161,13 +149,13 @@ export default function ReportHistory() {
 
     type Filter = FilterFunc<Report>;
     const filterMap: Record<string, Filter> = {
-        Today: (data) => data.filter(({ date }) => isToday(new Date(date))),
+        Today: (data) => data.filter(({ meta: { createdAt } }) => isToday(new Date(createdAt))),
 
-        'This week': (data) => data.filter(({ date }) => isThisWeek(new Date(date))),
+        'This week': (data) => data.filter(({ meta: { createdAt } }) => isThisWeek(new Date(createdAt))),
 
-        'This month': (data) => data.filter(({ date }) => isThisMonth(new Date(date))),
+        'This month': (data) => data.filter(({ meta: { createdAt } }) => isThisMonth(new Date(createdAt))),
 
-        'This year': (data) => data.filter(({ date }) => isThisYear(new Date(date))),
+        'This year': (data) => data.filter(({ meta: { createdAt } }) => isThisYear(new Date(createdAt))),
     };
 
     return (
@@ -234,7 +222,6 @@ export default function ReportHistory() {
                     </form>
                 </Toolbar>
             </AppBar>
-            {/* TODO: FIX - Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container item justify='center' alignItems='center' xs={12}>
                 <Grid item xs={12}>
                     <ListFilter

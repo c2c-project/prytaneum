@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FormTitle from 'components/FormTitle';
 
+import FormTitle from 'components/FormTitle';
 import FormBase from '../FormBase';
+import { ReportTypes } from '../types';
 
 interface DefaultProps {
     townhallId: string;
 }
 export interface FormProps {
-    reportType: 'Feedback' | 'Bug';
+    reportType: ReportTypes;
     townhallId?: string;
 }
 

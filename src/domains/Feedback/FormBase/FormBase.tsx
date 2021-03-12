@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import type { FeedbackReportForm, BugReportForm } from 'prytaneum-typings';
 
 import Form from 'components/Form';
 import FormActions from 'components/FormActions';
@@ -11,9 +12,7 @@ import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import useForm from 'hooks/useForm';
 import { createBugReport, createFeedbackReport, updateBugReport, updateFeedbackReport } from '../api';
-import { FeedbackReport, BugReport, FeedbackForm, BugReportForm } from '../types';
-
-type Report = FeedbackReport | BugReport;
+import { Report, ReportTypes } from '../types';
 
 interface DefaultProps {
     onSuccess: (report: Report) => void;
@@ -23,7 +22,7 @@ interface DefaultProps {
 
 interface Props {
     report: Report;
-    reportType: 'Feedback' | 'Bug';
+    reportType: ReportTypes;
     submitType: 'create' | 'update';
     onSuccess?: (report: Report) => void;
     onFailure?: () => void;
@@ -31,14 +30,14 @@ interface Props {
 }
 
 // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
-const endpoints = (townhallId: string) => ({
+const endpoints = (townhallId: string, reportId: string) => ({
     Feedback: {
-        create: (form: FeedbackForm) => createFeedbackReport(form, new Date().toISOString()),
-        update: (form: FeedbackForm) => updateFeedbackReport(form),
+        create: (form: FeedbackReportForm) => createFeedbackReport(form),
+        update: (form: FeedbackReportForm) => updateFeedbackReport(form, reportId),
     },
     Bug: {
-        create: (form: BugReportForm) => createBugReport(form, new Date().toISOString(), townhallId),
-        update: (form: BugReportForm) => updateBugReport(form),
+        create: (form: BugReportForm) => createBugReport(form, townhallId),
+        update: (form: BugReportForm) => updateBugReport(form, reportId),
     },
 });
 
@@ -51,18 +50,16 @@ export default function FormBase({
     townhallId,
 }: Props & DefaultProps) {
     const [snack] = useSnack();
-    const [reportState, errors, handleSubmit, handleChange] = useForm(report);
-
-    const submitRequest = React.useCallback(() => endpoints(townhallId)[reportType][submitType](reportState), [
-        reportState,
-        submitType,
-        reportType,
-        townhallId,
-    ]);
-
+    const [reportState, errors, handleSubmit, handleChange] = useForm<FeedbackReportForm | BugReportForm>({
+        description: report.description,
+    });
+    const submitRequest = React.useCallback(
+        () => endpoints(townhallId, report._id)[reportType][submitType](reportState),
+        [reportState, submitType, reportType, townhallId, report._id]
+    );
     const [sendRequest, isLoading] = useEndpoint(submitRequest, {
         onSuccess: () => {
-            onSuccess(reportState);
+            onSuccess({ ...report, description: reportState.description });
             snack('Report successfully submitted');
         },
         onFailure: () => {
