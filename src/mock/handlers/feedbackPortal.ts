@@ -1,56 +1,25 @@
 import { rest } from 'msw';
-import faker from 'faker/locale/en';
+import {
+    makeFeedbackReports,
+    makeBugReports,
+    FeedbackReportForm,
+    BugReportForm,
+    ReportReplyForm,
+} from 'prytaneum-typings';
 
-const past = faker.date.past();
-const recent = faker.date.recent();
-
-const makeBaseReport = () => ({
-    _id: faker.random.alphaNumeric(5),
-    date: faker.date.between(past, recent),
-    description: faker.lorem.paragraphs(),
-    user: {
-        _id: faker.random.alphaNumeric(5),
-    },
-});
-
-const makeFeedbackReports = (amount: number) => {
-    const feedbackReports = [];
-    for (let i = 0; i < amount; i += 1) {
-        feedbackReports.push(makeBaseReport());
-    }
-    return feedbackReports;
-};
-
-const makeBugReports = (amount: number) => {
-    const bugReports = [];
-    for (let i = 0; i < amount; i += 1) {
-        const tempReport = makeBaseReport();
-        bugReports.push({
-            ...tempReport,
-            townhallId: faker.random.alphaNumeric(12),
-        });
-    }
-    return bugReports;
-};
-
+// TODO: Update once backend PR  is merged
 export default [
     // Feedback reports
     rest.post('/api/feedback/create-report', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { date, description } = req.body as {
-            date: string;
-            description: string;
-        };
+        const { description } = req.body as FeedbackReportForm;
         if (description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
     }),
 
-    // TODO: Return fake feedback reports after David reviews PR
-    rest.get('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { submitterId } = req.params;
+    rest.get('/api/feedback/get-reports', (req, res, ctx) => {
         const page = req.url.searchParams.get('page');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const ascending = req.url.searchParams.get('ascending');
@@ -69,12 +38,9 @@ export default [
 
     rest.post('/api/feedback/update-report', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { newDescription, _id } = req.body as {
-            newDescription: string;
-            _id: string;
-        };
+        const { description } = req.body as FeedbackReportForm;
 
-        if (newDescription === 'fail') {
+        if (description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
@@ -88,25 +54,25 @@ export default [
         return res(ctx.status(200));
     }),
 
+    rest.put('/api/feedback-reports/:id/reply', (req, res, ctx) => {
+        const { content } = req.body as ReportReplyForm;
+
+        if (content === 'fail') {
+            return res(ctx.status(400));
+        }
+        return res(ctx.status(200));
+    }),
+
     // Bug reports
     rest.post('/api/bugs/create-report', (req, res, ctx) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { date, description, townhallId } = req.body as {
-            date: string;
-            description: string;
-            townhallId: string;
-        };
+        const { description } = req.body as BugReportForm;
         if (description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
     }),
 
-    // TODO: Return fake bug reports after David review PR
-    rest.get('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { submitterId } = req.params;
-
+    rest.get('/api/bugs/get-reports', (req, res, ctx) => {
         const page = req.url.searchParams.get('page');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const ascending = req.url.searchParams.get('ascending');
@@ -125,11 +91,8 @@ export default [
 
     rest.post('/api/bugs/update-report', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { newDescription, _id } = req.body as {
-            newDescription: string;
-            _id: string;
-        };
-        if (newDescription === 'fail') {
+        const { description } = req.body as BugReportForm;
+        if (description === 'fail') {
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
@@ -140,6 +103,15 @@ export default [
         const { _id } = req.body as {
             _id: string;
         };
+        return res(ctx.status(200));
+    }),
+
+    rest.put('/api/bug-reports/:id/reply', (req, res, ctx) => {
+        const { content } = req.body as ReportReplyForm;
+
+        if (content === 'fail') {
+            return res(ctx.status(400));
+        }
         return res(ctx.status(200));
     }),
 ];
