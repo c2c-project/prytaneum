@@ -1,20 +1,13 @@
 import React from 'react';
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListSubheader,
-    Divider,
-} from '@material-ui/core';
+import { List, ListItem, ListItemText, ListSubheader, Divider } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import ResponsiveDialog from 'components/ResponsiveDialog';
 import ReportSummary from 'domains/Feedback/ReportSummary';
 import { formatDate } from 'utils/format';
-import { FeedbackReport, BugReport } from '../types';
+import { Report } from '../types';
 
-type Report = FeedbackReport | BugReport;
 interface Props {
     reports: Report[];
 }
@@ -43,9 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function ReportList({ reports }: Props) {
     const classes = useStyles();
-    const [reportSelected, setReportSelected] = React.useState<Report | null>(
-        null
-    );
+    const [reportSelected, setReportSelected] = React.useState<Report | null>(null);
 
     return (
         <div>
@@ -53,15 +44,8 @@ export default function ReportList({ reports }: Props) {
                 {reports.map((report) => (
                     <li key={report._id}>
                         <Divider />
-                        <ListSubheader
-                            disableSticky
-                            className={classes.listSubheader}
-                            color='primary'
-                            component='div'
-                        >
-                            {`Date Submitted: ${formatDate(
-                                new Date(report.date)
-                            )}`}
+                        <ListSubheader disableSticky className={classes.listSubheader} color='primary' component='div'>
+                            {`Date Submitted: ${formatDate(new Date(report.meta.createdAt))}`}
                         </ListSubheader>
                         <ListItem
                             id={report._id}
@@ -72,19 +56,13 @@ export default function ReportList({ reports }: Props) {
                         >
                             <ListItemText
                                 className={classes.listText}
-                                primary={`${report.description.substr(
-                                    0,
-                                    200
-                                )} ...`}
+                                primary={`${report.description.substr(0, 200)} ...`}
                             />
                         </ListItem>
                     </li>
                 ))}
             </List>
-            <ResponsiveDialog
-                open={Boolean(reportSelected)}
-                onClose={() => setReportSelected(null)}
-            >
+            <ResponsiveDialog open={Boolean(reportSelected)} onClose={() => setReportSelected(null)}>
                 {reportSelected ? (
                     <Container maxWidth='sm' style={{ padding: 20 }}>
                         <ReportSummary
