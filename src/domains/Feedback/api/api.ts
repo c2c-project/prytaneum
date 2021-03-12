@@ -110,5 +110,5 @@ export async function replyToReport(_id: string, content: string, reportType: Re
         content,
     };
 
-    return axios.post(`/api/${reportType === 'Feedback' ? 'feedback-reports' : 'bug-reports'}/${_id}/reply`, body);
+    return axios.put(`/api/${reportType === 'Feedback' ? 'feedback-reports' : 'bug-reports'}/${_id}/reply`, body);
 }
