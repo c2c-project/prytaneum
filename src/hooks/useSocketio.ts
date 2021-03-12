@@ -7,7 +7,7 @@ function useSocketio(uri: string, opts: SocketIOClient.ConnectOpts, fn: SocketFn
     // socketio ref where we connect just once; guaranteed singleton
     const socketRef = React.useRef<SocketIOClient.Socket | null>(null);
     const getSocket = React.useCallback(() => {
-        if (socketRef.current && socketRef.current.connected) return socketRef.current;
+        if (socketRef.current) return socketRef.current;
         socketRef.current = io.connect(uri, opts);
         return socketRef.current;
     }, [uri, opts]);
