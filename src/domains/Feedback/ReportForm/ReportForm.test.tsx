@@ -4,6 +4,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker/locale/en';
 import { AxiosResponse } from 'axios';
+import { makeFeedbackReportForm, makeBugReportForm } from 'prytaneum-typings';
 
 import ReportForm from './ReportForm';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
@@ -36,7 +37,7 @@ describe('create report form', () => {
         });
 
         it('should change state of feedback report form', async () => {
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeFeedbackReportForm();
             ReactTestUtils.act(() => {
                 render(<ReportForm reportType='Feedback' />, container);
             });
@@ -47,11 +48,11 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(newDescription);
+            expect(reportDescriptionNode.value).toBe(description);
         });
 
         it('should submit feedback report form and succeed', async () => {
@@ -63,7 +64,7 @@ describe('create report form', () => {
                 config: {},
             };
             const spy = jest.spyOn(API, 'createFeedbackReport').mockResolvedValue(resolvedVal);
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeFeedbackReportForm();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -71,13 +72,12 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
-
             const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -96,7 +96,7 @@ describe('create report form', () => {
         it('should submit feedback report form and fail', async () => {
             const rejectedVal = { status: 500 };
             const spy = jest.spyOn(API, 'createFeedbackReport').mockRejectedValue(rejectedVal);
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeFeedbackReportForm();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -104,13 +104,12 @@ describe('create report form', () => {
             });
 
             const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
-
             const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -137,7 +136,7 @@ describe('create report form', () => {
         });
 
         it('should change state of bug report form', async () => {
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeBugReportForm();
             ReactTestUtils.act(() => {
                 render(<ReportForm reportType='Bug' townhallId={townhallId} />, container);
             });
@@ -148,11 +147,11 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(newDescription);
+            expect(reportDescriptionNode.value).toBe(description);
         });
 
         it('should submit and succeed', async () => {
@@ -164,7 +163,7 @@ describe('create report form', () => {
                 config: {},
             };
             const spy = jest.spyOn(API, 'createBugReport').mockResolvedValue(resolvedVal);
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeBugReportForm();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -177,7 +176,7 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -185,7 +184,6 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
-            // Can't tell with what date it is called
             expect(spy).toBeCalled();
             jest.runAllTimers();
 
@@ -199,7 +197,7 @@ describe('create report form', () => {
                 status: 500,
             };
             const spy = jest.spyOn(API, 'createBugReport').mockRejectedValue(resolvedVal);
-            const newDescription = faker.lorem.paragraph();
+            const { description } = makeBugReportForm();
             jest.useFakeTimers();
 
             ReactTestUtils.act(() => {
@@ -212,7 +210,7 @@ describe('create report form', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: description,
                     } as unknown) as EventTarget,
                 });
             });

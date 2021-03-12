@@ -3,8 +3,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
-import faker from 'faker/locale/en';
-import { makeFeedbackReport } from 'prytaneum-typings';
+import { makeFeedbackReport, makeFeedbackReportForm } from 'prytaneum-typings';
 
 import FormBase from './FormBase';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
@@ -47,7 +46,7 @@ describe('Update report at the base level', () => {
     });
 
     it('should change state of form', async () => {
-        const description = faker.lorem.paragraph();
+        const { description } = makeFeedbackReportForm();
         const onSuccess = jest.fn();
 
         ReactTestUtils.act(() => {
@@ -82,7 +81,7 @@ describe('Update report at the base level', () => {
             config: {},
         };
         const spy = jest.spyOn(API, 'updateFeedbackReport').mockResolvedValue(resolvedVal);
-        const newDescription = faker.lorem.paragraph();
+        const feedbackReportForm = makeFeedbackReportForm();
         const onSuccess = jest.fn();
 
         jest.useFakeTimers();
@@ -104,7 +103,7 @@ describe('Update report at the base level', () => {
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                target: ({ value: newDescription } as unknown) as EventTarget,
+                target: ({ value: feedbackReportForm.description } as unknown) as EventTarget,
             });
         });
 
@@ -112,10 +111,7 @@ describe('Update report at the base level', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        const expectedReport = {
-            description: newDescription,
-        };
-        expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
+        expect(spy).toBeCalledWith(feedbackReportForm, dummyFeedbackReport._id);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -129,7 +125,7 @@ describe('Update report at the base level', () => {
         const rejectedVal = { status: 500 };
         const spy = jest.spyOn(API, 'updateFeedbackReport').mockRejectedValue(rejectedVal);
 
-        const newDescription = faker.lorem.paragraph();
+        const feedbackReportForm = makeFeedbackReportForm();
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
@@ -151,7 +147,7 @@ describe('Update report at the base level', () => {
         // Simulate events
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
-                target: ({ value: newDescription } as unknown) as EventTarget,
+                target: ({ value: feedbackReportForm.description } as unknown) as EventTarget,
             });
         });
 
@@ -159,10 +155,7 @@ describe('Update report at the base level', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        const expectedReport = {
-            description: newDescription,
-        };
-        expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
+        expect(spy).toBeCalledWith(feedbackReportForm, dummyFeedbackReport._id);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

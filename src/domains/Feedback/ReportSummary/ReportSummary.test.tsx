@@ -2,9 +2,14 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import faker from 'faker/locale/en';
 import { AxiosResponse } from 'axios';
-import { makeFeedbackReport, makeBugReport, makeUser } from 'prytaneum-typings';
+import {
+    makeFeedbackReport,
+    makeBugReport,
+    makeUser,
+    makeFeedbackReportForm,
+    makeBugReportForm,
+} from 'prytaneum-typings';
 
 import UserProvider from 'contexts/User';
 import ReportSummary from './ReportSummary';
@@ -54,7 +59,7 @@ describe('Update report summary', () => {
 
         it('should change state of feedback report summary', async () => {
             const callBack = jest.fn();
-            const newDescription = faker.lorem.paragraph();
+            const feedbackReportForm = makeFeedbackReportForm();
             ReactTestUtils.act(() => {
                 render(
                     <Wrapper>
@@ -68,11 +73,11 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: feedbackReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(newDescription);
+            expect(reportDescriptionNode.value).toBe(feedbackReportForm.description);
         });
 
         it('should update feedback report summary and succeed', async () => {
@@ -84,7 +89,7 @@ describe('Update report summary', () => {
                 config: {},
             };
             const spy = jest.spyOn(API, 'updateFeedbackReport').mockResolvedValue(resolvedVal);
-            const newDescription = faker.lorem.paragraph();
+            const feedbackReportForm = makeFeedbackReportForm();
             const callBack = jest.fn();
             jest.useFakeTimers();
 
@@ -103,7 +108,7 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: feedbackReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -111,10 +116,8 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
-            const expectedReport = {
-                description: newDescription,
-            };
-            expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
+
+            expect(spy).toBeCalledWith(feedbackReportForm, dummyFeedbackReport._id);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -126,7 +129,7 @@ describe('Update report summary', () => {
         it('should attempt to update feedback report summary and fail', async () => {
             const rejectedVal = { status: 500 };
             const spy = jest.spyOn(API, 'updateFeedbackReport').mockRejectedValue(rejectedVal);
-            const newDescription = faker.lorem.paragraph();
+            const feedbackReportForm = makeFeedbackReportForm();
             const callBack = jest.fn();
             jest.useFakeTimers();
 
@@ -145,7 +148,7 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: feedbackReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -154,11 +157,7 @@ describe('Update report summary', () => {
                 button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
 
-            const expectedReport = {
-                description: newDescription,
-            };
-
-            expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
+            expect(spy).toBeCalledWith(feedbackReportForm, dummyFeedbackReport._id);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -245,7 +244,7 @@ describe('Update report summary', () => {
         });
 
         it('should change state of bug report summary', async () => {
-            const newDescription = faker.lorem.paragraph();
+            const bugReportForm = makeBugReportForm();
             const callBack = jest.fn();
             ReactTestUtils.act(() => {
                 render(
@@ -262,11 +261,11 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: bugReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
-            expect(reportDescriptionNode.value).toBe(newDescription);
+            expect(reportDescriptionNode.value).toBe(bugReportForm.description);
         });
 
         it('should update bug report summary and succeed', async () => {
@@ -278,7 +277,7 @@ describe('Update report summary', () => {
                 config: {},
             };
             const spy = jest.spyOn(API, 'updateBugReport').mockResolvedValue(resolvedVal);
-            const newDescription = faker.lorem.paragraph();
+            const bugReportForm = makeBugReportForm();
             const callBack = jest.fn();
             jest.useFakeTimers();
 
@@ -297,7 +296,7 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: bugReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -306,10 +305,7 @@ describe('Update report summary', () => {
                 button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
 
-            const expectedReport = {
-                description: newDescription,
-            };
-            expect(spy).toBeCalledWith(expectedReport, dummyBugReport._id);
+            expect(spy).toBeCalledWith(bugReportForm, dummyBugReport._id);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
@@ -321,7 +317,7 @@ describe('Update report summary', () => {
         it('should attempt to update bug report summary and fail', async () => {
             const rejectedVal = { status: 500 };
             const spy = jest.spyOn(API, 'updateBugReport').mockRejectedValue(rejectedVal);
-            const newDescription = faker.lorem.paragraph();
+            const bugReportForm = makeBugReportForm();
             const callBack = jest.fn();
             jest.useFakeTimers();
 
@@ -340,7 +336,7 @@ describe('Update report summary', () => {
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
-                        value: newDescription,
+                        value: bugReportForm.description,
                     } as unknown) as EventTarget,
                 });
             });
@@ -348,10 +344,7 @@ describe('Update report summary', () => {
                 button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             });
 
-            const expectedReport = {
-                description: newDescription,
-            };
-            expect(spy).toBeCalledWith(expectedReport, dummyBugReport._id);
+            expect(spy).toBeCalledWith(bugReportForm, dummyBugReport._id);
 
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {

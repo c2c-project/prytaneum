@@ -1,8 +1,11 @@
 import React from 'react';
+import { AxiosResponse } from 'axios';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker';
+import { makeReportReplyForm } from 'prytaneum-typings';
 
+import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 import ReplyForm from './ReplyForm';
 
 jest.mock('hooks/useSnack');
@@ -30,30 +33,11 @@ describe('Reply Form', () => {
             render(<ReplyForm reportId={reportId} reportType='Feedback' />, container);
         });
     });
-    it('Should open reply dialog', () => {
+
+    it('should change reply content', () => {
+        const { content } = makeReportReplyForm();
         ReactTestUtils.act(() => {
             render(<ReplyForm reportId={reportId} reportType='Feedback' />, container);
-        });
-        const replyButton = document.querySelector('#reply-button') as HTMLButtonElement;
-
-        ReactTestUtils.act(() => {
-            replyButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-        });
-
-        const replyTextField = document.querySelector('#reply-content') as HTMLInputElement;
-
-        expect(replyTextField.value).toBe('');
-    });
-
-    it('Should open reply dialog and change reply content', () => {
-        const replyContent = faker.lorem.paragraph();
-        ReactTestUtils.act(() => {
-            render(<ReplyForm reportId={reportId} reportType='Feedback' />, container);
-        });
-        const replyButton = document.querySelector('#reply-button') as HTMLButtonElement;
-
-        ReactTestUtils.act(() => {
-            replyButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
         const replyTextField = document.querySelector('#reply-content') as HTMLInputElement;
@@ -62,10 +46,75 @@ describe('Reply Form', () => {
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(replyTextField, {
                 target: ({
-                    value: replyContent,
+                    value: content,
                 } as unknown) as EventTarget,
             });
         });
-        expect(replyTextField.value).toBe(replyContent);
+        expect(replyTextField.value).toBe(content);
+    });
+
+    it('should input a reply, submit it, and suceed', () => {
+        const resolvedVal: AxiosResponse = {
+            status: 200,
+            data: {},
+            statusText: 'OK',
+            headers: {},
+            config: {},
+        };
+        const spy = jest.spyOn(API, 'replyToReport').mockResolvedValue(resolvedVal);
+        const { content } = makeReportReplyForm();
+
+        ReactTestUtils.act(() => {
+            render(<ReplyForm reportId={reportId} reportType='Feedback' />, container);
+        });
+
+        const replyTextField = document.querySelector('#reply-content') as HTMLInputElement;
+        const button = document.querySelector('#submit-reply-button') as HTMLButtonElement;
+
+        expect(replyTextField.value).toBe('');
+
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(replyTextField, {
+                target: ({
+                    value: content,
+                } as unknown) as EventTarget,
+            });
+        });
+        expect(replyTextField.value).toBe(content);
+
+        ReactTestUtils.act(() => {
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+
+        expect(spy).toBeCalledWith(reportId, content, 'Feedback');
+    });
+
+    it('should input a reply, submit it, and fail', () => {
+        const rejectedVal = { status: 500 };
+        const spy = jest.spyOn(API, 'replyToReport').mockRejectedValue(rejectedVal);
+        const { content } = makeReportReplyForm();
+        ReactTestUtils.act(() => {
+            render(<ReplyForm reportId={reportId} reportType='Feedback' />, container);
+        });
+
+        const replyTextField = document.querySelector('#reply-content') as HTMLInputElement;
+        const button = document.querySelector('#submit-reply-button') as HTMLButtonElement;
+
+        expect(replyTextField.value).toBe('');
+
+        ReactTestUtils.act(() => {
+            ReactTestUtils.Simulate.change(replyTextField, {
+                target: ({
+                    value: content,
+                } as unknown) as EventTarget,
+            });
+        });
+        expect(replyTextField.value).toBe(content);
+
+        ReactTestUtils.act(() => {
+            button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+
+        expect(spy).toBeCalledWith(reportId, content, 'Feedback');
     });
 });
