@@ -4,14 +4,14 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
 import faker from 'faker/locale/en';
+import { makeFeedbackReport } from 'prytaneum-typings';
 
-import { makeFeedbackReport } from '../reportMaker.mock';
 import FormBase from './FormBase';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 
 jest.mock('hooks/useSnack');
 
-describe('CreateReportRequest', () => {
+describe('Update report at the base level', () => {
     const dummyFeedbackReport = makeFeedbackReport();
     let container: HTMLDivElement | null = null;
 
@@ -36,7 +36,7 @@ describe('CreateReportRequest', () => {
         ReactTestUtils.act(() => {
             render(
                 <FormBase
-                    report={dummyFeedbackReport}
+                    report={{ ...dummyFeedbackReport, type: 'Feedback' }}
                     onSuccess={onSuccess}
                     reportType='Feedback'
                     submitType='update'
@@ -54,7 +54,7 @@ describe('CreateReportRequest', () => {
             render(
                 <FormBase
                     onSuccess={onSuccess}
-                    report={dummyFeedbackReport}
+                    report={{ ...dummyFeedbackReport, type: 'Feedback' }}
                     reportType='Feedback'
                     submitType='update'
                 />,
@@ -62,12 +62,8 @@ describe('CreateReportRequest', () => {
             );
         });
 
-        const reportDescriptionNode = document.querySelector(
-            '#report-description'
-        ) as HTMLInputElement;
-        expect(reportDescriptionNode.value).toBe(
-            dummyFeedbackReport.description
-        );
+        const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
+        expect(reportDescriptionNode.value).toBe(dummyFeedbackReport.description);
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -85,9 +81,7 @@ describe('CreateReportRequest', () => {
             headers: {},
             config: {},
         };
-        const spy = jest
-            .spyOn(API, 'updateFeedbackReport')
-            .mockResolvedValue(resolvedVal);
+        const spy = jest.spyOn(API, 'updateFeedbackReport').mockResolvedValue(resolvedVal);
         const newDescription = faker.lorem.paragraph();
         const onSuccess = jest.fn();
 
@@ -99,18 +93,14 @@ describe('CreateReportRequest', () => {
                     onSuccess={onSuccess}
                     reportType='Feedback'
                     submitType='update'
-                    report={dummyFeedbackReport}
+                    report={{ ...dummyFeedbackReport, type: 'Feedback' }}
                 />,
                 container
             );
         });
 
-        const reportDescriptionNode = document.querySelector(
-            '#report-description'
-        ) as HTMLInputElement;
-        const button = document.querySelector(
-            '[type="submit"]'
-        ) as HTMLButtonElement;
+        const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
+        const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(reportDescriptionNode, {
@@ -123,10 +113,9 @@ describe('CreateReportRequest', () => {
         });
 
         const expectedReport = {
-            ...dummyFeedbackReport,
             description: newDescription,
         };
-        expect(spy).toBeCalledWith(expectedReport);
+        expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -138,9 +127,7 @@ describe('CreateReportRequest', () => {
     it('should submit and fail', async () => {
         const onSuccess = jest.fn();
         const rejectedVal = { status: 500 };
-        const spy = jest
-            .spyOn(API, 'updateFeedbackReport')
-            .mockRejectedValue(rejectedVal);
+        const spy = jest.spyOn(API, 'updateFeedbackReport').mockRejectedValue(rejectedVal);
 
         const newDescription = faker.lorem.paragraph();
         jest.useFakeTimers();
@@ -151,19 +138,15 @@ describe('CreateReportRequest', () => {
                     onSuccess={onSuccess}
                     reportType='Feedback'
                     submitType='update'
-                    report={dummyFeedbackReport}
+                    report={{ ...dummyFeedbackReport, type: 'Feedback' }}
                 />,
                 container
             );
         });
 
         // Get form nodes
-        const reportDescriptionNode = document.querySelector(
-            '#report-description'
-        ) as HTMLInputElement;
-        const button = document.querySelector(
-            '[type="submit"]'
-        ) as HTMLButtonElement;
+        const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
+        const button = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
         // Simulate events
         ReactTestUtils.act(() => {
@@ -177,10 +160,9 @@ describe('CreateReportRequest', () => {
         });
 
         const expectedReport = {
-            ...dummyFeedbackReport,
             description: newDescription,
         };
-        expect(spy).toBeCalledWith(expectedReport);
+        expect(spy).toBeCalledWith(expectedReport, dummyFeedbackReport._id);
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

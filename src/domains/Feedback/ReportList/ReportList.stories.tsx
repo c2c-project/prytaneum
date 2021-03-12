@@ -1,26 +1,22 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
+import { makeFeedbackReports, makeUser } from 'prytaneum-typings';
 
+import UserProvider from 'contexts/User';
 import Component from '.';
-import { makeFeedbackReport } from '../reportMaker.mock';
 
 export default {
     title: 'Domains/Feedback/Report List',
-    component: Component,
-};
-
-const makeReports = (numberOfReports: number) => {
-    const list = [];
-    for (let i = 0; i < numberOfReports; i += 1) {
-        list.push(makeFeedbackReport());
-    }
-    return list;
 };
 
 export function ReportList() {
     return (
-        <Container maxWidth='sm'>
-            <Component reports={makeReports(10)} />
-        </Container>
+        <UserProvider value={makeUser()} forceNoLogin>
+            <Container maxWidth='sm'>
+                <Component
+                    reports={makeFeedbackReports(10).map((feedbackReport) => ({ ...feedbackReport, type: 'Feedback' }))}
+                />
+            </Container>
+        </UserProvider>
     );
 }

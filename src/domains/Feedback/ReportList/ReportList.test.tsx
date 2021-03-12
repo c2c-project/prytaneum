@@ -3,8 +3,9 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker/locale/en';
+import { makeBugReport, makeUser } from 'prytaneum-typings';
 
-import { makeBugReport } from '../reportMaker.mock';
+import UserProvider from 'contexts/User';
 import ReportList from './ReportList';
 
 jest.mock('hooks/useSnack');
@@ -31,7 +32,7 @@ describe('CreateReportList', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should render report list', async () => {
         ReactTestUtils.act(() => {
-            render(<ReportList reports={[dummyBugReport]} />, container);
+            render(<ReportList reports={[{ ...dummyBugReport, type: 'Bug' }]} />, container);
         });
     });
 
@@ -39,24 +40,23 @@ describe('CreateReportList', () => {
         const newDescription = faker.lorem.paragraph();
 
         ReactTestUtils.act(() => {
-            render(<ReportList reports={[dummyBugReport]} />, container);
-        });
-
-        const ListItemNode = document.querySelector(
-            `#${dummyBugReport._id}`
-        ) as HTMLInputElement;
-
-        // Open Dialog with Report Summary
-        ReactTestUtils.act(() => {
-            ListItemNode.dispatchEvent(
-                new MouseEvent('click', { bubbles: true })
+            render(
+                <UserProvider value={makeUser()} forceNoLogin>
+                    <ReportList reports={[{ ...dummyBugReport, type: 'Bug' }]} />
+                </UserProvider>,
+                container
             );
         });
 
+        const ListItemNode = document.querySelector(`#${dummyBugReport._id}`) as HTMLInputElement;
+
+        // Open Dialog with Report Summary
+        ReactTestUtils.act(() => {
+            ListItemNode.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+
         // Get report description`
-        const reportDescriptionNode = document.querySelector(
-            '#report-description'
-        ) as HTMLInputElement;
+        const reportDescriptionNode = document.querySelector('#report-description') as HTMLInputElement;
 
         expect(reportDescriptionNode.value).toBe(dummyBugReport.description);
 

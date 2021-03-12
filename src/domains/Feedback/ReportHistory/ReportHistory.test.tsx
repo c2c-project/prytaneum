@@ -41,26 +41,20 @@ describe('CreateReportList', () => {
             headers: {},
             config: {},
         };
-        const spy = jest
-            .spyOn(API, 'getFeedbackReportsBySubmitter')
-            .mockResolvedValue(resolvedVal);
+        const spy = jest.spyOn(API, 'getFeedbackReportsBySubmitter').mockResolvedValue(resolvedVal);
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(<ReportHistory />, container);
         });
 
-        const submitButton = document.querySelector(
-            '[type="submit"]'
-        ) as HTMLButtonElement;
+        const submitButton = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
         ReactTestUtils.act(() => {
-            submitButton.dispatchEvent(
-                new MouseEvent('click', { bubbles: true })
-            );
+            submitButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(1, '', '123456789');
+        expect(spy).toBeCalledWith(1, '');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -72,26 +66,20 @@ describe('CreateReportList', () => {
         const rejectedVal = {
             status: 500,
         };
-        const spy = jest
-            .spyOn(API, 'getFeedbackReportsBySubmitter')
-            .mockRejectedValue(rejectedVal);
+        const spy = jest.spyOn(API, 'getFeedbackReportsBySubmitter').mockRejectedValue(rejectedVal);
         jest.useFakeTimers();
 
         ReactTestUtils.act(() => {
             render(<ReportHistory />, container);
         });
 
-        const submitButton = document.querySelector(
-            '[type="submit"]'
-        ) as HTMLButtonElement;
+        const submitButton = document.querySelector('[type="submit"]') as HTMLButtonElement;
 
         ReactTestUtils.act(() => {
-            submitButton.dispatchEvent(
-                new MouseEvent('click', { bubbles: true })
-            );
+            submitButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(1, '', '123456789');
+        expect(spy).toBeCalledWith(1, '');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

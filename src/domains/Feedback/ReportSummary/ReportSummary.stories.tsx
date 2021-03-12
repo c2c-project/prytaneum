@@ -1,9 +1,10 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
 import Container from '@material-ui/core/Container';
+import { makeFeedbackReport, makeUser } from 'prytaneum-typings';
 
+import UserProvider from 'contexts/User';
 import Component from '.';
-import { makeFeedbackReport } from '../reportMaker.mock';
 
 export default {
     title: 'Domains/Feedback/Report Summary',
@@ -21,5 +22,9 @@ export default {
 } as Meta;
 
 export function ReportSummary() {
-    return <Component report={makeFeedbackReport()} callBack={() => {}} />;
+    return (
+        <UserProvider value={makeUser()} forceNoLogin>
+            <Component report={{ ...makeFeedbackReport(), type: 'Feedback' }} callBack={() => {}} />
+        </UserProvider>
+    );
 }
