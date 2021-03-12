@@ -1,22 +1,27 @@
 import React from 'react';
+import { AxiosResponse } from 'axios';
+import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import { AxiosResponse } from 'axios';
+
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
+import useUser from 'hooks/useUser';
 import LoadingButton from 'components/LoadingButton';
 import { formatDate } from 'utils/format';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import FormBase from '../FormBase';
-import { FeedbackReport, BugReport } from '../types';
-
+import Reply from '../Reply';
+import ReplyForm from '../ReplyForm';
 import { deleteBugReport, deleteFeedbackReport } from '../api';
+import { Report } from '../types';
 
-type Report = FeedbackReport | BugReport;
 interface SummaryProps {
     report: Report;
     callBack: () => void;
@@ -30,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) => ({
             backgroundColor: red[900],
         },
     },
+    marginTop: {
+        marginTop: 25,
+    },
 }));
 
 type DeleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
@@ -42,6 +50,8 @@ const endpoints: {
 };
 
 export default function ReportSummary({ report, callBack }: SummaryProps) {
+    const [user] = useUser();
+    const [showReplies, setShowReplies] = React.useState(false);
     const { updateReport, refetchReports } = React.useContext(ReportStateContext);
     const [snack] = useSnack();
 
@@ -58,6 +68,10 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
         },
     });
 
+    const handleShowRepliesClick = () => {
+        setShowReplies(!showReplies);
+    };
+
     const classes = useStyles();
 
     const onSuccess = (reportState: Report) => {
@@ -70,7 +84,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
             <Grid item xs={12}>
                 <Typography variant='h4' align='left'>
                     Date Submitted:
-                    {formatDate(new Date(report.date))}
+                    {formatDate(new Date(report.meta.createdAt))}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -95,6 +109,32 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                     </Button>
                 </LoadingButton>
             </Grid>
+            {user?.roles.includes('admin') && <ReplyForm reportId={report._id} reportType={report.type} />}
+            {report.replies.length > 0 && (
+                <Grid item container>
+                    <Grid item xs={12}>
+                        <Button
+                            id='showRepliesButton'
+                            fullWidth
+                            variant='contained'
+                            color='primary'
+                            startIcon={showReplies ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            onClick={handleShowRepliesClick}
+                        >
+                            {showReplies ? 'Hide Replies' : 'Show Replies'}
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Collapse in={showReplies} timeout='auto'>
+                            {report.replies.map((reply, index) => (
+                                <div className={classes.marginTop} key={index}>
+                                    <Reply reply={reply} />
+                                </div>
+                            ))}
+                        </Collapse>
+                    </Grid>
+                </Grid>
+            )}
         </Grid>
     );
 }
