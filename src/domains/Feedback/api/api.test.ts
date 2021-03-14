@@ -40,25 +40,19 @@ describe('#FeedbackRports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
-        const ascending = 'false';
         it('should reject since page number is not provided', async () => {
-            await expect(API.getFeedbackReportsBySubmitter(0, ascending)).rejects.toThrow(errors.fieldError());
-            expect(axios.get).not.toHaveBeenCalled();
-        });
-
-        it('should reject since ascending is not provided', async () => {
-            await expect(API.getFeedbackReportsBySubmitter(page, '')).rejects.toThrow(errors.fieldError());
+            await expect(API.getFeedbackReportsBySubmitter(0, 'Descending')).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should get feedback reports', async () => {
             const resolvedValue = { status: 200 };
             (axios as jest.Mocked<typeof axios>).get.mockResolvedValue(resolvedValue);
-            await expect(API.getFeedbackReportsBySubmitter(page, ascending)).resolves.toBe(resolvedValue);
+            await expect(API.getFeedbackReportsBySubmitter(page, 'Descending')).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith('/api/feedback/get-reports', {
                 params: {
                     page,
-                    ascending,
+                    ascending: 'false',
                 },
             });
         });
@@ -129,26 +123,19 @@ describe('#BugRports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
-        const ascending = 'true';
-
         it('should reject since page number is not provided', async () => {
-            await expect(API.getBugReportsBySubmitter(0, ascending)).rejects.toThrow(errors.fieldError());
-            expect(axios.get).not.toHaveBeenCalled();
-        });
-
-        it('should reject since ascending is not provided', async () => {
-            await expect(API.getBugReportsBySubmitter(page, '')).rejects.toThrow(errors.fieldError());
+            await expect(API.getBugReportsBySubmitter(0, 'Ascending')).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should get bug reports', async () => {
             const resolvedValue = { status: 200 };
             (axios as jest.Mocked<typeof axios>).get.mockResolvedValue(resolvedValue);
-            await expect(API.getBugReportsBySubmitter(page, ascending)).resolves.toBe(resolvedValue);
+            await expect(API.getBugReportsBySubmitter(page, 'Ascending')).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith('/api/bugs/get-reports', {
                 params: {
                     page,
-                    ascending,
+                    ascending: 'true',
                 },
             });
         });

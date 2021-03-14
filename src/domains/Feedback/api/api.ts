@@ -13,14 +13,14 @@ export async function createFeedbackReport(form: FeedbackReportForm) {
     return axios.post<unknown>('/api/feedback/create-report', body);
 }
 
-export async function getFeedbackReportsBySubmitter(page: number, ascending: string) {
+export async function getFeedbackReportsBySubmitter(page: number, ascending: 'Ascending' | 'Descending') {
     if (!page || !ascending) {
         throw errors.fieldError();
     }
 
     const params = {
         page,
-        ascending,
+        ascending: ascending === 'Ascending' ? 'true' : 'false',
     };
     return axios.get<{ reports: FeedbackReport[]; count: number }>('/api/feedback/get-reports', {
         params,
@@ -64,14 +64,14 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
     return axios.post<unknown>('/api/bugs/create-report', body);
 }
 
-export async function getBugReportsBySubmitter(page: number, ascending: string) {
+export async function getBugReportsBySubmitter(page: number, ascending: 'Ascending' | 'Descending') {
     if (!page || !ascending) {
         throw errors.fieldError();
     }
 
     const params = {
         page,
-        ascending,
+        ascending: ascending === 'Ascending' ? 'true' : 'false',
     };
     return axios.get<{ reports: BugReport[]; count: number }>('/api/bugs/get-reports', {
         params,

@@ -54,7 +54,7 @@ describe('CreateReportList', () => {
             submitButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(1, '');
+        expect(spy).toBeCalledWith(1, 'Ascending');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {
@@ -79,7 +79,7 @@ describe('CreateReportList', () => {
             submitButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(spy).toBeCalledWith(1, '');
+        expect(spy).toBeCalledWith(1, 'Ascending');
         jest.runAllTimers();
 
         await ReactTestUtils.act(async () => {

@@ -1,17 +1,12 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Sort as SortIcon, Search as SearchIcon, ArrowDropDown as ArrowDownIcon } from '@material-ui/icons';
 import Pagination from '@material-ui/lab/Pagination';
 import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns';
 
+import Form from 'components/Form';
+import Select from 'components/Select';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import ListFilter from 'components/ListFilter';
@@ -23,20 +18,11 @@ import ReportStateContext from '../Contexts/ReportStateContext';
 import { getFeedbackReportsBySubmitter, getBugReportsBySubmitter } from '../api';
 import { Report, ReportTypes } from '../types';
 
-const ReportOptions = ['Feedback', 'Bug'];
-
-const sortingOptions = [
-    { name: 'Ascending', value: 'true' },
-    { name: 'Descending', value: 'false' },
-];
-
+const reportOptions = ['Feedback', 'Bug'];
+const sortingOrderOptions = ['Ascending', 'Descending'];
+type sortingOrderTypes = 'Ascending' | 'Descending';
 const pageSize = 10;
-
-const useStyles = makeStyles((theme: Theme) => ({
-    select: {
-        borderColor: theme.palette.common.white,
-        color: theme.palette.common.white,
-    },
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
         height: '100%',
@@ -46,21 +32,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function ReportHistory() {
     const classes = useStyles();
     const [prevReportType, setPrevReportType] = React.useState('');
-    const [reportType, setReportType] = React.useState<ReportTypes | ''>('');
-    const [sortingOrder, setSortingOrder] = React.useState('');
+    const [reportType, setReportType] = React.useState<ReportTypes>('Feedback');
+    const [sortingOrder, setSortingOrder] = React.useState<sortingOrderTypes>('Ascending');
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
     const [reports, setReports] = React.useState<Report[]>([]);
     const accessors = React.useMemo<Accessors<Report>[]>(() => [(report) => report.description], []);
     const [filteredReports, handleSearch, handleFilterChange] = useFilters(reports, accessors);
-
-    const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setReportType(e.target.value as ReportTypes | '');
-    };
-
-    const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setSortingOrder(e.target.value as string);
-    };
 
     const feedbackReportsAPIRequest = React.useCallback(() => getFeedbackReportsBySubmitter(page, sortingOrder), [
         page,
@@ -74,7 +52,6 @@ export default function ReportHistory() {
 
     const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(feedbackReportsAPIRequest, {
         onSuccess: (results) => {
-            // Adds type attribute to report objects. This will be needed in children components
             const feedbackReports = results.data.reports.map((report) => ({
                 ...report,
                 type: 'Feedback',
@@ -124,7 +101,7 @@ export default function ReportHistory() {
         sendRequest();
     };
 
-    const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const getReports = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         sendRequest();
     };
@@ -161,68 +138,43 @@ export default function ReportHistory() {
 
     return (
         <div className={classes.root}>
-            <AppBar position='sticky'>
-                <Toolbar>
-                    <form onSubmit={getReports}>
-                        <Grid container alignItems='center' spacing={3}>
-                            <Grid item>
-                                <FormControl>
-                                    <Select
-                                        className={classes.select}
-                                        id='reportSelector'
-                                        displayEmpty
-                                        required
-                                        value={reportType}
-                                        onChange={handleReportChange}
-                                        input={<Input />}
-                                        IconComponent={() => <ArrowDownIcon />}
-                                    >
-                                        <MenuItem disabled value=''>
-                                            Report Type
-                                        </MenuItem>
-
-                                        {ReportOptions.map((ReportOption) => (
-                                            <MenuItem key={ReportOption} value={ReportOption}>
-                                                {ReportOption}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <FormControl>
-                                    <Select
-                                        id='sortingSelector'
-                                        className={classes.select}
-                                        displayEmpty
-                                        required
-                                        value={sortingOrder}
-                                        onChange={handleSortingChange}
-                                        input={<Input />}
-                                        IconComponent={() => <SortIcon />}
-                                    >
-                                        <MenuItem disabled value=''>
-                                            Sorting Order
-                                        </MenuItem>
-                                        {sortingOptions.map((sortingOption) => (
-                                            <MenuItem key={sortingOption.name} value={sortingOption.value}>
-                                                {sortingOption.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <LoadingButton loading={isLoadingFeedback || isLoadingBug}>
-                                    <Button type='submit' color='inherit' endIcon={<SearchIcon />}>
-                                        Search
-                                    </Button>
-                                </LoadingButton>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </Toolbar>
-            </AppBar>
+            <Form onSubmit={getReports}>
+                <Grid container alignItems='center' spacing={3}>
+                    <Grid item xs={12} md={2}>
+                        <Select
+                            label='Report Type'
+                            options={reportOptions}
+                            id='report-type-select'
+                            required
+                            value={reportType}
+                            onChange={(e) => {
+                                const { value } = e.target;
+                                setReportType(value as ReportTypes);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                        <Select
+                            label='Sorting Order'
+                            options={sortingOrderOptions}
+                            id='sorting-order-select'
+                            required
+                            value={sortingOrder}
+                            onChange={(e) => {
+                                const { value } = e.target;
+                                setSortingOrder(value as sortingOrderTypes);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                        <LoadingButton loading={isLoadingFeedback || isLoadingBug}>
+                            <Button type='submit' color='inherit' variant='contained'>
+                                Search
+                            </Button>
+                        </LoadingButton>
+                    </Grid>
+                </Grid>
+            </Form>
             <Grid container item justify='center' alignItems='center' xs={12}>
                 <Grid item xs={12}>
                     <ListFilter
