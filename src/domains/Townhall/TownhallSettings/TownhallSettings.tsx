@@ -50,6 +50,7 @@ export default function TownhallSettings() {
     const [save, isLoading] = useEndpoint(() => configureTownhall(townhall._id, state), {
         onSuccess: () => {
             snack('Saved!');
+            townhall.settings = state;
         },
     });
 
