@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import type { Townhall } from 'prytaneum-typings';
 
 import useEndpoint from 'hooks/useEndpoint';
@@ -17,6 +17,12 @@ interface Props {
 }
 
 export const TownhallContext = React.createContext<Townhall | null>(null);
+
+type Dispatch = React.Dispatch<SetStateAction<Townhall | undefined >>  | null;
+
+export const TownhallDispatch = React.createContext<Dispatch>(null);
+
+
 
 // TODO: optimize this so that a request doesn't get sent every single page load? maybe?
 export default function TownhallProvider({ value, children, townhallId, forceNoFetch }: Props) {
@@ -38,7 +44,11 @@ export default function TownhallProvider({ value, children, townhallId, forceNoF
     // "something broke try refreshing" page?
     if (isLoading || !townhall) return <Loader />;
 
-    return <TownhallContext.Provider value={townhall}>{children}</TownhallContext.Provider>;
+    return (
+        <TownhallContext.Provider value={townhall}>
+            <TownhallDispatch.Provider value={setTownhall}>{children}</TownhallDispatch.Provider>
+        </TownhallContext.Provider>
+    );
 }
 
 TownhallProvider.defaultProps = {

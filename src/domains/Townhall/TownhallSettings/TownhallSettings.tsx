@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 // TODO: add mermaid diagram doc for this component since it is complex
 export default function TownhallSettings() {
     const classes = useStyles();
-    const [townhall] = useTownhall();
+    const [townhall, ,setTownhall] = useTownhall();
     const [state, setState] = React.useState<SettingsType>(townhall.settings);
     const [snack] = useSnack();
     const isDiff = React.useMemo(() => JSON.stringify(townhall.settings) !== JSON.stringify(state), [
@@ -50,7 +50,9 @@ export default function TownhallSettings() {
     const [save, isLoading] = useEndpoint(() => configureTownhall(townhall._id, state), {
         onSuccess: () => {
             snack('Saved!');
-            townhall.settings = state;
+            let tempTownhallSettings = townhall;
+            tempTownhallSettings.settings = state;
+            setTownhall(tempTownhallSettings);
         },
     });
 
