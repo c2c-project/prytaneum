@@ -2,8 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import SaveIcon from '@material-ui/icons/Save';
+// import SaveIcon from '@material-ui/icons/Save';
 import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
+
 
 import history, { makeRelativeLink } from 'utils/history';
 import LoadingButton from 'components/LoadingButton';
@@ -51,7 +52,7 @@ export default function TownhallSettings() {
         onSuccess: () => {
             snack('Saved!');
             
-            setTownhall({...townhall, settings:state});
+            setTownhall((prev) => prev ? ({ ...prev, settings: state}) : prev);
         },
     });
 
