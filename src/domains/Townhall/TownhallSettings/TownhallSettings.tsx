@@ -2,9 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-// import SaveIcon from '@material-ui/icons/Save';
+import SaveIcon from '@material-ui/icons/Save';
 import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
-
 
 import history, { makeRelativeLink } from 'utils/history';
 import LoadingButton from 'components/LoadingButton';
@@ -36,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 // TODO: add mermaid diagram doc for this component since it is complex
 export default function TownhallSettings() {
     const classes = useStyles();
-    const [townhall, ,setTownhall] = useTownhall();
+    const [townhall, , setTownhall] = useTownhall();
     const [state, setState] = React.useState<SettingsType>(townhall.settings);
     const [snack] = useSnack();
     const isDiff = React.useMemo(() => JSON.stringify(townhall.settings) !== JSON.stringify(state), [
@@ -51,8 +50,7 @@ export default function TownhallSettings() {
     const [save, isLoading] = useEndpoint(() => configureTownhall(townhall._id, state), {
         onSuccess: () => {
             snack('Saved!');
-            
-            setTownhall((prev) => prev ? ({ ...prev, settings: state}) : prev);
+            setTownhall((prev) => (prev ? { ...prev, settings: state } : prev));
         },
     });
 
