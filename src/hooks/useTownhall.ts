@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { TownhallContext } from 'contexts/Townhall';
+import { TownhallContext, TownhallDispatch } from 'contexts/Townhall';
 import useUser from './useUser';
 
 export default function useTownhall() {
     const [user] = useUser();
     const townhall = React.useContext(TownhallContext);
+    const setTownhall = React.useContext(TownhallDispatch);
 
     // null if townhall context not used, will never be undefined because I only display a loader if townhall does not exist
     // TODO: what if no townhall found??
-    if (!townhall)
+    if (!townhall || !setTownhall)
         throw new Error('useTownhall() must be used within a TownhallContext');
 
     const isOwner = React.useMemo(
@@ -27,5 +28,5 @@ export default function useTownhall() {
             ),
         [townhall, user, isOwner]
     );
-    return [townhall, isModerator] as const;
+    return [townhall,  isModerator, setTownhall] as const;
 }
