@@ -43,7 +43,7 @@ const Copy = React.forwardRef<HTMLDivElement, Props>(
                 </Grid>
                 <Grid item xs='auto'>
                     <Tooltip title='Copy' aria-label='copy'>
-                        <IconButton onClick={() => copy(text)} edge='end'>
+                        <IconButton onPointerUp={() => copy(text)} edge='end'>
                             <CopyIcon />
                         </IconButton>
                     </Tooltip>
