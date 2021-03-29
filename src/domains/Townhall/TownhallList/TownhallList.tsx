@@ -5,27 +5,33 @@ import {
     ListItem,
     ListItemText,
     ListItemAvatar,
+    ListItemIcon,
     Avatar,
     ListItemSecondaryAction,
     Card,
     CardContent,
     CardHeader,
+    Checkbox,
+    DialogContent,
 } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ResponsiveDialog from 'components/ResponsiveDialog';
+import Button from '@material-ui/core/Button';
+
 import type { Townhall } from 'prytaneum-typings';
 
 import { formatDate } from 'utils/format';
 import useEndpoint from 'hooks/useEndpoint';
 import Loader from 'components/Loader';
 import ListFilter from 'components/ListFilter';
+import { townhallSettingsSections } from 'domains/Townhall/TownhallSettings/TownhallSettings';
 import { getTownhallList } from '../api';
-import {
-    filters as filterFuncs,
-    TonwhallFilterFunc,
-    search,
-    applyFilters,
-} from './utils';
+import { filters as filterFuncs, TonwhallFilterFunc, search, applyFilters } from './utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,22 +56,21 @@ interface Props {
 
 export default function TownhallList({ onClickTownhall, title }: Props) {
     const classes = useStyles();
+    const [townhallSettingsSelected, setTownhallSettingsSelected] = React.useState<string[]>([]);
+    const [townhallIdToCopy, setTownhallIdToCopy] = React.useState<string>();
+    const [open, setOpen] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [list, setList] = React.useState<Townhall[] | null>(null);
 
     // search is always the first element in the filter array
-    const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([
-        (townhalls: Townhall[]) => townhalls,
-    ]);
+    const [filters, setFilters] = React.useState<TonwhallFilterFunc[]>([(townhalls: Townhall[]) => townhalls]);
     const [, isLoading] = useEndpoint(() => getTownhallList(), {
         onSuccess: (results) => {
             setList(results.data);
         },
         runOnFirstRender: true,
     });
-    const filteredResults = React.useMemo(
-        () => applyFilters(list || [], filters),
-        [list, filters]
-    );
+    const filteredResults = React.useMemo(() => applyFilters(list || [], filters), [list, filters]);
 
     const handleSearch = React.useCallback(
         (text: string) =>
@@ -87,22 +92,26 @@ export default function TownhallList({ onClickTownhall, title }: Props) {
         );
     }
 
+    const handleSettingSelected = (setting: string) => () => {
+        const currentIndex = townhallSettingsSelected.indexOf(setting);
+        const newSettings = [...townhallSettingsSelected];
+        if (currentIndex === -1) {
+            newSettings.push(setting);
+        } else {
+            newSettings.splice(currentIndex, 1);
+        }
+        setTownhallSettingsSelected(newSettings);
+    };
+
     return (
         <div className={classes.root}>
             <Card raised className={classes.card}>
-                {title && (
-                    <CardHeader title={title} className={classes.title} />
-                )}
+                {title && <CardHeader title={title} className={classes.title} />}
                 <CardContent>
                     <ListFilter
                         filterMap={filterFuncs}
                         onSearch={handleSearch}
-                        onFilterChange={(newFilters) =>
-                            setFilters(([searchFunc]) => [
-                                searchFunc,
-                                ...newFilters,
-                            ])
-                        }
+                        onFilterChange={(newFilters) => setFilters(([searchFunc]) => [searchFunc, ...newFilters])}
                         length={filteredResults.length}
                     />
 
@@ -123,16 +132,60 @@ export default function TownhallList({ onClickTownhall, title }: Props) {
                                         {form.title[0]}
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText
-                                    primary={form.title}
-                                    secondary={formatDate(form.date)}
-                                />
+                                <ListItemText primary={form.title} secondary={formatDate(form.date)} />
                                 <ListItemSecondaryAction>
                                     <ChevronRight />
+                                    <IconButton
+                                        onClick={(e) => {
+                                            setAnchorEl(e.currentTarget);
+                                            setTownhallIdToCopy(_id);
+                                        }}
+                                    >
+                                        <MoreVertIcon />
+                                    </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))}
                     </List>
+                    <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+                        <MenuItem
+                            onClick={() => {
+                                setOpen(true);
+                            }}
+                        >
+                            copy
+                        </MenuItem>
+                    </Menu>
+                    <ResponsiveDialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        onExit={() => setTownhallSettingsSelected([])}
+                    >
+                        <DialogContent>
+                            <Typography variant='h5'>Which settings would you like to copy?</Typography>
+                            <List>
+                                {townhallSettingsSections.map((settingsSection, index) => (
+                                    <ListItem key={index} dense button onClick={handleSettingSelected(settingsSection)}>
+                                        <ListItemIcon>
+                                            <Checkbox
+                                                edge='start'
+                                                checked={townhallSettingsSelected.includes(settingsSection)}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary={settingsSection} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                            {/*  TODO: onlick submit request to copy townhall */}
+                            <Button
+                                variant='contained'
+                                fullWidth
+                                color='primary'
+                                onClick={() => console.log(townhallSettingsSelected)}>
+                                Submit
+                            </Button>
+                        </DialogContent>
+                    </ResponsiveDialog>
                 </CardContent>
             </Card>
         </div>

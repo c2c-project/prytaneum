@@ -32,6 +32,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+export const townhallSettingsSections = [
+    'Form',
+    'Video',
+    'Speakers',
+    'Components',
+    'Moderators',
+    'Invite',
+    'Data',
+    'Preview',
+];
+
 // TODO: add mermaid diagram doc for this component since it is complex
 export default function TownhallSettings() {
     const classes = useStyles();
