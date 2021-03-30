@@ -70,39 +70,46 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 }
 
 export function NotificationSettings({ user }: { user: ClientSafeUser }) {
-    const [notifState, setNotifState] = React.useState(user.settings.notifications);
-    // TODO: API Request
-    // done? look at lines 84-89
+    const [notificationState, setNotificationState] = React.useState(user.settings.notifications);
+
     const [snack] = useSnack();
-    const changeNotifEnd = React.useCallback(() => API.changeNotifications(notifState.enabled, notifState.types), [
-        notifState.enabled,
-        notifState.types,
+    const changeNotifEnd = React.useCallback(() => API.changeNotifications(notificationState.enabled, notificationState.types), [
+        notificationState.enabled,
+        notificationState.types,
     ]);
 
     // send user notif, BACKEND flips it, sends it back, logic happens there
     // this does make it a tad slow to update visually (at least in storybook)
     // but this makes sense as what if the backend cannot update the notification?
-    // then it updates visually here? no, it should only update IF it succeeds
-    const [sendNotif, isNotifLoading] = useEndpoint(changeNotifEnd, {
+    // then it updates visually here? 
+    // We _optimistically_ change the UI in the `onChange` function, and set it back
+    // if it fails
+    const [sendNotification, isNotifLoading] = useEndpoint(changeNotifEnd, {
         onSuccess: ({ data }) => {
-            setNotifState(data.user.settings.notifications);
+            setNotificationState(data.user.settings.notifications);
             snack('Updated Notification settings!');
         },
+        onFailure: () => {
+            setNotificationState(notificationState);
+            snack('Sorry! Could not update notifications, please try again');
+        }
     });
-    const buildHandler = buildCheckboxUpdate<typeof notifState>(setNotifState);
 
     return (
         <SettingsList>
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
-                    checked={notifState.enabled}
+                    checked={notificationState.enabled}
                     onChange={() => {
-                        buildHandler('enabled');
-                        sendNotif();
+                        // optimistic response
+                        // just change UI element now, if backend fails, we update accordingly
+                        let optimisticState = { enabled: !notificationState.enabled, types: notificationState.types }
+                        setNotificationState(optimisticState);
+                        sendNotification();
                     }}
                 />
             </SettingsItem>
-            <Collapse in={notifState.enabled}>
+            <Collapse in={notificationState.enabled}>
                 <SettingsItem helpText={text.notifications.types} name='Notification Types'>
                     <div>TODO</div>
                 </SettingsItem>
