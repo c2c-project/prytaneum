@@ -107,7 +107,7 @@ export async function getMyInfo() {
 }
 
 export async function changeName(fname: string, lname: string) {
-    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/name/`, { fname, lname });
+    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/name`, { fname, lname });
 }
 
 export async function changeEmail(email: string) {
@@ -115,9 +115,9 @@ export async function changeEmail(email: string) {
     if (!match || match[0].length !== email.length) {
         throw errors.invalidEmail();
     }
-    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/email/`, { email });
+    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/email`, { email });
 }
 
-export async function changeNotif(enabled: boolean, types: string[]) {
+export async function changeNotifications(enabled: boolean, types: string[]) {
     return axios.put<{ user: ClientSafeUser }>(`/api/users/me/notif`, { enabled, types });
 }

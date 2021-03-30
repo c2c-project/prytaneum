@@ -17,10 +17,8 @@ import useForm from 'hooks/useForm';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props
-    img?: string;
+    img?: string,
     id?: string
-    // safeUser?: ClientSafeUser;
-    // forceNoLogin?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -145,17 +143,24 @@ export default function UserProfile({ img, id }: Props) {
                     <Grid component='span' item xs={12}>
                         <h3>Logout</h3>
                         <Button
-                            href='https://prytaneum.io/logout'
+                            // we want a relative link, ie just /logout
+                            // migrating app, maybe not needed at this moment
+                            // href='https://prytaneum.io/logout'
                             type='submit'
                             variant='contained'
                             color='primary'
                             fullWidth
                         >
-                            Logout
+                            Logout (TODO)
                         </Button>
                     </Grid>
                 </Grid>
             </Grid>
         </div>
     );
+}
+
+UserProfile.defaultProps = {
+    img: undefined,
+    id: undefined
 }

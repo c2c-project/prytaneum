@@ -145,17 +145,6 @@ export default function UserSettings({ id, onClickPasswordReset }: Props) {
             component: <NotificationSettings user={user} />,
         },
         // {
-        //     title: 'GeneralEditableText',
-        //     description: 'General, but with EditableText instead of TextField',
-        //     component: (
-        //         <Grid container spacing={2}>
-        //             <Grid item xs={12}>
-        //                 <UserProfileEditable img='https://i.imgur.com/3beQH5s.jpeg' />
-        //             </Grid>
-        //         </Grid>
-        //     ),
-        // },
-        // {
         //     title: 'Account Settings',
         //     description: 'View Account Settings',
         //     component: (

@@ -74,7 +74,7 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
     // TODO: API Request
     // done? look at lines 84-89
     const [snack] = useSnack();
-    const changeNotifEnd = React.useCallback(() => API.changeNotif(notifState.enabled, notifState.types), [
+    const changeNotifEnd = React.useCallback(() => API.changeNotifications(notifState.enabled, notifState.types), [
         notifState.enabled,
         notifState.types,
     ]);

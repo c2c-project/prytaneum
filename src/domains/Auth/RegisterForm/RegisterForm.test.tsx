@@ -199,7 +199,6 @@ describe('RegisterForm', () => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        console.log(spy.mock);
         expect(spy).toBeCalledWith(form, undefined);
         jest.runAllTimers();
 
