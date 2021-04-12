@@ -12,7 +12,7 @@ import QuestionQueue from 'domains/Questions/QuestionQueue';
 import AskQuestion from 'domains/Questions/AskQuestion';
 import QuestionCarousel from 'domains/Questions/QuestionCarousel';
 import useTownhall from 'hooks/useTownhall';
-import Breakout from '../Breakout';
+// import Breakout from '../Breakout';
 import StyledTab, { Props as StyledTabProps } from './StyledTab';
 import InfoCard from '../InfoCard';
 import SpeakerItem from './SpeakerItem';
@@ -22,7 +22,7 @@ type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
     StyledTab
 );
-const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
+// const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
 const QuestionQueueTab = connect(() => ({
     badgeContent: 0,
     label: 'Question Queue',
@@ -42,7 +42,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionFeed />]);
-    if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
+    // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
 };

@@ -15,7 +15,7 @@ import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
 import useTownhall from 'hooks/useTownhall';
 
 import TownhallForm from '../TownhallForm';
-import ChatSettings from './ChatSettings';
+// import ChatSettings from './ChatSettings';
 import DataSettings from './DataSettings';
 import QuestionFeedSettings from './QuestionFeedSettings';
 import SpeakerSettings from './SpeakerSettings';
@@ -55,10 +55,10 @@ export default function TownhallSettings() {
 
     const componentSubSections = React.useMemo(
         () => [
-            {
-                title: 'Breakout Rooms',
-                component: <ChatSettings onChange={handleChange('chat')} value={state.chat} />,
-            },
+            // {
+            //     title: 'Breakout Rooms',
+            //     component: <ChatSettings onChange={handleChange('chat')} value={state.chat} />,
+            // },
             {
                 title: 'Question Feed',
                 component: (
