@@ -22,7 +22,10 @@ const initialState: ForgotPassForm = { password: '', confirmPassword: '' };
 export default function PasswordResetForm({ token, onSuccess }: Props) {
     const [snack] = useSnack();
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const builtRequest = React.useCallback(() => API.forgotPassReset(token, form), [form, token]);
+    const builtRequest = React.useCallback(
+        () => API.forgotPassReset(token, form), 
+        [form, token]
+    );
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
         onSuccess: () => {
             snack('Successfully reset password!');
@@ -53,7 +56,12 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
             </FormContent>
             <FormActions>
                 <LoadingButton loading={isLoading}>
-                    <Button type='submit' variant='contained' color='primary' fullWidth>
+                    <Button 
+                        type='submit' 
+                        variant='contained' 
+                        color='primary' 
+                        fullWidth
+                    >
                         Submit
                     </Button>
                 </LoadingButton>

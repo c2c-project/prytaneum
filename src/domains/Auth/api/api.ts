@@ -1,4 +1,9 @@
-import type { ForgotPassForm, ForgotPassRequestForm, RegisterForm, ClientSafeUser } from 'prytaneum-typings';
+import type { 
+    ForgotPassForm, 
+    ForgotPassRequestForm, 
+    RegisterForm, 
+    ClientSafeUser 
+} from 'prytaneum-typings';
 
 import axios from 'utils/axios';
 import errors from 'utils/errors';
@@ -119,5 +124,5 @@ export async function changeEmail(email: string) {
 }
 
 export async function changeNotifications(enabled: boolean, types: string[]) {
-    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/notif`, { enabled, types });
+    return axios.put<{ user: ClientSafeUser }>(`/api/users/me/notifications`, { enabled, types });
 }

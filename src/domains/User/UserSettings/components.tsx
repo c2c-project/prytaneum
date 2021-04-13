@@ -62,8 +62,14 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 
     return (
         <SettingsList>
-            <SettingsItem helpText={text.townhall.anonymous} name='Appear Anonymous'>
-                <Switch checked={state.anonymous} onChange={buildHandler('anonymous')} />
+            <SettingsItem 
+                helpText={text.townhall.anonymous} 
+                name='Appear Anonymous'
+            >
+                <Switch 
+                    checked={state.anonymous} 
+                    onChange={buildHandler('anonymous')} 
+                />
             </SettingsItem>
         </SettingsList>
     );
@@ -97,7 +103,10 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
 
     return (
         <SettingsList>
-            <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
+            <SettingsItem 
+                helpText={text.notifications.enabled} 
+                name='Enabled'
+            >
                 <Switch
                     checked={notificationState.enabled}
                     onChange={() => {
@@ -110,7 +119,10 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
                 />
             </SettingsItem>
             <Collapse in={notificationState.enabled}>
-                <SettingsItem helpText={text.notifications.types} name='Notification Types'>
+                <SettingsItem 
+                    helpText={text.notifications.types} 
+                    name='Notification Types'
+                >
                     <div>TODO</div>
                 </SettingsItem>
             </Collapse>
@@ -130,7 +142,11 @@ export const ButtonList = ({ list, setContent }: Props) => (
     <List>
         {list.map(({ title, component }) => (
             <li key={title}>
-                <ListItem key={title} button onClick={() => setContent(component)}>
+                <ListItem 
+                    key={title} 
+                    button 
+                    onClick={() => setContent(component)}
+                >
                     <ListItemText primary={title} />
                 </ListItem>
             </li>
@@ -183,7 +199,11 @@ export const DisableAccount = () => {
                     to log into your account.'
                 name='Disable Account'
             >
-                <Button variant='outlined' onClick={() => setOpen(true)} style={{ color: 'red', borderColor: 'red' }}>
+                <Button 
+                    variant='outlined' 
+                    onClick={() => setOpen(true)} 
+                    style={{ color: 'red', borderColor: 'red' }}
+                >
                     Disable
                 </Button>
             </SettingsItem>
@@ -195,8 +215,9 @@ export const DisableAccount = () => {
                 onConfirm={() => console.log('TODO')}
                 title='Disable Account?'
             >
-                You will no longer receive notifications about Town Halls and you can no longer join live Town Halls.
-                You will still be able to log into your account.
+                You will no longer receive notifications about Town Halls and 
+                you can no longer join live Town Halls. You will still be able 
+                to log into your account.
             </ConfirmationDialog>
         </div>
     );
@@ -208,8 +229,10 @@ export const DeleteAccount = () => (
         <h1>
             Delete Account?
             <p>
-                All of your account information will be erased from Prytaneum. This action is irreversible. Please enter
-                your password below twice to confirm.
+                All of your account information will be erased from Prytaneum. 
+                
+                This action is irreversible. Please enter your password below 
+                twice to confirm.
             </p>
         </h1>
         <TextField

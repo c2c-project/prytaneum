@@ -146,6 +146,7 @@ export default function UserProfile({ img, id }: Props) {
                             // we want a relative link, ie just /logout
                             // migrating app, maybe not needed at this moment
                             // href='https://prytaneum.io/logout'
+                            // TODO
                             type='submit'
                             variant='contained'
                             color='primary'

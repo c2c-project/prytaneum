@@ -17,7 +17,11 @@ function toCamelCase(str?: string) {
     return str
         .toLowerCase()
         .split(' ')
-        .map((word, idx) => (idx > 0 ? word[0].toUpperCase() + word.slice(1) : word.toLocaleLowerCase()))
+        .map((word, idx) => 
+            idx > 0 
+                ? word[0].toUpperCase() + word.slice(1) 
+                : word.toLocaleLowerCase()
+        )
         .join('');
 }
 

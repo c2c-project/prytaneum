@@ -76,11 +76,21 @@ describe('RegisterForm', () => {
             );
         });
 
-        const emailNode = document.querySelector('#register-email') as HTMLElement;
-        const passwordNode = document.querySelector('#register-password') as HTMLElement;
-        const confirmNode = document.querySelector('#register-confirm-password') as HTMLElement;
-        const firstnameNode = document.querySelector('#register-first-name') as HTMLElement;
-        const lastNameNode = document.querySelector('#register-last-name') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
+        const confirmNode = document.querySelector(
+            '#register-confirm-password'
+        ) as HTMLElement;
+        const firstnameNode = document.querySelector(
+            '#register-first-name'
+        ) as HTMLElement;
+        const lastNameNode = document.querySelector(
+            '#register-last-name'
+        ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         // modify input fields in the DOM
@@ -156,11 +166,21 @@ describe('RegisterForm', () => {
             );
         });
 
-        const emailNode = document.querySelector('#register-email') as HTMLElement;
-        const passwordNode = document.querySelector('#register-password') as HTMLElement;
-        const confirmNode = document.querySelector('#register-confirm-password') as HTMLElement;
-        const firstnameNode = document.querySelector('#register-first-name') as HTMLElement;
-        const lastNameNode = document.querySelector('#register-last-name') as HTMLElement;
+        const emailNode = document.querySelector(
+            '#register-email'
+        ) as HTMLElement;
+        const passwordNode = document.querySelector(
+            '#register-password'
+        ) as HTMLElement;
+        const confirmNode = document.querySelector(
+            '#register-confirm-password'
+        ) as HTMLElement;
+        const firstnameNode = document.querySelector(
+            '#register-first-name'
+        ) as HTMLElement;
+        const lastNameNode = document.querySelector(
+            '#register-last-name'
+        ) as HTMLElement;
         const button = document.querySelector('[type="submit"]') as HTMLElement;
 
         // modify input fields in the DOM

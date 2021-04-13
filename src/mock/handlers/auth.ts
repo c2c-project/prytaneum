@@ -1,8 +1,13 @@
 /* eslint-disable */
 import { rest } from 'msw';
 import faker from 'faker/locale/en';
-import { makeUser, User, ForgotPassForm, RegisterForm, ForgotPassRequestForm, ClientSafeUser } from 'prytaneum-typings';
-import { LinkedCamera } from '@material-ui/icons';
+import { 
+    makeUser, 
+    User, 
+    ForgotPassForm, 
+    RegisterForm, 
+    ForgotPassRequestForm, 
+} from 'prytaneum-typings';
 
 // used to decide whether or not to fail in mocks
 let failBit = 0;
@@ -120,7 +125,7 @@ export default [
         toReturnUser.email.address = email;
         return res(ctx.status(200), ctx.json({ user: toReturnUser }));
     }),
-    rest.put('/api/users/me/notif', (req, res, ctx) => {
+    rest.put('/api/users/me/notifications', (req, res, ctx) => {
         // to simulate failure, we just fail 50% of the time for this mock
         if (failBit === 1) {
             failBit ^= 1;
