@@ -62,13 +62,13 @@ export function TownhallUserSettings({ user }: { user: ClientSafeUser }) {
 
     return (
         <SettingsList>
-            <SettingsItem 
-                helpText={text.townhall.anonymous} 
+            <SettingsItem
+                helpText={text.townhall.anonymous}
                 name='Appear Anonymous'
             >
-                <Switch 
-                    checked={state.anonymous} 
-                    onChange={buildHandler('anonymous')} 
+                <Switch
+                    checked={state.anonymous}
+                    onChange={buildHandler('anonymous')}
                 />
             </SettingsItem>
         </SettingsList>
@@ -103,8 +103,8 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
 
     return (
         <SettingsList>
-            <SettingsItem 
-                helpText={text.notifications.enabled} 
+            <SettingsItem
+                helpText={text.notifications.enabled}
                 name='Enabled'
             >
                 <Switch
@@ -119,8 +119,8 @@ export function NotificationSettings({ user }: { user: ClientSafeUser }) {
                 />
             </SettingsItem>
             <Collapse in={notificationState.enabled}>
-                <SettingsItem 
-                    helpText={text.notifications.types} 
+                <SettingsItem
+                    helpText={text.notifications.types}
                     name='Notification Types'
                 >
                     <div>TODO</div>
@@ -142,9 +142,9 @@ export const ButtonList = ({ list, setContent }: Props) => (
     <List>
         {list.map(({ title, component }) => (
             <li key={title}>
-                <ListItem 
-                    key={title} 
-                    button 
+                <ListItem
+                    key={title}
+                    button
                     onClick={() => setContent(component)}
                 >
                     <ListItemText primary={title} />
@@ -199,9 +199,9 @@ export const DisableAccount = () => {
                     to log into your account.'
                 name='Disable Account'
             >
-                <Button 
-                    variant='outlined' 
-                    onClick={() => setOpen(true)} 
+                <Button
+                    variant='outlined'
+                    onClick={() => setOpen(true)}
                     style={{ color: 'red', borderColor: 'red' }}
                 >
                     Disable
@@ -215,8 +215,8 @@ export const DisableAccount = () => {
                 onConfirm={() => console.log('TODO')}
                 title='Disable Account?'
             >
-                You will no longer receive notifications about Town Halls and 
-                you can no longer join live Town Halls. You will still be able 
+                You will no longer receive notifications about Town Halls and
+                you can no longer join live Town Halls. You will still be able
                 to log into your account.
             </ConfirmationDialog>
         </div>
@@ -229,9 +229,9 @@ export const DeleteAccount = () => (
         <h1>
             Delete Account?
             <p>
-                All of your account information will be erased from Prytaneum. 
+                All of your account information will be erased from Prytaneum.
                 
-                This action is irreversible. Please enter your password below 
+                This action is irreversible. Please enter your password below
                 twice to confirm.
             </p>
         </h1>

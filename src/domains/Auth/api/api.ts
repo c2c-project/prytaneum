@@ -1,8 +1,8 @@
-import type { 
-    ForgotPassForm, 
-    ForgotPassRequestForm, 
-    RegisterForm, 
-    ClientSafeUser 
+import type {
+    ForgotPassForm,
+    ForgotPassRequestForm,
+    RegisterForm,
+    ClientSafeUser
 } from 'prytaneum-typings';
 
 import axios from 'utils/axios';

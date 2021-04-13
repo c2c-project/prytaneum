@@ -1,12 +1,12 @@
 /* eslint-disable */
 import { rest } from 'msw';
 import faker from 'faker/locale/en';
-import { 
-    makeUser, 
-    User, 
-    ForgotPassForm, 
-    RegisterForm, 
-    ForgotPassRequestForm, 
+import {
+    makeUser,
+    User,
+    ForgotPassForm,
+    RegisterForm,
+    ForgotPassRequestForm,
 } from 'prytaneum-typings';
 
 // used to decide whether or not to fail in mocks

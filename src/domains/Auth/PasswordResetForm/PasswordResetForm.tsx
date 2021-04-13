@@ -23,7 +23,7 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
     const [snack] = useSnack();
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     const builtRequest = React.useCallback(
-        () => API.forgotPassReset(token, form), 
+        () => API.forgotPassReset(token, form),
         [form, token]
     );
     const [sendRequest, isLoading] = useEndpoint(builtRequest, {
@@ -56,10 +56,10 @@ export default function PasswordResetForm({ token, onSuccess }: Props) {
             </FormContent>
             <FormActions>
                 <LoadingButton loading={isLoading}>
-                    <Button 
-                        type='submit' 
-                        variant='contained' 
-                        color='primary' 
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
                         fullWidth
                     >
                         Submit
