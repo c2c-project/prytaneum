@@ -1,0 +1,27 @@
+input HideQuestion {
+    questionId: ID!
+    eventId: ID!
+
+    """
+    Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
+    """
+    toggleTo: Boolean!
+}
+
+input ReorderQuestion {
+    questionId: ID!
+    position: Int!
+    eventId: ID!
+}
+
+type Mutation {
+    hideQuestion(input: HideQuestion): EventQuestion
+    reorderQueue(input: ReorderQuestion): EventQuestion
+}
+
+type Subscription {
+    """
+    New messages as feedback is given
+    """
+    eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback
+}

@@ -1,0 +1,26 @@
+type EventSpeaker {
+    """
+    The related user account associated with the speaker
+    """
+    user: [User]
+
+    """
+    Name set by the organizer of the event
+    """
+    name: String
+
+    """
+    Description set by the organizer of the event
+    """
+    description: String
+
+    """
+    Title set by the organizer of the event
+    """
+    title: String
+
+    """
+    Picture set by the organizer of the event
+    """
+    picture: String
+}

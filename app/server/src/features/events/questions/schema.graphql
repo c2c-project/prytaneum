@@ -1,0 +1,69 @@
+type EventQuestion {
+    id: ID
+    event: Event
+
+    """
+    User information on the person asking the question
+    """
+    createdBy: User
+    createdAt: Date
+    refQuestion: EventQuestion
+
+    """
+    The actual content of the question
+    """
+    question: String
+    position: Int
+    isVisible: Boolean
+    isAsked: Boolean
+    lang: String
+    isFollowUp: Boolean
+    isQuote: Boolean
+
+    """
+    The number of likes a particular question has
+    """
+    likes: Int
+
+    """
+    The users who have liked this question
+    """
+    likedBy: [User]
+
+    """
+    Whether or not the current user likes the question
+    """
+    isLikedByMe: Boolean
+}
+
+type Like {
+    user: User
+    question: EventQuestion
+}
+
+input CreateQuestion {
+    question: String!
+    isQuote: Boolean
+    isFollowUp: Boolean
+    refQuestion: ID
+    eventId: ID!
+}
+
+input AlterLike {
+    id: ID!
+    """
+    True if the user is attempting to like the question; false if they are trying to remove a like
+    """
+    to: Boolean
+}
+
+type Mutation {
+    createQuestion(input: CreateQuestion): EventQuestion
+
+    alterLike(input: AlterLike): Like
+}
+
+type Subscription {
+    eventQuestionCreated(eventId: ID!): EventQuestion
+    likeCountChanged(eventId: ID!): EventQuestion
+}

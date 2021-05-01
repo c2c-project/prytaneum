@@ -1,0 +1,5 @@
+type EventParticipant {
+    user: User
+    questions: [EventQuestion]
+    liveFeedBack: [EventLiveFeedback]
+}

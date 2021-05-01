@@ -1,0 +1,19 @@
+type EventLiveFeedback {
+    id: ID!
+    message: String!
+    event: Event
+    createdAt: String
+    createdBy: User
+}
+
+input CreateFeedback {
+    message: String!
+}
+
+type Mutation {
+    createFeedback(input: CreateFeedback): EventLiveFeedback
+}
+
+type Query {
+    myFeedback: [EventLiveFeedback]
+}

@@ -1,0 +1,4 @@
+type EventVideo {
+    url: String!
+    lang: String!
+}

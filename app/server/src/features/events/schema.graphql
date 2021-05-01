@@ -1,0 +1,137 @@
+type Event {
+    id: ID!
+
+    """
+    Creator of this event
+    """
+    createdBy: User
+
+    """
+    The owning organization
+    """
+    orgID: Organization
+    createdAt: Date
+    updatedAt: Date
+    title: String!
+
+    """
+    The planned start date time string
+    """
+    startDateTime: Date!
+
+    """
+    The planned end date time string
+    """
+    endDateTime: Date!
+    description: String!
+    topic: String!
+
+    """
+    Whether or not the Event is live
+    """
+    isActive: Boolean
+
+    """
+    Let all users see what questions have been submitted
+    """
+    isQuestionFeedVisible: Boolean
+
+    """
+    Collect user ratings after the event has ended
+    """
+    isCollectRatingsEnabled: Boolean
+
+    """
+    Display a forum-like interface once the "live" part of the event is over
+    """
+    isTransformToForumEnabled: Boolean
+
+    """
+    Is the event private, ie invite only
+    """
+    isPrivate: Boolean
+
+    """
+    All questions relating to this event
+    """
+    questions: [EventQuestion]
+
+    """
+    Speakers for this event
+    """
+    speakers: [EventSpeaker]
+
+    """
+    Registrants for this event -- individuals invited
+    """
+    registrants: [User]
+
+    """
+    Participants of the event -- individuals who showed up
+    """
+    participants: [EventParticipant]
+
+    """
+    Video feeds and the languages
+    """
+    videos: [EventVideo]
+
+    """
+    Live Feedback given during the event
+    """
+    liveFeedback: [EventLiveFeedback]
+
+    """
+    List of moderators for this particular event
+    """
+    moderators: [User]
+}
+
+input CreateEvent {
+    title: String!
+    startDateTime: String!
+    endDateTime: String!
+    description: String
+    topic: String!
+    orgId: String!
+}
+
+input UpdateEvent {
+    title: String
+    startDateTime: String
+    endDateTime: String
+    description: String
+    topic: String
+    isQuestionFeedVisible: Boolean
+    isCollectRatingsEnabled: Boolean
+    isTransformToForumEnabled: Boolean
+    isPrivate: Boolean
+    eventId: String!
+}
+
+input DeleteEvent {
+    eventId: String!
+}
+
+type Mutation {
+    createEvent(event: CreateEvent): Event
+    updateEvent(event: UpdateEvent): Event
+    deleteEvent(event: DeleteEvent): Event
+
+    """
+    Start the event so that it is "live"
+    """
+    startEvent(eventId: String!): Event
+
+    """
+    End the eent so that it is not live
+    """
+    endEvent(eventId: String!): Event
+}
+
+type Query {
+    """
+    Fetch an event by id
+    """
+    eventById(id: ID!): Event
+}
