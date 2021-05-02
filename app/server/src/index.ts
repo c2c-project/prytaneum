@@ -35,10 +35,10 @@ async function start() {
         },
     });
 
-    await server.listen(3000);
+    await server.listen(4000);
 
     // TODO: don't hard code port and host
-    console.log('🚀  Server ready at http://localhost:3000');
+    console.log('🚀  Server ready at http://localhost:4000');
 }
 
 void start();
