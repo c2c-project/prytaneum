@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
 import type { Question } from 'prytaneum-typings';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
 import ReplyForm from '../ReplyForm';
 
 interface Props {

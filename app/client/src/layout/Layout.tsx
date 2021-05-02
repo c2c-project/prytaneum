@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { Grid, useMediaQuery, Drawer, IconButton, ContainerProps } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import useUser from 'hooks/useUser';
+import useUser from '@local/hooks/useUser';
 import Main from './Main';
 import Page from './Page';
 import AppBar, { Public, LoggedIn } from './AppBar';

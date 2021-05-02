@@ -1,5 +1,5 @@
-import axios from 'utils/axios';
-import errors from 'utils/errors';
+import axios from '@local/utils/axios';
+import errors from '@local/utils/errors';
 import type { FeedbackReportForm, BugReportForm, FeedbackReport, BugReport } from 'prytaneum-typings';
 import { ReportTypes } from '../types';
 

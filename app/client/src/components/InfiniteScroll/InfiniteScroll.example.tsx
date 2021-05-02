@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import Button from '@material-ui/core/Button';
-import axios from 'utils/axios';
+import axios from '@local/utils/axios';
 
-import useSnack from 'hooks/useSnack';
-import useEndpoint from 'hooks/useEndpoint';
+import useSnack from '@local/hooks/useSnack';
+import useEndpoint from '@local/hooks/useEndpoint';
 import Component from './InfiniteScroll';
 
 // Note: Get requests must have at the minimum two query parameters: page number and limit number.

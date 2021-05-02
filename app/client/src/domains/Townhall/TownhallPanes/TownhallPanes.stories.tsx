@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
 import { makeQuestion, makeTownhall, makeUser, Townhall, User, makeGenFn, makeSpeaker } from 'prytaneum-typings';
 import faker from 'faker';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
-import TownhallProvider from 'contexts/Townhall';
+import TownhallProvider from '@local/contexts/Townhall';
 import PaneProvider from '../Contexts/Pane';
 import TownhallPanes from './TownhallPanes';
 
@@ -33,7 +33,7 @@ baseTownhall.state.playlist.queue = makeQuestions(10);
 baseTownhall.state.playlist.position.current = 0;
 
 export default {
-    title: 'Domains/Townhall/Townhall Panes',
+    title: '@local/domains/Townhall/Townhall Panes',
     decorators: [
         (MyStory) => (
             <FixtureSocket.Provider value={emitter}>

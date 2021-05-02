@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import axios from 'utils/axios';
-import errors from 'utils/errors';
+import axios from '@local/utils/axios';
+import errors from '@local/utils/errors';
 import { InviteForm, InvitePreview } from '../types';
 
 // API

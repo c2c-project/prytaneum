@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
@@ -11,12 +11,12 @@ import {
     makeBugReportForm,
 } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import ReportSummary from './ReportSummary';
 import * as API from '../api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 import { Report } from '../types';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('Update report summary', () => {
     let container: HTMLDivElement | null = null;

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import UniversalRouter, { Routes } from 'universal-router/sync';
 
 export default function useRouter<T, U>(routes: Routes<T, U>) {

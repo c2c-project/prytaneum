@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import { makeFeedbackReports, makeUser } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import Component from '.';
 
 export default {
-    title: 'Domains/Feedback/Report List',
+    title: '@local/domains/Feedback/Report List',
 };
 
 export function ReportList() {

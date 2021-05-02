@@ -1,16 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 import { Paper, Typography, Grid, Button, DialogContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import type { SocketIOEvents } from 'prytaneum-typings';
 import axios from 'axios';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import LoadingButton from 'components/LoadingButton';
-import useEndpoint from 'hooks/useEndpoint';
-import useTownhall from 'hooks/useTownhall';
-import useUser from 'hooks/useUser';
-import useSocketio, { SocketFn } from 'hooks/useSocketio';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import LoadingButton from '@local/components/LoadingButton';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useTownhall from '@local/hooks/useTownhall';
+import useUser from '@local/hooks/useUser';
+import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
 import { breakoutStart, breakoutEnd, addChatMessage, updateChatMessage, deleteChatMessage } from 'reducers';
 import BreakoutForm from './BreakoutForm';
 import BreakoutRoom from './BreakoutRoom';

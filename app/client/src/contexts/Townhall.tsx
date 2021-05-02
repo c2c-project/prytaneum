@@ -1,10 +1,10 @@
 import React, { SetStateAction } from 'react';
 import type { Townhall } from 'prytaneum-typings';
 
-import useEndpoint from 'hooks/useEndpoint';
-import Loader from 'components/Loader';
-import useIsMounted from 'hooks/useIsMounted';
-import { getTownhall } from 'domains/Townhall/api';
+import useEndpoint from '@local/hooks/useEndpoint';
+import Loader from '@local/components/Loader';
+import useIsMounted from '@local/hooks/useIsMounted';
+import { getTownhall } from '@local/domains/Townhall/api';
 
 interface Props {
     value?: Townhall; // we may not need this?

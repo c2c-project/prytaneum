@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 
 import Component from './MoCDropDown';
 
-export default { title: 'Components/MoC Dropdown' };
+export default { title: '@local/components/MoC Dropdown' };
 
 export function Basic() {
     return (

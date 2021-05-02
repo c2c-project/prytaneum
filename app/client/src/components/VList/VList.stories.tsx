@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import faker from 'faker/locale/en';
 import { Card, CardContent } from '@material-ui/core';
 
 import VList from './VList';
 
-export default { title: 'Components/VList' };
+export default { title: '@local/components/VList' };
 
 const data = new Array(1000)
     .fill(true)

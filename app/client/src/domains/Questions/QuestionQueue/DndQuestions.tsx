@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { DialogContent, Container, Typography } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import type { Question } from 'prytaneum-typings';
@@ -7,8 +7,8 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
 import { QueueActions } from 'reducers';
-import DropArea from 'components/DropArea';
-import useTownhall from 'hooks/useTownhall';
+import DropArea from '@local/components/DropArea';
+import useTownhall from '@local/hooks/useTownhall';
 import DraggableList from './DraggableList';
 import { updateQueueOrder } from '../api';
 

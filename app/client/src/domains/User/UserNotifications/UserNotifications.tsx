@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import { IconButton, IconButtonProps } from '@material-ui/core';
 

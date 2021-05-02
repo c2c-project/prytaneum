@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     Card,
     CardContent,
@@ -10,10 +10,10 @@ import {
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import type { Roles } from 'prytaneum-typings';
 
-import Select from 'components/Select';
-import CopyText from 'components/CopyText';
-import LoadingButton from 'components/LoadingButton';
-import useEndpoint from 'hooks/useEndpoint';
+import Select from '@local/components/Select';
+import CopyText from '@local/components/CopyText';
+import LoadingButton from '@local/components/LoadingButton';
+import useEndpoint from '@local/hooks/useEndpoint';
 import api from '../api';
 
 const useStyles = makeStyles((theme: Theme) => ({

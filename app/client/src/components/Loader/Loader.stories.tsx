@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 
 import Component from './Loader';
 
 export default {
-    title: 'Components/Loader',
+    title: '@local/components/Loader',
     component: Component,
 };
 

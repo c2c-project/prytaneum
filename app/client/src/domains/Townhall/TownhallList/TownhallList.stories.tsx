@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import Component from '.';
 
 export default {
-    title: 'Domains/Townhall/Townhall List',
+    title: '@local/domains/Townhall/Townhall List',
     decorators: [
         (MyStory) => (
             <div style={{ flex: 1, padding: 60 }}>

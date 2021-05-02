@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import MUIFab, { FabProps } from '@material-ui/core/Fab';
 import Zoom, { ZoomProps as _ZoomProps } from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';

@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { makeQuestion, makeTownhall, makeUser, Question } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
-import UserProvider from 'contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
+import UserProvider from '@local/contexts/User';
 import Component from './QuestionForm';
 
 export default {
-    title: 'Domains/Questions/Question Form',
+    title: '@local/domains/Questions/Question Form',
     decorators: [
         (MyStory) => (
             <UserProvider value={makeUser()} forceNoLogin>

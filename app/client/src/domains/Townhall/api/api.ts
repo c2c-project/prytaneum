@@ -8,7 +8,7 @@ import type {
     Breakout,
 } from 'prytaneum-typings';
 
-import axios from 'utils/axios';
+import axios from '@local/utils/axios';
 
 /**
  * create a townhall

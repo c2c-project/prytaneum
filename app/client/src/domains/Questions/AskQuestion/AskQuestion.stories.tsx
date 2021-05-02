@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { makeTownhall, makeUser, User } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
-import UserProvider from 'contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
+import UserProvider from '@local/contexts/User';
 import AskQuestion from './AskQuestion';
 
 export default {
-    title: 'Domains/Questions/Ask Question',
+    title: '@local/domains/Questions/Ask Question',
     component: AskQuestion,
     parameters: { layout: 'centered' },
     decorators: [

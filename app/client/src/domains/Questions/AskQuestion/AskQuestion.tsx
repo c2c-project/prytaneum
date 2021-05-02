@@ -1,11 +1,11 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
+import * as React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import useUser from 'hooks/useUser';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import useUser from '@local/hooks/useUser';
 import QuestionForm from '../QuestionForm';
 
 interface Props {

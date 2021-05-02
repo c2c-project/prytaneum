@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MUIDialog, { DialogProps } from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';

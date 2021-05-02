@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { List, ListItem, ListItemText, ListSubheader, Divider } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import ReportSummary from 'domains/Feedback/ReportSummary';
-import { formatDate } from 'utils/format';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import ReportSummary from '@local/domains/Feedback/ReportSummary';
+import { formatDate } from '@local/utils/format';
 import { Report } from '../types';
 
 interface Props {

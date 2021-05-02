@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 // import { Dispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,8 +12,8 @@ import {
     remoteIncrementQueue,
 } from 'reducers';
 
-import useSocketio, { SocketFn } from 'hooks/useSocketio';
-import useTownhall from 'hooks/useTownhall';
+import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
+import useTownhall from '@local/hooks/useTownhall';
 
 export default function usePlaylist() {
     const [townhall] = useTownhall();
@@ -60,7 +60,7 @@ export default function usePlaylist() {
             })
         );
         // NOTE: this should only run on the first render
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-@local/hooks/exhaustive-deps
     }, []);
     return [playlist, dispatch] as const;
 }

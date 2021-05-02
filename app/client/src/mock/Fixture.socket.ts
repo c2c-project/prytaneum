@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { EventEmitter } from 'events';
 // import faker from 'faker/locale/en';
 

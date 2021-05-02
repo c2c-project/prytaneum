@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { Dialog, Avatar, ListItem, ListItemText, ListItemAvatar } from '@material-ui/core';
 import type { Speaker } from 'prytaneum-typings';
 
-import SpeakerCard from 'domains/Speaker/SpeakerCard';
+import SpeakerCard from '@local/domains/Speaker/SpeakerCard';
 
 interface Props {
     speaker: Speaker;

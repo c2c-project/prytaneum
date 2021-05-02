@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Grid, Chip } from '@material-ui/core';
 
 interface QuestionLabelProps {

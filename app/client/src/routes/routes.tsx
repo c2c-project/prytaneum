@@ -1,14 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 
-import QueryProvider from 'contexts/Query';
+import QueryProvider from '@local/contexts/Query';
 
-import RegPrompt from 'domains/Auth/RegPrompt';
-import TownhallProvider from 'contexts/Townhall';
-import TownhallSettings from 'domains/Townhall/TownhallSettings';
+import RegPrompt from '@local/domains/Auth/RegPrompt';
+import TownhallProvider from '@local/contexts/Townhall';
+import TownhallSettings from '@local/domains/Townhall/TownhallSettings';
 import TownhallList from 'pages/TownhallList';
 import TownhallLive from 'pages/TownhallLive';
-import FadeThrough from 'animations/FadeThrough';
-import LoginWithToken from 'domains/Logical/LoginWithToken';
+import FadeThrough from '@local/animations/FadeThrough';
+import LoginWithToken from '@local/domains/Logical/LoginWithToken';
 
 import Dashboard from 'pages/Dashboard';
 
@@ -20,14 +20,14 @@ import Logout from 'pages/Logout';
 
 import NotFound from 'pages/NotFound';
 
-import InviteForm from 'domains/Invite/InviteForm';
+import InviteForm from '@local/domains/Invite/InviteForm';
 
-import UserSettings from 'domains/User/UserSettings';
+import UserSettings from '@local/domains/User/UserSettings';
 
-import RequireLogin from 'domains/Logical/RequireLogin';
-import Redirect from 'domains/Logical/Redirect';
-import RequireRoles from 'domains/Logical/RequireRoles';
-import history from 'utils/history';
+import RequireLogin from '@local/domains/Logical/RequireLogin';
+import Redirect from '@local/domains/Logical/Redirect';
+import RequireRoles from '@local/domains/Logical/RequireRoles';
+import history from '@local/utils/history';
 import { addRoutes, areParamsValid, PrytaneumRoutes, PrytaneumRoute } from './utils';
 
 const notFound: PrytaneumRoute = {

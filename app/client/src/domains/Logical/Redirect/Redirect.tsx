@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
+import * as React from 'react';
 
-import history from 'utils/history';
+import history from '@local/utils/history';
 
 interface Props {
     href: string;

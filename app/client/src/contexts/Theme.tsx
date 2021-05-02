@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { ThemeProvider as MUIThemeProvider } from '@material-ui/core/styles';
 
-import themes, { Themes } from 'theme';
+import themes, { Themes } from '@local/theme';
 
 interface Props {
     children: JSX.Element | JSX.Element[];

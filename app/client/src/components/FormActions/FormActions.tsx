@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, GridProps } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,11 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FormActions({
-    children,
-    gridProps,
-    disableGrow,
-}: Props) {
+export function FormActions({ children, gridProps, disableGrow }: Props) {
     const classes = useStyles();
     const count = React.Children.count(children);
     const getClassName = (idx: number) => {
@@ -63,8 +59,5 @@ FormActions.defaultProps = {
 FormActions.propTypes = {
     gridProps: PropTypes.object,
     disableGrow: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]).isRequired,
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]).isRequired,
 };

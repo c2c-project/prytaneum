@@ -1,7 +1,7 @@
-import React from 'react';
-import { QueryContext } from 'contexts/Query';
+import * as React from 'react';
+import { QueryContext } from '@local/contexts/Query';
 
-export default function useQuery() {
+export function useQuery() {
     const query = React.useContext(QueryContext);
     if (!query) return undefined;
 

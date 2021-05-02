@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { makeUsers } from 'mock/handlers/auth';
 import ListOverflow from './ListOverflow';
 
-export default { title: 'Components/ListOverflow' };
+export default { title: '@local/components/ListOverflow' };
 
 const usersPrimary = makeUsers(10).map((user) => {
     return { _id: user._id, primary: user.email.address };

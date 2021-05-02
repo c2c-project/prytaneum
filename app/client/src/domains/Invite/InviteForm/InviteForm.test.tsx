@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import { unmountComponentAtNode, render } from 'react-dom';
 import { makeTownhall, makeUser } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
-import UserProvider from 'contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
+import UserProvider from '@local/contexts/User';
 import InviteForm from '.';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('Invite Form', () => {
     let container: HTMLElement | null = null;

@@ -1,18 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import SaveIcon from '@material-ui/icons/Save';
 import type { TownhallSettings as SettingsType } from 'prytaneum-typings';
 
-import history, { makeRelativeLink } from 'utils/history';
-import LoadingButton from 'components/LoadingButton';
-import CopyText from 'components/CopyText';
-import Fab from 'components/Fab';
-import useSnack from 'hooks/useSnack';
-import useEndpoint from 'hooks/useEndpoint';
-import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
-import useTownhall from 'hooks/useTownhall';
+import history, { makeRelativeLink } from '@local/utils/history';
+import LoadingButton from '@local/components/LoadingButton';
+import CopyText from '@local/components/CopyText';
+import Fab from '@local/components/Fab';
+import useSnack from '@local/hooks/useSnack';
+import useEndpoint from '@local/hooks/useEndpoint';
+import SettingsMenu, { AccordionData } from '@local/components/SettingsMenu';
+import useTownhall from '@local/hooks/useTownhall';
 
 import TownhallForm from '../TownhallForm';
 import ChatSettings from './ChatSettings';
@@ -36,7 +36,7 @@ export const townhallSettingsSections = [
     'Form',
     'Video',
     'Speakers',
-    'Components',
+    '@local/components',
     'Moderators',
     'Invite',
     'Data',
@@ -65,7 +65,7 @@ export default function TownhallSettings() {
         },
     });
 
-    const componentSubSections = React.useMemo(
+    const @local/componentsubSections = React.useMemo(
         () => [
             {
                 title: 'Breakout Rooms',
@@ -121,11 +121,11 @@ export default function TownhallSettings() {
                 component: <SpeakerSettings value={state.speakers} onChange={handleChange('speakers')} />,
             },
             {
-                title: 'Components',
-                description: 'Turn on and off optional components',
+                title: '@local/components',
+                description: 'Turn on and off optional @local/components',
                 component: (
                     <Grid container spacing={2}>
-                        {componentSubSections.map(({ title, component }, idx) => (
+                        {@local/componentsubSections.map(({ title, component }, idx) => (
                             <React.Fragment key={title}>
                                 <Grid item xs={12}>
                                     <Typography variant='overline'>{title}</Typography>
@@ -133,7 +133,7 @@ export default function TownhallSettings() {
                                 <Grid item xs={12}>
                                     {component}
                                 </Grid>
-                                {idx !== componentSubSections.length - 1 && (
+                                {idx !== @local/componentsubSections.length - 1 && (
                                     <Grid item xs={12}>
                                         <Divider />
                                     </Grid>
@@ -180,7 +180,7 @@ export default function TownhallSettings() {
                 component: <PreviewSettings />,
             },
         ],
-        [componentSubSections, inviteSubSections, state, handleChange]
+        [@local/componentsubSections, inviteSubSections, state, handleChange]
     );
 
     return (

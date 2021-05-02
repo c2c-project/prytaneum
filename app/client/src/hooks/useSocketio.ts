@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import io from 'socket.io-client';
 
 export type SocketFn = (socket: SocketIOClient.Socket) => void;

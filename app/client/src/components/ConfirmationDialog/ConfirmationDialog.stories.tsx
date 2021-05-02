@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 
 import ConfirmationDialog from './ConfirmationDialog';
 
 export default {
-    title: 'Components/Confirmation Dialog',
+    title: '@local/components/Confirmation Dialog',
     parameters: { layout: 'centered' },
     argTypes: { onConfirm: { action: 'confirmed' }, onClose: { action: 'closed' } },
 } as Meta;

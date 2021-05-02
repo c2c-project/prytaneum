@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 
 import Component, { PieDatum } from './PieChart';
 
-export default { title: 'Components/Pie Chart' };
+export default { title: '@local/components/Pie Chart' };
 
 const Nivo: PieDatum[] = [
     {

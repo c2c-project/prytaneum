@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 
-import * as Storage from 'utils/storage';
+import * as Storage from '@local/utils/storage';
 
 type SetFn = <T extends keyof Storage.Storage>(
     value: Storage.Storage[T]

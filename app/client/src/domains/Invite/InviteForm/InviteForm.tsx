@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import useTownhall from 'hooks/useTownhall';
+import useTownhall from '@local/hooks/useTownhall';
 import { InviteForm, InvitePreview } from '../types';
 import Steps from './Steps';
 

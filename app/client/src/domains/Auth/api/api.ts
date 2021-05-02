@@ -5,11 +5,11 @@ import type {
     ClientSafeUser,
 } from 'prytaneum-typings';
 
-import axios from 'utils/axios';
-import errors from 'utils/errors';
+import axios from '@local/utils/axios';
+import errors from '@local/utils/errors';
 
 /** Function to POST to /api/users/login if email is valid
- *  @category Domains/Auth
+ *  @category @local/domains/Auth
  *  @constructor login
  *  @param {string} email the email to login with
  *  @param {string} password the password to try to login with username
@@ -50,7 +50,7 @@ export async function forgotPassReset(token: string, form: ForgotPassForm) {
 }
 
 /** Function to request a password reset
- *  @category Domains/Auth
+ *  @category @local/domains/Auth
  *  @constructor forgotPassRequest
  *  @param {ForgotPassForm} form the form to submit the reset through
  */
@@ -66,7 +66,7 @@ export async function forgotPassRequest(form: ForgotPassRequestForm) {
 }
 
 /** Function to register a new user, pulls the data from the form, checks if its valid, then returns either a POST, or an error if something is invalid
- *  @category Domains/Auth
+ *  @category @local/domains/Auth
  *  @constructor register
  *  @param {RegisterForm} form the form to submit the new user registration through
  */
@@ -91,7 +91,7 @@ export async function register(form: RegisterForm, query?: string) {
 }
 
 /** Function to confirm user from email
- *  @category Domains/Auth
+ *  @category @local/domains/Auth
  *  @constructor verifyEmail
  *  @param {string} userId the userId to check
  */

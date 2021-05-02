@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { makeUser } from 'prytaneum-typings';
-import * as AdminDashboardTypes from 'domains/Admin/types';
+import * as AdminDashboardTypes from '@local/domains/Admin/types';
 import { makeUsers } from './auth';
 
 export default [

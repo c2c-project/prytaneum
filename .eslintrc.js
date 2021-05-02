@@ -5,11 +5,11 @@ module.exports = {
         'airbnb-typescript',
         'prettier',
         'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:jest/recommended',
+        // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        // 'plugin:jest/recommended',
     ],
     parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.base.json',
     },
     rules: {
         quotes: ['error', 'single'],
@@ -48,7 +48,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ['**/*.ts?(x)', '**/*.js?(x)'],
+            files: ['./app/**/*.ts?(x)', './app/**/*.js?(x)'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'off',
             },

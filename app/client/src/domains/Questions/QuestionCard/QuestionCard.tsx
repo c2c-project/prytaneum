@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import type { Question } from 'prytaneum-typings';
 import {
     Card,
@@ -16,7 +16,7 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 
-import { formatDate } from 'utils/format';
+import { formatDate } from '@local/utils/format';
 import QuestionStats from './QuestionStats';
 
 export interface Props {

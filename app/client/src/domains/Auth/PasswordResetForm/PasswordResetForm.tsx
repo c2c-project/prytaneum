@@ -1,16 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import type { ForgotPassForm } from 'prytaneum-typings';
 
-import TextField from 'components/TextField';
-import Form from 'components/Form';
-import FormContent from 'components/FormContent';
-import FormActions from 'components/FormActions';
-import useEndpoint from 'hooks/useEndpoint';
-import LoadingButton from 'components/LoadingButton';
-import useSnack from 'hooks/useSnack';
-import useForm from 'hooks/useForm';
+import TextField from '@local/components/TextField';
+import Form from '@local/components/Form';
+import FormContent from '@local/components/FormContent';
+import FormActions from '@local/components/FormActions';
+import useEndpoint from '@local/hooks/useEndpoint';
+import LoadingButton from '@local/components/LoadingButton';
+import useSnack from '@local/hooks/useSnack';
+import useForm from '@local/hooks/useForm';
 
 import API from '../api';
 

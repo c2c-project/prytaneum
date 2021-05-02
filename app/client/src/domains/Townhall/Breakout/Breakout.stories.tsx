@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import { makeUser, makeTownhall } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
+import TownhallProvider from '@local/contexts/Townhall';
 import Breakout from './Breakout';
 
 export default {
-    title: 'Domains/Townhall/Breakout',
+    title: '@local/domains/Townhall/Breakout',
     decorators: [
         (MyStory) => (
             <TownhallProvider townhallId='123' forceNoFetch value={makeTownhall()}>

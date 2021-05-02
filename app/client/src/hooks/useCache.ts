@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // TODO: could be extended to use session storage?
 export default function useCache<T>(initialValue: T) {

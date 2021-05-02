@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
+import * as React from 'react';
 import {
     Menu,
     MenuItem,
@@ -19,8 +19,8 @@ import Settings from '@material-ui/icons/Settings';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import useUser from 'hooks/useUser';
-import { handleNavigation } from 'utils/history';
+import useUser from '@local/hooks/useUser';
+import { handleNavigation } from '@local/utils/history';
 
 const useStyles = makeStyles((theme) => ({
     button: {

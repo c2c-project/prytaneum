@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Component from './LoadingButton';
 
 export default {
-    title: 'Components/Loading Button',
+    title: '@local/components/Loading Button',
     component: Component,
 };
 

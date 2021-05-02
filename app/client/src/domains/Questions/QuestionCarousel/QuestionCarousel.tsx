@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Question } from 'prytaneum-typings';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton, Typography, Divider, Grid, Button } from '@material-ui/core';

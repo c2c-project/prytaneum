@@ -1,18 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid } from '@material-ui/core';
 import type { Question as QuestionType, QuestionForm as FormType } from 'prytaneum-typings';
 
-import useTownhall from 'hooks/useTownhall';
-import LoadingButton from 'components/LoadingButton';
-import Form from 'components/Form';
-import FormTitle from 'components/FormTitle';
-import FormContent from 'components/FormContent';
-import FormActions from 'components/FormActions';
-import TextField from 'components/TextField';
-import useForm from 'hooks/useForm';
-import useEndpoint from 'hooks/useEndpoint';
-import useSnack from 'hooks/useSnack';
+import useTownhall from '@local/hooks/useTownhall';
+import LoadingButton from '@local/components/LoadingButton';
+import Form from '@local/components/Form';
+import FormTitle from '@local/components/FormTitle';
+import FormContent from '@local/components/FormContent';
+import FormActions from '@local/components/FormActions';
+import TextField from '@local/components/TextField';
+import useForm from '@local/hooks/useForm';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useSnack from '@local/hooks/useSnack';
 import QuestionCard from '../QuestionCard';
 import { createQuestion } from '../api';
 
@@ -26,7 +26,7 @@ export default function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     const [snack] = useSnack();
     const [townhall] = useTownhall();
 
-    // form related hooks
+    // form related @local/hooks
     const [form, errors, handleSubmit, handleChange] = useForm<FormType>({
         question: '',
         quoteId: quote?._id,

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 
@@ -8,7 +8,7 @@ interface Props {
     className?: string;
 }
 
-export default function Form({ onSubmit, children, className }: Props) {
+export function Form({ onSubmit, children, className }: Props) {
     return (
         <Grid
             noValidate

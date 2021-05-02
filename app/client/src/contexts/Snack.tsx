@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import Button from '@material-ui/core/Button';
 import { SnackbarProvider, ProviderContext } from 'notistack';
 

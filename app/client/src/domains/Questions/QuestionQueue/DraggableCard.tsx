@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import type { Question } from 'prytaneum-typings';
 
-import DragArea from 'components/DragArea';
+import DragArea from '@local/components/DragArea';
 import QuestionCard from '../QuestionCard';
 import useListStyles from './useListStyles';
 

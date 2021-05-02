@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import { Story, Meta } from '@storybook/react';
 import faker from 'faker';
@@ -6,7 +6,7 @@ import faker from 'faker';
 import Component, { FormProps } from './ReportForm';
 
 export default {
-    title: 'Domains/Feedback/Report Form',
+    title: '@local/domains/Feedback/Report Form',
     component: Component,
     parameters: {
         layout: 'centered',

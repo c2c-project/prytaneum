@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import jsonwebtoken from 'jsonwebtoken';
 
 import HandleInviteLink from './HandleInviteLink';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('Handle Invite Link', () => {
     let container: HTMLElement | null = null;

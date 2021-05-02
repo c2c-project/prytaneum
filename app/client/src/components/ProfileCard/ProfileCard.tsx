@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import ResponsiveDialog from 'components/ResponsiveDialog';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import GithubIcon from '@material-ui/icons/GitHub';
@@ -18,7 +18,7 @@ import OtherIcon from '@material-ui/icons/PermContactCalendar';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-import { formatDate } from 'utils/format';
+import { formatDate } from '@local/utils/format';
 import { TeamMember, ReferenceNames } from 'types';
 
 const IconFactory = (IconName: ReferenceNames): JSX.Element => {

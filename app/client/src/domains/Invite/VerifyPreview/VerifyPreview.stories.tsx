@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import faker from 'faker/locale/en';
 import { makeGenFn } from 'prytaneum-typings';
 
 import Component from './VerifyPreview';
 
 export default {
-    title: 'Components/Invite/Verify Preview',
+    title: '@local/components/Invite/Verify Preview',
     component: Component,
 };
 

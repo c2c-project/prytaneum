@@ -1,5 +1,5 @@
 import * as React from 'react';
-// original code here: https://github.com/sghall/react-compound-slider/blob/master/docs/src/demos/horizontal/components.tsx
+// original code here: https://github.com/sghall/react-compound-slider/blob/master/docs/src/demos/horizontal/@local/components.tsx
 import {
     GetRailProps,
     GetHandleProps,

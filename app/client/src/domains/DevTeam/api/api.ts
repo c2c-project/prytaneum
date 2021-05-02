@@ -1,5 +1,5 @@
 import axios from 'axios';
-import errors from 'utils/errors';
+import errors from '@local/utils/errors';
 import { Team, TeamMember } from 'types';
 
 export function getDevTeams() {

@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import faker from 'faker/locale/en';
 import jwt from 'jsonwebtoken';
 
-import { DeviceContext } from 'contexts/Device';
+import { DeviceContext } from '@local/contexts/Device';
 
 import Component, { Props as EmailPreviewProps } from './EmailPreview';
 
 export default {
-    title: 'Components/Invite/Email Preview',
+    title: '@local/components/Invite/Email Preview',
     component: Component,
     argTypes: {
         DeviceType: {

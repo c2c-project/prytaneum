@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ResponsivePie } from '@nivo/pie';
 
 export interface PieDatum {

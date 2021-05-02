@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import ThemeProvider from 'contexts/Theme';
+import ThemeProvider from '@local/contexts/Theme';
 
 import TextField from './TextField';
 

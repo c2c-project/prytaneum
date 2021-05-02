@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useSnackbar } from 'notistack';
 
 interface Options {
@@ -8,10 +8,10 @@ interface Options {
 
 /**
  *
- * @category hooks
+ * @category @local/hooks
  *
  */
-export default function useSnack(): [
+export function useSnack(): [
     (message: string, options?: Options) => void,
     ReturnType<typeof useSnackbar>['closeSnackbar']
 ] {

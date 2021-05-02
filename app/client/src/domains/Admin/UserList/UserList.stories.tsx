@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 
 import Component from './UserList';
 
 export default {
-    title: 'Domains/Admin/User List',
+    title: '@local/domains/Admin/User List',
     parameters: {
         layout: 'fullscreen',
     },

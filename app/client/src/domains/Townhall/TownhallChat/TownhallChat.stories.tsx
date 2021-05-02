@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
 import { makeChatMessage, makeTownhall, makeUser } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
-import TownhallProvider from 'contexts/Townhall';
+import UserProvider from '@local/contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
 import FixtureSocket from 'mock/Fixture.socket';
 import Component from './TownhallChat';
 
@@ -23,7 +23,7 @@ function sendMessages(num: number) {
 const Template: Story<{}> = (props) => <Component {...props} />;
 
 export default {
-    title: 'Domains/Townhall/Townhall Chat',
+    title: '@local/domains/Townhall/Townhall Chat',
     decorators: [
         (MyStory) => (
             <UserProvider forceNoLogin value={makeUser()}>

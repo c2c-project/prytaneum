@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Avatar, Grid, TypographyProps } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { formatDate } from 'utils/format';
+import { formatDate } from '@local/utils/format';
 
 export interface Props {
     name: string;

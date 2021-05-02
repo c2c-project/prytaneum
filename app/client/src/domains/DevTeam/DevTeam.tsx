@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Grid, Divider, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Team from 'components/Team';
-import Loader from 'components/Loader';
-import useEndpoint from 'hooks/useEndpoint';
-import useSnack from 'hooks/useSnack';
+import Team from '@local/components/Team';
+import Loader from '@local/components/Loader';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useSnack from '@local/hooks/useSnack';
 import { Team as TeamType } from 'types';
 import { getDevTeams } from './api';
 

@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import { Paper } from '@material-ui/core';
 
 import Component, { TabPanels } from './TabPanel';
 
-export default { title: 'Components/Tab Panel' };
+export default { title: '@local/components/Tab Panel' };
 
 export function TabPanel() {
     const [state, setState] = React.useState(0);

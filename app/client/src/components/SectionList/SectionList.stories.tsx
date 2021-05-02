@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker/locale/en';
 
 import Component, { Section, Datum } from '.';
 
 export default {
-    title: 'Components/SectionList',
+    title: '@local/components/SectionList',
     component: Component,
 };
 

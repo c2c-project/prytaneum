@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { AxiosResponse } from 'axios';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
@@ -10,11 +10,11 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 
-import useSnack from 'hooks/useSnack';
-import useEndpoint from 'hooks/useEndpoint';
-import useUser from 'hooks/useUser';
-import LoadingButton from 'components/LoadingButton';
-import { formatDate } from 'utils/format';
+import useSnack from '@local/hooks/useSnack';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useUser from '@local/hooks/useUser';
+import LoadingButton from '@local/components/LoadingButton';
+import { formatDate } from '@local/utils/format';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import FormBase from '../FormBase';
 import Reply from '../Reply';

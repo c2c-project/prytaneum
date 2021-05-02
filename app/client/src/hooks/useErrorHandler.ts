@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { AxiosError } from 'axios';
 
 import useSnack from './useSnack';

@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 
 import Component from './SelectFile';
 
 export default {
-    title: 'Components/Select File',
+    title: '@local/components/Select File',
     component: Component,
     parameters: {
         layout: 'centered',

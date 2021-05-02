@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { makeQuestion } from 'prytaneum-typings';
 
 import Component from '.';
 
 export default {
-    title: 'Domains/Questions/Question Thread',
+    title: '@local/domains/Questions/Question Thread',
     decorators: [
         (Story) => (
             <div style={{ flex: 1, padding: 60 }}>

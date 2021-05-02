@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { Typography, Button, DialogContent, DialogActions, DialogTitle, IconButton, Grid } from '@material-ui/core';
 import { PrytaneumRoutes } from 'routes/utils';
 import BackIcon from '@material-ui/icons/ArrowBack';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import useUser from 'hooks/useUser';
-import useRouter from 'hooks/useRouter';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import useUser from '@local/hooks/useUser';
+import useRouter from '@local/hooks/useRouter';
 import LoginForm from '../LoginForm';
 import RegisterForm from '../RegisterForm';
 

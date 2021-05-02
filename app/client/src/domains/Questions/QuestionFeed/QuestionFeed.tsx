@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import type { Question } from 'prytaneum-typings';
 
-import ListFilter, { useFilters, Accessors, ListFilterSkeleton } from 'components/ListFilter';
-import useTownhall from 'hooks/useTownhall';
+import ListFilter, { useFilters, Accessors, ListFilterSkeleton } from '@local/components/ListFilter';
+import useTownhall from '@local/hooks/useTownhall';
 
 import { QuestionCardSkeleton } from '../QuestionCard';
 import FeedList from './FeedList';
-import { EmptyMessage, RefreshMessage } from './components';
+import { EmptyMessage, RefreshMessage } from './@local/components';
 // import { filters as filterFuncs } from './utils';
 import useQuestionFeed from './useQuestionFeed';
 

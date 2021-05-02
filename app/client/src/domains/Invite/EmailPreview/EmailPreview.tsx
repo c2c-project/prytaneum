@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
+import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 

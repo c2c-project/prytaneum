@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from 'react';
+import * as React from 'react';
 import {
     List,
     ListItem,
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import history from 'utils/history';
+import history from '@local/utils/history';
 
 export interface Datum {
     image?: string;

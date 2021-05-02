@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { makeQuestion } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
-import TownhallProvider from 'contexts/Townhall';
+import UserProvider from '@local/contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
 import Component from './ReplyForm';
 
 export default {
-    title: 'Domains/Questions/Reply Form',
+    title: '@local/domains/Questions/Reply Form',
     parameters: { layout: 'centered' },
     decorators: [
         (MyStory) => (

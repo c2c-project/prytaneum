@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 
 import Component from './DndList';
 
-export default { title: 'components/Dnd List' };
+export default { title: '@local/components/Dnd List' };
 
 export function Basic() {
     return (

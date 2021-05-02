@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import UserProfile from './UserProfile';
 
-jest.mock('hooks/useSnack');
-jest.mock('utils/axios');
+jest.mock('@local/hooks/useSnack');
+jest.mock('@local/utils/axios');
 
 /* 
     Rendering Component 

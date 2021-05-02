@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunc = (...args: any) => void;

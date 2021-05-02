@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import Component, { DataEntry } from './ProgressBar';
 
-export default { title: 'components/Progress Bar' };
+export default { title: '@local/components/Progress Bar' };
 
 const timelineData: DataEntry[] = [
     {

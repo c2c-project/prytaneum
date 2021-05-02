@@ -1,14 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import { makeUser, User } from 'prytaneum-typings';
 
 import LoginForm from './LoginForm';
 import API from '../api';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('LoginForm', () => {
     let container: HTMLElement | null = null;

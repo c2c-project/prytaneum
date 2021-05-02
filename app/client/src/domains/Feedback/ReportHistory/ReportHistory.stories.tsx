@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { makeUser } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import Component from '.';
 
-export default { title: 'Domains/Feedback/Report History' } as Meta;
+export default { title: '@local/domains/Feedback/Report History' } as Meta;
 
 export function ReportHistory() {
     return (

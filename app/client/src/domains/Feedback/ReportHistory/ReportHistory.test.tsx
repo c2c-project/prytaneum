@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import ReportHistory from './ReportHistory';
 import * as API from '../api/api';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 // TODO: Auth. Mock user Ids
 describe('CreateReportList', () => {

@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 
 import SpeakerForm from './SpeakerForm';
 
-export default { title: 'Domains/Speaker/Speaker Form', parameters: { layout: 'centered' } } as Meta;
+export default { title: '@local/domains/Speaker/Speaker Form', parameters: { layout: 'centered' } } as Meta;
 
 const Template: Story<{ onCancel: () => void; onSubmit: () => void }> = (props) => <SpeakerForm {...props} />;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     Card,
     CardHeader,
@@ -10,8 +10,8 @@ import {
     ListItemText,
 } from '@material-ui/core';
 
-import { formatDate } from 'utils/format';
-import useTownhall from 'hooks/useTownhall';
+import { formatDate } from '@local/utils/format';
+import useTownhall from '@local/hooks/useTownhall';
 
 export default function TownhallCard() {
     const [townhall] = useTownhall();

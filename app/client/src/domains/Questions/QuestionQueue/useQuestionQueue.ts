@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 
 import { QueueActions } from 'reducers';
-import useSocketio, { SocketFn } from 'hooks/useSocketio';
-import useTownhall from 'hooks/useTownhall';
+import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
+import useTownhall from '@local/hooks/useTownhall';
 
 export default function useQuestionQueue() {
     const [townhall] = useTownhall();
@@ -14,7 +14,7 @@ export default function useQuestionQueue() {
     React.useEffect(() => {
         dispatch({ type: 'question-queue-initialize', payload: townhall.state });
         // NOTE: I only want this to run on first render, and be ignored after
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-@local/hooks/exhaustive-deps
     }, []);
     const socketFn: SocketFn = React.useCallback((socket) => socket.on('playlist-state', dispatch), [dispatch]);
     useSocketio(

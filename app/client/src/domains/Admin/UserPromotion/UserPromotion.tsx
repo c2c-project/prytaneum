@@ -1,14 +1,14 @@
 /* eslint-disable */ // FIXME:
-// TODO: change to use components/SettingsItem & components/SettingsList
-import React from 'react';
+// TODO: change to use @local/components/SettingsItem & @local/components/SettingsList
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import type { User, Roles } from 'prytaneum-typings';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Paper, Grid, Switch, Typography } from '@material-ui/core';
 
-import useEndpoint from 'hooks/useEndpoint';
-import { promoteUser } from 'domains/Admin/api/api';
+import useEndpoint from '@local/hooks/useEndpoint';
+import { promoteUser } from '@local/domains/Admin/api/api';
 
 const useStyles = makeStyles((theme) => ({
     root: {

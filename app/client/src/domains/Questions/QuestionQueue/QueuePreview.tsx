@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Paper, Grid, Typography, Divider, Button, List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ReorderIcon from '@material-ui/icons/Reorder';
@@ -7,7 +7,7 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import type { Question } from 'prytaneum-typings';
 
 import CommentArrowLeft from 'icons/CommentArrowLeft';
-import ResponsiveDialog from 'components/ResponsiveDialog';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
 import QuestionCard from '../QuestionCard';
 import DndQuestions from './DndQuestions';
 

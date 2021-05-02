@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import useSnack from './useSnack';
 
 // NOTE: may be use useClipboard in the future, but no use case for read --  only write

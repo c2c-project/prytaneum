@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Fab from 'components/Fab';
-import useScrollTo from 'hooks/useScrollTo';
+import Fab from '@local/components/Fab';
+import useScrollTo from '@local/hooks/useScrollTo';
 
 export interface Props {
     children: React.ReactNode | React.ReactNodeArray;

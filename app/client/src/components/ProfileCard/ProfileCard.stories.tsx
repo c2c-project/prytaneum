@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker/locale/en';
 
@@ -6,7 +6,7 @@ import { ReferenceNames } from 'types';
 import Component from '.';
 
 export default {
-    title: 'Components/ProfileCard',
+    title: '@local/components/ProfileCard',
     component: Component,
 };
 

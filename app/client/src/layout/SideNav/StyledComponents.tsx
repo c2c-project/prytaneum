@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { ListItem, ListItemIcon, ListSubheader, ListSubheaderProps, Divider } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 

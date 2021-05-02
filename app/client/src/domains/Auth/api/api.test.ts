@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/unbound-method */
-import axios from 'utils/axios';
-import errors from 'utils/errors';
+import axios from '@local/utils/axios';
+import errors from '@local/utils/errors';
 import API from './index';
 
 beforeEach(() => {

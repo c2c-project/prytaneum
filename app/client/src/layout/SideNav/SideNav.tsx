@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { List, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ListIcon from '@material-ui/icons/List';
@@ -10,13 +10,13 @@ import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import type { ClientSafeUser } from 'prytaneum-typings';
 import { Update, State } from 'history';
 
-import history from 'utils/history';
+import history from '@local/utils/history';
 import {
     StyledSubheader,
     StyledDivider,
     StyledListItemIcon,
     StyledListItem,
-} from './StyledComponents';
+} from './Styled@local/components';
 import MovingBg from './MovingBg';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { Grid, Typography, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Townhall, TownhallSettings } from 'prytaneum-typings';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 
-import TabPanel, { TabPanels } from 'components/TabPanel';
-import QuestionFeed from 'domains/Questions/QuestionFeed';
-import QuestionQueue from 'domains/Questions/QuestionQueue';
-import AskQuestion from 'domains/Questions/AskQuestion';
-import QuestionCarousel from 'domains/Questions/QuestionCarousel';
-import useTownhall from 'hooks/useTownhall';
+import TabPanel, { TabPanels } from '@local/components/TabPanel';
+import QuestionFeed from '@local/domains/Questions/QuestionFeed';
+import QuestionQueue from '@local/domains/Questions/QuestionQueue';
+import AskQuestion from '@local/domains/Questions/AskQuestion';
+import QuestionCarousel from '@local/domains/Questions/QuestionCarousel';
+import useTownhall from '@local/hooks/useTownhall';
 import Breakout from '../Breakout';
 import StyledTab, { Props as StyledTabProps } from './StyledTab';
 import InfoCard from '../InfoCard';

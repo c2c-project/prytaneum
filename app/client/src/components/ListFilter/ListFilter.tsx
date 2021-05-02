@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     IconButton,
     Grid,
@@ -18,8 +18,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Skeleton, SkeletonProps } from '@material-ui/lab';
 import clsx from 'clsx';
 
-import TextField from 'components/TextField';
-import { FilterFunc } from 'utils/filters';
+import TextField from '@local/components/TextField';
+import { FilterFunc } from '@local/utils/filters';
 
 export interface Props<T> {
     onSearch: (s: string) => void;

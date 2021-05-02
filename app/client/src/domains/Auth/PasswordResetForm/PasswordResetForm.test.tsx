@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import PasswordResetForm from './PasswordResetForm';
 import API from '../api';
 
-jest.mock('hooks/useSnack');
-jest.mock('utils/axios');
+jest.mock('@local/hooks/useSnack');
+jest.mock('@local/utils/axios');
 
 describe('ForgotPassConsume', () => {
     let container: HTMLElement | null = null;

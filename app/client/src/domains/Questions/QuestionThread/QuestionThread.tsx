@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Question } from 'prytaneum-typings';
 import {
     List,
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { formatDistanceToNow } from 'utils/format';
+import { formatDistanceToNow } from '@local/utils/format';
 import QuestionCard from '../QuestionCard';
 
 interface Props {

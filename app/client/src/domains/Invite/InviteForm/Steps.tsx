@@ -14,12 +14,12 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ParseResult } from 'papaparse';
 
-import useEndpoint from 'hooks/useEndpoint';
+import useEndpoint from '@local/hooks/useEndpoint';
 
-import EmailPreview from 'domains/Invite/EmailPreview';
-import SelectFile from 'components/SelectFile';
-import VerifyPreview from 'domains/Invite/VerifyPreview';
-import Parse from 'domains/Invite/VerifyPreview/utils';
+import EmailPreview from '@local/domains/Invite/EmailPreview';
+import SelectFile from '@local/components/SelectFile';
+import VerifyPreview from '@local/domains/Invite/VerifyPreview';
+import Parse from '@local/domains/Invite/VerifyPreview/utils';
 import API from '../api';
 import { InviteForm, InvitePreview } from '../types';
 

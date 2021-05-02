@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 
 import Component, { Bill } from './BillSummary';
 
-export default { title: 'Components/Bill Summary' };
+export default { title: '@local/components/Bill Summary' };
 
 const bill: Bill = {
     name: 'Darth Vader',

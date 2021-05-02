@@ -1,5 +1,5 @@
 /* eslint-disable */ // FIXME:
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import DevTeam from './DevTeam';
 import * as API from './api/api'; // babel issues ref: https://stackoverflow.com/questions/53162001/typeerror-during-jests-spyon-cannot-set-property-getrequest-of-object-which
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('DevTeam', () => {
     let container: HTMLDivElement | null = null;

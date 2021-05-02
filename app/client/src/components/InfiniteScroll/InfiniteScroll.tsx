@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 
-import Loader from 'components/Loader';
+import Loader from '@local/components/Loader';
 
 interface Props {
     children: JSX.Element | JSX.Element[];

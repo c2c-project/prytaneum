@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import faker from 'faker/locale/en';
 
 import Component from './SettingsMenu';
 
-export default { title: 'Components/SettingsMenu' };
+export default { title: '@local/components/SettingsMenu' };
 
 const content2 = (
     <List>

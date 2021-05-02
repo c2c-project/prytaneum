@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { EventEmitter } from 'events';
 import { makeQuestion, makeGenFn, makeUser } from 'prytaneum-typings';
 
 import SocketFixture from 'mock/Fixture.socket';
-import UserProvider from 'contexts/User';
-import TownhallProvider from 'contexts/Townhall';
+import UserProvider from '@local/contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
 import QuestionQueue from './QuestionQueue';
 import QueuePreview, { Props as PreviewProps } from './QueuePreview';
 
@@ -33,7 +33,7 @@ function sendQueue(num?: number) {
 }
 
 export default {
-    title: 'Domains/Questions/Question Queue',
+    title: '@local/domains/Questions/Question Queue',
     decorators: [
         (MyStory) => (
             <div style={{ maxWidth: 500, width: '100%', height: '100%' }}>

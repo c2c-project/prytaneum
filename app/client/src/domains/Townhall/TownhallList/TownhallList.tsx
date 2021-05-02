@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     Typography,
     List,
@@ -20,16 +20,16 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ResponsiveDialog from 'components/ResponsiveDialog';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
 import Button from '@material-ui/core/Button';
 
 import type { Townhall } from 'prytaneum-typings';
 
-import { formatDate } from 'utils/format';
-import useEndpoint from 'hooks/useEndpoint';
-import Loader from 'components/Loader';
-import ListFilter from 'components/ListFilter';
-import { townhallSettingsSections } from 'domains/Townhall/TownhallSettings/TownhallSettings';
+import { formatDate } from '@local/utils/format';
+import useEndpoint from '@local/hooks/useEndpoint';
+import Loader from '@local/components/Loader';
+import ListFilter from '@local/components/ListFilter';
+import { townhallSettingsSections } from '@local/domains/Townhall/TownhallSettings/TownhallSettings';
 import { getTownhallList } from '../api';
 import { filters as filterFuncs, TonwhallFilterFunc, search, applyFilters } from './utils';
 

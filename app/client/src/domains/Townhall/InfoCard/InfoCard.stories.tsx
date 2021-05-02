@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { makeTownhall, makeUser } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
-import UserProvider from 'contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
+import UserProvider from '@local/contexts/User';
 import Component from './InfoCard';
 
-export default { title: 'Domains/Townhall/Info Card', parameters: { layout: 'centered' } } as Meta;
+export default { title: '@local/domains/Townhall/Info Card', parameters: { layout: 'centered' } } as Meta;
 
 export function InfoCard() {
     return (

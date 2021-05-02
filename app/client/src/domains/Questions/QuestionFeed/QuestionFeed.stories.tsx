@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { EventEmitter } from 'events';
 import { makeQuestion, makeUser, makeTownhall } from 'prytaneum-typings';
 import { Grid } from '@material-ui/core';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import FixtureSocket from 'mock/Fixture.socket';
-import TownhallProvider from 'contexts/Townhall';
+import TownhallProvider from '@local/contexts/Townhall';
 import QuestionFeed from './QuestionFeed';
 
 export { QuestionFeedLoading as Loading } from './QuestionFeed';
@@ -24,7 +24,7 @@ function sendMessage(num?: number) {
 }
 
 export default {
-    title: 'Domains/Questions/Question Feed',
+    title: '@local/domains/Questions/Question Feed',
     decorators: [
         (MyStory) => (
             <div style={{ flex: 1, padding: 60 }}>

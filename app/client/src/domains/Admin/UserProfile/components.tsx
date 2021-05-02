@@ -1,5 +1,5 @@
 /* eslint-disable */ // FIXME:
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
@@ -14,9 +14,9 @@ import {
 } from '@material-ui/core';
 import type { User } from 'prytaneum-typings';
 
-import { formatDate } from 'utils/format';
-import SettingsItem from 'components/SettingsItem';
-import SettingsList from 'components/SettingsList';
+import { formatDate } from '@local/utils/format';
+import SettingsItem from '@local/components/SettingsItem';
+import SettingsList from '@local/components/SettingsList';
 
 const useMiniStyles = makeStyles((theme) => ({
     image: {

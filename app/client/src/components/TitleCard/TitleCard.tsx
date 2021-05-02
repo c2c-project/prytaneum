@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {
     Card,

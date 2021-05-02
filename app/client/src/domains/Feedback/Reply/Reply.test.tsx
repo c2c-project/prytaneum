@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { makeReportReply } from 'prytaneum-typings';
 
-import { formatDate } from 'utils/format';
+import { formatDate } from '@local/utils/format';
 import Reply from './Reply';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('Reply Form', () => {
     let container: HTMLDivElement | null = null;

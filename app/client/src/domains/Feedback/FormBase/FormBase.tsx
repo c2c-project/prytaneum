@@ -1,16 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import type { FeedbackReportForm, BugReportForm } from 'prytaneum-typings';
 
-import Form from 'components/Form';
-import FormActions from 'components/FormActions';
-import FormContent from 'components/FormContent';
-import TextField from 'components/TextField';
-import LoadingButton from 'components/LoadingButton';
-import useSnack from 'hooks/useSnack';
-import useEndpoint from 'hooks/useEndpoint';
-import useForm from 'hooks/useForm';
+import Form from '@local/components/Form';
+import FormActions from '@local/components/FormActions';
+import FormContent from '@local/components/FormContent';
+import TextField from '@local/components/TextField';
+import LoadingButton from '@local/components/LoadingButton';
+import useSnack from '@local/hooks/useSnack';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useForm from '@local/hooks/useForm';
 import { createBugReport, createFeedbackReport, updateBugReport, updateFeedbackReport } from '../api';
 import { Report, ReportTypes } from '../types';
 

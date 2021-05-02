@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     // Typography,
     Grid,
@@ -6,12 +6,12 @@ import {
 } from '@material-ui/core';
 // import { makeStyles } from '@material-ui/core/styles';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
 // import AppBar from 'layout/AppBar';
 
-import SettingsMenu from 'components/SettingsMenu/SettingsMenu';
-import useUser from 'hooks/useUser';
-import Redirect from 'domains/Logical/Redirect';
+import SettingsMenu from '@local/components/SettingsMenu/SettingsMenu';
+import useUser from '@local/hooks/useUser';
+import Redirect from '@local/domains/Logical/Redirect';
 import UserProfile from '../UserProfile';
 
 import {
@@ -28,7 +28,7 @@ import {
     // TermsOfService,
     TownhallUserSettings,
     NotificationSettings,
-} from './components';
+} from './@local/components';
 
 // const useStyles = makeStyles((theme) => ({
 //     title: {
@@ -94,7 +94,7 @@ interface Props {
  * it displays the User information like first name, last name, username, email and obfuscated password, so they can change it.
  * To be pulled and pushed from/to database later <br/></br>
  * It also displays options for appearing anonymously, notifcations for upcoming townhalls, darkmode and color scheme (like material UIs website) <br/></br>
- * Account settings shows an option to logout, disable or delete account, each one opens a dialog box, see components/dialog
+ * Account settings shows an option to logout, disable or delete account, each one opens a dialog box, see @local/components/dialog
  * Information is info about us, feedback, ToS and privacy policy
  * @category Pages/Auth
  * @constructor UserSettings

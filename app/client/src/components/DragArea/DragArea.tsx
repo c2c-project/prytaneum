@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { Draggable, DraggableProps } from 'react-beautiful-dnd';
 
 type Props = Omit<DraggableProps, 'children'> & {

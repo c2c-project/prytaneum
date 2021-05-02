@@ -2,9 +2,9 @@
 import { add } from 'date-fns';
 import type { Townhall } from 'prytaneum-typings';
 
-import { search as utilSearch, FilterFunc } from 'utils/filters';
+import { search as utilSearch, FilterFunc } from '@local/utils/filters';
 
-export { applyFilters } from 'utils/filters';
+export { applyFilters } from '@local/utils/filters';
 
 export type TonwhallFilterFunc = FilterFunc<Townhall>;
 

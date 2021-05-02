@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import FormTitle from 'components/FormTitle';
+import FormTitle from '@local/components/FormTitle';
 import FormBase from '../FormBase';
 import { ReportTypes } from '../types';
 

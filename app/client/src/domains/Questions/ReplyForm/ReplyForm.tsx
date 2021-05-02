@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Button } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
@@ -8,16 +8,16 @@ import type {
     ReplyForm as FormType,
 } from 'prytaneum-typings';
 
-import TextField from 'components/TextField';
-import Form from 'components/Form';
-import FormTitle from 'components/FormTitle';
-import FormContent from 'components/FormContent';
-import FormActions from 'components/FormActions';
-import LoadingButton from 'components/LoadingButton';
-import useSnack from 'hooks/useSnack';
-import useForm from 'hooks/useForm';
-import useEndpoint from 'hooks/useEndpoint';
-import useTownhall from 'hooks/useTownhall';
+import TextField from '@local/components/TextField';
+import Form from '@local/components/Form';
+import FormTitle from '@local/components/FormTitle';
+import FormContent from '@local/components/FormContent';
+import FormActions from '@local/components/FormActions';
+import LoadingButton from '@local/components/LoadingButton';
+import useSnack from '@local/hooks/useSnack';
+import useForm from '@local/hooks/useForm';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useTownhall from '@local/hooks/useTownhall';
 import QuestionCard from '../QuestionCard';
 import { createReply } from '../api';
 

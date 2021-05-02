@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { Switch } from '@material-ui/core';
 
-import SettingsList from 'components/SettingsList';
-import SettingsItem from 'components/SettingsItem';
+import SettingsList from '@local/components/SettingsList';
+import SettingsItem from '@local/components/SettingsItem';
 
 import text from './help-text';
 import { Props, areEqual } from './utils';

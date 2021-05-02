@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/require-await */
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { AxiosResponse } from 'axios';
 import { makeUser } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import RegisterForm from './RegisterForm';
 import API from '../api';
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 describe('RegisterForm', () => {
     let container: HTMLElement | null = null;

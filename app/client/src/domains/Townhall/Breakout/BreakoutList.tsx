@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { MenuItem } from '@material-ui/core';
 import type { Breakout } from 'prytaneum-typings';
 import { useDispatch } from 'react-redux';
 
-import Loader from 'components/Loader';
-import TextField from 'components/TextField';
-import useEndpoint from 'hooks/useEndpoint';
+import Loader from '@local/components/Loader';
+import TextField from '@local/components/TextField';
+import useEndpoint from '@local/hooks/useEndpoint';
 import { breakoutRoomChange } from 'reducers';
 import { changeBreakoutRoom, getBreakoutRooms } from '../api';
 
@@ -38,7 +38,7 @@ export default function BreakoutList({ townhallId, breakoutId }: { townhallId: s
     // I only want this to run whenever the current room changes
     React.useEffect(() => {
         if (prevRoom !== currentRoom) run();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-@local/hooks/exhaustive-deps
     }, [currentRoom, prevRoom]);
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {

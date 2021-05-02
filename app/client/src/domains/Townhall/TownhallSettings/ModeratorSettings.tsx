@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     Grid,
     Typography,
@@ -17,10 +17,10 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import type { Moderator } from 'prytaneum-typings';
 
-import useSnack from 'hooks/useSnack';
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import TextField from 'components/TextField';
-import ConfirmationDialog from 'components/ConfirmationDialog';
+import useSnack from '@local/hooks/useSnack';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import TextField from '@local/components/TextField';
+import ConfirmationDialog from '@local/components/ConfirmationDialog';
 import { Props } from './utils';
 
 function AddModeratorForm({

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Roles } from 'prytaneum-typings';
 
 import useUser from './useUser';

@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { Button } from '@material-ui/core';
 import QueueIcon from '@material-ui/icons/QueueOutlined';
 
-import useEndpoint from 'hooks/useEndpoint';
+import useEndpoint from '@local/hooks/useEndpoint';
 import { addToQueue } from '../api';
 
 interface Props {

@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import useEndpoint from 'hooks/useEndpoint';
-import useSnack from 'hooks/useSnack';
-import Loader from 'components/Loader';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useSnack from '@local/hooks/useSnack';
+import Loader from '@local/components/Loader';
 
 import API from '../api';
 

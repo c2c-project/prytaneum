@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     List,
     ListItem,
@@ -11,12 +11,12 @@ import {
 import type { ClientSafeUser } from 'prytaneum-typings';
 // import { makeStyles } from '@material-ui/core/styles';
 
-import ConfirmationDialog from 'components/ConfirmationDialog';
-import SettingsList from 'components/SettingsList';
+import ConfirmationDialog from '@local/components/ConfirmationDialog';
+import SettingsList from '@local/components/SettingsList';
 
-import TextField from 'components/TextField';
+import TextField from '@local/components/TextField';
 
-import SettingsItem from 'components/SettingsItem';
+import SettingsItem from '@local/components/SettingsItem';
 import text from './help-text';
 
 /* DEPTH = 3 CURRYING HERE, 
@@ -42,7 +42,7 @@ const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
 //     },
 // }));
 
-// all really small one time user components go here
+// all really small one time user @local/components go here
 interface DisplayItem {
     title: string;
     component: JSX.Element;

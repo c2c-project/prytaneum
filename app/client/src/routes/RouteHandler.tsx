@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
+import * as React from 'react';
 import { RouteResultSync } from 'universal-router/sync';
 import { Update, State } from 'history';
 import { AnimatePresence } from 'framer-motion';
 
 // import Container from 'layout/Page';
-import history from 'utils/history';
+import history from '@local/utils/history';
 import Layout, { Props as LayoutProps } from 'layout';
-import useRouter from 'hooks/useRouter';
+import useRouter from '@local/hooks/useRouter';
 
 import { routes, ActionResult, CustomLayout } from './utils';
 

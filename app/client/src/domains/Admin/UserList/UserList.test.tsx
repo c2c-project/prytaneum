@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import UserList from './UserList';
@@ -9,7 +9,7 @@ import UserList from './UserList';
     PropTypes does rest of checking
 */
 
-jest.mock('hooks/useSnack');
+jest.mock('@local/hooks/useSnack');
 
 let container: HTMLDivElement | null = null;
 beforeEach(() => {

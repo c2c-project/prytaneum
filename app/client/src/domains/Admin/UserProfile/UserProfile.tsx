@@ -4,23 +4,23 @@ import PropTypes from 'prop-types';
 import type { User } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
 
-import useEndpoint from 'hooks/useEndpoint';
-import { getUser } from 'domains/Admin/api/api';
+import useEndpoint from '@local/hooks/useEndpoint';
+import { getUser } from '@local/domains/Admin/api/api';
 
 import { Grid, Paper, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import SettingsMenu, { AccordionData } from 'components/SettingsMenu';
-import SettingsList from 'components/SettingsList';
-import SettingsItem from 'components/SettingsItem';
-import * as AdminDashboardTypes from 'domains/Admin/types';
-import { userProfileFormat } from 'domains/Admin/helper';
+import SettingsMenu, { AccordionData } from '@local/components/SettingsMenu';
+import SettingsList from '@local/components/SettingsList';
+import SettingsItem from '@local/components/SettingsItem';
+import * as AdminDashboardTypes from '@local/domains/Admin/types';
+import { userProfileFormat } from '@local/domains/Admin/helper';
 
-import Fab from 'components/Fab';
-import Loader from 'components/Loader';
-import { fadeThroughProps } from 'animations/FadeThrough';
-import { Tags, MiniProfile, AccountActions } from './components';
+import Fab from '@local/components/Fab';
+import Loader from '@local/components/Loader';
+import { fadeThroughProps } from '@local/animations/FadeThrough';
+import { Tags, MiniProfile, AccountActions } from './@local/components';
 import UserPromotion from '../UserPromotion';
 
 const useStyles = makeStyles((theme) => ({

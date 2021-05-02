@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { ChatMessage as ChatMessageType, makeChatMessage } from 'prytaneum-typings';
 import { motion } from 'framer-motion';
 
-import ChatMessage from 'components/ChatMessage';
+import ChatMessage from '@local/components/ChatMessage';
 import Chat from './Chat';
 
 export default {
-    title: 'components/Chat',
+    title: '@local/components/Chat',
     argTypes: {
         onSubmit: { action: 'submitted' },
     },
@@ -21,7 +21,7 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
-    subcomponents: { ChatMessage },
+    sub@local/components: { ChatMessage },
 } as Meta;
 
 const makeChatMessages = (num: number) => {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */ // looked at source code, using how they recommend
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Card, CardContent, CardHeader, IconButton } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';

@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import type { Roles } from 'prytaneum-typings';
 
-import useRoleQuery from 'hooks/useRoleQuery';
-import useUser from 'hooks/useUser';
+import useRoleQuery from '@local/hooks/useRoleQuery';
+import useUser from '@local/hooks/useUser';
 import Redirect from '../Redirect';
 
 interface Props {

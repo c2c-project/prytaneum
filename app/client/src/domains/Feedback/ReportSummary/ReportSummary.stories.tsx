@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import Container from '@material-ui/core/Container';
 import { makeFeedbackReport, makeUser } from 'prytaneum-typings';
 
-import UserProvider from 'contexts/User';
+import UserProvider from '@local/contexts/User';
 import Component from '.';
 
 export default {
-    title: 'Domains/Feedback/Report Summary',
+    title: '@local/domains/Feedback/Report Summary',
     component: Component,
     parameters: {
         layout: 'centered',

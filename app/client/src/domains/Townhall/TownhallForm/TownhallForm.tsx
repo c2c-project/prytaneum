@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-curly-newline */
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
@@ -10,16 +10,16 @@ import {
 } from '@material-ui/core';
 import type { TownhallForm as FormType } from 'prytaneum-typings';
 
-import { TownhallContext } from 'contexts/Townhall';
-import LoadingButton from 'components/LoadingButton';
-import FormActions from 'components/FormActions';
-import FormContent from 'components/FormContent';
-import FormTitle from 'components/FormTitle';
-import Form from 'components/Form';
-import TextField from 'components/TextField';
-import DateTimePicker from 'components/DateTimePicker';
-import useEndpoint from 'hooks/useEndpoint';
-import useForm from 'hooks/useForm';
+import { TownhallContext } from '@local/contexts/Townhall';
+import LoadingButton from '@local/components/LoadingButton';
+import FormActions from '@local/components/FormActions';
+import FormContent from '@local/components/FormContent';
+import FormTitle from '@local/components/FormTitle';
+import Form from '@local/components/Form';
+import TextField from '@local/components/TextField';
+import DateTimePicker from '@local/components/DateTimePicker';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useForm from '@local/hooks/useForm';
 import { createTownhall, updateTownhall } from '../api';
 
 interface Props {

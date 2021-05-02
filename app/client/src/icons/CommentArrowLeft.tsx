@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 export default React.forwardRef<SVGSVGElement, SvgIconProps>(function CommentArrowLeft(props, ref) {

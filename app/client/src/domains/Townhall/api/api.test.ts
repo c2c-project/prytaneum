@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/unbound-method */
 
-import axios from 'utils/axios';
+import axios from '@local/utils/axios';
 import { makeTownhallForm } from 'prytaneum-typings';
 import qs from 'qs';
 import * as API from '.';

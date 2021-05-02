@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import AddIcon from '@material-ui/icons/Add';
 
 import Component from './Fab';
 
 export default {
-    title: 'Components/Fab',
+    title: '@local/components/Fab',
     component: Component,
     argTypes: {
         onClick: { onClick: 'fab clicked' },

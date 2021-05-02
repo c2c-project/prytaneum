@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 type SubmitFunction = (e: React.FormEvent<HTMLFormElement>) => void;
 type BuildSubmitFunction = (cb?: () => void) => SubmitFunction;
@@ -13,7 +13,7 @@ type UseFormTuple<T> = [
     React.Dispatch<React.SetStateAction<T>>
 ];
 
-export default function useForm<T>(initialState: T): UseFormTuple<T> {
+export function useForm<T>(initialState: T): UseFormTuple<T> {
     const [state, setState] = React.useState(initialState);
     const [errors, setErrors] = React.useState<Partial<T>>({});
     function buildHandleSubmit(callback?: () => void) {
@@ -24,17 +24,14 @@ export default function useForm<T>(initialState: T): UseFormTuple<T> {
             if (!isValid) {
                 const { elements } = form; // can't destructure this above b/c checkValidity can't so yeah
                 const elementArr = Array.from(elements) as HTMLInputElement[]; // I know this because it's a form, and I code them
-                const formErrors = elementArr.reduce<Partial<T>>(
-                    (accum, element) => {
-                        if (element.validationMessage)
-                            return {
-                                ...accum,
-                                [element.name]: element.validationMessage,
-                            };
-                        return accum;
-                    },
-                    {}
-                );
+                const formErrors = elementArr.reduce<Partial<T>>((accum, element) => {
+                    if (element.validationMessage)
+                        return {
+                            ...accum,
+                            [element.name]: element.validationMessage,
+                        };
+                    return accum;
+                }, {});
                 setErrors(formErrors);
             } else if (callback) {
                 callback();

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable import/prefer-default-export */
 import type { Question, Question as QuestionType, SocketIOEvents } from 'prytaneum-typings';
-import { FilterFunc } from 'utils/filters';
+import { FilterFunc } from '@local/utils/filters';
 
-export { applyFilters } from 'utils/filters';
+export { applyFilters } from '@local/utils/filters';
 
 export type QuestionFilterFunc = FilterFunc<Question>;
 

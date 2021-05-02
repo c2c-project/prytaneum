@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import MUITextField, { TextFieldProps } from '@material-ui/core/TextField';
 
 function toSnakeCase(str?: string) {
@@ -17,11 +17,7 @@ function toCamelCase(str?: string) {
     return str
         .toLowerCase()
         .split(' ')
-        .map((word, idx) =>
-            idx > 0
-                ? word[0].toUpperCase() + word.slice(1)
-                : word.toLocaleLowerCase()
-        )
+        .map((word, idx) => (idx > 0 ? word[0].toUpperCase() + word.slice(1) : word.toLocaleLowerCase()))
         .join('');
 }
 
@@ -32,19 +28,19 @@ export type Props = TextFieldProps & { label?: string };
  * @constructor TextField
  * @todo params
  */
-export default React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+export const TextField = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, label, name, id, ...passThroughProps } = props;
     return (
         <MUITextField
             ref={ref}
-            variant='outlined'
+            variant="outlined"
             fullWidth
             id={id || toSnakeCase(label)}
             name={name || toCamelCase(label)}
             label={label}
-            autoComplete='off'
-            autoCorrect='off'
-            autoCapitalize='off'
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
             spellCheck={false}
             {...passThroughProps}
         >

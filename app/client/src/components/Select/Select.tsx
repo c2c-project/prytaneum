@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { MenuItem, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 
-import TextField, { Props as TextFieldProps } from 'components/TextField';
+import TextField, { Props as TextFieldProps } from '@local/components/TextField';
 
 // source for constants and other seemingly random variables https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Badge/Badge.js
 

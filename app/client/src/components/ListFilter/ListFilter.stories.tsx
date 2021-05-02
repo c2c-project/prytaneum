@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import faker from 'faker/locale/en';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 
-import { search as utilSearch, applyFilters, FilterFunc } from 'utils/filters';
+import { search as utilSearch, applyFilters, FilterFunc } from '@local/utils/filters';
 import ListFilter, { Props } from './ListFilter';
 import useFilters, { Accessors } from './useFilters';
 
 export default {
-    title: 'Components/List Filter',
+    title: '@local/components/List Filter',
     component: ListFilter,
     decorators: [
         (MyStory) => (

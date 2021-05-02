@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { MenuItem, Grid, IconButton, Menu } from '@material-ui/core';
 import type { ChatMessageForm, SocketIOEvents } from 'prytaneum-typings';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -14,13 +14,13 @@ import {
     readChatMessages,
     breakoutEnd,
 } from 'reducers';
-import useSocketio, { SocketFn } from 'hooks/useSocketio';
-import useEndpoint from 'hooks/useEndpoint';
-import useTownhall from 'hooks/useTownhall';
-import useUser from 'hooks/useUser';
-import Chat from 'components/Chat';
-import Loader from 'components/Loader';
-import ChatMessage from 'components/ChatMessage';
+import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
+import useEndpoint from '@local/hooks/useEndpoint';
+import useTownhall from '@local/hooks/useTownhall';
+import useUser from '@local/hooks/useUser';
+import Chat from '@local/components/Chat';
+import Loader from '@local/components/Loader';
+import ChatMessage from '@local/components/ChatMessage';
 import BreakoutList from './BreakoutList';
 import { createChatMessage, getChatmessages, endBreakout } from '../api';
 
@@ -60,7 +60,7 @@ export default function BreakoutRoom({ onDataChange, breakoutId }: Props) {
     });
 
     // I only want to fetch messages each time breakoutId changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-@local/hooks/exhaustive-deps
     React.useEffect(fetchMessages, [breakoutId]);
 
     const socketFn: SocketFn = React.useCallback(

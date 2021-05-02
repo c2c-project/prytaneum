@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { makeUser } from 'prytaneum-typings';
 
 import Component from './SideNav';

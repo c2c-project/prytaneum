@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Grid, DialogContent, CardActions, Card, CardContent, List, ListItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import type { Question } from 'prytaneum-typings';
 import { useSelector } from 'react-redux';
 
-import ResponsiveDialog from 'components/ResponsiveDialog';
-import useUser from 'hooks/useUser';
+import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import useUser from '@local/hooks/useUser';
 import QuestionLabels from '../QuestionLabels';
 import { Like, QueueButton, Quote /* Reply */ } from '../QuestionActions';
 import QuestionCard from '../QuestionCard';

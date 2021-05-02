@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 
 import Component from './Select';
 
-export default { title: 'Components/Select' };
+export default { title: '@local/components/Select' };
 
 export function Basic() {
     const [state, setState] = React.useState('1');

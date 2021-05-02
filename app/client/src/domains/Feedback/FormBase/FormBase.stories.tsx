@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { makeFeedbackReport } from 'prytaneum-typings';
 
 import Component from '.';
 
-export default { title: 'Domains/Feedback/Form Base', parameters: { layout: 'centered' } } as Meta;
+export default { title: '@local/domains/Feedback/Form Base', parameters: { layout: 'centered' } } as Meta;
 
 export function Basic() {
     return (

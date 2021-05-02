@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 
 import Component from './DevTeam';
 
 export default {
-    title: 'Domains/DevTeam',
+    title: '@local/domains/DevTeam',
     component: Component,
 };
 

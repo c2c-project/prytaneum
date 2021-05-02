@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -15,12 +15,7 @@ interface Props {
  * @category Component
  * @constructor LoadingButton
  */
-export default function LoadingButton({
-    loading,
-    children,
-    className,
-    style,
-}: Props) {
+export function LoadingButton({ loading, children, className, style }: Props) {
     const theme = useTheme();
     if (loading) {
         try {
@@ -32,11 +27,7 @@ export default function LoadingButton({
                     endIcon: undefined,
                     startIcon: undefined,
                 },
-                <CircularProgress
-                    className={className}
-                    style={style}
-                    size={theme.typography.button.lineHeight}
-                />
+                <CircularProgress className={className} style={style} size={theme.typography.button.lineHeight} />
             );
         } catch (e) {
             // eslint-disable-next-line no-console

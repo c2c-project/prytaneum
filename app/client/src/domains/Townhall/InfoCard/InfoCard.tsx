@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { IconButton, Card, CardHeader, Collapse, CardContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 
-import useTownhall from 'hooks/useTownhall';
+import useTownhall from '@local/hooks/useTownhall';
 
 const useStyles = makeStyles((theme) => ({
     root: {

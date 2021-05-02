@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { QuestionForm, Question, ReplyForm, Playlist } from 'prytaneum-typings';
 
-import axios from 'utils/axios';
+import axios from '@local/utils/axios';
 
 /**
  * gets a specific question

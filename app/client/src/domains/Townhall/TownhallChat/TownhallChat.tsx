@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 // import { MenuItem } from '@material-ui/core';
 // import type { ChatMessageForm, SocketIOEvents } from 'prytaneum-typings';
 // import { motion } from 'framer-motion';
@@ -11,14 +11,14 @@ import React from 'react';
 //     deleteChatMessage,
 //     readChatMessages,
 // } from 'reducers';
-// import useSocketio, { SocketFn } from 'hooks/useSocketio';
-// import useEndpoint from 'hooks/useEndpoint';
-// import useTownhall from 'hooks/useTownhall';
-// import useUser from 'hooks/useUser';
-// import Chat from 'components/Chat';
-// import Loader from 'components/Loader';
-// import ChatMessage from 'components/ChatMessage';
-// import TextField from 'components/TextField';
+// import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
+// import useEndpoint from '@local/hooks/useEndpoint';
+// import useTownhall from '@local/hooks/useTownhall';
+// import useUser from '@local/hooks/useUser';
+// import Chat from '@local/components/Chat';
+// import Loader from '@local/components/Loader';
+// import ChatMessage from '@local/components/ChatMessage';
+// import TextField from '@local/components/TextField';
 // import { createChatMessage, getChatmessages } from '../api';
 
 // interface Props {

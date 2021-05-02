@@ -1,21 +1,22 @@
 /* eslint-disable react/jsx-curly-newline */
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, InputAdornment } from '@material-ui/core';
+import { Button, IconButton, InputAdornment, Grid, Divider } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import type { RegisterForm as FormType } from 'prytaneum-typings';
+import BackIcon from '@material-ui/icons/ArrowBack';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
-import Form from 'components/Form';
-import FormContent from 'components/FormContent';
-import FormActions from 'components/FormActions';
-import TextField from 'components/TextField';
-import useEndpoint from 'hooks/useEndpoint';
-import LoadingButton from 'components/LoadingButton';
-import useSnack from 'hooks/useSnack';
-import useForm from 'hooks/useForm';
-import useQuery from 'hooks/useQuery';
-import useUser from 'hooks/useUser';
+import { Form } from '@local/components/Form';
+import { FormContent } from '@local/components/FormContent';
+import { FormActions } from '@local/components/FormActions';
+import { TextField } from '@local/components/TextField';
+import { LoadingButton } from '@local/components/LoadingButton';
+import { useSnack } from '@local/hooks/useSnack';
+import { useForm } from '@local/hooks/useForm';
+import { useQuery } from '@local/hooks/useQuery';
+// import useUser from '@local/hooks/useUser';
 
 import API from '../api';
 
@@ -24,31 +25,45 @@ interface Props {
     onFailure: () => void;
 }
 
-const initialState: FormType = {
+const initialState = {
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
 };
+
+const useStyles = makeStyles((theme) => ({
+    btnGroup: {
+        '& > *': {
+            margin: theme.spacing(1, 0),
+        },
+    },
+    divider: {
+        width: '75%',
+        marginLeft: '12.5%',
+    },
+}));
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
     const [snack] = useSnack();
     const query = useQuery();
-    const [, setUser] = useUser();
+    const classes = useStyles();
+    const router = useRouter();
+    // const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const builtRequest = React.useCallback(() => API.register(form, query), [form, query]);
-    const [sendRequest, isLoading] = useEndpoint(builtRequest, {
-        onSuccess: ({ data }) => {
-            setUser(data.user);
-            snack('Successfully registered!');
-            onSuccess();
-        },
-        onFailure,
-    });
+    // const builtRequest = React.useCallback(() => API.register(form, query), [form, query]);
+    // const [sendRequest, isLoading] = useEndpoint(builtRequest, {
+    //     onSuccess: ({ data }) => {
+    //         setUser(data.user);
+    //         snack('Successfully registered!');
+    //         onSuccess();
+    //     },
+    //     onFailure,
+    // });
 
     return (
-        <Form onSubmit={handleSubmit(sendRequest)}>
+        <Form onSubmit={handleSubmit(console.log)}>
             <FormContent>
                 <TextField
                     id='register-first-name'
@@ -137,13 +152,23 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                     }}
                 />
             </FormContent>
-            <FormActions>
-                <LoadingButton loading={isLoading}>
+            <Grid container item direction='column' className={classes.btnGroup}>
+                <LoadingButton loading={false}>
                     <Button fullWidth type='submit' variant='contained' color='primary'>
                         Register
                     </Button>
                 </LoadingButton>
-            </FormActions>
+                <Divider className={classes.divider} />
+                <Button
+                    fullWidth
+                    onClick={() => router.push('/login')}
+                    variant='outlined'
+                    color='primary'
+                    startIcon={<BackIcon />}
+                >
+                    Back To Login
+                </Button>
+            </Grid>
         </Form>
     );
 }

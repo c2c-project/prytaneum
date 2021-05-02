@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { CardActions } from '@material-ui/core';
 import { makeQuestion, makeTownhall, makeUser } from 'prytaneum-typings';
 
-import TownhallProvider from 'contexts/Townhall';
-import UserProvider from 'contexts/User';
+import TownhallProvider from '@local/contexts/Townhall';
+import UserProvider from '@local/contexts/User';
 import LikeAction from './Like';
 import QuoteAction from './Quote';
 import ReplyAction from './Reply';
@@ -14,7 +14,7 @@ import QueueButton from './QueueButton';
 import QuestionCard from '../QuestionCard';
 
 export default {
-    title: 'Domains/Questions/Question Actions',
+    title: '@local/domains/Questions/Question Actions',
     parameters: { layout: 'centered' },
     decorators: [
         (MyStory) => (

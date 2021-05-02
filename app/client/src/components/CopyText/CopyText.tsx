@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import * as React from 'react';
 import { IconButton, Tooltip, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CopyIcon from '@material-ui/icons/ContentCopy';
 
-import TextField, { Props as TextFieldProps } from 'components/TextField';
+import TextField, { Props as TextFieldProps } from '@local/components/TextField';
 
-import useCopy from 'hooks/useCopy';
+import useCopy from '@local/hooks/useCopy';
 
 const useStyles = makeStyles((theme) => ({
     text: {

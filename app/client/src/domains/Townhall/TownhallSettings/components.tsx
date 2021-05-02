@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     Grid,
     FormControlLabel,
@@ -7,7 +7,7 @@ import {
     Button,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import useTownhall from 'hooks/useTownhall';
+import useTownhall from '@local/hooks/useTownhall';
 
 // TODO: credits settings
 // export const CreditsSettings = React.memo(function CreditsSettings({

@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import type { ReportReply } from 'prytaneum-typings';
 
-import { formatDate } from 'utils/format';
+import { formatDate } from '@local/utils/format';
 
 interface Props {
     reply: ReportReply;
