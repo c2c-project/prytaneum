@@ -19,9 +19,21 @@ type User {
     organizations: [Organization]
 }
 
+input RegistrationForm {
+    firstName: String!
+    lastName: String!
+    password: String!
+    confirmPassword: String!
+    email: String!
+}
+
 type Query {
     """
     Fetch user data about the current user
     """
     me: User
+}
+
+type Mutation {
+    register(input: RegistrationForm): User
 }

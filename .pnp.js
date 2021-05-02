@@ -258,8 +258,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/load-files", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.3.2"],
             ["@graphql-tools/merge", "virtual:518e8acecd41a777f60446d1354202140c9e593236dcab105ddaaa813375e1ec913fc5d14151a6c78eebc0b7c9ee5a5ef41b3db920b96661e92878e0027473cf#npm:6.2.13"],
             ["@graphql-tools/schema", "virtual:f7a6a9227e28241437f300b007d7630ba4ef64c0dae7c7ab78234e07bced63ab7737fbe1c616c7e5d578305477a11f39982b255b5199a977ccec3b5f84a2682c#npm:7.1.3"],
+            ["@types/bcrypt", "npm:3.0.1"],
             ["@types/node", "npm:15.0.1"],
             ["apollo-server-fastify", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.23.0"],
+            ["bcrypt", "npm:5.0.1"],
             ["fastify", "npm:3.15.0"],
             ["graphql", "npm:15.5.0"],
             ["mercurius", "npm:7.5.0"],
@@ -2513,6 +2515,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@mapbox/node-pre-gyp", [
+        ["npm:1.0.4", {
+          "packageLocation": "./.yarn/cache/@mapbox-node-pre-gyp-npm-1.0.4-b262be8310-591616bcc7.zip/node_modules/@mapbox/node-pre-gyp/",
+          "packageDependencies": [
+            ["@mapbox/node-pre-gyp", "npm:1.0.4"],
+            ["detect-libc", "npm:1.0.3"],
+            ["https-proxy-agent", "npm:5.0.0"],
+            ["make-dir", "npm:3.1.0"],
+            ["node-fetch", "npm:2.6.1"],
+            ["nopt", "npm:5.0.0"],
+            ["npmlog", "npm:4.1.2"],
+            ["rimraf", "npm:3.0.2"],
+            ["semver", "npm:7.3.5"],
+            ["tar", "npm:6.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@next/env", [
         ["npm:10.1.3", {
           "packageLocation": "./.yarn/cache/@next-env-npm-10.1.3-a4b192f9cf-2177aecf6b.zip/node_modules/@next/env/",
@@ -2859,6 +2879,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/accepts", "npm:1.3.5"],
             ["@types/node", "npm:14.14.41"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/bcrypt", [
+        ["npm:3.0.1", {
+          "packageLocation": "./.yarn/cache/@types-bcrypt-npm-3.0.1-98a55d5cf5-95e8b2cf19.zip/node_modules/@types/bcrypt/",
+          "packageDependencies": [
+            ["@types/bcrypt", "npm:3.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -4228,6 +4257,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["bcrypt", [
+        ["npm:5.0.1", {
+          "packageLocation": "./.yarn/unplugged/bcrypt-npm-5.0.1-6815be1cfe/node_modules/bcrypt/",
+          "packageDependencies": [
+            ["bcrypt", "npm:5.0.1"],
+            ["@mapbox/node-pre-gyp", "npm:1.0.4"],
+            ["node-addon-api", "npm:3.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["big.js", [
         ["npm:5.2.2", {
           "packageLocation": "./.yarn/cache/big.js-npm-5.2.2-e147c30820-ea33d7d256.zip/node_modules/big.js/",
@@ -5539,6 +5579,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/detect-indent-npm-6.0.0-9f7d77378e-ad06194141.zip/node_modules/detect-indent/",
           "packageDependencies": [
             ["detect-indent", "npm:6.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["detect-libc", [
+        ["npm:1.0.3", {
+          "packageLocation": "./.yarn/cache/detect-libc-npm-1.0.3-c30ac344d4-6cec442139.zip/node_modules/detect-libc/",
+          "packageDependencies": [
+            ["detect-libc", "npm:1.0.3"]
           ],
           "linkType": "HARD",
         }]
@@ -9174,6 +9223,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["no-case", "npm:3.0.4"],
             ["lower-case", "npm:2.0.2"],
             ["tslib", "npm:2.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-addon-api", [
+        ["npm:3.1.0", {
+          "packageLocation": "./.yarn/unplugged/node-addon-api-npm-3.1.0-a15037f88c/node_modules/node-addon-api/",
+          "packageDependencies": [
+            ["node-addon-api", "npm:3.1.0"],
+            ["node-gyp", "npm:8.0.0"]
           ],
           "linkType": "HARD",
         }]

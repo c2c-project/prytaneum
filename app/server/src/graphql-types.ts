@@ -37,6 +37,14 @@ export type User = {
     organizations?: Maybe<Array<Maybe<Organization>>>;
 };
 
+export type RegistrationForm = {
+    firstName: Scalars['String'];
+    lastName: Scalars['String'];
+    password: Scalars['String'];
+    confirmPassword: Scalars['String'];
+    email: Scalars['String'];
+};
+
 export type Query = {
     __typename?: 'Query';
     /** Fetch user data about the current user */
@@ -56,6 +64,88 @@ export type QueryeventByIdArgs = {
 
 export type QueryorgByIdArgs = {
     id: Scalars['ID'];
+};
+
+export type Mutation = {
+    __typename?: 'Mutation';
+    register?: Maybe<User>;
+    createEvent?: Maybe<Event>;
+    updateEvent?: Maybe<Event>;
+    deleteEvent?: Maybe<Event>;
+    /** Start the event so that it is "live" */
+    startEvent?: Maybe<Event>;
+    /** End the eent so that it is not live */
+    endEvent?: Maybe<Event>;
+    createOrganization?: Maybe<Organization>;
+    updateOrganizationById?: Maybe<Organization>;
+    deleteOrganizationById?: Maybe<Organization>;
+    /** Adds a new member and returns the new user added */
+    addMember?: Maybe<User>;
+    createFeedback?: Maybe<EventLiveFeedback>;
+    hideQuestion?: Maybe<EventQuestion>;
+    reorderQueue?: Maybe<EventQuestion>;
+    createQuestion?: Maybe<EventQuestion>;
+    alterLike?: Maybe<Like>;
+};
+
+export type MutationregisterArgs = {
+    input?: Maybe<RegistrationForm>;
+};
+
+export type MutationcreateEventArgs = {
+    event?: Maybe<CreateEvent>;
+};
+
+export type MutationupdateEventArgs = {
+    event?: Maybe<UpdateEvent>;
+};
+
+export type MutationdeleteEventArgs = {
+    event?: Maybe<DeleteEvent>;
+};
+
+export type MutationstartEventArgs = {
+    eventId: Scalars['String'];
+};
+
+export type MutationendEventArgs = {
+    eventId: Scalars['String'];
+};
+
+export type MutationcreateOrganizationArgs = {
+    input?: Maybe<CreateOrg>;
+};
+
+export type MutationupdateOrganizationByIdArgs = {
+    input?: Maybe<UpdateOrg>;
+};
+
+export type MutationdeleteOrganizationByIdArgs = {
+    input?: Maybe<DeleteOrg>;
+};
+
+export type MutationaddMemberArgs = {
+    input?: Maybe<NewMember>;
+};
+
+export type MutationcreateFeedbackArgs = {
+    input?: Maybe<CreateFeedback>;
+};
+
+export type MutationhideQuestionArgs = {
+    input?: Maybe<HideQuestion>;
+};
+
+export type MutationreorderQueueArgs = {
+    input?: Maybe<ReorderQuestion>;
+};
+
+export type MutationcreateQuestionArgs = {
+    input?: Maybe<CreateQuestion>;
+};
+
+export type MutationalterLikeArgs = {
+    input?: Maybe<AlterLike>;
 };
 
 export type Event = {
@@ -124,83 +214,6 @@ export type UpdateEvent = {
 
 export type DeleteEvent = {
     eventId: Scalars['String'];
-};
-
-export type Mutation = {
-    __typename?: 'Mutation';
-    createEvent?: Maybe<Event>;
-    updateEvent?: Maybe<Event>;
-    deleteEvent?: Maybe<Event>;
-    /** Start the event so that it is "live" */
-    startEvent?: Maybe<Event>;
-    /** End the eent so that it is not live */
-    endEvent?: Maybe<Event>;
-    createOrganization?: Maybe<Organization>;
-    updateOrganizationById?: Maybe<Organization>;
-    deleteOrganizationById?: Maybe<Organization>;
-    /** Adds a new member and returns the new user added */
-    addMember?: Maybe<User>;
-    createFeedback?: Maybe<EventLiveFeedback>;
-    hideQuestion?: Maybe<EventQuestion>;
-    reorderQueue?: Maybe<EventQuestion>;
-    createQuestion?: Maybe<EventQuestion>;
-    alterLike?: Maybe<Like>;
-};
-
-export type MutationcreateEventArgs = {
-    event?: Maybe<CreateEvent>;
-};
-
-export type MutationupdateEventArgs = {
-    event?: Maybe<UpdateEvent>;
-};
-
-export type MutationdeleteEventArgs = {
-    event?: Maybe<DeleteEvent>;
-};
-
-export type MutationstartEventArgs = {
-    eventId: Scalars['String'];
-};
-
-export type MutationendEventArgs = {
-    eventId: Scalars['String'];
-};
-
-export type MutationcreateOrganizationArgs = {
-    input?: Maybe<CreateOrg>;
-};
-
-export type MutationupdateOrganizationByIdArgs = {
-    input?: Maybe<UpdateOrg>;
-};
-
-export type MutationdeleteOrganizationByIdArgs = {
-    input?: Maybe<DeleteOrg>;
-};
-
-export type MutationaddMemberArgs = {
-    input?: Maybe<NewMember>;
-};
-
-export type MutationcreateFeedbackArgs = {
-    input?: Maybe<CreateFeedback>;
-};
-
-export type MutationhideQuestionArgs = {
-    input?: Maybe<HideQuestion>;
-};
-
-export type MutationreorderQueueArgs = {
-    input?: Maybe<ReorderQuestion>;
-};
-
-export type MutationcreateQuestionArgs = {
-    input?: Maybe<CreateQuestion>;
-};
-
-export type MutationalterLikeArgs = {
-    input?: Maybe<AlterLike>;
 };
 
 export type Organization = {
@@ -434,12 +447,13 @@ export type ResolversTypes = {
     ID: ResolverTypeWrapper<Scalars['ID']>;
     String: ResolverTypeWrapper<Scalars['String']>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+    RegistrationForm: RegistrationForm;
     Query: ResolverTypeWrapper<{}>;
+    Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
-    Mutation: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
@@ -467,12 +481,13 @@ export type ResolversParentTypes = {
     ID: Scalars['ID'];
     String: Scalars['String'];
     Boolean: Scalars['Boolean'];
+    RegistrationForm: RegistrationForm;
     Query: {};
+    Mutation: {};
     Event: Event;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
-    Mutation: {};
     Organization: Organization;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
@@ -532,39 +547,16 @@ export type QueryResolvers<
     myFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
 };
 
-export type EventResolvers<
-    ContextType = any,
-    ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
-> = {
-    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-    createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-    orgID?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
-    createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    startDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-    endDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-    description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    topic?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isQuestionFeedVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isCollectRatingsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isTransformToForumEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    questions?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventQuestion']>>>, ParentType, ContextType>;
-    speakers?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventSpeaker']>>>, ParentType, ContextType>;
-    registrants?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
-    participants?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventParticipant']>>>, ParentType, ContextType>;
-    videos?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventVideo']>>>, ParentType, ContextType>;
-    liveFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
-    moderators?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
-    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type MutationResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+    register?: Resolver<
+        Maybe<ResolversTypes['User']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationregisterArgs, never>
+    >;
     createEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
@@ -649,6 +641,35 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationalterLikeArgs, never>
     >;
+};
+
+export type EventResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    orgID?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
+    createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    startDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+    endDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+    description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    topic?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isQuestionFeedVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isCollectRatingsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isTransformToForumEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    questions?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventQuestion']>>>, ParentType, ContextType>;
+    speakers?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventSpeaker']>>>, ParentType, ContextType>;
+    registrants?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    participants?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventParticipant']>>>, ParentType, ContextType>;
+    videos?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventVideo']>>>, ParentType, ContextType>;
+    liveFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
+    moderators?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type OrganizationResolvers<
@@ -768,8 +789,8 @@ export type Resolvers<ContextType = any> = {
     Date?: GraphQLScalarType;
     User?: UserResolvers<ContextType>;
     Query?: QueryResolvers<ContextType>;
-    Event?: EventResolvers<ContextType>;
     Mutation?: MutationResolvers<ContextType>;
+    Event?: EventResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
     Subscription?: SubscriptionResolvers<ContextType>;
