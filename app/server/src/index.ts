@@ -22,14 +22,24 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 server.register(mercurius, {
     schema,
-    graphiql: true, // TODO: remove in prod
+    graphiql: process.env.NODE_ENV === 'development',
     context: buildContext,
     subscription: true,
 });
 
 server.register(cookie, {
-    secret: 'secret', // TODO: env
+    secret: process.env.COOKIE_SECRET,
 } as FastifyCookieOptions);
+
+function verifyEnv() {
+    if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
+    if (process.env.NODE_ENV === 'production') {
+        if (!process.env.COOKIE_SECRET) throw new Error('Must define COOKIE_SECRET in production');
+        if (!process.env.JWT_SECRET) throw new Error('Must define JWT_SECRET in production');
+        if (!process.env.PORT) throw new Error('Must define PORT in production');
+        if (!process.env.HOST) throw new Error('Must define HOST in production');
+    }
+}
 
 async function start() {
     // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
@@ -39,8 +49,8 @@ async function start() {
             // enabled: true,
         },
     });
-
-    await server.listen(4000);
+    verifyEnv();
+    await server.listen(process.env.PORT, process.env.HOST);
 }
 
 start();

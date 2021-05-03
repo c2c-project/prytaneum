@@ -2,7 +2,7 @@
   "name": "@app/server",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
+    "dev": "ts-node-dev --watch ./src/features -r tsconfig-paths/register -r dotenv-defaults/config --rs --transpile-only --no-notify --exit-child ./src/index.ts",
     "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts"
   },
   "dependencies": {
@@ -20,8 +20,12 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.1",
+    "@types/dotenv-defaults": "^2",
     "@types/jsonwebtoken": "^8",
     "@types/node": "^15.0.1",
+    "dotenv-cli": "^4.0.0",
+    "dotenv-defaults": "^2.0.1",
+    "dotenv-expand": "^5.1.0",
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4"
