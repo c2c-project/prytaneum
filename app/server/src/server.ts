@@ -1,3 +1,3 @@
 import fastify from 'fastify';
 
-export default fastify({ logger: true });
+export const server = fastify({ logger: true });

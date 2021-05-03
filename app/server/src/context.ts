@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { PrismaClient, User } from '@app/prisma';
-
-import { Maybe } from './graphql-types';
-
-export interface Context {
-    prisma: PrismaClient;
-    userId: Maybe<string>;
-}
-type CtxFn = (req: FastifyRequest, reply: FastifyReply) => Context;
+import { PrismaClient } from '@app/prisma';
 
 const prisma = new PrismaClient();
 
-export const context: CtxFn = (req, _reply) => ({
+export const buildContext = (_req: FastifyRequest, _reply: FastifyReply) => ({
     prisma,
     userId: '', // TODO: real authorization, this is just placeholder for typescript
+    // reply,
 });
+
+type PromiseType<T> = T extends PromiseLike<infer U> ? U : T;
+
+declare module 'mercurius' {
+    interface MercuriusContext extends PromiseType<ReturnType<typeof buildContext>> {}
+}

@@ -1,7 +1,7 @@
-import { User } from '@app/prisma';
 import { PrismaClient } from '@app/prisma';
 import { Maybe, errors } from '@local/features/utils';
 import { RegistrationForm } from '@local/graphql-types';
+
 import bcrypt from 'bcrypt';
 
 type MinimalUser = Pick<RegistrationForm, 'email' | 'firstName' | 'lastName'>;

@@ -1,11 +1,10 @@
-import { Context } from '@local/context';
-import { Resolvers as IResolvers } from '@local/graphql-types';
-import mercurius, { MercuriusContext } from 'mercurius';
+// import { Resolvers as IResolvers } from '@local/graphql-types';
+import mercurius, { IResolvers } from 'mercurius';
 
 /**
  * Resolver type used for making resolvers
  */
-export type Resolvers<T = Context & MercuriusContext> = IResolvers<T>;
+export type Resolvers = IResolvers;
 export const { withFilter } = mercurius;
 
 // convenience export

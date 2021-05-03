@@ -279,7 +279,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bcrypt", "npm:5.0.1"],
             ["fastify", "npm:3.15.1"],
             ["graphql", "npm:15.5.0"],
-            ["mercurius", "npm:7.6.0"],
+            ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.0"],
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.5.0"],
             ["ts-node-dev", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.1.6"],
             ["tsconfig-paths", "npm:3.9.0"],
@@ -17383,10 +17383,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:7b88275c27b10db475c9f60a7e0e63a441ccda398fb341f4a052a1dd53db531b2d877be38b34df17ca005b21547508ebac043f85f9b489778da2853a88ecaa0f#npm:0.5.0", {
-          "packageLocation": "./.yarn/$$virtual/graphql-jit-virtual-9d4c33218f/0/cache/graphql-jit-npm-0.5.0-31ea10e0f3-468104cd47.zip/node_modules/graphql-jit/",
+        ["virtual:8659747940d3a9967b33574ed8a6046107be3cd062e61ec5bb91809d261c3ce09347751305a7223f1e3c205400b19d6bc5d7703c40c91a4c79779c43ccb98050#npm:0.5.0", {
+          "packageLocation": "./.yarn/$$virtual/graphql-jit-virtual-62e181f333/0/cache/graphql-jit-npm-0.5.0-31ea10e0f3-468104cd47.zip/node_modules/graphql-jit/",
           "packageDependencies": [
-            ["graphql-jit", "virtual:7b88275c27b10db475c9f60a7e0e63a441ccda398fb341f4a052a1dd53db531b2d877be38b34df17ca005b21547508ebac043f85f9b489778da2853a88ecaa0f#npm:0.5.0"],
+            ["graphql-jit", "virtual:8659747940d3a9967b33574ed8a6046107be3cd062e61ec5bb91809d261c3ce09347751305a7223f1e3c205400b19d6bc5d7703c40c91a4c79779c43ccb98050#npm:0.5.0"],
             ["@types/graphql", null],
             ["fast-json-stringify", "npm:1.21.0"],
             ["generate-function", "npm:2.3.1"],
@@ -20913,16 +20913,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["npm:7.6.0", {
           "packageLocation": "./.yarn/cache/mercurius-npm-7.6.0-7b88275c27-6ab7dcaff6.zip/node_modules/mercurius/",
           "packageDependencies": [
-            ["mercurius", "npm:7.6.0"],
+            ["mercurius", "npm:7.6.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.0", {
+          "packageLocation": "./.yarn/$$virtual/mercurius-virtual-8659747940/0/cache/mercurius-npm-7.6.0-7b88275c27-6ab7dcaff6.zip/node_modules/mercurius/",
+          "packageDependencies": [
+            ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.0"],
+            ["@types/fastify", null],
             ["@types/isomorphic-form-data", "npm:2.0.0"],
             ["end-of-stream", "npm:1.4.4"],
             ["events.on", "npm:1.0.1"],
+            ["fastify", "npm:3.15.1"],
             ["fastify-error", "npm:0.3.1"],
             ["fastify-plugin", "npm:3.0.0"],
             ["fastify-static", "npm:4.0.1"],
             ["fastify-websocket", "npm:3.1.0"],
             ["graphql", "npm:15.5.0"],
-            ["graphql-jit", "virtual:7b88275c27b10db475c9f60a7e0e63a441ccda398fb341f4a052a1dd53db531b2d877be38b34df17ca005b21547508ebac043f85f9b489778da2853a88ecaa0f#npm:0.5.0"],
+            ["graphql-jit", "virtual:8659747940d3a9967b33574ed8a6046107be3cd062e61ec5bb91809d261c3ce09347751305a7223f1e3c205400b19d6bc5d7703c40c91a4c79779c43ccb98050#npm:0.5.0"],
             ["mqemitter", "npm:4.4.1"],
             ["p-map", "npm:4.0.0"],
             ["promise.allsettled", "npm:1.0.4"],
@@ -20932,6 +20941,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tiny-lru", "npm:7.0.6"],
             ["undici", "npm:3.3.6"],
             ["ws", "virtual:55965b06d8c55786c9fc5be34b4f699b95988eb81783fc76c6056abd16f16cb552496eaa877a8ba3948ae02112ef258bde5ce56d4575e8d06f363be40120da94#npm:7.4.5"]
+          ],
+          "packagePeers": [
+            "@types/fastify",
+            "fastify"
           ],
           "linkType": "HARD",
         }]
@@ -20963,7 +20976,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["chokidar", "npm:3.5.1"],
             ["fastify", "npm:3.15.1"],
             ["graphql", "npm:15.5.0"],
-            ["mercurius", "npm:7.6.0"],
+            ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.0"],
             ["mkdirp", "npm:1.0.4"],
             ["prettier", "npm:2.2.1"]
           ],

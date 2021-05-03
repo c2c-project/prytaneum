@@ -5,8 +5,8 @@ import { join } from 'path';
 import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
 
-import { context } from './context';
-import server from './server';
+import { buildContext } from './context';
+import { server } from './server';
 
 const typeDefsArr = loadFilesSync(join(__dirname, './features/**/*.graphql'));
 const typeDefs = mergeTypeDefs(typeDefsArr);
@@ -22,7 +22,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 server.register(mercurius, {
     schema,
     graphiql: true, // TODO: remove in prod
-    context,
+    context: buildContext,
     subscription: true,
 });
 
@@ -36,9 +36,6 @@ async function start() {
     });
 
     await server.listen(4000);
-
-    // TODO: don't hard code port and host
-    console.log('🚀  Server ready at http://localhost:4000');
 }
 
-void start();
+start();
