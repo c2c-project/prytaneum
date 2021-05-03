@@ -2,11 +2,16 @@
   "name": "@app/db",
   "scripts": {
     "g:update-prisma-types": "prisma generate",
-    "generate": "ts-node-script src/index.ts"
+    "generate": "ts-node-script src/index.ts",
+    "start-db": "dotenv -e .env.defaults -- docker run --name some-postgres -p \"3003:5432\" -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -d postgres"
   },
   "devDependencies": {
+    "@types/dotenv-defaults": "^2",
     "@types/faker": "~5.1.1",
     "@types/node": "^15.0.1",
+    "dotenv-cli": "^4.0.0",
+    "dotenv-defaults": "^2.0.1",
+    "dotenv-expand": "^5.1.0",
     "prisma": "^2.21.2",
     "ts-node": "^9.1.1"
   },

@@ -243,8 +243,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@app/db", "workspace:app/db"],
             ["@app/prisma", "workspace:app/prisma"],
             ["@prisma/client", "virtual:8ee2668734d2d67214d0f1828b64b2a734bd268bb337ebb5c27a25bf509e49ce385d32228674e52f2764a9d9e0791f565457996150d5b91a1fb9e3d4a630eb3f#npm:2.21.2"],
+            ["@types/dotenv-defaults", "npm:2.0.0"],
             ["@types/faker", "npm:5.1.7"],
             ["@types/node", "npm:15.0.1"],
+            ["dotenv-cli", "npm:4.0.0"],
+            ["dotenv-defaults", "npm:2.0.1"],
+            ["dotenv-expand", "npm:5.1.0"],
             ["faker", "https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c"],
             ["globby", "npm:11.0.3"],
             ["prisma", "npm:2.21.2"],
@@ -9079,6 +9083,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/dotenv-defaults", [
+        ["npm:2.0.0", {
+          "packageLocation": "./.yarn/cache/@types-dotenv-defaults-npm-2.0.0-f7def2379b-854a7c5f46.zip/node_modules/@types/dotenv-defaults/",
+          "packageDependencies": [
+            ["@types/dotenv-defaults", "npm:2.0.0"],
+            ["dotenv", "npm:8.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/eslint", [
         ["npm:7.2.10", {
           "packageLocation": "./.yarn/cache/@types-eslint-npm-7.2.10-80d8a98db0-d85af4ab45.zip/node_modules/@types/eslint/",
@@ -14442,12 +14456,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["dotenv-cli", [
+        ["npm:4.0.0", {
+          "packageLocation": "./.yarn/cache/dotenv-cli-npm-4.0.0-e83f369a7b-82b5421b65.zip/node_modules/dotenv-cli/",
+          "packageDependencies": [
+            ["dotenv-cli", "npm:4.0.0"],
+            ["cross-spawn", "npm:7.0.3"],
+            ["dotenv", "npm:8.2.0"],
+            ["dotenv-expand", "npm:5.1.0"],
+            ["minimist", "npm:1.2.5"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["dotenv-defaults", [
         ["npm:1.1.1", {
           "packageLocation": "./.yarn/cache/dotenv-defaults-npm-1.1.1-d526d7792c-cb00ae7bf1.zip/node_modules/dotenv-defaults/",
           "packageDependencies": [
             ["dotenv-defaults", "npm:1.1.1"],
             ["dotenv", "npm:6.2.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.0.1", {
+          "packageLocation": "./.yarn/cache/dotenv-defaults-npm-2.0.1-b5cf26c9c0-53ac7d987b.zip/node_modules/dotenv-defaults/",
+          "packageDependencies": [
+            ["dotenv-defaults", "npm:2.0.1"],
+            ["dotenv", "npm:8.2.0"]
           ],
           "linkType": "HARD",
         }]
