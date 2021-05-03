@@ -1,8 +1,9 @@
-import { PrismaClient } from '@app/prisma';
-import { Maybe, errors } from '@local/features/utils';
-import { RegistrationForm } from '@local/graphql-types';
-
 import bcrypt from 'bcrypt';
+import { PrismaClient } from '@app/prisma';
+
+import * as jwt from '@local/lib/jwt';
+import { Maybe, errors } from '@local/features/utils';
+import { LoginForm, RegistrationForm } from '@local/graphql-types';
 
 type MinimalUser = Pick<RegistrationForm, 'email' | 'firstName' | 'lastName'>;
 /**
@@ -18,7 +19,7 @@ async function register(prisma: PrismaClient, userData: MinimalUser, textPasswor
             lastName,
             fullName: `${firstName} ${lastName}`,
             password: encryptedPassword,
-            preferredLang: 'EN',
+            preferredLang: 'EN', // TODO:
         },
     });
 }
@@ -64,4 +65,40 @@ export async function registerSelf(prisma: PrismaClient, input: Maybe<Registrati
     if (input.password !== input.confirmPassword) throw new Error('Passwords must match');
 
     return register(prisma, input, input.password);
+}
+
+/**
+ * logs in a user and returns the user and a token to be used as a cookie
+ */
+export async function loginWithPassword(prisma: PrismaClient, input: Maybe<LoginForm> | undefined) {
+    if (!input) throw new Error(errors.invalidArgs);
+
+    //
+    // ─── LOGIN VALIDATION ───────────────────────────────────────────────────────────
+    //
+
+    // https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#incorrect-and-correct-response-examples
+    const errorMessage = 'Login failed; Invalid email or password.';
+
+    const { email, password } = input;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    // if there is no password, the user must finish registering their account, how to let them know... TODO:
+    if (!user || !user.password) throw new Error(errorMessage);
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) throw new Error(errorMessage);
+
+    //
+    // ─── TOKEN GENERATION ───────────────────────────────────────────────────────────
+    //
+
+    // TODO: refresh vs access tokens? I may want to issue a short lived token
+    // so that way I can store a refresh token in the user (although not the whole token, just the issuedAt of the refresh token)
+    const token = await jwt.sign({ id: user.userId });
+
+    // NOTE: graphql will remove any sensitive fields, such as password, since they it is not a query-able field
+    return { user, token };
 }

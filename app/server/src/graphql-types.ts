@@ -45,6 +45,11 @@ export type RegistrationForm = {
     email: Scalars['String'];
 };
 
+export type LoginForm = {
+    email: Scalars['String'];
+    password: Scalars['String'];
+};
+
 export type Query = {
     __typename?: 'Query';
     /** Fetch user data about the current user */
@@ -69,6 +74,7 @@ export type QueryorgByIdArgs = {
 export type Mutation = {
     __typename?: 'Mutation';
     register?: Maybe<User>;
+    login?: Maybe<User>;
     createEvent?: Maybe<Event>;
     updateEvent?: Maybe<Event>;
     deleteEvent?: Maybe<Event>;
@@ -90,6 +96,10 @@ export type Mutation = {
 
 export type MutationregisterArgs = {
     input?: Maybe<RegistrationForm>;
+};
+
+export type MutationloginArgs = {
+    input?: Maybe<LoginForm>;
 };
 
 export type MutationcreateEventArgs = {
@@ -448,6 +458,7 @@ export type ResolversTypes = {
     String: ResolverTypeWrapper<Scalars['String']>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     RegistrationForm: RegistrationForm;
+    LoginForm: LoginForm;
     Query: ResolverTypeWrapper<{}>;
     Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
@@ -482,6 +493,7 @@ export type ResolversParentTypes = {
     String: Scalars['String'];
     Boolean: Scalars['Boolean'];
     RegistrationForm: RegistrationForm;
+    LoginForm: LoginForm;
     Query: {};
     Mutation: {};
     Event: Event;
@@ -557,6 +569,7 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationregisterArgs, never>
     >;
+    login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationloginArgs, never>>;
     createEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,

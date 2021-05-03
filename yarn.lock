@@ -165,10 +165,13 @@ __metadata:
     "@graphql-tools/merge": ^6.2.13
     "@graphql-tools/schema": ^7.1.3
     "@types/bcrypt": ^3.0.1
+    "@types/jsonwebtoken": ^8
     "@types/node": ^15.0.1
     bcrypt: ^5.0.1
     fastify: ^3.15.1
+    fastify-cookie: ^5.3.0
     graphql: ^15.5.0
+    jsonwebtoken: ^8.5.1
     mercurius: ^7.6.0
     mercurius-codegen: ^1.5.0
     ts-node-dev: ^1.1.6
@@ -4865,7 +4868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.5.0":
+"@types/jsonwebtoken@npm:^8, @types/jsonwebtoken@npm:^8.5.0":
   version: 8.5.1
   resolution: "@types/jsonwebtoken@npm:8.5.1"
   dependencies:
@@ -8165,6 +8168,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie-signature@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "cookie-signature@npm:1.1.0"
+  checksum: a4665a1fd45dc79168bdd1ffcd17de0083974ac427520bedac7c2f7bce261d2376a101566f7f4d833d52954f2af63412ee26daa00e9c695fadea2154b3d8ca24
+  languageName: node
+  linkType: hard
+
 "cookie@npm:0.4.0":
   version: 0.4.0
   resolution: "cookie@npm:0.4.0"
@@ -10339,6 +10349,17 @@ __metadata:
   version: 2.0.7
   resolution: "fast-safe-stringify@npm:2.0.7"
   checksum: 7bd22543263b707870d70c6f2336b6e8563e34d6807dc388cc0566895e31e0a8273af017a7eb1c9538d0ef54288284e1c0585b557bd856491295a847159fd929
+  languageName: node
+  linkType: hard
+
+"fastify-cookie@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "fastify-cookie@npm:5.3.0"
+  dependencies:
+    cookie: ^0.4.0
+    cookie-signature: ^1.1.0
+    fastify-plugin: ^3.0.0
+  checksum: e7970aa1323bb2b58a63f35a4932c2740e22a6b566101707e7ff83f98f08d5a7f2516ad9ba7901d61b12fb30237cd66157871dcacb87a0f9481a3fe6244748cd
   languageName: node
   linkType: hard
 

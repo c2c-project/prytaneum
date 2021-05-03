@@ -21,7 +21,7 @@ After running the above, the corresponding folders and files are added inside of
 
 ## Security
 
-[make a todo checklist based off of this](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html#batching-attacks) -- also take a look at the links at the bottom
+[make a todo checklist based off of this](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html) -- also take a look at the links at the bottom
 
 # Optimizations Notes
 - [Take a look here to optimize queries](https://stackoverflow.com/a/59871178/15437092)

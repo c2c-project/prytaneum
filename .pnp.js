@@ -275,10 +275,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/merge", "virtual:518e8acecd41a777f60446d1354202140c9e593236dcab105ddaaa813375e1ec913fc5d14151a6c78eebc0b7c9ee5a5ef41b3db920b96661e92878e0027473cf#npm:6.2.13"],
             ["@graphql-tools/schema", "virtual:f7a6a9227e28241437f300b007d7630ba4ef64c0dae7c7ab78234e07bced63ab7737fbe1c616c7e5d578305477a11f39982b255b5199a977ccec3b5f84a2682c#npm:7.1.3"],
             ["@types/bcrypt", "npm:3.0.1"],
+            ["@types/jsonwebtoken", "npm:8.5.1"],
             ["@types/node", "npm:15.0.1"],
             ["bcrypt", "npm:5.0.1"],
             ["fastify", "npm:3.15.1"],
+            ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
             ["graphql", "npm:15.5.0"],
+            ["jsonwebtoken", "npm:8.5.1"],
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.0"],
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.5.0"],
             ["ts-node-dev", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.1.6"],
@@ -13267,6 +13270,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cookie-signature", "npm:1.0.6"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/cookie-signature-npm-1.1.0-f28f68ab67-a4665a1fd4.zip/node_modules/cookie-signature/",
+          "packageDependencies": [
+            ["cookie-signature", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["copy-concurrently", [
@@ -16020,6 +16030,31 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["secure-json-parse", "npm:2.4.0"],
             ["semver", "npm:7.3.5"],
             ["tiny-lru", "npm:7.0.6"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["fastify-cookie", [
+        ["npm:5.3.0", {
+          "packageLocation": "./.yarn/cache/fastify-cookie-npm-5.3.0-488d6fbcb1-e7970aa132.zip/node_modules/fastify-cookie/",
+          "packageDependencies": [
+            ["fastify-cookie", "npm:5.3.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0", {
+          "packageLocation": "./.yarn/$$virtual/fastify-cookie-virtual-6a8eb01299/0/cache/fastify-cookie-npm-5.3.0-488d6fbcb1-e7970aa132.zip/node_modules/fastify-cookie/",
+          "packageDependencies": [
+            ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
+            ["@types/fastify", null],
+            ["cookie", "npm:0.4.1"],
+            ["cookie-signature", "npm:1.1.0"],
+            ["fastify", "npm:3.15.1"],
+            ["fastify-plugin", "npm:3.0.0"]
+          ],
+          "packagePeers": [
+            "@types/fastify",
+            "fastify"
           ],
           "linkType": "HARD",
         }]

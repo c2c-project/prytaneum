@@ -27,6 +27,11 @@ input RegistrationForm {
     email: String!
 }
 
+input LoginForm {
+    email: String!
+    password: String!
+}
+
 type Query {
     """
     Fetch user data about the current user
@@ -36,4 +41,5 @@ type Query {
 
 type Mutation {
     register(input: RegistrationForm): User
+    login(input: LoginForm): User
 }

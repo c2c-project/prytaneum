@@ -4,6 +4,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { join } from 'path';
 import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
+import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 
 import { buildContext } from './context';
 import { server } from './server';
@@ -25,6 +26,10 @@ server.register(mercurius, {
     context: buildContext,
     subscription: true,
 });
+
+server.register(cookie, {
+    secret: 'secret', // TODO: env
+} as FastifyCookieOptions);
 
 async function start() {
     // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
