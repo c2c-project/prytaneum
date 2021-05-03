@@ -245,11 +245,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@app/db", "workspace:app/db"],
             ["@app/prisma", "workspace:app/prisma"],
             ["@prisma/client", "virtual:8ee2668734d2d67214d0f1828b64b2a734bd268bb337ebb5c27a25bf509e49ce385d32228674e52f2764a9d9e0791f565457996150d5b91a1fb9e3d4a630eb3f#npm:2.21.2"],
-            ["@types/dotenv-defaults", "npm:2.0.0"],
             ["@types/faker", "npm:5.1.7"],
             ["@types/node", "npm:15.0.1"],
             ["dotenv-cli", "npm:4.0.0"],
-            ["dotenv-defaults", "npm:2.0.1"],
             ["dotenv-expand", "npm:5.1.0"],
             ["faker", "https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c"],
             ["globby", "npm:11.0.3"],
@@ -281,12 +279,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/merge", "virtual:518e8acecd41a777f60446d1354202140c9e593236dcab105ddaaa813375e1ec913fc5d14151a6c78eebc0b7c9ee5a5ef41b3db920b96661e92878e0027473cf#npm:6.2.13"],
             ["@graphql-tools/schema", "virtual:f7a6a9227e28241437f300b007d7630ba4ef64c0dae7c7ab78234e07bced63ab7737fbe1c616c7e5d578305477a11f39982b255b5199a977ccec3b5f84a2682c#npm:7.1.3"],
             ["@types/bcrypt", "npm:3.0.1"],
-            ["@types/dotenv-defaults", "npm:2.0.0"],
             ["@types/jsonwebtoken", "npm:8.5.1"],
             ["@types/node", "npm:15.0.1"],
             ["bcrypt", "npm:5.0.1"],
+            ["dotenv", "npm:8.2.0"],
             ["dotenv-cli", "npm:4.0.0"],
-            ["dotenv-defaults", "npm:2.0.1"],
             ["dotenv-expand", "npm:5.1.0"],
             ["fastify", "npm:3.15.1"],
             ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
@@ -9099,16 +9096,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/dotenv-defaults", [
-        ["npm:2.0.0", {
-          "packageLocation": "./.yarn/cache/@types-dotenv-defaults-npm-2.0.0-f7def2379b-854a7c5f46.zip/node_modules/@types/dotenv-defaults/",
-          "packageDependencies": [
-            ["@types/dotenv-defaults", "npm:2.0.0"],
-            ["dotenv", "npm:8.2.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@types/eslint", [
         ["npm:7.2.10", {
           "packageLocation": "./.yarn/cache/@types-eslint-npm-7.2.10-80d8a98db0-d85af4ab45.zip/node_modules/@types/eslint/",
@@ -14509,14 +14496,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["dotenv-defaults", "npm:1.1.1"],
             ["dotenv", "npm:6.2.0"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:2.0.1", {
-          "packageLocation": "./.yarn/cache/dotenv-defaults-npm-2.0.1-b5cf26c9c0-53ac7d987b.zip/node_modules/dotenv-defaults/",
-          "packageDependencies": [
-            ["dotenv-defaults", "npm:2.0.1"],
-            ["dotenv", "npm:8.2.0"]
           ],
           "linkType": "HARD",
         }]

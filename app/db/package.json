@@ -3,15 +3,13 @@
     "scripts": {
         "g:update-prisma-types": "prisma generate",
         "generate": "ts-node-script src/index.ts",
-        "start-db": "dotenv -c defaults -- docker-compose up -d",
+        "start-db": "dotenv -c development -- docker-compose up -d",
         "stop-db": "docker-compose down"
     },
     "devDependencies": {
-        "@types/dotenv-defaults": "^2",
         "@types/faker": "~5.1.1",
         "@types/node": "^15.0.1",
         "dotenv-cli": "^4.0.0",
-        "dotenv-defaults": "^2.0.1",
         "dotenv-expand": "^5.1.0",
         "prisma": "^2.21.2",
         "ts-node": "^9.1.1"
