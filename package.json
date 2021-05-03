@@ -40,6 +40,7 @@
         "g:update-types": "ts-node ./scripts/make-types"
     },
     "dependencies": {
+        "babel-eslint": "^10.1.0",
         "graphql": "^15.5.0",
         "graphql-tag": "^2.11.0"
     }

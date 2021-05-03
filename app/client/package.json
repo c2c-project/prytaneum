@@ -34,6 +34,7 @@
         "react-player": "^1.11.1",
         "react-redux": "^7.2.2",
         "react-transition-group": "^4.4.1",
+        "redux": "^4.1.0",
         "redux-devtools-extension": "^2.13.9",
         "smoothscroll-polyfill": "^0.4.4"
     },

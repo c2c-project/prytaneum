@@ -45,6 +45,7 @@ module.exports = {
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
         'react/jsx-props-no-spreading': 'off',
+        'import/prefer-default-export': 'off',
     },
     overrides: [
         {
