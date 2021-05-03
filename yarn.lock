@@ -4676,6 +4676,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/concurrently@npm:^6":
+  version: 6.0.1
+  resolution: "@types/concurrently@npm:6.0.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 760d76aba803565701aaab1577ee713fd12d82ac3df095d2dd1984989f41544f9c8b4abcd181bc38b6021b364ef905178d7be22f4a4e688f6e3b4b332d8cd54a
+  languageName: node
+  linkType: hard
+
 "@types/deepmerge@npm:^2.2.0":
   version: 2.2.0
   resolution: "@types/deepmerge@npm:2.2.0"
@@ -8069,6 +8078,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"concurrently@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "concurrently@npm:6.0.2"
+  dependencies:
+    chalk: ^4.1.0
+    date-fns: ^2.16.1
+    lodash: ^4.17.21
+    read-pkg: ^5.2.0
+    rxjs: ^6.6.3
+    spawn-command: ^0.0.2-1
+    supports-color: ^8.1.0
+    tree-kill: ^1.2.2
+    yargs: ^16.2.0
+  bin:
+    concurrently: bin/concurrently.js
+  checksum: 2bb8892c8948bcfd8bd4079d720507acb3e49fdb5a4ad4e315f4ffdc768fb8cc7f3b25a1e98fbd7734efe6a8c86a5bd0f77001a212bd2db4ce67f05d0868f326
+  languageName: node
+  linkType: hard
+
 "confusing-browser-globals@npm:^1.0.10":
   version: 1.0.10
   resolution: "confusing-browser-globals@npm:1.0.10"
@@ -8681,7 +8709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.14.0":
+"date-fns@npm:^2.14.0, date-fns@npm:^2.16.1":
   version: 2.21.1
   resolution: "date-fns@npm:2.21.1"
   checksum: 00a2ddea1047c4ce6eaadda76a0ee0782d1cfe65061641bbff94f7a70d2d6ab12dac89e027b39d49710bdb2cf264bc1a4e096b0324c7de79699296a4c19f4a40
@@ -16727,11 +16755,13 @@ fsevents@^1.2.7:
     "@graphql-codegen/typescript-operations": 1.17.16
     "@graphql-codegen/typescript-react-apollo": 2.2.4
     "@graphql-codegen/typescript-resolvers": 1.19.1
+    "@types/concurrently": ^6
     "@types/eslint": ^7
     "@types/node": ^14.14.41
     "@typescript-eslint/eslint-plugin": ^4.22.0
     "@typescript-eslint/parser": ^4.22.0
     babel-eslint: ^10.1.0
+    concurrently: ^6.0.2
     eslint: ^7.25.0
     eslint-config-airbnb-typescript: ^12.3.1
     eslint-config-prettier: ^8.3.0
@@ -18199,7 +18229,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.6.0":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.6.0, rxjs@npm:^6.6.3":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -18846,6 +18876,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"spawn-command@npm:^0.0.2-1":
+  version: 0.0.2
+  resolution: "spawn-command@npm:0.0.2"
+  checksum: 961fb1551f2d5848509ec661f639c515e582034b010724fcaad6949148e21c50226e30889dd710a70dce25c4ba43437665aad621fc37c0f8a75fa9ec3e46a69f
+  languageName: node
+  linkType: hard
+
 "spdx-correct@npm:^3.0.0":
   version: 3.1.1
   resolution: "spdx-correct@npm:3.1.1"
@@ -19467,7 +19504,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^8.0.0":
+"supports-color@npm:^8.0.0, supports-color@npm:^8.1.0":
   version: 8.1.1
   resolution: "supports-color@npm:8.1.1"
   dependencies:
