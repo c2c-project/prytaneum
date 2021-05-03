@@ -6,6 +6,10 @@
 -   Install [Docker/Docker Compose](https://docs.docker.com/compose/install/)
 -   Install [Yarn v2](https://yarnpkg.com/getting-started)
 
+## Quick Start
+1. `yarn install`
+2. `yarn g:start-project`
+
 ## Basics
 
 Before getting into common development workflows, lets first go over the building blocks to the development workflow
