@@ -1,5 +1,5 @@
 type EventLiveFeedback {
-    id: ID!
+    feedbackId: ID!
     message: String!
     event: Event
     createdAt: String

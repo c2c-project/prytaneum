@@ -2,7 +2,7 @@
 User Data
 """
 type User {
-    id: ID!
+    userId: ID!
     firstName: String!
     lastName: String
     email: String

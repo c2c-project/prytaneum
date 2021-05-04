@@ -1,5 +1,5 @@
 type EventQuestion {
-    id: ID
+    questionId: ID
     event: Event
 
     """

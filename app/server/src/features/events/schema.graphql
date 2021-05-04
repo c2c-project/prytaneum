@@ -1,5 +1,5 @@
 type Event {
-    id: ID!
+    eventId: ID!
 
     """
     Creator of this event

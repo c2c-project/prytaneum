@@ -26,7 +26,7 @@ export type Scalars = {
 /** User Data */
 export type User = {
     __typename?: 'User';
-    id: Scalars['ID'];
+    userId: Scalars['ID'];
     firstName: Scalars['String'];
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
@@ -160,7 +160,7 @@ export type MutationalterLikeArgs = {
 
 export type Event = {
     __typename?: 'Event';
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
     /** Creator of this event */
     createdBy?: Maybe<User>;
     /** The owning organization */
@@ -229,7 +229,7 @@ export type DeleteEvent = {
 export type Organization = {
     __typename?: 'Organization';
     /** Unique identifier for this org */
-    id: Scalars['ID'];
+    orgId: Scalars['ID'];
     /** name of the org */
     name: Scalars['String'];
     /** When this org was created */
@@ -263,7 +263,7 @@ export type NewMember = {
 
 export type EventLiveFeedback = {
     __typename?: 'EventLiveFeedback';
-    id: Scalars['ID'];
+    feedbackId: Scalars['ID'];
     message: Scalars['String'];
     event?: Maybe<Event>;
     createdAt?: Maybe<Scalars['String']>;
@@ -316,7 +316,7 @@ export type EventParticipant = {
 
 export type EventQuestion = {
     __typename?: 'EventQuestion';
-    id?: Maybe<Scalars['ID']>;
+    questionId?: Maybe<Scalars['ID']>;
     event?: Maybe<Event>;
     /** User information on the person asking the question */
     createdBy?: Maybe<User>;
@@ -528,7 +528,7 @@ export type UserResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
 > = {
-    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -660,7 +660,7 @@ export type EventResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
 > = {
-    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     orgID?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -689,7 +689,7 @@ export type OrganizationResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']
 > = {
-    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    orgId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     members?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
@@ -701,7 +701,7 @@ export type EventLiveFeedbackResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventLiveFeedback'] = ResolversParentTypes['EventLiveFeedback']
 > = {
-    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    feedbackId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -750,7 +750,7 @@ export type EventQuestionResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventQuestion'] = ResolversParentTypes['EventQuestion']
 > = {
-    id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    questionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -839,7 +839,7 @@ type LoaderResolver<TReturn, TObj, TParams, TContext> =
       };
 export interface Loaders<TContext = import('mercurius').MercuriusContext & { reply: import('fastify').FastifyReply }> {
     User?: {
-        id?: LoaderResolver<Scalars['ID'], User, {}, TContext>;
+        userId?: LoaderResolver<Scalars['ID'], User, {}, TContext>;
         firstName?: LoaderResolver<Scalars['String'], User, {}, TContext>;
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
@@ -849,7 +849,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     Event?: {
-        id?: LoaderResolver<Scalars['ID'], Event, {}, TContext>;
+        eventId?: LoaderResolver<Scalars['ID'], Event, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, Event, {}, TContext>;
         orgID?: LoaderResolver<Maybe<Organization>, Event, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
@@ -874,7 +874,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     Organization?: {
-        id?: LoaderResolver<Scalars['ID'], Organization, {}, TContext>;
+        orgId?: LoaderResolver<Scalars['ID'], Organization, {}, TContext>;
         name?: LoaderResolver<Scalars['String'], Organization, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, Organization, {}, TContext>;
         members?: LoaderResolver<Maybe<Array<Maybe<User>>>, Organization, {}, TContext>;
@@ -882,7 +882,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventLiveFeedback?: {
-        id?: LoaderResolver<Scalars['ID'], EventLiveFeedback, {}, TContext>;
+        feedbackId?: LoaderResolver<Scalars['ID'], EventLiveFeedback, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventLiveFeedback, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventLiveFeedback, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedback, {}, TContext>;
@@ -896,7 +896,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventQuestion?: {
-        id?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
+        questionId?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventQuestion, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventQuestion, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;

@@ -2,7 +2,7 @@ type Organization {
     """
     Unique identifier for this org
     """
-    id: ID!
+    orgId: ID!
     """
     name of the org
     """

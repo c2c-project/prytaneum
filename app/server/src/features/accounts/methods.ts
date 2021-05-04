@@ -1,9 +1,19 @@
 import bcrypt from 'bcrypt';
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient, User as PrismaUser } from '@app/prisma';
 
 import * as jwt from '@local/lib/jwt';
 import { Maybe, errors } from '@local/features/utils';
-import { LoginForm, RegistrationForm } from '@local/graphql-types';
+import { LoginForm, RegistrationForm, User as GQLUser } from '@local/graphql-types';
+
+/**
+ * maps keys not defined in the prisma model to keys necessary in the graphql model
+ */
+function translateUser(user: PrismaUser): GQLUser {
+    return {
+        id: user.userId,
+        ...user,
+    };
+}
 
 type MinimalUser = Pick<RegistrationForm, 'email' | 'firstName' | 'lastName'>;
 /**
