@@ -5,3 +5,4 @@
 4. Users may register for an account ✔️
 5. Users may disable their accounts ❌
 6. Users may login to their accounts ✔️
+7. Users may logout of their account ✔️

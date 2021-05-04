@@ -6,6 +6,10 @@ export const resolvers: Resolvers = {
         me(parent, args, ctx, info) {
             return User.userById(ctx.userId, ctx.prisma);
         },
+        logout(parent, args, ctx, info) {
+            ctx.reply.clearCookie('jwt');
+            return new Date();
+        },
     },
     User: {
         organizations(parent, args, ctx, info) {

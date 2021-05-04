@@ -54,6 +54,8 @@ export type Query = {
     __typename?: 'Query';
     /** Fetch user data about the current user */
     me?: Maybe<User>;
+    /** The logout just returns the timestamp of the logout action */
+    logout?: Maybe<Scalars['Date']>;
     /** Fetch an event by id */
     eventById?: Maybe<Event>;
     /** Fetch organizations relevant to the current user */
@@ -543,6 +545,7 @@ export type QueryResolvers<
     ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    logout?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     eventById?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,

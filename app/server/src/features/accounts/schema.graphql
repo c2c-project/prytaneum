@@ -37,6 +37,11 @@ type Query {
     Fetch user data about the current user
     """
     me: User
+
+    """
+    The logout just returns the timestamp of the logout action
+    """
+    logout: Date
 }
 
 type Mutation {
