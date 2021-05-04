@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { FormActions } from '@local/components/FormActions';
 import { TextField } from '@local/components/TextField';
 // import useEndpoint from '@local/hooks/useEndpoint';
 import { LoadingButton } from '@local/components/LoadingButton';
@@ -69,7 +68,7 @@ export function LoginForm({ onSuccess }: Props) {
     // });
 
     return (
-        <Form onSubmit={handleSubmit(console.log)}>
+        <Form onSubmit={handleSubmit(onSuccess)}>
             <FormContent>
                 <TextField
                     id='login-email'
@@ -112,14 +111,11 @@ export function LoginForm({ onSuccess }: Props) {
                         }}
                     />
                     <Grid container justify='flex-end'>
-                        <MUILink
-                            component={Link}
-                            className={classes.link}
-                            color='primary'
-                            href='/forgot-password'
-                        >
-                            Forgot Password?
-                        </MUILink>
+                        <Link href='/forgot-password' passHref>
+                            <MUILink className={classes.link} color='primary'>
+                                Forgot Password?
+                            </MUILink>
+                        </Link>
                     </Grid>
                 </>
             </FormContent>

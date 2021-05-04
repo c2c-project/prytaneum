@@ -2492,6 +2492,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-codegen/typescript-apollo-client-helpers@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "@graphql-codegen/typescript-apollo-client-helpers@npm:1.1.5"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^1.18.5
+    "@graphql-codegen/visitor-plugin-common": ^1.20.0
+    auto-bind: ~4.0.0
+    change-case-all: 1.0.14
+    tslib: ~2.2.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: c71f6f638c7d00a7ba37c6bf411bfa0cf702ade0d4efcb84e1eda5cf405d0de87134d45348207d28e7edda489a1a9855a302aea29ef9bacfa3b15a47301eebae
+  languageName: node
+  linkType: hard
+
 "@graphql-codegen/typescript-operations@npm:1.17.16, @graphql-codegen/typescript-operations@npm:^1.17.16":
   version: 1.17.16
   resolution: "@graphql-codegen/typescript-operations@npm:1.17.16"
@@ -16731,6 +16746,7 @@ fsevents@^1.2.7:
     "@graphql-codegen/cli": ^1.21.4
     "@graphql-codegen/introspection": 1.18.2
     "@graphql-codegen/typescript": 1.22.0
+    "@graphql-codegen/typescript-apollo-client-helpers": ^1.1.5
     "@graphql-codegen/typescript-operations": 1.17.16
     "@graphql-codegen/typescript-react-apollo": 2.2.4
     "@graphql-codegen/typescript-resolvers": 1.19.1

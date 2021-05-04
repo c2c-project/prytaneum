@@ -8,17 +8,13 @@ import BackIcon from '@material-ui/icons/ArrowBack';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
+import { useRegisterMutation } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { FormActions } from '@local/components/FormActions';
 import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useSnack } from '@local/hooks/useSnack';
 import { useForm } from '@local/hooks/useForm';
-import { useQuery } from '@local/hooks/useQuery';
-// import useUser from '@local/hooks/useUser';
-
-import API from '../api';
 
 interface Props {
     onSuccess: () => void;
@@ -45,25 +41,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export default function RegisterForm({ onSuccess, onFailure }: Props) {
-    const [snack] = useSnack();
-    const query = useQuery();
-    const classes = useStyles();
-    const router = useRouter();
-    // const [, setUser] = useUser();
+    // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    // const builtRequest = React.useCallback(() => API.register(form, query), [form, query]);
-    // const [sendRequest, isLoading] = useEndpoint(builtRequest, {
-    //     onSuccess: ({ data }) => {
-    //         setUser(data.user);
-    //         snack('Successfully registered!');
-    //         onSuccess();
-    //     },
-    //     onFailure,
-    // });
+
+    // styling hook
+    const classes = useStyles();
+
+    // request hook
+    const [register, { data, loading }] = useRegisterMutation({
+        variables: { input: form },
+        onCompleted: onSuccess,
+        onError: onFailure,
+    });
+    // const [, setUser] = useUser();
+
+    // user feedback
+    const [snack] = useSnack();
+
+    // navigation
+    const router = useRouter();
 
     return (
-        <Form onSubmit={handleSubmit(console.log)}>
+        <Form onSubmit={handleSubmit(register)}>
             <FormContent>
                 <TextField
                     id='register-first-name'
@@ -153,7 +153,7 @@ export default function RegisterForm({ onSuccess, onFailure }: Props) {
                 />
             </FormContent>
             <Grid container item direction='column' className={classes.btnGroup}>
-                <LoadingButton loading={false}>
+                <LoadingButton loading={loading}>
                     <Button fullWidth type='submit' variant='contained' color='primary'>
                         Register
                     </Button>
