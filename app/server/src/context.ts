@@ -1,14 +1,21 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { PrismaClient } from '@app/prisma';
+import { verify } from './lib/jwt';
 
 const prisma = new PrismaClient();
 
-export const buildContext = (_req: FastifyRequest, _reply: FastifyReply) => ({
-    prisma,
-    userId: '', // TODO: real authorization, this is just placeholder for typescript
-    // reply,
-});
+export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
+    let userId = '';
+    if (req.cookies.jwt) {
+        const decodedJwt = await verify(req.cookies.jwt).catch(() => reply.clearCookie('jwt').send());
+        userId = (decodedJwt as { id: string }).id;
+    }
+    return {
+        prisma,
+        userId,
+    };
+};
 
 type PromiseType<T> = T extends PromiseLike<infer U> ? U : T;
 

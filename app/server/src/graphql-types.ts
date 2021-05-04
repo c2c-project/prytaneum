@@ -8,7 +8,7 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
     args: TArgs,
     context: TContext,
     info: GraphQLResolveInfo
-) => Promise<import('mercurius-codegen').DeepPartial<TResult>> | import('mercurius-codegen').DeepPartial<TResult>;
+) => Promise<TResult> | TResult;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
     { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */

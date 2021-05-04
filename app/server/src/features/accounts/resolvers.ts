@@ -13,7 +13,7 @@ export const resolvers: Resolvers = {
         },
     },
     Mutation: {
-        register(parent, args, ctx, info) {
+        async register(parent, args, ctx, info) {
             return User.registerSelf(ctx.prisma, args.input);
         },
         async login(parent, args, ctx, info) {

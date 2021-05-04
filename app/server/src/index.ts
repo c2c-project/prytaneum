@@ -48,6 +48,16 @@ async function start() {
         watchOptions: {
             // enabled: true,
         },
+        codegenConfig: {
+            // idk why they change it from the default
+            // https://github.com/mercurius-js/mercurius-typescript/blob/25f4f437d41be645ae13d0836123e82f4e14afe4/packages/mercurius-codegen/src/code.ts#L78
+            customResolverFn:
+                '(parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => Promise<TResult> | TResult',
+            // avoidOptionals: {
+            //     defaultValue: true
+            // },
+            // maybeValue: 'T | null | undefined',
+        },
     });
     verifyEnv();
     await server.listen(process.env.PORT, process.env.HOST);
