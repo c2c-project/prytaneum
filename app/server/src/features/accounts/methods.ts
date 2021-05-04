@@ -51,8 +51,10 @@ export async function userOrgs(userId: Maybe<string>, prisma: PrismaClient) {
         },
     });
 
+    if (!results) return null;
+
     // prepare data for graphql layer
-    const formattedData = results?.memberOf.map(({ organization }) => organization);
+    const formattedData = results.memberOf.map(({ organization }) => organization);
 
     return formattedData;
 }
