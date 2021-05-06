@@ -8,7 +8,7 @@
 
 ## Quick Start
 1. `yarn install`
-2. `yarn g:start-project`
+2. `yarn g:dev-project`
 
 ## Basics
 
