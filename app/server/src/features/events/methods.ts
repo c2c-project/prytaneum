@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { Event, PrismaClient } from '@app/prisma';
 import { CreateEvent, DeleteEvent, Maybe, UpdateEvent } from '@local/graphql-types';
 import { errors, filterOutFalsy } from '@local/features/utils';
@@ -86,7 +87,7 @@ async function canUserModify(userId: string, eventId: string, prisma: PrismaClie
                 },
             },
         },
-        where: { eventId: eventId },
+        where: { eventId },
     });
     const isMember = queryResult ? queryResult.organization.members.length > 0 : false;
     return isMember;
@@ -122,4 +123,11 @@ export async function deleteEvent(userId: Maybe<string>, prisma: PrismaClient, i
     if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
 
     return prisma.event.delete({ where: { eventId: input.eventId } });
+}
+
+/**
+ * fetch an event list
+ */
+export async function getPublicEvents(prisma: PrismaClient) {
+    return prisma.event.findMany();
 }

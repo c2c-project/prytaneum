@@ -40,8 +40,6 @@ export async function createOrg(userId: Maybe<string>, prisma: PrismaClient, inp
 
     if (!user) throw new Error(errors.DNE('User')); // user doesn't exist for some reason...
 
-    if (!user.canMakeOrgs) throw new Error(errors.permissions); // user does not have permissions to create an org
-
     // create the org, while adding the current user as a member
     // reference: https://www.prisma.io/docs/guides/performance-and-optimization/prisma-client-transactions-guide/#dependent-writes
     return prisma.organization.create({

@@ -58,6 +58,8 @@ export type Query = {
     logout?: Maybe<Scalars['Date']>;
     /** Fetch an event by id */
     eventById?: Maybe<Event>;
+    /** Fetch all events */
+    events?: Maybe<Array<Maybe<Event>>>;
     /** Fetch organizations relevant to the current user */
     myOrgs?: Maybe<Array<Maybe<Organization>>>;
     /** Fetch data about a particular org */
@@ -552,6 +554,7 @@ export type QueryResolvers<
         ContextType,
         RequireFields<QueryeventByIdArgs, 'id'>
     >;
+    events?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
     myOrgs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>;
     orgById?: Resolver<
         Maybe<ResolversTypes['Organization']>,

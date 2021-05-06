@@ -134,4 +134,9 @@ type Query {
     Fetch an event by id
     """
     eventById(id: ID!): Event
+
+    """
+    Fetch all events
+    """
+    events: [Event]
 }

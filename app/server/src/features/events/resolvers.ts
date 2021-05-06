@@ -6,6 +6,9 @@ export const resolvers: Resolvers = {
         eventById(parent, args, ctx, info) {
             return Event.eventById(ctx.prisma, args.id);
         },
+        events(parent, args, ctx, info) {
+            return Event.getPublicEvents(ctx.prisma);
+        },
     },
     Mutation: {
         createEvent(parent, args, ctx, info) {
@@ -17,8 +20,14 @@ export const resolvers: Resolvers = {
         deleteEvent(parent, args, ctx, info) {
             return Event.deleteEvent(ctx.userId, ctx.prisma, args.event);
         },
-        startEvent() { return null; },
-        endEvent(){ return null; },
-        createFeedback() { return null; }
+        startEvent() {
+            return null;
+        },
+        endEvent() {
+            return null;
+        },
+        createFeedback() {
+            return null;
+        },
     },
 };
