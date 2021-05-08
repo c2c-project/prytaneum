@@ -23,10 +23,10 @@ export const resolvers: Resolvers = {
     },
     Organization: {
         members(parent, input, ctx, info) {
-            return Organization.membersByOrgId(ctx.userId, ctx.prisma, parent.id);
+            return Organization.membersByOrgId(ctx.userId, ctx.prisma, parent.orgId);
         },
         events(parent, input, ctx, info) {
-            return Organization.eventsByOrgId(ctx.prisma, parent.id);
+            return Organization.eventsByOrgId(ctx.prisma, parent.orgId);
         },
     },
 };

@@ -27,7 +27,7 @@ export type Scalars = {
 export type User = {
     __typename?: 'User';
     userId: Scalars['ID'];
-    firstName: Scalars['String'];
+    firstName?: Maybe<Scalars['String']>;
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
     isEmailVerified?: Maybe<Scalars['Boolean']>;
@@ -94,6 +94,8 @@ export type Mutation = {
     createFeedback?: Maybe<EventLiveFeedback>;
     hideQuestion?: Maybe<EventQuestion>;
     reorderQueue?: Maybe<EventQuestion>;
+    /** Add a new moderator to the given event */
+    addModerator?: Maybe<User>;
     createQuestion?: Maybe<EventQuestion>;
     alterLike?: Maybe<Like>;
 };
@@ -154,6 +156,10 @@ export type MutationreorderQueueArgs = {
     input?: Maybe<ReorderQuestion>;
 };
 
+export type MutationaddModeratorArgs = {
+    input?: Maybe<AddModerator>;
+};
+
 export type MutationcreateQuestionArgs = {
     input?: Maybe<CreateQuestion>;
 };
@@ -168,16 +174,16 @@ export type Event = {
     /** Creator of this event */
     createdBy?: Maybe<User>;
     /** The owning organization */
-    orgID?: Maybe<Organization>;
+    organization?: Maybe<Organization>;
     createdAt?: Maybe<Scalars['Date']>;
     updatedAt?: Maybe<Scalars['Date']>;
-    title: Scalars['String'];
+    title?: Maybe<Scalars['String']>;
     /** The planned start date time string */
-    startDateTime: Scalars['Date'];
+    startDateTime?: Maybe<Scalars['Date']>;
     /** The planned end date time string */
-    endDateTime: Scalars['Date'];
-    description: Scalars['String'];
-    topic: Scalars['String'];
+    endDateTime?: Maybe<Scalars['Date']>;
+    description?: Maybe<Scalars['String']>;
+    topic?: Maybe<Scalars['String']>;
     /** Whether or not the Event is live */
     isActive?: Maybe<Scalars['Boolean']>;
     /** Let all users see what questions have been submitted */
@@ -185,29 +191,29 @@ export type Event = {
     /** Collect user ratings after the event has ended */
     isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
     /** Display a forum-like interface once the "live" part of the event is over */
-    isTransformToForumEnabled?: Maybe<Scalars['Boolean']>;
+    isForumEnabled?: Maybe<Scalars['Boolean']>;
     /** Is the event private, ie invite only */
     isPrivate?: Maybe<Scalars['Boolean']>;
     /** All questions relating to this event */
-    questions?: Maybe<Array<Maybe<EventQuestion>>>;
+    questions?: Maybe<Array<EventQuestion>>;
     /** Speakers for this event */
-    speakers?: Maybe<Array<Maybe<EventSpeaker>>>;
+    speakers?: Maybe<Array<EventSpeaker>>;
     /** Registrants for this event -- individuals invited */
-    registrants?: Maybe<Array<Maybe<User>>>;
+    registrants?: Maybe<Array<User>>;
     /** Participants of the event -- individuals who showed up */
-    participants?: Maybe<Array<Maybe<EventParticipant>>>;
+    participants?: Maybe<Array<EventParticipant>>;
     /** Video feeds and the languages */
-    videos?: Maybe<Array<Maybe<EventVideo>>>;
+    videos?: Maybe<Array<EventVideo>>;
     /** Live Feedback given during the event */
-    liveFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+    liveFeedback?: Maybe<Array<EventLiveFeedback>>;
     /** List of moderators for this particular event */
-    moderators?: Maybe<Array<Maybe<User>>>;
+    moderators?: Maybe<Array<User>>;
 };
 
 export type CreateEvent = {
     title: Scalars['String'];
-    startDateTime: Scalars['String'];
-    endDateTime: Scalars['String'];
+    startDateTime: Scalars['Date'];
+    endDateTime: Scalars['Date'];
     description?: Maybe<Scalars['String']>;
     topic: Scalars['String'];
     orgId: Scalars['String'];
@@ -215,13 +221,13 @@ export type CreateEvent = {
 
 export type UpdateEvent = {
     title?: Maybe<Scalars['String']>;
-    startDateTime?: Maybe<Scalars['String']>;
-    endDateTime?: Maybe<Scalars['String']>;
+    startDateTime?: Maybe<Scalars['Date']>;
+    endDateTime?: Maybe<Scalars['Date']>;
     description?: Maybe<Scalars['String']>;
     topic?: Maybe<Scalars['String']>;
     isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
     isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
-    isTransformToForumEnabled?: Maybe<Scalars['Boolean']>;
+    isForumEnabled?: Maybe<Scalars['Boolean']>;
     isPrivate?: Maybe<Scalars['Boolean']>;
     eventId: Scalars['String'];
 };
@@ -289,6 +295,11 @@ export type ReorderQuestion = {
     questionId: Scalars['ID'];
     position: Scalars['Int'];
     eventId: Scalars['ID'];
+};
+
+export type AddModerator = {
+    email: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type Subscription = {
@@ -364,8 +375,12 @@ export type AlterLike = {
 
 export type EventSpeaker = {
     __typename?: 'EventSpeaker';
+    /** User id associated with this speaker */
+    userId: Scalars['ID'];
+    /** Event id that this user is speaking at */
+    eventId: Scalars['ID'];
     /** The related user account associated with the speaker */
-    user?: Maybe<Array<Maybe<User>>>;
+    user?: Maybe<User>;
     /** Name set by the organizer of the event */
     name?: Maybe<Scalars['String']>;
     /** Description set by the organizer of the event */
@@ -479,6 +494,7 @@ export type ResolversTypes = {
     HideQuestion: HideQuestion;
     ReorderQuestion: ReorderQuestion;
     Int: ResolverTypeWrapper<Scalars['Int']>;
+    AddModerator: AddModerator;
     Subscription: ResolverTypeWrapper<{}>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventQuestion: ResolverTypeWrapper<EventQuestion>;
@@ -514,6 +530,7 @@ export type ResolversParentTypes = {
     HideQuestion: HideQuestion;
     ReorderQuestion: ReorderQuestion;
     Int: Scalars['Int'];
+    AddModerator: AddModerator;
     Subscription: {};
     EventParticipant: EventParticipant;
     EventQuestion: EventQuestion;
@@ -533,7 +550,7 @@ export type UserResolvers<
     ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
 > = {
     userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-    firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -648,6 +665,12 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationreorderQueueArgs, never>
     >;
+    addModerator?: Resolver<
+        Maybe<ResolversTypes['User']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationaddModeratorArgs, never>
+    >;
     createQuestion?: Resolver<
         Maybe<ResolversTypes['EventQuestion']>,
         ParentType,
@@ -668,26 +691,26 @@ export type EventResolvers<
 > = {
     eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-    orgID?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
+    organization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    startDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-    endDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-    description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    topic?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    startDateTime?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    endDateTime?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    topic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isQuestionFeedVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isCollectRatingsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isTransformToForumEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isForumEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    questions?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventQuestion']>>>, ParentType, ContextType>;
-    speakers?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventSpeaker']>>>, ParentType, ContextType>;
-    registrants?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
-    participants?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventParticipant']>>>, ParentType, ContextType>;
-    videos?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventVideo']>>>, ParentType, ContextType>;
-    liveFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
-    moderators?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    questions?: Resolver<Maybe<Array<ResolversTypes['EventQuestion']>>, ParentType, ContextType>;
+    speakers?: Resolver<Maybe<Array<ResolversTypes['EventSpeaker']>>, ParentType, ContextType>;
+    registrants?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+    participants?: Resolver<Maybe<Array<ResolversTypes['EventParticipant']>>, ParentType, ContextType>;
+    videos?: Resolver<Maybe<Array<ResolversTypes['EventVideo']>>, ParentType, ContextType>;
+    liveFeedback?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedback']>>, ParentType, ContextType>;
+    moderators?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -787,7 +810,9 @@ export type EventSpeakerResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
 > = {
-    user?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -846,7 +871,7 @@ type LoaderResolver<TReturn, TObj, TParams, TContext> =
 export interface Loaders<TContext = import('mercurius').MercuriusContext & { reply: import('fastify').FastifyReply }> {
     User?: {
         userId?: LoaderResolver<Scalars['ID'], User, {}, TContext>;
-        firstName?: LoaderResolver<Scalars['String'], User, {}, TContext>;
+        firstName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
@@ -857,26 +882,26 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     Event?: {
         eventId?: LoaderResolver<Scalars['ID'], Event, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, Event, {}, TContext>;
-        orgID?: LoaderResolver<Maybe<Organization>, Event, {}, TContext>;
+        organization?: LoaderResolver<Maybe<Organization>, Event, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
         updatedAt?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
-        title?: LoaderResolver<Scalars['String'], Event, {}, TContext>;
-        startDateTime?: LoaderResolver<Scalars['Date'], Event, {}, TContext>;
-        endDateTime?: LoaderResolver<Scalars['Date'], Event, {}, TContext>;
-        description?: LoaderResolver<Scalars['String'], Event, {}, TContext>;
-        topic?: LoaderResolver<Scalars['String'], Event, {}, TContext>;
+        title?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        startDateTime?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
+        endDateTime?: LoaderResolver<Maybe<Scalars['Date']>, Event, {}, TContext>;
+        description?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        topic?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
         isActive?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isQuestionFeedVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isCollectRatingsEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
-        isTransformToForumEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+        isForumEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isPrivate?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
-        questions?: LoaderResolver<Maybe<Array<Maybe<EventQuestion>>>, Event, {}, TContext>;
-        speakers?: LoaderResolver<Maybe<Array<Maybe<EventSpeaker>>>, Event, {}, TContext>;
-        registrants?: LoaderResolver<Maybe<Array<Maybe<User>>>, Event, {}, TContext>;
-        participants?: LoaderResolver<Maybe<Array<Maybe<EventParticipant>>>, Event, {}, TContext>;
-        videos?: LoaderResolver<Maybe<Array<Maybe<EventVideo>>>, Event, {}, TContext>;
-        liveFeedback?: LoaderResolver<Maybe<Array<Maybe<EventLiveFeedback>>>, Event, {}, TContext>;
-        moderators?: LoaderResolver<Maybe<Array<Maybe<User>>>, Event, {}, TContext>;
+        questions?: LoaderResolver<Maybe<Array<EventQuestion>>, Event, {}, TContext>;
+        speakers?: LoaderResolver<Maybe<Array<EventSpeaker>>, Event, {}, TContext>;
+        registrants?: LoaderResolver<Maybe<Array<User>>, Event, {}, TContext>;
+        participants?: LoaderResolver<Maybe<Array<EventParticipant>>, Event, {}, TContext>;
+        videos?: LoaderResolver<Maybe<Array<EventVideo>>, Event, {}, TContext>;
+        liveFeedback?: LoaderResolver<Maybe<Array<EventLiveFeedback>>, Event, {}, TContext>;
+        moderators?: LoaderResolver<Maybe<Array<User>>, Event, {}, TContext>;
     };
 
     Organization?: {
@@ -925,7 +950,9 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventSpeaker?: {
-        user?: LoaderResolver<Maybe<Array<Maybe<User>>>, EventSpeaker, {}, TContext>;
+        userId?: LoaderResolver<Scalars['ID'], EventSpeaker, {}, TContext>;
+        eventId?: LoaderResolver<Scalars['ID'], EventSpeaker, {}, TContext>;
+        user?: LoaderResolver<Maybe<User>, EventSpeaker, {}, TContext>;
         name?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         description?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         title?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;

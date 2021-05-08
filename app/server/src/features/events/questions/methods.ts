@@ -51,7 +51,7 @@ export async function alterLikeById(userId: Maybe<string>, prisma: PrismaClient,
     const results = likeQuestion ? await addLike() : await removeLike();
 
     // format results for graphql layer
-    const formattedData = { user: { id: results.likedBy }, question: { id: results.likedQuestion } };
+    const formattedData = { user: { userId: results.likedBy }, question: { questionId: results.likedQuestion } };
 
     return formattedData;
 }

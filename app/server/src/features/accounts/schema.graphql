@@ -3,7 +3,7 @@ User Data
 """
 type User {
     userId: ID!
-    firstName: String!
+    firstName: String
     lastName: String
     email: String
     isEmailVerified: Boolean

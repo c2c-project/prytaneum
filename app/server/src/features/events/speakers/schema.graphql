@@ -1,8 +1,18 @@
 type EventSpeaker {
     """
+    User id associated with this speaker
+    """
+    userId: ID!
+
+    """
+    Event id that this user is speaking at
+    """
+    eventId: ID!
+
+    """
     The related user account associated with the speaker
     """
-    user: [User]
+    user: User
 
     """
     Name set by the organizer of the event

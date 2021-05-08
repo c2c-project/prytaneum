@@ -9,22 +9,22 @@ type Event {
     """
     The owning organization
     """
-    orgID: Organization
+    organization: Organization
     createdAt: Date
     updatedAt: Date
-    title: String!
+    title: String
 
     """
     The planned start date time string
     """
-    startDateTime: Date!
+    startDateTime: Date
 
     """
     The planned end date time string
     """
-    endDateTime: Date!
-    description: String!
-    topic: String!
+    endDateTime: Date
+    description: String
+    topic: String
 
     """
     Whether or not the Event is live
@@ -44,7 +44,7 @@ type Event {
     """
     Display a forum-like interface once the "live" part of the event is over
     """
-    isTransformToForumEnabled: Boolean
+    isForumEnabled: Boolean
 
     """
     Is the event private, ie invite only
@@ -54,43 +54,43 @@ type Event {
     """
     All questions relating to this event
     """
-    questions: [EventQuestion]
+    questions: [EventQuestion!]
 
     """
     Speakers for this event
     """
-    speakers: [EventSpeaker]
+    speakers: [EventSpeaker!]
 
     """
     Registrants for this event -- individuals invited
     """
-    registrants: [User]
+    registrants: [User!]
 
     """
     Participants of the event -- individuals who showed up
     """
-    participants: [EventParticipant]
+    participants: [EventParticipant!]
 
     """
     Video feeds and the languages
     """
-    videos: [EventVideo]
+    videos: [EventVideo!]
 
     """
     Live Feedback given during the event
     """
-    liveFeedback: [EventLiveFeedback]
+    liveFeedback: [EventLiveFeedback!]
 
     """
     List of moderators for this particular event
     """
-    moderators: [User]
+    moderators: [User!]
 }
 
 input CreateEvent {
     title: String!
-    startDateTime: String!
-    endDateTime: String!
+    startDateTime: Date!
+    endDateTime: Date!
     description: String
     topic: String!
     orgId: String!
@@ -98,13 +98,13 @@ input CreateEvent {
 
 input UpdateEvent {
     title: String
-    startDateTime: String
-    endDateTime: String
+    startDateTime: Date
+    endDateTime: Date
     description: String
     topic: String
     isQuestionFeedVisible: Boolean
     isCollectRatingsEnabled: Boolean
-    isTransformToForumEnabled: Boolean
+    isForumEnabled: Boolean
     isPrivate: Boolean
     eventId: String!
 }

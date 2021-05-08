@@ -14,9 +14,19 @@ input ReorderQuestion {
     eventId: ID!
 }
 
+input AddModerator {
+    email: String!
+    eventId: String!
+}
+
 type Mutation {
     hideQuestion(input: HideQuestion): EventQuestion
     reorderQueue(input: ReorderQuestion): EventQuestion
+
+    """
+    Add a new moderator to the given event
+    """
+    addModerator(input: AddModerator): User
 }
 
 type Subscription {

@@ -13,10 +13,10 @@ export async function eventById(prisma: PrismaClient, eventId: string) {
 /**
  * permisison check to see if a user can create an event
  */
-async function canUserCreate(userId: string, orgId: string, prisma: PrismaClient) {
+export async function isMember(userId: string, orgId: string, prisma: PrismaClient) {
     // check if the user is part of the organization they are trying to create an event for
-    const isMember = await prisma.orgMember.findUnique({ where: { userId_orgId: { userId, orgId } } });
-    return isMember;
+    const _isMember = await prisma.orgMember.findUnique({ where: { userId_orgId: { userId, orgId } } });
+    return _isMember;
 }
 
 /**
@@ -45,7 +45,7 @@ export async function createEvent(userId: Maybe<string>, prisma: PrismaClient, i
 
     const { title, description, topic, startDateTime, endDateTime, orgId } = input;
 
-    if (!canUserCreate(userId, orgId, prisma)) throw new Error(errors.permissions);
+    if (!isMember(userId, orgId, prisma)) throw new Error(errors.permissions);
 
     // default values for different settings
     const defaultSettings: Settings = {
@@ -89,8 +89,8 @@ async function canUserModify(userId: string, eventId: string, prisma: PrismaClie
         },
         where: { eventId },
     });
-    const isMember = queryResult ? queryResult.organization.members.length > 0 : false;
-    return isMember;
+    const _isMember = queryResult ? queryResult.organization.members.length > 0 : false;
+    return _isMember;
 }
 
 /**
@@ -128,6 +128,38 @@ export async function deleteEvent(userId: Maybe<string>, prisma: PrismaClient, i
 /**
  * fetch an event list
  */
-export async function getPublicEvents(prisma: PrismaClient) {
+export async function findPublicEvents(prisma: PrismaClient) {
     return prisma.event.findMany();
+}
+
+/**
+ * find the speakers for the given event
+ */
+export async function findSpeakersByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventSpeaker.findMany({ where: { eventId } });
+}
+
+/**
+ * find the videos for the given event
+ */
+export async function findVideosByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventVideo.findMany({ where: { eventId } });
+}
+
+/**
+ * find moderators for a the given event
+ */
+export async function findModeratorsByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventModerator.findMany({ where: { eventId } });
+}
+
+/**
+ * find an organization based on the event (probably inefficient)
+ */
+export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
+    const result = await prisma.event.findUnique({ where: { eventId }, select: { organization: true } });
+
+    if (!result) return null;
+
+    return result.organization;
 }

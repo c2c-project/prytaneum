@@ -7,7 +7,7 @@ export const resolvers: Resolvers = {
             return Event.eventById(ctx.prisma, args.id);
         },
         events(parent, args, ctx, info) {
-            return Event.getPublicEvents(ctx.prisma);
+            return Event.findPublicEvents(ctx.prisma);
         },
     },
     Mutation: {
@@ -29,5 +29,19 @@ export const resolvers: Resolvers = {
         createFeedback() {
             return null;
         },
+    },
+    Event: {
+        speakers(parent, args, ctx, info) {
+            return Event.findSpeakersByEventId(parent.eventId, ctx.prisma);
+        },
+        videos(parent, args, ctx, info) {
+            return Event.findVideosByEventId(parent.eventId, ctx.prisma);
+        },
+        moderators(parent, arg, ctx, info) {
+            return Event.findModeratorsByEventId(parent.eventId, ctx.prisma);
+        },
+        organization(parent, arg, ctx, info) {
+            return Event.findOrgByEventId(parent.eventId, ctx.prisma);
+        }
     },
 };

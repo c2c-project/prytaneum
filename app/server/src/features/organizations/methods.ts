@@ -111,5 +111,5 @@ export async function membersByOrgId(userId: Maybe<string>, prisma: PrismaClient
  * does NOT require user login
  */
 export async function eventsByOrgId(prisma: PrismaClient, orgId: string) {
-    return prisma.event.findMany({ where: { orgId }, select: { updatedAt: false } });
+    return prisma.event.findMany({ where: { orgId } });
 }
