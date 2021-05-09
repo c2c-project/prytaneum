@@ -5,6 +5,7 @@ import { join } from 'path';
 import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
+import AltairFastify from 'altair-fastify-plugin';
 
 import { buildContext } from './context';
 import { server } from './server';
@@ -30,6 +31,8 @@ server.register(mercurius, {
 server.register(cookie, {
     secret: process.env.COOKIE_SECRET,
 } as FastifyCookieOptions);
+
+server.register(AltairFastify);
 
 function verifyEnv() {
     if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');

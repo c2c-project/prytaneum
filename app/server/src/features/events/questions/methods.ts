@@ -62,3 +62,11 @@ export async function alterLikeById(userId: Maybe<string>, prisma: PrismaClient,
 export function doesEventMatch(eventId: Maybe<string>, question: Partial<EventQuestion>) {
     return Boolean(eventId && eventId !== question.eventId);
 }
+
+/**
+ * Find all questions relevant to the given event id
+ */
+export function questionsByEventId(eventId: Maybe<string>, prisma: PrismaClient) {
+    if (!eventId) return null;
+    return prisma.eventQuestion.findMany({ where: { eventId } });
+}

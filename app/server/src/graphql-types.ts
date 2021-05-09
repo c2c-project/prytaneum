@@ -65,6 +65,7 @@ export type Query = {
     /** Fetch data about a particular org */
     orgById?: Maybe<Organization>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+    questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
 
 export type QueryeventByIdArgs = {
@@ -73,6 +74,10 @@ export type QueryeventByIdArgs = {
 
 export type QueryorgByIdArgs = {
     id: Scalars['ID'];
+};
+
+export type QueryquestionsByEventIdArgs = {
+    eventId: Scalars['ID'];
 };
 
 export type Mutation = {
@@ -580,6 +585,12 @@ export type QueryResolvers<
         RequireFields<QueryorgByIdArgs, 'id'>
     >;
     myFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
+    questionsByEventId?: Resolver<
+        Maybe<Array<ResolversTypes['EventQuestion']>>,
+        ParentType,
+        ContextType,
+        RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
+    >;
 };
 
 export type MutationResolvers<

@@ -67,3 +67,7 @@ type Subscription {
     eventQuestionCreated(eventId: ID!): EventQuestion
     likeCountChanged(eventId: ID!): EventQuestion
 }
+
+type Query {
+    questionsByEventId(eventId: ID!): [EventQuestion!]
+}

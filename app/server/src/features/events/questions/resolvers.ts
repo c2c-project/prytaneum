@@ -1,8 +1,13 @@
-import { EventQuestion } from '@app/prisma';
+// import { EventQuestionL } from '@app/prisma';
 import { Resolvers, withFilter } from '@local/features/utils';
 import * as Question from './methods';
 
 export const resolvers: Resolvers = {
+    Query: {
+        questionsByEventId(parent, args, ctx, info) {
+            return Question.questionsByEventId(args.eventId, ctx.prisma);
+        },
+    },
     Mutation: {
         createQuestion(parent, args, ctx, info) {
             return Question.createQuestion(ctx.userId, ctx.prisma, args.input);
@@ -12,18 +17,17 @@ export const resolvers: Resolvers = {
         },
     },
     Subscription: {
-        // https://github.com/mercurius-js/mercurius/issues/471
-        // likeCountChanged: {
-        //     subscribe: withFilter(
-        //         (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
-        //         (payload: EventQuestion, args, ctx) => Question.doesEventMatch(args.eventId, payload)
-        //     ),
-        // },
-        // eventQuestionCreated: {
-        //     subscribe: withFilter(
-        //         (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
-        //         (payload: EventQuestion, args, ctx) => Question.doesEventMatch(args.eventId, payload)
-        //     ),
-        // },
+        likeCountChanged: {
+            subscribe: withFilter(
+                (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
+                (payload, args, ctx) => Question.doesEventMatch(args.eventId, payload)
+            ),
+        },
+        eventQuestionCreated: {
+            subscribe: withFilter(
+                (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
+                (payload, args, ctx) => Question.doesEventMatch(args.eventId, payload)
+            ),
+        },
     },
 };
