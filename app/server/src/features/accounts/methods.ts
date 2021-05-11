@@ -1,33 +1,23 @@
 import bcrypt from 'bcrypt';
-import { PrismaClient, User as PrismaUser } from '@app/prisma';
+import { PrismaClient } from '@app/prisma';
 
 import * as jwt from '@local/lib/jwt';
 import { Maybe, errors } from '@local/features/utils';
-import { LoginForm, RegistrationForm, User as GQLUser } from '@local/graphql-types';
+import { LoginForm, RegistrationForm } from '@local/graphql-types';
 
-/**
- * maps keys not defined in the prisma model to keys necessary in the graphql model
- */
-function translateUser(user: PrismaUser): GQLUser {
-    return {
-        id: user.userId,
-        ...user,
-    };
-}
-
-type MinimalUser = Pick<RegistrationForm, 'email' | 'firstName' | 'lastName'>;
+type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
 /**
  * registers a user optionally with a password
  */
-async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
+export async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
     const { email, firstName, lastName } = userData;
     const encryptedPassword = await bcrypt.hash(textPassword, 10);
     return prisma.user.create({
         data: {
             email,
-            firstName,
-            lastName,
-            fullName: `${firstName} ${lastName}`,
+            firstName: firstName || null,
+            lastName: lastName || null,
+            fullName: firstName && lastName ? `${firstName} ${lastName}` : null,
             password: encryptedPassword,
             preferredLang: 'EN', // TODO:
         },
