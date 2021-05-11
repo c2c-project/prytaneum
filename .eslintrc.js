@@ -24,6 +24,7 @@ module.exports = {
         'react/jsx-curly-newline': ['off'],
         'jsx-quotes': ['error', 'prefer-single'],
         'react/jsx-wrap-multilines': 0,
+        'react/react-in-jsx-scope': 'off', // react 17 makes it unnecessary
         'import/no-extraneous-dependencies': [
             'error',
             {

@@ -17,6 +17,7 @@
         "@graphql-codegen/typescript-resolvers": "1.19.1",
         "@types/concurrently": "^6",
         "@types/eslint": "^7",
+        "@types/express": "^4",
         "@types/node": "^14.14.41",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^4.22.0",
@@ -44,11 +45,15 @@
         "g:dev-server": "yarn workspace @app/server dev",
         "g:dev-client": "yarn workspace @app/client dev",
         "g:start-db": "yarn workspace @app/db start-db",
-        "g:dev-project": "concurrently -n codegen,server,client,db -c \"bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
+        "g:start-proxy": "yarn workspace prytaneum ts-node-dev ./proxy.ts",
+        "g:dev-project": "concurrently -n proxy,codegen,server,client,db -c \"black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
     },
     "dependencies": {
         "babel-eslint": "^10.1.0",
+        "express": "^4.17.1",
         "graphql": "^15.5.0",
-        "graphql-tag": "^2.11.0"
+        "graphql-tag": "^2.11.0",
+        "http-proxy-middleware": "^2.0.0",
+        "ts-node-dev": "^1.1.6"
     }
 }
