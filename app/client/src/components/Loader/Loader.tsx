@@ -20,21 +20,13 @@ const useStyles = makeStyles({
  * @category Component
  * @constructor Loader
  */
-const Loader = () => {
+export const Loader = () => {
     const classes = useStyles();
     return (
         <Grid container justify='center' className={classes.root}>
-            <Grid
-                item
-                xs={12}
-                container
-                direction='column'
-                alignContent='center'
-            >
+            <Grid item xs={12} container direction='column' alignContent='center'>
                 <CircularProgress className={classes.loader} />
             </Grid>
         </Grid>
     );
 };
-
-export default Loader;

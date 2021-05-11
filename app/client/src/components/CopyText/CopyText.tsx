@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { IconButton, Tooltip, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import CopyIcon from '@material-ui/icons/ContentCopy';
+import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
 
-import TextField, { Props as TextFieldProps } from '@local/components/TextField';
+import { TextField, Props as TextFieldProps } from '@local/components/TextField';
 
 import useCopy from '@local/hooks/useCopy';
 
@@ -20,26 +20,15 @@ interface Props {
     TextFieldProps?: TextFieldProps;
 }
 
-const Copy = React.forwardRef<HTMLDivElement, Props>(
+export const CopyText = React.forwardRef<HTMLDivElement, Props>(
     ({ text, className, TextFieldProps: _TextFieldProps }: Props, ref) => {
         const [copy] = useCopy();
         const classes = useStyles();
 
         return (
-            <Grid
-                ref={ref}
-                className={className}
-                container
-                alignItems='center'
-                wrap='nowrap'
-            >
+            <Grid ref={ref} className={className} container alignItems='center' wrap='nowrap'>
                 <Grid item xs='auto' className={classes.text}>
-                    <TextField
-                        fullWidth
-                        variant='filled'
-                        value={text}
-                        {..._TextFieldProps}
-                    />
+                    <TextField fullWidth variant='filled' value={text} {..._TextFieldProps} />
                 </Grid>
                 <Grid item xs='auto'>
                     <Tooltip title='Copy' aria-label='copy'>
@@ -53,9 +42,7 @@ const Copy = React.forwardRef<HTMLDivElement, Props>(
     }
 );
 
-Copy.defaultProps = {
+CopyText.defaultProps = {
     className: undefined,
     TextFieldProps: {},
 };
-
-export default Copy;

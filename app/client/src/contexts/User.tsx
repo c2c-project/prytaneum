@@ -1,14 +1,11 @@
 import React, { SetStateAction } from 'react';
-import type { ClientSafeUser } from 'prytaneum-typings';
 
-import Loader from '@local/components/Loader';
-import useEndpoint from '@local/hooks/useEndpoint';
-import { getMyInfo } from '@local/domains/Auth/api';
+import { User, useMyUserInfoQuery } from '@local/graphql-types';
 
 // NOTE: don't use React.useContext with either of the below,
 // instead use the "useUser" hook found in the @local/hooks folder
 
-type State = ClientSafeUser | undefined | null; // null = means it's not in the tree
+type State = User | undefined | null; // null = means it's not in the tree
 // read note above
 export const UserContext = React.createContext<State>(null);
 
@@ -18,7 +15,7 @@ export const UserDispatch = React.createContext<Dispatch>(null);
 
 interface Props {
     children: React.ReactNode | React.ReactNodeArray;
-    value?: ClientSafeUser;
+    value?: User;
     /**
      * should only be used for storybook purposes
      */
@@ -27,30 +24,17 @@ interface Props {
 
 /**
  * This component attempts to fetch the user once on load of the app
+ * Does not block rendering of the app
  */
-export default function UserProvider({ children, value, forceNoLogin }: Props) {
+export function UserProvider({ children, value, forceNoLogin }: Props) {
     // this is initially undefined due to defaultProps declaration
     const [user, setUser] = React.useState<State>(value);
 
-    const [run, isLoading, getHasRun] = useEndpoint(getMyInfo, {
-        onSuccess: ({ data }) => {
-            setUser(data);
-        },
-        // so the default error handler is not used
-        onFailure: () => {},
-        minWaitTime: 0,
-    });
+    const { data } = useMyUserInfoQuery();
 
-    // runs only if the request hasn't run once and there's no user
     React.useEffect(() => {
-        if (!getHasRun() && !user && !forceNoLogin) run();
-    }, [getHasRun, user, run, forceNoLogin]);
-
-    // TODO: redirect to login?
-
-    // if the request is either loading or hasn't run AND there's no user
-    // then show a loader
-    if (!forceNoLogin && (isLoading || !getHasRun()) && !user) return <Loader />;
+        if (data && data.me) setUser(data.me);
+    }, [data]);
 
     return (
         <UserContext.Provider value={user}>

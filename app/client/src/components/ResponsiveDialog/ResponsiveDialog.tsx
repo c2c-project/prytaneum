@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -29,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props: SlideProps, ref: 
     return <Slide direction='up' ref={ref} {...props} />;
 });
 
-export type Props = {
+export type ResponsiveDialogProps = {
     title?: string;
     toolbar?: React.ReactElement;
     onClose?: () => void;
@@ -38,7 +39,7 @@ export type Props = {
 /**
  * Slide Up Dialog
  */
-export default function ResponsiveDialog(props: Props) {
+export function ResponsiveDialog(props: ResponsiveDialogProps) {
     const { children, title, fullScreen: _fullscreen, ...rest } = props;
     const classes = useStyles();
     const theme = useTheme();
@@ -62,6 +63,22 @@ export default function ResponsiveDialog(props: Props) {
             {children}
         </MUIDialog>
     );
+}
+
+/**
+ * Extremely simple helper hook for using the dialog
+ */
+export function useResponsiveDialog(initialState?: boolean) {
+    // dialog state
+    const [isOpen, setState] = React.useState(initialState || false);
+
+    // helper functions
+    const open = React.useCallback(() => setState(true), [setState]);
+    const close = React.useCallback(() => setState(false), [setState]);
+    const toggle = React.useCallback(() => setState((prev) => !prev), [setState]);
+
+    // tuple state first, then helper functions -- order based on probable usage ie open/close will be used more than toggle
+    return [isOpen, open, close, toggle] as const;
 }
 
 ResponsiveDialog.defaultProps = {

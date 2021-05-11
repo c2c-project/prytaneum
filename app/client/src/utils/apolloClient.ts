@@ -1,21 +1,61 @@
 // source: https://github.com/vercel/next.js/blob/canary/examples/with-apollo/lib/apolloClient.js
 import { useMemo } from 'react';
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-// import { concatPagination } from '@apollo/client/utilities';
+import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-let apolloClient;
+let apolloClient: ReturnType<typeof createApolloClient> | null = null;
 
 function createApolloClient() {
+    const httpLink = new HttpLink({
+        uri: process.env.NEXT_PUBLIC_GRAPHQL_URL, // Server URL (must be absolute)
+        credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+    });
+
+    if (process.browser) {
+        // console.log(process.env.NEXT_PUBLIC_GRAPHQL_URL);
+        const [, ...rest] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split(':');
+        const wsLink = new WebSocketLink({
+            uri: `ws:${rest.join(':')}`,
+            options: {
+                reconnect: true,
+            },
+        });
+
+        // The split function takes three parameters:
+        //
+        // * A function that's called for each operation to execute
+        // * The Link to use for an operation if the function returns a "truthy" value
+        // * The Link to use for an operation if the function returns a "falsy" value
+        const splitLink = split(
+            ({ query }) => {
+                const definition = getMainDefinition(query);
+                return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+            },
+            wsLink,
+            httpLink
+        );
+        return new ApolloClient({
+            ssrMode: typeof window === 'undefined',
+            link: splitLink,
+            cache: new InMemoryCache({
+                // typePolicies: {
+                //     Query: {
+                //         fields: {
+                //             allPosts: concatPagination(),
+                //         },
+                //     },
+                // },
+            }),
+        });
+    }
     return new ApolloClient({
         ssrMode: typeof window === 'undefined',
-        link: new HttpLink({
-            uri: process.env.NEXT_PUBLIC_GRAPHQL_URL, // Server URL (must be absolute)
-            credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-        }),
+        link: httpLink,
         cache: new InMemoryCache({
             // typePolicies: {
             //     Query: {
@@ -28,7 +68,7 @@ function createApolloClient() {
     });
 }
 
-export function initializeApollo(initialState = null) {
+export function initializeApollo(initialState: any = null) {
     const _apolloClient = apolloClient ?? createApolloClient();
 
     // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -57,16 +97,17 @@ export function initializeApollo(initialState = null) {
     return _apolloClient;
 }
 
-export function addApolloState(client, pageProps) {
-    if (pageProps?.props) {
-        // eslint-disable-next-line no-param-reassign
-        pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
-    }
-
-    return pageProps;
+export function addApolloState(client: ReturnType<typeof initializeApollo>, pageProps: Record<string, any>) {
+    return {
+        ...pageProps,
+        props: {
+            ...pageProps.props,
+            [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
+        },
+    };
 }
 
-export function useApollo(pageProps) {
+export function useApollo(pageProps: any) {
     const state = pageProps[APOLLO_STATE_PROP_NAME];
     const store = useMemo(() => initializeApollo(state), [state]);
     return store;

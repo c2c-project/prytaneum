@@ -18,7 +18,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Skeleton, SkeletonProps } from '@material-ui/lab';
 import clsx from 'clsx';
 
-import TextField from '@local/components/TextField';
+import { TextField } from '@local/components/TextField';
 import { FilterFunc } from '@local/utils/filters';
 
 export interface Props<T> {

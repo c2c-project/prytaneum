@@ -34,6 +34,7 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, className, ...passThroughProps } = props;
     const classes = useStyles(props);
+    // console.log('main');
     return (
         <MUIContainer
             disableGutters

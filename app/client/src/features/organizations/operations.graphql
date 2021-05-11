@@ -1,0 +1,33 @@
+query MyOrgs {
+    myOrgs {
+        orgId
+        name
+    }
+}
+
+query OrgInfo($id: ID!) {
+    orgById(id: $id) {
+        orgId
+        name
+        members {
+            userId
+            firstName
+            lastName
+        }
+        events {
+            eventId
+            title
+            topic
+            startDateTime
+        }
+    }
+}
+
+
+mutation CreateOrg($input: CreateOrg!) {
+    createOrganization(input: $input) {
+        orgId
+        name
+    }
+}
+

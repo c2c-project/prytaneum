@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { combineReducers, createStore } from '@reduxjs/toolkit';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { reducer as langReducer } from './language';
 
 import chatReducer from './chat';
 import feedReducer from './question-feed';
@@ -12,12 +13,14 @@ export default combineReducers({
     chat: chatReducer,
     queue: queueReducer,
     playlist: playlistReducer,
+    language: langReducer,
 });
 
 export * from './chat';
 export * from './quesiton-queue';
 export * from './question-feed';
 export * from './playlist';
+export * from './language';
 
 // function initStore(preloadedState = initialState) {
 //     return createStore(reducer, preloadedState, composeWithDevTools(applyMiddleware()));

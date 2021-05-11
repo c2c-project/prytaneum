@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
-import { handleNavigation } from '@local/utils/history';
-import useUser from '@local/hooks/useUser';
+import { useUser } from '@local/hooks/useUser';
 
 // function formatTitle(str: string | undefined): string | undefined {
 //     if (!str) {
@@ -32,6 +32,10 @@ const useStyles = makeStyles(() => ({
 export default function Title() {
     const classes = useStyles();
     const [user] = useUser();
+    const router = useRouter();
+
+    const handleNavigation = (path: string) => () => router.push(path);
+    
     return (
         <div className={classes.titleContainer}>
             <div className={classes.title}>

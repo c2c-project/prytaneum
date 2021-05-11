@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
 
-import ResponsiveDialog from '../ResponsiveDialog';
+import { ResponsiveDialog } from '../ResponsiveDialog';
 
 interface Props {
     onConfirm: () => void;
@@ -11,7 +11,7 @@ interface Props {
     onClose: () => void;
 }
 
-export default function ConfirmationDialog({ open, onConfirm, title, children, onClose }: Props) {
+export function ConfirmationDialog({ open, onConfirm, title, children, onClose }: Props) {
     // NOTE: the () => onClose() and () => onConfirm is done on purpose to prevent the synthetic event from being passed up
     // storybook yells at me if it's passed up
     return (

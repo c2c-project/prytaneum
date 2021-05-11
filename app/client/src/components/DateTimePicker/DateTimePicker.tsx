@@ -2,7 +2,7 @@
 import * as React from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import {
-    DateTimePicker,
+    DateTimePicker as MUIDateTimePicker,
     DateTimePickerProps,
     MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
@@ -12,14 +12,10 @@ import {
  * @constructor DateTimePicker
  * @param  props refer to material-ui/pickers documentation
  */
-export default function Picker(props: DateTimePickerProps) {
+export function DateTimePicker(props: DateTimePickerProps) {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DateTimePicker
-                label='DateTimePicker'
-                inputVariant='outlined'
-                {...props}
-            />
+            <MUIDateTimePicker label='DateTimePicker' inputVariant='outlined' {...props} />
         </MuiPickersUtilsProvider>
     );
 }

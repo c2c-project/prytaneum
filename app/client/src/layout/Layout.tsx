@@ -4,11 +4,11 @@ import { Grid, useMediaQuery, Drawer, IconButton, ContainerProps } from '@materi
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import useUser from '@local/hooks/useUser';
+import { useUser } from '@local/hooks/useUser';
 import Main from './Main';
 import Page from './Page';
 import AppBar, { Public, LoggedIn } from './AppBar';
-import SideNav from './SideNav';
+import { SideNav } from './SideNav';
 
 export interface Props {
     children: React.ReactNode | React.ReactNodeArray;
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Layout({
+export function Layout({
     children,
     showAsLoggedIn: loggedInOverride,
     hideSideNav: noSideNav,

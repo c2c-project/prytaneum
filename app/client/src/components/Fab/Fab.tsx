@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
  *  @param props
  *  @param @todo
  */
-export default function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: _ZoomProps }) {
+export function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: _ZoomProps }) {
     const classes = useStyles();
     return (
         <Zoom in timeout={300} {...ZoomProps}>

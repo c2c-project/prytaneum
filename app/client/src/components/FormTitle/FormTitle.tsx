@@ -10,12 +10,7 @@ interface Props {
     titleTypographyProps?: TypographyProps;
 }
 
-export default function FormTitle({
-    title,
-    subtitle,
-    description,
-    titleTypographyProps,
-}: Props) {
+export function FormTitle({ title, subtitle, description, titleTypographyProps }: Props) {
     return (
         <Grid container item xs={12}>
             <Grid item xs={12}>
@@ -32,11 +27,7 @@ export default function FormTitle({
             )}
             {description && (
                 <Grid item xs={12}>
-                    {typeof description === 'string' ? (
-                        <Typography paragraph>{description}</Typography>
-                    ) : (
-                        description
-                    )}
+                    {typeof description === 'string' ? <Typography paragraph>{description}</Typography> : description}
                 </Grid>
             )}
         </Grid>

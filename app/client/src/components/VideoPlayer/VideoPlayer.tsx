@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Grid } from '@material-ui/core';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
 
 const useStyles = makeStyles({
@@ -16,6 +17,11 @@ const useStyles = makeStyles({
         bottom: 0,
         left: 0,
     },
+    placeholder: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'lightGrey',
+    },
 });
 
 /** Displays the video stream that plays during the townhall
@@ -30,16 +36,22 @@ function VideoPlayer({ url, rest }: ReactPlayerProps) {
     return (
         <div className={classes.outerContainer}>
             <div className={classes.innerContainer}>
-                <ReactPlayer
-                    url={url}
-                    playing={process.env.NODE_ENV === 'production'}
-                    width='100%'
-                    height='100%'
-                    playsinline
-                    controls
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...rest}
-                />
+                {url !== '' ? (
+                    <ReactPlayer
+                        url={url}
+                        playing={process.env.NODE_ENV === 'production'}
+                        width='100%'
+                        height='100%'
+                        playsinline
+                        controls
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...rest}
+                    />
+                ) : (
+                    <Grid container justify='center' alignContent='center' className={classes.placeholder}>
+                        <Typography>No Video to display :(</Typography>
+                    </Grid>
+                )}
             </div>
         </div>
     );

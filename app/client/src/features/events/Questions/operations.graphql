@@ -1,0 +1,28 @@
+fragment QuestionCard on EventQuestion {
+    questionId
+    question
+    createdBy {
+        userId
+        firstName
+    }
+    createdAt
+}
+
+mutation CreateQuestion($input: CreateQuestion) {
+    createQuestion(input: $input) {
+        questionId
+        question
+    }
+}
+
+subscription NewQuestions($eventId: ID!) {
+    eventQuestionCreated(eventId: $eventId) {
+        ...QuestionCard
+    }
+}
+
+query Questions($eventId: ID!) {
+    questionsByEventId(eventId: $eventId) {
+        ...QuestionCard
+    }
+}

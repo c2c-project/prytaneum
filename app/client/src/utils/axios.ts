@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 // NOTE: remove this later
 // axios.defaults.headers = {
@@ -7,4 +7,4 @@ import axios from 'axios';
 //     },
 // };
 
-export default axios;
+export default {};

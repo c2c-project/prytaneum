@@ -33,14 +33,14 @@ export const TextField = React.forwardRef<HTMLDivElement, Props>((props, ref) =>
     return (
         <MUITextField
             ref={ref}
-            variant="outlined"
+            variant='outlined'
             fullWidth
             id={id || toSnakeCase(label)}
             name={name || toCamelCase(label)}
             label={label}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
+            autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
             spellCheck={false}
             {...passThroughProps}
         >

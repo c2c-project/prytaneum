@@ -1,0 +1,62 @@
+fragment EventSettings on Event {
+    isQuestionFeedVisible
+    isCollectRatingsEnabled
+    isForumEnabled
+    isPrivate
+}
+
+fragment EventModerators on Event {
+    moderators {
+        userId
+        firstName
+        lastName
+        email
+        avatar
+    }
+}
+
+fragment EventVideos on Event {
+    videos {
+        url
+        lang
+    }
+}
+
+fragment EventSpeakers on Event {
+    speakers {
+        userId
+        eventId
+        name
+        title
+        description
+        picture
+    }
+}
+
+fragment EventDetails on Event {
+    title
+    topic
+    description
+    startDateTime
+    endDateTime
+    isActive
+}
+
+mutation CreateEvent($input: CreateEvent) {
+    createEvent(event: $input) {
+        eventId
+        title
+        topic
+        startDateTime
+    }
+}
+
+query EventList {
+    events {
+        eventId
+        title
+        topic
+        startDateTime
+    }
+}
+

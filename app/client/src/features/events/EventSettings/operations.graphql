@@ -1,0 +1,25 @@
+query EventSettings($input: ID!) {
+    eventById(id: $input) {
+        eventId
+        ...EventDetails
+        ...EventSettings
+        ...EventSpeakers
+        ...EventVideos
+        ...EventModerators
+    }
+}
+
+mutation UpdateEvent($input: UpdateEvent) {
+    updateEvent(event: $input) {
+        eventId
+        title
+        startDateTime
+        endDateTime
+        description
+        topic
+        isQuestionFeedVisible
+        isCollectRatingsEnabled
+        isForumEnabled
+        isPrivate
+    }
+}

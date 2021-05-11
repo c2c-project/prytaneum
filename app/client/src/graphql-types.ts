@@ -13,7 +13,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
+  Date: Date;
+};
+
+export type AddModerator = {
+  email: Scalars['String'];
+  eventId: Scalars['String'];
 };
 
 export type AlterLike = {
@@ -24,8 +29,8 @@ export type AlterLike = {
 
 export type CreateEvent = {
   title: Scalars['String'];
-  startDateTime: Scalars['String'];
-  endDateTime: Scalars['String'];
+  startDateTime: Scalars['Date'];
+  endDateTime: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   topic: Scalars['String'];
   orgId: Scalars['String'];
@@ -60,20 +65,20 @@ export type DeleteOrg = {
 
 export type Event = {
   __typename?: 'Event';
-  id: Scalars['ID'];
+  eventId: Scalars['ID'];
   /** Creator of this event */
   createdBy?: Maybe<User>;
   /** The owning organization */
-  orgID?: Maybe<Organization>;
+  organization?: Maybe<Organization>;
   createdAt?: Maybe<Scalars['Date']>;
   updatedAt?: Maybe<Scalars['Date']>;
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   /** The planned start date time string */
-  startDateTime: Scalars['Date'];
+  startDateTime?: Maybe<Scalars['Date']>;
   /** The planned end date time string */
-  endDateTime: Scalars['Date'];
-  description: Scalars['String'];
-  topic: Scalars['String'];
+  endDateTime?: Maybe<Scalars['Date']>;
+  description?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
   /** Whether or not the Event is live */
   isActive?: Maybe<Scalars['Boolean']>;
   /** Let all users see what questions have been submitted */
@@ -81,28 +86,28 @@ export type Event = {
   /** Collect user ratings after the event has ended */
   isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
   /** Display a forum-like interface once the "live" part of the event is over */
-  isTransformToForumEnabled?: Maybe<Scalars['Boolean']>;
+  isForumEnabled?: Maybe<Scalars['Boolean']>;
   /** Is the event private, ie invite only */
   isPrivate?: Maybe<Scalars['Boolean']>;
   /** All questions relating to this event */
-  questions?: Maybe<Array<Maybe<EventQuestion>>>;
+  questions?: Maybe<Array<EventQuestion>>;
   /** Speakers for this event */
-  speakers?: Maybe<Array<Maybe<EventSpeaker>>>;
+  speakers?: Maybe<Array<EventSpeaker>>;
   /** Registrants for this event -- individuals invited */
-  registrants?: Maybe<Array<Maybe<User>>>;
+  registrants?: Maybe<Array<User>>;
   /** Participants of the event -- individuals who showed up */
-  participants?: Maybe<Array<Maybe<EventParticipant>>>;
+  participants?: Maybe<Array<EventParticipant>>;
   /** Video feeds and the languages */
-  videos?: Maybe<Array<Maybe<EventVideo>>>;
+  videos?: Maybe<Array<EventVideo>>;
   /** Live Feedback given during the event */
-  liveFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+  liveFeedback?: Maybe<Array<EventLiveFeedback>>;
   /** List of moderators for this particular event */
-  moderators?: Maybe<Array<Maybe<User>>>;
+  moderators?: Maybe<Array<User>>;
 };
 
 export type EventLiveFeedback = {
   __typename?: 'EventLiveFeedback';
-  id: Scalars['ID'];
+  feedbackId: Scalars['ID'];
   message: Scalars['String'];
   event?: Maybe<Event>;
   createdAt?: Maybe<Scalars['String']>;
@@ -118,8 +123,10 @@ export type EventParticipant = {
 
 export type EventQuestion = {
   __typename?: 'EventQuestion';
-  id?: Maybe<Scalars['ID']>;
+  questionId: Scalars['ID'];
   event?: Maybe<Event>;
+  /** The user id of the creator */
+  createdById?: Maybe<Scalars['ID']>;
   /** User information on the person asking the question */
   createdBy?: Maybe<User>;
   createdAt?: Maybe<Scalars['Date']>;
@@ -142,8 +149,12 @@ export type EventQuestion = {
 
 export type EventSpeaker = {
   __typename?: 'EventSpeaker';
+  /** User id associated with this speaker */
+  userId: Scalars['ID'];
+  /** Event id that this user is speaking at */
+  eventId: Scalars['ID'];
   /** The related user account associated with the speaker */
-  user?: Maybe<Array<Maybe<User>>>;
+  user?: Maybe<User>;
   /** Name set by the organizer of the event */
   name?: Maybe<Scalars['String']>;
   /** Description set by the organizer of the event */
@@ -182,6 +193,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Adds a new member and returns the new user added */
   addMember?: Maybe<User>;
+  /** Add a new moderator to the given event */
+  addModerator?: Maybe<User>;
   alterLike?: Maybe<Like>;
   createEvent?: Maybe<Event>;
   createFeedback?: Maybe<EventLiveFeedback>;
@@ -204,6 +217,11 @@ export type Mutation = {
 
 export type MutationAddMemberArgs = {
   input?: Maybe<NewMember>;
+};
+
+
+export type MutationAddModeratorArgs = {
+  input?: Maybe<AddModerator>;
 };
 
 
@@ -289,7 +307,7 @@ export type NewMember = {
 export type Organization = {
   __typename?: 'Organization';
   /** Unique identifier for this org */
-  id: Scalars['ID'];
+  orgId: Scalars['ID'];
   /** name of the org */
   name: Scalars['String'];
   /** When this org was created */
@@ -304,6 +322,10 @@ export type Query = {
   __typename?: 'Query';
   /** Fetch an event by id */
   eventById?: Maybe<Event>;
+  /** Fetch all events */
+  events?: Maybe<Array<Maybe<Event>>>;
+  /** The logout just returns the timestamp of the logout action */
+  logout?: Maybe<Scalars['Date']>;
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
@@ -311,6 +333,7 @@ export type Query = {
   myOrgs?: Maybe<Array<Maybe<Organization>>>;
   /** Fetch data about a particular org */
   orgById?: Maybe<Organization>;
+  questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
 
 
@@ -321,6 +344,11 @@ export type QueryEventByIdArgs = {
 
 export type QueryOrgByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryQuestionsByEventIdArgs = {
+  eventId: Scalars['ID'];
 };
 
 export type RegistrationForm = {
@@ -341,8 +369,8 @@ export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
   eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
-  eventQuestionCreated?: Maybe<EventQuestion>;
-  likeCountChanged?: Maybe<EventQuestion>;
+  eventQuestionCreated: EventQuestion;
+  likeCountChanged: EventQuestion;
 };
 
 
@@ -362,13 +390,13 @@ export type SubscriptionLikeCountChangedArgs = {
 
 export type UpdateEvent = {
   title?: Maybe<Scalars['String']>;
-  startDateTime?: Maybe<Scalars['String']>;
-  endDateTime?: Maybe<Scalars['String']>;
+  startDateTime?: Maybe<Scalars['Date']>;
+  endDateTime?: Maybe<Scalars['Date']>;
   description?: Maybe<Scalars['String']>;
   topic?: Maybe<Scalars['String']>;
   isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
   isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
-  isTransformToForumEnabled?: Maybe<Scalars['Boolean']>;
+  isForumEnabled?: Maybe<Scalars['Boolean']>;
   isPrivate?: Maybe<Scalars['Boolean']>;
   eventId: Scalars['String'];
 };
@@ -382,8 +410,8 @@ export type UpdateOrg = {
 /** User Data */
 export type User = {
   __typename?: 'User';
-  id: Scalars['ID'];
-  firstName: Scalars['String'];
+  userId: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
@@ -402,8 +430,16 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'>
+    & Pick<User, 'userId' | 'firstName' | 'lastName' | 'email' | 'avatar'>
   )> }
+);
+
+export type LogoutQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'logout'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -415,15 +451,266 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar'>
+    & Pick<User, 'userId' | 'firstName' | 'lastName' | 'email' | 'avatar'>
   )> }
 );
 
+export type MyUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type MyUserInfoQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'userId' | 'firstName' | 'lastName' | 'avatar' | 'email'>
+  )> }
+);
+
+export type EventSettingsQueryVariables = Exact<{
+  input: Scalars['ID'];
+}>;
+
+
+export type EventSettingsQuery = (
+  { __typename?: 'Query' }
+  & { eventById?: Maybe<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'eventId'>
+    & EventDetailsFragment
+    & EventSettingsFragment
+    & EventSpeakersFragment
+    & EventVideosFragment
+    & EventModeratorsFragment
+  )> }
+);
+
+export type UpdateEventMutationVariables = Exact<{
+  input?: Maybe<UpdateEvent>;
+}>;
+
+
+export type UpdateEventMutation = (
+  { __typename?: 'Mutation' }
+  & { updateEvent?: Maybe<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'eventId' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>
+  )> }
+);
+
+export type QuestionCardFragment = (
+  { __typename?: 'EventQuestion' }
+  & Pick<EventQuestion, 'questionId' | 'question' | 'createdAt'>
+  & { createdBy?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'userId' | 'firstName'>
+  )> }
+);
+
+export type CreateQuestionMutationVariables = Exact<{
+  input?: Maybe<CreateQuestion>;
+}>;
+
+
+export type CreateQuestionMutation = (
+  { __typename?: 'Mutation' }
+  & { createQuestion?: Maybe<(
+    { __typename?: 'EventQuestion' }
+    & Pick<EventQuestion, 'questionId' | 'question'>
+  )> }
+);
+
+export type NewQuestionsSubscriptionVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type NewQuestionsSubscription = (
+  { __typename?: 'Subscription' }
+  & { eventQuestionCreated: (
+    { __typename?: 'EventQuestion' }
+    & QuestionCardFragment
+  ) }
+);
+
+export type QuestionsQueryVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type QuestionsQuery = (
+  { __typename?: 'Query' }
+  & { questionsByEventId?: Maybe<Array<(
+    { __typename?: 'EventQuestion' }
+    & QuestionCardFragment
+  )>> }
+);
+
+export type EventSettingsFragment = (
+  { __typename?: 'Event' }
+  & Pick<Event, 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>
+);
+
+export type EventModeratorsFragment = (
+  { __typename?: 'Event' }
+  & { moderators?: Maybe<Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'userId' | 'firstName' | 'lastName' | 'email' | 'avatar'>
+  )>> }
+);
+
+export type EventVideosFragment = (
+  { __typename?: 'Event' }
+  & { videos?: Maybe<Array<(
+    { __typename?: 'EventVideo' }
+    & Pick<EventVideo, 'url' | 'lang'>
+  )>> }
+);
+
+export type EventSpeakersFragment = (
+  { __typename?: 'Event' }
+  & { speakers?: Maybe<Array<(
+    { __typename?: 'EventSpeaker' }
+    & Pick<EventSpeaker, 'userId' | 'eventId' | 'name' | 'title' | 'description' | 'picture'>
+  )>> }
+);
+
+export type EventDetailsFragment = (
+  { __typename?: 'Event' }
+  & Pick<Event, 'title' | 'topic' | 'description' | 'startDateTime' | 'endDateTime' | 'isActive'>
+);
+
+export type CreateEventMutationVariables = Exact<{
+  input?: Maybe<CreateEvent>;
+}>;
+
+
+export type CreateEventMutation = (
+  { __typename?: 'Mutation' }
+  & { createEvent?: Maybe<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+  )> }
+);
+
+export type EventListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EventListQuery = (
+  { __typename?: 'Query' }
+  & { events?: Maybe<Array<Maybe<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+  )>>> }
+);
+
+export type MyOrgsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyOrgsQuery = (
+  { __typename?: 'Query' }
+  & { myOrgs?: Maybe<Array<Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'orgId' | 'name'>
+  )>>> }
+);
+
+export type OrgInfoQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type OrgInfoQuery = (
+  { __typename?: 'Query' }
+  & { orgById?: Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'orgId' | 'name'>
+    & { members?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'userId' | 'firstName' | 'lastName'>
+    )>>>, events?: Maybe<Array<Maybe<(
+      { __typename?: 'Event' }
+      & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+    )>>> }
+  )> }
+);
+
+export type CreateOrgMutationVariables = Exact<{
+  input: CreateOrg;
+}>;
+
+
+export type CreateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrganization?: Maybe<(
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'orgId' | 'name'>
+  )> }
+);
+
+export const QuestionCardFragmentDoc = gql`
+    fragment QuestionCard on EventQuestion {
+  questionId
+  question
+  createdBy {
+    userId
+    firstName
+  }
+  createdAt
+}
+    `;
+export const EventSettingsFragmentDoc = gql`
+    fragment EventSettings on Event {
+  isQuestionFeedVisible
+  isCollectRatingsEnabled
+  isForumEnabled
+  isPrivate
+}
+    `;
+export const EventModeratorsFragmentDoc = gql`
+    fragment EventModerators on Event {
+  moderators {
+    userId
+    firstName
+    lastName
+    email
+    avatar
+  }
+}
+    `;
+export const EventVideosFragmentDoc = gql`
+    fragment EventVideos on Event {
+  videos {
+    url
+    lang
+  }
+}
+    `;
+export const EventSpeakersFragmentDoc = gql`
+    fragment EventSpeakers on Event {
+  speakers {
+    userId
+    eventId
+    name
+    title
+    description
+    picture
+  }
+}
+    `;
+export const EventDetailsFragmentDoc = gql`
+    fragment EventDetails on Event {
+  title
+  topic
+  description
+  startDateTime
+  endDateTime
+  isActive
+}
+    `;
 export const LoginDocument = gql`
     mutation Login($input: LoginForm!) {
   login(input: $input) {
-    id
+    userId
     firstName
     lastName
     email
@@ -457,10 +744,42 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = gql`
+    query Logout {
+  logout
+}
+    `;
+
+/**
+ * __useLogoutQuery__
+ *
+ * To run a query within a React component, call `useLogoutQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLogoutQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLogoutQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutQuery(baseOptions?: Apollo.QueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
+      }
+export function useLogoutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
+        }
+export type LogoutQueryHookResult = ReturnType<typeof useLogoutQuery>;
+export type LogoutLazyQueryHookResult = ReturnType<typeof useLogoutLazyQuery>;
+export type LogoutQueryResult = Apollo.QueryResult<LogoutQuery, LogoutQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: RegistrationForm!) {
   register(input: $input) {
-    id
+    userId
     firstName
     lastName
     email
@@ -494,11 +813,423 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export type EventKeySpecifier = ('id' | 'createdBy' | 'orgID' | 'createdAt' | 'updatedAt' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isActive' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isTransformToForumEnabled' | 'isPrivate' | 'questions' | 'speakers' | 'registrants' | 'participants' | 'videos' | 'liveFeedback' | 'moderators' | EventKeySpecifier)[];
+export const MyUserInfoDocument = gql`
+    query MyUserInfo {
+  me {
+    userId
+    firstName
+    lastName
+    avatar
+    email
+  }
+}
+    `;
+
+/**
+ * __useMyUserInfoQuery__
+ *
+ * To run a query within a React component, call `useMyUserInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyUserInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyUserInfoQuery(baseOptions?: Apollo.QueryHookOptions<MyUserInfoQuery, MyUserInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, options);
+      }
+export function useMyUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyUserInfoQuery, MyUserInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyUserInfoQuery, MyUserInfoQueryVariables>(MyUserInfoDocument, options);
+        }
+export type MyUserInfoQueryHookResult = ReturnType<typeof useMyUserInfoQuery>;
+export type MyUserInfoLazyQueryHookResult = ReturnType<typeof useMyUserInfoLazyQuery>;
+export type MyUserInfoQueryResult = Apollo.QueryResult<MyUserInfoQuery, MyUserInfoQueryVariables>;
+export const EventSettingsDocument = gql`
+    query EventSettings($input: ID!) {
+  eventById(id: $input) {
+    eventId
+    ...EventDetails
+    ...EventSettings
+    ...EventSpeakers
+    ...EventVideos
+    ...EventModerators
+  }
+}
+    ${EventDetailsFragmentDoc}
+${EventSettingsFragmentDoc}
+${EventSpeakersFragmentDoc}
+${EventVideosFragmentDoc}
+${EventModeratorsFragmentDoc}`;
+
+/**
+ * __useEventSettingsQuery__
+ *
+ * To run a query within a React component, call `useEventSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventSettingsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEventSettingsQuery(baseOptions: Apollo.QueryHookOptions<EventSettingsQuery, EventSettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventSettingsQuery, EventSettingsQueryVariables>(EventSettingsDocument, options);
+      }
+export function useEventSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventSettingsQuery, EventSettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventSettingsQuery, EventSettingsQueryVariables>(EventSettingsDocument, options);
+        }
+export type EventSettingsQueryHookResult = ReturnType<typeof useEventSettingsQuery>;
+export type EventSettingsLazyQueryHookResult = ReturnType<typeof useEventSettingsLazyQuery>;
+export type EventSettingsQueryResult = Apollo.QueryResult<EventSettingsQuery, EventSettingsQueryVariables>;
+export const UpdateEventDocument = gql`
+    mutation UpdateEvent($input: UpdateEvent) {
+  updateEvent(event: $input) {
+    eventId
+    title
+    startDateTime
+    endDateTime
+    description
+    topic
+    isQuestionFeedVisible
+    isCollectRatingsEnabled
+    isForumEnabled
+    isPrivate
+  }
+}
+    `;
+export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation, UpdateEventMutationVariables>;
+
+/**
+ * __useUpdateEventMutation__
+ *
+ * To run a mutation, you first call `useUpdateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEventMutation, { data, loading, error }] = useUpdateEventMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventMutation, UpdateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventMutation, UpdateEventMutationVariables>(UpdateEventDocument, options);
+      }
+export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
+export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
+export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
+export const CreateQuestionDocument = gql`
+    mutation CreateQuestion($input: CreateQuestion) {
+  createQuestion(input: $input) {
+    questionId
+    question
+  }
+}
+    `;
+export type CreateQuestionMutationFn = Apollo.MutationFunction<CreateQuestionMutation, CreateQuestionMutationVariables>;
+
+/**
+ * __useCreateQuestionMutation__
+ *
+ * To run a mutation, you first call `useCreateQuestionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateQuestionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createQuestionMutation, { data, loading, error }] = useCreateQuestionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateQuestionMutation(baseOptions?: Apollo.MutationHookOptions<CreateQuestionMutation, CreateQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateQuestionMutation, CreateQuestionMutationVariables>(CreateQuestionDocument, options);
+      }
+export type CreateQuestionMutationHookResult = ReturnType<typeof useCreateQuestionMutation>;
+export type CreateQuestionMutationResult = Apollo.MutationResult<CreateQuestionMutation>;
+export type CreateQuestionMutationOptions = Apollo.BaseMutationOptions<CreateQuestionMutation, CreateQuestionMutationVariables>;
+export const NewQuestionsDocument = gql`
+    subscription NewQuestions($eventId: ID!) {
+  eventQuestionCreated(eventId: $eventId) {
+    ...QuestionCard
+  }
+}
+    ${QuestionCardFragmentDoc}`;
+
+/**
+ * __useNewQuestionsSubscription__
+ *
+ * To run a query within a React component, call `useNewQuestionsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewQuestionsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewQuestionsSubscription({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useNewQuestionsSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewQuestionsSubscription, NewQuestionsSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewQuestionsSubscription, NewQuestionsSubscriptionVariables>(NewQuestionsDocument, options);
+      }
+export type NewQuestionsSubscriptionHookResult = ReturnType<typeof useNewQuestionsSubscription>;
+export type NewQuestionsSubscriptionResult = Apollo.SubscriptionResult<NewQuestionsSubscription>;
+export const QuestionsDocument = gql`
+    query Questions($eventId: ID!) {
+  questionsByEventId(eventId: $eventId) {
+    ...QuestionCard
+  }
+}
+    ${QuestionCardFragmentDoc}`;
+
+/**
+ * __useQuestionsQuery__
+ *
+ * To run a query within a React component, call `useQuestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuestionsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useQuestionsQuery(baseOptions: Apollo.QueryHookOptions<QuestionsQuery, QuestionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuestionsQuery, QuestionsQueryVariables>(QuestionsDocument, options);
+      }
+export function useQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestionsQuery, QuestionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuestionsQuery, QuestionsQueryVariables>(QuestionsDocument, options);
+        }
+export type QuestionsQueryHookResult = ReturnType<typeof useQuestionsQuery>;
+export type QuestionsLazyQueryHookResult = ReturnType<typeof useQuestionsLazyQuery>;
+export type QuestionsQueryResult = Apollo.QueryResult<QuestionsQuery, QuestionsQueryVariables>;
+export const CreateEventDocument = gql`
+    mutation CreateEvent($input: CreateEvent) {
+  createEvent(event: $input) {
+    eventId
+    title
+    topic
+    startDateTime
+  }
+}
+    `;
+export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation, CreateEventMutationVariables>;
+
+/**
+ * __useCreateEventMutation__
+ *
+ * To run a mutation, you first call `useCreateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutation, CreateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(CreateEventDocument, options);
+      }
+export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
+export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
+export const EventListDocument = gql`
+    query EventList {
+  events {
+    eventId
+    title
+    topic
+    startDateTime
+  }
+}
+    `;
+
+/**
+ * __useEventListQuery__
+ *
+ * To run a query within a React component, call `useEventListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEventListQuery(baseOptions?: Apollo.QueryHookOptions<EventListQuery, EventListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventListQuery, EventListQueryVariables>(EventListDocument, options);
+      }
+export function useEventListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventListQuery, EventListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventListQuery, EventListQueryVariables>(EventListDocument, options);
+        }
+export type EventListQueryHookResult = ReturnType<typeof useEventListQuery>;
+export type EventListLazyQueryHookResult = ReturnType<typeof useEventListLazyQuery>;
+export type EventListQueryResult = Apollo.QueryResult<EventListQuery, EventListQueryVariables>;
+export const MyOrgsDocument = gql`
+    query MyOrgs {
+  myOrgs {
+    orgId
+    name
+  }
+}
+    `;
+
+/**
+ * __useMyOrgsQuery__
+ *
+ * To run a query within a React component, call `useMyOrgsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyOrgsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyOrgsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyOrgsQuery(baseOptions?: Apollo.QueryHookOptions<MyOrgsQuery, MyOrgsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyOrgsQuery, MyOrgsQueryVariables>(MyOrgsDocument, options);
+      }
+export function useMyOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyOrgsQuery, MyOrgsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyOrgsQuery, MyOrgsQueryVariables>(MyOrgsDocument, options);
+        }
+export type MyOrgsQueryHookResult = ReturnType<typeof useMyOrgsQuery>;
+export type MyOrgsLazyQueryHookResult = ReturnType<typeof useMyOrgsLazyQuery>;
+export type MyOrgsQueryResult = Apollo.QueryResult<MyOrgsQuery, MyOrgsQueryVariables>;
+export const OrgInfoDocument = gql`
+    query OrgInfo($id: ID!) {
+  orgById(id: $id) {
+    orgId
+    name
+    members {
+      userId
+      firstName
+      lastName
+    }
+    events {
+      eventId
+      title
+      topic
+      startDateTime
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrgInfoQuery__
+ *
+ * To run a query within a React component, call `useOrgInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrgInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrgInfoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOrgInfoQuery(baseOptions: Apollo.QueryHookOptions<OrgInfoQuery, OrgInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrgInfoQuery, OrgInfoQueryVariables>(OrgInfoDocument, options);
+      }
+export function useOrgInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgInfoQuery, OrgInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrgInfoQuery, OrgInfoQueryVariables>(OrgInfoDocument, options);
+        }
+export type OrgInfoQueryHookResult = ReturnType<typeof useOrgInfoQuery>;
+export type OrgInfoLazyQueryHookResult = ReturnType<typeof useOrgInfoLazyQuery>;
+export type OrgInfoQueryResult = Apollo.QueryResult<OrgInfoQuery, OrgInfoQueryVariables>;
+export const CreateOrgDocument = gql`
+    mutation CreateOrg($input: CreateOrg!) {
+  createOrganization(input: $input) {
+    orgId
+    name
+  }
+}
+    `;
+export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
+
+/**
+ * __useCreateOrgMutation__
+ *
+ * To run a mutation, you first call `useCreateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrgMutation, { data, loading, error }] = useCreateOrgMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrgMutation, CreateOrgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrgMutation, CreateOrgMutationVariables>(CreateOrgDocument, options);
+      }
+export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
+export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
+export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
+export type EventKeySpecifier = ('eventId' | 'createdBy' | 'organization' | 'createdAt' | 'updatedAt' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isActive' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate' | 'questions' | 'speakers' | 'registrants' | 'participants' | 'videos' | 'liveFeedback' | 'moderators' | EventKeySpecifier)[];
 export type EventFieldPolicy = {
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	eventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
-	orgID?: FieldPolicy<any> | FieldReadFunction<any>,
+	organization?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -509,7 +1240,7 @@ export type EventFieldPolicy = {
 	isActive?: FieldPolicy<any> | FieldReadFunction<any>,
 	isQuestionFeedVisible?: FieldPolicy<any> | FieldReadFunction<any>,
 	isCollectRatingsEnabled?: FieldPolicy<any> | FieldReadFunction<any>,
-	isTransformToForumEnabled?: FieldPolicy<any> | FieldReadFunction<any>,
+	isForumEnabled?: FieldPolicy<any> | FieldReadFunction<any>,
 	isPrivate?: FieldPolicy<any> | FieldReadFunction<any>,
 	questions?: FieldPolicy<any> | FieldReadFunction<any>,
 	speakers?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -519,9 +1250,9 @@ export type EventFieldPolicy = {
 	liveFeedback?: FieldPolicy<any> | FieldReadFunction<any>,
 	moderators?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventLiveFeedbackKeySpecifier = ('id' | 'message' | 'event' | 'createdAt' | 'createdBy' | EventLiveFeedbackKeySpecifier)[];
+export type EventLiveFeedbackKeySpecifier = ('feedbackId' | 'message' | 'event' | 'createdAt' | 'createdBy' | EventLiveFeedbackKeySpecifier)[];
 export type EventLiveFeedbackFieldPolicy = {
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	feedbackId?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>,
 	event?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -533,10 +1264,11 @@ export type EventParticipantFieldPolicy = {
 	questions?: FieldPolicy<any> | FieldReadFunction<any>,
 	liveFeedBack?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventQuestionKeySpecifier = ('id' | 'event' | 'createdBy' | 'createdAt' | 'refQuestion' | 'question' | 'position' | 'isVisible' | 'isAsked' | 'lang' | 'isFollowUp' | 'isQuote' | 'likes' | 'likedBy' | 'isLikedByMe' | EventQuestionKeySpecifier)[];
+export type EventQuestionKeySpecifier = ('questionId' | 'event' | 'createdById' | 'createdBy' | 'createdAt' | 'refQuestion' | 'question' | 'position' | 'isVisible' | 'isAsked' | 'lang' | 'isFollowUp' | 'isQuote' | 'likes' | 'likedBy' | 'isLikedByMe' | EventQuestionKeySpecifier)[];
 export type EventQuestionFieldPolicy = {
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	questionId?: FieldPolicy<any> | FieldReadFunction<any>,
 	event?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdById?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	refQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -551,8 +1283,10 @@ export type EventQuestionFieldPolicy = {
 	likedBy?: FieldPolicy<any> | FieldReadFunction<any>,
 	isLikedByMe?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventSpeakerKeySpecifier = ('user' | 'name' | 'description' | 'title' | 'picture' | EventSpeakerKeySpecifier)[];
+export type EventSpeakerKeySpecifier = ('userId' | 'eventId' | 'user' | 'name' | 'description' | 'title' | 'picture' | EventSpeakerKeySpecifier)[];
 export type EventSpeakerFieldPolicy = {
+	userId?: FieldPolicy<any> | FieldReadFunction<any>,
+	eventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -569,9 +1303,10 @@ export type LikeFieldPolicy = {
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addMember' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'register' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addMember' | 'addModerator' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'register' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addMember?: FieldPolicy<any> | FieldReadFunction<any>,
+	addModerator?: FieldPolicy<any> | FieldReadFunction<any>,
 	alterLike?: FieldPolicy<any> | FieldReadFunction<any>,
 	createEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	createFeedback?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -588,21 +1323,24 @@ export type MutationFieldPolicy = {
 	updateEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateOrganizationById?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type OrganizationKeySpecifier = ('id' | 'name' | 'createdAt' | 'members' | 'events' | OrganizationKeySpecifier)[];
+export type OrganizationKeySpecifier = ('orgId' | 'name' | 'createdAt' | 'members' | 'events' | OrganizationKeySpecifier)[];
 export type OrganizationFieldPolicy = {
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	orgId?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	members?: FieldPolicy<any> | FieldReadFunction<any>,
 	events?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('eventById' | 'me' | 'myFeedback' | 'myOrgs' | 'orgById' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('eventById' | 'events' | 'logout' | 'me' | 'myFeedback' | 'myOrgs' | 'orgById' | 'questionsByEventId' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	eventById?: FieldPolicy<any> | FieldReadFunction<any>,
+	events?: FieldPolicy<any> | FieldReadFunction<any>,
+	logout?: FieldPolicy<any> | FieldReadFunction<any>,
 	me?: FieldPolicy<any> | FieldReadFunction<any>,
 	myFeedback?: FieldPolicy<any> | FieldReadFunction<any>,
 	myOrgs?: FieldPolicy<any> | FieldReadFunction<any>,
-	orgById?: FieldPolicy<any> | FieldReadFunction<any>
+	orgById?: FieldPolicy<any> | FieldReadFunction<any>,
+	questionsByEventId?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SubscriptionKeySpecifier = ('eventLiveFeedbackCreated' | 'eventQuestionCreated' | 'likeCountChanged' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {
@@ -610,9 +1348,9 @@ export type SubscriptionFieldPolicy = {
 	eventQuestionCreated?: FieldPolicy<any> | FieldReadFunction<any>,
 	likeCountChanged?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('id' | 'firstName' | 'lastName' | 'email' | 'isEmailVerified' | 'avatar' | 'organizations' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('userId' | 'firstName' | 'lastName' | 'email' | 'isEmailVerified' | 'avatar' | 'organizations' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>,
 	firstName?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastName?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,

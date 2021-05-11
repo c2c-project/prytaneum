@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
 import { LoginForm } from '@local/domains/Auth/LoginForm';
+import { useUser } from '@local/hooks/useUser';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,11 +33,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
     const classes = useStyles();
     const router = useRouter();
-    // const [user] = useUser();
-    // const [getIsMounted] = useIsMounted();
-    // React.useEffect(() => {
-    //     if (onLogin && user && getIsMounted) onLogin();
-    // }, [onLogin, user, getIsMounted]);
+
+    const [user] = useUser();
+
+    React.useEffect(() => {
+        if (user) router.push('/app/home');
+    }, [user, router]);
 
     return (
         <Grid container alignContent='center' className={classes.root} justify='center'>
@@ -48,7 +50,7 @@ export default function Login() {
                     Login
                 </Typography>
                 <div className={classes.form}>
-                    <LoginForm onSuccess={() => router.push('/app/home')} />
+                    <LoginForm onSuccess={() => router.push('/dashboard')} />
                 </div>
             </Paper>
         </Grid>

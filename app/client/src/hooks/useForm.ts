@@ -39,12 +39,10 @@ export function useForm<T>(initialState: T): UseFormTuple<T> {
         };
     }
 
-    const buildHandleChange: BuildChangeFunction<T> = (key: keyof T) => {
-        return (e: React.ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            const { value } = e.target;
-            setState({ ...state, [key]: value });
-        };
+    const buildHandleChange: BuildChangeFunction<T> = (key: keyof T) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const { value } = e.target;
+        setState({ ...state, [key]: value });
     };
     return [state, errors, buildHandleSubmit, buildHandleChange, setState];
 }
