@@ -65,6 +65,7 @@ model Event {
     endDateTime DateTime
     description String @db.VarChar(500)
     topic String @db.VarChar(50)
+    currentQuestion Int @default(-1)
     // settings defaults are built into the business logic layer rather than the db layer
     isActive Boolean
     isQuestionFeedVisible Boolean
