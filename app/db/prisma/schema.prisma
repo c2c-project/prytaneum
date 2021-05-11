@@ -15,9 +15,9 @@ model User {
     userId String @id @default(uuid()) @db.Uuid
     createdAt DateTime @default(now())
     email String @unique @db.VarChar(320)
-    firstName String @db.VarChar(100)
-    lastName String @db.VarChar(100)
-    fullName String @db.VarChar(200) // computed field, recomputed on name update
+    firstName String? @db.VarChar(100)
+    lastName String? @db.VarChar(100)
+    fullName String? @db.VarChar(200) // computed field, recomputed on name update
     password String?
     preferredLang String @db.VarChar(30)
     canMakeOrgs Boolean @default(false) 
