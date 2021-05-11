@@ -1,12 +1,19 @@
 type EventQuestion {
-    questionId: ID
+    questionId: ID!
     event: Event
+
+    """
+    The user id of the creator
+    """
+    createdById: ID
 
     """
     User information on the person asking the question
     """
     createdBy: User
     createdAt: Date
+
+    refQuestionId: ID
     refQuestion: EventQuestion
 
     """
@@ -31,14 +38,19 @@ type EventQuestion {
     likedBy: [User]
 
     """
+    Find the count of the likes only
+    """
+    likedByCount: Int
+
+    """
     Whether or not the current user likes the question
     """
     isLikedByMe: Boolean
 }
 
 type Like {
-    user: User
-    question: EventQuestion
+    user: User!
+    question: EventQuestion!
 }
 
 input CreateQuestion {
@@ -64,8 +76,8 @@ type Mutation {
 }
 
 type Subscription {
-    eventQuestionCreated(eventId: ID!): EventQuestion
-    likeCountChanged(eventId: ID!): EventQuestion
+    eventQuestionCreated(eventId: ID!): EventQuestion!
+    likeCountChanged(eventId: ID!): Like!
 }
 
 type Query {

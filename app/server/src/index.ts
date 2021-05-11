@@ -7,7 +7,7 @@ import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 
-import { buildContext } from './context';
+import { buildContext, buildSubscriptionContext } from './context';
 import { server } from './server';
 
 const typeDefsArr = loadFilesSync(join(__dirname, './features/**/*.graphql'));
@@ -25,7 +25,10 @@ server.register(mercurius, {
     schema,
     graphiql: process.env.NODE_ENV === 'development',
     context: buildContext,
-    subscription: true,
+    // subscription: true,
+    subscription: {
+        context: buildSubscriptionContext,
+    },
 });
 
 server.register(cookie, {
@@ -33,7 +36,6 @@ server.register(cookie, {
 } as FastifyCookieOptions);
 
 server.register(AltairFastify);
-
 function verifyEnv() {
     if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
     if (process.env.NODE_ENV === 'production') {

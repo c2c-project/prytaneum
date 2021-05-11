@@ -5,12 +5,25 @@ import { verify } from './lib/jwt';
 
 const prisma = new PrismaClient();
 
-export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
-    let userId = '';
+async function extractJwt(req: FastifyRequest) {
     if (req.cookies.jwt) {
-        const decodedJwt = await verify(req.cookies.jwt).catch(() => reply.clearCookie('jwt').send());
-        userId = (decodedJwt as { id: string }).id;
+        const decodedJwt = await verify(req.cookies.jwt);
+        return (decodedJwt as { id: string }).id;
     }
+    return '';
+}
+
+export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
+    console.log(userId);
+    return {
+        prisma,
+        userId,
+    };
+};
+
+export const buildSubscriptionContext = async (_: any, req: FastifyRequest) => {
+    const userId = await extractJwt(req);
     return {
         prisma,
         userId,

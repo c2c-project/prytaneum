@@ -1,4 +1,4 @@
-import { PrismaClient, EventQuestion } from '@app/prisma';
+import { PrismaClient } from '@app/prisma';
 import { CreateQuestion, AlterLike } from '@local/graphql-types';
 import { Maybe, errors } from '@local/features/utils';
 
@@ -59,8 +59,16 @@ export async function alterLikeById(userId: Maybe<string>, prisma: PrismaClient,
 /**
  * Filter function for event questions
  */
-export function doesEventMatch(eventId: Maybe<string>, question: Partial<EventQuestion>) {
-    return Boolean(eventId && eventId !== question.eventId);
+export async function doesEventMatch(eventId: Maybe<string>, questionId: string, prisma: PrismaClient) {
+    if (!eventId) return false;
+
+    // see if the event id matches the liked question
+    const found = await prisma.eventQuestion.findFirst({
+        where: { eventId, questionId },
+        select: { questionId: true },
+    });
+
+    return Boolean(found);
 }
 
 /**
@@ -69,4 +77,52 @@ export function doesEventMatch(eventId: Maybe<string>, question: Partial<EventQu
 export function questionsByEventId(eventId: Maybe<string>, prisma: PrismaClient) {
     if (!eventId) return null;
     return prisma.eventQuestion.findMany({ where: { eventId } });
+}
+
+/**
+ * find the submitter of a particular question
+ */
+export async function findSubmitter(userId: Maybe<string> | undefined, prisma: PrismaClient) {
+    if (!userId) return null;
+
+    return prisma.user.findUnique({ where: { userId } });
+}
+
+/**
+ * find the referenced question
+ */
+export async function findRefQuestion(refId: Maybe<string> | undefined, prisma: PrismaClient) {
+    if (!refId) return null;
+    return prisma.eventQuestion.findUnique({ where: { questionId: refId } });
+}
+
+/**
+ * find the number of likes
+ */
+export async function countLikes(questionId: string, prisma: PrismaClient) {
+    return prisma.eventQuestionLike.count({ where: { likedQuestion: questionId } });
+}
+
+/**
+ * find the users who liked the question
+ */
+export async function findLikedByUsers(questionId: string, prisma: PrismaClient) {
+    const likeResults = await prisma.eventQuestionLike.findMany({
+        where: { likedQuestion: questionId },
+        select: { user: true },
+    });
+
+    // format results and return
+    return likeResults.map(({ user }) => user);
+}
+
+/**
+ * is the question liked by the current user
+ */
+export async function isLikedByMe(userId: Maybe<string>, questionId: string, prisma: PrismaClient) {
+    if (!userId) return false;
+    const result = prisma.eventQuestionLike.findUnique({
+        where: { likedBy_likedQuestion: { likedBy: userId, likedQuestion: questionId } },
+    });
+    return Boolean(result);
 }

@@ -311,8 +311,8 @@ export type Subscription = {
     __typename?: 'Subscription';
     /** New messages as feedback is given */
     eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
-    eventQuestionCreated?: Maybe<EventQuestion>;
-    likeCountChanged?: Maybe<EventQuestion>;
+    eventQuestionCreated: EventQuestion;
+    likeCountChanged: Like;
 };
 
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
@@ -336,11 +336,14 @@ export type EventParticipant = {
 
 export type EventQuestion = {
     __typename?: 'EventQuestion';
-    questionId?: Maybe<Scalars['ID']>;
+    questionId: Scalars['ID'];
     event?: Maybe<Event>;
+    /** The user id of the creator */
+    createdById?: Maybe<Scalars['ID']>;
     /** User information on the person asking the question */
     createdBy?: Maybe<User>;
     createdAt?: Maybe<Scalars['Date']>;
+    refQuestionId?: Maybe<Scalars['ID']>;
     refQuestion?: Maybe<EventQuestion>;
     /** The actual content of the question */
     question?: Maybe<Scalars['String']>;
@@ -354,14 +357,16 @@ export type EventQuestion = {
     likes?: Maybe<Scalars['Int']>;
     /** The users who have liked this question */
     likedBy?: Maybe<Array<Maybe<User>>>;
+    /** Find the count of the likes only */
+    likedByCount?: Maybe<Scalars['Int']>;
     /** Whether or not the current user likes the question */
     isLikedByMe?: Maybe<Scalars['Boolean']>;
 };
 
 export type Like = {
     __typename?: 'Like';
-    user?: Maybe<User>;
-    question?: Maybe<EventQuestion>;
+    user: User;
+    question: EventQuestion;
 };
 
 export type CreateQuestion = {
@@ -761,14 +766,14 @@ export type SubscriptionResolvers<
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
     >;
     eventQuestionCreated?: SubscriptionResolver<
-        Maybe<ResolversTypes['EventQuestion']>,
+        ResolversTypes['EventQuestion'],
         'eventQuestionCreated',
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
     >;
     likeCountChanged?: SubscriptionResolver<
-        Maybe<ResolversTypes['EventQuestion']>,
+        ResolversTypes['Like'],
         'likeCountChanged',
         ParentType,
         ContextType,
@@ -790,10 +795,12 @@ export type EventQuestionResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventQuestion'] = ResolversParentTypes['EventQuestion']
 > = {
-    questionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    questionId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
+    createdById?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    refQuestionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     refQuestion?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
     question?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -804,6 +811,7 @@ export type EventQuestionResolvers<
     isQuote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     likes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     likedBy?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    likedByCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     isLikedByMe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -812,8 +820,8 @@ export type LikeResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like']
 > = {
-    user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-    question?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
+    user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+    question?: Resolver<ResolversTypes['EventQuestion'], ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -938,10 +946,12 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventQuestion?: {
-        questionId?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
+        questionId?: LoaderResolver<Scalars['ID'], EventQuestion, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventQuestion, {}, TContext>;
+        createdById?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventQuestion, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;
+        refQuestionId?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
         refQuestion?: LoaderResolver<Maybe<EventQuestion>, EventQuestion, {}, TContext>;
         question?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
         position?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
@@ -952,12 +962,13 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isQuote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         likes?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
         likedBy?: LoaderResolver<Maybe<Array<Maybe<User>>>, EventQuestion, {}, TContext>;
+        likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
         isLikedByMe?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
     };
 
     Like?: {
-        user?: LoaderResolver<Maybe<User>, Like, {}, TContext>;
-        question?: LoaderResolver<Maybe<EventQuestion>, Like, {}, TContext>;
+        user?: LoaderResolver<User, Like, {}, TContext>;
+        question?: LoaderResolver<EventQuestion, Like, {}, TContext>;
     };
 
     EventSpeaker?: {

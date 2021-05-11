@@ -1,5 +1,6 @@
-// import { EventQuestionL } from '@app/prisma';
+import { EventQuestion } from '@app/prisma';
 import { Resolvers, withFilter } from '@local/features/utils';
+import { Like } from '@local/graphql-types';
 import * as Question from './methods';
 
 export const resolvers: Resolvers = {
@@ -9,25 +10,58 @@ export const resolvers: Resolvers = {
         },
     },
     Mutation: {
-        createQuestion(parent, args, ctx, info) {
-            return Question.createQuestion(ctx.userId, ctx.prisma, args.input);
+        async createQuestion(parent, args, ctx, info) {
+            const question = await Question.createQuestion(ctx.userId, ctx.prisma, args.input);
+            ctx.pubsub.publish({
+                topic: 'eventQuestionCreated',
+                payload: {
+                    eventQuestionCreated: question,
+                },
+            });
+            return question;
         },
         async alterLike(parent, args, ctx, info) {
-            return Question.alterLikeById(ctx.userId, ctx.prisma, args.input);
+            const result = await Question.alterLikeById(ctx.userId, ctx.prisma, args.input);
+            ctx.pubsub.publish({
+                topic: 'likeCountChanged',
+                payload: {
+                    likeCountChanged: result,
+                },
+            });
+            return result;
         },
     },
     Subscription: {
         likeCountChanged: {
-            subscribe: withFilter(
+            subscribe: withFilter<{ likeCountChanged: Like }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
-                (payload, args, ctx) => Question.doesEventMatch(args.eventId, payload)
+                (payload, args, ctx) =>
+                    Question.doesEventMatch(args.eventId, payload.likeCountChanged.question.questionId, ctx.prisma)
             ),
         },
         eventQuestionCreated: {
-            subscribe: withFilter(
+            subscribe: withFilter<{ eventQuestionCreated: EventQuestion }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
-                (payload, args, ctx) => Question.doesEventMatch(args.eventId, payload)
+                (payload, args, ctx) =>
+                    Question.doesEventMatch(args.eventId, payload.eventQuestionCreated.questionId, ctx.prisma)
             ),
+        },
+    },
+    EventQuestion: {
+        async createdBy(parent, args, ctx, info) {
+            return Question.findSubmitter(parent.createdById, ctx.prisma);
+        },
+        refQuestion(parent, args, ctx, info) {
+            return Question.findRefQuestion(parent.refQuestionId, ctx.prisma);
+        },
+        likedBy(parent, args, ctx, info) {
+            return Question.findLikedByUsers(parent.questionId, ctx.prisma);
+        },
+        likedByCount(parent, args, ctx, info) {
+            return Question.countLikes(parent.questionId, ctx.prisma);
+        },
+        isLikedByMe(parent, args, ctx, info) {
+            return Question.isLikedByMe(ctx.userId, parent.questionId, ctx.prisma);
         },
     },
 };
