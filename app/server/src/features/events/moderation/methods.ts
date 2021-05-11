@@ -1,6 +1,7 @@
 import { PrismaClient } from '@app/prisma';
 import { Maybe, errors } from '@local/features/utils';
 import { AddModerator, HideQuestion, ReorderQuestion } from '@local/graphql-types';
+import { register } from '@local/features/accounts/methods';
 
 /**
  * given a user id and event id, determine if the user is a moderator
@@ -80,16 +81,50 @@ export async function addModerator(userId: Maybe<string>, prisma: PrismaClient, 
 
     // check if email already exists
     const userResult = await prisma.user.findFirst({ where: { email } });
-    if (userResult) {
-        prisma.eventModerator.create({
-            data: {
-                userId: userResult.userId,
-                eventId,
-            },
-        });
-    } else {
-        // creat the user first
-        // const user = await prisma.user.create
-        // // TODO: register with password
+
+    // create user if email is not in accounts system
+    let modUserId = userResult?.userId;
+    if (!modUserId) {
+        const regResult = await register(prisma, { email: input.email });
+        modUserId = regResult.userId;
     }
+
+    return prisma.eventModerator.create({
+        data: {
+            userId: modUserId,
+            eventId,
+        },
+    });
+}
+
+/**
+ * checks if the given feedback id matches the event
+ * TODO: some sort of validation? it doesn't make sense to do this here really?
+ * how do we know only a moderator is getting this info? maybe in the context?
+ */
+export async function isEventRelevant(eventId: string, prisma: PrismaClient, feedbackId: string) {
+    const result = await prisma.eventLiveFeedback.findFirst({ where: { eventId, feedbackId } });
+    return Boolean(result);
+}
+
+/**
+ * decrements or increments the current question
+ */
+export async function changeCurrentQuestion(
+    userId: Maybe<string>,
+    prisma: PrismaClient,
+    eventId: string,
+    change: 1 | -1
+) {
+    if (!userId) throw new Error(errors.noLogin);
+
+    const hasPermission = await isModerator(userId, eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+
+    const result = await prisma.event.update({
+        where: { eventId },
+        data: { currentQuestion: { increment: change } },
+        select: { currentQuestion: true },
+    });
+    return result.currentQuestion;
 }

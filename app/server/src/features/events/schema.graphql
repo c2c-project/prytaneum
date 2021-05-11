@@ -138,5 +138,9 @@ type Query {
     """
     Fetch all events
     """
-    events: [Event]
+    events: [Event!]
+}
+
+type Subscription {
+    questionPosition(eventId: ID!): Int!
 }

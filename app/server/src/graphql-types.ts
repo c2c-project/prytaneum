@@ -59,7 +59,7 @@ export type Query = {
     /** Fetch an event by id */
     eventById?: Maybe<Event>;
     /** Fetch all events */
-    events?: Maybe<Array<Maybe<Event>>>;
+    events?: Maybe<Array<Event>>;
     /** Fetch organizations relevant to the current user */
     myOrgs?: Maybe<Array<Maybe<Organization>>>;
     /** Fetch data about a particular org */
@@ -101,6 +101,10 @@ export type Mutation = {
     reorderQueue?: Maybe<EventQuestion>;
     /** Add a new moderator to the given event */
     addModerator?: Maybe<User>;
+    /** Advance the current question */
+    nextQuestion: Scalars['Int'];
+    /** Go to the previous question */
+    prevQuestion: Scalars['Int'];
     createQuestion?: Maybe<EventQuestion>;
     alterLike?: Maybe<Like>;
 };
@@ -163,6 +167,14 @@ export type MutationreorderQueueArgs = {
 
 export type MutationaddModeratorArgs = {
     input?: Maybe<AddModerator>;
+};
+
+export type MutationnextQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type MutationprevQuestionArgs = {
+    eventId: Scalars['ID'];
 };
 
 export type MutationcreateQuestionArgs = {
@@ -241,6 +253,31 @@ export type DeleteEvent = {
     eventId: Scalars['String'];
 };
 
+export type Subscription = {
+    __typename?: 'Subscription';
+    questionPosition: Scalars['Int'];
+    /** New messages as feedback is given */
+    eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
+    eventQuestionCreated: EventQuestion;
+    likeCountChanged: Like;
+};
+
+export type SubscriptionquestionPositionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptioneventLiveFeedbackCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptioneventQuestionCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionlikeCountChangedArgs = {
+    eventId: Scalars['ID'];
+};
+
 export type Organization = {
     __typename?: 'Organization';
     /** Unique identifier for this org */
@@ -305,26 +342,6 @@ export type ReorderQuestion = {
 export type AddModerator = {
     email: Scalars['String'];
     eventId: Scalars['String'];
-};
-
-export type Subscription = {
-    __typename?: 'Subscription';
-    /** New messages as feedback is given */
-    eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
-    eventQuestionCreated: EventQuestion;
-    likeCountChanged: Like;
-};
-
-export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptioneventQuestionCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionlikeCountChangedArgs = {
-    eventId: Scalars['ID'];
 };
 
 export type EventParticipant = {
@@ -490,10 +507,12 @@ export type ResolversTypes = {
     LoginForm: LoginForm;
     Query: ResolverTypeWrapper<{}>;
     Mutation: ResolverTypeWrapper<{}>;
+    Int: ResolverTypeWrapper<Scalars['Int']>;
     Event: ResolverTypeWrapper<Event>;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
+    Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
@@ -503,9 +522,7 @@ export type ResolversTypes = {
     CreateFeedback: CreateFeedback;
     HideQuestion: HideQuestion;
     ReorderQuestion: ReorderQuestion;
-    Int: ResolverTypeWrapper<Scalars['Int']>;
     AddModerator: AddModerator;
-    Subscription: ResolverTypeWrapper<{}>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventQuestion: ResolverTypeWrapper<EventQuestion>;
     Like: ResolverTypeWrapper<Like>;
@@ -526,10 +543,12 @@ export type ResolversParentTypes = {
     LoginForm: LoginForm;
     Query: {};
     Mutation: {};
+    Int: Scalars['Int'];
     Event: Event;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
+    Subscription: {};
     Organization: Organization;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
@@ -539,9 +558,7 @@ export type ResolversParentTypes = {
     CreateFeedback: CreateFeedback;
     HideQuestion: HideQuestion;
     ReorderQuestion: ReorderQuestion;
-    Int: Scalars['Int'];
     AddModerator: AddModerator;
-    Subscription: {};
     EventParticipant: EventParticipant;
     EventQuestion: EventQuestion;
     Like: Like;
@@ -581,7 +598,7 @@ export type QueryResolvers<
         ContextType,
         RequireFields<QueryeventByIdArgs, 'id'>
     >;
-    events?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
+    events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     myOrgs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>;
     orgById?: Resolver<
         Maybe<ResolversTypes['Organization']>,
@@ -687,6 +704,18 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationaddModeratorArgs, never>
     >;
+    nextQuestion?: Resolver<
+        ResolversTypes['Int'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationnextQuestionArgs, 'eventId'>
+    >;
+    prevQuestion?: Resolver<
+        ResolversTypes['Int'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationprevQuestionArgs, 'eventId'>
+    >;
     createQuestion?: Resolver<
         Maybe<ResolversTypes['EventQuestion']>,
         ParentType,
@@ -730,6 +759,40 @@ export type EventResolvers<
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SubscriptionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
+> = {
+    questionPosition?: SubscriptionResolver<
+        ResolversTypes['Int'],
+        'questionPosition',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionPositionArgs, 'eventId'>
+    >;
+    eventLiveFeedbackCreated?: SubscriptionResolver<
+        Maybe<ResolversTypes['EventLiveFeedback']>,
+        'eventLiveFeedbackCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
+    >;
+    eventQuestionCreated?: SubscriptionResolver<
+        ResolversTypes['EventQuestion'],
+        'eventQuestionCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
+    >;
+    likeCountChanged?: SubscriptionResolver<
+        ResolversTypes['Like'],
+        'likeCountChanged',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionlikeCountChangedArgs, 'eventId'>
+    >;
+};
+
 export type OrganizationResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']
@@ -752,33 +815,6 @@ export type EventLiveFeedbackResolvers<
     createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SubscriptionResolvers<
-    ContextType = any,
-    ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
-> = {
-    eventLiveFeedbackCreated?: SubscriptionResolver<
-        Maybe<ResolversTypes['EventLiveFeedback']>,
-        'eventLiveFeedbackCreated',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
-    >;
-    eventQuestionCreated?: SubscriptionResolver<
-        ResolversTypes['EventQuestion'],
-        'eventQuestionCreated',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
-    >;
-    likeCountChanged?: SubscriptionResolver<
-        ResolversTypes['Like'],
-        'likeCountChanged',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionlikeCountChangedArgs, 'eventId'>
-    >;
 };
 
 export type EventParticipantResolvers<
@@ -854,9 +890,9 @@ export type Resolvers<ContextType = any> = {
     Query?: QueryResolvers<ContextType>;
     Mutation?: MutationResolvers<ContextType>;
     Event?: EventResolvers<ContextType>;
+    Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
-    Subscription?: SubscriptionResolvers<ContextType>;
     EventParticipant?: EventParticipantResolvers<ContextType>;
     EventQuestion?: EventQuestionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;

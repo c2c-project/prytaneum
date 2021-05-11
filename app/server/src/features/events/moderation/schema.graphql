@@ -27,6 +27,16 @@ type Mutation {
     Add a new moderator to the given event
     """
     addModerator(input: AddModerator): User
+
+    """
+    Advance the current question
+    """
+    nextQuestion(eventId: ID!): Int!
+
+    """
+    Go to the previous question
+    """
+    prevQuestion(eventId: ID!): Int!
 }
 
 type Subscription {

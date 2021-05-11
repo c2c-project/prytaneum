@@ -25,9 +25,9 @@
 ### Moderation Features
 
 1. Moderators may hide questions ✔️
-2. Moderators may subscribe to the full list of feedback given by all users ❌
+2. Moderators may subscribe to the full list of feedback given by all users ✔️
 3. Moderators may reorder questions ✔️
-4. Moderators may advance the current question ❌
+4. Moderators may change the current question ✔️
 
 ### Video
 
@@ -43,4 +43,3 @@
 
 1. Users may submit live feedback ✔️
 2. Users may view their submitted feedback ❌
-
