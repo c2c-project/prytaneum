@@ -20,14 +20,11 @@ export const resolvers: Resolvers = {
         deleteEvent(parent, args, ctx, info) {
             return Event.deleteEvent(ctx.userId, ctx.prisma, args.event);
         },
-        startEvent() {
-            return null;
+        startEvent(parent, args, ctx, info) {
+            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.eventId, true);
         },
-        endEvent() {
-            return null;
-        },
-        createFeedback() {
-            return null;
+        endEvent(parent, args, ctx, info) {
+            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.eventId, false);
         },
     },
     Event: {
@@ -37,11 +34,14 @@ export const resolvers: Resolvers = {
         videos(parent, args, ctx, info) {
             return Event.findVideosByEventId(parent.eventId, ctx.prisma);
         },
-        moderators(parent, arg, ctx, info) {
+        moderators(parent, args, ctx, info) {
             return Event.findModeratorsByEventId(parent.eventId, ctx.prisma);
         },
-        organization(parent, arg, ctx, info) {
+        organization(parent, args, ctx, info) {
             return Event.findOrgByEventId(parent.eventId, ctx.prisma);
-        }
+        },
+        questions(parent, args, ctx, info) {
+            return Event.findQuestionsByEventId(parent.eventId, ctx.prisma);
+        },
     },
 };

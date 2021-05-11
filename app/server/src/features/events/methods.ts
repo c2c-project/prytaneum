@@ -35,6 +35,7 @@ type Settings = Omit<
     | 'eventId'
     | 'createdAt'
     | 'updatedAt'
+    | 'currentQuestion'
 >;
 /**
  * create an event
@@ -162,4 +163,29 @@ export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
     if (!result) return null;
 
     return result.organization;
+}
+
+/**
+ * find questions by eventId
+ */
+export async function findQuestionsByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventQuestion.findMany({ where: { eventId } });
+}
+
+/**
+ * start or end an event
+ */
+export async function changeEventStatus(
+    userId: Maybe<string>,
+    prisma: PrismaClient,
+    eventId: Maybe<string>,
+    status: boolean
+) {
+    if (!userId) throw new Error(errors.noLogin);
+    if (!eventId) throw new Error(errors.invalidArgs);
+
+    const hasPermission = await canUserModify(userId, eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+
+    return prisma.event.update({ where: { eventId }, data: { isActive: status } });
 }

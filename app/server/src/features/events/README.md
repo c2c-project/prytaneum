@@ -8,8 +8,9 @@
     4. Collect Ratings ✔️
 3. After an event is over and the corresponding event setting is enabled, the event is transformed into a Q & A forum ❌
 4. The publicity of the question feed is determined by the corresponding event setting ❌
-5. After ane vent is over and the corresponding event setting is enabled, users are prompted to rate their experience in the event ❌
+5. After an event is over and the corresponding event setting is enabled, users are prompted to rate their experience in the event ❌
 6. Private events are invite only if the corresponding event setting is enabled ❌
+7. Org Members may start and stop an event ✔️
 
 ## Sub Features
 
