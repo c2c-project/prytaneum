@@ -75,7 +75,7 @@ export async function createEvent(userId: Maybe<string>, prisma: PrismaClient, i
 /**
  * general permission check if the user can update
  */
-async function canUserModify(userId: string, eventId: string, prisma: PrismaClient) {
+export async function canUserModify(userId: string, eventId: string, prisma: PrismaClient) {
     const queryResult = await prisma.event.findUnique({
         select: {
             organization: {

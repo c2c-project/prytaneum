@@ -107,6 +107,9 @@ export type Mutation = {
     prevQuestion: Scalars['Int'];
     createQuestion?: Maybe<EventQuestion>;
     alterLike?: Maybe<Like>;
+    addVideo: EventVideo;
+    removeVideo?: Maybe<EventVideo>;
+    updateVideo?: Maybe<EventVideo>;
 };
 
 export type MutationregisterArgs = {
@@ -183,6 +186,18 @@ export type MutationcreateQuestionArgs = {
 
 export type MutationalterLikeArgs = {
     input?: Maybe<AlterLike>;
+};
+
+export type MutationaddVideoArgs = {
+    input: CreateVideo;
+};
+
+export type MutationremoveVideoArgs = {
+    url?: Maybe<DeleteVideo>;
+};
+
+export type MutationupdateVideoArgs = {
+    input: UpdateVideo;
 };
 
 export type Event = {
@@ -422,6 +437,25 @@ export type EventVideo = {
     __typename?: 'EventVideo';
     url: Scalars['String'];
     lang: Scalars['String'];
+    event?: Maybe<Event>;
+};
+
+export type CreateVideo = {
+    url: Scalars['String'];
+    lang: Scalars['String'];
+    eventId: Scalars['String'];
+};
+
+export type UpdateVideo = {
+    eventId: Scalars['String'];
+    url: Scalars['String'];
+    newUrl?: Maybe<Scalars['String']>;
+    lang?: Maybe<Scalars['String']>;
+};
+
+export type DeleteVideo = {
+    url: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -530,6 +564,9 @@ export type ResolversTypes = {
     AlterLike: AlterLike;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
     EventVideo: ResolverTypeWrapper<EventVideo>;
+    CreateVideo: CreateVideo;
+    UpdateVideo: UpdateVideo;
+    DeleteVideo: DeleteVideo;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -566,6 +603,9 @@ export type ResolversParentTypes = {
     AlterLike: AlterLike;
     EventSpeaker: EventSpeaker;
     EventVideo: EventVideo;
+    CreateVideo: CreateVideo;
+    UpdateVideo: UpdateVideo;
+    DeleteVideo: DeleteVideo;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -728,6 +768,24 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationalterLikeArgs, never>
     >;
+    addVideo?: Resolver<
+        ResolversTypes['EventVideo'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationaddVideoArgs, 'input'>
+    >;
+    removeVideo?: Resolver<
+        Maybe<ResolversTypes['EventVideo']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveVideoArgs, never>
+    >;
+    updateVideo?: Resolver<
+        Maybe<ResolversTypes['EventVideo']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateVideoArgs, 'input'>
+    >;
 };
 
 export type EventResolvers<
@@ -881,6 +939,7 @@ export type EventVideoResolvers<
 > = {
     url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     lang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1020,6 +1079,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     EventVideo?: {
         url?: LoaderResolver<Scalars['String'], EventVideo, {}, TContext>;
         lang?: LoaderResolver<Scalars['String'], EventVideo, {}, TContext>;
+        event?: LoaderResolver<Maybe<Event>, EventVideo, {}, TContext>;
     };
 }
 declare module 'mercurius' {

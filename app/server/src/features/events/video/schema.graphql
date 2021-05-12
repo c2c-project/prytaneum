@@ -1,4 +1,29 @@
 type EventVideo {
     url: String!
     lang: String!
+    event: Event
+}
+
+input CreateVideo {
+    url: String!
+    lang: String!
+    eventId: String!
+}
+
+input UpdateVideo {
+    eventId: String!
+    url: String!
+    newUrl: String
+    lang: String
+}
+
+input DeleteVideo {
+    url: String!
+    eventId: String!
+}
+
+type Mutation {
+    addVideo(input: CreateVideo!): EventVideo!
+    removeVideo(url: DeleteVideo): EventVideo
+    updateVideo(input: UpdateVideo!): EventVideo
 }

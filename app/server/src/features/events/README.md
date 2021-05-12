@@ -32,8 +32,8 @@
 
 ### Video
 
-1. Organization members may add multiple video feeds for different languages to an event ❌
-2. Organization members may remove video feeds from an event ❌
+1. Organization members may add multiple video feeds for different languages to an event ✔️
+2. Organization members may remove video feeds from an event ✔️
 
 ### Speakers
 
