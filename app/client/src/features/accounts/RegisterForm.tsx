@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '12.5%',
     },
 }));
-export default function RegisterForm({ onSuccess, onFailure }: Props) {
+export function RegisterForm({ onSuccess, onFailure }: Props) {
     // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);

@@ -53,6 +53,12 @@ export type CreateQuestion = {
   eventId: Scalars['ID'];
 };
 
+export type CreateVideo = {
+  url: Scalars['String'];
+  lang: Scalars['String'];
+  eventId: Scalars['String'];
+};
+
 
 export type DeleteEvent = {
   eventId: Scalars['String'];
@@ -61,6 +67,11 @@ export type DeleteEvent = {
 /** Information necessary for deleting an org */
 export type DeleteOrg = {
   id: Scalars['ID'];
+};
+
+export type DeleteVideo = {
+  url: Scalars['String'];
+  eventId: Scalars['String'];
 };
 
 export type Event = {
@@ -130,6 +141,7 @@ export type EventQuestion = {
   /** User information on the person asking the question */
   createdBy?: Maybe<User>;
   createdAt?: Maybe<Scalars['Date']>;
+  refQuestionId?: Maybe<Scalars['ID']>;
   refQuestion?: Maybe<EventQuestion>;
   /** The actual content of the question */
   question?: Maybe<Scalars['String']>;
@@ -143,6 +155,8 @@ export type EventQuestion = {
   likes?: Maybe<Scalars['Int']>;
   /** The users who have liked this question */
   likedBy?: Maybe<Array<Maybe<User>>>;
+  /** Find the count of the likes only */
+  likedByCount?: Maybe<Scalars['Int']>;
   /** Whether or not the current user likes the question */
   isLikedByMe?: Maybe<Scalars['Boolean']>;
 };
@@ -169,6 +183,7 @@ export type EventVideo = {
   __typename?: 'EventVideo';
   url: Scalars['String'];
   lang: Scalars['String'];
+  event?: Maybe<Event>;
 };
 
 export type HideQuestion = {
@@ -180,8 +195,8 @@ export type HideQuestion = {
 
 export type Like = {
   __typename?: 'Like';
-  user?: Maybe<User>;
-  question?: Maybe<EventQuestion>;
+  user: User;
+  question: EventQuestion;
 };
 
 export type LoginForm = {
@@ -195,6 +210,7 @@ export type Mutation = {
   addMember?: Maybe<User>;
   /** Add a new moderator to the given event */
   addModerator?: Maybe<User>;
+  addVideo: EventVideo;
   alterLike?: Maybe<Like>;
   createEvent?: Maybe<Event>;
   createFeedback?: Maybe<EventLiveFeedback>;
@@ -206,12 +222,18 @@ export type Mutation = {
   endEvent?: Maybe<Event>;
   hideQuestion?: Maybe<EventQuestion>;
   login?: Maybe<User>;
+  /** Advance the current question */
+  nextQuestion: Scalars['Int'];
+  /** Go to the previous question */
+  prevQuestion: Scalars['Int'];
   register?: Maybe<User>;
+  removeVideo?: Maybe<EventVideo>;
   reorderQueue?: Maybe<EventQuestion>;
   /** Start the event so that it is "live" */
   startEvent?: Maybe<Event>;
   updateEvent?: Maybe<Event>;
   updateOrganizationById?: Maybe<Organization>;
+  updateVideo?: Maybe<EventVideo>;
 };
 
 
@@ -222,6 +244,11 @@ export type MutationAddMemberArgs = {
 
 export type MutationAddModeratorArgs = {
   input?: Maybe<AddModerator>;
+};
+
+
+export type MutationAddVideoArgs = {
+  input: CreateVideo;
 };
 
 
@@ -275,8 +302,23 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationNextQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type MutationPrevQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type MutationRegisterArgs = {
   input?: Maybe<RegistrationForm>;
+};
+
+
+export type MutationRemoveVideoArgs = {
+  url?: Maybe<DeleteVideo>;
 };
 
 
@@ -297,6 +339,11 @@ export type MutationUpdateEventArgs = {
 
 export type MutationUpdateOrganizationByIdArgs = {
   input?: Maybe<UpdateOrg>;
+};
+
+
+export type MutationUpdateVideoArgs = {
+  input: UpdateVideo;
 };
 
 /** Info necessary for adding a member to an organization */
@@ -323,7 +370,7 @@ export type Query = {
   /** Fetch an event by id */
   eventById?: Maybe<Event>;
   /** Fetch all events */
-  events?: Maybe<Array<Maybe<Event>>>;
+  events?: Maybe<Array<Event>>;
   /** The logout just returns the timestamp of the logout action */
   logout?: Maybe<Scalars['Date']>;
   /** Fetch user data about the current user */
@@ -370,7 +417,8 @@ export type Subscription = {
   /** New messages as feedback is given */
   eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
   eventQuestionCreated: EventQuestion;
-  likeCountChanged: EventQuestion;
+  likeCountChanged: Like;
+  questionPosition: Scalars['Int'];
 };
 
 
@@ -385,6 +433,11 @@ export type SubscriptionEventQuestionCreatedArgs = {
 
 
 export type SubscriptionLikeCountChangedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionPositionArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -405,6 +458,13 @@ export type UpdateEvent = {
 export type UpdateOrg = {
   id: Scalars['ID'];
   name: Scalars['String'];
+};
+
+export type UpdateVideo = {
+  eventId: Scalars['String'];
+  url: Scalars['String'];
+  newUrl?: Maybe<Scalars['String']>;
+  lang?: Maybe<Scalars['String']>;
 };
 
 /** User Data */
@@ -597,10 +657,10 @@ export type EventListQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type EventListQuery = (
   { __typename?: 'Query' }
-  & { events?: Maybe<Array<Maybe<(
+  & { events?: Maybe<Array<(
     { __typename?: 'Event' }
     & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
-  )>>> }
+  )>> }
 );
 
 export type MyOrgsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1264,13 +1324,14 @@ export type EventParticipantFieldPolicy = {
 	questions?: FieldPolicy<any> | FieldReadFunction<any>,
 	liveFeedBack?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventQuestionKeySpecifier = ('questionId' | 'event' | 'createdById' | 'createdBy' | 'createdAt' | 'refQuestion' | 'question' | 'position' | 'isVisible' | 'isAsked' | 'lang' | 'isFollowUp' | 'isQuote' | 'likes' | 'likedBy' | 'isLikedByMe' | EventQuestionKeySpecifier)[];
+export type EventQuestionKeySpecifier = ('questionId' | 'event' | 'createdById' | 'createdBy' | 'createdAt' | 'refQuestionId' | 'refQuestion' | 'question' | 'position' | 'isVisible' | 'isAsked' | 'lang' | 'isFollowUp' | 'isQuote' | 'likes' | 'likedBy' | 'likedByCount' | 'isLikedByMe' | EventQuestionKeySpecifier)[];
 export type EventQuestionFieldPolicy = {
 	questionId?: FieldPolicy<any> | FieldReadFunction<any>,
 	event?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdById?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	refQuestionId?: FieldPolicy<any> | FieldReadFunction<any>,
 	refQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>,
 	position?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1281,6 +1342,7 @@ export type EventQuestionFieldPolicy = {
 	isQuote?: FieldPolicy<any> | FieldReadFunction<any>,
 	likes?: FieldPolicy<any> | FieldReadFunction<any>,
 	likedBy?: FieldPolicy<any> | FieldReadFunction<any>,
+	likedByCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	isLikedByMe?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type EventSpeakerKeySpecifier = ('userId' | 'eventId' | 'user' | 'name' | 'description' | 'title' | 'picture' | EventSpeakerKeySpecifier)[];
@@ -1293,20 +1355,22 @@ export type EventSpeakerFieldPolicy = {
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	picture?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventVideoKeySpecifier = ('url' | 'lang' | EventVideoKeySpecifier)[];
+export type EventVideoKeySpecifier = ('url' | 'lang' | 'event' | EventVideoKeySpecifier)[];
 export type EventVideoFieldPolicy = {
 	url?: FieldPolicy<any> | FieldReadFunction<any>,
-	lang?: FieldPolicy<any> | FieldReadFunction<any>
+	lang?: FieldPolicy<any> | FieldReadFunction<any>,
+	event?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type LikeKeySpecifier = ('user' | 'question' | LikeKeySpecifier)[];
 export type LikeFieldPolicy = {
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addMember' | 'addModerator' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'register' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addMember' | 'addModerator' | 'addVideo' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'nextQuestion' | 'prevQuestion' | 'register' | 'removeVideo' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | 'updateVideo' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addMember?: FieldPolicy<any> | FieldReadFunction<any>,
 	addModerator?: FieldPolicy<any> | FieldReadFunction<any>,
+	addVideo?: FieldPolicy<any> | FieldReadFunction<any>,
 	alterLike?: FieldPolicy<any> | FieldReadFunction<any>,
 	createEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	createFeedback?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1317,11 +1381,15 @@ export type MutationFieldPolicy = {
 	endEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	hideQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
+	nextQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
+	prevQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
+	removeVideo?: FieldPolicy<any> | FieldReadFunction<any>,
 	reorderQueue?: FieldPolicy<any> | FieldReadFunction<any>,
 	startEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateEvent?: FieldPolicy<any> | FieldReadFunction<any>,
-	updateOrganizationById?: FieldPolicy<any> | FieldReadFunction<any>
+	updateOrganizationById?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateVideo?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type OrganizationKeySpecifier = ('orgId' | 'name' | 'createdAt' | 'members' | 'events' | OrganizationKeySpecifier)[];
 export type OrganizationFieldPolicy = {
@@ -1342,11 +1410,12 @@ export type QueryFieldPolicy = {
 	orgById?: FieldPolicy<any> | FieldReadFunction<any>,
 	questionsByEventId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type SubscriptionKeySpecifier = ('eventLiveFeedbackCreated' | 'eventQuestionCreated' | 'likeCountChanged' | SubscriptionKeySpecifier)[];
+export type SubscriptionKeySpecifier = ('eventLiveFeedbackCreated' | 'eventQuestionCreated' | 'likeCountChanged' | 'questionPosition' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {
 	eventLiveFeedbackCreated?: FieldPolicy<any> | FieldReadFunction<any>,
 	eventQuestionCreated?: FieldPolicy<any> | FieldReadFunction<any>,
-	likeCountChanged?: FieldPolicy<any> | FieldReadFunction<any>
+	likeCountChanged?: FieldPolicy<any> | FieldReadFunction<any>,
+	questionPosition?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserKeySpecifier = ('userId' | 'firstName' | 'lastName' | 'email' | 'isEmailVerified' | 'avatar' | 'organizations' | UserKeySpecifier)[];
 export type UserFieldPolicy = {

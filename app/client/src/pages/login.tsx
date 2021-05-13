@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
-import { LoginForm } from '@local/domains/Auth/LoginForm';
+import { LoginForm } from '@local/features/accounts';
 import { useUser } from '@local/hooks/useUser';
 
 const useStyles = makeStyles((theme) => ({

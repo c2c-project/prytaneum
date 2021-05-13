@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // TODO: notifications
 // import UserNotifications from '@local/domains/User/UserNotifications';
-import UserMenu from '@local/domains/User/UserMenu';
+import { UserMenu } from '@local/features/accounts';
 // TODO: user theme that doesn't make tabpanels disappear, interesting problem
 // import UserTheme from '@local/domains/User/UserTheme';
 import Title from './Title';
@@ -37,9 +37,7 @@ export default function Nav() {
                     vertical: classes.divider,
                 }}
             />
-            <UserMenu
-                links={{ settings: '/app/settings', logout: '/logout' }}
-            />
+            <UserMenu links={{ settings: '/app/settings', logout: '/logout' }} />
         </>
     );
 }

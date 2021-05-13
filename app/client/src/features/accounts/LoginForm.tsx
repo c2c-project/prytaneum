@@ -64,7 +64,7 @@ export function LoginForm({ onSuccess }: Props) {
         variables: { input: form },
         onCompleted: ({ login: userData }) => {
             if (userData) setUser(userData);
-            onSuccess();
+            if (onSuccess) onSuccess();
         },
     });
     // const apiRequest = React.useCallback(() => API.login(form.email, form.password), [form]);
