@@ -23,7 +23,6 @@ export async function createQuestion(userId: Maybe<string>, prisma: PrismaClient
             isFollowUp: isFollowUp || false,
             isQuote: isQuote || false,
             createdById: userId,
-            position: 0, // TODO:
             isVisible: true,
             isAsked: false,
             lang: 'EN', // TODO:

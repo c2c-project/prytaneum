@@ -147,7 +147,7 @@ __metadata:
     dotenv-expand: ^5.1.0
     faker: "https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c"
     globby: ^11.0.3
-    prisma: ^2.21.2
+    prisma: ^2.22.1
     ts-node: ^9.1.1
     typescript: ^4.2.4
   languageName: unknown
@@ -3579,10 +3579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d":
-  version: 2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d
-  resolution: "@prisma/engines@npm:2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d"
-  checksum: 906f0ec909f0124d617737e1f5e6f4ab49f08dd9e0a743cb0c2aee756527e85bc480410de71ab42312967d0305eb650fe0b5f5a23e07f883a14bf01140656760
+"@prisma/engines@npm:2.22.0-21.60cc71d884972ab4e897f0277c4b84383dddaf6c":
+  version: 2.22.0-21.60cc71d884972ab4e897f0277c4b84383dddaf6c
+  resolution: "@prisma/engines@npm:2.22.0-21.60cc71d884972ab4e897f0277c4b84383dddaf6c"
+  checksum: 9903d376ca9c6ae0a9990ba8a02d93b4a71b0bcce821f9ce8024ac6b2521d2df5e487ebb531162ad550e6727513ea3699f1ec74bb1403821fc0a5c3d29ff2b48
   languageName: node
   linkType: hard
 
@@ -16880,15 +16880,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prisma@npm:^2.21.2":
-  version: 2.21.2
-  resolution: "prisma@npm:2.21.2"
+"prisma@npm:^2.22.1":
+  version: 2.22.1
+  resolution: "prisma@npm:2.22.1"
   dependencies:
-    "@prisma/engines": 2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d
+    "@prisma/engines": 2.22.0-21.60cc71d884972ab4e897f0277c4b84383dddaf6c
   bin:
     prisma: build/index.js
     prisma2: build/index.js
-  checksum: 5163ad1c11c648bd58e611acfd77b66a68958e7c02cd7c1e98d29c489b24400b937d6d7ced3f5521d5d29b48e76686fcd68de8dd3fb767484327ae7b76687ba6
+  checksum: 2128d459112aece0f1ce6be9ac1dfb1f00002757c1d85f22b4ab55246b859c441d62f907231f2df70475cf8c8951eba5f638e449089dd9150703fc7860168ff5
   languageName: node
   linkType: hard
 

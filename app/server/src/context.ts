@@ -15,7 +15,6 @@ async function extractJwt(req: FastifyRequest) {
 
 export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
     const userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
-    console.log(userId);
     return {
         prisma,
         userId,

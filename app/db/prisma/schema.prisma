@@ -111,7 +111,7 @@ model EventQuestion {
     createdById String @db.Uuid
     createdByUser User @relation(fields: [createdById], references: [userId])
     question String @db.VarChar(500)
-    position Int
+    position Int @default(-1)
     isVisible Boolean
     isAsked Boolean
     lang String @db.VarChar(30)

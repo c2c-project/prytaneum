@@ -7,8 +7,10 @@
 -   Install [Yarn v2](https://yarnpkg.com/getting-started)
 
 ## Quick Start
+
+1. Use Node LTS (14.x at the time of writing)
 1. `yarn install`
-2. `yarn g:dev-project`
+1. `yarn g:dev-project`
 
 ## Basics
 
@@ -35,6 +37,7 @@ There's a few complexities to take note of:
 ## Quirks/FAQ/Help
 
 -   If you add a "scoped" script e.g. `g:<some script>` and it doesn't work, try running `yarn install` then attempt to run the script again.
+-   Use latest LTS version of node -- node 16 doesn't work with prisma https://github.com/prisma/prisma/issues/6682 -- I already upgraded, but it seems teh fix didn't work
 
 ## Helpful Docs for learning
 
