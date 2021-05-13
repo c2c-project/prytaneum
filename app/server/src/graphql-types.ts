@@ -107,6 +107,9 @@ export type Mutation = {
     prevQuestion: Scalars['Int'];
     createQuestion?: Maybe<EventQuestion>;
     alterLike?: Maybe<Like>;
+    addSpeaker?: Maybe<EventSpeaker>;
+    removeSpeaker?: Maybe<EventSpeaker>;
+    updateSpeaker?: Maybe<EventSpeaker>;
     addVideo: EventVideo;
     removeVideo?: Maybe<EventVideo>;
     updateVideo?: Maybe<EventVideo>;
@@ -186,6 +189,18 @@ export type MutationcreateQuestionArgs = {
 
 export type MutationalterLikeArgs = {
     input?: Maybe<AlterLike>;
+};
+
+export type MutationaddSpeakerArgs = {
+    input?: Maybe<SpeakerForm>;
+};
+
+export type MutationremoveSpeakerArgs = {
+    input?: Maybe<UpdateSpeaker>;
+};
+
+export type MutationupdateSpeakerArgs = {
+    input?: Maybe<DeleteSpeaker>;
 };
 
 export type MutationaddVideoArgs = {
@@ -433,6 +448,30 @@ export type EventSpeaker = {
     picture?: Maybe<Scalars['String']>;
 };
 
+export type SpeakerForm = {
+    eventId: Scalars['String'];
+    name: Scalars['String'];
+    title: Scalars['String'];
+    description: Scalars['String'];
+    picture: Scalars['String'];
+    /** This is for matching the speaker to an account */
+    email: Scalars['String'];
+};
+
+export type UpdateSpeaker = {
+    name?: Maybe<Scalars['String']>;
+    title?: Maybe<Scalars['String']>;
+    description?: Maybe<Scalars['String']>;
+    picture?: Maybe<Scalars['String']>;
+    userId: Scalars['String'];
+    eventId: Scalars['String'];
+};
+
+export type DeleteSpeaker = {
+    eventId: Scalars['String'];
+    userId: Scalars['String'];
+};
+
 export type EventVideo = {
     __typename?: 'EventVideo';
     url: Scalars['String'];
@@ -563,6 +602,9 @@ export type ResolversTypes = {
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
+    SpeakerForm: SpeakerForm;
+    UpdateSpeaker: UpdateSpeaker;
+    DeleteSpeaker: DeleteSpeaker;
     EventVideo: ResolverTypeWrapper<EventVideo>;
     CreateVideo: CreateVideo;
     UpdateVideo: UpdateVideo;
@@ -602,6 +644,9 @@ export type ResolversParentTypes = {
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
     EventSpeaker: EventSpeaker;
+    SpeakerForm: SpeakerForm;
+    UpdateSpeaker: UpdateSpeaker;
+    DeleteSpeaker: DeleteSpeaker;
     EventVideo: EventVideo;
     CreateVideo: CreateVideo;
     UpdateVideo: UpdateVideo;
@@ -767,6 +812,24 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationalterLikeArgs, never>
+    >;
+    addSpeaker?: Resolver<
+        Maybe<ResolversTypes['EventSpeaker']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationaddSpeakerArgs, never>
+    >;
+    removeSpeaker?: Resolver<
+        Maybe<ResolversTypes['EventSpeaker']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveSpeakerArgs, never>
+    >;
+    updateSpeaker?: Resolver<
+        Maybe<ResolversTypes['EventSpeaker']>,
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateSpeakerArgs, never>
     >;
     addVideo?: Resolver<
         ResolversTypes['EventVideo'],

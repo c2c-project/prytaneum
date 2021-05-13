@@ -34,3 +34,36 @@ type EventSpeaker {
     """
     picture: String
 }
+
+input SpeakerForm {
+    eventId: String!
+    name: String!
+    title: String!
+    description: String!
+    picture: String!
+
+    """
+    This is for matching the speaker to an account
+    """
+    email: String!
+}
+
+input UpdateSpeaker {
+    name: String
+    title: String
+    description: String
+    picture: String
+    userId: String!
+    eventId: String!
+}
+
+input DeleteSpeaker {
+    eventId: String!
+    userId: String!
+}
+
+type Mutation {
+    addSpeaker(input: SpeakerForm): EventSpeaker
+    removeSpeaker(input: UpdateSpeaker): EventSpeaker
+    updateSpeaker(input: DeleteSpeaker): EventSpeaker
+}

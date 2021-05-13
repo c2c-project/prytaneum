@@ -8,8 +8,7 @@ export type Resolvers = IResolvers;
 export const { withFilter } = mercurius;
 
 // convenience export
-// NOTE: for some reason there's an error if I use @local/graphql-types here...
-export { Maybe } from '../graphql-types';
+export type Maybe<T> = T | null | undefined;
 
 /**
  * common error messages
