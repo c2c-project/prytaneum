@@ -196,11 +196,11 @@ export type MutationaddSpeakerArgs = {
 };
 
 export type MutationremoveSpeakerArgs = {
-    input?: Maybe<UpdateSpeaker>;
+    input?: Maybe<DeleteSpeaker>;
 };
 
 export type MutationupdateSpeakerArgs = {
-    input?: Maybe<DeleteSpeaker>;
+    input?: Maybe<UpdateSpeaker>;
 };
 
 export type MutationaddVideoArgs = {
@@ -208,7 +208,7 @@ export type MutationaddVideoArgs = {
 };
 
 export type MutationremoveVideoArgs = {
-    url?: Maybe<DeleteVideo>;
+    input?: Maybe<DeleteVideo>;
 };
 
 export type MutationupdateVideoArgs = {

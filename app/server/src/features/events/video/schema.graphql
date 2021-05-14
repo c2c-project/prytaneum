@@ -24,6 +24,6 @@ input DeleteVideo {
 
 type Mutation {
     addVideo(input: CreateVideo!): EventVideo!
-    removeVideo(url: DeleteVideo): EventVideo
+    removeVideo(input: DeleteVideo): EventVideo
     updateVideo(input: UpdateVideo!): EventVideo
 }

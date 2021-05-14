@@ -64,6 +64,6 @@ input DeleteSpeaker {
 
 type Mutation {
     addSpeaker(input: SpeakerForm): EventSpeaker
-    removeSpeaker(input: UpdateSpeaker): EventSpeaker
-    updateSpeaker(input: DeleteSpeaker): EventSpeaker
+    removeSpeaker(input: DeleteSpeaker): EventSpeaker
+    updateSpeaker(input: UpdateSpeaker): EventSpeaker
 }

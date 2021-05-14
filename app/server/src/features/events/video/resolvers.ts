@@ -7,7 +7,7 @@ export const resolvers: Resolvers = {
             return Video.addVideo(ctx.userId, ctx.prisma, args.input);
         },
         removeVideo(parent, args, ctx, info) {
-            return Video.removeVideo(ctx.userId, ctx.prisma, args.url);
+            return Video.removeVideo(ctx.userId, ctx.prisma, args.input);
         },
         updateVideo(parent, args, ctx, info) {
             return Video.updateVideo(ctx.userId, ctx.prisma, args.input);
