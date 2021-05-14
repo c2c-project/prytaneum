@@ -47,6 +47,8 @@ module.exports = {
         '@typescript-eslint/naming-convention': 'off',
         'react/jsx-props-no-spreading': 'off',
         'import/prefer-default-export': 'off',
+        // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
+        'react/require-default-props': 'off',
     },
     overrides: [
         {
