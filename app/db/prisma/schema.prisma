@@ -140,16 +140,15 @@ model EventModerator {
 }
 
 model EventSpeaker {
+    speakerId String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
-    userId String @db.Uuid
+    email String @db.VarChar(320)
     name String @db.VarChar(100)
     description String @db.VarChar(500)
     title String @db.VarChar(100)
     pictureUrl String @db.VarChar(200)
     event Event @relation(fields: [eventId], references: [eventId])
-    user User @relation(fields: [userId], references: [userId])
-
-    @@id([eventId, userId])
+    user User @relation(fields: [email], references: [email])
 }
 
 model EventRegistrant {
