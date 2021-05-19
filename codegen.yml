@@ -12,5 +12,8 @@ generates:
             reactApolloVersion: 3
             skipGraphQLImport: true
             withHooks: true
-            scalars: 
-              Date: Date
+            scalars:
+                Date: Date
+    ./app/client/schema.graphql:
+        plugins:
+            - custom/gen-sdl-plugin.js
