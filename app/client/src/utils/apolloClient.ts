@@ -5,6 +5,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
 import { WebSocketLink } from '@apollo/client/link/ws';
+import { TypedTypePolicies } from '@local/graphql-types';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -14,6 +15,39 @@ function createApolloClient() {
     const httpLink = new HttpLink({
         uri: process.env.NEXT_PUBLIC_GRAPHQL_URL, // Server URL (must be absolute)
         credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+    });
+
+    const cache = new InMemoryCache({
+        typePolicies: {
+            Event: {
+                keyFields: ['eventId'],
+            },
+            User: {
+                keyFields: ['userId'],
+            },
+            EventLiveFeedback: {
+                keyFields: ['feedbackId'],
+            },
+            EventQuestion: {
+                keyFields: ['questionId'],
+            },
+            EventVideo: {
+                keyFields: ['url'],
+            },
+            Organization: {
+                keyFields: ['orgId'],
+            },
+            Like: {
+                keyFields: [],
+            },
+        } as TypedTypePolicies,
+        // typePolicies: {
+        //     Query: {
+        //         fields: {
+        //             allPosts: concatPagination(),
+        //         },
+        //     },
+        // },
     });
 
     if (process.browser) {
@@ -42,29 +76,13 @@ function createApolloClient() {
         return new ApolloClient({
             ssrMode: typeof window === 'undefined',
             link: splitLink,
-            cache: new InMemoryCache({
-                // typePolicies: {
-                //     Query: {
-                //         fields: {
-                //             allPosts: concatPagination(),
-                //         },
-                //     },
-                // },
-            }),
+            cache,
         });
     }
     return new ApolloClient({
         ssrMode: typeof window === 'undefined',
         link: httpLink,
-        cache: new InMemoryCache({
-            // typePolicies: {
-            //     Query: {
-            //         fields: {
-            //             allPosts: concatPagination(),
-            //         },
-            //     },
-            // },
-        }),
+        cache,
     });
 }
 
@@ -107,7 +125,7 @@ export function addApolloState(client: ReturnType<typeof initializeApollo>, page
     };
 }
 
-export function useApollo(pageProps: any) {
+export function useApollo(pageProps?: any) {
     const state = pageProps[APOLLO_STATE_PROP_NAME];
     const store = useMemo(() => initializeApollo(state), [state]);
     return store;

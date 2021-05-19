@@ -5,26 +5,31 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import SaveIcon from '@material-ui/icons/Save';
 import { useRouter } from 'next/router';
 
-import { Event as OrgEvent, Scalars, useEventByIdQuery } from '@local/graphql-types';
+import { Event as OrgEvent, Scalars } from '@local/graphql-types';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { CopyText } from '@local/components/CopyText';
 import { Fab } from '@local/components/Fab';
-import { useSnack } from '@local/hooks/useSnack';
+import { useSnack, useEvent } from '@local/hooks';
 import SettingsMenu, { AccordionData } from '@local/components/SettingsMenu';
 
 import { EventForm } from '../EventForm';
 import { MemoizedChatSettings } from './ChatSettings';
-import DataSettings from './DataSettings';
+// import DataSettings from './DataSettings';
 import { MemoizedQuestionFeedSettings } from './QuestionFeedSettings';
-import SpeakerSettings from './SpeakerSettings';
+// import SpeakerSettings from './SpeakerSettings';
 import ModeratorSettings from './ModeratorSettings';
-import PreviewSettings from './PreviewSettings';
-import { MemoizedVideoSettings } from './VideoSettings';
+// import PreviewSettings from './PreviewSettings';
+import { EventSettings as VideoSettings } from '../Videos';
+import { EventSettings as SpeakerSettings } from '../Speakers';
+import { GenericSettings } from './GenericSettings';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         padding: theme.spacing(0, 0, 2, 0),
+    },
+    settingsSection: {
+        padding: theme.spacing(2),
     },
 }));
 
@@ -43,112 +48,96 @@ export const townhallSettingsSections = [
 //     [key in keyof OrgEvent]: OrgEvent[key] extends Scalars['Boolean'] ? boolean : never;
 // };
 
-export interface EventSettingsProps {
-    event: OrgEvent;
-}
-
 // TODO: add mermaid diagram doc for this component since it is complex
-export function EventSettings({ event }: EventSettingsProps) {
+export function EventSettings() {
     const classes = useStyles();
     const router = useRouter();
-    const [eventDetails, setEventDetails] = React.useState<OrgEvent>(event);
+    const [eventDetails] = useEvent();
     const [snack] = useSnack();
-    // const isDiff = React.useMemo(() => JSON.stringify(townhall.settings) !== JSON.stringify(state), [
-    //     townhall.settings,
-    //     state,
-    // ]);
-    const handleChange = React.useCallback(
-        <T extends keyof OrgEvent>(key: T) => (value: OrgEvent[T]) => {
-            setEventDetails((prevState) => ({ ...prevState, [key]: value }));
-        },
-        []
-    );
 
-    const componentsubSections = React.useMemo(
-        () => [
-            {
-                title: 'Question Feed',
-                component: (
-                    <MemoizedQuestionFeedSettings
-                        onChange={handleChange('isQuestionFeedVisible')}
-                        value={eventDetails.isQuestionFeedVisible}
-                    />
-                ),
-            },
-        ],
-        [handleChange, eventDetails]
-    );
-
-    const inviteSubSections = React.useMemo(
-        () => [
-            {
-                title: 'Join URL',
-                component: <CopyText text={`${window.origin}/events/${event.eventId}/live`} />,
-            },
-            {
-                title: 'Invitation Wizard',
-                component: (
-                    <Button onClick={() => router.push('/invite')} endIcon={<ChevronRight />} variant='outlined'>
-                        Go To Invitation Wizard
-                    </Button>
-                ),
-            },
-        ],
-        [event.eventId, router]
-    );
+    // const inviteSubSections = React.useMemo(
+    //     () => [
+    //         {
+    //             title: 'Join URL',
+    //             component: <CopyText text={`${window.origin}/events/${eventDetails.eventId}/live`} />,
+    //         },
+    //         {
+    //             title: 'Invitation Wizard',
+    //             component: (
+    //                 <Button onClick={() => router.push('/invite')} endIcon={<ChevronRight />} variant='outlined'>
+    //                     Go To Invitation Wizard
+    //                 </Button>
+    //             ),
+    //         },
+    //     ],
+    //     [eventDetails.eventId, router]
+    // );
 
     const config: AccordionData[] = React.useMemo(
         () => [
             {
+                title: 'General Settings',
+                description: 'Customize the event using various settings',
+                component: <GenericSettings className={classes.settingsSection} />,
+            },
+            {
                 title: 'Details',
-                description: 'Modify Basic Event Details',
+                description: 'Update basic event details',
                 component: (
                     <EventForm
+                        title={false}
                         variant='update'
-                        eventId={event.eventId}
+                        eventId={eventDetails.eventId}
                         form={{
-                            topic: event.topic,
-                            title: event.title,
-                            description: event.description,
-                            startDateTime: event.startDateTime,
-                            endDateTime: event.endDateTime,
+                            // TODO: maybe validate and display a pop up that something went wrong instead of having defaults like this
+                            topic: eventDetails.topic || '',
+                            title: eventDetails.title || '',
+                            description: eventDetails.description || '',
+                            startDateTime: eventDetails.startDateTime || new Date(),
+                            endDateTime: eventDetails.endDateTime || new Date(),
                         }}
+                        className={classes.settingsSection}
                     />
                 ),
             },
             {
                 title: 'Video',
-                description: 'Modify video settings',
-                component: <MemoizedVideoSettings value={eventDetails.videos} onChange={handleChange('videos')} />,
+                description: 'Modify the list of video streams and their languages',
+                component: (
+                    <VideoSettings className={classes.settingsSection} videos={eventDetails.videos || undefined} />
+                ),
             },
             {
                 title: 'Speakers',
                 description: 'Add and Modify speakers at this event',
-                component: <SpeakerSettings value={eventDetails.speakers} onChange={handleChange('speakers')} />,
-            },
-            {
-                title: 'Components',
-                description: 'Turn on and off optional components',
                 component: (
-                    <Grid container spacing={2}>
-                        {componentsubSections.map(({ title, component }, idx) => (
-                            <React.Fragment key={title}>
-                                <Grid item xs={12}>
-                                    <Typography variant='overline'>{title}</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {component}
-                                </Grid>
-                                {idx !== componentsubSections.length - 1 && (
-                                    <Grid item xs={12}>
-                                        <Divider />
-                                    </Grid>
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </Grid>
+                    <SpeakerSettings
+                        className={classes.settingsSection}
+                        speakers={eventDetails.speakers || undefined}
+                    />
                 ),
             },
+            // {
+            //     title: 'Components',
+            //     description: 'Turn on and off optional components',
+            //     component: (
+            //         <Grid container>
+            //             {componentsubSections.map(({ title, component }, idx) => (
+            //                 <React.Fragment key={title}>
+            //                     <Typography variant='overline'>{title}</Typography>
+            //                     <Grid item xs={12}>
+            //                         {component}
+            //                     </Grid>
+            //                     {idx !== componentsubSections.length - 1 && (
+            //                         <Grid item xs={12}>
+            //                             <Divider />
+            //                         </Grid>
+            //                     )}
+            //                 </React.Fragment>
+            //             ))}
+            //         </Grid>
+            //     ),
+            // },
             // TODO:
             // {
             //     title: 'Moderators',
@@ -157,44 +146,29 @@ export function EventSettings({ event }: EventSettingsProps) {
             //         <ModeratorSettings value={eventDetails.moderators} onChange={handleChange('moderators')} />
             //     ),
             // },
-            {
-                title: 'Invite',
-                description: 'Manage invitations',
-                component: (
-                    <Grid container spacing={2}>
-                        {inviteSubSections.map(({ title, component }) => (
-                            <React.Fragment key={title}>
-                                <Grid item xs={12}>
-                                    <Typography variant='body1'>{title}</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {component}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Divider />
-                                </Grid>
-                            </React.Fragment>
-                        ))}
-                    </Grid>
-                ),
-            },
-            {
-                title: 'Data',
-                description: 'Export data from this townhall',
-                component: <DataSettings />,
-            },
-            {
-                title: 'Preview',
-                description: 'View townhall as different types of users',
-                component: <PreviewSettings />,
-            },
+            // {
+            //     title: 'Invite',
+            //     description: 'Manage invitations',
+            //     component: (
+            //         <Grid container>
+            //             {inviteSubSections.map(({ title, component }) => (
+            //                 <React.Fragment key={title}>
+            //                     <Typography variant='overline'>{title}</Typography>
+            //                     <Grid item xs={12}>
+            //                         {component}
+            //                     </Grid>
+            //                 </React.Fragment>
+            //             ))}
+            //         </Grid>
+            //     ),
+            // },
         ],
-        [componentsubSections, inviteSubSections, eventDetails, handleChange]
+        [eventDetails, classes.settingsSection]
     );
 
     return (
         <div id='settings-id' className={classes.root}>
-            <SettingsMenu config={config} title='Townhall Settings' />
+            <SettingsMenu config={config} title='Event Settings' />
             {/* <LoadingButton loading={isLoading}> */}
             <Fab ZoomProps={{ in: false }}>
                 <SaveIcon color='inherit' />

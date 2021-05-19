@@ -29,6 +29,8 @@ import { DateTimePicker } from '@local/components/DateTimePicker';
 interface CommonProps {
     onSubmit?: (event: OrgEvent) => void;
     onCancel?: () => void;
+    title?: boolean;
+    className?: string;
 }
 
 interface CreateProps {
@@ -39,6 +41,7 @@ interface CreateProps {
 interface UpdateProps {
     variant: 'update';
     eventId: string;
+    orgId?: never;
     form: Omit<FormType, 'orgId'>;
 }
 
@@ -68,17 +71,17 @@ const makeInitialState = (props: EventFormProps): Omit<FormType, 'orgId'> =>
         : props.form;
 
 export function EventForm(props: EventFormProps) {
-    const { onCancel, onSubmit } = props;
+    const { onCancel, onSubmit, title, variant, className } = props;
 
     const [createEvent, { loading: isLoadingCreate }] = useCreateEventMutation({
         onCompleted(results) {
-            if (results.createEvent) onSubmit(results.createEvent);
+            if (results.createEvent && onSubmit) onSubmit(results.createEvent);
         },
     });
 
     const [updateEvent, { loading: isLoadingUpdate }] = useUpdateEventMutation({
         onCompleted(results) {
-            if (results.updateEvent) onSubmit(results.updateEvent);
+            if (results.updateEvent && onSubmit) onSubmit(results.updateEvent);
         },
     });
 
@@ -100,8 +103,8 @@ export function EventForm(props: EventFormProps) {
     });
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <FormTitle title='Townhall Form' />
+        <Form onSubmit={handleSubmit} className={className}>
+            {title && <FormTitle title='Townhall Form' />}
             <FormContent>
                 {/* <FormControl>
                     <FormControlLabel
@@ -164,23 +167,13 @@ export function EventForm(props: EventFormProps) {
                         Cancel
                     </Button>
                 )}
+
                 <LoadingButton loading={isLoading}>
                     <Button type='submit' variant='contained' color='secondary'>
-                        Submit
+                        {variant === 'create' ? 'Submit' : 'Save'}
                     </Button>
                 </LoadingButton>
             </FormActions>
         </Form>
     );
 }
-
-EventForm.defaultProps = {
-    onSubmit: () => {},
-    onCancel: null,
-};
-
-EventForm.propTypes = {
-    onSubmit: PropTypes.func,
-    onCancel: PropTypes.func,
-    orgId: PropTypes.string.isRequired,
-};

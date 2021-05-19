@@ -24,12 +24,13 @@ fragment EventVideos on Event {
 
 fragment EventSpeakers on Event {
     speakers {
-        userId
+        speakerId
         eventId
         name
         title
         description
-        picture
+        pictureUrl
+        email
     }
 }
 
@@ -59,4 +60,3 @@ query EventList {
         startDateTime
     }
 }
-

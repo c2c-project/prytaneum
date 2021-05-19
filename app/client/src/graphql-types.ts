@@ -69,6 +69,12 @@ export type DeleteOrg = {
   id: Scalars['ID'];
 };
 
+export type DeleteSpeaker = {
+  /** Necessary for verifying user permissions */
+  eventId: Scalars['String'];
+  speakerId: Scalars['String'];
+};
+
 export type DeleteVideo = {
   url: Scalars['String'];
   eventId: Scalars['String'];
@@ -163,10 +169,12 @@ export type EventQuestion = {
 
 export type EventSpeaker = {
   __typename?: 'EventSpeaker';
-  /** User id associated with this speaker */
-  userId: Scalars['ID'];
+  /** Speaker id */
+  speakerId: Scalars['String'];
+  /** email of the speaker */
+  email?: Maybe<Scalars['String']>;
   /** Event id that this user is speaking at */
-  eventId: Scalars['ID'];
+  eventId?: Maybe<Scalars['ID']>;
   /** The related user account associated with the speaker */
   user?: Maybe<User>;
   /** Name set by the organizer of the event */
@@ -176,7 +184,7 @@ export type EventSpeaker = {
   /** Title set by the organizer of the event */
   title?: Maybe<Scalars['String']>;
   /** Picture set by the organizer of the event */
-  picture?: Maybe<Scalars['String']>;
+  pictureUrl?: Maybe<Scalars['String']>;
 };
 
 export type EventVideo = {
@@ -210,6 +218,7 @@ export type Mutation = {
   addMember?: Maybe<User>;
   /** Add a new moderator to the given event */
   addModerator?: Maybe<User>;
+  addSpeaker?: Maybe<EventSpeaker>;
   addVideo: EventVideo;
   alterLike?: Maybe<Like>;
   createEvent?: Maybe<Event>;
@@ -227,12 +236,14 @@ export type Mutation = {
   /** Go to the previous question */
   prevQuestion: Scalars['Int'];
   register?: Maybe<User>;
+  removeSpeaker?: Maybe<EventSpeaker>;
   removeVideo?: Maybe<EventVideo>;
   reorderQueue?: Maybe<EventQuestion>;
   /** Start the event so that it is "live" */
   startEvent?: Maybe<Event>;
   updateEvent?: Maybe<Event>;
   updateOrganizationById?: Maybe<Organization>;
+  updateSpeaker?: Maybe<EventSpeaker>;
   updateVideo?: Maybe<EventVideo>;
 };
 
@@ -244,6 +255,11 @@ export type MutationAddMemberArgs = {
 
 export type MutationAddModeratorArgs = {
   input?: Maybe<AddModerator>;
+};
+
+
+export type MutationAddSpeakerArgs = {
+  input?: Maybe<SpeakerForm>;
 };
 
 
@@ -317,8 +333,13 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveSpeakerArgs = {
+  input?: Maybe<DeleteSpeaker>;
+};
+
+
 export type MutationRemoveVideoArgs = {
-  url?: Maybe<DeleteVideo>;
+  input?: Maybe<DeleteVideo>;
 };
 
 
@@ -342,6 +363,11 @@ export type MutationUpdateOrganizationByIdArgs = {
 };
 
 
+export type MutationUpdateSpeakerArgs = {
+  input?: Maybe<UpdateSpeaker>;
+};
+
+
 export type MutationUpdateVideoArgs = {
   input: UpdateVideo;
 };
@@ -360,9 +386,9 @@ export type Organization = {
   /** When this org was created */
   createdAt?: Maybe<Scalars['Date']>;
   /** all members of this org */
-  members?: Maybe<Array<Maybe<User>>>;
+  members?: Maybe<Array<User>>;
   /** Events owned by this organization */
-  events?: Maybe<Array<Maybe<Event>>>;
+  events?: Maybe<Array<Event>>;
 };
 
 export type Query = {
@@ -377,7 +403,7 @@ export type Query = {
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
   /** Fetch organizations relevant to the current user */
-  myOrgs?: Maybe<Array<Maybe<Organization>>>;
+  myOrgs?: Maybe<Array<Organization>>;
   /** Fetch data about a particular org */
   orgById?: Maybe<Organization>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
@@ -410,6 +436,16 @@ export type ReorderQuestion = {
   questionId: Scalars['ID'];
   position: Scalars['Int'];
   eventId: Scalars['ID'];
+};
+
+export type SpeakerForm = {
+  eventId: Scalars['String'];
+  name: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  pictureUrl: Scalars['String'];
+  /** This is for matching the speaker to an account */
+  email: Scalars['String'];
 };
 
 export type Subscription = {
@@ -458,6 +494,16 @@ export type UpdateEvent = {
 export type UpdateOrg = {
   id: Scalars['ID'];
   name: Scalars['String'];
+};
+
+export type UpdateSpeaker = {
+  name?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  pictureUrl?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  speakerId: Scalars['String'];
+  eventId: Scalars['String'];
 };
 
 export type UpdateVideo = {
@@ -605,6 +651,84 @@ export type QuestionsQuery = (
   )>> }
 );
 
+export type AddSpeakerMutationVariables = Exact<{
+  input?: Maybe<SpeakerForm>;
+}>;
+
+
+export type AddSpeakerMutation = (
+  { __typename?: 'Mutation' }
+  & { addSpeaker?: Maybe<(
+    { __typename?: 'EventSpeaker' }
+    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
+  )> }
+);
+
+export type RemoveSpeakerMutationVariables = Exact<{
+  input?: Maybe<DeleteSpeaker>;
+}>;
+
+
+export type RemoveSpeakerMutation = (
+  { __typename?: 'Mutation' }
+  & { removeSpeaker?: Maybe<(
+    { __typename?: 'EventSpeaker' }
+    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
+  )> }
+);
+
+export type UpdateSpeakerMutationVariables = Exact<{
+  input?: Maybe<UpdateSpeaker>;
+}>;
+
+
+export type UpdateSpeakerMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSpeaker?: Maybe<(
+    { __typename?: 'EventSpeaker' }
+    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
+  )> }
+);
+
+export type AddVideoMutationVariables = Exact<{
+  input: CreateVideo;
+}>;
+
+
+export type AddVideoMutation = (
+  { __typename?: 'Mutation' }
+  & { addVideo: (
+    { __typename?: 'EventVideo' }
+    & Pick<EventVideo, 'lang' | 'url'>
+  ) }
+);
+
+export type RemoveVideoMutationVariables = Exact<{
+  input: DeleteVideo;
+}>;
+
+
+export type RemoveVideoMutation = (
+  { __typename?: 'Mutation' }
+  & { removeVideo?: Maybe<(
+    { __typename?: 'EventVideo' }
+    & Pick<EventVideo, 'url'>
+  )> }
+);
+
+export type UpdateVideoMutationVariables = Exact<{
+  input: UpdateVideo;
+}>;
+
+
+export type UpdateVideoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateVideo?: Maybe<(
+    { __typename?: 'EventVideo' }
+    & Pick<EventVideo, 'url' | 'lang'>
+  )> }
+);
+
 export type EventSettingsFragment = (
   { __typename?: 'Event' }
   & Pick<Event, 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>
@@ -630,7 +754,7 @@ export type EventSpeakersFragment = (
   { __typename?: 'Event' }
   & { speakers?: Maybe<Array<(
     { __typename?: 'EventSpeaker' }
-    & Pick<EventSpeaker, 'userId' | 'eventId' | 'name' | 'title' | 'description' | 'picture'>
+    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'title' | 'description' | 'pictureUrl' | 'email'>
   )>> }
 );
 
@@ -668,10 +792,10 @@ export type MyOrgsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyOrgsQuery = (
   { __typename?: 'Query' }
-  & { myOrgs?: Maybe<Array<Maybe<(
+  & { myOrgs?: Maybe<Array<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'orgId' | 'name'>
-  )>>> }
+  )>> }
 );
 
 export type OrgInfoQueryVariables = Exact<{
@@ -684,13 +808,13 @@ export type OrgInfoQuery = (
   & { orgById?: Maybe<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'orgId' | 'name'>
-    & { members?: Maybe<Array<Maybe<(
+    & { members?: Maybe<Array<(
       { __typename?: 'User' }
       & Pick<User, 'userId' | 'firstName' | 'lastName'>
-    )>>>, events?: Maybe<Array<Maybe<(
+    )>>, events?: Maybe<Array<(
       { __typename?: 'Event' }
       & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -748,12 +872,13 @@ export const EventVideosFragmentDoc = gql`
 export const EventSpeakersFragmentDoc = gql`
     fragment EventSpeakers on Event {
   speakers {
-    userId
+    speakerId
     eventId
     name
     title
     description
-    picture
+    pictureUrl
+    email
   }
 }
     `;
@@ -1096,6 +1221,221 @@ export function useQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type QuestionsQueryHookResult = ReturnType<typeof useQuestionsQuery>;
 export type QuestionsLazyQueryHookResult = ReturnType<typeof useQuestionsLazyQuery>;
 export type QuestionsQueryResult = Apollo.QueryResult<QuestionsQuery, QuestionsQueryVariables>;
+export const AddSpeakerDocument = gql`
+    mutation AddSpeaker($input: SpeakerForm) {
+  addSpeaker(input: $input) {
+    speakerId
+    eventId
+    name
+    description
+    title
+    pictureUrl
+  }
+}
+    `;
+export type AddSpeakerMutationFn = Apollo.MutationFunction<AddSpeakerMutation, AddSpeakerMutationVariables>;
+
+/**
+ * __useAddSpeakerMutation__
+ *
+ * To run a mutation, you first call `useAddSpeakerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddSpeakerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addSpeakerMutation, { data, loading, error }] = useAddSpeakerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddSpeakerMutation(baseOptions?: Apollo.MutationHookOptions<AddSpeakerMutation, AddSpeakerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddSpeakerMutation, AddSpeakerMutationVariables>(AddSpeakerDocument, options);
+      }
+export type AddSpeakerMutationHookResult = ReturnType<typeof useAddSpeakerMutation>;
+export type AddSpeakerMutationResult = Apollo.MutationResult<AddSpeakerMutation>;
+export type AddSpeakerMutationOptions = Apollo.BaseMutationOptions<AddSpeakerMutation, AddSpeakerMutationVariables>;
+export const RemoveSpeakerDocument = gql`
+    mutation removeSpeaker($input: DeleteSpeaker) {
+  removeSpeaker(input: $input) {
+    speakerId
+    eventId
+    name
+    description
+    title
+    pictureUrl
+  }
+}
+    `;
+export type RemoveSpeakerMutationFn = Apollo.MutationFunction<RemoveSpeakerMutation, RemoveSpeakerMutationVariables>;
+
+/**
+ * __useRemoveSpeakerMutation__
+ *
+ * To run a mutation, you first call `useRemoveSpeakerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveSpeakerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeSpeakerMutation, { data, loading, error }] = useRemoveSpeakerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveSpeakerMutation(baseOptions?: Apollo.MutationHookOptions<RemoveSpeakerMutation, RemoveSpeakerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveSpeakerMutation, RemoveSpeakerMutationVariables>(RemoveSpeakerDocument, options);
+      }
+export type RemoveSpeakerMutationHookResult = ReturnType<typeof useRemoveSpeakerMutation>;
+export type RemoveSpeakerMutationResult = Apollo.MutationResult<RemoveSpeakerMutation>;
+export type RemoveSpeakerMutationOptions = Apollo.BaseMutationOptions<RemoveSpeakerMutation, RemoveSpeakerMutationVariables>;
+export const UpdateSpeakerDocument = gql`
+    mutation updateSpeaker($input: UpdateSpeaker) {
+  updateSpeaker(input: $input) {
+    speakerId
+    eventId
+    name
+    description
+    title
+    pictureUrl
+  }
+}
+    `;
+export type UpdateSpeakerMutationFn = Apollo.MutationFunction<UpdateSpeakerMutation, UpdateSpeakerMutationVariables>;
+
+/**
+ * __useUpdateSpeakerMutation__
+ *
+ * To run a mutation, you first call `useUpdateSpeakerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSpeakerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSpeakerMutation, { data, loading, error }] = useUpdateSpeakerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSpeakerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSpeakerMutation, UpdateSpeakerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSpeakerMutation, UpdateSpeakerMutationVariables>(UpdateSpeakerDocument, options);
+      }
+export type UpdateSpeakerMutationHookResult = ReturnType<typeof useUpdateSpeakerMutation>;
+export type UpdateSpeakerMutationResult = Apollo.MutationResult<UpdateSpeakerMutation>;
+export type UpdateSpeakerMutationOptions = Apollo.BaseMutationOptions<UpdateSpeakerMutation, UpdateSpeakerMutationVariables>;
+export const AddVideoDocument = gql`
+    mutation AddVideo($input: CreateVideo!) {
+  addVideo(input: $input) {
+    lang
+    url
+  }
+}
+    `;
+export type AddVideoMutationFn = Apollo.MutationFunction<AddVideoMutation, AddVideoMutationVariables>;
+
+/**
+ * __useAddVideoMutation__
+ *
+ * To run a mutation, you first call `useAddVideoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddVideoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addVideoMutation, { data, loading, error }] = useAddVideoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddVideoMutation(baseOptions?: Apollo.MutationHookOptions<AddVideoMutation, AddVideoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddVideoMutation, AddVideoMutationVariables>(AddVideoDocument, options);
+      }
+export type AddVideoMutationHookResult = ReturnType<typeof useAddVideoMutation>;
+export type AddVideoMutationResult = Apollo.MutationResult<AddVideoMutation>;
+export type AddVideoMutationOptions = Apollo.BaseMutationOptions<AddVideoMutation, AddVideoMutationVariables>;
+export const RemoveVideoDocument = gql`
+    mutation RemoveVideo($input: DeleteVideo!) {
+  removeVideo(input: $input) {
+    url
+  }
+}
+    `;
+export type RemoveVideoMutationFn = Apollo.MutationFunction<RemoveVideoMutation, RemoveVideoMutationVariables>;
+
+/**
+ * __useRemoveVideoMutation__
+ *
+ * To run a mutation, you first call `useRemoveVideoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveVideoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeVideoMutation, { data, loading, error }] = useRemoveVideoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveVideoMutation(baseOptions?: Apollo.MutationHookOptions<RemoveVideoMutation, RemoveVideoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveVideoMutation, RemoveVideoMutationVariables>(RemoveVideoDocument, options);
+      }
+export type RemoveVideoMutationHookResult = ReturnType<typeof useRemoveVideoMutation>;
+export type RemoveVideoMutationResult = Apollo.MutationResult<RemoveVideoMutation>;
+export type RemoveVideoMutationOptions = Apollo.BaseMutationOptions<RemoveVideoMutation, RemoveVideoMutationVariables>;
+export const UpdateVideoDocument = gql`
+    mutation UpdateVideo($input: UpdateVideo!) {
+  updateVideo(input: $input) {
+    url
+    lang
+  }
+}
+    `;
+export type UpdateVideoMutationFn = Apollo.MutationFunction<UpdateVideoMutation, UpdateVideoMutationVariables>;
+
+/**
+ * __useUpdateVideoMutation__
+ *
+ * To run a mutation, you first call `useUpdateVideoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateVideoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateVideoMutation, { data, loading, error }] = useUpdateVideoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateVideoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateVideoMutation, UpdateVideoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateVideoMutation, UpdateVideoMutationVariables>(UpdateVideoDocument, options);
+      }
+export type UpdateVideoMutationHookResult = ReturnType<typeof useUpdateVideoMutation>;
+export type UpdateVideoMutationResult = Apollo.MutationResult<UpdateVideoMutation>;
+export type UpdateVideoMutationOptions = Apollo.BaseMutationOptions<UpdateVideoMutation, UpdateVideoMutationVariables>;
 export const CreateEventDocument = gql`
     mutation CreateEvent($input: CreateEvent) {
   createEvent(event: $input) {
@@ -1345,15 +1685,16 @@ export type EventQuestionFieldPolicy = {
 	likedByCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	isLikedByMe?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventSpeakerKeySpecifier = ('userId' | 'eventId' | 'user' | 'name' | 'description' | 'title' | 'picture' | EventSpeakerKeySpecifier)[];
+export type EventSpeakerKeySpecifier = ('speakerId' | 'email' | 'eventId' | 'user' | 'name' | 'description' | 'title' | 'pictureUrl' | EventSpeakerKeySpecifier)[];
 export type EventSpeakerFieldPolicy = {
-	userId?: FieldPolicy<any> | FieldReadFunction<any>,
+	speakerId?: FieldPolicy<any> | FieldReadFunction<any>,
+	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	eventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
-	picture?: FieldPolicy<any> | FieldReadFunction<any>
+	pictureUrl?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type EventVideoKeySpecifier = ('url' | 'lang' | 'event' | EventVideoKeySpecifier)[];
 export type EventVideoFieldPolicy = {
@@ -1366,10 +1707,11 @@ export type LikeFieldPolicy = {
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addMember' | 'addModerator' | 'addVideo' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'nextQuestion' | 'prevQuestion' | 'register' | 'removeVideo' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | 'updateVideo' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addMember' | 'addModerator' | 'addSpeaker' | 'addVideo' | 'alterLike' | 'createEvent' | 'createFeedback' | 'createOrganization' | 'createQuestion' | 'deleteEvent' | 'deleteOrganizationById' | 'endEvent' | 'hideQuestion' | 'login' | 'nextQuestion' | 'prevQuestion' | 'register' | 'removeSpeaker' | 'removeVideo' | 'reorderQueue' | 'startEvent' | 'updateEvent' | 'updateOrganizationById' | 'updateSpeaker' | 'updateVideo' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addMember?: FieldPolicy<any> | FieldReadFunction<any>,
 	addModerator?: FieldPolicy<any> | FieldReadFunction<any>,
+	addSpeaker?: FieldPolicy<any> | FieldReadFunction<any>,
 	addVideo?: FieldPolicy<any> | FieldReadFunction<any>,
 	alterLike?: FieldPolicy<any> | FieldReadFunction<any>,
 	createEvent?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1384,11 +1726,13 @@ export type MutationFieldPolicy = {
 	nextQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
 	prevQuestion?: FieldPolicy<any> | FieldReadFunction<any>,
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
+	removeSpeaker?: FieldPolicy<any> | FieldReadFunction<any>,
 	removeVideo?: FieldPolicy<any> | FieldReadFunction<any>,
 	reorderQueue?: FieldPolicy<any> | FieldReadFunction<any>,
 	startEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateOrganizationById?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateSpeaker?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateVideo?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type OrganizationKeySpecifier = ('orgId' | 'name' | 'createdAt' | 'members' | 'events' | OrganizationKeySpecifier)[];

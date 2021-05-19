@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
 
 import { ResponsiveDialog } from '../ResponsiveDialog';
+import { LoadingButton } from '../LoadingButton';
 
 interface Props {
     onConfirm: () => void;
@@ -9,9 +10,10 @@ interface Props {
     children: string | JSX.Element;
     open: boolean;
     onClose: () => void;
+    isLoading?: boolean;
 }
 
-export function ConfirmationDialog({ open, onConfirm, title, children, onClose }: Props) {
+export function ConfirmationDialog({ open, onConfirm, title, children, onClose, isLoading }: Props) {
     // NOTE: the () => onClose() and () => onConfirm is done on purpose to prevent the synthetic event from being passed up
     // storybook yells at me if it's passed up
     return (
@@ -21,9 +23,11 @@ export function ConfirmationDialog({ open, onConfirm, title, children, onClose }
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => onClose()}>Cancel</Button>
-                <Button variant='contained' color='primary' onClick={() => onConfirm()}>
-                    Confirm
-                </Button>
+                <LoadingButton loading={Boolean(isLoading)}>
+                    <Button variant='contained' color='primary' onClick={() => onConfirm()}>
+                        Confirm
+                    </Button>
+                </LoadingButton>
             </DialogActions>
         </ResponsiveDialog>
     );

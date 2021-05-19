@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
             jssStyles.parentElement?.removeChild(jssStyles);
         }
     }, []);
-    
+
     return (
         <>
             <Head>

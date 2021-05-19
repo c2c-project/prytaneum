@@ -1,0 +1,19 @@
+mutation AddVideo($input: CreateVideo!) {
+    addVideo(input: $input) {
+        lang
+        url
+    }
+}
+
+mutation RemoveVideo($input: DeleteVideo!) {
+    removeVideo(input: $input) {
+        url
+    }
+}
+
+mutation UpdateVideo($input: UpdateVideo!) {
+    updateVideo(input: $input) {
+        url
+        lang
+    }
+}

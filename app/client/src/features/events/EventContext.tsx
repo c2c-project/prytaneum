@@ -9,18 +9,17 @@ interface Props {
 
 export const EventContext = React.createContext<Event | null>(null);
 
-type Dispatch = React.Dispatch<React.SetStateAction<Event | undefined>> | null;
+type Dispatch = React.Dispatch<React.SetStateAction<Event>> | null;
 
 export const EventDispatch = React.createContext<Dispatch>(null);
 
 // TODO: optimize this so that a request doesn't get sent every single page load? maybe?
 export function EventProvider({ event, children }: Props) {
-    const [townhall, setTownhall] = React.useState(event);
+    const [eventDetails, setEvent] = React.useState(event);
 
     return (
-        <EventContext.Provider value={townhall}>
-            <EventDispatch.Provider value={setTownhall}>{children}</EventDispatch.Provider>
+        <EventContext.Provider value={eventDetails}>
+            <EventDispatch.Provider value={setEvent}>{children}</EventDispatch.Provider>
         </EventContext.Provider>
     );
 }
-

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import { motion } from 'framer-motion';
 
-export default () => {
+export const MovingBg = () => {
     const theme = useTheme();
 
     return (

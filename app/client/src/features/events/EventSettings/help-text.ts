@@ -1,12 +1,12 @@
 // KEEP IN SYNC WITH townhallsettings type
 export default {
     breakout: {
-        enabled: 'Enables the Breakout component for this Townhall',
+        enabled: 'Enables the Breakout component for this Event',
         automated:
             'Automatically filters out toxic messages using Artificial Intelligence/Machine Learning',
     },
     questionQueue: {
-        transparent: 'Lets Townhall participants view submitted questions',
+        transparent: 'Lets Event participants view submitted questions',
         automated:
             'Automatically groups questions together using Artificial Intellligence/Machine Learning',
     },

@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 // import history from '@local/utils/history';
 import type { User } from '@local/graphql-types';
 import { StyledSubheader, StyledDivider, StyledListItemIcon, StyledListItem } from './StyledComponents';
-import MovingBg from './MovingBg';
+import { MovingBg } from './MovingBg';
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -14,7 +14,7 @@ import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import QuestionCarousel from '@local/features/events/Questions/QuestionCarousel';
 import StyledTab, { Props as StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
-import { SpeakerList } from '../Speaker';
+import { SpeakerList } from '../Speakers';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 

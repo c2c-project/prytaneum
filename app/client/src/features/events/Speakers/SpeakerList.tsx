@@ -14,8 +14,8 @@ export function SpeakerList({ speakers, className }: SpeakerItemProps) {
     const [openCard, setOpenCard] = React.useState(false);
     return (
         <List className={className}>
-            {speakers.map(({ userId, picture, name, description, title }) => (
-                <li key={userId}>
+            {speakers.map(({ speakerId, picture, name, description, title }) => (
+                <li key={speakerId}>
                     <ListItem key={picture} button onClick={() => setOpenCard(true)}>
                         <ListItemAvatar>
                             <Avatar alt={`${name}-avatar`} src={picture} />

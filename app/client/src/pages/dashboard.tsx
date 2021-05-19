@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TitleCard from '@local/components/TitleCard';
 import FadeThrough from '@local/animations/FadeThrough';
 // import RequireRoles from '@local/domains/Logical/RequireRoles';
-import RoleInvite from '@local/domains/Admin/RoleInvite';
+// import RoleInvite from '@local//Admin/RoleInvite';
 
 const useStyles = makeStyles((theme) => ({
     item: {
@@ -43,9 +43,9 @@ export default function Dashboard() {
                     </Card>
                 </Grid>
                 {/* <RequireRoles requiredRoles={['admin']} redirect={false}> */}
-                <Grid className={classes.item} item xs={12}>
+                {/* <Grid className={classes.item} item xs={12}>
                     <RoleInvite />
-                </Grid>
+                </Grid> */}
                 {/* </RequireRoles> */}
             </Grid>
         </FadeThrough>
