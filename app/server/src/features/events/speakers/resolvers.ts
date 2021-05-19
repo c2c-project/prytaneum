@@ -16,7 +16,7 @@ export const resolvers: Resolvers = {
     },
     EventSpeaker: {
         user(parent, args, ctx, info) {
-            return Speaker.findSpeakerAcc(parent.userId, ctx.prisma);
+            return Speaker.findSpeakerAcc(parent.email, ctx.prisma);
         },
     },
 };

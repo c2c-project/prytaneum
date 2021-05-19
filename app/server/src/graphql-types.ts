@@ -61,7 +61,7 @@ export type Query = {
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
     /** Fetch organizations relevant to the current user */
-    myOrgs?: Maybe<Array<Maybe<Organization>>>;
+    myOrgs?: Maybe<Array<Organization>>;
     /** Fetch data about a particular org */
     orgById?: Maybe<Organization>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
@@ -317,9 +317,9 @@ export type Organization = {
     /** When this org was created */
     createdAt?: Maybe<Scalars['Date']>;
     /** all members of this org */
-    members?: Maybe<Array<Maybe<User>>>;
+    members?: Maybe<Array<User>>;
     /** Events owned by this organization */
-    events?: Maybe<Array<Maybe<Event>>>;
+    events?: Maybe<Array<Event>>;
 };
 
 /** Necessary information for org creation */
@@ -432,10 +432,12 @@ export type AlterLike = {
 
 export type EventSpeaker = {
     __typename?: 'EventSpeaker';
-    /** User id associated with this speaker */
-    userId: Scalars['ID'];
+    /** Speaker id */
+    speakerId: Scalars['String'];
+    /** email of the speaker */
+    email?: Maybe<Scalars['String']>;
     /** Event id that this user is speaking at */
-    eventId: Scalars['ID'];
+    eventId?: Maybe<Scalars['ID']>;
     /** The related user account associated with the speaker */
     user?: Maybe<User>;
     /** Name set by the organizer of the event */
@@ -445,7 +447,7 @@ export type EventSpeaker = {
     /** Title set by the organizer of the event */
     title?: Maybe<Scalars['String']>;
     /** Picture set by the organizer of the event */
-    picture?: Maybe<Scalars['String']>;
+    pictureUrl?: Maybe<Scalars['String']>;
 };
 
 export type SpeakerForm = {
@@ -453,7 +455,7 @@ export type SpeakerForm = {
     name: Scalars['String'];
     title: Scalars['String'];
     description: Scalars['String'];
-    picture: Scalars['String'];
+    pictureUrl: Scalars['String'];
     /** This is for matching the speaker to an account */
     email: Scalars['String'];
 };
@@ -462,14 +464,16 @@ export type UpdateSpeaker = {
     name?: Maybe<Scalars['String']>;
     title?: Maybe<Scalars['String']>;
     description?: Maybe<Scalars['String']>;
-    picture?: Maybe<Scalars['String']>;
-    userId: Scalars['String'];
+    pictureUrl?: Maybe<Scalars['String']>;
+    email?: Maybe<Scalars['String']>;
+    speakerId: Scalars['String'];
     eventId: Scalars['String'];
 };
 
 export type DeleteSpeaker = {
+    /** Necessary for verifying user permissions */
     eventId: Scalars['String'];
-    userId: Scalars['String'];
+    speakerId: Scalars['String'];
 };
 
 export type EventVideo = {
@@ -684,7 +688,7 @@ export type QueryResolvers<
         RequireFields<QueryeventByIdArgs, 'id'>
     >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
-    myOrgs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>;
+    myOrgs?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
     orgById?: Resolver<
         Maybe<ResolversTypes['Organization']>,
         ParentType,
@@ -921,8 +925,8 @@ export type OrganizationResolvers<
     orgId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    members?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
-    events?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
+    members?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+    events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -986,13 +990,14 @@ export type EventSpeakerResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
 > = {
-    userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-    eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    speakerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    eventId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    picture?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    pictureUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1085,8 +1090,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         orgId?: LoaderResolver<Scalars['ID'], Organization, {}, TContext>;
         name?: LoaderResolver<Scalars['String'], Organization, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, Organization, {}, TContext>;
-        members?: LoaderResolver<Maybe<Array<Maybe<User>>>, Organization, {}, TContext>;
-        events?: LoaderResolver<Maybe<Array<Maybe<Event>>>, Organization, {}, TContext>;
+        members?: LoaderResolver<Maybe<Array<User>>, Organization, {}, TContext>;
+        events?: LoaderResolver<Maybe<Array<Event>>, Organization, {}, TContext>;
     };
 
     EventLiveFeedback?: {
@@ -1130,13 +1135,14 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventSpeaker?: {
-        userId?: LoaderResolver<Scalars['ID'], EventSpeaker, {}, TContext>;
-        eventId?: LoaderResolver<Scalars['ID'], EventSpeaker, {}, TContext>;
+        speakerId?: LoaderResolver<Scalars['String'], EventSpeaker, {}, TContext>;
+        email?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
+        eventId?: LoaderResolver<Maybe<Scalars['ID']>, EventSpeaker, {}, TContext>;
         user?: LoaderResolver<Maybe<User>, EventSpeaker, {}, TContext>;
         name?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         description?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         title?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
-        picture?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
+        pictureUrl?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
     };
 
     EventVideo?: {

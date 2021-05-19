@@ -4,10 +4,9 @@ import { DeleteSpeaker, SpeakerForm, UpdateSpeaker } from '@local/graphql-types'
 import { register } from '@local/features/accounts/methods';
 import { canUserModify } from '@local/features/events/methods';
 
-export function speakerById(prisma: PrismaClient) {}
-
-export function findSpeakerAcc(userId: string, prisma: PrismaClient) {
-    return prisma.user.findUnique({ where: { userId } });
+export function findSpeakerAcc(email: Maybe<string>, prisma: PrismaClient) {
+    if (!email) return null;
+    return prisma.user.findUnique({ where: { email } });
 }
 
 export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient, input: Maybe<SpeakerForm>) {
@@ -15,7 +14,7 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { email, eventId, name, description, title, picture } = input;
+    const { email, eventId, name, description, title, pictureUrl } = input;
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -33,12 +32,12 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
 
     return prisma.eventSpeaker.create({
         data: {
-            userId: speakerId,
             eventId,
             name,
             description,
             title,
-            pictureUrl: picture,
+            pictureUrl,
+            email,
         },
     });
 }
@@ -48,7 +47,7 @@ export async function updateSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { userId: speakerId, eventId, title, description, picture, name } = input;
+    const { speakerId, eventId, title, description, pictureUrl, name } = input;
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -56,17 +55,13 @@ export async function updateSpeaker(userId: Maybe<string>, prisma: PrismaClient,
 
     return prisma.eventSpeaker.update({
         where: {
-            eventId_userId: {
-                userId: speakerId,
-                eventId,
-            },
+            speakerId,
         },
         data: {
             title: title || undefined,
             description: description || undefined,
-            pictureUrl: picture || undefined,
+            pictureUrl: pictureUrl || undefined,
             name: name || undefined,
-            userId: speakerId,
         },
     });
 }
@@ -75,7 +70,7 @@ export async function deleteSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { eventId, userId: speakerId } = input;
+    const { eventId, speakerId } = input;
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -83,10 +78,7 @@ export async function deleteSpeaker(userId: Maybe<string>, prisma: PrismaClient,
 
     return prisma.eventSpeaker.delete({
         where: {
-            eventId_userId: {
-                eventId,
-                userId: speakerId,
-            },
+            speakerId,
         },
     });
 }

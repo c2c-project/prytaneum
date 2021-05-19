@@ -14,11 +14,11 @@ type Organization {
     """
     all members of this org
     """
-    members: [User]
+    members: [User!]
     """
     Events owned by this organization
     """
-    events: [Event]
+    events: [Event!]
 }
 
 """
@@ -65,7 +65,7 @@ type Query {
     """
     Fetch organizations relevant to the current user
     """
-    myOrgs: [Organization]
+    myOrgs: [Organization!]
     
     """
     Fetch data about a particular org

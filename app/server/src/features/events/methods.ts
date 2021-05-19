@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import { Event, PrismaClient } from '@app/prisma';
 import { CreateEvent, DeleteEvent, Maybe, UpdateEvent } from '@local/graphql-types';
-import { errors, filterOutFalsy } from '@local/features/utils';
+import { errors, filterOutUndefined } from '@local/features/utils';
 
 /**
  * get a specific event by its id
@@ -108,7 +108,7 @@ export async function updateEvent(userId: Maybe<string>, prisma: PrismaClient, i
     // if for some reason the client passes a falsy value, we must filter it out
     // passing a falsy value is a valid operation in terms of graphql, but is not
     // for our application
-    const updatedValues = filterOutFalsy(input);
+    const updatedValues = filterOutUndefined(input);
 
     return prisma.event.update({ where: { eventId: input.eventId }, data: { ...updatedValues } });
 }

@@ -37,9 +37,9 @@ export const errors = {
  * filters out any keys from an object where the value is falsy
  * does NOT recursively do this, ie at most 1 depth
  */
-export function filterOutFalsy<T extends Record<string, unknown>>(obj: T) {
+export function filterOutUndefined<T extends Record<string, unknown>>(obj: T) {
     const entries = Object.entries(obj);
     return entries
-        .filter(([_key, value]) => Boolean(value))
+        .filter(([_, value]) => value !== undefined)
         .reduce((accum, [key, value]) => ({ ...accum, [key]: value }), {});
 }

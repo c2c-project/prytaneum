@@ -11,7 +11,7 @@ type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationFo
  */
 export async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
     const { email, firstName, lastName } = userData;
-    const encryptedPassword = await bcrypt.hash(textPassword, 10);
+    const encryptedPassword = textPassword ? await bcrypt.hash(textPassword, 10) : null;
     return prisma.user.create({
         data: {
             email,

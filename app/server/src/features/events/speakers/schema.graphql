@@ -1,13 +1,18 @@
 type EventSpeaker {
     """
-    User id associated with this speaker
+    Speaker id
     """
-    userId: ID!
+    speakerId: String!
+
+    """
+    email of the speaker
+    """
+    email: String
 
     """
     Event id that this user is speaking at
     """
-    eventId: ID!
+    eventId: ID
 
     """
     The related user account associated with the speaker
@@ -32,7 +37,7 @@ type EventSpeaker {
     """
     Picture set by the organizer of the event
     """
-    picture: String
+    pictureUrl: String
 }
 
 input SpeakerForm {
@@ -40,7 +45,7 @@ input SpeakerForm {
     name: String!
     title: String!
     description: String!
-    picture: String!
+    pictureUrl: String!
 
     """
     This is for matching the speaker to an account
@@ -52,14 +57,18 @@ input UpdateSpeaker {
     name: String
     title: String
     description: String
-    picture: String
-    userId: String!
+    pictureUrl: String
+    email: String
+    speakerId: String!
     eventId: String!
 }
 
 input DeleteSpeaker {
+    """
+    Necessary for verifying user permissions
+    """
     eventId: String!
-    userId: String!
+    speakerId: String!
 }
 
 type Mutation {
