@@ -10,7 +10,7 @@ export type EventSettingsQueryVariables = {
 export type EventSettingsQueryResponse = {
     readonly eventById: {
         readonly id: string;
-        readonly " $fragmentRefs": FragmentRefs<"EventDetails" | "EventSettings" | "EventSpeakers" | "VideoEventSettingsFragment" | "EventModerators" | "GenericSettingsFragment">;
+        readonly " $fragmentRefs": FragmentRefs<"EventDetails" | "EventSettings" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "EventModerators" | "GenericSettingsFragment">;
     } | null;
 };
 export type EventSettingsQuery = {
@@ -28,7 +28,7 @@ query EventSettingsQuery(
     id
     ...EventDetails
     ...EventSettings
-    ...EventSpeakers
+    ...SpeakerEventSettingsFragment
     ...VideoEventSettingsFragment
     ...EventModerators
     ...GenericSettingsFragment
@@ -61,24 +61,25 @@ fragment EventSettings on Event {
   isPrivate
 }
 
-fragment EventSpeakers on Event {
-  speakers {
-    speakerId
-    id
-    name
-    title
-    description
-    pictureUrl
-    email
-  }
-}
-
 fragment GenericSettingsFragment on Event {
   id
   isQuestionFeedVisible
   isCollectRatingsEnabled
   isForumEnabled
   isPrivate
+}
+
+fragment SpeakerEventSettingsFragment on Event {
+  id
+  speakers {
+    id
+    eventId
+    name
+    title
+    description
+    pictureUrl
+    email
+  }
 }
 
 fragment VideoEventSettingsFragment on Event {
@@ -163,7 +164,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "EventSpeakers"
+            "name": "SpeakerEventSettingsFragment"
           },
           {
             "args": null,
@@ -268,14 +269,14 @@ return {
             "name": "speakers",
             "plural": true,
             "selections": [
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "speakerId",
+                "name": "eventId",
                 "storageKey": null
               },
-              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -368,14 +369,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a8c16b0bd98df782ce247c02bbf2f7ac",
+    "cacheID": "eb51fdbc2416e1dfe29b1cf8206900e6",
     "id": null,
     "metadata": {},
     "name": "EventSettingsQuery",
     "operationKind": "query",
-    "text": "query EventSettingsQuery(\n  $input: ID!\n) {\n  eventById(id: $input) {\n    id\n    ...EventDetails\n    ...EventSettings\n    ...EventSpeakers\n    ...VideoEventSettingsFragment\n    ...EventModerators\n    ...GenericSettingsFragment\n  }\n}\n\nfragment EventDetails on Event {\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n}\n\nfragment EventModerators on Event {\n  moderators {\n    userId\n    firstName\n    lastName\n    email\n    avatar\n  }\n}\n\nfragment EventSettings on Event {\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment EventSpeakers on Event {\n  speakers {\n    speakerId\n    id\n    name\n    title\n    description\n    pictureUrl\n    email\n  }\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment VideoEventSettingsFragment on Event {\n  id\n  videos {\n    id\n    url\n    lang\n  }\n}\n"
+    "text": "query EventSettingsQuery(\n  $input: ID!\n) {\n  eventById(id: $input) {\n    id\n    ...EventDetails\n    ...EventSettings\n    ...SpeakerEventSettingsFragment\n    ...VideoEventSettingsFragment\n    ...EventModerators\n    ...GenericSettingsFragment\n  }\n}\n\nfragment EventDetails on Event {\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n}\n\nfragment EventModerators on Event {\n  moderators {\n    userId\n    firstName\n    lastName\n    email\n    avatar\n  }\n}\n\nfragment EventSettings on Event {\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment SpeakerEventSettingsFragment on Event {\n  id\n  speakers {\n    id\n    eventId\n    name\n    title\n    description\n    pictureUrl\n    email\n  }\n}\n\nfragment VideoEventSettingsFragment on Event {\n  id\n  videos {\n    id\n    url\n    lang\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'fe81134815563aca5520979d5d68dd9e';
+(node as any).hash = '20bcfe626d1bc07dd614f576a4a58531';
 export default node;

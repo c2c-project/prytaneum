@@ -16,15 +16,20 @@ import {
 } from '@material-ui/core';
 import { Add, MoreVert } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { graphql, useFragment } from 'react-relay';
 
-import { EventSpeaker, useRemoveSpeakerMutation } from '@local/graphql-types';
+import type {
+    SpeakerEventSettingsFragment$key,
+    SpeakerEventSettingsFragment$data,
+} from '@local/__generated__/SpeakerEventSettingsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useEvent } from '@local/hooks';
-import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
-import { SpeakerForm } from './SpeakerForm';
+import { ArrayElement } from '@local/utils/ts-utils';
+import { CreateSpeaker, TCreatedSpeaker } from './CreateSpeaker';
+import { DeleteSpeaker } from './DeleteSpeaker';
+import { UpdateSpeaker, TUpdatedSpeaker } from './UpdateSpeaker';
 
 interface EventSettingsProps {
-    speakers?: EventSpeaker[];
+    fragmentRef: SpeakerEventSettingsFragment$key;
     className?: string;
 }
 
@@ -37,23 +42,39 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+export type TSpeaker = ArrayElement<NonNullable<SpeakerEventSettingsFragment$data['speakers']>>;
 interface State {
     isFormDialogOpen: boolean;
     isConfDialogOpen: boolean;
-    list: EventSpeaker[];
+    list: TSpeaker[];
     anchorEl: HTMLElement | null;
-    focusedSpeaker: EventSpeaker | null;
+    focusedSpeaker: TSpeaker | null;
 }
+
+export const SPEAKER_EVENT_SETTINGS_FRAGMENT = graphql`
+    fragment SpeakerEventSettingsFragment on Event {
+        id
+        speakers {
+            id
+            eventId
+            name
+            title
+            description
+            pictureUrl
+            email
+        }
+    }
+`;
 
 type Action =
     | { type: 'dialog/create-speaker'; payload?: never }
     | { type: 'dialog/update-speaker'; payload?: never }
     | { type: 'dialog/delete-speaker'; payload?: never }
     | { type: 'dialog/close-all'; payload?: never }
-    | { type: 'speakers/append'; payload: EventSpeaker }
-    | { type: 'speakers/focus'; payload: { speaker: EventSpeaker; anchorEl: HTMLElement } }
+    | { type: 'speakers/append'; payload: TSpeaker }
+    | { type: 'speakers/focus'; payload: { speaker: TSpeaker; anchorEl: HTMLElement } }
     | { type: 'speakers/remove-focused'; payload?: never }
-    | { type: 'speakers/update-focused'; payload: EventSpeaker };
+    | { type: 'speakers/update-focused'; payload: TSpeaker };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -109,7 +130,7 @@ const reducer = (state: State, action: Action): State => {
             if (focusedVideo === null) return state;
             return {
                 ...state,
-                list: state.list.filter(({ speakerId }) => speakerId !== focusedVideo.speakerId),
+                list: state.list.filter(({ id }) => id !== focusedVideo.id),
                 isConfDialogOpen: false,
             };
         }
@@ -118,7 +139,7 @@ const reducer = (state: State, action: Action): State => {
             if (focusedVideo === null) return state; // this should never happen
 
             // logic to replace the focused video with the updated video
-            const idx = state.list.findIndex(({ speakerId }) => speakerId === focusedVideo.speakerId);
+            const idx = state.list.findIndex(({ id }) => id === focusedVideo.id);
             const newList = [...state.list];
             newList[idx] = action.payload;
 
@@ -135,41 +156,37 @@ const reducer = (state: State, action: Action): State => {
     }
 };
 
-export const EventSettings = ({ speakers = [], className }: EventSettingsProps) => {
+export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
+    const { speakers, id: eventId } = useFragment(SPEAKER_EVENT_SETTINGS_FRAGMENT, fragmentRef);
     const [{ isFormDialogOpen, isConfDialogOpen, list, anchorEl, focusedSpeaker }, dispatch] = React.useReducer(
         reducer,
         {
             isFormDialogOpen: false,
             isConfDialogOpen: false,
-            list: speakers,
+            list: speakers ? [...speakers] : [],
             anchorEl: null,
             focusedSpeaker: null,
         }
     );
-    const [{ id }] = useEvent();
-    const [removeVideo, { loading: isLoading }] = useRemoveSpeakerMutation({
-        onCompleted() {
-            dispatch({ type: 'speakers/remove-focused' });
-        },
-    });
     const classes = useStyles();
 
     // close all dialogs
     const close = () => dispatch({ type: 'dialog/close-all' });
 
     // open the more-vert menu
-    const openMenu = (speaker: EventSpeaker) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    const openMenu = (speaker: TSpeaker) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         dispatch({ type: 'speakers/focus', payload: { speaker, anchorEl: e.currentTarget } });
 
     // append a speaker to the list of speakers
-    const appendVideo = (video: EventSpeaker) => dispatch({ type: 'speakers/append', payload: video });
+    const appendSpeaker = (createdSpeaker: TCreatedSpeaker) =>
+        createdSpeaker && dispatch({ type: 'speakers/append', payload: createdSpeaker });
 
     // open the update form
     const openUpdateForm = () => dispatch({ type: 'dialog/update-speaker' });
 
-    // update a spoeaker in the list
-    const updateVideo = (updatedVideo: EventSpeaker) =>
-        dispatch({ type: 'speakers/update-focused', payload: updatedVideo });
+    // update a speaker in the list
+    const updateSpeaker = (updatedSpeaker: TUpdatedSpeaker) =>
+        updatedSpeaker && dispatch({ type: 'speakers/update-focused', payload: updatedSpeaker });
 
     // open the deletion prompt
     const promptDelete = () => dispatch({ type: 'dialog/delete-speaker' });
@@ -179,8 +196,8 @@ export const EventSettings = ({ speakers = [], className }: EventSettingsProps) 
 
     // handle speaker deletion when the user confirms
     const handleDelete = () => {
-        if (focusedSpeaker === null) return; // TODO: snack
-        removeVideo({ variables: { input: { id, speakerId: focusedSpeaker.speakerId } } });
+        if (focusedSpeaker === null) return;
+        dispatch({ type: 'speakers/remove-focused' });
     };
 
     return (
@@ -188,20 +205,14 @@ export const EventSettings = ({ speakers = [], className }: EventSettingsProps) 
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     {focusedSpeaker !== null ? (
-                        <SpeakerForm
-                            variant='update'
-                            onSubmit={updateVideo}
-                            form={{
-                                pictureUrl: focusedSpeaker.pictureUrl || '',
-                                title: focusedSpeaker.title || '',
-                                email: focusedSpeaker.email || '',
-                                name: focusedSpeaker.name || '',
-                                description: focusedSpeaker.description || '',
-                            }}
-                            speakerId={focusedSpeaker.speakerId}
+                        <UpdateSpeaker
+                            onSubmit={updateSpeaker}
+                            form={{ ...focusedSpeaker }}
+                            speakerId={focusedSpeaker.id}
+                            eventId={eventId}
                         />
                     ) : (
-                        <SpeakerForm variant='create' onSubmit={appendVideo} />
+                        <CreateSpeaker eventId={eventId} onSubmit={appendSpeaker} />
                     )}
                 </DialogContent>
             </ResponsiveDialog>
@@ -211,30 +222,29 @@ export const EventSettings = ({ speakers = [], className }: EventSettingsProps) 
                     Delete
                 </MenuItem>
             </Menu>
-            <ConfirmationDialog
+            <DeleteSpeaker
                 open={isConfDialogOpen}
                 onClose={close}
                 title={`Delete "${focusedSpeaker?.name}"?`}
                 onConfirm={handleDelete}
-                isLoading={isLoading}
+                speakerId={focusedSpeaker?.id}
+                eventId={eventId}
             >
                 <>
                     Are you sure you want to delete&nbsp;
                     <b>{focusedSpeaker?.name}</b> from the list of speakers?
                 </>
-            </ConfirmationDialog>
+            </DeleteSpeaker>
             {list.length > 0 ? (
                 <List className={classes.listRoot} disablePadding>
-                    {list.map(({ name, pictureUrl, description, speakerId, title, ...rest }) => (
-                        <ListItem key={speakerId} disableGutters>
+                    {list.map(({ name, pictureUrl, description, id, title, ...rest }) => (
+                        <ListItem key={id} disableGutters>
                             <ListItemAvatar>
                                 <Avatar src={pictureUrl || undefined} />
                             </ListItemAvatar>
                             <ListItemText primary={name} secondary={title} />
                             <ListItemSecondaryAction>
-                                <IconButton
-                                    onClick={openMenu({ name, pictureUrl, description, speakerId, title, ...rest })}
-                                >
+                                <IconButton onClick={openMenu({ name, pictureUrl, description, id, title, ...rest })}>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>

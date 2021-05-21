@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import { DeleteVideoMutation } from '@local/__generated__/DeleteVideoMutation.graphql';
+import type { DeleteVideoMutation } from '@local/__generated__/DeleteVideoMutation.graphql';
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 import type { EventVideo } from '@local/graphql-types';
 

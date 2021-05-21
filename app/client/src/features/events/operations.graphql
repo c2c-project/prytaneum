@@ -24,8 +24,8 @@ fragment EventVideos on Event {
 
 fragment EventSpeakers on Event {
     speakers {
-        speakerId
         id
+        eventId
         name
         title
         description

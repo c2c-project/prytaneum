@@ -52,7 +52,7 @@ export const EVENT_SETTINGS_QUERY = graphql`
             id
             ...EventDetails
             ...EventSettings
-            ...EventSpeakers
+            ...SpeakerEventSettingsFragment
             ...VideoEventSettingsFragment
             ...EventModerators
             ...GenericSettingsFragment
@@ -130,16 +130,13 @@ export function EventSettings({ queryRef }: Props) {
                     <VideoEventSettings className={classes.settingsSection} fragmentRef={data.eventById} />
                 ),
             },
-            // {
-            //     title: 'Speakers',
-            //     description: 'Add and Modify speakers at this event',
-            //     component: (
-            //         <SpeakerEventSettings
-            //             className={classes.settingsSection}
-            //             speakers={eventDetails.speakers || undefined}
-            //         />
-            //     ),
-            // },
+            {
+                title: 'Speakers',
+                description: 'Add and Modify speakers at this event',
+                component: data.eventById && (
+                    <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.eventById} />
+                ),
+            },
             // {
             //     title: 'Components',
             //     description: 'Turn on and off optional components',
@@ -186,7 +183,7 @@ export function EventSettings({ queryRef }: Props) {
             //     ),
             // },
         ],
-        [classes.settingsSection]
+        [classes.settingsSection, data]
     );
 
     return (

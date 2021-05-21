@@ -57,8 +57,8 @@ input DeleteOrg {
 
 input DeleteSpeaker {
   """Necessary for verifying user permissions"""
+  eventId: String!
   id: String!
-  speakerId: String!
 }
 
 input DeleteVideo {
@@ -175,14 +175,14 @@ type EventQuestion {
 }
 
 type EventSpeaker {
-  """Speaker id"""
-  speakerId: String!
+  """Speaker eventId"""
+  id: String!
 
   """email of the speaker"""
   email: String
 
-  """Event id that this user is speaking at"""
-  id: ID
+  """Event eventId that this user is speaking at"""
+  eventId: ID
 
   """The related user account associated with the speaker"""
   user: User
@@ -327,7 +327,7 @@ input ReorderQuestion {
 }
 
 input SpeakerForm {
-  id: String!
+  eventId: String!
   name: String!
   title: String!
   description: String!
@@ -370,15 +370,14 @@ input UpdateSpeaker {
   description: String
   pictureUrl: String
   email: String
-  speakerId: String!
   id: String!
+  eventId: String!
 }
 
 input UpdateVideo {
   videoId: String!
   eventId: String!
-  url: String!
-  newUrl: String
+  url: String
   lang: String
 }
 
