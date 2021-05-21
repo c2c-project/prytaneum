@@ -53,7 +53,7 @@ model OrgMember {
 }
 
 model Event {
-    eventId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     createdById String @db.Uuid
     orgId String @db.Uuid
     organization Organization @relation(fields: [orgId], references: [orgId])
@@ -82,12 +82,11 @@ model Event {
 }
 
 model EventVideo {
+    id String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
     url String
     lang String
-
-    @@id([eventId, url])
 }
 
 model EventLiveFeedback {
@@ -95,7 +94,7 @@ model EventLiveFeedback {
     createdById String @db.Uuid
     createdByUser User @relation(fields: [createdById], references: [userId])
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
     createdAt DateTime @default(now())
     message String @db.VarChar(500)
 }
@@ -103,7 +102,7 @@ model EventLiveFeedback {
 model EventQuestion {
     questionId String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
     createdAt DateTime @default(now())
     refQuestionId String? @db.Uuid
     parentQuestion EventQuestion[] @relation("quote")
@@ -134,7 +133,7 @@ model EventModerator {
     eventId String @db.Uuid
     userId String @db.Uuid
     user User @relation(fields: [userId], references: [userId])
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
 
     @@id([eventId, userId])
 }
@@ -147,7 +146,7 @@ model EventSpeaker {
     description String @db.VarChar(500)
     title String @db.VarChar(100)
     pictureUrl String @db.VarChar(200)
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
     user User @relation(fields: [email], references: [email])
 }
 
@@ -155,7 +154,7 @@ model EventRegistrant {
     userId String @db.Uuid
     eventId String @db.Uuid
     user User @relation(fields: [userId], references: [userId])
-    event Event @relation(fields: [eventId], references: [eventId])
+    event Event @relation(fields: [eventId], references: [id])
 
     @@id([userId, eventId])
 }
