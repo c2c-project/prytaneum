@@ -10,14 +10,14 @@ export async function createQuestion(userId: Maybe<string>, prisma: PrismaClient
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { question, refQuestion, isFollowUp, isQuote, eventId } = input;
+    const { question, refQuestion, isFollowUp, isQuote, id } = input;
 
     // it's okay to have both false, but both cannot be true
     if (isQuote === isFollowUp && isQuote === true) throw new Error(errors.invalidArgs);
 
     return prisma.eventQuestion.create({
         data: {
-            eventId,
+            id,
             question,
             refQuestionId: refQuestion || null,
             isFollowUp: isFollowUp || false,
@@ -58,12 +58,12 @@ export async function alterLikeById(userId: Maybe<string>, prisma: PrismaClient,
 /**
  * Filter function for event questions
  */
-export async function doesEventMatch(eventId: Maybe<string>, questionId: string, prisma: PrismaClient) {
-    if (!eventId) return false;
+export async function doesEventMatch(id: Maybe<string>, questionId: string, prisma: PrismaClient) {
+    if (!id) return false;
 
     // see if the event id matches the liked question
     const found = await prisma.eventQuestion.findFirst({
-        where: { eventId, questionId },
+        where: { id, questionId },
         select: { questionId: true },
     });
 
@@ -73,9 +73,9 @@ export async function doesEventMatch(eventId: Maybe<string>, questionId: string,
 /**
  * Find all questions relevant to the given event id
  */
-export function questionsByEventId(eventId: Maybe<string>, prisma: PrismaClient) {
-    if (!eventId) return null;
-    return prisma.eventQuestion.findMany({ where: { eventId } });
+export function questionsByid(id: Maybe<string>, prisma: PrismaClient) {
+    if (!id) return null;
+    return prisma.eventQuestion.findMany({ where: { id } });
 }
 
 /**

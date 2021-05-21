@@ -14,10 +14,10 @@ export const resolvers: Resolvers = {
             return Moderation.addModerator(ctx.userId, ctx.prisma, args.input);
         },
         nextQuestion(parent, args, ctx, info) {
-            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.eventId, 1);
+            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.id, 1);
         },
         prevQuestion(parent, args, ctx, info) {
-            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.eventId, -1);
+            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.id, -1);
         },
     },
     Subscription: {
@@ -25,7 +25,7 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ eventLiveFeedbackCreated: EventLiveFeedback }>(
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('eventLiveFeedbackCreated'),
                 (payload, args, ctx) =>
-                    Moderation.isEventRelevant(args.eventId, ctx.prisma, payload.eventLiveFeedbackCreated.feedbackId)
+                    Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.feedbackId)
             ),
         },
     },

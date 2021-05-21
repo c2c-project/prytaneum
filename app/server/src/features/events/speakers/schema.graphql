@@ -12,7 +12,7 @@ type EventSpeaker {
     """
     Event id that this user is speaking at
     """
-    eventId: ID
+    id: ID
 
     """
     The related user account associated with the speaker
@@ -41,7 +41,7 @@ type EventSpeaker {
 }
 
 input SpeakerForm {
-    eventId: String!
+    id: String!
     name: String!
     title: String!
     description: String!
@@ -60,14 +60,14 @@ input UpdateSpeaker {
     pictureUrl: String
     email: String
     speakerId: String!
-    eventId: String!
+    id: String!
 }
 
 input DeleteSpeaker {
     """
     Necessary for verifying user permissions
     """
-    eventId: String!
+    id: String!
     speakerId: String!
 }
 

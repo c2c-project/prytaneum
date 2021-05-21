@@ -6,8 +6,8 @@ import { register } from '@local/features/accounts/methods';
 /**
  * given a user id and event id, determine if the user is a moderator
  */
-async function isModerator(userId: string, eventId: string, prisma: PrismaClient) {
-    const result = await prisma.eventModerator.findUnique({ where: { eventId_userId: { userId, eventId } } });
+async function isModerator(userId: string, id: string, prisma: PrismaClient) {
+    const result = await prisma.eventModerator.findUnique({ where: { id_userId: { userId, id } } });
     return Boolean(result);
 }
 
@@ -20,10 +20,10 @@ export async function hideQuestionById(userId: Maybe<string>, prisma: PrismaClie
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { questionId, eventId, toggleTo } = input;
+    const { questionId, id, toggleTo } = input;
 
     // permission check
-    const hasPermission = await isModerator(userId, eventId, prisma);
+    const hasPermission = await isModerator(userId, id, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
     return prisma.eventQuestion.update({
@@ -45,10 +45,10 @@ export async function reorderQuestion(userId: Maybe<string>, prisma: PrismaClien
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { questionId, eventId, position } = input;
+    const { questionId, id, position } = input;
 
     // permission check
-    const hasPermission = await isModerator(userId, eventId, prisma);
+    const hasPermission = await isModerator(userId, id, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
     return prisma.eventQuestion.update({
@@ -69,11 +69,11 @@ export async function addModerator(userId: Maybe<string>, prisma: PrismaClient, 
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { eventId, email } = input;
+    const { id, email } = input;
 
     // permission check
     const memberResults = await prisma.event.findUnique({
-        where: { eventId },
+        where: { id },
         select: { organization: { select: { members: { where: { userId } } } } },
     });
     const hasPermissions = memberResults?.organization.members.find(({ userId: memberId }) => memberId === userId);
@@ -92,7 +92,7 @@ export async function addModerator(userId: Maybe<string>, prisma: PrismaClient, 
     return prisma.eventModerator.create({
         data: {
             userId: modUserId,
-            eventId,
+            id,
         },
     });
 }
@@ -102,8 +102,8 @@ export async function addModerator(userId: Maybe<string>, prisma: PrismaClient, 
  * TODO: some sort of validation? it doesn't make sense to do this here really?
  * how do we know only a moderator is getting this info? maybe in the context?
  */
-export async function isEventRelevant(eventId: string, prisma: PrismaClient, feedbackId: string) {
-    const result = await prisma.eventLiveFeedback.findFirst({ where: { eventId, feedbackId } });
+export async function isEventRelevant(id: string, prisma: PrismaClient, feedbackId: string) {
+    const result = await prisma.eventLiveFeedback.findFirst({ where: { id, feedbackId } });
     return Boolean(result);
 }
 
@@ -113,16 +113,16 @@ export async function isEventRelevant(eventId: string, prisma: PrismaClient, fee
 export async function changeCurrentQuestion(
     userId: Maybe<string>,
     prisma: PrismaClient,
-    eventId: string,
+    id: string,
     change: 1 | -1
 ) {
     if (!userId) throw new Error(errors.noLogin);
 
-    const hasPermission = await isModerator(userId, eventId, prisma);
+    const hasPermission = await isModerator(userId, id, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
     const result = await prisma.event.update({
-        where: { eventId },
+        where: { id },
         data: { currentQuestion: { increment: change } },
         select: { currentQuestion: true },
     });

@@ -5,8 +5,8 @@ import * as Question from './methods';
 
 export const resolvers: Resolvers = {
     Query: {
-        questionsByEventId(parent, args, ctx, info) {
-            return Question.questionsByEventId(args.eventId, ctx.prisma);
+        questionsByid(parent, args, ctx, info) {
+            return Question.questionsByid(args.id, ctx.prisma);
         },
     },
     Mutation: {
@@ -36,14 +36,14 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ likeCountChanged: Like }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
                 (payload, args, ctx) =>
-                    Question.doesEventMatch(args.eventId, payload.likeCountChanged.question.questionId, ctx.prisma)
+                    Question.doesEventMatch(args.id, payload.likeCountChanged.question.questionId, ctx.prisma)
             ),
         },
         eventQuestionCreated: {
             subscribe: withFilter<{ eventQuestionCreated: EventQuestion }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
                 (payload, args, ctx) =>
-                    Question.doesEventMatch(args.eventId, payload.eventQuestionCreated.questionId, ctx.prisma)
+                    Question.doesEventMatch(args.id, payload.eventQuestionCreated.questionId, ctx.prisma)
             ),
         },
     },

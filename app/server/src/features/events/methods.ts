@@ -6,8 +6,8 @@ import { errors, filterOutUndefined } from '@local/features/utils';
 /**
  * get a specific event by its id
  */
-export async function eventById(prisma: PrismaClient, eventId: string) {
-    return prisma.event.findUnique({ where: { eventId } });
+export async function eventById(prisma: PrismaClient, id: string) {
+    return prisma.event.findUnique({ where: { id } });
 }
 
 /**
@@ -32,7 +32,7 @@ type Settings = Omit<
     | 'startDateTime'
     | 'endDateTime'
     | 'orgId'
-    | 'eventId'
+    | 'id'
     | 'createdAt'
     | 'updatedAt'
     | 'currentQuestion'
@@ -75,7 +75,7 @@ export async function createEvent(userId: Maybe<string>, prisma: PrismaClient, i
 /**
  * general permission check if the user can update
  */
-export async function canUserModify(userId: string, eventId: string, prisma: PrismaClient) {
+export async function canUserModify(userId: string, id: string, prisma: PrismaClient) {
     const queryResult = await prisma.event.findUnique({
         select: {
             organization: {
@@ -88,7 +88,7 @@ export async function canUserModify(userId: string, eventId: string, prisma: Pri
                 },
             },
         },
-        where: { eventId },
+        where: { id },
     });
     const _isMember = queryResult ? queryResult.organization.members.length > 0 : false;
     return _isMember;
@@ -102,7 +102,7 @@ export async function updateEvent(userId: Maybe<string>, prisma: PrismaClient, i
     if (!input) throw new Error(errors.invalidArgs);
 
     // check if user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
+    if (!canUserModify(userId, input.id, prisma)) throw new Error(errors.permissions);
 
     // get only the keys the user is trying to update
     // if for some reason the client passes a falsy value, we must filter it out
@@ -110,7 +110,7 @@ export async function updateEvent(userId: Maybe<string>, prisma: PrismaClient, i
     // for our application
     const updatedValues = filterOutUndefined(input);
 
-    return prisma.event.update({ where: { eventId: input.eventId }, data: { ...updatedValues } });
+    return prisma.event.update({ where: { id: input.id }, data: { ...updatedValues } });
 }
 
 /**
@@ -121,9 +121,9 @@ export async function deleteEvent(userId: Maybe<string>, prisma: PrismaClient, i
     if (!input) throw new Error(errors.invalidArgs);
 
     // check if the user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
+    if (!canUserModify(userId, input.id, prisma)) throw new Error(errors.permissions);
 
-    return prisma.event.delete({ where: { eventId: input.eventId } });
+    return prisma.event.delete({ where: { id: input.id } });
 }
 
 /**
@@ -136,29 +136,29 @@ export async function findPublicEvents(prisma: PrismaClient) {
 /**
  * find the speakers for the given event
  */
-export async function findSpeakersByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventSpeaker.findMany({ where: { eventId } });
+export async function findSpeakersByEventId(id: string, prisma: PrismaClient) {
+    return prisma.eventSpeaker.findMany({ where: { eventId: id } });
 }
 
 /**
  * find the videos for the given event
  */
-export async function findVideosByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventVideo.findMany({ where: { eventId } });
+export async function findVideosByEventId(id: string, prisma: PrismaClient) {
+    return prisma.eventVideo.findMany({ where: { eventId: id } });
 }
 
 /**
  * find moderators for a the given event
  */
-export async function findModeratorsByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventModerator.findMany({ where: { eventId } });
+export async function findModeratorsByEventId(id: string, prisma: PrismaClient) {
+    return prisma.eventModerator.findMany({ where: { eventId: id } });
 }
 
 /**
  * find an organization based on the event (probably inefficient)
  */
-export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
-    const result = await prisma.event.findUnique({ where: { eventId }, select: { organization: true } });
+export async function findOrgByid(id: string, prisma: PrismaClient) {
+    const result = await prisma.event.findUnique({ where: { id }, select: { organization: true } });
 
     if (!result) return null;
 
@@ -166,10 +166,10 @@ export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
 }
 
 /**
- * find questions by eventId
+ * find questions by id
  */
-export async function findQuestionsByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventQuestion.findMany({ where: { eventId } });
+export async function findQuestionsByid(id: string, prisma: PrismaClient) {
+    return prisma.eventQuestion.findMany({ where: { eventId: id } });
 }
 
 /**
@@ -178,14 +178,14 @@ export async function findQuestionsByEventId(eventId: string, prisma: PrismaClie
 export async function changeEventStatus(
     userId: Maybe<string>,
     prisma: PrismaClient,
-    eventId: Maybe<string>,
+    id: Maybe<string>,
     status: boolean
 ) {
     if (!userId) throw new Error(errors.noLogin);
-    if (!eventId) throw new Error(errors.invalidArgs);
+    if (!id) throw new Error(errors.invalidArgs);
 
-    const hasPermission = await canUserModify(userId, eventId, prisma);
+    const hasPermission = await canUserModify(userId, id, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
-    return prisma.event.update({ where: { eventId }, data: { isActive: status } });
+    return prisma.event.update({ where: { id }, data: { isActive: status } });
 }

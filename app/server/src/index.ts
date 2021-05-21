@@ -36,6 +36,7 @@ server.register(cookie, {
 } as FastifyCookieOptions);
 
 server.register(AltairFastify);
+
 function verifyEnv() {
     if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
     if (process.env.NODE_ENV === 'production') {

@@ -1,5 +1,5 @@
 type Event {
-    eventId: ID!
+    id: ID!
 
     """
     Creator of this event
@@ -106,11 +106,11 @@ input UpdateEvent {
     isCollectRatingsEnabled: Boolean
     isForumEnabled: Boolean
     isPrivate: Boolean
-    eventId: String!
+    id: String!
 }
 
 input DeleteEvent {
-    eventId: String!
+    id: String!
 }
 
 type Mutation {
@@ -121,12 +121,12 @@ type Mutation {
     """
     Start the event so that it is "live"
     """
-    startEvent(eventId: String!): Event
+    startEvent(id: String!): Event
 
     """
     End the eent so that it is not live
     """
-    endEvent(eventId: String!): Event
+    endEvent(id: String!): Event
 }
 
 type Query {
@@ -142,5 +142,5 @@ type Query {
 }
 
 type Subscription {
-    questionPosition(eventId: ID!): Int!
+    questionPosition(id: ID!): Int!
 }

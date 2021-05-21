@@ -1,6 +1,6 @@
 input HideQuestion {
     questionId: ID!
-    eventId: ID!
+    id: ID!
 
     """
     Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
@@ -11,12 +11,12 @@ input HideQuestion {
 input ReorderQuestion {
     questionId: ID!
     position: Int!
-    eventId: ID!
+    id: ID!
 }
 
 input AddModerator {
     email: String!
-    eventId: String!
+    id: String!
 }
 
 type Mutation {
@@ -31,17 +31,17 @@ type Mutation {
     """
     Advance the current question
     """
-    nextQuestion(eventId: ID!): Int!
+    nextQuestion(id: ID!): Int!
 
     """
     Go to the previous question
     """
-    prevQuestion(eventId: ID!): Int!
+    prevQuestion(id: ID!): Int!
 }
 
 type Subscription {
     """
     New messages as feedback is given
     """
-    eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback
+    eventLiveFeedbackCreated(id: ID!): EventLiveFeedback
 }

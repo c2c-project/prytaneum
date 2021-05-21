@@ -21,27 +21,27 @@ export const resolvers: Resolvers = {
             return Event.deleteEvent(ctx.userId, ctx.prisma, args.event);
         },
         startEvent(parent, args, ctx, info) {
-            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.eventId, true);
+            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.id, true);
         },
         endEvent(parent, args, ctx, info) {
-            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.eventId, false);
+            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.id, false);
         },
     },
     Event: {
         speakers(parent, args, ctx, info) {
-            return Event.findSpeakersByEventId(parent.eventId, ctx.prisma);
+            return Event.findSpeakersByEventId(parent.id, ctx.prisma);
         },
         videos(parent, args, ctx, info) {
-            return Event.findVideosByEventId(parent.eventId, ctx.prisma);
+            return Event.findVideosByEventId(parent.id, ctx.prisma);
         },
         moderators(parent, args, ctx, info) {
-            return Event.findModeratorsByEventId(parent.eventId, ctx.prisma);
+            return Event.findModeratorsByEventId(parent.id, ctx.prisma);
         },
         organization(parent, args, ctx, info) {
-            return Event.findOrgByEventId(parent.eventId, ctx.prisma);
+            return Event.findOrgByid(parent.id, ctx.prisma);
         },
         questions(parent, args, ctx, info) {
-            return Event.findQuestionsByEventId(parent.eventId, ctx.prisma);
+            return Event.findQuestionsByid(parent.id, ctx.prisma);
         },
     },
 };

@@ -14,10 +14,10 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { email, eventId, name, description, title, pictureUrl } = input;
+    const { email, id, name, description, title, pictureUrl } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, eventId, prisma);
+    const hasPermissions = await canUserModify(userId, id, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     // find user by email
@@ -32,7 +32,7 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
 
     return prisma.eventSpeaker.create({
         data: {
-            eventId,
+            id,
             name,
             description,
             title,
@@ -47,10 +47,10 @@ export async function updateSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { speakerId, eventId, title, description, pictureUrl, name } = input;
+    const { speakerId, id, title, description, pictureUrl, name } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, eventId, prisma);
+    const hasPermissions = await canUserModify(userId, id, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.update({
@@ -70,10 +70,10 @@ export async function deleteSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { eventId, speakerId } = input;
+    const { id, speakerId } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, eventId, prisma);
+    const hasPermissions = await canUserModify(userId, id, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.delete({

@@ -10,10 +10,18 @@ export async function addVideo(userId: Maybe<string>, prisma: PrismaClient, inpu
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const hasPermissions = await canUserModify(userId, input.eventId, prisma);
+    const { eventId, lang, url } = input;
+
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
-    return prisma.eventVideo.create({ data: input });
+    return prisma.eventVideo.create({
+        data: {
+            lang,
+            url,
+            eventId,
+        },
+    });
 }
 
 /**
@@ -23,10 +31,12 @@ export async function removeVideo(userId: Maybe<string>, prisma: PrismaClient, i
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const hasPermissions = await canUserModify(userId, input.eventId, prisma);
+    const { eventId, id } = input;
+
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
-    return prisma.eventVideo.delete({ where: { eventId_url: { eventId: input.eventId, url: input.url } } });
+    return prisma.eventVideo.delete({ where: { id } });
 }
 
 /**
@@ -36,7 +46,9 @@ export async function updateVideo(userId: Maybe<string>, prisma: PrismaClient, i
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const hasPermissions = await canUserModify(userId, input.eventId, prisma);
+    const { eventId, videoId } = input;
+
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     const data: Record<string, string> = {};
@@ -44,7 +56,7 @@ export async function updateVideo(userId: Maybe<string>, prisma: PrismaClient, i
     if (input.lang) data.lang = input.lang;
 
     return prisma.eventVideo.update({
-        where: { eventId_url: { eventId: input.eventId, url: input.url } },
+        where: { id: videoId },
         data,
     });
 }

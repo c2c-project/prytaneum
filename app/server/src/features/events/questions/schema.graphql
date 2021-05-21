@@ -58,7 +58,7 @@ input CreateQuestion {
     isQuote: Boolean
     isFollowUp: Boolean
     refQuestion: ID
-    eventId: ID!
+    id: ID!
 }
 
 input AlterLike {
@@ -76,10 +76,10 @@ type Mutation {
 }
 
 type Subscription {
-    eventQuestionCreated(eventId: ID!): EventQuestion!
-    likeCountChanged(eventId: ID!): Like!
+    eventQuestionCreated(id: ID!): EventQuestion!
+    likeCountChanged(id: ID!): Like!
 }
 
 type Query {
-    questionsByEventId(eventId: ID!): [EventQuestion!]
+    questionsByid(id: ID!): [EventQuestion!]
 }
