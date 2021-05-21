@@ -14,10 +14,10 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { email, id, name, description, title, pictureUrl } = input;
+    const { email, name, description, title, pictureUrl, eventId } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, id, prisma);
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     // find user by email
@@ -32,7 +32,7 @@ export async function createSpeaker(userId: Maybe<string>, prisma: PrismaClient,
 
     return prisma.eventSpeaker.create({
         data: {
-            id,
+            eventId,
             name,
             description,
             title,
@@ -47,15 +47,15 @@ export async function updateSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!input) throw new Error(errors.invalidArgs);
 
     // unpack
-    const { speakerId, id, title, description, pictureUrl, name } = input;
+    const { id, eventId, title, description, pictureUrl, name } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, id, prisma);
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.update({
         where: {
-            speakerId,
+            id,
         },
         data: {
             title: title || undefined,
@@ -70,15 +70,15 @@ export async function deleteSpeaker(userId: Maybe<string>, prisma: PrismaClient,
     if (!userId) throw new Error(errors.noLogin);
     if (!input) throw new Error(errors.invalidArgs);
 
-    const { id, speakerId } = input;
+    const { id, eventId } = input;
 
     // permission check
-    const hasPermissions = await canUserModify(userId, id, prisma);
+    const hasPermissions = await canUserModify(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.delete({
         where: {
-            speakerId,
+            id,
         },
     });
 }

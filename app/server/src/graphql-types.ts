@@ -432,12 +432,12 @@ export type AlterLike = {
 
 export type EventSpeaker = {
     __typename?: 'EventSpeaker';
-    /** Speaker id */
-    speakerId: Scalars['String'];
+    /** Speaker eventId */
+    id: Scalars['String'];
     /** email of the speaker */
     email?: Maybe<Scalars['String']>;
-    /** Event id that this user is speaking at */
-    id?: Maybe<Scalars['ID']>;
+    /** Event eventId that this user is speaking at */
+    eventId?: Maybe<Scalars['ID']>;
     /** The related user account associated with the speaker */
     user?: Maybe<User>;
     /** Name set by the organizer of the event */
@@ -451,7 +451,7 @@ export type EventSpeaker = {
 };
 
 export type SpeakerForm = {
-    id: Scalars['String'];
+    eventId: Scalars['String'];
     name: Scalars['String'];
     title: Scalars['String'];
     description: Scalars['String'];
@@ -466,14 +466,14 @@ export type UpdateSpeaker = {
     description?: Maybe<Scalars['String']>;
     pictureUrl?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
-    speakerId: Scalars['String'];
     id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type DeleteSpeaker = {
     /** Necessary for verifying user permissions */
+    eventId: Scalars['String'];
     id: Scalars['String'];
-    speakerId: Scalars['String'];
 };
 
 export type EventVideo = {
@@ -992,9 +992,9 @@ export type EventSpeakerResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
 > = {
-    speakerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    eventId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1138,9 +1138,9 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventSpeaker?: {
-        speakerId?: LoaderResolver<Scalars['String'], EventSpeaker, {}, TContext>;
+        id?: LoaderResolver<Scalars['String'], EventSpeaker, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
-        id?: LoaderResolver<Maybe<Scalars['ID']>, EventSpeaker, {}, TContext>;
+        eventId?: LoaderResolver<Maybe<Scalars['ID']>, EventSpeaker, {}, TContext>;
         user?: LoaderResolver<Maybe<User>, EventSpeaker, {}, TContext>;
         name?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         description?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;

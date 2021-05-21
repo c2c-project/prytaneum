@@ -139,7 +139,7 @@ model EventModerator {
 }
 
 model EventSpeaker {
-    speakerId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
     email String @db.VarChar(320)
     name String @db.VarChar(100)
