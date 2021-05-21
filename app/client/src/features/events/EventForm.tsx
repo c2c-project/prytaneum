@@ -40,7 +40,7 @@ interface CreateProps {
 
 interface UpdateProps {
     variant: 'update';
-    eventId: string;
+    id: string;
     orgId?: never;
     form: Omit<FormType, 'orgId'>;
 }
@@ -95,7 +95,7 @@ export function EventForm(props: EventFormProps) {
                 const createInput = { ...form, orgId: props.orgId };
                 createEvent({ variables: { input: createInput } });
             } else {
-                const updateInput = { ...form, eventId: props.eventId };
+                const updateInput = { ...form, id: props.id };
                 updateEvent({ variables: { input: updateInput } });
             }
         },

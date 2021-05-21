@@ -1,6 +1,6 @@
-query EventSettings($input: ID!) {
+query FullEventSettings($input: ID!) {
     eventById(id: $input) {
-        eventId
+        id
         ...EventDetails
         ...EventSettings
         ...EventSpeakers
@@ -11,7 +11,7 @@ query EventSettings($input: ID!) {
 
 mutation UpdateEvent($input: UpdateEvent) {
     updateEvent(event: $input) {
-        eventId
+        id
         title
         startDateTime
         endDateTime

@@ -1,2 +1,2 @@
 export * from './SpeakerList';
-export * from './EventSettings';
+export { EventSettings as SpeakerEventSettings } from './EventSettings';

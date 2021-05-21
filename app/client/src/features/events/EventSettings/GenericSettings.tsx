@@ -1,10 +1,15 @@
 import * as React from 'react';
 import { Switch } from '@material-ui/core';
+import { graphql, useFragment, useMutation } from 'react-relay';
 
-import { Event, useUpdateEventMutation } from '@local/graphql-types';
+import type {
+    GenericSettingsFragment$key,
+    GenericSettingsFragment,
+} from '@local/__generated__/GenericSettingsFragment.graphql';
+
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useSnack, useEvent } from '@local/hooks';
+import { useSnack } from '@local/hooks';
 
 const HELPT_TEXT = {
     isQuestionFeedVisible:
@@ -17,40 +22,47 @@ const HELPT_TEXT = {
         "When turned on, data from the event seeds an online forum.  Useful for coming back and answering questions speaker(s) weren't able to answer during the event.",
 };
 
-type Settings = Pick<Event, 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>;
-
 export interface EventSettingsProps {
     className?: string;
+    fragmentRef: GenericSettingsFragment$key;
 }
 
-export const GenericSettings = ({ className }: EventSettingsProps) => {
+export const GENERIC_SETTINGS_FRAGMENT = graphql`
+    fragment GenericSettingsFragment on Event {
+        id
+        isQuestionFeedVisible
+        isCollectRatingsEnabled
+        isForumEnabled
+        isPrivate
+    }
+`;
+
+export const GENERIC_SETTINGS_MUTATION = graphql`
+    mutation GenericSettingsMutation($input: UpdateEvent) {
+        updateEvent(event: $input) {
+            ...GenericSettingsFragment
+        }
+    }
+`;
+
+export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) => {
     const [snack] = useSnack();
-    const [event, , setEvent] = useEvent();
-    const { isQuestionFeedVisible, isCollectRatingsEnabled, isForumEnabled, isPrivate, eventId } = event;
+    const { isQuestionFeedVisible, isCollectRatingsEnabled, isForumEnabled, isPrivate, id } = useFragment(
+        GENERIC_SETTINGS_FRAGMENT,
+        fragmentRef
+    );
 
-    const [updateEvent] = useUpdateEventMutation({
-        onCompleted(results) {
-            if (results.updateEvent) {
-                const newEvent = results.updateEvent;
-                setEvent((prev) => ({
-                    ...prev,
-                    isQuestionFeedVisible: Boolean(newEvent.isQuestionFeedVisible),
-                    isForumEnabled: Boolean(newEvent.isForumEnabled),
-                    isPrivate: Boolean(newEvent.isPrivate),
-                    isCollectRatingsEnabled: Boolean(newEvent.isCollectRatingsEnabled),
-                }));
-            }
-        },
-        onError() {
-            snack('Something went wrong :(');
-        },
-    });
+    const [commit] = useMutation(GENERIC_SETTINGS_MUTATION);
 
-    function handleChange(key: keyof Settings) {
+    function handleChange(key: keyof GenericSettingsFragment) {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
             const { checked } = e.target;
-            setEvent((prev) => ({ ...prev, [key]: checked }));
-            updateEvent({ variables: { input: { [key]: checked, eventId } } });
+            commit({
+                variables: { input: { [key]: checked, id } },
+                onError() {
+                    snack('Something went wrong :(');
+                },
+            });
         };
     }
 

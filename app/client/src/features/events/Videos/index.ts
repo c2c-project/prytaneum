@@ -1,1 +1,2 @@
-export * from './EventSettings';
+export * from './VideoEventSettings';
+export * from './CreateVideo';

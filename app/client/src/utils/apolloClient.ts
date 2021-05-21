@@ -20,7 +20,7 @@ function createApolloClient() {
     const cache = new InMemoryCache({
         typePolicies: {
             Event: {
-                keyFields: ['eventId'],
+                keyFields: ['id'],
             },
             User: {
                 keyFields: ['userId'],

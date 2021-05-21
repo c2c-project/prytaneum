@@ -19,7 +19,9 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-        "@local/*": ["./src/*"]
+      "@local/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [

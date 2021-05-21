@@ -29,6 +29,7 @@ const plugins = [
         },
         'lab',
     ],
+    ['relay', { artifactDirectory: './src/__generated__' }],
 ];
 
 const presets = ['next/babel'];

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
+import { graphql, useFragment } from 'react-relay';
 
+import { OrgMemberListFragment$key } from '@local/__generated__/OrgMemberListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { User } from '@local/graphql-types';
 
 interface OrgMemberListProps {
-    members?: User[];
+    fragmentRef: OrgMemberListFragment$key;
     className?: string;
     orgId: string;
 }
@@ -29,8 +30,19 @@ const NewEvent = () => {
     );
 };
 
-export function OrgMemberList({ members: _members = [], className, orgId }: OrgMemberListProps) {
-    const [members, setMembers] = React.useState(_members);
+export const ORG_MEMBERS = graphql`
+    fragment OrgMemberListFragment on Organization {
+        members {
+            userId
+            firstName
+            lastName
+        }
+    }
+`;
+
+export function OrgMemberList({ fragmentRef, className, orgId }: OrgMemberListProps) {
+    const data = useFragment(ORG_MEMBERS, fragmentRef);
+    const [members, setMembers] = React.useState(data.members ?? []);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
 

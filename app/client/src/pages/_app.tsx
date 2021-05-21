@@ -6,7 +6,9 @@ import { Provider } from 'react-redux';
 import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import Head from 'next/head';
+import { RelayEnvironmentProvider } from 'react-relay';
 
+import { useEnvironment } from '@local/utils/relay-environment';
 import { useApollo } from '@local/utils/apolloClient';
 import { useStore } from '@local/reducers/store';
 import { UserProvider } from '@local/contexts/User';
@@ -17,6 +19,7 @@ import '@local/index.css';
 
 export default function App({ Component, pageProps }: AppProps) {
     const apolloClient = useApollo(pageProps);
+    const environment = useEnvironment(pageProps.initialRecords);
     const store = useStore(pageProps.initialReduxState);
     React.useEffect(() => {
         // Remove the server-side injected CSS.
@@ -31,22 +34,27 @@ export default function App({ Component, pageProps }: AppProps) {
             <Head>
                 <title>Prytaneum</title>
             </Head>
-            <ApolloProvider client={apolloClient}>
-                <ThemeProvider>
-                    <CssBaseline />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <SnackContext maxSnack={1}>
-                            <UserProvider>
-                                <Layout hideSideNav={pageProps.hideSideNav} ContainerProps={pageProps.containerProps}>
-                                    <Provider store={store}>
-                                        <Component {...pageProps} />
-                                    </Provider>
-                                </Layout>
-                            </UserProvider>
-                        </SnackContext>
-                    </MuiPickersUtilsProvider>
-                </ThemeProvider>
-            </ApolloProvider>
+            <RelayEnvironmentProvider environment={environment}>
+                <ApolloProvider client={apolloClient}>
+                    <ThemeProvider>
+                        <CssBaseline />
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <SnackContext maxSnack={1}>
+                                <UserProvider>
+                                    <Layout
+                                        hideSideNav={pageProps.hideSideNav}
+                                        ContainerProps={pageProps.containerProps}
+                                    >
+                                        <Provider store={store}>
+                                            <Component {...pageProps} />
+                                        </Provider>
+                                    </Layout>
+                                </UserProvider>
+                            </SnackContext>
+                        </MuiPickersUtilsProvider>
+                    </ThemeProvider>
+                </ApolloProvider>
+            </RelayEnvironmentProvider>
         </>
     );
 }

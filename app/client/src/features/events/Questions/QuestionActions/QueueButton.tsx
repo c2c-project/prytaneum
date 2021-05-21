@@ -17,7 +17,7 @@ interface Props {
 function QueueButton({ questionId, isQueued }: Props) {
     // const endpoint = React.useCallback(() => addToQueue(townhallId, questionId), [townhallId, questionId]);
     // const [run] = useEndpoint(endpoint);
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
     return (
         <Button
             fullWidth

@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 export interface AccordionData {
     title: string;
     description: string;
-    component: JSX.Element | ((b: boolean) => JSX.Element);
+    component: JSX.Element | ((b: boolean) => JSX.Element) | null;
 }
 
 interface Props {
@@ -138,24 +138,27 @@ export default function SettingsMenu({ config, title }: Props) {
                             <AccordionDetails>{getDetails(component, sectionTitle)}</AccordionDetails>
                         </Accordion>
                     ))} */}
-                    {config.map(({ title: sectionTitle, description, component }, idx) => (
-                        <Grid container className={classes.container} key={sectionTitle}>
-                            <Grid item xs={12} className={classes.componentTitle}>
-                                <Typography variant='h5'>{sectionTitle}</Typography>
-                                <Typography variant='body2' color='textSecondary'>
-                                    {description}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12} className={classes.componentItem}>
-                                {getDetails(component, sectionTitle)}
-                            </Grid>
-                            {idx !== config.length - 1 && (
-                                <Grid item xs={12}>
-                                    <Divider className={classes.componentDivider} />
+                    {config.map(
+                        ({ title: sectionTitle, description, component }, idx) =>
+                            component && (
+                                <Grid container className={classes.container} key={sectionTitle}>
+                                    <Grid item xs={12} className={classes.componentTitle}>
+                                        <Typography variant='h5'>{sectionTitle}</Typography>
+                                        <Typography variant='body2' color='textSecondary'>
+                                            {description}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} className={classes.componentItem}>
+                                        {getDetails(component, sectionTitle)}
+                                    </Grid>
+                                    {idx !== config.length - 1 && (
+                                        <Grid item xs={12}>
+                                            <Divider className={classes.componentDivider} />
+                                        </Grid>
+                                    )}
                                 </Grid>
-                            )}
-                        </Grid>
-                    ))}
+                            )
+                    )}
                 </Grid>
             </Grid>
         </div>

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 function FeedList({ questions, variant, systemMessages, className }: Props) {
     const [user] = useUser();
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
     const isModerator = React.useMemo(() => variant === 'moderator', [variant]);
     const classes = useStyles();
     const [dialogContent, setDialogContent] = React.useState<JSX.Element | null>(null);
@@ -70,7 +70,7 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
                                 <CardActions className={classes.questionActions}>
                                     {!isModerator && (
                                         <Like
-                                            eventId={eventId}
+                                            id={id}
                                             questionId={questionId}
                                             // liked={
                                             //     (user && question.likes.includes(user._id)) || liked.has(question._id)

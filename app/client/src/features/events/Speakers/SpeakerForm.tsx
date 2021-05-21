@@ -29,7 +29,7 @@ interface CreateVideoProps {
 
 interface UpdateVideoProps {
     variant: 'update';
-    form: Omit<CreateType, 'eventId'>;
+    form: Omit<CreateType, 'id'>;
     speakerId: string;
 }
 
@@ -41,22 +41,22 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const initialState: Omit<CreateType, 'eventId'> = { title: '', description: '', pictureUrl: '', name: '', email: '' };
+const initialState: Omit<CreateType, 'id'> = { title: '', description: '', pictureUrl: '', name: '', email: '' };
 
 export function SpeakerForm({ form = initialState, speakerId = '', onSubmit, variant }: SpeakerFormProps) {
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
     const [state, errors, handleSubmit, handleChange] = useForm(form);
     const classes = useStyles();
 
     const [addSpeaker, { loading: isAddLoading }] = useAddSpeakerMutation({
-        variables: { input: { ...state, eventId } },
+        variables: { input: { ...state, id } },
         onCompleted(results) {
             if (results.addSpeaker) onSubmit(results.addSpeaker);
         },
     });
 
     const [updateSpeaker, { loading: isUpdateLoading }] = useUpdateSpeakerMutation({
-        variables: { input: { ...state, eventId, speakerId } },
+        variables: { input: { ...state, id, speakerId } },
         onCompleted(results) {
             if (results.updateSpeaker) onSubmit(results.updateSpeaker);
         },

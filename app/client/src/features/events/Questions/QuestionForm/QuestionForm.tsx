@@ -21,7 +21,7 @@ interface Props {
 export function QuestionForm({ quote, onSubmit, onCancel }: Props) {
     // context & snack
     const [snack] = useSnack();
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
 
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
@@ -33,7 +33,7 @@ export function QuestionForm({ quote, onSubmit, onCancel }: Props) {
             input: {
                 ...form,
                 refQuestion: quote?.questionId,
-                eventId,
+                id,
             },
         },
         onCompleted() {

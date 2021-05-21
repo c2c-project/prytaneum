@@ -15,7 +15,7 @@ query OrgInfo($id: ID!) {
             lastName
         }
         events {
-            eventId
+            id
             title
             topic
             startDateTime

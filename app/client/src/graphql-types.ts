@@ -18,7 +18,7 @@ export type Scalars = {
 
 export type AddModerator = {
   email: Scalars['String'];
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type AlterLike = {
@@ -50,7 +50,7 @@ export type CreateQuestion = {
   isQuote?: Maybe<Scalars['Boolean']>;
   isFollowUp?: Maybe<Scalars['Boolean']>;
   refQuestion?: Maybe<Scalars['ID']>;
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 export type CreateVideo = {
@@ -61,7 +61,7 @@ export type CreateVideo = {
 
 
 export type DeleteEvent = {
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 /** Information necessary for deleting an org */
@@ -71,18 +71,18 @@ export type DeleteOrg = {
 
 export type DeleteSpeaker = {
   /** Necessary for verifying user permissions */
-  eventId: Scalars['String'];
+  id: Scalars['String'];
   speakerId: Scalars['String'];
 };
 
 export type DeleteVideo = {
-  url: Scalars['String'];
   eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type Event = {
   __typename?: 'Event';
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
   /** Creator of this event */
   createdBy?: Maybe<User>;
   /** The owning organization */
@@ -174,7 +174,7 @@ export type EventSpeaker = {
   /** email of the speaker */
   email?: Maybe<Scalars['String']>;
   /** Event id that this user is speaking at */
-  eventId?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['ID']>;
   /** The related user account associated with the speaker */
   user?: Maybe<User>;
   /** Name set by the organizer of the event */
@@ -189,6 +189,7 @@ export type EventSpeaker = {
 
 export type EventVideo = {
   __typename?: 'EventVideo';
+  id: Scalars['String'];
   url: Scalars['String'];
   lang: Scalars['String'];
   event?: Maybe<Event>;
@@ -196,7 +197,7 @@ export type EventVideo = {
 
 export type HideQuestion = {
   questionId: Scalars['ID'];
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
   /** Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise. */
   toggleTo: Scalars['Boolean'];
 };
@@ -304,7 +305,7 @@ export type MutationDeleteOrganizationByIdArgs = {
 
 
 export type MutationEndEventArgs = {
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 
@@ -319,12 +320,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationNextQuestionArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationPrevQuestionArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
@@ -349,7 +350,7 @@ export type MutationReorderQueueArgs = {
 
 
 export type MutationStartEventArgs = {
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 
@@ -406,7 +407,7 @@ export type Query = {
   myOrgs?: Maybe<Array<Organization>>;
   /** Fetch data about a particular org */
   orgById?: Maybe<Organization>;
-  questionsByEventId?: Maybe<Array<EventQuestion>>;
+  questionsByid?: Maybe<Array<EventQuestion>>;
 };
 
 
@@ -420,8 +421,8 @@ export type QueryOrgByIdArgs = {
 };
 
 
-export type QueryQuestionsByEventIdArgs = {
-  eventId: Scalars['ID'];
+export type QueryQuestionsByidArgs = {
+  id: Scalars['ID'];
 };
 
 export type RegistrationForm = {
@@ -435,11 +436,11 @@ export type RegistrationForm = {
 export type ReorderQuestion = {
   questionId: Scalars['ID'];
   position: Scalars['Int'];
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 export type SpeakerForm = {
-  eventId: Scalars['String'];
+  id: Scalars['String'];
   name: Scalars['String'];
   title: Scalars['String'];
   description: Scalars['String'];
@@ -459,22 +460,22 @@ export type Subscription = {
 
 
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
 export type SubscriptionEventQuestionCreatedArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
 export type SubscriptionLikeCountChangedArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
 export type SubscriptionQuestionPositionArgs = {
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 export type UpdateEvent = {
@@ -487,7 +488,7 @@ export type UpdateEvent = {
   isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
   isForumEnabled?: Maybe<Scalars['Boolean']>;
   isPrivate?: Maybe<Scalars['Boolean']>;
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 /** Information that may be updated by the user */
@@ -503,10 +504,11 @@ export type UpdateSpeaker = {
   pictureUrl?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   speakerId: Scalars['String'];
-  eventId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type UpdateVideo = {
+  videoId: Scalars['String'];
   eventId: Scalars['String'];
   url: Scalars['String'];
   newUrl?: Maybe<Scalars['String']>;
@@ -572,16 +574,16 @@ export type MyUserInfoQuery = (
   )> }
 );
 
-export type EventSettingsQueryVariables = Exact<{
+export type FullEventSettingsQueryVariables = Exact<{
   input: Scalars['ID'];
 }>;
 
 
-export type EventSettingsQuery = (
+export type FullEventSettingsQuery = (
   { __typename?: 'Query' }
   & { eventById?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'eventId'>
+    & Pick<Event, 'id'>
     & EventDetailsFragment
     & EventSettingsFragment
     & EventSpeakersFragment
@@ -599,7 +601,7 @@ export type UpdateEventMutation = (
   { __typename?: 'Mutation' }
   & { updateEvent?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'eventId' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>
+    & Pick<Event, 'id' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate'>
   )> }
 );
 
@@ -626,7 +628,7 @@ export type CreateQuestionMutation = (
 );
 
 export type NewQuestionsSubscriptionVariables = Exact<{
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -639,13 +641,13 @@ export type NewQuestionsSubscription = (
 );
 
 export type QuestionsQueryVariables = Exact<{
-  eventId: Scalars['ID'];
+  id: Scalars['ID'];
 }>;
 
 
 export type QuestionsQuery = (
   { __typename?: 'Query' }
-  & { questionsByEventId?: Maybe<Array<(
+  & { questionsByid?: Maybe<Array<(
     { __typename?: 'EventQuestion' }
     & QuestionCardFragment
   )>> }
@@ -660,7 +662,7 @@ export type AddSpeakerMutation = (
   { __typename?: 'Mutation' }
   & { addSpeaker?: Maybe<(
     { __typename?: 'EventSpeaker' }
-    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
+    & Pick<EventSpeaker, 'speakerId' | 'id' | 'name' | 'description' | 'title' | 'pictureUrl'>
   )> }
 );
 
@@ -673,7 +675,7 @@ export type RemoveSpeakerMutation = (
   { __typename?: 'Mutation' }
   & { removeSpeaker?: Maybe<(
     { __typename?: 'EventSpeaker' }
-    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
+    & Pick<EventSpeaker, 'speakerId' | 'id' | 'name' | 'description' | 'title' | 'pictureUrl'>
   )> }
 );
 
@@ -686,46 +688,7 @@ export type UpdateSpeakerMutation = (
   { __typename?: 'Mutation' }
   & { updateSpeaker?: Maybe<(
     { __typename?: 'EventSpeaker' }
-    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'description' | 'title' | 'pictureUrl'>
-  )> }
-);
-
-export type AddVideoMutationVariables = Exact<{
-  input: CreateVideo;
-}>;
-
-
-export type AddVideoMutation = (
-  { __typename?: 'Mutation' }
-  & { addVideo: (
-    { __typename?: 'EventVideo' }
-    & Pick<EventVideo, 'lang' | 'url'>
-  ) }
-);
-
-export type RemoveVideoMutationVariables = Exact<{
-  input: DeleteVideo;
-}>;
-
-
-export type RemoveVideoMutation = (
-  { __typename?: 'Mutation' }
-  & { removeVideo?: Maybe<(
-    { __typename?: 'EventVideo' }
-    & Pick<EventVideo, 'url'>
-  )> }
-);
-
-export type UpdateVideoMutationVariables = Exact<{
-  input: UpdateVideo;
-}>;
-
-
-export type UpdateVideoMutation = (
-  { __typename?: 'Mutation' }
-  & { updateVideo?: Maybe<(
-    { __typename?: 'EventVideo' }
-    & Pick<EventVideo, 'url' | 'lang'>
+    & Pick<EventSpeaker, 'speakerId' | 'id' | 'name' | 'description' | 'title' | 'pictureUrl'>
   )> }
 );
 
@@ -754,7 +717,7 @@ export type EventSpeakersFragment = (
   { __typename?: 'Event' }
   & { speakers?: Maybe<Array<(
     { __typename?: 'EventSpeaker' }
-    & Pick<EventSpeaker, 'speakerId' | 'eventId' | 'name' | 'title' | 'description' | 'pictureUrl' | 'email'>
+    & Pick<EventSpeaker, 'speakerId' | 'id' | 'name' | 'title' | 'description' | 'pictureUrl' | 'email'>
   )>> }
 );
 
@@ -772,7 +735,7 @@ export type CreateEventMutation = (
   { __typename?: 'Mutation' }
   & { createEvent?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+    & Pick<Event, 'id' | 'title' | 'topic' | 'startDateTime'>
   )> }
 );
 
@@ -783,7 +746,7 @@ export type EventListQuery = (
   { __typename?: 'Query' }
   & { events?: Maybe<Array<(
     { __typename?: 'Event' }
-    & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+    & Pick<Event, 'id' | 'title' | 'topic' | 'startDateTime'>
   )>> }
 );
 
@@ -813,7 +776,7 @@ export type OrgInfoQuery = (
       & Pick<User, 'userId' | 'firstName' | 'lastName'>
     )>>, events?: Maybe<Array<(
       { __typename?: 'Event' }
-      & Pick<Event, 'eventId' | 'title' | 'topic' | 'startDateTime'>
+      & Pick<Event, 'id' | 'title' | 'topic' | 'startDateTime'>
     )>> }
   )> }
 );
@@ -873,7 +836,7 @@ export const EventSpeakersFragmentDoc = gql`
     fragment EventSpeakers on Event {
   speakers {
     speakerId
-    eventId
+    id
     name
     title
     description
@@ -1036,10 +999,10 @@ export function useMyUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type MyUserInfoQueryHookResult = ReturnType<typeof useMyUserInfoQuery>;
 export type MyUserInfoLazyQueryHookResult = ReturnType<typeof useMyUserInfoLazyQuery>;
 export type MyUserInfoQueryResult = Apollo.QueryResult<MyUserInfoQuery, MyUserInfoQueryVariables>;
-export const EventSettingsDocument = gql`
-    query EventSettings($input: ID!) {
+export const FullEventSettingsDocument = gql`
+    query FullEventSettings($input: ID!) {
   eventById(id: $input) {
-    eventId
+    id
     ...EventDetails
     ...EventSettings
     ...EventSpeakers
@@ -1054,36 +1017,36 @@ ${EventVideosFragmentDoc}
 ${EventModeratorsFragmentDoc}`;
 
 /**
- * __useEventSettingsQuery__
+ * __useFullEventSettingsQuery__
  *
- * To run a query within a React component, call `useEventSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFullEventSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFullEventSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventSettingsQuery({
+ * const { data, loading, error } = useFullEventSettingsQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useEventSettingsQuery(baseOptions: Apollo.QueryHookOptions<EventSettingsQuery, EventSettingsQueryVariables>) {
+export function useFullEventSettingsQuery(baseOptions: Apollo.QueryHookOptions<FullEventSettingsQuery, FullEventSettingsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EventSettingsQuery, EventSettingsQueryVariables>(EventSettingsDocument, options);
+        return Apollo.useQuery<FullEventSettingsQuery, FullEventSettingsQueryVariables>(FullEventSettingsDocument, options);
       }
-export function useEventSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventSettingsQuery, EventSettingsQueryVariables>) {
+export function useFullEventSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FullEventSettingsQuery, FullEventSettingsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EventSettingsQuery, EventSettingsQueryVariables>(EventSettingsDocument, options);
+          return Apollo.useLazyQuery<FullEventSettingsQuery, FullEventSettingsQueryVariables>(FullEventSettingsDocument, options);
         }
-export type EventSettingsQueryHookResult = ReturnType<typeof useEventSettingsQuery>;
-export type EventSettingsLazyQueryHookResult = ReturnType<typeof useEventSettingsLazyQuery>;
-export type EventSettingsQueryResult = Apollo.QueryResult<EventSettingsQuery, EventSettingsQueryVariables>;
+export type FullEventSettingsQueryHookResult = ReturnType<typeof useFullEventSettingsQuery>;
+export type FullEventSettingsLazyQueryHookResult = ReturnType<typeof useFullEventSettingsLazyQuery>;
+export type FullEventSettingsQueryResult = Apollo.QueryResult<FullEventSettingsQuery, FullEventSettingsQueryVariables>;
 export const UpdateEventDocument = gql`
     mutation UpdateEvent($input: UpdateEvent) {
   updateEvent(event: $input) {
-    eventId
+    id
     title
     startDateTime
     endDateTime
@@ -1157,8 +1120,8 @@ export type CreateQuestionMutationHookResult = ReturnType<typeof useCreateQuesti
 export type CreateQuestionMutationResult = Apollo.MutationResult<CreateQuestionMutation>;
 export type CreateQuestionMutationOptions = Apollo.BaseMutationOptions<CreateQuestionMutation, CreateQuestionMutationVariables>;
 export const NewQuestionsDocument = gql`
-    subscription NewQuestions($eventId: ID!) {
-  eventQuestionCreated(eventId: $eventId) {
+    subscription NewQuestions($id: ID!) {
+  eventQuestionCreated(id: $id) {
     ...QuestionCard
   }
 }
@@ -1176,7 +1139,7 @@ export const NewQuestionsDocument = gql`
  * @example
  * const { data, loading, error } = useNewQuestionsSubscription({
  *   variables: {
- *      eventId: // value for 'eventId'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -1187,8 +1150,8 @@ export function useNewQuestionsSubscription(baseOptions: Apollo.SubscriptionHook
 export type NewQuestionsSubscriptionHookResult = ReturnType<typeof useNewQuestionsSubscription>;
 export type NewQuestionsSubscriptionResult = Apollo.SubscriptionResult<NewQuestionsSubscription>;
 export const QuestionsDocument = gql`
-    query Questions($eventId: ID!) {
-  questionsByEventId(eventId: $eventId) {
+    query Questions($id: ID!) {
+  questionsByid(id: $id) {
     ...QuestionCard
   }
 }
@@ -1206,7 +1169,7 @@ export const QuestionsDocument = gql`
  * @example
  * const { data, loading, error } = useQuestionsQuery({
  *   variables: {
- *      eventId: // value for 'eventId'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -1225,7 +1188,7 @@ export const AddSpeakerDocument = gql`
     mutation AddSpeaker($input: SpeakerForm) {
   addSpeaker(input: $input) {
     speakerId
-    eventId
+    id
     name
     description
     title
@@ -1263,7 +1226,7 @@ export const RemoveSpeakerDocument = gql`
     mutation removeSpeaker($input: DeleteSpeaker) {
   removeSpeaker(input: $input) {
     speakerId
-    eventId
+    id
     name
     description
     title
@@ -1301,7 +1264,7 @@ export const UpdateSpeakerDocument = gql`
     mutation updateSpeaker($input: UpdateSpeaker) {
   updateSpeaker(input: $input) {
     speakerId
-    eventId
+    id
     name
     description
     title
@@ -1335,111 +1298,10 @@ export function useUpdateSpeakerMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateSpeakerMutationHookResult = ReturnType<typeof useUpdateSpeakerMutation>;
 export type UpdateSpeakerMutationResult = Apollo.MutationResult<UpdateSpeakerMutation>;
 export type UpdateSpeakerMutationOptions = Apollo.BaseMutationOptions<UpdateSpeakerMutation, UpdateSpeakerMutationVariables>;
-export const AddVideoDocument = gql`
-    mutation AddVideo($input: CreateVideo!) {
-  addVideo(input: $input) {
-    lang
-    url
-  }
-}
-    `;
-export type AddVideoMutationFn = Apollo.MutationFunction<AddVideoMutation, AddVideoMutationVariables>;
-
-/**
- * __useAddVideoMutation__
- *
- * To run a mutation, you first call `useAddVideoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddVideoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addVideoMutation, { data, loading, error }] = useAddVideoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAddVideoMutation(baseOptions?: Apollo.MutationHookOptions<AddVideoMutation, AddVideoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddVideoMutation, AddVideoMutationVariables>(AddVideoDocument, options);
-      }
-export type AddVideoMutationHookResult = ReturnType<typeof useAddVideoMutation>;
-export type AddVideoMutationResult = Apollo.MutationResult<AddVideoMutation>;
-export type AddVideoMutationOptions = Apollo.BaseMutationOptions<AddVideoMutation, AddVideoMutationVariables>;
-export const RemoveVideoDocument = gql`
-    mutation RemoveVideo($input: DeleteVideo!) {
-  removeVideo(input: $input) {
-    url
-  }
-}
-    `;
-export type RemoveVideoMutationFn = Apollo.MutationFunction<RemoveVideoMutation, RemoveVideoMutationVariables>;
-
-/**
- * __useRemoveVideoMutation__
- *
- * To run a mutation, you first call `useRemoveVideoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveVideoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeVideoMutation, { data, loading, error }] = useRemoveVideoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useRemoveVideoMutation(baseOptions?: Apollo.MutationHookOptions<RemoveVideoMutation, RemoveVideoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RemoveVideoMutation, RemoveVideoMutationVariables>(RemoveVideoDocument, options);
-      }
-export type RemoveVideoMutationHookResult = ReturnType<typeof useRemoveVideoMutation>;
-export type RemoveVideoMutationResult = Apollo.MutationResult<RemoveVideoMutation>;
-export type RemoveVideoMutationOptions = Apollo.BaseMutationOptions<RemoveVideoMutation, RemoveVideoMutationVariables>;
-export const UpdateVideoDocument = gql`
-    mutation UpdateVideo($input: UpdateVideo!) {
-  updateVideo(input: $input) {
-    url
-    lang
-  }
-}
-    `;
-export type UpdateVideoMutationFn = Apollo.MutationFunction<UpdateVideoMutation, UpdateVideoMutationVariables>;
-
-/**
- * __useUpdateVideoMutation__
- *
- * To run a mutation, you first call `useUpdateVideoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateVideoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateVideoMutation, { data, loading, error }] = useUpdateVideoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateVideoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateVideoMutation, UpdateVideoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateVideoMutation, UpdateVideoMutationVariables>(UpdateVideoDocument, options);
-      }
-export type UpdateVideoMutationHookResult = ReturnType<typeof useUpdateVideoMutation>;
-export type UpdateVideoMutationResult = Apollo.MutationResult<UpdateVideoMutation>;
-export type UpdateVideoMutationOptions = Apollo.BaseMutationOptions<UpdateVideoMutation, UpdateVideoMutationVariables>;
 export const CreateEventDocument = gql`
     mutation CreateEvent($input: CreateEvent) {
   createEvent(event: $input) {
-    eventId
+    id
     title
     topic
     startDateTime
@@ -1475,7 +1337,7 @@ export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventM
 export const EventListDocument = gql`
     query EventList {
   events {
-    eventId
+    id
     title
     topic
     startDateTime
@@ -1555,7 +1417,7 @@ export const OrgInfoDocument = gql`
       lastName
     }
     events {
-      eventId
+      id
       title
       topic
       startDateTime
@@ -1625,9 +1487,9 @@ export function useCreateOrgMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateOrgMutationHookResult = ReturnType<typeof useCreateOrgMutation>;
 export type CreateOrgMutationResult = Apollo.MutationResult<CreateOrgMutation>;
 export type CreateOrgMutationOptions = Apollo.BaseMutationOptions<CreateOrgMutation, CreateOrgMutationVariables>;
-export type EventKeySpecifier = ('eventId' | 'createdBy' | 'organization' | 'createdAt' | 'updatedAt' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isActive' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate' | 'questions' | 'speakers' | 'registrants' | 'participants' | 'videos' | 'liveFeedback' | 'moderators' | EventKeySpecifier)[];
+export type EventKeySpecifier = ('id' | 'createdBy' | 'organization' | 'createdAt' | 'updatedAt' | 'title' | 'startDateTime' | 'endDateTime' | 'description' | 'topic' | 'isActive' | 'isQuestionFeedVisible' | 'isCollectRatingsEnabled' | 'isForumEnabled' | 'isPrivate' | 'questions' | 'speakers' | 'registrants' | 'participants' | 'videos' | 'liveFeedback' | 'moderators' | EventKeySpecifier)[];
 export type EventFieldPolicy = {
-	eventId?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
 	organization?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1685,19 +1547,20 @@ export type EventQuestionFieldPolicy = {
 	likedByCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	isLikedByMe?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventSpeakerKeySpecifier = ('speakerId' | 'email' | 'eventId' | 'user' | 'name' | 'description' | 'title' | 'pictureUrl' | EventSpeakerKeySpecifier)[];
+export type EventSpeakerKeySpecifier = ('speakerId' | 'email' | 'id' | 'user' | 'name' | 'description' | 'title' | 'pictureUrl' | EventSpeakerKeySpecifier)[];
 export type EventSpeakerFieldPolicy = {
 	speakerId?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
-	eventId?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	pictureUrl?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EventVideoKeySpecifier = ('url' | 'lang' | 'event' | EventVideoKeySpecifier)[];
+export type EventVideoKeySpecifier = ('id' | 'url' | 'lang' | 'event' | EventVideoKeySpecifier)[];
 export type EventVideoFieldPolicy = {
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>,
 	lang?: FieldPolicy<any> | FieldReadFunction<any>,
 	event?: FieldPolicy<any> | FieldReadFunction<any>
@@ -1743,7 +1606,7 @@ export type OrganizationFieldPolicy = {
 	members?: FieldPolicy<any> | FieldReadFunction<any>,
 	events?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('eventById' | 'events' | 'logout' | 'me' | 'myFeedback' | 'myOrgs' | 'orgById' | 'questionsByEventId' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('eventById' | 'events' | 'logout' | 'me' | 'myFeedback' | 'myOrgs' | 'orgById' | 'questionsByid' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	eventById?: FieldPolicy<any> | FieldReadFunction<any>,
 	events?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1752,7 +1615,7 @@ export type QueryFieldPolicy = {
 	myFeedback?: FieldPolicy<any> | FieldReadFunction<any>,
 	myOrgs?: FieldPolicy<any> | FieldReadFunction<any>,
 	orgById?: FieldPolicy<any> | FieldReadFunction<any>,
-	questionsByEventId?: FieldPolicy<any> | FieldReadFunction<any>
+	questionsByid?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SubscriptionKeySpecifier = ('eventLiveFeedbackCreated' | 'eventQuestionCreated' | 'likeCountChanged' | 'questionPosition' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {

@@ -6,7 +6,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined';
 // import { createLike, deleteLike } from '../api';
 
 interface Props {
-    eventId: string;
+    id: string;
     questionId: string;
     onLike?: () => void;
     onDeleteLike?: () => void;
@@ -14,7 +14,7 @@ interface Props {
     liked?: boolean;
 }
 
-function Like({ className, questionId, eventId, liked, onLike, onDeleteLike }: Props) {
+function Like({ className, questionId, id, liked, onLike, onDeleteLike }: Props) {
     const apiFn = React.useMemo(() => {
         // if (liked) return deleteLike;
         // return createLike;

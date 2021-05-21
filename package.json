@@ -44,9 +44,10 @@
         "g:update-types": "ts-node ./scripts/make-types",
         "g:dev-server": "yarn workspace @app/server dev",
         "g:dev-client": "yarn workspace @app/client dev",
+        "g:client-relay": "yarn workspace @app/client relay",
         "g:start-db": "yarn workspace @app/db start-db",
         "g:start-proxy": "yarn workspace prytaneum ts-node-dev ./proxy.ts",
-        "g:dev-project": "concurrently -n proxy,codegen,server,client,db -c \"black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
+        "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
     },
     "dependencies": {
         "babel-eslint": "^10.1.0",

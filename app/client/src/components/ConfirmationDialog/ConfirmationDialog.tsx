@@ -4,7 +4,7 @@ import { Button, DialogActions, DialogContentText, DialogContent } from '@materi
 import { ResponsiveDialog } from '../ResponsiveDialog';
 import { LoadingButton } from '../LoadingButton';
 
-interface Props {
+export interface ConfirmationDialogProps {
     onConfirm: () => void;
     title: string;
     children: string | JSX.Element;
@@ -13,7 +13,7 @@ interface Props {
     isLoading?: boolean;
 }
 
-export function ConfirmationDialog({ open, onConfirm, title, children, onClose, isLoading }: Props) {
+export function ConfirmationDialog({ open, onConfirm, title, children, onClose, isLoading }: ConfirmationDialogProps) {
     // NOTE: the () => onClose() and () => onConfirm is done on purpose to prevent the synthetic event from being passed up
     // storybook yells at me if it's passed up
     return (

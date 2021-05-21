@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import * as React from 'react';
 import {
     List,
@@ -15,15 +14,17 @@ import {
 } from '@material-ui/core';
 import { Add, MoreVert } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { graphql, useFragment } from 'react-relay';
 
-import { EventVideo, useRemoveVideoMutation } from '@local/graphql-types';
+import { VideoEventSettingsFragment$key } from '@local/__generated__/VideoEventSettingsFragment.graphql';
+import { EventVideo } from '@local/graphql-types';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useEvent } from '@local/hooks';
-import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
-import { VideoForm } from './VideoForm';
+import { CreateVideo } from './CreateVideo';
+import { UpdateVideo } from './UpdateVideo';
+import { DeleteVideo } from './DeleteVideo';
 
 interface EventSettingsProps {
-    videos?: EventVideo[];
+    fragmentRef: VideoEventSettingsFragment$key;
     className?: string;
 }
 
@@ -35,6 +36,17 @@ const useStyles = makeStyles(() => ({
         color: 'red',
     },
 }));
+
+export const VIDEO_EVENT_SETTINGS_FRAGMENT = graphql`
+    fragment VideoEventSettingsFragment on Event {
+        id
+        videos {
+            id
+            url
+            lang
+        }
+    }
+`;
 
 interface State {
     isFormDialogOpen: boolean;
@@ -134,19 +146,14 @@ const reducer = (state: State, action: Action): State => {
     }
 };
 
-export const EventSettings = ({ videos = [], className }: EventSettingsProps) => {
+export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
+    const { videos, id: eventId } = useFragment(VIDEO_EVENT_SETTINGS_FRAGMENT, fragmentRef);
     const [{ isFormDialogOpen, isConfDialogOpen, list, anchorEl, focusedVideo }, dispatch] = React.useReducer(reducer, {
         isFormDialogOpen: false,
         isConfDialogOpen: false,
-        list: videos,
+        list: videos ? [...videos] : [],
         anchorEl: null,
         focusedVideo: null,
-    });
-    const [{ eventId }] = useEvent();
-    const [removeVideo, { loading: isLoading }] = useRemoveVideoMutation({
-        onCompleted() {
-            dispatch({ type: 'videos/remove-focused' });
-        },
     });
     const classes = useStyles();
 
@@ -158,14 +165,14 @@ export const EventSettings = ({ videos = [], className }: EventSettingsProps) =>
         dispatch({ type: 'videos/focus', payload: { video, anchorEl: e.currentTarget } });
 
     // append a video to the list of videos
-    const appendVideo = (video: EventVideo) => dispatch({ type: 'videos/append', payload: video });
+    const appendVideo = (video: EventVideo | null) => video && dispatch({ type: 'videos/append', payload: video });
 
     // open the update form
     const openUpdateForm = () => dispatch({ type: 'dialog/update-video' });
 
     // update a video in the list
-    const updateVideo = (updatedVideo: EventVideo) =>
-        dispatch({ type: 'videos/update-focused', payload: updatedVideo });
+    const updateVideo = (updatedVideo: EventVideo | null) =>
+        updatedVideo && dispatch({ type: 'videos/update-focused', payload: updatedVideo });
 
     // open the deletion prompt
     const promptDelete = () => dispatch({ type: 'dialog/delete-video' });
@@ -176,7 +183,7 @@ export const EventSettings = ({ videos = [], className }: EventSettingsProps) =>
     // handle video deletion when the user confirms
     const handleDelete = () => {
         if (focusedVideo === null) return; // TODO: snack
-        removeVideo({ variables: { input: { eventId, url: focusedVideo.url } } });
+        dispatch({ type: 'videos/remove-focused' });
     };
 
     return (
@@ -184,9 +191,13 @@ export const EventSettings = ({ videos = [], className }: EventSettingsProps) =>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     {focusedVideo !== null ? (
-                        <VideoForm variant='update' onSubmit={updateVideo} form={focusedVideo} />
+                        <UpdateVideo
+                            onSubmit={updateVideo}
+                            video={{ id: focusedVideo.id, url: focusedVideo.url, lang: focusedVideo.lang }}
+                            eventId={eventId}
+                        />
                     ) : (
-                        <VideoForm variant='create' onSubmit={appendVideo} />
+                        <CreateVideo onSubmit={appendVideo} eventId={eventId} />
                     )}
                 </DialogContent>
             </ResponsiveDialog>
@@ -196,25 +207,26 @@ export const EventSettings = ({ videos = [], className }: EventSettingsProps) =>
                     Delete
                 </MenuItem>
             </Menu>
-            <ConfirmationDialog
+            <DeleteVideo
                 open={isConfDialogOpen}
                 onClose={close}
                 title={`Delete "${focusedVideo?.lang}" video?`}
                 onConfirm={handleDelete}
-                isLoading={isLoading}
+                video={focusedVideo}
+                eventId={eventId}
             >
                 <>
                     Are you sure you want to delete the&nbsp;
                     <b>{focusedVideo?.lang}</b> video?
                 </>
-            </ConfirmationDialog>
+            </DeleteVideo>
             {list.length > 0 ? (
                 <List className={classes.listRoot} disablePadding>
-                    {list.map(({ url, lang }) => (
-                        <ListItem key={url} disableGutters>
+                    {list.map(({ id, lang, url }) => (
+                        <ListItem key={id} disableGutters>
                             <ListItemText primary={lang} secondary={url} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu({ url, lang })}>
+                                <IconButton onClick={openMenu({ url, lang, id })}>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>

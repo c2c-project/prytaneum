@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import * as React from 'react';
 import {
     List,
@@ -147,7 +146,7 @@ export const EventSettings = ({ speakers = [], className }: EventSettingsProps) 
             focusedSpeaker: null,
         }
     );
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
     const [removeVideo, { loading: isLoading }] = useRemoveSpeakerMutation({
         onCompleted() {
             dispatch({ type: 'speakers/remove-focused' });
@@ -181,7 +180,7 @@ export const EventSettings = ({ speakers = [], className }: EventSettingsProps) 
     // handle speaker deletion when the user confirms
     const handleDelete = () => {
         if (focusedSpeaker === null) return; // TODO: snack
-        removeVideo({ variables: { input: { eventId, speakerId: focusedSpeaker.speakerId } } });
+        removeVideo({ variables: { input: { id, speakerId: focusedSpeaker.speakerId } } });
     };
 
     return (

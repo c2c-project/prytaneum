@@ -1,0 +1,398 @@
+input AddModerator {
+  email: String!
+  id: String!
+}
+
+input AlterLike {
+  id: ID!
+
+  """
+  True if the user is attempting to like the question; false if they are trying to remove a like
+  """
+  to: Boolean
+}
+
+input CreateEvent {
+  title: String!
+  startDateTime: Date!
+  endDateTime: Date!
+  description: String
+  topic: String!
+  orgId: String!
+}
+
+input CreateFeedback {
+  message: String!
+}
+
+"""Necessary information for org creation"""
+input CreateOrg {
+  name: String!
+}
+
+input CreateQuestion {
+  question: String!
+  isQuote: Boolean
+  isFollowUp: Boolean
+  refQuestion: ID
+  id: ID!
+}
+
+input CreateVideo {
+  url: String!
+  lang: String!
+  eventId: String!
+}
+
+scalar Date
+
+input DeleteEvent {
+  id: String!
+}
+
+"""Information necessary for deleting an org"""
+input DeleteOrg {
+  id: ID!
+}
+
+input DeleteSpeaker {
+  """Necessary for verifying user permissions"""
+  id: String!
+  speakerId: String!
+}
+
+input DeleteVideo {
+  eventId: String!
+  id: String!
+}
+
+type Event {
+  id: ID!
+
+  """Creator of this event"""
+  createdBy: User
+
+  """The owning organization"""
+  organization: Organization
+  createdAt: Date
+  updatedAt: Date
+  title: String
+
+  """The planned start date time string"""
+  startDateTime: Date
+
+  """The planned end date time string"""
+  endDateTime: Date
+  description: String
+  topic: String
+
+  """Whether or not the Event is live"""
+  isActive: Boolean
+
+  """Let all users see what questions have been submitted"""
+  isQuestionFeedVisible: Boolean
+
+  """Collect user ratings after the event has ended"""
+  isCollectRatingsEnabled: Boolean
+
+  """
+  Display a forum-like interface once the "live" part of the event is over
+  """
+  isForumEnabled: Boolean
+
+  """Is the event private, ie invite only"""
+  isPrivate: Boolean
+
+  """All questions relating to this event"""
+  questions: [EventQuestion!]
+
+  """Speakers for this event"""
+  speakers: [EventSpeaker!]
+
+  """Registrants for this event -- individuals invited"""
+  registrants: [User!]
+
+  """Participants of the event -- individuals who showed up"""
+  participants: [EventParticipant!]
+
+  """Video feeds and the languages"""
+  videos: [EventVideo!]
+
+  """Live Feedback given during the event"""
+  liveFeedback: [EventLiveFeedback!]
+
+  """List of moderators for this particular event"""
+  moderators: [User!]
+}
+
+type EventLiveFeedback {
+  feedbackId: ID!
+  message: String!
+  event: Event
+  createdAt: String
+  createdBy: User
+}
+
+type EventParticipant {
+  user: User
+  questions: [EventQuestion]
+  liveFeedBack: [EventLiveFeedback]
+}
+
+type EventQuestion {
+  questionId: ID!
+  event: Event
+
+  """The user id of the creator"""
+  createdById: ID
+
+  """User information on the person asking the question"""
+  createdBy: User
+  createdAt: Date
+  refQuestionId: ID
+  refQuestion: EventQuestion
+
+  """The actual content of the question"""
+  question: String
+  position: Int
+  isVisible: Boolean
+  isAsked: Boolean
+  lang: String
+  isFollowUp: Boolean
+  isQuote: Boolean
+
+  """The number of likes a particular question has"""
+  likes: Int
+
+  """The users who have liked this question"""
+  likedBy: [User]
+
+  """Find the count of the likes only"""
+  likedByCount: Int
+
+  """Whether or not the current user likes the question"""
+  isLikedByMe: Boolean
+}
+
+type EventSpeaker {
+  """Speaker id"""
+  speakerId: String!
+
+  """email of the speaker"""
+  email: String
+
+  """Event id that this user is speaking at"""
+  id: ID
+
+  """The related user account associated with the speaker"""
+  user: User
+
+  """Name set by the organizer of the event"""
+  name: String
+
+  """Description set by the organizer of the event"""
+  description: String
+
+  """Title set by the organizer of the event"""
+  title: String
+
+  """Picture set by the organizer of the event"""
+  pictureUrl: String
+}
+
+type EventVideo {
+  id: String!
+  url: String!
+  lang: String!
+  event: Event
+}
+
+input HideQuestion {
+  questionId: ID!
+  id: ID!
+
+  """
+  Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
+  """
+  toggleTo: Boolean!
+}
+
+type Like {
+  user: User!
+  question: EventQuestion!
+}
+
+input LoginForm {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  """Adds a new member and returns the new user added"""
+  addMember(input: NewMember): User
+
+  """Add a new moderator to the given event"""
+  addModerator(input: AddModerator): User
+  addSpeaker(input: SpeakerForm): EventSpeaker
+  addVideo(input: CreateVideo!): EventVideo!
+  alterLike(input: AlterLike): Like
+  createEvent(event: CreateEvent): Event
+  createFeedback(input: CreateFeedback): EventLiveFeedback
+  createOrganization(input: CreateOrg): Organization
+  createQuestion(input: CreateQuestion): EventQuestion
+  deleteEvent(event: DeleteEvent): Event
+  deleteOrganizationById(input: DeleteOrg): Organization
+
+  """End the eent so that it is not live"""
+  endEvent(id: String!): Event
+  hideQuestion(input: HideQuestion): EventQuestion
+  login(input: LoginForm): User
+
+  """Advance the current question"""
+  nextQuestion(id: ID!): Int!
+
+  """Go to the previous question"""
+  prevQuestion(id: ID!): Int!
+  register(input: RegistrationForm): User
+  removeSpeaker(input: DeleteSpeaker): EventSpeaker
+  removeVideo(input: DeleteVideo): EventVideo
+  reorderQueue(input: ReorderQuestion): EventQuestion
+
+  """
+  Start the event so that it is "live"
+  """
+  startEvent(id: String!): Event
+  updateEvent(event: UpdateEvent): Event
+  updateOrganizationById(input: UpdateOrg): Organization
+  updateSpeaker(input: UpdateSpeaker): EventSpeaker
+  updateVideo(input: UpdateVideo!): EventVideo
+}
+
+"""Info necessary for adding a member to an organization"""
+input NewMember {
+  email: String!
+}
+
+type Organization {
+  """Unique identifier for this org"""
+  orgId: ID!
+
+  """name of the org"""
+  name: String!
+
+  """When this org was created"""
+  createdAt: Date
+
+  """all members of this org"""
+  members: [User!]
+
+  """Events owned by this organization"""
+  events: [Event!]
+}
+
+type Query {
+  """Fetch an event by id"""
+  eventById(id: ID!): Event
+
+  """Fetch all events"""
+  events: [Event!]
+
+  """The logout just returns the timestamp of the logout action"""
+  logout: Date
+
+  """Fetch user data about the current user"""
+  me: User
+  myFeedback: [EventLiveFeedback]
+
+  """Fetch organizations relevant to the current user"""
+  myOrgs: [Organization!]
+
+  """Fetch data about a particular org"""
+  orgById(id: ID!): Organization
+  questionsByid(id: ID!): [EventQuestion!]
+}
+
+input RegistrationForm {
+  firstName: String!
+  lastName: String!
+  password: String!
+  confirmPassword: String!
+  email: String!
+}
+
+input ReorderQuestion {
+  questionId: ID!
+  position: Int!
+  id: ID!
+}
+
+input SpeakerForm {
+  id: String!
+  name: String!
+  title: String!
+  description: String!
+  pictureUrl: String!
+
+  """This is for matching the speaker to an account"""
+  email: String!
+}
+
+type Subscription {
+  """New messages as feedback is given"""
+  eventLiveFeedbackCreated(id: ID!): EventLiveFeedback
+  eventQuestionCreated(id: ID!): EventQuestion!
+  likeCountChanged(id: ID!): Like!
+  questionPosition(id: ID!): Int!
+}
+
+input UpdateEvent {
+  title: String
+  startDateTime: Date
+  endDateTime: Date
+  description: String
+  topic: String
+  isQuestionFeedVisible: Boolean
+  isCollectRatingsEnabled: Boolean
+  isForumEnabled: Boolean
+  isPrivate: Boolean
+  id: String!
+}
+
+"""Information that may be updated by the user"""
+input UpdateOrg {
+  id: ID!
+  name: String!
+}
+
+input UpdateSpeaker {
+  name: String
+  title: String
+  description: String
+  pictureUrl: String
+  email: String
+  speakerId: String!
+  id: String!
+}
+
+input UpdateVideo {
+  videoId: String!
+  eventId: String!
+  url: String!
+  newUrl: String
+  lang: String
+}
+
+"""User Data"""
+type User {
+  userId: ID!
+  firstName: String
+  lastName: String
+  email: String
+  isEmailVerified: Boolean
+
+  """Avatar URL if null then no avatar is uploaded"""
+  avatar: String
+
+  """Organizations that this user belongs to"""
+  organizations: [Organization]
+}

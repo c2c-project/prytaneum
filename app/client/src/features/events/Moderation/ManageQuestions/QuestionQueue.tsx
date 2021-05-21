@@ -17,11 +17,11 @@ const useStyles = makeStyles(() => ({
 
 export default function QuestionQueue() {
     const [{ queue, current }] = useQuestionQueue();
-    const [{ eventId }] = useEvent();
+    const [{ id }] = useEvent();
     const classes = useStyles();
 
-    // const goNextEndpoint = React.useCallback(() => nextQuestion(eventId), [eventId]);
-    // const goPrevEndpoint = React.useCallback(() => prevQuestion(eventId), [eventId]);
+    // const goNextEndpoint = React.useCallback(() => nextQuestion(id), [id]);
+    // const goPrevEndpoint = React.useCallback(() => prevQuestion(id), [id]);
 
     const [runNext] = useEndpoint(goNextEndpoint, { minWaitTime: 0 });
     const [runPrev] = useEndpoint(goPrevEndpoint, { minWaitTime: 0 });

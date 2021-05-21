@@ -15,14 +15,14 @@ mutation CreateQuestion($input: CreateQuestion) {
     }
 }
 
-subscription NewQuestions($eventId: ID!) {
-    eventQuestionCreated(eventId: $eventId) {
+subscription NewQuestions($id: ID!) {
+    eventQuestionCreated(id: $id) {
         ...QuestionCard
     }
 }
 
-query Questions($eventId: ID!) {
-    questionsByEventId(eventId: $eventId) {
+query Questions($id: ID!) {
+    questionsByid(id: $id) {
         ...QuestionCard
     }
 }

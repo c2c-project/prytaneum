@@ -1,7 +1,7 @@
 mutation AddSpeaker($input: SpeakerForm) {
     addSpeaker(input: $input) {
         speakerId
-        eventId
+        id
         name
         description
         title
@@ -12,7 +12,7 @@ mutation AddSpeaker($input: SpeakerForm) {
 mutation removeSpeaker($input: DeleteSpeaker) {
     removeSpeaker(input: $input) {
         speakerId
-        eventId
+        id
         name
         description
         title
@@ -22,7 +22,7 @@ mutation removeSpeaker($input: DeleteSpeaker) {
 mutation updateSpeaker($input: UpdateSpeaker) {
     updateSpeaker(input: $input) {
         speakerId
-        eventId
+        id
         name
         description
         title

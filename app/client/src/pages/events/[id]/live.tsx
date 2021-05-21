@@ -65,7 +65,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
     return addApolloState(apolloClient, {
         props: {
-            eventId: ctx?.params?.id,
+            id: ctx?.params?.id,
             initialReduxState: reduxStore.getState(),
             hideSideNav: true,
             containerProps: { maxWidth: 'xl' },
@@ -74,7 +74,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 }
 
 // TODO: SSR this and redirect appropriately if it's not live
-const Live: NextPage<{ eventId: string }> = ({ eventId }) => {
+const Live: NextPage<{ id: string }> = ({ id }) => {
     // main state
     const [eventDetails, setEventDetails] = React.useState<Event | null>(null);
 
@@ -99,7 +99,7 @@ const Live: NextPage<{ eventId: string }> = ({ eventId }) => {
     const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
     const { loading: isLoading } = useEventSettingsQuery({
-        variables: { input: eventId },
+        variables: { input: id },
         onCompleted(results) {
             if (results.eventById) setEventDetails(results.eventById);
         },
@@ -149,7 +149,7 @@ const Live: NextPage<{ eventId: string }> = ({ eventId }) => {
 };
 
 Live.propTypes = {
-    eventId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
 };
 
 export default Live;

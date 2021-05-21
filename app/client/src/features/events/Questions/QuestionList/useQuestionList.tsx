@@ -32,17 +32,17 @@ function reducer(state: typeof initialState, action: Action): typeof initialStat
 }
 
 export function useQuestionList() {
-    const [{ eventId }, isModerator] = useEvent();
+    const [{ id }, isModerator] = useEvent();
     const [state, dispatch] = React.useReducer(reducer, initialState);
     const { loading: isLoading } = useQuestionsQuery({
-        variables: { eventId },
+        variables: { id },
         onCompleted(results) {
-            if (results.questionsByEventId) dispatch({ type: 'initQuestionList', payload: results.questionsByEventId });
+            if (results.questionsByid) dispatch({ type: 'initQuestionList', payload: results.questionsByid });
         },
     });
 
     useNewQuestionsSubscription({
-        variables: { eventId },
+        variables: { id },
         onSubscriptionData({ subscriptionData }) {
             const { data } = subscriptionData;
             if (data && data.eventQuestionCreated)

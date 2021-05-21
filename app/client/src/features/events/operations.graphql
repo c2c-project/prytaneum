@@ -25,7 +25,7 @@ fragment EventVideos on Event {
 fragment EventSpeakers on Event {
     speakers {
         speakerId
-        eventId
+        id
         name
         title
         description
@@ -45,7 +45,7 @@ fragment EventDetails on Event {
 
 mutation CreateEvent($input: CreateEvent) {
     createEvent(event: $input) {
-        eventId
+        id
         title
         topic
         startDateTime
@@ -54,7 +54,7 @@ mutation CreateEvent($input: CreateEvent) {
 
 query EventList {
     events {
-        eventId
+        id
         title
         topic
         startDateTime
