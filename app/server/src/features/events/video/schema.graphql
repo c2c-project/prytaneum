@@ -14,8 +14,7 @@ input CreateVideo {
 input UpdateVideo {
     videoId: String!
     eventId: String!
-    url: String!
-    newUrl: String
+    url: String
     lang: String
 }
 

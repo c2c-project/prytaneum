@@ -52,7 +52,7 @@ export async function updateVideo(userId: Maybe<string>, prisma: PrismaClient, i
     if (!hasPermissions) throw new Error(errors.permissions);
 
     const data: Record<string, string> = {};
-    if (input.newUrl) data.url = input.newUrl;
+    if (input.url) data.url = input.url;
     if (input.lang) data.lang = input.lang;
 
     return prisma.eventVideo.update({

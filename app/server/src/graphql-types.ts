@@ -493,8 +493,7 @@ export type CreateVideo = {
 export type UpdateVideo = {
     videoId: Scalars['String'];
     eventId: Scalars['String'];
-    url: Scalars['String'];
-    newUrl?: Maybe<Scalars['String']>;
+    url?: Maybe<Scalars['String']>;
     lang?: Maybe<Scalars['String']>;
 };
 
