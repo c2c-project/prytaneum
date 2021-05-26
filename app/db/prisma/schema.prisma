@@ -12,7 +12,7 @@ generator client {
 }
 
 model User {
-    userId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     createdAt DateTime @default(now())
     email String @unique @db.VarChar(320)
     firstName String? @db.VarChar(100)
@@ -32,7 +32,7 @@ model User {
 }
 
 model Organization {
-    orgId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     createdAt DateTime @default(now())
     name String @db.VarChar(100)
     
@@ -43,8 +43,8 @@ model Organization {
 model OrgMember {
     userId String @db.Uuid
     orgId String @db.Uuid
-    organization Organization @relation(fields: [orgId], references: [orgId])
-    user User @relation(fields: [userId], references: [userId])
+    organization Organization @relation(fields: [orgId], references: [id])
+    user User @relation(fields: [userId], references: [id])
     events Event[]
     // orgName String // de-normalized field from an Organization
     // memberName String // denormalized field from the User 
@@ -56,7 +56,7 @@ model Event {
     id String @id @default(uuid()) @db.Uuid
     createdById String @db.Uuid
     orgId String @db.Uuid
-    organization Organization @relation(fields: [orgId], references: [orgId])
+    organization Organization @relation(fields: [orgId], references: [id])
     createdByUser OrgMember @relation(fields: [createdById, orgId], references: [userId, orgId])
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -90,9 +90,9 @@ model EventVideo {
 }
 
 model EventLiveFeedback {
-    feedbackId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     createdById String @db.Uuid
-    createdByUser User @relation(fields: [createdById], references: [userId])
+    createdByUser User @relation(fields: [createdById], references: [id])
     eventId String @db.Uuid
     event Event @relation(fields: [eventId], references: [id])
     createdAt DateTime @default(now())
@@ -100,15 +100,15 @@ model EventLiveFeedback {
 }
 
 model EventQuestion {
-    questionId String @id @default(uuid()) @db.Uuid
+    id String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
     event Event @relation(fields: [eventId], references: [id])
     createdAt DateTime @default(now())
     refQuestionId String? @db.Uuid
     parentQuestion EventQuestion[] @relation("quote")
-    refQuestion EventQuestion? @relation("quote", fields: [refQuestionId], references: [questionId])
+    refQuestion EventQuestion? @relation("quote", fields: [refQuestionId], references: [id])
     createdById String @db.Uuid
-    createdByUser User @relation(fields: [createdById], references: [userId])
+    createdByUser User @relation(fields: [createdById], references: [id])
     question String @db.VarChar(500)
     position Int @default(-1)
     isVisible Boolean
@@ -123,8 +123,8 @@ model EventQuestion {
 model EventQuestionLike {
     likedQuestion String @db.Uuid
     likedBy String @db.Uuid
-    question EventQuestion @relation(fields: [likedQuestion], references: [questionId])
-    user User @relation(fields: [likedBy], references: [userId])
+    question EventQuestion @relation(fields: [likedQuestion], references: [id])
+    user User @relation(fields: [likedBy], references: [id])
 
     @@id([likedBy, likedQuestion])
 }
@@ -132,7 +132,7 @@ model EventQuestionLike {
 model EventModerator {
     eventId String @db.Uuid
     userId String @db.Uuid
-    user User @relation(fields: [userId], references: [userId])
+    user User @relation(fields: [userId], references: [id])
     event Event @relation(fields: [eventId], references: [id])
 
     @@id([eventId, userId])
@@ -153,7 +153,7 @@ model EventSpeaker {
 model EventRegistrant {
     userId String @db.Uuid
     eventId String @db.Uuid
-    user User @relation(fields: [userId], references: [userId])
+    user User @relation(fields: [userId], references: [id])
     event Event @relation(fields: [eventId], references: [id])
 
     @@id([userId, eventId])
