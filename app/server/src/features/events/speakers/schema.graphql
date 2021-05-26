@@ -1,8 +1,8 @@
-type EventSpeaker {
+type EventSpeaker implements Node {
     """
-    Speaker eventId
+    Speaker id
     """
-    id: String!
+    id: ID!
 
     """
     email of the speaker
@@ -72,7 +72,7 @@ input DeleteSpeaker {
 }
 
 type Mutation {
-    addSpeaker(input: SpeakerForm): EventSpeaker
-    removeSpeaker(input: DeleteSpeaker): EventSpeaker
-    updateSpeaker(input: UpdateSpeaker): EventSpeaker
+    addSpeaker(input: SpeakerForm!): EventSpeaker
+    removeSpeaker(input: DeleteSpeaker!): EventSpeaker
+    updateSpeaker(input: UpdateSpeaker!): EventSpeaker
 }

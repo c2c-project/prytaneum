@@ -10,14 +10,16 @@ async function extractJwt(req: FastifyRequest) {
         const decodedJwt = await verify(req.cookies.jwt);
         return (decodedJwt as { id: string }).id;
     }
-    return '';
+    return null;
 }
 
 export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
     const userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
     return {
         prisma,
-        userId,
+        viewer: {
+            id: userId,
+        },
     };
 };
 
@@ -25,7 +27,9 @@ export const buildSubscriptionContext = async (_: any, req: FastifyRequest) => {
     const userId = await extractJwt(req);
     return {
         prisma,
-        userId,
+        viewer: {
+            id: userId,
+        },
     };
 };
 

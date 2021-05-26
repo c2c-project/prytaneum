@@ -1,4 +1,4 @@
-type Event {
+type Event implements Node {
     id: ID!
 
     """
@@ -64,7 +64,7 @@ type Event {
     """
     Registrants for this event -- individuals invited
     """
-    registrants: [User!]
+    registrants: UserConnection
 
     """
     Participants of the event -- individuals who showed up
@@ -74,7 +74,7 @@ type Event {
     """
     Video feeds and the languages
     """
-    videos: [EventVideo!]
+    videos: EventVideoConnection
 
     """
     Live Feedback given during the event
@@ -84,14 +84,35 @@ type Event {
     """
     List of moderators for this particular event
     """
-    moderators: [User!]
+    moderators: UserConnection
+
+    """
+    Whether or not the viewer is a moderator
+    """
+    isViewerModerator: Boolean
+}
+
+"""
+Event Edge
+"""
+type EventEdge {
+    node: Event!
+    cursor: String!
+}
+
+"""
+Connection to Events
+"""
+type EventConnection {
+    edges: [EventEdge!]
+    pageInfo: PageInfo!
 }
 
 input CreateEvent {
     title: String!
     startDateTime: Date!
     endDateTime: Date!
-    description: String
+    description: String!
     topic: String!
     orgId: String!
 }
@@ -106,35 +127,30 @@ input UpdateEvent {
     isCollectRatingsEnabled: Boolean
     isForumEnabled: Boolean
     isPrivate: Boolean
-    id: String!
+    eventId: String!
 }
 
 input DeleteEvent {
-    id: String!
+    eventId: String!
 }
 
 type Mutation {
-    createEvent(event: CreateEvent): Event
-    updateEvent(event: UpdateEvent): Event
-    deleteEvent(event: DeleteEvent): Event
+    createEvent(event: CreateEvent!): Event
+    updateEvent(event: UpdateEvent!): Event
+    deleteEvent(event: DeleteEvent!): Event
 
     """
     Start the event so that it is "live"
     """
-    startEvent(id: String!): Event
+    startEvent(eventId: String!): Event
 
     """
     End the eent so that it is not live
     """
-    endEvent(id: String!): Event
+    endEvent(eventId: String!): Event
 }
 
 type Query {
-    """
-    Fetch an event by id
-    """
-    eventById(id: ID!): Event
-
     """
     Fetch all events
     """
@@ -142,5 +158,5 @@ type Query {
 }
 
 type Subscription {
-    questionPosition(id: ID!): Int!
+    questionPosition(eventId: ID!): Int!
 }

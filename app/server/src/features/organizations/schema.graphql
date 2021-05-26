@@ -1,8 +1,8 @@
-type Organization {
+type Organization implements Node {
     """
     Unique identifier for this org
     """
-    orgId: ID!
+    id: ID!
     """
     name of the org
     """
@@ -14,11 +14,21 @@ type Organization {
     """
     all members of this org
     """
-    members: [User!]
+    members: UserConnection
     """
     Events owned by this organization
     """
-    events: [Event!]
+    events: EventConnection
+}
+
+type OrganizationEdge {
+    node: Organization!
+    cursor: String!
+}
+
+type OrganizationConnection {
+    edges: [OrganizationEdge!]
+    pageInfo: PageInfo!
 }
 
 """
@@ -32,7 +42,7 @@ input CreateOrg {
 Information that may be updated by the user
 """
 input UpdateOrg {
-    id: ID!
+    orgId: ID!
     name: String!
 }
 
@@ -40,7 +50,7 @@ input UpdateOrg {
 Information necessary for deleting an org
 """
 input DeleteOrg {
-    id: ID!
+    orgId: ID!
 }
 
 """
@@ -51,14 +61,14 @@ input NewMember {
 }
 
 type Mutation {
-    createOrganization(input: CreateOrg): Organization
-    updateOrganizationById(input: UpdateOrg): Organization
-    deleteOrganizationById(input: DeleteOrg): Organization
+    createOrganization(input: CreateOrg!): Organization
+    updateOrganizationById(input: UpdateOrg!): Organization
+    deleteOrganizationById(input: DeleteOrg!): Organization
 
     """
     Adds a new member and returns the new user added
     """
-    addMember(input: NewMember): User
+    addMember(input: NewMember!): User
 }
 
 type Query {
@@ -66,9 +76,4 @@ type Query {
     Fetch organizations relevant to the current user
     """
     myOrgs: [Organization!]
-    
-    """
-    Fetch data about a particular org
-    """
-    orgById(id: ID!): Organization
 }

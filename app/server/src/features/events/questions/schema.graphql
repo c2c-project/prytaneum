@@ -1,5 +1,5 @@
-type EventQuestion {
-    questionId: ID!
+type EventQuestion implements Node {
+    id: ID!
     event: Event
 
     """
@@ -13,7 +13,6 @@ type EventQuestion {
     createdBy: User
     createdAt: Date
 
-    refQuestionId: ID
     refQuestion: EventQuestion
 
     """
@@ -35,7 +34,7 @@ type EventQuestion {
     """
     The users who have liked this question
     """
-    likedBy: [User]
+    likedBy: UserConnection
 
     """
     Find the count of the likes only
@@ -46,6 +45,21 @@ type EventQuestion {
     Whether or not the current user likes the question
     """
     isLikedByMe: Boolean
+
+    """
+    If the question is owned by the current viewer
+    """
+    isMyQuestion: Boolean
+}
+
+type EventQuestionEdge {
+    node: EventQuestion!
+    cursor: String!
+}
+
+type EventQuestionConnection {
+    edges: [EventQuestionEdge!]
+    pageInfo: PageInfo!
 }
 
 type Like {
@@ -58,28 +72,27 @@ input CreateQuestion {
     isQuote: Boolean
     isFollowUp: Boolean
     refQuestion: ID
-    id: ID!
+    eventId: ID!
 }
 
 input AlterLike {
-    id: ID!
+    questionId: ID!
     """
     True if the user is attempting to like the question; false if they are trying to remove a like
     """
-    to: Boolean
+    to: Boolean!
 }
 
 type Mutation {
-    createQuestion(input: CreateQuestion): EventQuestion
-
-    alterLike(input: AlterLike): Like
+    createQuestion(input: CreateQuestion!): EventQuestion!
+    alterLike(input: AlterLike!): Boolean!
 }
 
 type Subscription {
-    eventQuestionCreated(id: ID!): EventQuestion!
-    likeCountChanged(id: ID!): Like!
+    eventQuestionCreated(eventId: ID!): EventQuestion!
+    likeCountChanged(eventId: ID!): Like!
 }
 
 type Query {
-    questionsByid(id: ID!): [EventQuestion!]
+    questionsByEventId(eventId: ID!): [EventQuestion!]
 }

@@ -1,23 +1,34 @@
-import { Resolvers, withFilter } from '@local/features/utils';
+import { Resolvers, withFilter, errors, toGlobalId } from '@local/features/utils';
 import { EventLiveFeedback } from '@local/graphql-types';
 import * as Moderation from './methods';
 
+const toQuestionId = toGlobalId('EventQuestion');
+const toUserId = toGlobalId('User');
+
 export const resolvers: Resolvers = {
     Mutation: {
-        hideQuestion(parent, args, ctx, info) {
-            return Moderation.hideQuestionById(ctx.userId, ctx.prisma, args.input);
+        async hideQuestion(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, args.input);
+            return toQuestionId(hiddenQuestion);
         },
-        reorderQueue(parent, args, ctx, info) {
-            return Moderation.reorderQuestion(ctx.userId, ctx.prisma, args.input);
+        async reorderQueue(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const updatedQuestion = await Moderation.reorderQuestion(ctx.viewer.id, ctx.prisma, args.input);
+            return toQuestionId(updatedQuestion);
         },
-        addModerator(parent, args, ctx, info) {
-            return Moderation.addModerator(ctx.userId, ctx.prisma, args.input);
+        async addModerator(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const newMod = await Moderation.addModerator(ctx.viewer.id, ctx.prisma, args.input);
+            return toUserId(newMod);
         },
         nextQuestion(parent, args, ctx, info) {
-            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.id, 1);
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, 1);
         },
         prevQuestion(parent, args, ctx, info) {
-            return Moderation.changeCurrentQuestion(ctx.userId, ctx.prisma, args.id, -1);
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, -1);
         },
     },
     Subscription: {
@@ -25,7 +36,7 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ eventLiveFeedbackCreated: EventLiveFeedback }>(
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('eventLiveFeedbackCreated'),
                 (payload, args, ctx) =>
-                    Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.feedbackId)
+                    Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.id)
             ),
         },
     },

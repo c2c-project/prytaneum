@@ -188,6 +188,7 @@ __metadata:
     fastify: ^3.15.1
     fastify-cookie: ^5.3.0
     graphql: ^15.5.0
+    graphql-relay: "github:DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"
     jsonwebtoken: ^8.5.1
     mercurius: ^7.6.1
     mercurius-codegen: ^1.5.0
@@ -11784,6 +11785,15 @@ fsevents@^1.2.7:
   peerDependencies:
     graphql: ">=14"
   checksum: 468104cd4766b68db5e1e7da266b0212746d6ede38f7b6fb7e0a7402d373270115ba98fd0cc392ba459a72d2013b4058ccf781fcf2acc2016599b7f534457d5d
+  languageName: node
+  linkType: hard
+
+"graphql-relay@github:DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e":
+  version: 0.6.0
+  resolution: "graphql-relay@https://github.com/DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"
+  peerDependencies:
+    graphql: ^14.7.0 || ^15.5.0
+  checksum: 6687b8fb627bd1633b0abe513ce4f85e0de42073318e55e8aae3c85b13fc6b8ac3ffcf537d2522a8c372b175e71df8b2905b2fed048202c5619dabf0719c167f
   languageName: node
   linkType: hard
 

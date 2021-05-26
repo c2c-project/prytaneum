@@ -1,5 +1,5 @@
-type EventLiveFeedback {
-    feedbackId: ID!
+type EventLiveFeedback implements Node {
+    id: ID!
     message: String!
     event: Event
     createdAt: String

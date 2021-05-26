@@ -1,8 +1,18 @@
-type EventVideo {
-    id: String!
+type EventVideo implements Node {
+    id: ID!
     url: String!
     lang: String!
     event: Event
+}
+
+type EventVideoEdge {
+    node: EventVideo!
+    cursor: String!
+}
+
+type EventVideoConnection {
+    edges: [EventVideoEdge!]
+    pageInfo: PageInfo!
 }
 
 input CreateVideo {
@@ -25,6 +35,6 @@ input DeleteVideo {
 
 type Mutation {
     addVideo(input: CreateVideo!): EventVideo!
-    removeVideo(input: DeleteVideo): EventVideo
+    removeVideo(input: DeleteVideo!): EventVideo
     updateVideo(input: UpdateVideo!): EventVideo
 }

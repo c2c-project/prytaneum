@@ -23,10 +23,45 @@ export type Scalars = {
     _FieldSet: any;
 };
 
+export type PageInfo = {
+    __typename?: 'PageInfo';
+    hasNextPage: Scalars['Boolean'];
+    hasPreviousPage: Scalars['Boolean'];
+    startCursor?: Maybe<Scalars['String']>;
+    endCursor?: Maybe<Scalars['String']>;
+};
+
+export type Node = {
+    id: Scalars['ID'];
+};
+
+export type Query = {
+    __typename?: 'Query';
+    node?: Maybe<Node>;
+    /** Fetch user data about the current user */
+    me?: Maybe<User>;
+    /** The logout just returns the timestamp of the logout action */
+    logout?: Maybe<Scalars['Date']>;
+    /** Fetch all events */
+    events?: Maybe<Array<Event>>;
+    /** Fetch organizations relevant to the current user */
+    myOrgs?: Maybe<Array<Organization>>;
+    myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+    questionsByEventId?: Maybe<Array<EventQuestion>>;
+};
+
+export type QuerynodeArgs = {
+    id: Scalars['ID'];
+};
+
+export type QueryquestionsByEventIdArgs = {
+    eventId: Scalars['ID'];
+};
+
 /** User Data */
-export type User = {
+export type User = Node & {
     __typename?: 'User';
-    userId: Scalars['ID'];
+    id: Scalars['ID'];
     firstName?: Maybe<Scalars['String']>;
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
@@ -34,7 +69,19 @@ export type User = {
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
-    organizations?: Maybe<Array<Maybe<Organization>>>;
+    organizations?: Maybe<OrganizationConnection>;
+};
+
+export type UserEdge = {
+    __typename?: 'UserEdge';
+    node: User;
+    cursor: Scalars['String'];
+};
+
+export type UserConnection = {
+    __typename?: 'UserConnection';
+    edges?: Maybe<Array<UserEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type RegistrationForm = {
@@ -48,36 +95,6 @@ export type RegistrationForm = {
 export type LoginForm = {
     email: Scalars['String'];
     password: Scalars['String'];
-};
-
-export type Query = {
-    __typename?: 'Query';
-    /** Fetch user data about the current user */
-    me?: Maybe<User>;
-    /** The logout just returns the timestamp of the logout action */
-    logout?: Maybe<Scalars['Date']>;
-    /** Fetch an event by id */
-    eventById?: Maybe<Event>;
-    /** Fetch all events */
-    events?: Maybe<Array<Event>>;
-    /** Fetch organizations relevant to the current user */
-    myOrgs?: Maybe<Array<Organization>>;
-    /** Fetch data about a particular org */
-    orgById?: Maybe<Organization>;
-    myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
-    questionsByid?: Maybe<Array<EventQuestion>>;
-};
-
-export type QueryeventByIdArgs = {
-    id: Scalars['ID'];
-};
-
-export type QueryorgByIdArgs = {
-    id: Scalars['ID'];
-};
-
-export type QueryquestionsByidArgs = {
-    id: Scalars['ID'];
 };
 
 export type Mutation = {
@@ -105,8 +122,8 @@ export type Mutation = {
     nextQuestion: Scalars['Int'];
     /** Go to the previous question */
     prevQuestion: Scalars['Int'];
-    createQuestion?: Maybe<EventQuestion>;
-    alterLike?: Maybe<Like>;
+    createQuestion: EventQuestion;
+    alterLike: Scalars['Boolean'];
     addSpeaker?: Maybe<EventSpeaker>;
     removeSpeaker?: Maybe<EventSpeaker>;
     updateSpeaker?: Maybe<EventSpeaker>;
@@ -116,47 +133,47 @@ export type Mutation = {
 };
 
 export type MutationregisterArgs = {
-    input?: Maybe<RegistrationForm>;
+    input: RegistrationForm;
 };
 
 export type MutationloginArgs = {
-    input?: Maybe<LoginForm>;
+    input: LoginForm;
 };
 
 export type MutationcreateEventArgs = {
-    event?: Maybe<CreateEvent>;
+    event: CreateEvent;
 };
 
 export type MutationupdateEventArgs = {
-    event?: Maybe<UpdateEvent>;
+    event: UpdateEvent;
 };
 
 export type MutationdeleteEventArgs = {
-    event?: Maybe<DeleteEvent>;
+    event: DeleteEvent;
 };
 
 export type MutationstartEventArgs = {
-    id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type MutationendEventArgs = {
-    id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type MutationcreateOrganizationArgs = {
-    input?: Maybe<CreateOrg>;
+    input: CreateOrg;
 };
 
 export type MutationupdateOrganizationByIdArgs = {
-    input?: Maybe<UpdateOrg>;
+    input: UpdateOrg;
 };
 
 export type MutationdeleteOrganizationByIdArgs = {
-    input?: Maybe<DeleteOrg>;
+    input: DeleteOrg;
 };
 
 export type MutationaddMemberArgs = {
-    input?: Maybe<NewMember>;
+    input: NewMember;
 };
 
 export type MutationcreateFeedbackArgs = {
@@ -164,43 +181,43 @@ export type MutationcreateFeedbackArgs = {
 };
 
 export type MutationhideQuestionArgs = {
-    input?: Maybe<HideQuestion>;
+    input: HideQuestion;
 };
 
 export type MutationreorderQueueArgs = {
-    input?: Maybe<ReorderQuestion>;
+    input: ReorderQuestion;
 };
 
 export type MutationaddModeratorArgs = {
-    input?: Maybe<AddModerator>;
+    input: AddModerator;
 };
 
 export type MutationnextQuestionArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type MutationprevQuestionArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type MutationcreateQuestionArgs = {
-    input?: Maybe<CreateQuestion>;
+    input: CreateQuestion;
 };
 
 export type MutationalterLikeArgs = {
-    input?: Maybe<AlterLike>;
+    input: AlterLike;
 };
 
 export type MutationaddSpeakerArgs = {
-    input?: Maybe<SpeakerForm>;
+    input: SpeakerForm;
 };
 
 export type MutationremoveSpeakerArgs = {
-    input?: Maybe<DeleteSpeaker>;
+    input: DeleteSpeaker;
 };
 
 export type MutationupdateSpeakerArgs = {
-    input?: Maybe<UpdateSpeaker>;
+    input: UpdateSpeaker;
 };
 
 export type MutationaddVideoArgs = {
@@ -208,14 +225,14 @@ export type MutationaddVideoArgs = {
 };
 
 export type MutationremoveVideoArgs = {
-    input?: Maybe<DeleteVideo>;
+    input: DeleteVideo;
 };
 
 export type MutationupdateVideoArgs = {
     input: UpdateVideo;
 };
 
-export type Event = {
+export type Event = Node & {
     __typename?: 'Event';
     id: Scalars['ID'];
     /** Creator of this event */
@@ -246,22 +263,38 @@ export type Event = {
     /** Speakers for this event */
     speakers?: Maybe<Array<EventSpeaker>>;
     /** Registrants for this event -- individuals invited */
-    registrants?: Maybe<Array<User>>;
+    registrants?: Maybe<UserConnection>;
     /** Participants of the event -- individuals who showed up */
     participants?: Maybe<Array<EventParticipant>>;
     /** Video feeds and the languages */
-    videos?: Maybe<Array<EventVideo>>;
+    videos?: Maybe<EventVideoConnection>;
     /** Live Feedback given during the event */
     liveFeedback?: Maybe<Array<EventLiveFeedback>>;
     /** List of moderators for this particular event */
-    moderators?: Maybe<Array<User>>;
+    moderators?: Maybe<UserConnection>;
+    /** Whether or not the viewer is a moderator */
+    isViewerModerator?: Maybe<Scalars['Boolean']>;
+};
+
+/** Event Edge */
+export type EventEdge = {
+    __typename?: 'EventEdge';
+    node: Event;
+    cursor: Scalars['String'];
+};
+
+/** Connection to Events */
+export type EventConnection = {
+    __typename?: 'EventConnection';
+    edges?: Maybe<Array<EventEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type CreateEvent = {
     title: Scalars['String'];
     startDateTime: Scalars['Date'];
     endDateTime: Scalars['Date'];
-    description?: Maybe<Scalars['String']>;
+    description: Scalars['String'];
     topic: Scalars['String'];
     orgId: Scalars['String'];
 };
@@ -276,11 +309,11 @@ export type UpdateEvent = {
     isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
     isForumEnabled?: Maybe<Scalars['Boolean']>;
     isPrivate?: Maybe<Scalars['Boolean']>;
-    id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type DeleteEvent = {
-    id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type Subscription = {
@@ -293,33 +326,45 @@ export type Subscription = {
 };
 
 export type SubscriptionquestionPositionArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type SubscriptioneventQuestionCreatedArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type SubscriptionlikeCountChangedArgs = {
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
-export type Organization = {
+export type Organization = Node & {
     __typename?: 'Organization';
     /** Unique identifier for this org */
-    orgId: Scalars['ID'];
+    id: Scalars['ID'];
     /** name of the org */
     name: Scalars['String'];
     /** When this org was created */
     createdAt?: Maybe<Scalars['Date']>;
     /** all members of this org */
-    members?: Maybe<Array<User>>;
+    members?: Maybe<UserConnection>;
     /** Events owned by this organization */
-    events?: Maybe<Array<Event>>;
+    events?: Maybe<EventConnection>;
+};
+
+export type OrganizationEdge = {
+    __typename?: 'OrganizationEdge';
+    node: Organization;
+    cursor: Scalars['String'];
+};
+
+export type OrganizationConnection = {
+    __typename?: 'OrganizationConnection';
+    edges?: Maybe<Array<OrganizationEdge>>;
+    pageInfo: PageInfo;
 };
 
 /** Necessary information for org creation */
@@ -329,13 +374,13 @@ export type CreateOrg = {
 
 /** Information that may be updated by the user */
 export type UpdateOrg = {
-    id: Scalars['ID'];
+    orgId: Scalars['ID'];
     name: Scalars['String'];
 };
 
 /** Information necessary for deleting an org */
 export type DeleteOrg = {
-    id: Scalars['ID'];
+    orgId: Scalars['ID'];
 };
 
 /** Info necessary for adding a member to an organization */
@@ -343,9 +388,9 @@ export type NewMember = {
     email: Scalars['String'];
 };
 
-export type EventLiveFeedback = {
+export type EventLiveFeedback = Node & {
     __typename?: 'EventLiveFeedback';
-    feedbackId: Scalars['ID'];
+    id: Scalars['ID'];
     message: Scalars['String'];
     event?: Maybe<Event>;
     createdAt?: Maybe<Scalars['String']>;
@@ -358,7 +403,7 @@ export type CreateFeedback = {
 
 export type HideQuestion = {
     questionId: Scalars['ID'];
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
     /** Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise. */
     toggleTo: Scalars['Boolean'];
 };
@@ -366,12 +411,12 @@ export type HideQuestion = {
 export type ReorderQuestion = {
     questionId: Scalars['ID'];
     position: Scalars['Int'];
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type AddModerator = {
     email: Scalars['String'];
-    id: Scalars['String'];
+    eventId: Scalars['String'];
 };
 
 export type EventParticipant = {
@@ -381,16 +426,15 @@ export type EventParticipant = {
     liveFeedBack?: Maybe<Array<Maybe<EventLiveFeedback>>>;
 };
 
-export type EventQuestion = {
+export type EventQuestion = Node & {
     __typename?: 'EventQuestion';
-    questionId: Scalars['ID'];
+    id: Scalars['ID'];
     event?: Maybe<Event>;
     /** The user id of the creator */
     createdById?: Maybe<Scalars['ID']>;
     /** User information on the person asking the question */
     createdBy?: Maybe<User>;
     createdAt?: Maybe<Scalars['Date']>;
-    refQuestionId?: Maybe<Scalars['ID']>;
     refQuestion?: Maybe<EventQuestion>;
     /** The actual content of the question */
     question?: Maybe<Scalars['String']>;
@@ -403,11 +447,25 @@ export type EventQuestion = {
     /** The number of likes a particular question has */
     likes?: Maybe<Scalars['Int']>;
     /** The users who have liked this question */
-    likedBy?: Maybe<Array<Maybe<User>>>;
+    likedBy?: Maybe<UserConnection>;
     /** Find the count of the likes only */
     likedByCount?: Maybe<Scalars['Int']>;
     /** Whether or not the current user likes the question */
     isLikedByMe?: Maybe<Scalars['Boolean']>;
+    /** If the question is owned by the current viewer */
+    isMyQuestion?: Maybe<Scalars['Boolean']>;
+};
+
+export type EventQuestionEdge = {
+    __typename?: 'EventQuestionEdge';
+    node: EventQuestion;
+    cursor: Scalars['String'];
+};
+
+export type EventQuestionConnection = {
+    __typename?: 'EventQuestionConnection';
+    edges?: Maybe<Array<EventQuestionEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type Like = {
@@ -421,19 +479,19 @@ export type CreateQuestion = {
     isQuote?: Maybe<Scalars['Boolean']>;
     isFollowUp?: Maybe<Scalars['Boolean']>;
     refQuestion?: Maybe<Scalars['ID']>;
-    id: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type AlterLike = {
-    id: Scalars['ID'];
+    questionId: Scalars['ID'];
     /** True if the user is attempting to like the question; false if they are trying to remove a like */
-    to?: Maybe<Scalars['Boolean']>;
+    to: Scalars['Boolean'];
 };
 
-export type EventSpeaker = {
+export type EventSpeaker = Node & {
     __typename?: 'EventSpeaker';
-    /** Speaker eventId */
-    id: Scalars['String'];
+    /** Speaker id */
+    id: Scalars['ID'];
     /** email of the speaker */
     email?: Maybe<Scalars['String']>;
     /** Event eventId that this user is speaking at */
@@ -476,12 +534,24 @@ export type DeleteSpeaker = {
     id: Scalars['String'];
 };
 
-export type EventVideo = {
+export type EventVideo = Node & {
     __typename?: 'EventVideo';
-    id: Scalars['String'];
+    id: Scalars['ID'];
     url: Scalars['String'];
     lang: Scalars['String'];
     event?: Maybe<Event>;
+};
+
+export type EventVideoEdge = {
+    __typename?: 'EventVideoEdge';
+    node: EventVideo;
+    cursor: Scalars['String'];
+};
+
+export type EventVideoConnection = {
+    __typename?: 'EventVideoConnection';
+    edges?: Maybe<Array<EventVideoEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type CreateVideo = {
@@ -577,21 +647,36 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
-    User: ResolverTypeWrapper<User>;
-    ID: ResolverTypeWrapper<Scalars['ID']>;
-    String: ResolverTypeWrapper<Scalars['String']>;
+    PageInfo: ResolverTypeWrapper<PageInfo>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+    String: ResolverTypeWrapper<Scalars['String']>;
+    Node:
+        | ResolversTypes['User']
+        | ResolversTypes['Event']
+        | ResolversTypes['Organization']
+        | ResolversTypes['EventLiveFeedback']
+        | ResolversTypes['EventQuestion']
+        | ResolversTypes['EventSpeaker']
+        | ResolversTypes['EventVideo'];
+    ID: ResolverTypeWrapper<Scalars['ID']>;
+    Query: ResolverTypeWrapper<{}>;
+    User: ResolverTypeWrapper<User>;
+    UserEdge: ResolverTypeWrapper<UserEdge>;
+    UserConnection: ResolverTypeWrapper<UserConnection>;
     RegistrationForm: RegistrationForm;
     LoginForm: LoginForm;
-    Query: ResolverTypeWrapper<{}>;
     Mutation: ResolverTypeWrapper<{}>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
     Event: ResolverTypeWrapper<Event>;
+    EventEdge: ResolverTypeWrapper<EventEdge>;
+    EventConnection: ResolverTypeWrapper<EventConnection>;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
+    OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
+    OrganizationConnection: ResolverTypeWrapper<OrganizationConnection>;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
     DeleteOrg: DeleteOrg;
@@ -603,6 +688,8 @@ export type ResolversTypes = {
     AddModerator: AddModerator;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventQuestion: ResolverTypeWrapper<EventQuestion>;
+    EventQuestionEdge: ResolverTypeWrapper<EventQuestionEdge>;
+    EventQuestionConnection: ResolverTypeWrapper<EventQuestionConnection>;
     Like: ResolverTypeWrapper<Like>;
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
@@ -611,6 +698,8 @@ export type ResolversTypes = {
     UpdateSpeaker: UpdateSpeaker;
     DeleteSpeaker: DeleteSpeaker;
     EventVideo: ResolverTypeWrapper<EventVideo>;
+    EventVideoEdge: ResolverTypeWrapper<EventVideoEdge>;
+    EventVideoConnection: ResolverTypeWrapper<EventVideoConnection>;
     CreateVideo: CreateVideo;
     UpdateVideo: UpdateVideo;
     DeleteVideo: DeleteVideo;
@@ -619,21 +708,36 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
     Date: Scalars['Date'];
-    User: User;
-    ID: Scalars['ID'];
-    String: Scalars['String'];
+    PageInfo: PageInfo;
     Boolean: Scalars['Boolean'];
+    String: Scalars['String'];
+    Node:
+        | ResolversParentTypes['User']
+        | ResolversParentTypes['Event']
+        | ResolversParentTypes['Organization']
+        | ResolversParentTypes['EventLiveFeedback']
+        | ResolversParentTypes['EventQuestion']
+        | ResolversParentTypes['EventSpeaker']
+        | ResolversParentTypes['EventVideo'];
+    ID: Scalars['ID'];
+    Query: {};
+    User: User;
+    UserEdge: UserEdge;
+    UserConnection: UserConnection;
     RegistrationForm: RegistrationForm;
     LoginForm: LoginForm;
-    Query: {};
     Mutation: {};
     Int: Scalars['Int'];
     Event: Event;
+    EventEdge: EventEdge;
+    EventConnection: EventConnection;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     Subscription: {};
     Organization: Organization;
+    OrganizationEdge: OrganizationEdge;
+    OrganizationConnection: OrganizationConnection;
     CreateOrg: CreateOrg;
     UpdateOrg: UpdateOrg;
     DeleteOrg: DeleteOrg;
@@ -645,6 +749,8 @@ export type ResolversParentTypes = {
     AddModerator: AddModerator;
     EventParticipant: EventParticipant;
     EventQuestion: EventQuestion;
+    EventQuestionEdge: EventQuestionEdge;
+    EventQuestionConnection: EventQuestionConnection;
     Like: Like;
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
@@ -653,6 +759,8 @@ export type ResolversParentTypes = {
     UpdateSpeaker: UpdateSpeaker;
     DeleteSpeaker: DeleteSpeaker;
     EventVideo: EventVideo;
+    EventVideoEdge: EventVideoEdge;
+    EventVideoConnection: EventVideoConnection;
     CreateVideo: CreateVideo;
     UpdateVideo: UpdateVideo;
     DeleteVideo: DeleteVideo;
@@ -662,47 +770,77 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
     name: 'Date';
 }
 
-export type UserResolvers<
+export type PageInfoResolvers<
     ContextType = any,
-    ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
+    ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']
 > = {
-    userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-    firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    organizations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>;
+    hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NodeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']
+> = {
+    resolveType: TypeResolveFn<
+        'User' | 'Event' | 'Organization' | 'EventLiveFeedback' | 'EventQuestion' | 'EventSpeaker' | 'EventVideo',
+        ParentType,
+        ContextType
+    >;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
 export type QueryResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
+    node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QuerynodeArgs, 'id'>>;
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     logout?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    eventById?: Resolver<
-        Maybe<ResolversTypes['Event']>,
-        ParentType,
-        ContextType,
-        RequireFields<QueryeventByIdArgs, 'id'>
-    >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     myOrgs?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
-    orgById?: Resolver<
-        Maybe<ResolversTypes['Organization']>,
-        ParentType,
-        ContextType,
-        RequireFields<QueryorgByIdArgs, 'id'>
-    >;
     myFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
-    questionsByid?: Resolver<
+    questionsByEventId?: Resolver<
         Maybe<Array<ResolversTypes['EventQuestion']>>,
         ParentType,
         ContextType,
-        RequireFields<QueryquestionsByidArgs, 'id'>
+        RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
     >;
+};
+
+export type UserResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    organizations?: Resolver<Maybe<ResolversTypes['OrganizationConnection']>, ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['UserEdge'] = ResolversParentTypes['UserEdge']
+> = {
+    node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['UserConnection'] = ResolversParentTypes['UserConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['UserEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<
@@ -713,62 +851,62 @@ export type MutationResolvers<
         Maybe<ResolversTypes['User']>,
         ParentType,
         ContextType,
-        RequireFields<MutationregisterArgs, never>
+        RequireFields<MutationregisterArgs, 'input'>
     >;
-    login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationloginArgs, never>>;
+    login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationloginArgs, 'input'>>;
     createEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
         ContextType,
-        RequireFields<MutationcreateEventArgs, never>
+        RequireFields<MutationcreateEventArgs, 'event'>
     >;
     updateEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
         ContextType,
-        RequireFields<MutationupdateEventArgs, never>
+        RequireFields<MutationupdateEventArgs, 'event'>
     >;
     deleteEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
         ContextType,
-        RequireFields<MutationdeleteEventArgs, never>
+        RequireFields<MutationdeleteEventArgs, 'event'>
     >;
     startEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
         ContextType,
-        RequireFields<MutationstartEventArgs, 'id'>
+        RequireFields<MutationstartEventArgs, 'eventId'>
     >;
     endEvent?: Resolver<
         Maybe<ResolversTypes['Event']>,
         ParentType,
         ContextType,
-        RequireFields<MutationendEventArgs, 'id'>
+        RequireFields<MutationendEventArgs, 'eventId'>
     >;
     createOrganization?: Resolver<
         Maybe<ResolversTypes['Organization']>,
         ParentType,
         ContextType,
-        RequireFields<MutationcreateOrganizationArgs, never>
+        RequireFields<MutationcreateOrganizationArgs, 'input'>
     >;
     updateOrganizationById?: Resolver<
         Maybe<ResolversTypes['Organization']>,
         ParentType,
         ContextType,
-        RequireFields<MutationupdateOrganizationByIdArgs, never>
+        RequireFields<MutationupdateOrganizationByIdArgs, 'input'>
     >;
     deleteOrganizationById?: Resolver<
         Maybe<ResolversTypes['Organization']>,
         ParentType,
         ContextType,
-        RequireFields<MutationdeleteOrganizationByIdArgs, never>
+        RequireFields<MutationdeleteOrganizationByIdArgs, 'input'>
     >;
     addMember?: Resolver<
         Maybe<ResolversTypes['User']>,
         ParentType,
         ContextType,
-        RequireFields<MutationaddMemberArgs, never>
+        RequireFields<MutationaddMemberArgs, 'input'>
     >;
     createFeedback?: Resolver<
         Maybe<ResolversTypes['EventLiveFeedback']>,
@@ -780,61 +918,61 @@ export type MutationResolvers<
         Maybe<ResolversTypes['EventQuestion']>,
         ParentType,
         ContextType,
-        RequireFields<MutationhideQuestionArgs, never>
+        RequireFields<MutationhideQuestionArgs, 'input'>
     >;
     reorderQueue?: Resolver<
         Maybe<ResolversTypes['EventQuestion']>,
         ParentType,
         ContextType,
-        RequireFields<MutationreorderQueueArgs, never>
+        RequireFields<MutationreorderQueueArgs, 'input'>
     >;
     addModerator?: Resolver<
         Maybe<ResolversTypes['User']>,
         ParentType,
         ContextType,
-        RequireFields<MutationaddModeratorArgs, never>
+        RequireFields<MutationaddModeratorArgs, 'input'>
     >;
     nextQuestion?: Resolver<
         ResolversTypes['Int'],
         ParentType,
         ContextType,
-        RequireFields<MutationnextQuestionArgs, 'id'>
+        RequireFields<MutationnextQuestionArgs, 'eventId'>
     >;
     prevQuestion?: Resolver<
         ResolversTypes['Int'],
         ParentType,
         ContextType,
-        RequireFields<MutationprevQuestionArgs, 'id'>
+        RequireFields<MutationprevQuestionArgs, 'eventId'>
     >;
     createQuestion?: Resolver<
-        Maybe<ResolversTypes['EventQuestion']>,
+        ResolversTypes['EventQuestion'],
         ParentType,
         ContextType,
-        RequireFields<MutationcreateQuestionArgs, never>
+        RequireFields<MutationcreateQuestionArgs, 'input'>
     >;
     alterLike?: Resolver<
-        Maybe<ResolversTypes['Like']>,
+        ResolversTypes['Boolean'],
         ParentType,
         ContextType,
-        RequireFields<MutationalterLikeArgs, never>
+        RequireFields<MutationalterLikeArgs, 'input'>
     >;
     addSpeaker?: Resolver<
         Maybe<ResolversTypes['EventSpeaker']>,
         ParentType,
         ContextType,
-        RequireFields<MutationaddSpeakerArgs, never>
+        RequireFields<MutationaddSpeakerArgs, 'input'>
     >;
     removeSpeaker?: Resolver<
         Maybe<ResolversTypes['EventSpeaker']>,
         ParentType,
         ContextType,
-        RequireFields<MutationremoveSpeakerArgs, never>
+        RequireFields<MutationremoveSpeakerArgs, 'input'>
     >;
     updateSpeaker?: Resolver<
         Maybe<ResolversTypes['EventSpeaker']>,
         ParentType,
         ContextType,
-        RequireFields<MutationupdateSpeakerArgs, never>
+        RequireFields<MutationupdateSpeakerArgs, 'input'>
     >;
     addVideo?: Resolver<
         ResolversTypes['EventVideo'],
@@ -846,7 +984,7 @@ export type MutationResolvers<
         Maybe<ResolversTypes['EventVideo']>,
         ParentType,
         ContextType,
-        RequireFields<MutationremoveVideoArgs, never>
+        RequireFields<MutationremoveVideoArgs, 'input'>
     >;
     updateVideo?: Resolver<
         Maybe<ResolversTypes['EventVideo']>,
@@ -877,11 +1015,30 @@ export type EventResolvers<
     isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     questions?: Resolver<Maybe<Array<ResolversTypes['EventQuestion']>>, ParentType, ContextType>;
     speakers?: Resolver<Maybe<Array<ResolversTypes['EventSpeaker']>>, ParentType, ContextType>;
-    registrants?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+    registrants?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     participants?: Resolver<Maybe<Array<ResolversTypes['EventParticipant']>>, ParentType, ContextType>;
-    videos?: Resolver<Maybe<Array<ResolversTypes['EventVideo']>>, ParentType, ContextType>;
+    videos?: Resolver<Maybe<ResolversTypes['EventVideoConnection']>, ParentType, ContextType>;
     liveFeedback?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedback']>>, ParentType, ContextType>;
-    moderators?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+    moderators?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
+    isViewerModerator?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventEdge'] = ResolversParentTypes['EventEdge']
+> = {
+    node?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventConnection'] = ResolversParentTypes['EventConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -894,28 +1051,28 @@ export type SubscriptionResolvers<
         'questionPosition',
         ParentType,
         ContextType,
-        RequireFields<SubscriptionquestionPositionArgs, 'id'>
+        RequireFields<SubscriptionquestionPositionArgs, 'eventId'>
     >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         Maybe<ResolversTypes['EventLiveFeedback']>,
         'eventLiveFeedbackCreated',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'id'>
+        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
     >;
     eventQuestionCreated?: SubscriptionResolver<
         ResolversTypes['EventQuestion'],
         'eventQuestionCreated',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventQuestionCreatedArgs, 'id'>
+        RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
     >;
     likeCountChanged?: SubscriptionResolver<
         ResolversTypes['Like'],
         'likeCountChanged',
         ParentType,
         ContextType,
-        RequireFields<SubscriptionlikeCountChangedArgs, 'id'>
+        RequireFields<SubscriptionlikeCountChangedArgs, 'eventId'>
     >;
 };
 
@@ -923,11 +1080,29 @@ export type OrganizationResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']
 > = {
-    orgId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    members?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
-    events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
+    members?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
+    events?: Resolver<Maybe<ResolversTypes['EventConnection']>, ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrganizationEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['OrganizationEdge'] = ResolversParentTypes['OrganizationEdge']
+> = {
+    node?: Resolver<ResolversTypes['Organization'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrganizationConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['OrganizationConnection'] = ResolversParentTypes['OrganizationConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['OrganizationEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -935,7 +1110,7 @@ export type EventLiveFeedbackResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventLiveFeedback'] = ResolversParentTypes['EventLiveFeedback']
 > = {
-    feedbackId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -957,12 +1132,11 @@ export type EventQuestionResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventQuestion'] = ResolversParentTypes['EventQuestion']
 > = {
-    questionId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdById?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-    refQuestionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     refQuestion?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
     question?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -972,9 +1146,28 @@ export type EventQuestionResolvers<
     isFollowUp?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isQuote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     likes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-    likedBy?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+    likedBy?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     likedByCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     isLikedByMe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isMyQuestion?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventQuestionEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventQuestionEdge'] = ResolversParentTypes['EventQuestionEdge']
+> = {
+    node?: Resolver<ResolversTypes['EventQuestion'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventQuestionConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventQuestionConnection'] = ResolversParentTypes['EventQuestionConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventQuestionEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -991,7 +1184,7 @@ export type EventSpeakerResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
 > = {
-    id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     eventId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -1006,27 +1199,57 @@ export type EventVideoResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['EventVideo'] = ResolversParentTypes['EventVideo']
 > = {
-    id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     lang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventVideoEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventVideoEdge'] = ResolversParentTypes['EventVideoEdge']
+> = {
+    node?: Resolver<ResolversTypes['EventVideo'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventVideoConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes['EventVideoConnection'] = ResolversParentTypes['EventVideoConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventVideoEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
     Date?: GraphQLScalarType;
-    User?: UserResolvers<ContextType>;
+    PageInfo?: PageInfoResolvers<ContextType>;
+    Node?: NodeResolvers<ContextType>;
     Query?: QueryResolvers<ContextType>;
+    User?: UserResolvers<ContextType>;
+    UserEdge?: UserEdgeResolvers<ContextType>;
+    UserConnection?: UserConnectionResolvers<ContextType>;
     Mutation?: MutationResolvers<ContextType>;
     Event?: EventResolvers<ContextType>;
+    EventEdge?: EventEdgeResolvers<ContextType>;
+    EventConnection?: EventConnectionResolvers<ContextType>;
     Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
+    OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
+    OrganizationConnection?: OrganizationConnectionResolvers<ContextType>;
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
     EventParticipant?: EventParticipantResolvers<ContextType>;
     EventQuestion?: EventQuestionResolvers<ContextType>;
+    EventQuestionEdge?: EventQuestionEdgeResolvers<ContextType>;
+    EventQuestionConnection?: EventQuestionConnectionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;
     EventSpeaker?: EventSpeakerResolvers<ContextType>;
     EventVideo?: EventVideoResolvers<ContextType>;
+    EventVideoEdge?: EventVideoEdgeResolvers<ContextType>;
+    EventVideoConnection?: EventVideoConnectionResolvers<ContextType>;
 };
 
 /**
@@ -1053,14 +1276,31 @@ type LoaderResolver<TReturn, TObj, TParams, TContext> =
           };
       };
 export interface Loaders<TContext = import('mercurius').MercuriusContext & { reply: import('fastify').FastifyReply }> {
+    PageInfo?: {
+        hasNextPage?: LoaderResolver<Scalars['Boolean'], PageInfo, {}, TContext>;
+        hasPreviousPage?: LoaderResolver<Scalars['Boolean'], PageInfo, {}, TContext>;
+        startCursor?: LoaderResolver<Maybe<Scalars['String']>, PageInfo, {}, TContext>;
+        endCursor?: LoaderResolver<Maybe<Scalars['String']>, PageInfo, {}, TContext>;
+    };
+
     User?: {
-        userId?: LoaderResolver<Scalars['ID'], User, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], User, {}, TContext>;
         firstName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
-        organizations?: LoaderResolver<Maybe<Array<Maybe<Organization>>>, User, {}, TContext>;
+        organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, {}, TContext>;
+    };
+
+    UserEdge?: {
+        node?: LoaderResolver<User, UserEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], UserEdge, {}, TContext>;
+    };
+
+    UserConnection?: {
+        edges?: LoaderResolver<Maybe<Array<UserEdge>>, UserConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, UserConnection, {}, TContext>;
     };
 
     Event?: {
@@ -1081,23 +1321,44 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isPrivate?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questions?: LoaderResolver<Maybe<Array<EventQuestion>>, Event, {}, TContext>;
         speakers?: LoaderResolver<Maybe<Array<EventSpeaker>>, Event, {}, TContext>;
-        registrants?: LoaderResolver<Maybe<Array<User>>, Event, {}, TContext>;
+        registrants?: LoaderResolver<Maybe<UserConnection>, Event, {}, TContext>;
         participants?: LoaderResolver<Maybe<Array<EventParticipant>>, Event, {}, TContext>;
-        videos?: LoaderResolver<Maybe<Array<EventVideo>>, Event, {}, TContext>;
+        videos?: LoaderResolver<Maybe<EventVideoConnection>, Event, {}, TContext>;
         liveFeedback?: LoaderResolver<Maybe<Array<EventLiveFeedback>>, Event, {}, TContext>;
-        moderators?: LoaderResolver<Maybe<Array<User>>, Event, {}, TContext>;
+        moderators?: LoaderResolver<Maybe<UserConnection>, Event, {}, TContext>;
+        isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+    };
+
+    EventEdge?: {
+        node?: LoaderResolver<Event, EventEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], EventEdge, {}, TContext>;
+    };
+
+    EventConnection?: {
+        edges?: LoaderResolver<Maybe<Array<EventEdge>>, EventConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, EventConnection, {}, TContext>;
     };
 
     Organization?: {
-        orgId?: LoaderResolver<Scalars['ID'], Organization, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], Organization, {}, TContext>;
         name?: LoaderResolver<Scalars['String'], Organization, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, Organization, {}, TContext>;
-        members?: LoaderResolver<Maybe<Array<User>>, Organization, {}, TContext>;
-        events?: LoaderResolver<Maybe<Array<Event>>, Organization, {}, TContext>;
+        members?: LoaderResolver<Maybe<UserConnection>, Organization, {}, TContext>;
+        events?: LoaderResolver<Maybe<EventConnection>, Organization, {}, TContext>;
+    };
+
+    OrganizationEdge?: {
+        node?: LoaderResolver<Organization, OrganizationEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], OrganizationEdge, {}, TContext>;
+    };
+
+    OrganizationConnection?: {
+        edges?: LoaderResolver<Maybe<Array<OrganizationEdge>>, OrganizationConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, OrganizationConnection, {}, TContext>;
     };
 
     EventLiveFeedback?: {
-        feedbackId?: LoaderResolver<Scalars['ID'], EventLiveFeedback, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], EventLiveFeedback, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventLiveFeedback, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventLiveFeedback, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedback, {}, TContext>;
@@ -1111,12 +1372,11 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventQuestion?: {
-        questionId?: LoaderResolver<Scalars['ID'], EventQuestion, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], EventQuestion, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventQuestion, {}, TContext>;
         createdById?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventQuestion, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;
-        refQuestionId?: LoaderResolver<Maybe<Scalars['ID']>, EventQuestion, {}, TContext>;
         refQuestion?: LoaderResolver<Maybe<EventQuestion>, EventQuestion, {}, TContext>;
         question?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
         position?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
@@ -1126,9 +1386,20 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isFollowUp?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isQuote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         likes?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
-        likedBy?: LoaderResolver<Maybe<Array<Maybe<User>>>, EventQuestion, {}, TContext>;
+        likedBy?: LoaderResolver<Maybe<UserConnection>, EventQuestion, {}, TContext>;
         likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
         isLikedByMe?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
+        isMyQuestion?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
+    };
+
+    EventQuestionEdge?: {
+        node?: LoaderResolver<EventQuestion, EventQuestionEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], EventQuestionEdge, {}, TContext>;
+    };
+
+    EventQuestionConnection?: {
+        edges?: LoaderResolver<Maybe<Array<EventQuestionEdge>>, EventQuestionConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, EventQuestionConnection, {}, TContext>;
     };
 
     Like?: {
@@ -1137,7 +1408,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventSpeaker?: {
-        id?: LoaderResolver<Scalars['String'], EventSpeaker, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], EventSpeaker, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, EventSpeaker, {}, TContext>;
         eventId?: LoaderResolver<Maybe<Scalars['ID']>, EventSpeaker, {}, TContext>;
         user?: LoaderResolver<Maybe<User>, EventSpeaker, {}, TContext>;
@@ -1148,10 +1419,20 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventVideo?: {
-        id?: LoaderResolver<Scalars['String'], EventVideo, {}, TContext>;
+        id?: LoaderResolver<Scalars['ID'], EventVideo, {}, TContext>;
         url?: LoaderResolver<Scalars['String'], EventVideo, {}, TContext>;
         lang?: LoaderResolver<Scalars['String'], EventVideo, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventVideo, {}, TContext>;
+    };
+
+    EventVideoEdge?: {
+        node?: LoaderResolver<EventVideo, EventVideoEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], EventVideoEdge, {}, TContext>;
+    };
+
+    EventVideoConnection?: {
+        edges?: LoaderResolver<Maybe<Array<EventVideoEdge>>, EventVideoConnection, {}, TContext>;
+        pageInfo?: LoaderResolver<PageInfo, EventVideoConnection, {}, TContext>;
     };
 }
 declare module 'mercurius' {

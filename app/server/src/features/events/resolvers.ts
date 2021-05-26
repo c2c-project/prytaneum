@@ -1,47 +1,68 @@
-import { Resolvers } from '@local/features/utils';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { connectionFromArray, fromGlobalId } from 'graphql-relay';
+import { Resolvers, toGlobalId, errors } from '@local/features/utils';
 import * as Event from './methods';
+
+const toEventId = toGlobalId('Event');
+const toUserId = toGlobalId('User');
 
 export const resolvers: Resolvers = {
     Query: {
-        eventById(parent, args, ctx, info) {
-            return Event.eventById(ctx.prisma, args.id);
-        },
-        events(parent, args, ctx, info) {
-            return Event.findPublicEvents(ctx.prisma);
+        async events(parent, args, ctx, info) {
+            const foundEvents = await Event.findPublicEvents(ctx.prisma);
+            return foundEvents.map(toEventId);
         },
     },
     Mutation: {
-        createEvent(parent, args, ctx, info) {
-            return Event.createEvent(ctx.userId, ctx.prisma, args.event);
+        async createEvent(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const createdEvent = await Event.createEvent(ctx.viewer.id, ctx.prisma, args.event);
+            return toEventId(createdEvent);
         },
-        updateEvent(parent, args, ctx, info) {
-            return Event.updateEvent(ctx.userId, ctx.prisma, args.event);
+        async updateEvent(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const updatedEvent = await Event.updateEvent(ctx.viewer.id, ctx.prisma, args.event);
+            return toEventId(updatedEvent);
         },
-        deleteEvent(parent, args, ctx, info) {
-            return Event.deleteEvent(ctx.userId, ctx.prisma, args.event);
+        async deleteEvent(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const deletedEvent = await Event.deleteEvent(ctx.viewer.id, ctx.prisma, args.event);
+            return toEventId(deletedEvent);
         },
-        startEvent(parent, args, ctx, info) {
-            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.id, true);
+        async startEvent(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, args.eventId, true);
+            return toEventId(updatedEvent);
         },
-        endEvent(parent, args, ctx, info) {
-            return Event.changeEventStatus(ctx.userId, ctx.prisma, args.id, false);
+        async endEvent(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, args.eventId, false);
+            return toEventId(updatedEvent);
         },
     },
     Event: {
         speakers(parent, args, ctx, info) {
             return Event.findSpeakersByEventId(parent.id, ctx.prisma);
         },
-        videos(parent, args, ctx, info) {
-            return Event.findVideosByEventId(parent.id, ctx.prisma);
+        async videos(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const videos = await Event.findVideosByEventId(eventId, ctx.prisma);
+            return connectionFromArray(videos, args);
         },
-        moderators(parent, args, ctx, info) {
-            return Event.findModeratorsByEventId(parent.id, ctx.prisma);
+        async moderators(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const foundMods = await Event.findModeratorsByEventId(eventId, ctx.prisma);
+            if (!foundMods) return null;
+            return connectionFromArray(foundMods.map(toUserId), args);
         },
         organization(parent, args, ctx, info) {
-            return Event.findOrgByid(parent.id, ctx.prisma);
+            return Event.findOrgByEventId(parent.id, ctx.prisma);
         },
         questions(parent, args, ctx, info) {
-            return Event.findQuestionsByid(parent.id, ctx.prisma);
+            return Event.findQuestionsByEventId(parent.id, ctx.prisma);
+        },
+        isViewerModerator(parent, args, ctx, info) {
+            return Event.isModerator(ctx.viewer.id, parent.id, ctx.prisma);
         },
     },
 };

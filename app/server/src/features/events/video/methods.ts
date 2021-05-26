@@ -1,15 +1,12 @@
 import { PrismaClient } from '@app/prisma';
 import { CreateVideo, UpdateVideo, DeleteVideo } from '@local/graphql-types';
-import { Maybe, errors } from '@local/features/utils';
+import { errors } from '@local/features/utils';
 import { canUserModify } from '../methods';
 
 /**
  * add a video to the given event
  */
-export async function addVideo(userId: Maybe<string>, prisma: PrismaClient, input: Maybe<CreateVideo> | undefined) {
-    if (!userId) throw new Error(errors.noLogin);
-    if (!input) throw new Error(errors.invalidArgs);
-
+export async function addVideo(userId: string, prisma: PrismaClient, input: CreateVideo) {
     const { eventId, lang, url } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -27,10 +24,7 @@ export async function addVideo(userId: Maybe<string>, prisma: PrismaClient, inpu
 /**
  * remove a video from an event
  */
-export async function removeVideo(userId: Maybe<string>, prisma: PrismaClient, input: Maybe<DeleteVideo> | undefined) {
-    if (!userId) throw new Error(errors.noLogin);
-    if (!input) throw new Error(errors.invalidArgs);
-
+export async function removeVideo(userId: string, prisma: PrismaClient, input: DeleteVideo) {
     const { eventId, id } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -42,10 +36,7 @@ export async function removeVideo(userId: Maybe<string>, prisma: PrismaClient, i
 /**
  * update a video
  */
-export async function updateVideo(userId: Maybe<string>, prisma: PrismaClient, input: Maybe<UpdateVideo> | undefined) {
-    if (!userId) throw new Error(errors.noLogin);
-    if (!input) throw new Error(errors.invalidArgs);
-
+export async function updateVideo(userId: string, prisma: PrismaClient, input: UpdateVideo) {
     const { eventId, videoId } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);

@@ -1,32 +1,46 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Organization from './methods';
-import { Resolvers } from '../utils';
+import { Resolvers, errors, toGlobalId } from '../utils';
+
+const toOrgId = toGlobalId('Organization');
+const toUserId = toGlobalId('User');
+const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Query: {
-        myOrgs(parent, input, ctx, info) {
-            return Organization.orgsByUserId(ctx.userId, ctx.prisma);
-        },
-        orgById(parent, input, ctx, info) {
-            return Organization.orgsById(input.id, ctx.prisma);
+        async myOrgs(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return null;
+            const userOrgs = await Organization.findOrgsByUserId(ctx.viewer.id, ctx.prisma);
+            return userOrgs.map(toOrgId);
         },
     },
     Mutation: {
-        createOrganization(parent, input, ctx, info) {
-            return Organization.createOrg(ctx.userId, ctx.prisma, input.input);
+        async createOrganization(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const createdOrg = await Organization.createOrg(ctx.viewer.id, ctx.prisma, args.input);
+            return toOrgId(createdOrg);
         },
-        updateOrganizationById(parent, input, ctx, info) {
-            return Organization.updateOrg(ctx.userId, ctx.prisma, input.input);
+        async updateOrganizationById(parent, args, ctx, info) {
+            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            const updatedOrg = await Organization.updateOrg(ctx.viewer.id, ctx.prisma, args.input);
+            return toOrgId(updatedOrg);
         },
         deleteOrganizationById() {
+            // unimplemented on purpose
             return Organization.deleteOrg();
         },
     },
     Organization: {
-        members(parent, input, ctx, info) {
-            return Organization.membersByOrgId(ctx.userId, ctx.prisma, parent.orgId);
+        async members(parent, args, ctx, info) {
+            const { id: orgId } = fromGlobalId(parent.id);
+            const orgMembers = await Organization.findMembersByOrgId(ctx.prisma, orgId);
+            return connectionFromArray(orgMembers.map(toUserId), args);
         },
-        events(parent, input, ctx, info) {
-            return Organization.eventsByOrgId(ctx.prisma, parent.orgId);
+        async events(parent, args, ctx, info) {
+            const { id: orgId } = fromGlobalId(parent.id);
+            const orgEvents = await Organization.findEventsByOrgId(ctx.prisma, orgId);
+            return connectionFromArray(orgEvents.map(toEventId), args);
         },
     },
 };

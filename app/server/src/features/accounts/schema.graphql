@@ -1,8 +1,8 @@
 """
 User Data
 """
-type User {
-    userId: ID!
+type User implements Node {
+    id: ID!
     firstName: String
     lastName: String
     email: String
@@ -16,7 +16,17 @@ type User {
     """
     Organizations that this user belongs to
     """
-    organizations: [Organization]
+    organizations: OrganizationConnection
+}
+
+type UserEdge {
+    node: User!
+    cursor: String!
+}
+
+type UserConnection {
+    edges: [UserEdge!]
+    pageInfo: PageInfo!
 }
 
 input RegistrationForm {
@@ -45,6 +55,6 @@ type Query {
 }
 
 type Mutation {
-    register(input: RegistrationForm): User
-    login(input: LoginForm): User
+    register(input: RegistrationForm!): User
+    login(input: LoginForm!): User
 }
