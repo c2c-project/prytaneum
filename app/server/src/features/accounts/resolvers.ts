@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId } from '@local/features/utils';
+import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import * as User from './methods';
 
 const toUserId = toGlobalId('User');
@@ -13,10 +13,6 @@ export const resolvers: Resolvers = {
             const user = await User.findUserById(ctx.viewer.id, ctx.prisma);
             return toUserId(user);
         },
-        logout(parent, args, ctx, info) {
-            ctx.reply.clearCookie('jwt');
-            return new Date();
-        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -28,13 +24,21 @@ export const resolvers: Resolvers = {
     },
     Mutation: {
         async register(parent, args, ctx, info) {
-            const registeredUser = await User.registerSelf(ctx.prisma, args.input);
-            return toUserId(registeredUser);
+            return runMutation(async () => {
+                const registeredUser = await User.registerSelf(ctx.prisma, args.input);
+                return toUserId(registeredUser);
+            });
         },
         async login(parent, args, ctx, info) {
-            const { user, token } = await User.loginWithPassword(ctx.prisma, args.input);
-            ctx.reply.setCookie('jwt', token);
-            return toUserId(user);
+            return runMutation(async () => {
+                const { user, token } = await User.loginWithPassword(ctx.prisma, args.input);
+                ctx.reply.setCookie('jwt', token);
+                return toUserId(user);
+            });
+        },
+        logout(parent, args, ctx, info) {
+            ctx.reply.clearCookie('jwt');
+            return new Date();
         },
     },
 };

@@ -40,7 +40,17 @@ type EventSpeaker implements Node {
     pictureUrl: String
 }
 
-input SpeakerForm {
+type EventSpeakerEdge {
+    node: EventSpeaker!
+    cursor: String!
+}
+
+type EventSpeakerConnection {
+    edges: [EventSpeakerEdge!]
+    pageInfo: PageInfo!
+}
+
+input CreateSpeaker {
     eventId: String!
     name: String!
     title: String!
@@ -71,8 +81,14 @@ input DeleteSpeaker {
     id: String!
 }
 
+type EventSpeakerMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventSpeaker
+}
+
 type Mutation {
-    addSpeaker(input: SpeakerForm!): EventSpeaker
-    removeSpeaker(input: DeleteSpeaker!): EventSpeaker
-    updateSpeaker(input: UpdateSpeaker!): EventSpeaker
+    createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
+    deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
+    updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
 }

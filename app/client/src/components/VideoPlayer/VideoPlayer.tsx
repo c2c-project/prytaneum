@@ -24,6 +24,8 @@ const useStyles = makeStyles({
     },
 });
 
+export type VideoPlayerProps = ReactPlayerProps;
+
 /** Displays the video stream that plays during the townhall
  *  @category Component
  *  @constructor VideoPlayer
@@ -31,7 +33,7 @@ const useStyles = makeStyles({
  *  @param {string | string[] | SourceProps[] | MediaStream} ReactPlayerProps.url URL
  *  @param {any} ReactPlayerProps.rest rest of props to pass to ReactPlayer
  */
-function VideoPlayer({ url, rest }: ReactPlayerProps) {
+export function VideoPlayer({ url, rest }: ReactPlayerProps) {
     const classes = useStyles();
     return (
         <div className={classes.outerContainer}>
@@ -60,5 +62,3 @@ function VideoPlayer({ url, rest }: ReactPlayerProps) {
 VideoPlayer.propTypes = {
     url: PropTypes.string.isRequired,
 };
-
-export default VideoPlayer;

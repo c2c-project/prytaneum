@@ -16,8 +16,8 @@ import { Add, MoreVert } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { graphql, useFragment } from 'react-relay';
 
-import { VideoEventSettingsFragment$key } from '@local/__generated__/VideoEventSettingsFragment.graphql';
-import { EventVideo } from '@local/graphql-types';
+import type { VideoEventSettingsFragment$key } from '@local/__generated__/VideoEventSettingsFragment.graphql';
+import type { EventVideo } from '@local/graphql-types';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { CreateVideo } from './CreateVideo';
 import { UpdateVideo } from './UpdateVideo';
@@ -38,20 +38,26 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const VIDEO_EVENT_SETTINGS_FRAGMENT = graphql`
-    fragment VideoEventSettingsFragment on Event {
+    fragment VideoEventSettingsFragment on Event
+    @argumentDefinitions(first: { type: "Int", defaultValue: 10 }, after: { type: "String", defaultValue: "" }) {
         id
-        videos {
-            id
-            url
-            lang
+        videos(first: $first, after: $after) @connection(key: "VideoEventSettingsFragment_videos") {
+            __id
+            edges {
+                node {
+                    id
+                    url
+                    lang
+                }
+                cursor
+            }
         }
     }
 `;
 
-interface State {
+interface TState {
     isFormDialogOpen: boolean;
     isConfDialogOpen: boolean;
-    list: EventVideo[];
     anchorEl: HTMLElement | null;
     focusedVideo: EventVideo | null;
 }
@@ -61,12 +67,9 @@ type Action =
     | { type: 'dialog/update-video'; payload?: never }
     | { type: 'dialog/delete-video'; payload?: never }
     | { type: 'dialog/close-all'; payload?: never }
-    | { type: 'videos/append'; payload: EventVideo }
-    | { type: 'videos/focus'; payload: { video: EventVideo; anchorEl: HTMLElement } }
-    | { type: 'videos/remove-focused'; payload?: never }
-    | { type: 'videos/update-focused'; payload: EventVideo };
+    | { type: 'videos/focus'; payload: { video: EventVideo; anchorEl: HTMLElement } };
 
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: TState, action: Action): TState => {
     switch (action.type) {
         case 'dialog/create-video':
             // clear focused video if any, open the form dialog, close any other dialogs
@@ -91,15 +94,6 @@ const reducer = (state: State, action: Action): State => {
                 isConfDialogOpen: true,
                 anchorEl: null,
             };
-        case 'videos/append':
-            // close all dialogs, append payload to list of videos
-            return {
-                ...state,
-                list: [...state.list, action.payload],
-                isFormDialogOpen: false,
-                isConfDialogOpen: false,
-                anchorEl: null,
-            };
         case 'videos/focus':
             // assign payload as the focused video and anchor El
             return {
@@ -115,32 +109,6 @@ const reducer = (state: State, action: Action): State => {
                 isFormDialogOpen: false,
                 isConfDialogOpen: false,
             };
-        case 'videos/remove-focused': {
-            const { focusedVideo } = state;
-            if (focusedVideo === null) return state;
-            return {
-                ...state,
-                list: state.list.filter(({ url }) => url !== focusedVideo.url),
-                isConfDialogOpen: false,
-            };
-        }
-        case 'videos/update-focused': {
-            const { focusedVideo } = state;
-            if (focusedVideo === null) return state; // this should never happen
-
-            // logic to replace the focused video with the updated video
-            const idx = state.list.findIndex(({ url }) => url === focusedVideo.url);
-            const newList = [...state.list];
-            newList[idx] = action.payload;
-
-            return {
-                ...state,
-                list: newList,
-                isFormDialogOpen: false,
-                isConfDialogOpen: false,
-                anchorEl: null,
-            };
-        }
         default:
             return state;
     }
@@ -148,10 +116,11 @@ const reducer = (state: State, action: Action): State => {
 
 export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
     const { videos, id: eventId } = useFragment(VIDEO_EVENT_SETTINGS_FRAGMENT, fragmentRef);
-    const [{ isFormDialogOpen, isConfDialogOpen, list, anchorEl, focusedVideo }, dispatch] = React.useReducer(reducer, {
+    const videoEdges = React.useMemo(() => videos?.edges?.map(({ node }) => node) || [], [videos?.edges]);
+    const connections = React.useMemo(() => (videos?.__id ? [videos.__id] : []), [videos]);
+    const [{ isFormDialogOpen, isConfDialogOpen, anchorEl, focusedVideo }, dispatch] = React.useReducer(reducer, {
         isFormDialogOpen: false,
         isConfDialogOpen: false,
-        list: videos ? [...videos] : [],
         anchorEl: null,
         focusedVideo: null,
     });
@@ -164,27 +133,14 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
     const openMenu = (video: EventVideo) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         dispatch({ type: 'videos/focus', payload: { video, anchorEl: e.currentTarget } });
 
-    // append a video to the list of videos
-    const appendVideo = (video: EventVideo | null) => video && dispatch({ type: 'videos/append', payload: video });
-
     // open the update form
     const openUpdateForm = () => dispatch({ type: 'dialog/update-video' });
 
-    // update a video in the list
-    const updateVideo = (updatedVideo: EventVideo | null) =>
-        updatedVideo && dispatch({ type: 'videos/update-focused', payload: updatedVideo });
-
-    // open the deletion prompt
+    // // open the deletion prompt
     const promptDelete = () => dispatch({ type: 'dialog/delete-video' });
 
-    // open the form for creating a new video
+    // // open the form for creating a new video
     const openFormDialog = () => dispatch({ type: 'dialog/create-video' });
-
-    // handle video deletion when the user confirms
-    const handleDelete = () => {
-        if (focusedVideo === null) return; // TODO: snack
-        dispatch({ type: 'videos/remove-focused' });
-    };
 
     return (
         <Grid container justify='center' className={className}>
@@ -192,12 +148,12 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
                 <DialogContent>
                     {focusedVideo !== null ? (
                         <UpdateVideo
-                            onSubmit={updateVideo}
+                            onSubmit={close}
                             video={{ id: focusedVideo.id, url: focusedVideo.url, lang: focusedVideo.lang }}
                             eventId={eventId}
                         />
                     ) : (
-                        <CreateVideo onSubmit={appendVideo} eventId={eventId} />
+                        <CreateVideo onSubmit={close} eventId={eventId} connections={connections} />
                     )}
                 </DialogContent>
             </ResponsiveDialog>
@@ -211,22 +167,23 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
                 open={isConfDialogOpen}
                 onClose={close}
                 title={`Delete "${focusedVideo?.lang}" video?`}
-                onConfirm={handleDelete}
+                onConfirm={close}
                 video={focusedVideo}
                 eventId={eventId}
+                connections={connections}
             >
                 <>
                     Are you sure you want to delete the&nbsp;
                     <b>{focusedVideo?.lang}</b> video?
                 </>
             </DeleteVideo>
-            {list.length > 0 ? (
+            {videoEdges.length > 0 ? (
                 <List className={classes.listRoot} disablePadding>
-                    {list.map(({ id, lang, url }) => (
+                    {videoEdges.map(({ id, url, lang }) => (
                         <ListItem key={id} disableGutters>
                             <ListItemText primary={lang} secondary={url} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu({ url, lang, id })}>
+                                <IconButton onClick={openMenu({ id, url, lang })}>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -239,7 +196,7 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
                 </Typography>
             )}
             <Grid container justify='flex-end'>
-                <Button onClick={openFormDialog} startIcon={<Add />}>
+                <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Add Video
                 </Button>
             </Grid>

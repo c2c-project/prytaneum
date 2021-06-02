@@ -12,10 +12,7 @@ import {
     remoteIncrementQueue,
 } from '@local/reducers';
 
-import { useEvent } from '@local/hooks';
-
 export default function usePlaylist() {
-    const [event] = useEvent();
     const playlist = useSelector((store) => store.playlist);
     const dispatch = useDispatch();
     // const socketFn: SocketFn = React.useCallback(

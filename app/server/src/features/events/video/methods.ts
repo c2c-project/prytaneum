@@ -6,7 +6,7 @@ import { canUserModify } from '../methods';
 /**
  * add a video to the given event
  */
-export async function addVideo(userId: string, prisma: PrismaClient, input: CreateVideo) {
+export async function createVideo(userId: string, prisma: PrismaClient, input: CreateVideo) {
     const { eventId, lang, url } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
@@ -24,7 +24,7 @@ export async function addVideo(userId: string, prisma: PrismaClient, input: Crea
 /**
  * remove a video from an event
  */
-export async function removeVideo(userId: string, prisma: PrismaClient, input: DeleteVideo) {
+export async function deleteVideo(userId: string, prisma: PrismaClient, input: DeleteVideo) {
     const { eventId, id } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);

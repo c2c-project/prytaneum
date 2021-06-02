@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import {
     List,
@@ -24,9 +25,9 @@ import type {
 } from '@local/__generated__/SpeakerEventSettingsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { CreateSpeaker, TCreatedSpeaker } from './CreateSpeaker';
+import { CreateSpeaker } from './CreateSpeaker';
 import { DeleteSpeaker } from './DeleteSpeaker';
-import { UpdateSpeaker, TUpdatedSpeaker } from './UpdateSpeaker';
+import { UpdateSpeaker } from './UpdateSpeaker';
 
 interface EventSettingsProps {
     fragmentRef: SpeakerEventSettingsFragment$key;
@@ -42,26 +43,37 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export type TSpeaker = ArrayElement<NonNullable<SpeakerEventSettingsFragment$data['speakers']>>;
-interface State {
+// all this for an array element type :\
+export type TSpeaker = ArrayElement<
+    NonNullable<NonNullable<SpeakerEventSettingsFragment$data['speakers']>['edges']>
+>['node'];
+
+interface TState {
     isFormDialogOpen: boolean;
     isConfDialogOpen: boolean;
-    list: TSpeaker[];
+    // list: TSpeaker[];
     anchorEl: HTMLElement | null;
     focusedSpeaker: TSpeaker | null;
 }
 
 export const SPEAKER_EVENT_SETTINGS_FRAGMENT = graphql`
-    fragment SpeakerEventSettingsFragment on Event {
+    fragment SpeakerEventSettingsFragment on Event
+    @argumentDefinitions(first: { type: "Int", defaultValue: 10 }, after: { type: "String", defaultValue: "" }) {
         id
-        speakers {
-            id
-            eventId
-            name
-            title
-            description
-            pictureUrl
-            email
+        speakers(first: $first, after: $after) @connection(key: "SpeakerEventSettingsFragment_speakers") {
+            __id
+            edges {
+                node {
+                    id
+                    eventId
+                    name
+                    title
+                    description
+                    pictureUrl
+                    email
+                }
+                cursor
+            }
         }
     }
 `;
@@ -71,12 +83,9 @@ type Action =
     | { type: 'dialog/update-speaker'; payload?: never }
     | { type: 'dialog/delete-speaker'; payload?: never }
     | { type: 'dialog/close-all'; payload?: never }
-    | { type: 'speakers/append'; payload: TSpeaker }
-    | { type: 'speakers/focus'; payload: { speaker: TSpeaker; anchorEl: HTMLElement } }
-    | { type: 'speakers/remove-focused'; payload?: never }
-    | { type: 'speakers/update-focused'; payload: TSpeaker };
+    | { type: 'speakers/focus'; payload: { speaker: TSpeaker; anchorEl: HTMLElement } };
 
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: TState, action: Action): TState => {
     switch (action.type) {
         case 'dialog/create-speaker':
             // clear focused video if any, open the form dialog, close any other dialogs
@@ -101,15 +110,6 @@ const reducer = (state: State, action: Action): State => {
                 isConfDialogOpen: true,
                 anchorEl: null,
             };
-        case 'speakers/append':
-            // close all dialogs, append payload to list of videos
-            return {
-                ...state,
-                list: [...state.list, action.payload],
-                isFormDialogOpen: false,
-                isConfDialogOpen: false,
-                anchorEl: null,
-            };
         case 'speakers/focus':
             // assign payload as the focused video and anchor El
             return {
@@ -125,32 +125,6 @@ const reducer = (state: State, action: Action): State => {
                 isFormDialogOpen: false,
                 isConfDialogOpen: false,
             };
-        case 'speakers/remove-focused': {
-            const { focusedSpeaker: focusedVideo } = state;
-            if (focusedVideo === null) return state;
-            return {
-                ...state,
-                list: state.list.filter(({ id }) => id !== focusedVideo.id),
-                isConfDialogOpen: false,
-            };
-        }
-        case 'speakers/update-focused': {
-            const { focusedSpeaker: focusedVideo } = state;
-            if (focusedVideo === null) return state; // this should never happen
-
-            // logic to replace the focused video with the updated video
-            const idx = state.list.findIndex(({ id }) => id === focusedVideo.id);
-            const newList = [...state.list];
-            newList[idx] = action.payload;
-
-            return {
-                ...state,
-                list: newList,
-                isFormDialogOpen: false,
-                isConfDialogOpen: false,
-                anchorEl: null,
-            };
-        }
         default:
             return state;
     }
@@ -158,16 +132,15 @@ const reducer = (state: State, action: Action): State => {
 
 export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
     const { speakers, id: eventId } = useFragment(SPEAKER_EVENT_SETTINGS_FRAGMENT, fragmentRef);
-    const [{ isFormDialogOpen, isConfDialogOpen, list, anchorEl, focusedSpeaker }, dispatch] = React.useReducer(
-        reducer,
-        {
-            isFormDialogOpen: false,
-            isConfDialogOpen: false,
-            list: speakers ? [...speakers] : [],
-            anchorEl: null,
-            focusedSpeaker: null,
-        }
-    );
+    const speakerEdges = React.useMemo(() => speakers?.edges || [], [speakers]);
+    const connections = React.useMemo(() => (speakers?.__id ? [speakers.__id] : []), [speakers]);
+    const [{ isFormDialogOpen, isConfDialogOpen, anchorEl, focusedSpeaker }, dispatch] = React.useReducer(reducer, {
+        isFormDialogOpen: false,
+        isConfDialogOpen: false,
+        // list: speakers ? [...speakers] : [],
+        anchorEl: null,
+        focusedSpeaker: null,
+    });
     const classes = useStyles();
 
     // close all dialogs
@@ -178,15 +151,15 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
         dispatch({ type: 'speakers/focus', payload: { speaker, anchorEl: e.currentTarget } });
 
     // append a speaker to the list of speakers
-    const appendSpeaker = (createdSpeaker: TCreatedSpeaker) =>
-        createdSpeaker && dispatch({ type: 'speakers/append', payload: createdSpeaker });
+    // const appendSpeaker = (createdSpeaker: TCreatedSpeaker) =>
+    //     createdSpeaker && dispatch({ type: 'speakers/append', payload: createdSpeaker });
 
     // open the update form
     const openUpdateForm = () => dispatch({ type: 'dialog/update-speaker' });
 
     // update a speaker in the list
-    const updateSpeaker = (updatedSpeaker: TUpdatedSpeaker) =>
-        updatedSpeaker && dispatch({ type: 'speakers/update-focused', payload: updatedSpeaker });
+    // const updateSpeaker = (updatedSpeaker: TUpdatedSpeaker) =>
+    //     updatedSpeaker && dispatch({ type: 'speakers/update-focused', payload: updatedSpeaker });
 
     // open the deletion prompt
     const promptDelete = () => dispatch({ type: 'dialog/delete-speaker' });
@@ -195,10 +168,10 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
     const openFormDialog = () => dispatch({ type: 'dialog/create-speaker' });
 
     // handle speaker deletion when the user confirms
-    const handleDelete = () => {
-        if (focusedSpeaker === null) return;
-        dispatch({ type: 'speakers/remove-focused' });
-    };
+    // const handleDelete = () => {
+    //     if (focusedSpeaker === null) return;
+    //     dispatch({ type: 'speakers/remove-focused' });
+    // };
 
     return (
         <Grid container justify='center' className={className}>
@@ -206,13 +179,13 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
                 <DialogContent>
                     {focusedSpeaker !== null ? (
                         <UpdateSpeaker
-                            onSubmit={updateSpeaker}
+                            onSubmit={close}
                             form={{ ...focusedSpeaker }}
                             speakerId={focusedSpeaker.id}
                             eventId={eventId}
                         />
                     ) : (
-                        <CreateSpeaker eventId={eventId} onSubmit={appendSpeaker} />
+                        <CreateSpeaker eventId={eventId} onSubmit={close} connections={connections} />
                     )}
                 </DialogContent>
             </ResponsiveDialog>
@@ -226,25 +199,26 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
                 open={isConfDialogOpen}
                 onClose={close}
                 title={`Delete "${focusedSpeaker?.name}"?`}
-                onConfirm={handleDelete}
+                onConfirm={close}
                 speakerId={focusedSpeaker?.id}
                 eventId={eventId}
+                connections={connections}
             >
                 <>
                     Are you sure you want to delete&nbsp;
                     <b>{focusedSpeaker?.name}</b> from the list of speakers?
                 </>
             </DeleteSpeaker>
-            {list.length > 0 ? (
+            {speakerEdges.length > 0 ? (
                 <List className={classes.listRoot} disablePadding>
-                    {list.map(({ name, pictureUrl, description, id, title, ...rest }) => (
-                        <ListItem key={id} disableGutters>
+                    {speakerEdges.map(({ node }) => (
+                        <ListItem key={node.id} disableGutters>
                             <ListItemAvatar>
-                                <Avatar src={pictureUrl || undefined} />
+                                <Avatar src={node.pictureUrl || undefined} />
                             </ListItemAvatar>
-                            <ListItemText primary={name} secondary={title} />
+                            <ListItemText primary={node.name} secondary={node.title} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu({ name, pictureUrl, description, id, title, ...rest })}>
+                                <IconButton onClick={openMenu(node)}>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -257,7 +231,7 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
                 </Typography>
             )}
             <Grid container justify='flex-end'>
-                <Button onClick={openFormDialog} startIcon={<Add />}>
+                <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Add Speaker
                 </Button>
             </Grid>

@@ -1,13 +1,13 @@
 overwrite: true
 schema: 'app/server/src/features/**/*.graphql'
-documents: 'app/client/src/features/**/*.graphql'
+# documents: 'app/client/src/features/**/*.graphql'
 generates:
     ./app/client/src/graphql-types.ts:
         plugins:
             - 'typescript'
-            - 'typescript-operations'
-            - 'typescript-react-apollo'
-            - 'typescript-apollo-client-helpers'
+            # - 'typescript-operations'
+            # - 'typescript-react-apollo'
+            # - 'typescript-apollo-client-helpers'
         config:
             reactApolloVersion: 3
             skipGraphQLImport: true

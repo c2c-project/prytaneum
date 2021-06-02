@@ -33,8 +33,14 @@ input DeleteVideo {
     id: String!
 }
 
+type EventVideoMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventVideo
+}
+
 type Mutation {
-    addVideo(input: CreateVideo!): EventVideo!
-    removeVideo(input: DeleteVideo!): EventVideo
-    updateVideo(input: UpdateVideo!): EventVideo
+    createVideo(input: CreateVideo!): EventVideoMutationResponse!
+    deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
+    updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
 }

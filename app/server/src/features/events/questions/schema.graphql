@@ -27,11 +27,6 @@ type EventQuestion implements Node {
     isQuote: Boolean
 
     """
-    The number of likes a particular question has
-    """
-    likes: Int
-
-    """
     The users who have liked this question
     """
     likedBy: UserConnection
@@ -83,13 +78,19 @@ input AlterLike {
     to: Boolean!
 }
 
+type EventQuestionMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventQuestionEdge
+}
+
 type Mutation {
-    createQuestion(input: CreateQuestion!): EventQuestion!
+    createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
     alterLike(input: AlterLike!): Boolean!
 }
 
 type Subscription {
-    eventQuestionCreated(eventId: ID!): EventQuestion!
+    eventQuestionCreated(eventId: ID!): EventQuestionEdge!
     likeCountChanged(eventId: ID!): Like!
 }
 

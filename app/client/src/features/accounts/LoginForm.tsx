@@ -6,17 +6,14 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMutation, graphql } from 'react-relay';
 
-import { useLoginMutation } from '@local/graphql-types';
+import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
-// import useEndpoint from '@local/hooks/useEndpoint';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useForm } from '@local/hooks/useForm';
-import { useUser } from '@local/hooks/useUser';
-
-// import API from '../api';
+import { useForm, useUser, useSnack } from '@local/hooks';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -37,12 +34,28 @@ interface Props {
     onSuccess?: () => void;
 }
 
-interface SignInForm {
+interface TLoginForm {
     email: string;
     password: string;
 }
 
-const intialState: SignInForm = { email: '', password: '' };
+const LOGIN_FORM_MUTATION = graphql`
+    mutation LoginFormMutation($input: LoginForm!) {
+        login(input: $input) {
+            isError
+            message
+            body {
+                id
+                firstName
+                lastName
+                email
+                avatar
+            }
+        }
+    }
+`;
+
+const intialState: TLoginForm = { email: '', password: '' };
 /** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
  * @category @local/domains/Auth
  * @constructor ForgotPassRequest
@@ -57,26 +70,29 @@ const intialState: SignInForm = { email: '', password: '' };
 export function LoginForm({ onSuccess }: Props) {
     const classes = useStyles();
     const router = useRouter();
+    const [snack] = useSnack();
     const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
-    const [login, { loading }] = useLoginMutation({
-        variables: { input: form },
-        onCompleted: ({ login: userData }) => {
-            if (userData) setUser(userData);
-            if (onSuccess) onSuccess();
-        },
-    });
-    // const apiRequest = React.useCallback(() => API.login(form.email, form.password), [form]);
-    // const [sendRequest, isLoading] = useEndpoint(apiRequest, {
-    //     onSuccess: ({ data }) => {
-    //         setUser(data.user);
-    //         if (onSuccess) onSuccess();
-    //     },
-    // });
+    const [commit, isLoading] = useMutation<LoginFormMutation>(LOGIN_FORM_MUTATION);
+
+    const commitMutation = (submittedForm: TLoginForm) => {
+        commit({
+            variables: {
+                input: submittedForm,
+            },
+            onCompleted({ login }) {
+                if (login.isError) snack(login.message);
+                else {
+                    setUser(login.body);
+                    if (onSuccess) onSuccess();
+                }
+            },
+        });
+    };
 
     return (
-        <Form onSubmit={handleSubmit(login)}>
+        <Form onSubmit={handleSubmit(commitMutation)}>
             <FormContent>
                 <TextField
                     id='login-email'
@@ -128,7 +144,7 @@ export function LoginForm({ onSuccess }: Props) {
                 </>
             </FormContent>
             <Grid container item direction='column' className={classes.buttonGroup}>
-                <LoadingButton loading={loading}>
+                <LoadingButton loading={isLoading}>
                     <Button fullWidth type='submit' variant='contained' color='primary'>
                         Login
                     </Button>

@@ -4,17 +4,16 @@ import { useRouter } from 'next/router';
 import { useQueryLoader } from 'react-relay';
 
 import { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery.graphql';
-import { Event as OrgEvent } from '@local/graphql-types';
 import { EventSettings, EVENT_SETTINGS_QUERY } from '@local/features/events';
 
 const Page: NextPage = () => {
     const router = useRouter();
-    const { id } = router.query as { id: string };
+    const { id: eventId } = router.query as { id: string };
     const [queryRef, loadQuery] = useQueryLoader<EventSettingsQuery>(EVENT_SETTINGS_QUERY);
 
     React.useEffect(() => {
-        if (router.isReady) loadQuery({ input: id });
-    }, [router.isReady, loadQuery, id]);
+        if (router.isReady) loadQuery({ input: eventId });
+    }, [router.isReady, loadQuery, eventId]);
 
     if (!router.isReady || !queryRef) return <div>Loading...</div>;
 

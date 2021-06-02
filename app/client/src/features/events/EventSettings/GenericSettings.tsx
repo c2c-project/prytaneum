@@ -6,6 +6,7 @@ import type {
     GenericSettingsFragment$key,
     GenericSettingsFragment,
 } from '@local/__generated__/GenericSettingsFragment.graphql';
+import type { GenericSettingsMutation } from '@local/__generated__/GenericSettingsMutation.graphql';
 
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
@@ -38,9 +39,13 @@ export const GENERIC_SETTINGS_FRAGMENT = graphql`
 `;
 
 export const GENERIC_SETTINGS_MUTATION = graphql`
-    mutation GenericSettingsMutation($input: UpdateEvent) {
+    mutation GenericSettingsMutation($input: UpdateEvent!) {
         updateEvent(event: $input) {
-            ...GenericSettingsFragment
+            isError
+            message
+            body {
+                ...GenericSettingsFragment
+            }
         }
     }
 `;
@@ -52,13 +57,13 @@ export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) 
         fragmentRef
     );
 
-    const [commit] = useMutation(GENERIC_SETTINGS_MUTATION);
+    const [commit] = useMutation<GenericSettingsMutation>(GENERIC_SETTINGS_MUTATION);
 
     function handleChange(key: keyof GenericSettingsFragment) {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
             const { checked } = e.target;
             commit({
-                variables: { input: { [key]: checked, id } },
+                variables: { input: { [key]: checked, eventId: id } },
                 onError() {
                     snack('Something went wrong :(');
                 },

@@ -14,11 +14,16 @@ type Organization implements Node {
     """
     all members of this org
     """
-    members: UserConnection
+    members(first: Int, after: String): UserConnection
     """
     Events owned by this organization
     """
-    events: EventConnection
+    events(first: Int, after: String): EventConnection
+
+    """
+    Whether or not the current viewer is a member
+    """
+    isViewerMember: Boolean
 }
 
 type OrganizationEdge {
@@ -34,14 +39,14 @@ type OrganizationConnection {
 """
 Necessary information for org creation
 """
-input CreateOrg {
+input CreateOrganization {
     name: String!
 }
 
 """
 Information that may be updated by the user
 """
-input UpdateOrg {
+input UpdateOrganization {
     orgId: ID!
     name: String!
 }
@@ -49,7 +54,7 @@ input UpdateOrg {
 """
 Information necessary for deleting an org
 """
-input DeleteOrg {
+input DeleteOrganization {
     orgId: ID!
 }
 
@@ -60,10 +65,16 @@ input NewMember {
     email: String!
 }
 
+type OrganizationMutationResponse implements MutationResponse{
+    isError: Boolean!
+    message: String!
+    body: Organization
+}
+
 type Mutation {
-    createOrganization(input: CreateOrg!): Organization
-    updateOrganizationById(input: UpdateOrg!): Organization
-    deleteOrganizationById(input: DeleteOrg!): Organization
+    createOrganization(input: CreateOrganization!): OrganizationMutationResponse!
+    updateOrganizationById(input: UpdateOrganization!): OrganizationMutationResponse!
+    deleteOrganizationById(input: DeleteOrganization!): OrganizationMutationResponse!
 
     """
     Adds a new member and returns the new user added

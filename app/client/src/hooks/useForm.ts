@@ -1,6 +1,14 @@
+/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
+import * as Yup from 'yup';
 
-export function useForm<TForm>(initialState: TForm) {
+type TSchema<T extends Record<string, unknown>> = Yup.ObjectSchema<
+    {
+        [key in keyof T]: Yup.SchemaOf<T[key]>;
+    }
+>;
+
+export function useForm<TForm extends Record<string, unknown>>(initialState: TForm, validationSchema?: TSchema<TForm>) {
     const [state, setState] = React.useState(initialState);
     const [errors, setErrors] = React.useState<Partial<TForm>>({});
     function buildHandleSubmit(callback?: (form: TForm) => void) {
@@ -21,7 +29,19 @@ export function useForm<TForm>(initialState: TForm) {
                 }, {});
                 setErrors(formErrors);
             } else if (callback) {
-                callback(state);
+                if (validationSchema) {
+                    validationSchema
+                        .validate(state)
+                        .then(() => {
+                            callback(state);
+                        })
+                        .catch((err) => {
+                            // TODO: parse yup errors appropriately
+                            console.log(err);
+                        });
+                } else {
+                    callback(state);
+                }
             }
         };
     }

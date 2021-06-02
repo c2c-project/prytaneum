@@ -1,25 +1,48 @@
-/* eslint-disable react/require-default-props */
 import * as React from 'react';
 import { Button, DialogContent } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
+import { useMutation, graphql } from 'react-relay';
 
-import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
+import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/hooks/useUser';
-import { QuestionForm } from '../QuestionForm';
+import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
-interface Props {
+export interface AskQuestionProps {
     className?: string;
+    eventId: string;
 }
 
-function AskQuestion({ className }: Props) {
-    const [open, setOpen] = React.useState(false);
+export const ASK_QUESTION_MUTATION = graphql`
+    mutation AskQuestionMutation($input: CreateQuestion!) {
+        createQuestion(input: $input) {
+            isError
+            message
+            body {
+                node {
+                    id
+                    question
+                }
+            }
+        }
+    }
+`;
+
+function AskQuestion({ className, eventId }: AskQuestionProps) {
+    const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
+    const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
+
+    function handleSubmit(form: TQuestionFormState) {
+        commit({ variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } }, onCompleted: close });
+    }
+
     return (
         <>
-            <ResponsiveDialog open={open} onClose={() => setOpen(false)}>
+            <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
-                    <QuestionForm onCancel={() => setOpen(false)} onSubmit={() => setOpen(false)} />
+                    <QuestionForm onCancel={close} onSubmit={handleSubmit} />
                 </DialogContent>
             </ResponsiveDialog>
 
@@ -28,7 +51,7 @@ function AskQuestion({ className }: Props) {
                 disabled={!user}
                 variant='contained'
                 color='primary'
-                onClick={() => setOpen(true)}
+                onClick={open}
                 startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
             >
                 {user ? 'Ask My Question' : 'Sign in to ask a question'}

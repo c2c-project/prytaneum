@@ -8,15 +8,19 @@ import { NullableFields } from '@local/utils/ts-utils';
 import { SpeakerForm, TSpeakerForm } from './SpeakerForm';
 
 const UPDATE_SPEAKER_MUTATION = graphql`
-    mutation UpdateSpeakerMutation($input: UpdateSpeaker) {
+    mutation UpdateSpeakerMutation($input: UpdateSpeaker!) {
         updateSpeaker(input: $input) {
-            id
-            eventId
-            name
-            description
-            title
-            pictureUrl
-            email
+            isError
+            message
+            body {
+                id
+                eventId
+                name
+                description
+                title
+                pictureUrl
+                email
+            }
         }
     }
 `;

@@ -43,7 +43,7 @@ export default function RegisterPage() {
                     Register
                 </Typography>
                 <div className={classes.form}>
-                    <RegisterForm onSuccess={() => console.log('yo')} />
+                    <RegisterForm onSuccess={() => router.push('/app/home')} />
                 </div>
             </Paper>
         </Grid>

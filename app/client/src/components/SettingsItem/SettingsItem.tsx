@@ -17,12 +17,7 @@ interface Props {
     children: JSX.Element;
 }
 
-export default function SettingsItem({
-    helpText,
-    name,
-    className,
-    children,
-}: Props) {
+export default function SettingsItem({ helpText, name, className, children }: Props) {
     const classes = useStyles();
     return (
         <Grid

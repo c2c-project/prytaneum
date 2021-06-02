@@ -54,12 +54,12 @@ type Event implements Node {
     """
     All questions relating to this event
     """
-    questions: [EventQuestion!]
+    questions(first: Int, after: String): EventQuestionConnection
 
     """
     Speakers for this event
     """
-    speakers: [EventSpeaker!]
+    speakers(first: Int, after: String): EventSpeakerConnection
 
     """
     Registrants for this event -- individuals invited
@@ -69,22 +69,22 @@ type Event implements Node {
     """
     Participants of the event -- individuals who showed up
     """
-    participants: [EventParticipant!]
+    participants(first: Int, after: String): EventParticipantConnection
 
     """
     Video feeds and the languages
     """
-    videos: EventVideoConnection
+    videos(first: Int, after: String): EventVideoConnection
 
     """
     Live Feedback given during the event
     """
-    liveFeedback: [EventLiveFeedback!]
+    liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
 
     """
     List of moderators for this particular event
     """
-    moderators: UserConnection
+    moderators(first: Int, after: String): UserConnection
 
     """
     Whether or not the viewer is a moderator
@@ -134,20 +134,26 @@ input DeleteEvent {
     eventId: String!
 }
 
+type EventMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Event
+}
+
 type Mutation {
-    createEvent(event: CreateEvent!): Event
-    updateEvent(event: UpdateEvent!): Event
-    deleteEvent(event: DeleteEvent!): Event
+    createEvent(event: CreateEvent!): EventMutationResponse!
+    updateEvent(event: UpdateEvent!): EventMutationResponse!
+    deleteEvent(event: DeleteEvent!): EventMutationResponse!
 
     """
     Start the event so that it is "live"
     """
-    startEvent(eventId: String!): Event
+    startEvent(eventId: String!): EventMutationResponse!
 
     """
     End the eent so that it is not live
     """
-    endEvent(eventId: String!): Event
+    endEvent(eventId: String!): EventMutationResponse!
 }
 
 type Query {

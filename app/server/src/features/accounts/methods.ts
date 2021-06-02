@@ -1,8 +1,11 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@app/prisma';
+import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
 import { LoginForm, RegistrationForm } from '@local/graphql-types';
+
+const toUserId = toGlobalId('User');
 
 type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
 
@@ -78,11 +81,12 @@ export async function loginWithPassword(prisma: PrismaClient, input: LoginForm) 
     const { email, password } = input;
 
     const user = await prisma.user.findUnique({ where: { email } });
+    const userWithGlobalId = toUserId(user);
 
     // if there is no password, the user must finish registering their account, how to let them know... TODO:
-    if (!user || !user.password) throw new Error(errorMessage);
+    if (!userWithGlobalId || !userWithGlobalId.password) throw new Error(errorMessage);
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, userWithGlobalId.password);
 
     if (!isValidPassword) throw new Error(errorMessage);
 
@@ -92,7 +96,7 @@ export async function loginWithPassword(prisma: PrismaClient, input: LoginForm) 
 
     // TODO: refresh vs access tokens? I may want to issue a short lived token
     // so that way I can store a refresh token in the user (although not the whole token, just the issuedAt of the refresh token)
-    const token = await jwt.sign({ id: user.id });
+    const token = await jwt.sign({ id: userWithGlobalId.id });
 
     // NOTE: graphql will remove any sensitive fields, such as password, since they it is not a query-able field
     return { user, token };

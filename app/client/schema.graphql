@@ -1,22 +1,17 @@
-input AddModerator {
-  email: String!
-  id: String!
-}
-
 input AlterLike {
-  id: ID!
+  questionId: ID!
 
   """
   True if the user is attempting to like the question; false if they are trying to remove a like
   """
-  to: Boolean
+  to: Boolean!
 }
 
 input CreateEvent {
   title: String!
   startDateTime: Date!
   endDateTime: Date!
-  description: String
+  description: String!
   topic: String!
   orgId: String!
 }
@@ -25,8 +20,13 @@ input CreateFeedback {
   message: String!
 }
 
+input CreateModerator {
+  email: String!
+  eventId: String!
+}
+
 """Necessary information for org creation"""
-input CreateOrg {
+input CreateOrganization {
   name: String!
 }
 
@@ -35,7 +35,18 @@ input CreateQuestion {
   isQuote: Boolean
   isFollowUp: Boolean
   refQuestion: ID
-  id: ID!
+  eventId: ID!
+}
+
+input CreateSpeaker {
+  eventId: String!
+  name: String!
+  title: String!
+  description: String!
+  pictureUrl: String!
+
+  """This is for matching the speaker to an account"""
+  email: String!
 }
 
 input CreateVideo {
@@ -47,12 +58,17 @@ input CreateVideo {
 scalar Date
 
 input DeleteEvent {
-  id: String!
+  eventId: String!
+}
+
+input DeleteModerator {
+  userId: String!
+  eventId: String!
 }
 
 """Information necessary for deleting an org"""
-input DeleteOrg {
-  id: ID!
+input DeleteOrganization {
+  orgId: ID!
 }
 
 input DeleteSpeaker {
@@ -66,7 +82,11 @@ input DeleteVideo {
   id: String!
 }
 
-type Event {
+type Error {
+  message: String!
+}
+
+type Event implements Node {
   id: ID!
 
   """Creator of this event"""
@@ -104,33 +124,64 @@ type Event {
   isPrivate: Boolean
 
   """All questions relating to this event"""
-  questions: [EventQuestion!]
+  questions(first: Int, after: String): EventQuestionConnection
 
   """Speakers for this event"""
-  speakers: [EventSpeaker!]
+  speakers(first: Int, after: String): EventSpeakerConnection
 
   """Registrants for this event -- individuals invited"""
-  registrants: [User!]
+  registrants: UserConnection
 
   """Participants of the event -- individuals who showed up"""
-  participants: [EventParticipant!]
+  participants(first: Int, after: String): EventParticipantConnection
 
   """Video feeds and the languages"""
-  videos: [EventVideo!]
+  videos(first: Int, after: String): EventVideoConnection
 
   """Live Feedback given during the event"""
-  liveFeedback: [EventLiveFeedback!]
+  liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
 
   """List of moderators for this particular event"""
-  moderators: [User!]
+  moderators(first: Int, after: String): UserConnection
+
+  """Whether or not the viewer is a moderator"""
+  isViewerModerator: Boolean
 }
 
-type EventLiveFeedback {
-  feedbackId: ID!
+"""Connection to Events"""
+type EventConnection {
+  edges: [EventEdge!]
+  pageInfo: PageInfo!
+}
+
+"""Event Edge"""
+type EventEdge {
+  node: Event!
+  cursor: String!
+}
+
+type EventLiveFeedback implements Node {
+  id: ID!
   message: String!
   event: Event
   createdAt: String
   createdBy: User
+}
+
+type EventLiveFeedbackConnection {
+  edges: [EventLiveFeedbackEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventLiveFeedbackEdge {
+  node: EventLiveFeedback!
+  cursor: String!
+}
+
+type EventMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: Event
 }
 
 type EventParticipant {
@@ -139,8 +190,18 @@ type EventParticipant {
   liveFeedBack: [EventLiveFeedback]
 }
 
-type EventQuestion {
-  questionId: ID!
+type EventParticipantConnection {
+  edges: [EventParticipantEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventParticipantEdge {
+  node: EventParticipant!
+  cursor: String!
+}
+
+type EventQuestion implements Node {
+  id: ID!
   event: Event
 
   """The user id of the creator"""
@@ -149,7 +210,6 @@ type EventQuestion {
   """User information on the person asking the question"""
   createdBy: User
   createdAt: Date
-  refQuestionId: ID
   refQuestion: EventQuestion
 
   """The actual content of the question"""
@@ -161,22 +221,38 @@ type EventQuestion {
   isFollowUp: Boolean
   isQuote: Boolean
 
-  """The number of likes a particular question has"""
-  likes: Int
-
   """The users who have liked this question"""
-  likedBy: [User]
+  likedBy: UserConnection
 
   """Find the count of the likes only"""
   likedByCount: Int
 
   """Whether or not the current user likes the question"""
   isLikedByMe: Boolean
+
+  """If the question is owned by the current viewer"""
+  isMyQuestion: Boolean
 }
 
-type EventSpeaker {
-  """Speaker eventId"""
-  id: String!
+type EventQuestionConnection {
+  edges: [EventQuestionEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventQuestionEdge {
+  node: EventQuestion!
+  cursor: String!
+}
+
+type EventQuestionMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: EventQuestionEdge
+}
+
+type EventSpeaker implements Node {
+  """Speaker id"""
+  id: ID!
 
   """email of the speaker"""
   email: String
@@ -200,16 +276,48 @@ type EventSpeaker {
   pictureUrl: String
 }
 
-type EventVideo {
-  id: String!
+type EventSpeakerConnection {
+  edges: [EventSpeakerEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventSpeakerEdge {
+  node: EventSpeaker!
+  cursor: String!
+}
+
+type EventSpeakerMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: EventSpeaker
+}
+
+type EventVideo implements Node {
+  id: ID!
   url: String!
   lang: String!
   event: Event
 }
 
+type EventVideoConnection {
+  edges: [EventVideoEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventVideoEdge {
+  node: EventVideo!
+  cursor: String!
+}
+
+type EventVideoMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: EventVideo
+}
+
 input HideQuestion {
   questionId: ID!
-  id: ID!
+  eventId: ID!
 
   """
   Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
@@ -227,45 +335,63 @@ input LoginForm {
   password: String!
 }
 
+type ModeratorMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: User
+}
+
 type Mutation {
   """Adds a new member and returns the new user added"""
-  addMember(input: NewMember): User
+  addMember(input: NewMember!): User
+  alterLike(input: AlterLike!): Boolean!
+  createEvent(event: CreateEvent!): EventMutationResponse!
+  createFeedback(input: CreateFeedback): EventLiveFeedback
 
   """Add a new moderator to the given event"""
-  addModerator(input: AddModerator): User
-  addSpeaker(input: SpeakerForm): EventSpeaker
-  addVideo(input: CreateVideo!): EventVideo!
-  alterLike(input: AlterLike): Like
-  createEvent(event: CreateEvent): Event
-  createFeedback(input: CreateFeedback): EventLiveFeedback
-  createOrganization(input: CreateOrg): Organization
-  createQuestion(input: CreateQuestion): EventQuestion
-  deleteEvent(event: DeleteEvent): Event
-  deleteOrganizationById(input: DeleteOrg): Organization
+  createModerator(input: CreateModerator!): ModeratorMutationResponse!
+  createOrganization(input: CreateOrganization!): OrganizationMutationResponse!
+  createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
+  createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
+  createVideo(input: CreateVideo!): EventVideoMutationResponse!
+  deleteEvent(event: DeleteEvent!): EventMutationResponse!
+
+  """Removes a moderator from a given event"""
+  deleteModerator(input: DeleteModerator!): ModeratorMutationResponse!
+  deleteOrganizationById(input: DeleteOrganization!): OrganizationMutationResponse!
+  deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
+  deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
 
   """End the eent so that it is not live"""
-  endEvent(id: String!): Event
-  hideQuestion(input: HideQuestion): EventQuestion
-  login(input: LoginForm): User
+  endEvent(eventId: String!): EventMutationResponse!
+  hideQuestion(input: HideQuestion!): EventQuestion
+  login(input: LoginForm!): UserMutationResponse!
+
+  """The logout just returns the timestamp of the logout action"""
+  logout: Date!
 
   """Advance the current question"""
-  nextQuestion(id: ID!): Int!
+  nextQuestion(eventId: ID!): Int!
 
   """Go to the previous question"""
-  prevQuestion(id: ID!): Int!
-  register(input: RegistrationForm): User
-  removeSpeaker(input: DeleteSpeaker): EventSpeaker
-  removeVideo(input: DeleteVideo): EventVideo
-  reorderQueue(input: ReorderQuestion): EventQuestion
+  prevQuestion(eventId: ID!): Int!
+  register(input: RegistrationForm!): UserMutationResponse!
+  reorderQueue(input: ReorderQuestion!): EventQuestion
 
   """
   Start the event so that it is "live"
   """
-  startEvent(id: String!): Event
-  updateEvent(event: UpdateEvent): Event
-  updateOrganizationById(input: UpdateOrg): Organization
-  updateSpeaker(input: UpdateSpeaker): EventSpeaker
-  updateVideo(input: UpdateVideo!): EventVideo
+  startEvent(eventId: String!): EventMutationResponse!
+  updateEvent(event: UpdateEvent!): EventMutationResponse!
+  updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
+  updateOrganizationById(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
+  updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
+}
+
+interface MutationResponse {
+  isError: Boolean!
+  message: String!
 }
 
 """Info necessary for adding a member to an organization"""
@@ -273,9 +399,13 @@ input NewMember {
   email: String!
 }
 
-type Organization {
+interface Node {
+  id: ID!
+}
+
+type Organization implements Node {
   """Unique identifier for this org"""
-  orgId: ID!
+  id: ID!
 
   """name of the org"""
   name: String!
@@ -284,21 +414,41 @@ type Organization {
   createdAt: Date
 
   """all members of this org"""
-  members: [User!]
+  members(first: Int, after: String): UserConnection
 
   """Events owned by this organization"""
-  events: [Event!]
+  events(first: Int, after: String): EventConnection
+
+  """Whether or not the current viewer is a member"""
+  isViewerMember: Boolean
+}
+
+type OrganizationConnection {
+  edges: [OrganizationEdge!]
+  pageInfo: PageInfo!
+}
+
+type OrganizationEdge {
+  node: Organization!
+  cursor: String!
+}
+
+type OrganizationMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: Organization
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
 }
 
 type Query {
-  """Fetch an event by id"""
-  eventById(id: ID!): Event
-
   """Fetch all events"""
   events: [Event!]
-
-  """The logout just returns the timestamp of the logout action"""
-  logout: Date
 
   """Fetch user data about the current user"""
   me: User
@@ -306,10 +456,8 @@ type Query {
 
   """Fetch organizations relevant to the current user"""
   myOrgs: [Organization!]
-
-  """Fetch data about a particular org"""
-  orgById(id: ID!): Organization
-  questionsByid(id: ID!): [EventQuestion!]
+  node(id: ID!): Node
+  questionsByEventId(eventId: ID!): [EventQuestion!]
 }
 
 input RegistrationForm {
@@ -323,26 +471,15 @@ input RegistrationForm {
 input ReorderQuestion {
   questionId: ID!
   position: Int!
-  id: ID!
-}
-
-input SpeakerForm {
-  eventId: String!
-  name: String!
-  title: String!
-  description: String!
-  pictureUrl: String!
-
-  """This is for matching the speaker to an account"""
-  email: String!
+  eventId: ID!
 }
 
 type Subscription {
   """New messages as feedback is given"""
-  eventLiveFeedbackCreated(id: ID!): EventLiveFeedback
-  eventQuestionCreated(id: ID!): EventQuestion!
-  likeCountChanged(id: ID!): Like!
-  questionPosition(id: ID!): Int!
+  eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback
+  eventQuestionCreated(eventId: ID!): EventQuestionEdge!
+  likeCountChanged(eventId: ID!): Like!
+  questionPosition(eventId: ID!): Int!
 }
 
 input UpdateEvent {
@@ -355,12 +492,17 @@ input UpdateEvent {
   isCollectRatingsEnabled: Boolean
   isForumEnabled: Boolean
   isPrivate: Boolean
-  id: String!
+  eventId: String!
+}
+
+input UpdateModerator {
+  userId: String!
+  eventId: String!
 }
 
 """Information that may be updated by the user"""
-input UpdateOrg {
-  id: ID!
+input UpdateOrganization {
+  orgId: ID!
   name: String!
 }
 
@@ -382,8 +524,8 @@ input UpdateVideo {
 }
 
 """User Data"""
-type User {
-  userId: ID!
+type User implements Node {
+  id: ID!
   firstName: String
   lastName: String
   email: String
@@ -393,5 +535,21 @@ type User {
   avatar: String
 
   """Organizations that this user belongs to"""
-  organizations: [Organization]
+  organizations: OrganizationConnection
+}
+
+type UserConnection {
+  edges: [UserEdge!]
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+type UserMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: User
 }

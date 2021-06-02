@@ -1,7 +1,23 @@
 import { PrismaClient } from '@app/prisma';
 import { errors } from '@local/features/utils';
-import { AddModerator, HideQuestion, ReorderQuestion } from '@local/graphql-types';
+import { CreateModerator, DeleteModerator, HideQuestion, ReorderQuestion, UpdateModerator } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
+
+async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
+    const memberResults = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: { organization: { select: { members: { where: { userId } } } } },
+    });
+
+    // can't be a member if there are no members or no event or something
+    if (!memberResults) return false;
+
+    // double check that the user is within the array of, what should be, 1 element
+    const _isMember = memberResults.organization.members.find(({ userId: memberId }) => memberId === userId);
+
+    // return the result
+    return Boolean(_isMember);
+}
 
 /**
  * given a user id and event id, determine if the user is a moderator
@@ -55,15 +71,11 @@ export async function reorderQuestion(userId: string, prisma: PrismaClient, inpu
 /**
  * Add a moderator to the event
  */
-export async function addModerator(userId: string, prisma: PrismaClient, input: AddModerator) {
+export async function createModerator(userId: string, prisma: PrismaClient, input: CreateModerator) {
     const { eventId, email } = input;
 
     // permission check
-    const memberResults = await prisma.event.findUnique({
-        where: { id: eventId },
-        select: { organization: { select: { members: { where: { userId } } } } },
-    });
-    const hasPermissions = memberResults?.organization.members.find(({ userId: memberId }) => memberId === userId);
+    const hasPermissions = await isMember(userId, eventId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
 
     // check if email already exists
@@ -110,4 +122,23 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
         select: { currentQuestion: true },
     });
     return result.currentQuestion;
+}
+
+/**
+ * UNIMPLEMENTED
+ * currently, there's nothing to update, but in the future we may have more fine grained mod permissions
+ * but for now it's better if the organizer must remove and then re-add a different
+ */
+export async function updateModerator(userId: string, prisma: PrismaClient, input: UpdateModerator) {
+    return null;
+}
+
+export async function deleteModerator(userId: string, prisma: PrismaClient, input: DeleteModerator) {
+    const { userId: modId, eventId } = input;
+    const hasPermission = await isMember(userId, eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+    const deletedModerator = await prisma.eventModerator.delete({
+        where: { eventId_userId: { eventId, userId: modId } },
+    });
+    return prisma.user.findUnique({ where: { id: deletedModerator.userId } });
 }

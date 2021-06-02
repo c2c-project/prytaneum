@@ -9,11 +9,16 @@ export type DeleteVideo = {
 };
 export type DeleteVideoMutationVariables = {
     input: DeleteVideo;
+    connections: Array<string>;
 };
 export type DeleteVideoMutationResponse = {
-    readonly removeVideo: {
-        readonly id: string;
-    } | null;
+    readonly deleteVideo: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+        } | null;
+    };
 };
 export type DeleteVideoMutation = {
     readonly response: DeleteVideoMutationResponse;
@@ -26,72 +31,155 @@ export type DeleteVideoMutation = {
 mutation DeleteVideoMutation(
   $input: DeleteVideo!
 ) {
-  removeVideo(input: $input) {
-    id
+  deleteVideo(input: $input) {
+    isError
+    message
+    body {
+      id
+    }
   }
 }
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "input"
+},
+v2 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input"
   }
 ],
-v1 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "EventVideo",
-    "kind": "LinkedField",
-    "name": "removeVideo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isError",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "DeleteVideoMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "EventVideoMutationResponse",
+        "kind": "LinkedField",
+        "name": "deleteVideo",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventVideo",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "DeleteVideoMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "EventVideoMutationResponse",
+        "kind": "LinkedField",
+        "name": "deleteVideo",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventVideo",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "deleteEdge",
+                "key": "",
+                "kind": "ScalarHandle",
+                "name": "id",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "e36c1fe6e6b3ef6022ed02421c6d0a22",
+    "cacheID": "d4daafa00a44312c1d4f55e2027acb76",
     "id": null,
     "metadata": {},
     "name": "DeleteVideoMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteVideoMutation(\n  $input: DeleteVideo!\n) {\n  removeVideo(input: $input) {\n    id\n  }\n}\n"
+    "text": "mutation DeleteVideoMutation(\n  $input: DeleteVideo!\n) {\n  deleteVideo(input: $input) {\n    isError\n    message\n    body {\n      id\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '1baba1934c475170fa14dd09e62997f3';
+(node as any).hash = '62024c492aea73a2af93a9ef3a6f33a4';
 export default node;

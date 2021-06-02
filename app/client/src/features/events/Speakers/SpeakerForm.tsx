@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import type { SpeakerForm as CreateType } from '@local/graphql-types';
+import type { CreateSpeaker as CreateType } from '@local/graphql-types';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';

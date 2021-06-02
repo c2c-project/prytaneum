@@ -50,7 +50,7 @@ export default function Login() {
                     Login
                 </Typography>
                 <div className={classes.form}>
-                    <LoginForm onSuccess={() => router.push('/dashboard')} />
+                    <LoginForm onSuccess={() => router.push('/app/home')} />
                 </div>
             </Paper>
         </Grid>

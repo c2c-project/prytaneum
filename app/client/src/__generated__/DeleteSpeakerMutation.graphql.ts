@@ -9,16 +9,16 @@ export type DeleteSpeaker = {
 };
 export type DeleteSpeakerMutationVariables = {
     input: DeleteSpeaker;
+    connections: Array<string>;
 };
 export type DeleteSpeakerMutationResponse = {
-    readonly removeSpeaker: {
-        readonly id: string;
-        readonly eventId: string | null;
-        readonly name: string | null;
-        readonly description: string | null;
-        readonly title: string | null;
-        readonly pictureUrl: string | null;
-    } | null;
+    readonly deleteSpeaker: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+        } | null;
+    };
 };
 export type DeleteSpeakerMutation = {
     readonly response: DeleteSpeakerMutationResponse;
@@ -31,112 +31,155 @@ export type DeleteSpeakerMutation = {
 mutation DeleteSpeakerMutation(
   $input: DeleteSpeaker!
 ) {
-  removeSpeaker(input: $input) {
-    id
-    eventId
-    name
-    description
-    title
-    pictureUrl
+  deleteSpeaker(input: $input) {
+    isError
+    message
+    body {
+      id
+    }
   }
 }
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "input"
+},
+v2 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input"
   }
 ],
-v1 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "EventSpeaker",
-    "kind": "LinkedField",
-    "name": "removeSpeaker",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "eventId",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "name",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "description",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "title",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "pictureUrl",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isError",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "DeleteSpeakerMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "EventSpeakerMutationResponse",
+        "kind": "LinkedField",
+        "name": "deleteSpeaker",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventSpeaker",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "DeleteSpeakerMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "EventSpeakerMutationResponse",
+        "kind": "LinkedField",
+        "name": "deleteSpeaker",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventSpeaker",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "deleteEdge",
+                "key": "",
+                "kind": "ScalarHandle",
+                "name": "id",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "ea14a28c1c7d4bb28670c8e1ff53bdff",
+    "cacheID": "176aa1b491b48c658c44c108852a9de0",
     "id": null,
     "metadata": {},
     "name": "DeleteSpeakerMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteSpeakerMutation(\n  $input: DeleteSpeaker!\n) {\n  removeSpeaker(input: $input) {\n    id\n    eventId\n    name\n    description\n    title\n    pictureUrl\n  }\n}\n"
+    "text": "mutation DeleteSpeakerMutation(\n  $input: DeleteSpeaker!\n) {\n  deleteSpeaker(input: $input) {\n    isError\n    message\n    body {\n      id\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8919949b717d0fcc10c45ba9cd2f088d';
+(node as any).hash = 'bc2546794af320ab5db29d24edb7e893';
 export default node;

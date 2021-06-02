@@ -2,91 +2,88 @@ import * as React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
-import { graphql, useFragment } from 'react-relay';
+import { graphql, usePaginationFragment } from 'react-relay';
 
 import type { OrgEventListFragment$key } from '@local/__generated__/OrgEventListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { Event } from '@local/graphql-types';
 import { formatDate } from '@local/utils/format';
-import { EventForm, EventFormProps } from '@local/features/events';
-
-const NewEvent = ({ onSubmit: _onSubmit, ...rest }: EventFormProps) => {
-    const [isOpen, open, close] = useResponsiveDialog(false);
-
-    // wraps the onSubmit so that we close the dialog when the form is submitted too
-    const onSubmit: typeof _onSubmit = (...params) => {
-        close();
-        if (_onSubmit) _onSubmit(...params);
-    };
-
-    return (
-        <>
-            <ResponsiveDialog open={isOpen} onClose={close}>
-                <DialogContent>
-                    <EventForm onCancel={close} onSubmit={onSubmit} {...rest} />
-                </DialogContent>
-            </ResponsiveDialog>
-            <Button onClick={open} startIcon={<Add />}>
-                New Event
-            </Button>
-        </>
-    );
-};
+import { CreateEvent } from '@local/features/events';
 
 interface OrgEventListProps {
     fragementRef: OrgEventListFragment$key;
     className?: string;
-    orgId: string;
 }
 
 const EVENT_FRAGEMENT = graphql`
-    fragment OrgEventListFragment on Organization {
-        events {
-            id
-            title
-            topic
-            startDateTime
+    fragment OrgEventListFragment on Organization @refetchable(queryName: "EventsListPaginationQuery") {
+        id
+        events(first: $count, after: $cursor) @connection(key: "OrgEventListFragment_events") {
+            __id
+            edges {
+                cursor
+                node {
+                    id
+                    title
+                    topic
+                    startDateTime
+                }
+            }
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+            }
         }
     }
 `;
 
-export function OrgEventList({ fragementRef, className, orgId }: OrgEventListProps) {
-    const data = useFragment(EVENT_FRAGEMENT, fragementRef);
-    const [events, setEvents] = React.useState(data.events ?? []);
+export function OrgEventList({ fragementRef, className }: OrgEventListProps) {
+    const { data } = usePaginationFragment(EVENT_FRAGEMENT, fragementRef);
+    const eventArr = React.useMemo(() => data.events?.edges || [], [data]);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
-
-    const prependEvent = (event: Event) => {
-        setEvents((prev) => ({
-            ...prev,
-            event,
-        }));
-    };
+    const [isOpen, open, close] = useResponsiveDialog(false);
 
     return (
         <Grid container item direction='column' className={className}>
             <Grid item xs={12}>
-                <List>
-                    {events.length > 0 ? (
-                        events.map(({ id, title, startDateTime }, idx) => (
+                {eventArr.length > 0 ? (
+                    <List>
+                        {eventArr.map(({ node }, idx) => (
                             <ListItem
                                 button
-                                key={id}
-                                divider={idx !== events.length - 1}
-                                onClick={handleNav(`/events/${id}/settings`)}
+                                key={node.id}
+                                divider={idx !== eventArr.length - 1}
+                                onClick={handleNav(`/events/${node.id}/settings`)}
                             >
-                                <ListItemText primary={title} secondary={startDateTime && formatDate(startDateTime)} />
+                                <ListItemText
+                                    primary={node.title}
+                                    secondary={node.startDateTime && formatDate(node.startDateTime)}
+                                />
                             </ListItem>
-                        ))
-                    ) : (
-                        <Typography align='center' variant='body2' color='textSecondary'>
-                            No events to display
-                        </Typography>
-                    )}
-                </List>
+                        ))}
+                    </List>
+                ) : (
+                    <Typography align='center' variant='body2' color='textSecondary'>
+                        No events to display
+                    </Typography>
+                )}
             </Grid>
             <Grid container justify='flex-end'>
-                <NewEvent variant='create' onSubmit={prependEvent} orgId={orgId} />
+                <ResponsiveDialog open={isOpen} onClose={close} title='Create Event'>
+                    <DialogContent>
+                        <CreateEvent
+                            connections={data.events ? [data.events.__id] : []}
+                            orgId={data.id}
+                            onCancel={close}
+                            onSubmit={close}
+                        />
+                    </DialogContent>
+                </ResponsiveDialog>
+                <Button onClick={open} startIcon={<Add />}>
+                    New Event
+                </Button>
             </Grid>
         </Grid>
     );

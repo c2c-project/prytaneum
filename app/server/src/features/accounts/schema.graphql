@@ -42,19 +42,24 @@ input LoginForm {
     password: String!
 }
 
+type UserMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: User
+}
+
 type Query {
     """
     Fetch user data about the current user
     """
     me: User
-
-    """
-    The logout just returns the timestamp of the logout action
-    """
-    logout: Date
 }
 
 type Mutation {
-    register(input: RegistrationForm!): User
-    login(input: LoginForm!): User
+    register(input: RegistrationForm!): UserMutationResponse!
+    login(input: LoginForm!): UserMutationResponse!
+    """
+    The logout just returns the timestamp of the logout action
+    """
+    logout: Date!
 }

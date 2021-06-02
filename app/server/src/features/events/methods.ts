@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import { Event, PrismaClient } from '@app/prisma';
 import { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
-import { errors, filterOutUndefined } from '@local/features/utils';
+import { errors, filterFields } from '@local/features/utils';
 
 export { isModerator } from './moderation/methods';
 
@@ -100,13 +100,22 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
     // check if user has valid permissions
     if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
 
-    // get only the keys the user is trying to update
-    // if for some reason the client passes a falsy value, we must filter it out
-    // passing a falsy value is a valid operation in terms of graphql, but is not
-    // for our application
-    const updatedValues = filterOutUndefined(input);
+    const fields = filterFields({
+        input,
+        allowedFields: {
+            topic: true,
+            title: true,
+            description: true,
+            endDateTime: true,
+            startDateTime: true,
+            isCollectRatingsEnabled: true,
+            isForumEnabled: true,
+            isPrivate: true,
+            isQuestionFeedVisible: true,
+        },
+    });
 
-    return prisma.event.update({ where: { id: input.eventId }, data: { ...updatedValues } });
+    return prisma.event.update({ where: { id: input.eventId }, data: { ...fields } });
 }
 
 /**
@@ -147,7 +156,6 @@ export async function findVideosByEventId(eventId: string, prisma: PrismaClient)
  */
 export async function findModeratorsByEventId(eventId: string, prisma: PrismaClient) {
     const results = await prisma.eventModerator.findMany({ where: { eventId }, include: { user: true } });
-    if (!results) return null;
     return results.map(({ user }) => user);
 }
 

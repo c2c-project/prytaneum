@@ -7,14 +7,17 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { NextPage, GetServerSidePropsContext } from 'next';
 import { useSelector } from 'react-redux';
+import { fetchQuery, graphql } from 'react-relay';
 
+import { liveQuery, liveQueryResponse } from '@local/__generated__/liveQuery.graphql';
 import { Loader } from '@local/components/Loader';
 import { Fab } from '@local/components/Fab';
-import VideoPlayer from '@local/components/VideoPlayer';
-import { EventSidebar, EventProvider } from '@local/features/events';
-import { useEventSettingsQuery, Event, EventSettingsDocument } from '@local/graphql-types';
+import { EventSidebar, EventProvider, EventVideo } from '@local/features/events';
+import { Event } from '@local/graphql-types';
 import { initializeApollo, addApolloState } from '@local/utils/apolloClient';
+import { initEnvironment } from '@local/utils/relay-environment';
 import { initializeStore } from '@local/reducers/store';
+import { PickRequired } from '@local/utils/ts-utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,56 +57,64 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-    const apolloClient = initializeApollo();
+const LIVE_QUERY = graphql`
+    query liveQuery($eventId: ID!) {
+        node(id: $eventId) {
+            id
+            ... on Event {
+                ...EventSidebarFragment
+                ...EventVideoFragment
+            }
+        }
+    }
+`;
+
+function doesCtxHaveId(
+    ctx: GetServerSidePropsContext<{ id?: string }>
+): ctx is PickRequired<GetServerSidePropsContext<{ id: string }>, 'params'> {
+    return ctx?.params?.id !== undefined;
+}
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: string }>) {
+    // const apolloClient = initializeApollo();
+
+    // await apolloClient.query({
+    //     query: EventSettingsDocument,
+    //     variables: { input: ctx?.params?.id },
+    // });
+
+    // return addApolloState(apolloClient, {
+    //     props: {
+    //         id: ctx?.params?.id,
+    //         initialReduxState: reduxStore.getState(),
+    //         hideSideNav: true,
+    //         containerProps: { maxWidth: 'xl' },
+    //     },
+    // });
     const reduxStore = initializeStore();
-
-    await apolloClient.query({
-        query: EventSettingsDocument,
-        variables: { input: ctx?.params?.id },
-    });
-
-    return addApolloState(apolloClient, {
-        props: {
-            id: ctx?.params?.id,
-            initialReduxState: reduxStore.getState(),
-            hideSideNav: true,
-            containerProps: { maxWidth: 'xl' },
-        },
-    });
+    const baseProps = {
+        initialReduxState: reduxStore.getState(),
+        hideSideNav: true,
+        containerProps: { maxWidth: 'xl' },
+    };
+    if (!doesCtxHaveId(ctx)) return { props: baseProps };
+    const environment = initEnvironment();
+    const queryProps = await fetchQuery<liveQuery>(environment, LIVE_QUERY, { eventId: ctx.params.id }).toPromise();
+    const initialRecords = environment.getStore().getSource().toJSON();
+    return { props: { ...baseProps, ...queryProps, initialRecords } };
 }
 
 // TODO: SSR this and redirect appropriately if it's not live
-const Live: NextPage<{ id: string }> = ({ id }) => {
-    // main state
-    const [eventDetails, setEventDetails] = React.useState<Event | null>(null);
-
+const Live: NextPage<liveQueryResponse> = ({ node: eventById }) => {
     // styles
     const classes = useStyles();
     const theme = useTheme();
-
-    // language
-    const lang = useSelector((store) => store.language);
-
-    const video = React.useMemo(() => {
-        if (!eventDetails || !eventDetails.videos) return '';
-        const eventVideo = eventDetails.videos.find(({ lang: videoLang }) => lang === videoLang);
-        if (eventVideo === undefined) return '';
-        return eventVideo.url;
-    }, [lang, eventDetails]);
 
     // references for scrolling
     const topRef = React.useRef<HTMLDivElement | null>(null);
     const [isFabVisible, setIsFabVisible] = React.useState(false);
 
     const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
-
-    const { loading: isLoading } = useEventSettingsQuery({
-        variables: { input: id },
-        onCompleted(results) {
-            if (results.eventById) setEventDetails(results.eventById);
-        },
-    });
 
     // increase the distance required to show the scroll to top fab
     // because of on screen keyboards on mobile
@@ -125,31 +136,25 @@ const Live: NextPage<{ id: string }> = ({ id }) => {
             inline: 'nearest',
         });
     };
-    if (isLoading || !eventDetails) return <Loader />;
+    if (!eventById) return <h1>what</h1>;
 
     return (
-        <EventProvider event={eventDetails}>
-            <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
-                {!isMdUp && <div ref={topRef} />}
-                <Grid item md={8} className={classes.video}>
-                    <VideoPlayer url={video} />
-                </Grid>
-                <Grid container item xs={12} md={4} direction='column'>
-                    <div className={classes.panes} onScroll={handleScroll}>
-                        {isMdUp && <div ref={topRef} className={classes.target} />}
-                        <EventSidebar />
-                    </div>
-                </Grid>
-                <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
-                    <KeyboardArrowUpIcon />
-                </Fab>
+        <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
+            {!isMdUp && <div ref={topRef} />}
+            <Grid item md={8} className={classes.video}>
+                <EventVideo fragmentRef={eventById} />
             </Grid>
-        </EventProvider>
+            <Grid container item xs={12} md={4} direction='column'>
+                <div className={classes.panes} onScroll={handleScroll}>
+                    {isMdUp && <div ref={topRef} className={classes.target} />}
+                    <EventSidebar fragmentRef={eventById} />
+                </div>
+            </Grid>
+            <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
+                <KeyboardArrowUpIcon />
+            </Fab>
+        </Grid>
     );
-};
-
-Live.propTypes = {
-    id: PropTypes.string.isRequired,
 };
 
 export default Live;

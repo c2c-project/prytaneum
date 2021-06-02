@@ -6,6 +6,16 @@ type EventLiveFeedback implements Node {
     createdBy: User
 }
 
+type EventLiveFeedbackEdge {
+    node: EventLiveFeedback!
+    cursor: String!
+}
+
+type EventLiveFeedbackConnection {
+    edges: [EventLiveFeedbackEdge!]
+    pageInfo: PageInfo!
+}
+
 input CreateFeedback {
     message: String!
 }

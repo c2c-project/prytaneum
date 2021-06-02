@@ -24,12 +24,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ORG_PROFILE = graphql`
-    query OrgProfileQuery($id: ID!) {
-        orgById(id: $id) {
-            orgId
-            name
-            ...OrgEventListFragment
-            ...OrgMemberListFragment
+    query OrgProfileQuery($id: ID!, $count: Int, $cursor: String) {
+        node(id: $id) {
+            id
+            ... on Organization {
+                name
+                ...OrgEventListFragment
+                ...OrgMemberListFragment
+            }
         }
     }
 `;
@@ -39,21 +41,19 @@ interface Props {
 }
 
 export const OrgProfile = ({ queryRef }: Props) => {
-    const router = useRouter();
     const classes = useStyles();
-    const { id } = router.query as { id: string }; // guaranteed as part of the file name
-    const data = usePreloadedQuery(ORG_PROFILE, queryRef);
+    const { node } = usePreloadedQuery(ORG_PROFILE, queryRef);
 
     return (
         <Grid container className={classes.root} alignItems='flex-start' alignContent='flex-start'>
-            <Typography variant='h4'>{data.orgById?.name ?? 'Unknown Organization'}</Typography>
+            <Typography variant='h4'>{node?.name ?? 'Unknown Organization'}</Typography>
             <Grid component={Paper} container item direction='column' className={classes.section}>
                 <Typography variant='h5'>Events</Typography>
-                {data.orgById && <OrgEventList fragementRef={data.orgById} className={classes.listRoot} orgId={id} />}
+                {node && <OrgEventList fragementRef={node} className={classes.listRoot} />}
             </Grid>
             <Grid component={Paper} container item direction='column' className={classes.section}>
                 <Typography variant='h5'>Members</Typography>
-                {data.orgById && <OrgMemberList fragmentRef={data.orgById} className={classes.listRoot} orgId={id} />}
+                {node && <OrgMemberList fragmentRef={node} className={classes.listRoot} />}
             </Grid>
         </Grid>
     );

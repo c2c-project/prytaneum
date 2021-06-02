@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { PrismaClient } from '@app/prisma';
+import { fromGlobalId } from 'graphql-relay';
 import { verify } from './lib/jwt';
 
 const prisma = new PrismaClient();
@@ -14,7 +15,11 @@ async function extractJwt(req: FastifyRequest) {
 }
 
 export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
+    let userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
+    if (userId) {
+        const { id } = fromGlobalId(userId);
+        userId = id;
+    }
     return {
         prisma,
         viewer: {
@@ -24,7 +29,11 @@ export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => 
 };
 
 export const buildSubscriptionContext = async (_: any, req: FastifyRequest) => {
-    const userId = await extractJwt(req);
+    let userId = await extractJwt(req);
+    if (userId) {
+        const { id } = fromGlobalId(userId);
+        userId = id;
+    }
     return {
         prisma,
         viewer: {

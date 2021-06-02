@@ -10,12 +10,12 @@ export function useEvent() {
 
     if (!event || !setEvent) throw new Error('useEvent() must be used within a EventContext');
 
-    const isOwner = React.useMemo(() => user && event.createdBy && event.createdBy.userId === user.userId, [
+    const isOwner = React.useMemo(() => user && event.createdBy && event.createdBy.id === user.id, [
         user,
         event,
     ]);
     const isModerator = React.useMemo(
-        () => Boolean((user && event.moderators.some(({ userId }) => userId === user.userId)) || isOwner),
+        () => Boolean((user && event.moderators?.some(({ id }) => id === user.id)) || isOwner),
         [event, user, isOwner]
     );
     return [event, isModerator, setEvent] as const;

@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
+import { graphql } from 'react-relay';
 
 import { EventQuestion as Question } from '@local/graphql-types';
 import { formatDate } from '@local/utils/format';
@@ -33,6 +34,18 @@ export interface Props {
      */
     stats?: boolean;
 }
+
+export const QUESTION_CARD_FRAGMENT = graphql`
+    fragment QuestionCardFragment on EventQuestion {
+        id
+        question
+        createdBy {
+            id
+            firstName
+        }
+        createdAt
+    }
+`;
 
 export function QuestionCardSkeleton() {
     return (

@@ -13,18 +13,22 @@ export type UpdateSpeaker = {
     eventId: string;
 };
 export type UpdateSpeakerMutationVariables = {
-    input?: UpdateSpeaker | null;
+    input: UpdateSpeaker;
 };
 export type UpdateSpeakerMutationResponse = {
     readonly updateSpeaker: {
-        readonly id: string;
-        readonly eventId: string | null;
-        readonly name: string | null;
-        readonly description: string | null;
-        readonly title: string | null;
-        readonly pictureUrl: string | null;
-        readonly email: string | null;
-    } | null;
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+            readonly eventId: string | null;
+            readonly name: string | null;
+            readonly description: string | null;
+            readonly title: string | null;
+            readonly pictureUrl: string | null;
+            readonly email: string | null;
+        } | null;
+    };
 };
 export type UpdateSpeakerMutation = {
     readonly response: UpdateSpeakerMutationResponse;
@@ -35,16 +39,20 @@ export type UpdateSpeakerMutation = {
 
 /*
 mutation UpdateSpeakerMutation(
-  $input: UpdateSpeaker
+  $input: UpdateSpeaker!
 ) {
   updateSpeaker(input: $input) {
-    id
-    eventId
-    name
-    description
-    title
-    pictureUrl
-    email
+    isError
+    message
+    body {
+      id
+      eventId
+      name
+      description
+      title
+      pictureUrl
+      email
+    }
   }
 }
 */
@@ -67,7 +75,7 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "EventSpeaker",
+    "concreteType": "EventSpeakerMutationResponse",
     "kind": "LinkedField",
     "name": "updateSpeaker",
     "plural": false,
@@ -76,49 +84,74 @@ v1 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "id",
+        "name": "isError",
         "storageKey": null
       },
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "eventId",
+        "name": "message",
         "storageKey": null
       },
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "name",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "description",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "title",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "pictureUrl",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "email",
+        "concreteType": "EventSpeaker",
+        "kind": "LinkedField",
+        "name": "body",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "eventId",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "description",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "title",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "pictureUrl",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "email",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ],
@@ -143,14 +176,14 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "82f7ae70d5c4352be6e4dcea4b80f3f3",
+    "cacheID": "88922ba4d9734d3acccf2dafeb97cc9d",
     "id": null,
     "metadata": {},
     "name": "UpdateSpeakerMutation",
     "operationKind": "mutation",
-    "text": "mutation UpdateSpeakerMutation(\n  $input: UpdateSpeaker\n) {\n  updateSpeaker(input: $input) {\n    id\n    eventId\n    name\n    description\n    title\n    pictureUrl\n    email\n  }\n}\n"
+    "text": "mutation UpdateSpeakerMutation(\n  $input: UpdateSpeaker!\n) {\n  updateSpeaker(input: $input) {\n    isError\n    message\n    body {\n      id\n      eventId\n      name\n      description\n      title\n      pictureUrl\n      email\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '13cbbb9bed50461f009b5e60657174ca';
+(node as any).hash = '667470bddeb73a74af55a0a8f202dd78';
 export default node;

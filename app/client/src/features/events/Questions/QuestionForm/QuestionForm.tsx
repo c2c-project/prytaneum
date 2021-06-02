@@ -1,57 +1,34 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-import { EventQuestion as QuestionType, useCreateQuestionMutation } from '@local/graphql-types';
-import { LoadingButton } from '@local/components/LoadingButton';
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { TextField } from '@local/components/TextField';
-import { useForm, useSnack, useEvent } from '@local/hooks';
-import QuestionCard from '../QuestionCard';
+import { useForm } from '@local/hooks';
+
+export type TQuestionFormState = { question: string };
 
 interface Props {
-    quote?: QuestionType;
-    onSubmit?: () => void;
+    quote?: React.ReactNode;
+    onSubmit?: (state: TQuestionFormState) => void;
     onCancel?: () => void;
 }
 
+// TODO: eliminate inline styles
 export function QuestionForm({ quote, onSubmit, onCancel }: Props) {
-    // context & snack
-    const [snack] = useSnack();
-    const [{ id }] = useEvent();
-
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
         question: '',
     });
 
-    const [runMutation, { loading: isLoading }] = useCreateQuestionMutation({
-        variables: {
-            input: {
-                ...form,
-                refQuestion: quote?.questionId,
-                id,
-            },
-        },
-        onCompleted() {
-            snack('Successfully submitted Question');
-            if (onSubmit) onSubmit();
-        },
-    });
-
     const isQuestionValid = React.useMemo(() => form.question.trim().length !== 0, [form]);
 
     return (
-        <Form onSubmit={handleSubmit(runMutation)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Question Form' />
-            {quote && (
-                <Grid item xs={12}>
-                    <QuestionCard CardProps={{ elevation: 3 }} style={{ marginBottom: '8px' }} question={quote} />
-                </Grid>
-            )}
+            {quote}
             <FormContent>
                 <TextField
                     id='question-field'
@@ -72,24 +49,10 @@ export function QuestionForm({ quote, onSubmit, onCancel }: Props) {
                         Cancel
                     </Button>
                 )}
-                <LoadingButton loading={isLoading}>
-                    <Button disabled={!isQuestionValid} type='submit' variant='contained' color='primary'>
-                        Ask
-                    </Button>
-                </LoadingButton>
+                <Button disabled={!isQuestionValid} type='submit' variant='contained' color='primary'>
+                    Ask
+                </Button>
             </FormActions>
         </Form>
     );
 }
-
-QuestionForm.defaultProps = {
-    quote: undefined,
-    onSubmit: undefined,
-    onCancel: undefined,
-};
-
-QuestionForm.propTypes = {
-    quote: PropTypes.object,
-    onSubmit: PropTypes.func,
-    onCancel: PropTypes.func,
-};

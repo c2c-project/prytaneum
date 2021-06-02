@@ -40,7 +40,7 @@ export const TextField = React.forwardRef<HTMLDivElement, Props>((props, ref) =>
             label={label}
             autoComplete='off'
             autoCorrect='off'
-            autoCapitalize='off'
+            autoCapitalize='none'
             spellCheck={false}
             {...passThroughProps}
         >

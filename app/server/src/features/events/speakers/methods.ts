@@ -1,6 +1,6 @@
 import { PrismaClient } from '@app/prisma';
 import { errors } from '@local/features/utils';
-import { DeleteSpeaker, SpeakerForm, UpdateSpeaker } from '@local/graphql-types';
+import { DeleteSpeaker, CreateSpeaker, UpdateSpeaker } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 import { canUserModify } from '@local/features/events/methods';
 
@@ -9,7 +9,7 @@ export function findSpeakerAccByEmail(email: string, prisma: PrismaClient) {
     return prisma.user.findUnique({ where: { email } });
 }
 
-export async function createSpeaker(userId: string, prisma: PrismaClient, input: SpeakerForm) {
+export async function createSpeaker(userId: string, prisma: PrismaClient, input: CreateSpeaker) {
     // unpack
     const { email, name, description, title, pictureUrl, eventId } = input;
 

@@ -1,19 +1,50 @@
 import * as React from 'react';
+import type { GraphQLSubscriptionConfig, ConnectionHandler } from 'relay-runtime';
+import { useSubscription, graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
-import { EventQuestion, useQuestionsQuery, useNewQuestionsSubscription } from '@local/graphql-types';
-import { useEvent } from '@local/hooks';
+import type {
+    useQuestionListSubscriptionVariables,
+    useQuestionListSubscription,
+    useQuestionListSubscriptionResponse,
+} from '@local/__generated__/useQuestionListSubscription.graphql';
+import type { QuestionCardFragment$data } from '@local/__generated__/QuestionCardFragment.graphql';
+import type {
+    useQuestionListQuery,
+    useQuestionListQueryResponse,
+} from '@local/__generated__/useQuestionListQuery.graphql';
+import { EventQuestion, useQuestionsQuery } from '@local/graphql-types';
+
+export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
+    subscription useQuestionListSubscription($eventId: ID!) {
+        eventQuestionCreated(eventId: $eventId) {
+            node {
+                id
+                ...QuestionCardFragment
+            }
+        }
+    }
+`;
+
+export const USE_QUESTION_LIST_QUERY = graphql`
+    query useQuestionListQuery($eventId: ID!) {
+        questionsByEventId(eventId: $eventId) {
+            id
+            ...QuestionCardFragment
+        }
+    }
+`;
 
 const initialState = {
     isPaused: false,
-    buffer: [] as EventQuestion[],
-    questionList: [] as EventQuestion[],
+    buffer: [] as QuestionCardFragment$data[],
+    questionList: [] as QuestionCardFragment$data[],
 };
 
 type Action =
     | { type: 'togglePause'; payload?: never }
-    | { type: 'addToBuffer'; payload: EventQuestion }
+    | { type: 'addToBuffer'; payload: QuestionCardFragment$data }
     | { type: 'flushBuffer'; payload?: never }
-    | { type: 'initQuestionList'; payload: EventQuestion[] };
+    | { type: 'initQuestionList'; payload: QuestionCardFragment$data[] };
 
 function reducer(state: typeof initialState, action: Action): typeof initialState {
     switch (action.type) {
@@ -31,24 +62,40 @@ function reducer(state: typeof initialState, action: Action): typeof initialStat
     }
 }
 
-export function useQuestionList() {
-    const [{ id }, isModerator] = useEvent();
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { loading: isLoading } = useQuestionsQuery({
-        variables: { id },
-        onCompleted(results) {
-            if (results.questionsByid) dispatch({ type: 'initQuestionList', payload: results.questionsByid });
-        },
-    });
+interface TArgs {
+    queryRef: PreloadedQuery<useQuestionListQuery>;
+    eventId: string;
+}
 
-    useNewQuestionsSubscription({
-        variables: { id },
-        onSubscriptionData({ subscriptionData }) {
-            const { data } = subscriptionData;
-            if (data && data.eventQuestionCreated)
-                dispatch({ type: 'addToBuffer', payload: data.eventQuestionCreated });
-        },
-    });
+export function useQuestionList({ queryRef, eventId }: TArgs) {
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const { questionsByEventId } = usePreloadedQuery<useQuestionListQuery>(USE_QUESTION_LIST_QUERY, queryRef);
+
+    // TODO: make more compliant with graphql conneciton spec
+    // https://relay.dev/graphql/connections.htm
+    // https://relay.dev/docs/guided-tour/list-data/connections/#internaldocs-banner
+    const config = React.useMemo<GraphQLSubscriptionConfig<useQuestionListSubscription>>(
+        () => ({
+            variables: { eventId },
+            subscription: USE_QUESTION_LIST_SUBSCRIPTION,
+            onCompleted() {},
+            onNext(data) {
+                if (data?.eventQuestionCreated) dispatch({ type: 'addToBuffer', payload: data.eventQuestionCreated });
+            },
+        }),
+        [eventId]
+    );
+
+    useSubscription(config);
+
+    // useNewQuestionsSubscription({
+    //     variables: { id },
+    //     onSubscriptionData({ subscriptionData }) {
+    //         const { data } = subscriptionData;
+    //         if (data && data.eventQuestionCreated)
+    //             dispatch({ type: 'addToBuffer', payload: data.eventQuestionCreated });
+    //     },
+    // });
 
     React.useEffect(() => {
         let isMounted = true;

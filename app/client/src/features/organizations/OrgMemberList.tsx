@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
 import { graphql, useFragment } from 'react-relay';
 
-import { OrgMemberListFragment$key } from '@local/__generated__/OrgMemberListFragment.graphql';
+import type { OrgMemberListFragment$key } from '@local/__generated__/OrgMemberListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 
 interface OrgMemberListProps {
     fragmentRef: OrgMemberListFragment$key;
     className?: string;
-    orgId: string;
 }
 
 const NewEvent = () => {
@@ -32,17 +31,23 @@ const NewEvent = () => {
 
 export const ORG_MEMBERS = graphql`
     fragment OrgMemberListFragment on Organization {
+        id
         members {
-            userId
-            firstName
-            lastName
+            edges {
+                cursor
+                node {
+                    id
+                    firstName
+                    lastName
+                }
+            }
         }
     }
 `;
 
-export function OrgMemberList({ fragmentRef, className, orgId }: OrgMemberListProps) {
+export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
     const data = useFragment(ORG_MEMBERS, fragmentRef);
-    const [members, setMembers] = React.useState(data.members ?? []);
+    const members = React.useMemo(() => data.members?.edges || [], []);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
 
@@ -51,9 +56,9 @@ export function OrgMemberList({ fragmentRef, className, orgId }: OrgMemberListPr
             <Grid item xs={12}>
                 <List>
                     {members.length > 0 ? (
-                        members.map(({ userId, firstName, lastName }) => (
-                            <ListItem button key={userId} divider>
-                                <ListItemText primary={`${firstName} ${lastName}`} />
+                        members.map(({ node }) => (
+                            <ListItem button key={node.id} divider>
+                                <ListItemText primary={`${node.firstName} ${node.lastName}`} />
                             </ListItem>
                         ))
                     ) : (

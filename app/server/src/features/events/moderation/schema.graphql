@@ -14,9 +14,25 @@ input ReorderQuestion {
     eventId: ID!
 }
 
-input AddModerator {
+input CreateModerator {
     email: String!
     eventId: String!
+}
+
+input DeleteModerator {
+    userId: String!
+    eventId: String!
+}
+
+input UpdateModerator {
+    userId: String!
+    eventId: String!
+}
+
+type ModeratorMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: User
 }
 
 type Mutation {
@@ -26,7 +42,14 @@ type Mutation {
     """
     Add a new moderator to the given event
     """
-    addModerator(input: AddModerator!): User
+    createModerator(input: CreateModerator!): ModeratorMutationResponse!
+
+    updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
+
+    """
+    Removes a moderator from a given event
+    """
+    deleteModerator(input: DeleteModerator!): ModeratorMutationResponse!
 
     """
     Advance the current question

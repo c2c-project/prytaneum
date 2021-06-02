@@ -7,26 +7,31 @@ import type {
 import { SpeakerForm, TSpeakerForm } from './SpeakerForm';
 
 const CREATE_SPEAKER_MUTATION = graphql`
-    mutation CreateSpeakerMutation($input: SpeakerForm) {
-        addSpeaker(input: $input) {
-            id
-            eventId
-            name
-            description
-            title
-            pictureUrl
-            email
+    mutation CreateSpeakerMutation($input: CreateSpeaker!, $connections: [ID!]!) {
+        createSpeaker(input: $input) {
+            isError
+            message
+            body @appendNode(connections: $connections, edgeTypeName: "EventSpeakerEdge") {
+                id
+                eventId
+                name
+                description
+                title
+                pictureUrl
+                email
+            }
         }
     }
 `;
 
-export type TCreatedSpeaker = CreateSpeakerMutationResponse['addSpeaker'];
+export type TCreatedSpeaker = CreateSpeakerMutationResponse['createSpeaker'];
 export interface CreateSpeakerProps {
     eventId: string;
     onSubmit: (speaker: TCreatedSpeaker) => void;
+    connections?: string[];
 }
 
-export function CreateSpeaker({ eventId, onSubmit }: CreateSpeakerProps) {
+export function CreateSpeaker({ eventId, onSubmit, connections }: CreateSpeakerProps) {
     const [commit] = useMutation<CreateSpeakerMutation>(CREATE_SPEAKER_MUTATION);
 
     function handleSubmit(form: TSpeakerForm) {
@@ -36,9 +41,11 @@ export function CreateSpeaker({ eventId, onSubmit }: CreateSpeakerProps) {
                     ...form,
                     eventId,
                 },
+                connections: connections ?? [],
             },
             onCompleted(results) {
-                if (results.addSpeaker) onSubmit(results.addSpeaker);
+                console.log(results);
+                if (results.createSpeaker) onSubmit(results.createSpeaker);
             },
         });
     }

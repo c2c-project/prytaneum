@@ -1,5 +1,5 @@
 import { PrismaClient } from '@app/prisma';
-import { CreateOrg, UpdateOrg } from '@local/graphql-types';
+import { CreateOrganization, UpdateOrganization } from '@local/graphql-types';
 import { errors } from '../utils';
 
 /**
@@ -24,10 +24,10 @@ export async function findOrgById(orgId: string, prisma: PrismaClient) {
  * How a user creates an org. As of right now, they are required to have the
  * `canMakeOrgs` permission set to true
  */
-export async function createOrg(userId: string, prisma: PrismaClient, { name }: CreateOrg) {
+export async function createOrg(userId: string, prisma: PrismaClient, { name }: CreateOrganization) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user) throw new Error(errors.DNE('User')); // user doesn't exist for some reason...
+    if (!user) throw new Error(errors.DNE('Login')); // user doesn't exist for some reason...
 
     // create the org, while adding the current user as a member
     // reference: https://www.prisma.io/docs/guides/performance-and-optimization/prisma-client-transactions-guide/#dependent-writes
@@ -45,7 +45,7 @@ export async function createOrg(userId: string, prisma: PrismaClient, { name }: 
  * In this case, we only check if the user is a member of the organization
  * in the future we might have more specific permissions to check
  */
-export async function updateOrg(userId: string, prisma: PrismaClient, { name, orgId }: UpdateOrg) {
+export async function updateOrg(userId: string, prisma: PrismaClient, { name, orgId }: UpdateOrganization) {
     // check if the user is a member of this organization, for now this is sufficient for being able to update the org
     const result = await prisma.orgMember.findFirst({ where: { userId, orgId }, select: { userId: true } });
 
@@ -94,5 +94,11 @@ export async function findMembersByOrgId(prisma: PrismaClient, orgId: string) {
  * does NOT require user login
  */
 export async function findEventsByOrgId(prisma: PrismaClient, orgId: string) {
-    return prisma.event.findMany({ where: { orgId } });
+    return prisma.event.findMany({ where: { orgId }, orderBy: { createdAt: 'desc' } });
+}
+
+export async function isViewerMember(userId: string | null, prisma: PrismaClient, orgId: string) {
+    if (!userId) return false; // non logged in viewer cannot be a member
+    const result = await prisma.orgMember.findUnique({ where: { userId_orgId: { userId, orgId } } });
+    return Boolean(result);
 }

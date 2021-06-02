@@ -3,8 +3,9 @@ import { IconButton, Card, CardHeader, Collapse, CardContent } from '@material-u
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
+import { graphql, useFragment } from 'react-relay';
 
-import { useEvent } from '@local/hooks';
+import { EventDetailsCardFragment$key } from '@local/__generated__/EventDetailsCardFragment.graphql';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,12 +24,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+export const EVENT_DETAILS_CARD_FRAGMENT = graphql`
+    fragment EventDetailsCardFragment on Event {
+        id
+        title
+        topic
+        description
+    }
+`;
+
 interface Props {
     className?: string;
+    fragmentRef: EventDetailsCardFragment$key;
 }
 
-export function EventDetailsCard({ className }: Props) {
-    const [{ topic, title, description }] = useEvent();
+export function EventDetailsCard({ className, fragmentRef }: Props) {
+    const { topic, title, description } = useFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
     const classes = useStyles();
     const [isIn, setIsIn] = React.useState(false);
 

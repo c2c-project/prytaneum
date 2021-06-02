@@ -3,43 +3,38 @@ import { Button } from '@material-ui/core';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/hooks/useForm';
-import { CreateOrg, useCreateOrgMutation, Organization } from '@local/graphql-types';
+import { CreateOrg } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormActions } from '@local/components/FormActions';
 
-export interface CreateOrgProps {
-    onSubmit: (result: Organization) => void;
+export interface OrgFormProps {
+    onSubmit: (result: TOrgFormState) => void;
 }
 
-const intiialState: CreateOrg = { name: '' };
+const intialState: CreateOrg = { name: '' };
 
-export function OrgForm({ onSubmit }: CreateOrgProps) {
-    // form state hook
-    const [state, errors, handleSubmit, handleChange] = useForm(intiialState);
+export type TOrgFormState = typeof intialState;
 
-    const [createOrg, { loading }] = useCreateOrgMutation({
-        variables: { input: state },
-        onCompleted: (result) => {
-            if (result.createOrganization) onSubmit(result.createOrganization);
-        },
-    });
+export function OrgForm({ onSubmit }: OrgFormProps) {
+    const [state, errors, handleSubmit, handleChange] = useForm(intialState);
 
     return (
-        <Form onSubmit={handleSubmit(createOrg)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Create Organization' />
             <FormContent>
                 <TextField
                     required
                     helperText={errors.name}
                     label='Organization Name'
+                    value={state.name}
                     fullWidth
                     onChange={handleChange('name')}
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                <LoadingButton loading={loading}>
+                <LoadingButton loading={false}>
                     <Button variant='contained' color='primary' type='submit'>
                         Create
                     </Button>

@@ -7,4 +7,9 @@ export const resolvers: Resolvers = {
             return Root.getNode(args.id, ctx.prisma);
         },
     },
+    Node: {
+        __resolveType(parent, ctx) {
+            return Root.resolveType(parent);
+        },
+    },
 };

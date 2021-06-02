@@ -18,29 +18,29 @@ function createApolloClient() {
     });
 
     const cache = new InMemoryCache({
-        typePolicies: {
-            Event: {
-                keyFields: ['id'],
-            },
-            User: {
-                keyFields: ['userId'],
-            },
-            EventLiveFeedback: {
-                keyFields: ['feedbackId'],
-            },
-            EventQuestion: {
-                keyFields: ['questionId'],
-            },
-            EventVideo: {
-                keyFields: ['url'],
-            },
-            Organization: {
-                keyFields: ['orgId'],
-            },
-            Like: {
-                keyFields: [],
-            },
-        } as TypedTypePolicies,
+        // typePolicies: {
+        //     Event: {
+        //         keyFields: ['id'],
+        //     },
+        //     User: {
+        //         keyFields: ['userId'],
+        //     },
+        //     EventLiveFeedback: {
+        //         keyFields: ['feedbackId'],
+        //     },
+        //     EventQuestion: {
+        //         keyFields: ['questionId'],
+        //     },
+        //     EventVideo: {
+        //         keyFields: ['url'],
+        //     },
+        //     Organization: {
+        //         keyFields: ['orgId'],
+        //     },
+        //     Like: {
+        //         keyFields: [],
+        //     },
+        // } as TypedTypePolicies,
         // typePolicies: {
         //     Query: {
         //         fields: {

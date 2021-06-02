@@ -1,5 +1,7 @@
 import { PrismaClient } from '@app/prisma';
 import { fromGlobalId } from 'graphql-relay';
+
+import { Node } from '@local/graphql-types';
 import { findUserById } from './accounts/methods';
 import { findEventById } from './events/methods';
 import { findOrgById } from './organizations/methods';
@@ -13,17 +15,27 @@ type TNodes = 'User' | 'Event' | 'Organization';
  * implements finding a particular node by id, security should be done from within the find
  * ie this particular query we should pay special attention to, could accidentally reveal fields that should not be allowed
  */
-export function getNode(globalId: string, prisma: PrismaClient) {
-    const { type, id } = fromGlobalId(globalId);
+export async function getNode(globalId: string, prisma: PrismaClient) {
+    async function findNode() {
+        const { type, id } = fromGlobalId(globalId);
 
-    switch (type as TNodes) {
-        case 'Event':
-            return findUserById(id, prisma);
-        case 'User':
-            return findEventById(id, prisma);
-        case 'Organization':
-            return findOrgById(id, prisma);
-        default:
-            return null;
+        switch (type as TNodes) {
+            case 'User':
+                return findUserById(id, prisma);
+            case 'Event':
+                return findEventById(id, prisma);
+            case 'Organization':
+                return findOrgById(id, prisma);
+            default:
+                return null;
+        }
     }
+    const result = await findNode();
+    if (!result) return null;
+    return { ...result, id: globalId };
+}
+
+export async function resolveType<T extends Node>(obj: T) {
+    const { type } = fromGlobalId(obj.id);
+    return type as TNodes;
 }

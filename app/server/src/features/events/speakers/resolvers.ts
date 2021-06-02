@@ -1,19 +1,48 @@
-import { Resolvers, errors } from '@local/features/utils';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { fromGlobalId } from 'graphql-relay';
+import { Resolvers, errors, runMutation, toGlobalId } from '@local/features/utils';
 import * as Speaker from './methods';
+
+const toSpeakerId = toGlobalId('EventSpeaker');
 
 export const resolvers: Resolvers = {
     Mutation: {
-        addSpeaker(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            return Speaker.createSpeaker(ctx.viewer.id, ctx.prisma, args.input);
+        createSpeaker(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const createdSpeaker = await Speaker.createSpeaker(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                });
+                return toSpeakerId(createdSpeaker);
+            });
         },
-        removeSpeaker(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            return Speaker.deleteSpeaker(ctx.viewer.id, ctx.prisma, args.input);
+        deleteSpeaker(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: speakerId } = fromGlobalId(args.input.id);
+                const deletedSpeaker = await Speaker.deleteSpeaker(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    id: speakerId,
+                });
+                return toSpeakerId(deletedSpeaker);
+            });
         },
         updateSpeaker(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            return Speaker.updateSpeaker(ctx.viewer.id, ctx.prisma, args.input);
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: speakerId } = fromGlobalId(args.input.id);
+                const updatedSpeaker = await Speaker.updateSpeaker(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    id: speakerId,
+                });
+                return toSpeakerId(updatedSpeaker);
+            });
         },
     },
     EventSpeaker: {

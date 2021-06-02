@@ -1,104 +1,59 @@
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import {
-    Button,
-    // FormControlLabel,
-    // Switch,
-    // FormControl,
-    // FormHelperText,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import {
-    CreateEvent as FormType,
-    useCreateEventMutation,
-    Event as OrgEvent,
-    useUpdateEventMutation,
-} from '@local/graphql-types';
-import { LoadingButton } from '@local/components/LoadingButton';
+import type { CreateEvent as FormType } from '@local/graphql-types';
 import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
 import { TextField } from '@local/components/TextField';
 import { DateTimePicker } from '@local/components/DateTimePicker';
+import { makeInitialState } from '@local/utils/ts-utils';
 
-interface CommonProps {
-    onSubmit?: (event: OrgEvent) => void;
+export interface EventFormProps {
+    onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
     title?: boolean;
     className?: string;
+    form?: TEventForm;
 }
 
-interface CreateProps {
-    variant: 'create';
-    orgId: string;
-}
+export type TEventForm = Omit<FormType, 'orgId'>;
 
-interface UpdateProps {
-    variant: 'update';
-    id: string;
-    orgId?: never;
-    form: Omit<FormType, 'orgId'>;
-}
-
-export type EventFormProps = (CreateProps | UpdateProps) & CommonProps;
-
-type Schema = {
-    [key in keyof Omit<FormType, 'orgId'>]: Yup.AnySchema;
+// convenience type helper for the schema below it
+type TSchema = {
+    [key in keyof TEventForm]: Yup.AnySchema;
 };
-
-const validationSchema = Yup.object().shape<Schema>({
+const validationSchema = Yup.object().shape<TSchema>({
     title: Yup.string().max(100, 'Title must be less than 100 characters').required('Please enter a title'),
     description: Yup.string(),
-    startDateTime: Yup.date().required('Please enter a start date'),
-    endDateTime: Yup.date(),
+    startDateTime: Yup.date()
+        .max(Yup.ref('endDateTime'), 'Start date & time must be less than end date & time!')
+        .required('Please enter a start date'),
+    endDateTime: Yup.date()
+        .min(Yup.ref('startDateTime'), 'End date & time must be greater than start date & time!')
+        .required(),
     topic: Yup.string().max(100, 'Topic must be less than 100 characters').required('Please enter a topic'),
 });
 
-const makeInitialState = (props: EventFormProps): Omit<FormType, 'orgId'> =>
-    props.variant === 'create'
-        ? {
-              title: '',
-              description: '',
-              startDateTime: new Date(),
-              endDateTime: new Date(),
-              topic: '',
-          }
-        : props.form;
+const initialState: TEventForm = {
+    title: '',
+    description: '',
+    startDateTime: new Date(),
+    endDateTime: new Date(),
+    topic: '',
+};
 
 export function EventForm(props: EventFormProps) {
-    const { onCancel, onSubmit, title, variant, className } = props;
+    const { onCancel, onSubmit, title, className, form } = props;
 
-    const [createEvent, { loading: isLoadingCreate }] = useCreateEventMutation({
-        onCompleted(results) {
-            if (results.createEvent && onSubmit) onSubmit(results.createEvent);
-        },
-    });
-
-    const [updateEvent, { loading: isLoadingUpdate }] = useUpdateEventMutation({
-        onCompleted(results) {
-            if (results.updateEvent && onSubmit) onSubmit(results.updateEvent);
-        },
-    });
-
-    const isLoading = isLoadingCreate || isLoadingUpdate;
-
-    const { handleSubmit, handleChange, values, errors } = useFormik<Omit<FormType, 'orgId'>>({
-        initialValues: makeInitialState(props),
+    const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik<TEventForm>({
+        initialValues: makeInitialState(initialState, form),
         validationSchema,
-        onSubmit: (form) => {
-            if (props.variant === 'create') {
-                const createInput = { ...form, orgId: props.orgId };
-                createEvent({ variables: { input: createInput } });
-            } else {
-                const updateInput = { ...form, id: props.id };
-                updateEvent({ variables: { input: updateInput } });
-            }
-        },
+        onSubmit,
+        // not sure how I feel about this
         // validateOnChange: false,
     });
 
@@ -106,25 +61,8 @@ export function EventForm(props: EventFormProps) {
         <Form onSubmit={handleSubmit} className={className}>
             {title && <FormTitle title='Townhall Form' />}
             <FormContent>
-                {/* <FormControl>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={state.private}
-                                onChange={(_e, checked) =>
-                                    setState({ ...state, private: checked })
-                                }
-                                name='private-checkbox'
-                            />
-                        }
-                        label='Private'
-                    />
-                    <FormHelperText>
-                        Turning on the Private Option means the Townhall will
-                        NOT be listed publicly and will be invite only.
-                    </FormHelperText>
-                </FormControl> */}
                 <TextField
+                    autoFocus
                     error={Boolean(errors.title)}
                     helperText={errors.title}
                     required
@@ -140,18 +78,6 @@ export function EventForm(props: EventFormProps) {
                     value={values.topic}
                     onChange={handleChange}
                 />
-                <DateTimePicker
-                    error={Boolean(errors.startDateTime)}
-                    helperText={errors.startDateTime}
-                    fullWidth
-                    required
-                    autoComplete='off'
-                    id='date'
-                    label='Date & Time'
-                    inputVariant='outlined'
-                    value={values.startDateTime}
-                    onChange={handleChange}
-                />
                 <TextField
                     error={Boolean(errors.description)}
                     helperText={errors.description}
@@ -159,6 +85,30 @@ export function EventForm(props: EventFormProps) {
                     label='Description'
                     value={values.description}
                     onChange={handleChange}
+                />
+                <DateTimePicker
+                    error={Boolean(errors.startDateTime)}
+                    helperText={errors.startDateTime}
+                    fullWidth
+                    required
+                    autoComplete='off'
+                    id='date'
+                    label='Start Date & Time'
+                    inputVariant='outlined'
+                    value={values.startDateTime}
+                    onChange={(value) => setFieldValue('startDateTime', value)}
+                />
+                <DateTimePicker
+                    error={Boolean(errors.endDateTime)}
+                    helperText={errors.endDateTime}
+                    fullWidth
+                    required
+                    autoComplete='off'
+                    id='date'
+                    label='End Date & Time'
+                    inputVariant='outlined'
+                    value={values.endDateTime}
+                    onChange={(value) => setFieldValue('endDateTime', value)}
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
@@ -168,11 +118,9 @@ export function EventForm(props: EventFormProps) {
                     </Button>
                 )}
 
-                <LoadingButton loading={isLoading}>
-                    <Button type='submit' variant='contained' color='secondary'>
-                        {variant === 'create' ? 'Submit' : 'Save'}
-                    </Button>
-                </LoadingButton>
+                <Button type='submit' variant='contained' color='secondary'>
+                    Submit
+                </Button>
             </FormActions>
         </Form>
     );

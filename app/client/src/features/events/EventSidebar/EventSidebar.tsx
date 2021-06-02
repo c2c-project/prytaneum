@@ -4,9 +4,9 @@ import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
+import { graphql, useFragment } from 'react-relay';
 
-import { useEvent } from '@local/hooks';
-import { Event, EventSettingsFragment } from '@local/graphql-types';
+import { EventSidebarFragment$key, EventSidebarFragment } from '@local/__generated__/EventSidebarFragment.graphql';
 import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import QuestionQueue from '@local/features/events/Moderation/ManageQuestions';
@@ -27,10 +27,10 @@ const QuestionQueueTab = connect(() => ({
     label: 'Question Queue',
 }))(StyledTab);
 
-const getTabVisibility = (settings: EventSettingsFragment, isModerator: boolean) => ({
-    isQuestionFeedVisible: settings.isQuestionFeedVisible || isModerator,
+const getTabVisibility = (settings: EventSidebarFragment) => ({
+    isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
     // isChatVisible: settings,
-    isQueueVisible: isModerator,
+    isQueueVisible: settings.isViewerModerator,
 });
 
 type TabTuple = [React.JSXElementConstructor<CustomTabProps>, JSX.Element][];
@@ -39,12 +39,22 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
 
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
-    if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
+    // if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionList />]);
     // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
 };
+
+export const EVENT_SIDEBAR_FRAGMENT = graphql`
+    fragment EventSidebarFragment on Event {
+        id
+        isQuestionFeedVisible
+        isViewerModerator
+        ...EventDetailsCardFragment
+        ...SpeakerListFragment
+    }
+`;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,15 +97,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 interface Props {
-    classes: ReturnType<typeof useStyles>;
-    event: Event;
-    isModerator: boolean;
+    fragmentRef: EventSidebarFragment$key;
 }
-const MemoizedEventSidbar = React.memo(({ classes, event, isModerator }: Props) => {
+export const EventSidebar = ({ fragmentRef }: Props) => {
+    const classes = useStyles();
     const [state, setState] = React.useState<number>(0);
+    const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
 
-    const tabVisibility = React.useMemo(() => getTabVisibility(event, isModerator), [event, isModerator]);
-    const speakers = React.useMemo(() => event.speakers, [event]);
+    const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
     return (
@@ -113,12 +122,12 @@ const MemoizedEventSidbar = React.memo(({ classes, event, isModerator }: Props) 
                 wrap='nowrap'
                 className={clsx(classes.item, classes.paper, classes.fullWidth)}
             >
-                <EventDetailsCard />
-                <SpeakerList className={clsx(classes.item, classes.fullWidth)} speakers={speakers} />
-                <AskQuestion className={classes.fullWidth} />
+                <EventDetailsCard fragmentRef={data} />
+                <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
+                <AskQuestion className={classes.fullWidth} eventId={data.id} />
             </Grid>
 
-            {!isModerator && (
+            {!data.isViewerModerator && (
                 <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
                     <Typography className={clsx(classes.pl, classes.pb)} variant='h5'>
                         Current Question
@@ -146,10 +155,4 @@ const MemoizedEventSidbar = React.memo(({ classes, event, isModerator }: Props) 
             </Grid>
         </Grid>
     );
-});
-
-export function EventSidebar() {
-    const classes = useStyles();
-    const [event, isModerator] = useEvent();
-    return <MemoizedEventSidbar classes={classes} event={event} isModerator={isModerator} />;
-}
+};

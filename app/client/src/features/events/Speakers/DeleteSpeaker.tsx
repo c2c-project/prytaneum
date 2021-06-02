@@ -5,27 +5,26 @@ import type { DeleteSpeakerMutation } from '@local/__generated__/DeleteSpeakerMu
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 
 export const DELETE_SPEAKER_MUTATION = graphql`
-    mutation DeleteSpeakerMutation($input: DeleteSpeaker!) {
-        removeSpeaker(input: $input) {
-            id
-            eventId
-            name
-            description
-            title
-            pictureUrl
+    mutation DeleteSpeakerMutation($input: DeleteSpeaker!, $connections: [ID!]!) {
+        deleteSpeaker(input: $input) {
+            isError
+            message
+            body {
+                id @deleteEdge(connections: $connections)
+            }
         }
     }
 `;
 
-type DeleteSpeakerProps = ConfirmationDialogProps & { speakerId?: string; eventId: string };
+type DeleteSpeakerProps = ConfirmationDialogProps & { speakerId?: string; eventId: string; connections: string[] };
 
 export function DeleteSpeaker(props: DeleteSpeakerProps) {
-    const { children, onConfirm, speakerId, eventId, ...propsSubset } = props;
+    const { children, connections, onConfirm, speakerId, eventId, ...propsSubset } = props;
     const [commit] = useMutation<DeleteSpeakerMutation>(DELETE_SPEAKER_MUTATION);
     const curryOnConfirm = () => {
         if (!speakerId) return;
         commit({
-            variables: { input: { id: speakerId, eventId } },
+            variables: { input: { id: speakerId, eventId }, connections },
             onCompleted: onConfirm,
         });
     };

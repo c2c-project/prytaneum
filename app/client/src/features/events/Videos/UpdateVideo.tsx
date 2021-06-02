@@ -16,9 +16,13 @@ interface CreateVideoProps {
 export const UPDATE_VIDEO_MUTATION = graphql`
     mutation UpdateVideoMutation($input: UpdateVideo!) {
         updateVideo(input: $input) {
-            id
-            url
-            lang
+            isError
+            message
+            body {
+                id
+                url
+                lang
+            }
         }
     }
 `;

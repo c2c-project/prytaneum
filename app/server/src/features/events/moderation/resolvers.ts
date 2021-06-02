@@ -1,5 +1,7 @@
-import { Resolvers, withFilter, errors, toGlobalId } from '@local/features/utils';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { EventLiveFeedback } from '@local/graphql-types';
+import { fromGlobalId } from 'graphql-relay';
 import * as Moderation from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
@@ -17,11 +19,6 @@ export const resolvers: Resolvers = {
             const updatedQuestion = await Moderation.reorderQuestion(ctx.viewer.id, ctx.prisma, args.input);
             return toQuestionId(updatedQuestion);
         },
-        async addModerator(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            const newMod = await Moderation.addModerator(ctx.viewer.id, ctx.prisma, args.input);
-            return toUserId(newMod);
-        },
         nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, 1);
@@ -29,6 +26,41 @@ export const resolvers: Resolvers = {
         prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, -1);
+        },
+        async createModerator(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const newMod = await Moderation.createModerator(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
+                return toUserId(newMod);
+            });
+        },
+        async updateModerator(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: userId } = fromGlobalId(args.input.userId);
+                const newMod = await Moderation.updateModerator(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    userId,
+                });
+                return toUserId(newMod);
+            });
+        },
+        async deleteModerator(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                console.log(ctx.viewer.id);
+                const { id: userId } = fromGlobalId(args.input.userId);
+                const deletedMod = await Moderation.deleteModerator(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    userId,
+                });
+                return toUserId(deletedMod);
+            });
         },
     },
     Subscription: {

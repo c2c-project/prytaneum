@@ -18,6 +18,7 @@ After running the above, the corresponding folders and files are added inside of
 
 -   All resolvers assume that authentication of the user has occurred at a prior level
 -   [Connections spec for relay](https://relay.dev/graphql/connections.htm#)
+    > In order to indicate to Relay that we want to perform pagination over this connection, we need to mark the field with the @connection directive. We must also provide a static unique identifier for this connection, known as the key. We recommend the following naming convention for the connection key: <fragment*name>*<field_name>.
 
 ## Development Notes
 

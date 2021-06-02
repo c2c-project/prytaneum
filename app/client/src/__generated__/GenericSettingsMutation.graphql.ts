@@ -14,15 +14,19 @@ export type UpdateEvent = {
     isCollectRatingsEnabled?: boolean | null;
     isForumEnabled?: boolean | null;
     isPrivate?: boolean | null;
-    id: string;
+    eventId: string;
 };
 export type GenericSettingsMutationVariables = {
-    input?: UpdateEvent | null;
+    input: UpdateEvent;
 };
 export type GenericSettingsMutationResponse = {
     readonly updateEvent: {
-        readonly " $fragmentRefs": FragmentRefs<"GenericSettingsFragment">;
-    } | null;
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly " $fragmentRefs": FragmentRefs<"GenericSettingsFragment">;
+        } | null;
+    };
 };
 export type GenericSettingsMutation = {
     readonly response: GenericSettingsMutationResponse;
@@ -33,11 +37,15 @@ export type GenericSettingsMutation = {
 
 /*
 mutation GenericSettingsMutation(
-  $input: UpdateEvent
+  $input: UpdateEvent!
 ) {
   updateEvent(event: $input) {
-    ...GenericSettingsFragment
-    id
+    isError
+    message
+    body {
+      ...GenericSettingsFragment
+      id
+    }
   }
 }
 
@@ -64,7 +72,21 @@ v1 = [
     "name": "event",
     "variableName": "input"
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isError",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -75,15 +97,28 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Event",
+        "concreteType": "EventMutationResponse",
         "kind": "LinkedField",
         "name": "updateEvent",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
           {
+            "alias": null,
             "args": null,
-            "kind": "FragmentSpread",
-            "name": "GenericSettingsFragment"
+            "concreteType": "Event",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "GenericSettingsFragment"
+              }
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -101,44 +136,57 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Event",
+        "concreteType": "EventMutationResponse",
         "kind": "LinkedField",
         "name": "updateEvent",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isQuestionFeedVisible",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isCollectRatingsEnabled",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isForumEnabled",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isPrivate",
+            "concreteType": "Event",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isQuestionFeedVisible",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isCollectRatingsEnabled",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isForumEnabled",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isPrivate",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           }
         ],
@@ -147,14 +195,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "844c0b7a37ac0339d3150c4175f538bf",
+    "cacheID": "7f951762c717982d1f177282a0f23297",
     "id": null,
     "metadata": {},
     "name": "GenericSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GenericSettingsMutation(\n  $input: UpdateEvent\n) {\n  updateEvent(event: $input) {\n    ...GenericSettingsFragment\n    id\n  }\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n"
+    "text": "mutation GenericSettingsMutation(\n  $input: UpdateEvent!\n) {\n  updateEvent(event: $input) {\n    isError\n    message\n    body {\n      ...GenericSettingsFragment\n      id\n    }\n  }\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n"
   }
 };
 })();
-(node as any).hash = 'e726b547ccf3ceba3d14ede7849cbee4';
+(node as any).hash = 'd0fd6b5cf844706def65f9f1269638a1';
 export default node;

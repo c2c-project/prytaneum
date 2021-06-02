@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Divider, Button } from '@material-ui/core';
@@ -24,6 +25,8 @@ import ModeratorSettings from './ModeratorSettings';
 import { VideoEventSettings } from '../Videos';
 import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
+import { EventDetails } from './EventDetails';
+import { ModeratorEventSettings } from '../Moderation';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,14 +51,15 @@ export const townhallSettingsSections = [
 
 export const EVENT_SETTINGS_QUERY = graphql`
     query EventSettingsQuery($input: ID!) {
-        eventById(id: $input) {
+        node(id: $input) {
             id
-            ...EventDetails
-            ...EventSettings
-            ...SpeakerEventSettingsFragment
-            ...VideoEventSettingsFragment
-            ...EventModerators
-            ...GenericSettingsFragment
+            ... on Event {
+                ...EventDetailsFragment
+                ...SpeakerEventSettingsFragment
+                ...VideoEventSettingsFragment
+                ...GenericSettingsFragment
+                ...ModeratorEventSettingsFragment
+            }
         }
     }
 `;
@@ -95,97 +99,58 @@ export function EventSettings({ queryRef }: Props) {
     // );
 
     const config: AccordionData[] = React.useMemo(
-        () => [
-            {
-                title: 'General Settings',
-                description: 'Customize the event using various settings',
-                component: data.eventById && (
-                    <GenericSettings className={classes.settingsSection} fragmentRef={data.eventById} />
-                ),
-            },
-            // {
-            //     title: 'Details',
-            //     description: 'Update basic event details',
-            //     component: (
-            //         <EventForm
-            //             title={false}
-            //             variant='update'
-            //             id={eventDetails.id}
-            //             form={{
-            //                 // TODO: maybe validate and display a pop up that something went wrong instead of having defaults like this
-            //                 topic: eventDetails.topic || '',
-            //                 title: eventDetails.title || '',
-            //                 description: eventDetails.description || '',
-            //                 startDateTime: eventDetails.startDateTime || new Date(),
-            //                 endDateTime: eventDetails.endDateTime || new Date(),
-            //             }}
-            //             className={classes.settingsSection}
-            //         />
-            //     ),
-            // },
-            {
-                title: 'Video',
-                description: 'Modify the list of video streams and their languages',
-                component: data.eventById && (
-                    <VideoEventSettings className={classes.settingsSection} fragmentRef={data.eventById} />
-                ),
-            },
-            {
-                title: 'Speakers',
-                description: 'Add and Modify speakers at this event',
-                component: data.eventById && (
-                    <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.eventById} />
-                ),
-            },
-            // {
-            //     title: 'Components',
-            //     description: 'Turn on and off optional components',
-            //     component: (
-            //         <Grid container>
-            //             {componentsubSections.map(({ title, component }, idx) => (
-            //                 <React.Fragment key={title}>
-            //                     <Typography variant='overline'>{title}</Typography>
-            //                     <Grid item xs={12}>
-            //                         {component}
-            //                     </Grid>
-            //                     {idx !== componentsubSections.length - 1 && (
-            //                         <Grid item xs={12}>
-            //                             <Divider />
-            //                         </Grid>
-            //                     )}
-            //                 </React.Fragment>
-            //             ))}
-            //         </Grid>
-            //     ),
-            // },
-            // TODO:
-            // {
-            //     title: 'Moderators',
-            //     description: 'Designate individuals as moderators',
-            //     component: () => (
-            //         <ModeratorSettings value={eventDetails.moderators} onChange={handleChange('moderators')} />
-            //     ),
-            // },
-            // {
-            //     title: 'Invite',
-            //     description: 'Manage invitations',
-            //     component: (
-            //         <Grid container>
-            //             {inviteSubSections.map(({ title, component }) => (
-            //                 <React.Fragment key={title}>
-            //                     <Typography variant='overline'>{title}</Typography>
-            //                     <Grid item xs={12}>
-            //                         {component}
-            //                     </Grid>
-            //                 </React.Fragment>
-            //             ))}
-            //         </Grid>
-            //     ),
-            // },
-        ],
-        [classes.settingsSection, data]
+        () =>
+            data.node
+                ? [
+                      {
+                          title: 'Details',
+                          description: 'Update basic event details',
+                          component: <EventDetails fragmentRef={data.node} className={classes.settingsSection} />,
+                      },
+                      {
+                          title: 'General',
+                          description: 'Customize the event using various settings',
+                          component: <GenericSettings className={classes.settingsSection} fragmentRef={data.node} />,
+                      },
+                      {
+                          title: 'Video',
+                          description: 'Modify the list of video streams and their languages',
+                          component: <VideoEventSettings className={classes.settingsSection} fragmentRef={data.node} />,
+                      },
+                      {
+                          title: 'Speaker',
+                          description: 'Add and Modify speakers at this event',
+                          component: (
+                              <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                          ),
+                      },
+                      {
+                          title: 'Moderators',
+                          description: 'Designate individuals as moderators',
+                          component: () => (
+                              <ModeratorEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                          ),
+                      },
+                      // {
+                      //     title: 'Invite',
+                      //     description: 'Manage invitations',
+                      //     component: (
+                      //         <Grid container>
+                      //             {inviteSubSections.map(({ title, component }) => (
+                      //                 <React.Fragment key={title}>
+                      //                     <Typography variant='overline'>{title}</Typography>
+                      //                     <Grid item xs={12}>
+                      //                         {component}
+                      //                     </Grid>
+                      //                 </React.Fragment>
+                      //             ))}
+                      //         </Grid>
+                      //     ),
+                      // },
+                  ]
+                : [],
+        [data.node, classes.settingsSection]
     );
-
     return (
         <div id='settings-id' className={classes.root}>
             <SettingsMenu config={config} title='Event Settings' />

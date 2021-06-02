@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { EventQuestion } from '@app/prisma';
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
-import { Resolvers, withFilter, errors, toGlobalId } from '@local/features/utils';
-import { Like } from '@local/graphql-types';
+import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
+import { Like, EventQuestionEdge } from '@local/graphql-types';
 import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
@@ -17,16 +17,20 @@ export const resolvers: Resolvers = {
     },
     Mutation: {
         async createQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, args.input);
-            const formattedQuestion = toQuestionId(question);
-            ctx.pubsub.publish({
-                topic: 'eventQuestionCreated',
-                payload: {
-                    eventQuestionCreated: formattedQuestion,
-                },
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, args.input);
+                const formattedQuestion = toQuestionId(question);
+                const edge = { node: formattedQuestion, cursor: formattedQuestion.id };
+                ctx.pubsub.publish({
+                    topic: 'eventQuestionCreated',
+                    payload: {
+                        eventQuestionCreated: edge,
+                    },
+                });
+                // TODO: better cursors
+                return edge;
             });
-            return formattedQuestion;
         },
         async alterLike(parent, args, ctx, info) {
             // this whole function is kinda eh
@@ -55,9 +59,10 @@ export const resolvers: Resolvers = {
             ),
         },
         eventQuestionCreated: {
-            subscribe: withFilter<{ eventQuestionCreated: EventQuestion }>(
+            subscribe: withFilter<{ eventQuestionCreated: EventQuestionEdge }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
-                (payload, args, ctx) => Question.doesEventMatch(args.id, payload.eventQuestionCreated.id, ctx.prisma)
+                (payload, args, ctx) =>
+                    Question.doesEventMatch(args.id, payload.eventQuestionCreated.node.id, ctx.prisma)
             ),
         },
     },

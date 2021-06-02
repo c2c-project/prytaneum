@@ -8,9 +8,9 @@ export type EventSettingsQueryVariables = {
     input: string;
 };
 export type EventSettingsQueryResponse = {
-    readonly eventById: {
+    readonly node: {
         readonly id: string;
-        readonly " $fragmentRefs": FragmentRefs<"EventDetails" | "EventSettings" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "EventModerators" | "GenericSettingsFragment">;
+        readonly " $fragmentRefs": FragmentRefs<"EventDetailsFragment" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "GenericSettingsFragment" | "ModeratorEventSettingsFragment">;
     } | null;
 };
 export type EventSettingsQuery = {
@@ -24,41 +24,26 @@ export type EventSettingsQuery = {
 query EventSettingsQuery(
   $input: ID!
 ) {
-  eventById(id: $input) {
+  node(id: $input) {
+    __typename
     id
-    ...EventDetails
-    ...EventSettings
-    ...SpeakerEventSettingsFragment
-    ...VideoEventSettingsFragment
-    ...EventModerators
-    ...GenericSettingsFragment
+    ... on Event {
+      ...EventDetailsFragment
+      ...SpeakerEventSettingsFragment
+      ...VideoEventSettingsFragment
+      ...GenericSettingsFragment
+      ...ModeratorEventSettingsFragment
+    }
   }
 }
 
-fragment EventDetails on Event {
+fragment EventDetailsFragment on Event {
+  id
   title
   topic
   description
   startDateTime
   endDateTime
-  isActive
-}
-
-fragment EventModerators on Event {
-  moderators {
-    userId
-    firstName
-    lastName
-    email
-    avatar
-  }
-}
-
-fragment EventSettings on Event {
-  isQuestionFeedVisible
-  isCollectRatingsEnabled
-  isForumEnabled
-  isPrivate
 }
 
 fragment GenericSettingsFragment on Event {
@@ -69,25 +54,66 @@ fragment GenericSettingsFragment on Event {
   isPrivate
 }
 
+fragment ModeratorEventSettingsFragment on Event {
+  id
+  moderators(first: 10, after: "") {
+    edges {
+      cursor
+      node {
+        id
+        firstName
+        lastName
+        avatar
+        email
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
 fragment SpeakerEventSettingsFragment on Event {
   id
-  speakers {
-    id
-    eventId
-    name
-    title
-    description
-    pictureUrl
-    email
+  speakers(first: 10, after: "") {
+    edges {
+      node {
+        id
+        eventId
+        name
+        title
+        description
+        pictureUrl
+        email
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }
 
 fragment VideoEventSettingsFragment on Event {
   id
-  videos {
-    id
-    url
-    lang
+  videos(first: 10, after: "") {
+    edges {
+      node {
+        id
+        url
+        lang
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }
 */
@@ -118,22 +144,85 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "title",
+  "name": "__typename",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "description",
+  "name": "title",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+},
+v6 = [
+  {
+    "kind": "Literal",
+    "name": "after",
+    "value": ""
+  },
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 10
+  }
+],
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "email",
   "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v10 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "__id",
+      "storageKey": null
+    }
+  ]
 };
 return {
   "fragment": {
@@ -145,41 +234,43 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Event",
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "eventById",
+        "name": "node",
         "plural": false,
         "selections": [
           (v2/*: any*/),
           {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "EventDetails"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "EventSettings"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "SpeakerEventSettingsFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "VideoEventSettingsFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "EventModerators"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "GenericSettingsFragment"
+            "kind": "InlineFragment",
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "EventDetailsFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "SpeakerEventSettingsFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "VideoEventSettingsFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "GenericSettingsFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "ModeratorEventSettingsFragment"
+              }
+            ],
+            "type": "Event",
+            "abstractKey": null
           }
         ],
         "storageKey": null
@@ -197,159 +288,22 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "Event",
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "eventById",
+        "name": "node",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           (v3/*: any*/),
+          (v2/*: any*/),
           {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "topic",
-            "storageKey": null
-          },
-          (v4/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "startDateTime",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "endDateTime",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isActive",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isQuestionFeedVisible",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isCollectRatingsEnabled",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isForumEnabled",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isPrivate",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventSpeaker",
-            "kind": "LinkedField",
-            "name": "speakers",
-            "plural": true,
+            "kind": "InlineFragment",
             "selections": [
-              (v2/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "eventId",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "name",
-                "storageKey": null
-              },
-              (v3/*: any*/),
               (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "pictureUrl",
-                "storageKey": null
-              },
-              (v5/*: any*/)
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventVideo",
-            "kind": "LinkedField",
-            "name": "videos",
-            "plural": true,
-            "selections": [
-              (v2/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "url",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "lang",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "User",
-            "kind": "LinkedField",
-            "name": "moderators",
-            "plural": true,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "userId",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "firstName",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "lastName",
+                "name": "topic",
                 "storageKey": null
               },
               (v5/*: any*/),
@@ -357,11 +311,248 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "avatar",
+                "name": "startDateTime",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "endDateTime",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "concreteType": "EventSpeakerConnection",
+                "kind": "LinkedField",
+                "name": "speakers",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "EventSpeakerEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "EventSpeaker",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "eventId",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "name",
+                            "storageKey": null
+                          },
+                          (v4/*: any*/),
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "pictureUrl",
+                            "storageKey": null
+                          },
+                          (v7/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v9/*: any*/),
+                  (v10/*: any*/)
+                ],
+                "storageKey": "speakers(after:\"\",first:10)"
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "filters": null,
+                "handle": "connection",
+                "key": "SpeakerEventSettingsFragment_speakers",
+                "kind": "LinkedHandle",
+                "name": "speakers"
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "concreteType": "EventVideoConnection",
+                "kind": "LinkedField",
+                "name": "videos",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "EventVideoEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "EventVideo",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "url",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "lang",
+                            "storageKey": null
+                          },
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v9/*: any*/),
+                  (v10/*: any*/)
+                ],
+                "storageKey": "videos(after:\"\",first:10)"
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "filters": null,
+                "handle": "connection",
+                "key": "VideoEventSettingsFragment_videos",
+                "kind": "LinkedHandle",
+                "name": "videos"
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isQuestionFeedVisible",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isCollectRatingsEnabled",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isForumEnabled",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isPrivate",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "concreteType": "UserConnection",
+                "kind": "LinkedField",
+                "name": "moderators",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "UserEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      (v8/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "User",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "firstName",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "lastName",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "avatar",
+                            "storageKey": null
+                          },
+                          (v7/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  (v9/*: any*/),
+                  (v10/*: any*/)
+                ],
+                "storageKey": "moderators(after:\"\",first:10)"
+              },
+              {
+                "alias": null,
+                "args": (v6/*: any*/),
+                "filters": null,
+                "handle": "connection",
+                "key": "ModeratorEventSettingsFragment_moderators",
+                "kind": "LinkedHandle",
+                "name": "moderators"
               }
             ],
-            "storageKey": null
+            "type": "Event",
+            "abstractKey": null
           }
         ],
         "storageKey": null
@@ -369,14 +560,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "eb51fdbc2416e1dfe29b1cf8206900e6",
+    "cacheID": "28673262f98d10ca9cbdd7a9ab26cb35",
     "id": null,
     "metadata": {},
     "name": "EventSettingsQuery",
     "operationKind": "query",
-    "text": "query EventSettingsQuery(\n  $input: ID!\n) {\n  eventById(id: $input) {\n    id\n    ...EventDetails\n    ...EventSettings\n    ...SpeakerEventSettingsFragment\n    ...VideoEventSettingsFragment\n    ...EventModerators\n    ...GenericSettingsFragment\n  }\n}\n\nfragment EventDetails on Event {\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n}\n\nfragment EventModerators on Event {\n  moderators {\n    userId\n    firstName\n    lastName\n    email\n    avatar\n  }\n}\n\nfragment EventSettings on Event {\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment SpeakerEventSettingsFragment on Event {\n  id\n  speakers {\n    id\n    eventId\n    name\n    title\n    description\n    pictureUrl\n    email\n  }\n}\n\nfragment VideoEventSettingsFragment on Event {\n  id\n  videos {\n    id\n    url\n    lang\n  }\n}\n"
+    "text": "query EventSettingsQuery(\n  $input: ID!\n) {\n  node(id: $input) {\n    __typename\n    id\n    ... on Event {\n      ...EventDetailsFragment\n      ...SpeakerEventSettingsFragment\n      ...VideoEventSettingsFragment\n      ...GenericSettingsFragment\n      ...ModeratorEventSettingsFragment\n    }\n  }\n}\n\nfragment EventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n}\n\nfragment GenericSettingsFragment on Event {\n  id\n  isQuestionFeedVisible\n  isCollectRatingsEnabled\n  isForumEnabled\n  isPrivate\n}\n\nfragment ModeratorEventSettingsFragment on Event {\n  id\n  moderators(first: 10, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        firstName\n        lastName\n        avatar\n        email\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SpeakerEventSettingsFragment on Event {\n  id\n  speakers(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        eventId\n        name\n        title\n        description\n        pictureUrl\n        email\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment VideoEventSettingsFragment on Event {\n  id\n  videos(first: 10, after: \"\") {\n    edges {\n      node {\n        id\n        url\n        lang\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '20bcfe626d1bc07dd614f576a4a58531';
+(node as any).hash = '79c0b484492df5e5b181fce8c44369fc';
 export default node;
