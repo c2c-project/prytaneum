@@ -9,6 +9,7 @@ export type useQuestionListSubscriptionVariables = {
 };
 export type useQuestionListSubscriptionResponse = {
     readonly eventQuestionCreated: {
+        readonly cursor: string;
         readonly node: {
             readonly id: string;
             readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
@@ -27,6 +28,7 @@ subscription useQuestionListSubscription(
   $eventId: ID!
 ) {
   eventQuestionCreated(eventId: $eventId) {
+    cursor
     node {
       id
       ...QuestionCardFragment
@@ -64,6 +66,13 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 };
@@ -82,6 +91,7 @@ return {
         "name": "eventQuestionCreated",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -90,7 +100,7 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -120,6 +130,7 @@ return {
         "name": "eventQuestionCreated",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -128,7 +139,7 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -144,7 +155,7 @@ return {
                 "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -171,14 +182,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b80f5bb38f566fc094db56b033450f89",
+    "cacheID": "8422d746abd0d6511e3874fef41e4198",
     "id": null,
     "metadata": {},
     "name": "useQuestionListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  eventQuestionCreated(eventId: $eventId) {\n    node {\n      id\n      ...QuestionCardFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
+    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  eventQuestionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionCardFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
   }
 };
 })();
-(node as any).hash = '4c02617fb26ef037632065f4c7ac1cb7';
+(node as any).hash = 'd98b39582c32907f1180d2ea48a40b96';
 export default node;

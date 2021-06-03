@@ -4,17 +4,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 
 import { EventQuestion as Question } from '@local/graphql-types';
+import type { useQuestionListFragment$data } from '@local/__generated__/useQuestionListFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser, useEvent } from '@local/hooks';
 // import QuestionLabels from '../QuestionLabels';
+import { ArrayElement } from '@local/utils/ts-utils';
 import { Like, QueueButton, Quote /* Reply */ } from '../QuestionActions';
 import QuestionCard from '../QuestionCard';
 
 interface Props {
-    questions: Question[];
     variant: 'moderator' | 'user';
     systemMessages: React.ReactNodeArray;
     className?: string;
+    eventId: string;
+    questions: ArrayElement<NonNullable<NonNullable<useQuestionListFragment$data['questions']>['edges']>>['node'][];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -34,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function FeedList({ questions, variant, systemMessages, className }: Props) {
+function FeedList({ variant, systemMessages, className, eventId, questions }: Props) {
     const [user] = useUser();
-    const [{ id: eventId }] = useEvent();
+    // const [{ id: eventId }] = useEvent();
     const isModerator = React.useMemo(() => variant === 'moderator', [variant]);
     const classes = useStyles();
     const [dialogContent, setDialogContent] = React.useState<JSX.Element | null>(null);
@@ -56,48 +59,45 @@ function FeedList({ questions, variant, systemMessages, className }: Props) {
 
     const questionList = (
         <List disablePadding>
-            {questions.map((question) => {
-                const { refQuestion, id: questionId } = question;
-                return (
-                    <ListItem disableGutters key={questionId}>
-                        <QuestionCard
-                            stats={isModerator}
-                            question={question}
-                            className={classes.item}
-                            quote={refQuestion}
-                        >
-                            {/* {isModerator && <QuestionLabels labels={question.aiml.labels} />} */}
-                            <CardActions className={classes.questionActions}>
-                                {!isModerator && (
-                                    <Like
-                                        id={eventId}
-                                        questionId={questionId}
-                                        // liked={
-                                        //     (user && question.likes.includes(user._id)) || liked.has(question._id)
-                                        // }
-                                        // onLike={() =>
-                                        //     setLiked((prev) => {
-                                        //         const nextState = new Set(prev).add(question._id);
-                                        //         return nextState;
-                                        //     })
-                                        // }
-                                        // onDeleteLike={() =>
-                                        //     setLiked((prev) => {
-                                        //         const copy = new Set(prev);
-                                        //         copy.delete(questionId);
-                                        //         return copy;
-                                        //     })
-                                        // }
-                                    />
-                                )}
-                                {/* {!isModerator && <Quote question={question} />} */}
-                                {isModerator && <QueueButton isQueued={isQueued(questionId)} questionId={questionId} />}
-                                {/* <Reply question={question} /> */}
-                            </CardActions>
-                        </QuestionCard>
-                    </ListItem>
-                );
-            })}
+            {questions.map((question) => (
+                <ListItem disableGutters key={question.id}>
+                    <QuestionCard
+                        stats={isModerator}
+                        fragmentRef={question}
+                        className={classes.item}
+                        // quote={refQuestion}
+                    >
+                        {/* {isModerator && <QuestionLabels labels={question.aiml.labels} />} */}
+                        <CardActions className={classes.questionActions}>
+                            {!isModerator && (
+                                <Like
+                                    id={eventId}
+                                    questionId={question.id}
+                                    // liked={
+                                    //     (user && question.likes.includes(user._id)) || liked.has(question._id)
+                                    // }
+                                    // onLike={() =>
+                                    //     setLiked((prev) => {
+                                    //         const nextState = new Set(prev).add(question._id);
+                                    //         return nextState;
+                                    //     })
+                                    // }
+                                    // onDeleteLike={() =>
+                                    //     setLiked((prev) => {
+                                    //         const copy = new Set(prev);
+                                    //         copy.delete(questionId);
+                                    //         return copy;
+                                    //     })
+                                    // }
+                                />
+                            )}
+                            {/* {!isModerator && <Quote question={question} />} */}
+                            {isModerator && <QueueButton isQueued={isQueued(question.id)} questionId={question.id} />}
+                            {/* <Reply question={question} /> */}
+                        </CardActions>
+                    </QuestionCard>
+                </ListItem>
+            ))}
         </List>
     );
 

@@ -30,22 +30,28 @@ export const SPEAKER_LIST_FRAGMENT = graphql`
 
 export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
     const { speakers } = useFragment(SPEAKER_LIST_FRAGMENT, fragmentRef);
+    const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
     const [openCard, setOpenCard] = React.useState(false);
     return speakers ? (
         <List className={className}>
-            {speakers.map(({ id: speakerId, pictureUrl: picture, name, description, title }) => (
-                <li key={speakerId}>
-                    <ListItem key={picture} button onClick={() => setOpenCard(true)}>
-                        {picture && (
+            {speakerEdges.map(({ node }) => (
+                <li key={node.id}>
+                    <ListItem button onClick={() => setOpenCard(true)}>
+                        {node.pictureUrl && (
                             <ListItemAvatar>
-                                <Avatar alt={`${name}-avatar`} src={picture} />
+                                <Avatar alt={`${node.name}-avatar`} src={node.pictureUrl} />
                             </ListItemAvatar>
                         )}
-                        <ListItemText primary={name} secondary={title} />
+                        <ListItemText primary={node.name} secondary={node.title} />
                     </ListItem>
-                    {picture && name && title && description && (
+                    {node.pictureUrl && node.name && node.title && node.description && (
                         <Dialog open={openCard} onClose={() => setOpenCard(false)}>
-                            <SpeakerCard image={picture} title={name} subtitle={title} description={description} />
+                            <SpeakerCard
+                                image={node.pictureUrl}
+                                title={node.name}
+                                subtitle={node.title}
+                                description={node.description}
+                            />
                         </Dialog>
                     )}
                 </li>

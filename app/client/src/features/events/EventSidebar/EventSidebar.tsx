@@ -40,7 +40,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
     // if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
-    if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionList />]);
+    // if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionList />]);
     // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
@@ -53,6 +53,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         isViewerModerator
         ...EventDetailsCardFragment
         ...SpeakerListFragment
+        ...useQuestionListFragment
     }
 `;
 
@@ -124,7 +125,7 @@ export const EventSidebar = ({ fragmentRef }: Props) => {
             >
                 <EventDetailsCard fragmentRef={data} />
                 <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
-                <AskQuestion className={classes.fullWidth} eventId={data.id} />
+                <AskQuestion className={classes.fullWidth} eventId={data.id} connectionKey='useQuestionListFragment_questions' />
             </Grid>
 
             {!data.isViewerModerator && (
@@ -147,11 +148,12 @@ export const EventSidebar = ({ fragmentRef }: Props) => {
             </div>
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
-                {tabs.map(([, tabPanel], idx) => (
+                <QuestionList fragmentRef={data} />
+                {/* {tabs.map(([, tabPanel], idx) => (
                     <TabPanel key={idx} visible={state === idx}>
                         {tabPanel}
                     </TabPanel>
-                ))}
+                ))} */}
             </Grid>
         </Grid>
     );

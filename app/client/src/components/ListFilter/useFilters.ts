@@ -8,37 +8,23 @@ export type Accessors<T> = (arg: T) => string;
 export default function useFilters<Datum>(
     data: Datum[],
     accessors: Accessors<Datum>[]
-): [
-    Datum[],
-    (searchText: string) => void,
-    (filters: FilterFunc<Datum>[]) => void
-] {
+): [Datum[], (searchText: string) => void, (filters: FilterFunc<Datum>[]) => void] {
     // list of filters with the default search as just returning the full amount of data
-    const [filters, setFilters] = React.useState<FilterFunc<Datum>[]>([
-        (list: Datum[]) => list,
-    ]);
+    const [filters, setFilters] = React.useState<FilterFunc<Datum>[]>([(list: Datum[]) => list]);
 
     // search function
     const search = React.useCallback(
-        (searchText: string, searchData: Datum[]) => {
-            return utilSearch(searchText, searchData, accessors);
-        },
+        (searchText: string, searchData: Datum[]) => utilSearch(searchText, searchData, accessors),
         [accessors]
     );
 
     // memoized results of applying all active filters
-    const filteredResults = React.useMemo(
-        () => applyFilters(data || [], filters),
-        [data, filters]
-    );
+    const filteredResults = React.useMemo(() => applyFilters(data || [], filters), [data, filters]);
 
     // handle search, always sets the first filter of the filter array
     const handleSearch = React.useCallback(
         (searchText: string) =>
-            setFilters(([, ...otherFilters]) => [
-                (filteredList) => search(searchText, filteredList),
-                ...otherFilters,
-            ]),
+            setFilters(([, ...otherFilters]) => [(filteredList) => search(searchText, filteredList), ...otherFilters]),
         [setFilters, search]
     );
 

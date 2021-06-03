@@ -22,10 +22,14 @@ const fetchQuery: FetchFunction = async (params, variables) => {
     return response.json();
 };
 
-const createSubscriptionClient = () =>
-    new SubscriptionClient(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
+const createSubscriptionClient = () => {
+    const wsProtocol = 'ws://';
+    // first element will be "http"
+    const [, ...url] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split('://');
+    return new SubscriptionClient([wsProtocol, ...url].join(''), {
         reconnect: true,
     });
+};
 
 const initSubscriptionClient = () => {
     const client = subscriptionClient ?? createSubscriptionClient();
@@ -89,7 +93,7 @@ export function useEnvironment(initialRecords: RecordMap) {
  * still be rendered within the react tree.  So we must navigate to /logout
  * render a tree with the previous environment, then navigate away from that page so that
  * the new, cleared, environment gets used the next render.
- * 
+ *
  * Also, the useEnvironment hook will not rerun with the new environment
  */
 export function clearEnvironment() {

@@ -5,8 +5,10 @@ import { Pause, PlayArrow } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
+import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
 import { EventQuestion } from '@local/graphql-types';
 import ListFilter, { useFilters, Accessors, ListFilterSkeleton } from '@local/components/ListFilter';
+import { ArrayElement } from '@local/utils/ts-utils';
 
 import { QuestionCardSkeleton } from '../QuestionCard';
 import FeedList from './FeedList';
@@ -17,6 +19,7 @@ import { useQuestionList } from './useQuestionList';
 interface Props {
     className?: string;
     style?: React.CSSProperties;
+    fragmentRef: useQuestionListFragment$key;
 }
 
 const useStyles = makeStyles(() => ({
@@ -43,55 +46,48 @@ export function QuestionFeedLoading() {
     );
 }
 
-export function QuestionList({ className, style }: Props) {
+export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
-    const { isLoading, isPaused, buffer, questionList, dispatch, isModerator } = useQuestionList();
+    const [state, setState] = React.useState(false); // FIXME:
+    const { questions, eventId } = useQuestionList({ fragmentRef });
 
-    function togglePause() {
-        dispatch({ type: 'togglePause' });
-    }
+    function togglePause() {}
 
-    const accessors = React.useMemo<Accessors<EventQuestion>[]>(
+    const accessors = React.useMemo<Accessors<ArrayElement<typeof questions>>[]>(
         () => [
             (q) => q?.question || '', // question text itself
             (q) => q?.createdBy?.firstName || '', // first name of the user
         ],
         []
     );
-    const [filteredList, handleSearch, handleFilterChange] = useFilters(questionList, accessors);
-
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(questions, accessors);
     return (
         <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
-            {isLoading ? (
-                <QuestionFeedLoading />
-            ) : (
-                <>
-                    <ListFilter
-                        className={classes.listFilter}
-                        // filterMap={filterFuncs}
-                        onFilterChange={handleFilterChange}
-                        onSearch={handleSearch}
-                        length={filteredList.length}
-                        menuIcons={[
-                            <Tooltip title='Load New'>
-                                <span>
-                                    <IconButton color='inherit' onClick={togglePause}>
-                                        <Badge badgeContent={isPaused ? buffer.length : 0} color='secondary'>
-                                            {isPaused ? <PlayArrow /> : <Pause />}
-                                        </Badge>
-                                    </IconButton>
-                                </span>
-                            </Tooltip>,
-                        ]}
-                    />
-                    <FeedList
-                        className={classes.content}
-                        variant={isModerator ? 'moderator' : 'user'}
-                        questions={filteredList}
-                        systemMessages={[]}
-                    />
-                </>
-            )}
+            <ListFilter
+                className={classes.listFilter}
+                // filterMap={filterFuncs}
+                onFilterChange={handleFilterChange}
+                onSearch={handleSearch}
+                length={filteredList.length}
+                menuIcons={[
+                    <Tooltip title='Load New'>
+                        <span>
+                            <IconButton color='inherit' onClick={togglePause}>
+                                <Badge badgeContent={state ? 0 : 0} color='secondary'>
+                                    {state ? <PlayArrow /> : <Pause />}
+                                </Badge>
+                            </IconButton>
+                        </span>
+                    </Tooltip>,
+                ]}
+            />
+            <FeedList
+                className={classes.content}
+                variant={state ? 'moderator' : 'user'}
+                questions={filteredList}
+                systemMessages={[]}
+                eventId={eventId}
+            />
         </Grid>
     );
 }

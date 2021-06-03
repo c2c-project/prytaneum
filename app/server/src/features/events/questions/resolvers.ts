@@ -19,15 +19,20 @@ export const resolvers: Resolvers = {
         async createQuestion(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
-                const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, args.input);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 const formattedQuestion = toQuestionId(question);
-                const edge = { node: formattedQuestion, cursor: formattedQuestion.id };
+                const edge = {
+                    node: formattedQuestion,
+                    cursor: formattedQuestion.createdAt.getMilliseconds().toString(),
+                };
                 ctx.pubsub.publish({
                     topic: 'eventQuestionCreated',
                     payload: {
                         eventQuestionCreated: edge,
                     },
                 });
+
                 // TODO: better cursors
                 return edge;
             });
@@ -61,8 +66,11 @@ export const resolvers: Resolvers = {
         eventQuestionCreated: {
             subscribe: withFilter<{ eventQuestionCreated: EventQuestionEdge }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
-                (payload, args, ctx) =>
-                    Question.doesEventMatch(args.id, payload.eventQuestionCreated.node.id, ctx.prisma)
+                (payload, args, ctx) => {
+                    const { id: questionId } = fromGlobalId(payload.eventQuestionCreated.node.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
             ),
         },
     },

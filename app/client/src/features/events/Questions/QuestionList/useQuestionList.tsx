@@ -1,22 +1,14 @@
 import * as React from 'react';
-import type { GraphQLSubscriptionConfig, ConnectionHandler } from 'relay-runtime';
-import { useSubscription, graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+import { GraphQLSubscriptionConfig, ConnectionHandler } from 'relay-runtime';
+import { useSubscription, graphql, useFragment } from 'react-relay';
 
-import type {
-    useQuestionListSubscriptionVariables,
-    useQuestionListSubscription,
-    useQuestionListSubscriptionResponse,
-} from '@local/__generated__/useQuestionListSubscription.graphql';
-import type { QuestionCardFragment$data } from '@local/__generated__/QuestionCardFragment.graphql';
-import type {
-    useQuestionListQuery,
-    useQuestionListQueryResponse,
-} from '@local/__generated__/useQuestionListQuery.graphql';
-import { EventQuestion, useQuestionsQuery } from '@local/graphql-types';
+import type { useQuestionListSubscription } from '@local/__generated__/useQuestionListSubscription.graphql';
+import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
 
 export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
     subscription useQuestionListSubscription($eventId: ID!) {
         eventQuestionCreated(eventId: $eventId) {
+            cursor
             node {
                 id
                 ...QuestionCardFragment
@@ -25,89 +17,89 @@ export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
     }
 `;
 
-export const USE_QUESTION_LIST_QUERY = graphql`
-    query useQuestionListQuery($eventId: ID!) {
-        questionsByEventId(eventId: $eventId) {
-            id
-            ...QuestionCardFragment
+// TODO: make the pagination here better
+export const USE_QUESTION_LIST_FRAGMENT = graphql`
+    fragment useQuestionListFragment on Event
+    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
+        id
+        questions(first: $first, after: $after) @connection(key: "useQuestionListFragment_questions") {
+            __id
+            edges {
+                cursor
+                node {
+                    id
+                    question
+                    createdBy {
+                        firstName
+                    }
+                    ...QuestionCardFragment
+                }
+            }
         }
     }
 `;
 
-const initialState = {
-    isPaused: false,
-    buffer: [] as QuestionCardFragment$data[],
-    questionList: [] as QuestionCardFragment$data[],
-};
-
-type Action =
-    | { type: 'togglePause'; payload?: never }
-    | { type: 'addToBuffer'; payload: QuestionCardFragment$data }
-    | { type: 'flushBuffer'; payload?: never }
-    | { type: 'initQuestionList'; payload: QuestionCardFragment$data[] };
-
-function reducer(state: typeof initialState, action: Action): typeof initialState {
-    switch (action.type) {
-        case 'togglePause':
-            return { ...state, isPaused: !state.isPaused };
-        case 'flushBuffer':
-            if (state.isPaused || state.buffer.length === 0) return state;
-            return { ...state, buffer: [], questionList: [...state.buffer, ...state.questionList] };
-        case 'addToBuffer':
-            return { ...state, buffer: [action.payload, ...state.buffer] };
-        case 'initQuestionList':
-            return { ...state, questionList: action.payload };
-        default:
-            return state;
-    }
-}
-
 interface TArgs {
-    queryRef: PreloadedQuery<useQuestionListQuery>;
-    eventId: string;
+    fragmentRef: useQuestionListFragment$key;
 }
 
-export function useQuestionList({ queryRef, eventId }: TArgs) {
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { questionsByEventId } = usePreloadedQuery<useQuestionListQuery>(USE_QUESTION_LIST_QUERY, queryRef);
+export function useQuestionList({ fragmentRef }: TArgs) {
+    // const [state, dispatch] = React.useReducer(reducer, initialState);
+    const { questions, id: eventId } = useFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
+    const questionList = React.useMemo(
+        () => (questions?.edges ? questions.edges.map(({ node }) => node) : []),
+        [questions]
+    );
 
-    // TODO: make more compliant with graphql conneciton spec
-    // https://relay.dev/graphql/connections.htm
-    // https://relay.dev/docs/guided-tour/list-data/connections/#internaldocs-banner
     const config = React.useMemo<GraphQLSubscriptionConfig<useQuestionListSubscription>>(
         () => ({
             variables: { eventId },
             subscription: USE_QUESTION_LIST_SUBSCRIPTION,
-            onCompleted() {},
-            onNext(data) {
-                if (data?.eventQuestionCreated) dispatch({ type: 'addToBuffer', payload: data.eventQuestionCreated });
+            // onCompleted() {},
+            // https://relay.dev/docs/guided-tour/updating-data/graphql-subscriptions/
+            updater(store, data) {
+                // get the root event record based on the eventId
+                const eventRecord = store.get(eventId);
+
+                // if not found then don't continue -- this component shouldn't be rendered in this case/other issues are present
+                if (!eventRecord) return;
+
+                // get the connection for event -> questions (defined towards top of file)
+                // CR = connection record
+                const eventQuestionCR = ConnectionHandler.getConnection(
+                    eventRecord,
+                    'useQuestionListFragment_questions' // (defined towards top of file)
+                );
+
+                // if no connection is found, then there's nothing to connect
+                if (!eventQuestionCR) return;
+
+                // check if the connection record already exists on the edges
+                // if it does, then don't do anything
+                const connectionEdges = eventQuestionCR.getLinkedRecords('edges');
+                const found = connectionEdges?.find((record) => {
+                    const value = record.getLinkedRecord('node')?.getDataID();
+                    return value === data.eventQuestionCreated.node.id;
+                });
+                if (found) return;
+
+                // the edge is the payload itself from the subscription
+                const edge = store.getRootField('eventQuestionCreated');
+
+                // build the edge
+                const newEdge = ConnectionHandler.buildConnectionEdge(store, eventQuestionCR, edge);
+
+                // if there's no edge built for some reason then don't do anything
+                if (!newEdge) return;
+
+                // insert the edge inside of the connection
+                ConnectionHandler.insertEdgeBefore(eventQuestionCR, newEdge);
             },
         }),
         [eventId]
     );
 
     useSubscription(config);
-
-    // useNewQuestionsSubscription({
-    //     variables: { id },
-    //     onSubscriptionData({ subscriptionData }) {
-    //         const { data } = subscriptionData;
-    //         if (data && data.eventQuestionCreated)
-    //             dispatch({ type: 'addToBuffer', payload: data.eventQuestionCreated });
-    //     },
-    // });
-
-    React.useEffect(() => {
-        let isMounted = true;
-        const handle = setInterval(() => {
-            if (!isMounted) return;
-            dispatch({ type: 'flushBuffer' });
-        }, 1500);
-        return () => {
-            isMounted = false;
-            clearInterval(handle);
-        };
-    }, [dispatch]);
-
-    return { ...state, dispatch, isLoading, isModerator };
+    // console.log(questionList);
+    return { questions: questionList, eventId };
 }

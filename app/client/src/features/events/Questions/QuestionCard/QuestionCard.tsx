@@ -14,14 +14,15 @@ import {
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import { graphql } from 'react-relay';
+import { graphql, useFragment } from 'react-relay';
 
+import type { QuestionCardFragment$key } from '@local/__generated__/QuestionCardFragment.graphql';
 import { EventQuestion as Question } from '@local/graphql-types';
 import { formatDate } from '@local/utils/format';
 import QuestionStats from './QuestionStats';
 
 export interface Props {
-    question: Question;
+    fragmentRef: QuestionCardFragment$key;
     children?: React.ReactNode | React.ReactNodeArray;
     CardProps?: CardProps;
     CardHeaderProps?: CardHeaderProps;
@@ -60,7 +61,7 @@ export function QuestionCardSkeleton() {
  * Card is the root element
  */
 function QuestionCard({
-    question,
+    fragmentRef,
     children,
     CardProps: cardProps,
     CardContentProps: cardContentProps,
@@ -70,8 +71,12 @@ function QuestionCard({
     quote,
     stats,
 }: Props) {
-    const theme = useTheme();
-    const [time, month] = React.useMemo(() => formatDate(question?.createdAt, 'p-P').split('-'), [question.createdAt]);
+    // const theme = useTheme();
+    const question = useFragment(QUESTION_CARD_FRAGMENT, fragmentRef);
+    const [time, month] = React.useMemo(
+        () => (question.createdAt ? formatDate(question?.createdAt, 'p-P').split('-') : ['', '']),
+        [question.createdAt]
+    );
     const subheader = React.useMemo(
         () => (
             <Typography variant='caption' color='textSecondary'>
@@ -82,16 +87,19 @@ function QuestionCard({
         ),
         [time, month]
     );
+
+    if (!question) return <div>loading...</div>;
+
     return (
         <div className={className} style={style}>
             <Card {...cardProps}>
                 <CardHeader
                     title={question?.createdBy?.firstName}
                     subheader={subheader}
-                    avatar={<Avatar>{question?.createdBy?.firstName[0]}</Avatar>}
+                    avatar={<Avatar>{question?.createdBy?.firstName?.charAt(0)}</Avatar>}
                     {...cardHeaderProps}
                 />
-                {quote && (
+                {/* {quote && (
                     <QuestionCard
                         question={quote}
                         style={{
@@ -101,15 +109,15 @@ function QuestionCard({
                         }}
                         CardProps={{ elevation: 0 }}
                     />
-                )}
+                )} */}
                 <CardContent {...cardContentProps}>
                     <Typography>{question.question}</Typography>
-                    {stats && (
+                    {/* {stats && (
                         <>
                             <Divider />
                             <QuestionStats question={question} />
                         </>
-                    )}
+                    )} */}
                 </CardContent>
                 {children}
             </Card>

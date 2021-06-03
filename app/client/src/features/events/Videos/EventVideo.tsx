@@ -25,8 +25,8 @@ export function EventVideo({ fragmentRef }: EventVideoProps) {
     const data = useFragment(EVENT_VIDEO_FRAGMENT, fragmentRef);
 
     // TODO: better system/user flow for this
-    if (!data || !data.videos || data.videos.length === 0) return <VideoPlayer url='' />;
+    if (!data || !data.videos || !data.videos.edges || data.videos.edges.length === 0) return <VideoPlayer url='' />;
 
     // TODO: implement switcher for diff languages
-    return <VideoPlayer url={data.videos[0].url} />;
+    return <VideoPlayer url={data.videos.edges[0].node.url ?? ''} />;
 }

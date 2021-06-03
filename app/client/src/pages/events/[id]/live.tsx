@@ -1,20 +1,15 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { NextPage, GetServerSidePropsContext } from 'next';
-import { useSelector } from 'react-redux';
 import { fetchQuery, graphql } from 'react-relay';
 
 import { liveQuery, liveQueryResponse } from '@local/__generated__/liveQuery.graphql';
-import { Loader } from '@local/components/Loader';
 import { Fab } from '@local/components/Fab';
-import { EventSidebar, EventProvider, EventVideo } from '@local/features/events';
-import { Event } from '@local/graphql-types';
-import { initializeApollo, addApolloState } from '@local/utils/apolloClient';
+import { EventSidebar, EventVideo } from '@local/features/events';
 import { initEnvironment } from '@local/utils/relay-environment';
 import { initializeStore } from '@local/reducers/store';
 import { PickRequired } from '@local/utils/ts-utils';
@@ -76,21 +71,6 @@ function doesCtxHaveId(
 }
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: string }>) {
-    // const apolloClient = initializeApollo();
-
-    // await apolloClient.query({
-    //     query: EventSettingsDocument,
-    //     variables: { input: ctx?.params?.id },
-    // });
-
-    // return addApolloState(apolloClient, {
-    //     props: {
-    //         id: ctx?.params?.id,
-    //         initialReduxState: reduxStore.getState(),
-    //         hideSideNav: true,
-    //         containerProps: { maxWidth: 'xl' },
-    //     },
-    // });
     const reduxStore = initializeStore();
     const baseProps = {
         initialReduxState: reduxStore.getState(),
@@ -105,7 +85,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: st
 }
 
 // TODO: SSR this and redirect appropriately if it's not live
-const Live: NextPage<liveQueryResponse> = ({ node: eventById }) => {
+const Live: NextPage<liveQueryResponse> = ({ node }) => {
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -136,18 +116,18 @@ const Live: NextPage<liveQueryResponse> = ({ node: eventById }) => {
             inline: 'nearest',
         });
     };
-    if (!eventById) return <h1>what</h1>;
+    if (!node) return <h1>what</h1>;
 
     return (
         <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
             {!isMdUp && <div ref={topRef} />}
             <Grid item md={8} className={classes.video}>
-                <EventVideo fragmentRef={eventById} />
+                <EventVideo fragmentRef={node} />
             </Grid>
             <Grid container item xs={12} md={4} direction='column'>
                 <div className={classes.panes} onScroll={handleScroll}>
                     {isMdUp && <div ref={topRef} className={classes.target} />}
-                    <EventSidebar fragmentRef={eventById} />
+                    <EventSidebar fragmentRef={node} />
                 </div>
             </Grid>
             <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>

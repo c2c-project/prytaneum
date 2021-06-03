@@ -174,7 +174,7 @@ export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
  * find questions by event id
  */
 export async function findQuestionsByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventQuestion.findMany({ where: { eventId } });
+    return prisma.eventQuestion.findMany({ where: { eventId }, orderBy: { createdAt: 'desc' } });
 }
 
 /**

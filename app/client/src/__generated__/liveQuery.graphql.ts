@@ -47,6 +47,7 @@ fragment EventSidebarFragment on Event {
   isViewerModerator
   ...EventDetailsCardFragment
   ...SpeakerListFragment
+  ...useQuestionListFragment
 }
 
 fragment EventVideoFragment on Event {
@@ -62,6 +63,16 @@ fragment EventVideoFragment on Event {
   }
 }
 
+fragment QuestionCardFragment on EventQuestion {
+  id
+  question
+  createdBy {
+    id
+    firstName
+  }
+  createdAt
+}
+
 fragment SpeakerListFragment on Event {
   speakers {
     edges {
@@ -73,6 +84,29 @@ fragment SpeakerListFragment on Event {
         title
       }
       cursor
+    }
+  }
+}
+
+fragment useQuestionListFragment on Event {
+  id
+  questions(first: 100, after: "") {
+    edges {
+      cursor
+      node {
+        id
+        question
+        createdBy {
+          firstName
+          id
+        }
+        ...QuestionCardFragment
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
@@ -104,23 +138,42 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "title",
+  "name": "__typename",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "description",
+  "name": "title",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
-};
+},
+v7 = [
+  {
+    "kind": "Literal",
+    "name": "after",
+    "value": ""
+  },
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 100
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -175,13 +228,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
+          (v3/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -200,7 +247,7 @@ return {
                 "name": "isViewerModerator",
                 "storageKey": null
               },
-              (v3/*: any*/),
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -208,7 +255,7 @@ return {
                 "name": "topic",
                 "storageKey": null
               },
-              (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -248,17 +295,132 @@ return {
                             "name": "name",
                             "storageKey": null
                           },
-                          (v4/*: any*/),
-                          (v3/*: any*/)
+                          (v5/*: any*/),
+                          (v4/*: any*/)
                         ],
                         "storageKey": null
                       },
-                      (v5/*: any*/)
+                      (v6/*: any*/)
                     ],
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": (v7/*: any*/),
+                "concreteType": "EventQuestionConnection",
+                "kind": "LinkedField",
+                "name": "questions",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "EventQuestionEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      (v6/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "EventQuestion",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "question",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "User",
+                            "kind": "LinkedField",
+                            "name": "createdBy",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "firstName",
+                                "storageKey": null
+                              },
+                              (v2/*: any*/)
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "createdAt",
+                            "storageKey": null
+                          },
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "PageInfo",
+                    "kind": "LinkedField",
+                    "name": "pageInfo",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "endCursor",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "hasNextPage",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ClientExtension",
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__id",
+                        "storageKey": null
+                      }
+                    ]
+                  }
+                ],
+                "storageKey": "questions(after:\"\",first:100)"
+              },
+              {
+                "alias": null,
+                "args": (v7/*: any*/),
+                "filters": null,
+                "handle": "connection",
+                "key": "useQuestionListFragment_questions",
+                "kind": "LinkedHandle",
+                "name": "questions"
               },
               {
                 "alias": null,
@@ -276,7 +438,7 @@ return {
                     "name": "edges",
                     "plural": true,
                     "selections": [
-                      (v5/*: any*/),
+                      (v6/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -319,12 +481,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "542c697f66c587b76b0324cd19d90347",
+    "cacheID": "0b2a90ccec3eecd8c68f6099825aaa88",
     "id": null,
     "metadata": {},
     "name": "liveQuery",
     "operationKind": "query",
-    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n"
+    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  questions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        ...QuestionCardFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
