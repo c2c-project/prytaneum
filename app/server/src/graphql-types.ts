@@ -575,7 +575,7 @@ export type EventQuestion = Node & {
     /** Find the count of the likes only */
     likedByCount?: Maybe<Scalars['Int']>;
     /** Whether or not the current user likes the question */
-    isLikedByMe?: Maybe<Scalars['Boolean']>;
+    isLikedByViewer?: Maybe<Scalars['Boolean']>;
     /** If the question is owned by the current viewer */
     isMyQuestion?: Maybe<Scalars['Boolean']>;
 };
@@ -1513,7 +1513,7 @@ export type EventQuestionResolvers<
     isQuote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     likedBy?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     likedByCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-    isLikedByMe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isLikedByViewer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isMyQuestion?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1864,7 +1864,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isQuote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         likedBy?: LoaderResolver<Maybe<UserConnection>, EventQuestion, {}, TContext>;
         likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
-        isLikedByMe?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
+        isLikedByViewer?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isMyQuestion?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
     };
 

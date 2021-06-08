@@ -39,7 +39,7 @@ type EventQuestion implements Node {
     """
     Whether or not the current user likes the question
     """
-    isLikedByMe: Boolean
+    isLikedByViewer: Boolean
 
     """
     If the question is owned by the current viewer

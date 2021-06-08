@@ -94,10 +94,10 @@ export const resolvers: Resolvers = {
             const { id: questionId } = fromGlobalId(parent.id);
             return Question.countLikes(questionId, ctx.prisma);
         },
-        isLikedByMe(parent, args, ctx, info) {
+        isLikedByViewer(parent, args, ctx, info) {
             if (!ctx.viewer.id) return null;
             const { id: questionId } = fromGlobalId(parent.id);
-            return Question.isLikedByMe(ctx.viewer.id, questionId, ctx.prisma);
+            return Question.isLikedByViewer(ctx.viewer.id, questionId, ctx.prisma);
         },
         isMyQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) return null;

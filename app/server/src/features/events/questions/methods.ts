@@ -1,12 +1,14 @@
 import { PrismaClient } from '@app/prisma';
 import { CreateQuestion, AlterLike } from '@local/graphql-types';
+import { fromGlobalId } from 'graphql-relay';
 import { errors } from '@local/features/utils';
 
 /**
  * submit a question, in the future this may plug into an event broker like kafka or redis
  */
 export async function createQuestion(userId: string, prisma: PrismaClient, input: CreateQuestion) {
-    const { question, refQuestion, isFollowUp, isQuote, eventId } = input;
+    const { question, refQuestion: globalRefId, isFollowUp, isQuote, eventId } = input;
+    const refQuestionId = globalRefId ? fromGlobalId(globalRefId).id : null;
 
     // it's okay to have both false, but both cannot be true
     if (isQuote === isFollowUp && isQuote === true) throw new Error(errors.invalidArgs);
@@ -15,7 +17,7 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
         data: {
             eventId,
             question,
-            refQuestionId: refQuestion || null,
+            refQuestionId,
             isFollowUp: isFollowUp || false,
             isQuote: isQuote || false,
             createdById: userId,
@@ -113,7 +115,7 @@ export async function findLikedByUsers(questionId: string, prisma: PrismaClient)
 /**
  * is the question liked by the current user
  */
-export async function isLikedByMe(userId: string, questionId: string, prisma: PrismaClient) {
+export async function isLikedByViewer(userId: string, questionId: string, prisma: PrismaClient) {
     const result = prisma.eventQuestionLike.findUnique({
         where: { likedBy_likedQuestion: { likedBy: userId, likedQuestion: questionId } },
     });
