@@ -10,14 +10,14 @@ import { useForm } from '@local/hooks';
 
 export type TQuestionFormState = { question: string };
 
-interface Props {
+export interface QuestionFormProps {
     quote?: React.ReactNode;
     onSubmit?: (state: TQuestionFormState) => void;
     onCancel?: () => void;
 }
 
 // TODO: eliminate inline styles
-export function QuestionForm({ quote, onSubmit, onCancel }: Props) {
+export function QuestionForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
         question: '',

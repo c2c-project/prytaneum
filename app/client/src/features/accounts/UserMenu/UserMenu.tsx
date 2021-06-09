@@ -20,7 +20,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
-import { useUser } from '@local/hooks/useUser';
+import { useUser, useIsClient } from '@local/hooks';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -63,11 +63,16 @@ interface Props {
 export function UserMenu({ className, links }: Props) {
     const [user] = useUser();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const isClient = useIsClient();
     const classes = useStyles();
+
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
-    const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
+
+    // if server, then default to rendering desktop version and not mobile
+    // TODO: determine if the user is on desktop or mobile and render appropriately
+    const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
     const router = useRouter();
 
     const handleNavigation = (path: string) => () => router.push(path);

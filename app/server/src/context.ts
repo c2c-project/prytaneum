@@ -11,6 +11,12 @@ async function extractJwt(req: FastifyRequest) {
         const decodedJwt = await verify(req.cookies.jwt);
         return (decodedJwt as { id: string }).id;
     }
+    if (req.headers.authorization) {
+        // will be a string like "Bearer <jwt token here>", w/ split on a space it will be ['Bearer", <jwt here>]
+        const [, jwt] = req.headers.authorization.split(' ');
+        const decodedJwt = await verify(jwt);
+        return (decodedJwt as { id: string }).id;
+    }
     return null;
 }
 

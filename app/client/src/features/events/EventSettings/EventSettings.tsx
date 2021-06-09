@@ -12,6 +12,7 @@ import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
 import { EventDetails } from './EventDetails';
 import { ModeratorEventSettings } from '../Moderation';
+import { EventContext } from '../EventContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,7 @@ export const EVENT_SETTINGS_QUERY = graphql`
         node(id: $input) {
             id
             ... on Event {
+                isViewerModerator
                 ...EventDetailsFragment
                 ...SpeakerEventSettingsFragment
                 ...VideoEventSettingsFragment
@@ -63,49 +65,58 @@ export function EventSettings({ queryRef }: Props) {
     const classes = useStyles();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
 
+    if (!data.node) return <div>Loading...</div>;
+
     return (
-        <div className={classes.root}>
-            <Typography variant='h2' className={classes.title}>
-                Event Settings
-            </Typography>
-            <Divider className={classes.titleDivider} />
-            {data.node && (
-                <SettingsMenu
-                    config={[
-                        {
-                            title: 'Details',
-                            description: 'Update basic event details',
-                            component: <EventDetails fragmentRef={data.node} className={classes.settingsSection} />,
-                        },
-                        {
-                            title: 'General',
-                            description: 'Customize the event using various settings',
-                            component: <GenericSettings className={classes.settingsSection} fragmentRef={data.node} />,
-                        },
-                        {
-                            title: 'Video',
-                            description: 'Modify the list of video streams and their languages',
-                            component: (
-                                <VideoEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                            ),
-                        },
-                        {
-                            title: 'Speaker',
-                            description: 'Add and Modify speakers at this event',
-                            component: (
-                                <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                            ),
-                        },
-                        {
-                            title: 'Moderators',
-                            description: 'Designate individuals as moderators',
-                            component: (
-                                <ModeratorEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                            ),
-                        },
-                    ]}
-                />
-            )}
-        </div>
+        <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
+            <div className={classes.root}>
+                <Typography variant='h2' className={classes.title}>
+                    Event Settings
+                </Typography>
+                <Divider className={classes.titleDivider} />
+                {data.node && (
+                    <SettingsMenu
+                        config={[
+                            {
+                                title: 'Details',
+                                description: 'Update basic event details',
+                                component: <EventDetails fragmentRef={data.node} className={classes.settingsSection} />,
+                            },
+                            {
+                                title: 'General',
+                                description: 'Customize the event using various settings',
+                                component: (
+                                    <GenericSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
+                            },
+                            {
+                                title: 'Video',
+                                description: 'Modify the list of video streams and their languages',
+                                component: (
+                                    <VideoEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
+                            },
+                            {
+                                title: 'Speaker',
+                                description: 'Add and Modify speakers at this event',
+                                component: (
+                                    <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
+                            },
+                            {
+                                title: 'Moderators',
+                                description: 'Designate individuals as moderators',
+                                component: (
+                                    <ModeratorEventSettings
+                                        className={classes.settingsSection}
+                                        fragmentRef={data.node}
+                                    />
+                                ),
+                            },
+                        ]}
+                    />
+                )}
+            </div>
+        </EventContext.Provider>
     );
 }

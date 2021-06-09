@@ -32,7 +32,13 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
                     createdBy {
                         firstName
                     }
+                    refQuestion {
+                        ...QuestionCardFragment
+                    }
                     ...QuestionCardFragment
+                    ...QuestionActionsFragment
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
                 }
             }
         }
@@ -100,6 +106,6 @@ export function useQuestionList({ fragmentRef }: TArgs) {
     );
 
     useSubscription(config);
-    // console.log(questionList);
-    return { questions: questionList, eventId };
+
+    return { questions: questionList, eventId, connections: questions?.__id ? [questions.__id] : [] };
 }

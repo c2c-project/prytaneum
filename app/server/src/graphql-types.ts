@@ -144,7 +144,7 @@ export type Mutation = {
     /** Go to the previous question */
     prevQuestion: Scalars['Int'];
     createQuestion: EventQuestionMutationResponse;
-    alterLike: Scalars['Boolean'];
+    alterLike: EventQuestionMutationResponse;
     createSpeaker: EventSpeakerMutationResponse;
     deleteSpeaker: EventSpeakerMutationResponse;
     updateSpeaker: EventSpeakerMutationResponse;
@@ -388,7 +388,7 @@ export type Subscription = {
     /** New messages as feedback is given */
     eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
     eventQuestionCreated: EventQuestionEdge;
-    likeCountChanged: Like;
+    likeCountChanged: EventQuestionEdge;
 };
 
 export type SubscriptionquestionPositionArgs = {
@@ -1210,7 +1210,7 @@ export type MutationResolvers<
         RequireFields<MutationcreateQuestionArgs, 'input'>
     >;
     alterLike?: Resolver<
-        ResolversTypes['Boolean'],
+        ResolversTypes['EventQuestionMutationResponse'],
         ParentType,
         ContextType,
         RequireFields<MutationalterLikeArgs, 'input'>
@@ -1367,7 +1367,7 @@ export type SubscriptionResolvers<
         RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
     >;
     likeCountChanged?: SubscriptionResolver<
-        ResolversTypes['Like'],
+        ResolversTypes['EventQuestionEdge'],
         'likeCountChanged',
         ParentType,
         ContextType,

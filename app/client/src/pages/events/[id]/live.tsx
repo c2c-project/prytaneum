@@ -5,12 +5,14 @@ import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { NextPage, GetServerSidePropsContext } from 'next';
-import { fetchQuery, graphql } from 'react-relay';
+import { graphql, fetchQuery } from 'react-relay';
 
-import { liveQuery, liveQueryResponse } from '@local/__generated__/liveQuery.graphql';
+import type { liveQuery } from '@local/__generated__/liveQuery.graphql';
+import type { UserQuery } from '@local/__generated__/UserQuery.graphql';
+import { USER_QUERY } from '@local/contexts/User';
 import { Fab } from '@local/components/Fab';
-import { EventSidebar, EventVideo } from '@local/features/events';
-import { initEnvironment } from '@local/utils/relay-environment';
+import { EventSidebar, EventVideo, EventContext } from '@local/features/events';
+import { initServerEnvironment, makeServerFetchFunction } from '@local/utils/relay-environment';
 import { initializeStore } from '@local/reducers/store';
 import { PickRequired } from '@local/utils/ts-utils';
 
@@ -57,6 +59,7 @@ const LIVE_QUERY = graphql`
         node(id: $eventId) {
             id
             ... on Event {
+                isViewerModerator
                 ...EventSidebarFragment
                 ...EventVideoFragment
             }
@@ -78,14 +81,17 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: st
         containerProps: { maxWidth: 'xl' },
     };
     if (!doesCtxHaveId(ctx)) return { props: baseProps };
-    const environment = initEnvironment();
-    const queryProps = await fetchQuery<liveQuery>(environment, LIVE_QUERY, { eventId: ctx.params.id }).toPromise();
+    const fetchFunction = makeServerFetchFunction(ctx);
+    const environment = initServerEnvironment(fetchFunction);
+    const queryResult = await fetchQuery<liveQuery>(environment, LIVE_QUERY, { eventId: ctx.params.id }).toPromise();
     const initialRecords = environment.getStore().getSource().toJSON();
-    return { props: { ...baseProps, ...queryProps, initialRecords } };
+
+    const userInfo = await fetchQuery<UserQuery>(environment, USER_QUERY, {}).toPromise();
+    return { props: { ...baseProps, ...queryResult, initialRecords, userInfo } };
 }
 
 // TODO: SSR this and redirect appropriately if it's not live
-const Live: NextPage<liveQueryResponse> = ({ node }) => {
+const Live: NextPage<liveQuery['response']> = ({ node }) => {
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -116,24 +122,27 @@ const Live: NextPage<liveQueryResponse> = ({ node }) => {
             inline: 'nearest',
         });
     };
-    if (!node) return <h1>what</h1>;
+
+    if (!node) return <div>Loading...</div>;
 
     return (
-        <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
-            {!isMdUp && <div ref={topRef} />}
-            <Grid item md={8} className={classes.video}>
-                <EventVideo fragmentRef={node} />
+        <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
+            <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
+                {!isMdUp && <div ref={topRef} />}
+                <Grid item md={8} className={classes.video}>
+                    <EventVideo fragmentRef={node} />
+                </Grid>
+                <Grid container item xs={12} md={4} direction='column'>
+                    <div className={classes.panes} onScroll={handleScroll}>
+                        {isMdUp && <div ref={topRef} className={classes.target} />}
+                        <EventSidebar fragmentRef={node} />
+                    </div>
+                </Grid>
+                <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
+                    <KeyboardArrowUpIcon />
+                </Fab>
             </Grid>
-            <Grid container item xs={12} md={4} direction='column'>
-                <div className={classes.panes} onScroll={handleScroll}>
-                    {isMdUp && <div ref={topRef} className={classes.target} />}
-                    <EventSidebar fragmentRef={node} />
-                </div>
-            </Grid>
-            <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
-                <KeyboardArrowUpIcon />
-            </Fab>
-        </Grid>
+        </EventContext.Provider>
     );
 };
 

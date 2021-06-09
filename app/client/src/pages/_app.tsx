@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <CssBaseline />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <SnackContext maxSnack={1}>
-                            <UserProvider>
+                            <UserProvider userInfo={pageProps.userInfo}>
                                 <Layout hideSideNav={pageProps.hideSideNav} ContainerProps={pageProps.containerProps}>
                                     <Provider store={store}>
                                         <Component {...pageProps} />

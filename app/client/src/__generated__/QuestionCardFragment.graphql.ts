@@ -7,6 +7,15 @@ import { FragmentRefs } from "relay-runtime";
 export type QuestionCardFragment = {
     readonly id: string;
     readonly question: string | null;
+    readonly refQuestion: {
+        readonly id: string;
+        readonly question: string | null;
+        readonly createdBy: {
+            readonly id: string;
+            readonly firstName: string | null;
+        } | null;
+        readonly createdAt: Date | null;
+    } | null;
     readonly createdBy: {
         readonly id: string;
         readonly firstName: string | null;
@@ -29,6 +38,39 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v0/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
 };
 return {
   "argumentDefinitions": [],
@@ -37,43 +79,28 @@ return {
   "name": "QuestionCardFragment",
   "selections": [
     (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "question",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "User",
+      "concreteType": "EventQuestion",
       "kind": "LinkedField",
-      "name": "createdBy",
+      "name": "refQuestion",
       "plural": false,
       "selections": [
         (v0/*: any*/),
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "firstName",
-          "storageKey": null
-        }
+        (v1/*: any*/),
+        (v2/*: any*/),
+        (v3/*: any*/)
       ],
       "storageKey": null
     },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "createdAt",
-      "storageKey": null
-    }
+    (v2/*: any*/),
+    (v3/*: any*/)
   ],
   "type": "EventQuestion",
   "abstractKey": null
 };
 })();
-(node as any).hash = 'ef0a497431ff2d2f71fb81146acd346e';
+(node as any).hash = '828abcf00441aadfbaf5a262f371dbf7';
 export default node;

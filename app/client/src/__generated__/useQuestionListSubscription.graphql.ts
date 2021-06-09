@@ -39,6 +39,15 @@ subscription useQuestionListSubscription(
 fragment QuestionCardFragment on EventQuestion {
   id
   question
+  refQuestion {
+    id
+    question
+    createdBy {
+      id
+      firstName
+    }
+    createdAt
+  }
   createdBy {
     id
     firstName
@@ -74,6 +83,39 @@ v3 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v3/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
   "storageKey": null
 };
 return {
@@ -140,39 +182,24 @@ return {
             "plural": false,
             "selections": [
               (v3/*: any*/),
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "question",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "User",
+                "concreteType": "EventQuestion",
                 "kind": "LinkedField",
-                "name": "createdBy",
+                "name": "refQuestion",
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "firstName",
-                    "storageKey": null
-                  }
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "createdAt",
-                "storageKey": null
-              }
+              (v5/*: any*/),
+              (v6/*: any*/)
             ],
             "storageKey": null
           }
@@ -182,12 +209,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8422d746abd0d6511e3874fef41e4198",
+    "cacheID": "28641b2806dcf70084eeaf0c9e602e97",
     "id": null,
     "metadata": {},
     "name": "useQuestionListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  eventQuestionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionCardFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
+    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  eventQuestionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionCardFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
   }
 };
 })();

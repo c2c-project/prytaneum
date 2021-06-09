@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { IconButton, Grid, Badge, Tooltip } from '@material-ui/core';
+import { Grid, Card, List, ListItem } from '@material-ui/core';
 import { Pause, PlayArrow } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
-import { EventQuestion } from '@local/graphql-types';
-import ListFilter, { useFilters, Accessors, ListFilterSkeleton } from '@local/components/ListFilter';
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
+import { useEvent } from '@local/features/events';
+import { useUser } from '@local/hooks';
 
-import { QuestionCardSkeleton } from '../QuestionCard';
-import FeedList from './FeedList';
+import { QuestionActions } from '../QuestionActions';
+import { QuestionAuthor } from '../QuestionAuthor';
+import { QuestionContent } from '../QuestionContent';
 import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
@@ -22,7 +24,7 @@ interface Props {
     fragmentRef: useQuestionListFragment$key;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         // padding: theme.spacing(1.5),
     },
@@ -33,25 +35,25 @@ const useStyles = makeStyles(() => ({
         height: 0, // flex box recalculates this -- explanation:  https://stackoverflow.com/a/14964944
         flex: '1 1 100%',
     },
+    questionActions: {
+        padding: 0,
+        color: theme.palette.primary.light,
+    },
+    item: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
 }));
-
-export function QuestionFeedLoading() {
-    return (
-        <>
-            <ListFilterSkeleton />
-            {new Array(3).fill(0).map((_zero, idx) => (
-                <QuestionCardSkeleton key={idx} />
-            ))}
-        </>
-    );
-}
 
 export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
-    const [state, setState] = React.useState(false); // FIXME:
-    const { questions, eventId } = useQuestionList({ fragmentRef });
+    const [user] = useUser();
+    const { isModerator } = useEvent();
+    const { questions, connections } = useQuestionList({ fragmentRef });
+    // const [isPaused, setIsPaused] = React.useState();
 
-    function togglePause() {}
+    // function togglePause() {}
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof questions>>[]>(
         () => [
@@ -60,7 +62,9 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
         ],
         []
     );
+
     const [filteredList, handleSearch, handleFilterChange] = useFilters(questions, accessors);
+
     return (
         <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
             <ListFilter
@@ -69,30 +73,42 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
                 length={filteredList.length}
-                menuIcons={[
-                    <Tooltip title='Load New'>
-                        <span>
-                            <IconButton color='inherit' onClick={togglePause}>
-                                <Badge badgeContent={state ? 0 : 0} color='secondary'>
-                                    {state ? <PlayArrow /> : <Pause />}
-                                </Badge>
-                            </IconButton>
-                        </span>
-                    </Tooltip>,
-                ]}
+                // menuIcons={[
+                //     <Tooltip title='Load New'>
+                //         <span>
+                //             <IconButton color='inherit' onClick={togglePause}>
+                //                 <Badge badgeContent={isPaused ? 0 : 0} color='secondary'>
+                //                     {isPaused ? <PlayArrow /> : <Pause />}
+                //                 </Badge>
+                //             </IconButton>
+                //         </span>
+                //     </Tooltip>,
+                // ]}
             />
-            <FeedList
-                className={classes.content}
-                variant={state ? 'moderator' : 'user'}
-                questions={filteredList}
-                systemMessages={[]}
-                eventId={eventId}
-            />
+            <div className={classes.content}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <List disablePadding>
+                            {filteredList.map((question) => (
+                                <ListItem disableGutters key={question.id}>
+                                    <Card className={classes.item}>
+                                        <QuestionAuthor fragmentRef={question} />
+                                        <QuestionContent fragmentRef={question} />
+                                        <QuestionActions
+                                            className={classes.questionActions}
+                                            like={!isModerator && Boolean(user)}
+                                            quote={!isModerator && Boolean(user)}
+                                            queue={isModerator && Boolean(user)}
+                                            connections={connections}
+                                            fragmentRef={question}
+                                        />
+                                    </Card>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Grid>
+                </Grid>
+            </div>
         </Grid>
     );
 }
-
-QuestionList.defaultProps = {
-    className: undefined,
-    style: undefined,
-};

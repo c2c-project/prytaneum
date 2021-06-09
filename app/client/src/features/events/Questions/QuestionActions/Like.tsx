@@ -1,37 +1,58 @@
 import * as React from 'react';
 import { Button } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined';
+import { graphql, useMutation, useFragment } from 'react-relay';
 
-// import useEndpoint from '@local/hooks/useEndpoint';
-// import { createLike, deleteLike } from '../api';
+import { useUser } from '@local/hooks';
+import type { LikeMutation } from '@local/__generated__/LikeMutation.graphql';
+import type { LikeFragment$key } from '@local/__generated__/LikeFragment.graphql';
+
+const LIKE_FRAGMENT = graphql`
+    fragment LikeFragment on EventQuestion {
+        id
+        isLikedByViewer
+    }
+`;
+
+const LIKE_MUTATION = graphql`
+    mutation LikeMutation($input: AlterLike!) {
+        alterLike(input: $input) {
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                    isLikedByViewer
+                }
+            }
+        }
+    }
+`;
 
 interface Props {
-    id: string;
-    questionId: string;
-    onLike?: () => void;
-    onDeleteLike?: () => void;
+    fragmentRef: LikeFragment$key;
     className?: string;
-    liked?: boolean;
 }
 
-function Like({ className, questionId, id, liked, onLike, onDeleteLike }: Props) {
-    const apiFn = React.useMemo(() => {
-        // if (liked) return deleteLike;
-        // return createLike;
-    }, [liked]);
-    const onSuccess = React.useMemo(() => {
-        if (liked) return onDeleteLike;
-        return onLike;
-    }, [liked, onDeleteLike, onLike]);
-    // const [run] = useEndpoint(() => apiFn(townhallId, questionId), {
-    //     onSuccess,
-    //     minWaitTime: 0,
-    // });
+export function Like({ className = undefined, fragmentRef }: Props) {
+    const { id: questionId, isLikedByViewer } = useFragment(LIKE_FRAGMENT, fragmentRef);
+    const [commit] = useMutation<LikeMutation>(LIKE_MUTATION);
+    function handleClick() {
+        commit({
+            variables: {
+                input: {
+                    questionId,
+                    to: !isLikedByViewer,
+                },
+            },
+        });
+    }
 
     return (
         <Button
-            color={liked ? 'secondary' : 'inherit'}
-            onClick={() => console.log('??')}
+            color={isLikedByViewer ? 'secondary' : 'inherit'}
+            onClick={handleClick}
             endIcon={<ThumbUpIcon fontSize='small' />}
             fullWidth
             className={className}
@@ -40,12 +61,3 @@ function Like({ className, questionId, id, liked, onLike, onDeleteLike }: Props)
         </Button>
     );
 }
-
-Like.defaultProps = {
-    className: undefined,
-    liked: false,
-    onLike: undefined,
-    onDeleteLike: undefined,
-};
-
-export default React.memo(Like);

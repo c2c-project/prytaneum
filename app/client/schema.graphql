@@ -228,7 +228,7 @@ type EventQuestion implements Node {
   likedByCount: Int
 
   """Whether or not the current user likes the question"""
-  isLikedByMe: Boolean
+  isLikedByViewer: Boolean
 
   """If the question is owned by the current viewer"""
   isMyQuestion: Boolean
@@ -344,7 +344,7 @@ type ModeratorMutationResponse implements MutationResponse {
 type Mutation {
   """Adds a new member and returns the new user added"""
   addMember(input: NewMember!): User
-  alterLike(input: AlterLike!): Boolean!
+  alterLike(input: AlterLike!): EventQuestionMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback): EventLiveFeedback
 
@@ -478,7 +478,7 @@ type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback
   eventQuestionCreated(eventId: ID!): EventQuestionEdge!
-  likeCountChanged(eventId: ID!): Like!
+  likeCountChanged(eventId: ID!): EventQuestionEdge!
   questionPosition(eventId: ID!): Int!
 }
 

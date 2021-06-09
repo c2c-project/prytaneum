@@ -14,7 +14,7 @@ interface Props {
 /**
  * Should only be used by moderators or when the user is a verified moderator
  */
-function QueueButton({ questionId, isQueued }: Props) {
+export function QueueButton({ questionId, isQueued }: Props) {
     // const endpoint = React.useCallback(() => addToQueue(townhallId, questionId), [townhallId, questionId]);
     // const [run] = useEndpoint(endpoint);
     const [{ id }] = useEvent();
@@ -29,5 +29,3 @@ function QueueButton({ questionId, isQueued }: Props) {
         </Button>
     );
 }
-
-export default React.memo(QueueButton);

@@ -16,7 +16,10 @@ export type useQuestionListFragment = {
                 readonly createdBy: {
                     readonly firstName: string | null;
                 } | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+                readonly refQuestion: {
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment" | "QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment">;
             };
         }> | null;
     } | null;
@@ -37,6 +40,11 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v1 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionCardFragment"
 };
 return {
   "argumentDefinitions": [
@@ -127,14 +135,37 @@ return {
                 {
                   "alias": null,
                   "args": null,
+                  "concreteType": "EventQuestion",
+                  "kind": "LinkedField",
+                  "name": "refQuestion",
+                  "plural": false,
+                  "selections": [
+                    (v1/*: any*/)
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
                   "kind": "ScalarField",
                   "name": "__typename",
                   "storageKey": null
                 },
+                (v1/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
-                  "name": "QuestionCardFragment"
+                  "name": "QuestionActionsFragment"
+                },
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "QuestionAuthorFragment"
+                },
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "QuestionContentFragment"
                 }
               ],
               "storageKey": null
@@ -187,5 +218,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '2a7146705aa71f505b3d72fda4e3ebd8';
+(node as any).hash = 'd0455a69534decb0968cd4687b0e8f6a';
 export default node;

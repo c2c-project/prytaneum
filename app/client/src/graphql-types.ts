@@ -260,7 +260,7 @@ export type EventQuestion = Node & {
   /** Find the count of the likes only */
   likedByCount?: Maybe<Scalars['Int']>;
   /** Whether or not the current user likes the question */
-  isLikedByMe?: Maybe<Scalars['Boolean']>;
+  isLikedByViewer?: Maybe<Scalars['Boolean']>;
   /** If the question is owned by the current viewer */
   isMyQuestion?: Maybe<Scalars['Boolean']>;
 };
@@ -379,7 +379,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Adds a new member and returns the new user added */
   addMember?: Maybe<User>;
-  alterLike: Scalars['Boolean'];
+  alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
   createFeedback?: Maybe<EventLiveFeedback>;
   /** Add a new moderator to the given event */
@@ -661,7 +661,7 @@ export type Subscription = {
   /** New messages as feedback is given */
   eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
   eventQuestionCreated: EventQuestionEdge;
-  likeCountChanged: Like;
+  likeCountChanged: EventQuestionEdge;
   questionPosition: Scalars['Int'];
 };
 

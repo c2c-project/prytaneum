@@ -10,6 +10,7 @@ export type liveQueryVariables = {
 export type liveQueryResponse = {
     readonly node: {
         readonly id: string;
+        readonly isViewerModerator?: boolean | null;
         readonly " $fragmentRefs": FragmentRefs<"EventSidebarFragment" | "EventVideoFragment">;
     } | null;
 };
@@ -28,6 +29,7 @@ query liveQuery(
     __typename
     id
     ... on Event {
+      isViewerModerator
       ...EventSidebarFragment
       ...EventVideoFragment
     }
@@ -63,14 +65,52 @@ fragment EventVideoFragment on Event {
   }
 }
 
+fragment LikeFragment on EventQuestion {
+  id
+  isLikedByViewer
+}
+
+fragment QuestionActionsFragment on EventQuestion {
+  id
+  ...QuoteFragment
+  ...LikeFragment
+}
+
+fragment QuestionAuthorFragment on EventQuestion {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
 fragment QuestionCardFragment on EventQuestion {
   id
   question
+  refQuestion {
+    id
+    question
+    createdBy {
+      id
+      firstName
+    }
+    createdAt
+  }
   createdBy {
     id
     firstName
   }
   createdAt
+}
+
+fragment QuestionContentFragment on EventQuestion {
+  question
+}
+
+fragment QuoteFragment on EventQuestion {
+  id
+  ...QuestionCardFragment
 }
 
 fragment SpeakerListFragment on Event {
@@ -100,7 +140,14 @@ fragment useQuestionListFragment on Event {
           firstName
           id
         }
+        refQuestion {
+          ...QuestionCardFragment
+          id
+        }
         ...QuestionCardFragment
+        ...QuestionActionsFragment
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
         __typename
       }
     }
@@ -138,31 +185,38 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "__typename",
+  "name": "isViewerModerator",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "title",
+  "name": "__typename",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "description",
+  "name": "title",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
 },
-v7 = [
+v8 = [
   {
     "kind": "Literal",
     "name": "after",
@@ -173,7 +227,41 @@ v7 = [
     "name": "first",
     "value": 100
   }
-];
+],
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "firstName",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v2/*: any*/),
+    (v10/*: any*/)
+  ],
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -193,6 +281,7 @@ return {
           {
             "kind": "InlineFragment",
             "selections": [
+              (v3/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -228,11 +317,12 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v4/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -240,14 +330,7 @@ return {
                 "name": "isQuestionFeedVisible",
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "isViewerModerator",
-                "storageKey": null
-              },
-              (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -255,7 +338,7 @@ return {
                 "name": "topic",
                 "storageKey": null
               },
-              (v5/*: any*/),
+              (v6/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -295,12 +378,12 @@ return {
                             "name": "name",
                             "storageKey": null
                           },
-                          (v5/*: any*/),
-                          (v4/*: any*/)
+                          (v6/*: any*/),
+                          (v5/*: any*/)
                         ],
                         "storageKey": null
                       },
-                      (v6/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -309,7 +392,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v7/*: any*/),
+                "args": (v8/*: any*/),
                 "concreteType": "EventQuestionConnection",
                 "kind": "LinkedField",
                 "name": "questions",
@@ -323,7 +406,7 @@ return {
                     "name": "edges",
                     "plural": true,
                     "selections": [
-                      (v6/*: any*/),
+                      (v7/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -333,13 +416,7 @@ return {
                         "plural": false,
                         "selections": [
                           (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "question",
-                            "storageKey": null
-                          },
+                          (v9/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -348,25 +425,57 @@ return {
                             "name": "createdBy",
                             "plural": false,
                             "selections": [
+                              (v10/*: any*/),
+                              (v2/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "firstName",
+                                "name": "avatar",
                                 "storageKey": null
-                              },
-                              (v2/*: any*/)
+                              }
                             ],
                             "storageKey": null
                           },
                           {
                             "alias": null,
                             "args": null,
-                            "kind": "ScalarField",
-                            "name": "createdAt",
+                            "concreteType": "EventQuestion",
+                            "kind": "LinkedField",
+                            "name": "refQuestion",
+                            "plural": false,
+                            "selections": [
+                              (v2/*: any*/),
+                              (v9/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "EventQuestion",
+                                "kind": "LinkedField",
+                                "name": "refQuestion",
+                                "plural": false,
+                                "selections": [
+                                  (v2/*: any*/),
+                                  (v9/*: any*/),
+                                  (v11/*: any*/),
+                                  (v12/*: any*/)
+                                ],
+                                "storageKey": null
+                              },
+                              (v11/*: any*/),
+                              (v12/*: any*/)
+                            ],
                             "storageKey": null
                           },
-                          (v3/*: any*/)
+                          (v12/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "isLikedByViewer",
+                            "storageKey": null
+                          },
+                          (v4/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -415,7 +524,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v7/*: any*/),
+                "args": (v8/*: any*/),
                 "filters": null,
                 "handle": "connection",
                 "key": "useQuestionListFragment_questions",
@@ -438,7 +547,7 @@ return {
                     "name": "edges",
                     "plural": true,
                     "selections": [
-                      (v6/*: any*/),
+                      (v7/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -481,14 +590,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0b2a90ccec3eecd8c68f6099825aaa88",
+    "cacheID": "8b6cf4b8fb62c3febe88fa5ef34ac45e",
     "id": null,
     "metadata": {},
     "name": "liveQuery",
     "operationKind": "query",
-    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  questions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        ...QuestionCardFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionCardFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  questions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionCardFragment\n          id\n        }\n        ...QuestionCardFragment\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '1731a20ecc3badd0c9b5dad339b3ca7e';
+(node as any).hash = 'fe215566b070a77a3768d2c93991cebf';
 export default node;

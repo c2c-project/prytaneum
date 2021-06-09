@@ -12,12 +12,12 @@ import {
     Paper,
     Divider,
 } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { graphql, useFragment } from 'react-relay';
+import clsx from 'clsx';
 
 import type { QuestionCardFragment$key } from '@local/__generated__/QuestionCardFragment.graphql';
-import { EventQuestion as Question } from '@local/graphql-types';
 import { formatDate } from '@local/utils/format';
 import QuestionStats from './QuestionStats';
 
@@ -29,17 +29,32 @@ export interface Props {
     CardContentProps?: CardContentProps;
     style?: React.CSSProperties;
     className?: string;
-    quote?: Question | null;
+    quote?: boolean;
     /**
      * display stats for this question
      */
     stats?: boolean;
 }
 
+const useStyles = makeStyles(() => ({
+    root: {
+        width: '100%',
+    },
+}));
+
 export const QUESTION_CARD_FRAGMENT = graphql`
     fragment QuestionCardFragment on EventQuestion {
         id
         question
+        refQuestion {
+            id
+            question
+            createdBy {
+                id
+                firstName
+            }
+            createdAt
+        }
         createdBy {
             id
             firstName
@@ -60,7 +75,7 @@ export function QuestionCardSkeleton() {
 /**
  * Card is the root element
  */
-function QuestionCard({
+export function QuestionCard({
     fragmentRef,
     children,
     CardProps: cardProps,
@@ -68,14 +83,15 @@ function QuestionCard({
     CardHeaderProps: cardHeaderProps,
     style,
     className,
-    quote,
+    quote = false,
     stats,
 }: Props) {
-    // const theme = useTheme();
+    const classes = useStyles();
     const question = useFragment(QUESTION_CARD_FRAGMENT, fragmentRef);
+    // const question = React.useMemo(() => (quote ? questionData.refQuestion : questionData), [questionData, quote]);
     const [time, month] = React.useMemo(
-        () => (question.createdAt ? formatDate(question?.createdAt, 'p-P').split('-') : ['', '']),
-        [question.createdAt]
+        () => (question?.createdAt ? formatDate(question?.createdAt, 'p-P').split('-') : ['', '']),
+        [question?.createdAt]
     );
     const subheader = React.useMemo(
         () => (
@@ -91,7 +107,7 @@ function QuestionCard({
     if (!question) return <div>loading...</div>;
 
     return (
-        <div className={className} style={style}>
+        <div className={clsx(className, classes.root)} style={style}>
             <Card {...cardProps}>
                 <CardHeader
                     title={question?.createdBy?.firstName}
@@ -99,25 +115,8 @@ function QuestionCard({
                     avatar={<Avatar>{question?.createdBy?.firstName?.charAt(0)}</Avatar>}
                     {...cardHeaderProps}
                 />
-                {/* {quote && (
-                    <QuestionCard
-                        question={quote}
-                        style={{
-                            margin: '0 32px',
-                            border: '1px solid lightgrey',
-                            borderRadius: theme.shape.borderRadius,
-                        }}
-                        CardProps={{ elevation: 0 }}
-                    />
-                )} */}
                 <CardContent {...cardContentProps}>
                     <Typography>{question.question}</Typography>
-                    {/* {stats && (
-                        <>
-                            <Divider />
-                            <QuestionStats question={question} />
-                        </>
-                    )} */}
                 </CardContent>
                 {children}
             </Card>
@@ -134,5 +133,3 @@ QuestionCard.defaultProps = {
     className: undefined,
     stats: false,
 };
-
-export default React.memo(QuestionCard);

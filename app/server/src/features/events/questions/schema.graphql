@@ -86,12 +86,12 @@ type EventQuestionMutationResponse implements MutationResponse {
 
 type Mutation {
     createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
-    alterLike(input: AlterLike!): Boolean!
+    alterLike(input: AlterLike!): EventQuestionMutationResponse!
 }
 
 type Subscription {
     eventQuestionCreated(eventId: ID!): EventQuestionEdge!
-    likeCountChanged(eventId: ID!): Like!
+    likeCountChanged(eventId: ID!): EventQuestionEdge!
 }
 
 type Query {

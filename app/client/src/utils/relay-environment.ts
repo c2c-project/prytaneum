@@ -2,25 +2,40 @@
 import { useMemo } from 'react';
 import { Environment, Network, RecordSource, Store, FetchFunction, Observable, SubscribeFunction } from 'relay-runtime';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { GetServerSidePropsContext } from 'next';
 
 let relayEnvironment: Environment | null = null;
 let subscriptionClient: SubscriptionClient | null = null;
 
-const fetchQuery: FetchFunction = async (params, variables) => {
-    // console.log(`fetching query ${params.name} with ${JSON.stringify(variables)}`);
-    const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-        body: JSON.stringify({
-            query: params.text,
-            variables,
-        }),
+export function makeFetchFunction(config?: RequestInit): FetchFunction {
+    return async (params, variables) => {
+        const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify({
+                query: params.text,
+                variables,
+            }),
+            ...config,
+        });
+        return response.json();
+    };
+}
+
+export function makeServerFetchFunction(ctx: GetServerSidePropsContext) {
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+    };
+    if (ctx.req.cookies.jwt) headers.Authorization = `Bearer ${ctx.req.cookies?.jwt}`;
+    // inject cookies only for now
+    return makeFetchFunction({
+        headers,
     });
-    return response.json();
-};
+}
 
 const createSubscriptionClient = () => {
     const wsProtocol = 'ws://';
@@ -58,8 +73,9 @@ const subscribe: SubscribeFunction = (request, variables) => {
 function createEnvironment() {
     return new Environment({
         // Create a network layer from the fetch function
-        network: Network.create(fetchQuery, subscribe),
+        network: Network.create(makeFetchFunction(), subscribe),
         store: new Store(new RecordSource()),
+        isServer: typeof window === 'undefined',
     });
 }
 
@@ -80,6 +96,15 @@ export function initEnvironment(initialRecords?: RecordMap) {
     if (!relayEnvironment) relayEnvironment = environment;
 
     return relayEnvironment;
+}
+
+export function initServerEnvironment(fetchFunction: FetchFunction) {
+    const environment = new Environment({
+        network: Network.create(fetchFunction, subscribe),
+        store: new Store(new RecordSource()),
+        isServer: true,
+    });
+    return environment;
 }
 
 export function useEnvironment(initialRecords: RecordMap) {

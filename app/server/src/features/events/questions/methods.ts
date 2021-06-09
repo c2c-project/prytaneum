@@ -45,7 +45,8 @@ export async function alterLikeByQuestionId(userId: string, prisma: PrismaClient
     // perform the create or delete
     const results = likeQuestion ? await addLike() : await removeLike();
 
-    return results;
+    if (results) return prisma.eventQuestion.findUnique({ where: { id: questionId } });
+    return null;
 }
 
 /**
@@ -116,7 +117,7 @@ export async function findLikedByUsers(questionId: string, prisma: PrismaClient)
  * is the question liked by the current user
  */
 export async function isLikedByViewer(userId: string, questionId: string, prisma: PrismaClient) {
-    const result = prisma.eventQuestionLike.findUnique({
+    const result = await prisma.eventQuestionLike.findUnique({
         where: { likedBy_likedQuestion: { likedBy: userId, likedQuestion: questionId } },
     });
     return Boolean(result);

@@ -38,29 +38,34 @@ export const resolvers: Resolvers = {
             });
         },
         async alterLike(parent, args, ctx, info) {
-            // this whole function is kinda eh
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            const { likedQuestion: questionId, likedBy: userId } = await Question.alterLikeByQuestionId(
-                ctx.viewer.id,
-                ctx.prisma,
-                args.input
-            );
-            const formattedResult = { user: { id: userId }, question: { id: questionId } };
-            ctx.pubsub.publish({
-                topic: 'likeCountChanged',
-                payload: {
-                    likeCountChanged: formattedResult,
-                },
+            return runMutation(async () => {
+                // this whole function is kinda eh
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                const question = await Question.alterLikeByQuestionId(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    questionId,
+                });
+                if (!question) return question;
+                const edge = {
+                    node: toQuestionId(question),
+                    cursor: question.createdAt.getMilliseconds.toString(),
+                };
+                ctx.pubsub.publish({
+                    topic: 'likeCountChanged',
+                    payload: {
+                        likeCountChanged: edge,
+                    },
+                });
+                return edge;
             });
-            return formattedResult;
         },
     },
     Subscription: {
         likeCountChanged: {
-            subscribe: withFilter<{ likeCountChanged: Like }>(
+            subscribe: withFilter<{ likeCountChanged: EventQuestionEdge }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
-                (payload, args, ctx) =>
-                    Question.doesEventMatch(args.id, payload.likeCountChanged.question.id, ctx.prisma)
+                (payload, args, ctx) => Question.doesEventMatch(args.id, payload.likeCountChanged.node.id, ctx.prisma)
             ),
         },
         eventQuestionCreated: {
