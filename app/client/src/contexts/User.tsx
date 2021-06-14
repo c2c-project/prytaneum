@@ -1,13 +1,11 @@
 import React, { SetStateAction } from 'react';
-import { graphql } from 'react-relay';
+import { graphql, loadQuery } from 'react-relay';
 
-import { UserQuery } from '@local/__generated__/UserQuery.graphql';
-import { User } from '@local/graphql-types';
+import type { UserQuery } from '@local/__generated__/UserQuery.graphql';
 
 // NOTE: don't use React.useContext with either of the below,
 // instead use the "useUser" hook found in the @local/hooks folder
-
-type TState = User | undefined | null; // undefined means it's not in the tree
+type TState = NonNullable<UserQuery['response']>['me'] | undefined; // undefined means it's not in the tree
 // read note above
 export const UserContext = React.createContext<TState>(undefined);
 
@@ -37,9 +35,12 @@ export const USER_QUERY = graphql`
  */
 export function UserProvider({ children, userInfo }: UserProps) {
     const [user, setUser] = React.useState<TState>(userInfo?.me ?? null);
+
     return (
         <UserContext.Provider value={user}>
             <UserDispatch.Provider value={setUser}>{children}</UserDispatch.Provider>
         </UserContext.Provider>
     );
 }
+
+export function loadUser() {}

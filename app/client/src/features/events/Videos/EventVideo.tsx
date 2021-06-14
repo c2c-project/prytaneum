@@ -1,6 +1,7 @@
 import { graphql, useFragment } from 'react-relay';
+import { Skeleton } from '@material-ui/lab';
 
-import { EventVideoFragment$key } from '@local/__generated__/EventVideoFragment.graphql';
+import type { EventVideoFragment$key } from '@local/__generated__/EventVideoFragment.graphql';
 import { VideoPlayer } from '@local/components/VideoPlayer';
 
 export const EVENT_VIDEO_FRAGMENT = graphql`
@@ -19,6 +20,10 @@ export const EVENT_VIDEO_FRAGMENT = graphql`
 
 interface EventVideoProps {
     fragmentRef: EventVideoFragment$key;
+}
+
+export function EventVideoLoader() {
+    return <Skeleton variant='rect' style={{ width: '100%', height: '100%' }} />;
 }
 
 export function EventVideo({ fragmentRef }: EventVideoProps) {

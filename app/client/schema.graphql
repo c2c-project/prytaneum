@@ -146,6 +146,14 @@ type Event implements Node {
 
   """Whether or not the viewer is a moderator"""
   isViewerModerator: Boolean
+
+  """Questions queued in this session by the moderator(s)"""
+  queuedQuestions(first: Int, after: String): EventQuestionConnection
+
+  """
+  The question currently being asked, corresponds to a "position" value on the event question
+  """
+  currentQuestion: Int
 }
 
 """Connection to Events"""
@@ -362,7 +370,7 @@ type Mutation {
   deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
   deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
 
-  """End the eent so that it is not live"""
+  """End the event so that it is not live"""
   endEvent(eventId: String!): EventMutationResponse!
   hideQuestion(input: HideQuestion!): EventQuestion
   login(input: LoginForm!): UserMutationResponse!
@@ -476,10 +484,17 @@ input ReorderQuestion {
 
 type Subscription {
   """New messages as feedback is given"""
-  eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback
+  eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
   eventQuestionCreated(eventId: ID!): EventQuestionEdge!
   likeCountChanged(eventId: ID!): EventQuestionEdge!
-  questionPosition(eventId: ID!): Int!
+
+  """Question subscription for all operations performed on questions"""
+  questionCRUD(eventId: ID!): EventQuestionEdge!
+
+  """
+  Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update
+  """
+  questionLikeOrPositionUpdate(eventId: ID!): EventQuestion!
 }
 
 input UpdateEvent {

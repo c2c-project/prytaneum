@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { EventLiveFeedback } from '@local/graphql-types';
+import { EventLiveFeedback, EventQuestion } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
 import * as Moderation from './methods';
 
@@ -17,7 +17,14 @@ export const resolvers: Resolvers = {
         async reorderQueue(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const updatedQuestion = await Moderation.reorderQuestion(ctx.viewer.id, ctx.prisma, args.input);
-            return toQuestionId(updatedQuestion);
+            const questionWithGlobalId = toQuestionId(updatedQuestion);
+            ctx.pubsub.publish({
+                topic: 'questionPositionUpdate',
+                payload: {
+                    questionPositionUpdate: questionWithGlobalId,
+                },
+            });
+            return questionWithGlobalId;
         },
         nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
@@ -52,7 +59,6 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                console.log(ctx.viewer.id);
                 const { id: userId } = fromGlobalId(args.input.userId);
                 const deletedMod = await Moderation.deleteModerator(ctx.viewer.id, ctx.prisma, {
                     ...args.input,

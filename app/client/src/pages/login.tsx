@@ -2,8 +2,13 @@ import * as React from 'react';
 import { Grid, Typography, Avatar, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
+// import { fetchQuery } from 'react-relay';
 import { useRouter } from 'next/router';
+// import { GetServerSideProps } from 'next';
 
+// import { USER_QUERY } from '@local/contexts/User';
+// import { makeServerFetchFunction, initServerEnvironment } from '@local/utils/relay-environment';
+// import { initializeStore } from '@local/reducers/store';
 import { LoginForm } from '@local/features/accounts';
 import { useUser } from '@local/hooks/useUser';
 

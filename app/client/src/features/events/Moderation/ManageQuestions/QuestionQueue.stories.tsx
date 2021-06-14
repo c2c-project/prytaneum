@@ -8,7 +8,7 @@ import SocketFixture from 'mock/Fixture.socket';
 import UserProvider from '@local/contexts/User';
 import TownhallProvider from '@local/contexts/Townhall';
 import QuestionQueue from './QuestionQueue';
-import QueuePreview, { Props as PreviewProps } from './QueuePreview';
+import QueuePreview, { QueuePreviewProps as PreviewProps } from './QueuePreview';
 
 const emitter = (new EventEmitter() as unknown) as SocketIOClient.Socket;
 

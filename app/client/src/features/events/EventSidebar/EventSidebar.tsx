@@ -2,11 +2,16 @@
 import * as React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { graphql, useFragment } from 'react-relay';
 
-import { EventSidebarFragment$key, EventSidebarFragment } from '@local/__generated__/EventSidebarFragment.graphql';
+import {
+    EventSidebarFragment$key,
+    EventSidebarFragment,
+    EventSidebarFragment$data,
+} from '@local/__generated__/EventSidebarFragment.graphql';
 import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import QuestionQueue from '@local/features/events/Moderation/ManageQuestions';
@@ -33,14 +38,19 @@ const getTabVisibility = (settings: EventSidebarFragment) => ({
     isQueueVisible: settings.isViewerModerator,
 });
 
-type TabTuple = [React.JSXElementConstructor<CustomTabProps>, JSX.Element][];
+type TabTuple = [
+    React.JSXElementConstructor<CustomTabProps>,
+    React.JSXElementConstructor<{ fragmentRef: EventSidebarFragment$data }>
+][];
 const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple => {
     const tabs: TabTuple = [];
 
+    console.log(tabVisibility);
+
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
-    // if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, <QuestionQueue />]);
-    // if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, <QuestionList />]);
+    if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, QuestionQueue]);
+    if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, QuestionList]);
     // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
@@ -54,6 +64,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         ...EventDetailsCardFragment
         ...SpeakerListFragment
         ...useQuestionListFragment
+        ...QuestionQueueFragment
     }
 `;
 
@@ -97,10 +108,14 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
     },
 }));
-interface Props {
+
+export function EventSidebarLoader() {
+    return <Skeleton variant='rect' height={500} width={200} />;
+}
+export interface EventSidebarProps {
     fragmentRef: EventSidebarFragment$key;
 }
-export const EventSidebar = ({ fragmentRef }: Props) => {
+export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
     const [state, setState] = React.useState<number>(0);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
@@ -125,7 +140,11 @@ export const EventSidebar = ({ fragmentRef }: Props) => {
             >
                 <EventDetailsCard fragmentRef={data} />
                 <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
-                <AskQuestion className={classes.fullWidth} eventId={data.id} connectionKey='useQuestionListFragment_questions' />
+                <AskQuestion
+                    className={classes.fullWidth}
+                    eventId={data.id}
+                    connectionKey='useQuestionListFragment_questions'
+                />
             </Grid>
 
             {!data.isViewerModerator && (
@@ -148,12 +167,11 @@ export const EventSidebar = ({ fragmentRef }: Props) => {
             </div>
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
-                <QuestionList fragmentRef={data} />
-                {/* {tabs.map(([, tabPanel], idx) => (
+                {tabs.map(([, Panel], idx) => (
                     <TabPanel key={idx} visible={state === idx}>
-                        {tabPanel}
+                        <Panel fragmentRef={data} />
                     </TabPanel>
-                ))} */}
+                ))}
             </Grid>
         </Grid>
     );

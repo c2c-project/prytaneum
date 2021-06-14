@@ -11,6 +11,7 @@ import {
     ListItemIcon,
     useMediaQuery,
     IconButton,
+    Button,
 } from '@material-ui/core';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -19,8 +20,12 @@ import Settings from '@material-ui/icons/Settings';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { Skeleton } from '@material-ui/lab';
+import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
-import { useUser, useIsClient } from '@local/hooks';
+import type { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
+import { useIsClient } from '@local/hooks';
+import { useUser } from '../useUser';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -50,25 +55,63 @@ const useStyles = makeStyles((theme) => ({
         }),
         transform: 'rotate(180deg)',
     },
+    item: {
+        marginRight: theme.spacing(1),
+    },
 }));
 
-interface Props {
-    className?: string;
-    links: {
-        settings: string;
-        logout: string;
-    };
+export function UserMenuLoader() {
+    const classes = useStyles();
+    return (
+        <>
+            <Skeleton variant='circle' className={classes.avatar} />
+            <Skeleton height='100%' width={100} />
+        </>
+    );
 }
 
-export function UserMenu({ className, links }: Props) {
+export const USER_MENU_QUERY = graphql`
+    query UserMenuQuery {
+        me {
+            ...useUserFragment
+        }
+    }
+`;
+
+export interface UserMenuProps {
+    className?: string;
+    queryRef: PreloadedQuery<UserMenuQuery>;
+}
+
+function UserName() {
     const [user] = useUser();
+    const classes = useStyles();
+
+    return (
+        <>
+            {user?.firstName && <Avatar className={classes.avatar}>{user.firstName[0]}</Avatar>}
+            <Typography variant='button' color='inherit'>
+                {`${user?.firstName} ${user?.lastName}`.toUpperCase()}
+            </Typography>
+        </>
+    );
+}
+
+export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
+    const isSignedIn = React.useMemo(() => !!data.me, [data]);
+    const [, setUser] = useUser();
     const isClient = useIsClient();
     const classes = useStyles();
 
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
+
+    React.useEffect(() => {
+        if (data) setUser(data.me);
+    }, [data, setUser]);
 
     // if server, then default to rendering desktop version and not mobile
     // TODO: determine if the user is on desktop or mobile and render appropriately
@@ -83,21 +126,6 @@ export function UserMenu({ className, links }: Props) {
         setAnchorEl(currentTarget);
     }
 
-    const userInfo = React.useMemo(
-        () =>
-            user ? (
-                <>
-                    {user.firstName && <Avatar className={classes.avatar}>{user.firstName[0]}</Avatar>}
-                    <Typography variant='button' color='inherit'>
-                        {`${user.firstName} ${user.lastName}`.toUpperCase()}
-                    </Typography>
-                </>
-            ) : (
-                <> </>
-            ),
-        [classes, user]
-    );
-
     const menuButton = React.useMemo(() => {
         if (isSmUp)
             return (
@@ -109,7 +137,7 @@ export function UserMenu({ className, links }: Props) {
                     disableRipple
                     disableTouchRipple
                 >
-                    {userInfo}
+                    <UserName />
                     <ArrowDropDown className={!isOpen ? classes.icon : clsx([classes.icon, classes.iconOpen])} />
                 </ButtonBase>
             );
@@ -118,48 +146,67 @@ export function UserMenu({ className, links }: Props) {
                 <MoreVert />
             </IconButton>
         );
-    }, [isSmUp, classes, userInfo, isOpen]);
+    }, [isSmUp, classes, isOpen]);
 
     return (
         <div className={className}>
-            {menuButton}
-            <Menu
-                anchorEl={anchorEl}
-                open={isOpen}
-                onClose={() => setAnchorEl(null)}
-                onClick={() => setAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                getContentAnchorEl={null}
-                PaperProps={{
-                    className: classes.paper,
-                    style: { minWidth: width.current },
-                }}
-            >
-                {!isSmUp && (
-                    <MenuItem button={false} divider>
-                        {userInfo}
-                    </MenuItem>
-                )}
-                <MenuItem button onClick={handleNavigation(links.settings)}>
-                    <ListItemIcon>
-                        <Settings />
-                    </ListItemIcon>
-                    <ListItemText primary='Settings' />
-                </MenuItem>
-                <MenuItem button onClick={handleNavigation(links.logout)}>
-                    <ListItemIcon>
-                        <ExitToApp />
-                    </ListItemIcon>
-                    <ListItemText primary='Logout' />
-                </MenuItem>
-            </Menu>
+            {!isSignedIn && (
+                <>
+                    <Button
+                        color='primary'
+                        variant='contained'
+                        className={classes.item}
+                        onClick={handleNavigation('/login')}
+                    >
+                        Login
+                    </Button>
+                    <Button color='primary' variant='outlined' onClick={handleNavigation('/register')}>
+                        Register
+                    </Button>
+                </>
+            )}
+            {isSignedIn && (
+                <>
+                    {menuButton}
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={isOpen}
+                        onClose={() => setAnchorEl(null)}
+                        onClick={() => setAnchorEl(null)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        getContentAnchorEl={null}
+                        PaperProps={{
+                            className: classes.paper,
+                            style: { minWidth: width.current },
+                        }}
+                    >
+                        {!isSmUp && (
+                            <MenuItem button={false} divider>
+                                <UserName />
+                            </MenuItem>
+                        )}
+                        <MenuItem button onClick={handleNavigation('/settings')}>
+                            <ListItemIcon>
+                                <Settings />
+                            </ListItemIcon>
+                            <ListItemText primary='Settings' />
+                        </MenuItem>
+                        <MenuItem button onClick={handleNavigation('/logout')}>
+                            <ListItemIcon>
+                                <ExitToApp />
+                            </ListItemIcon>
+                            <ListItemText primary='Logout' />
+                        </MenuItem>
+                    </Menu>
+                </>
+            )}
         </div>
     );
 }

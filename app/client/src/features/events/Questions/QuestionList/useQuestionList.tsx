@@ -7,11 +7,12 @@ import type { useQuestionListFragment$key } from '@local/__generated__/useQuesti
 
 export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
     subscription useQuestionListSubscription($eventId: ID!) {
-        eventQuestionCreated(eventId: $eventId) {
+        questionCRUD(eventId: $eventId) {
             cursor
             node {
                 id
                 ...QuestionCardFragment
+                ...QuestionStatsFragment
             }
         }
     }
@@ -33,12 +34,13 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
                         firstName
                     }
                     refQuestion {
-                        ...QuestionCardFragment
+                        ...QuestionQuoteFragment
                     }
                     ...QuestionCardFragment
                     ...QuestionActionsFragment
                     ...QuestionAuthorFragment
                     ...QuestionContentFragment
+                    ...QuestionStatsFragment
                 }
             }
         }
@@ -85,12 +87,12 @@ export function useQuestionList({ fragmentRef }: TArgs) {
                 const connectionEdges = eventQuestionCR.getLinkedRecords('edges');
                 const found = connectionEdges?.find((record) => {
                     const value = record.getLinkedRecord('node')?.getDataID();
-                    return value === data.eventQuestionCreated.node.id;
+                    return value === data.questionCRUD.node.id;
                 });
                 if (found) return;
 
                 // the edge is the payload itself from the subscription
-                const edge = store.getRootField('eventQuestionCreated');
+                const edge = store.getRootField('questionCRUD');
 
                 // build the edge
                 const newEdge = ConnectionHandler.buildConnectionEdge(store, eventQuestionCR, edge);
