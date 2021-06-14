@@ -1,0 +1,24 @@
+{
+    "name": "@app/db",
+    "scripts": {
+        "g:update-prisma-types": "prisma generate",
+        "generate": "ts-node-script src/index.ts",
+        "start-db": "dotenv -c development -- docker-compose up -d",
+        "stop-db": "docker-compose down"
+    },
+    "devDependencies": {
+        "@types/faker": "~5.1.1",
+        "@types/node": "^15.0.1",
+        "dotenv-cli": "^4.0.0",
+        "dotenv-expand": "^5.1.0",
+        "prisma": "2.21.2",
+        "ts-node": "^9.1.1"
+    },
+    "dependencies": {
+        "@app/prisma": "workspace:app/prisma",
+        "@prisma/client": "2.21.2",
+        "faker": "https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c",
+        "globby": "^11.0.3",
+        "typescript": "^4.2.4"
+    }
+}

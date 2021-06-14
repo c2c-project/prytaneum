@@ -1,0 +1,25 @@
+scalar Date
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+interface Node {
+    id: ID!
+}
+
+type Query {
+    node(id: ID!): Node
+}
+
+type Error {
+    message: String!
+}
+
+interface MutationResponse {
+    isError: Boolean!
+    message: String!
+}

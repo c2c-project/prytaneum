@@ -1,0 +1,174 @@
+type Event implements Node {
+    id: ID!
+
+    """
+    Creator of this event
+    """
+    createdBy: User
+
+    """
+    The owning organization
+    """
+    organization: Organization
+    createdAt: Date
+    updatedAt: Date
+    title: String
+
+    """
+    The planned start date time string
+    """
+    startDateTime: Date
+
+    """
+    The planned end date time string
+    """
+    endDateTime: Date
+    description: String
+    topic: String
+
+    """
+    Whether or not the Event is live
+    """
+    isActive: Boolean
+
+    """
+    Let all users see what questions have been submitted
+    """
+    isQuestionFeedVisible: Boolean
+
+    """
+    Collect user ratings after the event has ended
+    """
+    isCollectRatingsEnabled: Boolean
+
+    """
+    Display a forum-like interface once the "live" part of the event is over
+    """
+    isForumEnabled: Boolean
+
+    """
+    Is the event private, ie invite only
+    """
+    isPrivate: Boolean
+
+    """
+    All questions relating to this event
+    """
+    questions(first: Int, after: String): EventQuestionConnection
+
+    """
+    Speakers for this event
+    """
+    speakers(first: Int, after: String): EventSpeakerConnection
+
+    """
+    Registrants for this event -- individuals invited
+    """
+    registrants: UserConnection
+
+    """
+    Participants of the event -- individuals who showed up
+    """
+    participants(first: Int, after: String): EventParticipantConnection
+
+    """
+    Video feeds and the languages
+    """
+    videos(first: Int, after: String): EventVideoConnection
+
+    """
+    Live Feedback given during the event
+    """
+    liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
+
+    """
+    List of moderators for this particular event
+    """
+    moderators(first: Int, after: String): UserConnection
+
+    """
+    Whether or not the viewer is a moderator
+    """
+    isViewerModerator: Boolean
+
+    """
+    Questions queued in this session by the moderator(s)
+    """
+    queuedQuestions(first: Int, after: String): EventQuestionConnection
+
+    """
+    The question currently being asked, corresponds to a "position" value on the event question
+    """
+    currentQuestion: Int
+}
+
+"""
+Event Edge
+"""
+type EventEdge {
+    node: Event!
+    cursor: String!
+}
+
+"""
+Connection to Events
+"""
+type EventConnection {
+    edges: [EventEdge!]
+    pageInfo: PageInfo!
+}
+
+input CreateEvent {
+    title: String!
+    startDateTime: Date!
+    endDateTime: Date!
+    description: String!
+    topic: String!
+    orgId: String!
+}
+
+input UpdateEvent {
+    title: String
+    startDateTime: Date
+    endDateTime: Date
+    description: String
+    topic: String
+    isQuestionFeedVisible: Boolean
+    isCollectRatingsEnabled: Boolean
+    isForumEnabled: Boolean
+    isPrivate: Boolean
+    eventId: String!
+}
+
+input DeleteEvent {
+    eventId: String!
+}
+
+type EventMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Event
+}
+
+type Mutation {
+    createEvent(event: CreateEvent!): EventMutationResponse!
+    updateEvent(event: UpdateEvent!): EventMutationResponse!
+    deleteEvent(event: DeleteEvent!): EventMutationResponse!
+
+    """
+    Start the event so that it is "live"
+    """
+    startEvent(eventId: String!): EventMutationResponse!
+
+    """
+    End the event so that it is not live
+    """
+    endEvent(eventId: String!): EventMutationResponse!
+}
+
+type Query {
+    """
+    Fetch all events
+    """
+    events: [Event!]
+}

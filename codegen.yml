@@ -1,0 +1,14 @@
+overwrite: true
+schema: 'app/server/src/features/**/*.graphql'
+# documents: 'app/client/src/features/**/*.graphql'
+generates:
+    ./app/client/src/graphql-types.ts:
+        plugins:
+            - 'typescript'
+        config:
+            skipGraphQLImport: true
+            scalars:
+                Date: Date
+    ./app/client/schema.graphql:
+        plugins:
+            - custom/gen-sdl-plugin.js

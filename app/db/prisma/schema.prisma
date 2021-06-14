@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../../prisma"
+}
+
+model User {
+    id String @id @default(uuid()) @db.Uuid
+    createdAt DateTime @default(now())
+    email String @unique @db.VarChar(320)
+    firstName String? @db.VarChar(100)
+    lastName String? @db.VarChar(100)
+    fullName String? @db.VarChar(200) // computed field, recomputed on name update
+    password String?
+    preferredLang String @db.VarChar(30)
+    canMakeOrgs Boolean @default(false) 
+
+    memberOf OrgMember[]
+    feedback EventLiveFeedback[]
+    questions EventQuestion[]
+    likes EventQuestionLike[]
+    moderatorOf EventModerator[]
+    speakerOf EventSpeaker[]
+    registrantOf EventRegistrant[]
+}
+
+model Organization {
+    id String @id @default(uuid()) @db.Uuid
+    createdAt DateTime @default(now())
+    name String @db.VarChar(100)
+    
+    members OrgMember[]
+    events Event[]
+}
+
+model OrgMember {
+    userId String @db.Uuid
+    orgId String @db.Uuid
+    organization Organization @relation(fields: [orgId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+    events Event[]
+    // orgName String // de-normalized field from an Organization
+    // memberName String // denormalized field from the User 
+
+    @@id([userId, orgId])
+}
+
+model Event {
+    id String @id @default(uuid()) @db.Uuid
+    createdById String @db.Uuid
+    orgId String @db.Uuid
+    organization Organization @relation(fields: [orgId], references: [id])
+    createdByUser OrgMember @relation(fields: [createdById, orgId], references: [userId, orgId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title String @db.VarChar(100)
+    startDateTime DateTime
+    endDateTime DateTime
+    description String @db.VarChar(500)
+    topic String @db.VarChar(50)
+    currentQuestion Int @default(-1)
+    // settings defaults are built into the business logic layer rather than the db layer
+    isActive Boolean
+    isQuestionFeedVisible Boolean
+    isCollectRatingsEnabled Boolean
+    isForumEnabled Boolean
+    isPrivate Boolean
+
+    feedback EventLiveFeedback[]
+    questions EventQuestion[]
+    moderators EventModerator[]
+    speakers EventSpeaker[]
+    registrants EventRegistrant[]
+    videos EventVideo[]
+}
+
+model EventVideo {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id])
+    url String
+    lang String
+}
+
+model EventLiveFeedback {
+    id String @id @default(uuid()) @db.Uuid
+    createdById String @db.Uuid
+    createdByUser User @relation(fields: [createdById], references: [id])
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id])
+    createdAt DateTime @default(now())
+    message String @db.VarChar(500)
+}
+
+model EventQuestion {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id])
+    createdAt DateTime @default(now())
+    refQuestionId String? @db.Uuid
+    parentQuestion EventQuestion[] @relation("quote")
+    refQuestion EventQuestion? @relation("quote", fields: [refQuestionId], references: [id])
+    createdById String @db.Uuid
+    createdByUser User @relation(fields: [createdById], references: [id])
+    question String @db.VarChar(500)
+    // if position is -1, then the question is not queued
+    position Int @default(-1)
+    isVisible Boolean
+    isAsked Boolean
+    lang String @db.VarChar(30)
+    isFollowUp Boolean
+    isQuote Boolean
+    
+    likes EventQuestionLike[]
+}
+
+model EventQuestionLike {
+    likedQuestion String @db.Uuid
+    likedBy String @db.Uuid
+    question EventQuestion @relation(fields: [likedQuestion], references: [id])
+    user User @relation(fields: [likedBy], references: [id])
+
+    @@id([likedBy, likedQuestion])
+}
+
+model EventModerator {
+    eventId String @db.Uuid
+    userId String @db.Uuid
+    user User @relation(fields: [userId], references: [id])
+    event Event @relation(fields: [eventId], references: [id])
+
+    @@id([eventId, userId])
+}
+
+model EventSpeaker {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    email String @db.VarChar(320)
+    name String @db.VarChar(100)
+    description String @db.VarChar(500)
+    title String @db.VarChar(100)
+    pictureUrl String @db.VarChar(200)
+    event Event @relation(fields: [eventId], references: [id])
+    user User @relation(fields: [email], references: [email])
+}
+
+model EventRegistrant {
+    userId String @db.Uuid
+    eventId String @db.Uuid
+    user User @relation(fields: [userId], references: [id])
+    event Event @relation(fields: [eventId], references: [id])
+
+    @@id([userId, eventId])
+}

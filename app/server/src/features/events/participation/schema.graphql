@@ -1,0 +1,15 @@
+type EventParticipant {
+    user: User
+    questions: [EventQuestion]
+    liveFeedBack: [EventLiveFeedback]
+}
+
+type EventParticipantEdge {
+    node: EventParticipant!
+    cursor: String!
+}
+
+type EventParticipantConnection {
+    edges: [EventParticipantEdge!]
+    pageInfo: PageInfo!
+}

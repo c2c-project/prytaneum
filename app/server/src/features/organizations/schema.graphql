@@ -1,0 +1,90 @@
+type Organization implements Node {
+    """
+    Unique identifier for this org
+    """
+    id: ID!
+    """
+    name of the org
+    """
+    name: String!
+    """
+    When this org was created
+    """
+    createdAt: Date
+    """
+    all members of this org
+    """
+    members(first: Int, after: String): UserConnection
+    """
+    Events owned by this organization
+    """
+    events(first: Int, after: String): EventConnection
+
+    """
+    Whether or not the current viewer is a member
+    """
+    isViewerMember: Boolean
+}
+
+type OrganizationEdge {
+    node: Organization!
+    cursor: String!
+}
+
+type OrganizationConnection {
+    edges: [OrganizationEdge!]
+    pageInfo: PageInfo!
+}
+
+"""
+Necessary information for org creation
+"""
+input CreateOrganization {
+    name: String!
+}
+
+"""
+Information that may be updated by the user
+"""
+input UpdateOrganization {
+    orgId: ID!
+    name: String!
+}
+
+"""
+Information necessary for deleting an org
+"""
+input DeleteOrganization {
+    orgId: ID!
+}
+
+"""
+Info necessary for adding a member to an organization
+"""
+input NewMember {
+    email: String!
+}
+
+type OrganizationMutationResponse implements MutationResponse{
+    isError: Boolean!
+    message: String!
+    body: Organization
+}
+
+type Mutation {
+    createOrganization(input: CreateOrganization!): OrganizationMutationResponse!
+    updateOrganizationById(input: UpdateOrganization!): OrganizationMutationResponse!
+    deleteOrganizationById(input: DeleteOrganization!): OrganizationMutationResponse!
+
+    """
+    Adds a new member and returns the new user added
+    """
+    addMember(input: NewMember!): User
+}
+
+type Query {
+    """
+    Fetch organizations relevant to the current user
+    """
+    myOrgs: [Organization!]
+}

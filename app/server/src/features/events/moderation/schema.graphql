@@ -1,0 +1,74 @@
+input HideQuestion {
+    questionId: ID!
+    eventId: ID!
+
+    """
+    Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
+    """
+    toggleTo: Boolean!
+}
+
+input ReorderQuestion {
+    questionId: ID!
+    position: Int!
+    eventId: ID!
+}
+
+input CreateModerator {
+    email: String!
+    eventId: String!
+}
+
+input DeleteModerator {
+    userId: String!
+    eventId: String!
+}
+
+input UpdateModerator {
+    userId: String!
+    eventId: String!
+}
+
+type ModeratorMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: User
+}
+
+type Mutation {
+    hideQuestion(input: HideQuestion!): EventQuestion
+    reorderQueue(input: ReorderQuestion!): EventQuestion
+
+    """
+    Add a new moderator to the given event
+    """
+    createModerator(input: CreateModerator!): ModeratorMutationResponse!
+
+    updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
+
+    """
+    Removes a moderator from a given event
+    """
+    deleteModerator(input: DeleteModerator!): ModeratorMutationResponse!
+
+    """
+    Advance the current question
+    """
+    nextQuestion(eventId: ID!): Int!
+
+    """
+    Go to the previous question
+    """
+    prevQuestion(eventId: ID!): Int!
+}
+
+type Subscription {
+    """
+    New messages as feedback is given
+    """
+    eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
+    """
+    Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update
+    """
+    questionLikeOrPositionUpdate(eventId: ID!): EventQuestion!
+}

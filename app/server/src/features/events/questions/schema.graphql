@@ -1,0 +1,103 @@
+type EventQuestion implements Node {
+    id: ID!
+    event: Event
+
+    """
+    The user id of the creator
+    """
+    createdById: ID
+
+    """
+    User information on the person asking the question
+    """
+    createdBy: User
+    createdAt: Date
+
+    refQuestion: EventQuestion
+
+    """
+    The actual content of the question
+    """
+    question: String
+    position: Int
+    isVisible: Boolean
+    isAsked: Boolean
+    lang: String
+    isFollowUp: Boolean
+    isQuote: Boolean
+
+    """
+    The users who have liked this question
+    """
+    likedBy: UserConnection
+
+    """
+    Find the count of the likes only
+    """
+    likedByCount: Int
+
+    """
+    Whether or not the current user likes the question
+    """
+    isLikedByViewer: Boolean
+
+    """
+    If the question is owned by the current viewer
+    """
+    isMyQuestion: Boolean
+}
+
+type EventQuestionEdge {
+    node: EventQuestion!
+    cursor: String!
+}
+
+type EventQuestionConnection {
+    edges: [EventQuestionEdge!]
+    pageInfo: PageInfo!
+}
+
+type Like {
+    user: User!
+    question: EventQuestion!
+}
+
+input CreateQuestion {
+    question: String!
+    isQuote: Boolean
+    isFollowUp: Boolean
+    refQuestion: ID
+    eventId: ID!
+}
+
+input AlterLike {
+    questionId: ID!
+    """
+    True if the user is attempting to like the question; false if they are trying to remove a like
+    """
+    to: Boolean!
+}
+
+type EventQuestionMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventQuestionEdge
+}
+
+type Mutation {
+    createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
+    alterLike(input: AlterLike!): EventQuestionMutationResponse!
+}
+
+type Subscription {
+    eventQuestionCreated(eventId: ID!): EventQuestionEdge!
+    likeCountChanged(eventId: ID!): EventQuestionEdge!
+    """
+    Question subscription for all operations performed on questions
+    """
+    questionCRUD(eventId: ID!): EventQuestionEdge!
+}
+
+type Query {
+    questionsByEventId(eventId: ID!): [EventQuestion!]
+}
