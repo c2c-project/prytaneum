@@ -1,28 +1,29 @@
-/* eslint-disable @typescript-eslint/indent */
-import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from '@reduxjs/toolkit';
+import { graphql, useFragment } from 'react-relay';
 
-// import { QueueActions } from '@local/reducers';
-// import useSocketio, { SocketFn } from '@local/hooks/useSocketio';
-// import useTownhall from '@local/hooks/useTownhall';
+import type { useQuestionQueueFragment$key } from '@local/__generated__/useQuestionQueueFragment.graphql';
 
-export default function useQuestionQueue(): any {
-    // const [townhall] = useTownhall();
-    // const playlist = useSelector((store) => store.queue);
-    // const dispatch = useDispatch<Dispatch<QueueActions>>();
-    // React.useEffect(() => {
-    //     dispatch({ type: 'question-queue-initialize', payload: townhall.state });
-    //     // NOTE: I only want this to run on first render, and be ignored after
-    //     // eslint-disable-next-line react-@local/hooks/exhaustive-deps
-    // }, []);
-    // const socketFn: SocketFn = React.useCallback((socket) => socket.on('playlist-state', dispatch), [dispatch]);
-    // useSocketio(
-    //     '/playlist',
-    //     {
-    //         query: { townhallId: townhall._id },
-    //     },
-    //     socketFn
-    // );
-    return [];
+export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
+    fragment useQuestionQueueFragment on Event
+    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
+        id
+        currentQuestion
+        queuedQuestions(first: $first, after: $after) @connection(key: "useQuestionQueueFragment_queuedQuestions") {
+            edges {
+                cursor
+                node {
+                    ...QuestionCardFragment
+                    position
+                }
+            }
+        }
+    }
+`;
+
+interface useQuestionQueueArgs {
+    fragmentRef: useQuestionQueueFragment$key;
+}
+
+export function useQuestionQueue({ fragmentRef }: useQuestionQueueArgs) {
+    const data = useFragment(USE_QUESTION_QUEUE_FRAGMENT, fragmentRef);
+    return data;
 }

@@ -56,10 +56,8 @@ export function Quote({ className, connections, fragmentRef }: QuoteProps) {
                 },
                 connections,
             },
-            onCompleted(result) {
-                console.log(result);
-            },
         });
+        close();
     };
 
     const quote = React.useMemo(() => <QuestionCard fragmentRef={data} />, [data]);

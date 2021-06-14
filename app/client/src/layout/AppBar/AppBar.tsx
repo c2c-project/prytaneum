@@ -2,6 +2,12 @@ import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import { useQueryLoader } from 'react-relay';
+
+import { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
+import { ConditionalRender } from '@local/components';
+import { UserMenu, UserMenuLoader, USER_MENU_QUERY } from '@local/features/accounts';
+import Title from './Title';
 
 const useStyles = makeStyles((theme) => ({
     appbar: {
@@ -26,20 +32,38 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface Props {
-    children?: React.ReactElement | React.ReactNode;
+function PreloadedUserMenu() {
+    const [queryRef, loadQuery] = useQueryLoader<UserMenuQuery>(USER_MENU_QUERY);
+    React.useEffect(() => {
+        if (!queryRef) loadQuery({});
+    }, [loadQuery, queryRef]);
+
+    if (!queryRef) return <UserMenuLoader />;
+
+    return <UserMenu queryRef={queryRef} />;
 }
 
-export default function AppBar({ children }: Props) {
+export interface AppBarProps {
+    children: React.ReactNode | React.ReactNodeArray;
+}
+
+export function AppBar({ children }: AppBarProps) {
     const classes = useStyles();
 
     return (
         <MUIAppBar className={classes.appbar} position='sticky'>
-            <Toolbar>{children}</Toolbar>
+            <Toolbar>
+                {children}
+                <Title />
+                <ConditionalRender client>
+                    <React.Suspense fallback={<UserMenuLoader />}>
+                        <PreloadedUserMenu />
+                    </React.Suspense>
+                </ConditionalRender>
+                <ConditionalRender server>
+                    <UserMenuLoader />
+                </ConditionalRender>
+            </Toolbar>
         </MUIAppBar>
     );
 }
-
-AppBar.defaultProps = {
-    children: undefined,
-};

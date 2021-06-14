@@ -17,9 +17,9 @@ export type useQuestionListFragment = {
                     readonly firstName: string | null;
                 } | null;
                 readonly refQuestion: {
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
                 } | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment" | "QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment">;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment" | "QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
         }> | null;
     } | null;
@@ -40,11 +40,6 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v1 = {
-  "args": null,
-  "kind": "FragmentSpread",
-  "name": "QuestionCardFragment"
 };
 return {
   "argumentDefinitions": [
@@ -140,7 +135,11 @@ return {
                   "name": "refQuestion",
                   "plural": false,
                   "selections": [
-                    (v1/*: any*/)
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "QuestionQuoteFragment"
+                    }
                   ],
                   "storageKey": null
                 },
@@ -151,7 +150,11 @@ return {
                   "name": "__typename",
                   "storageKey": null
                 },
-                (v1/*: any*/),
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "QuestionCardFragment"
+                },
                 {
                   "args": null,
                   "kind": "FragmentSpread",
@@ -166,6 +169,11 @@ return {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "QuestionContentFragment"
+                },
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "QuestionStatsFragment"
                 }
               ],
               "storageKey": null
@@ -218,5 +226,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'd0455a69534decb0968cd4687b0e8f6a';
+(node as any).hash = 'aa7fc2387ba1b4e7a3769202cc3211b3';
 export default node;

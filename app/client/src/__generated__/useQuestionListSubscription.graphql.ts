@@ -8,11 +8,11 @@ export type useQuestionListSubscriptionVariables = {
     eventId: string;
 };
 export type useQuestionListSubscriptionResponse = {
-    readonly eventQuestionCreated: {
+    readonly questionCRUD: {
         readonly cursor: string;
         readonly node: {
             readonly id: string;
-            readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+            readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment" | "QuestionStatsFragment">;
         };
     };
 };
@@ -27,11 +27,12 @@ export type useQuestionListSubscription = {
 subscription useQuestionListSubscription(
   $eventId: ID!
 ) {
-  eventQuestionCreated(eventId: $eventId) {
+  questionCRUD(eventId: $eventId) {
     cursor
     node {
       id
       ...QuestionCardFragment
+      ...QuestionStatsFragment
     }
   }
 }
@@ -53,6 +54,11 @@ fragment QuestionCardFragment on EventQuestion {
     firstName
   }
   createdAt
+}
+
+fragment QuestionStatsFragment on EventQuestion {
+  id
+  likedByCount
 }
 */
 
@@ -130,7 +136,7 @@ return {
         "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "eventQuestionCreated",
+        "name": "questionCRUD",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -147,6 +153,11 @@ return {
                 "args": null,
                 "kind": "FragmentSpread",
                 "name": "QuestionCardFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "QuestionStatsFragment"
               }
             ],
             "storageKey": null
@@ -169,7 +180,7 @@ return {
         "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "eventQuestionCreated",
+        "name": "questionCRUD",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -199,7 +210,14 @@ return {
                 "storageKey": null
               },
               (v5/*: any*/),
-              (v6/*: any*/)
+              (v6/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "likedByCount",
+                "storageKey": null
+              }
             ],
             "storageKey": null
           }
@@ -209,14 +227,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "28641b2806dcf70084eeaf0c9e602e97",
+    "cacheID": "c3ecceb1b38b64075af19e520ea78703",
     "id": null,
     "metadata": {},
     "name": "useQuestionListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  eventQuestionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionCardFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
+    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  questionCRUD(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionCardFragment\n      ...QuestionStatsFragment\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'd98b39582c32907f1180d2ea48a40b96';
+(node as any).hash = 'e5d909787874ab170bc0175a6e8b88f4';
 export default node;

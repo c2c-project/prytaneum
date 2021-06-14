@@ -92,6 +92,10 @@ type Mutation {
 type Subscription {
     eventQuestionCreated(eventId: ID!): EventQuestionEdge!
     likeCountChanged(eventId: ID!): EventQuestionEdge!
+    """
+    Question subscription for all operations performed on questions
+    """
+    questionCRUD(eventId: ID!): EventQuestionEdge!
 }
 
 type Query {

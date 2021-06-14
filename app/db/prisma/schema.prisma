@@ -110,6 +110,7 @@ model EventQuestion {
     createdById String @db.Uuid
     createdByUser User @relation(fields: [createdById], references: [id])
     question String @db.VarChar(500)
+    // if position is -1, then the question is not queued
     position Int @default(-1)
     isVisible Boolean
     isAsked Boolean

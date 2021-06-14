@@ -35,6 +35,7 @@ interface Props {
 }
 
 interface TLoginForm {
+    [index: string]: string;
     email: string;
     password: string;
 }
@@ -45,11 +46,7 @@ const LOGIN_FORM_MUTATION = graphql`
             isError
             message
             body {
-                id
-                firstName
-                lastName
-                email
-                avatar
+                ...useUserFragment
             }
         }
     }

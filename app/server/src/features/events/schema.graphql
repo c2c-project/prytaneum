@@ -90,6 +90,16 @@ type Event implements Node {
     Whether or not the viewer is a moderator
     """
     isViewerModerator: Boolean
+
+    """
+    Questions queued in this session by the moderator(s)
+    """
+    queuedQuestions(first: Int, after: String): EventQuestionConnection
+
+    """
+    The question currently being asked, corresponds to a "position" value on the event question
+    """
+    currentQuestion: Int
 }
 
 """
@@ -151,7 +161,7 @@ type Mutation {
     startEvent(eventId: String!): EventMutationResponse!
 
     """
-    End the eent so that it is not live
+    End the event so that it is not live
     """
     endEvent(eventId: String!): EventMutationResponse!
 }
@@ -161,8 +171,4 @@ type Query {
     Fetch all events
     """
     events: [Event!]
-}
-
-type Subscription {
-    questionPosition(eventId: ID!): Int!
 }

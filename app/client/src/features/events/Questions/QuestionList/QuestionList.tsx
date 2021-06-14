@@ -14,6 +14,8 @@ import { useUser } from '@local/hooks';
 import { QuestionActions } from '../QuestionActions';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
+import { QuestionQuote } from '../QuestionQuote';
+import { QuestionStats } from '../QuestionStats';
 import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
@@ -93,6 +95,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                 <ListItem disableGutters key={question.id}>
                                     <Card className={classes.item}>
                                         <QuestionAuthor fragmentRef={question} />
+                                        {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
                                         <QuestionActions
                                             className={classes.questionActions}
@@ -102,6 +105,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             connections={connections}
                                             fragmentRef={question}
                                         />
+                                        {isModerator && <QuestionStats fragmentRef={question} />}
                                     </Card>
                                 </ListItem>
                             ))}

@@ -27,9 +27,9 @@ export const resolvers: Resolvers = {
                     cursor: formattedQuestion.createdAt.getMilliseconds().toString(),
                 };
                 ctx.pubsub.publish({
-                    topic: 'eventQuestionCreated',
+                    topic: 'questionCRUD',
                     payload: {
-                        eventQuestionCreated: edge,
+                        questionCRUD: edge,
                     },
                 });
 
@@ -52,9 +52,9 @@ export const resolvers: Resolvers = {
                     cursor: question.createdAt.getMilliseconds.toString(),
                 };
                 ctx.pubsub.publish({
-                    topic: 'likeCountChanged',
+                    topic: 'questionCRUD',
                     payload: {
-                        likeCountChanged: edge,
+                        questionCRUD: edge,
                     },
                 });
                 return edge;
@@ -73,6 +73,16 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
                 (payload, args, ctx) => {
                     const { id: questionId } = fromGlobalId(payload.eventQuestionCreated.node.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        questionCRUD: {
+            subscribe: withFilter<{ questionCRUD: EventQuestionEdge }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),
+                (payload, args, ctx) => {
+                    const { id: questionId } = fromGlobalId(payload.questionCRUD.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }

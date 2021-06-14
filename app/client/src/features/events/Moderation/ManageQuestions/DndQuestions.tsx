@@ -1,23 +1,31 @@
 import * as React from 'react';
 import { DialogContent, Container, Typography } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import type { Question } from 'prytaneum-typings';
 import { useTheme } from '@material-ui/core/styles';
 import { Dispatch } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
+import { graphql, useFragment } from 'react-relay';
 
+import type { DndQuestionsFragment$key } from '@local/__generated__/DndQuestionsFragment.graphql';
 import { QueueActions } from '@local/reducers';
 import DropArea from '@local/components/DropArea';
 // import useTownhall from '@local/hooks/useTownhall';
 import DraggableList from './DraggableList';
 // import { updateQueueOrder } from '../../Questions/api';
 
-interface Props {
-    queue: Question[];
+interface DndQuestionsProps {
+    fragmentRef: DndQuestionsFragment$key;
     position: number;
     // bufferLength: number;
     // onFlushBuffer: () => void;
 }
+
+const DND_QUESTIONS_FRAGMENT = graphql`
+    fragment DndQuestionsFragment on Event {
+        id
+        ...DraggableListFragment
+    }
+`;
 
 /**
  * abstracting most of the styling/generic logic away
@@ -52,7 +60,8 @@ function useStyledQueue() {
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-function DndQuestions({ queue, position }: Props) {
+export function DndQuestions({ fragmentRef, position }: DndQuestionsProps) {
+    const data = useFragment(DND_QUESTIONS_FRAGMENT, fragmentRef);
     const [reorder, getListStyle, itemStyle] = useStyledQueue();
     const dispatch = useDispatch<Dispatch<QueueActions>>();
     // const [townhall] = useTownhall();
@@ -83,7 +92,7 @@ function DndQuestions({ queue, position }: Props) {
                         <Typography align='center'>Drag and drop the questions below to reorder</Typography>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <DropArea getStyle={getListStyle} droppableId='droppable'>
-                                <DraggableList questions={unaskedQuestions} itemStyle={itemStyle} />
+                                <DraggableList fragmentRef={data} itemStyle={itemStyle} />
                             </DropArea>
                         </DragDropContext>
                     </>
@@ -94,5 +103,3 @@ function DndQuestions({ queue, position }: Props) {
         </DialogContent>
     );
 }
-
-export default React.memo(DndQuestions);

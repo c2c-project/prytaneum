@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Paper, Grid, Typography, Divider, Button, List, ListItem } from '@material-ui/core';
+import { Paper, Grid, Typography, Divider, Button, List, ListItem, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import type { Question } from 'prytaneum-typings';
+import { graphql, useFragment } from 'react-relay';
 
+import type { QueuePreviewFragment$key } from '@local/__generated__/QueuePreviewFragment.graphql';
 import CommentArrowLeft from '@local/icons/CommentArrowLeft';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { QuestionAuthor, QuestionContent } from '@local/features/events/Questions';
 import QuestionCard from '../../Questions/QuestionCard';
 import DndQuestions from './DndQuestions';
 
@@ -33,25 +35,43 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export interface Props {
-    queue: Question[];
+export const QUEUE_PREVIEW_FRAGMENT = graphql`
+    fragment QueuePreviewFragment on Event
+    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
+        queuedQuestions(first: $first, after: $after) @connection(key: "QueuePreviewFragment_queuedQuestions") {
+            edges {
+                cursor
+                node {
+                    id
+                    position
+                    ...QuestionCardFragment
+                }
+            }
+        }
+    }
+`;
+
+export interface QueuePreviewProps {
+    fragmentRef: QueuePreviewFragment$key;
     current: number;
     onClickNext: () => void;
     onClickPrev: () => void;
 }
 
-function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
+function QueuePreview({ fragmentRef, current, onClickNext, onClickPrev }: QueuePreviewProps) {
+    const data = useFragment(QUEUE_PREVIEW_FRAGMENT, fragmentRef);
     const classes = useStyles();
-    const currentQuestion = queue[current];
-    const nextQuestion = queue[current + 1];
-    const hasPrevious = Boolean(queue[current - 1]);
-    const pastQuestions = React.useMemo(() => queue.slice(0, current), [queue, current]);
+    // const currentQuestion = queue[current];
+    // const nextQuestion = queue[current + 1];
+    // const hasPrevious = Boolean(queue[current - 1]);
+    // const pastQuestions = React.useMemo(() => queue.slice(0, current), [queue, current]);
     const [open, setOpen] = React.useState(false);
     const [showPast, setShowPast] = React.useState(false);
+    console.log(data);
 
     return (
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
-            <Grid container justify='space-around'>
+            {/* <Grid container justify='space-around'>
                 <Typography variant='body2'>
                     <b>{queue.length - (current < 0 ? 0 : current + 1)}</b>
                     &nbsp;Remaining
@@ -68,13 +88,17 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
                 </Typography>
             </Grid>
             {currentQuestion && (
-                <QuestionCard
-                    stats
-                    className={classes.item}
-                    CardProps={{ elevation: 0 }}
-                    question={currentQuestion}
-                    quote={currentQuestion.quote}
-                />
+                <Card>
+                    <QuestionAuthor />
+                    <QuestionContent />
+                </Card>
+                // <QuestionCard
+                //     stats
+                //     className={classes.item}
+                //     CardProps={{ elevation: 0 }}
+                //     question={currentQuestion}
+                //     quote={currentQuestion.quote}
+                // />
             )}
             {!currentQuestion && (
                 <Typography color='textSecondary' variant='body2' className={classes.empty}>
@@ -135,13 +159,9 @@ function QueuePreview({ queue, current, onClickNext, onClickPrev }: Props) {
             </ResponsiveDialog>
             <ResponsiveDialog title='In Queue' fullScreen open={open} onClose={() => setOpen(false)}>
                 <DndQuestions queue={queue} position={current} />
-            </ResponsiveDialog>
+            </ResponsiveDialog> */}
         </Grid>
     );
 }
-
-QueuePreview.defaultProps = {};
-
-QueuePreview.propTypes = {};
 
 export default React.memo(QueuePreview);

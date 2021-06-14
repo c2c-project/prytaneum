@@ -92,5 +92,12 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             return Event.isModerator(ctx.viewer.id, eventId, ctx.prisma);
         },
+        async queuedQuestions(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const queryResult = await Event.findQueuedQuestionsByEventId(eventId, ctx.prisma);
+            if (!queryResult) return connectionFromArray([], args);
+            const { questions } = queryResult;
+            return connectionFromArray(questions.map(toQuestionId), args);
+        },
     },
 };

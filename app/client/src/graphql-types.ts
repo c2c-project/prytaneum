@@ -138,6 +138,10 @@ export type Event = Node & {
   moderators?: Maybe<UserConnection>;
   /** Whether or not the viewer is a moderator */
   isViewerModerator?: Maybe<Scalars['Boolean']>;
+  /** Questions queued in this session by the moderator(s) */
+  queuedQuestions?: Maybe<EventQuestionConnection>;
+  /** The question currently being asked, corresponds to a "position" value on the event question */
+  currentQuestion?: Maybe<Scalars['Int']>;
 };
 
 
@@ -172,6 +176,12 @@ export type EventLiveFeedbackArgs = {
 
 
 export type EventModeratorsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventQueuedQuestionsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
 };
@@ -394,7 +404,7 @@ export type Mutation = {
   deleteOrganizationById: OrganizationMutationResponse;
   deleteSpeaker: EventSpeakerMutationResponse;
   deleteVideo: EventVideoMutationResponse;
-  /** End the eent so that it is not live */
+  /** End the event so that it is not live */
   endEvent: EventMutationResponse;
   hideQuestion?: Maybe<EventQuestion>;
   login: UserMutationResponse;
@@ -659,10 +669,13 @@ export type ReorderQuestion = {
 export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
-  eventLiveFeedbackCreated?: Maybe<EventLiveFeedback>;
+  eventLiveFeedbackCreated: EventLiveFeedback;
   eventQuestionCreated: EventQuestionEdge;
   likeCountChanged: EventQuestionEdge;
-  questionPosition: Scalars['Int'];
+  /** Question subscription for all operations performed on questions */
+  questionCRUD: EventQuestionEdge;
+  /** Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update */
+  questionLikeOrPositionUpdate: EventQuestion;
 };
 
 
@@ -681,7 +694,12 @@ export type SubscriptionLikeCountChangedArgs = {
 };
 
 
-export type SubscriptionQuestionPositionArgs = {
+export type SubscriptionQuestionCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionLikeOrPositionUpdateArgs = {
   eventId: Scalars['ID'];
 };
 

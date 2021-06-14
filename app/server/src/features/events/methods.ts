@@ -186,3 +186,14 @@ export async function changeEventStatus(userId: string, prisma: PrismaClient, ev
 
     return prisma.event.update({ where: { id: eventId }, data: { isActive: status } });
 }
+
+/**
+ * find queued questions by event id
+ * if position is greater than -1, then the question is queued
+ */
+export async function findQueuedQuestionsByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.event.findUnique({
+        where: { id: eventId },
+        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } } },
+    });
+}

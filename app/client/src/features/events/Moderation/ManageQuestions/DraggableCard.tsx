@@ -1,12 +1,23 @@
 import * as React from 'react';
-import type { Question } from 'prytaneum-typings';
+import { Card } from '@material-ui/core';
+import { graphql, useFragment } from 'react-relay';
 
+import type { DraggableCardFragment$key } from '@local/__generated__/DraggableCardFragment.graphql';
 import DragArea from '@local/components/DragArea';
-import QuestionCard from '../../Questions/QuestionCard';
 import useListStyles from './useListStyles';
+import { QuestionAuthor, QuestionContent, QuestionStats } from '../../Questions';
 
-interface Props {
-    question: Question;
+const DRAGGABLE_CARD = graphql`
+    fragment DraggableCardFragment on EventQuestion {
+        id
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
+        ...QuestionStatsFragment
+    }
+`;
+
+export interface DraggableCardProps {
+    fragmentRef: DraggableCardFragment$key;
     index: number;
     itemStyle: (isDragging: boolean) => React.CSSProperties;
     isCurrent: boolean;
@@ -16,32 +27,31 @@ interface Props {
 /**
  * renders a single draggable card
  */
-export default React.memo(({ question, index, itemStyle, isCurrent, draggable }: Props) => {
-    const classes = useListStyles();
-    const getStyle: (d: boolean) => React.CSSProperties = React.useMemo(() => {
-        if (draggable || isCurrent) return itemStyle;
-        return (dragging) => ({
-            ...itemStyle(dragging),
-            filter: 'brightness(.7)',
-        });
-    }, [draggable, isCurrent, itemStyle]);
-    return (
-        <DragArea
-            key={question._id}
-            draggableId={question._id}
-            index={index}
-            getStyle={getStyle}
-            isDragDisabled={!draggable}
-        >
-            <QuestionCard
-                CardHeaderProps={{
-                    avatar: undefined,
-                    subheader: undefined,
-                }}
-                className={classes.listItem}
-                question={question}
-                stats
-            />
-        </DragArea>
-    );
-});
+export const DraggableCard = React.memo(
+    ({ fragmentRef, index, itemStyle, isCurrent, draggable }: DraggableCardProps) => {
+        const question = useFragment(DRAGGABLE_CARD, fragmentRef);
+        const classes = useListStyles();
+        const getStyle: (d: boolean) => React.CSSProperties = React.useMemo(() => {
+            if (draggable || isCurrent) return itemStyle;
+            return (dragging) => ({
+                ...itemStyle(dragging),
+                filter: 'brightness(.7)',
+            });
+        }, [draggable, isCurrent, itemStyle]);
+        return (
+            <DragArea
+                key={question.id}
+                draggableId={question.id}
+                index={index}
+                getStyle={getStyle}
+                isDragDisabled={!draggable}
+            >
+                <Card className={classes.listItem}>
+                    <QuestionAuthor fragmentRef={question} />
+                    <QuestionContent fragmentRef={question} />
+                    <QuestionStats fragmentRef={question} />
+                </Card>
+            </DragArea>
+        );
+    }
+);
