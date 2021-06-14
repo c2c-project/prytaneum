@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    ports: 
+    - "${POSTGRES_PORT}:5432"
+    environment:
+    - POSTGRES_PASSWORD
+volumes:
+  db_data:
+

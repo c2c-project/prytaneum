@@ -1,0 +1,29 @@
+type EventLiveFeedback implements Node {
+    id: ID!
+    message: String!
+    event: Event
+    createdAt: String
+    createdBy: User
+}
+
+type EventLiveFeedbackEdge {
+    node: EventLiveFeedback!
+    cursor: String!
+}
+
+type EventLiveFeedbackConnection {
+    edges: [EventLiveFeedbackEdge!]
+    pageInfo: PageInfo!
+}
+
+input CreateFeedback {
+    message: String!
+}
+
+type Mutation {
+    createFeedback(input: CreateFeedback): EventLiveFeedback
+}
+
+type Query {
+    myFeedback: [EventLiveFeedback]
+}

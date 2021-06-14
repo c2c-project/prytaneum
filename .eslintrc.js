@@ -5,11 +5,11 @@ module.exports = {
         'airbnb-typescript',
         'prettier',
         'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:jest/recommended',
+        // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        // 'plugin:jest/recommended',
     ],
     parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.base.json',
     },
     rules: {
         quotes: ['error', 'single'],
@@ -24,6 +24,7 @@ module.exports = {
         'react/jsx-curly-newline': ['off'],
         'jsx-quotes': ['error', 'prefer-single'],
         'react/jsx-wrap-multilines': 0,
+        'react/react-in-jsx-scope': 'off', // react 17 makes it unnecessary
         'import/no-extraneous-dependencies': [
             'error',
             {
@@ -45,10 +46,13 @@ module.exports = {
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
         'react/jsx-props-no-spreading': 'off',
+        'import/prefer-default-export': 'off',
+        // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
+        'react/require-default-props': 'off',
     },
     overrides: [
         {
-            files: ['**/*.ts?(x)', '**/*.js?(x)'],
+            files: ['./app/**/*.ts?(x)', './app/**/*.js?(x)'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'off',
             },

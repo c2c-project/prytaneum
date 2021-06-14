@@ -1,0 +1,9 @@
+{
+    "name": "@app/prisma",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "devDependencies": {
+        "@prisma/client": "*",
+        "@types/node": "*"
+    }
+}

@@ -1,0 +1,46 @@
+type EventVideo implements Node {
+    id: ID!
+    url: String!
+    lang: String!
+    event: Event
+}
+
+type EventVideoEdge {
+    node: EventVideo!
+    cursor: String!
+}
+
+type EventVideoConnection {
+    edges: [EventVideoEdge!]
+    pageInfo: PageInfo!
+}
+
+input CreateVideo {
+    url: String!
+    lang: String!
+    eventId: String!
+}
+
+input UpdateVideo {
+    videoId: String!
+    eventId: String!
+    url: String
+    lang: String
+}
+
+input DeleteVideo {
+    eventId: String!
+    id: String!
+}
+
+type EventVideoMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventVideo
+}
+
+type Mutation {
+    createVideo(input: CreateVideo!): EventVideoMutationResponse!
+    deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
+    updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
+}

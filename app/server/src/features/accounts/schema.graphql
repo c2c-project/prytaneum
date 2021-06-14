@@ -1,0 +1,65 @@
+"""
+User Data
+"""
+type User implements Node {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+    isEmailVerified: Boolean
+
+    """
+    Avatar URL if null then no avatar is uploaded
+    """
+    avatar: String
+
+    """
+    Organizations that this user belongs to
+    """
+    organizations: OrganizationConnection
+}
+
+type UserEdge {
+    node: User!
+    cursor: String!
+}
+
+type UserConnection {
+    edges: [UserEdge!]
+    pageInfo: PageInfo!
+}
+
+input RegistrationForm {
+    firstName: String!
+    lastName: String!
+    password: String!
+    confirmPassword: String!
+    email: String!
+}
+
+input LoginForm {
+    email: String!
+    password: String!
+}
+
+type UserMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: User
+}
+
+type Query {
+    """
+    Fetch user data about the current user
+    """
+    me: User
+}
+
+type Mutation {
+    register(input: RegistrationForm!): UserMutationResponse!
+    login(input: LoginForm!): UserMutationResponse!
+    """
+    The logout just returns the timestamp of the logout action
+    """
+    logout: Date!
+}

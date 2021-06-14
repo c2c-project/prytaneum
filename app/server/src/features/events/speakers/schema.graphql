@@ -1,0 +1,94 @@
+type EventSpeaker implements Node {
+    """
+    Speaker id
+    """
+    id: ID!
+
+    """
+    email of the speaker
+    """
+    email: String
+
+    """
+    Event eventId that this user is speaking at
+    """
+    eventId: ID
+
+    """
+    The related user account associated with the speaker
+    """
+    user: User
+
+    """
+    Name set by the organizer of the event
+    """
+    name: String
+
+    """
+    Description set by the organizer of the event
+    """
+    description: String
+
+    """
+    Title set by the organizer of the event
+    """
+    title: String
+
+    """
+    Picture set by the organizer of the event
+    """
+    pictureUrl: String
+}
+
+type EventSpeakerEdge {
+    node: EventSpeaker!
+    cursor: String!
+}
+
+type EventSpeakerConnection {
+    edges: [EventSpeakerEdge!]
+    pageInfo: PageInfo!
+}
+
+input CreateSpeaker {
+    eventId: String!
+    name: String!
+    title: String!
+    description: String!
+    pictureUrl: String!
+
+    """
+    This is for matching the speaker to an account
+    """
+    email: String!
+}
+
+input UpdateSpeaker {
+    name: String
+    title: String
+    description: String
+    pictureUrl: String
+    email: String
+    id: String!
+    eventId: String!
+}
+
+input DeleteSpeaker {
+    """
+    Necessary for verifying user permissions
+    """
+    eventId: String!
+    id: String!
+}
+
+type EventSpeakerMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventSpeaker
+}
+
+type Mutation {
+    createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
+    deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
+    updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
+}
