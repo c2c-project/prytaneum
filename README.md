@@ -39,6 +39,7 @@ There's a few complexities to take note of:
 
 -   If you add a "scoped" script e.g. `g:<some script>` and it doesn't work, try running `yarn install` then attempt to run the script again.
 -   Use latest LTS version of node -- node 16 doesn't work with prisma https://github.com/prisma/prisma/issues/6682 -- I already upgraded, but it seems teh fix didn't work
+-   Use wsl if working on windows. When using wsl, `.env.local` files must be used providing the wsl HOST in place of localhost.
 
 ## Helpful Docs for learning
 
