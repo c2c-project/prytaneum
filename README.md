@@ -9,8 +9,9 @@
 ## Quick Start
 
 1. Use Node LTS (14.x at the time of writing)
-1. `yarn install`
-1. `yarn g:dev-project`
+2. `yarn install`
+3. `yarn g:dev-project`
+4. `http://localhost:8080/login` in your browser.
 
 ## Basics
 
@@ -44,3 +45,14 @@ There's a few complexities to take note of:
 -   [Prisma's database modeling guide](https://www.prisma.io/dataguide)
 
 ## Available Scripts
+
+## Possible Errors
+
+- Project won't start because of `Error occurred while proxying request localhost:8080/graphql ...`?
+    - Run `yarn workspace @app/db prisma generate`.
+    - Run `yarn g:dev-server` to check if the server starts up without any errors.
+    - Ensure you have [nvm](https://github.com/nvm-sh/nvm) installed and/or follow [this guide](https://stackoverflow.com/questions/11284634/upgrade-node-js-to-the-latest-version-on-mac-os) to upgrade your node to LTS (currently v14.x).
+    - Open a fresh terminal and run `yarn g:dev-project`.
+
+- `Subject/type may not be empty` error when trying to commit for the first time?
+    - Format your commit message as `addition(scope): what addition you made` where addition can be `fix`, `feature`, `refactor`, etc. `(scope)` can be `(global)`, `(frontend)`, `(backend)`, `(fullstack)`, `(docs)`. Your message should be a string of all lowercase letters that isn't sentence-case, start-case, pascal-case, or upper-case.
