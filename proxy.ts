@@ -1,5 +1,5 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import * as express from 'express';
+import express from 'express';
 
 const app = express();
 
@@ -9,7 +9,7 @@ app.use(
     createProxyMiddleware({
         changeOrigin: true,
         ws: true,
-        target: 'http://localhost:3002',
+        target: `http://${process.env.HOST}:${process.env.SERVER_PORT}`,
         logLevel: 'debug',
     })
 );
@@ -19,7 +19,7 @@ app.use(
     '/',
     createProxyMiddleware({
         changeOrigin: true,
-        target: 'http://localhost:3000',
+        target: `http://${process.env.HOST}:${process.env.CLIENT_PORT}`,
         logLevel: 'debug',
     })
 );

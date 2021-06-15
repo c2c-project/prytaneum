@@ -22,6 +22,8 @@
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^4.22.0",
         "concurrently": "^6.0.2",
+        "dotenv": "^10.0.0",
+        "dotenv-expand": "^5.1.0",
         "eslint": "^7.25.0",
         "eslint-config-airbnb-typescript": "^12.3.1",
         "eslint-config-prettier": "^8.3.0",
@@ -46,7 +48,7 @@
         "g:dev-client": "yarn workspace @app/client dev",
         "g:client-relay": "yarn workspace @app/client relay",
         "g:start-db": "yarn workspace @app/db start-db",
-        "g:start-proxy": "yarn workspace prytaneum ts-node-dev ./proxy.ts",
+        "g:start-proxy": "yarn workspace prytaneum ts-node-dev -r ./scripts/env.ts ./proxy.ts",
         "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
     },
     "dependencies": {
