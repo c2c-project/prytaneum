@@ -39,6 +39,8 @@ There's a few complexities to take note of:
 
 -   If you add a "scoped" script e.g. `g:<some script>` and it doesn't work, try running `yarn install` then attempt to run the script again.
 -   Use latest LTS version of node -- node 16 doesn't work with prisma https://github.com/prisma/prisma/issues/6682 -- I already upgraded, but it seems teh fix didn't work
+-   When using Windows it is STRONGLY RECOMMENDED to use WSL in order to avoid various issues. When using wsl for development, you may encounter issues accessing the web app via localhost. This issue should be fixed temporarily by restarting WSL with `wsl --shutdown`, and should be permanently fixed by turning off [Windows 10 Fast Startup](https://www.tenforums.com/tutorials/4189-turn-off-fast-startup-windows-10-a.html).
+-   The `.env.local` files can be used to locally overwrite environment variables. NOTE: For this to work the path for the env files must be loaded in scripts/env.ts.
 
 ## Helpful Docs for learning
 
