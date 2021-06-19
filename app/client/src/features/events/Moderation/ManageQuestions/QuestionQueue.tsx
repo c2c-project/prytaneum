@@ -1,14 +1,20 @@
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem } from '@material-ui/core';
-import { graphql, useFragment } from 'react-relay';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
+import { graphql, useFragment, useMutation } from 'react-relay';
 import ReorderIcon from '@material-ui/icons/Reorder';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import type { QuestionQueueFragment$key } from '@local/__generated__/QuestionQueueFragment.graphql';
-import CommentArrowLeft from '@local/icons/CommentArrowLeft';
+import type {
+    QuestionQueueFragment$key,
+    QuestionQueueFragment$data,
+} from '@local/__generated__/QuestionQueueFragment.graphql';
+import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
+import DragArea from '@local/components/DragArea';
+import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
+import { ArrayElement } from '@local/utils/ts-utils';
 import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
-import { DndQuestions } from './DndQuestions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 
@@ -29,10 +35,29 @@ const useStyles = makeStyles((theme) => ({
     empty: {
         margin: theme.spacing(5, 0),
     },
-    item: {
+    fullWidth: {
         width: '100%',
     },
+    currentQuestionWrapper: {
+        backgroundColor: theme.palette.primary.main,
+        padding: theme.spacing(2),
+    },
+    currentQuestionTitle: {
+        marginBottom: theme.spacing(1),
+        color: 'white',
+    },
+    dialogContent: {
+        '& > *': {
+            marginBottom: theme.spacing(2),
+        },
+    },
+    pastQuestionsContainer: {
+        padding: theme.spacing(2),
+        backgroundColor: theme.palette.secondary.main,
+    },
 }));
+
+type QuestionNode = ArrayElement<NonNullable<NonNullable<QuestionQueueFragment$data['queuedQuestions']>['edges']>>;
 
 interface QuestionQueueProps {
     fragmentRef: QuestionQueueFragment$key;
@@ -55,13 +80,100 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
                 }
             }
         }
-        ...DndQuestionsFragment
     }
 `;
 
-export default function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
+export const QUESTION_QUEUE_MUTATION = graphql`
+    mutation QuestionQueueMutation($input: UpdateQuestionPosition!) @raw_response_type {
+        updateQuestionPosition(input: $input) {
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                    position
+                }
+            }
+        }
+    }
+`;
+
+function sortByPosition(el1: QuestionNode, el2: QuestionNode) {
+    if (!el1.node.position || !el2.node.position) return 0;
+    return el1.node.position - el2.node.position;
+}
+
+/**
+ * abstracting most of the styling/generic logic away
+ */
+function useStyledQueue({ eventId }: { eventId: string }) {
+    const theme = useTheme();
+    const [commit] = useMutation<QuestionQueueMutation>(QUESTION_QUEUE_MUTATION);
+    const reorder = React.useCallback(
+        (list: readonly QuestionNode[], sourceIdx: number, destinationIdx: number) => {
+            if (destinationIdx === list.length - 1) return; // TODO:
+            if (destinationIdx === 0) return; // TODO:
+            const isMovingTowardsStart = sourceIdx > destinationIdx;
+            const maxIdx = isMovingTowardsStart ? destinationIdx : destinationIdx + 1;
+            const minIdx = maxIdx - 1;
+            const maxPos = list[maxIdx].node.position;
+            const minPos = list[minIdx].node.position;
+
+            if (!maxPos || !minPos) return;
+
+            const newPosition = minPos + (maxPos - minPos) / 2;
+
+            commit({
+                variables: {
+                    input: {
+                        eventId,
+                        questionId: list[sourceIdx].node.id,
+                        position: newPosition,
+                    },
+                },
+                optimisticResponse: {
+                    updateQuestionPosition: {
+                        isError: false,
+                        message: '',
+                        body: {
+                            cursor: list[sourceIdx].cursor,
+                            node: {
+                                id: list[sourceIdx].node.id,
+                                position: newPosition,
+                            },
+                        },
+                    },
+                },
+            });
+        },
+        [commit, eventId]
+    );
+    const getListStyle = React.useCallback(
+        (isDraggingOver: boolean): React.CSSProperties => ({
+            background: isDraggingOver ? 'lightblue' : 'lightgrey',
+            padding: theme.spacing(2),
+            borderRadius: theme.custom.borderRadius,
+            boxShadow: theme.shadows[3],
+        }),
+        [theme]
+    );
+
+    const itemStyle = React.useCallback(
+        (isDragging: boolean): React.CSSProperties => ({
+            userSelect: 'none',
+            margin: theme.spacing(0, 0, 4, 0),
+            filter: isDragging ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})` : '',
+        }),
+        [theme]
+    );
+    return [reorder, getListStyle, itemStyle] as const;
+}
+
+export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const data = useFragment(QUESTION_QUEUE_FRAGMENT, fragmentRef);
     const classes = useStyles();
+    const ref = React.useRef<HTMLElement | null>(null);
     const { totQuestions, currQuestionIdx } = React.useMemo(
         () => ({
             totQuestions: data.queuedQuestions?.edges?.length ?? 0,
@@ -71,20 +183,38 @@ export default function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [data]
     );
 
-    const { currentQuestion, nextQuestion, pastQuestions } = React.useMemo(
+    const { currentQuestion, nextQuestion, pastQuestions, futureQuestions } = React.useMemo(
         () => ({
             currentQuestion: data.queuedQuestions?.edges && data.queuedQuestions.edges[currQuestionIdx],
             nextQuestion:
                 data.queuedQuestions?.edges && data.queuedQuestions.edges.length > currQuestionIdx + 1
                     ? data.queuedQuestions.edges[currQuestionIdx + 1]
                     : null,
-            pastQuestions: data.queuedQuestions?.edges?.slice(0, currQuestionIdx) ?? [],
+            pastQuestions: currQuestionIdx === -1 ? [] : data.queuedQuestions?.edges?.slice(0, currQuestionIdx) ?? [],
+            futureQuestions:
+                currQuestionIdx === -1
+                    ? data.queuedQuestions?.edges ?? []
+                    : data.queuedQuestions?.edges?.slice(currQuestionIdx + 1).sort(sortByPosition) ?? [],
         }),
         [currQuestionIdx, data]
     );
 
     const [open, setOpen] = React.useState(false);
-    const [showPast, setShowPast] = React.useState(false);
+
+    const scrollToCurrent = () => {
+        ref.current?.scrollIntoView();
+    };
+
+    const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId: data.id });
+
+    const onDragEnd = React.useCallback(
+        (result: DropResult) => {
+            // dropped outside the list
+            if (!result.destination || !futureQuestions) return;
+            reorder(futureQuestions, result.source.index, result.destination.index);
+        },
+        [futureQuestions, reorder]
+    );
 
     return (
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
@@ -105,7 +235,7 @@ export default function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 </Grid>
             </Grid>
             {currentQuestion && (
-                <Card>
+                <Card elevation={0} className={classes.fullWidth}>
                     <QuestionAuthor fragmentRef={currentQuestion.node} />
                     <QuestionContent fragmentRef={currentQuestion.node} />
                     <QuestionStats fragmentRef={currentQuestion.node} />
@@ -119,7 +249,7 @@ export default function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             <Grid container item justify='space-between'>
                 <PreviousQuestionButton disabled={pastQuestions.length === 0} />
                 <NextQuestionButton
-                    disabled={currQuestionIdx === -1 ? true : Boolean(totQuestions - currQuestionIdx - 1)}
+                    disabled={currQuestionIdx === -1 ? !nextQuestion : !(totQuestions - currQuestionIdx - 1)}
                     variant='outlined'
                 />
             </Grid>
@@ -129,47 +259,82 @@ export default function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     Up Next
                 </Typography>
             </Grid>
-            {nextQuestion && (
-                <Card>
-                    <QuestionAuthor fragmentRef={nextQuestion.node} />
-                    <QuestionContent fragmentRef={nextQuestion.node} />
-                    <QuestionStats fragmentRef={nextQuestion.node} />
-                </Card>
-            )}
+            <Grid item xs={12}>
+                {nextQuestion && (
+                    <Card elevation={0}>
+                        <QuestionAuthor fragmentRef={nextQuestion.node} />
+                        <QuestionContent fragmentRef={nextQuestion.node} />
+                        <QuestionStats fragmentRef={nextQuestion.node} />
+                    </Card>
+                )}
+            </Grid>
             {!nextQuestion && (
                 <Typography color='textSecondary' variant='body2' className={classes.empty}>
                     There is no question to display
                 </Typography>
             )}
 
-            <Grid container item justify='space-between'>
-                <Button variant='outlined' startIcon={<CommentArrowLeft />} onClick={() => setShowPast(true)}>
-                    Past Questions
-                </Button>
+            <Grid container item justify='flex-end'>
                 <Button variant='outlined' startIcon={<ReorderIcon />} onClick={() => setOpen(true)}>
                     In Queue
                 </Button>
             </Grid>
-            <ResponsiveDialog title='Past Questions' fullScreen open={showPast} onClose={() => setShowPast(false)}>
-                {pastQuestions.length === 0 && (
-                    <Typography align='center' variant='h5'>
-                        No Questions to display
-                    </Typography>
-                )}
-                <List>
-                    {pastQuestions.map((question) => (
-                        <ListItem key={question.node.id}>
+            <ResponsiveDialog
+                title='In Queue'
+                fullScreen
+                open={open}
+                onClose={() => setOpen(false)}
+                onEntered={scrollToCurrent}
+            >
+                <DialogContent className={classes.dialogContent}>
+                    <Paper className={classes.pastQuestionsContainer}>
+                        <Typography variant='h5'>Past Questions</Typography>
+                        <List>
+                            {pastQuestions.map((question) => (
+                                <ListItem key={question.node.id}>
+                                    <Card className={classes.fullWidth}>
+                                        <QuestionAuthor fragmentRef={question.node} />
+                                        <QuestionContent fragmentRef={question.node} />
+                                        <QuestionStats fragmentRef={question.node} />
+                                    </Card>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                    {currentQuestion && (
+                        <Paper className={classes.currentQuestionWrapper} ref={ref}>
+                            <Typography className={classes.currentQuestionTitle} variant='h5'>
+                                Current Question
+                            </Typography>
                             <Card>
-                                <QuestionAuthor fragmentRef={question.node} />
-                                <QuestionContent fragmentRef={question.node} />
-                                <QuestionStats fragmentRef={question.node} />
+                                <QuestionAuthor fragmentRef={currentQuestion.node} />
+                                <QuestionContent fragmentRef={currentQuestion.node} />
+                                <QuestionStats fragmentRef={currentQuestion.node} />
                             </Card>
-                        </ListItem>
-                    ))}
-                </List>
-            </ResponsiveDialog>
-            <ResponsiveDialog title='In Queue' fullScreen open={open} onClose={() => setOpen(false)}>
-                <DndQuestions fragmentRef={data} position={data.currentQuestion ?? 0} />
+                        </Paper>
+                    )}
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <DropArea getStyle={getListStyle} droppableId='droppable'>
+                            <Typography variant='h5'>In Queue</Typography>
+                            {futureQuestions.map((question, idx) => (
+                                <DragArea
+                                    getStyle={itemStyle}
+                                    key={question.node.id}
+                                    index={idx}
+                                    draggableId={question.node.id}
+                                >
+                                    <ListItem>
+                                        <Card className={classes.fullWidth}>
+                                            <QuestionAuthor fragmentRef={question.node} />
+                                            <QuestionContent fragmentRef={question.node} />
+                                            <QuestionStats fragmentRef={question.node} />
+                                        </Card>
+                                    </ListItem>
+                                </DragArea>
+                            ))}
+                        </DropArea>
+                    </DragDropContext>
+                </DialogContent>
             </ResponsiveDialog>
         </Grid>
     );

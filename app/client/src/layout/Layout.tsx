@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Grid, useMediaQuery, IconButton, ContainerProps } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useUser } from '@local/features/accounts';
 
 import Main from './Main';
 import Page from './Page';
@@ -46,6 +47,7 @@ export function Layout({
 }: LayoutProps) {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
+    const [user] = useUser();
 
     const theme = useTheme();
     const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
@@ -53,14 +55,14 @@ export function Layout({
     return (
         <Page>
             <AppBar>
-                {!noSideNav && isMdDown && (
+                {!noSideNav && isMdDown && user && (
                     <IconButton className={classes.menuIcon} onClick={() => setOpen(!open)} color='inherit'>
                         <MenuIcon />
                     </IconButton>
                 )}
             </AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
-                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isMdDown || !!noSideNav} />
+                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isMdDown || !!noSideNav || !user} />
                 <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}
                 </Main>

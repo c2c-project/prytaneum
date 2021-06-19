@@ -23,7 +23,7 @@ export type QuoteMutationResponse = {
             readonly cursor: string;
             readonly node: {
                 readonly id: string;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
             };
         } | null;
     };
@@ -46,29 +46,24 @@ mutation QuoteMutation(
       cursor
       node {
         id
-        ...QuestionCardFragment
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
       }
     }
   }
 }
 
-fragment QuestionCardFragment on EventQuestion {
-  id
-  question
-  refQuestion {
-    id
-    question
-    createdBy {
-      id
-      firstName
-    }
-    createdAt
-  }
+fragment QuestionAuthorFragment on EventQuestion {
   createdBy {
     id
     firstName
+    avatar
   }
   createdAt
+}
+
+fragment QuestionContentFragment on EventQuestion {
+  question
 }
 */
 
@@ -117,39 +112,6 @@ v6 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v7 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "question",
-  "storageKey": null
-},
-v8 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "createdBy",
-  "plural": false,
-  "selections": [
-    (v6/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "firstName",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "createdAt",
-  "storageKey": null
 };
 return {
   "fragment": {
@@ -192,7 +154,12 @@ return {
                   {
                     "args": null,
                     "kind": "FragmentSpread",
-                    "name": "QuestionCardFragment"
+                    "name": "QuestionAuthorFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionContentFragment"
                   }
                 ],
                 "storageKey": null
@@ -244,24 +211,46 @@ return {
                 "plural": false,
                 "selections": [
                   (v6/*: any*/),
-                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "EventQuestion",
+                    "concreteType": "User",
                     "kind": "LinkedField",
-                    "name": "refQuestion",
+                    "name": "createdBy",
                     "plural": false,
                     "selections": [
                       (v6/*: any*/),
-                      (v7/*: any*/),
-                      (v8/*: any*/),
-                      (v9/*: any*/)
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "firstName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "avatar",
+                        "storageKey": null
+                      }
                     ],
                     "storageKey": null
                   },
-                  (v8/*: any*/),
-                  (v9/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "createdAt",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "question",
+                    "storageKey": null
+                  }
                 ],
                 "storageKey": null
               }
@@ -290,14 +279,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "452c86827a04489c82807dde4d33ea43",
+    "cacheID": "edac19b9a4b664ae8fcd3dee48f82ce9",
     "id": null,
     "metadata": {},
     "name": "QuoteMutation",
     "operationKind": "mutation",
-    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionCardFragment\n      }\n    }\n  }\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n"
+    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
   }
 };
 })();
-(node as any).hash = '89196095a5510b161619a60b3e7709a9';
+(node as any).hash = '133c16077905b74a09c8f7f4a868970d';
 export default node;

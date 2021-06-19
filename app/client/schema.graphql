@@ -1,3 +1,8 @@
+input AddQuestionToQueue {
+  questionId: ID!
+  eventId: ID!
+}
+
 input AlterLike {
   questionId: ID!
 
@@ -20,9 +25,15 @@ input CreateFeedback {
   message: String!
 }
 
+"""Info necessary for adding a member to an organization"""
+input CreateMember {
+  email: String!
+  orgId: ID!
+}
+
 input CreateModerator {
   email: String!
-  eventId: String!
+  eventId: ID!
 }
 
 """Necessary information for org creation"""
@@ -61,9 +72,14 @@ input DeleteEvent {
   eventId: String!
 }
 
+input DeleteMember {
+  userId: ID!
+  orgId: ID!
+}
+
 input DeleteModerator {
-  userId: String!
-  eventId: String!
+  userId: ID!
+  eventId: ID!
 }
 
 """Information necessary for deleting an org"""
@@ -350,11 +366,13 @@ type ModeratorMutationResponse implements MutationResponse {
 }
 
 type Mutation {
-  """Adds a new member and returns the new user added"""
-  addMember(input: NewMember!): User
+  addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback): EventLiveFeedback
+
+  """Adds a new member and returns the new user added"""
+  createMember(input: CreateMember!): UserMutationResponse!
 
   """Add a new moderator to the given event"""
   createModerator(input: CreateModerator!): ModeratorMutationResponse!
@@ -364,9 +382,12 @@ type Mutation {
   createVideo(input: CreateVideo!): EventVideoMutationResponse!
   deleteEvent(event: DeleteEvent!): EventMutationResponse!
 
+  """Delete a member from the organization"""
+  deleteMember(input: DeleteMember!): UserMutationResponse!
+
   """Removes a moderator from a given event"""
   deleteModerator(input: DeleteModerator!): ModeratorMutationResponse!
-  deleteOrganizationById(input: DeleteOrganization!): OrganizationMutationResponse!
+  deleteOrganization(input: DeleteOrganization!): OrganizationMutationResponse!
   deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
   deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
 
@@ -384,7 +405,6 @@ type Mutation {
   """Go to the previous question"""
   prevQuestion(eventId: ID!): Int!
   register(input: RegistrationForm!): UserMutationResponse!
-  reorderQueue(input: ReorderQuestion!): EventQuestion
 
   """
   Start the event so that it is "live"
@@ -392,7 +412,8 @@ type Mutation {
   startEvent(eventId: String!): EventMutationResponse!
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
-  updateOrganizationById(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
   updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
 }
@@ -400,11 +421,6 @@ type Mutation {
 interface MutationResponse {
   isError: Boolean!
   message: String!
-}
-
-"""Info necessary for adding a member to an organization"""
-input NewMember {
-  email: String!
 }
 
 interface Node {
@@ -476,25 +492,12 @@ input RegistrationForm {
   email: String!
 }
 
-input ReorderQuestion {
-  questionId: ID!
-  position: Int!
-  eventId: ID!
-}
-
 type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-  eventQuestionCreated(eventId: ID!): EventQuestionEdge!
-  likeCountChanged(eventId: ID!): EventQuestionEdge!
 
   """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): EventQuestionEdge!
-
-  """
-  Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update
-  """
-  questionLikeOrPositionUpdate(eventId: ID!): EventQuestion!
 }
 
 input UpdateEvent {
@@ -511,14 +514,20 @@ input UpdateEvent {
 }
 
 input UpdateModerator {
-  userId: String!
-  eventId: String!
+  userId: ID!
+  eventId: ID!
 }
 
 """Information that may be updated by the user"""
 input UpdateOrganization {
   orgId: ID!
   name: String!
+}
+
+input UpdateQuestionPosition {
+  questionId: ID!
+  position: Int!
+  eventId: ID!
 }
 
 input UpdateSpeaker {

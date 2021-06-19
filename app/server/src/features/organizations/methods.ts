@@ -1,5 +1,7 @@
 import { PrismaClient } from '@app/prisma';
-import { CreateOrganization, UpdateOrganization } from '@local/graphql-types';
+import { CreateOrganization, UpdateOrganization, CreateMember, DeleteMember } from '@local/graphql-types';
+import { isMemberOfOrg } from '@local/features/permissions';
+import { register } from '@local/features/accounts/methods';
 import { errors } from '../utils';
 
 /**
@@ -101,4 +103,41 @@ export async function isViewerMember(userId: string | null, prisma: PrismaClient
     if (!userId) return false; // non logged in viewer cannot be a member
     const result = await prisma.orgMember.findUnique({ where: { userId_orgId: { userId, orgId } } });
     return Boolean(result);
+}
+
+export async function createMember(userId: string, prisma: PrismaClient, input: CreateMember) {
+    // first I have to check if the user has permission to add a member
+    // the policy for now is that any member can add any other member
+    const hasPermissions = await isMemberOfOrg(userId, input.orgId, prisma);
+    if (!hasPermissions) throw new Error(errors.permissions);
+
+    // then we'll have to check if the user exists
+    // if they don't exist create a "shadow" account
+    // if they do exist proceed as normal
+    let user = await prisma.user.findUnique({ where: { email: input.email } });
+    if (!user) user = await register(prisma, { email: input.email });
+
+    // check if user is already a member
+    const isUserMember = await isMemberOfOrg(user.id, input.orgId, prisma);
+    if (isUserMember) return user;
+
+    // add a table entry for the OrgMembers table
+    await prisma.orgMember.create({
+        data: {
+            orgId: input.orgId,
+            userId: user.id,
+        },
+    });
+
+    // return the newly added user via lookup by email
+    return user;
+}
+
+export async function deleteMember(userId: string, prisma: PrismaClient, input: DeleteMember) {
+    const hasPermissions = await isMemberOfOrg(userId, input.orgId, prisma);
+    if (!hasPermissions) throw new Error(errors.permissions);
+
+    await prisma.orgMember.delete({ where: { userId_orgId: { userId: input.userId, orgId: input.orgId } } });
+
+    return prisma.user.findUnique({ where: { id: input.userId } });
 }

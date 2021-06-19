@@ -17,7 +17,6 @@ export type QuestionQueueFragment = {
             };
         }> | null;
     } | null;
-    readonly " $fragmentRefs": FragmentRefs<"DndQuestionsFragment">;
     readonly " $refType": "QuestionQueueFragment";
 };
 export type QuestionQueueFragment$data = QuestionQueueFragment;
@@ -166,16 +165,11 @@ return {
         }
       ],
       "storageKey": null
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "DndQuestionsFragment"
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
 })();
-(node as any).hash = 'd63d9f9e7e8daeea26b0fb7eba7c9892';
+(node as any).hash = '76ce27dd72a9748073b142b1a2bd9b87';
 export default node;

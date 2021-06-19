@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { Grid, Card, List, ListItem } from '@material-ui/core';
-import { Pause, PlayArrow } from '@material-ui/icons';
+// import { Pause, PlayArrow } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -9,14 +9,13 @@ import type { useQuestionListFragment$key } from '@local/__generated__/useQuesti
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { useEvent } from '@local/features/events';
-import { useUser } from '@local/hooks';
+import { useUser } from '@local/features/accounts';
 
 import { QuestionActions } from '../QuestionActions';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
 import { QuestionQuote } from '../QuestionQuote';
 import { QuestionStats } from '../QuestionStats';
-import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
 
@@ -97,6 +96,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                         <QuestionAuthor fragmentRef={question} />
                                         {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
+                                        {isModerator && <QuestionStats fragmentRef={question} />}
                                         <QuestionActions
                                             className={classes.questionActions}
                                             like={!isModerator && Boolean(user)}
@@ -105,7 +105,6 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             connections={connections}
                                             fragmentRef={question}
                                         />
-                                        {isModerator && <QuestionStats fragmentRef={question} />}
                                     </Card>
                                 </ListItem>
                             ))}

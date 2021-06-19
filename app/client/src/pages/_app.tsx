@@ -7,11 +7,9 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { RelayEnvironmentProvider } from 'react-relay';
 
-import { useEnvironment } from '@local/hooks';
 import { useStore } from '@local/reducers/store';
 import { UserProvider } from '@local/features/accounts/UserContext';
-import ThemeProvider from '@local/contexts/Theme';
-import SnackContext from '@local/contexts/Snack';
+import { ThemeProvider, SnackContext, useEnvironment } from '@local/features/core';
 import { Layout } from '@local/layout';
 import '@local/index.css';
 

@@ -36,36 +36,6 @@ query EventLiveQuery(
   }
 }
 
-fragment DndQuestionsFragment on Event {
-  id
-  ...DraggableListFragment
-}
-
-fragment DraggableCardFragment on EventQuestion {
-  id
-  ...QuestionAuthorFragment
-  ...QuestionContentFragment
-  ...QuestionStatsFragment
-}
-
-fragment DraggableListFragment on Event {
-  id
-  queuedQuestions(first: 100, after: "") {
-    edges {
-      cursor
-      node {
-        id
-        ...DraggableCardFragment
-        __typename
-      }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
-  }
-}
-
 fragment EventDetailsCardFragment on Event {
   id
   title
@@ -105,6 +75,7 @@ fragment QuestionActionsFragment on EventQuestion {
   id
   ...QuoteFragment
   ...LikeFragment
+  ...QueueButtonFragment
 }
 
 fragment QuestionAuthorFragment on EventQuestion {
@@ -112,25 +83,6 @@ fragment QuestionAuthorFragment on EventQuestion {
     id
     firstName
     avatar
-  }
-  createdAt
-}
-
-fragment QuestionCardFragment on EventQuestion {
-  id
-  question
-  refQuestion {
-    id
-    question
-    createdBy {
-      id
-      firstName
-    }
-    createdAt
-  }
-  createdBy {
-    id
-    firstName
   }
   createdAt
 }
@@ -159,7 +111,6 @@ fragment QuestionQueueFragment on Event {
       hasNextPage
     }
   }
-  ...DndQuestionsFragment
 }
 
 fragment QuestionQuoteFragment on EventQuestion {
@@ -173,9 +124,15 @@ fragment QuestionStatsFragment on EventQuestion {
   likedByCount
 }
 
+fragment QueueButtonFragment on EventQuestion {
+  id
+  position
+}
+
 fragment QuoteFragment on EventQuestion {
   id
-  ...QuestionCardFragment
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
 }
 
 fragment SpeakerListFragment on Event {
@@ -209,7 +166,6 @@ fragment useQuestionListFragment on Event {
           ...QuestionQuoteFragment
           id
         }
-        ...QuestionCardFragment
         ...QuestionActionsFragment
         ...QuestionAuthorFragment
         ...QuestionContentFragment
@@ -340,10 +296,17 @@ v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "likedByCount",
+  "name": "position",
   "storageKey": null
 },
 v15 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "likedByCount",
+  "storageKey": null
+},
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "PageInfo",
@@ -561,6 +524,7 @@ return {
                             "storageKey": null
                           },
                           (v14/*: any*/),
+                          (v15/*: any*/),
                           (v4/*: any*/)
                         ],
                         "storageKey": null
@@ -568,7 +532,7 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v15/*: any*/),
+                  (v16/*: any*/),
                   {
                     "kind": "ClientExtension",
                     "selections": [
@@ -628,15 +592,9 @@ return {
                           (v2/*: any*/),
                           (v12/*: any*/),
                           (v13/*: any*/),
-                          (v14/*: any*/),
+                          (v15/*: any*/),
                           (v9/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "position",
-                            "storageKey": null
-                          },
+                          (v14/*: any*/),
                           (v4/*: any*/)
                         ],
                         "storageKey": null
@@ -644,7 +602,7 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v15/*: any*/)
+                  (v16/*: any*/)
                 ],
                 "storageKey": "queuedQuestions(after:\"\",first:100)"
               },
@@ -654,15 +612,6 @@ return {
                 "filters": null,
                 "handle": "connection",
                 "key": "QuestionQueueFragment_queuedQuestions",
-                "kind": "LinkedHandle",
-                "name": "queuedQuestions"
-              },
-              {
-                "alias": null,
-                "args": (v8/*: any*/),
-                "filters": null,
-                "handle": "connection",
-                "key": "DraggableListFragment_queuedQuestions",
                 "kind": "LinkedHandle",
                 "name": "queuedQuestions"
               },
@@ -725,12 +674,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "81b6b97c63e6104cd9095484c12f2dae",
+    "cacheID": "83862c94a0f516dc9f62f28a01aaf5c8",
     "id": null,
     "metadata": {},
     "name": "EventLiveQuery",
     "operationKind": "query",
-    "text": "query EventLiveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment DndQuestionsFragment on Event {\n  id\n  ...DraggableListFragment\n}\n\nfragment DraggableCardFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n  ...QuestionStatsFragment\n}\n\nfragment DraggableListFragment on Event {\n  id\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        ...DraggableCardFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n  ...QuestionQueueFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCardFragment on EventQuestion {\n  id\n  question\n  refQuestion {\n    id\n    question\n    createdBy {\n      id\n      firstName\n    }\n    createdAt\n  }\n  createdBy {\n    id\n    firstName\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQueueFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...DndQuestionsFragment\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionCardFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  questions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionCardFragment\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query EventLiveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      ...EventSidebarFragment\n      ...EventVideoFragment\n    }\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n  ...QuestionQueueFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQueueFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  questions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

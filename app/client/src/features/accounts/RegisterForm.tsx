@@ -1,24 +1,25 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, InputAdornment, Grid, Divider } from '@material-ui/core';
+import { Button, IconButton, InputAdornment, Grid, Divider, Avatar, Typography } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import BackIcon from '@material-ui/icons/ArrowBack';
+import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRouter } from 'next/router';
 import { graphql, useMutation } from 'react-relay';
 
-import { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
+import type { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useSnack, useForm, useUser } from '@local/hooks';
+import { useUser } from '@local/features/accounts';
+import { useSnack, useForm } from '@local/features/core';
 
 interface Props {
     onSuccess: () => void;
     onFailure: () => void;
+    secondaryActions?: React.ReactNode;
 }
 
 const initialState = {
@@ -41,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
         width: '75%',
         marginLeft: '12.5%',
     },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(4),
+    },
 }));
 const REGISTER_FORM_MUTATION = graphql`
     mutation RegisterFormMutation($input: RegistrationForm!) {
@@ -48,15 +57,12 @@ const REGISTER_FORM_MUTATION = graphql`
             isError
             message
             body {
-                id
-                firstName
-                lastName
-                email
+                ...useUserFragment
             }
         }
     }
 `;
-export function RegisterForm({ onSuccess, onFailure }: Props) {
+export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) {
     // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
@@ -71,17 +77,14 @@ export function RegisterForm({ onSuccess, onFailure }: Props) {
     const [, setUser] = useUser();
 
     // user feedback
-    const [snack] = useSnack();
-
-    // navigation
-    const router = useRouter();
+    const { displaySnack } = useSnack();
 
     function handleCommit(submittedForm: TRegisterForm) {
         commit({
             variables: { input: submittedForm },
             onCompleted({ register }) {
                 if (register.isError) {
-                    snack(register.message);
+                    displaySnack(register.message);
                     if (onFailure) onFailure();
                 } else {
                     setUser(register.body);
@@ -93,113 +96,119 @@ export function RegisterForm({ onSuccess, onFailure }: Props) {
     }
 
     return (
-        <Form onSubmit={handleSubmit(handleCommit)}>
-            <FormContent>
-                <TextField
-                    id='register-first-name'
-                    helperText={errors.firstName}
-                    required
-                    value={form.firstName}
-                    onChange={handleChange('firstName')}
-                    label='First Name'
-                    autoFocus
-                    error={Boolean(errors.firstName)}
-                />
-                <TextField
-                    id='register-last-name'
-                    helperText={errors.lastName}
-                    required
-                    value={form.lastName}
-                    onChange={handleChange('lastName')}
-                    label='Last Name'
-                    error={Boolean(errors.lastName)}
-                />
-                <TextField
-                    id='register-email'
-                    // eslint-disable-next-line quotes
-                    helperText={errors.email || "We'll never share your email"}
-                    required
-                    type='email'
-                    value={form.email}
-                    onChange={handleChange('email')}
-                    label='Email'
-                    error={Boolean(errors.email)}
-                />
-                <TextField
-                    id='register-password'
-                    required
-                    error={Boolean(errors.password)}
-                    helperText={errors.password || 'Passwords must be at least 8 characters'}
-                    type={isPassVisible ? 'text' : 'password'}
-                    value={form.password}
-                    onChange={handleChange('password')}
-                    label='Password'
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position='end'>
-                                <IconButton
-                                    aria-label='toggle password visibility'
-                                    onClick={() => setIsPassVisible(!isPassVisible)}
-                                    onMouseDown={(e) => e.preventDefault()}
-                                    edge='end'
-                                >
-                                    {isPassVisible ? (
-                                        <VisibilityOff color={errors.password ? 'error' : undefined} />
-                                    ) : (
-                                        <Visibility color={errors.password ? 'error' : undefined} />
-                                    )}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <TextField
-                    id='register-confirm-password'
-                    required
-                    error={Boolean(errors.confirmPassword)}
-                    helperText={errors.confirmPassword}
-                    type={isPassVisible ? 'text' : 'password'}
-                    value={form.confirmPassword}
-                    onChange={handleChange('confirmPassword')}
-                    label='Confirm Password'
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position='end'>
-                                <IconButton
-                                    aria-label='toggle password visibility'
-                                    onClick={() => setIsPassVisible(!isPassVisible)}
-                                    onMouseDown={(e) => e.preventDefault()}
-                                    edge='end'
-                                >
-                                    {isPassVisible ? (
-                                        <VisibilityOff color={errors.confirmPassword ? 'error' : undefined} />
-                                    ) : (
-                                        <Visibility color={errors.confirmPassword ? 'error' : undefined} />
-                                    )}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </FormContent>
-            <Grid container item direction='column' className={classes.btnGroup}>
-                <LoadingButton loading={isLoading}>
-                    <Button fullWidth type='submit' variant='contained' color='primary'>
-                        Register
-                    </Button>
-                </LoadingButton>
-                <Divider className={classes.divider} />
-                <Button
-                    fullWidth
-                    onClick={() => router.push('/login')}
-                    variant='outlined'
-                    color='primary'
-                    startIcon={<BackIcon />}
-                >
-                    Back To Login
-                </Button>
+        <Grid container justify='center'>
+            <Grid container item xs={12} direction='column' alignItems='center'>
+                <Avatar className={classes.avatar}>
+                    <AccountCirlceOutline />
+                </Avatar>
+                <Typography component='h1' variant='h5'>
+                    Register
+                </Typography>
             </Grid>
-        </Form>
+            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+                <FormContent>
+                    <TextField
+                        id='register-first-name'
+                        helperText={errors.firstName}
+                        required
+                        value={form.firstName}
+                        onChange={handleChange('firstName')}
+                        label='First Name'
+                        autoFocus
+                        error={Boolean(errors.firstName)}
+                    />
+                    <TextField
+                        id='register-last-name'
+                        helperText={errors.lastName}
+                        required
+                        value={form.lastName}
+                        onChange={handleChange('lastName')}
+                        label='Last Name'
+                        error={Boolean(errors.lastName)}
+                    />
+                    <TextField
+                        id='register-email'
+                        // eslint-disable-next-line quotes
+                        helperText={errors.email || "We'll never share your email"}
+                        required
+                        type='email'
+                        value={form.email}
+                        onChange={handleChange('email')}
+                        label='Email'
+                        error={Boolean(errors.email)}
+                    />
+                    <TextField
+                        id='register-password'
+                        required
+                        error={Boolean(errors.password)}
+                        helperText={errors.password || 'Passwords must be at least 8 characters'}
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={form.password}
+                        onChange={handleChange('password')}
+                        label='Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        id='register-confirm-password'
+                        required
+                        error={Boolean(errors.confirmPassword)}
+                        helperText={errors.confirmPassword}
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={form.confirmPassword}
+                        onChange={handleChange('confirmPassword')}
+                        label='Confirm Password'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.confirmPassword ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.confirmPassword ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </FormContent>
+                <Grid container item direction='column' className={classes.btnGroup}>
+                    <LoadingButton loading={isLoading}>
+                        <Button fullWidth type='submit' variant='contained' color='primary'>
+                            Register
+                        </Button>
+                    </LoadingButton>
+                    {secondaryActions && (
+                        <>
+                            <Divider className={classes.divider} />
+                            {secondaryActions}
+                        </>
+                    )}
+                </Grid>
+            </Form>
+        </Grid>
     );
 }
 

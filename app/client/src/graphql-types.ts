@@ -12,6 +12,11 @@ export type Scalars = {
   Date: Date;
 };
 
+export type AddQuestionToQueue = {
+  questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
+};
+
 export type AlterLike = {
   questionId: Scalars['ID'];
   /** True if the user is attempting to like the question; false if they are trying to remove a like */
@@ -31,9 +36,15 @@ export type CreateFeedback = {
   message: Scalars['String'];
 };
 
+/** Info necessary for adding a member to an organization */
+export type CreateMember = {
+  email: Scalars['String'];
+  orgId: Scalars['ID'];
+};
+
 export type CreateModerator = {
   email: Scalars['String'];
-  eventId: Scalars['String'];
+  eventId: Scalars['ID'];
 };
 
 /** Necessary information for org creation */
@@ -70,9 +81,14 @@ export type DeleteEvent = {
   eventId: Scalars['String'];
 };
 
+export type DeleteMember = {
+  userId: Scalars['ID'];
+  orgId: Scalars['ID'];
+};
+
 export type DeleteModerator = {
-  userId: Scalars['String'];
-  eventId: Scalars['String'];
+  userId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 /** Information necessary for deleting an org */
@@ -387,11 +403,12 @@ export type ModeratorMutationResponse = MutationResponse & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Adds a new member and returns the new user added */
-  addMember?: Maybe<User>;
+  addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
   createFeedback?: Maybe<EventLiveFeedback>;
+  /** Adds a new member and returns the new user added */
+  createMember: UserMutationResponse;
   /** Add a new moderator to the given event */
   createModerator: ModeratorMutationResponse;
   createOrganization: OrganizationMutationResponse;
@@ -399,9 +416,11 @@ export type Mutation = {
   createSpeaker: EventSpeakerMutationResponse;
   createVideo: EventVideoMutationResponse;
   deleteEvent: EventMutationResponse;
+  /** Delete a member from the organization */
+  deleteMember: UserMutationResponse;
   /** Removes a moderator from a given event */
   deleteModerator: ModeratorMutationResponse;
-  deleteOrganizationById: OrganizationMutationResponse;
+  deleteOrganization: OrganizationMutationResponse;
   deleteSpeaker: EventSpeakerMutationResponse;
   deleteVideo: EventVideoMutationResponse;
   /** End the event so that it is not live */
@@ -415,19 +434,19 @@ export type Mutation = {
   /** Go to the previous question */
   prevQuestion: Scalars['Int'];
   register: UserMutationResponse;
-  reorderQueue?: Maybe<EventQuestion>;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
-  updateOrganizationById: OrganizationMutationResponse;
+  updateOrganization: OrganizationMutationResponse;
+  updateQuestionPosition: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
 
 
-export type MutationAddMemberArgs = {
-  input: NewMember;
+export type MutationAddQuestionToQueueArgs = {
+  input: AddQuestionToQueue;
 };
 
 
@@ -443,6 +462,11 @@ export type MutationCreateEventArgs = {
 
 export type MutationCreateFeedbackArgs = {
   input?: Maybe<CreateFeedback>;
+};
+
+
+export type MutationCreateMemberArgs = {
+  input: CreateMember;
 };
 
 
@@ -476,12 +500,17 @@ export type MutationDeleteEventArgs = {
 };
 
 
+export type MutationDeleteMemberArgs = {
+  input: DeleteMember;
+};
+
+
 export type MutationDeleteModeratorArgs = {
   input: DeleteModerator;
 };
 
 
-export type MutationDeleteOrganizationByIdArgs = {
+export type MutationDeleteOrganizationArgs = {
   input: DeleteOrganization;
 };
 
@@ -526,11 +555,6 @@ export type MutationRegisterArgs = {
 };
 
 
-export type MutationReorderQueueArgs = {
-  input: ReorderQuestion;
-};
-
-
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
 };
@@ -546,8 +570,13 @@ export type MutationUpdateModeratorArgs = {
 };
 
 
-export type MutationUpdateOrganizationByIdArgs = {
+export type MutationUpdateOrganizationArgs = {
   input: UpdateOrganization;
+};
+
+
+export type MutationUpdateQuestionPositionArgs = {
+  input: UpdateQuestionPosition;
 };
 
 
@@ -563,11 +592,6 @@ export type MutationUpdateVideoArgs = {
 export type MutationResponse = {
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-};
-
-/** Info necessary for adding a member to an organization */
-export type NewMember = {
-  email: Scalars['String'];
 };
 
 export type Node = {
@@ -660,22 +684,12 @@ export type RegistrationForm = {
   email: Scalars['String'];
 };
 
-export type ReorderQuestion = {
-  questionId: Scalars['ID'];
-  position: Scalars['Int'];
-  eventId: Scalars['ID'];
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
-  eventQuestionCreated: EventQuestionEdge;
-  likeCountChanged: EventQuestionEdge;
   /** Question subscription for all operations performed on questions */
   questionCRUD: EventQuestionEdge;
-  /** Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update */
-  questionLikeOrPositionUpdate: EventQuestion;
 };
 
 
@@ -684,22 +698,7 @@ export type SubscriptionEventLiveFeedbackCreatedArgs = {
 };
 
 
-export type SubscriptionEventQuestionCreatedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionLikeCountChangedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type SubscriptionQuestionCrudArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionQuestionLikeOrPositionUpdateArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -717,14 +716,20 @@ export type UpdateEvent = {
 };
 
 export type UpdateModerator = {
-  userId: Scalars['String'];
-  eventId: Scalars['String'];
+  userId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 /** Information that may be updated by the user */
 export type UpdateOrganization = {
   orgId: Scalars['ID'];
   name: Scalars['String'];
+};
+
+export type UpdateQuestionPosition = {
+  questionId: Scalars['ID'];
+  position: Scalars['Int'];
+  eventId: Scalars['ID'];
 };
 
 export type UpdateSpeaker = {

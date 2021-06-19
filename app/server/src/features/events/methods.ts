@@ -2,6 +2,7 @@
 import { Event, PrismaClient } from '@app/prisma';
 import { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 import { errors, filterFields } from '@local/features/utils';
+import { isMemberOfOrg } from '@local/features/permissions';
 
 export { isModerator } from './moderation/methods';
 
@@ -10,15 +11,6 @@ export { isModerator } from './moderation/methods';
  */
 export async function findEventById(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({ where: { id: eventId } });
-}
-
-/**
- * permisison check to see if a user can create an event
- */
-export async function isMember(userId: string, orgId: string, prisma: PrismaClient) {
-    // check if the user is part of the organization they are trying to create an event for
-    const _isMember = await prisma.orgMember.findUnique({ where: { userId_orgId: { userId, orgId } } });
-    return _isMember;
 }
 
 /**
@@ -45,7 +37,7 @@ type Settings = Omit<
 export async function createEvent(userId: string, prisma: PrismaClient, input: CreateEvent) {
     const { title, description, topic, startDateTime, endDateTime, orgId } = input;
 
-    if (!isMember(userId, orgId, prisma)) throw new Error(errors.permissions);
+    if (!isMemberOfOrg(userId, orgId, prisma)) throw new Error(errors.permissions);
 
     // default values for different settings
     const defaultSettings: Settings = {

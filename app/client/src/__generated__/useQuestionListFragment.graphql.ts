@@ -19,7 +19,7 @@ export type useQuestionListFragment = {
                 readonly refQuestion: {
                     readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
                 } | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment" | "QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
         }> | null;
     } | null;
@@ -153,11 +153,6 @@ return {
                 {
                   "args": null,
                   "kind": "FragmentSpread",
-                  "name": "QuestionCardFragment"
-                },
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
                   "name": "QuestionActionsFragment"
                 },
                 {
@@ -226,5 +221,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'aa7fc2387ba1b4e7a3769202cc3211b3';
+(node as any).hash = '6f705b87a0334d149e520f81b9832d43';
 export default node;

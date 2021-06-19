@@ -4,7 +4,7 @@ import { graphql } from 'react-relay';
 import type { useUserFragment$key } from '@local/__generated__/useUserFragment.graphql';
 
 // NOTE: don't use React.useContext with either of the below,
-// instead use the "useUser" hook found in the @local/hooks folder
+// instead use the "useUser" hook found in this same folder
 type TState = useUserFragment$key | null | undefined; // undefined means it's not in the tree
 // read note above
 export const UserContext = React.createContext<TState>(undefined);

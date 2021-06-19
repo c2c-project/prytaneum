@@ -61,8 +61,14 @@ input DeleteOrganization {
 """
 Info necessary for adding a member to an organization
 """
-input NewMember {
+input CreateMember {
     email: String!
+    orgId: ID! 
+}
+
+input DeleteMember {
+    userId: ID!
+    orgId: ID!
 }
 
 type OrganizationMutationResponse implements MutationResponse{
@@ -73,13 +79,18 @@ type OrganizationMutationResponse implements MutationResponse{
 
 type Mutation {
     createOrganization(input: CreateOrganization!): OrganizationMutationResponse!
-    updateOrganizationById(input: UpdateOrganization!): OrganizationMutationResponse!
-    deleteOrganizationById(input: DeleteOrganization!): OrganizationMutationResponse!
+    updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+    deleteOrganization(input: DeleteOrganization!): OrganizationMutationResponse!
 
     """
     Adds a new member and returns the new user added
     """
-    addMember(input: NewMember!): User
+    createMember(input: CreateMember!): UserMutationResponse!
+
+    """
+    Delete a member from the organization
+    """
+    deleteMember(input: DeleteMember!): UserMutationResponse!
 }
 
 type Query {
