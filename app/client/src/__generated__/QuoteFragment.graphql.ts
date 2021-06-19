@@ -6,7 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type QuoteFragment = {
     readonly id: string;
-    readonly " $fragmentRefs": FragmentRefs<"QuestionCardFragment">;
+    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
     readonly " $refType": "QuoteFragment";
 };
 export type QuoteFragment$data = QuoteFragment;
@@ -33,11 +33,16 @@ const node: ReaderFragment = {
     {
       "args": null,
       "kind": "FragmentSpread",
-      "name": "QuestionCardFragment"
+      "name": "QuestionAuthorFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "QuestionContentFragment"
     }
   ],
   "type": "EventQuestion",
   "abstractKey": null
 };
-(node as any).hash = '0eba9155c131bb028f9a7594e5227923';
+(node as any).hash = 'ab7d05c6a423d28cf8d30638659c8caf';
 export default node;

@@ -1,8 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Grid, Typography } from '@material-ui/core';
-
-import { Props as QuestionProps } from '../QuestionCard';
+import { Typography } from '@material-ui/core';
 
 export function EmptyMessage() {
     return (

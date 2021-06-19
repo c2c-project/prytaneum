@@ -8,7 +8,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { EventQuestion as Question } from '@local/graphql-types';
 import { incrementQueue, decrementQueue, jumpToCurrent } from '@local/reducers';
 import usePlaylist from '../usePlaylist';
-import QuestionCard from '../QuestionCard';
+// import QuestionCard from '../QuestionCard';
 
 export interface CarouselProps {
     question: Question | undefined;
@@ -41,14 +41,7 @@ export function QuestionCarousel({ question, onClickNext, onClickPrev, hasNext, 
     return (
         <div className={classes.root}>
             {/* <div className={classes.flex}> */}
-            {question && (
-                <QuestionCard
-                    className={classes.flex}
-                    CardProps={{ elevation: 0 }}
-                    question={question}
-                    quote={question.refQuestion}
-                />
-            )}
+            {question && <div>todod</div>}
             {!question && <Typography>No Question to display yet</Typography>}
             {/* </div> */}
             <Divider />

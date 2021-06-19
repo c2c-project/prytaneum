@@ -11,7 +11,6 @@ export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
             cursor
             node {
                 id
-                ...QuestionCardFragment
                 ...QuestionStatsFragment
             }
         }
@@ -36,7 +35,6 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
                     refQuestion {
                         ...QuestionQuoteFragment
                     }
-                    ...QuestionCardFragment
                     ...QuestionActionsFragment
                     ...QuestionAuthorFragment
                     ...QuestionContentFragment
