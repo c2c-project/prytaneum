@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { EventLiveFeedback, EventQuestion } from '@local/graphql-types';
+import { EventLiveFeedback } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
 import * as Moderation from './methods';
 
@@ -14,25 +14,38 @@ export const resolvers: Resolvers = {
             const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, args.input);
             return toQuestionId(hiddenQuestion);
         },
-        async reorderQueue(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            const updatedQuestion = await Moderation.reorderQuestion(ctx.viewer.id, ctx.prisma, args.input);
-            const questionWithGlobalId = toQuestionId(updatedQuestion);
-            ctx.pubsub.publish({
-                topic: 'questionPositionUpdate',
-                payload: {
-                    questionPositionUpdate: questionWithGlobalId,
-                },
+        async updateQuestionPosition(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    questionId,
+                });
+                const questionWithGlobalId = toQuestionId(updatedQuestion);
+                ctx.pubsub.publish({
+                    topic: 'questionPositionUpdate',
+                    payload: {
+                        questionPositionUpdate: questionWithGlobalId,
+                    },
+                });
+                return {
+                    node: questionWithGlobalId,
+                    cursor: questionWithGlobalId.createdAt.getMilliseconds().toString(),
+                };
             });
-            return questionWithGlobalId;
         },
         nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, 1);
+            const { id: eventId } = fromGlobalId(args.eventId);
+            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
         },
         prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, args.eventId, -1);
+            const { id: eventId } = fromGlobalId(args.eventId);
+            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
         },
         async createModerator(parent, args, ctx, info) {
             return runMutation(async () => {
@@ -66,6 +79,30 @@ export const resolvers: Resolvers = {
                     userId,
                 });
                 return toUserId(deletedMod);
+            });
+        },
+        addQuestionToQueue(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    questionId,
+                });
+                const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const edge = {
+                    cursor: updatedQuestion.createdAt.getMilliseconds().toString(),
+                    node: questionWithGlobalId,
+                };
+                ctx.pubsub.publish({
+                    topic: 'questionCRUD',
+                    payload: {
+                        questionCRUD: edge,
+                    },
+                });
+                return edge;
             });
         },
     },

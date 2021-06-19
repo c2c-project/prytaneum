@@ -8,7 +8,7 @@ input HideQuestion {
     toggleTo: Boolean!
 }
 
-input ReorderQuestion {
+input UpdateQuestionPosition {
     questionId: ID!
     position: Int!
     eventId: ID!
@@ -16,17 +16,22 @@ input ReorderQuestion {
 
 input CreateModerator {
     email: String!
-    eventId: String!
+    eventId: ID!
 }
 
 input DeleteModerator {
-    userId: String!
-    eventId: String!
+    userId: ID!
+    eventId: ID!
 }
 
 input UpdateModerator {
-    userId: String!
-    eventId: String!
+    userId: ID!
+    eventId: ID!
+}
+
+input AddQuestionToQueue {
+    questionId: ID!
+    eventId: ID!
 }
 
 type ModeratorMutationResponse implements MutationResponse {
@@ -37,7 +42,8 @@ type ModeratorMutationResponse implements MutationResponse {
 
 type Mutation {
     hideQuestion(input: HideQuestion!): EventQuestion
-    reorderQueue(input: ReorderQuestion!): EventQuestion
+    updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
+    addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
 
     """
     Add a new moderator to the given event

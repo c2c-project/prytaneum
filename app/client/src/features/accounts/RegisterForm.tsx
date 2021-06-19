@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { graphql, useMutation } from 'react-relay';
 
-import { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
+import type { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
@@ -48,10 +48,7 @@ const REGISTER_FORM_MUTATION = graphql`
             isError
             message
             body {
-                id
-                firstName
-                lastName
-                email
+                ...useUserFragment
             }
         }
     }

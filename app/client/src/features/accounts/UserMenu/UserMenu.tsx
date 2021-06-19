@@ -100,18 +100,18 @@ function UserName() {
 export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
-    const isSignedIn = React.useMemo(() => !!data.me, [data]);
-    const [, setUser] = useUser();
+    const [user, setUser] = useUser();
     const isClient = useIsClient();
     const classes = useStyles();
+    const isSignedIn = React.useMemo(() => !!user, [user]);
 
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
 
     React.useEffect(() => {
-        if (data) setUser(data.me);
-    }, [data, setUser]);
+        if (data && !user) setUser(data.me);
+    }, [data, setUser, user]);
 
     // if server, then default to rendering desktop version and not mobile
     // TODO: determine if the user is on desktop or mobile and render appropriately

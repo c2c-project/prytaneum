@@ -6,7 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type QuestionActionsFragment = {
     readonly id: string;
-    readonly " $fragmentRefs": FragmentRefs<"QuoteFragment" | "LikeFragment">;
+    readonly " $fragmentRefs": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment">;
     readonly " $refType": "QuestionActionsFragment";
 };
 export type QuestionActionsFragment$data = QuestionActionsFragment;
@@ -39,10 +39,15 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "LikeFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "QueueButtonFragment"
     }
   ],
   "type": "EventQuestion",
   "abstractKey": null
 };
-(node as any).hash = '2963ab406aaae685703284e9628d6911';
+(node as any).hash = 'fa1512172fd81210a0928ac95cd34c49';
 export default node;

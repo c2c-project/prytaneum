@@ -1,6 +1,13 @@
-import { PrismaClient } from '@app/prisma';
+import { EventQuestion, PrismaClient } from '@app/prisma';
 import { errors } from '@local/features/utils';
-import { CreateModerator, DeleteModerator, HideQuestion, ReorderQuestion, UpdateModerator } from '@local/graphql-types';
+import {
+    CreateModerator,
+    DeleteModerator,
+    HideQuestion,
+    ReorderQuestion,
+    UpdateModerator,
+    AddQuestionToQueue,
+} from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 
 async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
@@ -51,7 +58,7 @@ export async function hideQuestionById(userId: string, prisma: PrismaClient, inp
 /**
  * update question order by updating a single questions position value
  */
-export async function reorderQuestion(userId: string, prisma: PrismaClient, input: ReorderQuestion) {
+export async function updateQuestionPosition(userId: string, prisma: PrismaClient, input: ReorderQuestion) {
     const { questionId, eventId, position } = input;
 
     // permission check
@@ -111,14 +118,32 @@ export async function isEventRelevant(eventId: string, prisma: PrismaClient, fee
 
 /**
  * decrements or increments the current question
+ * NOTE: race condition is here!!, probably better to use another server that would instantiate a session for us during a live event
+ * but this is sufficient for now
+ * OR another solution is to use $queryRaw and $executeRaw to write the appropriate logic as one sql query/statement
  */
-export async function changeCurrentQuestion(userId: string, prisma: PrismaClient, id: string, change: 1 | -1) {
-    const hasPermission = await isModerator(userId, id, prisma);
+export async function changeCurrentQuestion(userId: string, prisma: PrismaClient, eventId: string, change: 1 | -1) {
+    const hasPermission = await isModerator(userId, eventId, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
+    // first find the event's current question
+    const queryResult = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: { currentQuestion: true },
+    });
+    if (!queryResult) throw new Error(errors.DNE('Event'));
+
+    const question = await prisma.eventQuestion.findFirst({
+        where: { position: { gt: queryResult.currentQuestion } },
+        take: 1,
+        orderBy: { position: change === -1 ? 'desc' : 'asc' },
+    });
+
+    if (!question) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+
     const result = await prisma.event.update({
-        where: { id },
-        data: { currentQuestion: { increment: change } },
+        where: { id: eventId },
+        data: { currentQuestion: question.position },
         select: { currentQuestion: true },
     });
     return result.currentQuestion;
@@ -141,4 +166,29 @@ export async function deleteModerator(userId: string, prisma: PrismaClient, inpu
         where: { eventId_userId: { eventId, userId: modId } },
     });
     return prisma.user.findUnique({ where: { id: deletedModerator.userId } });
+}
+
+export async function addQuestionToQueue(userId: string, prisma: PrismaClient, input: AddQuestionToQueue) {
+    // permission check
+    const hasPermission = await isModerator(userId, input.eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+
+    const currentTimeMs = new Date().getUTCMilliseconds();
+    const currentTimeMsStr = currentTimeMs.toString();
+
+    // using 7 digits since most events are ~1 hr and there are 7 digits of ms in 1 hr
+    // (there's no reasoning for why I chose do this, just had to choose an amount)
+    const calculatedPosition = parseInt(currentTimeMsStr.slice(-7), 10);
+
+    // check if id is already non-negative
+    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
+    // if the question isn't found with the -1 position, then it's already in queue
+    if (!question) throw new Error('Question is already in queue');
+
+    return prisma.eventQuestion.update({
+        where: { id: input.questionId },
+        data: {
+            position: calculatedPosition,
+        },
+    });
 }

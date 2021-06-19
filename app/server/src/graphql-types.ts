@@ -127,13 +127,16 @@ export type Mutation = {
     /** End the event so that it is not live */
     endEvent: EventMutationResponse;
     createOrganization: OrganizationMutationResponse;
-    updateOrganizationById: OrganizationMutationResponse;
-    deleteOrganizationById: OrganizationMutationResponse;
+    updateOrganization: OrganizationMutationResponse;
+    deleteOrganization: OrganizationMutationResponse;
     /** Adds a new member and returns the new user added */
-    addMember?: Maybe<User>;
+    createMember: UserMutationResponse;
+    /** Delete a member from the organization */
+    deleteMember: UserMutationResponse;
     createFeedback?: Maybe<EventLiveFeedback>;
     hideQuestion?: Maybe<EventQuestion>;
-    reorderQueue?: Maybe<EventQuestion>;
+    updateQuestionPosition: EventQuestionMutationResponse;
+    addQuestionToQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
@@ -185,16 +188,20 @@ export type MutationcreateOrganizationArgs = {
     input: CreateOrganization;
 };
 
-export type MutationupdateOrganizationByIdArgs = {
+export type MutationupdateOrganizationArgs = {
     input: UpdateOrganization;
 };
 
-export type MutationdeleteOrganizationByIdArgs = {
+export type MutationdeleteOrganizationArgs = {
     input: DeleteOrganization;
 };
 
-export type MutationaddMemberArgs = {
-    input: NewMember;
+export type MutationcreateMemberArgs = {
+    input: CreateMember;
+};
+
+export type MutationdeleteMemberArgs = {
+    input: DeleteMember;
 };
 
 export type MutationcreateFeedbackArgs = {
@@ -205,8 +212,12 @@ export type MutationhideQuestionArgs = {
     input: HideQuestion;
 };
 
-export type MutationreorderQueueArgs = {
-    input: ReorderQuestion;
+export type MutationupdateQuestionPositionArgs = {
+    input: UpdateQuestionPosition;
+};
+
+export type MutationaddQuestionToQueueArgs = {
+    input: AddQuestionToQueue;
 };
 
 export type MutationcreateModeratorArgs = {
@@ -446,8 +457,14 @@ export type DeleteOrganization = {
 };
 
 /** Info necessary for adding a member to an organization */
-export type NewMember = {
+export type CreateMember = {
     email: Scalars['String'];
+    orgId: Scalars['ID'];
+};
+
+export type DeleteMember = {
+    userId: Scalars['ID'];
+    orgId: Scalars['ID'];
 };
 
 export type OrganizationMutationResponse = MutationResponse & {
@@ -489,7 +506,7 @@ export type HideQuestion = {
     toggleTo: Scalars['Boolean'];
 };
 
-export type ReorderQuestion = {
+export type UpdateQuestionPosition = {
     questionId: Scalars['ID'];
     position: Scalars['Int'];
     eventId: Scalars['ID'];
@@ -497,17 +514,22 @@ export type ReorderQuestion = {
 
 export type CreateModerator = {
     email: Scalars['String'];
-    eventId: Scalars['String'];
+    eventId: Scalars['ID'];
 };
 
 export type DeleteModerator = {
-    userId: Scalars['String'];
-    eventId: Scalars['String'];
+    userId: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type UpdateModerator = {
-    userId: Scalars['String'];
-    eventId: Scalars['String'];
+    userId: Scalars['ID'];
+    eventId: Scalars['ID'];
+};
+
+export type AddQuestionToQueue = {
+    questionId: Scalars['ID'];
+    eventId: Scalars['ID'];
 };
 
 export type ModeratorMutationResponse = MutationResponse & {
@@ -863,17 +885,19 @@ export type ResolversTypes = {
     CreateOrganization: CreateOrganization;
     UpdateOrganization: UpdateOrganization;
     DeleteOrganization: DeleteOrganization;
-    NewMember: NewMember;
+    CreateMember: CreateMember;
+    DeleteMember: DeleteMember;
     OrganizationMutationResponse: ResolverTypeWrapper<OrganizationMutationResponse>;
     EventLiveFeedback: ResolverTypeWrapper<EventLiveFeedback>;
     EventLiveFeedbackEdge: ResolverTypeWrapper<EventLiveFeedbackEdge>;
     EventLiveFeedbackConnection: ResolverTypeWrapper<EventLiveFeedbackConnection>;
     CreateFeedback: CreateFeedback;
     HideQuestion: HideQuestion;
-    ReorderQuestion: ReorderQuestion;
+    UpdateQuestionPosition: UpdateQuestionPosition;
     CreateModerator: CreateModerator;
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
+    AddQuestionToQueue: AddQuestionToQueue;
     ModeratorMutationResponse: ResolverTypeWrapper<ModeratorMutationResponse>;
     Subscription: ResolverTypeWrapper<{}>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
@@ -948,17 +972,19 @@ export type ResolversParentTypes = {
     CreateOrganization: CreateOrganization;
     UpdateOrganization: UpdateOrganization;
     DeleteOrganization: DeleteOrganization;
-    NewMember: NewMember;
+    CreateMember: CreateMember;
+    DeleteMember: DeleteMember;
     OrganizationMutationResponse: OrganizationMutationResponse;
     EventLiveFeedback: EventLiveFeedback;
     EventLiveFeedbackEdge: EventLiveFeedbackEdge;
     EventLiveFeedbackConnection: EventLiveFeedbackConnection;
     CreateFeedback: CreateFeedback;
     HideQuestion: HideQuestion;
-    ReorderQuestion: ReorderQuestion;
+    UpdateQuestionPosition: UpdateQuestionPosition;
     CreateModerator: CreateModerator;
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
+    AddQuestionToQueue: AddQuestionToQueue;
     ModeratorMutationResponse: ModeratorMutationResponse;
     Subscription: {};
     EventParticipant: EventParticipant;
@@ -1153,23 +1179,29 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationcreateOrganizationArgs, 'input'>
     >;
-    updateOrganizationById?: Resolver<
+    updateOrganization?: Resolver<
         ResolversTypes['OrganizationMutationResponse'],
         ParentType,
         ContextType,
-        RequireFields<MutationupdateOrganizationByIdArgs, 'input'>
+        RequireFields<MutationupdateOrganizationArgs, 'input'>
     >;
-    deleteOrganizationById?: Resolver<
+    deleteOrganization?: Resolver<
         ResolversTypes['OrganizationMutationResponse'],
         ParentType,
         ContextType,
-        RequireFields<MutationdeleteOrganizationByIdArgs, 'input'>
+        RequireFields<MutationdeleteOrganizationArgs, 'input'>
     >;
-    addMember?: Resolver<
-        Maybe<ResolversTypes['User']>,
+    createMember?: Resolver<
+        ResolversTypes['UserMutationResponse'],
         ParentType,
         ContextType,
-        RequireFields<MutationaddMemberArgs, 'input'>
+        RequireFields<MutationcreateMemberArgs, 'input'>
+    >;
+    deleteMember?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationdeleteMemberArgs, 'input'>
     >;
     createFeedback?: Resolver<
         Maybe<ResolversTypes['EventLiveFeedback']>,
@@ -1183,11 +1215,17 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationhideQuestionArgs, 'input'>
     >;
-    reorderQueue?: Resolver<
-        Maybe<ResolversTypes['EventQuestion']>,
+    updateQuestionPosition?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
         ParentType,
         ContextType,
-        RequireFields<MutationreorderQueueArgs, 'input'>
+        RequireFields<MutationupdateQuestionPositionArgs, 'input'>
+    >;
+    addQuestionToQueue?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationaddQuestionToQueueArgs, 'input'>
     >;
     createModerator?: Resolver<
         ResolversTypes['ModeratorMutationResponse'],

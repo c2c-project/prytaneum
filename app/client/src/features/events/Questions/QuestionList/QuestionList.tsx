@@ -97,6 +97,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                         <QuestionAuthor fragmentRef={question} />
                                         {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
+                                        {isModerator && <QuestionStats fragmentRef={question} />}
                                         <QuestionActions
                                             className={classes.questionActions}
                                             like={!isModerator && Boolean(user)}
@@ -105,7 +106,6 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             connections={connections}
                                             fragmentRef={question}
                                         />
-                                        {isModerator && <QuestionStats fragmentRef={question} />}
                                     </Card>
                                 </ListItem>
                             ))}

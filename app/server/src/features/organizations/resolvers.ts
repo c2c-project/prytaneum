@@ -23,17 +23,41 @@ export const resolvers: Resolvers = {
                 return toOrgId(createdOrg);
             });
         },
-        async updateOrganizationById(parent, args, ctx, info) {
+        async updateOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const updatedOrg = await Organization.updateOrg(ctx.viewer.id, ctx.prisma, args.input);
                 return toOrgId(updatedOrg);
             });
         },
-        deleteOrganizationById() {
+        deleteOrganization() {
             // unimplemented on purpose
             // return Organization.deleteOrg();
             return { isError: true, message: 'Unable to delete', body: null };
+        },
+        createMember(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: orgId } = fromGlobalId(args.input.orgId);
+                const createdMember = await Organization.createMember(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    orgId,
+                });
+                return toUserId(createdMember);
+            });
+        },
+        deleteMember(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: orgId } = fromGlobalId(args.input.orgId);
+                const { id: userId } = fromGlobalId(args.input.userId);
+                const deletedMember = await Organization.deleteMember(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    orgId,
+                    userId,
+                });
+                return toUserId(deletedMember);
+            });
         },
     },
     Organization: {

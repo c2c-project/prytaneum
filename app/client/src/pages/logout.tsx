@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useMutation, graphql } from 'react-relay';
+import { useRouter } from 'next/router';
 
 // import { Redirect } from '@local/domains/Logical/Redirect';
 import { logoutMutation } from '@local/__generated__/logoutMutation.graphql';
@@ -17,24 +18,35 @@ const LOGOUT_MUTATION = graphql`
  *  @constructor Logout
  */
 export default function Logout() {
-    const [, setUser] = useUser();
+    const [user, setUser] = useUser();
     const { resetEnv } = useEnvironment();
-    const [isLoggedOut, setState] = React.useState(false);
-    const [runMutation, isLoading] = useMutation<logoutMutation>(LOGOUT_MUTATION);
+    const [runMutation] = useMutation<logoutMutation>(LOGOUT_MUTATION);
     const isClient = useIsClient();
+    const router = useRouter();
 
     React.useEffect(() => {
         if (isClient) {
             runMutation({
                 variables: {},
                 onCompleted() {
-                    setState(true);
                     resetEnv();
                     setUser(null);
                 },
             });
         }
-    }, [runMutation, isClient, resetEnv]);
+    }, [runMutation, isClient, resetEnv, setUser]);
 
-    if (isLoading || !isLoggedOut) return <Loader />;
+    React.useEffect(() => {
+        let handle: NodeJS.Timeout | undefined;
+        if (!user) {
+            handle = setTimeout(() => {
+                router.push('/login');
+            }, 1500);
+        }
+        return () => {
+            if (handle) clearTimeout(handle);
+        };
+    }, [user, router]);
+
+    return <Loader />;
 }

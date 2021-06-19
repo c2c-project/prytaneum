@@ -11,6 +11,7 @@ const QUESTION_ACTIONS_FRAGMENT = graphql`
         id
         ...QuoteFragment
         ...LikeFragment
+        ...QueueButtonFragment
     }
 `;
 
@@ -35,7 +36,7 @@ export function QuestionActions({
         <CardActions {...props}>
             {like && <Like fragmentRef={data} />}
             {quote && <Quote fragmentRef={data} connections={connections} />}
-            {/* {queue && <QueueButton />} */}
+            {queue && <QueueButton fragmentRef={data} />}
         </CardActions>
     );
 }
