@@ -152,12 +152,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:10.4.9"],
             ["@testing-library/user-event", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.4.2"],
             ["@types/babel__core", "npm:7.1.14"],
-            ["@types/deepmerge", "npm:2.2.0"],
             ["@types/faker", "npm:4.1.12"],
             ["@types/jest", "npm:26.0.23"],
-            ["@types/lodash", "npm:4.14.168"],
             ["@types/node", "npm:14.14.41"],
-            ["@types/papaparse", "npm:5.2.5"],
             ["@types/prop-types", "npm:15.7.3"],
             ["@types/react", "npm:17.0.4"],
             ["@types/react-beautiful-dnd", "npm:13.0.0"],
@@ -175,18 +172,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["chromatic", "npm:5.8.0"],
             ["clsx", "npm:1.1.1"],
             ["date-fns", "npm:2.21.1"],
-            ["deepmerge", "npm:4.2.2"],
             ["formik", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.2.6"],
             ["framer-motion", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:3.10.6"],
-            ["global", "npm:4.4.0"],
             ["graphql", "npm:15.5.0"],
             ["jest-environment-jsdom-sixteen", "npm:1.0.3"],
-            ["lodash", "npm:4.17.21"],
             ["next", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:10.1.3"],
             ["notistack", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:1.0.6"],
-            ["papaparse", "npm:5.3.0"],
             ["prop-types", "npm:15.7.2"],
-            ["qs", "npm:6.10.1"],
             ["react", "npm:17.0.2"],
             ["react-beautiful-dnd", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:13.1.0"],
             ["react-dom", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"],
@@ -9294,16 +9286,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/deepmerge", [
-        ["npm:2.2.0", {
-          "packageLocation": "./.yarn/cache/@types-deepmerge-npm-2.2.0-fdf10de75b-a2a38a7735.zip/node_modules/@types/deepmerge/",
-          "packageDependencies": [
-            ["@types/deepmerge", "npm:2.2.0"],
-            ["deepmerge", "npm:4.2.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@types/eslint", [
         ["npm:7.2.10", {
           "packageLocation": "./.yarn/cache/@types-eslint-npm-7.2.10-80d8a98db0-d85af4ab45.zip/node_modules/@types/eslint/",
@@ -9703,16 +9685,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-overlayscrollbars-npm-1.12.0-18c7d686ad-6ef727673b.zip/node_modules/@types/overlayscrollbars/",
           "packageDependencies": [
             ["@types/overlayscrollbars", "npm:1.12.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/papaparse", [
-        ["npm:5.2.5", {
-          "packageLocation": "./.yarn/cache/@types-papaparse-npm-5.2.5-06ba44752d-c212250add.zip/node_modules/@types/papaparse/",
-          "packageDependencies": [
-            ["@types/papaparse", "npm:5.2.5"],
-            ["@types/node", "npm:14.14.41"]
           ],
           "linkType": "HARD",
         }]
@@ -23016,15 +22988,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-71c60150b6.zip/node_modules/pako/",
           "packageDependencies": [
             ["pako", "npm:1.0.11"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["papaparse", [
-        ["npm:5.3.0", {
-          "packageLocation": "./.yarn/cache/papaparse-npm-5.3.0-3ff9a3446a-65a492e6dc.zip/node_modules/papaparse/",
-          "packageDependencies": [
-            ["papaparse", "npm:5.3.0"]
           ],
           "linkType": "HARD",
         }]
