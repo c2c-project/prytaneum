@@ -4,7 +4,7 @@ import {
     CreateModerator,
     DeleteModerator,
     HideQuestion,
-    ReorderQuestion,
+    UpdateQuestionPosition,
     UpdateModerator,
     AddQuestionToQueue,
 } from '@local/graphql-types';
@@ -58,7 +58,7 @@ export async function hideQuestionById(userId: string, prisma: PrismaClient, inp
 /**
  * update question order by updating a single questions position value
  */
-export async function updateQuestionPosition(userId: string, prisma: PrismaClient, input: ReorderQuestion) {
+export async function updateQuestionPosition(userId: string, prisma: PrismaClient, input: UpdateQuestionPosition) {
     const { questionId, eventId, position } = input;
 
     // permission check
