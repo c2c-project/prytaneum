@@ -12,6 +12,7 @@ import {
     useMediaQuery,
     IconButton,
     Button,
+    DialogContent,
 } from '@material-ui/core';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -23,9 +24,12 @@ import { useRouter } from 'next/router';
 import { Skeleton } from '@material-ui/lab';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
+import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import type { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
 import { useIsClient } from '@local/hooks';
 import { useUser } from '../useUser';
+import { LoginForm } from '../LoginForm';
+import { RegisterForm } from '../RegisterForm';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -97,6 +101,7 @@ function UserName() {
     );
 }
 
+type TButtons = 'login' | 'register' | null;
 export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
@@ -126,6 +131,11 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         setAnchorEl(currentTarget);
     }
 
+    const [type, setType] = React.useState<TButtons>(null);
+
+    const handleClick = (btnType: NonNullable<TButtons>) => () => setType(btnType);
+    const close = () => setType(null);
+
     const menuButton = React.useMemo(() => {
         if (isSmUp)
             return (
@@ -152,17 +162,22 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         <div className={className}>
             {!isSignedIn && (
                 <>
-                    <Button
-                        color='primary'
-                        variant='contained'
-                        className={classes.item}
-                        onClick={handleNavigation('/login')}
-                    >
+                    <Button color='primary' variant='contained' className={classes.item} onClick={handleClick('login')}>
                         Login
                     </Button>
-                    <Button color='primary' variant='outlined' onClick={handleNavigation('/register')}>
+                    <ResponsiveDialog open={type === 'login'} onClose={close}>
+                        <DialogContent>
+                            <LoginForm onSuccess={close} />
+                        </DialogContent>
+                    </ResponsiveDialog>
+                    <Button color='primary' variant='outlined' onClick={handleClick('register')}>
                         Register
                     </Button>
+                    <ResponsiveDialog open={type === 'register'} onClose={close}>
+                        <DialogContent>
+                            <RegisterForm onSuccess={close} />
+                        </DialogContent>
+                    </ResponsiveDialog>
                 </>
             )}
             {isSignedIn && (

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Avatar, Typography, Grid, Paper } from '@material-ui/core';
-import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
+import { Grid, Paper, Button } from '@material-ui/core';
+import BackIcon from '@material-ui/icons/ArrowBack';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -36,15 +36,20 @@ export default function RegisterPage() {
     return (
         <Grid container alignContent='center' className={classes.root} justify='center'>
             <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <AccountCirlceOutline />
-                </Avatar>
-                <Typography component='h1' variant='h5'>
-                    Register
-                </Typography>
-                <div className={classes.form}>
-                    <RegisterForm onSuccess={() => router.push('/app/home')} />
-                </div>
+                <RegisterForm
+                    onSuccess={() => router.push('/app/home')}
+                    secondaryActions={
+                        <Button
+                            fullWidth
+                            onClick={() => router.push('/login')}
+                            variant='outlined'
+                            color='primary'
+                            startIcon={<BackIcon />}
+                        >
+                            Back To Login
+                        </Button>
+                    }
+                />
             </Paper>
         </Grid>
     );
