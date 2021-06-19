@@ -6,7 +6,7 @@ import { graphql, useMutation, useFragment } from 'react-relay';
 import type { QueueButtonMutation } from '@local/__generated__/QueueButtonMutation.graphql';
 import type { QueueButtonFragment$key } from '@local/__generated__/QueueButtonFragment.graphql';
 import { useEvent } from '@local/features/events';
-import { useConnection } from '@local/hooks';
+import { useConnection } from '@local/features/core';
 
 export interface QueueButtonProps {
     fragmentRef: QueueButtonFragment$key;

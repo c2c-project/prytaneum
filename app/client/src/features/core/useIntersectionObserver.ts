@@ -1,9 +1,6 @@
 import * as React from 'react';
 
-export default function useIntersectionObserver(
-    onIntersect: IntersectionObserverCallback,
-    options?: IntersectionObserverInit
-) {
+export function useIntersectionObserver(onIntersect: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     const ref = React.useRef<IntersectionObserver | null>(null);
 
     const getObserver = React.useCallback(() => {

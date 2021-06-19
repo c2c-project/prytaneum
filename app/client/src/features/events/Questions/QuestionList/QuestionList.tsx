@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { Grid, Card, List, ListItem } from '@material-ui/core';
-import { Pause, PlayArrow } from '@material-ui/icons';
+// import { Pause, PlayArrow } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -16,7 +16,6 @@ import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
 import { QuestionQuote } from '../QuestionQuote';
 import { QuestionStats } from '../QuestionStats';
-import { EmptyMessage, RefreshMessage } from './components';
 // import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
 

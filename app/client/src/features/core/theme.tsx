@@ -90,12 +90,12 @@ const base = createMuiTheme({
     },
 });
 
-export interface Themes {
+export interface TThemes {
     light: Theme;
     dark: Theme;
 }
 
-const themes: Themes = {
+export const themes: TThemes = {
     dark: createMuiTheme({
         ...base,
         palette: {
@@ -114,5 +114,3 @@ const themes: Themes = {
         },
     }),
 };
-
-export default themes;

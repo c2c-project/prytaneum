@@ -5,7 +5,7 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { TextField } from '@local/components/TextField';
-import { useForm } from '@local/hooks/useForm';
+import { useForm } from '@local/features/core';
 import { FormTitle } from '@local/components/FormTitle';
 
 export type TVideoForm = { url: string; lang: string };

@@ -14,8 +14,7 @@ import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
-import { useSnack } from '@local/features/core';
-import { useForm } from '@local/hooks';
+import { useSnack, useForm } from '@local/features/core';
 
 interface Props {
     onSuccess: () => void;

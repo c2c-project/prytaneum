@@ -107,10 +107,10 @@ export function initServerEnvironment(fetchFunction: FetchFunction) {
     return environment;
 }
 
-export function useEnvironment(initialRecords: RecordMap) {
-    const store = useMemo(() => initEnvironment(initialRecords), [initialRecords]);
-    return store;
-}
+// export function useEnvironment(initialRecords: RecordMap) {
+//     const store = useMemo(() => initEnvironment(initialRecords), [initialRecords]);
+//     return store;
+// }
 
 /**
  * this will reset the environment, but it will not cause a rerender in the react-dom
@@ -123,4 +123,18 @@ export function useEnvironment(initialRecords: RecordMap) {
  */
 export function clearEnvironment() {
     relayEnvironment = createEnvironment();
+}
+
+export function useEnvironment(initialRecords?: RecordMap) {
+    return useMemo(() => {
+        let env = initEnvironment(initialRecords);
+        const resetEnv = () => {
+            clearEnvironment();
+            env = initEnvironment(initialRecords);
+        };
+        return {
+            env,
+            resetEnv,
+        };
+    }, [initialRecords]);
 }

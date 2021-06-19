@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 
 import { TextField } from '@local/components/TextField';
-import { useForm } from '@local/hooks/useForm';
+import { useForm } from '@local/features/core';
 import type { CreateMember } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';

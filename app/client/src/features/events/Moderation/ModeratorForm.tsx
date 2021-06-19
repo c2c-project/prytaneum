@@ -7,7 +7,7 @@ import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { TextField } from '@local/components/TextField';
-import { useForm } from '@local/hooks';
+import { useForm } from '@local/features/core';
 
 export type TModeratorForm = { email: string };
 export interface ModeratorProps {

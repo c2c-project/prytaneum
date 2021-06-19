@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useSnack } from '@local/features/core';
+import { useSnack } from './useSnack';
 
 // NOTE: may be use useClipboard in the future, but no use case for read --  only write
 export default function useCopy() {
     const [data, setData] = React.useState<string>('');
     const [dummy, forceUpdate] = React.useReducer((x: number) => x + 1, 0);
-    const [snack] = useSnack();
+    const { displaySnack } = useSnack();
 
     React.useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,11 +15,11 @@ export default function useCopy() {
             try {
                 await navigator.clipboard.writeText(data);
                 if (isMounted) {
-                    snack('Copied!');
+                    displaySnack('Copied!');
                 }
             } catch (e) {
                 if (isMounted) {
-                    snack('Unable to copy :(');
+                    displaySnack('Unable to copy :(');
                 }
             }
         };
@@ -29,7 +29,7 @@ export default function useCopy() {
         return () => {
             isMounted = false;
         };
-    }, [data, dummy, snack]);
+    }, [data, dummy, displaySnack]);
     // NOTE: snack should technically never change as long as the context doesn't, which it won't
 
     const copy = (str: string) => {
