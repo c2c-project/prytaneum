@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSnack } from './useSnack';
+import { useSnack } from '@local/features/core';
 
 // NOTE: may be use useClipboard in the future, but no use case for read --  only write
 export default function useCopy() {

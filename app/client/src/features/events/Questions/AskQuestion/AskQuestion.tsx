@@ -6,7 +6,7 @@ import { useMutation, graphql, ConnectionHandler } from 'react-relay';
 
 import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useUser } from '@local/hooks/useUser';
+import { useUser } from '@local/features/accounts';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {

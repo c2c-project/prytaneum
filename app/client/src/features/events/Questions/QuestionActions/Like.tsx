@@ -3,7 +3,6 @@ import { Button } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined';
 import { graphql, useMutation, useFragment } from 'react-relay';
 
-import { useUser } from '@local/hooks';
 import type { LikeMutation } from '@local/__generated__/LikeMutation.graphql';
 import type { LikeFragment$key } from '@local/__generated__/LikeFragment.graphql';
 

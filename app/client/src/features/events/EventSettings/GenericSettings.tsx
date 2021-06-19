@@ -10,7 +10,7 @@ import type { GenericSettingsMutation } from '@local/__generated__/GenericSettin
 
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useSnack } from '@local/hooks';
+import { useSnack } from '@local/features/core';
 
 const HELPT_TEXT = {
     isQuestionFeedVisible:
@@ -51,7 +51,7 @@ export const GENERIC_SETTINGS_MUTATION = graphql`
 `;
 
 export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) => {
-    const [snack] = useSnack();
+    const { displaySnack } = useSnack();
     const { isQuestionFeedVisible, isCollectRatingsEnabled, isForumEnabled, isPrivate, id } = useFragment(
         GENERIC_SETTINGS_FRAGMENT,
         fragmentRef
@@ -65,7 +65,7 @@ export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) 
             commit({
                 variables: { input: { [key]: checked, eventId: id } },
                 onError() {
-                    snack('Something went wrong :(');
+                    displaySnack('Something went wrong :(');
                 },
             });
         };

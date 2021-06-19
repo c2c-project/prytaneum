@@ -13,7 +13,9 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useSnack, useForm, useUser } from '@local/hooks';
+import { useUser } from '@local/features/accounts';
+import { useSnack } from '@local/features/core';
+import { useForm } from '@local/hooks';
 
 interface Props {
     onSuccess: () => void;
@@ -76,14 +78,14 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     const [, setUser] = useUser();
 
     // user feedback
-    const [snack] = useSnack();
+    const { displaySnack } = useSnack();
 
     function handleCommit(submittedForm: TRegisterForm) {
         commit({
             variables: { input: submittedForm },
             onCompleted({ register }) {
                 if (register.isError) {
-                    snack(register.message);
+                    displaySnack(register.message);
                     if (onFailure) onFailure();
                 } else {
                     setUser(register.body);

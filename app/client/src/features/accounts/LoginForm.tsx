@@ -22,7 +22,9 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useForm, useUser, useSnack } from '@local/hooks';
+import { useUser } from '@local/features/accounts';
+import { useSnack } from '@local/features/core';
+import { useForm } from '@local/hooks';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -84,7 +86,7 @@ const intialState: TLoginForm = { email: '', password: '' };
  */
 export function LoginForm({ onSuccess, secondaryActions }: Props) {
     const classes = useStyles();
-    const [snack] = useSnack();
+    const { displaySnack } = useSnack();
     const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
@@ -96,7 +98,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                 input: submittedForm,
             },
             onCompleted({ login }) {
-                if (login.isError) snack(login.message);
+                if (login.isError) displaySnack(login.message);
                 else {
                     setUser(login.body);
                     if (onSuccess) onSuccess();

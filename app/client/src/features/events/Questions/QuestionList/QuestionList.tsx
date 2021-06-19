@@ -9,7 +9,7 @@ import type { useQuestionListFragment$key } from '@local/__generated__/useQuesti
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { useEvent } from '@local/features/events';
-import { useUser } from '@local/hooks';
+import { useUser } from '@local/features/accounts';
 
 import { QuestionActions } from '../QuestionActions';
 import { QuestionAuthor } from '../QuestionAuthor';

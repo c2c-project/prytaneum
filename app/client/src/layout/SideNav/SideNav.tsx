@@ -5,8 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import { ConditionalRender } from '@local/components';
-import { UserSideNav, USER_SIDE_NAV_QUERY, UserSideNavProps, UserSideNavLoader } from '@local/features/accounts';
-import { useUser } from '@local/hooks';
+import { UserSideNav, USER_SIDE_NAV_QUERY, UserSideNavProps, UserSideNavLoader, useUser } from '@local/features/accounts';
 
 const Loader = () => (
     <Hidden mdDown>

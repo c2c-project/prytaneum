@@ -3,8 +3,7 @@ import { Grid, Button, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
-import { LoginForm } from '@local/features/accounts';
-import { useUser } from '@local/hooks/useUser';
+import { LoginForm, useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {

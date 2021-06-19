@@ -6,15 +6,7 @@ interface Options {
     onExited?: () => void;
 }
 
-/**
- *
- * @category @local/hooks
- *
- */
-export function useSnack(): [
-    (message: string, options?: Options) => void,
-    ReturnType<typeof useSnackbar>['closeSnackbar']
-] {
+export function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const makeSnack = React.useCallback(
         (message: string, options?: Options) => {
@@ -27,5 +19,5 @@ export function useSnack(): [
         },
         [enqueueSnackbar]
     );
-    return [makeSnack, closeSnackbar];
+    return { displaySnack: makeSnack, closeSnack: closeSnackbar };
 }
