@@ -62,22 +62,6 @@ export const resolvers: Resolvers = {
         },
     },
     Subscription: {
-        likeCountChanged: {
-            subscribe: withFilter<{ likeCountChanged: EventQuestionEdge }>(
-                (parent, args, ctx) => ctx.pubsub.subscribe('likeCountChanged'),
-                (payload, args, ctx) => Question.doesEventMatch(args.id, payload.likeCountChanged.node.id, ctx.prisma)
-            ),
-        },
-        eventQuestionCreated: {
-            subscribe: withFilter<{ eventQuestionCreated: EventQuestionEdge }>(
-                (parent, args, ctx) => ctx.pubsub.subscribe('eventQuestionCreated'),
-                (payload, args, ctx) => {
-                    const { id: questionId } = fromGlobalId(payload.eventQuestionCreated.node.id);
-                    const { id: eventId } = fromGlobalId(args.eventId);
-                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
-                }
-            ),
-        },
         questionCRUD: {
             subscribe: withFilter<{ questionCRUD: EventQuestionEdge }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),

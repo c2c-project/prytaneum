@@ -688,12 +688,8 @@ export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
-  eventQuestionCreated: EventQuestionEdge;
-  likeCountChanged: EventQuestionEdge;
   /** Question subscription for all operations performed on questions */
   questionCRUD: EventQuestionEdge;
-  /** Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update */
-  questionLikeOrPositionUpdate: EventQuestion;
 };
 
 
@@ -702,22 +698,7 @@ export type SubscriptionEventLiveFeedbackCreatedArgs = {
 };
 
 
-export type SubscriptionEventQuestionCreatedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionLikeCountChangedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type SubscriptionQuestionCrudArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionQuestionLikeOrPositionUpdateArgs = {
   eventId: Scalars['ID'];
 };
 

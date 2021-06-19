@@ -495,16 +495,9 @@ input RegistrationForm {
 type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-  eventQuestionCreated(eventId: ID!): EventQuestionEdge!
-  likeCountChanged(eventId: ID!): EventQuestionEdge!
 
   """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): EventQuestionEdge!
-
-  """
-  Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update
-  """
-  questionLikeOrPositionUpdate(eventId: ID!): EventQuestion!
 }
 
 input UpdateEvent {

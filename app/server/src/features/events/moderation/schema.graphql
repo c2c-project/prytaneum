@@ -73,8 +73,4 @@ type Subscription {
     New messages as feedback is given
     """
     eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-    """
-    Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update
-    """
-    questionLikeOrPositionUpdate(eventId: ID!): EventQuestion!
 }

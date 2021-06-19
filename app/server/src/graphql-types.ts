@@ -543,27 +543,11 @@ export type Subscription = {
     __typename?: 'Subscription';
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
-    /** Whenever a moderator updates a question's position -- questions newly added to the queue is considered a position update */
-    questionLikeOrPositionUpdate: EventQuestion;
-    eventQuestionCreated: EventQuestionEdge;
-    likeCountChanged: EventQuestionEdge;
     /** Question subscription for all operations performed on questions */
     questionCRUD: EventQuestionEdge;
 };
 
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionLikeOrPositionUpdateArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptioneventQuestionCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionlikeCountChangedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1503,27 +1487,6 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
-    >;
-    questionLikeOrPositionUpdate?: SubscriptionResolver<
-        ResolversTypes['EventQuestion'],
-        'questionLikeOrPositionUpdate',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionLikeOrPositionUpdateArgs, 'eventId'>
-    >;
-    eventQuestionCreated?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
-        'eventQuestionCreated',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventQuestionCreatedArgs, 'eventId'>
-    >;
-    likeCountChanged?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
-        'likeCountChanged',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionlikeCountChangedArgs, 'eventId'>
     >;
     questionCRUD?: SubscriptionResolver<
         ResolversTypes['EventQuestionEdge'],
