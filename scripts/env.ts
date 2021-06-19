@@ -1,5 +1,5 @@
 // Code taken from https://github.com/vercel/next.js/tree/canary/packages/next-env
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
