@@ -16,7 +16,6 @@ import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import { Skeleton, SkeletonProps } from '@material-ui/lab';
-import clsx from 'clsx';
 
 import { TextField } from '@local/components/TextField';
 import { FilterFunc } from '@local/utils/filters';
@@ -33,9 +32,6 @@ export interface Props<T> {
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(2, 0, 0, 0),
-    },
     resultsText: {
         padding: theme.spacing(1, 0),
     },
@@ -110,7 +106,7 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
     };
 
     return (
-        <div className={className ? clsx([classes.root, className]) : classes.root}>
+        <div className={className}>
             <Grid container alignItems='center'>
                 <Grid item xs='auto' className={classes.search}>
                     <TextField

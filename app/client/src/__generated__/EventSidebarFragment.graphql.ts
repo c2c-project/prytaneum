@@ -8,7 +8,7 @@ export type EventSidebarFragment = {
     readonly id: string;
     readonly isQuestionFeedVisible: boolean | null;
     readonly isViewerModerator: boolean | null;
-    readonly " $fragmentRefs": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "QuestionQueueFragment">;
+    readonly " $fragmentRefs": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "QuestionQueueFragment" | "QuestionCarouselFragment">;
     readonly " $refType": "EventSidebarFragment";
 };
 export type EventSidebarFragment$data = EventSidebarFragment;
@@ -65,10 +65,15 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "QuestionQueueFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "QuestionCarouselFragment"
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'f6e4317aed49ac4e4cd114623da24386';
+(node as any).hash = '229af438fa2029f6af4790f0b8e88556';
 export default node;
