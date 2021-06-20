@@ -84,7 +84,8 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventUpdates'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(payload.eventUpdates.id);
-                    return eventId === args.eventId;
+                    const { id: argEventId } = fromGlobalId(args.eventId);
+                    return eventId === argEventId;
                 }
             ),
         },
