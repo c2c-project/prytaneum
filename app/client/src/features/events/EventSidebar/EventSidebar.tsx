@@ -17,24 +17,23 @@ import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import QuestionCarousel from '@local/features/events/Questions/QuestionCarousel';
-import StyledTab, { Props as StyledTabProps } from './StyledTab';
+import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 
 const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
-    StyledTab
+    MemoizedStyledTab
 );
 // const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
 const QuestionQueueTab = connect(() => ({
     badgeContent: 0,
     label: 'Question Queue',
-}))(StyledTab);
+}))(MemoizedStyledTab);
 
 const getTabVisibility = (settings: EventSidebarFragment) => ({
     isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
-    // isChatVisible: settings,
     isQueueVisible: settings.isViewerModerator,
 });
 
@@ -45,13 +44,10 @@ type TabTuple = [
 const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple => {
     const tabs: TabTuple = [];
 
-    console.log(tabVisibility);
-
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, QuestionQueue]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, QuestionList]);
-    // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
 };
