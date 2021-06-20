@@ -60,12 +60,12 @@ type Mutation {
     """
     Advance the current question
     """
-    nextQuestion(eventId: ID!): Int!
+    nextQuestion(eventId: ID!): Event!
 
     """
     Go to the previous question
     """
-    prevQuestion(eventId: ID!): Int!
+    prevQuestion(eventId: ID!): Event!
 }
 
 type Subscription {

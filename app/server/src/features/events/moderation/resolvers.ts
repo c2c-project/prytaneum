@@ -6,6 +6,7 @@ import * as Moderation from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
+const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Mutation: {
@@ -26,9 +27,9 @@ export const resolvers: Resolvers = {
                 });
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
                 ctx.pubsub.publish({
-                    topic: 'questionPositionUpdate',
+                    topic: 'questionCRUD',
                     payload: {
-                        questionPositionUpdate: questionWithGlobalId,
+                        questionCRUD: questionWithGlobalId,
                     },
                 });
                 return {
@@ -37,15 +38,31 @@ export const resolvers: Resolvers = {
                 };
             });
         },
-        nextQuestion(parent, args, ctx, info) {
+        async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
+            const eventWithGlobalId = toEventId(updatedEvent);
+            ctx.pubsub.publish({
+                topic: 'eventUpdates',
+                payload: {
+                    eventUpdates: eventWithGlobalId,
+                },
+            });
+            return eventWithGlobalId;
         },
-        prevQuestion(parent, args, ctx, info) {
+        async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
+            const eventWithGlobalId = toEventId(updatedEvent);
+            ctx.pubsub.publish({
+                topic: 'eventUpdates',
+                payload: {
+                    eventUpdates: eventWithGlobalId,
+                },
+            });
+            return eventWithGlobalId;
         },
         async createModerator(parent, args, ctx, info) {
             return runMutation(async () => {

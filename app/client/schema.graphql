@@ -400,10 +400,10 @@ type Mutation {
   logout: Date!
 
   """Advance the current question"""
-  nextQuestion(eventId: ID!): Int!
+  nextQuestion(eventId: ID!): Event!
 
   """Go to the previous question"""
-  prevQuestion(eventId: ID!): Int!
+  prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
 
   """
@@ -495,6 +495,7 @@ input RegistrationForm {
 type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
+  eventUpdates(eventId: ID!): Event!
 
   """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): EventQuestionEdge!

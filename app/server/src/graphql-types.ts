@@ -143,9 +143,9 @@ export type Mutation = {
     /** Removes a moderator from a given event */
     deleteModerator: ModeratorMutationResponse;
     /** Advance the current question */
-    nextQuestion: Scalars['Int'];
+    nextQuestion: Event;
     /** Go to the previous question */
-    prevQuestion: Scalars['Int'];
+    prevQuestion: Event;
     createQuestion: EventQuestionMutationResponse;
     alterLike: EventQuestionMutationResponse;
     createSpeaker: EventSpeakerMutationResponse;
@@ -402,6 +402,27 @@ export type EventMutationResponse = MutationResponse & {
     body?: Maybe<Event>;
 };
 
+export type Subscription = {
+    __typename?: 'Subscription';
+    eventUpdates: Event;
+    /** New messages as feedback is given */
+    eventLiveFeedbackCreated: EventLiveFeedback;
+    /** Question subscription for all operations performed on questions */
+    questionCRUD: EventQuestionEdge;
+};
+
+export type SubscriptioneventUpdatesArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptioneventLiveFeedbackCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionCRUDArgs = {
+    eventId: Scalars['ID'];
+};
+
 export type Organization = Node & {
     __typename?: 'Organization';
     /** Unique identifier for this org */
@@ -537,22 +558,6 @@ export type ModeratorMutationResponse = MutationResponse & {
     isError: Scalars['Boolean'];
     message: Scalars['String'];
     body?: Maybe<User>;
-};
-
-export type Subscription = {
-    __typename?: 'Subscription';
-    /** New messages as feedback is given */
-    eventLiveFeedbackCreated: EventLiveFeedback;
-    /** Question subscription for all operations performed on questions */
-    questionCRUD: EventQuestionEdge;
-};
-
-export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionCRUDArgs = {
-    eventId: Scalars['ID'];
 };
 
 export type EventParticipant = {
@@ -855,14 +860,15 @@ export type ResolversTypes = {
     LoginForm: LoginForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     Mutation: ResolverTypeWrapper<{}>;
-    Int: ResolverTypeWrapper<Scalars['Int']>;
     Event: ResolverTypeWrapper<Event>;
+    Int: ResolverTypeWrapper<Scalars['Int']>;
     EventEdge: ResolverTypeWrapper<EventEdge>;
     EventConnection: ResolverTypeWrapper<EventConnection>;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: ResolverTypeWrapper<EventMutationResponse>;
+    Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
     OrganizationConnection: ResolverTypeWrapper<OrganizationConnection>;
@@ -883,7 +889,6 @@ export type ResolversTypes = {
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
     ModeratorMutationResponse: ResolverTypeWrapper<ModeratorMutationResponse>;
-    Subscription: ResolverTypeWrapper<{}>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventParticipantEdge: ResolverTypeWrapper<EventParticipantEdge>;
     EventParticipantConnection: ResolverTypeWrapper<EventParticipantConnection>;
@@ -942,14 +947,15 @@ export type ResolversParentTypes = {
     LoginForm: LoginForm;
     UserMutationResponse: UserMutationResponse;
     Mutation: {};
-    Int: Scalars['Int'];
     Event: Event;
+    Int: Scalars['Int'];
     EventEdge: EventEdge;
     EventConnection: EventConnection;
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: EventMutationResponse;
+    Subscription: {};
     Organization: Organization;
     OrganizationEdge: OrganizationEdge;
     OrganizationConnection: OrganizationConnection;
@@ -970,7 +976,6 @@ export type ResolversParentTypes = {
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
     ModeratorMutationResponse: ModeratorMutationResponse;
-    Subscription: {};
     EventParticipant: EventParticipant;
     EventParticipantEdge: EventParticipantEdge;
     EventParticipantConnection: EventParticipantConnection;
@@ -1230,13 +1235,13 @@ export type MutationResolvers<
         RequireFields<MutationdeleteModeratorArgs, 'input'>
     >;
     nextQuestion?: Resolver<
-        ResolversTypes['Int'],
+        ResolversTypes['Event'],
         ParentType,
         ContextType,
         RequireFields<MutationnextQuestionArgs, 'eventId'>
     >;
     prevQuestion?: Resolver<
-        ResolversTypes['Int'],
+        ResolversTypes['Event'],
         ParentType,
         ContextType,
         RequireFields<MutationprevQuestionArgs, 'eventId'>
@@ -1386,6 +1391,33 @@ export type EventMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SubscriptionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
+> = {
+    eventUpdates?: SubscriptionResolver<
+        ResolversTypes['Event'],
+        'eventUpdates',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventUpdatesArgs, 'eventId'>
+    >;
+    eventLiveFeedbackCreated?: SubscriptionResolver<
+        ResolversTypes['EventLiveFeedback'],
+        'eventLiveFeedbackCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
+    >;
+    questionCRUD?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionCRUD',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
+    >;
+};
+
 export type OrganizationResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']
@@ -1475,26 +1507,6 @@ export type ModeratorMutationResponseResolvers<
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     body?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SubscriptionResolvers<
-    ContextType = MercuriusContext,
-    ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
-> = {
-    eventLiveFeedbackCreated?: SubscriptionResolver<
-        ResolversTypes['EventLiveFeedback'],
-        'eventLiveFeedbackCreated',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
-    >;
-    questionCRUD?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
-        'questionCRUD',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
-    >;
 };
 
 export type EventParticipantResolvers<
@@ -1684,6 +1696,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventEdge?: EventEdgeResolvers<ContextType>;
     EventConnection?: EventConnectionResolvers<ContextType>;
     EventMutationResponse?: EventMutationResponseResolvers<ContextType>;
+    Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
     OrganizationConnection?: OrganizationConnectionResolvers<ContextType>;
@@ -1692,7 +1705,6 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
     EventLiveFeedbackConnection?: EventLiveFeedbackConnectionResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
-    Subscription?: SubscriptionResolvers<ContextType>;
     EventParticipant?: EventParticipantResolvers<ContextType>;
     EventParticipantEdge?: EventParticipantEdgeResolvers<ContextType>;
     EventParticipantConnection?: EventParticipantConnectionResolvers<ContextType>;

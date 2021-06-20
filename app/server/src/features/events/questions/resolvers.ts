@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { EventQuestion } from '@app/prisma';
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { Like, EventQuestionEdge } from '@local/graphql-types';
+import type { EventQuestionEdge } from '@local/graphql-types';
 import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');

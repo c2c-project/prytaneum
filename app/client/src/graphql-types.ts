@@ -430,9 +430,9 @@ export type Mutation = {
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
   /** Advance the current question */
-  nextQuestion: Scalars['Int'];
+  nextQuestion: Event;
   /** Go to the previous question */
-  prevQuestion: Scalars['Int'];
+  prevQuestion: Event;
   register: UserMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
@@ -688,12 +688,18 @@ export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
+  eventUpdates: Event;
   /** Question subscription for all operations performed on questions */
   questionCRUD: EventQuestionEdge;
 };
 
 
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEventUpdatesArgs = {
   eventId: Scalars['ID'];
 };
 

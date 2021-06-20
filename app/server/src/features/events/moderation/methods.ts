@@ -144,9 +144,9 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     const result = await prisma.event.update({
         where: { id: eventId },
         data: { currentQuestion: question.position },
-        select: { currentQuestion: true },
+        select: { currentQuestion: true, id: true },
     });
-    return result.currentQuestion;
+    return result;
 }
 
 /**

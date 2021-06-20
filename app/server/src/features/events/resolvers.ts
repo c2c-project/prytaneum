@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, errors, runMutation } from '@local/features/utils';
+import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
+import type { Event as TEvent } from '@local/graphql-types';
 import * as Event from './methods';
 
 const toEventId = toGlobalId('Event');
@@ -34,7 +35,12 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.event.eventId);
                 const updatedEvent = await Event.updateEvent(ctx.viewer.id, ctx.prisma, { ...args.event, eventId });
-                return toEventId(updatedEvent);
+                const eventWithGlobalId = toEventId(updatedEvent);
+                ctx.pubsub.publish({
+                    topic: 'eventUpdates',
+                    payload: eventWithGlobalId,
+                });
+                return eventWithGlobalId;
             });
         },
         async deleteEvent(parent, args, ctx, info) {
@@ -50,7 +56,12 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, eventId, true);
-                return toEventId(updatedEvent);
+                const eventWithGlobalId = toEventId(updatedEvent);
+                ctx.pubsub.publish({
+                    topic: 'eventUpdates',
+                    payload: eventWithGlobalId,
+                });
+                return eventWithGlobalId;
             });
         },
         async endEvent(parent, args, ctx, info) {
@@ -58,8 +69,24 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, eventId, false);
-                return toEventId(updatedEvent);
+                const eventWithGlobalId = toEventId(updatedEvent);
+                ctx.pubsub.publish({
+                    topic: 'eventUpdates',
+                    payload: eventWithGlobalId,
+                });
+                return eventWithGlobalId;
             });
+        },
+    },
+    Subscription: {
+        eventUpdates: {
+            subscribe: withFilter<{ eventUpdates: TEvent }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('eventUpdates'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(payload.eventUpdates.id);
+                    return eventId === args.eventId;
+                }
+            ),
         },
     },
     Event: {
