@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Card, List, ListItem } from '@material-ui/core';
+import { Grid, Card, List, ListItem, Typography } from '@material-ui/core';
 // import { Pause, PlayArrow } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -108,6 +108,16 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                     </Card>
                                 </ListItem>
                             ))}
+                            {filteredList.length === 0 && questions.length !== 0 && (
+                                <Typography align='center' variant='body2'>
+                                    No results to display
+                                </Typography>
+                            )}
+                            {questions.length === 0 && (
+                                <Typography align='center' variant='h5'>
+                                    No Questions to display :(
+                                </Typography>
+                            )}
                         </List>
                     </Grid>
                 </Grid>
