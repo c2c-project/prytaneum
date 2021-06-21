@@ -60,12 +60,12 @@ type Mutation {
     """
     Advance the current question
     """
-    nextQuestion(eventId: ID!): Int!
+    nextQuestion(eventId: ID!): Event!
 
     """
     Go to the previous question
     """
-    prevQuestion(eventId: ID!): Int!
+    prevQuestion(eventId: ID!): Event!
 }
 
 type Subscription {
@@ -73,4 +73,9 @@ type Subscription {
     New messages as feedback is given
     """
     eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
+
+    """
+    subscription for whenever questions are added to the queue
+    """
+    questionQueued(eventId: ID!): EventQuestion!
 }

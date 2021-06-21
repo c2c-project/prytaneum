@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { EventLiveFeedback } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
+import type { EventLiveFeedback, QuestionOperation, EventQuestion } from '@local/graphql-types';
 import * as Moderation from './methods';
+import { doesEventMatch } from '../questions/methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
+const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Mutation: {
@@ -25,27 +27,45 @@ export const resolvers: Resolvers = {
                     questionId,
                 });
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const edge = {
+                    node: questionWithGlobalId,
+                    cursor: questionWithGlobalId.createdAt.getTime().toString(),
+                };
                 ctx.pubsub.publish({
-                    topic: 'questionPositionUpdate',
+                    topic: 'questionCRUD',
                     payload: {
-                        questionPositionUpdate: questionWithGlobalId,
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                return {
-                    node: questionWithGlobalId,
-                    cursor: questionWithGlobalId.createdAt.getMilliseconds().toString(),
-                };
+                return edge;
             });
         },
-        nextQuestion(parent, args, ctx, info) {
+        async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
+            const eventWithGlobalId = toEventId(updatedEvent);
+
+            ctx.pubsub.publish({
+                topic: 'eventUpdates',
+                payload: {
+                    eventUpdates: eventWithGlobalId,
+                },
+            });
+            return eventWithGlobalId;
         },
-        prevQuestion(parent, args, ctx, info) {
+        async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            return Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
+            const eventWithGlobalId = toEventId(updatedEvent);
+            ctx.pubsub.publish({
+                topic: 'eventUpdates',
+                payload: {
+                    eventUpdates: eventWithGlobalId,
+                },
+            });
+            return eventWithGlobalId;
         },
         async createModerator(parent, args, ctx, info) {
             return runMutation(async () => {
@@ -93,13 +113,19 @@ export const resolvers: Resolvers = {
                 });
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
                 const edge = {
-                    cursor: updatedQuestion.createdAt.getMilliseconds().toString(),
+                    cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
-                        questionCRUD: edge,
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionQueued',
+                    payload: {
+                        questionQueued: questionWithGlobalId,
                     },
                 });
                 return edge;
@@ -112,6 +138,16 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('eventLiveFeedbackCreated'),
                 (payload, args, ctx) =>
                     Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.id)
+            ),
+        },
+        questionQueued: {
+            subscribe: withFilter<{ questionQueued: EventQuestion }>(
+                (parent, args, ctx, info) => ctx.pubsub.subscribe('questionQueued'),
+                (payload, args, ctx) => {
+                    const { id: questionId } = fromGlobalId(payload.questionQueued.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    return doesEventMatch(eventId, questionId, ctx.prisma);
+                }
             ),
         },
     },

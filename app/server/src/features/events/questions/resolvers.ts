@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { EventQuestion } from '@app/prisma';
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { Like, EventQuestionEdge } from '@local/graphql-types';
+import type { QuestionOperation } from '@local/graphql-types';
 import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
@@ -24,12 +23,12 @@ export const resolvers: Resolvers = {
                 const formattedQuestion = toQuestionId(question);
                 const edge = {
                     node: formattedQuestion,
-                    cursor: formattedQuestion.createdAt.getMilliseconds().toString(),
+                    cursor: formattedQuestion.createdAt.getTime().toString(),
                 };
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
-                        questionCRUD: edge,
+                        questionCRUD: { operationType: 'CREATE', edge } as QuestionOperation,
                     },
                 });
 
@@ -49,12 +48,12 @@ export const resolvers: Resolvers = {
                 if (!question) return question;
                 const edge = {
                     node: toQuestionId(question),
-                    cursor: question.createdAt.getMilliseconds.toString(),
+                    cursor: question.createdAt.getTime().toString(),
                 };
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
-                        questionCRUD: edge,
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
                 return edge;
@@ -63,10 +62,10 @@ export const resolvers: Resolvers = {
     },
     Subscription: {
         questionCRUD: {
-            subscribe: withFilter<{ questionCRUD: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionCRUD: QuestionOperation }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),
                 (payload, args, ctx) => {
-                    const { id: questionId } = fromGlobalId(payload.questionCRUD.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionCRUD.edge.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }

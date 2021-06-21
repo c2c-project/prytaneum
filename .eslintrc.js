@@ -38,6 +38,7 @@ module.exports = {
                     '**/*.stories.*',
                     '**/__tests__/**',
                     '**/setupTests.ts',
+                    '**/scripts/**'
                 ],
             },
         ],

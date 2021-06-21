@@ -4,7 +4,7 @@ import { useQueryLoader } from 'react-relay';
 
 import { OrgListQuery } from '@local/__generated__/OrgListQuery.graphql';
 import { ORG_LIST_QUERY, OrgList } from '@local/features/organizations';
-import { useIsClient } from '@local/hooks';
+import { useIsClient } from '@local/features/core';
 import { Loader } from '@local/components/Loader';
 
 const Page: NextPage = () => {

@@ -1,89 +1,171 @@
-// import * as React from 'react';
+import { useMemo, useReducer, useEffect } from 'react';
+import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { ChevronLeft, ChevronRight } from '@material-ui/icons';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { graphql, useFragment, useSubscription } from 'react-relay';
 
-// import { makeStyles } from '@material-ui/core/styles';
-// import { IconButton, Typography, Divider, Grid, Button } from '@material-ui/core';
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
+import type { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
+import { useEvent } from '@local/features/events';
+import { QuestionAuthor } from '../QuestionAuthor';
+import { QuestionContent } from '../QuestionContent';
 
-// import { EventQuestion as Question } from '@local/graphql-types';
-// // import { incrementQueue, decrementQueue, jumpToCurrent } from '@local/reducers';
-// // import usePlaylist from '../usePlaylist';
-// // import QuestionCard from '../QuestionCard';
+const useStyles = makeStyles((theme) => ({
+    root: {
+        backgroundColor: theme.palette.primary.light,
+    },
+    btn: {
+        color: 'white',
+    },
+    card: {
+        minHeight: 150,
+    },
+}));
 
-// export interface CarouselProps {
-//     question: Question | undefined;
-//     onClickNext: () => void;
-//     onClickPrev: () => void;
-//     hasNext: boolean;
-//     hasPrev: boolean;
-//     onClickJump: () => void;
-// }
+const QUESTION_CAROUSEL_FRAGMENT = graphql`
+    fragment QuestionCarouselFragment on Event
+    @argumentDefinitions(first: { type: Int, defaultValue: 100 }, after: { type: String, defaultValue: "" }) {
+        id
+        currentQuestion
+        queuedQuestions(first: $first, after: $after) @connection(key: "QuestionCarousel_queuedQuestions") {
+            edges {
+                cursor
+                node {
+                    position
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
+                }
+            }
+        }
+    }
+`;
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         display: 'flex',
-//         alignItems: 'center',
-//         flexDirection: 'column',
-//     },
+const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
+    subscription QuestionCarouselSubscription($eventId: ID!) {
+        eventUpdates(eventId: $eventId) {
+            id
+            currentQuestion
+        }
+    }
+`;
 
-//     flex: {
-//         flex: '1 1 100%',
-//         padding: theme.spacing(0, 1),
-//         width: '100%',
-//     },
-//     hide: {
-//         visibility: 'hidden',
-//     },
-// }));
+export interface QuestionCarouselProps {
+    fragmentRef: QuestionCarouselFragment$key;
+}
 
-// export function QuestionCarousel({ question, onClickNext, onClickPrev, hasNext, hasPrev, onClickJump }: CarouselProps) {
-//     const classes = useStyles();
-//     return (
-//         <div className={classes.root}>
-//             {/* <div className={classes.flex}> */}
-//             {question && <div>todod</div>}
-//             {!question && <Typography>No Question to display yet</Typography>}
-//             {/* </div> */}
-//             <Divider />
-//             <Grid container justify='space-between'>
-//                 <IconButton onClick={onClickPrev} disabled={!hasPrev}>
-//                     <ChevronLeftIcon />
-//                 </IconButton>
-//                 <Button disabled={!hasNext} onClick={onClickJump}>
-//                     Go to Current
-//                 </Button>
-//                 <IconButton onClick={onClickNext} disabled={!hasNext}>
-//                     <ChevronRightIcon />
-//                 </IconButton>
-//             </Grid>
-//         </div>
-//     );
-// }
+type TState = {
+    idx: number;
+    currQuestionIdx: number;
+};
+type TActions =
+    | { type: 'next'; payload?: never }
+    | { type: 'previous'; payload?: never }
+    | { type: 'updateCurrentQuestionIdx'; payload: number }
+    | { type: 'goToCurrent'; payload?: never };
 
-// export default function CurrentQuestion() {
-//     const [playlist, dispatch] = usePlaylist();
-//     const { position, queue, max } = playlist;
+function reducer(state: TState, action: TActions): TState {
+    switch (action.type) {
+        case 'next':
+            return { ...state, idx: state.idx + 1 };
+        case 'previous':
+            return { ...state, idx: state.idx - 1 };
+        case 'updateCurrentQuestionIdx':
+            return {
+                ...state,
+                currQuestionIdx: action.payload,
+                idx: state.idx === state.currQuestionIdx ? action.payload : state.idx,
+            };
+        case 'goToCurrent':
+            return {
+                ...state,
+                idx: state.currQuestionIdx,
+            };
+        default:
+            return state;
+    }
+}
 
-//     function handleClick(dir: -1 | 1) {
-//         return () => {
-//             if (position + dir < 0) return;
-//             if (position + dir > queue.length) return;
-//             dispatch(dir === 1 ? incrementQueue() : decrementQueue());
-//         };
-//     }
+export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
+    const classes = useStyles();
+    const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
+    const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
+    const { eventId } = useEvent();
+    const config = useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
+        () => ({
+            variables: { eventId },
+            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
+        }),
+        [eventId]
+    );
+    useSubscription(config);
 
-//     return (
-//         <QuestionCarousel
-//             question={queue[position]}
-//             onClickPrev={handleClick(-1)}
-//             onClickNext={handleClick(1)}
-//             hasNext={position < max}
-//             hasPrev={position > 0}
-//             onClickJump={() => dispatch(jumpToCurrent())}
-//         />
-//     );
-// }
+    const sortedQuestions = useMemo(
+        () =>
+            data.queuedQuestions?.edges
+                ?.slice(0)
+                .sort((edgeA, edgeB) =>
+                    edgeA.node.position && edgeB.node.position ? edgeA.node.position - edgeB.node.position : 0
+                ) ?? [],
+        [data]
+    );
+    const currQuestionIdx = useMemo(
+        () => sortedQuestions.findIndex(({ node }) => node.position !== null && node.position === data.currentQuestion),
+        [sortedQuestions, data.currentQuestion]
+    );
 
-export default function Todo() {
-    return <h1>yo</h1>;
+    useEffect(() => {
+        if (state.currQuestionIdx !== currQuestionIdx) dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
+    }, [currQuestionIdx, state.currQuestionIdx]);
+
+    // probably a better way to do this, but whatever
+    const displayedQuestion = useMemo(
+        () => (state.idx >= 0 && state.idx < sortedQuestions.length ? sortedQuestions[state.idx] : null),
+        [sortedQuestions, state.idx]
+    );
+
+    return (
+        <Paper className={classes.root}>
+            <Grid container justify='space-between'>
+                <IconButton
+                    disabled={state.idx === 0 || state.idx === -1}
+                    className={classes.btn}
+                    onClick={() => dispatch({ type: 'previous' })}
+                >
+                    <ChevronLeft />
+                </IconButton>
+                <Button onClick={() => dispatch({ type: 'goToCurrent' })} className={classes.btn}>
+                    {state.idx === state.currQuestionIdx ? 'Answering Now' : 'Go To Current'}
+                </Button>
+                <IconButton
+                    disabled={state.currQuestionIdx === state.idx || state.idx === -1}
+                    className={classes.btn}
+                    onClick={() => dispatch({ type: 'next' })}
+                >
+                    <ChevronRight />
+                </IconButton>
+            </Grid>
+            <Grid
+                component={Card}
+                elevation={0}
+                className={classes.card}
+                container
+                alignItems='center'
+                justify='center'
+            >
+                {displayedQuestion ? (
+                    <Grid item xs={12}>
+                        <QuestionAuthor fragmentRef={displayedQuestion.node} />
+                        <QuestionContent fragmentRef={displayedQuestion.node} />
+                    </Grid>
+                ) : (
+                    <CardContent>
+                        <Typography variant='body2' color='textSecondary' align='center'>
+                            No question to display :(
+                        </Typography>
+                    </CardContent>
+                )}
+            </Grid>
+        </Paper>
+    );
 }

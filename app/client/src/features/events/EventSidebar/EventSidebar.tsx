@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { connect } from 'react-redux';
@@ -16,25 +16,24 @@ import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
-import QuestionCarousel from '@local/features/events/Questions/QuestionCarousel';
-import StyledTab, { Props as StyledTabProps } from './StyledTab';
+import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
+import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 
 const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
-    StyledTab
+    MemoizedStyledTab
 );
 // const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
 const QuestionQueueTab = connect(() => ({
     badgeContent: 0,
     label: 'Question Queue',
-}))(StyledTab);
+}))(MemoizedStyledTab);
 
 const getTabVisibility = (settings: EventSidebarFragment) => ({
     isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
-    // isChatVisible: settings,
     isQueueVisible: settings.isViewerModerator,
 });
 
@@ -45,13 +44,10 @@ type TabTuple = [
 const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple => {
     const tabs: TabTuple = [];
 
-    console.log(tabVisibility);
-
     // conditional tabs
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, QuestionQueue]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, QuestionList]);
-    // if (tabVisibility.isChatVisible) tabs.push([BreakoutTab, <Breakout />]);
 
     return tabs;
 };
@@ -65,16 +61,24 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         ...SpeakerListFragment
         ...useQuestionListFragment
         ...QuestionQueueFragment
+        ...QuestionCarouselFragment
     }
 `;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
-        maxWidth: 600,
+
         padding: theme.spacing(0, 1, 1, 1),
         [theme.breakpoints.down('sm')]: {
             padding: theme.spacing(1),
+        },
+        [theme.breakpoints.up('md')]: {
+            maxWidth: 600,
+        },
+        '& > *': {
+            marginBottom: theme.spacing(2.5),
+            width: '100%',
         },
     },
     paneContainer: {
@@ -88,11 +92,11 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'flex-end',
     },
     item: {
-        flex: 1,
-        marginBottom: theme.spacing(1.5),
+        // flex: 1,
+        // marginBottom: theme.spacing(1.5),
     },
     fullWidth: {
-        width: '100%',
+        // width: '100%',
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -147,24 +151,17 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                 />
             </Grid>
 
-            {!data.isViewerModerator && (
-                <Grid container direction='column' className={clsx(classes.item, classes.paper, classes.fullWidth)}>
-                    <Typography className={clsx(classes.pl, classes.pb)} variant='h5'>
-                        Current Question
-                    </Typography>
-                    <QuestionCarousel />
-                </Grid>
-            )}
+            {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
-            <div className={clsx(classes.item, classes.fullWidth)}>
-                {tabs.length > 1 && (
+            {tabs.length > 1 && (
+                <div className={clsx(classes.item, classes.fullWidth)}>
                     <Grid item xs='auto'>
                         {tabs.map(([Option], idx) => (
                             <Option selected={state === idx} key={idx} onClick={() => setState(idx)} />
                         ))}
                     </Grid>
-                )}
-            </div>
+                </div>
+            )}
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 {tabs.map(([, Panel], idx) => (

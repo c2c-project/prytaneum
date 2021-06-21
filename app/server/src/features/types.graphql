@@ -23,3 +23,9 @@ interface MutationResponse {
     isError: Boolean!
     message: String!
 }
+
+enum Operation {
+    CREATE
+    UPDATE
+    DELETE
+}

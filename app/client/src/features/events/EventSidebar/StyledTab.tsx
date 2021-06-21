@@ -4,7 +4,6 @@ import { Badge } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ChipTab from '@local/components/ChipTab';
-import { Panes } from '../types';
 
 const useStyles = makeStyles((theme) => ({
     badge: {
@@ -15,22 +14,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export interface Props {
+export interface StyledTabProps {
     label: string;
     /**
      * tabs parent component passes this in
      */
     selected?: boolean;
     onClick: () => void;
-    /**
-     * tabs parent component inspects this, otherwise it doesn't matter
-     */
-    // eslint-disable-next-line react/no-unused-prop-types
-    value?: Panes;
     badgeContent?: number | boolean;
 }
 
-function StyledTab({ label, selected, onClick, badgeContent }: Props) {
+function StyledTab({ label, selected, onClick, badgeContent }: StyledTabProps) {
     const classes = useStyles();
     return (
         <Badge
@@ -61,6 +55,8 @@ StyledTab.defaultProps = {
 // realistically, this should only ever update if the selected or badgeContent property has changed
 // changes to onClick are ignored here because we don't need to care about those
 // onClick should effectively do the same thing every render
-export default React.memo(StyledTab, (prevProps, nextProps) => {
-    return prevProps.selected === nextProps.selected && prevProps.badgeContent === nextProps.badgeContent;
-});
+export const MemoizedStyledTab = React.memo(
+    StyledTab,
+    (prevProps, nextProps) =>
+        prevProps.selected === nextProps.selected && prevProps.badgeContent === nextProps.badgeContent
+);

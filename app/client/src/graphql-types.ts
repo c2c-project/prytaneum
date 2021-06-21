@@ -430,9 +430,9 @@ export type Mutation = {
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
   /** Advance the current question */
-  nextQuestion: Scalars['Int'];
+  nextQuestion: Event;
   /** Go to the previous question */
-  prevQuestion: Scalars['Int'];
+  prevQuestion: Event;
   register: UserMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
@@ -598,6 +598,12 @@ export type Node = {
   id: Scalars['ID'];
 };
 
+export enum Operation {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Delete = 'DELETE'
+}
+
 export type Organization = Node & {
   __typename?: 'Organization';
   /** Unique identifier for this org */
@@ -676,6 +682,12 @@ export type QueryQuestionsByEventIdArgs = {
   eventId: Scalars['ID'];
 };
 
+export type QuestionOperation = {
+  __typename?: 'QuestionOperation';
+  operationType: Operation;
+  edge: EventQuestionEdge;
+};
+
 export type RegistrationForm = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -688,12 +700,18 @@ export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
+  eventUpdates: Event;
   /** Question subscription for all operations performed on questions */
-  questionCRUD: EventQuestionEdge;
+  questionCRUD: QuestionOperation;
 };
 
 
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEventUpdatesArgs = {
   eventId: Scalars['ID'];
 };
 
