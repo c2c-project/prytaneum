@@ -427,6 +427,12 @@ interface Node {
   id: ID!
 }
 
+enum Operation {
+  CREATE
+  UPDATE
+  DELETE
+}
+
 type Organization implements Node {
   """Unique identifier for this org"""
   id: ID!
@@ -484,6 +490,11 @@ type Query {
   questionsByEventId(eventId: ID!): [EventQuestion!]
 }
 
+type QuestionOperation {
+  operationType: Operation!
+  edge: EventQuestionEdge!
+}
+
 input RegistrationForm {
   firstName: String!
   lastName: String!
@@ -498,7 +509,7 @@ type Subscription {
   eventUpdates(eventId: ID!): Event!
 
   """Question subscription for all operations performed on questions"""
-  questionCRUD(eventId: ID!): EventQuestionEdge!
+  questionCRUD(eventId: ID!): QuestionOperation!
 }
 
 input UpdateEvent {

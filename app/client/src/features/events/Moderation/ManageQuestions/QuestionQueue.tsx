@@ -111,18 +111,24 @@ function useStyledQueue({ eventId }: { eventId: string }) {
     const theme = useTheme();
     const [commit] = useMutation<QuestionQueueMutation>(QUESTION_QUEUE_MUTATION);
     const reorder = React.useCallback(
-        (list: readonly QuestionNode[], sourceIdx: number, destinationIdx: number) => {
-            if (destinationIdx === list.length - 1) return; // TODO:
-            if (destinationIdx === 0) return; // TODO:
+        (list: readonly QuestionNode[], sourceIdx: number, destinationIdx: number, minPosition: number) => {
             const isMovingTowardsStart = sourceIdx > destinationIdx;
             const maxIdx = isMovingTowardsStart ? destinationIdx : destinationIdx + 1;
             const minIdx = maxIdx - 1;
-            const maxPos = list[maxIdx].node.position;
-            const minPos = list[minIdx].node.position;
+
+            // if maxIdx === list.length, then we're moving to the end of the list, hence special logic
+            // NOTE: race condition, since we're using time for ordering, then adding 1000 ms (1s) will mean that the order
+            // at the very end may be messed up, but that's okay, the start is what's important
+            const maxPos =
+                maxIdx === list.length ? (list[list.length - 1].node.position ?? 0) + 1000 : list[maxIdx].node.position;
+
+            // if minIdx === -1, then we're moving to the start of the list, hence special logic
+            const minPos = minIdx === -1 ? minPosition : list[minIdx].node.position;
 
             if (!maxPos || !minPos) return;
 
-            const newPosition = minPos + (maxPos - minPos) / 2;
+            // round b/c relay requires that int be an actual integer
+            const newPosition = Math.round(minPos + (maxPos - minPos) / 2);
 
             commit({
                 variables: {
@@ -174,29 +180,27 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const data = useFragment(QUESTION_QUEUE_FRAGMENT, fragmentRef);
     const classes = useStyles();
     const ref = React.useRef<HTMLElement | null>(null);
-    const { totQuestions, currQuestionIdx } = React.useMemo(
+    const { totQuestions, sortedQuestions } = React.useMemo(
         () => ({
             totQuestions: data.queuedQuestions?.edges?.length ?? 0,
-            currQuestionIdx:
-                data.queuedQuestions?.edges?.findIndex(({ node }) => node.position === data.currentQuestion) ?? 0,
+            sortedQuestions: data.queuedQuestions?.edges?.slice(0).sort(sortByPosition) ?? [],
         }),
         [data]
     );
 
+    const currQuestionIdx = React.useMemo(
+        () => sortedQuestions.findIndex(({ node }) => node.position === data.currentQuestion),
+        [sortedQuestions, data.currentQuestion]
+    );
+
     const { currentQuestion, nextQuestion, pastQuestions, futureQuestions } = React.useMemo(
         () => ({
-            currentQuestion: data.queuedQuestions?.edges && data.queuedQuestions.edges[currQuestionIdx],
-            nextQuestion:
-                data.queuedQuestions?.edges && data.queuedQuestions.edges.length > currQuestionIdx + 1
-                    ? data.queuedQuestions.edges[currQuestionIdx + 1]
-                    : null,
-            pastQuestions: currQuestionIdx === -1 ? [] : data.queuedQuestions?.edges?.slice(0, currQuestionIdx) ?? [],
-            futureQuestions:
-                currQuestionIdx === -1
-                    ? data.queuedQuestions?.edges ?? []
-                    : data.queuedQuestions?.edges?.slice(currQuestionIdx + 1).sort(sortByPosition) ?? [],
+            currentQuestion: sortedQuestions[currQuestionIdx] ?? null,
+            nextQuestion: sortedQuestions.length > currQuestionIdx + 1 ? sortedQuestions[currQuestionIdx + 1] : null,
+            pastQuestions: currQuestionIdx === -1 ? [] : sortedQuestions.slice(0, currQuestionIdx),
+            futureQuestions: currQuestionIdx === -1 ? sortedQuestions : sortedQuestions.slice(currQuestionIdx + 1),
         }),
-        [currQuestionIdx, data]
+        [currQuestionIdx, sortedQuestions]
     );
 
     const [open, setOpen] = React.useState(false);
@@ -211,9 +215,9 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         (result: DropResult) => {
             // dropped outside the list
             if (!result.destination || !futureQuestions) return;
-            reorder(futureQuestions, result.source.index, result.destination.index);
+            reorder(futureQuestions, result.source.index, result.destination.index, currentQuestion.node.position || 0);
         },
-        [futureQuestions, reorder]
+        [futureQuestions, reorder, currentQuestion]
     );
 
     return (

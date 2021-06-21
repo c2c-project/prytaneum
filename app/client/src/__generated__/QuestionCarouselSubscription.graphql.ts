@@ -3,27 +3,27 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type PreviousQuestionButtonMutationVariables = {
+export type QuestionCarouselSubscriptionVariables = {
     eventId: string;
 };
-export type PreviousQuestionButtonMutationResponse = {
-    readonly prevQuestion: {
+export type QuestionCarouselSubscriptionResponse = {
+    readonly eventUpdates: {
         readonly id: string;
         readonly currentQuestion: number | null;
     };
 };
-export type PreviousQuestionButtonMutation = {
-    readonly response: PreviousQuestionButtonMutationResponse;
-    readonly variables: PreviousQuestionButtonMutationVariables;
+export type QuestionCarouselSubscription = {
+    readonly response: QuestionCarouselSubscriptionResponse;
+    readonly variables: QuestionCarouselSubscriptionVariables;
 };
 
 
 
 /*
-mutation PreviousQuestionButtonMutation(
+subscription QuestionCarouselSubscription(
   $eventId: ID!
 ) {
-  prevQuestion(eventId: $eventId) {
+  eventUpdates(eventId: $eventId) {
     id
     currentQuestion
   }
@@ -50,7 +50,7 @@ v1 = [
     ],
     "concreteType": "Event",
     "kind": "LinkedField",
-    "name": "prevQuestion",
+    "name": "eventUpdates",
     "plural": false,
     "selections": [
       {
@@ -76,27 +76,27 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "PreviousQuestionButtonMutation",
+    "name": "QuestionCarouselSubscription",
     "selections": (v1/*: any*/),
-    "type": "Mutation",
+    "type": "Subscription",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "PreviousQuestionButtonMutation",
+    "name": "QuestionCarouselSubscription",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "e40b2e42bea3cd9ac4d1e9df055a0a7c",
+    "cacheID": "240070639049e50f38588f469be1a6d3",
     "id": null,
     "metadata": {},
-    "name": "PreviousQuestionButtonMutation",
-    "operationKind": "mutation",
-    "text": "mutation PreviousQuestionButtonMutation(\n  $eventId: ID!\n) {\n  prevQuestion(eventId: $eventId) {\n    id\n    currentQuestion\n  }\n}\n"
+    "name": "QuestionCarouselSubscription",
+    "operationKind": "subscription",
+    "text": "subscription QuestionCarouselSubscription(\n  $eventId: ID!\n) {\n  eventUpdates(eventId: $eventId) {\n    id\n    currentQuestion\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b6fd926c640c55d2e47b98383ffd5080';
+(node as any).hash = 'bd6f14c6ae80ef6db6226d0ed844cf3c';
 export default node;

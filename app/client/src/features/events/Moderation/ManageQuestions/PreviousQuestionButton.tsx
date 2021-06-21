@@ -7,7 +7,10 @@ import { useEvent } from '../../useEvent';
 
 export const PREVIOUS_QUESTION_BUTTON_MUTATION = graphql`
     mutation PreviousQuestionButtonMutation($eventId: ID!) {
-        prevQuestion(eventId: $eventId)
+        prevQuestion(eventId: $eventId) {
+            id
+            currentQuestion
+        }
     }
 `;
 

@@ -16,11 +16,11 @@ export interface AskQuestionProps {
 }
 
 export const ASK_QUESTION_MUTATION = graphql`
-    mutation AskQuestionMutation($input: CreateQuestion!, $connections: [ID!]!) {
+    mutation AskQuestionMutation($input: CreateQuestion!) {
         createQuestion(input: $input) {
             isError
             message
-            body @prependEdge(connections: $connections) {
+            body {
                 cursor
                 node {
                     id
@@ -41,14 +41,10 @@ function AskQuestion({ className, eventId, connectionKey }: AskQuestionProps) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
     const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
-    const connection = React.useMemo(
-        () => ConnectionHandler.getConnectionID(eventId, connectionKey),
-        [connectionKey, eventId]
-    );
 
     function handleSubmit(form: TQuestionFormState) {
         commit({
-            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false }, connections: [connection] },
+            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
             onCompleted: close,
         });
     }

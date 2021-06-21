@@ -7,7 +7,10 @@ export type NextQuestionButtonMutationVariables = {
     eventId: string;
 };
 export type NextQuestionButtonMutationResponse = {
-    readonly nextQuestion: number;
+    readonly nextQuestion: {
+        readonly id: string;
+        readonly currentQuestion: number | null;
+    };
 };
 export type NextQuestionButtonMutation = {
     readonly response: NextQuestionButtonMutationResponse;
@@ -20,7 +23,10 @@ export type NextQuestionButtonMutation = {
 mutation NextQuestionButtonMutation(
   $eventId: ID!
 ) {
-  nextQuestion(eventId: $eventId)
+  nextQuestion(eventId: $eventId) {
+    id
+    currentQuestion
+  }
 }
 */
 
@@ -42,8 +48,26 @@ v1 = [
         "variableName": "eventId"
       }
     ],
-    "kind": "ScalarField",
+    "concreteType": "Event",
+    "kind": "LinkedField",
     "name": "nextQuestion",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "currentQuestion",
+        "storageKey": null
+      }
+    ],
     "storageKey": null
   }
 ];
@@ -65,14 +89,14 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "4accc5cab885a6f9bbb5e5f87a5a21f2",
+    "cacheID": "51804ca1bd92a0c695985d5472bb1d4f",
     "id": null,
     "metadata": {},
     "name": "NextQuestionButtonMutation",
     "operationKind": "mutation",
-    "text": "mutation NextQuestionButtonMutation(\n  $eventId: ID!\n) {\n  nextQuestion(eventId: $eventId)\n}\n"
+    "text": "mutation NextQuestionButtonMutation(\n  $eventId: ID!\n) {\n  nextQuestion(eventId: $eventId) {\n    id\n    currentQuestion\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '977a5473df344286447bbfacf32f59b5';
+(node as any).hash = '6e0b196203af346eac891d579b4d3143';
 export default node;

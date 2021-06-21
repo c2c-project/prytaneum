@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useReducer, useEffect } from 'react';
 import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import { graphql, useFragment } from 'react-relay';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { graphql, useFragment, useSubscription } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
+import type { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
+import { useEvent } from '@local/features/events';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
 
@@ -38,42 +41,107 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
     }
 `;
 
+const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
+    subscription QuestionCarouselSubscription($eventId: ID!) {
+        eventUpdates(eventId: $eventId) {
+            id
+            currentQuestion
+        }
+    }
+`;
+
 export interface QuestionCarouselProps {
     fragmentRef: QuestionCarouselFragment$key;
+}
+
+type TState = {
+    idx: number;
+    currQuestionIdx: number;
+};
+type TActions =
+    | { type: 'next'; payload?: never }
+    | { type: 'previous'; payload?: never }
+    | { type: 'updateCurrentQuestionIdx'; payload: number }
+    | { type: 'goToCurrent'; payload?: never };
+
+function reducer(state: TState, action: TActions): TState {
+    switch (action.type) {
+        case 'next':
+            return { ...state, idx: state.idx + 1 };
+        case 'previous':
+            return { ...state, idx: state.idx - 1 };
+        case 'updateCurrentQuestionIdx':
+            return {
+                ...state,
+                currQuestionIdx: action.payload,
+                idx: state.idx === state.currQuestionIdx ? action.payload : state.idx,
+            };
+        case 'goToCurrent':
+            return {
+                ...state,
+                idx: state.currQuestionIdx,
+            };
+        default:
+            return state;
+    }
 }
 
 export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
     const classes = useStyles();
     const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
-    const currQuestionIdx = useMemo(
+    const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
+    const { eventId } = useEvent();
+    const config = useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
+        () => ({
+            variables: { eventId },
+            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
+        }),
+        [eventId]
+    );
+    useSubscription(config);
+
+    const sortedQuestions = useMemo(
         () =>
-            data.queuedQuestions?.edges?.findIndex(
-                ({ node }) => node.position !== null && node.position === data.currentQuestion
-            ),
+            data.queuedQuestions?.edges
+                ?.slice(0)
+                .sort((edgeA, edgeB) =>
+                    edgeA.node.position && edgeB.node.position ? edgeA.node.position - edgeB.node.position : 0
+                ) ?? [],
         [data]
     );
+    const currQuestionIdx = useMemo(
+        () => sortedQuestions.findIndex(({ node }) => node.position !== null && node.position === data.currentQuestion),
+        [sortedQuestions, data.currentQuestion]
+    );
+
+    useEffect(() => {
+        if (state.currQuestionIdx !== currQuestionIdx) dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
+    }, [currQuestionIdx, state.currQuestionIdx]);
 
     // probably a better way to do this, but whatever
-    const currQuestion = useMemo(
-        () =>
-            currQuestionIdx !== null &&
-            currQuestionIdx !== -1 &&
-            currQuestionIdx !== undefined &&
-            data.queuedQuestions &&
-            data.queuedQuestions.edges
-                ? data.queuedQuestions.edges[currQuestionIdx]
-                : null,
-        [currQuestionIdx, data]
+    const displayedQuestion = useMemo(
+        () => (state.idx >= 0 && state.idx < sortedQuestions.length ? sortedQuestions[state.idx] : null),
+        [sortedQuestions, state.idx]
     );
 
     return (
         <Paper className={classes.root}>
             <Grid container justify='space-between'>
-                <IconButton className={classes.btn}>
+                <IconButton
+                    disabled={state.idx === 0 || state.idx === -1}
+                    className={classes.btn}
+                    onClick={() => dispatch({ type: 'previous' })}
+                >
                     <ChevronLeft />
                 </IconButton>
-                <Button className={classes.btn}>Answering Now</Button>
-                <IconButton className={classes.btn}>
+                <Button onClick={() => dispatch({ type: 'goToCurrent' })} className={classes.btn}>
+                    {state.idx === state.currQuestionIdx ? 'Answering Now' : 'Go To Current'}
+                </Button>
+                <IconButton
+                    disabled={state.currQuestionIdx === state.idx || state.idx === -1}
+                    className={classes.btn}
+                    onClick={() => dispatch({ type: 'next' })}
+                >
                     <ChevronRight />
                 </IconButton>
             </Grid>
@@ -85,15 +153,15 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
                 alignItems='center'
                 justify='center'
             >
-                {currQuestion ? (
+                {displayedQuestion ? (
                     <Grid item xs={12}>
-                        <QuestionAuthor fragmentRef={currQuestion.node} />
-                        <QuestionContent fragmentRef={currQuestion.node} />
+                        <QuestionAuthor fragmentRef={displayedQuestion.node} />
+                        <QuestionContent fragmentRef={displayedQuestion.node} />
                     </Grid>
                 ) : (
                     <CardContent>
                         <Typography variant='body2' color='textSecondary' align='center'>
-                            No Question to display :(
+                            No question to display :(
                         </Typography>
                     </CardContent>
                 )}
