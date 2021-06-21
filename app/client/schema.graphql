@@ -510,6 +510,9 @@ type Subscription {
 
   """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): QuestionOperation!
+
+  """subscription for whenever questions are added to the queue"""
+  questionQueued(eventId: ID!): EventQuestion!
 }
 
 input UpdateEvent {

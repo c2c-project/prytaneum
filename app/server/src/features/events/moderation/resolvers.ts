@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import type { EventLiveFeedback, QuestionOperation } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
+import type { EventLiveFeedback, QuestionOperation, EventQuestion } from '@local/graphql-types';
 import * as Moderation from './methods';
+import { doesEventMatch } from '../questions/methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
@@ -121,6 +122,12 @@ export const resolvers: Resolvers = {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
+                ctx.pubsub.publish({
+                    topic: 'questionQueued',
+                    payload: {
+                        questionQueued: questionWithGlobalId,
+                    },
+                });
                 return edge;
             });
         },
@@ -131,6 +138,16 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('eventLiveFeedbackCreated'),
                 (payload, args, ctx) =>
                     Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.id)
+            ),
+        },
+        questionQueued: {
+            subscribe: withFilter<{ questionQueued: EventQuestion }>(
+                (parent, args, ctx, info) => ctx.pubsub.subscribe('questionQueued'),
+                (payload, args, ctx) => {
+                    const { id: questionId } = fromGlobalId(payload.questionQueued.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    return doesEventMatch(eventId, questionId, ctx.prisma);
+                }
             ),
         },
     },

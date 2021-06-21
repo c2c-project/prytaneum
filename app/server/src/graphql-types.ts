@@ -413,6 +413,8 @@ export type Subscription = {
     eventUpdates: Event;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
+    /** subscription for whenever questions are added to the queue */
+    questionQueued: EventQuestion;
     /** Question subscription for all operations performed on questions */
     questionCRUD: QuestionOperation;
 };
@@ -422,6 +424,10 @@ export type SubscriptioneventUpdatesArgs = {
 };
 
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionQueuedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1423,6 +1429,13 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
+    >;
+    questionQueued?: SubscriptionResolver<
+        ResolversTypes['EventQuestion'],
+        'questionQueued',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionQueuedArgs, 'eventId'>
     >;
     questionCRUD?: SubscriptionResolver<
         ResolversTypes['QuestionOperation'],

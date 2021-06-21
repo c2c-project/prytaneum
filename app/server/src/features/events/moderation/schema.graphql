@@ -73,4 +73,9 @@ type Subscription {
     New messages as feedback is given
     """
     eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
+
+    """
+    subscription for whenever questions are added to the queue
+    """
+    questionQueued(eventId: ID!): EventQuestion!
 }
