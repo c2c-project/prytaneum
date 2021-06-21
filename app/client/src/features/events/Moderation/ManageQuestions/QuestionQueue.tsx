@@ -214,8 +214,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
             // dropped outside the list
+            console.log(data);
+            console.log(currentQuestion, futureQuestions, currQuestionIdx);
             if (!result.destination || !futureQuestions) return;
-            reorder(futureQuestions, result.source.index, result.destination.index, currentQuestion.node.position || 0);
+            reorder(futureQuestions, result.source.index, result.destination.index, currentQuestion?.node.position || 0);
         },
         [futureQuestions, reorder, currentQuestion]
     );
