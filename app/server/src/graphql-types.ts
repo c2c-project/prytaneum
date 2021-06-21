@@ -67,6 +67,12 @@ export type MutationResponse = {
     message: Scalars['String'];
 };
 
+export enum Operation {
+    CREATE = 'CREATE',
+    UPDATE = 'UPDATE',
+    DELETE = 'DELETE',
+}
+
 /** User Data */
 export type User = Node & {
     __typename?: 'User';
@@ -408,7 +414,7 @@ export type Subscription = {
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** Question subscription for all operations performed on questions */
-    questionCRUD: EventQuestionEdge;
+    questionCRUD: QuestionOperation;
 };
 
 export type SubscriptioneventUpdatesArgs = {
@@ -646,6 +652,12 @@ export type EventQuestionMutationResponse = MutationResponse & {
     body?: Maybe<EventQuestionEdge>;
 };
 
+export type QuestionOperation = {
+    __typename?: 'QuestionOperation';
+    operationType: Operation;
+    edge: EventQuestionEdge;
+};
+
 export type EventSpeaker = Node & {
     __typename?: 'EventSpeaker';
     /** Speaker id */
@@ -853,6 +865,7 @@ export type ResolversTypes = {
         | ResolversTypes['EventQuestionMutationResponse']
         | ResolversTypes['EventSpeakerMutationResponse']
         | ResolversTypes['EventVideoMutationResponse'];
+    Operation: Operation;
     User: ResolverTypeWrapper<User>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -899,6 +912,7 @@ export type ResolversTypes = {
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: ResolverTypeWrapper<EventQuestionMutationResponse>;
+    QuestionOperation: ResolverTypeWrapper<QuestionOperation>;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
     EventSpeakerEdge: ResolverTypeWrapper<EventSpeakerEdge>;
     EventSpeakerConnection: ResolverTypeWrapper<EventSpeakerConnection>;
@@ -986,6 +1000,7 @@ export type ResolversParentTypes = {
     CreateQuestion: CreateQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: EventQuestionMutationResponse;
+    QuestionOperation: QuestionOperation;
     EventSpeaker: EventSpeaker;
     EventSpeakerEdge: EventSpeakerEdge;
     EventSpeakerConnection: EventSpeakerConnection;
@@ -1410,7 +1425,7 @@ export type SubscriptionResolvers<
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
     >;
     questionCRUD?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['QuestionOperation'],
         'questionCRUD',
         ParentType,
         ContextType,
@@ -1598,6 +1613,15 @@ export type EventQuestionMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type QuestionOperationResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['QuestionOperation'] = ResolversParentTypes['QuestionOperation']
+> = {
+    operationType?: Resolver<ResolversTypes['Operation'], ParentType, ContextType>;
+    edge?: Resolver<ResolversTypes['EventQuestionEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type EventSpeakerResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
@@ -1713,6 +1737,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventQuestionConnection?: EventQuestionConnectionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;
     EventQuestionMutationResponse?: EventQuestionMutationResponseResolvers<ContextType>;
+    QuestionOperation?: QuestionOperationResolvers<ContextType>;
     EventSpeaker?: EventSpeakerResolvers<ContextType>;
     EventSpeakerEdge?: EventSpeakerEdgeResolvers<ContextType>;
     EventSpeakerConnection?: EventSpeakerConnectionResolvers<ContextType>;
@@ -1932,6 +1957,11 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], EventQuestionMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventQuestionMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<EventQuestionEdge>, EventQuestionMutationResponse, {}, TContext>;
+    };
+
+    QuestionOperation?: {
+        operationType?: LoaderResolver<Operation, QuestionOperation, {}, TContext>;
+        edge?: LoaderResolver<EventQuestionEdge, QuestionOperation, {}, TContext>;
     };
 
     EventSpeaker?: {

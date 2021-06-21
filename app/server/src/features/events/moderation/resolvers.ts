@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { EventLiveFeedback } from '@local/graphql-types';
+import type { EventLiveFeedback, QuestionOperation } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
 import * as Moderation from './methods';
 
@@ -26,16 +26,17 @@ export const resolvers: Resolvers = {
                     questionId,
                 });
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const edge = {
+                    node: questionWithGlobalId,
+                    cursor: questionWithGlobalId.createdAt.getTime().toString(),
+                };
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
-                        questionCRUD: questionWithGlobalId,
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                return {
-                    node: questionWithGlobalId,
-                    cursor: questionWithGlobalId.createdAt.getMilliseconds().toString(),
-                };
+                return edge;
             });
         },
         async nextQuestion(parent, args, ctx, info) {
@@ -43,6 +44,7 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(args.eventId);
             const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
             const eventWithGlobalId = toEventId(updatedEvent);
+
             ctx.pubsub.publish({
                 topic: 'eventUpdates',
                 payload: {
@@ -110,13 +112,13 @@ export const resolvers: Resolvers = {
                 });
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
                 const edge = {
-                    cursor: updatedQuestion.createdAt.getMilliseconds().toString(),
+                    cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
-                        questionCRUD: edge,
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
                 return edge;

@@ -84,6 +84,11 @@ type EventQuestionMutationResponse implements MutationResponse {
     body: EventQuestionEdge
 }
 
+type QuestionOperation {
+    operationType: Operation!
+    edge: EventQuestionEdge!
+}
+
 type Mutation {
     createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
     alterLike(input: AlterLike!): EventQuestionMutationResponse!
@@ -93,7 +98,7 @@ type Subscription {
     """
     Question subscription for all operations performed on questions
     """
-    questionCRUD(eventId: ID!): EventQuestionEdge!
+    questionCRUD(eventId: ID!): QuestionOperation!
 }
 
 type Query {

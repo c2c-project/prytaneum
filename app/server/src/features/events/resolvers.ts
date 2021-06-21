@@ -125,7 +125,18 @@ export const resolvers: Resolvers = {
             const queryResult = await Event.findQueuedQuestionsByEventId(eventId, ctx.prisma);
             if (!queryResult) return connectionFromArray([], args);
             const { questions } = queryResult;
-            return connectionFromArray(questions.map(toQuestionId), args);
+            const edges = questions
+                .map(toQuestionId)
+                .map((question) => ({ node: question, cursor: question.position.toString() }));
+            return {
+                edges,
+                pageInfo: {
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: edges[0].cursor.toString(),
+                    endCursor: edges[questions.length - 1].cursor.toString(),
+                },
+            };
         },
     },
 };

@@ -58,6 +58,15 @@ export async function createEvent(userId: string, prisma: PrismaClient, input: C
             endDateTime,
             orgId,
             ...defaultSettings,
+
+            // add the current user (the creator) as a moderator
+            moderators: {
+                create: [
+                    {
+                        userId,
+                    },
+                ],
+            },
         },
     });
     return result;

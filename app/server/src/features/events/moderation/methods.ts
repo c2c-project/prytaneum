@@ -1,4 +1,4 @@
-import { EventQuestion, PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@app/prisma';
 import { errors } from '@local/features/utils';
 import {
     CreateModerator,
@@ -32,7 +32,7 @@ async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
 export async function isModerator(userId: string | null, eventId: string, prisma: PrismaClient) {
     if (!userId) return false;
     const result = await prisma.eventModerator.findUnique({ where: { eventId_userId: { userId, eventId } } });
-    return Boolean(result);
+    return !!result;
 }
 
 /**
@@ -134,9 +134,9 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     if (!queryResult) throw new Error(errors.DNE('Event'));
 
     const question = await prisma.eventQuestion.findFirst({
-        where: { position: { gt: queryResult.currentQuestion } },
+        where: { position: { [change === 1 ? 'gt' : 'lt']: queryResult.currentQuestion }, eventId },
         take: 1,
-        orderBy: { position: change === -1 ? 'desc' : 'asc' },
+        orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
 
     if (!question) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
@@ -154,6 +154,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
  * currently, there's nothing to update, but in the future we may have more fine grained mod permissions
  * but for now it's better if the organizer must remove and then re-add a different
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function updateModerator(userId: string, prisma: PrismaClient, input: UpdateModerator) {
     return null;
 }
@@ -173,7 +174,7 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     const hasPermission = await isModerator(userId, input.eventId, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
-    const currentTimeMs = new Date().getUTCMilliseconds();
+    const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
     // using 7 digits since most events are ~1 hr and there are 7 digits of ms in 1 hr
