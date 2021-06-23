@@ -125,7 +125,8 @@ function useStyledQueue({ eventId }: { eventId: string }) {
             // if minIdx === -1, then we're moving to the start of the list, hence special logic
             const minPos = minIdx === -1 ? minPosition : list[minIdx].node.position;
 
-            if (!maxPos || !minPos) return;
+            
+            if (!maxPos || minPos === null) return;
 
             // round b/c relay requires that int be an actual integer
             const newPosition = Math.round(minPos + (maxPos - minPos) / 2);
