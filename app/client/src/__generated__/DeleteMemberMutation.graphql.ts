@@ -9,7 +9,6 @@ export type DeleteMember = {
 };
 export type DeleteMemberMutationVariables = {
     input: DeleteMember;
-    connections: Array<string>;
 };
 export type DeleteMemberMutationResponse = {
     readonly deleteMember: {
@@ -48,149 +47,101 @@ mutation DeleteMemberMutation(
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "input"
-},
-v2 = [
+var v0 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "input"
   }
 ],
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isError",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "message",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "body",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "firstName",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "lastName",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "avatar",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-};
-return {
-  "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
+v1 = [
+  {
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "DeleteMemberMutation",
+    "concreteType": "UserMutationResponse",
+    "kind": "LinkedField",
+    "name": "deleteMember",
+    "plural": false,
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "UserMutationResponse",
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isError",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "message",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "User",
         "kind": "LinkedField",
-        "name": "deleteMember",
+        "name": "body",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/),
-          (v5/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "firstName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "lastName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "avatar",
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
     ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "DeleteMemberMutation",
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "DeleteMemberMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "UserMutationResponse",
-        "kind": "LinkedField",
-        "name": "deleteMember",
-        "plural": false,
-        "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/),
-          (v5/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "appendNode",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "body",
-            "handleArgs": [
-              {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
-              },
-              {
-                "kind": "Literal",
-                "name": "edgeTypeName",
-                "value": "UserEdge"
-              }
-            ]
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
     "cacheID": "adcb94ec39ec301ed140740d063affd8",
@@ -202,5 +153,5 @@ return {
   }
 };
 })();
-(node as any).hash = '38cd15f21ff751d7225b80e5fe76865b';
+(node as any).hash = '751101c05acc276e8a21e40194ee5be7';
 export default node;
