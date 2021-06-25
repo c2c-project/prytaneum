@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
 import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
 import { graphql, useFragment } from 'react-relay';
+import { useUser } from '@local/features/accounts/useUser';
 
 import type { OrgMemberListFragment$key } from '@local/__generated__/OrgMemberListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { CreateMember, CreateMemberProps } from './CreateMember';
+import { DeleteMember } from './DeleteMember';
 
 interface OrgMemberListProps {
     fragmentRef: OrgMemberListFragment$key;
@@ -48,12 +52,33 @@ export const ORG_MEMBERS = graphql`
     }
 `;
 
+export interface SelectedMember {
+    readonly id: string,
+    readonly firstName: string | null
+    readonly lastName: string | null
+}
+
 export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
+    const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
+    const [selectedMember, setSelectedMember] = React.useState({
+        id: '',
+        firstName: '',
+        lastName: ''
+    } as SelectedMember);
+    const [user, setUser] = useUser();
     const data = useFragment(ORG_MEMBERS, fragmentRef);
     const members = React.useMemo(() => data.members?.edges || [], [data]);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
     const connectionId = React.useMemo(() => data.members?.__id, [data]);
+
+    const close = () => {
+        setIsConfDialogOpen(false);
+    }
+
+    React.useEffect(() => {
+        console.log(user);
+    }, [user])
 
     return (
         <Grid container item direction='column' className={className}>
@@ -63,6 +88,18 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                         members.map(({ node }) => (
                             <ListItem button key={node.id} divider>
                                 <ListItemText primary={`${node.firstName} ${node.lastName}`} />
+                                {user?.id !== node.id ?
+                                    <IconButton
+                                        className='deleteMember'
+                                        onClick={() => {
+                                            setSelectedMember(node);
+                                            setIsConfDialogOpen(true);
+                                        }}
+                                        aria-expanded={isConfDialogOpen}
+                                        aria-label='delete member'
+                                    >
+                                        <ClearIcon />
+                                    </IconButton> : <></>}
                             </ListItem>
                         ))
                     ) : (
@@ -71,6 +108,22 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                         </Typography>
                     )}
                 </List>
+            </Grid>
+            <Grid container justify='flex-end'>
+                <DeleteMember
+                    open={isConfDialogOpen}
+                    onClose={close}
+                    title={`Delete "${selectedMember.firstName}" as a member?`}
+                    onConfirm={close}
+                    memberId={selectedMember.id}
+                    orgId={data.id}
+                    connections={[connectionId ?? '']}
+                >
+                    <>
+                        Are you sure you want to delete the&nbsp;
+                        <b>{selectedMember.firstName}</b> member?
+                    </>
+                </DeleteMember>
             </Grid>
             <Grid container justify='flex-end'>
                 <CreateMemberDialog orgId={data.id} connections={[connectionId ?? '']} />

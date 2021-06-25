@@ -25,7 +25,8 @@ export const resolvers: Resolvers = {
     Mutation: {
         async register(parent, args, ctx, info) {
             return runMutation(async () => {
-                const registeredUser = await User.registerSelf(ctx.prisma, args.input);
+                const { registeredUser, token } = await User.registerSelf(ctx.prisma, args.input);
+                ctx.reply.setCookie('jwt', token);
                 return toUserId(registeredUser);
             });
         },

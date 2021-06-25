@@ -703,6 +703,8 @@ export type Subscription = {
   eventUpdates: Event;
   /** Question subscription for all operations performed on questions */
   questionCRUD: QuestionOperation;
+  /** subscription for whenever questions are added to the queue */
+  questionQueued: EventQuestion;
 };
 
 
@@ -717,6 +719,11 @@ export type SubscriptionEventUpdatesArgs = {
 
 
 export type SubscriptionQuestionCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionQueuedArgs = {
   eventId: Scalars['ID'];
 };
 
