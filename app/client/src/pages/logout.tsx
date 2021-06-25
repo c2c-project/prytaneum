@@ -35,11 +35,11 @@ export default function Logout() {
                 },
             });
         }
-    }, [runMutation, isClient, resetEnv, setUser]);
+    }, [runMutation, isClient, resetEnv, setUser, router]);
 
     React.useEffect(() => {
         let handle: NodeJS.Timeout | undefined;
-        if (!user) {
+        if (!user || user == null) {
             handle = setTimeout(() => {
                 router.push('/login');
             }, 1500);
