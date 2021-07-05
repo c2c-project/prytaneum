@@ -64,7 +64,10 @@ export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {
 export async function registerSelf(prisma: PrismaClient, input: RegistrationForm) {
     if (input.password !== input.confirmPassword) throw new Error('Passwords must match');
 
-    return register(prisma, input, input.password);
+    const registeredUser = await register(prisma, input, input.password);
+    const token = await jwt.sign({ id: toUserId(registeredUser).id });
+
+    return { registeredUser, token };
 }
 
 /**

@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const MODERATER_EVENT_SETTINGS_FRAGMENT = graphql`
+export const MODERATOR_EVENT_SETTINGS_FRAGMENT = graphql`
     fragment ModeratorEventSettingsFragment on Event
     @argumentDefinitions(first: { type: "Int", defaultValue: 10 }, after: { type: "String", defaultValue: "" }) {
         id
@@ -132,7 +132,7 @@ const reducer = (state: TState, action: Action): TState => {
 };
 
 export const ModeratorEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
-    const { moderators, id: eventId } = useFragment(MODERATER_EVENT_SETTINGS_FRAGMENT, fragmentRef);
+    const { moderators, id: eventId } = useFragment(MODERATOR_EVENT_SETTINGS_FRAGMENT, fragmentRef);
     const moderatorEdges = React.useMemo(() => moderators?.edges?.map(({ node }) => node) || [], [moderators?.edges]);
     const connections = React.useMemo(() => (moderators?.__id ? [moderators.__id] : []), [moderators]);
     const [{ isFormDialogOpen, isConfDialogOpen, anchorEl, focusedModerator }, dispatch] = React.useReducer(reducer, {
