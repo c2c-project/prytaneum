@@ -17,13 +17,11 @@ const Page: NextPage = () => {
         if (router.isReady) loadQuery({ input: eventId });
     }, [router.isReady, loadQuery, eventId]);
 
-    if (!user) {
-        return (
-            <div>
-                <p>Please log in.</p>
-            </div>
-        );
-    }
+    React.useEffect(() => {
+        if (!user) {
+            router.push('/login');
+        }
+    });
 
     if (!router.isReady || !queryRef) return <div>Loading...</div>;
 
