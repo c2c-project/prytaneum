@@ -6,15 +6,23 @@ import { useQueryLoader } from 'react-relay';
 import { OrgProfileQuery } from '@local/__generated__/OrgProfileQuery.graphql';
 import { Loader } from '@local/components/Loader';
 import { OrgProfile, ORG_PROFILE } from '@local/features/organizations';
+import { useUser } from '@local/features/accounts';
 
 const Page: NextPage = () => {
     const router = useRouter();
     const { id } = router.query as { id: string }; // guaranteed as part of the file name
     const [queryRef, loadQuery] = useQueryLoader<OrgProfileQuery>(ORG_PROFILE);
+    const [user] = useUser();
 
     React.useEffect(() => {
         if (router.isReady) loadQuery({ id });
     }, [router.isReady, id, loadQuery]);
+
+    React.useEffect(() => {
+        if (!user) {
+            router.push('/login');
+        }
+    });
 
     if (!router.isReady || !queryRef) return <Loader />;
 

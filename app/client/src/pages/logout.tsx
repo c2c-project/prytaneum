@@ -32,14 +32,15 @@ export default function Logout() {
                 onCompleted() {
                     resetEnv();
                     setUser(null);
+                    router.push('/login');
                 },
             });
         }
-    }, [runMutation, isClient, resetEnv, setUser]);
+    }, [runMutation, isClient, resetEnv, setUser, router]);
 
     React.useEffect(() => {
         let handle: NodeJS.Timeout | undefined;
-        if (!user) {
+        if (!user || user == null) {
             handle = setTimeout(() => {
                 router.push('/login');
             }, 1500);
