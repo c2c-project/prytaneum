@@ -36,6 +36,11 @@ export type CreateFeedback = {
   message: Scalars['String'];
 };
 
+export type CreateInvite = {
+  email: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
 /** Info necessary for adding a member to an organization */
 export type CreateMember = {
   email: Scalars['String'];
@@ -383,6 +388,12 @@ export type HideQuestion = {
   toggleTo: Scalars['Boolean'];
 };
 
+export type InviteMutationResponse = MutationResponse & {
+  __typename?: 'InviteMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Like = {
   __typename?: 'Like';
   user: User;
@@ -407,6 +418,7 @@ export type Mutation = {
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
   createFeedback?: Maybe<EventLiveFeedback>;
+  createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
   /** Add a new moderator to the given event */
@@ -462,6 +474,11 @@ export type MutationCreateEventArgs = {
 
 export type MutationCreateFeedbackArgs = {
   input?: Maybe<CreateFeedback>;
+};
+
+
+export type MutationCreateInviteArgs = {
+  input: CreateInvite;
 };
 
 
@@ -670,6 +687,7 @@ export type Query = {
   myOrgs?: Maybe<Array<Organization>>;
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  validateInvite: ValidateInviteQueryResponse;
 };
 
 
@@ -680,6 +698,11 @@ export type QueryNodeArgs = {
 
 export type QueryQuestionsByEventIdArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryValidateInviteArgs = {
+  input: ValidateInvite;
 };
 
 export type QuestionOperation = {
@@ -805,4 +828,14 @@ export type UserMutationResponse = MutationResponse & {
   isError: Scalars['Boolean'];
   message: Scalars['String'];
   body?: Maybe<User>;
+};
+
+export type ValidateInvite = {
+  token: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
+export type ValidateInviteQueryResponse = {
+  __typename?: 'ValidateInviteQueryResponse';
+  valid: Scalars['Boolean'];
 };
