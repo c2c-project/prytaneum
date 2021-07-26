@@ -11,7 +11,6 @@ import { graphql, useFragment } from 'react-relay';
 
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { ArrayElement } from '@local/utils/ts-utils';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails'
 import { CreateInvite } from './CreateInvite';
 
@@ -78,6 +77,11 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
 
     const openFormDialog = () => dispatch({ type: 'dialog/create-invite' });
 
+    const generateInviteLink = () => {
+        const inviteLink = `http://localhost:8080/events/${eventId}/live`;
+        // TODO copy link to clipboard
+    };
+
     return (
         <Grid container justify='center' className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
@@ -88,6 +92,9 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
             <Grid container justify='flex-end'>
                 <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Invite
+                </Button>
+                <Button variant='outlined' onClick={generateInviteLink} startIcon={<Add />}>
+                    Generate Invite Link
                 </Button>
             </Grid>
         </Grid>

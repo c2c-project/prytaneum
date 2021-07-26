@@ -5,7 +5,8 @@ import * as Invites from './methods';
 export const resolvers: Resolvers = {
     Query: {
         async validateInvite(parent, args, ctx, info) {
-            return;
+            
+            return { valid: true };
         }
     },
     Mutation: {
