@@ -28,7 +28,10 @@ export type QuestionQueueFragment$key = {
 
 
 const node: ReaderFragment = (function(){
-var v0 = {
+var v0 = [
+  "queuedQuestions"
+],
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -55,15 +58,28 @@ return {
         "count": "first",
         "cursor": "after",
         "direction": "forward",
-        "path": [
-          "queuedQuestions"
-        ]
+        "path": (v0/*: any*/)
       }
-    ]
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "first",
+          "cursor": "after"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./QuestionQueuePagination.graphql.ts'),
+      "identifierField": "id"
+    }
   },
   "name": "QuestionQueueFragment",
   "selections": [
-    (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -102,7 +118,7 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v0/*: any*/),
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -171,5 +187,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '76ce27dd72a9748073b142b1a2bd9b87';
+(node as any).hash = 'a5efab195ec373790e17dc533ddfa12f';
 export default node;

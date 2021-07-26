@@ -9,7 +9,6 @@ export type AddQuestionToQueue = {
 };
 export type QueueButtonMutationVariables = {
     input: AddQuestionToQueue;
-    connections: Array<string>;
 };
 export type QueueButtonMutationResponse = {
     readonly addQuestionToQueue: {
@@ -50,148 +49,105 @@ mutation QueueButtonMutation(
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "input"
-},
-v2 = [
+var v0 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "input"
   }
 ],
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isError",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "message",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "EventQuestionEdge",
-  "kind": "LinkedField",
-  "name": "body",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "cursor",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "EventQuestion",
-      "kind": "LinkedField",
-      "name": "node",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "position",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-};
-return {
-  "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
+v1 = [
+  {
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "QueueButtonMutation",
+    "concreteType": "EventQuestionMutationResponse",
+    "kind": "LinkedField",
+    "name": "addQuestionToQueue",
+    "plural": false,
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isError",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "message",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "addQuestionToQueue",
+        "name": "body",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/),
-          (v5/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "cursor",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventQuestion",
+            "kind": "LinkedField",
+            "name": "node",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "position",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
     ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "QueueButtonMutation",
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "QueueButtonMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
-        "kind": "LinkedField",
-        "name": "addQuestionToQueue",
-        "plural": false,
-        "selections": [
-          (v3/*: any*/),
-          (v4/*: any*/),
-          (v5/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "appendEdge",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "body",
-            "handleArgs": [
-              {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
-              }
-            ]
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
     "cacheID": "c90fcdcd9cb60a6922a40ae70956e7f8",
@@ -203,5 +159,5 @@ return {
   }
 };
 })();
-(node as any).hash = 'f4c66f84ae5e87e48e1bbd658d466630';
+(node as any).hash = '30912632b7b00d3443b815cff9dd78ea';
 export default node;
