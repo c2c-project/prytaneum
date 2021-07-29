@@ -36,6 +36,12 @@ type OrganizationConnection {
     pageInfo: PageInfo!
 }
 
+type OrganizationSubscription {
+    orgId: ID!
+    userId: ID
+    deleteMember: Boolean!
+}
+
 """
 Necessary information for org creation
 """
@@ -98,4 +104,11 @@ type Query {
     Fetch organizations relevant to the current user
     """
     myOrgs: [Organization!]
+}
+
+type Subscription {
+    """
+    subscription for whenever a new org is added
+    """
+    orgUpdated: OrganizationSubscription!
 }
