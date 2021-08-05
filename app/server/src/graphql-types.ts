@@ -330,6 +330,10 @@ export type Event = Node & {
     moderators?: Maybe<UserConnection>;
     /** Whether or not the viewer is a moderator */
     isViewerModerator?: Maybe<Scalars['Boolean']>;
+    /** List of users who can view event when private */
+    invited?: Maybe<UserConnection>;
+    /** Whether or not the viewer is invited */
+    isViewerInvited?: Maybe<Scalars['Boolean']>;
     /** Questions queued in this session by the moderator(s) */
     queuedQuestions?: Maybe<EventQuestionConnection>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
@@ -362,6 +366,11 @@ export type EventliveFeedbackArgs = {
 };
 
 export type EventmoderatorsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+export type EventinvitedArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -1428,6 +1437,13 @@ export type EventResolvers<
         RequireFields<EventmoderatorsArgs, never>
     >;
     isViewerModerator?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    invited?: Resolver<
+        Maybe<ResolversTypes['UserConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventinvitedArgs, never>
+    >;
+    isViewerInvited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     queuedQuestions?: Resolver<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
@@ -1919,6 +1935,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         liveFeedback?: LoaderResolver<Maybe<EventLiveFeedbackConnection>, Event, EventliveFeedbackArgs, TContext>;
         moderators?: LoaderResolver<Maybe<UserConnection>, Event, EventmoderatorsArgs, TContext>;
         isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+        invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
+        isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         queuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventqueuedQuestionsArgs, TContext>;
         currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };

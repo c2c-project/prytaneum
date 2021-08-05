@@ -5,8 +5,9 @@ import * as Invites from './methods';
 export const resolvers: Resolvers = {
     Query: {
         async validateInvite(parent, args, ctx, info) {
-            
-            return { valid: true };
+            const { id: eventId } = fromGlobalId(args.input.eventId);
+            const { token } = args.input;
+            return Invites.validateInvite(token, eventId, ctx.prisma);
         }
     },
     Mutation: {

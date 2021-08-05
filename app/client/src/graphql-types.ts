@@ -159,6 +159,10 @@ export type Event = Node & {
   moderators?: Maybe<UserConnection>;
   /** Whether or not the viewer is a moderator */
   isViewerModerator?: Maybe<Scalars['Boolean']>;
+  /** List of users who can view event when private */
+  invited?: Maybe<UserConnection>;
+  /** Whether or not the viewer is invited */
+  isViewerInvited?: Maybe<Scalars['Boolean']>;
   /** Questions queued in this session by the moderator(s) */
   queuedQuestions?: Maybe<EventQuestionConnection>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
@@ -197,6 +201,12 @@ export type EventLiveFeedbackArgs = {
 
 
 export type EventModeratorsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventInvitedArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
 };
