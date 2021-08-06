@@ -78,6 +78,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     const openFormDialog = () => dispatch({ type: 'dialog/create-invite' });
 
     const generateInviteLink = () => {
+        // TODO generate token for event if private unless only invites should be used for priavte events
         const inviteLink = `http://localhost:8080/events/${eventId}/live`;
         // TODO copy link to clipboard
     };

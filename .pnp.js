@@ -245,6 +245,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/merge", "virtual:518e8acecd41a777f60446d1354202140c9e593236dcab105ddaaa813375e1ec913fc5d14151a6c78eebc0b7c9ee5a5ef41b3db920b96661e92878e0027473cf#npm:6.2.13"],
             ["@graphql-tools/schema", "virtual:f7a6a9227e28241437f300b007d7630ba4ef64c0dae7c7ab78234e07bced63ab7737fbe1c616c7e5d578305477a11f39982b255b5199a977ccec3b5f84a2682c#npm:7.1.3"],
             ["@types/bcrypt", "npm:3.0.1"],
+            ["@types/busboy", "npm:0.2.4"],
             ["@types/jsonwebtoken", "npm:8.5.1"],
             ["@types/mailgun-js", "npm:0.22.11"],
             ["@types/node", "npm:15.0.1"],
@@ -255,6 +256,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-expand", "npm:5.1.0"],
             ["fastify", "npm:3.15.1"],
             ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
+            ["fastify-multipart", "npm:4.0.7"],
             ["form-data", "npm:4.0.0"],
             ["graphql", "npm:15.5.0"],
             ["graphql-relay", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#https://github.com/DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"],
@@ -9252,6 +9254,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/busboy", [
+        ["npm:0.2.4", {
+          "packageLocation": "./.yarn/cache/@types-busboy-npm-0.2.4-fd143f945a-c180a4b2fe.zip/node_modules/@types/busboy/",
+          "packageDependencies": [
+            ["@types/busboy", "npm:0.2.4"],
+            ["@types/node", "npm:14.14.41"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/color-convert", [
         ["npm:2.0.0", {
           "packageLocation": "./.yarn/cache/@types-color-convert-npm-2.0.0-f59f3c146a-c7291845fc.zip/node_modules/@types/color-convert/",
@@ -16527,6 +16539,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["fastify-multipart", [
+        ["npm:4.0.7", {
+          "packageLocation": "./.yarn/cache/fastify-multipart-npm-4.0.7-063a449108-118d1e4748.zip/node_modules/fastify-multipart/",
+          "packageDependencies": [
+            ["fastify-multipart", "npm:4.0.7"],
+            ["busboy", "npm:0.3.1"],
+            ["deepmerge", "npm:4.2.2"],
+            ["end-of-stream", "npm:1.4.4"],
+            ["fastify-error", "npm:0.3.1"],
+            ["fastify-plugin", "npm:3.0.0"],
+            ["hexoid", "npm:1.0.0"],
+            ["stream-wormhole", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["fastify-plugin", [
         ["npm:2.3.4", {
           "packageLocation": "./.yarn/cache/fastify-plugin-npm-2.3.4-526bc79215-31426b9698.zip/node_modules/fastify-plugin/",
@@ -18372,6 +18400,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["header-case", "npm:2.0.4"],
             ["capital-case", "npm:1.0.4"],
             ["tslib", "npm:2.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["hexoid", [
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/hexoid-npm-1.0.0-2274609209-4fbb267c88.zip/node_modules/hexoid/",
+          "packageDependencies": [
+            ["hexoid", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -27131,6 +27168,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/stream-shift-npm-1.0.1-9526210fa7-5d777b222e.zip/node_modules/stream-shift/",
           "packageDependencies": [
             ["stream-shift", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["stream-wormhole", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/stream-wormhole-npm-1.1.0-f067a319cd-8048145c59.zip/node_modules/stream-wormhole/",
+          "packageDependencies": [
+            ["stream-wormhole", "npm:1.1.0"]
           ],
           "linkType": "HARD",
         }]

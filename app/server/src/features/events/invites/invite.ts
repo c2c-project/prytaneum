@@ -1,8 +1,15 @@
 import { server } from '@local/server';
-import Mailgun from 'mailgun-js';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import util from 'util';
+import { pipeline } from 'stream';
+import path from 'path';
 
 import { sendEmail } from '@local/lib/email/email';
+import { FastifyRequest } from 'fastify/types/request';
+import { errors } from '@local/features/utils';
+
+const pump = util.promisify(pipeline);
 
 const paramsJsonSchema = {
     type: 'object',
@@ -16,15 +23,47 @@ const schema = {
     params: paramsJsonSchema
 }
 
+interface MulterRequest extends FastifyRequest {
+    file: any
+}
+
 export async function routes () {
-    server.get('/invite', { schema }, async (request, reply) => {
-        console.log(request.query);
-        sendEmail('keltonadey1@gmail.com', 'Test', 'Text', new Date(), '');
-        const inviteInfo = {
-            email: request.query,
-            eventId: request.query
+    server.post('/invite', { schema }, async (request, reply) => {
+        const data = await (request as MulterRequest).file();
+        if (!data) reply.send(new Error(errors.fileNotFound));
+        const filePath = path.join(__dirname, '/downloads', data.filename);
+        try {
+            // Validate the filetype
+            if (data.mimetype !== 'text/csv') throw new Error('Invalid filetype, expected .csv');
+    
+            // Make directory for files if it does not exists
+            if (!fs.existsSync(path.join(__dirname, '/downloads'))) {
+                fs.mkdirSync(path.join(__dirname, '/downloads'));
+            }
+    
+            // Write file to disk
+            await pump(data.file, fs.createWriteStream(filePath));
+    
+            // remove file and throw an error if the file exceeded the size limit
+            if (data.file.truncated) {
+                console.log('truncated');
+                fs.unlink(filePath, (err) => {
+                    if (err) console.error(JSON.stringify(err));
+                });
+                reply.send(new Error(errors.fileSize));    
+            }
+            
+            // Remove file after use
+            fs.unlink(filePath, (err) => {
+                if (err) console.error(JSON.stringify(err));
+            });
+            reply.send();
+        } catch (error) {
+            console.error(error);
+            fs.unlink(filePath, (err) => {
+                if (err) console.error(JSON.stringify(err));
+            });
         }
-        reply.send({ params: request.query });
     })
 }
 
@@ -38,7 +77,7 @@ export async function routes () {
  * @param {string} constituentScope the constituent scope
  * @returns {string} the filled out invite template string
  */
-// const getInviteString = ({
+// export const getInviteString = ({
 //     MoC,
 //     topic,
 //     eventDateTime,
@@ -58,7 +97,7 @@ export async function routes () {
  * @param {string} message Message body
  * @param {string} unsubLink the unsubscribe link
  */
-const addUnsubLink = (message: string, unsubLink: string): string => {
+export const addUnsubLink = (message: string, unsubLink: string): string => {
     const updatedMessage = `${message}\n${unsubLink}`;
     return updatedMessage;
 };
@@ -68,7 +107,7 @@ const addUnsubLink = (message: string, unsubLink: string): string => {
  * @param {string} email
  * @return {string} link string
  */
-const generateInviteLink = (email: string, townHallId: string): string => {
+export const generateInviteLink = (email: string, townHallId: string): string => {
     const jwtOptions: jwt.SignOptions = {
         algorithm: 'HS256',
     };
@@ -82,7 +121,7 @@ const generateInviteLink = (email: string, townHallId: string): string => {
  * @param {string} email
  * @return {string} link string
  */
-const generateUnsubscribeLink = (email: string, townHallId: string): string => {
+export const generateUnsubscribeLink = (email: string, townHallId: string): string => {
     const jwtOptions: jwt.SignOptions = {
         algorithm: 'HS256',
     };
@@ -100,7 +139,7 @@ interface RecipiantVariables {
  * @param inviteeList list of invitee data
  * @return Returns the recipiant variables along with the list of recipiant emails
  */
-// const generateRecipiantVariables = (
+// export const generateRecipiantVariables = (
 //     inviteeList: Array<InviteeData>,
 //     townHallId: string
 // ): { emails: Array<string>; recipiantVariables: string } => {
@@ -122,7 +161,7 @@ interface RecipiantVariables {
  * @param {string} inviteData Invite specific data
  * @return {Promise<Array<string | Mailgun.messages.SendResponse>>} promise that resolves to the mailgun email results in array
  */
-// const inviteMany = async (
+// export const inviteMany = async (
 //     inviteeList: Array<InviteeData>,
 //     inviteData: InviteData
 // ): Promise<Array<string | Mailgun.messages.SendResponse>> => {
@@ -177,7 +216,7 @@ interface RecipiantVariables {
  * @returns {Date} Given date as Date object if defined. Defaults to current Date object if undefined.
  * @throws ClientError: If a given string is defined but invalid throws a formatting error
  */
-const validateDeliveryTime = (deliveryTimeString: string | undefined): Date => {
+export const validateDeliveryTime = (deliveryTimeString: string | undefined): Date => {
     let deliveryTime: Date;
     if (deliveryTimeString === undefined) {
         // Deliver right away by default if no deliveryTime is given

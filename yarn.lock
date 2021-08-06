@@ -139,6 +139,7 @@ __metadata:
     "@graphql-tools/merge": ^6.2.13
     "@graphql-tools/schema": ^7.1.3
     "@types/bcrypt": ^3.0.1
+    "@types/busboy": ^0.2.4
     "@types/jsonwebtoken": ^8
     "@types/mailgun-js": ^0.22.11
     "@types/node": ^15.0.1
@@ -149,6 +150,7 @@ __metadata:
     dotenv-expand: ^5.1.0
     fastify: ^3.15.1
     fastify-cookie: ^5.3.0
+    fastify-multipart: ^4.0.7
     form-data: ^4.0.0
     graphql: ^15.5.0
     graphql-relay: "github:DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"
@@ -4770,6 +4772,15 @@ __metadata:
   version: 3.0.0
   resolution: "@types/braces@npm:3.0.0"
   checksum: 4bebd28e5b04c7e4930997017343516a2ab8fab2bcc64095da1e3b927c173f48c4bc3c75f3ef8037e9e8c7a54e0133b8705887ae52c8f9adb11dfb8d32cd9b78
+  languageName: node
+  linkType: hard
+
+"@types/busboy@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@types/busboy@npm:0.2.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: c180a4b2fea49d28a8f1f80e2b244093d79959282c9d79390025e0892b1648505922a73f0fd56763a057b006664a7f9239b84678cfd834d4909a183d6673c4af
   languageName: node
   linkType: hard
 
@@ -10704,6 +10715,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-multipart@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "fastify-multipart@npm:4.0.7"
+  dependencies:
+    busboy: ^0.3.1
+    deepmerge: ^4.2.2
+    end-of-stream: ^1.4.4
+    fastify-error: ^0.3.0
+    fastify-plugin: ^3.0.0
+    hexoid: ^1.0.0
+    stream-wormhole: ^1.1.0
+  checksum: 118d1e4748eb1480bcc1ddde532a3ea04e5795008264941ad3ae3125997693a66d9bc0a3227321955bad2919075a796c91d3dc79d89e8ffe5769779d6033d9fb
+  languageName: node
+  linkType: hard
+
 "fastify-plugin@npm:^2.3.4":
   version: 2.3.4
   resolution: "fastify-plugin@npm:2.3.4"
@@ -12182,6 +12208,13 @@ fsevents@^1.2.7:
     capital-case: ^1.0.4
     tslib: ^2.0.3
   checksum: 1cc640a98a59224db2b1c3ed2ecf2a9755db445b103462d4a30185e825ec6d61fbcc6b607a0d87b6f71b33a9f0080f6900420da528ced5cb661b4de75c36dd4d
+  languageName: node
+  linkType: hard
+
+"hexoid@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hexoid@npm:1.0.0"
+  checksum: 4fbb267c885c6f69623fedd994d25f181a7888d549039ba74e8f9c34faa42452b7b53372e07fda8f03bda41aa98d953804f4b4bc4466d4c4209bb956be71efdf
   languageName: node
   linkType: hard
 
@@ -19688,6 +19721,13 @@ resolve@^2.0.0-next.3:
   version: 1.0.1
   resolution: "stream-shift@npm:1.0.1"
   checksum: 5d777b222e460dc660ee29acad4f99649eb8d0051d3cb648fc92f3f77557b33d0a8ad656291c2cfa87703204191534a6003c2b035606a699674d0bb600353ad3
+  languageName: node
+  linkType: hard
+
+"stream-wormhole@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "stream-wormhole@npm:1.1.0"
+  checksum: 8048145c59dae4864d34c91fb0ee6531f681ba55f751c65870aceb681ad1c1fb710899cef66b61a440643e51c1fd1e0f2815112281425c8e2fbb587362a6c965
   languageName: node
   linkType: hard
 

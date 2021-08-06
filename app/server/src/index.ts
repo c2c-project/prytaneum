@@ -6,7 +6,9 @@ import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
+import fastifyMultipart from 'fastify-multipart';
 
+import { routes as inviteRoute } from '@local/features/events/invites/invite';
 import { buildContext, buildSubscriptionContext } from './context';
 import { server } from './server';
 
@@ -36,6 +38,20 @@ server.register(cookie, {
 } as FastifyCookieOptions);
 
 server.register(AltairFastify);
+
+server.register(fastifyMultipart, {
+    limits: {
+        fieldNameSize: 100, // Max field name size in bytes
+        fieldSize: 100,     // Max field value size in bytes
+        fields: 10,         // Max number of non-file fields
+        fileSize: 1000000,  // For multipart forms, the max file size in bytes
+        files: 1,           // Max number of file fields
+        headerPairs: 2000   // Max number of header key=>value pairs
+    },
+    // attachFieldsToBody: true
+});
+
+server.register(inviteRoute);
 
 function verifyEnv() {
     if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
