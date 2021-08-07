@@ -16,7 +16,6 @@ export async function getServerSideProps() {
 
 const Live: NextPage = () => {
     const router = useRouter();
-
     if (!router.isReady) return <EventLiveLoader />;
 
     return (
