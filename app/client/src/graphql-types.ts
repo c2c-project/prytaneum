@@ -651,6 +651,13 @@ export type OrganizationMutationResponse = MutationResponse & {
   body?: Maybe<Organization>;
 };
 
+export type OrganizationSubscription = {
+  __typename?: 'OrganizationSubscription';
+  orgId: Scalars['ID'];
+  userId?: Maybe<Scalars['ID']>;
+  deleteMember: Scalars['Boolean'];
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   hasNextPage: Scalars['Boolean'];
@@ -701,6 +708,8 @@ export type Subscription = {
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
+  /** subscription for whenever a new org is added */
+  orgUpdated: OrganizationSubscription;
   /** Question subscription for all operations performed on questions */
   questionCRUD: QuestionOperation;
   /** subscription for whenever questions are added to the queue */
