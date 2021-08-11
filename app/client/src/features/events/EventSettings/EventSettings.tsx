@@ -7,6 +7,10 @@ import { Typography, Divider } from '@material-ui/core';
 import { SettingsMenu } from '@local/components/SettingsMenu';
 import type { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery.graphql';
 
+import { useUser } from '@local/features/accounts';
+import { useRouter } from 'next/router';
+import { Loader } from '@local/components/Loader';
+import { useSnack } from '@local/features/core';
 import { VideoEventSettings } from '../Videos';
 import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
@@ -62,10 +66,24 @@ interface Props {
 }
 
 export function EventSettings({ queryRef }: Props) {
+    const router = useRouter();
     const classes = useStyles();
+    const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
+    const [user] = useUser();
+    const [canView, setCanView] = React.useState(false);
 
-    if (!data.node) return <div>Loading...</div>;
+    React.useEffect(() => {
+        if (!user) router.push('/login');
+        else if (data.node?.isViewerModerator) {
+            setCanView(true);
+        } else {
+            displaySnack('You must be a moderator to view');
+            router.push('/app/home');
+        }
+    }, [user, router, data, displaySnack]);
+
+    if (!data.node || !canView) return <Loader />;
 
     return (
         <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
