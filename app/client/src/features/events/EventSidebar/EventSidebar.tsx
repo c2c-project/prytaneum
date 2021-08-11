@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
-import { graphql, useFragment } from 'react-relay';
+import { graphql, useRefetchableFragment } from 'react-relay';
 
 import {
     EventSidebarFragment$key,
@@ -17,6 +17,7 @@ import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
+import { useUser } from '@local/features/accounts';
 import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
@@ -53,7 +54,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
 };
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
-    fragment EventSidebarFragment on Event {
+    fragment EventSidebarFragment on Event @refetchable(queryName: "EventSidebarRefetchable") {
         id
         isQuestionFeedVisible
         isViewerModerator
@@ -122,7 +123,12 @@ export interface EventSidebarProps {
 export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
     const [state, setState] = React.useState<number>(0);
-    const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [data, refetch] = useRefetchableFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [user] = useUser();
+
+    React.useEffect(() => {
+        refetch({}, { fetchPolicy: 'store-and-network' });
+    }, [user, refetch]);
 
     const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
