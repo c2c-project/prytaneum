@@ -4,13 +4,16 @@ import {
     Grid,
     Button,
     DialogContent,
+    Collapse,
 } from '@material-ui/core';
-import { Add, MoreVert } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import { graphql, useFragment } from 'react-relay';
+import { Add } from '@material-ui/icons';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useFragment } from 'react-relay';
+import { CopyText } from '@local/components/CopyText';
 
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { LoadingButton } from '@local/components/LoadingButton';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails'
 import { CreateInvite } from './CreateInvite';
 
@@ -19,12 +22,18 @@ interface EventSettingsProps {
     className?: string;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     listRoot: {
         width: '100%',
     },
     red: {
         color: 'red',
+    },
+    text: {
+        fontSize: '1.3em',
+    },
+    btn: {
+        margin: theme.spacing(2, 0),
     },
 }));
 
@@ -63,14 +72,14 @@ const reducer = (state: TState, action: Action): TState => {
 
 export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
     const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
-    // const moderatorEdges = React.useMemo(() => moderators?.edges?.map(({ node }) => node) || [], [moderators?.edges]);
-    // const connections = React.useMemo(() => (moderators?.__id ? [moderators.__id] : []), [moderators]);
-    const [{ isFormDialogOpen, isConfDialogOpen, anchorEl }, dispatch] = React.useReducer(reducer, {
+    const [link, setLink] = React.useState('');
+    const [{ isFormDialogOpen }, dispatch] = React.useReducer(reducer, {
         isFormDialogOpen: false,
         isConfDialogOpen: false,
         anchorEl: null,
     });
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
 
     // close all dialogs
     const close = () => dispatch({ type: 'dialog/close-all' });
@@ -80,8 +89,13 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     const generateInviteLink = () => {
         // TODO generate token for event if private unless only invites should be used for priavte events
         const inviteLink = `http://localhost:8080/events/${eventId}/live`;
-        // TODO copy link to clipboard
+        setLink(inviteLink);
     };
+
+    const toggleInviteLink = () => {
+        if (link === '') generateInviteLink();
+        setOpen(!open);
+    }
 
     return (
         <Grid container justify='center' className={className}>
@@ -90,13 +104,20 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     <CreateInvite onSubmit={close} eventId={eventId} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Grid container justify='flex-end'>
-                <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
+            <Grid item container justify='center' direction='column' alignItems='flex-end'>
+                <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
                     Invite
                 </Button>
-                <Button variant='outlined' onClick={generateInviteLink} startIcon={<Add />}>
-                    Generate Invite Link
-                </Button>
+                <LoadingButton loading={false}>
+                    <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
+                        Invite Link
+                    </Button>
+                </LoadingButton>
+                <Grid item container justify='center' xs={12}>
+                    <Collapse in={open}>
+                        <CopyText TextFieldProps={{ label: 'Invite Link' }} className={classes.text} text={link} />
+                    </Collapse>
+                </Grid>
             </Grid>
         </Grid>
     );
