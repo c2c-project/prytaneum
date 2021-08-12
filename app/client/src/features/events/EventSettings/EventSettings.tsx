@@ -17,6 +17,7 @@ import { GenericSettings } from './GenericSettings';
 import { EventDetails } from './EventDetails';
 import { ModeratorEventSettings } from '../Moderation';
 import { EventContext } from '../EventContext';
+import { InviteEventSettings } from '../Invites/InviteEventSettings';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -131,6 +132,16 @@ export function EventSettings({ queryRef }: Props) {
                                     />
                                 ),
                             },
+                            {
+                                title: 'Invites',
+                                description: 'Invite people to join the event',
+                                component: (
+                                    <InviteEventSettings
+                                        className={classes.settingsSection}
+                                        fragmentRef={data.node}
+                                    />
+                                )
+                            }
                         ]}
                     />
                 )}

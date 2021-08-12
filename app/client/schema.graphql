@@ -25,6 +25,11 @@ input CreateFeedback {
   message: String!
 }
 
+input CreateInvite {
+  email: String!
+  eventId: ID!
+}
+
 """Info necessary for adding a member to an organization"""
 input CreateMember {
   email: String!
@@ -162,6 +167,12 @@ type Event implements Node {
 
   """Whether or not the viewer is a moderator"""
   isViewerModerator: Boolean
+
+  """List of users who can view event when private"""
+  invited(first: Int, after: String): UserConnection
+
+  """Whether or not the viewer is invited"""
+  isViewerInvited: Boolean
 
   """Questions queued in this session by the moderator(s)"""
   queuedQuestions(first: Int, after: String): EventQuestionConnection
@@ -349,6 +360,11 @@ input HideQuestion {
   toggleTo: Boolean!
 }
 
+type InviteMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+}
+
 type Like {
   user: User!
   question: EventQuestion!
@@ -370,6 +386,7 @@ type Mutation {
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback): EventLiveFeedback
+  createInvite(input: CreateInvite!): InviteMutationResponse!
 
   """Adds a new member and returns the new user added"""
   createMember(input: CreateMember!): UserMutationResponse!
@@ -494,6 +511,7 @@ type Query {
   myOrgs: [Organization!]
   node(id: ID!): Node
   questionsByEventId(eventId: ID!): [EventQuestion!]
+  validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
 }
 
 type QuestionOperation {
@@ -600,4 +618,13 @@ type UserMutationResponse implements MutationResponse {
   isError: Boolean!
   message: String!
   body: User
+}
+
+input ValidateInvite {
+  token: String!
+  eventId: ID!
+}
+
+type ValidateInviteQueryResponse {
+  valid: Boolean!
 }

@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
+import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
+
+const cookieOptions: CookieSerializeOptions = {
+    sameSite: 'strict'
+}
 
 export const resolvers: Resolvers = {
     Query: {
@@ -26,19 +31,19 @@ export const resolvers: Resolvers = {
         async register(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { registeredUser, token } = await User.registerSelf(ctx.prisma, args.input);
-                ctx.reply.setCookie('jwt', token);
+                ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(registeredUser);
             });
         },
         async login(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { user, token } = await User.loginWithPassword(ctx.prisma, args.input);
-                ctx.reply.setCookie('jwt', token);
+                ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(user);
             });
         },
         logout(parent, args, ctx, info) {
-            ctx.reply.clearCookie('jwt');
+            ctx.reply.clearCookie('jwt', cookieOptions);
             return new Date();
         },
     },
