@@ -18,16 +18,17 @@ interface inviteMessage {
 const getInviteMessage = (vars: inviteMessage) => `
     You have been invited to participate in this Prytaneum event: ${vars.eventName} 
     starting at ${vars.startTime}
-    Join using the link https://${process.env.HOST}:${process.env.PORT}/events/${vars.eventId}/live?token=${vars.token}
+    Join using the link https://prytaneum.io/events/${vars.eventId}/live?token=${vars.token}
 `;
 
 export async function invite(viewerId: string, prisma: PrismaClient, { email, eventId }: CreateInvite) {
     // Check if event exists
-    const queryResult = await prisma.event.findUnique({ where: { id: eventId } });
+    const { id: globalEventId } = fromGlobalId(eventId);
+    const queryResult = await prisma.event.findUnique({ where: { id: globalEventId } });
     if (!queryResult) throw new Error('Event not found');
 
     // Check if viewer has permission to invite
-    if (!canUserModify(viewerId, eventId, prisma)) throw new Error(errors.permissions);
+    if (!canUserModify(viewerId, globalEventId, prisma)) throw new Error(errors.permissions);
 
     // check if email already exists
     let userResult = await prisma.user.findFirst({ where: { email } });

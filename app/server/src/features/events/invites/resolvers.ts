@@ -11,11 +11,10 @@ export const resolvers: Resolvers = {
         }
     },
     Mutation: {
-        createInvite(parent, args, ctx, info) {
+        async createInvite(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
-                const { id: eventId } = fromGlobalId(args.input.eventId);
-                Invites.invite(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
+                return Invites.invite(ctx.viewer.id, ctx.prisma, args.input);
             })
         }
     }
