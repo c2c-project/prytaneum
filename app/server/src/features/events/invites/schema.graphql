@@ -1,0 +1,26 @@
+input CreateInvite {
+    email: String!
+    eventId: ID!
+}
+
+input ValidateInvite {
+    token: String!
+    eventId: ID!
+}
+
+type InviteMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
+type ValidateInviteQueryResponse {
+    valid: Boolean!
+}
+
+type Query {
+    validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
+}
+
+type Mutation {
+    createInvite(input: CreateInvite!): InviteMutationResponse!
+}

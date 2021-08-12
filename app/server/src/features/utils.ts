@@ -32,6 +32,8 @@ export const errors = {
      * Error thrown if there are insufficient permissions
      */
     permissions: 'Insufficient permissions',
+    fileNotFound: 'File not found',
+    fileSize: 'File too large'
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;

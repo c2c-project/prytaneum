@@ -6,7 +6,7 @@ import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
 
 import { TextField, Props as TextFieldProps } from '@local/components/TextField';
 
-import useCopy from '@local/hooks/useCopy';
+import useCopy from '@local/features/core/useCopy';
 
 const useStyles = makeStyles((theme) => ({
     text: {

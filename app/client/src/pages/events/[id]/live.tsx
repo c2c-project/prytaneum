@@ -23,7 +23,7 @@ const Live: NextPage = () => {
         <>
             <ConditionalRender client>
                 <React.Suspense fallback={<EventLiveLoader />}>
-                    <PreloadedEventLive eventId={router.query.id as string} />
+                    <PreloadedEventLive eventId={router.query.id as string} token={router.query.token as string} />
                 </React.Suspense>
             </ConditionalRender>
             <ConditionalRender server>

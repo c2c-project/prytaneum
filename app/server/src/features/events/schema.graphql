@@ -92,6 +92,16 @@ type Event implements Node {
     isViewerModerator: Boolean
 
     """
+    List of users who can view event when private
+    """
+    invited(first: Int, after: String): UserConnection
+
+    """
+    Whether or not the viewer is invited
+    """
+    isViewerInvited: Boolean
+
+    """
     Questions queued in this session by the moderator(s)
     """
     queuedQuestions(first: Int, after: String): EventQuestionConnection
