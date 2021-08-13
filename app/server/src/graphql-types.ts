@@ -149,6 +149,8 @@ export type Mutation = {
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
+    removeQuestionFromQueue: EventQuestionMutationResponse;
+    updateQuestionQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
@@ -234,6 +236,14 @@ export type MutationupdateQuestionPositionArgs = {
 
 export type MutationaddQuestionToQueueArgs = {
     input: AddQuestionToQueue;
+};
+
+export type MutationremoveQuestionFromQueueArgs = {
+    input: RemoveQuestionFromQueue;
+};
+
+export type MutationupdateQuestionQueueArgs = {
+    input: UpdateQuestionQueue;
 };
 
 export type MutationcreateModeratorArgs = {
@@ -614,6 +624,17 @@ export type AddQuestionToQueue = {
     eventId: Scalars['ID'];
 };
 
+export type RemoveQuestionFromQueue = {
+    questionId: Scalars['ID'];
+    eventId: Scalars['ID'];
+};
+
+export type UpdateQuestionQueue = {
+    questionId: Scalars['ID'];
+    eventId: Scalars['ID'];
+    adding: Scalars['Boolean'];
+};
+
 export type ModeratorMutationResponse = MutationResponse & {
     __typename?: 'ModeratorMutationResponse';
     isError: Scalars['Boolean'];
@@ -962,6 +983,8 @@ export type ResolversTypes = {
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
+    RemoveQuestionFromQueue: RemoveQuestionFromQueue;
+    UpdateQuestionQueue: UpdateQuestionQueue;
     ModeratorMutationResponse: ResolverTypeWrapper<ModeratorMutationResponse>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventParticipantEdge: ResolverTypeWrapper<EventParticipantEdge>;
@@ -1056,6 +1079,8 @@ export type ResolversParentTypes = {
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
+    RemoveQuestionFromQueue: RemoveQuestionFromQueue;
+    UpdateQuestionQueue: UpdateQuestionQueue;
     ModeratorMutationResponse: ModeratorMutationResponse;
     EventParticipant: EventParticipant;
     EventParticipantEdge: EventParticipantEdge;
@@ -1310,6 +1335,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationaddQuestionToQueueArgs, 'input'>
+    >;
+    removeQuestionFromQueue?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveQuestionFromQueueArgs, 'input'>
+    >;
+    updateQuestionQueue?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateQuestionQueueArgs, 'input'>
     >;
     createModerator?: Resolver<
         ResolversTypes['ModeratorMutationResponse'],

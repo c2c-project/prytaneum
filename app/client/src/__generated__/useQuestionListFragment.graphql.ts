@@ -6,6 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionListFragment = {
     readonly id: string;
+    readonly currentQuestion: number | null;
     readonly questions: {
         readonly __id: string;
         readonly edges: ReadonlyArray<{
@@ -70,6 +71,13 @@ return {
   "name": "useQuestionListFragment",
   "selections": [
     (v0/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "currentQuestion",
+      "storageKey": null
+    },
     {
       "alias": "questions",
       "args": null,
@@ -221,5 +229,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '6f705b87a0334d149e520f81b9832d43';
+(node as any).hash = 'b81afe8fd8d468a14a7585eca58ae56f';
 export default node;
