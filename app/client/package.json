@@ -36,7 +36,8 @@
         "relay-runtime": "^11.0.2",
         "smoothscroll-polyfill": "^0.4.4",
         "subscriptions-transport-ws": "^0.9.18",
-        "yup": "^0.32.9"
+        "yup": "^0.32.9",
+        "prytaneum-typings": "https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece"
     },
     "devDependencies": {
         "@babel/core": "^7.14.0",

@@ -2,6 +2,8 @@
     "name": "@app/server",
     "private": true,
     "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "start": "dotenv -c production -- ts-node-dev -r tsconfig-paths/register --transpile-only --exit-child ./src/index.ts",
         "dev": "dotenv -c development -- ts-node-dev --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
         "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts"
     },
