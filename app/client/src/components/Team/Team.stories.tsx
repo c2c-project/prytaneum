@@ -1,7 +1,6 @@
 import * as React from 'react';
 import faker from 'faker/locale/en';
 
-import { ReferenceNames } from 'types';
 import Component from '.';
 
 export default {
@@ -20,11 +19,11 @@ const makeBaseTeam = () => ({
 const makeTeam = (num: number) => {
     const teamMembers = [];
     const linkedIn = {
-        name: 'LinkedIn' as ReferenceNames,
+        name: 'LinkedIn',
         link: 'https://www.linkedin.com',
     };
     const email = {
-        name: 'email' as ReferenceNames,
+        name: 'email',
         link: 'https://www.gmail.com',
     };
     for (let i = 0; i < num; i += 1) {

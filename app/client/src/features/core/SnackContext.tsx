@@ -11,7 +11,8 @@ interface Props {
 // eslint-disable-next-line react/prop-types
 export function SnackContext({ children, ...rest }: Props) {
     // add action to all snackbars
-    const notistackRef = React.useRef<ProviderContext | null>(null);
+    // const notistackRef = React.useRef<ProviderContext | null>(null);
+    const notistackRef = React.createRef<ProviderContext>();
 
     const onClickDismiss = (key: React.ReactText) => () => {
         notistackRef?.current?.closeSnackbar(key);
@@ -19,7 +20,7 @@ export function SnackContext({ children, ...rest }: Props) {
 
     return (
         <SnackbarProvider
-            ref={notistackRef}
+            // ref={notistackRef}
             action={(key) => (
                 <Button color='inherit' onClick={onClickDismiss(key)}>
                     Dismiss

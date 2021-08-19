@@ -31,6 +31,7 @@ export function UpdateModerator({ eventId, onSubmit, form }: CreateModeratorProp
         commit({
             variables: {
                 input: {
+                    userId: '',
                     ...submittedForm,
                     eventId,
                 },

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Meta } from '@storybook/react';
 import AddIcon from '@material-ui/icons/Add';
 
-import Component from './Fab';
+import { Fab as Component} from './Fab';
 
 export default {
     title: '@local/components/Fab',

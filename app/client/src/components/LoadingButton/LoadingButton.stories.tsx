@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-import Component from './LoadingButton';
+import { LoadingButton as Component } from './LoadingButton';
 
 export default {
     title: '@local/components/Loading Button',

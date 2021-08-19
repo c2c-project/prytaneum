@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
-import TextField from '@local/components/TextField';
+import { TextField } from '@local/components/TextField';
 
 const useStyles = makeStyles((theme) => ({
     root: {

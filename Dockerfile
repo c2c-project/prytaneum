@@ -1,44 +1,47 @@
-FROM node:14.15.4 as base
+FROM node:14.15.4 as base-stage
 
-RUN apt-get update && apt-get install --no-install-recommends --yes openssl
+RUN apt-get update
+RUN yarn set version berry
 
+
+# Build Stage
+FROM base-stage as build-stage
 WORKDIR /usr/src/app
 
-COPY *.json .
-COPY yarn.lock .
-COPY scripts ./scripts
-COPY app ./app
 COPY . .
+# COPY *.json ./
+# COPY yarn.lock .
+# COPY scripts ./scripts
+# COPY *.yml ./
 # COPY app/client/*.json ./app/client/
 # COPY app/server/*.json ./app/server/
+# COPY . ./
+# COPY app ./app
 
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 ENV SERVER_PORT 3002
 ENV CLIENT_PORT 3000
 
-# Install production dependencies
-# RUN yarn install --production
-
-# Install all dependencies
-# RUN yarn install --pure-lockfile
-
-RUN yarn workspaces focus -A
-
-# Copy source files
-# COPY app/client ./app/client/
-# COPY app/server ./app/server/
+RUN yarn install
 
 # Build
 WORKDIR /usr/src/app/app/client
 RUN yarn build
 
-WORKDIR /usr/src/app/app/server
-RUN yarn build
-
-# WORKDIR /usr/src/app/app/db
+WORKDIR /usr/src/app/app/db
 # RUN yarn generate
-# RUN yarn g:update-prisma-types
+RUN yarn g:update-prisma-types
+
+# Production Stage
+
+FROM node:14.15.4 as production-stage
 
 WORKDIR /usr/src/app
+COPY --from=build-stage /usr/src/app ./
+
+EXPOSE 8080
+EXPOSE 3000
+EXPOSE 3002
+
 CMD ["yarn", "g:start-project"]

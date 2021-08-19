@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Meta } from '@storybook/react';
-import Component from './CopyText';
+import {CopyText as Component } from './CopyText';
 
 export default { title: '@local/components/Copy', parameters: { layout: 'centered' } } as Meta;
 

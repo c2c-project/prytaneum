@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import GithubIcon from '@material-ui/icons/GitHub';
@@ -19,9 +19,8 @@ import OtherIcon from '@material-ui/icons/PermContactCalendar';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from '@local/utils/format';
-import { TeamMember, ReferenceNames } from 'types';
 
-const IconFactory = (IconName: ReferenceNames): JSX.Element => {
+const IconFactory = (IconName: any): JSX.Element => {
     switch (IconName) {
         case 'Github':
             return <GithubIcon />;
@@ -69,6 +68,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
+
+interface TeamMember {
+    fullName: string,
+    picturePath: string
+    subtitle: string,
+    startDate: Date,
+    endDate: Date,
+    references: Array<{ name: string, link: string }>,
+    description: string
+}
 
 interface Props {
     teamMember: TeamMember;

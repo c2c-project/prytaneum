@@ -12,8 +12,7 @@ import {
     Divider,
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-
-import history from '@local/utils/history';
+import { useRouter } from 'next/router';
 
 export interface Datum {
     image?: string;
@@ -58,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
  *  @param {Section[]} props.sections consists of the Sections to iterate through <br><br> A Section consits of Title and a Datum[]
  */
 export default function SectionList({ sections }: Props) {
+    const router = useRouter();
     const classes = useStyles();
     return (
         <List className={classes.root} subheader={<li />}>
@@ -75,7 +75,7 @@ export default function SectionList({ sections }: Props) {
                                     <ListItem
                                         divider
                                         button
-                                        onClick={() => history.push(href)}
+                                        onClick={() => router.push(href)}
                                     >
                                         {image && (
                                             <ListItemAvatar>

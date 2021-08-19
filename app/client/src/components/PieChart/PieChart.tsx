@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ResponsivePie } from '@nivo/pie';
+// import { ResponsivePie } from '@nivo/pie';
 
 export interface PieDatum {
     id: string | number;
@@ -22,7 +22,7 @@ export type ValueFormatter = (value: number) => string | number;
 export default function TownhallNivo({ height, data }: Props) {
     return (
         <div style={{ height }}>
-            <ResponsivePie data={data} />
+            {/* <ResponsivePie data={data} /> */}
         </div>
     );
 }

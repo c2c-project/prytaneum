@@ -3,8 +3,7 @@ import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import FadeThrough from '@local/animations/FadeThrough';
-import history from '@local/utils/history';
-import PasswordResetForm from '@local/domains/Auth/PasswordResetForm';
+// import PasswordResetForm from '@local/domains/Auth/PasswordResetForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,10 +39,10 @@ export default function ForgotPasswordReset({ token }: Props) {
                 justify='center'
             >
                 <Paper className={classes.paper}>
-                    <PasswordResetForm
+                    {/* <PasswordResetForm
                         token={token}
                         onSuccess={() => history.push('/login')}
-                    />
+                    /> */}
                 </Paper>
             </Grid>
         </FadeThrough>

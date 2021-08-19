@@ -2,7 +2,6 @@ import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker/locale/en';
 
-import { ReferenceNames } from 'types';
 import Component from '.';
 
 export default {
@@ -19,11 +18,11 @@ const dummyTeamMember = {
     endDate: faker.date.future().toISOString(),
     references: [
         {
-            name: 'Github' as ReferenceNames,
+            name: 'Github',
             link: 'https://github.com',
         },
         {
-            name: 'LinkedIn' as ReferenceNames,
+            name: 'LinkedIn',
             link: 'https://www.linkedin.com',
         },
     ],
@@ -32,7 +31,7 @@ const dummyTeamMember = {
 export function ProfileCard() {
     return (
         <Container maxWidth='sm'>
-            <Component teamMember={dummyTeamMember} />
+            {/* <Component teamMember={dummyTeamMember} /> */}
         </Container>
     );
 }
