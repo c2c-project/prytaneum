@@ -9,7 +9,7 @@ app.use(
     createProxyMiddleware({
         changeOrigin: true,
         ws: true,
-        target: `http://${process.env.HOST}:${process.env.SERVER_PORT}`,
+        target: `https://${process.env.HOST}:${process.env.SERVER_PORT}`,
         logLevel: 'debug',
     })
 );
@@ -19,7 +19,7 @@ app.use(
     '/',
     createProxyMiddleware({
         changeOrigin: true,
-        target: `http://${process.env.HOST}:${process.env.CLIENT_PORT}`,
+        target: `https://${process.env.HOST}:${process.env.CLIENT_PORT}`,
         logLevel: 'debug',
     })
 );
