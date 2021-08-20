@@ -52,7 +52,7 @@
         "g:start-db": "yarn workspace @app/db start-db",
         "g:start-proxy": "yarn workspace prytaneum ts-node-dev -r ./scripts/env.ts ./proxy.ts",
         "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\"",
-        "g:start-project": "concurrently -n relay,proxy,codegen,server,client -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:start-server\" \"yarn g:start-client\""
+        "g:start-project": "concurrently -n proxy,server,client \"yarn g:start-proxy\" \"yarn g:start-server\" \"yarn g:start-client\""
     },
     "dependencies": {
         "babel-eslint": "^10.1.0",
