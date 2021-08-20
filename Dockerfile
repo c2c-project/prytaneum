@@ -18,10 +18,10 @@ COPY . .
 # COPY . ./
 # COPY app ./app
 
-ENV NODE_ENV production
-ENV HOST 0.0.0.0
-ENV SERVER_PORT 3002
-ENV CLIENT_PORT 3000
+# ENV NODE_ENV production
+# ENV HOST 0.0.0.0
+# ENV SERVER_PORT 3002
+# ENV CLIENT_PORT 3000
 
 RUN yarn install
 
@@ -39,6 +39,14 @@ FROM node:14.15.4 as production-stage
 
 WORKDIR /usr/src/app
 COPY --from=build-stage /usr/src/app ./
+# COPY --from=build-stage /usr/src/app/package.json ./
+# COPY --from=build-stage /usr/src/app/*.yml ./
+# COPY --from=build-stage /usr/src/app/.pnp.cjs ./
+# COPY --from=build-stage /usr/src/app/app/client/.next/ ./app/client/
+# COPY --from=build-stage /usr/src/app/app/client/public/ ./app/client/
+# COPY --from=build-stage /usr/src/app/app/client/package.json ./app/client/
+# COPY --from=build-stage /usr/src/app/app/server/ ./app/server/
+# COPY --from=build-stage /usr/src/app/app/db/ ./app/db/
 
 EXPOSE 8080
 EXPOSE 3000
