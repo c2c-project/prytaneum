@@ -7,6 +7,7 @@ import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 import fastifyMultipart from 'fastify-multipart';
+import fastifyCors from 'fastify-cors';
 
 import { routes as inviteRoute } from '@local/features/events/invites/invite';
 import { buildContext, buildSubscriptionContext } from './context';
@@ -22,6 +23,11 @@ const resolverArr = loadFilesSync([
 const resolvers = mergeResolvers(resolverArr);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+server.register(fastifyCors, {
+    origin: 'http://localhost',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+});
 
 server.register(mercurius, {
     schema,

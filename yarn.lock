@@ -152,6 +152,7 @@ __metadata:
     dotenv-expand: ^5.1.0
     fastify: ^3.15.1
     fastify-cookie: ^5.3.0
+    fastify-cors: ^6.0.2
     fastify-multipart: ^4.0.7
     form-data: ^4.0.0
     graphql: ^15.5.0
@@ -10718,6 +10719,16 @@ __metadata:
     cookie-signature: ^1.1.0
     fastify-plugin: ^3.0.0
   checksum: 0a0f66f1db3b58cfff4c79f07fc792bb4993fd9fa4dd18411644c4619eb70b8cb35d8e1ddd1c6642251d5a7f9fd48704ac9a0a10e938f9fd6c9c8491e52caf4d
+  languageName: node
+  linkType: hard
+
+"fastify-cors@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "fastify-cors@npm:6.0.2"
+  dependencies:
+    fastify-plugin: ^3.0.0
+    vary: ^1.1.2
+  checksum: f600eb30d2259bf0277c3df72c73f09f6891f3984c62e1c9a7489f0d6b2ffb1749dbe9a79a05ad74b08a660c1a707c9fb7636c20b87d07eae0e6efd9c951fd03
   languageName: node
   linkType: hard
 
@@ -21498,7 +21509,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vary@npm:~1.1.2":
+"vary@npm:^1.1.2, vary@npm:~1.1.2":
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b
