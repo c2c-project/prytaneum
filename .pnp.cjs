@@ -256,6 +256,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-expand", "npm:5.1.0"],
             ["fastify", "npm:3.15.1"],
             ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
+            ["fastify-cors", "npm:6.0.2"],
             ["fastify-multipart", "npm:4.0.7"],
             ["form-data", "npm:4.0.0"],
             ["graphql", "npm:15.5.0"],
@@ -16528,6 +16529,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/fastify",
             "fastify"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["fastify-cors", [
+        ["npm:6.0.2", {
+          "packageLocation": "./.yarn/cache/fastify-cors-npm-6.0.2-df492a53ce-f600eb30d2.zip/node_modules/fastify-cors/",
+          "packageDependencies": [
+            ["fastify-cors", "npm:6.0.2"],
+            ["fastify-plugin", "npm:3.0.0"],
+            ["vary", "npm:1.1.2"]
           ],
           "linkType": "HARD",
         }]

@@ -18,10 +18,10 @@ COPY . .
 # COPY . ./
 # COPY app ./app
 
-# ENV NODE_ENV production
-# ENV HOST 0.0.0.0
-# ENV SERVER_PORT 3002
-# ENV CLIENT_PORT 3000
+ENV NODE_ENV production
+ENV HOST 0.0.0.0
+ENV SERVER_PORT 3002
+ENV CLIENT_PORT 3000
 
 RUN yarn install
 
@@ -38,6 +38,12 @@ RUN yarn g:update-prisma-types
 FROM node:14.15.4 as production-stage
 
 WORKDIR /usr/src/app
+
+ENV NODE_ENV Production
+ENV HOST 0.0.0.0
+ENV SERVER_PORT 3002
+ENV CLIENT_PORT 3000
+
 COPY --from=build-stage /usr/src/app ./
 # COPY --from=build-stage /usr/src/app/package.json ./
 # COPY --from=build-stage /usr/src/app/*.yml ./
