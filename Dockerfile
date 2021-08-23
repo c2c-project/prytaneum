@@ -39,7 +39,7 @@ FROM node:14.15.4 as production-stage
 
 WORKDIR /usr/src/app
 
-ENV NODE_ENV Production
+ENV NODE_ENV production
 ENV HOST 0.0.0.0
 ENV SERVER_PORT 3002
 ENV CLIENT_PORT 3000
