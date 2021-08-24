@@ -25,7 +25,7 @@ const resolvers = mergeResolvers(resolverArr);
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 server.register(fastifyCors, {
-    origin: ['http://localhost', 'http://localhost:8080/graphql', 'http://localhost:8080'],
+    origin: ['http://localhost', 'http://localhost:8080/graphql', 'http://localhost:8080', 'https://prytaneum-dev-wnse2xo3ka-uc.a.run.app', 'https://prytaneum-dev-wnse2xo3ka-uc.a.run.app/graphql'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 });
 
