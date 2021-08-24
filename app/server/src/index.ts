@@ -25,7 +25,7 @@ const resolvers = mergeResolvers(resolverArr);
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 server.register(fastifyCors, {
-    origin: false,
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
 
@@ -75,7 +75,7 @@ async function start() {
     const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined
 
     // You must listen on the port Cloud Run provides
-    const port = process.env.PORT || 3000
+    const port = process.env.PORT || 3002
 
     // You must listen on all IPV4 addresses in Cloud Run
     const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST
