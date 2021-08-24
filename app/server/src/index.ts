@@ -25,7 +25,7 @@ const resolvers = mergeResolvers(resolverArr);
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 server.register(fastifyCors, {
-    origin: true,
+    origin: 'http://localhost',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 });
 
