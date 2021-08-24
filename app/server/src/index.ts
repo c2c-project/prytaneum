@@ -24,7 +24,10 @@ const resolvers = mergeResolvers(resolverArr);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-server.register(fastifyCors);
+server.register(fastifyCors, {
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+});
 
 server.register(mercurius, {
     schema,
