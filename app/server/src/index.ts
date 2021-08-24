@@ -24,11 +24,7 @@ const resolvers = mergeResolvers(resolverArr);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-server.register(fastifyCors, {
-    origin: ['http://localhost', 'https://prytaneum-dev-wnse2xo3ka-uc.a.run.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    preflight: false
-});
+server.register(fastifyCors);
 
 server.register(mercurius, {
     schema,

@@ -246,11 +246,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/schema", "virtual:f7a6a9227e28241437f300b007d7630ba4ef64c0dae7c7ab78234e07bced63ab7737fbe1c616c7e5d578305477a11f39982b255b5199a977ccec3b5f84a2682c#npm:7.1.3"],
             ["@types/bcryptjs", "npm:2.4.2"],
             ["@types/busboy", "npm:0.2.4"],
+            ["@types/cors", "npm:2.8.12"],
             ["@types/jsonwebtoken", "npm:8.5.1"],
             ["@types/mailgun-js", "npm:0.22.11"],
             ["@types/node", "npm:15.0.1"],
             ["altair-fastify-plugin", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:4.0.2"],
             ["bcryptjs", "npm:2.4.3"],
+            ["cors", "npm:2.8.5"],
             ["dotenv", "npm:8.2.0"],
             ["dotenv-cli", "npm:4.0.0"],
             ["dotenv-expand", "npm:5.1.0"],
@@ -9282,6 +9284,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/cors", [
+        ["npm:2.8.12", {
+          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.12-ff52e8e514-8c45f112c7.zip/node_modules/@types/cors/",
+          "packageDependencies": [
+            ["@types/cors", "npm:2.8.12"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/eslint", [
         ["npm:7.2.10", {
           "packageLocation": "./.yarn/cache/@types-eslint-npm-7.2.10-80d8a98db0-9c82e4733c.zip/node_modules/@types/eslint/",
@@ -13761,6 +13772,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/core-util-is-npm-1.0.2-9fc2b94dc3-7a4c925b49.zip/node_modules/core-util-is/",
           "packageDependencies": [
             ["core-util-is", "npm:1.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["cors", [
+        ["npm:2.8.5", {
+          "packageLocation": "./.yarn/cache/cors-npm-2.8.5-c9935a2d12-ced838404c.zip/node_modules/cors/",
+          "packageDependencies": [
+            ["cors", "npm:2.8.5"],
+            ["object-assign", "npm:4.1.1"],
+            ["vary", "npm:1.1.2"]
           ],
           "linkType": "HARD",
         }]
