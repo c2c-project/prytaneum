@@ -9,14 +9,6 @@ FROM base-stage as build-stage
 WORKDIR /usr/src/app
 
 COPY . .
-# COPY *.json ./
-# COPY yarn.lock .
-# COPY scripts ./scripts
-# COPY *.yml ./
-# COPY app/client/*.json ./app/client/
-# COPY app/server/*.json ./app/server/
-# COPY . ./
-# COPY app ./app
 
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
@@ -45,13 +37,15 @@ ENV SERVER_PORT 3002
 ENV CLIENT_PORT 3000
 
 COPY --from=build-stage /usr/src/app ./
-# COPY --from=build-stage /usr/src/app/package.json ./
+# COPY --from=build-stage /usr/src/app/*.json ./
 # COPY --from=build-stage /usr/src/app/*.yml ./
 # COPY --from=build-stage /usr/src/app/.pnp.cjs ./
-# COPY --from=build-stage /usr/src/app/.env ./.env
-# COPY --from=build-stage /usr/src/app/.yarn ./.yarn
-# COPY --from=build-stage /usr/src/app/yarn.lock ./yarn.lock
-# COPY --from=build-stage /usr/src/app/proxy.ts ./proxy.ts
+# COPY --from=build-stage /usr/src/app/.env ./
+# COPY --from=build-stage /usr/src/app/.yarn ./
+# COPY --from=build-stage /usr/src/app/yarn.lock ./
+# COPY --from=build-stage /usr/src/app/.dockerignore ./
+# COPY --from=build-stage /usr/src/app/.nvmrc ./
+# COPY --from=build-stage /usr/src/app/proxy.ts ./
 # COPY --from=build-stage /usr/src/app/custom/ ./custom
 # COPY --from=build-stage /usr/src/app/scripts ./scripts
 # COPY --from=build-stage /usr/src/app/app/client/.next/ ./app/client/.next
@@ -66,4 +60,4 @@ EXPOSE 8080
 EXPOSE 3000
 EXPOSE 3002
 
-CMD ["yarn", "g:test-project"]
+CMD ["yarn", "g:start-project"]

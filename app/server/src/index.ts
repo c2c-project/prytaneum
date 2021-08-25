@@ -67,7 +67,7 @@ function verifyEnv() {
     if (process.env.NODE_ENV === 'production') {
         if (!process.env.COOKIE_SECRET) throw new Error('Must define COOKIE_SECRET in production');
         if (!process.env.JWT_SECRET) throw new Error('Must define JWT_SECRET in production');
-        if (!process.env.PORT) throw new Error('Must define PORT in production');
+        if (!process.env.SERVER_PORT) throw new Error('Must define PORT in production');
         if (!process.env.HOST) throw new Error('Must define HOST in production');
     }
 }
@@ -101,6 +101,7 @@ async function start() {
         },
     });
     verifyEnv();
+    console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
     await server.listen(port, address);
 }
 
