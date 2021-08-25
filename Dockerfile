@@ -48,14 +48,22 @@ COPY --from=build-stage /usr/src/app ./
 # COPY --from=build-stage /usr/src/app/package.json ./
 # COPY --from=build-stage /usr/src/app/*.yml ./
 # COPY --from=build-stage /usr/src/app/.pnp.cjs ./
-# COPY --from=build-stage /usr/src/app/app/client/.next/ ./app/client/
-# COPY --from=build-stage /usr/src/app/app/client/public/ ./app/client/
-# COPY --from=build-stage /usr/src/app/app/client/package.json ./app/client/
-# COPY --from=build-stage /usr/src/app/app/server/ ./app/server/
-# COPY --from=build-stage /usr/src/app/app/db/ ./app/db/
+# COPY --from=build-stage /usr/src/app/.env ./.env
+# COPY --from=build-stage /usr/src/app/.yarn ./.yarn
+# COPY --from=build-stage /usr/src/app/yarn.lock ./yarn.lock
+# COPY --from=build-stage /usr/src/app/proxy.ts ./proxy.ts
+# COPY --from=build-stage /usr/src/app/custom/ ./custom
+# COPY --from=build-stage /usr/src/app/scripts ./scripts
+# COPY --from=build-stage /usr/src/app/app/client/.next/ ./app/client/.next
+# COPY --from=build-stage /usr/src/app/app/client/public/ ./app/client/public
+# COPY --from=build-stage /usr/src/app/app/client/*.json ./app/client/
+# COPY --from=build-stage /usr/src/app/app/client/schema.graphql ./app/client/
+# COPY --from=build-stage /usr/src/app/app/server/ ./app/server
+# COPY --from=build-stage /usr/src/app/app/db/ ./app/db
+# COPY --from=build-stage /usr/src/app/app/prisma/ ./app/prisma
 
 EXPOSE 8080
 EXPOSE 3000
 EXPOSE 3002
 
-CMD ["yarn", "g:start-project"]
+CMD ["yarn", "g:test-project"]
