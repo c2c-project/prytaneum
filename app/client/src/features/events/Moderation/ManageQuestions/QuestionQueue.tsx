@@ -220,7 +220,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             updater: () => {
                 refetch(
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
+                    {},
                     { fetchPolicy: 'store-and-network' }
                 );
             },
