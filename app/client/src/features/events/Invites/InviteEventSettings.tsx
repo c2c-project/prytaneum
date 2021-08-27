@@ -88,7 +88,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
 
     const generateInviteLink = () => {
         // TODO generate token for event if private unless only invites should be used for priavte events
-        const inviteLink = `https://prytaneum-dev-wnse2xo3ka-uc.a.run.app/events/${eventId}/live`;
+        const inviteLink = `http://localhost:8080/events/${eventId}/live`;
         setLink(inviteLink);
     };
 

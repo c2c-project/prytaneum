@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import { NextPage, GetServerSidePropsContext } from 'next';
-import { fetchQuery, graphql, } from 'react-relay';
+import { fetchQuery, graphql } from 'react-relay';
 
 import type { profileQuery, profileQueryResponse } from '@local/__generated__/profileQuery.graphql';
 import { initEnvironment } from '@local/features/core/relay';

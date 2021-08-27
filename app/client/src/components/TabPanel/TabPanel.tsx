@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-// import { CSSTransition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 
 // time in ms it takes a component to exit
@@ -52,25 +52,24 @@ export interface Props {
 }
 const TabPanel = React.memo(({ visible, children, classes }: Props) => {
     return (
-        <></>
-        // <CSSTransition
-        //     timeout={400}
-        //     in={visible}
-        //     appear
-        //     classNames={{
-        //         appear: clsx(classes.enter, classes.visible),
-        //         appearActive: clsx(classes.enterActive, classes.visible),
-        //         appearDone: clsx(classes.enterDone, classes.visible),
-        //         enter: clsx(classes.enter, classes.visible),
-        //         enterActive: clsx(classes.enterActive, classes.visible),
-        //         enterDone: clsx(classes.enterDone, classes.visible),
-        //         exit: clsx(classes.exit, classes.visible, classes.exiting),
-        //         exitActive: clsx(classes.exitActive, classes.visible, classes.exiting),
-        //         exitDone: clsx(classes.exitDone, classes.exiting),
-        //     }}
-        // >
-        //     <div className={classes.container}>{children}</div>
-        // </CSSTransition>
+        <CSSTransition
+            timeout={400}
+            in={visible}
+            appear
+            classNames={{
+                appear: clsx(classes.enter, classes.visible),
+                appearActive: clsx(classes.enterActive, classes.visible),
+                appearDone: clsx(classes.enterDone, classes.visible),
+                enter: clsx(classes.enter, classes.visible),
+                enterActive: clsx(classes.enterActive, classes.visible),
+                enterDone: clsx(classes.enterDone, classes.visible),
+                exit: clsx(classes.exit, classes.visible, classes.exiting),
+                exitActive: clsx(classes.exitActive, classes.visible, classes.exiting),
+                exitDone: clsx(classes.exitDone, classes.exiting),
+            }}
+        >
+            <div className={classes.container}>{children}</div>
+        </CSSTransition>
     );
 });
 

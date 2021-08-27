@@ -19,8 +19,9 @@ import OtherIcon from '@material-ui/icons/PermContactCalendar';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from '@local/utils/format';
+import { TeamMember, ReferenceNames } from 'prytaneum-typings';
 
-const IconFactory = (IconName: any): JSX.Element => {
+const IconFactory = (IconName: ReferenceNames): JSX.Element => {
     switch (IconName) {
         case 'Github':
             return <GithubIcon />;
@@ -68,16 +69,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
-interface TeamMember {
-    fullName: string,
-    picturePath: string
-    subtitle: string,
-    startDate: Date,
-    endDate: Date,
-    references: Array<{ name: string, link: string }>,
-    description: string
-}
 
 interface Props {
     teamMember: TeamMember;

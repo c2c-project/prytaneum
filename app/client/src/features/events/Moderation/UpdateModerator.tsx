@@ -27,11 +27,10 @@ export const UPDATE_MODERATOR_MUTATION = graphql`
 
 export function UpdateModerator({ eventId, onSubmit, form }: CreateModeratorProps) {
     const [commit] = useMutation<UpdateModeratorMutation>(UPDATE_MODERATOR_MUTATION);
-    const handleSubmit: ModeratorProps['onSubmit'] = (submittedForm) => {
+    const handleSubmit: ModeratorProps['onSubmit'] = (submittedForm: TModeratorForm) => {
         commit({
             variables: {
                 input: {
-                    userId: '',
                     ...submittedForm,
                     eventId,
                 },

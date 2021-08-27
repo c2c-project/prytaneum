@@ -2,6 +2,7 @@ import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import faker from 'faker/locale/en';
 
+import { ReferenceNames } from 'prytaneum-typings';
 import Component from '.';
 
 export default {
@@ -18,11 +19,11 @@ const dummyTeamMember = {
     endDate: faker.date.future().toISOString(),
     references: [
         {
-            name: 'Github',
+            name: 'Github' as ReferenceNames,
             link: 'https://github.com',
         },
         {
-            name: 'LinkedIn',
+            name: 'LinkedIn' as ReferenceNames,
             link: 'https://www.linkedin.com',
         },
     ],
@@ -31,7 +32,7 @@ const dummyTeamMember = {
 export function ProfileCard() {
     return (
         <Container maxWidth='sm'>
-            {/* <Component teamMember={dummyTeamMember} /> */}
+            <Component teamMember={dummyTeamMember} />
         </Container>
     );
 }

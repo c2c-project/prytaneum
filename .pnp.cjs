@@ -161,6 +161,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:16.9.12"],
             ["@types/react-redux", "npm:7.1.16"],
             ["@types/react-relay", "npm:11.0.1"],
+            ["@types/react-transition-group", "npm:4.4.2"],
             ["@types/react-window", "npm:1.8.3"],
             ["@types/redux-devtools-extension", "npm:2.13.0"],
             ["@types/relay-runtime", "npm:11.0.0"],
@@ -179,7 +180,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:10.1.3"],
             ["notistack", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:1.0.6"],
             ["prop-types", "npm:15.7.2"],
-            ["prytaneum-typings", "https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece"],
+            ["prytaneum-typings", "https://github.com/c2c-project/prytaneum-typings.git#commit=b78a1ee77c2fcdb137d456e65ac0064e6bbe630b"],
             ["react", "npm:17.0.2"],
             ["react-beautiful-dnd", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:13.1.0"],
             ["react-compound-slider", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:3.3.1"],
@@ -9873,6 +9874,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:17.0.4"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:4.4.2", {
+          "packageLocation": "./.yarn/cache/@types-react-transition-group-npm-4.4.2-489435214b-35523ef25a.zip/node_modules/@types/react-transition-group/",
+          "packageDependencies": [
+            ["@types/react-transition-group", "npm:4.4.2"],
+            ["@types/react", "npm:17.0.4"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@types/react-window", [
@@ -16383,10 +16392,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["https://github.com/DevelopmentByDavid/faker.js.git#commit=b6488ff0039b737819eed805e2fdd478e07e4b10", {
-          "packageLocation": "./.yarn/cache/faker-https-5fc67a4c67-a204458dc4.zip/node_modules/faker/",
+        ["https://github.com/marak/Faker.js.git#commit=e0b392de967d3000f59ef712c666786aa5ae19b7", {
+          "packageLocation": "./.yarn/cache/faker-https-b3d8f906b9-9e567f6b21.zip/node_modules/faker/",
           "packageDependencies": [
-            ["faker", "https://github.com/DevelopmentByDavid/faker.js.git#commit=b6488ff0039b737819eed805e2fdd478e07e4b10"]
+            ["faker", "https://github.com/marak/Faker.js.git#commit=e0b392de967d3000f59ef712c666786aa5ae19b7"]
           ],
           "linkType": "HARD",
         }]
@@ -24217,14 +24226,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prytaneum-typings", [
-        ["https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece", {
-          "packageLocation": "./.yarn/cache/prytaneum-typings-https-d6dae3d7c5-a5a7332e0f.zip/node_modules/prytaneum-typings/",
+        ["https://github.com/c2c-project/prytaneum-typings.git#commit=b78a1ee77c2fcdb137d456e65ac0064e6bbe630b", {
+          "packageLocation": "./.yarn/cache/prytaneum-typings-https-3661b90835-3272c821fb.zip/node_modules/prytaneum-typings/",
           "packageDependencies": [
-            ["prytaneum-typings", "https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece"],
+            ["prytaneum-typings", "https://github.com/c2c-project/prytaneum-typings.git#commit=b78a1ee77c2fcdb137d456e65ac0064e6bbe630b"],
             ["@types/faker", "npm:4.1.12"],
             ["@types/mongodb", "npm:3.6.20"],
             ["@types/node", "npm:14.17.9"],
-            ["faker", "https://github.com/DevelopmentByDavid/faker.js.git#commit=b6488ff0039b737819eed805e2fdd478e07e4b10"]
+            ["faker", "https://github.com/marak/Faker.js.git#commit=e0b392de967d3000f59ef712c666786aa5ae19b7"]
           ],
           "linkType": "HARD",
         }]

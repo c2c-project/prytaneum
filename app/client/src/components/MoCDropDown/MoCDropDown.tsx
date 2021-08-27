@@ -41,21 +41,21 @@ export default function MoCDropdown() {
         setInput(event.target.value as string);
     };
 
-    useEffect(() => {
-        const url = `https://api.propublica.org/congress/v1/116/${chamber}/members.json`;
-        // axios
-        //     .get(url, {
-        //         headers: {
-        //             'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY, // FIXME: should be a request to our server rather than a process.env
-        //         },
-        //     })
-        //     .then((response) => {
-        //         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        //         setData2(response.data.results[0].members);
-        //     })
-        //     // eslint-disable-next-line no-console
-        //     .catch(console.error); // FIXME:
-    }, [chamber]);
+    // useEffect(() => {
+    //     const url = `https://api.propublica.org/congress/v1/116/${chamber}/members.json`;
+    //     axios
+    //         .get(url, {
+    //             headers: {
+    //                 'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY, // FIXME: should be a request to our server rather than a process.env
+    //             },
+    //         })
+    //         .then((response) => {
+    //             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    //             setData2(response.data.results[0].members);
+    //         })
+    //         // eslint-disable-next-line no-console
+    //         .catch(console.error); // FIXME:
+    // }, [chamber]);
 
     return (
         <div>

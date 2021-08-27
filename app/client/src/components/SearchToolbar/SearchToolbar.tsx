@@ -19,9 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    onChange: (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => void;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
     label: string;
 }
 

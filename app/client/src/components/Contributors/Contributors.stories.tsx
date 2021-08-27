@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Meta } from '@storybook/react';
 import faker from 'faker/locale/en';
+
+import { ReferenceNames } from 'prytaneum-typings';
 import Component from '.';
 
 export default {
@@ -23,11 +25,11 @@ const makeBaseTeam = () => ({
 const makeTeam = (num: number) => {
     const teamMembers = [];
     const linkedIn = {
-        name: 'LinkedIn',
+        name: 'LinkedIn' as ReferenceNames,
         link: 'https://www.linkedin.com',
     };
     const email = {
-        name: 'email',
+        name: 'email' as ReferenceNames,
         link: 'https://www.gmail.com',
     };
     for (let i = 0; i < num; i += 1) {

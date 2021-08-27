@@ -63,6 +63,7 @@ __metadata:
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.16
     "@types/react-relay": ^11
+    "@types/react-transition-group": ^4
     "@types/react-window": ^1.8.2
     "@types/redux-devtools-extension": ^2
     "@types/relay-runtime": ^11
@@ -81,7 +82,7 @@ __metadata:
     next: 10.1.3
     notistack: ^1.0.6
     prop-types: ^15.7.2
-    prytaneum-typings: "https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece"
+    prytaneum-typings: "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.83"
     react: 17.0.2
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
@@ -5292,6 +5293,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 8f4dce3eb5c70178c5ec2f7434983d632d02a0371a80c31ea012e37a2b8b2174bee482c3b85764333cbe3bcba9132b95307e23ac56d05d490e485e371bdcea46
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:^4":
+  version: 4.4.2
+  resolution: "@types/react-transition-group@npm:4.4.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: 35523ef25ae5bbf68793a52e9b996f8c7c337e0d10650bc964c26929547b062509c955f55e76651bcf604560594783f60c4bfcee290a263845f9e43eb0ab0d1e
   languageName: node
   linkType: hard
 
@@ -10616,17 +10626,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"faker@https://github.com/DevelopmentByDavid/faker.js#delete-stuff":
-  version: 5.1.0
-  resolution: "faker@https://github.com/DevelopmentByDavid/faker.js.git#commit=b6488ff0039b737819eed805e2fdd478e07e4b10"
-  checksum: a204458dc4d237455972cef332dfa8dbf1c0c0949d4fdf65fec962e77d47298f82611f05ca2d9b7b4406a3871cef877fe0be6be22ba52dc87a0ab9ce1912e033
-  languageName: node
-  linkType: hard
-
 "faker@https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c":
   version: 5.1.1
   resolution: "faker@https://github.com/DevelopmentByDavid/faker.js.git#commit=1a97197fe0e312ebc45d470ff88ade5c0835ad1c"
   checksum: 0fe1448592b3b27bbb43f6e2e8535bef010bca50e971d1f013b5df12a0785ce809828c81c6ca0b8ac1e306af0814a4f3afccb48fbaa4635952aff768c46e9d45
+  languageName: node
+  linkType: hard
+
+"faker@https://github.com/marak/Faker.js#v5.1.0":
+  version: 5.1.0
+  resolution: "faker@https://github.com/marak/Faker.js.git#commit=e0b392de967d3000f59ef712c666786aa5ae19b7"
+  checksum: 9e567f6b219f7d1ae52fd1f11107baf874b37e7e14d89d8115abc0a8f4341ef8d40c052f89aa62f9f5cd922f778db5abea1907dc0a4e6102706b3a06894b00b9
   languageName: node
   linkType: hard
 
@@ -17277,15 +17287,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece":
+"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.83":
   version: 1.0.0
-  resolution: "prytaneum-typings@https://github.com/c2c-project/prytaneum-typings.git#commit=fe995e21a783ddf3a9c61f8fd2c39a205105cece"
+  resolution: "prytaneum-typings@https://github.com/c2c-project/prytaneum-typings.git#commit=b78a1ee77c2fcdb137d456e65ac0064e6bbe630b"
   dependencies:
     "@types/faker": ^4.1.4
     "@types/mongodb": ^3.5.32
     "@types/node": ^14.14.6
-    faker: "https://github.com/DevelopmentByDavid/faker.js#delete-stuff"
-  checksum: a5a7332e0f2747bdb06707c20d4559fea1338ba6cbf8b5362cc0ba67dca4c26d9fab740213299d92d15f075f3594ac526af7b37e82a52a153e916eba088162ae
+    faker: "https://github.com/marak/Faker.js#v5.1.0"
+  checksum: 3272c821fbf543ae7405af93494f97143aa1b3a0d72866138fa3b9921e7da19059dcd7de8b5ade138e258309bf0d66399cb791b978c024f3c8a8cad914d0d403
   languageName: node
   linkType: hard
 

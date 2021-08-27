@@ -57,8 +57,9 @@ const useStyles = makeStyles((theme: Theme) => ({
  *  @param {Section[]} props.sections consists of the Sections to iterate through <br><br> A Section consits of Title and a Datum[]
  */
 export default function SectionList({ sections }: Props) {
-    const router = useRouter();
     const classes = useStyles();
+    const router = useRouter();
+
     return (
         <List className={classes.root} subheader={<li />}>
             {sections.map(({ title, sectionData }) => (

@@ -5,9 +5,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
-interface Team {
-    members: Array<{ fullName: string, picturePath: string }>
-}
+import { Team } from 'prytaneum-typings';
 
 interface Props {
     team: Team;
