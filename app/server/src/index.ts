@@ -100,9 +100,17 @@ async function start() {
             // maybeValue: 'T | null | undefined',
         },
     });
-    verifyEnv();
-    console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
-    await server.listen(port, address);
+    try {
+        verifyEnv();
+        console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
+        const runAddress = await server.listen(port, address);
+        console.log(`Listening on ${runAddress}`);
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
 }
 
-start();
+if (require.main === module) {
+  start()
+}
