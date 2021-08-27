@@ -94,7 +94,7 @@ export default function Home() {
             </Grid>
             <Grid item sm={12} md={6}>
                 <Typography variant='h6'>
-                    Where We've Been Used
+                    Where We&apos;ve Been Used
                 </Typography>
                 <Typography variant='body1'>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
