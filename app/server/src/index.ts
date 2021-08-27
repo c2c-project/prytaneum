@@ -11,7 +11,7 @@ import fastifyCors from 'fastify-cors';
 
 import { routes as inviteRoute } from '@local/features/events/invites/invite';
 import { buildContext, buildSubscriptionContext } from './context';
-import { server } from './server';
+import build from './server';
 
 const typeDefsArr = loadFilesSync(join(__dirname, './features/**/*.graphql'));
 const typeDefs = mergeTypeDefs(typeDefsArr);
@@ -23,44 +23,6 @@ const resolverArr = loadFilesSync([
 const resolvers = mergeResolvers(resolverArr);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-server.register((fastify, options, done) => {
-    fastify.register(fastifyCors, {
-        origin: '*',
-        methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD']
-    });
-    done();
-});
-
-server.register(mercurius, {
-    schema,
-    graphiql: process.env.NODE_ENV === 'development',
-    context: buildContext,
-    // subscription: true,
-    subscription: {
-        context: buildSubscriptionContext,
-    },
-});
-
-server.register(cookie, {
-    secret: process.env.COOKIE_SECRET,
-} as FastifyCookieOptions);
-
-server.register(AltairFastify);
-
-server.register(fastifyMultipart, {
-    limits: {
-        fieldNameSize: 100, // Max field name size in bytes
-        fieldSize: 100,     // Max field value size in bytes
-        fields: 10,         // Max number of non-file fields
-        fileSize: 1000000,  // For multipart forms, the max file size in bytes
-        files: 1,           // Max number of file fields
-        headerPairs: 2000   // Max number of header key=>value pairs
-    },
-    // attachFieldsToBody: true
-});
-
-server.register(inviteRoute);
 
 function verifyEnv() {
     if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
@@ -82,25 +44,65 @@ async function start() {
     // You must listen on all IPV4 addresses in Cloud Run
     const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST
     
-    // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
-    mercuriusCodgen(server, {
-        targetPath: join(__dirname, './graphql-types.ts'),
-        watchOptions: {
-            // enabled: true,
-        },
-        codegenConfig: {
-            internalResolversPrefix: '__',
-            // idk why they change it from the default
-            // https://github.com/mercurius-js/mercurius-typescript/blob/25f4f437d41be645ae13d0836123e82f4e14afe4/packages/mercurius-codegen/src/code.ts#L78
-            customResolverFn:
-                '(parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => Promise<TResult> | TResult',
-            // avoidOptionals: {
-            //     defaultValue: true
-            // },
-            // maybeValue: 'T | null | undefined',
-        },
-    });
     try {
+        const server = build();
+
+        // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
+        mercuriusCodgen(server, {
+            targetPath: join(__dirname, './graphql-types.ts'),
+            watchOptions: {
+                // enabled: true,
+            },
+            codegenConfig: {
+                internalResolversPrefix: '__',
+                // idk why they change it from the default
+                // https://github.com/mercurius-js/mercurius-typescript/blob/25f4f437d41be645ae13d0836123e82f4e14afe4/packages/mercurius-codegen/src/code.ts#L78
+                customResolverFn:
+                    '(parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => Promise<TResult> | TResult',
+                // avoidOptionals: {
+                //     defaultValue: true
+                // },
+                // maybeValue: 'T | null | undefined',
+            },
+        });
+
+        server.register((fastify, options, done) => {
+            fastify.register(fastifyCors, {
+                origin: '*',
+                methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD']
+            });
+            done();
+        });
+
+        server.register(mercurius, {
+            schema,
+            graphiql: process.env.NODE_ENV === 'development',
+            context: buildContext,
+            // subscription: true,
+            subscription: {
+                context: buildSubscriptionContext,
+            },
+        });
+
+        server.register(cookie, {
+            secret: process.env.COOKIE_SECRET,
+        } as FastifyCookieOptions);
+
+        server.register(AltairFastify);
+
+        server.register(fastifyMultipart, {
+            limits: {
+                fieldNameSize: 100, // Max field name size in bytes
+                fieldSize: 100,     // Max field value size in bytes
+                fields: 10,         // Max number of non-file fields
+                fileSize: 1000000,  // For multipart forms, the max file size in bytes
+                files: 1,           // Max number of file fields
+                headerPairs: 2000   // Max number of header key=>value pairs
+            },
+            // attachFieldsToBody: true
+        });
+
+        server.register(inviteRoute);
         verifyEnv();
         console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);
