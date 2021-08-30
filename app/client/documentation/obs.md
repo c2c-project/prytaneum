@@ -61,8 +61,21 @@ Depending on the kind of lag, this could be related to a slow internet connectio
 
 3. On the bottom left of the OBS Studio window, click on the + and select 'Video Capture Device'. You will be prompted to create a new Video Capture Device. Select OK.
 
+![Adding Sources](screenshots/sources.png)
+![Selecting Video Capture Device](screenshots/sourcesselection.png)
+
 4. Next you will need to select the correct device on which you will stream your video. This will either be your built in camera, or if you have an external camera, select that device and ensure it is working correctly by viewing your video preview. Then select OK.
+
+![Video Capture Prompt](screenshots/videocaptureprompt.png)
+![Video Capture Preview](screenshots/videocapturepreview.png)
 
 5. On the bottom right of the OBS Studio window, you will see a list of options which include **Start Virtual Camera**. Click this option to begin mirroring your OBS video to Zoom.
 
-6. On the bottom left of the Zoom window, you will see your audio and video buttons. Click on the little arrow on video to display a list of available video sources and select OBS Virtual Camera. You have now successfully connected OBS to Zoom.
+![Start Virtual Camera](screenshots/startvirtualcamera.png)
+
+6. On the bottom left of the Zoom window, you will see your audio and video buttons. Click on the little arrow on video to display a list of available video sources and select OBS Virtual Camera. You have now successfully connected OBS to Zoom. If you turn your video off on Zoom, your screen should show an OBS preview image.
+
+![Zoom Camera Selection](screenshots/zoomcameraselection.png)
+![Zoom Previewe Camera Off](screenshots/zoompreviewcamoff.png)
+
+
