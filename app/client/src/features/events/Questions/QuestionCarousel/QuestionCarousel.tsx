@@ -41,7 +41,7 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
     }
 `;
 
-const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
+export const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
     subscription QuestionCarouselSubscription($eventId: ID!) {
         eventUpdates(eventId: $eventId) {
             id

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
+import { Organization as OrgT, OrganizationSubscription } from '@local/graphql-types';
 import * as Organization from './methods';
-import { Resolvers, errors, toGlobalId, runMutation } from '../utils';
+import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '../utils';
+import { isMemberOfOrg } from '../permissions';
 
 const toOrgId = toGlobalId('Organization');
 const toUserId = toGlobalId('User');
@@ -20,6 +22,12 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const createdOrg = await Organization.createOrg(ctx.viewer.id, ctx.prisma, args.input);
+                ctx.pubsub.publish({
+                    topic: 'orgUpdated',
+                    payload: {
+                        orgUpdated: { orgId: createdOrg.id, deleteMember: false },
+                    },
+                });
                 return toOrgId(createdOrg);
             });
         },
@@ -43,6 +51,12 @@ export const resolvers: Resolvers = {
                     ...args.input,
                     orgId,
                 });
+                ctx.pubsub.publish({
+                    topic: 'orgUpdated',
+                    payload: {
+                        orgUpdated: { orgId, userId: createdMember.id, deleteMember: false },
+                    },
+                });
                 return toUserId(createdMember);
             });
         },
@@ -55,6 +69,12 @@ export const resolvers: Resolvers = {
                     ...args.input,
                     orgId,
                     userId,
+                });
+                ctx.pubsub.publish({
+                    topic: 'orgUpdated',
+                    payload: {
+                        orgUpdated: { orgId, userId, deleteMember: true },
+                    },
                 });
                 return toUserId(deletedMember);
             });
@@ -74,6 +94,20 @@ export const resolvers: Resolvers = {
         async isViewerMember(parent, args, ctx, info) {
             const { id: orgId } = fromGlobalId(parent.id);
             return Organization.isViewerMember(ctx.viewer.id, ctx.prisma, orgId);
+        },
+    },
+    Subscription: {
+        orgUpdated: {
+            subscribe: withFilter<{ orgUpdated: OrganizationSubscription }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('orgUpdated'),
+                (payload, args, ctx) => {
+                    if (!ctx.viewer.id) return false;
+                    const { orgId, userId, deleteMember } = payload.orgUpdated;
+                    // If member is deleted, update that user to remove org from their list
+                    if (deleteMember && userId === ctx.viewer.id) return true;
+                    return isMemberOfOrg(ctx.viewer.id, orgId, ctx.prisma);
+                }
+            ),
         },
     },
 };

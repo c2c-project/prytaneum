@@ -411,6 +411,8 @@ export type EventMutationResponse = MutationResponse & {
 export type Subscription = {
     __typename?: 'Subscription';
     eventUpdates: Event;
+    /** subscription for whenever a new org is added */
+    orgUpdated: OrganizationSubscription;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** subscription for whenever questions are added to the queue */
@@ -471,6 +473,13 @@ export type OrganizationConnection = {
     __typename?: 'OrganizationConnection';
     edges?: Maybe<Array<OrganizationEdge>>;
     pageInfo: PageInfo;
+};
+
+export type OrganizationSubscription = {
+    __typename?: 'OrganizationSubscription';
+    orgId: Scalars['ID'];
+    userId?: Maybe<Scalars['ID']>;
+    deleteMember: Scalars['Boolean'];
 };
 
 /** Necessary information for org creation */
@@ -891,6 +900,7 @@ export type ResolversTypes = {
     Organization: ResolverTypeWrapper<Organization>;
     OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
     OrganizationConnection: ResolverTypeWrapper<OrganizationConnection>;
+    OrganizationSubscription: ResolverTypeWrapper<OrganizationSubscription>;
     CreateOrganization: CreateOrganization;
     UpdateOrganization: UpdateOrganization;
     DeleteOrganization: DeleteOrganization;
@@ -979,6 +989,7 @@ export type ResolversParentTypes = {
     Organization: Organization;
     OrganizationEdge: OrganizationEdge;
     OrganizationConnection: OrganizationConnection;
+    OrganizationSubscription: OrganizationSubscription;
     CreateOrganization: CreateOrganization;
     UpdateOrganization: UpdateOrganization;
     DeleteOrganization: DeleteOrganization;
@@ -1423,6 +1434,12 @@ export type SubscriptionResolvers<
         ContextType,
         RequireFields<SubscriptioneventUpdatesArgs, 'eventId'>
     >;
+    orgUpdated?: SubscriptionResolver<
+        ResolversTypes['OrganizationSubscription'],
+        'orgUpdated',
+        ParentType,
+        ContextType
+    >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         ResolversTypes['EventLiveFeedback'],
         'eventLiveFeedbackCreated',
@@ -1484,6 +1501,16 @@ export type OrganizationConnectionResolvers<
 > = {
     edges?: Resolver<Maybe<Array<ResolversTypes['OrganizationEdge']>>, ParentType, ContextType>;
     pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrganizationSubscriptionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['OrganizationSubscription'] = ResolversParentTypes['OrganizationSubscription']
+> = {
+    orgId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    userId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    deleteMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1737,6 +1764,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     Organization?: OrganizationResolvers<ContextType>;
     OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
     OrganizationConnection?: OrganizationConnectionResolvers<ContextType>;
+    OrganizationSubscription?: OrganizationSubscriptionResolvers<ContextType>;
     OrganizationMutationResponse?: OrganizationMutationResponseResolvers<ContextType>;
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
@@ -1883,6 +1911,12 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     OrganizationConnection?: {
         edges?: LoaderResolver<Maybe<Array<OrganizationEdge>>, OrganizationConnection, {}, TContext>;
         pageInfo?: LoaderResolver<PageInfo, OrganizationConnection, {}, TContext>;
+    };
+
+    OrganizationSubscription?: {
+        orgId?: LoaderResolver<Scalars['ID'], OrganizationSubscription, {}, TContext>;
+        userId?: LoaderResolver<Maybe<Scalars['ID']>, OrganizationSubscription, {}, TContext>;
+        deleteMember?: LoaderResolver<Scalars['Boolean'], OrganizationSubscription, {}, TContext>;
     };
 
     OrganizationMutationResponse?: {
