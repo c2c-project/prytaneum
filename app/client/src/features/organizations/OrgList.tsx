@@ -12,13 +12,16 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Add, ChevronRight } from '@material-ui/icons';
 import { useRouter } from 'next/router';
-import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
+import { usePreloadedQuery, graphql, PreloadedQuery, useSubscription, loadQuery } from 'react-relay';
 
 import type { OrgListQuery } from '@local/__generated__/OrgListQuery.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { Fab } from '@local/components/Fab';
 import { CreateOrg, CreateOrgProps } from '@local/features/organizations';
 import { ArrayElement } from '@local/utils/ts-utils';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { OrgListSubscription } from '@local/__generated__/OrgListSubscription.graphql';
+import { useEnvironment } from '../core';
 
 export const ORG_LIST_QUERY = graphql`
     query OrgListQuery {
@@ -26,6 +29,15 @@ export const ORG_LIST_QUERY = graphql`
             id
             name
             createdAt
+        }
+    }
+`;
+
+// TODO Add subscription so list updates correctly when a new org is created
+export const ORG_LIST_SUBSCRIPTION = graphql`
+    subscription OrgListSubscription {
+        orgUpdated {
+            orgId
         }
     }
 `;
@@ -75,10 +87,32 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const [orgList, setEventList] = React.useState<TOrganizationList>(data.myOrgs || []);
     const classes = useStyles();
     const router = useRouter();
+    const { env } = useEnvironment();
 
-    const prependOrg = (org: ArrayElement<TOrganizationList>) => {
-        setEventList((prev) => [org, ...prev]);
+    const refetch = React.useCallback(() => {
+        loadQuery(env, ORG_LIST_QUERY, {}, { fetchPolicy: 'store-and-network' });
+    }, [env]);
+
+    const config = React.useMemo<GraphQLSubscriptionConfig<OrgListSubscription>>(
+        () => ({
+            variables: {},
+            subscription: ORG_LIST_SUBSCRIPTION,
+            updater: () => {
+                refetch();
+            },
+        }),
+        [refetch]
+    );
+
+    useSubscription(config);
+
+    const appendOrg = (org: ArrayElement<TOrganizationList>) => {
+        setEventList((prev) => [...prev, org]);
     };
+
+    React.useEffect(() => {
+        setEventList(data.myOrgs || []);
+    }, [data]);
 
     if (orgList.length === 0)
         return (
@@ -88,7 +122,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
                     <br />
                     Get started by clicking the + at the bottom right
                 </Typography>
-                <CreateOrgFab onSubmit={prependOrg} />
+                <CreateOrgFab onSubmit={appendOrg} />
             </Grid>
         );
 
@@ -110,7 +144,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
                     </ListItem>
                 ))}
             </List>
-            <CreateOrgFab onSubmit={prependOrg} />
+            <CreateOrgFab onSubmit={appendOrg} />
         </Grid>
     );
 };

@@ -469,6 +469,12 @@ type OrganizationMutationResponse implements MutationResponse {
   body: Organization
 }
 
+type OrganizationSubscription {
+  orgId: ID!
+  userId: ID
+  deleteMember: Boolean!
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -507,6 +513,9 @@ type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
   eventUpdates(eventId: ID!): Event!
+
+  """subscription for whenever a new org is added"""
+  orgUpdated: OrganizationSubscription!
 
   """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): QuestionOperation!

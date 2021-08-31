@@ -1,7 +1,22 @@
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
-import { graphql, useFragment, useMutation } from 'react-relay';
+import {
+    Grid,
+    Paper,
+    Typography,
+    Divider,
+    Card,
+    Button,
+    List,
+    ListItem,
+    DialogContent,
+} from '@material-ui/core';
+import {
+    graphql,
+    useMutation,
+    usePaginationFragment,
+    useSubscription,
+} from 'react-relay';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -14,9 +29,14 @@ import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
+import { QuestionQueueSubscription } from '@local/__generated__/QuestionQueueSubscription.graphql';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
+import { QUESTION_CAROUSEL_SUBSCRIPTION } from '@local/features/events/Questions/QuestionCarousel/QuestionCarousel';
 import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
+import { useEvent } from '../../useEvent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,6 +85,7 @@ interface QuestionQueueProps {
 
 export const QUESTION_QUEUE_FRAGMENT = graphql`
     fragment QuestionQueueFragment on Event
+    @refetchable(queryName: "QuestionQueuePagination")
     @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
         id
         currentQuestion
@@ -79,6 +100,15 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
                     position
                 }
             }
+        }
+    }
+`;
+
+export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
+    subscription QuestionQueueSubscription($eventId: ID!) {
+        questionQueued(eventId: $eventId) {
+            id
+            position
         }
     }
 `;
@@ -125,7 +155,6 @@ function useStyledQueue({ eventId }: { eventId: string }) {
             // if minIdx === -1, then we're moving to the start of the list, hence special logic
             const minPos = minIdx === -1 ? minPosition : list[minIdx].node.position;
 
-            
             if (!maxPos || minPos === null) return;
 
             // round b/c relay requires that int be an actual integer
@@ -178,9 +207,42 @@ function useStyledQueue({ eventId }: { eventId: string }) {
 }
 
 export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
-    const data = useFragment(QUESTION_QUEUE_FRAGMENT, fragmentRef);
+    const { data, refetch } = usePaginationFragment(QUESTION_QUEUE_FRAGMENT, fragmentRef);
     const classes = useStyles();
     const ref = React.useRef<HTMLElement | null>(null);
+    const { eventId } = useEvent();
+    const [open, setOpen] = React.useState(false);
+
+    const questionQueueConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionQueueSubscription>>(
+        () => ({
+            variables: { eventId },
+            subscription: QUESTION_QUEUE_SUBSCRIPTION,
+            updater: () => {
+                refetch(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
+                    { fetchPolicy: 'store-and-network' }
+                );
+            },
+        }),
+        [eventId, refetch, data]
+    );
+
+    const questionCarouselConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
+        () => ({
+            variables: { eventId },
+            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
+        }),
+        [eventId]
+    );
+
+    useSubscription(questionQueueConfig);
+    useSubscription(questionCarouselConfig);
+
+    const scrollToCurrent = () => {
+        ref.current?.scrollIntoView();
+    };
+
     const { totQuestions, sortedQuestions } = React.useMemo(
         () => ({
             totQuestions: data.queuedQuestions?.edges?.length ?? 0,
@@ -204,19 +266,18 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [currQuestionIdx, sortedQuestions]
     );
 
-    const [open, setOpen] = React.useState(false);
-
-    const scrollToCurrent = () => {
-        ref.current?.scrollIntoView();
-    };
-
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId: data.id });
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
             // dropped outside the list
             if (!result.destination || !futureQuestions) return;
-            reorder(futureQuestions, result.source.index, result.destination.index, currentQuestion?.node.position || 0);
+            reorder(
+                futureQuestions,
+                result.source.index,
+                result.destination.index,
+                currentQuestion?.node.position || 0
+            );
         },
         [futureQuestions, reorder, currentQuestion]
     );
