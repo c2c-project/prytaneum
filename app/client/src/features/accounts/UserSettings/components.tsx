@@ -5,20 +5,35 @@ import {
     ListItemText,
     Switch,
     Collapse,
-    // Typography,
+    Typography,
     Button,
+    Grid,
 } from '@material-ui/core';
-import { UserSettings } from '@local/graphql-types';
-
-// import { makeStyles } from '@material-ui/core/styles';
-
+import { User, UserSettings } from '@local/graphql-types';
+import { Form } from '@local/components/Form';
+import { FormContent } from '@local/components/FormContent';
+import { TextField } from '@local/components/TextField';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
-
-import { TextField } from '@local/components/TextField';
-
 import SettingsItem from '@local/components/SettingsItem';
+import { useForm } from '@local/features/core';
+import { makeStyles } from '@material-ui/core/styles';
 import text from './help-text';
+
+const initialModifyUserEmail = {
+    newEmail: '',
+};
+
+const initialModifyUserPassword = {
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+};
+
+const intiialDeleteAccount = {
+    password: '',
+    confirmPassword: '',
+};
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
@@ -34,14 +49,17 @@ const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
     setState((prev) => ({ ...prev, [id]: checked }));
 };
 
-// const useStyles = makeStyles((theme) => ({
-//     indent: {
-//         paddingLeft: theme.spacing(4),
-//     },
-//     fullWidth: {
-//         width: '100%',
-//     },
-// }));
+const useStyles = makeStyles((theme) => ({
+    // indent: {
+    //     paddingLeft: theme.spacing(4),
+    // },
+    // fullWidth: {
+    //     width: '100%',
+    // },
+    form: {
+        margin: theme.spacing(0, 1, 0, ),
+    },
+}));
 
 // all really small one time user @local/components go here
 interface DisplayItem {
@@ -97,13 +115,113 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
     );
 }
 
-// export function ModifyUserEmail({ user }: { user: User }) {
-//     return (
-//         <Typography>
-//             todo
-//         </Typography>
-//     )
-// }
+export function ModifyUserEmail({ user }: { user: User }) {
+    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserEmail);
+    const classes = useStyles();
+
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Change Email</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body1'>
+                    <b>Current email:</b> {user.email}
+                </Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    A verification email will be sent to the new email to confirm the update.
+                </Typography>
+            </Grid>
+            <Form className={classes.form} onSubmit={() => {}}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your new email' }}
+                        label='Enter your new email'
+                        helperText={errors.newEmail}
+                        error={Boolean(errors.newEmail)}
+                        required
+                        type='email'
+                        variant='outlined'
+                        value={form.newEmail}
+                        onChange={handleChange('newEmail')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button type='submit' variant='outlined' color='primary'>
+                        Update email
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
+    )
+}
+
+export function ModifyUserPassword() {
+    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
+    const classes = useStyles();
+
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Change Password</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    Passwords must be at least 8 characters.
+                </Typography>
+            </Grid>
+            
+            <Form className={classes.form} onSubmit={() => {}}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your old password' }}
+                        label='Enter your old password'
+                        helperText={errors.oldPassword}
+                        error={Boolean(errors.oldPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={form.oldPassword}
+                        onChange={handleChange('oldPassword')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your new password' }}
+                        label='Enter your new password'
+                        helperText={errors.newPassword}
+                        error={Boolean(errors.newPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={form.newPassword}
+                        onChange={handleChange('newPassword')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your new password again' }}
+                        label='Confirm your new password'
+                        helperText={errors.confirmNewPassword}
+                        error={Boolean(errors.confirmNewPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={form.confirmNewPassword}
+                        onChange={handleChange('confirmNewPassword')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button variant='outlined' color='primary'>
+                        Update password
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
+    )
+}
 
 export const ButtonList = ({ list, setContent }: Props) => (
     <List>
@@ -190,39 +308,64 @@ export const DisableAccount = () => {
     );
 };
 
-export const DeleteAccount = () => (
+export function DeleteAccount() {
+    const [form, errors, handleSubmit, handleChange] = useForm(intiialDeleteAccount);
+    const classes = useStyles();
     // ROUTING: to /Login after deleted
-    <span>
-        <h1>
-            Delete Account?
-            <p>
-                All of your account information will be erased from Prytaneum.
-                This action is irreversible. Please enter your password below
-                twice to confirm.
-            </p>
-        </h1>
-        <TextField
-            inputProps={{ 'aria-label': 'Enter your password' }}
-            label='Please enter your password'
-            required
-            variant='outlined'
-            type='password'
-            value=''
-            onChange={() => {}}
-            spellCheck={false}
-        />
-        <TextField
-            inputProps={{ 'aria-label': 'Enter your password again' }}
-            label='Please enter your password again to DELETE your account'
-            required
-            variant='outlined'
-            type='password'
-            value=''
-            onChange={() => {}}
-            spellCheck={false}
-        />
-    </span>
-);
+    
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Delete Account</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    All of your account information will be erased from Prytaneum.
+                </Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    <b>This action is irreversible.</b> Please enter your password below
+                    twice to confirm.
+                </Typography>
+            </Grid>
+            <Form className={classes.form} onSubmit={() => {}}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your password' }}
+                        label='Enter your password'
+                        helperText={errors.password}
+                        error={Boolean(errors.password)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={form.password}
+                        onChange={handleChange('password')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your password again' }}
+                        label='Confirm your password to DELETE your account'
+                        helperText={errors.confirmPassword}
+                        error={Boolean(errors.confirmPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={form.confirmPassword}
+                        onChange={handleChange('confirmPassword')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button variant='outlined' style={{ color: 'red', borderColor: 'red' }}>
+                        Delete account
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
+        
+    );
+}
 
 export const Feedback = () => (
     <span>

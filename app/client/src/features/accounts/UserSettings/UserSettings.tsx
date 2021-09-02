@@ -4,9 +4,8 @@ import {
     Grid,
     Divider,
 } from '@material-ui/core';
-import MoreVert from '@material-ui/icons/MoreVert';
 
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 // import AppBar from 'layout/AppBar';
@@ -14,7 +13,7 @@ import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { SettingsMenu }  from '@local/components/SettingsMenu/SettingsMenu';
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
-import UserProfile from '../UserProfile/UserProfile';
+// import UserProfile from '../UserProfile/UserProfile';
 
 import {
     // ButtonList,
@@ -22,14 +21,16 @@ import {
     // Notifications,
     // Appearance,
     // Logout,
-    DisableAccount,
-    // DeleteAccount,
+    ModifyUserEmail,
+    ModifyUserPassword,
+    // DisableAccount,
+    DeleteAccount,
     // Feedback,
     // AboutUs,
     // PrivacyPolicy,
     // TermsOfService,
-    TownhallUserSettings,
-    NotificationSettings,
+    // TownhallUserSettings,
+    // NotificationSettings,
 } from './components';
 
 interface Props {
@@ -147,9 +148,23 @@ export default function UserSettings({ id }: Props) {
             title: 'Account Settings',
             description: 'View Account Settings',
             component: (
-                <div>
-                    Test
-                </div>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <ModifyUserEmail user={user} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ModifyUserPassword />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Divider />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <DeleteAccount />
+                    </Grid>
+                </Grid>
             ),
         },
         // {

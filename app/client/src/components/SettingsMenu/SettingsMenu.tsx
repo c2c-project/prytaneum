@@ -143,8 +143,8 @@ export function SettingsMenu({ config }: Props) {
                                 className={expandedPanels.includes(sectionTitle) && classes.panel}
                             >
                                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                    <Typography variant='body1' className={classes.heading}>{sectionTitle}</Typography>
-                                    <Typography variant='body1' className={classes.secondaryHeading}>{description}</Typography>
+                                    <Typography variant='body2' className={classes.heading}>{sectionTitle}</Typography>
+                                    <Typography variant='body2' className={classes.secondaryHeading}>{description}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container key={sectionTitle}>
