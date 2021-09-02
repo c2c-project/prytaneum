@@ -74,5 +74,6 @@ There's a few complexities to take note of:
     - Run `yarn workspace @app/db prisma generate`.
     - Run `yarn workspace @app/db start-db` to start db.
     - Run `docker-compose down && docker volume prune && docker container prune && docker image prune` to clear current db.
+    - Run `yarn workspace @app/db start-db` to start db again.
     - Run `yarn workspace @app/db prisma db push --preview-feature` to sync the db with the schema.
     - Run `yarn g:dev-project`.
