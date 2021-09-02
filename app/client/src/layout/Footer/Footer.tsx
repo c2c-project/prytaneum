@@ -9,15 +9,15 @@ export function Footer() {
                 <Container maxWidth='lg'>
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={4}>
-                            <Box borderBottom={1}>Help</Box>
+                            <Box borderBottom={1}>Learn More</Box>
                             <Box>
                                 <Link href='/'>Home</Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Contact</Link>
+                                <Link href='/aboutus'>About Us</Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Support</Link>
+                                <Link href='/'>Mission</Link>
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -33,9 +33,9 @@ export function Footer() {
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <Box borderBottom={1}>Elsewhere</Box>
+                            <Box borderBottom={1}>Support</Box>
                             <Box>
-                                <Link href='/'>Home</Link>
+                                <Link href='/'>FAQ</Link>
                             </Box>
                             <Box>
                                 <Link href='/'>Contact</Link>
