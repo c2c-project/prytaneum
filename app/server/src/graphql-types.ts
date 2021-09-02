@@ -87,6 +87,16 @@ export type User = Node & {
     organizations?: Maybe<OrganizationConnection>;
 };
 
+export type UserSettings = {
+    __typename?: 'UserSettings';
+    currentEmail: Scalars['String'];
+    updateEmail?: Maybe<Scalars['String']>;
+    updatePassword?: Maybe<Scalars['String']>;
+    deleteAccount: Scalars['Boolean'];
+    isAnonymous: Scalars['Boolean'];
+    isNotificationsEnabled: Scalars['Boolean'];
+};
+
 export type UserEdge = {
     __typename?: 'UserEdge';
     node: User;
@@ -882,6 +892,7 @@ export type ResolversTypes = {
         | ResolversTypes['EventVideoMutationResponse'];
     Operation: Operation;
     User: ResolverTypeWrapper<User>;
+    UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
     RegistrationForm: RegistrationForm;
@@ -971,6 +982,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventSpeakerMutationResponse']
         | ResolversParentTypes['EventVideoMutationResponse'];
     User: User;
+    UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
     RegistrationForm: RegistrationForm;
@@ -1116,6 +1128,19 @@ export type UserResolvers<
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<Maybe<ResolversTypes['OrganizationConnection']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserSettingsResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['UserSettings'] = ResolversParentTypes['UserSettings']
+> = {
+    currentEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    updateEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    updatePassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    deleteAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    isAnonymous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    isNotificationsEnabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1752,6 +1777,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     Error?: ErrorResolvers<ContextType>;
     MutationResponse?: MutationResponseResolvers<ContextType>;
     User?: UserResolvers<ContextType>;
+    UserSettings?: UserSettingsResolvers<ContextType>;
     UserEdge?: UserEdgeResolvers<ContextType>;
     UserConnection?: UserConnectionResolvers<ContextType>;
     UserMutationResponse?: UserMutationResponseResolvers<ContextType>;
@@ -1832,6 +1858,15 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, {}, TContext>;
+    };
+
+    UserSettings?: {
+        currentEmail?: LoaderResolver<Scalars['String'], UserSettings, {}, TContext>;
+        updateEmail?: LoaderResolver<Maybe<Scalars['String']>, UserSettings, {}, TContext>;
+        updatePassword?: LoaderResolver<Maybe<Scalars['String']>, UserSettings, {}, TContext>;
+        deleteAccount?: LoaderResolver<Scalars['Boolean'], UserSettings, {}, TContext>;
+        isAnonymous?: LoaderResolver<Scalars['Boolean'], UserSettings, {}, TContext>;
+        isNotificationsEnabled?: LoaderResolver<Scalars['Boolean'], UserSettings, {}, TContext>;
     };
 
     UserEdge?: {

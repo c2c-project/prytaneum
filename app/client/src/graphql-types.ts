@@ -815,3 +815,13 @@ export type UserMutationResponse = MutationResponse & {
   message: Scalars['String'];
   body?: Maybe<User>;
 };
+
+export type UserSettings = {
+  __typename?: 'UserSettings';
+  currentEmail: Scalars['String'];
+  updateEmail?: Maybe<Scalars['String']>;
+  updatePassword?: Maybe<Scalars['String']>;
+  deleteAccount: Scalars['Boolean'];
+  isAnonymous: Scalars['Boolean'];
+  isNotificationsEnabled: Scalars['Boolean'];
+};

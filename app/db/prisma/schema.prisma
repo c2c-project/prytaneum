@@ -20,8 +20,9 @@ model User {
     fullName String? @db.VarChar(200) // computed field, recomputed on name update
     password String?
     preferredLang String @db.VarChar(30)
-    canMakeOrgs Boolean @default(false) 
+    canMakeOrgs Boolean @default(false)
 
+    settings UserSettings[]
     memberOf OrgMember[]
     feedback EventLiveFeedback[]
     questions EventQuestion[]
@@ -29,6 +30,19 @@ model User {
     moderatorOf EventModerator[]
     speakerOf EventSpeaker[]
     registrantOf EventRegistrant[]
+}
+
+model UserSettings {
+    userId String @db.Uuid
+    user User @relation(fields: [userId], references: [id])
+    currentEmail String
+    updateEmail String
+    updatePassword String
+    deleteAccount Boolean @default(false)
+    isAnonymous Boolean @default(false)
+    isNotificationsEnabled Boolean @default(false)
+
+    @@id([userId])
 }
 
 model Organization {
