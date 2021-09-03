@@ -8,6 +8,7 @@ import {
     Typography,
     Button,
     Grid,
+    Link as MUILink,
 } from '@material-ui/core';
 import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
@@ -18,6 +19,7 @@ import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
 import { useForm } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Link from 'next/link';
 import text from './help-text';
 
 const initialModifyUserEmail = {
@@ -57,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
     //     width: '100%',
     // },
     form: {
-        margin: theme.spacing(0, 1, 0, ),
+        margin: theme.spacing(0, 1, 0, 1),
+    },
+    link: {
+        paddingLeft: theme.spacing(1),
     },
 }));
 
@@ -214,9 +219,14 @@ export function ModifyUserPassword() {
                     />
                 </FormContent>
                 <Grid component='span' item xs={12}>
-                    <Button variant='outlined' color='primary'>
+                    <Button type='submit' variant='outlined' color='primary'>
                         Update password
                     </Button>
+                    <Link href='/forgot-password' passHref>
+                        <MUILink className={classes.link} color='primary'>
+                            Forgot Password?
+                        </MUILink>
+                    </Link>
                 </Grid>
             </Form>
         </Grid>
@@ -357,7 +367,7 @@ export function DeleteAccount() {
                     />
                 </FormContent>
                 <Grid component='span' item xs={12}>
-                    <Button variant='outlined' style={{ color: 'red', borderColor: 'red' }}>
+                    <Button type='submit' variant='outlined' style={{ color: 'red', borderColor: 'red' }}>
                         Delete account
                     </Button>
                 </Grid>
