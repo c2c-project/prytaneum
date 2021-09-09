@@ -138,7 +138,6 @@ spec:
       maxSurge: 25%
       maxUnavailable: 25%
     type: RollingUpdate
-  serviceAccountName: prytaneum-kubernetes
   template:
     metadata:
       labels:
