@@ -271,7 +271,6 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: prytaneum-dev
-  serviceAccountName: prytaneum-kubernetes
 ---
 apiVersion: v1
 kind: Service
@@ -336,4 +335,3 @@ spec:
     app: prytaneum-dev
   sessionAffinity: None
   type: LoadBalancer
-  serviceAccountName: prytaneum-kubernetes
