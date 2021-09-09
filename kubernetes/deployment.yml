@@ -187,9 +187,9 @@ spec:
             secretKeyRef:
               name: db-secret
               key: database
-        - image: gcr.io/prytaneum-project/github.com/kadey001/prytaneum
-        - imagePullPolicy: IfNotPresent
-        - name: prytaneum-dev-sha256-1
+      - image: gcr.io/prytaneum-project/github.com/kadey001/prytaneum
+      - imagePullPolicy: IfNotPresent
+      - name: prytaneum-dev-sha256-1
       - name: cloud-sql-proxy
         # It is recommended to use the latest version of the Cloud SQL proxy
         # Make sure to update on a regular schedule!
