@@ -20,7 +20,7 @@ spec:
       labels:
         app: prytaneum-dev
     spec:
-      serviceAccountName: prytaneum-kubernetes
+      # serviceAccountName: prytaneum-kubernetes
       containers:
         - name: prytaneum-dev-sha256-1
           image: gcr.io/prytaneum-project/github.com/kadey001/prytaneum
