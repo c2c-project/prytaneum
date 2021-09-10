@@ -65,6 +65,7 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ questionCRUD: QuestionOperation }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),
                 (payload, args, ctx) => {
+                    console.log('Question list updated');
                     const { id: questionId } = fromGlobalId(payload.questionCRUD.edge.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
