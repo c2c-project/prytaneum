@@ -51,6 +51,26 @@ spec:
                 configMapKeyRef:
                   key: NEXT_PUBLIC_GRAPHQL_URL
                   name: prytaneum-dev-config-m55x
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: prytaneum-dev-config-m55x
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASSWORD
+                  name: prytaneum-dev-config-m55x
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: prytaneum-dev-config-m55x
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_HOST
+                  name: prytaneum-dev-config-m55x
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
