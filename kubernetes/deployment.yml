@@ -51,26 +51,6 @@ spec:
                 configMapKeyRef:
                   key: NEXT_PUBLIC_GRAPHQL_URL
                   name: prytaneum-dev-config-m55x
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: password
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: database
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: host
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
