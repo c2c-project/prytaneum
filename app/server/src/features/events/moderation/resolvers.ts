@@ -101,6 +101,47 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedMod);
             });
         },
+        updateQuestionQueue(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                // TODO Check if the question is a current question as it must be handled differently
+                const { adding } = args.input;
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                let updatedQuestion;
+                if (adding) {
+                    updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
+                        ...args.input,
+                        eventId,
+                        questionId,
+                    });
+                } else {
+                    updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
+                        ...args.input,
+                        eventId,
+                        questionId,
+                    });
+                }
+                const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const edge = {
+                    cursor: updatedQuestion.createdAt.getTime().toString(),
+                    node: questionWithGlobalId,
+                };
+                ctx.pubsub.publish({
+                    topic: 'questionCRUD',
+                    payload: {
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionQueued',
+                    payload: {
+                        questionQueued: questionWithGlobalId,
+                    },
+                });
+                return edge;
+            });
+        },
         addQuestionToQueue(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
@@ -131,6 +172,36 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        removeQuestionFromQueue(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                    questionId,
+                });
+                const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const edge = {
+                    cursor: updatedQuestion.createdAt.getTime().toString(),
+                    node: questionWithGlobalId,
+                };
+                ctx.pubsub.publish({
+                    topic: 'questionCRUD',
+                    payload: {
+                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionQueued',
+                    payload: {
+                        questionQueued: questionWithGlobalId,
+                    },
+                });
+                return edge;
+            })
+        }
     },
     Subscription: {
         eventLiveFeedbackCreated: {

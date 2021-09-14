@@ -7,6 +7,7 @@ import {
     UpdateQuestionPosition,
     UpdateModerator,
     AddQuestionToQueue,
+    RemoveQuestionFromQueue,
 } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 
@@ -190,6 +191,33 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
         where: { id: input.questionId },
         data: {
             position: calculatedPosition,
+        },
+    });
+}
+
+export async function removeQuestionFromQueue(userId: string, prisma: PrismaClient, input: RemoveQuestionFromQueue) {
+    // permission check
+    const hasPermission = await isModerator(userId, input.eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+
+    // Find current question
+    const queryResult = await prisma.event.findUnique({
+        where: { id: input.eventId },
+        select: { currentQuestion: true },
+    });
+    if (!queryResult) throw new Error(errors.DNE('Event'));
+
+    const question = await prisma.eventQuestion.findUnique({ where: { id: input.questionId }});
+    if (!question) throw new Error('Question cannot be found');
+    if (queryResult.currentQuestion === question.position) {
+        return question;
+    }
+
+    // Set the position to -1 to remove it from the queue
+    return prisma.eventQuestion.update({
+        where: { id: input.questionId },
+        data: {
+            position: -1,
         },
     });
 }

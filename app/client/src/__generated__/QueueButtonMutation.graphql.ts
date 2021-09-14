@@ -3,15 +3,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type AddQuestionToQueue = {
+export type UpdateQuestionQueue = {
     questionId: string;
     eventId: string;
+    adding: boolean;
 };
 export type QueueButtonMutationVariables = {
-    input: AddQuestionToQueue;
+    input: UpdateQuestionQueue;
 };
 export type QueueButtonMutationResponse = {
-    readonly addQuestionToQueue: {
+    readonly updateQuestionQueue: {
         readonly isError: boolean;
         readonly message: string;
         readonly body: {
@@ -32,9 +33,9 @@ export type QueueButtonMutation = {
 
 /*
 mutation QueueButtonMutation(
-  $input: AddQuestionToQueue!
+  $input: UpdateQuestionQueue!
 ) {
-  addQuestionToQueue(input: $input) {
+  updateQuestionQueue(input: $input) {
     isError
     message
     body {
@@ -68,7 +69,7 @@ v1 = [
     ],
     "concreteType": "EventQuestionMutationResponse",
     "kind": "LinkedField",
-    "name": "addQuestionToQueue",
+    "name": "updateQuestionQueue",
     "plural": false,
     "selections": [
       {
@@ -150,14 +151,14 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c90fcdcd9cb60a6922a40ae70956e7f8",
+    "cacheID": "d51abd2e7798ca5a080972f29a933fb4",
     "id": null,
     "metadata": {},
     "name": "QueueButtonMutation",
     "operationKind": "mutation",
-    "text": "mutation QueueButtonMutation(\n  $input: AddQuestionToQueue!\n) {\n  addQuestionToQueue(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
+    "text": "mutation QueueButtonMutation(\n  $input: UpdateQuestionQueue!\n) {\n  updateQuestionQueue(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '30912632b7b00d3443b815cff9dd78ea';
+(node as any).hash = '1adf653c2e16503d73593819b657ff52';
 export default node;
