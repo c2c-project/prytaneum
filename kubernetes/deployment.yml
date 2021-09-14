@@ -201,7 +201,8 @@ spec:
   - host: prytaneum.io
     http:
       paths:
-      - path: /*
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: prytaneum-dev-service
