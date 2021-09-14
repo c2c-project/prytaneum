@@ -127,7 +127,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    cloud.google.com/neg: '{"ingress":true}'
+    cloud.google.com/neg: '{"ingress": true}'
   finalizers:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
@@ -196,6 +196,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: prytaneum-ingress
+  annotations:
+    # If the class annotation is not specified it defaults to "gce".
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: prytaneum-kubernetes
 spec:
   rules:
   - host: prytaneum.io
@@ -208,3 +212,12 @@ spec:
             name: prytaneum-dev-service
             port:
               number: 80
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: frontend-config
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT
