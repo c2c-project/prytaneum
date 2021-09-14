@@ -201,7 +201,7 @@ spec:
   - host: prytaneum.io
     http:
       paths:
-      - path: /
+      - path: /*
         pathType: ImplementationSpecific
         backend:
           service:
