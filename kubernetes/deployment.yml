@@ -212,12 +212,3 @@ spec:
             name: prytaneum-dev-service
             port:
               number: 80
----
-apiVersion: networking.gke.io/v1beta1
-kind: FrontendConfig
-metadata:
-  name: frontend-config
-spec:
-  redirectToHttps:
-    enabled: true
-    responseCodeName: MOVED_PERMANENTLY_DEFAULT
