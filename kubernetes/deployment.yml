@@ -111,7 +111,7 @@ metadata:
   name: prytaneum-dev-hpa-p6zm
   namespace: dev
 spec:
-  maxReplicas: 5
+  maxReplicas: 2
   metrics:
     - resource:
         name: cpu
