@@ -46,11 +46,16 @@ export type Query = {
     /** Fetch organizations relevant to the current user */
     myOrgs?: Maybe<Array<Organization>>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+    validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
 
 export type QuerynodeArgs = {
     id: Scalars['ID'];
+};
+
+export type QueryvalidateInviteArgs = {
+    input: ValidateInvite;
 };
 
 export type QueryquestionsByEventIdArgs = {
@@ -150,9 +155,12 @@ export type Mutation = {
     /** Delete a member from the organization */
     deleteMember: UserMutationResponse;
     createFeedback?: Maybe<EventLiveFeedback>;
+    createInvite: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
+    removeQuestionFromQueue: EventQuestionMutationResponse;
+    updateQuestionQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
@@ -224,6 +232,10 @@ export type MutationcreateFeedbackArgs = {
     input?: Maybe<CreateFeedback>;
 };
 
+export type MutationcreateInviteArgs = {
+    input: CreateInvite;
+};
+
 export type MutationhideQuestionArgs = {
     input: HideQuestion;
 };
@@ -234,6 +246,14 @@ export type MutationupdateQuestionPositionArgs = {
 
 export type MutationaddQuestionToQueueArgs = {
     input: AddQuestionToQueue;
+};
+
+export type MutationremoveQuestionFromQueueArgs = {
+    input: RemoveQuestionFromQueue;
+};
+
+export type MutationupdateQuestionQueueArgs = {
+    input: UpdateQuestionQueue;
 };
 
 export type MutationcreateModeratorArgs = {
@@ -330,6 +350,10 @@ export type Event = Node & {
     moderators?: Maybe<UserConnection>;
     /** Whether or not the viewer is a moderator */
     isViewerModerator?: Maybe<Scalars['Boolean']>;
+    /** List of users who can view event when private */
+    invited?: Maybe<UserConnection>;
+    /** Whether or not the viewer is invited */
+    isViewerInvited?: Maybe<Scalars['Boolean']>;
     /** Questions queued in this session by the moderator(s) */
     queuedQuestions?: Maybe<EventQuestionConnection>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
@@ -362,6 +386,11 @@ export type EventliveFeedbackArgs = {
 };
 
 export type EventmoderatorsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+export type EventinvitedArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -551,6 +580,27 @@ export type CreateFeedback = {
     message: Scalars['String'];
 };
 
+export type CreateInvite = {
+    email: Scalars['String'];
+    eventId: Scalars['ID'];
+};
+
+export type ValidateInvite = {
+    token: Scalars['String'];
+    eventId: Scalars['ID'];
+};
+
+export type InviteMutationResponse = MutationResponse & {
+    __typename?: 'InviteMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
+export type ValidateInviteQueryResponse = {
+    __typename?: 'ValidateInviteQueryResponse';
+    valid: Scalars['Boolean'];
+};
+
 export type HideQuestion = {
     questionId: Scalars['ID'];
     eventId: Scalars['ID'];
@@ -582,6 +632,17 @@ export type UpdateModerator = {
 export type AddQuestionToQueue = {
     questionId: Scalars['ID'];
     eventId: Scalars['ID'];
+};
+
+export type RemoveQuestionFromQueue = {
+    questionId: Scalars['ID'];
+    eventId: Scalars['ID'];
+};
+
+export type UpdateQuestionQueue = {
+    questionId: Scalars['ID'];
+    eventId: Scalars['ID'];
+    adding: Scalars['Boolean'];
 };
 
 export type ModeratorMutationResponse = MutationResponse & {
@@ -886,6 +947,7 @@ export type ResolversTypes = {
         | ResolversTypes['UserMutationResponse']
         | ResolversTypes['EventMutationResponse']
         | ResolversTypes['OrganizationMutationResponse']
+        | ResolversTypes['InviteMutationResponse']
         | ResolversTypes['ModeratorMutationResponse']
         | ResolversTypes['EventQuestionMutationResponse']
         | ResolversTypes['EventSpeakerMutationResponse']
@@ -922,12 +984,18 @@ export type ResolversTypes = {
     EventLiveFeedbackEdge: ResolverTypeWrapper<EventLiveFeedbackEdge>;
     EventLiveFeedbackConnection: ResolverTypeWrapper<EventLiveFeedbackConnection>;
     CreateFeedback: CreateFeedback;
+    CreateInvite: CreateInvite;
+    ValidateInvite: ValidateInvite;
+    InviteMutationResponse: ResolverTypeWrapper<InviteMutationResponse>;
+    ValidateInviteQueryResponse: ResolverTypeWrapper<ValidateInviteQueryResponse>;
     HideQuestion: HideQuestion;
     UpdateQuestionPosition: UpdateQuestionPosition;
     CreateModerator: CreateModerator;
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
+    RemoveQuestionFromQueue: RemoveQuestionFromQueue;
+    UpdateQuestionQueue: UpdateQuestionQueue;
     ModeratorMutationResponse: ResolverTypeWrapper<ModeratorMutationResponse>;
     EventParticipant: ResolverTypeWrapper<EventParticipant>;
     EventParticipantEdge: ResolverTypeWrapper<EventParticipantEdge>;
@@ -977,6 +1045,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['UserMutationResponse']
         | ResolversParentTypes['EventMutationResponse']
         | ResolversParentTypes['OrganizationMutationResponse']
+        | ResolversParentTypes['InviteMutationResponse']
         | ResolversParentTypes['ModeratorMutationResponse']
         | ResolversParentTypes['EventQuestionMutationResponse']
         | ResolversParentTypes['EventSpeakerMutationResponse']
@@ -1012,12 +1081,18 @@ export type ResolversParentTypes = {
     EventLiveFeedbackEdge: EventLiveFeedbackEdge;
     EventLiveFeedbackConnection: EventLiveFeedbackConnection;
     CreateFeedback: CreateFeedback;
+    CreateInvite: CreateInvite;
+    ValidateInvite: ValidateInvite;
+    InviteMutationResponse: InviteMutationResponse;
+    ValidateInviteQueryResponse: ValidateInviteQueryResponse;
     HideQuestion: HideQuestion;
     UpdateQuestionPosition: UpdateQuestionPosition;
     CreateModerator: CreateModerator;
     DeleteModerator: DeleteModerator;
     UpdateModerator: UpdateModerator;
     AddQuestionToQueue: AddQuestionToQueue;
+    RemoveQuestionFromQueue: RemoveQuestionFromQueue;
+    UpdateQuestionQueue: UpdateQuestionQueue;
     ModeratorMutationResponse: ModeratorMutationResponse;
     EventParticipant: EventParticipant;
     EventParticipantEdge: EventParticipantEdge;
@@ -1082,6 +1157,12 @@ export type QueryResolvers<
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     myOrgs?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
     myFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
+    validateInvite?: Resolver<
+        ResolversTypes['ValidateInviteQueryResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<QueryvalidateInviteArgs, 'input'>
+    >;
     questionsByEventId?: Resolver<
         Maybe<Array<ResolversTypes['EventQuestion']>>,
         ParentType,
@@ -1106,6 +1187,7 @@ export type MutationResponseResolvers<
         | 'UserMutationResponse'
         | 'EventMutationResponse'
         | 'OrganizationMutationResponse'
+        | 'InviteMutationResponse'
         | 'ModeratorMutationResponse'
         | 'EventQuestionMutationResponse'
         | 'EventSpeakerMutationResponse'
@@ -1255,6 +1337,12 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationcreateFeedbackArgs, never>
     >;
+    createInvite?: Resolver<
+        ResolversTypes['InviteMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationcreateInviteArgs, 'input'>
+    >;
     hideQuestion?: Resolver<
         Maybe<ResolversTypes['EventQuestion']>,
         ParentType,
@@ -1272,6 +1360,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationaddQuestionToQueueArgs, 'input'>
+    >;
+    removeQuestionFromQueue?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveQuestionFromQueueArgs, 'input'>
+    >;
+    updateQuestionQueue?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateQuestionQueueArgs, 'input'>
     >;
     createModerator?: Resolver<
         ResolversTypes['ModeratorMutationResponse'],
@@ -1410,6 +1510,13 @@ export type EventResolvers<
         RequireFields<EventmoderatorsArgs, never>
     >;
     isViewerModerator?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    invited?: Resolver<
+        Maybe<ResolversTypes['UserConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventinvitedArgs, never>
+    >;
+    isViewerInvited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     queuedQuestions?: Resolver<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
@@ -1576,6 +1683,23 @@ export type EventLiveFeedbackConnectionResolvers<
 > = {
     edges?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedbackEdge']>>, ParentType, ContextType>;
     pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type InviteMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['InviteMutationResponse'] = ResolversParentTypes['InviteMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ValidateInviteQueryResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ValidateInviteQueryResponse'] = ResolversParentTypes['ValidateInviteQueryResponse']
+> = {
+    valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1795,6 +1919,8 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
     EventLiveFeedbackConnection?: EventLiveFeedbackConnectionResolvers<ContextType>;
+    InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
+    ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
     EventParticipant?: EventParticipantResolvers<ContextType>;
     EventParticipantEdge?: EventParticipantEdgeResolvers<ContextType>;
@@ -1909,6 +2035,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         liveFeedback?: LoaderResolver<Maybe<EventLiveFeedbackConnection>, Event, EventliveFeedbackArgs, TContext>;
         moderators?: LoaderResolver<Maybe<UserConnection>, Event, EventmoderatorsArgs, TContext>;
         isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
+        invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
+        isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         queuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventqueuedQuestionsArgs, TContext>;
         currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
@@ -1976,6 +2104,15 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     EventLiveFeedbackConnection?: {
         edges?: LoaderResolver<Maybe<Array<EventLiveFeedbackEdge>>, EventLiveFeedbackConnection, {}, TContext>;
         pageInfo?: LoaderResolver<PageInfo, EventLiveFeedbackConnection, {}, TContext>;
+    };
+
+    InviteMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], InviteMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], InviteMutationResponse, {}, TContext>;
+    };
+
+    ValidateInviteQueryResponse?: {
+        valid?: LoaderResolver<Scalars['Boolean'], ValidateInviteQueryResponse, {}, TContext>;
     };
 
     ModeratorMutationResponse?: {

@@ -4,18 +4,14 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { Skeleton } from '@material-ui/lab';
-import { NextPage, GetServerSidePropsContext } from 'next';
 import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { Fab } from '@local/components/Fab';
-import { ConditionalRender } from '@local/components';
-import { EventSidebar, EventVideo, EventVideoLoader, EventContext, EventSidebarLoader } from '@local/features/events';
-import { initServerEnvironment, makeServerFetchFunction } from '@local/utils/relay-environment';
-import { PickRequired } from '@local/utils/ts-utils';
-import { initApp } from '@local/utils/init-app';
+import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
+import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
+import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,14 +70,17 @@ export function EventLiveLoader() {
 
 export interface PreloadedEventLiveProps {
     eventId: string;
+    token?: string;
 }
 
 export interface EventLiveProps {
-    queryRef: PreloadedQuery<EventLiveQuery>;
+    eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
+    validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
 }
 
-export function EventLive({ queryRef }: EventLiveProps) {
-    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, queryRef);
+export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
+    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
+    const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -113,6 +112,13 @@ export function EventLive({ queryRef }: EventLiveProps) {
         });
     };
 
+    React.useEffect(() => {
+        const { valid } = validateInvite;
+        console.log(valid);
+        // Check if event is private
+        // If private, check if valid & redirect if invalid
+    }, [validateInvite]);
+
     if (!node) return <EventSidebarLoader />;
 
     return (
@@ -136,14 +142,20 @@ export function EventLive({ queryRef }: EventLiveProps) {
     );
 }
 
-export function PreloadedEventLive({ eventId }: PreloadedEventLiveProps) {
-    const [queryRef, loadQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
+    const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+    const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ eventId });
-    }, [queryRef, loadQuery, eventId]);
+        if (!eventLiveQueryRef) loadEventQuery({ eventId });
+    }, [eventLiveQueryRef, loadEventQuery, eventId]);
 
-    if (!queryRef) return <EventSidebarLoader />;
+    React.useEffect(() => {
+        if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
+        if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
+    }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
 
-    return <EventLive queryRef={queryRef} />;
+    if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
+
+    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
 }

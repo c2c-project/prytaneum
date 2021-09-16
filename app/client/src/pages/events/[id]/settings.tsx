@@ -5,6 +5,7 @@ import { useQueryLoader } from 'react-relay';
 
 import { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery.graphql';
 import { EventSettings, EVENT_SETTINGS_QUERY } from '@local/features/events';
+import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 
 const Page: NextPage = () => {
@@ -23,7 +24,7 @@ const Page: NextPage = () => {
         }
     });
 
-    if (!router.isReady || !queryRef) return <div>Loading...</div>;
+    if (!router.isReady || !queryRef) return <Loader />;
 
     return (
         <React.Suspense fallback='loading...'>

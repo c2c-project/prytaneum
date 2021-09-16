@@ -139,7 +139,9 @@ __metadata:
     "@graphql-tools/merge": ^6.2.13
     "@graphql-tools/schema": ^7.1.3
     "@types/bcrypt": ^3.0.1
+    "@types/busboy": ^0.2.4
     "@types/jsonwebtoken": ^8
+    "@types/mailgun-js": ^0.22.11
     "@types/node": ^15.0.1
     altair-fastify-plugin: ^4.0.2
     bcrypt: ^5.0.1
@@ -148,9 +150,12 @@ __metadata:
     dotenv-expand: ^5.1.0
     fastify: ^3.15.1
     fastify-cookie: ^5.3.0
+    fastify-multipart: ^4.0.7
+    form-data: ^4.0.0
     graphql: ^15.5.0
     graphql-relay: "github:DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"
     jsonwebtoken: ^8.5.1
+    mailgun.js: ^3.4.0
     mercurius: ^7.6.1
     mercurius-codegen: ^1.6.1
     ts-node-dev: ^1.1.6
@@ -4770,6 +4775,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/busboy@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@types/busboy@npm:0.2.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: c180a4b2fea49d28a8f1f80e2b244093d79959282c9d79390025e0892b1648505922a73f0fd56763a057b006664a7f9239b84678cfd834d4909a183d6673c4af
+  languageName: node
+  linkType: hard
+
 "@types/color-convert@npm:^2.0.0":
   version: 2.0.0
   resolution: "@types/color-convert@npm:2.0.0"
@@ -5049,6 +5063,16 @@ __metadata:
   version: 4.14.168
   resolution: "@types/lodash@npm:4.14.168"
   checksum: 9a4e25f89fc035b9f0388f1f7be85e5eff49f9e6db0d93432c9a89fce0916f8a89db4e8290415f7ea02de6b00d3573826378dcb655b7b2d20530a6e8d6dd6fd0
+  languageName: node
+  linkType: hard
+
+"@types/mailgun-js@npm:^0.22.11":
+  version: 0.22.11
+  resolution: "@types/mailgun-js@npm:0.22.11"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^2.5.0
+  checksum: 7761df5ed7cc026ff4a76521fbc0efac4dfc479ccc4dd4385a14f9decb4cd4ff3cbdac5d9cb0937cef8bea47374b4c23f0ab3ab0663d1e2cba13df31fa1d1980
   languageName: node
   linkType: hard
 
@@ -5943,6 +5967,15 @@ __metadata:
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
   checksum: 9f9236a3cc7f56c167be3aa81c77fcab2e08dfb8047b7861b91440f20b299b9442255856bdbe9d408d7e96a0b64a36e1c27384251126962490b4eee841b533e0
+  languageName: node
+  linkType: hard
+
+"abort-controller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abort-controller@npm:3.0.0"
+  dependencies:
+    event-target-shim: ^5.0.0
+  checksum: cc53ad8df9a6de3f55d4f804fca5106908f855e47b572fb5ab3cdd723b76374686dcefa557a2f87d4396db77e31bc0e6ce9d48637388cef6d884c29ad2691448
   languageName: node
   linkType: hard
 
@@ -7137,7 +7170,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.3.5, bluebird@npm:^3.5.5":
+"bluebird@npm:^3.3.5, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 4f2288662f3d4eadbb82d4daa4a7d7976a28fa3c7eb4102c9b4033b03e5be4574ba123ac52a7c103cde4cb7b2d2afc1dbe41817ca15a29ff21ecd258d0286047
@@ -7388,6 +7421,15 @@ __metadata:
   dependencies:
     node-int64: ^0.4.0
   checksum: 302af195672988c21be9590b0b4fcacf9bd5bc116a32cbb5f613b21800fce8ee6aa1c57e76bbfa15a60269fe48885d062383e353fbaa821dbf06e92f72cc8b7d
+  languageName: node
+  linkType: hard
+
+"btoa@npm:^1.1.2":
+  version: 1.2.1
+  resolution: "btoa@npm:1.2.1"
+  bin:
+    btoa: bin/btoa.js
+  checksum: d8f863b356706f64d6f9f4ed30711b72b8e76e36dcd25ed14349829f0450a1a06ee8abb8006b1ff7461650933fd9347f0df095c0bacc9ab46c55e4857ce3db21
   languageName: node
   linkType: hard
 
@@ -8879,7 +8921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"data-uri-to-buffer@npm:3.0.1":
+"data-uri-to-buffer@npm:3.0.1, data-uri-to-buffer@npm:^3.0.1":
   version: 3.0.1
   resolution: "data-uri-to-buffer@npm:3.0.1"
   checksum: 9f28217ba76eaca400a75f4b1a1d0f55058082c8152a3d88ad5feeec5e54b8c7b6d8a7bb210206bfa552a927c1b942b6102ddbb2feaa557321ea94762c4f14e2
@@ -10296,6 +10338,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"event-target-shim@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "event-target-shim@npm:5.0.1"
+  checksum: d176477a31adf328ff50148886e46cef3f61ff8bdc1d6db161f6b3ead2501085d5652a81fab8dddc59aed93727231c0b5c8a0948de77ae401b2d977a3d18329e
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:^3.1.0":
   version: 3.1.2
   resolution: "eventemitter3@npm:3.1.2"
@@ -10666,6 +10715,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-multipart@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "fastify-multipart@npm:4.0.7"
+  dependencies:
+    busboy: ^0.3.1
+    deepmerge: ^4.2.2
+    end-of-stream: ^1.4.4
+    fastify-error: ^0.3.0
+    fastify-plugin: ^3.0.0
+    hexoid: ^1.0.0
+    stream-wormhole: ^1.1.0
+  checksum: 118d1e4748eb1480bcc1ddde532a3ea04e5795008264941ad3ae3125997693a66d9bc0a3227321955bad2919075a796c91d3dc79d89e8ffe5769779d6033d9fb
+  languageName: node
+  linkType: hard
+
 "fastify-plugin@npm:^2.3.4":
   version: 2.3.4
   resolution: "fastify-plugin@npm:2.3.4"
@@ -10804,6 +10868,16 @@ __metadata:
     setimmediate: ^1.0.5
     ua-parser-js: ^0.7.18
   checksum: f112f440b2e1a7a44f8cc1cb0a0a90ce733b291df6f47919b4c3066c33a83e9078d1e841b5ef24da26c59cdef8a4d171332e7a99ea39403221b34ae4ca90b93f
+  languageName: node
+  linkType: hard
+
+"fetch-blob@npm:^2.1.1":
+  version: 2.1.2
+  resolution: "fetch-blob@npm:2.1.2"
+  peerDependenciesMeta:
+    domexception:
+      optional: true
+  checksum: c11ab96a1961c61b4f200fa1bf8da2feb48e999ed661bf792469a0dc1e4cc4ee4fa5da1e0091687ca34cabb91b4f4f3fcc5177019709b0ea7fbc28cc07f55b9f
   languageName: node
   linkType: hard
 
@@ -11113,7 +11187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:4.0.0":
+"form-data@npm:4.0.0, form-data@npm:^4.0.0":
   version: 4.0.0
   resolution: "form-data@npm:4.0.0"
   dependencies:
@@ -11124,7 +11198,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^2.5.1":
+"form-data@npm:^2.5.0, form-data@npm:^2.5.1":
   version: 2.5.1
   resolution: "form-data@npm:2.5.1"
   dependencies:
@@ -12134,6 +12208,13 @@ fsevents@^1.2.7:
     capital-case: ^1.0.4
     tslib: ^2.0.3
   checksum: 1cc640a98a59224db2b1c3ed2ecf2a9755db445b103462d4a30185e825ec6d61fbcc6b607a0d87b6f71b33a9f0080f6900420da528ced5cb661b4de75c36dd4d
+  languageName: node
+  linkType: hard
+
+"hexoid@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hexoid@npm:1.0.0"
+  checksum: 4fbb267c885c6f69623fedd994d25f181a7888d549039ba74e8f9c34faa42452b7b53372e07fda8f03bda41aa98d953804f4b4bc4466d4c4209bb956be71efdf
   languageName: node
   linkType: hard
 
@@ -14125,6 +14206,29 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"ky-universal@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "ky-universal@npm:0.8.2"
+  dependencies:
+    abort-controller: ^3.0.0
+    node-fetch: 3.0.0-beta.9
+  peerDependencies:
+    ky: ">=0.17.0"
+    web-streams-polyfill: ">=2.0.0"
+  peerDependenciesMeta:
+    web-streams-polyfill:
+      optional: true
+  checksum: da33c771eaa63348d586846ce706c03c42f4ab475c5661609712e0e62078d11bbbc98834257dd3b81838e094613800724756c23550e295f6e8aa0dbc67d16f43
+  languageName: node
+  linkType: hard
+
+"ky@npm:^0.25.1":
+  version: 0.25.1
+  resolution: "ky@npm:0.25.1"
+  checksum: af13618fd3d2d2cb18657dadec99381bd0be8ca7047079a12390ae0098a83e8a7defe980199ce3846dbbcc330bf6c418bb63b358a2af6d10b405ef0cebb7af1a
+  languageName: node
+  linkType: hard
+
 "language-subtag-registry@npm:~0.3.2":
   version: 0.3.21
   resolution: "language-subtag-registry@npm:0.3.21"
@@ -14667,6 +14771,22 @@ fsevents@^1.2.7:
   bin:
     lz-string: bin/bin.js
   checksum: 60a13f8a724d109cffc7dda4cb98569adfa0516750f8a75b7236f6bc94b47edffb59e8a1e501364404e3867cf399e6612c3981f9c81c2de75751203431bf2e69
+  languageName: node
+  linkType: hard
+
+"mailgun.js@npm:^3.4.0":
+  version: 3.4.0
+  resolution: "mailgun.js@npm:3.4.0"
+  dependencies:
+    bluebird: ^3.7.2
+    btoa: ^1.1.2
+    ky: ^0.25.1
+    ky-universal: ^0.8.2
+    url: ^0.11.0
+    url-join: 0.0.1
+    web-streams-polyfill: ^3.0.1
+    webpack-merge: ^5.4.0
+  checksum: 9ffd36a6ced45c8d38e90773a053d1ca78b463b0f4afedcac78694dc4eb4f694cf1b9427ca0d023cd5f0655731b71e3fb9515724a6a04391a5488ca41986a5c9
   languageName: node
   linkType: hard
 
@@ -15597,6 +15717,16 @@ fsevents@^1.2.7:
   version: 2.6.1
   resolution: "node-fetch@npm:2.6.1"
   checksum: cbb171635e538162b977eac5dfe7a1e07a9a02e991924377a6435502291e2f823d306b95aabc455caebf4a118ccf836868462bc70ccc3095af02bb9da61fda37
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:3.0.0-beta.9":
+  version: 3.0.0-beta.9
+  resolution: "node-fetch@npm:3.0.0-beta.9"
+  dependencies:
+    data-uri-to-buffer: ^3.0.1
+    fetch-blob: ^2.1.1
+  checksum: e1b71946805b6dbe44394df4dcd7287bb18c2d93bb5b1d41de24c5d87bc3ec28be5e7ec0601dfc93a62d41c05a25dc5f7c0804912e2c11bfbb23252c8ff2a155
   languageName: node
   linkType: hard
 
@@ -19594,6 +19724,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"stream-wormhole@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "stream-wormhole@npm:1.1.0"
+  checksum: 8048145c59dae4864d34c91fb0ee6531f681ba55f751c65870aceb681ad1c1fb710899cef66b61a440643e51c1fd1e0f2815112281425c8e2fbb587362a6c965
+  languageName: node
+  linkType: hard
+
 "streamsearch@npm:0.1.2":
   version: 0.1.2
   resolution: "streamsearch@npm:0.1.2"
@@ -21081,6 +21218,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"url-join@npm:0.0.1":
+  version: 0.0.1
+  resolution: "url-join@npm:0.0.1"
+  checksum: 0406b221c6cd29bcf4c258b5cd2d9c41a9e0128b7ce7c7c437b2769c2d733cba583d974147333578e092e672bd287c5f001e508ee0bfbf176a79ec962edd65a1
+  languageName: node
+  linkType: hard
+
 "url-loader@npm:^4.1.1":
   version: 4.1.1
   resolution: "url-loader@npm:4.1.1"
@@ -21454,6 +21598,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"web-streams-polyfill@npm:^3.0.1":
+  version: 3.0.3
+  resolution: "web-streams-polyfill@npm:3.0.3"
+  checksum: e7e0bc4410d89b29a7cece265a907b597ba8dd1681f497efd7c418cfde51d2ef5197310d0b3bcf291262da364a17846eb90c48857c4697c07e31a282a8aaba5a
+  languageName: node
+  linkType: hard
+
 "webidl-conversions@npm:^4.0.2":
   version: 4.0.2
   resolution: "webidl-conversions@npm:4.0.2"
@@ -21518,6 +21669,16 @@ resolve@^2.0.0-next.3:
     ansi-colors: ^3.0.0
     uuid: ^3.3.2
   checksum: 250db04c41e278aa15a4f452808ef32ca8eca0f7df9d4c7c28b3d94e45d2649fbeb90a0adbee1c675447209b6a35136e13c1fb31476c3ca81c972bb41f0535bb
+  languageName: node
+  linkType: hard
+
+"webpack-merge@npm:^5.4.0":
+  version: 5.8.0
+  resolution: "webpack-merge@npm:5.8.0"
+  dependencies:
+    clone-deep: ^4.0.1
+    wildcard: ^2.0.0
+  checksum: ee3ff2cc97de7f35a80a81c7f0f211ceb12aa392344fae4e1c4d3e0090b5222e90a784af2eb886948bc0023e275c239961b0177f9b09f23da97e720006db9d1a
   languageName: node
   linkType: hard
 
@@ -21741,6 +21902,13 @@ resolve@^2.0.0-next.3:
   dependencies:
     string-width: ^4.0.0
   checksum: 729c30582e49bdcb1372216eedfd71d1640a1344a4b4e970bc9f33d575b56b130f530b383fbab2cf2bcffb76ea4357e6a66939778d8de91ca66037651d94e01a
+  languageName: node
+  linkType: hard
+
+"wildcard@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "wildcard@npm:2.0.0"
+  checksum: 207baede4d6d41fc1aefcc4727c95ca6f29eaaf4d66478665fe0ac17232709637426ae96fd79deb3b68da3564e7bde7f2be63e5c3665ac8f63ee92364c0a2dd3
   languageName: node
   linkType: hard
 

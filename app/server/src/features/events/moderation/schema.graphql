@@ -34,6 +34,17 @@ input AddQuestionToQueue {
     eventId: ID!
 }
 
+input RemoveQuestionFromQueue {
+    questionId: ID!
+    eventId: ID!
+}
+
+input UpdateQuestionQueue {
+    questionId: ID!
+    eventId: ID!
+    adding: Boolean!
+}
+
 type ModeratorMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
@@ -44,6 +55,8 @@ type Mutation {
     hideQuestion(input: HideQuestion!): EventQuestion
     updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
     addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
+    removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
+    updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
 
     """
     Add a new moderator to the given event

@@ -6,7 +6,7 @@ import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
 
 import { TextField, Props as TextFieldProps } from '@local/components/TextField';
 
-import useCopy from '@local/hooks/useCopy';
+import useCopy from '@local/features/core/useCopy';
 
 const useStyles = makeStyles((theme) => ({
     text: {
@@ -32,7 +32,7 @@ export const CopyText = React.forwardRef<HTMLDivElement, Props>(
                 </Grid>
                 <Grid item xs='auto'>
                     <Tooltip title='Copy' aria-label='copy'>
-                        <IconButton onClick={() => copy(text)} edge='end'>
+                        <IconButton onPointerUp={() => copy(text)} edge='end'>
                             <CopyIcon />
                         </IconButton>
                     </Tooltip>

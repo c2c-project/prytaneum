@@ -28,6 +28,7 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
     fragment useQuestionListFragment on Event
     @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
         id
+        currentQuestion
         questions(first: $first, after: $after) @connection(key: "useQuestionListFragment_questions") {
             __id
             edges {
@@ -106,7 +107,7 @@ function deleteQuestion() {}
 
 export function useQuestionList({ fragmentRef }: TArgs) {
     // const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { questions, id: eventId } = useFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
+    const { questions, id: eventId, currentQuestion } = useFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
     const questionList = React.useMemo(
         () => (questions?.edges ? questions.edges.map(({ node }) => node) : []),
         [questions]
@@ -129,5 +130,5 @@ export function useQuestionList({ fragmentRef }: TArgs) {
 
     useSubscription(config);
 
-    return { questions: questionList, eventId, connections: questions?.__id ? [questions.__id] : [] };
+    return { questions: questionList, eventId, connections: questions?.__id ? [questions.__id] : [], currentQuestion };
 }

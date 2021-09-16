@@ -9,6 +9,7 @@ import { useUser } from '@local/features/accounts/useUser';
 
 import type { OrgMemberListFragment$key } from '@local/__generated__/OrgMemberListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { Loader } from '@local/components/Loader';
 import { CreateMember, CreateMemberProps } from './CreateMember';
 import { DeleteMember } from './DeleteMember';
 
@@ -71,14 +72,23 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);
     const connectionId = React.useMemo(() => data.members?.__id, [data]);
+    const [canView, setCanView] = React.useState(false);
 
     const close = () => {
         setIsConfDialogOpen(false);
     }
 
     React.useEffect(() => {
-        console.log(user);
-    }, [user])
+        members.every(member => {
+            if (member.node.id === user?.id) {
+                setCanView(true);
+                return false;
+            }
+            return true;
+        })
+    }, [user, members])
+
+    if (!canView) return <Loader />;
 
     return (
         <Grid container item direction='column' className={className}>

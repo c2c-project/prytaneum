@@ -21,7 +21,9 @@ import { CreateOrg, CreateOrgProps } from '@local/features/organizations';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { OrgListSubscription } from '@local/__generated__/OrgListSubscription.graphql';
+import { Loader } from '@local/components/Loader';
 import { useEnvironment } from '../core';
+import { useUser } from '../accounts';
 
 export const ORG_LIST_QUERY = graphql`
     query OrgListQuery {
@@ -88,6 +90,11 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const classes = useStyles();
     const router = useRouter();
     const { env } = useEnvironment();
+    const [user] = useUser();
+
+    React.useEffect(() => {
+        if (!user) router.push('/login');
+    }, [user, router])
 
     const refetch = React.useCallback(() => {
         loadQuery(env, ORG_LIST_QUERY, {}, { fetchPolicy: 'store-and-network' });
@@ -113,6 +120,8 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     React.useEffect(() => {
         setEventList(data.myOrgs || []);
     }, [data]);
+
+    if (!user) return <Loader />;
 
     if (orgList.length === 0)
         return (

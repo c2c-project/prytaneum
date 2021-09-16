@@ -22,7 +22,16 @@ export type EventSidebarFragment$key = {
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./EventSidebarRefetchable.graphql.ts'),
+      "identifierField": "id"
+    }
+  },
   "name": "EventSidebarFragment",
   "selections": [
     {
@@ -75,5 +84,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = '229af438fa2029f6af4790f0b8e88556';
+(node as any).hash = '42b6373b33c7fc4ad8a780c372302d13';
 export default node;

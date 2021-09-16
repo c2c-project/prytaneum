@@ -28,6 +28,7 @@ model User {
     questions EventQuestion[]
     likes EventQuestionLike[]
     moderatorOf EventModerator[]
+    invitedOf EventInvited[]
     speakerOf EventSpeaker[]
     registrantOf EventRegistrant[]
 }
@@ -90,6 +91,7 @@ model Event {
     feedback EventLiveFeedback[]
     questions EventQuestion[]
     moderators EventModerator[]
+    invited EventInvited[]
     speakers EventSpeaker[]
     registrants EventRegistrant[]
     videos EventVideo[]
@@ -145,6 +147,15 @@ model EventQuestionLike {
 }
 
 model EventModerator {
+    eventId String @db.Uuid
+    userId String @db.Uuid
+    user User @relation(fields: [userId], references: [id])
+    event Event @relation(fields: [eventId], references: [id])
+
+    @@id([eventId, userId])
+}
+
+model EventInvited {
     eventId String @db.Uuid
     userId String @db.Uuid
     user User @relation(fields: [userId], references: [id])
