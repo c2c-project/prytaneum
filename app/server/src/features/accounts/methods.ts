@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@app/prisma';
-import { toGlobalId } from '@local/features/utils';
 
-import * as jwt from '@local/lib/jwt';
-import { LoginForm, RegistrationForm } from '@local/graphql-types';
+import { LoginForm, RegistrationForm } from '../../graphql-types';
+import * as jwt from '../../lib/jwt';
+import { toGlobalId } from '../utils';
 
 const toUserId = toGlobalId('User');
 
