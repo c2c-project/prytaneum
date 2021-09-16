@@ -19,6 +19,15 @@ type User implements Node {
     organizations: OrganizationConnection
 }
 
+type UserSettings {
+    currentEmail: String!
+    updateEmail: String
+    updatePassword: String
+    deleteAccount: Boolean!
+    isAnonymous: Boolean!
+    isNotificationsEnabled: Boolean!
+}
+
 type UserEdge {
     node: User!
     cursor: String!
