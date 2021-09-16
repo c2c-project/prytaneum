@@ -258,9 +258,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["graphql", "npm:15.5.0"],
             ["graphql-relay", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#https://github.com/DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e"],
             ["jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.2.0"],
+            ["jest-mock-extended", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.0.2-beta2"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.1"],
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.6.1"],
+            ["ts-jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.0.5"],
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],
             ["tsconfig-paths", "npm:3.9.0"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
@@ -13570,6 +13572,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["bs-logger", [
+        ["npm:0.2.6", {
+          "packageLocation": "./.yarn/cache/bs-logger-npm-0.2.6-7670f88b66-f5f2f1315d.zip/node_modules/bs-logger/",
+          "packageDependencies": [
+            ["bs-logger", "npm:0.2.6"],
+            ["fast-json-stable-stringify", "npm:2.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["bser", [
         ["npm:2.1.1", {
           "packageLocation": "./.yarn/cache/bser-npm-2.1.1-cc902055ce-302af19567.zip/node_modules/bser/",
@@ -21532,6 +21544,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-mock", "npm:27.1.1"],
             ["@jest/types", "npm:27.1.1"],
             ["@types/node", "npm:14.14.41"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["jest-mock-extended", [
+        ["npm:2.0.2-beta2", {
+          "packageLocation": "./.yarn/cache/jest-mock-extended-npm-2.0.2-beta2-09751573dd-2313d057ef.zip/node_modules/jest-mock-extended/",
+          "packageDependencies": [
+            ["jest-mock-extended", "npm:2.0.2-beta2"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.0.2-beta2", {
+          "packageLocation": "./.yarn/$$virtual/jest-mock-extended-virtual-5aefdd48a3/0/cache/jest-mock-extended-npm-2.0.2-beta2-09751573dd-2313d057ef.zip/node_modules/jest-mock-extended/",
+          "packageDependencies": [
+            ["jest-mock-extended", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.0.2-beta2"],
+            ["@types/jest", "npm:27.0.1"],
+            ["@types/typescript", null],
+            ["jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.2.0"],
+            ["ts-essentials", "virtual:5aefdd48a31bbf1fd99650c74cf11e72c20dd722a6c06e2e0e40520082549f286d1f70ef02179aae20fd63a3272c5a14aedbfb05ae6f44c431deab472311b0be#npm:7.0.3"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
+          ],
+          "packagePeers": [
+            "@types/jest",
+            "@types/typescript",
+            "jest",
+            "typescript"
           ],
           "linkType": "HARD",
         }]
@@ -30054,6 +30093,70 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-essentials", "npm:2.0.12"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:7.0.3", {
+          "packageLocation": "./.yarn/cache/ts-essentials-npm-7.0.3-dbefe5cb3b-59d99e418e.zip/node_modules/ts-essentials/",
+          "packageDependencies": [
+            ["ts-essentials", "npm:7.0.3"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:5aefdd48a31bbf1fd99650c74cf11e72c20dd722a6c06e2e0e40520082549f286d1f70ef02179aae20fd63a3272c5a14aedbfb05ae6f44c431deab472311b0be#npm:7.0.3", {
+          "packageLocation": "./.yarn/$$virtual/ts-essentials-virtual-4a8d165444/0/cache/ts-essentials-npm-7.0.3-dbefe5cb3b-59d99e418e.zip/node_modules/ts-essentials/",
+          "packageDependencies": [
+            ["ts-essentials", "virtual:5aefdd48a31bbf1fd99650c74cf11e72c20dd722a6c06e2e0e40520082549f286d1f70ef02179aae20fd63a3272c5a14aedbfb05ae6f44c431deab472311b0be#npm:7.0.3"],
+            ["@types/typescript", null],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
+          ],
+          "packagePeers": [
+            "@types/typescript",
+            "typescript"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-jest", [
+        ["npm:27.0.5", {
+          "packageLocation": "./.yarn/cache/ts-jest-npm-27.0.5-9336f30efa-0f7479a6c9.zip/node_modules/ts-jest/",
+          "packageDependencies": [
+            ["ts-jest", "npm:27.0.5"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.0.5", {
+          "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-2f618e0c14/0/cache/ts-jest-npm-27.0.5-9336f30efa-0f7479a6c9.zip/node_modules/ts-jest/",
+          "packageDependencies": [
+            ["ts-jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.0.5"],
+            ["@babel/core", null],
+            ["@types/babel-jest", null],
+            ["@types/babel__core", null],
+            ["@types/jest", "npm:27.0.1"],
+            ["@types/types__jest", null],
+            ["@types/typescript", null],
+            ["babel-jest", null],
+            ["bs-logger", "npm:0.2.6"],
+            ["fast-json-stable-stringify", "npm:2.1.0"],
+            ["jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.2.0"],
+            ["jest-util", "npm:27.2.0"],
+            ["json5", "npm:2.2.0"],
+            ["lodash", "npm:4.17.21"],
+            ["make-error", "npm:1.3.6"],
+            ["semver", "npm:7.3.5"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"],
+            ["yargs-parser", "npm:20.2.9"]
+          ],
+          "packagePeers": [
+            "@babel/core",
+            "@types/babel-jest",
+            "@types/babel__core",
+            "@types/jest",
+            "@types/types__jest",
+            "@types/typescript",
+            "babel-jest",
+            "jest",
+            "typescript"
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["ts-log", [
@@ -31907,6 +32010,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/yargs-parser-npm-20.2.7-5ab0b83136-124e7f1c24.zip/node_modules/yargs-parser/",
           "packageDependencies": [
             ["yargs-parser", "npm:20.2.7"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:20.2.9", {
+          "packageLocation": "./.yarn/cache/yargs-parser-npm-20.2.9-a1d19e598d-3c58da6f61.zip/node_modules/yargs-parser/",
+          "packageDependencies": [
+            ["yargs-parser", "npm:20.2.9"]
           ],
           "linkType": "HARD",
         }]
