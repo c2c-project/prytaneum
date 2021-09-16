@@ -17,6 +17,7 @@
         "fastify-cookie": "^5.3.0",
         "graphql": "^15.5.0",
         "graphql-relay": "github:DevelopmentByDavid/graphql-relay-js.git#commit=edab2b08c5ce9a81c7ded3cc817953b14c505e3e",
+        "jest-mock-extended": "^2.0.2-beta2",
         "jsonwebtoken": "^8.5.1",
         "mercurius": "^7.6.1",
         "mercurius-codegen": "^1.6.1"
