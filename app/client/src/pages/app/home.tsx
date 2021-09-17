@@ -1,6 +1,9 @@
+import * as React from 'react';
+import { useRouter } from 'next/router';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { OrgForm } from '@local/features/organizations';
+import { useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,7 +16,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
+    const router = useRouter();
+    const [user] = useUser();
     const classes = useStyles();
+    React.useEffect(() => {
+        if (!user) {
+            router.push('/login');
+        }
+    });
     return (
         <Grid className={classes.root} container justify='center' alignItems='center'>
             <Grid component={Paper} className={classes.paper} item>
