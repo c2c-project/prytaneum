@@ -9,6 +9,7 @@ import Main from './Main';
 import Page from './Page';
 import { AppBar } from './AppBar';
 import { SideNav } from './SideNav';
+import { Footer } from './Footer';
 
 export interface LayoutProps {
     children: React.ReactNode | React.ReactNodeArray;
@@ -67,6 +68,7 @@ export function Layout({
                     {children}
                 </Main>
             </Grid>
+            <Footer />
         </Page>
     );
 }

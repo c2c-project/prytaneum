@@ -51,7 +51,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { questions, connections } = useQuestionList({ fragmentRef });
+    const { questions, connections, currentQuestion } = useQuestionList({ fragmentRef });
     // const [isPaused, setIsPaused] = React.useState();
 
     // function togglePause() {}
@@ -104,6 +104,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             queue={isModerator && Boolean(user)}
                                             connections={connections}
                                             fragmentRef={question}
+                                            currentQuestion={currentQuestion}
                                         />
                                     </Card>
                                 </ListItem>

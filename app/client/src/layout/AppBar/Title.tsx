@@ -27,7 +27,7 @@ export default function Title() {
     return (
         <div className={classes.titleContainer}>
             <div className={classes.title}>
-                <Typography align='left' variant='h6' noWrap onClick={user ? handleNavigation('/app/home') : undefined}>
+                <Typography align='left' variant='h6' noWrap onClick={user ? handleNavigation('/app/home') : handleNavigation('/')}>
                     Prytaneum
                 </Typography>
             </div>

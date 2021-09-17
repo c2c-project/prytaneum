@@ -422,6 +422,7 @@ type Mutation {
   """Go to the previous question"""
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
+  removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
 
   """
   Start the event so that it is "live"
@@ -431,6 +432,7 @@ type Mutation {
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
+  updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
   updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
 }
@@ -527,6 +529,11 @@ input RegistrationForm {
   email: String!
 }
 
+input RemoveQuestionFromQueue {
+  questionId: ID!
+  eventId: ID!
+}
+
 type Subscription {
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
@@ -570,6 +577,12 @@ input UpdateQuestionPosition {
   questionId: ID!
   position: Int!
   eventId: ID!
+}
+
+input UpdateQuestionQueue {
+  questionId: ID!
+  eventId: ID!
+  adding: Boolean!
 }
 
 input UpdateSpeaker {
@@ -627,4 +640,13 @@ input ValidateInvite {
 
 type ValidateInviteQueryResponse {
   valid: Boolean!
+}
+
+type UserSettings {
+  currentEmail: String!
+  updateEmail: String
+  updatePassword: String
+  deleteAccount: Boolean!
+  isAnonymous: Boolean!
+  isNotificationsEnabled: Boolean!
 }

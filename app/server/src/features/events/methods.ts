@@ -14,6 +14,13 @@ export async function findEventById(eventId: string, prisma: PrismaClient) {
 }
 
 /**
+ * check if the event is private
+ */
+export async function isEventPrivate(eventId: string, prisma: PrismaClient, status: boolean) {
+    return prisma.event.findUnique({ where: { id: eventId }, select: { isPrivate: status } });
+}
+
+/**
  * Omit rather than pick -- if anything changes on the event type, it's adding more settings
  * so we'd rather just have typescript throw a fit than miss a setting in the default type
  * when the shape of the event type changes

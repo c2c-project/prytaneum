@@ -456,12 +456,14 @@ export type Mutation = {
   /** Go to the previous question */
   prevQuestion: Event;
   register: UserMutationResponse;
+  removeQuestionFromQueue: EventQuestionMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
   updateOrganization: OrganizationMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
+  updateQuestionQueue: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
@@ -582,6 +584,11 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveQuestionFromQueueArgs = {
+  input: RemoveQuestionFromQueue;
+};
+
+
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
 };
@@ -604,6 +611,11 @@ export type MutationUpdateOrganizationArgs = {
 
 export type MutationUpdateQuestionPositionArgs = {
   input: UpdateQuestionPosition;
+};
+
+
+export type MutationUpdateQuestionQueueArgs = {
+  input: UpdateQuestionQueue;
 };
 
 
@@ -736,6 +748,11 @@ export type RegistrationForm = {
   email: Scalars['String'];
 };
 
+export type RemoveQuestionFromQueue = {
+  questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   /** New messages as feedback is given */
@@ -799,6 +816,12 @@ export type UpdateQuestionPosition = {
   eventId: Scalars['ID'];
 };
 
+export type UpdateQuestionQueue = {
+  questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
+  adding: Scalars['Boolean'];
+};
+
 export type UpdateSpeaker = {
   name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -857,4 +880,14 @@ export type ValidateInvite = {
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
   valid: Scalars['Boolean'];
+};
+
+export type UserSettings = {
+  __typename?: 'UserSettings';
+  currentEmail: Scalars['String'];
+  updateEmail?: Maybe<Scalars['String']>;
+  updatePassword?: Maybe<Scalars['String']>;
+  deleteAccount: Scalars['Boolean'];
+  isAnonymous: Scalars['Boolean'];
+  isNotificationsEnabled: Scalars['Boolean'];
 };
