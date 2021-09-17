@@ -6,7 +6,7 @@ metadata:
   name: prytaneum-dev
   namespace: dev
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: prytaneum-dev
@@ -111,7 +111,7 @@ metadata:
   name: prytaneum-dev-hpa-p6zm
   namespace: dev
 spec:
-  maxReplicas: 2
+  maxReplicas: 1
   metrics:
     - resource:
         name: cpu
@@ -128,7 +128,6 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
-    beta.cloud.google.com/backend-config: '{"ports": {"80":"prytaneum-backend-config"}}'
   finalizers:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
@@ -177,7 +176,7 @@ spec:
   clusterIP: 10.112.13.141
   clusterIPs:
     - 10.112.13.141
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local
   ports:
     - nodePort: 30492
       port: 80
