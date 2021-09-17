@@ -65,9 +65,9 @@ export function SettingsMenu({ config }: Props) {
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const [numExpanded, setNumExpanded] = React.useState(0);
-    const [expandedPanels, setExpandedPanels] = React.useState([])
+    const [expandedPanels, setExpandedPanels] = React.useState<any[]>([])
 
-    const handleChange = (panel) => (event, isExpanded) => {
+    const handleChange = (panel: any) => (event: any, isExpanded: any) => {
         setNumExpanded(isExpanded ? numExpanded + 1 : numExpanded - 1);
 
         if (isExpanded)
@@ -140,7 +140,7 @@ export function SettingsMenu({ config }: Props) {
                             <Accordion 
                                 expanded={expandedPanels.includes(sectionTitle)} 
                                 onChange={handleChange(sectionTitle)}
-                                className={expandedPanels.includes(sectionTitle) && classes.panel}
+                                className={expandedPanels.includes(sectionTitle) && classes.panel || undefined}
                             >
                                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                     <Typography variant='body2' className={classes.heading}>{sectionTitle}</Typography>

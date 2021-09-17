@@ -21,6 +21,7 @@ import { useForm } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 import text from './help-text';
+import { useUserFragment } from '@local/__generated__/useUserFragment.graphql'
 
 const initialModifyUserEmail = {
     newEmail: '',
@@ -120,7 +121,7 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
     );
 }
 
-export function ModifyUserEmail({ user }: { user: User }) {
+export function ModifyUserEmail({ user }: { user: useUserFragment | null }) {
     const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserEmail);
     const classes = useStyles();
 
@@ -131,7 +132,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body1'>
-                    <b>Current email:</b> {user.email}
+                    <b>Current email:</b> {user?.email}
                 </Typography>
             </Grid>
             <Grid component='span' item xs={12}>
