@@ -6,6 +6,8 @@ import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import type { OrgProfileQuery } from '@local/__generated__/OrgProfileQuery.graphql';
 import { OrgEventList, OrgMemberList } from '@local/features/organizations';
+import { Loader } from '@local/components/Loader';
+import { useUser } from '../accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,8 +43,16 @@ interface Props {
 }
 
 export const OrgProfile = ({ queryRef }: Props) => {
+    const router = useRouter();
     const classes = useStyles();
     const { node } = usePreloadedQuery(ORG_PROFILE, queryRef);
+    const [user] = useUser();
+
+    React.useEffect(() => {
+        if (!user) router.push('/login');
+    }, [router, user]);
+
+    if (!node || !user) return <Loader />;
 
     return (
         <Grid container className={classes.root} alignItems='flex-start' alignContent='flex-start'>

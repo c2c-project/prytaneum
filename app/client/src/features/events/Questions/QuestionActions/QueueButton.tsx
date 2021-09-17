@@ -11,6 +11,7 @@ import { useSnack } from '@local/features/core';
 
 export interface QueueButtonProps {
     fragmentRef: QueueButtonFragment$key;
+    currentQuestion: number | null;
 }
 
 export const QUEUE_BUTTON_FRAGMENT = graphql`
@@ -21,8 +22,8 @@ export const QUEUE_BUTTON_FRAGMENT = graphql`
 `;
 
 export const QUEUE_BUTTON_MUTATION = graphql`
-    mutation QueueButtonMutation($input: AddQuestionToQueue!) {
-        addQuestionToQueue(input: $input) {
+    mutation QueueButtonMutation($input: UpdateQuestionQueue!) {
+        updateQuestionQueue(input: $input) {
             isError
             message
             body {
@@ -39,8 +40,9 @@ export const QUEUE_BUTTON_MUTATION = graphql`
 /**
  * Should only be used by moderators or when the user is a verified moderator
  */
-export function QueueButton({ fragmentRef }: QueueButtonProps) {
+export function QueueButton({ fragmentRef, currentQuestion }: QueueButtonProps) {
     const { id: questionId, position } = useFragment(QUEUE_BUTTON_FRAGMENT, fragmentRef);
+    // const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
     const [commit] = useMutation<QueueButtonMutation>(QUEUE_BUTTON_MUTATION);
     const { eventId } = useEvent();
     const { displaySnack } = useSnack();
@@ -58,23 +60,33 @@ export function QueueButton({ fragmentRef }: QueueButtonProps) {
                 input: {
                     questionId,
                     eventId,
+                    adding: !isQueued
                 }
             },
             updater: (store: RecordSourceSelectorProxy) => {
                 const EventProxy = store.get(eventId);
                 if (!EventProxy) return;
                 const conn = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
-                const payload = store.getRootField('addQuestionToQueue');
+                const payload = store.getRootField('updateQuestionQueue');
                 if (!conn || !payload) return;
-                const serverEdge = payload.getLinkedRecord('body');
-                if (!serverEdge) return;
-                const newEdge = ConnectionHandler.buildConnectionEdge(store, conn, serverEdge);
-                if (!newEdge) return;
-                ConnectionHandler.insertEdgeAfter(conn, newEdge);
+                if (isQueued) {
+                    if (currentQuestion === position) {
+                        displaySnack('Cannot dequeue the current question');
+                    } else {
+                        // If the question is being dequeued then delete the node from the connection
+                        ConnectionHandler.deleteNode(conn, questionId);
+                    }
+                } else {
+                    const serverEdge = payload.getLinkedRecord('body');
+                    if (!serverEdge) return;
+                    const newEdge = ConnectionHandler.buildConnectionEdge(store, conn, serverEdge);
+                    if (!newEdge) return;
+                    ConnectionHandler.insertEdgeAfter(conn, newEdge);
+                }
             },
-            onCompleted: ({ addQuestionToQueue }) => {
-                if (addQuestionToQueue.isError) {
-                    displaySnack(addQuestionToQueue.message);
+            onCompleted: ({ updateQuestionQueue }) => {
+                if (updateQuestionQueue.isError) {
+                    displaySnack(updateQuestionQueue.message);
                 }
             }
         });

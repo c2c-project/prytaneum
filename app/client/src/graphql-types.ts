@@ -36,6 +36,11 @@ export type CreateFeedback = {
   message: Scalars['String'];
 };
 
+export type CreateInvite = {
+  email: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
 /** Info necessary for adding a member to an organization */
 export type CreateMember = {
   email: Scalars['String'];
@@ -154,6 +159,10 @@ export type Event = Node & {
   moderators?: Maybe<UserConnection>;
   /** Whether or not the viewer is a moderator */
   isViewerModerator?: Maybe<Scalars['Boolean']>;
+  /** List of users who can view event when private */
+  invited?: Maybe<UserConnection>;
+  /** Whether or not the viewer is invited */
+  isViewerInvited?: Maybe<Scalars['Boolean']>;
   /** Questions queued in this session by the moderator(s) */
   queuedQuestions?: Maybe<EventQuestionConnection>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
@@ -192,6 +201,12 @@ export type EventLiveFeedbackArgs = {
 
 
 export type EventModeratorsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventInvitedArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
 };
@@ -383,6 +398,12 @@ export type HideQuestion = {
   toggleTo: Scalars['Boolean'];
 };
 
+export type InviteMutationResponse = MutationResponse & {
+  __typename?: 'InviteMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Like = {
   __typename?: 'Like';
   user: User;
@@ -407,6 +428,7 @@ export type Mutation = {
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
   createFeedback?: Maybe<EventLiveFeedback>;
+  createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
   /** Add a new moderator to the given event */
@@ -434,12 +456,14 @@ export type Mutation = {
   /** Go to the previous question */
   prevQuestion: Event;
   register: UserMutationResponse;
+  removeQuestionFromQueue: EventQuestionMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
   updateOrganization: OrganizationMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
+  updateQuestionQueue: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
@@ -462,6 +486,11 @@ export type MutationCreateEventArgs = {
 
 export type MutationCreateFeedbackArgs = {
   input?: Maybe<CreateFeedback>;
+};
+
+
+export type MutationCreateInviteArgs = {
+  input: CreateInvite;
 };
 
 
@@ -555,6 +584,11 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveQuestionFromQueueArgs = {
+  input: RemoveQuestionFromQueue;
+};
+
+
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
 };
@@ -577,6 +611,11 @@ export type MutationUpdateOrganizationArgs = {
 
 export type MutationUpdateQuestionPositionArgs = {
   input: UpdateQuestionPosition;
+};
+
+
+export type MutationUpdateQuestionQueueArgs = {
+  input: UpdateQuestionQueue;
 };
 
 
@@ -677,6 +716,7 @@ export type Query = {
   myOrgs?: Maybe<Array<Organization>>;
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  validateInvite: ValidateInviteQueryResponse;
 };
 
 
@@ -687,6 +727,11 @@ export type QueryNodeArgs = {
 
 export type QueryQuestionsByEventIdArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryValidateInviteArgs = {
+  input: ValidateInvite;
 };
 
 export type QuestionOperation = {
@@ -701,6 +746,11 @@ export type RegistrationForm = {
   password: Scalars['String'];
   confirmPassword: Scalars['String'];
   email: Scalars['String'];
+};
+
+export type RemoveQuestionFromQueue = {
+  questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 export type Subscription = {
@@ -766,6 +816,12 @@ export type UpdateQuestionPosition = {
   eventId: Scalars['ID'];
 };
 
+export type UpdateQuestionQueue = {
+  questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
+  adding: Scalars['Boolean'];
+};
+
 export type UpdateSpeaker = {
   name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -814,6 +870,16 @@ export type UserMutationResponse = MutationResponse & {
   isError: Scalars['Boolean'];
   message: Scalars['String'];
   body?: Maybe<User>;
+};
+
+export type ValidateInvite = {
+  token: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
+export type ValidateInviteQueryResponse = {
+  __typename?: 'ValidateInviteQueryResponse';
+  valid: Scalars['Boolean'];
 };
 
 export type UserSettings = {
