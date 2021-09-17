@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
+import { Resolvers, toGlobalId, runMutation } from '../utils';
 import * as User from './methods';
 
 const toUserId = toGlobalId('User');

@@ -1,0 +1,1 @@
+import { resolvers } from './resolvers';
