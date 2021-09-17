@@ -222,3 +222,14 @@ spec:
   domains:
     - prytaneum.io
     - www.prytaneum.io
+---
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: prytaneum-backend-config
+spec:
+  sessionAffinity:
+    affinityType: "CLIENT_IP"
+  timeoutSec: 300
+  connectionDraining:
+    drainingTimeoutSec: 600
