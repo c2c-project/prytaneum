@@ -128,6 +128,7 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
+    beta.cloud.google.com/backend-config: prytaneum-backend-config
   finalizers:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
