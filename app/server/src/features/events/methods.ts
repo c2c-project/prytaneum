@@ -16,9 +16,9 @@ export async function findEventById(eventId: string, prisma: PrismaClient) {
 /**
  * check if the event is private
  */
-export async function isEventPrivate(eventId: string, prisma: PrismaClient, status: boolean) {
-    return prisma.event.findUnique({ where: { id: eventId }, select: { isPrivate: status } });
-}
+// export async function isEventPrivate(eventId: string, prisma: PrismaClient, status: boolean) {
+//     return prisma.event.findUnique({ where: { id: eventId }, select: { isPrivate: status } });
+// }
 
 /**
  * Omit rather than pick -- if anything changes on the event type, it's adding more settings
