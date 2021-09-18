@@ -5,7 +5,7 @@ import { Container, Grid, Box, Link } from '@material-ui/core';
 export function Footer() {
     return (
         <footer>
-            <Box px={{ xs: 3, sm: 10 }} py={{ xs: 5, sm: 10 }}>
+            <Box px={{ xs: 3, sm: 5 }} py={{ xs: 5, sm: 5 }}>
                 <Container maxWidth='lg'>
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={4}>
