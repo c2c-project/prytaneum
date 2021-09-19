@@ -200,6 +200,7 @@ metadata:
     # If the class annotation is not specified it defaults to "gce".
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/force-ssl-redirect: "true"
     kubernetes.io/ingress.regional-static-ip-name: prytaneum-io-ip
     networking.gke.io/managed-certificates: prytaneum-io-cert
 spec:
