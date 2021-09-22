@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, IconButton, InputAdornment, Grid, Divider, Avatar, Typography } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
+// import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { graphql, useMutation } from 'react-relay';
 
@@ -50,6 +50,13 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
+    button: {
+        backgroundColor: '#ED526C',
+        color: '#FFF',
+        '&:hover': {
+            backgroundColor: '#C7374F',
+        },
+    }
 }));
 const REGISTER_FORM_MUTATION = graphql`
     mutation RegisterFormMutation($input: RegistrationForm!) {
@@ -98,10 +105,10 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     return (
         <Grid container justify='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
-                <Avatar className={classes.avatar}>
+                {/* <Avatar className={classes.avatar}>
                     <AccountCirlceOutline />
-                </Avatar>
-                <Typography component='h1' variant='h5'>
+                </Avatar> */}
+                <Typography component='h1' variant='h6'>
                     Register
                 </Typography>
             </Grid>
@@ -196,13 +203,13 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                 </FormContent>
                 <Grid container item direction='column' className={classes.btnGroup}>
                     <LoadingButton loading={isLoading}>
-                        <Button fullWidth type='submit' variant='contained' color='primary'>
+                        <Button fullWidth type='submit' variant='contained' className={classes.button}>
                             Register
                         </Button>
                     </LoadingButton>
                     {secondaryActions && (
                         <>
-                            <Divider className={classes.divider} />
+                            {/* <Divider className={classes.divider} /> */}
                             {secondaryActions}
                         </>
                     )}

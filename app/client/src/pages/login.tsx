@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { Grid, Button, Paper, Link } from '@material-ui/core';
+import { Grid, Paper, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         margin: theme.spacing(1),
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
+    // avatar: {
+    //     margin: theme.spacing(1),
+    //     backgroundColor: theme.palette.secondary.main,
+    // },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
