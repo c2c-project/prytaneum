@@ -6,8 +6,8 @@ import {
     IconButton,
     Link as MUILink,
     Grid,
-    Divider,
-    Avatar,
+    // Divider,
+    // Avatar,
     Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Link from 'next/link';
 import { useMutation, graphql } from 'react-relay';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphql';
 import { Form } from '@local/components/Form';
@@ -46,6 +46,13 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
+    button: {
+        backgroundColor: '#ED526C',
+        color: '#FFF',
+        '&:hover': {
+            backgroundColor: '#C7374F',
+        },
+    }
 }));
 
 interface Props {
@@ -109,10 +116,10 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     return (
         <Grid container justify='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
-                <Avatar className={classes.avatar}>
+                {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
-                </Avatar>
-                <Typography component='h1' variant='h5'>
+                </Avatar> */}
+                <Typography component='h1' variant='h6'>
                     Login
                 </Typography>
             </Grid>
@@ -169,13 +176,13 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                 </FormContent>
                 <Grid container item direction='column' className={classes.buttonGroup}>
                     <LoadingButton loading={isLoading}>
-                        <Button fullWidth type='submit' variant='contained' color='primary'>
+                        <Button fullWidth type='submit' variant='contained' className={classes.button}>
                             Login
                         </Button>
                     </LoadingButton>
                     {secondaryActions && (
                         <>
-                            <Divider className={classes.divider} />
+                            {/* <Divider className={classes.divider} /> */}
                             {secondaryActions}
                         </>
                     )}

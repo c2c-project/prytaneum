@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 300,
         alignSelf: 'flex-start',
         backgroundColor: '#ED526C',
+        fontSize: 24,
+        color: '#FFF',
         '&:hover': {
             backgroundColor: '#C7374F',
         },
-        fontSize: 24,
-        color: '#FFF',
         [theme.breakpoints.down('xs')]: {
             minWidth: 0,
             width: '100%',
