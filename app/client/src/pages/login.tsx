@@ -35,14 +35,14 @@ export default function Login() {
     const [user] = useUser();
 
     React.useEffect(() => {
-        if (user) router.push('/app/home');
+        if (user) router.push('/organizations/me');
     }, [user, router]);
 
     return (
         <Grid container alignContent='center' className={classes.root} justify='center'>
             <Paper className={classes.paper}>
                 <LoginForm
-                    onSuccess={() => router.push('/app/home')}
+                    onSuccess={() => router.push('/organizations/me')}
                     secondaryActions={
                         <Button fullWidth variant='outlined' onClick={() => router.push('/register')}>
                             Register

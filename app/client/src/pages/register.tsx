@@ -37,7 +37,7 @@ export default function RegisterPage() {
         <Grid container alignContent='center' className={classes.root} justify='center'>
             <Paper className={classes.paper}>
                 <RegisterForm
-                    onSuccess={() => router.push('/app/home')}
+                    onSuccess={() => router.push('/organizations/me')}
                     secondaryActions={
                         <Button
                             fullWidth

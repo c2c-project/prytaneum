@@ -44,7 +44,7 @@ export default function Home() {
     const [user] = useUser();
 
     React.useEffect(() => {
-        if (user) router.push('/app/home');
+        if (user) router.push('/organizations/me');
     }, [user, router]);
 
     return (
