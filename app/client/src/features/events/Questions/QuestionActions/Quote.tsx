@@ -64,6 +64,7 @@ export function Quote({ className, connections, fragmentRef }: QuoteProps) {
                 input: {
                     ...submittedForm,
                     eventId,
+                    isQuote: true,
                     refQuestion: data.id,
                 },
                 connections,

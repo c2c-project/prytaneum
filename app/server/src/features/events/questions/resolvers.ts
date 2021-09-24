@@ -21,6 +21,8 @@ export const resolvers: Resolvers = {
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 const formattedQuestion = toQuestionId(question);
+                if (formattedQuestion.refQuestion)
+                    formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
                 const edge = {
                     node: formattedQuestion,
                     cursor: formattedQuestion.createdAt.getTime().toString(),
@@ -65,7 +67,6 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ questionCRUD: QuestionOperation }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),
                 (payload, args, ctx) => {
-                    console.log('Question list updated');
                     const { id: questionId } = fromGlobalId(payload.questionCRUD.edge.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
