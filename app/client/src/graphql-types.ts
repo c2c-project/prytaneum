@@ -763,7 +763,7 @@ export type Subscription = {
   /** Question subscription for all operations performed on questions */
   questionCRUD: QuestionOperation;
   /** subscription for whenever questions are added to the queue */
-  questionQueued: EventQuestionMutationResponse;
+  questionQueued: EventQuestionEdge;
 };
 
 

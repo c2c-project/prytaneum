@@ -546,7 +546,7 @@ type Subscription {
   questionCRUD(eventId: ID!): QuestionOperation!
 
   """subscription for whenever questions are added to the queue"""
-  questionQueued(eventId: ID!): EventQuestionMutationResponse!
+  questionQueued(eventId: ID!): EventQuestionEdge!
 }
 
 input UpdateEvent {

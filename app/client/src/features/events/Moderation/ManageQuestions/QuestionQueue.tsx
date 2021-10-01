@@ -107,17 +107,13 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
 export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
     subscription QuestionQueueSubscription($eventId: ID!) {
         questionQueued(eventId: $eventId) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    ...QuestionAuthorFragment
-                    ...QuestionStatsFragment
-                    ...QuestionContentFragment
-                    position
-                }
+            cursor
+            node {
+                id
+                ...QuestionAuthorFragment
+                ...QuestionStatsFragment
+                ...QuestionContentFragment
+                position
             }
         }
     }
@@ -228,11 +224,21 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             variables: { eventId },
             subscription: QUESTION_QUEUE_SUBSCRIPTION,
             updater: (store) => {
+                console.log('Store')
                 const EventProxy = store.get(eventId);
                 const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
                 const payload = store.getRootField('questionQueued');
-                console.log(connection, payload.getValue('body'));
-
+                const node = payload.getLinkedRecord('node');
+                console.log(node);
+                const questionId = node.getValue('id');
+                const position = node.getValue('position');
+                console.log(position);
+                if (position < 0) {
+                    ConnectionHandler.deleteNode(connection, questionId);
+                } else {
+                    const newEdge = ConnectionHandler.buildConnectionEdge(store, connection, payload);
+                    ConnectionHandler.insertEdgeAfter(connection, newEdge);
+                }
                 // refetch(
                 //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 //     { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },

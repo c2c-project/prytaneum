@@ -9,16 +9,12 @@ export type QuestionQueueSubscriptionVariables = {
 };
 export type QuestionQueueSubscriptionResponse = {
     readonly questionQueued: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-            };
-        } | null;
+        readonly cursor: string;
+        readonly node: {
+            readonly id: string;
+            readonly position: number | null;
+            readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+        };
     };
 };
 export type QuestionQueueSubscription = {
@@ -33,17 +29,13 @@ subscription QuestionQueueSubscription(
   $eventId: ID!
 ) {
   questionQueued(eventId: $eventId) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        ...QuestionAuthorFragment
-        ...QuestionStatsFragment
-        ...QuestionContentFragment
-        position
-      }
+    cursor
+    node {
+      id
+      ...QuestionAuthorFragment
+      ...QuestionStatsFragment
+      ...QuestionContentFragment
+      position
     }
   }
 }
@@ -86,31 +78,17 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isError",
+  "name": "cursor",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "message",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "cursor",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v6 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -127,49 +105,36 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
+        "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionQueued",
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestionEdge",
+            "concreteType": "EventQuestion",
             "kind": "LinkedField",
-            "name": "body",
+            "name": "node",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               (v4/*: any*/),
               {
-                "alias": null,
                 "args": null,
-                "concreteType": "EventQuestion",
-                "kind": "LinkedField",
-                "name": "node",
-                "plural": false,
-                "selections": [
-                  (v5/*: any*/),
-                  (v6/*: any*/),
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionAuthorFragment"
-                  },
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionStatsFragment"
-                  },
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionContentFragment"
-                  }
-                ],
-                "storageKey": null
+                "kind": "FragmentSpread",
+                "name": "QuestionAuthorFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "QuestionStatsFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "QuestionContentFragment"
               }
             ],
             "storageKey": null
@@ -190,82 +155,69 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
+        "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionQueued",
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestionEdge",
+            "concreteType": "EventQuestion",
             "kind": "LinkedField",
-            "name": "body",
+            "name": "node",
             "plural": false,
             "selections": [
-              (v4/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "EventQuestion",
+                "concreteType": "User",
                 "kind": "LinkedField",
-                "name": "node",
+                "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v5/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
-                    "kind": "LinkedField",
-                    "name": "createdBy",
-                    "plural": false,
-                    "selections": [
-                      (v5/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "firstName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "avatar",
-                        "storageKey": null
-                      }
-                    ],
+                    "kind": "ScalarField",
+                    "name": "firstName",
                     "storageKey": null
                   },
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "createdAt",
+                    "name": "avatar",
                     "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "likedByCount",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "question",
-                    "storageKey": null
-                  },
-                  (v6/*: any*/)
+                  }
                 ],
                 "storageKey": null
-              }
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "createdAt",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "likedByCount",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "question",
+                "storageKey": null
+              },
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -275,14 +227,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3dc14ffecd6788ec7dddf647e30569e6",
+    "cacheID": "a833edd780f85fc70327c4e5cb29502e",
     "id": null,
     "metadata": {},
     "name": "QuestionQueueSubscription",
     "operationKind": "subscription",
-    "text": "subscription QuestionQueueSubscription(\n  $eventId: ID!\n) {\n  questionQueued(eventId: $eventId) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription QuestionQueueSubscription(\n  $eventId: ID!\n) {\n  questionQueued(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionAuthorFragment\n      ...QuestionStatsFragment\n      ...QuestionContentFragment\n      position\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '3cb3209012ccb85661a97fbb254dfde2';
+(node as any).hash = 'a792b09257a6af77cd236bcf38deacf6';
 export default node;
