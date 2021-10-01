@@ -8,7 +8,7 @@
         "@commitlint/cli": "^12.1.1",
         "@commitlint/config-conventional": "^12.1.1",
         "@commitlint/prompt-cli": "^12.1.1",
-        "@graphql-codegen/cli": "^1.21.4",
+        "@graphql-codegen/cli": "^2.2.0",
         "@graphql-codegen/introspection": "1.18.2",
         "@graphql-codegen/typescript": "1.22.0",
         "@graphql-codegen/typescript-apollo-client-helpers": "^1.1.5",
