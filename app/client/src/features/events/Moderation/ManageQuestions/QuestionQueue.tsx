@@ -30,7 +30,7 @@ import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { QuestionQueueSubscription } from '@local/__generated__/QuestionQueueSubscription.graphql';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { GraphQLSubscriptionConfig, ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 import { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
 import { QUESTION_CAROUSEL_SUBSCRIPTION } from '@local/features/events/Questions/QuestionCarousel/QuestionCarousel';
 import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
@@ -107,8 +107,18 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
 export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
     subscription QuestionQueueSubscription($eventId: ID!) {
         questionQueued(eventId: $eventId) {
-            id
-            position
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                    ...QuestionAuthorFragment
+                    ...QuestionStatsFragment
+                    ...QuestionContentFragment
+                    position
+                }
+            }
         }
     }
 `;
@@ -217,13 +227,19 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         () => ({
             variables: { eventId },
             subscription: QUESTION_QUEUE_SUBSCRIPTION,
-            updater: () => {
-                refetch(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
-                    { fetchPolicy: 'store-and-network' }
-                );
+            updater: (store) => {
+                const EventProxy = store.get(eventId);
+                const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
+                const payload = store.getRootField('questionQueued');
+                console.log(connection, payload.getValue('body'));
+
+                // refetch(
+                //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                //     { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
+                //     { fetchPolicy: 'store-and-network' }
+                // );
             },
+            onError: (error) => { console.error(error) }
         }),
         [eventId, refetch, data]
     );

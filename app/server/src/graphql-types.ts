@@ -455,7 +455,7 @@ export type Subscription = {
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** subscription for whenever questions are added to the queue */
-    questionQueued: EventQuestion;
+    questionQueued: EventQuestionMutationResponse;
     /** Question subscription for all operations performed on questions */
     questionCRUD: QuestionOperation;
 };
@@ -1580,7 +1580,7 @@ export type SubscriptionResolvers<
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
     >;
     questionQueued?: SubscriptionResolver<
-        ResolversTypes['EventQuestion'],
+        ResolversTypes['EventQuestionMutationResponse'],
         'questionQueued',
         ParentType,
         ContextType,
