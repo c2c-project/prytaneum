@@ -187,14 +187,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:16.13.1"],
             ["react-player", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:1.15.3"],
             ["react-redux", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:7.2.4"],
-            ["react-relay", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.0.2"],
+            ["react-relay", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:12.0.0"],
             ["react-test-renderer", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"],
             ["react-transition-group", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:4.4.1"],
             ["redux", "npm:4.1.0"],
             ["redux-devtools-extension", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.13.9"],
             ["relay-compiler", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.0.2"],
             ["relay-compiler-language-typescript", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:14.0.0"],
-            ["relay-runtime", "npm:11.0.2"],
+            ["relay-runtime", "npm:12.0.0"],
             ["smoothscroll-polyfill", "npm:0.4.4"],
             ["subscriptions-transport-ws", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:0.9.18"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"],
@@ -25180,24 +25180,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["react-relay", [
-        ["npm:11.0.2", {
-          "packageLocation": "./.yarn/cache/react-relay-npm-11.0.2-b643d9cfd2-eeb6024266.zip/node_modules/react-relay/",
+        ["npm:12.0.0", {
+          "packageLocation": "./.yarn/cache/react-relay-npm-12.0.0-e13dfa64b6-c040f1e133.zip/node_modules/react-relay/",
           "packageDependencies": [
-            ["react-relay", "npm:11.0.2"]
+            ["react-relay", "npm:12.0.0"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.0.2", {
-          "packageLocation": "./.yarn/$$virtual/react-relay-virtual-da2fa825ee/0/cache/react-relay-npm-11.0.2-b643d9cfd2-eeb6024266.zip/node_modules/react-relay/",
+        ["virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:12.0.0", {
+          "packageLocation": "./.yarn/$$virtual/react-relay-virtual-a7391d4c36/0/cache/react-relay-npm-12.0.0-e13dfa64b6-c040f1e133.zip/node_modules/react-relay/",
           "packageDependencies": [
-            ["react-relay", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.0.2"],
+            ["react-relay", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:12.0.0"],
             ["@babel/runtime", "npm:7.13.10"],
             ["@types/react", "npm:17.0.4"],
             ["fbjs", "npm:3.0.0"],
             ["invariant", "npm:2.2.4"],
             ["nullthrows", "npm:1.1.1"],
             ["react", "npm:17.0.2"],
-            ["relay-runtime", "npm:11.0.2"]
+            ["relay-runtime", "npm:12.0.0"]
           ],
           "packagePeers": [
             "@types/react",
@@ -25849,7 +25849,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["immutable", "npm:4.0.0-rc.12"],
             ["invariant", "npm:2.2.4"],
             ["relay-compiler", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:11.0.2"],
-            ["relay-runtime", "npm:11.0.2"],
+            ["relay-runtime", "npm:12.0.0"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
           ],
           "packagePeers": [
@@ -25880,6 +25880,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/relay-runtime-npm-11.0.2-c3b3a84bb1-64f767da52.zip/node_modules/relay-runtime/",
           "packageDependencies": [
             ["relay-runtime", "npm:11.0.2"],
+            ["@babel/runtime", "npm:7.13.10"],
+            ["fbjs", "npm:3.0.0"],
+            ["invariant", "npm:2.2.4"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:12.0.0", {
+          "packageLocation": "./.yarn/cache/relay-runtime-npm-12.0.0-48b91c47fc-ef19c4f734.zip/node_modules/relay-runtime/",
+          "packageDependencies": [
+            ["relay-runtime", "npm:12.0.0"],
             ["@babel/runtime", "npm:7.13.10"],
             ["fbjs", "npm:3.0.0"],
             ["invariant", "npm:2.2.4"]

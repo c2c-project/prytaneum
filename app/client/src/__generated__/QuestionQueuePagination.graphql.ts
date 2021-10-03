@@ -296,6 +296,18 @@ return {
                       }
                     ],
                     "storageKey": null
+                  },
+                  {
+                    "kind": "ClientExtension",
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__id",
+                        "storageKey": null
+                      }
+                    ]
                   }
                 ],
                 "storageKey": null
@@ -328,5 +340,5 @@ return {
   }
 };
 })();
-(node as any).hash = 'a5efab195ec373790e17dc533ddfa12f';
+(node as any).hash = '6b5c31475b05e4193890def837aa428d';
 export default node;

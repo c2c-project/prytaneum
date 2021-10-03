@@ -90,6 +90,7 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
         id
         currentQuestion
         queuedQuestions(first: $first, after: $after) @connection(key: "QuestionQueueFragment_queuedQuestions") {
+            __id
             edges {
                 cursor
                 node {
@@ -224,26 +225,32 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             variables: { eventId },
             subscription: QUESTION_QUEUE_SUBSCRIPTION,
             updater: (store) => {
-                console.log('Store')
-                const EventProxy = store.get(eventId);
-                const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
-                const payload = store.getRootField('questionQueued');
-                const node = payload.getLinkedRecord('node');
-                console.log(node);
-                const questionId = node.getValue('id');
-                const position = node.getValue('position');
-                console.log(position);
-                if (position < 0) {
-                    ConnectionHandler.deleteNode(connection, questionId);
+                console.log('Data: ', data)
+                if (!data?.queuedQuestions?.__id) {
+                    console.log('REFETCH');
+                    refetch(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        { after: data?.queuedQuestions?.pageInfo?.endCursor },
+                        { fetchPolicy: 'store-and-network' }
+                    );
                 } else {
-                    const newEdge = ConnectionHandler.buildConnectionEdge(store, connection, payload);
-                    ConnectionHandler.insertEdgeAfter(connection, newEdge);
+                    const connection = store.get(data?.queuedQuestions?.__id);
+                    // const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
+                    console.log('Connection: ', connection);
+                    const payload = store.getRootField('questionQueued');
+                    const node = payload.getLinkedRecord('node');
+                    console.log('Node Record: ', node);
+                    const questionId = node.getValue('id');
+                    const position = node.getValue('position');
+                    console.log('ID + Position: ', questionId, position);
+                    if (position < 0) {
+                        console.log('DELETE NODE');
+                        ConnectionHandler.deleteNode(connection, questionId);
+                    } else {
+                        const newEdge = ConnectionHandler.buildConnectionEdge(store, connection, payload);
+                        ConnectionHandler.insertEdgeAfter(connection, newEdge);
+                    }
                 }
-                // refetch(
-                //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                //     { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
-                //     { fetchPolicy: 'store-and-network' }
-                // );
             },
             onError: (error) => { console.error(error) }
         }),

@@ -138,8 +138,8 @@ export const resolvers: Resolvers = {
                 pageInfo: {
                     hasNextPage: false,
                     hasPreviousPage: false,
-                    startCursor: edges[0].cursor.toString(),
-                    endCursor: edges[questions.length - 1].cursor.toString(),
+                    startCursor: edges[0].cursor.toString() || null,
+                    endCursor: edges[questions.length - 1].cursor.toString() || null,
                 },
             };
         },

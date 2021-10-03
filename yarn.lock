@@ -87,14 +87,14 @@ __metadata:
     react-is: ^16.13.1
     react-player: ^1.11.1
     react-redux: ^7.2.2
-    react-relay: ^11.0.2
+    react-relay: ^12.0.0
     react-test-renderer: ^17.0.2
     react-transition-group: ^4.4.1
     redux: ^4.1.0
     redux-devtools-extension: ^2.13.9
     relay-compiler: ^11.0.2
     relay-compiler-language-typescript: ^14.0.0
-    relay-runtime: ^11.0.2
+    relay-runtime: ^12.0.0
     smoothscroll-polyfill: ^0.4.4
     subscriptions-transport-ws: ^0.9.18
     typescript: ^4.2.4
@@ -18000,18 +18000,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-relay@npm:^11.0.2":
-  version: 11.0.2
-  resolution: "react-relay@npm:11.0.2"
+"react-relay@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "react-relay@npm:12.0.0"
   dependencies:
     "@babel/runtime": ^7.0.0
     fbjs: ^3.0.0
     invariant: ^2.2.4
     nullthrows: ^1.1.1
-    relay-runtime: 11.0.2
+    relay-runtime: 12.0.0
   peerDependencies:
     react: ^16.9.0 || ^17
-  checksum: eeb60242665af3f214bffc9017e1d12c938eec1981a8019710bb0ce07b7e4233d8ee28e68c9ac765e672c01bcafdcd5f294496754d002bb5bd90053a2a68e6af
+  checksum: c040f1e133d128fc8143e6539f885deea2fb116601cc084b3dac247bb315dc6e1637853a2a191a2c8767ff87dec4e1bdab9f24d69d496e4a01f21e055be713a4
   languageName: node
   linkType: hard
 
@@ -18530,7 +18530,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"relay-runtime@npm:11.0.2, relay-runtime@npm:^11.0.2":
+"relay-runtime@npm:11.0.2":
   version: 11.0.2
   resolution: "relay-runtime@npm:11.0.2"
   dependencies:
@@ -18538,6 +18538,17 @@ fsevents@^1.2.7:
     fbjs: ^3.0.0
     invariant: ^2.2.4
   checksum: 64f767da52d5960a5d9384586ed9ba54254d03f60adcd21f59ef55b153a3720cd648cb7c42f3d3060ac0c74ed9a63e2fa07afe1b69e5ba18f0ecd6be4d4cb2c7
+  languageName: node
+  linkType: hard
+
+"relay-runtime@npm:12.0.0, relay-runtime@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "relay-runtime@npm:12.0.0"
+  dependencies:
+    "@babel/runtime": ^7.0.0
+    fbjs: ^3.0.0
+    invariant: ^2.2.4
+  checksum: ef19c4f73467e754b58b6d49e45c3037450c84cc1d21e45071c79d78d7115056d949da3c7dadde61c9c2929ef0bf8e7abd40f5b9696ff3043384e9adf22cdfe8
   languageName: node
   linkType: hard
 

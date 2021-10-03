@@ -353,6 +353,18 @@ v16 = {
     }
   ],
   "storageKey": null
+},
+v17 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "__id",
+      "storageKey": null
+    }
+  ]
 };
 return {
   "fragment": {
@@ -563,18 +575,7 @@ return {
                     "storageKey": null
                   },
                   (v16/*: any*/),
-                  {
-                    "kind": "ClientExtension",
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "__id",
-                        "storageKey": null
-                      }
-                    ]
-                  }
+                  (v17/*: any*/)
                 ],
                 "storageKey": "questions(after:\"\",first:100)"
               },
@@ -625,7 +626,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v16/*: any*/)
+                  (v16/*: any*/),
+                  (v17/*: any*/)
                 ],
                 "storageKey": "queuedQuestions(after:\"\",first:100)"
               },
