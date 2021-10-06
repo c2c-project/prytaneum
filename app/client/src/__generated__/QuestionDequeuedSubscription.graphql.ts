@@ -183,6 +183,22 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "filters": null,
+                "handle": "deleteEdge",
+                "key": "",
+                "kind": "ScalarHandle",
+                "name": "id",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": "User",
                 "kind": "LinkedField",
                 "name": "createdBy",
@@ -246,5 +262,5 @@ return {
   }
 };
 })();
-(node as any).hash = '8bd94fb1b4fdd40e8602a45fe9d9da7f';
+(node as any).hash = '00237dd5e22c43dbb91dadc2228cb797';
 export default node;

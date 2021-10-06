@@ -94,10 +94,9 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
 
 export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
     subscription QuestionQueuedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionQueued(eventId: $eventId) @appendEdge(connections: $connections) {
+        questionQueued(eventId: $eventId) {
             cursor
-            # node @appendNode(connections: $connections, edgeTypeName: "EventQuestionEdge") {
-            node {
+            node @appendNode(connections: $connections, edgeTypeName: "EventQuestionEdge") {
                 id
                 ...QuestionAuthorFragment
                 ...QuestionStatsFragment
@@ -214,8 +213,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             variables: { eventId, connections: [connectionID] },
             subscription: QUESTION_QUEUE_SUBSCRIPTION,
             updater: (store) => {
-                console.log('Updater called', data);
-                // console.log('Data: ', data)
                 if (!data?.queuedQuestions?.__id) {
                     console.log('REFETCH');
                     refetch(
@@ -244,7 +241,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 // }
             },
             onNext: (response) => {
-                console.log('onNext', response);
+                console.log('Enqueue: ', response);
             },
             onError: (error) => {
                 console.error(error);
@@ -257,19 +254,11 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         () => ({
             variables: { eventId, connections: [connectionID] },
             subscription: QUESTION_DEQUEUED_SUBSCRIPTION,
-            updater: (store) => {
-                const connection = store.get(connectionID);
-                // const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
-                console.log('Connection: ', connection);
-                const payload = store.getRootField('questionDequeued');
-                const node = payload.getLinkedRecord('node');
-                console.log('Node Record: ', node);
-                const questionId = node.getValue('id');
-                console.log('DELETE NODE');
-                ConnectionHandler.deleteNode(connection, questionId);
-            },
             onNext: (response) => {
-                console.log('onNext Dequeue: ', response);
+                console.log('Dequeue: ', response);
+            },
+            onError: (error) => {
+                console.error(error);
             }
         })
     );
@@ -282,10 +271,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [eventId]
     );
 
-    console.log('Rerendered');
+    // console.log('Rerendered');
     React.useEffect(() => {
-        console.log('Connection: ', connectionID, data);
-    }, [connectionID, data]);
+        console.log('Data: ', data);
+    }, [data]);
 
     useSubscription(questionQueueConfig);
     useSubscription(questionDequeuedConfig);
