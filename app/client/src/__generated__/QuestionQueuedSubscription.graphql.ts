@@ -4,10 +4,11 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type QuestionQueueSubscriptionVariables = {
+export type QuestionQueuedSubscriptionVariables = {
     eventId: string;
+    connections: Array<string>;
 };
-export type QuestionQueueSubscriptionResponse = {
+export type QuestionQueuedSubscriptionResponse = {
     readonly questionQueued: {
         readonly cursor: string;
         readonly node: {
@@ -17,15 +18,15 @@ export type QuestionQueueSubscriptionResponse = {
         };
     };
 };
-export type QuestionQueueSubscription = {
-    readonly response: QuestionQueueSubscriptionResponse;
-    readonly variables: QuestionQueueSubscriptionVariables;
+export type QuestionQueuedSubscription = {
+    readonly response: QuestionQueuedSubscriptionResponse;
+    readonly variables: QuestionQueuedSubscriptionVariables;
 };
 
 
 
 /*
-subscription QuestionQueueSubscription(
+subscription QuestionQueuedSubscription(
   $eventId: ID!
 ) {
   questionQueued(eventId: $eventId) {
@@ -60,35 +61,38 @@ fragment QuestionStatsFragment on EventQuestion {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "eventId"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "eventId"
+},
+v2 = [
   {
     "kind": "Variable",
     "name": "eventId",
     "variableName": "eventId"
   }
 ],
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -97,20 +101,23 @@ v4 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "QuestionQueueSubscription",
+    "name": "QuestionQueuedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionQueued",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -119,8 +126,8 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -148,19 +155,22 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
-    "name": "QuestionQueueSubscription",
+    "name": "QuestionQueuedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionQueued",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -169,7 +179,7 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -178,7 +188,7 @@ return {
                 "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -217,9 +227,30 @@ return {
                 "name": "question",
                 "storageKey": null
               },
-              (v4/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "appendNode",
+            "key": "",
+            "kind": "LinkedHandle",
+            "name": "node",
+            "handleArgs": [
+              {
+                "kind": "Variable",
+                "name": "connections",
+                "variableName": "connections"
+              },
+              {
+                "kind": "Literal",
+                "name": "edgeTypeName",
+                "value": "EventQuestionEdge"
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -227,14 +258,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a833edd780f85fc70327c4e5cb29502e",
+    "cacheID": "2a59ed232702a8c4420293f9fd4b509e",
     "id": null,
     "metadata": {},
-    "name": "QuestionQueueSubscription",
+    "name": "QuestionQueuedSubscription",
     "operationKind": "subscription",
-    "text": "subscription QuestionQueueSubscription(\n  $eventId: ID!\n) {\n  questionQueued(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionAuthorFragment\n      ...QuestionStatsFragment\n      ...QuestionContentFragment\n      position\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription QuestionQueuedSubscription(\n  $eventId: ID!\n) {\n  questionQueued(eventId: $eventId) {\n    cursor\n    node {\n      id\n      ...QuestionAuthorFragment\n      ...QuestionStatsFragment\n      ...QuestionContentFragment\n      position\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'a792b09257a6af77cd236bcf38deacf6';
+(node as any).hash = 'd27e8d52173704b0a7db901a6fc73065';
 export default node;

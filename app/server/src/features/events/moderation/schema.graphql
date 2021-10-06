@@ -91,4 +91,5 @@ type Subscription {
     subscription for whenever questions are added to the queue
     """
     questionQueued(eventId: ID!): EventQuestionEdge!
+    questionDequeued(eventId: ID!): EventQuestionEdge!
 }

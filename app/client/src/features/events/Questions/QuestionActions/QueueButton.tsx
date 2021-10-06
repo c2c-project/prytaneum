@@ -68,23 +68,23 @@ export function QueueButton({ fragmentRef, currentQuestion }: QueueButtonProps) 
                         adding: !isQueued
                     }
                 },
-                updater: (store: RecordSourceSelectorProxy) => {
-                    const EventProxy = store.get(eventId);
-                    if (!EventProxy) return;
-                    const conn = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
-                    const payload = store.getRootField('updateQuestionQueue');
-                    if (!conn || !payload) return;
-                    if (isQueued) {
-                        // If the question is being dequeued then delete the node from the connection
-                        ConnectionHandler.deleteNode(conn, questionId);
-                    } else {
-                        const serverEdge = payload.getLinkedRecord('body');
-                        if (!serverEdge) return;
-                        const newEdge = ConnectionHandler.buildConnectionEdge(store, conn, serverEdge);
-                        if (!newEdge) return;
-                        ConnectionHandler.insertEdgeAfter(conn, newEdge);
-                    }
-                },
+                // updater: (store: RecordSourceSelectorProxy) => {
+                //     const EventProxy = store.get(eventId);
+                //     if (!EventProxy) return;
+                //     const conn = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
+                //     const payload = store.getRootField('updateQuestionQueue');
+                //     if (!conn || !payload) return;
+                //     if (isQueued) {
+                //         // If the question is being dequeued then delete the node from the connection
+                //         ConnectionHandler.deleteNode(conn, questionId);
+                //     } else {
+                //         const serverEdge = payload.getLinkedRecord('body');
+                //         if (!serverEdge) return;
+                //         const newEdge = ConnectionHandler.buildConnectionEdge(store, conn, serverEdge);
+                //         if (!newEdge) return;
+                //         ConnectionHandler.insertEdgeAfter(conn, newEdge);
+                //     }
+                // },
                 onCompleted: ({ updateQuestionQueue }) => {
                     if (updateQuestionQueue.isError) {
                         displaySnack(updateQuestionQueue.message);

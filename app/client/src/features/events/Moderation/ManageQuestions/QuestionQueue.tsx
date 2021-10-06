@@ -1,22 +1,7 @@
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {
-    Grid,
-    Paper,
-    Typography,
-    Divider,
-    Card,
-    Button,
-    List,
-    ListItem,
-    DialogContent,
-} from '@material-ui/core';
-import {
-    graphql,
-    useMutation,
-    usePaginationFragment,
-    useSubscription,
-} from 'react-relay';
+import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
+import { graphql, useMutation, usePaginationFragment, useSubscription } from 'react-relay';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -29,10 +14,12 @@ import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { QuestionQueueSubscription } from '@local/__generated__/QuestionQueueSubscription.graphql';
+import { QuestionQueuedSubscription } from '@local/__generated__/QuestionQueuedSubscription.graphql';
+import { QuestionDequeuedSubscription } from '@local/__generated__/QuestionDequeuedSubscription.graphql'
 import { GraphQLSubscriptionConfig, ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 import { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
 import { QUESTION_CAROUSEL_SUBSCRIPTION } from '@local/features/events/Questions/QuestionCarousel/QuestionCarousel';
+import { QUESTION_DEQUEUED_SUBSCRIPTION } from './QuestionDequeued';
 import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
@@ -106,9 +93,10 @@ export const QUESTION_QUEUE_FRAGMENT = graphql`
 `;
 
 export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
-    subscription QuestionQueueSubscription($eventId: ID!) {
-        questionQueued(eventId: $eventId) {
+    subscription QuestionQueuedSubscription($eventId: ID!, $connections: [ID!]!) {
+        questionQueued(eventId: $eventId) @appendEdge(connections: $connections) {
             cursor
+            # node @appendNode(connections: $connections, edgeTypeName: "EventQuestionEdge") {
             node {
                 id
                 ...QuestionAuthorFragment
@@ -219,13 +207,15 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const ref = React.useRef<HTMLElement | null>(null);
     const { eventId } = useEvent();
     const [open, setOpen] = React.useState(false);
+    const connectionID = ConnectionHandler.getConnectionID(eventId, 'QuestionQueueFragment_queuedQuestions');
 
-    const questionQueueConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionQueueSubscription>>(
+    const questionQueueConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionQueuedSubscription>>(
         () => ({
-            variables: { eventId },
+            variables: { eventId, connections: [connectionID] },
             subscription: QUESTION_QUEUE_SUBSCRIPTION,
             updater: (store) => {
-                console.log('Data: ', data)
+                console.log('Updater called', data);
+                // console.log('Data: ', data)
                 if (!data?.queuedQuestions?.__id) {
                     console.log('REFETCH');
                     refetch(
@@ -233,28 +223,55 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         { after: data?.queuedQuestions?.pageInfo?.endCursor },
                         { fetchPolicy: 'store-and-network' }
                     );
-                } else {
-                    const connection = store.get(data?.queuedQuestions?.__id);
-                    // const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
-                    console.log('Connection: ', connection);
-                    const payload = store.getRootField('questionQueued');
-                    const node = payload.getLinkedRecord('node');
-                    console.log('Node Record: ', node);
-                    const questionId = node.getValue('id');
-                    const position = node.getValue('position');
-                    console.log('ID + Position: ', questionId, position);
-                    if (position < 0) {
-                        console.log('DELETE NODE');
-                        ConnectionHandler.deleteNode(connection, questionId);
-                    } else {
-                        const newEdge = ConnectionHandler.buildConnectionEdge(store, connection, payload);
-                        ConnectionHandler.insertEdgeAfter(connection, newEdge);
-                    }
-                }
+                } 
+                // else {
+                //     const connection = store.get(data?.queuedQuestions?.__id);
+                //     // const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
+                //     console.log('Connection: ', connection);
+                //     const payload = store.getRootField('questionQueued');
+                //     const node = payload.getLinkedRecord('node');
+                //     console.log('Node Record: ', node);
+                //     const questionId = node.getValue('id');
+                //     const position = node.getValue('position');
+                //     console.log('ID + Position: ', questionId, position);
+                //     if (position < 0) {
+                //         console.log('DELETE NODE');
+                //         ConnectionHandler.deleteNode(connection, questionId);
+                //     } else {
+                //         const newEdge = ConnectionHandler.buildConnectionEdge(store, connection, payload);
+                //         ConnectionHandler.insertEdgeAfter(connection, newEdge);
+                //     }
+                // }
             },
-            onError: (error) => { console.error(error) }
+            onNext: (response) => {
+                console.log('onNext', response);
+            },
+            onError: (error) => {
+                console.error(error);
+            },
         }),
-        [eventId, refetch, data]
+        [eventId, connectionID, data, refetch]
+    );
+
+    const questionDequeuedConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionDequeuedSubscription>>(
+        () => ({
+            variables: { eventId, connections: [connectionID] },
+            subscription: QUESTION_DEQUEUED_SUBSCRIPTION,
+            updater: (store) => {
+                const connection = store.get(connectionID);
+                // const connection = ConnectionHandler.getConnection(EventProxy, 'QuestionQueueFragment_queuedQuestions');
+                console.log('Connection: ', connection);
+                const payload = store.getRootField('questionDequeued');
+                const node = payload.getLinkedRecord('node');
+                console.log('Node Record: ', node);
+                const questionId = node.getValue('id');
+                console.log('DELETE NODE');
+                ConnectionHandler.deleteNode(connection, questionId);
+            },
+            onNext: (response) => {
+                console.log('onNext Dequeue: ', response);
+            }
+        })
     );
 
     const questionCarouselConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
@@ -265,7 +282,13 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [eventId]
     );
 
+    console.log('Rerendered');
+    React.useEffect(() => {
+        console.log('Connection: ', connectionID, data);
+    }, [connectionID, data]);
+
     useSubscription(questionQueueConfig);
+    useSubscription(questionDequeuedConfig);
     useSubscription(questionCarouselConfig);
 
     const scrollToCurrent = () => {

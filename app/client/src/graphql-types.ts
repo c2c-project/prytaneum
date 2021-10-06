@@ -762,6 +762,7 @@ export type Subscription = {
   orgUpdated: OrganizationSubscription;
   /** Question subscription for all operations performed on questions */
   questionCRUD: QuestionOperation;
+  questionDequeued: EventQuestionEdge;
   /** subscription for whenever questions are added to the queue */
   questionQueued: EventQuestionEdge;
 };
@@ -778,6 +779,11 @@ export type SubscriptionEventUpdatesArgs = {
 
 
 export type SubscriptionQuestionCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionDequeuedArgs = {
   eventId: Scalars['ID'];
 };
 

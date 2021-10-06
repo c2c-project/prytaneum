@@ -123,6 +123,8 @@ export const resolvers: Resolvers = {
                     });
                 }
                 const questionWithGlobalId = toQuestionId(updatedQuestion);
+                const { id: globalEventId } = toEventId({ id: updatedQuestion.eventId });
+                questionWithGlobalId.eventId = globalEventId;
                 const edge = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
@@ -133,12 +135,22 @@ export const resolvers: Resolvers = {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                ctx.pubsub.publish({
-                    topic: 'questionQueued',
-                    payload: {
-                        questionQueued: edge,
-                    },
-                });
+                if (adding) {
+                    ctx.pubsub.publish({
+                        topic: 'questionQueued',
+                        payload: {
+                            questionQueued: edge,
+                        },
+                    });
+                } else {
+                    console.log('DeQueue Pub Sub Called', edge)
+                    ctx.pubsub.publish({
+                        topic: 'questionDequeued',
+                        payload: {
+                            questionDequeued: edge,
+                        },
+                    });
+                }
                 return edge;
             });
         },
@@ -154,12 +166,24 @@ export const resolvers: Resolvers = {
         questionQueued: {
             subscribe: withFilter<{ questionQueued: EventQuestionEdge }>(
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('questionQueued'),
-                async (payload, args, ctx) => {
+                (payload, args, ctx) => {
+                    console.log('Queued: ', args.eventId, payload.questionQueued.node);
                     const { id: questionId } = fromGlobalId(payload.questionQueued.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     return doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
+        questionDequeued: {
+            subscribe: withFilter<{ questionDequeued: EventQuestionEdge }>(
+                (parent, args, ctx, info) => ctx.pubsub.subscribe('questionDequeued'),
+                (payload, args, ctx) => {
+                    console.log('Dequeued: ', args.eventId, payload.questionDequeued.node);
+                    const { id: questionId } = fromGlobalId(payload.questionDequeued.node.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    return doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            )
+        }
     },
 };

@@ -456,6 +456,7 @@ export type Subscription = {
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** subscription for whenever questions are added to the queue */
     questionQueued: EventQuestionEdge;
+    questionDequeued: EventQuestionEdge;
     /** Question subscription for all operations performed on questions */
     questionCRUD: QuestionOperation;
 };
@@ -469,6 +470,10 @@ export type SubscriptioneventLiveFeedbackCreatedArgs = {
 };
 
 export type SubscriptionquestionQueuedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionDequeuedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1585,6 +1590,13 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionQueuedArgs, 'eventId'>
+    >;
+    questionDequeued?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionDequeued',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionDequeuedArgs, 'eventId'>
     >;
     questionCRUD?: SubscriptionResolver<
         ResolversTypes['QuestionOperation'],
