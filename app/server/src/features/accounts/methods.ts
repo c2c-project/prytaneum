@@ -3,7 +3,7 @@ import { PrismaClient } from '@app/prisma';
 import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
-import { LoginForm, RegistrationForm } from '@local/graphql-types';
+import { DeleteAccountForm, LoginForm, RegistrationForm, UpdateEmailForm, UpdatePasswordForm } from '@local/graphql-types';
 
 const toUserId = toGlobalId('User');
 
@@ -101,6 +101,96 @@ export async function loginWithPassword(prisma: PrismaClient, input: LoginForm) 
     // so that way I can store a refresh token in the user (although not the whole token, just the issuedAt of the refresh token)
     const token = await jwt.sign({ id: userWithGlobalId.id });
 
-    // NOTE: graphql will remove any sensitive fields, such as password, since they it is not a query-able field
+    // NOTE: graphql will remove any sensitive fields, such as password, since it is not a query-able field
     return { user, token };
+}
+
+/**
+ * updates the user's email
+ */
+export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) {
+    const { currentEmail, newEmail } = input;
+
+    // update user email
+    const updatedUser = await prisma.user.update({
+        where: { email: currentEmail },
+        data: { email: newEmail }
+    })
+
+    // generate token
+    const token = await jwt.sign({ id: toUserId(updatedUser).id });
+
+    // return update user and token
+    return { updatedUser, token };
+}
+
+/**
+ * updates the user's password
+ */
+export async function updatePassword(prisma: PrismaClient, input: UpdatePasswordForm) {
+    const {
+        email,
+        oldPassword,
+        newPassword,
+        confirmNewPassword
+    } = input;
+    
+    // fetch user for password validation
+    const user = await prisma.user.findUnique({ where: { email } });
+    const userWithGlobalId = toUserId(user);
+
+    // if there is no password, the user must finish registering their account, how to let them know... TODO:
+    if (!userWithGlobalId || !userWithGlobalId.password) throw new Error('Updating password failed: Missing password.');
+
+    const isValidPassword = await bcrypt.compare(oldPassword, userWithGlobalId.password);
+
+    // validation if password matches actual password
+    if (!isValidPassword) throw new Error('Updating password failed: Invalid password.');
+
+    // validation if new passwords match
+    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match');
+
+    // update user password
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { password: newPassword }
+    })
+
+    // generate token
+    const token = await jwt.sign({ id: toUserId(updatedUser).id });
+
+    // return updated user and token
+    return { updatedUser, token };
+}
+
+/**
+ * deletes the user's account
+ */
+export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountForm) {
+    const {
+        email,
+        password,
+        confirmPassword
+    } = input;
+    
+    // fetch user for password validation
+    const user = await prisma.user.findUnique({ where: { email } });
+    const userWithGlobalId = toUserId(user);
+
+    // if there is no password, the user must finish registering their account, how to let them know... TODO:
+    if (!userWithGlobalId || !userWithGlobalId.password) throw new Error('Updating password failed: Missing password.');
+
+    // validation if password matches actual password
+    const isValidPassword = await bcrypt.compare(password, userWithGlobalId.password);
+
+    if (!isValidPassword) throw new Error('Updating password failed: Invalid password.');
+
+    // validation if passwords match
+    if (password !== confirmPassword) throw new Error('Passwords must match');
+
+    // delete user by email
+    const deletedUser = await prisma.user.delete({ where: { email }});
+
+    // return deleted user
+    return { deletedUser };
 }

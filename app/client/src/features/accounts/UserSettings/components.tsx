@@ -10,21 +10,29 @@ import {
     Grid,
     Link as MUILink,
 } from '@material-ui/core';
-import { User, UserSettings } from '@local/graphql-types';
+import { UpdatePasswordForm, User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useForm } from '@local/features/core';
+import { useUser } from '@local/features/accounts';
+import { useSnack, useForm } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { graphql, useMutation } from 'react-relay';
+import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql';
+import type { UpdatePassowrdFormMutation } from '@local/__generated__/UpdatePassowrdFormMutation.graphql';
+import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import text from './help-text';
 
 const initialModifyUserEmail = {
     newEmail: '',
 };
+
+export type TUpdateEmailForm = typeof initialModifyUserEmail;
 
 const initialModifyUserPassword = {
     oldPassword: '',
@@ -32,10 +40,14 @@ const initialModifyUserPassword = {
     confirmNewPassword: '',
 };
 
+export type TUpdatePasswordForm = typeof initialModifyUserPassword;
+
 const intiialDeleteAccount = {
     password: '',
     confirmPassword: '',
 };
+
+export type TDeleteAccountForm = typeof intiialDeleteAccount;
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
@@ -65,6 +77,42 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(1),
     },
 }));
+
+const UPDATE_EMAIL_FORM_MUTATION = graphql`
+    mutation UpdateEmailFormMutation($input: UpdateEmailForm!) {
+        updateEmail(input: $input) {
+            isError
+            message
+            body {
+                ...useUserFragment
+            }
+        }
+    }
+`;
+
+const UPDATE_PASSWORD_FORM_MUTATION = graphql`
+    mutation UpdatePassowrdFormMutation($input: UpdatePasswordForm!) {
+        updatePassword(input: $input) {
+            isError
+            message
+            body {
+                ...useUserFragment
+            }
+        }
+    }
+`;
+
+const DELETE_ACCOUNT_FORM_MUTATION = graphql`
+    mutation DeleteAccountFormMutation($input: DeleteAccountForm!) {
+        deleteAccount(input: $input) {
+            isError
+            message
+            body {
+                ...useUserFragment
+            }
+        }
+    }
+`;
 
 // all really small one time user @local/components go here
 interface DisplayItem {
@@ -121,8 +169,32 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
 }
 
 export function ModifyUserEmail({ user }: { user: User }) {
+    // form state hooks
     const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserEmail);
+    const [commit] = useMutation<UpdateEmailFormMutation>(UPDATE_EMAIL_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+    
+    const [, setUser] = useUser();
+
+    // styling hook
     const classes = useStyles();
+
+    function handleCommit(submittedForm: TUpdateEmailForm) {
+        // add user email to input passed into the commit
+        const completeForm = { currentEmail: user.email, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ updateEmail }) {
+                if (updateEmail.isError) {
+                    displaySnack(updateEmail.message);
+                } else {
+                    setUser(updateEmail.body);
+                }
+            },
+        });
+    }
 
     return (
         <Grid container spacing={2}>
@@ -139,7 +211,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                     A verification email will be sent to the new email to confirm the update.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your new email' }}
@@ -164,9 +236,33 @@ export function ModifyUserEmail({ user }: { user: User }) {
     )
 }
 
-export function ModifyUserPassword() {
+export function ModifyUserPassword({ user }: { user: User }) {
+    // form state hooks
     const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
+    const [commit] = useMutation<UpdatePassowrdFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+    
+    const [, setUser] = useUser();
+
+    // styling hook
     const classes = useStyles();
+    
+    function handleCommit(submittedForm: TUpdatePasswordForm) {
+        // add user email to input passed into the commit
+        const completeForm = { currentEmail: user.email, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ updatePassword }) {
+                if (updatePassword.isError) {
+                    displaySnack(updatePassword.message);
+                } else {
+                    setUser(updatePassword.body);
+                }
+            },
+        });
+    }
 
     return (
         <Grid container spacing={2}>
@@ -179,7 +275,7 @@ export function ModifyUserPassword() {
                 </Typography>
             </Grid>
             
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your old password' }}
@@ -318,10 +414,35 @@ export const DisableAccount = () => {
     );
 };
 
-export function DeleteAccount() {
+export function DeleteAccount({ user }: { user: User }) {
+    // form state hooks
     const [form, errors, handleSubmit, handleChange] = useForm(intiialDeleteAccount);
+    const [commit] = useMutation<DeleteAccountFormMutation>(DELETE_ACCOUNT_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+
+    // routing hook
+    const router = useRouter();
+
+    // styling hook
     const classes = useStyles();
-    // ROUTING: to /Login after deleted
+
+    function handleCommit(submittedForm: TDeleteAccountForm) {
+        // add user email to input passed into the commit
+        const completeForm = { currentEmail: user.email, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ deleteAccount }) {
+                if (deleteAccount.isError) {
+                    displaySnack(deleteAccount.message);
+                } else {
+                    // route to login after successfully deleting account
+                    router.push('/login');
+                }
+            },
+        });
+    }
     
     return (
         <Grid container spacing={2}>
@@ -339,7 +460,7 @@ export function DeleteAccount() {
                     twice to confirm.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your password' }}
