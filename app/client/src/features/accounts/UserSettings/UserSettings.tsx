@@ -156,13 +156,13 @@ export default function UserSettings({ id }: Props) {
                         <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                        <ModifyUserPassword />
+                        <ModifyUserPassword user={user} />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                        <DeleteAccount />
+                        <DeleteAccount user={user} />
                     </Grid>
                 </Grid>
             ),

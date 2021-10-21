@@ -10,7 +10,7 @@ import {
     Grid,
     Link as MUILink,
 } from '@material-ui/core';
-import { UpdatePasswordForm, User, UserSettings } from '@local/graphql-types';
+import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
@@ -20,12 +20,15 @@ import SettingsItem from '@local/components/SettingsItem';
 import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { graphql, useMutation } from 'react-relay';
-import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql';
-import type { UpdatePassowrdFormMutation } from '@local/__generated__/UpdatePassowrdFormMutation.graphql';
-import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql';
+import { useMutation } from 'react-relay';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql'
+import type { UpdatePasswordFormMutation } from '@local/__generated__/UpdatePasswordFormMutation.graphql'
+import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql'
+import { UPDATE_EMAIL_FORM_MUTATION } from './UpdateEmailForm';
+import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
+import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
 import text from './help-text';
 
 const initialModifyUserEmail = {
@@ -78,41 +81,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const UPDATE_EMAIL_FORM_MUTATION = graphql`
-    mutation UpdateEmailFormMutation($input: UpdateEmailForm!) {
-        updateEmail(input: $input) {
-            isError
-            message
-            body {
-                ...useUserFragment
-            }
-        }
-    }
-`;
 
-const UPDATE_PASSWORD_FORM_MUTATION = graphql`
-    mutation UpdatePassowrdFormMutation($input: UpdatePasswordForm!) {
-        updatePassword(input: $input) {
-            isError
-            message
-            body {
-                ...useUserFragment
-            }
-        }
-    }
-`;
 
-const DELETE_ACCOUNT_FORM_MUTATION = graphql`
-    mutation DeleteAccountFormMutation($input: DeleteAccountForm!) {
-        deleteAccount(input: $input) {
-            isError
-            message
-            body {
-                ...useUserFragment
-            }
-        }
-    }
-`;
+
 
 // all really small one time user @local/components go here
 interface DisplayItem {
@@ -183,14 +154,18 @@ export function ModifyUserEmail({ user }: { user: User }) {
 
     function handleCommit(submittedForm: TUpdateEmailForm) {
         // add user email to input passed into the commit
-        const completeForm = { currentEmail: user.email, ...submittedForm }
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { currentEmail: userEmail, ...submittedForm }
         commit({
             variables: { input: completeForm },
             onCompleted({ updateEmail }) {
                 if (updateEmail.isError) {
                     displaySnack(updateEmail.message);
                 } else {
+                    displaySnack('Email changed successfully!');
                     setUser(updateEmail.body);
+                    // clear form
+                    form.newEmail = '';
                 }
             },
         });
@@ -239,7 +214,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
 export function ModifyUserPassword({ user }: { user: User }) {
     // form state hooks
     const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
-    const [commit] = useMutation<UpdatePassowrdFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
+    const [commit] = useMutation<UpdatePasswordFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
 
     // user feedback
     const { displaySnack } = useSnack();
@@ -251,14 +226,20 @@ export function ModifyUserPassword({ user }: { user: User }) {
     
     function handleCommit(submittedForm: TUpdatePasswordForm) {
         // add user email to input passed into the commit
-        const completeForm = { currentEmail: user.email, ...submittedForm }
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { email: userEmail, ...submittedForm }
         commit({
             variables: { input: completeForm },
             onCompleted({ updatePassword }) {
                 if (updatePassword.isError) {
                     displaySnack(updatePassword.message);
                 } else {
+                    displaySnack('Password changed successfully!');
                     setUser(updatePassword.body);
+                    // clear form
+                    form.oldPassword = ''
+                    form.newPassword = ''
+                    form.confirmNewPassword = ''
                 }
             },
         });
@@ -430,13 +411,15 @@ export function DeleteAccount({ user }: { user: User }) {
 
     function handleCommit(submittedForm: TDeleteAccountForm) {
         // add user email to input passed into the commit
-        const completeForm = { currentEmail: user.email, ...submittedForm }
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { email: userEmail, ...submittedForm }
         commit({
             variables: { input: completeForm },
             onCompleted({ deleteAccount }) {
                 if (deleteAccount.isError) {
                     displaySnack(deleteAccount.message);
                 } else {
+                    displaySnack('Account deleted successfully!');
                     // route to login after successfully deleting account
                     router.push('/login');
                 }

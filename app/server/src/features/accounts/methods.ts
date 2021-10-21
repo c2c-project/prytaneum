@@ -111,6 +111,10 @@ export async function loginWithPassword(prisma: PrismaClient, input: LoginForm) 
 export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) {
     const { currentEmail, newEmail } = input;
 
+    // validiation if no other user exists with the new email
+    const user = await prisma.user.findUnique({ where: { email: newEmail } });
+    if (user) throw new Error('Updating email failed: Another user exists with this email. Please input a different email.');
+
     // update user email
     const updatedUser = await prisma.user.update({
         where: { email: currentEmail },
@@ -147,13 +151,18 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
     // validation if password matches actual password
     if (!isValidPassword) throw new Error('Updating password failed: Invalid password.');
 
+    // validation if new password is at least 8 characters
+    if (newPassword.length < 8) throw new Error('New password must be at least 8 characters.');
+
     // validation if new passwords match
-    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match');
+    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match.');
+
+    const encryptedPassword = newPassword ? await bcrypt.hash(newPassword, 10) : null;
 
     // update user password
     const updatedUser = await prisma.user.update({
         where: { email },
-        data: { password: newPassword }
+        data: { password: encryptedPassword }
     })
 
     // generate token
@@ -178,15 +187,15 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
     const userWithGlobalId = toUserId(user);
 
     // if there is no password, the user must finish registering their account, how to let them know... TODO:
-    if (!userWithGlobalId || !userWithGlobalId.password) throw new Error('Updating password failed: Missing password.');
+    if (!userWithGlobalId || !userWithGlobalId.password) throw new Error('Deleting account failed: Missing password.');
 
     // validation if password matches actual password
     const isValidPassword = await bcrypt.compare(password, userWithGlobalId.password);
 
-    if (!isValidPassword) throw new Error('Updating password failed: Invalid password.');
+    if (!isValidPassword) throw new Error('Deleting account failed: Invalid password.');
 
     // validation if passwords match
-    if (password !== confirmPassword) throw new Error('Passwords must match');
+    if (password !== confirmPassword) throw new Error('Passwords must match.');
 
     // delete user by email
     const deletedUser = await prisma.user.delete({ where: { email }});
