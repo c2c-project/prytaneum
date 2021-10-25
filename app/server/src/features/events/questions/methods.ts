@@ -25,6 +25,9 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
             isAsked: false,
             lang: 'EN', // TODO:
         },
+        include: {
+            refQuestion: true
+        }
     });
 }
 
