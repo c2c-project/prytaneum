@@ -10,9 +10,9 @@ export default class MyDocument extends Document {
                 <Head>
                     {/* PWA primary color */}
                     <meta name='theme-color' content={themes.dark.palette.primary.main} />
-                    <link 
+                    <link
                         rel='stylesheet'
-                        href='https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap'
+                        href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
                     />
                 </Head>
                 <body>
