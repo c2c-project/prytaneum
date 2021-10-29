@@ -39,7 +39,7 @@ async function start() {
     // you can also use it to detect if you are running in Cloud Run
     const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined
     
-    const port = process.env.SERVER_PORT;
+    const port = process.env.SERVER_PORT || '3002';
 
     // You must listen on all IPV4 addresses in Cloud Run
     const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST
@@ -114,5 +114,5 @@ async function start() {
 }
 
 if (require.main === module) {
-  start()
+    start()
 }

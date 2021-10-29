@@ -41,16 +41,14 @@ const node: ReaderFragment = {
   ],
   "kind": "Fragment",
   "metadata": {
-    "connection": [
-      {
-        "count": "first",
-        "cursor": "after",
-        "direction": "forward",
-        "path": [
-          "queuedQuestions"
-        ]
-      }
-    ]
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./QuestionCarouselFragmentRefetchable.graphql.ts'),
+      "identifierField": "id"
+    }
   },
   "name": "QuestionCarouselFragment",
   "selections": [
@@ -69,11 +67,22 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
-      "alias": "queuedQuestions",
-      "args": null,
+      "alias": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "after",
+          "variableName": "after"
+        },
+        {
+          "kind": "Variable",
+          "name": "first",
+          "variableName": "first"
+        }
+      ],
       "concreteType": "EventQuestionConnection",
       "kind": "LinkedField",
-      "name": "__QuestionCarousel_queuedQuestions_connection",
+      "name": "queuedQuestions",
       "plural": false,
       "selections": [
         {
@@ -107,13 +116,6 @@ const node: ReaderFragment = {
                   "storageKey": null
                 },
                 {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "__typename",
-                  "storageKey": null
-                },
-                {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "QuestionAuthorFragment"
@@ -128,31 +130,6 @@ const node: ReaderFragment = {
             }
           ],
           "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "PageInfo",
-          "kind": "LinkedField",
-          "name": "pageInfo",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "endCursor",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "hasNextPage",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
         }
       ],
       "storageKey": null
@@ -161,5 +138,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'cd75865c3f4e4c81f3d84294861dded9';
+(node as any).hash = 'bfd207907fc023269ac34fb8582fc8d1';
 export default node;
