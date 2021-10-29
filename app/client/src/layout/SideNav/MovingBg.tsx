@@ -11,7 +11,7 @@ export const MovingBg = () => {
             layoutId='selected'
             initial={false}
             animate={{
-                backgroundColor: theme.palette.primary.main,
+                backgroundColor: theme.palette.secondary.main,
             }}
             style={{
                 position: 'absolute',

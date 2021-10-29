@@ -24,7 +24,7 @@ export function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: _
     const classes = useStyles();
     return (
         <Zoom in timeout={300} {...ZoomProps}>
-            <MUIFab className={classes.fab} color='secondary' {...rest}>
+            <MUIFab className={classes.fab} color='primary' {...rest}>
                 {children}
             </MUIFab>
         </Zoom>
