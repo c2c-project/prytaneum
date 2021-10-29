@@ -46,13 +46,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
-    button: {
-        backgroundColor: '#ED526C',
-        color: '#FFF',
-        '&:hover': {
-            backgroundColor: '#C7374F',
-        },
-    }
 }));
 
 interface Props {
@@ -176,7 +169,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                 </FormContent>
                 <Grid container item direction='column' className={classes.buttonGroup}>
                     <LoadingButton loading={isLoading}>
-                        <Button fullWidth type='submit' variant='contained' className={classes.button}>
+                        <Button fullWidth type='submit' variant='contained' color='secondary'>
                             Login
                         </Button>
                     </LoadingButton>

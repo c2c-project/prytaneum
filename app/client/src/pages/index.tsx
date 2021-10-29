@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '85vh',
+        paddingLeft: '1rem',
     },
     header: {
         marginBottom: 20,
@@ -20,18 +21,14 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     title: {
-        fontWeight: 400,
-        fontSize: 140,
-        color: '#272C6C',
         [theme.breakpoints.down('md')]: {
-            fontSize: 100
+            marginTop: 50,
         },
         [theme.breakpoints.down('sm')]: {
-            fontSize: 110
+            marginTop: 35,
         },
         [theme.breakpoints.down('xs')]: {
-            fontWeight: 500,
-            fontSize: 56
+            marginTop: 20,
         },
     },
     subtitle: {
@@ -48,12 +45,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 20,
         minWidth: 300,
         alignSelf: 'flex-start',
-        backgroundColor: '#ED526C',
         fontSize: 24,
-        color: '#FFF',
-        '&:hover': {
-            backgroundColor: '#C7374F',
-        },
         [theme.breakpoints.down('xs')]: {
             minWidth: 0,
             width: '100%',
@@ -78,9 +70,14 @@ export default function Home() {
     return (
         <Grid container alignItems='center' className={classes.root} justify='center' spacing={2}>
             <Grid item xs={12} sm={12} md={6} className={classes.header}>
-                <Typography variant='h1' className={classes.title}>
-                    Prytaneum
-                </Typography>
+                <div className={classes.title}>
+                    <Image
+                        src='https://i.ibb.co/2nh4WDw/prytaneum-logo-full.png' 
+                        width={3483}
+                        height={665}
+                        objectFit='contain'
+                    />
+                </div>
                 <Typography variant='h5' className={classes.subtitle}>
                     A crucial tool for a better democracy.
                 </Typography>
@@ -96,9 +93,9 @@ export default function Home() {
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
                 <Image
-                    src='https://i.ibb.co/zhxkrc2/landing-illustration.png' 
-                    width={820}
-                    height={591}
+                    src='https://i.ibb.co/zP5g4xq/prytaneum-landing.png' 
+                    width={3292}
+                    height={2097}
                     objectFit='contain'
                 />
             </Grid>

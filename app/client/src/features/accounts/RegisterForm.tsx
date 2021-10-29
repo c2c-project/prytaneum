@@ -50,13 +50,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
-    button: {
-        backgroundColor: '#ED526C',
-        color: '#FFF',
-        '&:hover': {
-            backgroundColor: '#C7374F',
-        },
-    }
 }));
 const REGISTER_FORM_MUTATION = graphql`
     mutation RegisterFormMutation($input: RegistrationForm!) {
@@ -203,7 +196,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                 </FormContent>
                 <Grid container item direction='column' className={classes.btnGroup}>
                     <LoadingButton loading={isLoading}>
-                        <Button fullWidth type='submit' variant='contained' className={classes.button}>
+                        <Button fullWidth type='submit' variant='contained' color='secondary'>
                             Register
                         </Button>
                     </LoadingButton>
