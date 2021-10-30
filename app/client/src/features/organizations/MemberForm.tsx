@@ -19,7 +19,7 @@ type TSchema = {
     [key in keyof TMemberForm]: Yup.AnySchema;
 };
 const validationSchema = Yup.object().shape<TSchema>({
-    email: Yup.string().required('Please enter an email'),
+    email: Yup.string().email('Please enter a valid email').required('Please enter an email'),
 });
 
 const initialState: TMemberForm = { email: '' };

@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape<TSchema>({
     description: Yup.string().required('Please enter a description'),
     pictureUrl: Yup.string().required('Please enter a picture URL'),
     name: Yup.string().required('Please enter a name'),
-    email: Yup.string().required('Please enter an email'),
+    email: Yup.string().email('Please enter a valid email').required('Please enter an email'),
 });
 
 const useStyles = makeStyles(() => ({
