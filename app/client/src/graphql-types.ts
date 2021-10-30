@@ -1260,9 +1260,19 @@ export type UserSettings = {
   updatePassword?: Maybe<Scalars['String']>;
 };
 
+export type UserSettings = {
+  __typename?: 'UserSettings';
+  currentEmail: Scalars['String'];
+  updateEmail?: Maybe<Scalars['String']>;
+  updatePassword?: Maybe<Scalars['String']>;
+  deleteAccount: Scalars['Boolean'];
+  isAnonymous: Scalars['Boolean'];
+  isNotificationsEnabled: Scalars['Boolean'];
+};
+
 export type ValidateInvite = {
-  eventId: Scalars['ID'];
   token: Scalars['String'];
+  eventId: Scalars['ID'];
 };
 
 export type ValidateInviteQueryResponse = {

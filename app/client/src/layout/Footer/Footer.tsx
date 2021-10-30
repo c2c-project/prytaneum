@@ -29,14 +29,10 @@ export function Footer() {
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Account</Box>
                             <Box>
-                                <Link href='/' underline='hover'>
-                                    Login
-                                </Link>
+                                <Link href='/login'>Login</Link>
                             </Box>
                             <Box>
-                                <Link href='/' underline='hover'>
-                                    Sign Up
-                                </Link>
+                                <Link href='/register'>Sign Up</Link>
                             </Box>
                             <Box>
                                 <Link href='/' underline='hover'>
