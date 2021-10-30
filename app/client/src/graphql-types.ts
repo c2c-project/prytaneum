@@ -920,16 +920,6 @@ export type UserMutationResponse = MutationResponse & {
   body?: Maybe<User>;
 };
 
-export type ValidateInvite = {
-  token: Scalars['String'];
-  eventId: Scalars['ID'];
-};
-
-export type ValidateInviteQueryResponse = {
-  __typename?: 'ValidateInviteQueryResponse';
-  valid: Scalars['Boolean'];
-};
-
 export type UserSettings = {
   __typename?: 'UserSettings';
   currentEmail: Scalars['String'];
@@ -938,4 +928,14 @@ export type UserSettings = {
   deleteAccount: Scalars['Boolean'];
   isAnonymous: Scalars['Boolean'];
   isNotificationsEnabled: Scalars['Boolean'];
+};
+
+export type ValidateInvite = {
+  token: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
+export type ValidateInviteQueryResponse = {
+  __typename?: 'ValidateInviteQueryResponse';
+  valid: Scalars['Boolean'];
 };
