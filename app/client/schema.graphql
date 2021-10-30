@@ -394,6 +394,12 @@ type FeedbackOperation {
   operationType: Operation!
 }
 
+input ForgotPassRequestForm {
+  email: String!
+  newPassword: String!
+  confirmNewPassword: String!
+}
+
 input HideQuestion {
   eventId: ID!
   questionId: ID!
@@ -474,6 +480,7 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
+  resetPassword(input: ForgotPassRequestForm!): UserMutationResponse!
 
   """
   Start the event so that it is "live"

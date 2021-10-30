@@ -3,7 +3,7 @@ import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/VpnKey';
 import { makeStyles } from '@material-ui/core/styles';
 
-// import ForgotPassRequestForm from '@local/features/accounts/ForgotPassRequest';
+import { ForgotPassRequestForm } from '@local/features/accounts/ForgotPassRequestForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,11 +47,11 @@ export default function ForgotPassRequest() {
                     Forgot Password
                 </Typography>
                 <div className={classes.form}>
-                    {/* <ForgotPassRequestForm
+                    <ForgotPassRequestForm
                         onSuccess={() => {
                             router.push('/login');
                         }}
-                    /> */}
+                    />
                 </div>
             </Paper>
         </Grid>
