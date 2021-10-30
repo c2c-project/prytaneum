@@ -350,6 +350,12 @@ type EventVideoMutationResponse implements MutationResponse {
   body: EventVideo
 }
 
+input ForgotPassRequestForm {
+  email: String!
+  newPassword: String!
+  confirmNewPassword: String!
+}
+
 input HideQuestion {
   questionId: ID!
   eventId: ID!
@@ -423,6 +429,7 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
+  resetPassword(input: ForgotPassRequestForm!): UserMutationResponse!
 
   """
   Start the event so that it is "live"

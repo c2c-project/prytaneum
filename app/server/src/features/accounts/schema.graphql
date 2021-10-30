@@ -51,6 +51,12 @@ input LoginForm {
     password: String!
 }
 
+input ForgotPassRequestForm {
+    email: String!
+    newPassword: String!
+    confirmNewPassword: String!
+}
+
 type UserMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
@@ -67,6 +73,7 @@ type Query {
 type Mutation {
     register(input: RegistrationForm!): UserMutationResponse!
     login(input: LoginForm!): UserMutationResponse!
+    resetPassword(input: ForgotPassRequestForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action
     """
