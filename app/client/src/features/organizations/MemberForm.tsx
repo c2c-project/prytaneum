@@ -1,11 +1,12 @@
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
-
-import { useForm } from '@local/core';
 import type { CreateMember } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormActions } from '@local/components/FormActions';
+import { makeInitialState } from '@local/utils/ts-utils';
 
 export type TMemberForm = Pick<CreateMember, 'email'>;
 
@@ -14,20 +15,35 @@ export interface MemberFormProps {
     form?: TMemberForm;
 }
 
+type TSchema = {
+    [key in keyof TMemberForm]: Yup.AnySchema;
+};
+const validationSchema = Yup.object().shape<TSchema>({
+    email: Yup.string().required('Please enter an email'),
+});
+
 const initialState: TMemberForm = { email: '' };
 
-export function MemberForm({ onSubmit, form: formProp }: MemberFormProps) {
-    const [form, errors, handleSubmit, handleChange] = useForm(formProp ?? initialState);
+export function MemberForm(props: MemberFormProps) {
+    const { onSubmit, form } = props;
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TMemberForm>({
+        initialValues: makeInitialState(initialState, form),
+        validationSchema,
+        onSubmit,
+    });
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
             <FormTitle title='Member Form' />
             <FormContent>
                 <TextField
+                    autoFocus
+                    required
                     label='Member Email'
-                    value={form.email}
+                    value={values.email}
                     onChange={handleChange('email')}
-                    error={!!errors.email}
+                    error={Boolean(errors.email)}
                     helperText={errors.email}
                 />
             </FormContent>

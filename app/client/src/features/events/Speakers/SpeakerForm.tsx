@@ -1,13 +1,13 @@
 import * as React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-
 import type { CreateSpeaker as CreateType } from '@local/graphql-types';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { useForm } from '@local/core';
 import { NullableFields, makeInitialState } from '@local/utils/ts-utils';
 
 export type TSpeakerForm = Omit<CreateType, 'eventId' | 'id'>;
@@ -15,6 +15,17 @@ export interface SpeakerFormProps {
     onSubmit: (speaker: TSpeakerForm) => void;
     form?: NullableFields<TSpeakerForm>;
 }
+
+type TSchema = {
+    [key in keyof TSpeakerForm]: Yup.AnySchema;
+};
+const validationSchema = Yup.object().shape<TSchema>({
+    title: Yup.string().required('Please enter a title'),
+    description: Yup.string().required('Please enter a description'),
+    pictureUrl: Yup.string().required('Please enter a picture URL'),
+    name: Yup.string().required('Please enter a name'),
+    email: Yup.string().required('Please enter an email'),
+});
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -24,12 +35,19 @@ const useStyles = makeStyles(() => ({
 
 const initialState: TSpeakerForm = { title: '', description: '', pictureUrl: '', name: '', email: '' };
 
-export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
-    const [state, errors, handleSubmit, handleChange] = useForm(makeInitialState(initialState, form));
+export function SpeakerForm(props: SpeakerFormProps) {
+    const { onSubmit, form } = props;
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TSpeakerForm>({
+        initialValues: makeInitialState(initialState, form),
+        validationSchema,
+        onSubmit,
+    });
+
     const classes = useStyles();
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
             <FormTitle title='Speaker Form' />
             <FormContent className={classes.root}>
                 <TextField
@@ -37,7 +55,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     helperText={errors?.name}
                     required
                     label='Speaker Name'
-                    value={state.name}
+                    value={values.name}
                     onChange={handleChange('name')}
                 />
                 <TextField
@@ -45,7 +63,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     helperText={errors?.title}
                     required
                     label='Speaker Title'
-                    value={state.title}
+                    value={values.title}
                     onChange={handleChange('title')}
                 />
                 <TextField
@@ -53,7 +71,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     helperText={errors?.description}
                     required
                     label='Speaker Description'
-                    value={state.description}
+                    value={values.description}
                     onChange={handleChange('description')}
                 />
                 <TextField
@@ -61,7 +79,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     helperText={errors?.pictureUrl}
                     required
                     label='Picture URL'
-                    value={state.pictureUrl}
+                    value={values.pictureUrl}
                     onChange={handleChange('pictureUrl')}
                 />
                 <TextField
@@ -69,7 +87,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     helperText={errors?.email}
                     required
                     label="Speaker's Email"
-                    value={state.email}
+                    value={values.email}
                     onChange={handleChange('email')}
                 />
             </FormContent>

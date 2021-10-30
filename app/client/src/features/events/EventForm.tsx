@@ -26,7 +26,7 @@ type TSchema = {
 };
 const validationSchema = Yup.object().shape<TSchema>({
     title: Yup.string().max(100, 'Title must be less than 100 characters').required('Please enter a title'),
-    description: Yup.string(),
+    description: Yup.string().required('Please enter a description'),
     startDateTime: Yup.date()
         .max(Yup.ref('endDateTime'), 'Start date & time must be less than end date & time!')
         .required('Please enter a start date'),
