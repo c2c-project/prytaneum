@@ -400,6 +400,12 @@ input ForgotPassRequestForm {
   confirmNewPassword: String!
 }
 
+input ForgotPassRequestForm {
+  email: String!
+  newPassword: String!
+  confirmNewPassword: String!
+}
+
 input HideQuestion {
   eventId: ID!
   questionId: ID!

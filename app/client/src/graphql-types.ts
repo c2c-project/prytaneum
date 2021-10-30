@@ -461,6 +461,12 @@ export type ForgotPassRequestForm = {
   confirmNewPassword: Scalars['String'];
 };
 
+export type ForgotPassRequestForm = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String'];
+};
+
 export type HideQuestion = {
   eventId: Scalars['ID'];
   questionId: Scalars['ID'];
