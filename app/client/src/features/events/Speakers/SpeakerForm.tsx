@@ -86,6 +86,7 @@ export function SpeakerForm(props: SpeakerFormProps) {
                     error={Boolean(errors?.email)}
                     helperText={errors?.email}
                     required
+                    type='email'
                     label="Speaker's Email"
                     value={values.email}
                     onChange={handleChange('email')}

@@ -40,6 +40,7 @@ export function MemberForm(props: MemberFormProps) {
                 <TextField
                     autoFocus
                     required
+                    type='email'
                     label='Member Email'
                     value={values.email}
                     onChange={handleChange('email')}
