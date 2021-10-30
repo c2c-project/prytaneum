@@ -14,6 +14,15 @@ type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationFo
  */
 export async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
     const { email, firstName, lastName } = userData;
+
+    // validation if password is at least 8 characters
+    if (textPassword && textPassword.length < 8) throw new Error('Password must be at least 8 characters.');
+
+    // validation if password is strong
+    // strong passwords are alphanumeric with a mixture of lowercase/uppercase characters and at least one special character
+    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*., ?])');
+    if (textPassword && !regex.test(textPassword)) throw new Error('Password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.');
+
     const encryptedPassword = textPassword ? await bcrypt.hash(textPassword, 10) : null;
     return prisma.user.create({
         data: {
@@ -63,6 +72,14 @@ export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {
  */
 export async function registerSelf(prisma: PrismaClient, input: RegistrationForm) {
     if (input.password !== input.confirmPassword) throw new Error('Passwords must match');
+
+    // validation if password is at least 8 characters
+    if (input.password.length < 8) throw new Error('Password must be at least 8 characters.');
+
+    // validation if password is strong
+    // strong passwords are alphanumeric with a mixture of lowercase/uppercase characters and at least one special character
+    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*., ?])');
+    if (!regex.test(input.password)) throw new Error('Password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.');
 
     const registeredUser = await register(prisma, input, input.password);
     const token = await jwt.sign({ id: toUserId(registeredUser).id });
