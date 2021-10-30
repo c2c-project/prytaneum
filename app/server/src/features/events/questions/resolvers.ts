@@ -21,6 +21,8 @@ export const resolvers: Resolvers = {
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 const formattedQuestion = toQuestionId(question);
+                if (formattedQuestion.refQuestion)
+                    formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
                 const edge = {
                     node: formattedQuestion,
                     cursor: formattedQuestion.createdAt.getTime().toString(),
