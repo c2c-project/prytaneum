@@ -252,7 +252,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body2'>
-                    Passwords must be at least 8 characters.
+                    Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least one number, and at least one special character (e.g. +_!@#$%^&*., ?).
                 </Typography>
             </Grid>
             
