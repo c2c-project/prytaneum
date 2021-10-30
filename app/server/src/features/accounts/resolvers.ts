@@ -67,5 +67,11 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedUser);
             });
         },
+        async resetPassword(parent, args, ctx, info) {
+            return runMutation(async () => {
+                await User.resetPassword(ctx.prisma, args.input);
+                ctx.reply.clearCookie('jwt', cookieOptions);
+            });
+        },
     },
 };

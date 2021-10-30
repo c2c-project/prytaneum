@@ -3,7 +3,14 @@ import { PrismaClient } from '@app/prisma';
 import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
-import { DeleteAccountForm, LoginForm, RegistrationForm, UpdateEmailForm, UpdatePasswordForm } from '@local/graphql-types';
+import {
+    DeleteAccountForm,
+    LoginForm,
+    RegistrationForm,
+    UpdateEmailForm,
+    UpdatePasswordForm,
+    ForgotPassRequestForm 
+} from '@local/graphql-types';
 
 const toUserId = toGlobalId('User');
 
@@ -194,6 +201,40 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
 
     // return updated user and token
     return { updatedUser, token };
+}
+
+/**
+ * resets the user's password using existing email
+ */
+export async function resetPassword(prisma: PrismaClient, input: ForgotPassRequestForm) {
+    const {
+        email,
+        newPassword,
+        confirmNewPassword
+    } = input;
+    
+    // fetch user for password validation
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new Error('Resetting password failed: No user exists with this email. Please input a different email.');
+
+    // validation if new password is at least 8 characters
+    if (newPassword.length < 8) throw new Error('New password must be at least 8 characters.');
+
+    // validation if new password is strong
+    // strong passwords are alphanumeric with a mixture of lowercase/uppercase characters and at least one special character
+    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*., ?])');
+    if (!regex.test(newPassword)) throw new Error('New password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.');
+
+    // validation if new passwords match
+    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match.');
+
+    const encryptedPassword = newPassword ? await bcrypt.hash(newPassword, 10) : null;
+
+    // update user password
+    await prisma.user.update({
+        where: { email },
+        data: { password: encryptedPassword }
+    })
 }
 
 /**

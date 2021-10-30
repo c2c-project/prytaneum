@@ -145,6 +145,12 @@ export type LoginForm = {
     password: Scalars['String'];
 };
 
+export type ForgotPassRequestForm = {
+    email: Scalars['String'];
+    newPassword: Scalars['String'];
+    confirmNewPassword: Scalars['String'];
+};
+
 export type UserMutationResponse = MutationResponse & {
     __typename?: 'UserMutationResponse';
     isError: Scalars['Boolean'];
@@ -159,6 +165,7 @@ export type Mutation = {
     updateEmail: UserMutationResponse;
     updatePassword: UserMutationResponse;
     deleteAccount: UserMutationResponse;
+    resetPassword: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -219,6 +226,10 @@ export type MutationupdatePasswordArgs = {
 
 export type MutationdeleteAccountArgs = {
     input: DeleteAccountForm;
+};
+
+export type MutationresetPasswordArgs = {
+    input: ForgotPassRequestForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -995,6 +1006,7 @@ export type ResolversTypes = {
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
+    ForgotPassRequestForm: ForgotPassRequestForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
@@ -1095,6 +1107,7 @@ export type ResolversParentTypes = {
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
+    ForgotPassRequestForm: ForgotPassRequestForm;
     UserMutationResponse: UserMutationResponse;
     Mutation: {};
     Event: Event;
@@ -1326,6 +1339,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationdeleteAccountArgs, 'input'>
+    >;
+    resetPassword?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<

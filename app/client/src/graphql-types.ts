@@ -397,6 +397,12 @@ export type EventVideoMutationResponse = MutationResponse & {
   body?: Maybe<EventVideo>;
 };
 
+export type ForgotPassRequestForm = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String'];
+};
+
 export type HideQuestion = {
   questionId: Scalars['ID'];
   eventId: Scalars['ID'];
@@ -464,6 +470,7 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
+  resetPassword: UserMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
@@ -600,6 +607,11 @@ export type MutationRegisterArgs = {
 
 export type MutationRemoveQuestionFromQueueArgs = {
   input: RemoveQuestionFromQueue;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ForgotPassRequestForm;
 };
 
 
