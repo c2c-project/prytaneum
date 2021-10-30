@@ -39,8 +39,16 @@ const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 const base = createMuiTheme({
     typography: {
+        fontFamily: '\'Manrope\', sans-serif',
+        h4: {
+            fontWeight: 600,
+        },
+        h6: {
+            fontWeight: 600,
+        },
         button: {
             lineHeight: '1.75em',
+            fontWeight: 600,
             // fontSize: 'rem',
         },
     },
