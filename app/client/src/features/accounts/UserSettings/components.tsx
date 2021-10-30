@@ -22,11 +22,14 @@ import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
 import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useSnack } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMutation } from 'react-relay';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { makeInitialState } from '@local/utils/ts-utils';
 import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql'
 import type { UpdatePasswordFormMutation } from '@local/__generated__/UpdatePasswordFormMutation.graphql'
 import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql'
@@ -35,26 +38,58 @@ import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
 import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
 import text from './help-text';
 
-const initialModifyUserEmail = {
-    newEmail: '',
+// used for modifying user email
+export type TUpdateEmailForm = { newEmail: string };
+
+type TUpdateEmailSchema = {
+    [key in keyof TUpdateEmailForm]: Yup.AnySchema;
+};
+const updateEmailValidationSchema = Yup.object().shape<TUpdateEmailSchema>({
+    newEmail: Yup.string().email('Please enter a valid email'),
+});
+
+const initialModifyUserEmail: TUpdateEmailForm = { newEmail: '' };
+
+// used for modifying user password
+export type TUpdatePasswordForm = {
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string,
 };
 
-export type TUpdateEmailForm = typeof initialModifyUserEmail;
+type TUpdatePasswordSchema = {
+    [key in keyof TUpdatePasswordForm]: Yup.AnySchema;
+};
+const updatePasswordValidationSchema = Yup.object().shape<TUpdatePasswordSchema>({
+    oldPassword: Yup.string(),
+    newPassword: Yup.string(),
+    confirmNewPassword: Yup.string(),
+});
 
-const initialModifyUserPassword = {
+const initialModifyUserPassword: TUpdatePasswordForm = {
     oldPassword: '',
     newPassword: '',
     confirmNewPassword: '',
 };
 
-export type TUpdatePasswordForm = typeof initialModifyUserPassword;
+// used for deleting user account
+export type TDeleteAccountForm = {
+    password: string,
+    confirmPassword: string,
+};
 
-const intiialDeleteAccount = {
+type TDeleteAccountSchema = {
+    [key in keyof TDeleteAccountForm]: Yup.AnySchema;
+};
+const deleteAccountValidationSchema = Yup.object().shape<TDeleteAccountSchema>({
+    password: Yup.string(),
+    confirmPassword: Yup.string(),
+});
+
+const intiialDeleteAccount: TDeleteAccountForm = {
     password: '',
     confirmPassword: '',
 };
-
-export type TDeleteAccountForm = typeof intiialDeleteAccount;
 
 /* DEPTH = 3 CURRYING HERE, 
     top to bottom: 
@@ -145,7 +180,6 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
 
 export function ModifyUserEmail({ user }: { user: User }) {
     // form state hooks
-    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserEmail);
     const [commit] = useMutation<UpdateEmailFormMutation>(UPDATE_EMAIL_FORM_MUTATION);
 
     // user feedback
@@ -156,6 +190,12 @@ export function ModifyUserEmail({ user }: { user: User }) {
     // styling hook
     const classes = useStyles();
 
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TUpdateEmailForm>({
+        initialValues: makeInitialState(initialModifyUserEmail),
+        validationSchema: updateEmailValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
     function handleCommit(submittedForm: TUpdateEmailForm) {
         // add user email to input passed into the commit
         const userEmail = user.email ? user.email : ''
@@ -168,8 +208,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                 } else {
                     displaySnack('Email changed successfully!');
                     setUser(updateEmail.body);
-                    // clear form
-                    form.newEmail = '';
+                    resetForm();
                 }
             },
         });
@@ -190,7 +229,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                     A verification email will be sent to the new email to confirm the update.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your new email' }}
@@ -200,7 +239,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                         required
                         type='email'
                         variant='outlined'
-                        value={form.newEmail}
+                        value={values.newEmail}
                         onChange={handleChange('newEmail')}
                         spellCheck={false}
                     />
@@ -218,7 +257,6 @@ export function ModifyUserEmail({ user }: { user: User }) {
 export function ModifyUserPassword({ user }: { user: User }) {
     // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
-    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
     const [commit] = useMutation<UpdatePasswordFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
 
     // user feedback
@@ -228,7 +266,13 @@ export function ModifyUserPassword({ user }: { user: User }) {
 
     // styling hook
     const classes = useStyles();
-    
+
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TUpdatePasswordForm>({
+        initialValues: makeInitialState(initialModifyUserPassword),
+        validationSchema: updatePasswordValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
     function handleCommit(submittedForm: TUpdatePasswordForm) {
         // add user email to input passed into the commit
         const userEmail = user.email ? user.email : ''
@@ -241,10 +285,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                 } else {
                     displaySnack('Password changed successfully!');
                     setUser(updatePassword.body);
-                    // clear form
-                    form.oldPassword = ''
-                    form.newPassword = ''
-                    form.confirmNewPassword = ''
+                    resetForm()
                 }
             },
         });
@@ -261,7 +302,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                 </Typography>
             </Grid>
             
-            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your old password' }}
@@ -271,7 +312,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.oldPassword}
+                        value={values.oldPassword}
                         onChange={handleChange('oldPassword')}
                         spellCheck={false}
                     />
@@ -282,7 +323,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                         required
                         variant='outlined'
                         type={isPassVisible ? 'text' : 'password'}
-                        value={form.newPassword}
+                        value={values.newPassword}
                         onChange={handleChange('newPassword')}
                         spellCheck={false}
                         InputProps={{
@@ -296,9 +337,9 @@ export function ModifyUserPassword({ user }: { user: User }) {
                                         edge='end'
                                     >
                                         {isPassVisible ? (
-                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                            <VisibilityOff color={errors.newPassword ? 'error' : undefined} />
                                         ) : (
-                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                            <Visibility color={errors.newPassword ? 'error' : undefined} />
                                         )}
                                     </IconButton>
                                 </InputAdornment>
@@ -312,7 +353,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                         required
                         variant='outlined'
                         type={isPassVisible ? 'text' : 'password'}
-                        value={form.confirmNewPassword}
+                        value={values.confirmNewPassword}
                         onChange={handleChange('confirmNewPassword')}
                         spellCheck={false}
                         InputProps={{
@@ -326,9 +367,9 @@ export function ModifyUserPassword({ user }: { user: User }) {
                                         edge='end'
                                     >
                                         {isPassVisible ? (
-                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                            <VisibilityOff color={errors.confirmNewPassword ? 'error' : undefined} />
                                         ) : (
-                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                            <Visibility color={errors.confirmNewPassword ? 'error' : undefined} />
                                         )}
                                     </IconButton>
                                 </InputAdornment>
@@ -438,7 +479,6 @@ export const DisableAccount = () => {
 
 export function DeleteAccount({ user }: { user: User }) {
     // form state hooks
-    const [form, errors, handleSubmit, handleChange] = useForm(intiialDeleteAccount);
     const [commit] = useMutation<DeleteAccountFormMutation>(DELETE_ACCOUNT_FORM_MUTATION);
 
     // user feedback
@@ -450,6 +490,12 @@ export function DeleteAccount({ user }: { user: User }) {
     // styling hook
     const classes = useStyles();
 
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TDeleteAccountForm>({
+        initialValues: makeInitialState(intiialDeleteAccount),
+        validationSchema: deleteAccountValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
     function handleCommit(submittedForm: TDeleteAccountForm) {
         // add user email to input passed into the commit
         const userEmail = user.email ? user.email : ''
@@ -461,6 +507,7 @@ export function DeleteAccount({ user }: { user: User }) {
                     displaySnack(deleteAccount.message);
                 } else {
                     displaySnack('Account deleted successfully!');
+                    resetForm();
                     // route to login after successfully deleting account
                     router.push('/login');
                 }
@@ -484,7 +531,7 @@ export function DeleteAccount({ user }: { user: User }) {
                     twice to confirm.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your password' }}
@@ -494,7 +541,7 @@ export function DeleteAccount({ user }: { user: User }) {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.password}
+                        value={values.password}
                         onChange={handleChange('password')}
                         spellCheck={false}
                     />
@@ -506,7 +553,7 @@ export function DeleteAccount({ user }: { user: User }) {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.confirmPassword}
+                        value={values.confirmPassword}
                         onChange={handleChange('confirmPassword')}
                         spellCheck={false}
                     />
