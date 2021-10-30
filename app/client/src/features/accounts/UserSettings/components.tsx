@@ -9,7 +9,11 @@ import {
     Button,
     Grid,
     Link as MUILink,
+    IconButton,
+    InputAdornment,
 } from '@material-ui/core';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
@@ -213,6 +217,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
 
 export function ModifyUserPassword({ user }: { user: User }) {
     // form state hooks
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
     const [commit] = useMutation<UpdatePasswordFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
 
@@ -271,28 +276,64 @@ export function ModifyUserPassword({ user }: { user: User }) {
                         spellCheck={false}
                     />
                     <TextField
-                        inputProps={{ 'aria-label': 'Enter your new password' }}
                         label='Enter your new password'
                         helperText={errors.newPassword}
                         error={Boolean(errors.newPassword)}
                         required
                         variant='outlined'
-                        type='password'
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.newPassword}
                         onChange={handleChange('newPassword')}
                         spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <TextField
-                        inputProps={{ 'aria-label': 'Enter your new password again' }}
                         label='Confirm your new password'
                         helperText={errors.confirmNewPassword}
                         error={Boolean(errors.confirmNewPassword)}
                         required
                         variant='outlined'
-                        type='password'
+                        type={isPassVisible ? 'text' : 'password'}
                         value={form.confirmNewPassword}
                         onChange={handleChange('confirmNewPassword')}
                         spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password again',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.password ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.password ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </FormContent>
                 <Grid component='span' item xs={12}>
