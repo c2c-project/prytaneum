@@ -633,15 +633,6 @@ type UserMutationResponse implements MutationResponse {
   body: User
 }
 
-type UserSettings {
-  currentEmail: String!
-  updateEmail: String
-  updatePassword: String
-  deleteAccount: Boolean!
-  isAnonymous: Boolean!
-  isNotificationsEnabled: Boolean!
-}
-
 input ValidateInvite {
   token: String!
   eventId: ID!
@@ -649,4 +640,13 @@ input ValidateInvite {
 
 type ValidateInviteQueryResponse {
   valid: Boolean!
+}
+
+type UserSettings {
+  currentEmail: String!
+  updateEmail: String
+  updatePassword: String
+  deleteAccount: Boolean!
+  isAnonymous: Boolean!
+  isNotificationsEnabled: Boolean!
 }

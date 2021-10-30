@@ -111,13 +111,13 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <StyledListItem button onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
+                {/* <StyledListItem button onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
                     {selected === 'Dashboard' && <MovingBg />}
                     <StyledListItemIcon>
                         <DashboardIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='Dashboard' />
-                </StyledListItem>
+                </StyledListItem> */}
                 <>
                     <StyledSubheader>Organizations</StyledSubheader>
                     <StyledDivider />
