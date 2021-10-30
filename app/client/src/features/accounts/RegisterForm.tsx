@@ -141,7 +141,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                         id='register-password'
                         required
                         error={Boolean(errors.password)}
-                        helperText={errors.password || 'Passwords must be at least 8 characters'}
+                        helperText={errors.password || 'Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least one number, and at least one special character (e.g. -+_!@#$%^&*., ?)'}
                         type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
                         onChange={handleChange('password')}
