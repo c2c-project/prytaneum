@@ -105,20 +105,24 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     <CreateInvite onSubmit={close} eventId={eventId} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Grid item container justifyContent='center' direction='column' alignItems='flex-end'>
-                <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
-                    Invite
-                </Button>
-                <LoadingButton loading={false}>
-                    <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
-                        Invite Link
-                    </Button>
-                </LoadingButton>
-                <Grid item container justifyContent='center' xs={12}>
+            <Grid container justify='center'>
+                <Grid item justify='center' xs={6}>
+                    <LoadingButton loading={false}>
+                        <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
+                            {open ? 'Hide invite link' : 'Reveal invite link'}
+                        </Button>
+                    </LoadingButton>
+                </Grid>
+                <Grid item container justify='center' xs={6}>
                     <Collapse in={open}>
                         <CopyText TextFieldProps={{ label: 'Invite Link' }} className={classes.text} text={link} />
                     </Collapse>
                 </Grid>
+            </Grid>
+            <Grid item container justify='center' direction='column' alignItems='flex-end'>
+                <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
+                    Invite
+                </Button>
             </Grid>
         </Grid>
     );
