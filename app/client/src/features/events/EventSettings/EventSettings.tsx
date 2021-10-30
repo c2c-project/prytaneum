@@ -90,12 +90,9 @@ export function EventSettings({ queryRef }: Props) {
     return (
         <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
             <div className={classes.root}>
-                <Typography variant='h2' className={classes.title}>
-                    Event Settings
-                </Typography>
-                <Divider className={classes.titleDivider} />
                 {data.node && (
                     <SettingsMenu
+                        title='Event Settings'
                         config={[
                             {
                                 title: 'Details',
