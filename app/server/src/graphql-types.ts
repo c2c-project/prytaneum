@@ -185,15 +185,22 @@ export type Mutation = {
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
     removeQuestionFromQueue: EventQuestionMutationResponse;
+    /** TODO: #QQRedesign delete once code complete */
     updateQuestionQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
     /** Removes a moderator from a given event */
     deleteModerator: ModeratorMutationResponse;
-    /** Advance the current question */
+    /**
+     * Advance the current question
+     * TODO: make this an EventMutationResponse
+     */
     nextQuestion: Event;
-    /** Go to the previous question */
+    /**
+     * Go to the previous question
+     * TODO: make this an EventMutationResponse
+     */
     prevQuestion: Event;
     createQuestion: EventQuestionMutationResponse;
     alterLike: EventQuestionMutationResponse;

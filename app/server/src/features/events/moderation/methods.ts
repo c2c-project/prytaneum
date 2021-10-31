@@ -133,20 +133,25 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     });
     if (!queryResult) throw new Error(errors.DNE('Event'));
 
-    const question = await prisma.eventQuestion.findFirst({
+    // the "next" question, where next can be +1 or -1
+    const nextQuestion = await prisma.eventQuestion.findFirst({
         where: { position: { [change === 1 ? 'gt' : 'lt']: queryResult.currentQuestion }, eventId },
-        take: 1,
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
 
-    if (!question) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+    // could be null and that's okay, since we don't always have a currentQuestion -- start of event for example
+    const currentQuestion = await prisma.eventQuestion.findFirst({
+        where: { position: queryResult.currentQuestion },
+    });
 
-    const result = await prisma.event.update({
+    if (!nextQuestion) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+
+    const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: question.position },
+        data: { currentQuestion: nextQuestion.position },
         select: { currentQuestion: true, id: true },
     });
-    return result;
+    return { event: updatedEvent, currentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
 }
 
 /**
@@ -204,7 +209,7 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     });
     if (!queryResult) throw new Error(errors.DNE('Event'));
 
-    const question = await prisma.eventQuestion.findUnique({ where: { id: input.questionId }});
+    const question = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
     if (!question) throw new Error('Question cannot be found');
     if (queryResult.currentQuestion === question.position) {
         return question;
