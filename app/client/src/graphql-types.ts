@@ -369,6 +369,20 @@ export type EventQuestionQueue = {
     enqueuedQuestions?: Maybe<EventQuestionConnection>;
 };
 
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueueQuestionRecordArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueueEnqueuedQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
 export type EventSpeaker = Node & {
     __typename?: 'EventSpeaker';
     /** Description set by the organizer of the event */
@@ -473,52 +487,55 @@ export type ModeratorMutationResponse = MutationResponse & {
 };
 
 export type Mutation = {
-    __typename?: 'Mutation';
-    addQuestionToQueue: EventQuestionMutationResponse;
-    alterLike: EventQuestionMutationResponse;
-    createEvent: EventMutationResponse;
-    createFeedback?: Maybe<EventFeedbackMutationResponse>;
-    createInvite: InviteMutationResponse;
-    /** Adds a new member and returns the new user added */
-    createMember: UserMutationResponse;
-    /** Add a new moderator to the given event */
-    createModerator: ModeratorMutationResponse;
-    createOrganization: OrganizationMutationResponse;
-    createQuestion: EventQuestionMutationResponse;
-    createSpeaker: EventSpeakerMutationResponse;
-    createVideo: EventVideoMutationResponse;
-    deleteAccount: UserMutationResponse;
-    deleteEvent: EventMutationResponse;
-    /** Delete a member from the organization */
-    deleteMember: UserMutationResponse;
-    /** Removes a moderator from a given event */
-    deleteModerator: ModeratorMutationResponse;
-    deleteOrganization: OrganizationMutationResponse;
-    deleteSpeaker: EventSpeakerMutationResponse;
-    deleteVideo: EventVideoMutationResponse;
-    /** End the event so that it is not live */
-    endEvent: EventMutationResponse;
-    hideQuestion?: Maybe<EventQuestion>;
-    login: UserMutationResponse;
-    /** The logout just returns the timestamp of the logout action */
-    logout: Scalars['Date'];
-    /** Advance the current question */
-    nextQuestion: Event;
-    /** Go to the previous question */
-    prevQuestion: Event;
-    register: UserMutationResponse;
-    removeQuestionFromQueue: EventQuestionMutationResponse;
-    /** Start the event so that it is "live" */
-    startEvent: EventMutationResponse;
-    updateEmail: UserMutationResponse;
-    updateEvent: EventMutationResponse;
-    updateModerator: ModeratorMutationResponse;
-    updateOrganization: OrganizationMutationResponse;
-    updatePassword: UserMutationResponse;
-    updateQuestionPosition: EventQuestionMutationResponse;
-    updateQuestionQueue: EventQuestionMutationResponse;
-    updateSpeaker: EventSpeakerMutationResponse;
-    updateVideo: EventVideoMutationResponse;
+  __typename?: 'Mutation';
+  addQuestionToQueue: EventQuestionMutationResponse;
+  alterLike: EventQuestionMutationResponse;
+  createEvent: EventMutationResponse;
+  createFeedback?: Maybe<EventLiveFeedback>;
+  createInvite: InviteMutationResponse;
+  /** Adds a new member and returns the new user added */
+  createMember: UserMutationResponse;
+  /** Add a new moderator to the given event */
+  createModerator: ModeratorMutationResponse;
+  createOrganization: OrganizationMutationResponse;
+  createQuestion: EventQuestionMutationResponse;
+  createSpeaker: EventSpeakerMutationResponse;
+  createVideo: EventVideoMutationResponse;
+  deleteEvent: EventMutationResponse;
+  /** Delete a member from the organization */
+  deleteMember: UserMutationResponse;
+  /** Removes a moderator from a given event */
+  deleteModerator: ModeratorMutationResponse;
+  deleteOrganization: OrganizationMutationResponse;
+  deleteSpeaker: EventSpeakerMutationResponse;
+  deleteVideo: EventVideoMutationResponse;
+  /** End the event so that it is not live */
+  endEvent: EventMutationResponse;
+  hideQuestion?: Maybe<EventQuestion>;
+  login: UserMutationResponse;
+  /** The logout just returns the timestamp of the logout action */
+  logout: Scalars['Date'];
+  /**
+   * Advance the current question
+   * TODO: make this an EventMutationResponse
+   */
+  nextQuestion: Event;
+  /**
+   * Go to the previous question
+   * TODO: make this an EventMutationResponse
+   */
+  prevQuestion: Event;
+  register: UserMutationResponse;
+  removeQuestionFromQueue: EventQuestionMutationResponse;
+  /** Start the event so that it is "live" */
+  startEvent: EventMutationResponse;
+  updateEvent: EventMutationResponse;
+  updateModerator: ModeratorMutationResponse;
+  updateOrganization: OrganizationMutationResponse;
+  updateQuestionPosition: EventQuestionMutationResponse;
+  updateQuestionQueue: EventQuestionMutationResponse;
+  updateSpeaker: EventSpeakerMutationResponse;
+  updateVideo: EventVideoMutationResponse;
 };
 
 export type MutationAddQuestionToQueueArgs = {

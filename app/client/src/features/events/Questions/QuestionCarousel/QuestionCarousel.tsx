@@ -6,7 +6,8 @@ import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { graphql, useRefetchableFragment, useSubscription } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
-import type { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
+import type { QuestionCarouselAddedSubscription } from '@local/__generated__/QuestionCarouselAddedSubscription.graphql';
+import type { QuestionCarouselRemovedSubscription } from '@local/__generated__/QuestionCarouselRemovedSubscription.graphql';
 import { useEvent } from '@local/features/events';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
@@ -29,24 +30,40 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
     @argumentDefinitions(first: { type: Int, defaultValue: 100 }, after: { type: String, defaultValue: "" }) {
         id
         currentQuestion
-        queuedQuestions(first: $first, after: $after) {
-            edges {
-                cursor
-                node {
-                    position
-                    ...QuestionAuthorFragment
-                    ...QuestionContentFragment
+        questionQueue {
+            questionRecord(first: $first, after: $after) @connection(key: "QuestionCarousel_questionRecord") {
+                __id
+                edges {
+                    cursor
+                    node {
+                        position
+                        ...QuestionAuthorFragment
+                        ...QuestionContentFragment
+                    }
                 }
             }
         }
     }
 `;
 
-export const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
-    subscription QuestionCarouselSubscription($eventId: ID!) {
-        eventUpdates(eventId: $eventId) {
-            id
-            currentQuestion
+export const QUESTION_CAROUSEL_ADDED_SUBSCRIPTION = graphql`
+    subscription QuestionCarouselAddedSubscription($eventId: ID!, $connections: [ID!]!) {
+        questionAddedToRecord(eventId: $eventId) @appendEdge(connections: $connections) {
+            node {
+                id
+                ...QuestionAuthorFragment
+                ...QuestionContentFragment
+            }
+        }
+    }
+`;
+
+export const QUESTION_CAROUSEL_REMOVED_SUBSCRIPTION = graphql`
+    subscription QuestionCarouselRemovedSubscription($eventId: ID!, $connections: [ID!]!) {
+        questionRemovedFromRecord(eventId: $eventId) {
+            node {
+                id @deleteEdge(connections: $connections)
+            }
         }
     }
 `;
@@ -92,34 +109,45 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
     const [data, refetch] = useRefetchableFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
     const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
     const { eventId } = useEvent();
-    const config = useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
+    const questionCarouselAddedConfig = useMemo<GraphQLSubscriptionConfig<QuestionCarouselAddedSubscription>>(
         () => ({
-            variables: { eventId },
-            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
-            updater: () => {
-                refetch({}, { fetchPolicy: 'store-and-network' });
-            }
+            variables: {
+                eventId,
+                connections: data.questionQueue?.questionRecord?.__id ? [data.questionQueue.questionRecord.__id] : [],
+            },
+            subscription: QUESTION_CAROUSEL_ADDED_SUBSCRIPTION,
         }),
-        [eventId, refetch]
+        [eventId, data.questionQueue?.questionRecord?.__id]
     );
-    useSubscription(config);
+    const questionCarouselRemovedConfig = useMemo<GraphQLSubscriptionConfig<QuestionCarouselRemovedSubscription>>(
+        () => ({
+            variables: {
+                eventId,
+                connections: data.questionQueue?.questionRecord?.__id ? [data.questionQueue.questionRecord.__id] : [],
+            },
+            subscription: QUESTION_CAROUSEL_ADDED_SUBSCRIPTION,
+        }),
+        [eventId, data.questionQueue?.questionRecord?.__id]
+    );
+    useSubscription(questionCarouselAddedConfig);
+    useSubscription(questionCarouselRemovedConfig);
 
+    // somewhat redundant, but ensures that everything is sorted
     const sortedQuestions = useMemo(
         () =>
-            data.queuedQuestions?.edges
+            data.questionQueue?.questionRecord?.edges
                 ?.slice(0)
                 .sort((edgeA, edgeB) =>
                     edgeA.node.position && edgeB.node.position ? edgeA.node.position - edgeB.node.position : 0
                 ) ?? [],
         [data]
     );
-    const currQuestionIdx = useMemo(
-        () => sortedQuestions.findIndex(({ node }) => node.position !== null && node.position === data.currentQuestion),
-        [sortedQuestions, data.currentQuestion]
-    );
+
+    const currQuestionIdx = useMemo(() => sortedQuestions.length - 1, [sortedQuestions]);
 
     useEffect(() => {
-        if (state.currQuestionIdx !== currQuestionIdx) dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
+        if (state.currQuestionIdx !== currQuestionIdx)
+            dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
     }, [currQuestionIdx, state.currQuestionIdx]);
 
     // probably a better way to do this, but whatever

@@ -7,14 +7,17 @@ import { FragmentRefs } from "relay-runtime";
 export type QuestionCarouselFragment = {
     readonly id: string;
     readonly currentQuestion: number | null;
-    readonly queuedQuestions: {
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-            };
-        }> | null;
+    readonly questionQueue: {
+        readonly questionRecord: {
+            readonly __id: string;
+            readonly edges: ReadonlyArray<{
+                readonly cursor: string;
+                readonly node: {
+                    readonly position: number | null;
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+                };
+            }> | null;
+        } | null;
     } | null;
     readonly " $refType": "QuestionCarouselFragment";
 };
@@ -41,14 +44,17 @@ const node: ReaderFragment = {
   ],
   "kind": "Fragment",
   "metadata": {
-    "refetch": {
-      "connection": null,
-      "fragmentPathInResult": [
-        "node"
-      ],
-      "operation": require('./QuestionCarouselFragmentRefetchable.graphql.ts'),
-      "identifierField": "id"
-    }
+    "connection": [
+      {
+        "count": "first",
+        "cursor": "after",
+        "direction": "forward",
+        "path": [
+          "questionQueue",
+          "questionRecord"
+        ]
+      }
+    ]
   },
   "name": "QuestionCarouselFragment",
   "selections": [
@@ -68,65 +74,109 @@ const node: ReaderFragment = {
     },
     {
       "alias": null,
-      "args": [
-        {
-          "kind": "Variable",
-          "name": "after",
-          "variableName": "after"
-        },
-        {
-          "kind": "Variable",
-          "name": "first",
-          "variableName": "first"
-        }
-      ],
-      "concreteType": "EventQuestionConnection",
+      "args": null,
+      "concreteType": "EventQuestionQueue",
       "kind": "LinkedField",
-      "name": "queuedQuestions",
+      "name": "questionQueue",
       "plural": false,
       "selections": [
         {
-          "alias": null,
+          "alias": "questionRecord",
           "args": null,
-          "concreteType": "EventQuestionEdge",
+          "concreteType": "EventQuestionConnection",
           "kind": "LinkedField",
-          "name": "edges",
-          "plural": true,
+          "name": "__QuestionCarousel_questionRecord_connection",
+          "plural": false,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "kind": "ScalarField",
-              "name": "cursor",
+              "concreteType": "EventQuestionEdge",
+              "kind": "LinkedField",
+              "name": "edges",
+              "plural": true,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "cursor",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "EventQuestion",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "position",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "__typename",
+                      "storageKey": null
+                    },
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "QuestionAuthorFragment"
+                    },
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "QuestionContentFragment"
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
               "storageKey": null
             },
             {
               "alias": null,
               "args": null,
-              "concreteType": "EventQuestion",
+              "concreteType": "PageInfo",
               "kind": "LinkedField",
-              "name": "node",
+              "name": "pageInfo",
               "plural": false,
               "selections": [
                 {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
-                  "name": "position",
+                  "name": "endCursor",
                   "storageKey": null
                 },
                 {
+                  "alias": null,
                   "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "QuestionAuthorFragment"
-                },
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "QuestionContentFragment"
+                  "kind": "ScalarField",
+                  "name": "hasNextPage",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
+            },
+            {
+              "kind": "ClientExtension",
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "__id",
+                  "storageKey": null
+                }
+              ]
             }
           ],
           "storageKey": null
@@ -138,5 +188,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'bfd207907fc023269ac34fb8582fc8d1';
+(node as any).hash = 'bcc0cc6f20e68108a4b122411ec54bbd';
 export default node;

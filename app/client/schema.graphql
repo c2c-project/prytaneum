@@ -377,8 +377,8 @@ type EventQuestionQueue {
     """
     last index is current question
     """
-    questionRecord: EventQuestionConnection
-    enqueuedQuestions: EventQuestionConnection
+    questionRecord(first: Int, after: String): EventQuestionConnection
+    enqueuedQuestions(first: Int, after: String): EventQuestionConnection
 }
 
 type EventSpeaker implements Node {
@@ -548,11 +548,13 @@ type Mutation {
 
     """
     Advance the current question
+    TODO: make this an EventMutationResponse
     """
     nextQuestion(eventId: ID!): Event!
 
     """
     Go to the previous question
+    TODO: make this an EventMutationResponse
     """
     prevQuestion(eventId: ID!): Event!
     register(input: RegistrationForm!): UserMutationResponse!
