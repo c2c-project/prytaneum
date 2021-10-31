@@ -54,8 +54,8 @@ type EventQuestionQueue {
     """
     last index is current question
     """
-    questionRecord: EventQuestionConnection
-    enqueuedQuestions: EventQuestionConnection
+    questionRecord(first: Int, after: String): EventQuestionConnection
+    enqueuedQuestions(first: Int, after: String): EventQuestionConnection
 }
 
 type EventQuestionEdge {

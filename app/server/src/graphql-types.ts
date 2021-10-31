@@ -822,6 +822,18 @@ export type EventQuestionQueue = {
     enqueuedQuestions?: Maybe<EventQuestionConnection>;
 };
 
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueuequestionRecordArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueueenqueuedQuestionsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
 export type EventQuestionEdge = {
     __typename?: 'EventQuestionEdge';
     node: EventQuestion;
@@ -2012,8 +2024,18 @@ export type EventQuestionQueueResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventQuestionQueue'] = ResolversParentTypes['EventQuestionQueue']
 > = {
-    questionRecord?: Resolver<Maybe<ResolversTypes['EventQuestionConnection']>, ParentType, ContextType>;
-    enqueuedQuestions?: Resolver<Maybe<ResolversTypes['EventQuestionConnection']>, ParentType, ContextType>;
+    questionRecord?: Resolver<
+        Maybe<ResolversTypes['EventQuestionConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventQuestionQueuequestionRecordArgs, never>
+    >;
+    enqueuedQuestions?: Resolver<
+        Maybe<ResolversTypes['EventQuestionConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventQuestionQueueenqueuedQuestionsArgs, never>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2425,8 +2447,18 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     };
 
     EventQuestionQueue?: {
-        questionRecord?: LoaderResolver<Maybe<EventQuestionConnection>, EventQuestionQueue, {}, TContext>;
-        enqueuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, EventQuestionQueue, {}, TContext>;
+        questionRecord?: LoaderResolver<
+            Maybe<EventQuestionConnection>,
+            EventQuestionQueue,
+            EventQuestionQueuequestionRecordArgs,
+            TContext
+        >;
+        enqueuedQuestions?: LoaderResolver<
+            Maybe<EventQuestionConnection>,
+            EventQuestionQueue,
+            EventQuestionQueueenqueuedQuestionsArgs,
+            TContext
+        >;
     };
 
     EventQuestionEdge?: {
