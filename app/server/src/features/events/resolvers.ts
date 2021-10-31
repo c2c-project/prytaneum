@@ -126,6 +126,7 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             return Event.isModerator(ctx.viewer.id, eventId, ctx.prisma);
         },
+        // TODO: #QQRedesign delete after code complete
         async queuedQuestions(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findQueuedQuestionsByEventId(eventId, ctx.prisma);

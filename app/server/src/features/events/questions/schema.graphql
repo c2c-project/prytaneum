@@ -47,6 +47,17 @@ type EventQuestion implements Node {
     isMyQuestion: Boolean
 }
 
+"""
+EventQuestionQueue is the entire queue of the event
+"""
+type EventQuestionQueue {
+    """
+    last index is current question
+    """
+    questionRecord: EventQuestionConnection
+    enqueuedQuestions: EventQuestionConnection
+}
+
 type EventQuestionEdge {
     node: EventQuestion!
     cursor: String!
@@ -84,6 +95,9 @@ type EventQuestionMutationResponse implements MutationResponse {
     body: EventQuestionEdge
 }
 
+"""
+TODO: #QQRedesign dlete after code complete
+"""
 type QuestionOperation {
     operationType: Operation!
     edge: EventQuestionEdge!
@@ -97,8 +111,19 @@ type Mutation {
 type Subscription {
     """
     Question subscription for all operations performed on questions
+    TODO: #QQRedesign delete after code complete
     """
     questionCRUD(eventId: ID!): QuestionOperation!
+
+    questionCreated(eventId: ID!): EventQuestionEdge!
+    questionUpdated(eventId: ID!): EventQuestionEdge!
+    questionDeleted(eventId: ID!): EventQuestionEdge!
+
+    questionAddedToRecord(eventId: ID!): EventQuestionEdge!
+    questionRemovedFromRecord(eventId: ID!): EventQuestionEdge!
+
+    questionAddedToEnqueued(eventId: ID!): EventQuestionEdge!
+    questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdge!
 }
 
 type Query {

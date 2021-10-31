@@ -63,6 +63,7 @@ export const resolvers: Resolvers = {
         },
     },
     Subscription: {
+        // TODO: #QQRedesign delete after code complete
         questionCRUD: {
             subscribe: withFilter<{ questionCRUD: QuestionOperation }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),

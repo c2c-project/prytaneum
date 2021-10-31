@@ -391,8 +391,13 @@ export type Event = Node & {
     invited?: Maybe<UserConnection>;
     /** Whether or not the viewer is invited */
     isViewerInvited?: Maybe<Scalars['Boolean']>;
-    /** Questions queued in this session by the moderator(s) */
+    /**
+     * Questions queued in this session by the moderator(s)
+     * TODO: #QQRedesign delete after code complete
+     */
     queuedQuestions?: Maybe<EventQuestionConnection>;
+    /** Questions having to do with the queue */
+    questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
     currentQuestion?: Maybe<Scalars['Int']>;
 };
@@ -433,6 +438,11 @@ export type EventinvitedArgs = {
 };
 
 export type EventqueuedQuestionsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+export type EventquestionQueueArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -486,16 +496,30 @@ export type EventMutationResponse = MutationResponse & {
 
 export type Subscription = {
     __typename?: 'Subscription';
+    /** TODO: #QQRedesign delete after code complete */
     eventUpdates: Event;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
-    /** subscription for whenever questions are added to the queue */
+    /**
+     * subscription for whenever questions are added to the queue
+     * TODO: #QQRedesign delete once code complete
+     */
     questionQueued: EventQuestion;
-    /** Question subscription for all operations performed on questions */
+    /**
+     * Question subscription for all operations performed on questions
+     * TODO: #QQRedesign delete after code complete
+     */
     questionCRUD: QuestionOperation;
+    questionCreated: EventQuestionEdge;
+    questionUpdated: EventQuestionEdge;
+    questionDeleted: EventQuestionEdge;
+    questionAddedToRecord: EventQuestionEdge;
+    questionRemovedFromRecord: EventQuestionEdge;
+    questionAddedToEnqueued: EventQuestionEdge;
+    questionRemovedFromEnqueued: EventQuestionEdge;
 };
 
 export type SubscriptioneventUpdatesArgs = {
@@ -515,6 +539,34 @@ export type SubscriptionquestionQueuedArgs = {
 };
 
 export type SubscriptionquestionCRUDArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionUpdatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionDeletedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionAddedToRecordArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionRemovedFromRecordArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionAddedToEnqueuedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionquestionRemovedFromEnqueuedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -755,6 +807,14 @@ export type EventQuestion = Node & {
     isMyQuestion?: Maybe<Scalars['Boolean']>;
 };
 
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueue = {
+    __typename?: 'EventQuestionQueue';
+    /** last index is current question */
+    questionRecord?: Maybe<EventQuestionConnection>;
+    enqueuedQuestions?: Maybe<EventQuestionConnection>;
+};
+
 export type EventQuestionEdge = {
     __typename?: 'EventQuestionEdge';
     node: EventQuestion;
@@ -794,6 +854,7 @@ export type EventQuestionMutationResponse = MutationResponse & {
     body?: Maybe<EventQuestionEdge>;
 };
 
+/** TODO: #QQRedesign dlete after code complete */
 export type QuestionOperation = {
     __typename?: 'QuestionOperation';
     operationType: Operation;
@@ -1063,6 +1124,7 @@ export type ResolversTypes = {
     EventParticipantEdge: ResolverTypeWrapper<EventParticipantEdge>;
     EventParticipantConnection: ResolverTypeWrapper<EventParticipantConnection>;
     EventQuestion: ResolverTypeWrapper<EventQuestion>;
+    EventQuestionQueue: ResolverTypeWrapper<EventQuestionQueue>;
     EventQuestionEdge: ResolverTypeWrapper<EventQuestionEdge>;
     EventQuestionConnection: ResolverTypeWrapper<EventQuestionConnection>;
     Like: ResolverTypeWrapper<Like>;
@@ -1166,6 +1228,7 @@ export type ResolversParentTypes = {
     EventParticipantEdge: EventParticipantEdge;
     EventParticipantConnection: EventParticipantConnection;
     EventQuestion: EventQuestion;
+    EventQuestionQueue: EventQuestionQueue;
     EventQuestionEdge: EventQuestionEdge;
     EventQuestionConnection: EventQuestionConnection;
     Like: Like;
@@ -1615,6 +1678,12 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventqueuedQuestionsArgs, never>
     >;
+    questionQueue?: Resolver<
+        Maybe<ResolversTypes['EventQuestionQueue']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventquestionQueueArgs, never>
+    >;
     currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1691,6 +1760,55 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
+    >;
+    questionCreated?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionCreatedArgs, 'eventId'>
+    >;
+    questionUpdated?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionUpdated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionUpdatedArgs, 'eventId'>
+    >;
+    questionDeleted?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionDeleted',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionDeletedArgs, 'eventId'>
+    >;
+    questionAddedToRecord?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionAddedToRecord',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionAddedToRecordArgs, 'eventId'>
+    >;
+    questionRemovedFromRecord?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionRemovedFromRecord',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionRemovedFromRecordArgs, 'eventId'>
+    >;
+    questionAddedToEnqueued?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionAddedToEnqueued',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionAddedToEnqueuedArgs, 'eventId'>
+    >;
+    questionRemovedFromEnqueued?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdge'],
+        'questionRemovedFromEnqueued',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionquestionRemovedFromEnqueuedArgs, 'eventId'>
     >;
 };
 
@@ -1883,6 +2001,15 @@ export type EventQuestionResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventQuestionQueueResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventQuestionQueue'] = ResolversParentTypes['EventQuestionQueue']
+> = {
+    questionRecord?: Resolver<Maybe<ResolversTypes['EventQuestionConnection']>, ParentType, ContextType>;
+    enqueuedQuestions?: Resolver<Maybe<ResolversTypes['EventQuestionConnection']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type EventQuestionEdgeResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventQuestionEdge'] = ResolversParentTypes['EventQuestionEdge']
@@ -2046,6 +2173,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventParticipantEdge?: EventParticipantEdgeResolvers<ContextType>;
     EventParticipantConnection?: EventParticipantConnectionResolvers<ContextType>;
     EventQuestion?: EventQuestionResolvers<ContextType>;
+    EventQuestionQueue?: EventQuestionQueueResolvers<ContextType>;
     EventQuestionEdge?: EventQuestionEdgeResolvers<ContextType>;
     EventQuestionConnection?: EventQuestionConnectionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;
@@ -2158,6 +2286,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         queuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventqueuedQuestionsArgs, TContext>;
+        questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
         currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
 
@@ -2286,6 +2415,11 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
         isLikedByViewer?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isMyQuestion?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
+    };
+
+    EventQuestionQueue?: {
+        questionRecord?: LoaderResolver<Maybe<EventQuestionConnection>, EventQuestionQueue, {}, TContext>;
+        enqueuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, EventQuestionQueue, {}, TContext>;
     };
 
     EventQuestionEdge?: {

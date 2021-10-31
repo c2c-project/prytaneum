@@ -89,6 +89,7 @@ type Subscription {
 
     """
     subscription for whenever questions are added to the queue
+    TODO: #QQRedesign delete once code complete
     """
     questionQueued(eventId: ID!): EventQuestion!
 }
