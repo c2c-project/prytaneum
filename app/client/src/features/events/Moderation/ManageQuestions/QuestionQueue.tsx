@@ -1,42 +1,25 @@
+/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {
-    Grid,
-    Paper,
-    Typography,
-    Divider,
-    Card,
-    Button,
-    List,
-    ListItem,
-    DialogContent,
-} from '@material-ui/core';
-import {
-    graphql,
-    useMutation,
-    usePaginationFragment,
-    useSubscription,
-} from 'react-relay';
+import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
+import { graphql, useMutation } from 'react-relay';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import type {
-    QuestionQueueFragment$key,
-    QuestionQueueFragment$data,
-} from '@local/__generated__/QuestionQueueFragment.graphql';
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
+import type {
+    useQuestionQueueFragment$data,
+    useQuestionQueueFragment$key,
+} from '@local/__generated__/useQuestionQueueFragment.graphql';
 import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { QuestionQueueSubscription } from '@local/__generated__/QuestionQueueSubscription.graphql';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
-import { QUESTION_CAROUSEL_SUBSCRIPTION } from '@local/features/events/Questions/QuestionCarousel/QuestionCarousel';
 import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useEvent } from '../../useEvent';
+import { useQuestionQueue } from './useQuestionQueue';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -77,41 +60,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type QuestionNode = ArrayElement<NonNullable<NonNullable<QuestionQueueFragment$data['queuedQuestions']>['edges']>>;
+type QuestionNode = ArrayElement<
+    NonNullable<NonNullable<NonNullable<useQuestionQueueFragment$data['questionQueue']>['questionRecord']>['edges']>
+>;
 
 interface QuestionQueueProps {
-    fragmentRef: QuestionQueueFragment$key;
+    fragmentRef: useQuestionQueueFragment$key;
 }
-
-export const QUESTION_QUEUE_FRAGMENT = graphql`
-    fragment QuestionQueueFragment on Event
-    @refetchable(queryName: "QuestionQueuePagination")
-    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
-        id
-        currentQuestion
-        queuedQuestions(first: $first, after: $after) @connection(key: "QuestionQueueFragment_queuedQuestions") {
-            edges {
-                cursor
-                node {
-                    id
-                    ...QuestionAuthorFragment
-                    ...QuestionStatsFragment
-                    ...QuestionContentFragment
-                    position
-                }
-            }
-        }
-    }
-`;
-
-export const QUESTION_QUEUE_SUBSCRIPTION = graphql`
-    subscription QuestionQueueSubscription($eventId: ID!) {
-        questionQueued(eventId: $eventId) {
-            id
-            position
-        }
-    }
-`;
 
 export const QUESTION_QUEUE_MUTATION = graphql`
     mutation QuestionQueueMutation($input: UpdateQuestionPosition!) @raw_response_type {
@@ -128,11 +83,6 @@ export const QUESTION_QUEUE_MUTATION = graphql`
         }
     }
 `;
-
-function sortByPosition(el1: QuestionNode, el2: QuestionNode) {
-    if (!el1.node.position || !el2.node.position) return 0;
-    return el1.node.position - el2.node.position;
-}
 
 /**
  * abstracting most of the styling/generic logic away
@@ -207,90 +157,62 @@ function useStyledQueue({ eventId }: { eventId: string }) {
 }
 
 export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
-    const { data, refetch } = usePaginationFragment(QUESTION_QUEUE_FRAGMENT, fragmentRef);
+    //
+    // ─── HOOKS ──────────────────────────────────────────────────────────────────────
+    //
+    const questionQueue = useQuestionQueue({ fragmentRef });
+    const { eventId } = useEvent();
     const classes = useStyles();
     const ref = React.useRef<HTMLElement | null>(null);
-    const { eventId } = useEvent();
     const [open, setOpen] = React.useState(false);
+    const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
 
-    const questionQueueConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionQueueSubscription>>(
-        () => ({
-            variables: { eventId },
-            subscription: QUESTION_QUEUE_SUBSCRIPTION,
-            updater: () => {
-                refetch(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    { after: (data?.queuedQuestions as any)?.pageInfo?.endCursor },
-                    { fetchPolicy: 'store-and-network' }
-                );
-            },
-        }),
-        [eventId, refetch, data]
+    //
+    // ─── COMPUTED VALUES ────────────────────────────────────────────────────────────
+    //
+    const enqueuedQuestions = React.useMemo(() => questionQueue?.enqueuedQuestions?.edges ?? [], [questionQueue]);
+    const questionRecord = React.useMemo(() => questionQueue?.questionRecord?.edges ?? [], [questionQueue]);
+    const canGoBackward = React.useMemo(() => questionRecord.length > 1, [questionRecord]);
+    const canGoForward = React.useMemo(() => enqueuedQuestions.length > 0, [enqueuedQuestions]);
+    const currentQuestion = React.useMemo(
+        () => (canGoBackward ? questionRecord[questionRecord.length - 1] : null),
+        [canGoBackward, questionRecord]
+    );
+    const nextQuestion = React.useMemo(
+        () => (canGoForward ? enqueuedQuestions[enqueuedQuestions.length - 1] : null),
+        [canGoForward, enqueuedQuestions]
     );
 
-    const questionCarouselConfig = React.useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
-        () => ({
-            variables: { eventId },
-            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
-        }),
-        [eventId]
-    );
-
-    useSubscription(questionQueueConfig);
-    useSubscription(questionCarouselConfig);
-
+    //
+    // ─── UTILITIES ──────────────────────────────────────────────────────────────────
+    //
     const scrollToCurrent = () => {
         ref.current?.scrollIntoView();
     };
 
-    const { totQuestions, sortedQuestions } = React.useMemo(
-        () => ({
-            totQuestions: data.queuedQuestions?.edges?.length ?? 0,
-            sortedQuestions: data.queuedQuestions?.edges?.slice(0).sort(sortByPosition) ?? [],
-        }),
-        [data]
-    );
-
-    const currQuestionIdx = React.useMemo(
-        () => sortedQuestions.findIndex(({ node }) => node.position === data.currentQuestion),
-        [sortedQuestions, data.currentQuestion]
-    );
-
-    const { currentQuestion, nextQuestion, pastQuestions, futureQuestions } = React.useMemo(
-        () => ({
-            currentQuestion: sortedQuestions[currQuestionIdx] ?? null,
-            nextQuestion: sortedQuestions.length > currQuestionIdx + 1 ? sortedQuestions[currQuestionIdx + 1] : null,
-            pastQuestions: currQuestionIdx === -1 ? [] : sortedQuestions.slice(0, currQuestionIdx),
-            futureQuestions: currQuestionIdx === -1 ? sortedQuestions : sortedQuestions.slice(currQuestionIdx + 1),
-        }),
-        [currQuestionIdx, sortedQuestions]
-    );
-
-    const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId: data.id });
-
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
             // dropped outside the list
-            if (!result.destination || !futureQuestions) return;
+            if (!result.destination || !enqueuedQuestions) return;
             reorder(
-                futureQuestions,
+                enqueuedQuestions,
                 result.source.index,
                 result.destination.index,
                 currentQuestion?.node.position || 0
             );
         },
-        [futureQuestions, reorder, currentQuestion]
+        [enqueuedQuestions, reorder, currentQuestion]
     );
 
     return (
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
             <Grid container justify='space-around'>
                 <Typography variant='body2'>
-                    <b>{currQuestionIdx === -1 ? totQuestions : totQuestions - currQuestionIdx - 1}</b>
+                    <b>{questionQueue?.enqueuedQuestions?.edges?.length ?? 'Unknown'}</b>
                     &nbsp;Remaining
                 </Typography>
                 <Typography variant='body2'>
-                    <b>{currQuestionIdx + 1}</b>
+                    <b>{questionQueue?.questionRecord?.edges?.length ?? 'Unknown'}</b>
                     &nbsp;Asked (Includes Current)
                 </Typography>
                 <Divider className={classes.divider} />
@@ -313,11 +235,8 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 </Typography>
             )}
             <Grid container item justify='space-between'>
-                <PreviousQuestionButton disabled={pastQuestions.length === 0} />
-                <NextQuestionButton
-                    disabled={currQuestionIdx === -1 ? !nextQuestion : !(totQuestions - currQuestionIdx - 1)}
-                    variant='outlined'
-                />
+                <PreviousQuestionButton disabled={!canGoBackward} />
+                <NextQuestionButton disabled={!canGoForward} variant='outlined' />
             </Grid>
             <Divider className={classes.divider} />
             <Grid item xs={12}>
@@ -356,7 +275,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     <Paper className={classes.pastQuestionsContainer}>
                         <Typography variant='h5'>Past Questions</Typography>
                         <List>
-                            {pastQuestions.map((question) => (
+                            {questionQueue?.questionRecord?.edges?.map((question) => (
                                 <ListItem key={question.node.id}>
                                     <Card className={classes.fullWidth}>
                                         <QuestionAuthor fragmentRef={question.node} />
@@ -364,7 +283,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                         <QuestionStats fragmentRef={question.node} />
                                     </Card>
                                 </ListItem>
-                            ))}
+                            )) ?? []}
                         </List>
                     </Paper>
                     {currentQuestion && (
@@ -382,7 +301,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     <DragDropContext onDragEnd={onDragEnd}>
                         <DropArea getStyle={getListStyle} droppableId='droppable'>
                             <Typography variant='h5'>In Queue</Typography>
-                            {futureQuestions.map((question, idx) => (
+                            {questionQueue?.enqueuedQuestions?.edges?.map((question, idx) => (
                                 <DragArea
                                     getStyle={itemStyle}
                                     key={question.node.id}
@@ -397,7 +316,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                         </Card>
                                     </ListItem>
                                 </DragArea>
-                            ))}
+                            )) ?? []}
                         </DropArea>
                     </DragDropContext>
                 </DialogContent>

@@ -25,10 +25,10 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         isViewerModerator
         ...EventDetailsCardFragment
         ...SpeakerListFragment
-        ...useQuestionListFragment @arguments(first: 1000)
-        ...useLiveFeedbackListFragment
-        ...QuestionQueueFragment
+        ...useQuestionListFragment
+        ...useQuestionQueueFragment
         ...QuestionCarouselFragment
+        ...useLiveFeedbackListFragment
     }
 `;
 
