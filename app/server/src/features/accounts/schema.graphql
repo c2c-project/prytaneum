@@ -46,6 +46,24 @@ input RegistrationForm {
     email: String!
 }
 
+input UpdateEmailForm {
+    currentEmail: String!
+    newEmail: String!
+}
+
+input UpdatePasswordForm {
+    email: String!
+    oldPassword: String!
+    newPassword: String!
+    confirmNewPassword: String!
+}
+
+input DeleteAccountForm {
+    email: String!
+    password: String!
+    confirmPassword: String!
+}
+
 input LoginForm {
     email: String!
     password: String!
@@ -67,6 +85,9 @@ type Query {
 type Mutation {
     register(input: RegistrationForm!): UserMutationResponse!
     login(input: LoginForm!): UserMutationResponse!
+    updateEmail(input: UpdateEmailForm!): UserMutationResponse!
+    updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
+    deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action
     """

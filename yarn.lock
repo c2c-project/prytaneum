@@ -17279,6 +17279,7 @@ fsevents@^1.2.7:
     husky: ^6.0.0
     ts-node-dev: ^1.1.6
     typescript: ^4.2.4
+    yarn: ^1.22.17
   languageName: unknown
   linkType: soft
 
@@ -22168,6 +22169,16 @@ resolve@^2.0.0-next.3:
     yarn-or-npm: bin/index.js
     yon: bin/index.js
   checksum: 28b7cb0df35ab035f9013f08c4033dd63e36a7331ecc4aef93af5d10e8339aa8b3ec2b3f4618fabba85724920d7b2ad8c08df6a3e6fa4f6efe665d43f81927b6
+  languageName: node
+  linkType: hard
+
+"yarn@npm:^1.22.17":
+  version: 1.22.17
+  resolution: "yarn@npm:1.22.17"
+  bin:
+    yarn: ./bin/yarn.js
+    yarnpkg: ./bin/yarn.js
+  checksum: 4453b7e9becc660f5223a8a3189ba8040e526d6aaaca138034c5b2a5d0de652e794317250f283c19c1b8c0af403d64f6e682f598db677fa3372123eaeb613026
   languageName: node
   linkType: hard
 
