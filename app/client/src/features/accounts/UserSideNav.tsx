@@ -22,7 +22,7 @@ import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 240, // think this is from material.io spec, I just know this number
+        maxWidth: 250, // think this is from material.io spec, I just know this number (adjusted)
         padding: theme.spacing(0, 1.5),
         flex: 1,
         [theme.breakpoints.up('lg')]: {

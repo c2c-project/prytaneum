@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, Button, Paper } from '@material-ui/core';
+import Image from 'next/image';
+import { Grid, Paper, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -9,6 +10,15 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column-reverse',
+        },
+        flexGrow: 1,
+    },
+    formContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginBottom: 20
     },
     paper: {
         display: 'flex',
@@ -18,14 +28,22 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         margin: theme.spacing(1),
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
+    // avatar: {
+    //     margin: theme.spacing(1),
+    //     backgroundColor: theme.palette.secondary.main,
+    // },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
+    link: {
+        textAlign: 'center',
+        color: 'grey',
+        textDecoration: 'underline',
+        '&:hover': {
+            color: theme.palette.primary.main,
+        },
+    }
 }));
 
 export default function Login() {
@@ -39,17 +57,27 @@ export default function Login() {
     }, [user, router]);
 
     return (
-        <Grid container alignContent='center' className={classes.root} justify='center'>
-            <Paper className={classes.paper}>
-                <LoginForm
-                    onSuccess={() => router.push('/organizations/me')}
-                    secondaryActions={
-                        <Button fullWidth variant='outlined' onClick={() => router.push('/register')}>
-                            Register
-                        </Button>
-                    }
+        <Grid container alignItems='center' className={classes.root} justify='center'>
+            <Grid item md={7}>
+                <Image
+                    src='https://i.ibb.co/wg4Cyn1/login-illustration.png' 
+                    width={697}
+                    height={383}
+                    objectFit='contain'
                 />
-            </Paper>
+            </Grid>
+            <Grid item md={5} className={classes.formContainer}>
+                <Paper className={classes.paper}>
+                    <LoginForm
+                        onSuccess={() => router.push('/app/home')}
+                        secondaryActions={
+                            <Link href='/register' className={classes.link}>
+                                Or, register an account
+                            </Link>
+                        }
+                    />
+                </Paper>
+            </Grid>
         </Grid>
     );
 }

@@ -60,7 +60,7 @@
         "graphql": "^15.5.0",
         "graphql-tag": "^2.11.0",
         "http-proxy-middleware": "^2.0.0",
-        "ts-node-dev": "^1.1.6"
-    },
-    "packageManager": "yarn@3.0.1"
+        "ts-node-dev": "^1.1.6",
+        "yarn": "^1.22.17"
+    }
 }
