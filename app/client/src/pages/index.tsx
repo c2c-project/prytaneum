@@ -1,40 +1,60 @@
 import * as React from 'react';
-import { Grid, Typography, Button, Paper, Hidden } from '@material-ui/core';
+import Image from 'next/image';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
-import { LoginForm, useUser } from '@local/features/accounts';
+import { useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        height: '100%',
-    },
-    paper: {
-        maxWidth: 425,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: theme.spacing(3),
-        margin: theme.spacing(1),
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(4),
+        height: '85vh',
+        paddingLeft: '1rem',
     },
     header: {
-        marginBottom: 50,
+        marginBottom: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        [theme.breakpoints.down('sm')]: {
+            alignItems: 'center'
+        },
     },
     title: {
-        fontWeight: 400,
+        [theme.breakpoints.down('md')]: {
+            marginTop: 50,
+        },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 35,
+        },
+        [theme.breakpoints.down('xs')]: {
+            marginTop: 20,
+        },
     },
     subtitle: {
-        textTransform: 'uppercase',
+        textAlign: 'right',
+        color: '#272C6C',
+        [theme.breakpoints.down('sm')]: {
+            textAlign: 'center'
+        },
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 18
+        },
     },
+    button: {
+        marginTop: 20,
+        minWidth: 300,
+        alignSelf: 'flex-start',
+        fontSize: 24,
+        [theme.breakpoints.down('xs')]: {
+            minWidth: 0,
+            width: '100%',
+            fontSize: 20,
+        },
+        [theme.breakpoints.down('sm')]: {
+            alignSelf: 'center'
+        },
+    }
 }));
 
 export default function Home() {
@@ -48,69 +68,36 @@ export default function Home() {
     }, [user, router]);
 
     return (
-        <Grid container alignContent='center' className={classes.root} justify='center' spacing={2}>
+        <Grid container alignItems='center' className={classes.root} justify='center' spacing={2}>
             <Grid item xs={12} sm={12} md={6} className={classes.header}>
-                <Typography variant='h1' className={classes.title}>
-                    P
-                </Typography>
+                <div className={classes.title}>
+                    <Image
+                        src='https://i.ibb.co/2nh4WDw/prytaneum-logo-full.png' 
+                        width={3483}
+                        height={665}
+                        objectFit='contain'
+                    />
+                </div>
                 <Typography variant='h5' className={classes.subtitle}>
-                    A crucial tool<br/>
-                    for a <b>better democracy</b>
+                    A crucial tool for a better democracy.
                 </Typography>
+                {user ? 
+                    <Button variant='contained' color='secondary' className={classes.button} onClick={() => router.push('/app/home')}>
+                        Go to Dashboard
+                    </Button>
+                    : 
+                    <Button variant='contained' color='secondary' className={classes.button} onClick={() => router.push('/register')}>
+                        Register
+                    </Button>
+                }
             </Grid>
-            <Hidden smDown>    
-                <Grid item xs={6}>
-                    <Paper className={classes.paper}>
-                        <LoginForm
-                            onSuccess={() => router.push('/app/home')}
-                            secondaryActions={
-                                <Button fullWidth variant='outlined' onClick={() => router.push('/register')}>
-                                    Register
-                                </Button>
-                            }
-                        />
-                    </Paper>
-                </Grid>
-            </Hidden>
-            <Grid item sm={12} md={6}>
-                <Typography variant='h6'>
-                    Mission Statement
-                </Typography>
-                <Typography variant='body1'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                </Typography>
-            </Grid>
-            <Grid item sm={12} md={6}>
-                <Typography variant='h6'>
-                    Capabilities
-                </Typography>
-                <Typography variant='body1'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                </Typography>
-            </Grid>
-            <Grid item sm={12} md={6}>
-                <Typography variant='h6'>
-                    Where We&apos;ve Been Used
-                </Typography>
-                <Typography variant='body1'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                </Typography>
-            </Grid>
-            <Grid item sm={12} md={6}>
-                <Typography variant='h6'>
-                    Features
-                </Typography>
-                <Typography variant='body1'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                </Typography>
+            <Grid item xs={12} sm={12} md={6}>
+                <Image
+                    src='https://i.ibb.co/zP5g4xq/prytaneum-landing.png' 
+                    width={3292}
+                    height={2097}
+                    objectFit='contain'
+                />
             </Grid>
         </Grid>
     );

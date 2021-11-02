@@ -34,7 +34,7 @@ export function MemberForm({ onSubmit, form: formProp }: MemberFormProps) {
             </FormContent>
             <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
                 <Button variant='contained' color='primary' type='submit'>
-                    Submit
+                    Invite
                 </Button>
             </FormActions>
         </Form>

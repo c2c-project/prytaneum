@@ -38,7 +38,7 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     return (
         <MUIContainer
             disableGutters
-            maxWidth='md'
+            maxWidth='lg'
             ref={ref}
             className={clsx([classes.root, classes.spacing, className])}
             {...passThroughProps}
