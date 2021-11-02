@@ -37,7 +37,6 @@ import { UPDATE_EMAIL_FORM_MUTATION } from './UpdateEmailForm';
 import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
 import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
 import text from './help-text';
-import { useUserFragment } from '@local/__generated__/useUserFragment.graphql'
 
 // used for modifying user email
 export type TUpdateEmailForm = { newEmail: string };
