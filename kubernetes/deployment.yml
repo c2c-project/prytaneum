@@ -77,37 +77,6 @@ kind: HorizontalPodAutoscaler
 metadata:
   labels:
     app: prytaneum-dev
-  managedFields:
-    - apiVersion: autoscaling/v2beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:labels':
-            .: {}
-            'f:app': {}
-        'f:spec':
-          'f:maxReplicas': {}
-          'f:metrics': {}
-          'f:minReplicas': {}
-          'f:scaleTargetRef':
-            'f:apiVersion': {}
-            'f:kind': {}
-            'f:name': {}
-      manager: GoogleCloudConsole
-      operation: Update
-      time: '2021-09-01T23:28:37Z'
-    - apiVersion: autoscaling/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:autoscaling.alpha.kubernetes.io/conditions': {}
-        'f:status':
-          'f:currentReplicas': {}
-      manager: vpa-recommender
-      operation: Update
-      time: '2021-09-01T23:28:54Z'
   name: prytaneum-dev-hpa-p6zm
   namespace: dev
 spec:
@@ -133,44 +102,6 @@ metadata:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
     app: prytaneum-dev
-  managedFields:
-    - apiVersion: v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:labels':
-            .: {}
-            'f:app': {}
-        'f:spec':
-          'f:externalTrafficPolicy': {}
-          'f:ports':
-            .: {}
-            'k:{"port":80,"protocol":"TCP"}':
-              .: {}
-              'f:port': {}
-              'f:protocol': {}
-              'f:targetPort': {}
-          'f:selector':
-            .: {}
-            'f:app': {}
-          'f:sessionAffinity': {}
-          'f:type': {}
-      manager: GoogleCloudConsole
-      operation: Update
-      time: '2021-09-01T23:33:06Z'
-    - apiVersion: v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"service.kubernetes.io/load-balancer-cleanup"': {}
-        'f:status':
-          'f:loadBalancer':
-            'f:ingress': {}
-      manager: kube-controller-manager
-      operation: Update
-      time: '2021-09-01T23:33:55Z'
   name: prytaneum-dev-service
   namespace: dev
 spec:
