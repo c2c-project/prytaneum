@@ -122,6 +122,24 @@ export type RegistrationForm = {
     email: Scalars['String'];
 };
 
+export type UpdateEmailForm = {
+    currentEmail: Scalars['String'];
+    newEmail: Scalars['String'];
+};
+
+export type UpdatePasswordForm = {
+    email: Scalars['String'];
+    oldPassword: Scalars['String'];
+    newPassword: Scalars['String'];
+    confirmNewPassword: Scalars['String'];
+};
+
+export type DeleteAccountForm = {
+    email: Scalars['String'];
+    password: Scalars['String'];
+    confirmPassword: Scalars['String'];
+};
+
 export type LoginForm = {
     email: Scalars['String'];
     password: Scalars['String'];
@@ -138,6 +156,9 @@ export type Mutation = {
     __typename?: 'Mutation';
     register: UserMutationResponse;
     login: UserMutationResponse;
+    updateEmail: UserMutationResponse;
+    updatePassword: UserMutationResponse;
+    deleteAccount: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -186,6 +207,18 @@ export type MutationregisterArgs = {
 
 export type MutationloginArgs = {
     input: LoginForm;
+};
+
+export type MutationupdateEmailArgs = {
+    input: UpdateEmailForm;
+};
+
+export type MutationupdatePasswordArgs = {
+    input: UpdatePasswordForm;
+};
+
+export type MutationdeleteAccountArgs = {
+    input: DeleteAccountForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -958,6 +991,9 @@ export type ResolversTypes = {
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
     RegistrationForm: RegistrationForm;
+    UpdateEmailForm: UpdateEmailForm;
+    UpdatePasswordForm: UpdatePasswordForm;
+    DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     Mutation: ResolverTypeWrapper<{}>;
@@ -1055,6 +1091,9 @@ export type ResolversParentTypes = {
     UserEdge: UserEdge;
     UserConnection: UserConnection;
     RegistrationForm: RegistrationForm;
+    UpdateEmailForm: UpdateEmailForm;
+    UpdatePasswordForm: UpdatePasswordForm;
+    DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
     UserMutationResponse: UserMutationResponse;
     Mutation: {};
@@ -1269,6 +1308,24 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationloginArgs, 'input'>
+    >;
+    updateEmail?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateEmailArgs, 'input'>
+    >;
+    updatePassword?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdatePasswordArgs, 'input'>
+    >;
+    deleteAccount?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationdeleteAccountArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<

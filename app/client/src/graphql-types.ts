@@ -82,6 +82,12 @@ export type CreateVideo = {
 };
 
 
+export type DeleteAccountForm = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  confirmPassword: Scalars['String'];
+};
+
 export type DeleteEvent = {
   eventId: Scalars['String'];
 };
@@ -437,6 +443,7 @@ export type Mutation = {
   createQuestion: EventQuestionMutationResponse;
   createSpeaker: EventSpeakerMutationResponse;
   createVideo: EventVideoMutationResponse;
+  deleteAccount: UserMutationResponse;
   deleteEvent: EventMutationResponse;
   /** Delete a member from the organization */
   deleteMember: UserMutationResponse;
@@ -459,9 +466,11 @@ export type Mutation = {
   removeQuestionFromQueue: EventQuestionMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
+  updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
   updateOrganization: OrganizationMutationResponse;
+  updatePassword: UserMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
   updateQuestionQueue: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
@@ -521,6 +530,11 @@ export type MutationCreateSpeakerArgs = {
 
 export type MutationCreateVideoArgs = {
   input: CreateVideo;
+};
+
+
+export type MutationDeleteAccountArgs = {
+  input: DeleteAccountForm;
 };
 
 
@@ -594,6 +608,11 @@ export type MutationStartEventArgs = {
 };
 
 
+export type MutationUpdateEmailArgs = {
+  input: UpdateEmailForm;
+};
+
+
 export type MutationUpdateEventArgs = {
   event: UpdateEvent;
 };
@@ -606,6 +625,11 @@ export type MutationUpdateModeratorArgs = {
 
 export type MutationUpdateOrganizationArgs = {
   input: UpdateOrganization;
+};
+
+
+export type MutationUpdatePasswordArgs = {
+  input: UpdatePasswordForm;
 };
 
 
@@ -786,6 +810,11 @@ export type SubscriptionQuestionQueuedArgs = {
   eventId: Scalars['ID'];
 };
 
+export type UpdateEmailForm = {
+  currentEmail: Scalars['String'];
+  newEmail: Scalars['String'];
+};
+
 export type UpdateEvent = {
   title?: Maybe<Scalars['String']>;
   startDateTime?: Maybe<Scalars['Date']>;
@@ -808,6 +837,13 @@ export type UpdateModerator = {
 export type UpdateOrganization = {
   orgId: Scalars['ID'];
   name: Scalars['String'];
+};
+
+export type UpdatePasswordForm = {
+  email: Scalars['String'];
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String'];
 };
 
 export type UpdateQuestionPosition = {
