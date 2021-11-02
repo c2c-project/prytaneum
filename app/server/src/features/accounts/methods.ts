@@ -111,6 +111,8 @@ export async function loginWithPassword(prisma: PrismaClient, input: LoginForm) 
 export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) {
     const { currentEmail, newEmail } = input;
 
+    // TODO Require email validation via link with token to confirm the update
+
     // validiation if no other user exists with the new email
     const user = await prisma.user.findUnique({ where: { email: newEmail } });
     if (user) throw new Error('Updating email failed: Another user exists with this email. Please input a different email.');
