@@ -5,9 +5,9 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 export const StyledListItem = withStyles((theme) => ({
     selected: {
-        color: theme.palette.primary.contrastText,
+        color: theme.palette.secondary.contrastText,
         '&.MuiListItemIcon-root': {
-            color: theme.palette.primary.contrastText,
+            color: theme.palette.secondary.contrastText,
         },
     },
     root: {

@@ -9,7 +9,11 @@ import {
     Button,
     Grid,
     Link as MUILink,
+    IconButton,
+    InputAdornment,
 } from '@material-ui/core';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
@@ -17,22 +21,72 @@ import { TextField } from '@local/components/TextField';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useForm } from '@local/features/core';
+import { useUser } from '@local/features/accounts';
+import { useSnack } from '@local/features/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useMutation } from 'react-relay';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { makeInitialState } from '@local/utils/ts-utils';
+import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql'
+import type { UpdatePasswordFormMutation } from '@local/__generated__/UpdatePasswordFormMutation.graphql'
+import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql'
+import { UPDATE_EMAIL_FORM_MUTATION } from './UpdateEmailForm';
+import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
+import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
 import text from './help-text';
 
-const initialModifyUserEmail = {
-    newEmail: '',
+// used for modifying user email
+export type TUpdateEmailForm = { newEmail: string };
+
+type TUpdateEmailSchema = {
+    [key in keyof TUpdateEmailForm]: Yup.AnySchema;
+};
+const updateEmailValidationSchema = Yup.object().shape<TUpdateEmailSchema>({
+    newEmail: Yup.string().email('Please enter a valid email'),
+});
+
+const initialModifyUserEmail: TUpdateEmailForm = { newEmail: '' };
+
+// used for modifying user password
+export type TUpdatePasswordForm = {
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string,
 };
 
-const initialModifyUserPassword = {
+type TUpdatePasswordSchema = {
+    [key in keyof TUpdatePasswordForm]: Yup.AnySchema;
+};
+const updatePasswordValidationSchema = Yup.object().shape<TUpdatePasswordSchema>({
+    oldPassword: Yup.string(),
+    newPassword: Yup.string(),
+    confirmNewPassword: Yup.string(),
+});
+
+const initialModifyUserPassword: TUpdatePasswordForm = {
     oldPassword: '',
     newPassword: '',
     confirmNewPassword: '',
 };
 
-const intiialDeleteAccount = {
+// used for deleting user account
+export type TDeleteAccountForm = {
+    password: string,
+    confirmPassword: string,
+};
+
+type TDeleteAccountSchema = {
+    [key in keyof TDeleteAccountForm]: Yup.AnySchema;
+};
+const deleteAccountValidationSchema = Yup.object().shape<TDeleteAccountSchema>({
+    password: Yup.string(),
+    confirmPassword: Yup.string(),
+});
+
+const intiialDeleteAccount: TDeleteAccountForm = {
     password: '',
     confirmPassword: '',
 };
@@ -65,6 +119,10 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(1),
     },
 }));
+
+
+
+
 
 // all really small one time user @local/components go here
 interface DisplayItem {
@@ -121,8 +179,40 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
 }
 
 export function ModifyUserEmail({ user }: { user: User }) {
-    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserEmail);
+    // form state hooks
+    const [commit] = useMutation<UpdateEmailFormMutation>(UPDATE_EMAIL_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+    
+    const [, setUser] = useUser();
+
+    // styling hook
     const classes = useStyles();
+
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TUpdateEmailForm>({
+        initialValues: makeInitialState(initialModifyUserEmail),
+        validationSchema: updateEmailValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
+    function handleCommit(submittedForm: TUpdateEmailForm) {
+        // add user email to input passed into the commit
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { currentEmail: userEmail, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ updateEmail }) {
+                if (updateEmail.isError) {
+                    displaySnack(updateEmail.message);
+                } else {
+                    displaySnack('Email changed successfully!');
+                    setUser(updateEmail.body);
+                    resetForm();
+                }
+            },
+        });
+    }
 
     return (
         <Grid container spacing={2}>
@@ -139,7 +229,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                     A verification email will be sent to the new email to confirm the update.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your new email' }}
@@ -149,7 +239,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                         required
                         type='email'
                         variant='outlined'
-                        value={form.newEmail}
+                        value={values.newEmail}
                         onChange={handleChange('newEmail')}
                         spellCheck={false}
                     />
@@ -164,9 +254,42 @@ export function ModifyUserEmail({ user }: { user: User }) {
     )
 }
 
-export function ModifyUserPassword() {
-    const [form, errors, handleSubmit, handleChange] = useForm(initialModifyUserPassword);
+export function ModifyUserPassword({ user }: { user: User }) {
+    // form state hooks
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
+    const [commit] = useMutation<UpdatePasswordFormMutation>(UPDATE_PASSWORD_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+    
+    const [, setUser] = useUser();
+
+    // styling hook
     const classes = useStyles();
+
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TUpdatePasswordForm>({
+        initialValues: makeInitialState(initialModifyUserPassword),
+        validationSchema: updatePasswordValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
+    function handleCommit(submittedForm: TUpdatePasswordForm) {
+        // add user email to input passed into the commit
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { email: userEmail, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ updatePassword }) {
+                if (updatePassword.isError) {
+                    displaySnack(updatePassword.message);
+                } else {
+                    displaySnack('Password changed successfully!');
+                    setUser(updatePassword.body);
+                    resetForm()
+                }
+            },
+        });
+    }
 
     return (
         <Grid container spacing={2}>
@@ -175,11 +298,11 @@ export function ModifyUserPassword() {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body2'>
-                    Passwords must be at least 8 characters.
+                    Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least one number, and at least one special character (e.g. +_!@#$%^&*., ?).
                 </Typography>
             </Grid>
             
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your old password' }}
@@ -189,33 +312,69 @@ export function ModifyUserPassword() {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.oldPassword}
+                        value={values.oldPassword}
                         onChange={handleChange('oldPassword')}
                         spellCheck={false}
                     />
                     <TextField
-                        inputProps={{ 'aria-label': 'Enter your new password' }}
                         label='Enter your new password'
                         helperText={errors.newPassword}
                         error={Boolean(errors.newPassword)}
                         required
                         variant='outlined'
-                        type='password'
-                        value={form.newPassword}
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={values.newPassword}
                         onChange={handleChange('newPassword')}
                         spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.newPassword ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.newPassword ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <TextField
-                        inputProps={{ 'aria-label': 'Enter your new password again' }}
                         label='Confirm your new password'
                         helperText={errors.confirmNewPassword}
                         error={Boolean(errors.confirmNewPassword)}
                         required
                         variant='outlined'
-                        type='password'
-                        value={form.confirmNewPassword}
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={values.confirmNewPassword}
                         onChange={handleChange('confirmNewPassword')}
                         spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password again',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.confirmNewPassword ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.confirmNewPassword ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </FormContent>
                 <Grid component='span' item xs={12}>
@@ -318,10 +477,43 @@ export const DisableAccount = () => {
     );
 };
 
-export function DeleteAccount() {
-    const [form, errors, handleSubmit, handleChange] = useForm(intiialDeleteAccount);
+export function DeleteAccount({ user }: { user: User }) {
+    // form state hooks
+    const [commit] = useMutation<DeleteAccountFormMutation>(DELETE_ACCOUNT_FORM_MUTATION);
+
+    // user feedback
+    const { displaySnack } = useSnack();
+
+    // routing hook
+    const router = useRouter();
+
+    // styling hook
     const classes = useStyles();
-    // ROUTING: to /Login after deleted
+
+    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TDeleteAccountForm>({
+        initialValues: makeInitialState(intiialDeleteAccount),
+        validationSchema: deleteAccountValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: handleCommit
+    });
+    function handleCommit(submittedForm: TDeleteAccountForm) {
+        // add user email to input passed into the commit
+        const userEmail = user.email ? user.email : ''
+        const completeForm = { email: userEmail, ...submittedForm }
+        commit({
+            variables: { input: completeForm },
+            onCompleted({ deleteAccount }) {
+                if (deleteAccount.isError) {
+                    displaySnack(deleteAccount.message);
+                } else {
+                    displaySnack('Account deleted successfully!');
+                    resetForm();
+                    // route to login after successfully deleting account
+                    router.push('/login');
+                }
+            },
+        });
+    }
     
     return (
         <Grid container spacing={2}>
@@ -339,7 +531,7 @@ export function DeleteAccount() {
                     twice to confirm.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={() => {}}>
+            <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your password' }}
@@ -349,7 +541,7 @@ export function DeleteAccount() {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.password}
+                        value={values.password}
                         onChange={handleChange('password')}
                         spellCheck={false}
                     />
@@ -361,7 +553,7 @@ export function DeleteAccount() {
                         required
                         variant='outlined'
                         type='password'
-                        value={form.confirmPassword}
+                        value={values.confirmPassword}
                         onChange={handleChange('confirmPassword')}
                         spellCheck={false}
                     />
