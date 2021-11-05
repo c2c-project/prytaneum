@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -9,7 +10,7 @@ import AltairFastify from 'altair-fastify-plugin';
 import fastifyMultipart from 'fastify-multipart';
 import fastifyCors from 'fastify-cors';
 
-import { routes as inviteRoute } from '@local/features/events/invites/invite';
+// import { routes as inviteRoute } from '@local/features/events/invites/invite';
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
 
@@ -102,7 +103,7 @@ async function start() {
             // attachFieldsToBody: true
         });
 
-        server.register(inviteRoute);
+        // server.register(inviteRoute);
         verifyEnv();
         console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);

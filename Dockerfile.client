@@ -1,0 +1,35 @@
+FROM node:14.15.4 as base-stage
+
+RUN apt-get update
+RUN yarn set version berry
+
+# Build Stage
+FROM base-stage as build-stage
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN yarn install
+
+# Build Client
+WORKDIR /usr/src/app/app/client
+RUN yarn build
+
+FROM node:14.15.4 as production-stage
+
+RUN yarn set version berry
+
+WORKDIR /usr/src/app
+
+ENV NODE_ENV production
+ENV HOST 0.0.0.0
+
+COPY --from=build-stage /usr/src/app/app/client ./app/client/
+COPY --from=build-stage /usr/src/app/*.json ./
+
+RUN yarn plugin import workspace-tools
+RUN yarn workspaces focus @app/client 
+
+EXPOSE 3000
+
+CMD ["yarn", "g:start-client"]

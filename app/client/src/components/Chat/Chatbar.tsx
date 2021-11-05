@@ -1,5 +1,4 @@
 import * as React from 'react';
-import type { ChatMessageForm } from 'prytaneum-typings';
 import { Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export interface Props {
-    onSubmit: (m: ChatMessageForm) => void;
+    onSubmit: (m: { message: string }) => void;
     disabled?: boolean;
 }
 
