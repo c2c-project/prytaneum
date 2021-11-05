@@ -24,11 +24,13 @@ WORKDIR /usr/src/app
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 
-COPY --from=build-stage /usr/src/app/app/client ./app/client/
+COPY --from=build-stage /usr/src/app/app/client/*.json ./app/client/
+COPY --from=build-stage /usr/src/app/app/client/.next ./app/client/.next
+COPY --from=build-stage /usr/src/app/app/client/public ./app/client/public
 COPY --from=build-stage /usr/src/app/*.json ./
 
 RUN yarn plugin import workspace-tools
-RUN yarn workspaces focus @app/client 
+RUN yarn workspaces focus @app/client --production
 
 EXPOSE 3000
 
