@@ -19,9 +19,9 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-  GKE_CLUSTER: prytaneum-cluster    # TODO: update to cluster name
-  GKE_ZONE: us-central1-a   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: prytaneum # TODO: update to deployment name
+  GKE_CLUSTER: prytaneum-dev-cluster    
+  GKE_ZONE: us-central1-a   
+  DEPLOYMENT_NAME: prytaneum 
   CLIENT_IMAGE: prytaneum-client
   SERVER_IMAGE: prytaneum-server
 
