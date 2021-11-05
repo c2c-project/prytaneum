@@ -15,13 +15,13 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - $default-branch
+      - CI/CD
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-  GKE_CLUSTER: prytaneum-cluster    # TODO: update to cluster name
-  GKE_ZONE: us-central1-a   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: prytaneum # TODO: update to deployment name
+  GKE_CLUSTER: prytaneum-dev-cluster    
+  GKE_ZONE: us-central1-a   
+  DEPLOYMENT_NAME: prytaneum 
   CLIENT_IMAGE: prytaneum-client
   SERVER_IMAGE: prytaneum-server
 
@@ -39,7 +39,7 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
-        project_id: ${{ secrets.GKE_PROJECT }}
+        project_id: ${{ secrets.GKE_PROJECT_ID }}
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -56,7 +56,7 @@ jobs:
     - name: Build Client
       run: |-
         docker build \
-          ../../Dockerfile.client
+          -f Dockerfile.client \
           --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
@@ -65,10 +65,11 @@ jobs:
     - name: Build Server
       run: |-
         docker build \
-          ../../Dockerfile.client
+          -f Dockerfile.server \
           --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
 
     # Push the Client image to Google Container Registry
     - name: Publish Client
