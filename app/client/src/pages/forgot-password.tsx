@@ -26,17 +26,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    nav: {
-        paddingTop: theme.spacing(2),
-    },
 }));
 
 export default function ForgotPassRequest() {
     const classes = useStyles();
-
     return (
         <Grid container alignContent='center' className={classes.root} justify='center'>
             <Paper className={classes.paper}>
@@ -47,11 +40,7 @@ export default function ForgotPassRequest() {
                     Forgot Password
                 </Typography>
                 <div className={classes.form}>
-                    <ForgotPassRequestForm
-                        onSuccess={() => {
-                            router.push('/login');
-                        }}
-                    />
+                    <ForgotPassRequestForm />
                 </div>
             </Paper>
         </Grid>

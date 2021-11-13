@@ -67,11 +67,37 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedUser);
             });
         },
+        async requestResetPassword(parent, args, ctx, info) {
+            try {
+                const { token } = await User.getResetPasswordToken(ctx.prisma, args.input);
+                return {
+                    isError: false,
+                    message: '',
+                    body: token,
+                };
+            } catch (e) {
+                return {
+                    isError: true,
+                    message: e.message,
+                    body: null,
+                };
+            }
+        },
         async resetPassword(parent, args, ctx, info) {
-            return runMutation(async () => {
+            try {
                 await User.resetPassword(ctx.prisma, args.input);
-                ctx.reply.clearCookie('jwt', cookieOptions);
-            });
+                return {
+                    isError: false,
+                    message: '',
+                    body: new Date(),
+                };
+            } catch (e) {
+                return {
+                    isError: true,
+                    message: e.message,
+                    body: null,
+                };
+            }
         },
     },
 };

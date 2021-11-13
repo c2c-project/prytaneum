@@ -402,8 +402,12 @@ input ForgotPassRequestForm {
 
 input ForgotPassRequestForm {
   email: String!
-  newPassword: String!
-  confirmNewPassword: String!
+}
+
+type ForgotPassRequestResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: String
 }
 
 input HideQuestion {
@@ -486,7 +490,10 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
-  resetPassword(input: ForgotPassRequestForm!): UserMutationResponse!
+
+  """The requestResetPassword just returns the token used to reset password"""
+  requestResetPassword(input: ForgotPassRequestForm!): ForgotPassRequestResponse!
+  resetPassword(input: ResetPasswordForm!): ResetPasswordResponse!
 
   """
   Start the event so that it is "live"
@@ -599,6 +606,18 @@ input RegistrationForm {
 input RemoveQuestionFromQueue {
   eventId: ID!
   questionId: ID!
+}
+
+input ResetPasswordForm {
+  token: String!
+  newPassword: String!
+  confirmNewPassword: String!
+}
+
+type ResetPasswordResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+  body: Date
 }
 
 type Subscription {

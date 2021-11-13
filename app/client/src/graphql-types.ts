@@ -463,8 +463,13 @@ export type ForgotPassRequestForm = {
 
 export type ForgotPassRequestForm = {
   email: Scalars['String'];
-  newPassword: Scalars['String'];
-  confirmNewPassword: Scalars['String'];
+};
+
+export type ForgotPassRequestResponse = MutationResponse & {
+  __typename?: 'ForgotPassRequestResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+  body?: Maybe<Scalars['String']>;
 };
 
 export type HideQuestion = {
@@ -540,7 +545,9 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
-  resetPassword: UserMutationResponse;
+  /** The requestResetPassword just returns the token used to reset password */
+  requestResetPassword: ForgotPassRequestResponse;
+  resetPassword: ResetPasswordResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
@@ -680,8 +687,13 @@ export type MutationRemoveQuestionFromQueueArgs = {
 };
 
 
-export type MutationResetPasswordArgs = {
+export type MutationRequestResetPasswordArgs = {
   input: ForgotPassRequestForm;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordForm;
 };
 
 
@@ -863,6 +875,19 @@ export type RegistrationForm = {
 export type RemoveQuestionFromQueue = {
   eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+};
+
+export type ResetPasswordForm = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String'];
+};
+
+export type ResetPasswordResponse = MutationResponse & {
+  __typename?: 'ResetPasswordResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+  body?: Maybe<Scalars['Date']>;
 };
 
 export type Subscription = {

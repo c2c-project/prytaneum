@@ -71,8 +71,24 @@ input LoginForm {
 
 input ForgotPassRequestForm {
     email: String!
+}
+
+type ForgotPassRequestResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: String
+}
+
+input ResetPasswordForm {
+    token: String!
     newPassword: String!
     confirmNewPassword: String!
+}
+
+type ResetPasswordResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Date
 }
 
 type UserMutationResponse implements MutationResponse {
@@ -94,7 +110,11 @@ type Mutation {
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
-    resetPassword(input: ForgotPassRequestForm!): UserMutationResponse!
+    resetPassword(input: ResetPasswordForm!): ResetPasswordResponse!
+    """
+    The requestResetPassword just returns the token used to reset password
+    """
+    requestResetPassword(input: ForgotPassRequestForm!): ForgotPassRequestResponse!
     """
     The logout just returns the timestamp of the logout action
     """
