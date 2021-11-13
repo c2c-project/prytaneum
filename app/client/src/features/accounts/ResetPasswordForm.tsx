@@ -83,7 +83,6 @@ export function ResetPasswordForm({ onSuccess, onFailure }: Props) {
     return (
         <Grid container justify='center'>
             <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
-                {/* {router.query} */}
                 <FormContent>
                     <TextField
                         label='Enter your new password'

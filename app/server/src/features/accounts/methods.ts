@@ -205,7 +205,7 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
 }
 
 /**
- * gets token used to reset password
+ * returns token used to reset password
  */
 export async function getResetPasswordToken(prisma: PrismaClient, input: ForgotPassRequestForm) {
     const { email } = input;
@@ -222,7 +222,7 @@ export async function getResetPasswordToken(prisma: PrismaClient, input: ForgotP
 }
 
 /**
- * resets the user's password using existing email
+ * resets the user's password using email retrieved from token
  */
 export async function resetPassword(prisma: PrismaClient, input: ResetPasswordForm) {
     const {
@@ -231,6 +231,7 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         confirmNewPassword
     } = input;
 
+    // fetch email from token validation
     const promise = await jwt.verify(token);
     const result = JSON.parse(JSON.stringify(promise))
     if (!result.email) throw new Error('Invalid token.');

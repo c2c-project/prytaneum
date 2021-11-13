@@ -110,11 +110,8 @@ type Mutation {
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
-    resetPassword(input: ResetPasswordForm!): ResetPasswordResponse!
-    """
-    The requestResetPassword just returns the token used to reset password
-    """
     requestResetPassword(input: ForgotPassRequestForm!): ForgotPassRequestResponse!
+    resetPassword(input: ResetPasswordForm!): ResetPasswordResponse!
     """
     The logout just returns the timestamp of the logout action
     """
