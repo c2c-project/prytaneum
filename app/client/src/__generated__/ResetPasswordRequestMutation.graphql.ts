@@ -3,31 +3,33 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type ForgotPassRequestForm = {
-    email: string;
+export type ResetPasswordForm = {
+    token: string;
+    newPassword: string;
+    confirmNewPassword: string;
 };
-export type ForgotPasswordFormMutationVariables = {
-    input: ForgotPassRequestForm;
+export type ResetPasswordRequestMutationVariables = {
+    input: ResetPasswordForm;
 };
-export type ForgotPasswordFormMutationResponse = {
-    readonly requestResetPassword: {
+export type ResetPasswordRequestMutationResponse = {
+    readonly resetPassword: {
         readonly isError: boolean;
         readonly message: string;
-        readonly body: string | null;
+        readonly body: Date | null;
     };
 };
-export type ForgotPasswordFormMutation = {
-    readonly response: ForgotPasswordFormMutationResponse;
-    readonly variables: ForgotPasswordFormMutationVariables;
+export type ResetPasswordRequestMutation = {
+    readonly response: ResetPasswordRequestMutationResponse;
+    readonly variables: ResetPasswordRequestMutationVariables;
 };
 
 
 
 /*
-mutation ForgotPasswordFormMutation(
-  $input: ForgotPassRequestForm!
+mutation ResetPasswordRequestMutation(
+  $input: ResetPasswordForm!
 ) {
-  requestResetPassword(input: $input) {
+  resetPassword(input: $input) {
     isError
     message
     body
@@ -53,9 +55,9 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "ForgotPassRequestResponse",
+    "concreteType": "ResetPasswordResponse",
     "kind": "LinkedField",
-    "name": "requestResetPassword",
+    "name": "resetPassword",
     "plural": false,
     "selections": [
       {
@@ -88,7 +90,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ForgotPasswordFormMutation",
+    "name": "ResetPasswordRequestMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -97,18 +99,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ForgotPasswordFormMutation",
+    "name": "ResetPasswordRequestMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "5d82653cfab4cb7382287dbe6fc6cf1b",
+    "cacheID": "94c1598be8d5f1bff79dcdcae31c1c6d",
     "id": null,
     "metadata": {},
-    "name": "ForgotPasswordFormMutation",
+    "name": "ResetPasswordRequestMutation",
     "operationKind": "mutation",
-    "text": "mutation ForgotPasswordFormMutation(\n  $input: ForgotPassRequestForm!\n) {\n  requestResetPassword(input: $input) {\n    isError\n    message\n    body\n  }\n}\n"
+    "text": "mutation ResetPasswordRequestMutation(\n  $input: ResetPasswordForm!\n) {\n  resetPassword(input: $input) {\n    isError\n    message\n    body\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '7d32b2d6cd76a24eafc5594f807fd540';
+(node as any).hash = 'd60dc2ed3298bf746e615fa03125e590';
 export default node;

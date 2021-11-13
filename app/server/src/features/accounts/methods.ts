@@ -9,7 +9,8 @@ import {
     RegistrationForm,
     UpdateEmailForm,
     UpdatePasswordForm,
-    ForgotPassRequestForm 
+    ForgotPassRequestForm,
+    ResetPasswordForm
 } from '@local/graphql-types';
 
 const toUserId = toGlobalId('User');
@@ -204,17 +205,38 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
 }
 
 /**
- * resets the user's password using existing email
+ * gets token used to reset password
  */
-export async function resetPassword(prisma: PrismaClient, input: ForgotPassRequestForm) {
-    const {
-        email,
-        newPassword,
-        confirmNewPassword
-    } = input;
+export async function getResetPasswordToken(prisma: PrismaClient, input: ForgotPassRequestForm) {
+    const { email } = input;
     
     // fetch user for password validation
     const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) throw new Error('Request failed: No user exists with this email. Please input a different email.');
+
+    // generate token
+    const token = await jwt.sign({ email });
+
+    // return token
+    return { token };
+}
+
+/**
+ * resets the user's password using existing email
+ */
+export async function resetPassword(prisma: PrismaClient, input: ResetPasswordForm) {
+    const {
+        token,
+        newPassword,
+        confirmNewPassword
+    } = input;
+
+    const promise = await jwt.verify(token);
+    const result = JSON.parse(JSON.stringify(promise))
+    if (!result.email) throw new Error('Invalid token.');
+    
+    // fetch user for password validation
+    const user = await prisma.user.findUnique({ where: { email: result.email } });
     if (!user) throw new Error('Resetting password failed: No user exists with this email. Please input a different email.');
 
     // validation if new password is at least 8 characters
@@ -232,7 +254,7 @@ export async function resetPassword(prisma: PrismaClient, input: ForgotPassReque
 
     // update user password
     await prisma.user.update({
-        where: { email },
+        where: { email: result.email },
         data: { password: encryptedPassword }
     })
 }
