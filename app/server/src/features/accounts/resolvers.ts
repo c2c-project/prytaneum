@@ -8,7 +8,7 @@ const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
 
 const cookieOptions: CookieSerializeOptions = {
-    sameSite: 'strict'
+    sameSite: 'lax'
 }
 
 export const resolvers: Resolvers = {
