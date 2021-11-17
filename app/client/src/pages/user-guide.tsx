@@ -225,7 +225,7 @@ export default function UserGuide() {
 
     return (
         <Grid container alignItems='center' className={classes.root} justify='center' spacing={4}>
-            <Grid item xs={3}>
+            <Grid item xs={4} sm={3}>
                 <Image
                     src='https://i.ibb.co/qmXt8Fw/prytaneum-logo-filled.png' 
                     width={1107}
@@ -233,9 +233,9 @@ export default function UserGuide() {
                     objectFit='contain'
                 />
             </Grid>
-            <Grid item xs={9} className={classes.section}>
+            <Grid item xs={12} sm={9} className={classes.section}>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon}/> Guide to Prytaneum: Participant
+                    <BookOutlinedIcon className={classes.icon}/> <b>Guide to Prytaneum:</b> Participant
                 </Typography>
                 <Typography variant='body1'>
                     Participants are the residents who want to engage in discussion on a 
@@ -245,7 +245,7 @@ export default function UserGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     Attending a Town Hall
                 </Typography>
                 <Typography variant='body1'>
@@ -258,7 +258,7 @@ export default function UserGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     Participant Town Hall Interactions
                 </Typography>
                 <Typography variant='body1'>
