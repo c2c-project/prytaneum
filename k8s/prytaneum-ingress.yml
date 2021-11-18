@@ -14,17 +14,13 @@ spec:
   - host: prytaneum.io
     http:
       paths:
-      - path: /*
+      - backend:
+          serviceName: prytaneum-client-service
+          servicePort: 80
+        path: /*
         pathType: ImplementationSpecific
-        backend:
-          service:
-            name: prytaneum-client-service
-            port:
-              number: 80
-      - path: /graphql
+      - backend:
+          serviceName: prytaneum-server-service
+          servicePort: 80
+        path: /graphql
         pathType: ImplementationSpecific
-        backend:
-          service:
-            name: prytaneum-server-service
-            port:
-              number: 80

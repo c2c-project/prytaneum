@@ -10,7 +10,7 @@ metadata:
   name: prytaneum-server-service
   namespace: production
 spec:
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local
   ports:
     - port: 80
       protocol: TCP
