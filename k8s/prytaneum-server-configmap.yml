@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prytaneum-client-config
+  name: prytaneum-server-config
   namespace: production
   labels:
-    app: prytaneum-client
+    app: prytaneum-server
 data:
   HOST: 0.0.0.0
   NODE_ENV: production

@@ -4,7 +4,7 @@ metadata:
   name: prytaneum-server
   labels:
     app: prytaneum-server
-  namespace: dev
+  namespace: production
 spec:
   selector:
     matchLabels:
@@ -24,17 +24,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: NODE_ENV
-                  name: prytaneum-config-druj
+                  name: prytaneum-server-config
             - name: HOST
               valueFrom:
                 configMapKeyRef:
                   key: HOST
-                  name: prytaneum-config-druj
+                  name: prytaneum-server-config
             - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:
                   key: SERVER_PORT
-                  name: prytaneum-config-druj
+                  name: prytaneum-server-config
             - name: DB_USER
               valueFrom:
                 secretKeyRef:

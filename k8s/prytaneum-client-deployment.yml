@@ -4,7 +4,7 @@ metadata:
   labels:
     app: prytaneum-client
   name: prytaneum-client
-  namespace: dev
+  namespace: production
 spec:
   replicas: 1
   selector:

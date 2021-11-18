@@ -8,7 +8,7 @@ metadata:
   labels:
     app: prytaneum-server
   name: prytaneum-server-service
-  namespace: dev
+  namespace: production
 spec:
   externalTrafficPolicy: Cluster
   ports:
