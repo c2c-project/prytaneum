@@ -29,7 +29,7 @@ export default function Title() {
         <div className={classes.titleContainer}>
             <div className={classes.title}>
                 <Image
-                    src='https://i.ibb.co/JHfYfqy/prytaneum-logo.png' 
+                    src='/static/prytaneum_logo.svg' 
                     width={97}
                     height={135}
                     objectFit='contain'

@@ -72,7 +72,7 @@ export default function Home() {
             <Grid item xs={12} sm={12} md={6} className={classes.header}>
                 <div className={classes.title}>
                     <Image
-                        src='https://i.ibb.co/2nh4WDw/prytaneum-logo-full.png' 
+                        src='/static/prytaneum_logo2.svg' 
                         width={3483}
                         height={665}
                         objectFit='contain'
@@ -93,7 +93,7 @@ export default function Home() {
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
                 <Image
-                    src='https://i.ibb.co/zP5g4xq/prytaneum-landing.png' 
+                    src='/static/prytaneum_landing_graphic.svg' 
                     width={3292}
                     height={2097}
                     objectFit='contain'

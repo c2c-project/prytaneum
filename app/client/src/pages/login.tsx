@@ -60,7 +60,7 @@ export default function Login() {
         <Grid container alignItems='center' className={classes.root} justify='center'>
             <Grid item md={7}>
                 <Image
-                    src='https://i.ibb.co/wg4Cyn1/login-illustration.png' 
+                    src='/static/login_illustration.png' 
                     width={697}
                     height={383}
                     objectFit='contain'
