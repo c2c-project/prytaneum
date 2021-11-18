@@ -6,14 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-<<<<<<< HEAD
         height: '100%',
         paddingLeft: theme.spacing(1),
         textAlign: 'center',
-    },
-=======
-        minHeight: '85vh',
-        paddingLeft: '1rem',
     },
     section: {
         display: 'flex',
@@ -22,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
         gap: '1rem',
         textAlign: 'center',
     },
->>>>>>> feat(frontend): implement about us page
     paragraph: {
         fontSize: 'large'
     },
@@ -32,26 +26,16 @@ export default function AboutUs() {
     const classes = useStyles();
 
     return (
-<<<<<<< HEAD
         <Grid container className={classes.root} justify='center' alignItems='center' spacing={2}>
             <Grid container item xs={12} direction='column' alignItems='center' spacing={1}>
                 <Grid item xs={4} sm={3} md={2}>
                     <Image
                         src='/static/prytaneum_logo.svg' 
-=======
-        <Grid container alignItems='center' className={classes.root} justify='center' spacing={2}>
-            
-            <Grid item xs={12} className={classes.section}>
-                <Grid item xs={4} sm={3} md={2}>
-                    <Image
-                        src='https://i.ibb.co/qmXt8Fw/prytaneum-logo-filled.png' 
->>>>>>> feat(frontend): implement about us page
                         width={1107}
                         height={1108}
                         objectFit='contain'
                     />
                 </Grid>
-<<<<<<< HEAD
                 <Grid item>
                     <Typography variant='body1' className={classes.paragraph}>
                         Technology to Enhance Democracy
@@ -122,7 +106,6 @@ export default function AboutUs() {
                         fact the elected official with whom they are talking.
                     </Typography>
                 </Grid>
-=======
                 <Typography variant='body1' className={classes.paragraph}>
                     Technology to Enhance Democracy
                 </Typography>
@@ -192,7 +175,6 @@ export default function AboutUs() {
                     direct connection with the elected official and authenticate that it is in 
                     fact the elected official with whom they are talking.
                 </Typography>
->>>>>>> feat(frontend): implement about us page
             </Grid>
         </Grid>
     );
