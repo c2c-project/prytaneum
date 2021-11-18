@@ -92,7 +92,7 @@ jobs:
         cd ./k8s
         kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
         kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
-        kustomize build ./k8s | kubectl apply -f -
+        kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$CLIENT_DEPLOYMENT
         kubectl rollout status deployment/$SERVER_DEPLOYMENT
         kubectl get services -o wide
