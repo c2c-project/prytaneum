@@ -13,6 +13,9 @@ RUN yarn install
 
 # Build Client
 WORKDIR /usr/src/app/app/client
+
+ENV NEXT_PUBLIC_GRAPHQL_URL https://prytaneum.io/graphql
+
 RUN yarn build
 
 FROM node:14.15.4 as production-stage

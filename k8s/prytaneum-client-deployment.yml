@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prytaneum-client
+  name: prytaneum-client
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prytaneum-client
+  template:
+    metadata:
+      labels:
+        app: prytaneum-client
+    spec:
+      containers:
+        - name: prytaneum-client
+          image: gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_ENV
+                  name: prytaneum-config-druj
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: HOST
+                  name: prytaneum-config-druj
+            - name: CLIENT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: CLIENT_PORT
+                  name: prytaneum-config-druj
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVER_PORT
+                  name: prytaneum-config-druj
+            - name: NEXT_PUBLIC_GRAPHQL_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: NEXT_PUBLIC_GRAPHQL_URL
+                  name: prytaneum-config-druj
