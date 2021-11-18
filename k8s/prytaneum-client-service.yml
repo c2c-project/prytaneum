@@ -6,8 +6,8 @@ metadata:
   finalizers:
     - service.kubernetes.io/load-balancer-cleanup
   labels:
-    app: prytaneum
-  name: prytaneum-frontend-service
+    app: prytaneum-client
+  name: prytaneum-client-service
   namespace: dev
 spec:
   externalTrafficPolicy: Cluster
