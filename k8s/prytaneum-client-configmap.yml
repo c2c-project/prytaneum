@@ -8,4 +8,4 @@ metadata:
 data:
   HOST: 0.0.0.0
   NODE_ENV: production
-  CLIENT_PORT: 3000
+  CLIENT_PORT: "3000"
