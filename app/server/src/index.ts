@@ -38,13 +38,13 @@ function verifyEnv() {
 async function start() {
     // Google Cloud Run will set this environment variable for you, so
     // you can also use it to detect if you are running in Cloud Run
-    const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined
-    
+    const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
+
     const port = process.env.SERVER_PORT || '3002';
 
     // You must listen on all IPV4 addresses in Cloud Run
-    const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST
-    
+    const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST;
+
     try {
         const server = build();
 
@@ -67,12 +67,9 @@ async function start() {
             },
         });
 
-        server.register((fastify, options, done) => {
-            fastify.register(fastifyCors, {
-                origin: '*',
-                methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD']
-            });
-            done();
+        server.register(fastifyCors, {
+            origin: '*',
+            methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD'],
         });
 
         server.register(mercurius, {
@@ -91,19 +88,23 @@ async function start() {
 
         server.register(AltairFastify);
 
-        server.register(fastifyMultipart, {
-            limits: {
-                fieldNameSize: 100, // Max field name size in bytes
-                fieldSize: 100,     // Max field value size in bytes
-                fields: 10,         // Max number of non-file fields
-                fileSize: 1000000,  // For multipart forms, the max file size in bytes
-                files: 1,           // Max number of file fields
-                headerPairs: 2000   // Max number of header key=>value pairs
-            },
-            // attachFieldsToBody: true
-        });
+        // server.register(fastifyMultipart, {
+        //     limits: {
+        //         fieldNameSize: 100, // Max field name size in bytes
+        //         fieldSize: 100, // Max field value size in bytes
+        //         fields: 10, // Max number of non-file fields
+        //         fileSize: 1000000, // For multipart forms, the max file size in bytes
+        //         files: 1, // Max number of file fields
+        //         headerPairs: 2000, // Max number of header key=>value pairs
+        //     },
+        //     // attachFieldsToBody: true
+        // });
 
-        // server.register(inviteRoute);
+        // Routes for kubernetes health checks
+        server.get('/', async (req, res) => ({ status: 'Healthy' }));
+        server.get('/healthz', async (req, res) => ({ status: 'Healthy' }))
+
+        // server.register(defaultRoute);
         verifyEnv();
         console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);
@@ -115,5 +116,5 @@ async function start() {
 }
 
 if (require.main === module) {
-    start()
+    start();
 }
