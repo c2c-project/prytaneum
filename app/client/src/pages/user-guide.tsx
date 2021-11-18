@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center',
         },
     },
+    paragraph: {
+        fontSize: '18px',
+    },
     section: {
         display: 'flex',
         flexDirection: 'column',
@@ -237,7 +240,7 @@ export default function UserGuide() {
                 <Typography variant='h3'>
                     <BookOutlinedIcon className={classes.icon}/> <b>Guide to Prytaneum:</b> Participant
                 </Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     Participants are the residents who want to engage in discussion on a 
                     policy topic. In Prytaneum, participants can type in questions to add to a 
                     question list; they can like, reply and quote another participant’s 
@@ -248,11 +251,11 @@ export default function UserGuide() {
                 <Typography variant='h4'>
                     Attending a Town Hall
                 </Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     To attend a town hall event, you must be invited to the event by the
                     organizer through email or a direct link.
                 </Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     Clicking on a Prytaneum invite link will direct you to the event where you 
                     can interact with the town hall through participant actions.
                 </Typography>
@@ -261,7 +264,7 @@ export default function UserGuide() {
                 <Typography variant='h4'>
                     Participant Town Hall Interactions
                 </Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     Clicking on any <Chip  color='secondary' icon={<HelpIcon/>} label='#' size='small' /> will
                     reveal more information about the corresponding element.
                 </Typography>
@@ -479,7 +482,7 @@ export default function UserGuide() {
                 </Paper>
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsectiontext}>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     <sup>2</sup> Clicking the down arrow toggles the visibility of the event’s 
                     description
                 </Typography>
@@ -504,7 +507,7 @@ export default function UserGuide() {
                 </Paper>
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsectiontext}>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     <sup>3</sup> This prompt will appear after pressing the button, it will ask 
                     you to write in your question and submit it to the town hall
                 </Typography>
@@ -540,7 +543,7 @@ export default function UserGuide() {
                 </Paper>
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsectiontext}>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.paragraph}>
                     <sup>6</sup> Similar to pressing the &quot;Ask a Question&quot; button,
                     you will be asked to write in your question with the question you want to 
                     quote
