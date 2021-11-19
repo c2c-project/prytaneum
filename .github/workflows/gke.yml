@@ -58,7 +58,7 @@ jobs:
       run: |-
         docker build \
           -f Dockerfile.client \
-          --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production" \
+          --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -67,7 +67,7 @@ jobs:
       run: |-
         docker build \
           -f Dockerfile.server \
-          --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:production" \
+          --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -75,11 +75,11 @@ jobs:
     # Push the Client image to Google Container Registry
     - name: Publish Client
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production"
+        docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA"
     # Push the Server image to Google Container Registry
     - name: Publish Server
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:production"
+        docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
 
     # Set up kustomize
     - name: Set up Kustomize
@@ -90,18 +90,18 @@ jobs:
     - name: Kustomize & Deploy Client
       run: |-
         cd ./k8s/client
-        kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production
+        kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
         kustomize build . | kubectl apply -f -
     - name: Kustomize & Deploy Server
       run: |-
         cd ./k8s/server
-        kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:production
+        kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
         kustomize build . | kubectl apply -f -
     - name: Kustomize & Deploy Ingress/Certs
       run: |-
         kustomize build ./k8s | kubectl apply -f -
-    - name: Rollout Client Check
-      run: kubectl rollout status deployment/prytaneum-client
+    # - name: Rollout Client Check
+    #   run: kubectl rollout status deployment/prytaneum-client
     - name: Rollout Server Check
       run: kubectl rollout status deployment/prytaneum-server
     - name: Services Check
