@@ -58,7 +58,7 @@ jobs:
       run: |-
         docker build \
           -f Dockerfile.client \
-          --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
+          --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -67,7 +67,7 @@ jobs:
       run: |-
         docker build \
           -f Dockerfile.server \
-          --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+          --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:production" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -75,11 +75,11 @@ jobs:
     # Push the Client image to Google Container Registry
     - name: Publish Client
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production"
     # Push the Server image to Google Container Registry
     - name: Publish Server
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:production"
 
     # Set up kustomize
     - name: Set up Kustomize
@@ -87,12 +87,21 @@ jobs:
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
     # Deploy the Docker image to the GKE cluster
-    - name: Deploy
+    - name: Kustomize & Deploy Ingress/Certs
       run: |-
-        cd ./k8s
-        kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
-        kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
+        kustomize build ./k8s | kubectl apply -f -
+    - name: Kustomize & Deploy Client
+      run: |-
+        cd ./k8s/client
+        kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production
         kustomize build . | kubectl apply -f -
+    - name: Kustomize & Deploy Server
+      run: |-
+        cd ../server
+        kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:production
+        kustomize build . | kubectl apply -f -
+    - name: Rollout Check
+      run: |-
         kubectl rollout status deployment/$CLIENT_DEPLOYMENT
         kubectl rollout status deployment/$SERVER_DEPLOYMENT
         kubectl get services -o wide
