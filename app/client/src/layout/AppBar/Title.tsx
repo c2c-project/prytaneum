@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography } from '@material-ui/core';
+import Image from 'next/image';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -13,6 +13,7 @@ const useStyles = makeStyles(() => ({
     title: {
         flexShrink: 1,
         flexGrow: 0,
+        width: 25,
         cursor: 'pointer',
     },
 }));
@@ -27,9 +28,13 @@ export default function Title() {
     return (
         <div className={classes.titleContainer}>
             <div className={classes.title}>
-                <Typography align='left' variant='h6' noWrap onClick={user ? handleNavigation('/app/home') : handleNavigation('/')}>
-                    Prytaneum
-                </Typography>
+                <Image
+                    src='https://i.ibb.co/JHfYfqy/prytaneum-logo.png' 
+                    width={97}
+                    height={135}
+                    objectFit='contain'
+                    onClick={user ? handleNavigation('/app/home') : handleNavigation('/')}
+                />
             </div>
         </div>
     );

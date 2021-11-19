@@ -118,8 +118,8 @@ export function EventForm(props: EventFormProps) {
                     </Button>
                 )}
 
-                <Button type='submit' variant='contained' color='secondary'>
-                    Submit
+                <Button type='submit' variant='contained' color='primary'>
+                    Create
                 </Button>
             </FormActions>
         </Form>
