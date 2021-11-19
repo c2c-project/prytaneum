@@ -577,7 +577,7 @@ input UpdateEvent {
 }
 
 input UpdateModerator {
-  userId: ID!
+  email: String!
   eventId: ID!
 }
 

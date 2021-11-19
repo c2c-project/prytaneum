@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Meta } from '@storybook/react';
 import { Tabs } from '@material-ui/core';
 
-import Main from 'layout/Main';
+import Main from '@local/layout/Main';
 import Component from './Tab';
 
 export default { title: '@local/components/Chip Tab', parameters: { layout: 'centered' } } as Meta;

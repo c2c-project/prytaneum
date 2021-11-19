@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/Launch';
-import ResponsiveDialog from '@local/components/ResponsiveDialog';
+import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import GithubIcon from '@material-ui/icons/GitHub';
@@ -19,7 +19,7 @@ import OtherIcon from '@material-ui/icons/PermContactCalendar';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 import { formatDate } from '@local/utils/format';
-import { TeamMember, ReferenceNames } from 'types';
+import { TeamMember, ReferenceNames } from 'prytaneum-typings';
 
 const IconFactory = (IconName: ReferenceNames): JSX.Element => {
     switch (IconName) {

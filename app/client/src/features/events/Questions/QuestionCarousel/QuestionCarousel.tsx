@@ -3,7 +3,7 @@ import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { graphql, useFragment, useSubscription } from 'react-relay';
+import { graphql, useRefetchableFragment, useSubscription } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
 import type { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
@@ -25,10 +25,11 @@ const useStyles = makeStyles((theme) => ({
 
 const QUESTION_CAROUSEL_FRAGMENT = graphql`
     fragment QuestionCarouselFragment on Event
+    @refetchable(queryName: "QuestionCarouselFragmentRefetchable")
     @argumentDefinitions(first: { type: Int, defaultValue: 100 }, after: { type: String, defaultValue: "" }) {
         id
         currentQuestion
-        queuedQuestions(first: $first, after: $after) @connection(key: "QuestionCarousel_queuedQuestions") {
+        queuedQuestions(first: $first, after: $after) {
             edges {
                 cursor
                 node {
@@ -88,15 +89,18 @@ function reducer(state: TState, action: TActions): TState {
 
 export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
     const classes = useStyles();
-    const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
+    const [data, refetch] = useRefetchableFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
     const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
     const { eventId } = useEvent();
     const config = useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
         () => ({
             variables: { eventId },
             subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
+            updater: () => {
+                refetch({}, { fetchPolicy: 'store-and-network' });
+            }
         }),
-        [eventId]
+        [eventId, refetch]
     );
     useSubscription(config);
 

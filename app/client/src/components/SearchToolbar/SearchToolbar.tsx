@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
-import TextField from '@local/components/TextField';
+import { TextField } from '@local/components/TextField';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,9 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface Props {
-    onChange: (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => void;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
     label: string;
 }
 

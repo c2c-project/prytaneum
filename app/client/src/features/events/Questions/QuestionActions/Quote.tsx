@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QUOTE_MUTATION = graphql`
-    mutation QuoteMutation($input: CreateQuestion!, $connections: [ID!]!) {
+    mutation QuoteMutation($input: CreateQuestion!) {
         createQuestion(input: $input) {
             isError
             message
-            body @appendEdge(connections: $connections) {
+            body {
                 cursor
                 node {
                     id
@@ -64,10 +64,10 @@ export function Quote({ className, connections, fragmentRef }: QuoteProps) {
                 input: {
                     ...submittedForm,
                     eventId,
+                    isQuote: true,
                     refQuestion: data.id,
-                },
-                connections,
-            },
+                }
+            }
         });
         close();
     };

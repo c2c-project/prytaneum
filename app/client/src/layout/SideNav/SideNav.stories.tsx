@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { makeUser } from 'prytaneum-typings';
 
-import Component from './SideNav';
+import { SideNav as Component} from './SideNav';
 
 export default { title: 'layout/SideNav' };
 
 export function Basic() {
-    return <Component user={makeUser()} />;
+    return <Component isHidden={false} isOpen={true} close={() => {}} />;
 }

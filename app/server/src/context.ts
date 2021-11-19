@@ -21,6 +21,8 @@ async function extractJwt(req: FastifyRequest) {
 }
 
 export const buildContext = async (req: FastifyRequest, reply: FastifyReply) => {
+    reply.header('Access-Control-Allow-Origin', '*')
+    reply.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
     let userId = await extractJwt(req).catch(() => reply.clearCookie('jwt').send());
     if (userId) {
         const { id } = fromGlobalId(userId);

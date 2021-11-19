@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Meta } from '@storybook/react';
-import Component from './DateTimePicker';
+import { DateTimePicker as Component } from './DateTimePicker';
 
 export default {
     title: '@local/components/DateTimePicker',

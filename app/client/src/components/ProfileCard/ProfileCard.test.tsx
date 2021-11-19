@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import faker from 'faker/locale/en';
-import { ReferenceNames } from 'types';
+import { ReferenceNames } from 'prytaneum-typings';
 import ProfileCard from './ProfileCard';
 
 jest.mock('@material-ui/core/useMediaQuery', () => () => true);

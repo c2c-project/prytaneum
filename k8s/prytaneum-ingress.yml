@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prytaneum-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/v1beta1.FrontendConfig: "prytaneum-frontend-config"
+    kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.regional-static-ip-name: prytaneum-io-ip
+    networking.gke.io/managed-certificates: prytaneum-io-cert
+spec:
+  rules:
+  - host: prytaneum.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: prytaneum-client-service
+            port: 
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: prytaneum-server-service
+            port:
+              number: 80
+        path: /graphql
+        pathType: ImplementationSpecific
