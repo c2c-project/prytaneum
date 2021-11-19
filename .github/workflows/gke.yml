@@ -87,9 +87,6 @@ jobs:
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
     # Deploy the Docker image to the GKE cluster
-    - name: Kustomize & Deploy Ingress/Certs
-      run: |-
-        kustomize build ./k8s | kubectl apply -f -
     - name: Kustomize & Deploy Client
       run: |-
         cd ./k8s/client
@@ -97,9 +94,12 @@ jobs:
         kustomize build . | kubectl apply -f -
     - name: Kustomize & Deploy Server
       run: |-
-        cd ../server
+        cd ./k8s/server
         kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:production
         kustomize build . | kubectl apply -f -
+    - name: Kustomize & Deploy Ingress/Certs
+      run: |-
+        kustomize build ./k8s | kubectl apply -f -
     - name: Rollout Check
       run: |-
         kubectl rollout status deployment/$CLIENT_DEPLOYMENT
