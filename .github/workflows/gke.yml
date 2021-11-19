@@ -100,8 +100,9 @@ jobs:
     - name: Kustomize & Deploy Ingress/Certs
       run: |-
         kustomize build ./k8s | kubectl apply -f -
-    - name: Rollout Check
-      run: |-
-        kubectl rollout status deployment/$CLIENT_DEPLOYMENT
-        kubectl rollout status deployment/$SERVER_DEPLOYMENT
-        kubectl get services -o wide
+    - name: Rollout Client Check
+      run: kubectl rollout status deployment/prytaneum-client
+    - name: Rollout Server Check
+      run: kubectl rollout status deployment/prytaneum-server
+    - name: Services Check
+      run: kubectl get services -o wide
