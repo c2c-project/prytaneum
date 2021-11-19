@@ -1,16 +1,4 @@
-# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the $default-branch branch.
-#
-# To configure this workflow:
-#
-# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
-#
-# 2. Set up secrets in your workspace: GKE_PROJECT with the name of the project and GKE_SA_KEY with the Base64 encoded JSON service account key (https://github.com/GoogleCloudPlatform/github-actions/tree/docs/service-account-key/setup-gcloud#inputs).
-#
-# 3. Change the values for the GKE_ZONE, GKE_CLUSTER, IMAGE, and DEPLOYMENT_NAME environment variables (below).
-#
-# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke
-
-name: Build and Deploy to GKE
+name: Build and Deploy Production Version to GKE
 
 on:
   push:
@@ -101,9 +89,14 @@ jobs:
         kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:production
         kustomize build . | kubectl apply -f -
         
-    - name: Kustomize & Deploy Ingress/Certs
+    - name: Kustomize & Deploy Ingress
       run: |-
         kustomize build ./k8s | kubectl apply -f -
+
+    - name: Deploy Certificate
+      run: |-
+        cd ./k8s/cert
+        kubectl apply -f prytaneum-managed-certificate.yml
 
     - name: Set kubectl context
       run: |-
