@@ -25,6 +25,7 @@ env:
   SERVER_DEPLOYMENT: prytaneum-server 
   CLIENT_IMAGE: prytaneum-client
   SERVER_IMAGE: prytaneum-server
+  NAMESPACE: production
 
 jobs:
   setup-build-publish-deploy:
@@ -98,10 +99,11 @@ jobs:
         kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
         kustomize build . | kubectl apply -f -
     - name: Kustomize & Deploy Ingress/Certs
-      run: |-
-        kustomize build ./k8s | kubectl apply -f -
-    # - name: Rollout Client Check
-    #   run: kubectl rollout status deployment/prytaneum-client
+      run: kustomize build ./k8s | kubectl apply -f -
+    - name: Set kubectl context
+      run: kubectl config set-context --current --namespace=$NAMESPACE
+    - name: Rollout Client Check
+      run: kubectl rollout status deployment/prytaneum-client
     - name: Rollout Server Check
       run: kubectl rollout status deployment/prytaneum-server
     - name: Services Check
