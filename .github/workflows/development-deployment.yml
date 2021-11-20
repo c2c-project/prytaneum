@@ -1,4 +1,4 @@
-name: Build and Deploy Production Version to GKE
+name: Build and Deploy development Version to GKE
 
 on:
   push:
