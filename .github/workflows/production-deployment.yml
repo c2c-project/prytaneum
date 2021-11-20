@@ -93,14 +93,13 @@ jobs:
 
       - name: Kustomize & Deploy Ingress
         run: |-
-          cd ./k8s
-          kustomize edit set namespace $NAMESPACE
-          kustomize build . | kubectl apply -f -
+          cd ./k8s/ingress/production
+          kubectl apply -f ./prytanem-ingress.yml
 
       - name: Deploy Certificate
         run: |-
           cd ./k8s/cert
-          kubectl apply -f prytaneum-managed-certificate.yml
+          kubectl apply -f ./prytaneum-managed-certificate.yml
 
       - name: Set kubectl context
         run: |-
