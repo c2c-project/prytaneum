@@ -10,7 +10,7 @@ import {
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 // import AppBar from 'layout/AppBar';
 
-import { SettingsMenu }  from '@local/components/SettingsMenu/SettingsMenu';
+import { SettingsMenu } from '@local/components/SettingsMenu/SettingsMenu';
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
 // import UserProfile from '../UserProfile/UserProfile';
@@ -107,7 +107,6 @@ export default function UserSettings({ id }: Props) {
 
     const handleNavigation = (path: string) => () => router.push(path);
 
-
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
         if (cont === null) setOpen(false);
@@ -147,7 +146,9 @@ export default function UserSettings({ id }: Props) {
         {
             title: 'Account Settings',
             description: 'View Account Settings',
-            component: (
+            component: !user ? (
+                <></>
+            ) : (
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <ModifyUserEmail user={user} />

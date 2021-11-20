@@ -3,9 +3,9 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './index';
 
-let STORE;
+let STORE: any;
 
-function initStore(preloadedState) {
+function initStore(preloadedState: any) {
     return createStore(rootReducer, preloadedState, composeWithDevTools(applyMiddleware()));
 }
 
@@ -31,7 +31,7 @@ export const initializeStore = (preloadedState?: any) => {
     return _store;
 };
 
-export function useStore(initialState) {
+export function useStore(initialState: any) {
     const store = useMemo(() => initializeStore(initialState), [initialState]);
     return store;
 }
