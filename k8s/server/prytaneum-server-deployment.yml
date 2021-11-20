@@ -39,19 +39,19 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: prod-db-secret
+                  name: db-secret
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: prod-db-secret
+                  name: db-secret
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
                   key: database
-                  name: prod-db-secret
+                  name: db-secret
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
                   key: host
-                  name: prod-db-secret
+                  name: db-secret
