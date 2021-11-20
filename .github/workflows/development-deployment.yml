@@ -94,7 +94,7 @@ jobs:
       - name: Kustomize & Deploy Ingress
         run: |-
           cd ./k8s/ingress/development
-          kubectl apply -f ./prytanem-ingress.yml
+          kubectl apply -f ./prytaneum-ingress.yml
 
       - name: Deploy Certificate
         run: |-
