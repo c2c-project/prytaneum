@@ -9,28 +9,18 @@ import {
     Avatar,
     InputAdornment,
     Chip,
-    MobileStepper
+    ButtonGroup,
 } from '@material-ui/core';
 import { TextField } from '@local/components/TextField';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SearchIcon from '@material-ui/icons/Search';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
-import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
-import RecordVoiceOverOutlinedIcon from '@material-ui/icons/RecordVoiceOverOutlined';
-import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ReplyIcon from '@material-ui/icons/Reply';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -47,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         width: '100%',
-        minHeight: '60vh',
-        margin: '2rem 0'
+        minHeight: '85vh',
+        paddingLeft: '1rem',
     },
     header: {
         marginBottom: 20,
@@ -369,22 +359,162 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             gap: '2rem',
         },
-        [theme.breakpoints.down('xs')]: {
+    },
+    section: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+        textAlign: 'center',
+    },
+    paragraph: {
+        fontSize: '18px',
+    },
+    window: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        overflow: 'hidden',
+    },
+    windowheader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: theme.spacing(1),
+        background: 'white',
+        boxShadow: '0 5px 7px rgba(0,0,0,0.1)'
+    },
+    logo: {
+        marginTop: '0.25rem',
+        marginLeft: '0.25rem',
+        width: 30,
+        cursor: 'pointer',
+    },
+    tabs: {
+        display: 'flex',
+        gap: '1.5rem',
+        alignItems: 'center',
+        fontWeight: 700,
+        textTransform: 'uppercase',
+    },
+    user: {
+        display: 'flex',
+        gap: '0.5rem',
+        alignItems: 'center',
+        fontWeight: 700,
+    },
+    avatar: {
+        width: 30,
+        height: 30,
+    },
+    windowcontent: {
+        display: 'flex',
+        gap: '1rem',
+        padding: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
-            gap: '1rem',
         },
     },
-    arrowsection: {
+    windowdisplay: {
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'center',
+        padding: theme.spacing(1),
+        backgroundColor: 'black',
+        height: '75%',
         [theme.breakpoints.down('sm')]: {
-            display: 'none',
+            minHeight: '70vh',
+        },
+        [theme.breakpoints.down('xs')]: {
+            minHeight: '50vh',
         },
     },
-    downarrow: {
-        fontSize: '4rem',
-        transform: 'rotate(-90deg)'
-    }
+    windowsidebar: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.25rem',
+        [theme.breakpoints.down('md')]: {
+            alignItems: 'center',
+        },
+    },
+    paper: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        width: '100%',
+        maxWidth: 425,
+        padding: theme.spacing(2),
+    },
+    subpaper: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        padding: theme.spacing(2),
+    },
+    buttonwrapper: {
+        display: 'flex',
+        gap: '0.5rem',
+        alignSelf: 'end',
+    },
+    dropdown: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    userheader: {
+        display: 'flex',
+        gap: '0.5rem',
+    },
+    paperdropdown: {
+        borderRadius: '9999px',
+        paddingLeft: theme.spacing(2),
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
+    },
+    searchcontainer: {
+        width: '100%',
+    },
+    searchwrapper: {
+        display: 'flex',
+        gap: '0.5rem',
+        width: '100%',
+    },
+    pinnedpaper: {
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        width: '100%',
+        maxWidth: 425,
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(3),
+    },
+    pinheader: {
+        position: 'absolute',
+        top: '-1rem',
+        left: '50%',
+        whiteSpace: 'nowrap',
+        transform: 'translateX(-50%)',
+    },
+    chip: {
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        textTransform: 'uppercase',
+        fontSize: '12px',
+        fontWeight: 800,
+    },
+    arrow: {
+        fontSize: '18px',
+    },
+    windowtitle: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '0.5rem',
+    },
+    userbutton: {
+        margin: '1rem 0',
+    },
 }));
 
 export default function Home() {
@@ -1248,7 +1378,7 @@ export default function Home() {
 
     return (
         <>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.landing}>
+            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
                 <Grid item xs={12} md={6} className={classes.header}>
                     <div className={classes.title}>
                         <Image
@@ -1280,9 +1410,6 @@ export default function Home() {
                         alt='Prytaneum Logo'
                     />
                 </Grid>
-                <Grid item xs={12} className={classes.arrowsection}>
-                    <ArrowBackIosRoundedIcon className={classes.downarrow} />
-                </Grid>
             </Grid>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
                 <Grid item xs={12} className={classes.section}>
@@ -1302,288 +1429,198 @@ export default function Home() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <div className={classes.yellowshadow}>
-                        <Paper elevation={3} square className={classes.window}>
-                            <Grid item xs={12} className={classes.windowheader}>
-                                <div className={classes.tabs}>
-                                    <div className={classes.logo}>
+                    <Paper square className={classes.window}>
+                        <Grid item xs={12} className={classes.windowheader}>
+                            <div className={classes.tabs}>
+                                <div className={classes.logo}>
+                                    <Image
+                                        src='/static/prytaneum_logo.svg' 
+                                        width={50}
+                                        height={49}
+                                        objectFit='contain'
+                                    />
+                                </div>
+                                <div>Home</div>
+                                <div>Dashboard</div>
+                                <div>About Us</div>
+                            </div>
+                            <div className={classes.user}>
+                                <div>
+                                    <Avatar className={classes.avatar}>L</Avatar>
+                                </div>
+                                <div>
+                                    Lorem Ipsum
+                                </div>
+                                <KeyboardArrowDownIcon className={classes.arrow}/>
+                            </div>
+                        </Grid>
+                        <div className={classes.windowcontent}>
+                            <Grid item xs={12} md={7} lg={8}>
+                                <div className={classes.windowdisplay}>
+                                    <Grid item xs={6}>
                                         <Image
-                                            src='/static/prytaneum_logo.svg' 
-                                            width={50}
-                                            height={49}
+                                            src='https://i.ibb.co/cNvfQC8/cam1.png' 
+                                            width={1146}
+                                            height={648}
                                             objectFit='contain'
                                         />
-                                    </div>
-                                    <div>Home</div>
-                                    <div>Dashboard</div>
-                                    <div>About Us</div>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Image
+                                            src='https://i.ibb.co/xG0SYBT/cam2.png' 
+                                            width={1146}
+                                            height={648}
+                                            objectFit='contain'
+                                        />
+                                    </Grid>
                                 </div>
-                                <div className={classes.user}>
+                                <div className={classes.windowtitle}>
                                     <div>
-                                        <Avatar className={classes.avatar}>L</Avatar>
+                                        <Typography variant='h6'>
+                                            Town Hall Meeting
+                                        </Typography>
+                                        <Typography variant='caption'>
+                                            Concerns within the city
+                                        </Typography>
                                     </div>
-                                    <div>
-                                        Lorem Ipsum
-                                    </div>
-                                    <KeyboardArrowDownIcon className={classes.arrow}/>
-                                </div>
-                            </Grid>
-                            <div className={classes.windowcontent}>
-                                <Grid item xs={12} lg={7}>
-                                    <div className={classes.windowdisplay}>
-                                        <Grid item xs={6}>
-                                            <Image
-                                                src='https://i.ibb.co/cNvfQC8/cam1.png' 
-                                                width={1146}
-                                                height={648}
-                                                objectFit='contain'
-                                            />
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Image
-                                                src='https://i.ibb.co/xG0SYBT/cam2.png' 
-                                                width={1146}
-                                                height={648}
-                                                objectFit='contain'
-                                            />
-                                        </Grid>
-                                    </div>
-                                    <div className={classes.windowtitle}>
+                                    <div className={classes.userheader}>
+                                        <div>
+                                            <Avatar>E</Avatar>
+                                        </div>
                                         <div>
                                             <Typography variant='h6'>
-                                                Town Hall Meeting
+                                                Elias Dagmar
                                             </Typography>
                                             <Typography variant='caption'>
-                                                Concerns within the city
+                                                Town Official
                                             </Typography>
                                         </div>
-                                        <div className={classes.userheader}>
-                                            <div>
-                                                <Avatar>E</Avatar>
-                                            </div>
-                                            <div>
-                                                <Typography variant='h6'>
-                                                    Elias Dagmar
-                                                </Typography>
-                                                <Typography variant='caption'>
-                                                    Town Official
-                                                </Typography>
-                                            </div>
+                                    </div>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} md={5} lg={4} className={classes.windowsidebar}>
+                                <Paper elevation={3} className={classes.pinnedpaper}>
+                                    <div className={classes.pinheader}>
+                                        <Chip 
+                                            color='secondary'
+                                            icon={<BookmarkIcon/>}
+                                            label='Answering Now'
+                                            className={classes.chip}
+                                        />
+                                    </div>
+                                    <div className={classes.userheader}>
+                                        <div>
+                                            <Avatar>A</Avatar>
+                                        </div>
+                                        <div>
+                                            <Typography variant='subtitle2'>
+                                                Asami Gisela
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                10:12 AM · 11/20/2021
+                                            </Typography>
                                         </div>
                                     </div>
-                                </Grid>
-                                <Grid item xs={12} lg={5} className={classes.windowsidebar}>
-                                    <Paper elevation={3} className={classes.pinnedpaper}>
-                                        <div className={classes.pinheader}>
-                                            <Chip 
-                                                size='small'
-                                                color='secondary'
-                                                icon={<BookmarkIcon/>}
-                                                label='Answering Now'
-                                                className={classes.chip}
-                                            />
+                                    <Typography variant='subtitle2'>
+                                        What are your calls to action concerning the 
+                                        homelessness in the city? What decisions will you be 
+                                        making to attend to the matter?
+                                    </Typography>
+                                </Paper>
+                                <Button
+                                    fullWidth
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<QuestionAnswerIcon/>}
+                                    className={classes.userbutton}
+                                >
+                                    Ask a Question
+                                </Button>
+                                <div className={classes.searchcontainer}>
+                                    <div className={classes.searchwrapper}>
+                                        <TextField
+                                            label='Search'
+                                            fullWidth
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position='end'>
+                                                        <IconButton
+                                                            aria-label='toggle password visibility'
+                                                            edge='end'
+                                                        >
+                                                            <SearchIcon />
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                        <IconButton disabled>
+                                            <RefreshIcon />
+                                        </IconButton>
+                                    </div>
+                                    <Typography variant='caption'>
+                                        10 Results Displayed
+                                    </Typography>
+                                </div>
+                                <Paper elevation={3} className={classes.paper}>
+                                    <div className={classes.userheader}>
+                                        <div>
+                                            <Avatar>A</Avatar>
                                         </div>
-                                        <div className={classes.userheader}>
-                                            <div>
-                                                <Avatar>A</Avatar>
-                                            </div>
-                                            <div>
-                                                <Typography variant='subtitle2'>
-                                                    Asami Gisela
-                                                </Typography>
-                                                <Typography variant='caption'>
-                                                    10:12 AM · 11/20/2021
-                                                </Typography>
-                                            </div>
+                                        <div>
+                                            <Typography variant='subtitle2'>
+                                                Asami Gisela
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                10:12 AM · 11/20/2021
+                                            </Typography>
                                         </div>
-                                        <Typography variant='subtitle2' className={classes.papertext}>
-                                            What are your calls to action concerning the 
-                                            homelessness in the city? What decisions will you be 
-                                            making to attend to the matter?
-                                        </Typography>
-                                    </Paper>
-                                    <div className={classes.selectbuttons}>
-                                        <Button
-                                            variant={viewerFeed === 'Feed' ? 'contained' : 'outlined'}
-                                            color='primary'
-                                            onClick={() => setViewerFeed('Feed')}
-                                        >
-                                            Feed
+                                    </div>
+                                    <Typography variant='subtitle2'>
+                                        What are your calls to action concerning the 
+                                        homelessness in the city? What decisions will you be 
+                                        making to attend to the matter?
+                                    </Typography>
+                                    <ButtonGroup fullWidth>
+                                        <Button endIcon={<ThumbUpIcon/>}>
+                                            Like
                                         </Button>
-                                        <Button
-                                            variant={viewerFeed === 'Feedback' ? 'contained' : 'outlined'}
-                                            color='primary'
-                                            onClick={() => setViewerFeed('Feedback')}
-                                        >
-                                            Feedback
+                                        <Button endIcon={<FormatQuoteIcon/>}>
+                                            Quote
                                         </Button>
-                                    </div>
-                                    <div className={classes.searchcontainer}>
-                                        <div className={classes.searchwrapper}>
-                                            <TextField
-                                                label='Search'
-                                                fullWidth
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position='end'>
-                                                            <IconButton
-                                                                aria-label='toggle password visibility'
-                                                                edge='end'
-                                                            >
-                                                                <SearchIcon />
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                            <IconButton disabled>
-                                                <RefreshIcon />
-                                            </IconButton>
+                                    </ButtonGroup>
+                                </Paper>
+                                <Paper elevation={3} className={classes.paper}>
+                                    <div className={classes.userheader}>
+                                        <div>
+                                            <Avatar>R</Avatar>
                                         </div>
-                                        <Typography variant='caption'>
-                                            10 Results Displayed
-                                        </Typography>
+                                        <div>
+                                            <Typography variant='subtitle2'>
+                                                Raul Aditya
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                10:15 PM · 11/20/2021
+                                            </Typography>
+                                        </div>
                                     </div>
-                                    { viewerFeed  === 'Feed' ?
-                                        <>
-                                            <Button
-                                                fullWidth
-                                                variant='contained'
-                                                color='primary'
-                                                startIcon={<QuestionAnswerIcon/>}
-                                                className={classes.userbutton}
-                                            >
-                                                Ask a Question
-                                            </Button>
-                                            <Paper elevation={3} className={classes.paper}>
-                                                <div className={classes.userheader}>
-                                                    <div>
-                                                        <Avatar>A</Avatar>
-                                                    </div>
-                                                    <div>
-                                                        <Typography variant='subtitle2'>
-                                                            Asami Gisela
-                                                        </Typography>
-                                                        <Typography variant='caption'>
-                                                            10:12 AM · 11/20/2021
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                                <Typography variant='subtitle2' className={classes.papertext}>
-                                                    What are your calls to action concerning the 
-                                                    homelessness in the city? What decisions will you be 
-                                                    making to attend to the matter?
-                                                </Typography>
-                                                <div className={classes.feedbuttons}>
-                                                    <Button size='small' endIcon={<ThumbUpIcon/>}>
-                                                        Like
-                                                    </Button>
-                                                    <Button size='small' endIcon={<FormatQuoteIcon/>}>
-                                                        Quote
-                                                    </Button>
-                                                </div>
-                                            </Paper>
-                                            <Paper elevation={3} className={classes.paper}>
-                                                <div className={classes.userheader}>
-                                                    <div>
-                                                        <Avatar>R</Avatar>
-                                                    </div>
-                                                    <div>
-                                                        <Typography variant='subtitle2'>
-                                                            Raul Aditya
-                                                        </Typography>
-                                                        <Typography variant='caption'>
-                                                            10:15 AM · 11/20/2021
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                                <Typography variant='subtitle2' className={classes.papertext}>
-                                                    What do you think is the best way to tackle the issue
-                                                    with providing equal opportunities for education for 
-                                                    underrepresented communities in the city?
-                                                </Typography>
-                                                <div className={classes.feedbuttons}>
-                                                    <Button size='small' endIcon={<ThumbUpIcon/>}>
-                                                        Like
-                                                    </Button>
-                                                    <Button size='small' endIcon={<FormatQuoteIcon/>}>
-                                                        Quote
-                                                    </Button>
-                                                </div>
-                                            </Paper>
-                                        </>
-                                        :
-                                        <>
-                                            <Button
-                                                fullWidth
-                                                variant='contained'
-                                                color='primary'
-                                                startIcon={<QuestionAnswerIcon/>}
-                                                className={classes.userbutton}
-                                            >
-                                                Give Feedback
-                                            </Button>
-                                            <Paper elevation={3} className={classes.paper}>
-                                                <div className={classes.userheader}>
-                                                    <div>
-                                                        <Avatar>L</Avatar>
-                                                    </div>
-                                                    <div>
-                                                        <Typography variant='subtitle2'>
-                                                            Yourself
-                                                        </Typography>
-                                                        <Typography variant='caption'>
-                                                            10:05 AM · 11/20/2021
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                                <Typography variant='subtitle2' className={classes.papertext}>
-                                                    Perhaps a more ideal solution would be...
-                                                </Typography>
-                                            </Paper>
-                                            <Paper elevation={3} className={classes.paper}>
-                                                <div className={classes.userheader}>
-                                                    <div>
-                                                        <Avatar>L</Avatar>
-                                                    </div>
-                                                    <div>
-                                                        <Typography variant='subtitle2'>
-                                                            Yourself
-                                                        </Typography>
-                                                        <Typography variant='caption'>
-                                                            10:02 AM · 11/20/2021
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                                <Typography variant='subtitle2' className={classes.papertext}>
-                                                    I think a better follow-up would be...
-                                                </Typography>
-                                            </Paper>
-                                            <Paper elevation={3} className={classes.paper}>
-                                                <div className={classes.userheader}>
-                                                    <div>
-                                                        <Avatar>L</Avatar>
-                                                    </div>
-                                                    <div>
-                                                        <Typography variant='subtitle2'>
-                                                            Yourself
-                                                        </Typography>
-                                                        <Typography variant='caption'>
-                                                            10:01 AM · 11/20/2021
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                                <Typography variant='subtitle2' className={classes.papertext}>
-                                                    I think you make a good point regarding...
-                                                </Typography>
-                                            </Paper>
-                                        </>
-                                    }
-                                    
-                                </Grid>
-                            </div>
-                        </Paper>
-                    </div>
+                                    <Typography variant='subtitle2'>
+                                        What do you think is the best way to tackle the issue
+                                        with providing equal opportunities for education for 
+                                        underrepresented communities in the city?
+                                    </Typography>
+                                    <ButtonGroup fullWidth>
+                                        <Button endIcon={<ThumbUpIcon/>}>
+                                            Like
+                                        </Button>
+                                        <Button endIcon={<FormatQuoteIcon/>}>
+                                            Quote
+                                        </Button>
+                                    </ButtonGroup>
+                                </Paper>
+                            </Grid>
+                        </div>
+                    </Paper>
                 </Grid>
             </Grid>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
@@ -1591,25 +1628,6 @@ export default function Home() {
                     <Typography variant='h4'>
                         A better solution for remote public engagement.
                     </Typography>
-                    {views[activeView]}
-                    <MobileStepper
-                        variant='dots'
-                        steps={2}
-                        position='static'
-                        activeStep={activeView}
-                        nextButton={
-                            <Button size='small' onClick={handleNextView} disabled={activeView === 1}>
-                                Next
-                                <KeyboardArrowRightIcon />
-                            </Button>
-                        }
-                        backButton={
-                            <Button size='small' onClick={handleBackView} disabled={activeView === 0}>
-                                <KeyboardArrowLeftIcon />
-                                Back
-                            </Button>
-                        }
-                    />
                 </Grid>
             </Grid>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
@@ -1621,47 +1639,6 @@ export default function Home() {
                         constructive engagement through the user interface and “pro-social” 
                         algorithm.
                     </Typography>
-                    {roles[activeRole]}
-                    <MobileStepper
-                        variant='dots'
-                        steps={3}
-                        position='static'
-                        activeStep={activeRole}
-                        nextButton={
-                            <Button size='small' onClick={handleNextRole} disabled={activeRole === 2}>
-                                Next
-                                <KeyboardArrowRightIcon />
-                            </Button>
-                        }
-                        backButton={
-                            <Button size='small' onClick={handleBackRole} disabled={activeRole === 0}>
-                                <KeyboardArrowLeftIcon />
-                                Back
-                            </Button>
-                        }
-                    />
-                </Grid>
-            </Grid>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Grid item xs={12} className={classes.partners}>
-                    <Image
-                        src='/static/democracy_fund_logo.svg' 
-                        width={280}
-                        height={200}
-                        objectFit='contain'
-                    />
-                    <Image
-                        src='/static/prytaneum_logo.svg' 
-                        width={150}
-                        height={200}
-                        objectFit='contain'
-                    />
-                    <Image
-                        src='/static/ucr_tecd_logo.svg' 
-                        width={450}
-                        height={200}
-                        objectFit='contain'
-                    />
                 </Grid>
             </Grid>
         </>
