@@ -461,7 +461,7 @@ export default function Home() {
     ]
 
     const views = [
-        <div className={`${classes.subview} ${classes.smallscale}`}>
+        <div key={1} className={`${classes.subview} ${classes.smallscale}`}>
             <Typography variant='body1'>
                 Participant View
             </Typography>
@@ -748,7 +748,7 @@ export default function Home() {
                 </Paper>
             </div>
         </div>,
-        <div className={`${classes.subview} ${classes.smallscale}`}>
+        <div key={2} className={`${classes.subview} ${classes.smallscale}`}>
             <Typography variant='body1'>
                 Moderator View
             </Typography>
