@@ -6,6 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.regional-static-ip-name: dev-prytaneum-io
 spec:
   rules:
   - http:
