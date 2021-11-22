@@ -5,7 +5,6 @@ metadata:
   namespace: development
   annotations:
     kubernetes.io/ingress.class: "gce"
-    networking.gke.io/v1beta1.FrontendConfig: "prytaneum-frontend-config"
     kubernetes.io/ingress.allow-http: "true"
 spec:
   rules:
