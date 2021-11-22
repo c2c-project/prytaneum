@@ -3,7 +3,7 @@ name: Build and Deploy Production Version to GKE
 on:
   push:
     branches:
-      - dev
+      - master
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -50,6 +50,8 @@ jobs:
             --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:production" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
+            --build-arg GRAPHQL_URL="https://prytaneum.io/graphql" \
+            --build-arg DEPLOYMENT_ENV="production" \
             .
       # Build the Server
       - name: Build Server

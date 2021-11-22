@@ -14,7 +14,8 @@ RUN yarn install
 # Build Client
 WORKDIR /usr/src/app/app/client
 
-ENV NEXT_PUBLIC_GRAPHQL_URL https://prytaneum.io/graphql
+ARG GRAPHQL_URL=https://prytaneum.io/graphql
+ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}}
 
 RUN yarn build
 
@@ -24,6 +25,8 @@ RUN yarn set version berry
 
 WORKDIR /usr/src/app
 
+ARG DEPLOYMENT_ENV=production
+ENV DEPLOYMENT_ENV ${DEPLOYMENT_ENV}
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 

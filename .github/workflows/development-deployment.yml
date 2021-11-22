@@ -50,6 +50,8 @@ jobs:
             --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
+            --build-arg GRAPHQL_URL="${{ secrets.DEV_GRAPHQL_URL }}" \
+            --build-arg DEPLOYMENT_ENV="development" \
             .
       # Build the Server
       - name: Build Server

@@ -38,7 +38,7 @@ export function makeServerFetchFunction(ctx: GetServerSidePropsContext) {
 }
 
 const createSubscriptionClient = () => {
-    const wsProtocol = 'wss://';
+    const wsProtocol = process.env.DEPLOYMENT_ENV === 'production' ? 'wss://' : 'ws://';
     // first element will be "http"
     const [, ...url] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split('://');
     return new SubscriptionClient([wsProtocol, ...url].join(''), {
