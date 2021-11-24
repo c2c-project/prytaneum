@@ -3,8 +3,9 @@ import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/VpnKey';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
-
 import { ResetPasswordForm } from '@local/features/accounts/ResetPasswordForm';
+// import FadeThrough from '@local/animations/FadeThrough';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -16,6 +16,9 @@ export type useQuestionListSubscriptionResponse = {
             readonly node: {
                 readonly id: string;
                 readonly position: number | null;
+                readonly refQuestion: {
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                } | null;
                 readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
         };
@@ -39,6 +42,10 @@ subscription useQuestionListSubscription(
       node {
         id
         position
+        refQuestion {
+          ...QuestionQuoteFragment
+          id
+        }
         ...QuestionAuthorFragment
         ...QuestionContentFragment
         ...QuestionStatsFragment
@@ -58,6 +65,12 @@ fragment QuestionAuthorFragment on EventQuestion {
 
 fragment QuestionContentFragment on EventQuestion {
   question
+}
+
+fragment QuestionQuoteFragment on EventQuestion {
+  id
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
 }
 
 fragment QuestionStatsFragment on EventQuestion {
@@ -108,6 +121,46 @@ v5 = {
   "kind": "ScalarField",
   "name": "position",
   "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v4/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "avatar",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -144,6 +197,22 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "EventQuestion",
+                    "kind": "LinkedField",
+                    "name": "refQuestion",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "args": null,
+                        "kind": "FragmentSpread",
+                        "name": "QuestionQuoteFragment"
+                      }
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -209,43 +278,21 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
+                    "concreteType": "EventQuestion",
                     "kind": "LinkedField",
-                    "name": "createdBy",
+                    "name": "refQuestion",
                     "plural": false,
                     "selections": [
                       (v4/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "firstName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "avatar",
-                        "storageKey": null
-                      }
+                      (v6/*: any*/),
+                      (v7/*: any*/),
+                      (v8/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "createdAt",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "question",
-                    "storageKey": null
-                  },
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -265,14 +312,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "28088855b18a91c6fcbaec8697e6c212",
+    "cacheID": "19cf3306871cd116952b835cbe7268da",
     "id": null,
     "metadata": {},
     "name": "useQuestionListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  questionCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  questionCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        position\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '02fae8aadfcad3af1184d7f8730ca130';
+(node as any).hash = '2e9277a543f7f9d438dc03286cb8baf3';
 export default node;

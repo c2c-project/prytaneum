@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import Main from '.';
-import AppBar from '../AppBar';
+import { AppBar } from '../AppBar';
 import Page from '../Page';
 
 export default { title: 'Layout/Main' };

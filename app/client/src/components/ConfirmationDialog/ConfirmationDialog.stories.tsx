@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta } from '@storybook/react';
 
-import ConfirmationDialog from './ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 
 export default {
     title: '@local/components/Confirmation Dialog',

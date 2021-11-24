@@ -38,7 +38,7 @@ export function makeServerFetchFunction(ctx: GetServerSidePropsContext) {
 }
 
 const createSubscriptionClient = () => {
-    const wsProtocol = 'ws://';
+    const wsProtocol = 'wss://';
     // first element will be "http"
     const [, ...url] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split('://');
     return new SubscriptionClient([wsProtocol, ...url].join(''), {

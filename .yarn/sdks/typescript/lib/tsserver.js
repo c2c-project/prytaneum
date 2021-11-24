@@ -4,12 +4,16 @@ const {existsSync} = require(`fs`);
 const {createRequire, createRequireFromPath} = require(`module`);
 const {resolve} = require(`path`);
 
-const relPnpApiPath = "../../../../.pnp.js";
+const relPnpApiPath = "../../../../.pnp.cjs";
 
 const absPnpApiPath = resolve(__dirname, relPnpApiPath);
 const absRequire = (createRequire || createRequireFromPath)(absPnpApiPath);
 
 const moduleWrapper = tsserver => {
+  if (!process.versions.pnp) {
+    return tsserver;
+  }
+
   const {isAbsolute} = require(`path`);
   const pnpApi = require(`pnpapi`);
 
@@ -26,7 +30,7 @@ const moduleWrapper = tsserver => {
 
   function toEditorPath(str) {
     // We add the `zip:` prefix to both `.zip/` paths and virtual paths
-    if (isAbsolute(str) && !str.match(/^\^zip:/) && (str.match(/\.zip\//) || isVirtual(str))) {
+    if (isAbsolute(str) && !str.match(/^\^?(zip:|\/zip\/)/) && (str.match(/\.zip\//) || isVirtual(str))) {
       // We also take the opportunity to turn virtual paths into physical ones;
       // this makes it much easier to work with workspaces that list peer
       // dependencies, since otherwise Ctrl+Click would bring us to the virtual
@@ -56,8 +60,16 @@ const moduleWrapper = tsserver => {
           //
           // Ref: https://github.com/microsoft/vscode/issues/105014#issuecomment-686760910
           //
-          case `vscode`: {
+          // Update Oct 8 2021: VSCode changed their format in 1.61.
+          // Before | ^zip:/c:/foo/bar.zip/package.json
+          // After  | ^/zip//c:/foo/bar.zip/package.json
+          //
+          case `vscode <1.61`: {
             str = `^zip:${str}`;
+          } break;
+
+          case `vscode`: {
+            str = `^/zip/${str}`;
           } break;
 
           // To make "go to definition" work,
@@ -66,6 +78,14 @@ const moduleWrapper = tsserver => {
           case `coc-nvim`: {
             str = normalize(resolved).replace(/\.zip\//, `.zip::`);
             str = resolve(`zipfile:${str}`);
+          } break;
+
+          // Support neovim native LSP and [typescript-language-server](https://github.com/theia-ide/typescript-language-server)
+          // We have to resolve the actual file system path from virtual path,
+          // everything else is up to neovim
+          case `neovim`: {
+            str = normalize(resolved).replace(/\.zip\//, `.zip::`);
+            str = `zipfile:${str}`;
           } break;
 
           default: {
@@ -79,9 +99,25 @@ const moduleWrapper = tsserver => {
   }
 
   function fromEditorPath(str) {
-    return process.platform === `win32`
-      ? str.replace(/^\^?zip:\//, ``)
-      : str.replace(/^\^?zip:/, ``);
+    switch (hostInfo) {
+      case `coc-nvim`:
+      case `neovim`: {
+        str = str.replace(/\.zip::/, `.zip/`);
+        // The path for coc-nvim is in format of /<pwd>/zipfile:/<pwd>/.yarn/...
+        // So in order to convert it back, we use .* to match all the thing
+        // before `zipfile:`
+        return process.platform === `win32`
+          ? str.replace(/^.*zipfile:\//, ``)
+          : str.replace(/^.*zipfile:/, ``);
+      } break;
+
+      case `vscode`:
+      default: {
+        return process.platform === `win32`
+          ? str.replace(/^\^?(zip:|\/zip)\/+/, ``)
+          : str.replace(/^\^?(zip:|\/zip)\/+/, `/`);
+      } break;
+    }
   }
 
   // Force enable 'allowLocalPluginLoads'
@@ -106,7 +142,7 @@ const moduleWrapper = tsserver => {
   const {onMessage: originalOnMessage, send: originalSend} = Session.prototype;
   let hostInfo = `unknown`;
 
-  return Object.assign(Session.prototype, {
+  Object.assign(Session.prototype, {
     onMessage(/** @type {string} */ message) {
       const parsedMessage = JSON.parse(message)
 
@@ -117,6 +153,9 @@ const moduleWrapper = tsserver => {
         typeof parsedMessage.arguments.hostInfo === `string`
       ) {
         hostInfo = parsedMessage.arguments.hostInfo;
+        if (hostInfo === `vscode` && process.env.VSCODE_IPC_HOOK && process.env.VSCODE_IPC_HOOK.match(/Code\/1\.([1-5][0-9]|60)\./)) {
+          hostInfo += ` <1.61`;
+        }
       }
 
       return originalOnMessage.call(this, JSON.stringify(parsedMessage, (key, value) => {
@@ -130,6 +169,8 @@ const moduleWrapper = tsserver => {
       })));
     }
   });
+
+  return tsserver;
 };
 
 if (existsSync(absPnpApiPath)) {

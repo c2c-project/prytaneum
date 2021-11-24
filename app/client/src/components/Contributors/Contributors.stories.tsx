@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Meta } from '@storybook/react';
 import faker from 'faker/locale/en';
 
-import { ReferenceNames } from 'types';
+import { ReferenceNames } from 'prytaneum-typings';
 import Component from '.';
 
 export default {

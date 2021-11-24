@@ -8,7 +8,7 @@
         "@commitlint/cli": "^12.1.1",
         "@commitlint/config-conventional": "^12.1.1",
         "@commitlint/prompt-cli": "^12.1.1",
-        "@graphql-codegen/cli": "^1.21.4",
+        "@graphql-codegen/cli": "^2.2.0",
         "@graphql-codegen/introspection": "1.18.2",
         "@graphql-codegen/typescript": "1.22.0",
         "@graphql-codegen/typescript-apollo-client-helpers": "^1.1.5",
@@ -40,16 +40,19 @@
         "typescript": "^4.2.4"
     },
     "scripts": {
-        "postinstall": "husky install",
+        "husky": "husky install",
         "g:commit": "commit",
         "g:codegen": "graphql-codegen --config codegen.yml",
         "g:update-types": "ts-node ./scripts/make-types",
         "g:dev-server": "yarn workspace @app/server dev",
         "g:dev-client": "yarn workspace @app/client dev",
+        "g:start-server": "yarn workspace @app/server start",
+        "g:start-client": "yarn workspace @app/client start",
         "g:client-relay": "yarn workspace @app/client relay",
         "g:start-db": "yarn workspace @app/db start-db",
         "g:start-proxy": "yarn workspace prytaneum ts-node-dev -r ./scripts/env.ts ./proxy.ts",
-        "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\""
+        "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\"",
+        "g:start-project": "concurrently -n server,client,proxy \"yarn g:start-server\" \"yarn g:start-client\" \"yarn g:start-proxy\""
     },
     "dependencies": {
         "babel-eslint": "^10.1.0",

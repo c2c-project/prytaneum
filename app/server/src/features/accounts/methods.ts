@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@app/prisma';
 import { toGlobalId } from '@local/features/utils';
 

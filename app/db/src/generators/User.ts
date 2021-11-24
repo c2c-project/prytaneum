@@ -8,7 +8,7 @@ export const gen = (): User => {
     const firstName = faker.name.findName();
     const lastName = faker.name.lastName();
     return {
-        userId: faker.random.uuid(),
+        id: faker.random.uuid(),
         createdAt: faker.date.past(),
         firstName,
         lastName,

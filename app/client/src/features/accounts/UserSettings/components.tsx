@@ -221,7 +221,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body1'>
-                    <b>Current email:</b> {user.email}
+                    <b>Current email:</b> {user?.email}
                 </Typography>
             </Grid>
             <Grid component='span' item xs={12}>

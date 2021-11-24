@@ -1,3 +1,7 @@
 import fastify from 'fastify';
 
-export const server = fastify({ logger: { prettyPrint: process.env.NODE_ENV === 'development' } });
+export default function build() {
+    const server = fastify({ logger: { prettyPrint: process.env.NODE_ENV === 'development' }, trustProxy: true });
+    return server;
+}
+

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Component from './ResponsiveDialog';
+import { ResponsiveDialog as Component } from './ResponsiveDialog';
 
 export default { title: '@local/components/Responsive Dialog', component: Component };
 

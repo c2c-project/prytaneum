@@ -866,7 +866,7 @@ export type UpdateEvent = {
 };
 
 export type UpdateModerator = {
-  userId: Scalars['ID'];
+  email: Scalars['String'];
   eventId: Scalars['ID'];
 };
 

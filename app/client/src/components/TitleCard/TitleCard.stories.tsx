@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Main from 'layout/Main';
+import Main from '@local/layout/Main';
 import Component from './TitleCard';
 
 export default { title: '@local/components/Title Card' };
