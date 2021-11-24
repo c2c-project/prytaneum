@@ -5,6 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type UpdateSpeaker = {
+<<<<<<< HEAD
     description?: string | null | undefined;
     email?: string | null | undefined;
     eventId: string;
@@ -12,6 +13,15 @@ export type UpdateSpeaker = {
     name?: string | null | undefined;
     pictureUrl?: string | null | undefined;
     title?: string | null | undefined;
+=======
+    description?: string | null;
+    email?: string | null;
+    eventId: string;
+    id: string;
+    name?: string | null;
+    pictureUrl?: string | null;
+    title?: string | null;
+>>>>>>> chore(project): updated generation
 };
 export type UpdateSpeakerMutationVariables = {
     input: UpdateSpeaker;

@@ -170,6 +170,7 @@ type Event implements Node {
   """Participants of the event -- individuals who showed up"""
   participants(after: String, first: Int): EventParticipantConnection
 
+<<<<<<< HEAD
   """Questions having to do with the queue"""
   questionQueue(after: String, first: Int): EventQuestionQueue
 
@@ -182,6 +183,14 @@ type Event implements Node {
   """
   queuedQuestions(after: String, first: Int): EventQuestionConnection
 
+=======
+  """All questions relating to this event"""
+  questions(after: String, first: Int): EventQuestionConnection
+
+  """Questions queued in this session by the moderator(s)"""
+  queuedQuestions(after: String, first: Int): EventQuestionConnection
+
+>>>>>>> chore(project): updated generation
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
 
@@ -208,6 +217,7 @@ type EventConnection {
 type EventEdge {
   cursor: String!
   node: Event!
+<<<<<<< HEAD
 }
 
 type EventFeedbackMutationResponse implements MutationResponse {
@@ -225,6 +235,16 @@ type EventLiveFeedback implements Node {
   isReply: Boolean
   message: String!
   refFeedback: EventLiveFeedback
+=======
+}
+
+type EventLiveFeedback implements Node {
+  createdAt: String
+  createdBy: User
+  event: Event
+  id: ID!
+  message: String!
+>>>>>>> chore(project): updated generation
 }
 
 type EventLiveFeedbackConnection {
@@ -301,6 +321,7 @@ type EventQuestionConnection {
 type EventQuestionEdge {
   cursor: String!
   node: EventQuestion!
+<<<<<<< HEAD
 }
 
 """
@@ -308,12 +329,15 @@ Required to reduce frontend complexity due to relay limitation https://github.co
 """
 type EventQuestionEdgeContainer {
   edge: EventQuestionEdge!
+=======
+>>>>>>> chore(project): updated generation
 }
 
 type EventQuestionMutationResponse implements MutationResponse {
   body: EventQuestionEdge
   isError: Boolean!
   message: String!
+<<<<<<< HEAD
 }
 
 """EventQuestionQueue is the entire queue of the event"""
@@ -322,6 +346,8 @@ type EventQuestionQueue {
 
   """last index is current question"""
   questionRecord(after: String, first: Int): EventQuestionConnection
+=======
+>>>>>>> chore(project): updated generation
 }
 
 type EventSpeaker implements Node {
@@ -387,11 +413,14 @@ type EventVideoMutationResponse implements MutationResponse {
   body: EventVideo
   isError: Boolean!
   message: String!
+<<<<<<< HEAD
 }
 
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
+=======
+>>>>>>> chore(project): updated generation
 }
 
 input HideQuestion {

@@ -6,8 +6,13 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type UpdateVideo = {
     eventId: string;
+<<<<<<< HEAD
     lang?: string | null | undefined;
     url?: string | null | undefined;
+=======
+    lang?: string | null;
+    url?: string | null;
+>>>>>>> chore(project): updated generation
     videoId: string;
 };
 export type UpdateVideoMutationVariables = {

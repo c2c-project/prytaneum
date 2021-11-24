@@ -6,10 +6,17 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type CreateQuestion = {
     eventId: string;
+<<<<<<< HEAD
     isFollowUp?: boolean | null | undefined;
     isQuote?: boolean | null | undefined;
     question: string;
     refQuestion?: string | null | undefined;
+=======
+    isFollowUp?: boolean | null;
+    isQuote?: boolean | null;
+    question: string;
+    refQuestion?: string | null;
+>>>>>>> chore(project): updated generation
 };
 export type AskQuestionMutationVariables = {
     input: CreateQuestion;
