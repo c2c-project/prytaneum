@@ -6,6 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type UpdateEvent = {
 <<<<<<< HEAD
+<<<<<<< HEAD
     description?: string | null | undefined;
     endDateTime?: Date | null | undefined;
     eventId: string;
@@ -17,6 +18,8 @@ export type UpdateEvent = {
     title?: string | null | undefined;
     topic?: string | null | undefined;
 =======
+=======
+>>>>>>> chore(project): updated generation
     description?: string | null;
     endDateTime?: Date | null;
     eventId: string;
@@ -27,6 +30,9 @@ export type UpdateEvent = {
     startDateTime?: Date | null;
     title?: string | null;
     topic?: string | null;
+<<<<<<< HEAD
+>>>>>>> chore(project): updated generation
+=======
 >>>>>>> chore(project): updated generation
 };
 export type UpdateEventMutationVariables = {

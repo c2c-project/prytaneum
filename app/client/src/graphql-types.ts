@@ -162,6 +162,7 @@ export type Event = Node & {
   /** Participants of the event -- individuals who showed up */
   participants?: Maybe<EventParticipantConnection>;
 <<<<<<< HEAD
+<<<<<<< HEAD
   /** Questions having to do with the queue */
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
@@ -171,6 +172,8 @@ export type Event = Node & {
    * TODO: #QQRedesign delete after code complete
    */
 =======
+=======
+>>>>>>> chore(project): updated generation
   /** All questions relating to this event */
   questions?: Maybe<EventQuestionConnection>;
   /** Questions queued in this session by the moderator(s) */
@@ -198,6 +201,7 @@ export type EventInvitedArgs = {
 
 export type EventLiveFeedbackArgs = {
 <<<<<<< HEAD
+<<<<<<< HEAD
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
@@ -206,23 +210,33 @@ export type EventLiveFeedbackArgs = {
 export type EventModeratorsArgs = {
 =======
 >>>>>>> chore(project): updated generation
+=======
+>>>>>>> chore(project): updated generation
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 export type EventParticipantsArgs = {
 =======
 export type EventModeratorsArgs = {
 >>>>>>> chore(project): updated generation
+=======
+export type EventModeratorsArgs = {
+>>>>>>> chore(project): updated generation
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export type EventQuestionQueueArgs = {
+=======
+export type EventParticipantsArgs = {
+>>>>>>> chore(project): updated generation
 =======
 export type EventParticipantsArgs = {
 >>>>>>> chore(project): updated generation
@@ -267,6 +281,7 @@ export type EventEdge = {
   cursor: Scalars['String'];
   node: Event;
 <<<<<<< HEAD
+<<<<<<< HEAD
 };
 
 export type EventFeedbackMutationResponse = MutationResponse & {
@@ -276,10 +291,13 @@ export type EventFeedbackMutationResponse = MutationResponse & {
   message: Scalars['String'];
 =======
 >>>>>>> chore(project): updated generation
+=======
+>>>>>>> chore(project): updated generation
 };
 
 export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
+<<<<<<< HEAD
 <<<<<<< HEAD
   createdAt?: Maybe<Scalars['Date']>;
   createdBy?: Maybe<User>;
@@ -290,11 +308,16 @@ export type EventLiveFeedback = Node & {
   message: Scalars['String'];
   refFeedback?: Maybe<EventLiveFeedback>;
 =======
+=======
+>>>>>>> chore(project): updated generation
   createdAt?: Maybe<Scalars['String']>;
   createdBy?: Maybe<User>;
   event?: Maybe<Event>;
   id: Scalars['ID'];
   message: Scalars['String'];
+<<<<<<< HEAD
+>>>>>>> chore(project): updated generation
+=======
 >>>>>>> chore(project): updated generation
 };
 
@@ -375,12 +398,15 @@ export type EventQuestionEdge = {
   cursor: Scalars['String'];
   node: EventQuestion;
 <<<<<<< HEAD
+<<<<<<< HEAD
 };
 
 /** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
 export type EventQuestionEdgeContainer = {
   __typename?: 'EventQuestionEdgeContainer';
   edge: EventQuestionEdge;
+=======
+>>>>>>> chore(project): updated generation
 =======
 >>>>>>> chore(project): updated generation
 };
@@ -390,6 +416,7 @@ export type EventQuestionMutationResponse = MutationResponse & {
   body?: Maybe<EventQuestionEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+<<<<<<< HEAD
 <<<<<<< HEAD
 };
 
@@ -413,6 +440,8 @@ export type EventQuestionQueueEnqueuedQuestionsArgs = {
 export type EventQuestionQueueQuestionRecordArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+=======
+>>>>>>> chore(project): updated generation
 =======
 >>>>>>> chore(project): updated generation
 };
@@ -482,12 +511,15 @@ export type EventVideoMutationResponse = MutationResponse & {
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 <<<<<<< HEAD
+<<<<<<< HEAD
 };
 
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
   operationType: Operation;
+=======
+>>>>>>> chore(project): updated generation
 =======
 >>>>>>> chore(project): updated generation
 };

@@ -8,15 +8,21 @@ import {  } from "relay-runtime";
 export type CreateQuestion = {
     eventId: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
     isFollowUp?: boolean | null | undefined;
     isQuote?: boolean | null | undefined;
     question: string;
     refQuestion?: string | null | undefined;
 =======
+=======
+>>>>>>> chore(project): updated generation
     isFollowUp?: boolean | null;
     isQuote?: boolean | null;
     question: string;
     refQuestion?: string | null;
+<<<<<<< HEAD
+>>>>>>> chore(project): updated generation
+=======
 >>>>>>> chore(project): updated generation
 };
 export type QuoteMutationVariables = {

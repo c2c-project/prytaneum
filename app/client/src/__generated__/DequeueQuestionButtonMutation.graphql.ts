@@ -3,8 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+<<<<<<< HEAD:app/client/src/__generated__/DequeueQuestionButtonMutation.graphql.ts
 
 export type RemoveQuestionFromQueue = {
+=======
+export type UpdateQuestionQueue = {
+    adding: boolean;
+>>>>>>> chore(project): updated generation:app/client/src/__generated__/QueueButtonMutation.graphql.ts
     eventId: string;
     questionId: string;
 };
