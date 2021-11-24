@@ -645,8 +645,8 @@ input UpdateEvent {
 }
 
 input UpdateModerator {
-  email: String!
   eventId: ID!
+  userId: ID!
 }
 
 """Information that may be updated by the user"""
