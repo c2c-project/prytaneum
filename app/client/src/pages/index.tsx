@@ -30,6 +30,7 @@ import ReplyIcon from '@material-ui/icons/Reply';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -38,13 +39,16 @@ import { useUser } from '@local/features/accounts';
 const useStyles = makeStyles((theme) => ({
     landing: {
         width: '100%',
-        minHeight: '90vh',
+        minHeight: '100vh',
+        margin: 0,
+        [theme.breakpoints.down('sm')]: {
+            minHeight: '90vh',
+        },
     },
     root: {
         width: '100%',
         minHeight: '60vh',
-        marginTop: '2rem',
-        marginBottom: '2rem',
+        margin: '2rem 0'
     },
     header: {
         marginBottom: 20,
@@ -370,6 +374,17 @@ const useStyles = makeStyles((theme) => ({
             gap: '1rem',
         },
     },
+    arrowsection: {
+        display: 'flex',
+        justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+    downarrow: {
+        fontSize: '4rem',
+        transform: 'rotate(-90deg)'
+    }
 }));
 
 export default function Home() {
@@ -1263,6 +1278,9 @@ export default function Home() {
                         height={2097}
                         objectFit='contain'
                     />
+                </Grid>
+                <Grid item xs={12} className={classes.arrowsection}>
+                    <ArrowBackIosRoundedIcon className={classes.downarrow} />
                 </Grid>
             </Grid>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
