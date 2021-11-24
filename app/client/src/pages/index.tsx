@@ -182,13 +182,6 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         gap: '0.75rem',
         width: '100%',
-        // maxWidth: 425,
-        padding: theme.spacing(2),
-    },
-    subpaper: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
         padding: theme.spacing(2),
     },
     buttonwrapper: {
@@ -196,21 +189,9 @@ const useStyles = makeStyles((theme) => ({
         gap: '0.5rem',
         alignSelf: 'end',
     },
-    dropdown: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
     userheader: {
         display: 'flex',
         gap: '0.5rem',
-    },
-    paperdropdown: {
-        borderRadius: '9999px',
-        paddingLeft: theme.spacing(2),
-        [theme.breakpoints.down('md')]: {
-            width: '100%',
-        },
     },
     searchcontainer: {
         width: '100%',
@@ -229,7 +210,6 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         gap: '0.75rem',
         width: '100%',
-        // maxWidth: 425,
         padding: theme.spacing(2),
         paddingTop: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
@@ -267,46 +247,12 @@ const useStyles = makeStyles((theme) => ({
     papertext: {
         fontSize: '13px',
     },
-    yellowshadow: {
-        boxShadow: '10px 10px 0 0 #f5c64f',
-    },
-    blueshadow: {
-        boxShadow: '10px 10px 0 0 #4056a1'
-    },
-    lightblueshadow: {
-        boxShadow: '10px 10px 0 0 #8eafff'
-    },
     selectbuttons: {
         display: 'flex',
         gap: '0.5rem',
         alignItems: 'center',
         [theme.breakpoints.down('md')]: {
             width: '100%',
-        },
-    },
-    partners: {
-        display: 'flex',
-        gap: '4rem',
-        justifyContent: 'center',
-        [theme.breakpoints.down('md')]: {
-            gap: '3rem',
-        },
-        [theme.breakpoints.down('sm')]: {
-            gap: '2rem',
-        },
-        [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
-            gap: '1rem',
-        },
-    },
-    roleicon: {
-        fontSize: '5.5rem',
-    },
-    smallscale: {
-        transform: 'scale(0.85)',
-        margin: '-3.5rem 0',
-        [theme.breakpoints.down('md')]: {
-            margin: '-5.5rem 0'
         },
     },
     subview: {
@@ -388,6 +334,40 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '-0.5rem',
         [theme.breakpoints.up('sm')]: {
             display: 'none',
+        },
+    },
+    yellowshadow: {
+        boxShadow: '10px 10px 0 0 #f5c64f',
+    },
+    blueshadow: {
+        boxShadow: '10px 10px 0 0 #4056a1'
+    },
+    lightblueshadow: {
+        boxShadow: '10px 10px 0 0 #8eafff'
+    },
+    smallscale: {
+        transform: 'scale(0.85)',
+        margin: '-3.5rem 0',
+        [theme.breakpoints.down('md')]: {
+            margin: '-5.5rem 0'
+        },
+    },
+    roleicon: {
+        fontSize: '5.5rem',
+    },
+    partners: {
+        display: 'flex',
+        gap: '4rem',
+        justifyContent: 'center',
+        [theme.breakpoints.down('md')]: {
+            gap: '3rem',
+        },
+        [theme.breakpoints.down('sm')]: {
+            gap: '2rem',
+        },
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+            gap: '1rem',
         },
     },
 }));
