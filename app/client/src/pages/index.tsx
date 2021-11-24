@@ -29,6 +29,7 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ReplyIcon from '@material-ui/icons/Reply';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { useUser } from '@local/features/accounts';
@@ -42,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
     landing: {
         width: '100%',
         minHeight: '90vh',
-        margin: 0
     },
     root: {
         width: '100%',
         minHeight: '60vh',
-        margin: '2rem 0',
+        marginTop: '2rem',
+        marginBottom: '2rem',
     },
     arrowsection: {
         display: 'flex',
@@ -56,22 +57,39 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
-    downarrow: {
-        fontSize: '4rem',
-        transform: 'rotate(-90deg)'
+    title: {
+        [theme.breakpoints.down('md')]: {
+            marginTop: 50,
+        },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 35,
+        },
+        [theme.breakpoints.down('xs')]: {
+            marginTop: 20,
+        },
+    },
+    subtitle: {
+        textAlign: 'right',
+        color: '#272C6C',
+        [theme.breakpoints.down('md')]: {
+            textAlign: 'center'
+        },
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 18
+        },
     },
     button: {
         marginTop: 20,
         minWidth: 300,
         alignSelf: 'flex-start',
         fontSize: 24,
+        [theme.breakpoints.down('md')]: {
+            alignSelf: 'center'
+        },
         [theme.breakpoints.down('xs')]: {
             minWidth: 0,
             width: '100%',
             fontSize: 20,
-        },
-        [theme.breakpoints.down('sm')]: {
-            alignSelf: 'center'
         },
     },
     section: {
@@ -111,7 +129,15 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'uppercase',
         '& > div': {
             cursor: 'pointer',
-        }
+        },
+        [theme.breakpoints.down('xs')]: {
+            '& > div': {
+                display: 'none',
+            },
+            '& > div:nth-of-type(1)': {
+                display: 'flex',
+            },
+        },
     },
     user: {
         display: 'flex',
@@ -128,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         gap: '1rem',
         padding: theme.spacing(2),
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
         },
     },
@@ -139,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         backgroundColor: 'black',
         height: '65%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             minHeight: '70vh',
         },
         [theme.breakpoints.down('xs')]: {
@@ -191,6 +217,9 @@ const useStyles = makeStyles((theme) => ({
     },
     searchcontainer: {
         width: '100%',
+        [theme.breakpoints.down('md')]: {
+            display: 'none',
+        },
     },
     searchwrapper: {
         display: 'flex',
@@ -206,6 +235,9 @@ const useStyles = makeStyles((theme) => ({
         // maxWidth: 425,
         padding: theme.spacing(2),
         paddingTop: theme.spacing(3),
+        [theme.breakpoints.down('md')]: {
+            marginTop: '1rem',
+        },
     },
     pinheader: {
         position: 'absolute',
@@ -239,7 +271,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '13px',
     },
     yellowshadow: {
-        boxShadow: '10px 10px 0 0 #f5c64f'
+        boxShadow: '10px 10px 0 0 #f5c64f',
     },
     blueshadow: {
         boxShadow: '10px 10px 0 0 #4056a1'
@@ -251,6 +283,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         gap: '0.5rem',
         alignItems: 'center',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
     },
     partners: {
         display: 'flex',
@@ -271,8 +306,11 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '5.5rem',
     },
     smallscale: {
-        // transform: 'scale(0.8)',
-        // margin: '-4rem 0'
+        transform: 'scale(0.85)',
+        margin: '-3.5rem 0',
+        [theme.breakpoints.down('md')]: {
+            margin: '-5.5rem 0'
+        },
     },
     subview: {
         textAlign: 'left',
@@ -334,6 +372,26 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontWeight: 600,
         color: 'grey',
+        [theme.breakpoints.down('md')]: {
+            marginTop: 0,
+            marginBottom: 0,
+        },
+    },
+    desktopqueuebuttons: {
+        display: 'flex',
+        gap: '0.5rem',
+        [theme.breakpoints.down('xs')]: {
+            display: 'none',
+        },
+    },
+    mobilequeuebuttons: {
+        display: 'flex',
+        gap: '0.5rem',
+        width: '100%',
+        marginTop: '-0.5rem',
+        [theme.breakpoints.up('sm')]: {
+            display: 'none',
+        },
     },
 }));
 
@@ -439,7 +497,7 @@ export default function Home() {
                         </div>
                     </Grid>
                     <div className={classes.windowcontent}>
-                        <Grid item xs={12} md={7} >
+                        <Grid item xs={12} lg={7}>
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
@@ -482,7 +540,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                        <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                             <Paper elevation={3} className={classes.pinnedpaper}>
                                 <div className={classes.pinheader}>
                                     <Chip 
@@ -726,7 +784,7 @@ export default function Home() {
                         </div>
                     </Grid>
                     <div className={classes.windowcontent}>
-                        <Grid item xs={12} md={7} >
+                        <Grid item xs={12} lg={7}>
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
@@ -769,7 +827,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                        <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                             <Paper elevation={3} className={classes.pinnedpaper}>
                                 <div className={classes.pinheader}>
                                     <Chip 
@@ -822,7 +880,7 @@ export default function Home() {
                                     Queue
                                 </Button>
                                 { subModFeed === 'Queue' &&
-                                    <>
+                                    <div className={classes.desktopqueuebuttons}>
                                         <Button
                                             size='small'
                                             variant='contained'
@@ -841,7 +899,7 @@ export default function Home() {
                                         >
                                             Past
                                         </Button>
-                                    </>
+                                    </div>
                                 }
                                 <Button
                                     variant={subModFeed === 'Feed' ? 'contained' : 'outlined'}
@@ -858,6 +916,29 @@ export default function Home() {
                                     Feedback
                                 </Button>
                             </div>
+                            { subModFeed === 'Queue' &&
+                                <div className={classes.mobilequeuebuttons}>
+                                    <SubdirectoryArrowRightIcon />
+                                    <Button
+                                        size='small'
+                                        variant='contained'
+                                        color='primary'
+                                        onClick={() => setSubModQueue('Upcoming')}
+                                        className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    >
+                                        Upcoming
+                                    </Button>
+                                    <Button
+                                        size='small'
+                                        variant='contained'
+                                        color='primary'
+                                        onClick={() => setSubModQueue('Past')}
+                                        className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    >
+                                        Past
+                                    </Button>
+                                </div>
+                            }
                             <div className={classes.searchcontainer}>
                                 <div className={classes.searchwrapper}>
                                     <TextField
@@ -1298,7 +1379,7 @@ export default function Home() {
                                 </div>
                             </Grid>
                             <div className={classes.windowcontent}>
-                                <Grid item xs={12} md={7} >
+                                <Grid item xs={12} lg={7}>
                                     <div className={classes.windowdisplay}>
                                         <Grid item xs={6}>
                                             <Image
@@ -1341,7 +1422,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                                <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                                     <Paper elevation={3} className={classes.pinnedpaper}>
                                         <div className={classes.pinheader}>
                                             <Chip 
