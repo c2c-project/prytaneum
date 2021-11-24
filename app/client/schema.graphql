@@ -1,6 +1,6 @@
 input AddQuestionToQueue {
-  questionId: ID!
   eventId: ID!
+  questionId: ID!
 }
 
 input AlterLike {
@@ -13,12 +13,12 @@ input AlterLike {
 }
 
 input CreateEvent {
-  title: String!
-  startDateTime: Date!
-  endDateTime: Date!
   description: String!
-  topic: String!
+  endDateTime: Date!
   orgId: String!
+  startDateTime: Date!
+  title: String!
+  topic: String!
 }
 
 input CreateFeedback {
@@ -47,36 +47,36 @@ input CreateOrganization {
 }
 
 input CreateQuestion {
-  question: String!
-  isQuote: Boolean
-  isFollowUp: Boolean
-  refQuestion: ID
   eventId: ID!
+  isFollowUp: Boolean
+  isQuote: Boolean
+  question: String!
+  refQuestion: ID
 }
 
 input CreateSpeaker {
-  eventId: String!
-  name: String!
-  title: String!
   description: String!
-  pictureUrl: String!
 
   """This is for matching the speaker to an account"""
   email: String!
+  eventId: String!
+  name: String!
+  pictureUrl: String!
+  title: String!
 }
 
 input CreateVideo {
-  url: String!
-  lang: String!
   eventId: String!
+  lang: String!
+  url: String!
 }
 
 scalar Date
 
 input DeleteAccountForm {
+  confirmPassword: String!
   email: String!
   password: String!
-  confirmPassword: String!
 }
 
 input DeleteEvent {
@@ -84,13 +84,13 @@ input DeleteEvent {
 }
 
 input DeleteMember {
-  userId: ID!
   orgId: ID!
+  userId: ID!
 }
 
 input DeleteModerator {
-  userId: ID!
   eventId: ID!
+  userId: ID!
 }
 
 """Information necessary for deleting an org"""
@@ -114,30 +114,26 @@ type Error {
 }
 
 type Event implements Node {
-  id: ID!
+  createdAt: Date
 
   """Creator of this event"""
   createdBy: User
 
-  """The owning organization"""
-  organization: Organization
-  createdAt: Date
-  updatedAt: Date
-  title: String
-
-  """The planned start date time string"""
-  startDateTime: Date
+  """
+  The question currently being asked, corresponds to a "position" value on the event question
+  """
+  currentQuestion: Int
+  description: String
 
   """The planned end date time string"""
   endDateTime: Date
-  description: String
-  topic: String
+  id: ID!
+
+  """List of users who can view event when private"""
+  invited(after: String, first: Int): UserConnection
 
   """Whether or not the Event is live"""
   isActive: Boolean
-
-  """Let all users see what questions have been submitted"""
-  isQuestionFeedVisible: Boolean
 
   """Collect user ratings after the event has ended"""
   isCollectRatingsEnabled: Boolean
@@ -150,43 +146,47 @@ type Event implements Node {
   """Is the event private, ie invite only"""
   isPrivate: Boolean
 
-  """All questions relating to this event"""
-  questions(first: Int, after: String): EventQuestionConnection
-
-  """Speakers for this event"""
-  speakers(first: Int, after: String): EventSpeakerConnection
-
-  """Registrants for this event -- individuals invited"""
-  registrants: UserConnection
-
-  """Participants of the event -- individuals who showed up"""
-  participants(first: Int, after: String): EventParticipantConnection
-
-  """Video feeds and the languages"""
-  videos(first: Int, after: String): EventVideoConnection
-
-  """Live Feedback given during the event"""
-  liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
-
-  """List of moderators for this particular event"""
-  moderators(first: Int, after: String): UserConnection
-
-  """Whether or not the viewer is a moderator"""
-  isViewerModerator: Boolean
-
-  """List of users who can view event when private"""
-  invited(first: Int, after: String): UserConnection
+  """Let all users see what questions have been submitted"""
+  isQuestionFeedVisible: Boolean
 
   """Whether or not the viewer is invited"""
   isViewerInvited: Boolean
 
-  """Questions queued in this session by the moderator(s)"""
-  queuedQuestions(first: Int, after: String): EventQuestionConnection
+  """Whether or not the viewer is a moderator"""
+  isViewerModerator: Boolean
 
-  """
-  The question currently being asked, corresponds to a "position" value on the event question
-  """
-  currentQuestion: Int
+  """Live Feedback given during the event"""
+  liveFeedback(after: String, first: Int): EventLiveFeedbackConnection
+
+  """List of moderators for this particular event"""
+  moderators(after: String, first: Int): UserConnection
+
+  """The owning organization"""
+  organization: Organization
+
+  """Participants of the event -- individuals who showed up"""
+  participants(after: String, first: Int): EventParticipantConnection
+
+  """All questions relating to this event"""
+  questions(after: String, first: Int): EventQuestionConnection
+
+  """Questions queued in this session by the moderator(s)"""
+  queuedQuestions(after: String, first: Int): EventQuestionConnection
+
+  """Registrants for this event -- individuals invited"""
+  registrants: UserConnection
+
+  """Speakers for this event"""
+  speakers(after: String, first: Int): EventSpeakerConnection
+
+  """The planned start date time string"""
+  startDateTime: Date
+  title: String
+  topic: String
+  updatedAt: Date
+
+  """Video feeds and the languages"""
+  videos(after: String, first: Int): EventVideoConnection
 }
 
 """Connection to Events"""
@@ -197,16 +197,16 @@ type EventConnection {
 
 """Event Edge"""
 type EventEdge {
-  node: Event!
   cursor: String!
+  node: Event!
 }
 
 type EventLiveFeedback implements Node {
-  id: ID!
-  message: String!
-  event: Event
   createdAt: String
   createdBy: User
+  event: Event
+  id: ID!
+  message: String!
 }
 
 type EventLiveFeedbackConnection {
@@ -215,20 +215,20 @@ type EventLiveFeedbackConnection {
 }
 
 type EventLiveFeedbackEdge {
-  node: EventLiveFeedback!
   cursor: String!
+  node: EventLiveFeedback!
 }
 
 type EventMutationResponse implements MutationResponse {
+  body: Event
   isError: Boolean!
   message: String!
-  body: Event
 }
 
 type EventParticipant {
-  user: User
-  questions: [EventQuestion]
   liveFeedBack: [EventLiveFeedback]
+  questions: [EventQuestion]
+  user: User
 }
 
 type EventParticipantConnection {
@@ -237,42 +237,42 @@ type EventParticipantConnection {
 }
 
 type EventParticipantEdge {
-  node: EventParticipant!
   cursor: String!
+  node: EventParticipant!
 }
 
 type EventQuestion implements Node {
-  id: ID!
-  event: Event
-
-  """The user id of the creator"""
-  createdById: ID
+  createdAt: Date
 
   """User information on the person asking the question"""
   createdBy: User
-  createdAt: Date
-  refQuestion: EventQuestion
 
-  """The actual content of the question"""
-  question: String
-  position: Int
-  isVisible: Boolean
+  """The user id of the creator"""
+  createdById: ID
+  event: Event
+  id: ID!
   isAsked: Boolean
-  lang: String
   isFollowUp: Boolean
-  isQuote: Boolean
-
-  """The users who have liked this question"""
-  likedBy: UserConnection
-
-  """Find the count of the likes only"""
-  likedByCount: Int
 
   """Whether or not the current user likes the question"""
   isLikedByViewer: Boolean
 
   """If the question is owned by the current viewer"""
   isMyQuestion: Boolean
+  isQuote: Boolean
+  isVisible: Boolean
+  lang: String
+
+  """The users who have liked this question"""
+  likedBy: UserConnection
+
+  """Find the count of the likes only"""
+  likedByCount: Int
+  position: Int
+
+  """The actual content of the question"""
+  question: String
+  refQuestion: EventQuestion
 }
 
 type EventQuestionConnection {
@@ -281,19 +281,19 @@ type EventQuestionConnection {
 }
 
 type EventQuestionEdge {
-  node: EventQuestion!
   cursor: String!
+  node: EventQuestion!
 }
 
 type EventQuestionMutationResponse implements MutationResponse {
+  body: EventQuestionEdge
   isError: Boolean!
   message: String!
-  body: EventQuestionEdge
 }
 
 type EventSpeaker implements Node {
-  """Speaker id"""
-  id: ID!
+  """Description set by the organizer of the event"""
+  description: String
 
   """email of the speaker"""
   email: String
@@ -301,20 +301,20 @@ type EventSpeaker implements Node {
   """Event eventId that this user is speaking at"""
   eventId: ID
 
-  """The related user account associated with the speaker"""
-  user: User
+  """Speaker id"""
+  id: ID!
 
   """Name set by the organizer of the event"""
   name: String
 
-  """Description set by the organizer of the event"""
-  description: String
+  """Picture set by the organizer of the event"""
+  pictureUrl: String
 
   """Title set by the organizer of the event"""
   title: String
 
-  """Picture set by the organizer of the event"""
-  pictureUrl: String
+  """The related user account associated with the speaker"""
+  user: User
 }
 
 type EventSpeakerConnection {
@@ -323,21 +323,21 @@ type EventSpeakerConnection {
 }
 
 type EventSpeakerEdge {
-  node: EventSpeaker!
   cursor: String!
+  node: EventSpeaker!
 }
 
 type EventSpeakerMutationResponse implements MutationResponse {
+  body: EventSpeaker
   isError: Boolean!
   message: String!
-  body: EventSpeaker
 }
 
 type EventVideo implements Node {
-  id: ID!
-  url: String!
-  lang: String!
   event: Event
+  id: ID!
+  lang: String!
+  url: String!
 }
 
 type EventVideoConnection {
@@ -346,19 +346,19 @@ type EventVideoConnection {
 }
 
 type EventVideoEdge {
-  node: EventVideo!
   cursor: String!
+  node: EventVideo!
 }
 
 type EventVideoMutationResponse implements MutationResponse {
+  body: EventVideo
   isError: Boolean!
   message: String!
-  body: EventVideo
 }
 
 input HideQuestion {
-  questionId: ID!
   eventId: ID!
+  questionId: ID!
 
   """
   Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise.
@@ -372,8 +372,8 @@ type InviteMutationResponse implements MutationResponse {
 }
 
 type Like {
-  user: User!
   question: EventQuestion!
+  user: User!
 }
 
 input LoginForm {
@@ -382,9 +382,9 @@ input LoginForm {
 }
 
 type ModeratorMutationResponse implements MutationResponse {
+  body: User
   isError: Boolean!
   message: String!
-  body: User
 }
 
 type Mutation {
@@ -457,28 +457,28 @@ interface Node {
 
 enum Operation {
   CREATE
-  UPDATE
   DELETE
+  UPDATE
 }
 
 type Organization implements Node {
-  """Unique identifier for this org"""
-  id: ID!
-
-  """name of the org"""
-  name: String!
-
   """When this org was created"""
   createdAt: Date
 
-  """all members of this org"""
-  members(first: Int, after: String): UserConnection
-
   """Events owned by this organization"""
-  events(first: Int, after: String): EventConnection
+  events(after: String, first: Int): EventConnection
+
+  """Unique identifier for this org"""
+  id: ID!
 
   """Whether or not the current viewer is a member"""
   isViewerMember: Boolean
+
+  """all members of this org"""
+  members(after: String, first: Int): UserConnection
+
+  """name of the org"""
+  name: String!
 }
 
 type OrganizationConnection {
@@ -487,27 +487,27 @@ type OrganizationConnection {
 }
 
 type OrganizationEdge {
-  node: Organization!
   cursor: String!
+  node: Organization!
 }
 
 type OrganizationMutationResponse implements MutationResponse {
+  body: Organization
   isError: Boolean!
   message: String!
-  body: Organization
 }
 
 type OrganizationSubscription {
+  deleteMember: Boolean!
   orgId: ID!
   userId: ID
-  deleteMember: Boolean!
 }
 
 type PageInfo {
+  endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String
-  endCursor: String
 }
 
 type Query {
@@ -526,21 +526,21 @@ type Query {
 }
 
 type QuestionOperation {
-  operationType: Operation!
   edge: EventQuestionEdge!
+  operationType: Operation!
 }
 
 input RegistrationForm {
+  confirmPassword: String!
+  email: String!
   firstName: String!
   lastName: String!
   password: String!
-  confirmPassword: String!
-  email: String!
 }
 
 input RemoveQuestionFromQueue {
-  questionId: ID!
   eventId: ID!
+  questionId: ID!
 }
 
 type Subscription {
@@ -564,75 +564,74 @@ input UpdateEmailForm {
 }
 
 input UpdateEvent {
-  title: String
-  startDateTime: Date
-  endDateTime: Date
   description: String
-  topic: String
-  isQuestionFeedVisible: Boolean
+  endDateTime: Date
+  eventId: String!
   isCollectRatingsEnabled: Boolean
   isForumEnabled: Boolean
   isPrivate: Boolean
-  eventId: String!
+  isQuestionFeedVisible: Boolean
+  startDateTime: Date
+  title: String
+  topic: String
 }
 
 input UpdateModerator {
-  email: String!
   eventId: ID!
+  userId: ID!
 }
 
 """Information that may be updated by the user"""
 input UpdateOrganization {
-  orgId: ID!
   name: String!
+  orgId: ID!
 }
 
 input UpdatePasswordForm {
-  email: String!
-  oldPassword: String!
-  newPassword: String!
   confirmNewPassword: String!
+  email: String!
+  newPassword: String!
+  oldPassword: String!
 }
 
 input UpdateQuestionPosition {
-  questionId: ID!
-  position: Int!
   eventId: ID!
+  position: Int!
+  questionId: ID!
 }
 
 input UpdateQuestionQueue {
-  questionId: ID!
-  eventId: ID!
   adding: Boolean!
+  eventId: ID!
+  questionId: ID!
 }
 
 input UpdateSpeaker {
-  name: String
-  title: String
   description: String
-  pictureUrl: String
   email: String
-  id: String!
   eventId: String!
+  id: String!
+  name: String
+  pictureUrl: String
+  title: String
 }
 
 input UpdateVideo {
-  videoId: String!
   eventId: String!
-  url: String
   lang: String
+  url: String
+  videoId: String!
 }
 
 """User Data"""
 type User implements Node {
-  id: ID!
-  firstName: String
-  lastName: String
-  email: String
-  isEmailVerified: Boolean
-
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
+  email: String
+  firstName: String
+  id: ID!
+  isEmailVerified: Boolean
+  lastName: String
 
   """Organizations that this user belongs to"""
   organizations: OrganizationConnection
@@ -644,28 +643,28 @@ type UserConnection {
 }
 
 type UserEdge {
-  node: User!
   cursor: String!
+  node: User!
 }
 
 type UserMutationResponse implements MutationResponse {
+  body: User
   isError: Boolean!
   message: String!
-  body: User
 }
 
 type UserSettings {
   currentEmail: String!
-  updateEmail: String
-  updatePassword: String
   deleteAccount: Boolean!
   isAnonymous: Boolean!
   isNotificationsEnabled: Boolean!
+  updateEmail: String
+  updatePassword: String
 }
 
 input ValidateInvite {
-  token: String!
   eventId: ID!
+  token: String!
 }
 
 type ValidateInviteQueryResponse {
