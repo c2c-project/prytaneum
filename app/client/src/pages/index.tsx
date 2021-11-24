@@ -29,6 +29,7 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ReplyIcon from '@material-ui/icons/Reply';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -38,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
     landing: {
         width: '100%',
         minHeight: '90vh',
-        margin: 0
     },
     root: {
         width: '100%',
         minHeight: '60vh',
-        margin: '2rem 0',
+        marginTop: '2rem',
+        marginBottom: '2rem',
     },
     header: {
         marginBottom: 20,
@@ -181,6 +182,13 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         gap: '0.75rem',
         width: '100%',
+        // maxWidth: 425,
+        padding: theme.spacing(2),
+    },
+    subpaper: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
         padding: theme.spacing(2),
     },
     buttonwrapper: {
@@ -188,9 +196,21 @@ const useStyles = makeStyles((theme) => ({
         gap: '0.5rem',
         alignSelf: 'end',
     },
+    dropdown: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     userheader: {
         display: 'flex',
         gap: '0.5rem',
+    },
+    paperdropdown: {
+        borderRadius: '9999px',
+        paddingLeft: theme.spacing(2),
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
     },
     searchcontainer: {
         width: '100%',
@@ -209,6 +229,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         gap: '0.75rem',
         width: '100%',
+        // maxWidth: 425,
         padding: theme.spacing(2),
         paddingTop: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
@@ -246,12 +267,46 @@ const useStyles = makeStyles((theme) => ({
     papertext: {
         fontSize: '13px',
     },
+    yellowshadow: {
+        boxShadow: '10px 10px 0 0 #f5c64f',
+    },
+    blueshadow: {
+        boxShadow: '10px 10px 0 0 #4056a1'
+    },
+    lightblueshadow: {
+        boxShadow: '10px 10px 0 0 #8eafff'
+    },
     selectbuttons: {
         display: 'flex',
         gap: '0.5rem',
         alignItems: 'center',
         [theme.breakpoints.down('md')]: {
             width: '100%',
+        },
+    },
+    partners: {
+        display: 'flex',
+        gap: '4rem',
+        justifyContent: 'center',
+        [theme.breakpoints.down('md')]: {
+            gap: '3rem',
+        },
+        [theme.breakpoints.down('sm')]: {
+            gap: '2rem',
+        },
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+            gap: '1rem',
+        },
+    },
+    roleicon: {
+        fontSize: '5.5rem',
+    },
+    smallscale: {
+        transform: 'scale(0.85)',
+        margin: '-3.5rem 0',
+        [theme.breakpoints.down('md')]: {
+            margin: '-5.5rem 0'
         },
     },
     subview: {
@@ -334,297 +389,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
-    },
-    yellowshadow: {
-        boxShadow: '10px 10px 0 0 #f5c64f',
-    },
-    blueshadow: {
-        boxShadow: '10px 10px 0 0 #4056a1'
-    },
-    lightblueshadow: {
-        boxShadow: '10px 10px 0 0 #8eafff'
-    },
-    smallscale: {
-        transform: 'scale(0.85)',
-        margin: '-3.5rem 0',
-        [theme.breakpoints.down('md')]: {
-            margin: '-5.5rem 0'
-        },
-    },
-    roleicon: {
-        fontSize: '5.5rem',
-    },
-    partners: {
-        display: 'flex',
-        gap: '4rem',
-        justifyContent: 'center',
-        [theme.breakpoints.down('md')]: {
-            gap: '3rem',
-        },
-        [theme.breakpoints.down('sm')]: {
-            gap: '2rem',
-        },
-    },
-    section: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        textAlign: 'center',
-    },
-    paragraph: {
-        fontSize: '18px',
-    },
-    window: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        overflow: 'hidden',
-    },
-    windowheader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '100%',
-        padding: theme.spacing(1),
-        background: 'white',
-        boxShadow: '0 5px 7px rgba(0,0,0,0.1)'
-    },
-    logo: {
-        marginTop: '0.25rem',
-        marginLeft: '0.25rem',
-        width: 30,
-        cursor: 'pointer',
-    },
-    tabs: {
-        display: 'flex',
-        gap: '1.5rem',
-        alignItems: 'center',
-        fontWeight: 700,
-        textTransform: 'uppercase',
-        '& > div': {
-            cursor: 'pointer',
-        }
-    },
-    user: {
-        display: 'flex',
-        gap: '0.5rem',
-        alignItems: 'center',
-        fontWeight: 700,
-        cursor: 'pointer',
-    },
-    avatar: {
-        width: 30,
-        height: 30,
-    },
-    windowcontent: {
-        display: 'flex',
-        gap: '1rem',
-        padding: theme.spacing(2),
-        [theme.breakpoints.down('sm')]: {
-            flexDirection: 'column',
-        },
-    },
-    windowdisplay: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: theme.spacing(1),
-        backgroundColor: 'black',
-        height: '65%',
-        [theme.breakpoints.down('sm')]: {
-            minHeight: '70vh',
-        },
-        [theme.breakpoints.down('xs')]: {
-            minHeight: '50vh',
-        },
-    },
-    windowsidebar: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        [theme.breakpoints.down('md')]: {
-            alignItems: 'center',
-        },
-    },
-    paper: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        width: '100%',
-        // maxWidth: 425,
-        padding: theme.spacing(2),
-    },
-    subpaper: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        padding: theme.spacing(2),
-    },
-    buttonwrapper: {
-        display: 'flex',
-        gap: '0.5rem',
-        alignSelf: 'end',
-    },
-    dropdown: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    userheader: {
-        display: 'flex',
-        gap: '0.5rem',
-    },
-    paperdropdown: {
-        borderRadius: '9999px',
-        paddingLeft: theme.spacing(2),
-        [theme.breakpoints.down('md')]: {
-            width: '100%',
-        },
-    },
-    searchcontainer: {
-        width: '100%',
-    },
-    searchwrapper: {
-        display: 'flex',
-        gap: '0.5rem',
-        width: '100%',
-    },
-    pinnedpaper: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        width: '100%',
-        // maxWidth: 425,
-        padding: theme.spacing(2),
-        paddingTop: theme.spacing(3),
-    },
-    pinheader: {
-        position: 'absolute',
-        top: '-1rem',
-        left: '50%',
-        display: 'flex',
-        gap: '2.5rem',
-        whiteSpace: 'nowrap',
-        transform: 'translateX(-50%)',
-    },
-    chip: {
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-        background: '#F5C64F',
-        textTransform: 'uppercase',
-        fontWeight: 600,
-    },
-    arrow: {
-        fontSize: '18px',
-    },
-    windowtitle: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: '0.5rem',
-    },
-    userbutton: {
-        fontSize: '12px',
-    },
-    papertext: {
-        fontSize: '13px',
-    },
-    yellowshadow: {
-        boxShadow: '10px 10px 0 0 #f5c64f'
-    },
-    blueshadow: {
-        boxShadow: '10px 10px 0 0 #4056a1'
-    },
-    lightblueshadow: {
-        boxShadow: '10px 10px 0 0 #8eafff'
-    },
-    selectbuttons: {
-        display: 'flex',
-        gap: '0.5rem',
-        alignItems: 'center',
-    },
-    partners: {
-        display: 'flex',
-        gap: '4rem',
-        justifyContent: 'center',
-        [theme.breakpoints.down('md')]: {
-            gap: '3rem',
-        },
-        [theme.breakpoints.down('sm')]: {
-            gap: '2rem',
-        },
-        [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
-            gap: '1rem',
-        },
-    },
-    roleicon: {
-        fontSize: '5.5rem',
-    },
-    smallscale: {
-        // transform: 'scale(0.8)',
-        // margin: '-4rem 0'
-    },
-    subview: {
-        textAlign: 'left',
-    },
-    feedbackwrapper: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    feedbuttons: {
-        display: 'flex',
-        '& > *': {
-            width: '50%',
-        }
-    },
-    pinnedbuttons: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    modfeedrow: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    modfeedrowqueue: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    likes: {
-        display: 'flex',
-        gap: '0.5rem',
-        alignItems: 'center',
-        fontSize: '1rem',
-        '& > *:nth-of-type(1)': {
-            fontSize: '1.25rem',
-            color: '#8eafff'
-        }
-    },
-    filler: {
-        visibility: 'hidden',
-    },
-    queuebuttonactive: {
-        background: '#8eafff',
-        '&:hover': {
-            background: '#7ea0f2',
-        }
-    },
-    queuebuttoninactive: {
-        background: '#c4d5ff',
-        '&:hover': {
-            background: '#aec2f2',
-        }
-    },
-    queuecaption: {
-        marginTop: '-0.5rem',
-        marginBottom: '1rem',
-        textAlign: 'center',
-        fontWeight: 600,
-        color: 'grey',
     },
 }));
 
@@ -730,7 +494,7 @@ export default function Home() {
                         </div>
                     </Grid>
                     <div className={classes.windowcontent}>
-                        <Grid item xs={12} md={7} >
+                        <Grid item xs={12} lg={7}>
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
@@ -773,7 +537,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                        <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                             <Paper elevation={3} className={classes.pinnedpaper}>
                                 <div className={classes.pinheader}>
                                     <Chip 
@@ -1017,7 +781,7 @@ export default function Home() {
                         </div>
                     </Grid>
                     <div className={classes.windowcontent}>
-                        <Grid item xs={12} md={7} >
+                        <Grid item xs={12} lg={7}>
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
@@ -1060,7 +824,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                        <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                             <Paper elevation={3} className={classes.pinnedpaper}>
                                 <div className={classes.pinheader}>
                                     <Chip 
@@ -1113,7 +877,7 @@ export default function Home() {
                                     Queue
                                 </Button>
                                 { subModFeed === 'Queue' &&
-                                    <>
+                                    <div className={classes.desktopqueuebuttons}>
                                         <Button
                                             size='small'
                                             variant='contained'
@@ -1132,7 +896,7 @@ export default function Home() {
                                         >
                                             Past
                                         </Button>
-                                    </>
+                                    </div>
                                 }
                                 <Button
                                     variant={subModFeed === 'Feed' ? 'contained' : 'outlined'}
@@ -1149,6 +913,29 @@ export default function Home() {
                                     Feedback
                                 </Button>
                             </div>
+                            { subModFeed === 'Queue' &&
+                                <div className={classes.mobilequeuebuttons}>
+                                    <SubdirectoryArrowRightIcon />
+                                    <Button
+                                        size='small'
+                                        variant='contained'
+                                        color='primary'
+                                        onClick={() => setSubModQueue('Upcoming')}
+                                        className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    >
+                                        Upcoming
+                                    </Button>
+                                    <Button
+                                        size='small'
+                                        variant='contained'
+                                        color='primary'
+                                        onClick={() => setSubModQueue('Past')}
+                                        className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    >
+                                        Past
+                                    </Button>
+                                </div>
+                            }
                             <div className={classes.searchcontainer}>
                                 <div className={classes.searchwrapper}>
                                     <TextField
@@ -1544,7 +1331,7 @@ export default function Home() {
                                 </div>
                             </Grid>
                             <div className={classes.windowcontent}>
-                                <Grid item xs={12} md={7} >
+                                <Grid item xs={12} lg={7}>
                                     <div className={classes.windowdisplay}>
                                         <Grid item xs={6}>
                                             <Image
@@ -1587,7 +1374,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} md={5}  className={classes.windowsidebar}>
+                                <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                                     <Paper elevation={3} className={classes.pinnedpaper}>
                                         <div className={classes.pinheader}>
                                             <Chip 
