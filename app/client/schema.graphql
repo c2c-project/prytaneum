@@ -73,6 +73,12 @@ input CreateVideo {
 
 scalar Date
 
+input DeleteAccountForm {
+  email: String!
+  password: String!
+  confirmPassword: String!
+}
+
 input DeleteEvent {
   eventId: String!
 }
@@ -397,6 +403,7 @@ type Mutation {
   createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
   createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
   createVideo(input: CreateVideo!): EventVideoMutationResponse!
+  deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
   deleteEvent(event: DeleteEvent!): EventMutationResponse!
 
   """Delete a member from the organization"""
@@ -428,9 +435,11 @@ type Mutation {
   Start the event so that it is "live"
   """
   startEvent(eventId: String!): EventMutationResponse!
+  updateEmail(input: UpdateEmailForm!): UserMutationResponse!
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+  updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
   updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
@@ -549,6 +558,11 @@ type Subscription {
   questionQueued(eventId: ID!): EventQuestion!
 }
 
+input UpdateEmailForm {
+  currentEmail: String!
+  newEmail: String!
+}
+
 input UpdateEvent {
   title: String
   startDateTime: Date
@@ -563,7 +577,7 @@ input UpdateEvent {
 }
 
 input UpdateModerator {
-  userId: ID!
+  email: String!
   eventId: ID!
 }
 
@@ -571,6 +585,13 @@ input UpdateModerator {
 input UpdateOrganization {
   orgId: ID!
   name: String!
+}
+
+input UpdatePasswordForm {
+  email: String!
+  oldPassword: String!
+  newPassword: String!
+  confirmNewPassword: String!
 }
 
 input UpdateQuestionPosition {
@@ -633,15 +654,6 @@ type UserMutationResponse implements MutationResponse {
   body: User
 }
 
-input ValidateInvite {
-  token: String!
-  eventId: ID!
-}
-
-type ValidateInviteQueryResponse {
-  valid: Boolean!
-}
-
 type UserSettings {
   currentEmail: String!
   updateEmail: String
@@ -649,4 +661,13 @@ type UserSettings {
   deleteAccount: Boolean!
   isAnonymous: Boolean!
   isNotificationsEnabled: Boolean!
+}
+
+input ValidateInvite {
+  token: String!
+  eventId: ID!
+}
+
+type ValidateInviteQueryResponse {
+  valid: Boolean!
 }

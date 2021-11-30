@@ -3,8 +3,8 @@ import { Grid, Typography } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Fab from '@local/components/Fab';
-import useScrollTo from '@local/hooks/useScrollTo';
+import { Fab } from '@local/components/Fab';
+import useScrollTo from '@local/features/core/useScrollTo';
 
 export interface Props {
     children: React.ReactNode | React.ReactNodeArray;

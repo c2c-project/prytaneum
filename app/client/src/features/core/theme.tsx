@@ -39,8 +39,16 @@ const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 const base = createMuiTheme({
     typography: {
+        fontFamily: '\'Manrope\', sans-serif',
+        h4: {
+            fontWeight: 600,
+        },
+        h6: {
+            fontWeight: 600,
+        },
         button: {
             lineHeight: '1.75em',
+            fontWeight: 600,
             // fontSize: 'rem',
         },
     },
@@ -85,7 +93,7 @@ const base = createMuiTheme({
     },
     palette: {
         background: {
-            default: '#F5F5F5',
+            default: '#f3f1ee',
         },
     },
 });
@@ -100,17 +108,17 @@ export const themes: TThemes = {
         ...base,
         palette: {
             ...base.palette,
-            primary: { main: '#2C3D4E' },
-            secondary: { main: '#fca06f' },
+            primary: { main: '#4056a1' },
+            secondary: { main: '#f13c20' },
         },
     }),
     light: createMuiTheme({
         ...base,
         palette: {
             ...base.palette,
-            primary: { main: '#fff5e6' },
+            primary: { main: '#f3f1ee' },
             // primary: { main: '#fef7ec' },
-            secondary: { main: '#003C8F' },
+            secondary: { main: '#171818' },
         },
     }),
 };

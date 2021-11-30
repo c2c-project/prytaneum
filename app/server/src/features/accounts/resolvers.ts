@@ -8,7 +8,7 @@ const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
 
 const cookieOptions: CookieSerializeOptions = {
-    sameSite: 'strict'
+    sameSite: 'lax'
 }
 
 export const resolvers: Resolvers = {
@@ -45,6 +45,27 @@ export const resolvers: Resolvers = {
         logout(parent, args, ctx, info) {
             ctx.reply.clearCookie('jwt', cookieOptions);
             return new Date();
+        },
+        async updateEmail(parent, args, ctx, info) {
+            return runMutation(async () => {
+                const { updatedUser, token } = await User.updateEmail(ctx.prisma, args.input);
+                ctx.reply.setCookie('jwt', token, cookieOptions);
+                return toUserId(updatedUser);
+            });
+        },
+        async updatePassword(parent, args, ctx, info) {
+            return runMutation(async () => {
+                const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);
+                ctx.reply.setCookie('jwt', token, cookieOptions);
+                return toUserId(updatedUser);
+            });
+        },
+        async deleteAccount(parent, args, ctx, info) {
+            return runMutation(async () => {
+                const { deletedUser } = await User.deleteAccount(ctx.prisma, args.input);
+                ctx.reply.clearCookie('jwt', cookieOptions);
+                return toUserId(deletedUser);
+            });
         },
     },
 };

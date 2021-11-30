@@ -14,6 +14,9 @@ export const USE_QUESTION_LIST_SUBSCRIPTION = graphql`
                 node {
                     id
                     position
+                    refQuestion {
+                        ...QuestionQuoteFragment
+                    }
                     ...QuestionAuthorFragment
                     ...QuestionContentFragment
                     ...QuestionStatsFragment

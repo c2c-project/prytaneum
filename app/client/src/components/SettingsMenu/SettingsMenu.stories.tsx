@@ -2,7 +2,7 @@ import * as React from 'react';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import faker from 'faker/locale/en';
 
-import Component from './SettingsMenu';
+import { SettingsMenu as Component } from './SettingsMenu';
 
 export default { title: '@local/components/SettingsMenu' };
 
@@ -48,7 +48,7 @@ export function SettingsMenu() {
     const sections = makeSections(50);
     return (
         <div>
-            <Component config={sections} title='Storybook' />
+            <Component config={sections} />
         </div>
     );
 }

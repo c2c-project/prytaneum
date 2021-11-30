@@ -28,43 +28,43 @@ interface MulterRequest extends FastifyRequest {
 }
 
 export async function routes () {
-    server.post('/invite', { schema }, async (request, reply) => {
-        const data = await (request as MulterRequest).file();
-        if (!data) reply.send(new Error(errors.fileNotFound));
-        const filePath = path.join(__dirname, '/downloads', data.filename);
-        try {
-            // Validate the filetype
-            if (data.mimetype !== 'text/csv') throw new Error('Invalid filetype, expected .csv');
+    // server.post('/invite', { schema }, async (request, reply) => {
+    //     const data = await (request as MulterRequest).file();
+    //     if (!data) reply.send(new Error(errors.fileNotFound));
+    //     const filePath = path.join(__dirname, '/downloads', data.filename);
+    //     try {
+    //         // Validate the filetype
+    //         if (data.mimetype !== 'text/csv') throw new Error('Invalid filetype, expected .csv');
     
-            // Make directory for files if it does not exists
-            if (!fs.existsSync(path.join(__dirname, '/downloads'))) {
-                fs.mkdirSync(path.join(__dirname, '/downloads'));
-            }
+    //         // Make directory for files if it does not exists
+    //         if (!fs.existsSync(path.join(__dirname, '/downloads'))) {
+    //             fs.mkdirSync(path.join(__dirname, '/downloads'));
+    //         }
     
-            // Write file to disk
-            await pump(data.file, fs.createWriteStream(filePath));
+    //         // Write file to disk
+    //         await pump(data.file, fs.createWriteStream(filePath));
     
-            // remove file and throw an error if the file exceeded the size limit
-            if (data.file.truncated) {
-                console.log('truncated');
-                fs.unlink(filePath, (err) => {
-                    if (err) console.error(JSON.stringify(err));
-                });
-                reply.send(new Error(errors.fileSize));    
-            }
+    //         // remove file and throw an error if the file exceeded the size limit
+    //         if (data.file.truncated) {
+    //             console.log('truncated');
+    //             fs.unlink(filePath, (err) => {
+    //                 if (err) console.error(JSON.stringify(err));
+    //             });
+    //             reply.send(new Error(errors.fileSize));    
+    //         }
             
-            // Remove file after use
-            fs.unlink(filePath, (err) => {
-                if (err) console.error(JSON.stringify(err));
-            });
-            reply.send();
-        } catch (error) {
-            console.error(error);
-            fs.unlink(filePath, (err) => {
-                if (err) console.error(JSON.stringify(err));
-            });
-        }
-    })
+    //         // Remove file after use
+    //         fs.unlink(filePath, (err) => {
+    //             if (err) console.error(JSON.stringify(err));
+    //         });
+    //         reply.send();
+    //     } catch (error) {
+    //         console.error(error);
+    //         fs.unlink(filePath, (err) => {
+    //             if (err) console.error(JSON.stringify(err));
+    //         });
+    //     }
+    // })
 }
 
 

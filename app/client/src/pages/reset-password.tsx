@@ -3,8 +3,9 @@ import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import FadeThrough from '@local/animations/FadeThrough';
-import history from '@local/utils/history';
-import PasswordResetForm from '@local/domains/Auth/PasswordResetForm';
+import { useRouter } from 'next/router';
+// import PasswordResetForm from '@local/domains/Auth/PasswordResetForm';
+// TODO re-add password reset form
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,6 +30,7 @@ interface Props {
 // TODO: verify token from the routing itself and don't render this component if there's no token, handle redirect in routing
 export default function ForgotPasswordReset({ token }: Props) {
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <FadeThrough animKey='forgot-pass-reset'>
@@ -40,10 +42,10 @@ export default function ForgotPasswordReset({ token }: Props) {
                 justify='center'
             >
                 <Paper className={classes.paper}>
-                    <PasswordResetForm
+                    {/* <PasswordResetForm
                         token={token}
-                        onSuccess={() => history.push('/login')}
-                    />
+                        onSuccess={() => router.push('/login')}
+                    /> */}
                 </Paper>
             </Grid>
         </FadeThrough>

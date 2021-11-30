@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prytaneum-server
+  labels:
+    app: prytaneum-server
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: prytaneum-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prytaneum-server
+    spec:
+      containers:
+        - name: prytaneum-server
+          image: gcr.io/PROJECT_ID/SERVER_IMAGE:TAG
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_ENV
+                  name: prytaneum-server-config
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: HOST
+                  name: prytaneum-server-config
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVER_PORT
+                  name: prytaneum-server-config
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: db-secret
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: db-secret
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: database
+                  name: db-secret
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: db-secret

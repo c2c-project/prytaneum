@@ -4,7 +4,7 @@ import { NextPage, GetServerSidePropsContext } from 'next';
 import { fetchQuery, graphql } from 'react-relay';
 
 import type { profileQuery, profileQueryResponse } from '@local/__generated__/profileQuery.graphql';
-import { initEnvironment } from '@local/utils/relay-environment';
+import { initEnvironment } from '@local/features/core/relay';
 import { initializeStore } from '@local/reducers/store';
 import { PickRequired } from '@local/utils/ts-utils';
 import { EventProfile } from '@local/features/events';

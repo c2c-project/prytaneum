@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Grid, Paper, Button } from '@material-ui/core';
-import BackIcon from '@material-ui/icons/ArrowBack';
+import Image from 'next/image';
+import { Grid, Paper, Link } from '@material-ui/core';
+// import BackIcon from '@material-ui/icons/ArrowBack';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
@@ -10,6 +11,15 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column-reverse',
+        },
+        flexGrow: 1,
+    },
+    formContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginBottom: 20
     },
     paper: {
         maxWidth: 425,
@@ -19,14 +29,22 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
         margin: theme.spacing(1),
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
+    // avatar: {
+    //     margin: theme.spacing(1),
+    //     backgroundColor: theme.palette.secondary.main,
+    // },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
     },
+    link: {
+        textAlign: 'center',
+        color: 'grey',
+        textDecoration: 'underline',
+        '&:hover': {
+            color: theme.palette.primary.main,
+        },
+    }
 }));
 
 export default function RegisterPage() {
@@ -34,23 +52,27 @@ export default function RegisterPage() {
     const router = useRouter();
 
     return (
-        <Grid container alignContent='center' className={classes.root} justify='center'>
-            <Paper className={classes.paper}>
-                <RegisterForm
-                    onSuccess={() => router.push('/app/home')}
-                    secondaryActions={
-                        <Button
-                            fullWidth
-                            onClick={() => router.push('/login')}
-                            variant='outlined'
-                            color='primary'
-                            startIcon={<BackIcon />}
-                        >
-                            Back To Login
-                        </Button>
-                    }
+        <Grid container alignItems='center' className={classes.root} justify='center'>
+            <Grid item md={7}>
+                <Image
+                    src='/static/login_illustration.png' 
+                    width={697}
+                    height={383}
+                    objectFit='contain'
                 />
-            </Paper>
+            </Grid>
+            <Grid item md={5} className={classes.formContainer}>
+                <Paper className={classes.paper}>
+                    <RegisterForm
+                        onSuccess={() => router.push('/app/home')}
+                        secondaryActions={
+                            <Link href='/login' className={classes.link}>
+                                Already have an account?
+                            </Link>
+                        }
+                    />
+                </Paper>
+            </Grid>
         </Grid>
     );
 }

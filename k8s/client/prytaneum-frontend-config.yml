@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: prytaneum-frontend-config
+  namespace: production
+spec:
+  redirectToHttps:
+    enabled: true
