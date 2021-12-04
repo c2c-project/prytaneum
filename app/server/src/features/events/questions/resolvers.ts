@@ -69,9 +69,9 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionUpdated',
                     payload: {
-                        questionUpdated: edge
-                    }
-                })
+                        questionUpdated: edge,
+                    },
+                });
                 return edge;
             });
         },
