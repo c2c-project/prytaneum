@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type useQuestionQueueRemovedFromRecordSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;

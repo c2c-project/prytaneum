@@ -3,12 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type useQuestionListUpdatedSubscriptionVariables = {
     eventId: string;
 };
 export type useQuestionListUpdatedSubscriptionResponse = {
-    readonly questionCreated: {
+    readonly questionUpdated: {
         readonly cursor: string;
         readonly node: {
             readonly id: string;
@@ -28,7 +29,7 @@ export type useQuestionListUpdatedSubscription = {
 subscription useQuestionListUpdatedSubscription(
   $eventId: ID!
 ) {
-  questionCreated(eventId: $eventId) {
+  questionUpdated(eventId: $eventId) {
     cursor
     node {
       id
@@ -107,7 +108,7 @@ return {
         "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionUpdated",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -157,7 +158,7 @@ return {
         "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionUpdated",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -227,14 +228,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "93d1431877e65d830f5abbd5b3abe775",
+    "cacheID": "b17dce23f468de7eb866f1aab1c662c8",
     "id": null,
     "metadata": {},
     "name": "useQuestionListUpdatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListUpdatedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      position\n      ...QuestionAuthorFragment\n      ...QuestionContentFragment\n      ...QuestionStatsFragment\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionListUpdatedSubscription(\n  $eventId: ID!\n) {\n  questionUpdated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      position\n      ...QuestionAuthorFragment\n      ...QuestionContentFragment\n      ...QuestionStatsFragment\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '208441aee2b44a1ad9d67d485a70d32b';
+(node as any).hash = '1216a6a40677ffb17d1e4307801a564f';
 export default node;

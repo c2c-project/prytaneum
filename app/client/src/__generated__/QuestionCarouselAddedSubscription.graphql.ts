@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type QuestionCarouselAddedSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;

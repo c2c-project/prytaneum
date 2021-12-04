@@ -60,8 +60,8 @@ export function QueueButton({ fragmentRef, currentQuestion }: QueueButtonProps) 
                 input: {
                     questionId,
                     eventId,
-                    adding: !isQueued
-                }
+                    adding: !isQueued,
+                },
             },
             updater: (store: RecordSourceSelectorProxy) => {
                 const EventProxy = store.get(eventId);
@@ -88,7 +88,7 @@ export function QueueButton({ fragmentRef, currentQuestion }: QueueButtonProps) 
                 if (updateQuestionQueue.isError) {
                     displaySnack(updateQuestionQueue.message);
                 }
-            }
+            },
         });
     };
     return (

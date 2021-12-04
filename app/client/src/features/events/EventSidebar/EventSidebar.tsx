@@ -4,7 +4,7 @@ import { Grid, Tab, Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import clsx from 'clsx';
-import { graphql, useRefetchableFragment } from 'react-relay';
+import { graphql, useFragment } from 'react-relay';
 
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
 import TabPanel, { TabPanels } from '@local/components/TabPanel';
@@ -12,14 +12,14 @@ import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
-import { useUser } from '@local/features/accounts';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
+import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
-    fragment EventSidebarFragment on Event @refetchable(queryName: "EventSidebarRefetchable") {
+    fragment EventSidebarFragment on Event {
         id
         isQuestionFeedVisible
         isViewerModerator
@@ -90,18 +90,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
     const [tabIndex, setTabIndex] = React.useState<number>(0);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
-    const [data, refetch] = useRefetchableFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
-    const [user] = useUser();
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
-        e.preventDefault();
-        setTabIndex(newTabIndex);
-    };
-
-    React.useEffect(() => {
-        refetch({}, { fetchPolicy: 'store-and-network' });
-    }, [user, refetch]);
+    const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
 
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);

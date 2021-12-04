@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type SpeakerEventSettingsFragment = {
     readonly id: string;
     readonly speakers: {
@@ -25,7 +26,7 @@ export type SpeakerEventSettingsFragment = {
 };
 export type SpeakerEventSettingsFragment$data = SpeakerEventSettingsFragment;
 export type SpeakerEventSettingsFragment$key = {
-    readonly " $data"?: SpeakerEventSettingsFragment$data;
+    readonly " $data"?: SpeakerEventSettingsFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"SpeakerEventSettingsFragment">;
 };
 

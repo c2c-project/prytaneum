@@ -3,10 +3,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type useQuestionListCreatedSubscriptionVariables = {
     eventId: string;
-    connections: Array<string>;
 };
 export type useQuestionListCreatedSubscriptionResponse = {
     readonly questionCreated: {
@@ -61,38 +61,35 @@ fragment QuestionStatsFragment on EventQuestion {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "eventId"
-},
-v2 = [
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "eventId"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "eventId",
     "variableName": "eventId"
   }
 ],
-v3 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "cursor",
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -101,23 +98,20 @@ v5 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "useQuestionListCreatedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionCreated",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -126,8 +120,8 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               (v4/*: any*/),
-              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -155,22 +149,19 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "useQuestionListCreatedSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "questionCreated",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -179,8 +170,8 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               (v4/*: any*/),
-              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -189,7 +180,7 @@ return {
                 "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -233,22 +224,6 @@ return {
           }
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "filters": null,
-        "handle": "appendEdge",
-        "key": "",
-        "kind": "LinkedHandle",
-        "name": "questionCreated",
-        "handleArgs": [
-          {
-            "kind": "Variable",
-            "name": "connections",
-            "variableName": "connections"
-          }
-        ]
       }
     ]
   },
@@ -262,5 +237,5 @@ return {
   }
 };
 })();
-(node as any).hash = '739c033ac0fc6762a55f6598f5821efa';
+(node as any).hash = 'ac918b718ef2581fd1c069a04735c63b';
 export default node;

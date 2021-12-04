@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+import EventsListPaginationQuery from "./EventsListPaginationQuery.graphql";
+import {  } from "relay-runtime";
 export type OrgEventListFragment = {
     readonly id: string;
     readonly events: {
@@ -28,7 +29,7 @@ export type OrgEventListFragment = {
 };
 export type OrgEventListFragment$data = OrgEventListFragment;
 export type OrgEventListFragment$key = {
-    readonly " $data"?: OrgEventListFragment$data;
+    readonly " $data"?: OrgEventListFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"OrgEventListFragment">;
 };
 
@@ -78,7 +79,7 @@ return {
       "fragmentPathInResult": [
         "node"
       ],
-      "operation": require('./EventsListPaginationQuery.graphql.ts'),
+      "operation": EventsListPaginationQuery,
       "identifierField": "id"
     }
   },

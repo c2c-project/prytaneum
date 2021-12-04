@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { ConnectionHandler, GraphQLSubscriptionConfig } from 'relay-runtime';
 import { useSubscription, graphql, useFragment } from 'react-relay';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
@@ -7,10 +7,9 @@ import type { useQuestionListCreatedSubscription } from '@local/__generated__/us
 import type { useQuestionListUpdatedSubscription } from '@local/__generated__/useQuestionListUpdatedSubscription.graphql';
 import type { useQuestionListDeletedSubscription } from '@local/__generated__/useQuestionListDeletedSubscription.graphql';
 
-
 export const USE_QUESTION_LIST_CREATED_SUBSCRIPTION = graphql`
-    subscription useQuestionListCreatedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionCreated(eventId: $eventId) @appendEdge(connections: $connections) {
+    subscription useQuestionListCreatedSubscription($eventId: ID!) {
+        questionCreated(eventId: $eventId) {
             cursor
             node {
                 id
@@ -25,7 +24,7 @@ export const USE_QUESTION_LIST_CREATED_SUBSCRIPTION = graphql`
 
 export const USE_QUESTION_LIST_UPDATED_SUBSCRIPTION = graphql`
     subscription useQuestionListUpdatedSubscription($eventId: ID!) {
-        questionCreated(eventId: $eventId) {
+        questionUpdated(eventId: $eventId) {
             cursor
             node {
                 id
@@ -40,7 +39,7 @@ export const USE_QUESTION_LIST_UPDATED_SUBSCRIPTION = graphql`
 
 export const USE_QUESTION_LIST_DELETED_SUBSCRIPTION = graphql`
     subscription useQuestionListDeletedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionCreated(eventId: $eventId) {
+        questionDeleted(eventId: $eventId) {
             cursor
             node {
                 id @deleteEdge(connections: $connections)
@@ -56,7 +55,7 @@ export const USE_QUESTION_LIST_DELETED_SUBSCRIPTION = graphql`
 // TODO: make the pagination here better
 export const USE_QUESTION_LIST_FRAGMENT = graphql`
     fragment useQuestionListFragment on Event
-    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "" }) {
+    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "1" }) {
         id
         currentQuestion
         questions(first: $first, after: $after) @connection(key: "useQuestionListFragment_questions") {
@@ -96,10 +95,30 @@ export function useQuestionList({ fragmentRef }: TArgs) {
 
     const createdConfig = React.useMemo<GraphQLSubscriptionConfig<useQuestionListCreatedSubscription>>(
         () => ({
-            variables: { eventId, connections },
+            variables: { eventId },
             subscription: USE_QUESTION_LIST_CREATED_SUBSCRIPTION,
+            updater(store) {
+                const eventRecord = store.get(eventId);
+                if (!eventRecord) return;
+
+                const connectionRecord = ConnectionHandler.getConnection(
+                    eventRecord,
+                    'useQuestionListFragment_questions' // defined above inside USE_QUESTION_LIST_FRAGMENT
+                );
+                if (!connectionRecord) return;
+
+                // the payload is the edge itself
+                const serverEdge = store.getRootField('questionCreated');
+
+                // build the local edge
+                const localEdge = ConnectionHandler.buildConnectionEdge(store, connectionRecord, serverEdge);
+                if (!localEdge) return;
+
+                // insert the local edge
+                ConnectionHandler.insertEdgeBefore(connectionRecord, localEdge);
+            },
         }),
-        [eventId, connections]
+        [eventId]
     );
 
     const updatedConfig = React.useMemo<GraphQLSubscriptionConfig<useQuestionListUpdatedSubscription>>(

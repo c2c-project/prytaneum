@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+import QuestionCarouselFragmentRefetchable from "./QuestionCarouselFragmentRefetchable.graphql";
+import {  } from "relay-runtime";
 export type QuestionCarouselFragment = {
     readonly id: string;
     readonly currentQuestion: number | null;
@@ -23,13 +24,18 @@ export type QuestionCarouselFragment = {
 };
 export type QuestionCarouselFragment$data = QuestionCarouselFragment;
 export type QuestionCarouselFragment$key = {
-    readonly " $data"?: QuestionCarouselFragment$data;
+    readonly " $data"?: QuestionCarouselFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"QuestionCarouselFragment">;
 };
 
 
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = [
+  "questionQueue",
+  "questionRecord"
+];
+return {
   "argumentDefinitions": [
     {
       "defaultValue": "",
@@ -49,12 +55,24 @@ const node: ReaderFragment = {
         "count": "first",
         "cursor": "after",
         "direction": "forward",
-        "path": [
-          "questionQueue",
-          "questionRecord"
-        ]
+        "path": (v0/*: any*/)
       }
-    ]
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "first",
+          "cursor": "after"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": QuestionCarouselFragmentRefetchable,
+      "identifierField": "id"
+    }
   },
   "name": "QuestionCarouselFragment",
   "selections": [
@@ -188,5 +206,6 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'bcc0cc6f20e68108a4b122411ec54bbd';
+})();
+(node as any).hash = '83e92b6754fa8996590a9319134e91f7';
 export default node;

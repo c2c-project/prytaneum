@@ -3,13 +3,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type useQuestionListDeletedSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;
 };
 export type useQuestionListDeletedSubscriptionResponse = {
-    readonly questionCreated: {
+    readonly questionDeleted: {
         readonly cursor: string;
         readonly node: {
             readonly id: string;
@@ -29,7 +30,7 @@ export type useQuestionListDeletedSubscription = {
 subscription useQuestionListDeletedSubscription(
   $eventId: ID!
 ) {
-  questionCreated(eventId: $eventId) {
+  questionDeleted(eventId: $eventId) {
     cursor
     node {
       id
@@ -114,7 +115,7 @@ return {
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionDeleted",
         "plural": false,
         "selections": [
           (v3/*: any*/),
@@ -167,7 +168,7 @@ return {
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionDeleted",
         "plural": false,
         "selections": [
           (v3/*: any*/),
@@ -253,14 +254,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8a6bb6d7ab7ad56fad19bebe65deecb0",
+    "cacheID": "b2605d22c025d7adaa9586d037d275b5",
     "id": null,
     "metadata": {},
     "name": "useQuestionListDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionListDeletedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    cursor\n    node {\n      id\n      position\n      ...QuestionAuthorFragment\n      ...QuestionContentFragment\n      ...QuestionStatsFragment\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionListDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    cursor\n    node {\n      id\n      position\n      ...QuestionAuthorFragment\n      ...QuestionContentFragment\n      ...QuestionStatsFragment\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '6853d4d68dae557dce4a4ba91c1c9305';
+(node as any).hash = 'd890589a15bd8ec7ea8072727ffb2d6a';
 export default node;

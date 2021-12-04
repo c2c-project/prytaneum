@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type QuestionCarouselFragmentRefetchableVariables = {
-    after?: string | null;
-    first?: number | null;
+    after?: string | null | undefined;
+    first?: number | null | undefined;
     id: string;
 };
 export type QuestionCarouselFragmentRefetchableResponse = {
@@ -46,14 +47,21 @@ fragment QuestionAuthorFragment on EventQuestion {
 fragment QuestionCarouselFragment_2HEEH6 on Event {
   id
   currentQuestion
-  queuedQuestions(first: $first, after: $after) {
-    edges {
-      cursor
-      node {
-        position
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-        id
+  questionQueue {
+    questionRecord(first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          position
+          ...QuestionAuthorFragment
+          ...QuestionContentFragment
+          id
+          __typename
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
@@ -105,6 +113,13 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 };
@@ -149,14 +164,8 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
           (v3/*: any*/),
+          (v4/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
@@ -169,88 +178,146 @@ return {
               },
               {
                 "alias": null,
-                "args": (v2/*: any*/),
-                "concreteType": "EventQuestionConnection",
+                "args": null,
+                "concreteType": "EventQuestionQueue",
                 "kind": "LinkedField",
-                "name": "queuedQuestions",
+                "name": "questionQueue",
                 "plural": false,
                 "selections": [
                   {
                     "alias": null,
-                    "args": null,
-                    "concreteType": "EventQuestionEdge",
+                    "args": (v2/*: any*/),
+                    "concreteType": "EventQuestionConnection",
                     "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
+                    "name": "questionRecord",
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
-                        "kind": "ScalarField",
-                        "name": "cursor",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "EventQuestion",
+                        "concreteType": "EventQuestionEdge",
                         "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
+                        "name": "edges",
+                        "plural": true,
                         "selections": [
                           {
                             "alias": null,
                             "args": null,
                             "kind": "ScalarField",
-                            "name": "position",
+                            "name": "cursor",
                             "storageKey": null
                           },
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "User",
+                            "concreteType": "EventQuestion",
                             "kind": "LinkedField",
-                            "name": "createdBy",
+                            "name": "node",
                             "plural": false,
                             "selections": [
-                              (v3/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "firstName",
+                                "name": "position",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "User",
+                                "kind": "LinkedField",
+                                "name": "createdBy",
+                                "plural": false,
+                                "selections": [
+                                  (v4/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "firstName",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "avatar",
+                                    "storageKey": null
+                                  }
+                                ],
                                 "storageKey": null
                               },
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "avatar",
+                                "name": "createdAt",
                                 "storageKey": null
-                              }
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "question",
+                                "storageKey": null
+                              },
+                              (v4/*: any*/),
+                              (v3/*: any*/)
                             ],
                             "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "createdAt",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "question",
-                            "storageKey": null
-                          },
-                          (v3/*: any*/)
+                          }
                         ],
                         "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "PageInfo",
+                        "kind": "LinkedField",
+                        "name": "pageInfo",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "endCursor",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "hasNextPage",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ClientExtension",
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "__id",
+                            "storageKey": null
+                          }
+                        ]
                       }
                     ],
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": (v2/*: any*/),
+                    "filters": null,
+                    "handle": "connection",
+                    "key": "QuestionCarousel_questionRecord",
+                    "kind": "LinkedHandle",
+                    "name": "questionRecord"
                   }
                 ],
                 "storageKey": null
@@ -265,14 +332,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "77515c9cdcd8e85742e5300010fead69",
+    "cacheID": "3d9733b46a49b56ddc42a52dcc11ded2",
     "id": null,
     "metadata": {},
     "name": "QuestionCarouselFragmentRefetchable",
     "operationKind": "query",
-    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        id\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
   }
 };
 })();
-(node as any).hash = 'bfd207907fc023269ac34fb8582fc8d1';
+(node as any).hash = '83e92b6754fa8996590a9319134e91f7';
 export default node;

@@ -163,7 +163,7 @@ export const resolvers: Resolvers = {
                     endCursor: edges[liveFeedback.length - 1]?.cursor.toString(),
                 },
             };
-        }
+        },
         async questionQueue(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findQuestionQueueByEventId(eventId, ctx.prisma);
