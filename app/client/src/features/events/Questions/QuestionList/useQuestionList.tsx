@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ConnectionHandler, GraphQLSubscriptionConfig } from 'relay-runtime';
+import { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { useSubscription, graphql, useFragment } from 'react-relay';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
@@ -8,15 +8,17 @@ import type { useQuestionListUpdatedSubscription } from '@local/__generated__/us
 import type { useQuestionListDeletedSubscription } from '@local/__generated__/useQuestionListDeletedSubscription.graphql';
 
 export const USE_QUESTION_LIST_CREATED_SUBSCRIPTION = graphql`
-    subscription useQuestionListCreatedSubscription($eventId: ID!) {
+    subscription useQuestionListCreatedSubscription($eventId: ID!, $connections: [ID!]!) {
         questionCreated(eventId: $eventId) {
-            cursor
-            node {
-                id
-                position
-                ...QuestionAuthorFragment
-                ...QuestionContentFragment
-                ...QuestionStatsFragment
+            edge @prependEdge(connections: $connections) {
+                cursor
+                node {
+                    id
+                    position
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
+                    ...QuestionStatsFragment
+                }
             }
         }
     }
@@ -25,13 +27,15 @@ export const USE_QUESTION_LIST_CREATED_SUBSCRIPTION = graphql`
 export const USE_QUESTION_LIST_UPDATED_SUBSCRIPTION = graphql`
     subscription useQuestionListUpdatedSubscription($eventId: ID!) {
         questionUpdated(eventId: $eventId) {
-            cursor
-            node {
-                id
-                position
-                ...QuestionAuthorFragment
-                ...QuestionContentFragment
-                ...QuestionStatsFragment
+            edge {
+                cursor
+                node {
+                    id
+                    position
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
+                    ...QuestionStatsFragment
+                }
             }
         }
     }
@@ -40,13 +44,15 @@ export const USE_QUESTION_LIST_UPDATED_SUBSCRIPTION = graphql`
 export const USE_QUESTION_LIST_DELETED_SUBSCRIPTION = graphql`
     subscription useQuestionListDeletedSubscription($eventId: ID!, $connections: [ID!]!) {
         questionDeleted(eventId: $eventId) {
-            cursor
-            node {
-                id @deleteEdge(connections: $connections)
-                position
-                ...QuestionAuthorFragment
-                ...QuestionContentFragment
-                ...QuestionStatsFragment
+            edge {
+                cursor
+                node {
+                    id @deleteEdge(connections: $connections)
+                    position
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
+                    ...QuestionStatsFragment
+                }
             }
         }
     }
@@ -95,30 +101,10 @@ export function useQuestionList({ fragmentRef }: TArgs) {
 
     const createdConfig = React.useMemo<GraphQLSubscriptionConfig<useQuestionListCreatedSubscription>>(
         () => ({
-            variables: { eventId },
+            variables: { eventId, connections },
             subscription: USE_QUESTION_LIST_CREATED_SUBSCRIPTION,
-            updater(store) {
-                const eventRecord = store.get(eventId);
-                if (!eventRecord) return;
-
-                const connectionRecord = ConnectionHandler.getConnection(
-                    eventRecord,
-                    'useQuestionListFragment_questions' // defined above inside USE_QUESTION_LIST_FRAGMENT
-                );
-                if (!connectionRecord) return;
-
-                // the payload is the edge itself
-                const serverEdge = store.getRootField('questionCreated');
-
-                // build the local edge
-                const localEdge = ConnectionHandler.buildConnectionEdge(store, connectionRecord, serverEdge);
-                if (!localEdge) return;
-
-                // insert the local edge
-                ConnectionHandler.insertEdgeBefore(connectionRecord, localEdge);
-            },
         }),
-        [eventId]
+        [eventId, connections]
     );
 
     const updatedConfig = React.useMemo<GraphQLSubscriptionConfig<useQuestionListUpdatedSubscription>>(

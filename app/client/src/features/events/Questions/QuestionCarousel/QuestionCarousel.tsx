@@ -48,11 +48,13 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
 
 export const QUESTION_CAROUSEL_ADDED_SUBSCRIPTION = graphql`
     subscription QuestionCarouselAddedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionAddedToRecord(eventId: $eventId) @appendEdge(connections: $connections) {
-            node {
-                id
-                ...QuestionAuthorFragment
-                ...QuestionContentFragment
+        questionAddedToRecord(eventId: $eventId) {
+            edge @appendEdge(connections: $connections) {
+                node {
+                    id
+                    ...QuestionAuthorFragment
+                    ...QuestionContentFragment
+                }
             }
         }
     }
@@ -61,8 +63,10 @@ export const QUESTION_CAROUSEL_ADDED_SUBSCRIPTION = graphql`
 export const QUESTION_CAROUSEL_REMOVED_SUBSCRIPTION = graphql`
     subscription QuestionCarouselRemovedSubscription($eventId: ID!, $connections: [ID!]!) {
         questionRemovedFromRecord(eventId: $eventId) {
-            node {
-                id @deleteEdge(connections: $connections)
+            edge {
+                node {
+                    id @deleteEdge(connections: $connections)
+                }
             }
         }
     }

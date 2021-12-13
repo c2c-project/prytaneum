@@ -108,6 +108,13 @@ type Mutation {
     alterLike(input: AlterLike!): EventQuestionMutationResponse!
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventQuestionEdgeContainer {
+    edge: EventQuestionEdge!
+}
+
 type Subscription {
     """
     Question subscription for all operations performed on questions
@@ -115,15 +122,15 @@ type Subscription {
     """
     questionCRUD(eventId: ID!): QuestionOperation!
 
-    questionCreated(eventId: ID!): EventQuestionEdge!
-    questionUpdated(eventId: ID!): EventQuestionEdge!
-    questionDeleted(eventId: ID!): EventQuestionEdge!
+    questionCreated(eventId: ID!): EventQuestionEdgeContainer!
+    questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
+    questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
 
-    questionAddedToRecord(eventId: ID!): EventQuestionEdge!
-    questionRemovedFromRecord(eventId: ID!): EventQuestionEdge!
+    questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
+    questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
 
-    questionAddedToEnqueued(eventId: ID!): EventQuestionEdge!
-    questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdge!
+    questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
+    questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
 }
 
 type Query {

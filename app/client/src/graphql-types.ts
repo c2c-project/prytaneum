@@ -343,6 +343,12 @@ export type EventQuestionEdge = {
   node: EventQuestion;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventQuestionEdgeContainer = {
+  __typename?: 'EventQuestionEdgeContainer';
+  edge: EventQuestionEdge;
+};
+
 export type EventQuestionMutationResponse = MutationResponse & {
   __typename?: 'EventQuestionMutationResponse';
   body?: Maybe<EventQuestionEdge>;
@@ -845,23 +851,23 @@ export type Subscription = {
   feedbackCRUD: FeedbackOperation;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
-  questionAddedToEnqueued: EventQuestionEdge;
-  questionAddedToRecord: EventQuestionEdge;
+  questionAddedToEnqueued: EventQuestionEdgeContainer;
+  questionAddedToRecord: EventQuestionEdgeContainer;
   /**
    * Question subscription for all operations performed on questions
    * TODO: #QQRedesign delete after code complete
    */
   questionCRUD: QuestionOperation;
-  questionCreated: EventQuestionEdge;
-  questionDeleted: EventQuestionEdge;
+  questionCreated: EventQuestionEdgeContainer;
+  questionDeleted: EventQuestionEdgeContainer;
   /**
    * subscription for whenever questions are added to the queue
    * TODO: #QQRedesign delete once code complete
    */
   questionQueued: EventQuestion;
-  questionRemovedFromEnqueued: EventQuestionEdge;
-  questionRemovedFromRecord: EventQuestionEdge;
-  questionUpdated: EventQuestionEdge;
+  questionRemovedFromEnqueued: EventQuestionEdgeContainer;
+  questionRemovedFromRecord: EventQuestionEdgeContainer;
+  questionUpdated: EventQuestionEdgeContainer;
 };
 
 

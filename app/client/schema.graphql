@@ -298,6 +298,13 @@ type EventQuestionEdge {
   node: EventQuestion!
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventQuestionEdgeContainer {
+  edge: EventQuestionEdge!
+}
+
 type EventQuestionMutationResponse implements MutationResponse {
   body: EventQuestionEdge
   isError: Boolean!
@@ -586,25 +593,25 @@ type Subscription {
 
   """subscription for whenever a new org is added"""
   orgUpdated: OrganizationSubscription!
-  questionAddedToEnqueued(eventId: ID!): EventQuestionEdge!
-  questionAddedToRecord(eventId: ID!): EventQuestionEdge!
+  questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
+  questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
   """
   Question subscription for all operations performed on questions
   TODO: #QQRedesign delete after code complete
   """
   questionCRUD(eventId: ID!): QuestionOperation!
-  questionCreated(eventId: ID!): EventQuestionEdge!
-  questionDeleted(eventId: ID!): EventQuestionEdge!
+  questionCreated(eventId: ID!): EventQuestionEdgeContainer!
+  questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
 
   """
   subscription for whenever questions are added to the queue
   TODO: #QQRedesign delete once code complete
   """
   questionQueued(eventId: ID!): EventQuestion!
-  questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdge!
-  questionRemovedFromRecord(eventId: ID!): EventQuestionEdge!
-  questionUpdated(eventId: ID!): EventQuestionEdge!
+  questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
+  questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
+  questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
 }
 
 input UpdateEmailForm {

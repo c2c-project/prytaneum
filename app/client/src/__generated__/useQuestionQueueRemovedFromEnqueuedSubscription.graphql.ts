@@ -10,8 +10,10 @@ export type useQuestionQueueRemovedFromEnqueuedSubscriptionVariables = {
 };
 export type useQuestionQueueRemovedFromEnqueuedSubscriptionResponse = {
     readonly questionRemovedFromEnqueued: {
-        readonly node: {
-            readonly id: string;
+        readonly edge: {
+            readonly node: {
+                readonly id: string;
+            };
         };
     };
 };
@@ -27,8 +29,10 @@ subscription useQuestionQueueRemovedFromEnqueuedSubscription(
   $eventId: ID!
 ) {
   questionRemovedFromEnqueued(eventId: $eventId) {
-    node {
-      id
+    edge {
+      node {
+        id
+      }
     }
   }
 }
@@ -72,7 +76,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromEnqueued",
         "plural": false,
@@ -80,12 +84,23 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              }
             ],
             "storageKey": null
           }
@@ -108,7 +123,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromEnqueued",
         "plural": false,
@@ -116,27 +131,38 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "filters": null,
-                "handle": "deleteEdge",
-                "key": "",
-                "kind": "ScalarHandle",
-                "name": "id",
-                "handleArgs": [
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
                   {
-                    "kind": "Variable",
-                    "name": "connections",
-                    "variableName": "connections"
+                    "alias": null,
+                    "args": null,
+                    "filters": null,
+                    "handle": "deleteEdge",
+                    "key": "",
+                    "kind": "ScalarHandle",
+                    "name": "id",
+                    "handleArgs": [
+                      {
+                        "kind": "Variable",
+                        "name": "connections",
+                        "variableName": "connections"
+                      }
+                    ]
                   }
-                ]
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -147,14 +173,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6336bcb2a20459d4e9851ff58c320549",
+    "cacheID": "a77cce141c2f559f72eb02afc8a157c0",
     "id": null,
     "metadata": {},
     "name": "useQuestionQueueRemovedFromEnqueuedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionQueueRemovedFromEnqueuedSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromEnqueued(eventId: $eventId) {\n    node {\n      id\n    }\n  }\n}\n"
+    "text": "subscription useQuestionQueueRemovedFromEnqueuedSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromEnqueued(eventId: $eventId) {\n    edge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '08b4974104c8fe93a70edfb37127d559';
+(node as any).hash = 'f21e18c1e39210cc638213100bb48ab4';
 export default node;

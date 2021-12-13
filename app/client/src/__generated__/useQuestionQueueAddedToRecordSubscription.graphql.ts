@@ -11,12 +11,14 @@ export type useQuestionQueueAddedToRecordSubscriptionVariables = {
 };
 export type useQuestionQueueAddedToRecordSubscriptionResponse = {
     readonly questionAddedToRecord: {
-        readonly node: {
-            readonly id: string;
-            readonly position: number | null;
-            readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+        readonly edge: {
+            readonly node: {
+                readonly id: string;
+                readonly position: number | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+            };
+            readonly cursor: string;
         };
-        readonly cursor: string;
     };
 };
 export type useQuestionQueueAddedToRecordSubscription = {
@@ -31,14 +33,16 @@ subscription useQuestionQueueAddedToRecordSubscription(
   $eventId: ID!
 ) {
   questionAddedToRecord(eventId: $eventId) {
-    node {
-      id
-      ...QuestionAuthorFragment
-      ...QuestionStatsFragment
-      ...QuestionContentFragment
-      position
+    edge {
+      node {
+        id
+        ...QuestionAuthorFragment
+        ...QuestionStatsFragment
+        ...QuestionContentFragment
+        position
+      }
+      cursor
     }
-    cursor
   }
 }
 
@@ -113,7 +117,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionAddedToRecord",
         "plural": false,
@@ -121,32 +125,43 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/),
               {
+                "alias": null,
                 "args": null,
-                "kind": "FragmentSpread",
-                "name": "QuestionAuthorFragment"
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionAuthorFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionStatsFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionContentFragment"
+                  }
+                ],
+                "storageKey": null
               },
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "QuestionStatsFragment"
-              },
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "QuestionContentFragment"
-              }
+              (v5/*: any*/)
             ],
             "storageKey": null
-          },
-          (v5/*: any*/)
+          }
         ],
         "storageKey": null
       }
@@ -166,7 +181,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionAddedToRecord",
         "plural": false,
@@ -174,94 +189,105 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "User",
+                "concreteType": "EventQuestion",
                 "kind": "LinkedField",
-                "name": "createdBy",
+                "name": "node",
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
-                    "kind": "ScalarField",
-                    "name": "firstName",
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v3/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "firstName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "avatar",
+                        "storageKey": null
+                      }
+                    ],
                     "storageKey": null
                   },
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "avatar",
+                    "name": "createdAt",
                     "storageKey": null
-                  }
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "likedByCount",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "question",
+                    "storageKey": null
+                  },
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "createdAt",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "likedByCount",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "question",
-                "storageKey": null
-              },
-              (v4/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "appendEdge",
+            "key": "",
+            "kind": "LinkedHandle",
+            "name": "edge",
+            "handleArgs": [
+              {
+                "kind": "Variable",
+                "name": "connections",
+                "variableName": "connections"
+              }
+            ]
+          }
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "filters": null,
-        "handle": "appendEdge",
-        "key": "",
-        "kind": "LinkedHandle",
-        "name": "questionAddedToRecord",
-        "handleArgs": [
-          {
-            "kind": "Variable",
-            "name": "connections",
-            "variableName": "connections"
-          }
-        ]
       }
     ]
   },
   "params": {
-    "cacheID": "25177a55340096ca52a64fc613fdb23b",
+    "cacheID": "0816cfdedf270dc24c0e563faabc89da",
     "id": null,
     "metadata": {},
     "name": "useQuestionQueueAddedToRecordSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionQueueAddedToRecordSubscription(\n  $eventId: ID!\n) {\n  questionAddedToRecord(eventId: $eventId) {\n    node {\n      id\n      ...QuestionAuthorFragment\n      ...QuestionStatsFragment\n      ...QuestionContentFragment\n      position\n    }\n    cursor\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionQueueAddedToRecordSubscription(\n  $eventId: ID!\n) {\n  questionAddedToRecord(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '3f7590de32a2836987c79ce54f0b4d3d';
+(node as any).hash = '15dfb0c0061d4aabd846253d5b47f2b2';
 export default node;

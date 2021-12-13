@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import type { EventQuestionEdge, QuestionOperation } from '@local/graphql-types';
+import type { EventQuestionEdge, EventQuestionEdgeContainer, QuestionOperation } from '@local/graphql-types';
 import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
@@ -37,7 +37,7 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionCreated',
                     payload: {
-                        questionCreated: edge,
+                        questionCreated: { edge },
                     },
                 });
 
@@ -69,7 +69,7 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionUpdated',
                     payload: {
-                        questionUpdated: edge,
+                        questionUpdated: { edge },
                     },
                 });
                 return edge;
@@ -89,71 +89,71 @@ export const resolvers: Resolvers = {
             ),
         },
         questionCreated: {
-            subscribe: withFilter<{ questionCreated: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionCreated: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCreated'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionCreated.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionCreated.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionUpdated: {
-            subscribe: withFilter<{ questionUpdated: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionUpdated: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionUpdated'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionUpdated.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionUpdated.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionDeleted: {
-            subscribe: withFilter<{ questionDeleted: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionDeleted: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionDeleted'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionDeleted.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionDeleted.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionAddedToRecord: {
-            subscribe: withFilter<{ questionAddedToRecord: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionAddedToRecord: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionAddedToRecord'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionAddedToRecord.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionAddedToRecord.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionRemovedFromRecord: {
-            subscribe: withFilter<{ questionRemovedFromRecord: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionRemovedFromRecord: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionRemovedFromRecord'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionRemovedFromRecord.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionRemovedFromRecord.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionAddedToEnqueued: {
-            subscribe: withFilter<{ questionAddedToEnqueued: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionAddedToEnqueued: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionAddedToEnqueued'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionAddedToEnqueued.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionAddedToEnqueued.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
         },
         questionRemovedFromEnqueued: {
-            subscribe: withFilter<{ questionRemovedFromEnqueued: EventQuestionEdge }>(
+            subscribe: withFilter<{ questionRemovedFromEnqueued: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionRemovedFromEnqueued'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: questionId } = fromGlobalId(payload.questionRemovedFromEnqueued.node.id);
+                    const { id: questionId } = fromGlobalId(payload.questionRemovedFromEnqueued.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),

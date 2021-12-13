@@ -41,7 +41,7 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionUpdated',
                     payload: {
-                        questionUpdated: edge,
+                        questionUpdated: { edge },
                     },
                 });
                 return edge;
@@ -59,6 +59,7 @@ export const resolvers: Resolvers = {
             );
 
             const eventWithGlobalId = toEventId(event);
+            const currentQuestionWithGlobalId = toQuestionId(currentQuestion);
 
             // TODO: #QQRedesign delete once code complete
             ctx.pubsub.publish({
@@ -71,8 +72,20 @@ export const resolvers: Resolvers = {
                 topic: 'questionAddedToRecord',
                 payload: {
                     questionAddedToRecord: {
-                        node: currentQuestion,
-                        cursor: currentQuestion.createdAt.getTime().toString(),
+                        edge: {
+                            node: currentQuestionWithGlobalId,
+                            cursor: currentQuestionWithGlobalId.createdAt.getTime().toString(),
+                        },
+                    },
+                },
+            });
+            ctx.pubsub.publish({
+                topic: 'questionRemovedFromEnqueued',
+                payload: {
+                    questionRemovedFromEnqueued: {
+                        edge: {
+                            node: currentQuestionWithGlobalId,
+                        },
                     },
                 },
             });
@@ -90,6 +103,7 @@ export const resolvers: Resolvers = {
             );
             if (!prevCurrentQuestion) throw new Error('No question to move back to!');
             const eventWithGlobalId = toEventId(event);
+            const prevCurrentQuestionWithGlobalId = toQuestionId(prevCurrentQuestion);
             // TODO: #QQRedesign delete once code complete
             ctx.pubsub.publish({
                 topic: 'eventUpdates',
@@ -100,9 +114,21 @@ export const resolvers: Resolvers = {
             ctx.pubsub.publish({
                 topic: 'questionRemovedFromRecord',
                 payload: {
-                    questionAddedToRecord: {
-                        node: prevCurrentQuestion,
-                        cursor: prevCurrentQuestion.createdAt.getTime().toString(),
+                    questionRemovedFromRecord: {
+                        edge: {
+                            node: prevCurrentQuestionWithGlobalId,
+                            cursor: prevCurrentQuestion.createdAt.getTime().toString(),
+                        },
+                    },
+                },
+            });
+            ctx.pubsub.publish({
+                topic: 'questionAddedToEnqueued',
+                payload: {
+                    questionAddedToEnqueued: {
+                        edge: {
+                            node: prevCurrentQuestionWithGlobalId,
+                        },
                     },
                 },
             });
@@ -217,7 +243,9 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionAddedToEnqueued',
                     payload: {
-                        questionAddedToEnqueued: questionWithGlobalId,
+                        edge: {
+                            questionAddedToEnqueued: questionWithGlobalId,
+                        },
                     },
                 });
                 return edge;
@@ -255,7 +283,9 @@ export const resolvers: Resolvers = {
                 ctx.pubsub.publish({
                     topic: 'questionRemovedFromEnqueued',
                     payload: {
-                        questionRemovedFromEnqueued: questionWithGlobalId,
+                        edge: {
+                            questionRemovedFromEnqueued: questionWithGlobalId,
+                        },
                     },
                 });
                 return edge;

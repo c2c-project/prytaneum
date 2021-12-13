@@ -10,8 +10,10 @@ export type QuestionCarouselRemovedSubscriptionVariables = {
 };
 export type QuestionCarouselRemovedSubscriptionResponse = {
     readonly questionRemovedFromRecord: {
-        readonly node: {
-            readonly id: string;
+        readonly edge: {
+            readonly node: {
+                readonly id: string;
+            };
         };
     };
 };
@@ -27,8 +29,10 @@ subscription QuestionCarouselRemovedSubscription(
   $eventId: ID!
 ) {
   questionRemovedFromRecord(eventId: $eventId) {
-    node {
-      id
+    edge {
+      node {
+        id
+      }
     }
   }
 }
@@ -72,7 +76,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromRecord",
         "plural": false,
@@ -80,12 +84,23 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              }
             ],
             "storageKey": null
           }
@@ -108,7 +123,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromRecord",
         "plural": false,
@@ -116,27 +131,38 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "filters": null,
-                "handle": "deleteEdge",
-                "key": "",
-                "kind": "ScalarHandle",
-                "name": "id",
-                "handleArgs": [
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
                   {
-                    "kind": "Variable",
-                    "name": "connections",
-                    "variableName": "connections"
+                    "alias": null,
+                    "args": null,
+                    "filters": null,
+                    "handle": "deleteEdge",
+                    "key": "",
+                    "kind": "ScalarHandle",
+                    "name": "id",
+                    "handleArgs": [
+                      {
+                        "kind": "Variable",
+                        "name": "connections",
+                        "variableName": "connections"
+                      }
+                    ]
                   }
-                ]
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -147,14 +173,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ab04cd765a04b277d9f9a342147de901",
+    "cacheID": "805d358c046b157b3a5c3ddcebfa7c5c",
     "id": null,
     "metadata": {},
     "name": "QuestionCarouselRemovedSubscription",
     "operationKind": "subscription",
-    "text": "subscription QuestionCarouselRemovedSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromRecord(eventId: $eventId) {\n    node {\n      id\n    }\n  }\n}\n"
+    "text": "subscription QuestionCarouselRemovedSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromRecord(eventId: $eventId) {\n    edge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b15430c5efd84b624bee8cf3c78e4a9a';
+(node as any).hash = '45f7989afdce9cd84c8d184b4e5c7caf';
 export default node;

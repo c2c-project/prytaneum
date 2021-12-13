@@ -49,15 +49,17 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
 
 export const USE_ADDED_TO_ENQUEUED_SUBSCRIPTION = graphql`
     subscription useQuestionQueueAddedToEnqueuedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionAddedToEnqueued(eventId: $eventId) @appendEdge(connections: $connections) {
-            node {
-                id
-                ...QuestionAuthorFragment
-                ...QuestionStatsFragment
-                ...QuestionContentFragment
-                position
+        questionAddedToEnqueued(eventId: $eventId) {
+            edge @appendEdge(connections: $connections) {
+                node {
+                    id
+                    ...QuestionAuthorFragment
+                    ...QuestionStatsFragment
+                    ...QuestionContentFragment
+                    position
+                }
+                cursor
             }
-            cursor
         }
     }
 `;
@@ -65,8 +67,10 @@ export const USE_ADDED_TO_ENQUEUED_SUBSCRIPTION = graphql`
 export const USE_REMOVED_FROM_ENQUEUED_SUBSCRIPTION = graphql`
     subscription useQuestionQueueRemovedFromEnqueuedSubscription($eventId: ID!, $connections: [ID!]!) {
         questionRemovedFromEnqueued(eventId: $eventId) {
-            node {
-                id @deleteEdge(connections: $connections)
+            edge {
+                node {
+                    id @deleteEdge(connections: $connections)
+                }
             }
         }
     }
@@ -74,15 +78,17 @@ export const USE_REMOVED_FROM_ENQUEUED_SUBSCRIPTION = graphql`
 
 export const USE_ADDED_TO_RECORD_SUBSCRIPTION = graphql`
     subscription useQuestionQueueAddedToRecordSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionAddedToRecord(eventId: $eventId) @appendEdge(connections: $connections) {
-            node {
-                id
-                ...QuestionAuthorFragment
-                ...QuestionStatsFragment
-                ...QuestionContentFragment
-                position
+        questionAddedToRecord(eventId: $eventId) {
+            edge @appendEdge(connections: $connections) {
+                node {
+                    id
+                    ...QuestionAuthorFragment
+                    ...QuestionStatsFragment
+                    ...QuestionContentFragment
+                    position
+                }
+                cursor
             }
-            cursor
         }
     }
 `;
@@ -90,8 +96,10 @@ export const USE_ADDED_TO_RECORD_SUBSCRIPTION = graphql`
 export const USE_REMOVED_FROM_RECORD_SUBSCRIPTION = graphql`
     subscription useQuestionQueueRemovedFromRecordSubscription($eventId: ID!, $connections: [ID!]!) {
         questionRemovedFromRecord(eventId: $eventId) {
-            node {
-                id @deleteEdge(connections: $connections)
+            edge {
+                node {
+                    id @deleteEdge(connections: $connections)
+                }
             }
         }
     }

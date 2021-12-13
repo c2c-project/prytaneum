@@ -10,8 +10,10 @@ export type useQuestionQueueRemovedFromRecordSubscriptionVariables = {
 };
 export type useQuestionQueueRemovedFromRecordSubscriptionResponse = {
     readonly questionRemovedFromRecord: {
-        readonly node: {
-            readonly id: string;
+        readonly edge: {
+            readonly node: {
+                readonly id: string;
+            };
         };
     };
 };
@@ -27,8 +29,10 @@ subscription useQuestionQueueRemovedFromRecordSubscription(
   $eventId: ID!
 ) {
   questionRemovedFromRecord(eventId: $eventId) {
-    node {
-      id
+    edge {
+      node {
+        id
+      }
     }
   }
 }
@@ -72,7 +76,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromRecord",
         "plural": false,
@@ -80,12 +84,23 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              }
             ],
             "storageKey": null
           }
@@ -108,7 +123,7 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
         "name": "questionRemovedFromRecord",
         "plural": false,
@@ -116,27 +131,38 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "filters": null,
-                "handle": "deleteEdge",
-                "key": "",
-                "kind": "ScalarHandle",
-                "name": "id",
-                "handleArgs": [
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
                   {
-                    "kind": "Variable",
-                    "name": "connections",
-                    "variableName": "connections"
+                    "alias": null,
+                    "args": null,
+                    "filters": null,
+                    "handle": "deleteEdge",
+                    "key": "",
+                    "kind": "ScalarHandle",
+                    "name": "id",
+                    "handleArgs": [
+                      {
+                        "kind": "Variable",
+                        "name": "connections",
+                        "variableName": "connections"
+                      }
+                    ]
                   }
-                ]
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -147,14 +173,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2b3d05d91acace1c62e642d4e9085594",
+    "cacheID": "a09384b87e0f29a551c173e778de2f81",
     "id": null,
     "metadata": {},
     "name": "useQuestionQueueRemovedFromRecordSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionQueueRemovedFromRecordSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromRecord(eventId: $eventId) {\n    node {\n      id\n    }\n  }\n}\n"
+    "text": "subscription useQuestionQueueRemovedFromRecordSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromRecord(eventId: $eventId) {\n    edge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f5f19177bf5a7d088d3640090f52ca60';
+(node as any).hash = '63e1e1d736dd42bdf061fde38eb12ffd';
 export default node;

@@ -520,13 +520,13 @@ export type Subscription = {
      * TODO: #QQRedesign delete after code complete
      */
     questionCRUD: QuestionOperation;
-    questionCreated: EventQuestionEdge;
-    questionUpdated: EventQuestionEdge;
-    questionDeleted: EventQuestionEdge;
-    questionAddedToRecord: EventQuestionEdge;
-    questionRemovedFromRecord: EventQuestionEdge;
-    questionAddedToEnqueued: EventQuestionEdge;
-    questionRemovedFromEnqueued: EventQuestionEdge;
+    questionCreated: EventQuestionEdgeContainer;
+    questionUpdated: EventQuestionEdgeContainer;
+    questionDeleted: EventQuestionEdgeContainer;
+    questionAddedToRecord: EventQuestionEdgeContainer;
+    questionRemovedFromRecord: EventQuestionEdgeContainer;
+    questionAddedToEnqueued: EventQuestionEdgeContainer;
+    questionRemovedFromEnqueued: EventQuestionEdgeContainer;
 };
 
 export type SubscriptioneventUpdatesArgs = {
@@ -880,6 +880,12 @@ export type QuestionOperation = {
     edge: EventQuestionEdge;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventQuestionEdgeContainer = {
+    __typename?: 'EventQuestionEdgeContainer';
+    edge: EventQuestionEdge;
+};
+
 export type EventSpeaker = Node & {
     __typename?: 'EventSpeaker';
     /** Speaker id */
@@ -1151,6 +1157,7 @@ export type ResolversTypes = {
     AlterLike: AlterLike;
     EventQuestionMutationResponse: ResolverTypeWrapper<EventQuestionMutationResponse>;
     QuestionOperation: ResolverTypeWrapper<QuestionOperation>;
+    EventQuestionEdgeContainer: ResolverTypeWrapper<EventQuestionEdgeContainer>;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
     EventSpeakerEdge: ResolverTypeWrapper<EventSpeakerEdge>;
     EventSpeakerConnection: ResolverTypeWrapper<EventSpeakerConnection>;
@@ -1255,6 +1262,7 @@ export type ResolversParentTypes = {
     AlterLike: AlterLike;
     EventQuestionMutationResponse: EventQuestionMutationResponse;
     QuestionOperation: QuestionOperation;
+    EventQuestionEdgeContainer: EventQuestionEdgeContainer;
     EventSpeaker: EventSpeaker;
     EventSpeakerEdge: EventSpeakerEdge;
     EventSpeakerConnection: EventSpeakerConnection;
@@ -1781,49 +1789,49 @@ export type SubscriptionResolvers<
         RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
     >;
     questionCreated?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionCreated',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionCreatedArgs, 'eventId'>
     >;
     questionUpdated?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionUpdated',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionUpdatedArgs, 'eventId'>
     >;
     questionDeleted?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionDeleted',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionDeletedArgs, 'eventId'>
     >;
     questionAddedToRecord?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionAddedToRecord',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionAddedToRecordArgs, 'eventId'>
     >;
     questionRemovedFromRecord?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionRemovedFromRecord',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionRemovedFromRecordArgs, 'eventId'>
     >;
     questionAddedToEnqueued?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionAddedToEnqueued',
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionAddedToEnqueuedArgs, 'eventId'>
     >;
     questionRemovedFromEnqueued?: SubscriptionResolver<
-        ResolversTypes['EventQuestionEdge'],
+        ResolversTypes['EventQuestionEdgeContainer'],
         'questionRemovedFromEnqueued',
         ParentType,
         ContextType,
@@ -2085,6 +2093,14 @@ export type QuestionOperationResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventQuestionEdgeContainerResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventQuestionEdgeContainer'] = ResolversParentTypes['EventQuestionEdgeContainer']
+> = {
+    edge?: Resolver<ResolversTypes['EventQuestionEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type EventSpeakerResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventSpeaker'] = ResolversParentTypes['EventSpeaker']
@@ -2208,6 +2224,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     Like?: LikeResolvers<ContextType>;
     EventQuestionMutationResponse?: EventQuestionMutationResponseResolvers<ContextType>;
     QuestionOperation?: QuestionOperationResolvers<ContextType>;
+    EventQuestionEdgeContainer?: EventQuestionEdgeContainerResolvers<ContextType>;
     EventSpeaker?: EventSpeakerResolvers<ContextType>;
     EventSpeakerEdge?: EventSpeakerEdgeResolvers<ContextType>;
     EventSpeakerConnection?: EventSpeakerConnectionResolvers<ContextType>;
@@ -2485,6 +2502,10 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     QuestionOperation?: {
         operationType?: LoaderResolver<Operation, QuestionOperation, {}, TContext>;
         edge?: LoaderResolver<EventQuestionEdge, QuestionOperation, {}, TContext>;
+    };
+
+    EventQuestionEdgeContainer?: {
+        edge?: LoaderResolver<EventQuestionEdge, EventQuestionEdgeContainer, {}, TContext>;
     };
 
     EventSpeaker?: {
