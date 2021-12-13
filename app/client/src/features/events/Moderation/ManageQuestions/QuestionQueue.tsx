@@ -175,11 +175,11 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const canGoBackward = React.useMemo(() => questionRecord.length > 1, [questionRecord]);
     const canGoForward = React.useMemo(() => enqueuedQuestions.length > 0, [enqueuedQuestions]);
     const currentQuestion = React.useMemo(
-        () => (canGoBackward ? questionRecord[questionRecord.length - 1] : null),
-        [canGoBackward, questionRecord]
+        () => (questionRecord.length > 0 ? questionRecord[questionRecord.length - 1] : null),
+        [questionRecord]
     );
     const nextQuestion = React.useMemo(
-        () => (canGoForward ? enqueuedQuestions[enqueuedQuestions.length - 1] : null),
+        () => (canGoForward ? enqueuedQuestions[0] : null),
         [canGoForward, enqueuedQuestions]
     );
 
@@ -276,7 +276,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         <Typography variant='h5'>Past Questions</Typography>
                         <List>
                             {questionQueue?.questionRecord?.edges
-                                ?.slice(0) // hacky way to copy the array -- feeling lazy TODO: more elegant solution
+                                ?.slice(0, -1) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
                                 ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0))
                                 .map((question) => (
                                     <ListItem key={question.node.id}>
