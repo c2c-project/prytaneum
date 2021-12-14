@@ -3,46 +3,40 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type UpdateQuestionQueue = {
-    adding: boolean;
+export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
+export type useLiveFeedbackListSubscriptionVariables = {
     eventId: string;
-    questionId: string;
 };
-export type QueueButtonMutationVariables = {
-    input: UpdateQuestionQueue;
-};
-export type QueueButtonMutationResponse = {
-    readonly updateQuestionQueue: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
+export type useLiveFeedbackListSubscriptionResponse = {
+    readonly feedbackCRUD: {
+        readonly operationType: Operation;
+        readonly edge: {
             readonly cursor: string;
             readonly node: {
                 readonly id: string;
-                readonly position: number | null;
+                readonly message: string;
             };
-        } | null;
+        };
     };
 };
-export type QueueButtonMutation = {
-    readonly response: QueueButtonMutationResponse;
-    readonly variables: QueueButtonMutationVariables;
+export type useLiveFeedbackListSubscription = {
+    readonly response: useLiveFeedbackListSubscriptionResponse;
+    readonly variables: useLiveFeedbackListSubscriptionVariables;
 };
 
 
 
 /*
-mutation QueueButtonMutation(
-  $input: UpdateQuestionQueue!
+subscription useLiveFeedbackListSubscription(
+  $eventId: ID!
 ) {
-  updateQuestionQueue(input: $input) {
-    isError
-    message
-    body {
+  feedbackCRUD(eventId: $eventId) {
+    operationType
+    edge {
       cursor
       node {
         id
-        position
+        message
       }
     }
   }
@@ -54,7 +48,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "eventId"
   }
 ],
 v1 = [
@@ -63,35 +57,28 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
+        "name": "eventId",
+        "variableName": "eventId"
       }
     ],
-    "concreteType": "EventQuestionMutationResponse",
+    "concreteType": "FeedbackOperation",
     "kind": "LinkedField",
-    "name": "updateQuestionQueue",
+    "name": "feedbackCRUD",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "isError",
+        "name": "operationType",
         "storageKey": null
       },
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "message",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventLiveFeedbackEdge",
         "kind": "LinkedField",
-        "name": "body",
+        "name": "edge",
         "plural": false,
         "selections": [
           {
@@ -104,7 +91,7 @@ v1 = [
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventLiveFeedback",
             "kind": "LinkedField",
             "name": "node",
             "plural": false,
@@ -120,7 +107,7 @@ v1 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "position",
+                "name": "message",
                 "storageKey": null
               }
             ],
@@ -138,27 +125,27 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "QueueButtonMutation",
+    "name": "useLiveFeedbackListSubscription",
     "selections": (v1/*: any*/),
-    "type": "Mutation",
+    "type": "Subscription",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "QueueButtonMutation",
+    "name": "useLiveFeedbackListSubscription",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "d51abd2e7798ca5a080972f29a933fb4",
+    "cacheID": "4e6790bc467a85ed3d340c2fe11f8eed",
     "id": null,
     "metadata": {},
-    "name": "QueueButtonMutation",
-    "operationKind": "mutation",
-    "text": "mutation QueueButtonMutation(\n  $input: UpdateQuestionQueue!\n) {\n  updateQuestionQueue(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
+    "name": "useLiveFeedbackListSubscription",
+    "operationKind": "subscription",
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '1adf653c2e16503d73593819b657ff52';
+(node as any).hash = '4dd515f068e03ec1321a4861ca265d65';
 export default node;

@@ -5,9 +5,9 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type DeleteAccountForm = {
+    confirmPassword: string;
     email: string;
     password: string;
-    confirmPassword: string;
 };
 export type DeleteAccountFormMutationVariables = {
     input: DeleteAccountForm;
