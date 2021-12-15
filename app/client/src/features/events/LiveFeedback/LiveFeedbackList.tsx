@@ -44,8 +44,8 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
     );
 
     React.useEffect(() => {
-        console.log(liveFeedback)
-        console.log(filteredList);
+        console.log('Unfiltered: ', liveFeedback)
+        console.log('Filtered: ', filteredList);
     }, [liveFeedback, filteredList])
 
     return (
@@ -54,16 +54,28 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
-                            {filteredList.map((feedback) => (
-                                <ListItem disableGutters key={feedback.id}>
-                                    <Card className={classes.item}>
-                                        <LiveFeedbackAuthor fragmentRef={feedback} />
-                                        <CardContent>
-                                            <Typography>feedback.message</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </ListItem>
-                            ))}
+                            {isModerator ? 
+                                liveFeedback.map((feedback) => (
+                                    <ListItem disableGutters key={feedback.id}>
+                                        <Card className={classes.item}>
+                                            <LiveFeedbackAuthor fragmentRef={feedback} />
+                                            <CardContent>
+                                                <Typography>{feedback.message}</Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </ListItem>
+                                ))
+                                :
+                                filteredList.map((feedback) => (
+                                    <ListItem disableGutters key={feedback.id}>
+                                        <Card className={classes.item}>
+                                            <LiveFeedbackAuthor fragmentRef={feedback} />
+                                            <CardContent>
+                                                <Typography>{feedback.message}</Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </ListItem>
+                                ))}
                         </List>
                     </Grid>
                 </Grid>

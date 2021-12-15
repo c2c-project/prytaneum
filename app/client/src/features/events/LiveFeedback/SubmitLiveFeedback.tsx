@@ -4,7 +4,7 @@ import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
 import { useMutation, graphql } from 'react-relay';
 
-import type { SubmitFeedbackMutation } from '@local/__generated__/SubmitFeedbackMutation.graphql';
+import type { SubmitLiveFeedbackMutation } from '@local/__generated__/SubmitLiveFeedbackMutation.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
 import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
@@ -39,7 +39,7 @@ export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
 export function SubmitLiveFeedback({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
-    const [commit] = useMutation<SubmitFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
+    const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
 
     function handleSubmit(form: TLiveFeedbackFormState) {
         commit({

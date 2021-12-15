@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { graphql, useFragment, useSubscription } from 'react-relay';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { ConnectionHandler, GraphQLSubscriptionConfig } from 'relay-runtime';
 import { useLiveFeedbackListSubscription } from '@local/__generated__/useLiveFeedbackListSubscription.graphql';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
 
@@ -14,6 +14,10 @@ export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
                 node {
                     id
                     message
+                    createdBy {
+                        id
+                    }
+                    ...LiveFeedbackAuthorFragment
                 }
             }
         }
@@ -55,7 +59,27 @@ export function useLiveFeedbackList({ fragmentRef }: Props) {
 
     const config = React.useMemo<GraphQLSubscriptionConfig<useLiveFeedbackListSubscription>>(() => ({
         variables: { eventId },
-        subscription: USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION
+        subscription: USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION,
+        updater(store, data) {
+            const eventRecord = store.get(eventId);
+            if (!eventRecord) return;
+
+            const eventLiveFeedbackConnectionRecord = ConnectionHandler.getConnection(
+                eventRecord,
+                'useLiveFeedbackListFragment_liveFeedback'
+            );
+
+            if (!eventLiveFeedbackConnectionRecord) return;
+
+            const payload = store.getRootField('feedbackCRUD');
+            const edge = payload.getLinkedRecord('edge');
+            if (!edge) return;
+
+            const newEdge = ConnectionHandler.buildConnectionEdge(store, eventLiveFeedbackConnectionRecord, edge);
+            if (!newEdge) return;
+
+            ConnectionHandler.insertEdgeBefore(eventLiveFeedbackConnectionRecord, newEdge);
+        }
     }), [eventId]);
 
     useSubscription(config);

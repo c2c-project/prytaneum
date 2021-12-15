@@ -205,3 +205,10 @@ export async function findQueuedQuestionsByEventId(eventId: string, prisma: Pris
         select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } } },
     });
 }
+
+export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.event.findUnique({
+        where: { id: eventId },
+        select: { feedback: true }
+    });
+}
