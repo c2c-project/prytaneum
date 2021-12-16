@@ -152,6 +152,7 @@ export const resolvers: Resolvers = {
             const edges = liveFeedback
                 .map(toFeedbackId)
                 .map((feedback) => ({ node: feedback, cursor: feedback.createdAt.getTime().toString() }));
+            // TODO Filter the results if viewer is not a moderator
             return {
                 edges,
                 pageInfo: {

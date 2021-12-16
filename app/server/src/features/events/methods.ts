@@ -206,9 +206,12 @@ export async function findQueuedQuestionsByEventId(eventId: string, prisma: Pris
     });
 }
 
+/**
+ * Find live feedback by event id
+ */
 export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { feedback: true }
+        select: { feedback: { orderBy: { createdAt: 'desc' } } },
     });
 }

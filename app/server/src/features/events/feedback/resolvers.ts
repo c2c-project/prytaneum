@@ -1,11 +1,11 @@
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { fromGlobalId } from 'graphql-relay';
-import { EventLiveFeedback, EventLiveFeedbackEdge, FeedbackOperation } from '@local/graphql-types';
+import { FeedbackOperation } from '@local/graphql-types';
 import * as Feedback from './methods';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toUserId = toGlobalId('User');
-const toEventId = toGlobalId('Event');
+// const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -25,7 +25,6 @@ export const resolvers: Resolvers = {
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const feedback = await Feedback.createFeedback(ctx.viewer.id, eventId, ctx.prisma, args.input)
                 if (!feedback) return feedback;
-                console.log(feedback)
                 const edge = {
                     node: toFeedbackId(feedback),
                     cursor: feedback.createdAt.getTime().toString()
