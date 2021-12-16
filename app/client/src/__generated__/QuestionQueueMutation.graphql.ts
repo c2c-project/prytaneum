@@ -4,9 +4,9 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type UpdateQuestionPosition = {
-    eventId: string;
-    position: number;
     questionId: string;
+    position: number;
+    eventId: string;
 };
 export type QuestionQueueMutationVariables = {
     input: UpdateQuestionPosition;

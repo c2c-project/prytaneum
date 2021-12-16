@@ -13,8 +13,8 @@ export type Scalars = {
 };
 
 export type AddQuestionToQueue = {
-  eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 export type AlterLike = {
@@ -24,16 +24,15 @@ export type AlterLike = {
 };
 
 export type CreateEvent = {
-  description: Scalars['String'];
-  endDateTime: Scalars['Date'];
-  orgId: Scalars['String'];
-  startDateTime: Scalars['Date'];
   title: Scalars['String'];
+  startDateTime: Scalars['Date'];
+  endDateTime: Scalars['Date'];
+  description: Scalars['String'];
   topic: Scalars['String'];
+  orgId: Scalars['String'];
 };
 
 export type CreateFeedback = {
-  eventId: Scalars['ID'];
   message: Scalars['String'];
 };
 
@@ -59,34 +58,34 @@ export type CreateOrganization = {
 };
 
 export type CreateQuestion = {
-  eventId: Scalars['ID'];
-  isFollowUp?: Maybe<Scalars['Boolean']>;
-  isQuote?: Maybe<Scalars['Boolean']>;
   question: Scalars['String'];
+  isQuote?: Maybe<Scalars['Boolean']>;
+  isFollowUp?: Maybe<Scalars['Boolean']>;
   refQuestion?: Maybe<Scalars['ID']>;
+  eventId: Scalars['ID'];
 };
 
 export type CreateSpeaker = {
-  description: Scalars['String'];
-  /** This is for matching the speaker to an account */
-  email: Scalars['String'];
   eventId: Scalars['String'];
   name: Scalars['String'];
-  pictureUrl: Scalars['String'];
   title: Scalars['String'];
+  description: Scalars['String'];
+  pictureUrl: Scalars['String'];
+  /** This is for matching the speaker to an account */
+  email: Scalars['String'];
 };
 
 export type CreateVideo = {
-  eventId: Scalars['String'];
-  lang: Scalars['String'];
   url: Scalars['String'];
+  lang: Scalars['String'];
+  eventId: Scalars['String'];
 };
 
 
 export type DeleteAccountForm = {
-  confirmPassword: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+  confirmPassword: Scalars['String'];
 };
 
 export type DeleteEvent = {
@@ -94,13 +93,13 @@ export type DeleteEvent = {
 };
 
 export type DeleteMember = {
-  orgId: Scalars['ID'];
   userId: Scalars['ID'];
+  orgId: Scalars['ID'];
 };
 
 export type DeleteModerator = {
-  eventId: Scalars['ID'];
   userId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 /** Information necessary for deleting an org */
@@ -126,102 +125,102 @@ export type Error = {
 
 export type Event = Node & {
   __typename?: 'Event';
-  createdAt?: Maybe<Scalars['Date']>;
+  id: Scalars['ID'];
   /** Creator of this event */
   createdBy?: Maybe<User>;
-  /** The question currently being asked, corresponds to a "position" value on the event question */
-  currentQuestion?: Maybe<Scalars['Int']>;
-  description?: Maybe<Scalars['String']>;
+  /** The owning organization */
+  organization?: Maybe<Organization>;
+  createdAt?: Maybe<Scalars['Date']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  title?: Maybe<Scalars['String']>;
+  /** The planned start date time string */
+  startDateTime?: Maybe<Scalars['Date']>;
   /** The planned end date time string */
   endDateTime?: Maybe<Scalars['Date']>;
-  id: Scalars['ID'];
-  /** List of users who can view event when private */
-  invited?: Maybe<UserConnection>;
+  description?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
   /** Whether or not the Event is live */
   isActive?: Maybe<Scalars['Boolean']>;
+  /** Let all users see what questions have been submitted */
+  isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
   /** Collect user ratings after the event has ended */
   isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
   /** Display a forum-like interface once the "live" part of the event is over */
   isForumEnabled?: Maybe<Scalars['Boolean']>;
   /** Is the event private, ie invite only */
   isPrivate?: Maybe<Scalars['Boolean']>;
-  /** Let all users see what questions have been submitted */
-  isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
-  /** Whether or not the viewer is invited */
-  isViewerInvited?: Maybe<Scalars['Boolean']>;
-  /** Whether or not the viewer is a moderator */
-  isViewerModerator?: Maybe<Scalars['Boolean']>;
+  /** All questions relating to this event */
+  questions?: Maybe<EventQuestionConnection>;
+  /** Speakers for this event */
+  speakers?: Maybe<EventSpeakerConnection>;
+  /** Registrants for this event -- individuals invited */
+  registrants?: Maybe<UserConnection>;
+  /** Participants of the event -- individuals who showed up */
+  participants?: Maybe<EventParticipantConnection>;
+  /** Video feeds and the languages */
+  videos?: Maybe<EventVideoConnection>;
   /** Live Feedback given during the event */
   liveFeedback?: Maybe<EventLiveFeedbackConnection>;
   /** List of moderators for this particular event */
   moderators?: Maybe<UserConnection>;
-  /** The owning organization */
-  organization?: Maybe<Organization>;
-  /** Participants of the event -- individuals who showed up */
-  participants?: Maybe<EventParticipantConnection>;
-  /** All questions relating to this event */
-  questions?: Maybe<EventQuestionConnection>;
+  /** Whether or not the viewer is a moderator */
+  isViewerModerator?: Maybe<Scalars['Boolean']>;
+  /** List of users who can view event when private */
+  invited?: Maybe<UserConnection>;
+  /** Whether or not the viewer is invited */
+  isViewerInvited?: Maybe<Scalars['Boolean']>;
   /** Questions queued in this session by the moderator(s) */
   queuedQuestions?: Maybe<EventQuestionConnection>;
-  /** Registrants for this event -- individuals invited */
-  registrants?: Maybe<UserConnection>;
-  /** Speakers for this event */
-  speakers?: Maybe<EventSpeakerConnection>;
-  /** The planned start date time string */
-  startDateTime?: Maybe<Scalars['Date']>;
-  title?: Maybe<Scalars['String']>;
-  topic?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['Date']>;
-  /** Video feeds and the languages */
-  videos?: Maybe<EventVideoConnection>;
-};
-
-
-export type EventInvitedArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-};
-
-
-export type EventLiveFeedbackArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-};
-
-
-export type EventModeratorsArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-};
-
-
-export type EventParticipantsArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
+  /** The question currently being asked, corresponds to a "position" value on the event question */
+  currentQuestion?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventQuestionsArgs = {
-  after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
-};
-
-
-export type EventQueuedQuestionsArgs = {
   after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventSpeakersArgs = {
-  after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventParticipantsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
 };
 
 
 export type EventVideosArgs = {
-  after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventLiveFeedbackArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventModeratorsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventInvitedArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type EventQueuedQuestionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
 };
 
 /** Connection to Events */
@@ -234,24 +233,17 @@ export type EventConnection = {
 /** Event Edge */
 export type EventEdge = {
   __typename?: 'EventEdge';
-  cursor: Scalars['String'];
   node: Event;
-};
-
-export type EventFeedbackMutationResponse = MutationResponse & {
-  __typename?: 'EventFeedbackMutationResponse';
-  body?: Maybe<EventLiveFeedbackEdge>;
-  isError: Scalars['Boolean'];
-  message: Scalars['String'];
+  cursor: Scalars['String'];
 };
 
 export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
-  createdAt?: Maybe<Scalars['Date']>;
-  createdBy?: Maybe<User>;
-  event?: Maybe<Event>;
   id: Scalars['ID'];
   message: Scalars['String'];
+  event?: Maybe<Event>;
+  createdAt?: Maybe<Scalars['String']>;
+  createdBy?: Maybe<User>;
 };
 
 export type EventLiveFeedbackConnection = {
@@ -262,22 +254,22 @@ export type EventLiveFeedbackConnection = {
 
 export type EventLiveFeedbackEdge = {
   __typename?: 'EventLiveFeedbackEdge';
-  cursor: Scalars['String'];
   node: EventLiveFeedback;
+  cursor: Scalars['String'];
 };
 
 export type EventMutationResponse = MutationResponse & {
   __typename?: 'EventMutationResponse';
-  body?: Maybe<Event>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<Event>;
 };
 
 export type EventParticipant = {
   __typename?: 'EventParticipant';
-  liveFeedBack?: Maybe<Array<Maybe<EventLiveFeedback>>>;
-  questions?: Maybe<Array<Maybe<EventQuestion>>>;
   user?: Maybe<User>;
+  questions?: Maybe<Array<Maybe<EventQuestion>>>;
+  liveFeedBack?: Maybe<Array<Maybe<EventLiveFeedback>>>;
 };
 
 export type EventParticipantConnection = {
@@ -288,36 +280,36 @@ export type EventParticipantConnection = {
 
 export type EventParticipantEdge = {
   __typename?: 'EventParticipantEdge';
-  cursor: Scalars['String'];
   node: EventParticipant;
+  cursor: Scalars['String'];
 };
 
 export type EventQuestion = Node & {
   __typename?: 'EventQuestion';
-  createdAt?: Maybe<Scalars['Date']>;
-  /** User information on the person asking the question */
-  createdBy?: Maybe<User>;
+  id: Scalars['ID'];
+  event?: Maybe<Event>;
   /** The user id of the creator */
   createdById?: Maybe<Scalars['ID']>;
-  event?: Maybe<Event>;
-  id: Scalars['ID'];
-  isAsked?: Maybe<Scalars['Boolean']>;
-  isFollowUp?: Maybe<Scalars['Boolean']>;
-  /** Whether or not the current user likes the question */
-  isLikedByViewer?: Maybe<Scalars['Boolean']>;
-  /** If the question is owned by the current viewer */
-  isMyQuestion?: Maybe<Scalars['Boolean']>;
-  isQuote?: Maybe<Scalars['Boolean']>;
+  /** User information on the person asking the question */
+  createdBy?: Maybe<User>;
+  createdAt?: Maybe<Scalars['Date']>;
+  refQuestion?: Maybe<EventQuestion>;
+  /** The actual content of the question */
+  question?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['Int']>;
   isVisible?: Maybe<Scalars['Boolean']>;
+  isAsked?: Maybe<Scalars['Boolean']>;
   lang?: Maybe<Scalars['String']>;
+  isFollowUp?: Maybe<Scalars['Boolean']>;
+  isQuote?: Maybe<Scalars['Boolean']>;
   /** The users who have liked this question */
   likedBy?: Maybe<UserConnection>;
   /** Find the count of the likes only */
   likedByCount?: Maybe<Scalars['Int']>;
-  position?: Maybe<Scalars['Int']>;
-  /** The actual content of the question */
-  question?: Maybe<Scalars['String']>;
-  refQuestion?: Maybe<EventQuestion>;
+  /** Whether or not the current user likes the question */
+  isLikedByViewer?: Maybe<Scalars['Boolean']>;
+  /** If the question is owned by the current viewer */
+  isMyQuestion?: Maybe<Scalars['Boolean']>;
 };
 
 export type EventQuestionConnection = {
@@ -328,35 +320,35 @@ export type EventQuestionConnection = {
 
 export type EventQuestionEdge = {
   __typename?: 'EventQuestionEdge';
-  cursor: Scalars['String'];
   node: EventQuestion;
+  cursor: Scalars['String'];
 };
 
 export type EventQuestionMutationResponse = MutationResponse & {
   __typename?: 'EventQuestionMutationResponse';
-  body?: Maybe<EventQuestionEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<EventQuestionEdge>;
 };
 
 export type EventSpeaker = Node & {
   __typename?: 'EventSpeaker';
-  /** Description set by the organizer of the event */
-  description?: Maybe<Scalars['String']>;
+  /** Speaker id */
+  id: Scalars['ID'];
   /** email of the speaker */
   email?: Maybe<Scalars['String']>;
   /** Event eventId that this user is speaking at */
   eventId?: Maybe<Scalars['ID']>;
-  /** Speaker id */
-  id: Scalars['ID'];
-  /** Name set by the organizer of the event */
-  name?: Maybe<Scalars['String']>;
-  /** Picture set by the organizer of the event */
-  pictureUrl?: Maybe<Scalars['String']>;
-  /** Title set by the organizer of the event */
-  title?: Maybe<Scalars['String']>;
   /** The related user account associated with the speaker */
   user?: Maybe<User>;
+  /** Name set by the organizer of the event */
+  name?: Maybe<Scalars['String']>;
+  /** Description set by the organizer of the event */
+  description?: Maybe<Scalars['String']>;
+  /** Title set by the organizer of the event */
+  title?: Maybe<Scalars['String']>;
+  /** Picture set by the organizer of the event */
+  pictureUrl?: Maybe<Scalars['String']>;
 };
 
 export type EventSpeakerConnection = {
@@ -367,23 +359,23 @@ export type EventSpeakerConnection = {
 
 export type EventSpeakerEdge = {
   __typename?: 'EventSpeakerEdge';
-  cursor: Scalars['String'];
   node: EventSpeaker;
+  cursor: Scalars['String'];
 };
 
 export type EventSpeakerMutationResponse = MutationResponse & {
   __typename?: 'EventSpeakerMutationResponse';
-  body?: Maybe<EventSpeaker>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<EventSpeaker>;
 };
 
 export type EventVideo = Node & {
   __typename?: 'EventVideo';
-  event?: Maybe<Event>;
   id: Scalars['ID'];
-  lang: Scalars['String'];
   url: Scalars['String'];
+  lang: Scalars['String'];
+  event?: Maybe<Event>;
 };
 
 export type EventVideoConnection = {
@@ -394,26 +386,20 @@ export type EventVideoConnection = {
 
 export type EventVideoEdge = {
   __typename?: 'EventVideoEdge';
-  cursor: Scalars['String'];
   node: EventVideo;
+  cursor: Scalars['String'];
 };
 
 export type EventVideoMutationResponse = MutationResponse & {
   __typename?: 'EventVideoMutationResponse';
-  body?: Maybe<EventVideo>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-};
-
-export type FeedbackOperation = {
-  __typename?: 'FeedbackOperation';
-  edge: EventLiveFeedbackEdge;
-  operationType: Operation;
+  body?: Maybe<EventVideo>;
 };
 
 export type HideQuestion = {
-  eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
   /** Goal state. If we want to change the state to hidden, toggleTo is true; false otherwise. */
   toggleTo: Scalars['Boolean'];
 };
@@ -426,8 +412,8 @@ export type InviteMutationResponse = MutationResponse & {
 
 export type Like = {
   __typename?: 'Like';
-  question: EventQuestion;
   user: User;
+  question: EventQuestion;
 };
 
 export type LoginForm = {
@@ -437,9 +423,9 @@ export type LoginForm = {
 
 export type ModeratorMutationResponse = MutationResponse & {
   __typename?: 'ModeratorMutationResponse';
-  body?: Maybe<User>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<User>;
 };
 
 export type Mutation = {
@@ -447,7 +433,7 @@ export type Mutation = {
   addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
-  createFeedback?: Maybe<EventFeedbackMutationResponse>;
+  createFeedback?: Maybe<EventLiveFeedback>;
   createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
@@ -677,36 +663,36 @@ export type Node = {
 
 export enum Operation {
   Create = 'CREATE',
-  Delete = 'DELETE',
-  Update = 'UPDATE'
+  Update = 'UPDATE',
+  Delete = 'DELETE'
 }
 
 export type Organization = Node & {
   __typename?: 'Organization';
-  /** When this org was created */
-  createdAt?: Maybe<Scalars['Date']>;
-  /** Events owned by this organization */
-  events?: Maybe<EventConnection>;
   /** Unique identifier for this org */
   id: Scalars['ID'];
-  /** Whether or not the current viewer is a member */
-  isViewerMember?: Maybe<Scalars['Boolean']>;
-  /** all members of this org */
-  members?: Maybe<UserConnection>;
   /** name of the org */
   name: Scalars['String'];
-};
-
-
-export type OrganizationEventsArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
+  /** When this org was created */
+  createdAt?: Maybe<Scalars['Date']>;
+  /** all members of this org */
+  members?: Maybe<UserConnection>;
+  /** Events owned by this organization */
+  events?: Maybe<EventConnection>;
+  /** Whether or not the current viewer is a member */
+  isViewerMember?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type OrganizationMembersArgs = {
-  after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+};
+
+
+export type OrganizationEventsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
 };
 
 export type OrganizationConnection = {
@@ -717,30 +703,30 @@ export type OrganizationConnection = {
 
 export type OrganizationEdge = {
   __typename?: 'OrganizationEdge';
-  cursor: Scalars['String'];
   node: Organization;
+  cursor: Scalars['String'];
 };
 
 export type OrganizationMutationResponse = MutationResponse & {
   __typename?: 'OrganizationMutationResponse';
-  body?: Maybe<Organization>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<Organization>;
 };
 
 export type OrganizationSubscription = {
   __typename?: 'OrganizationSubscription';
-  deleteMember: Scalars['Boolean'];
   orgId: Scalars['ID'];
   userId?: Maybe<Scalars['ID']>;
+  deleteMember: Scalars['Boolean'];
 };
 
 export type PageInfo = {
   __typename?: 'PageInfo';
-  endCursor?: Maybe<Scalars['String']>;
   hasNextPage: Scalars['Boolean'];
   hasPreviousPage: Scalars['Boolean'];
   startCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -755,11 +741,6 @@ export type Query = {
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
-};
-
-
-export type QueryMyFeedbackArgs = {
-  eventId: Scalars['ID'];
 };
 
 
@@ -779,21 +760,21 @@ export type QueryValidateInviteArgs = {
 
 export type QuestionOperation = {
   __typename?: 'QuestionOperation';
-  edge: EventQuestionEdge;
   operationType: Operation;
+  edge: EventQuestionEdge;
 };
 
 export type RegistrationForm = {
-  confirmPassword: Scalars['String'];
-  email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   password: Scalars['String'];
+  confirmPassword: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type RemoveQuestionFromQueue = {
-  eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
 };
 
 export type Subscription = {
@@ -801,7 +782,6 @@ export type Subscription = {
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
-  feedbackCRUD: FeedbackOperation;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
   /** Question subscription for all operations performed on questions */
@@ -821,11 +801,6 @@ export type SubscriptionEventUpdatesArgs = {
 };
 
 
-export type SubscriptionFeedbackCrudArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type SubscriptionQuestionCrudArgs = {
   eventId: Scalars['ID'];
 };
@@ -841,75 +816,75 @@ export type UpdateEmailForm = {
 };
 
 export type UpdateEvent = {
-  description?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  startDateTime?: Maybe<Scalars['Date']>;
   endDateTime?: Maybe<Scalars['Date']>;
-  eventId: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
+  isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
   isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
   isForumEnabled?: Maybe<Scalars['Boolean']>;
   isPrivate?: Maybe<Scalars['Boolean']>;
-  isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
-  startDateTime?: Maybe<Scalars['Date']>;
-  title?: Maybe<Scalars['String']>;
-  topic?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
 };
 
 export type UpdateModerator = {
+  email: Scalars['String'];
   eventId: Scalars['ID'];
-  userId: Scalars['ID'];
 };
 
 /** Information that may be updated by the user */
 export type UpdateOrganization = {
-  name: Scalars['String'];
   orgId: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type UpdatePasswordForm = {
-  confirmNewPassword: Scalars['String'];
   email: Scalars['String'];
-  newPassword: Scalars['String'];
   oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String'];
 };
 
 export type UpdateQuestionPosition = {
-  eventId: Scalars['ID'];
-  position: Scalars['Int'];
   questionId: Scalars['ID'];
+  position: Scalars['Int'];
+  eventId: Scalars['ID'];
 };
 
 export type UpdateQuestionQueue = {
-  adding: Scalars['Boolean'];
-  eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+  eventId: Scalars['ID'];
+  adding: Scalars['Boolean'];
 };
 
 export type UpdateSpeaker = {
-  description?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  eventId: Scalars['String'];
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  pictureUrl?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  pictureUrl?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  eventId: Scalars['String'];
 };
 
 export type UpdateVideo = {
-  eventId: Scalars['String'];
-  lang?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
   videoId: Scalars['String'];
+  eventId: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
+  lang?: Maybe<Scalars['String']>;
 };
 
 /** User Data */
 export type User = Node & {
   __typename?: 'User';
+  id: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  isEmailVerified?: Maybe<Scalars['Boolean']>;
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  isEmailVerified?: Maybe<Scalars['Boolean']>;
-  lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
 };
@@ -922,30 +897,30 @@ export type UserConnection = {
 
 export type UserEdge = {
   __typename?: 'UserEdge';
-  cursor: Scalars['String'];
   node: User;
+  cursor: Scalars['String'];
 };
 
 export type UserMutationResponse = MutationResponse & {
   __typename?: 'UserMutationResponse';
-  body?: Maybe<User>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+  body?: Maybe<User>;
 };
 
 export type UserSettings = {
   __typename?: 'UserSettings';
   currentEmail: Scalars['String'];
+  updateEmail?: Maybe<Scalars['String']>;
+  updatePassword?: Maybe<Scalars['String']>;
   deleteAccount: Scalars['Boolean'];
   isAnonymous: Scalars['Boolean'];
   isNotificationsEnabled: Scalars['Boolean'];
-  updateEmail?: Maybe<Scalars['String']>;
-  updatePassword?: Maybe<Scalars['String']>;
 };
 
 export type ValidateInvite = {
-  eventId: Scalars['ID'];
   token: Scalars['String'];
+  eventId: Scalars['ID'];
 };
 
 export type ValidateInviteQueryResponse = {

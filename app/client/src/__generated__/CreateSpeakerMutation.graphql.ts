@@ -4,12 +4,12 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type CreateSpeaker = {
-    description: string;
-    email: string;
     eventId: string;
     name: string;
-    pictureUrl: string;
     title: string;
+    description: string;
+    pictureUrl: string;
+    email: string;
 };
 export type CreateSpeakerMutationVariables = {
     input: CreateSpeaker;

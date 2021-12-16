@@ -5,10 +5,10 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UpdatePasswordForm = {
-    confirmNewPassword: string;
     email: string;
-    newPassword: string;
     oldPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
 };
 export type UpdatePasswordFormMutationVariables = {
     input: UpdatePasswordForm;
