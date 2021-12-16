@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
 import { Card, CardContent, Grid, List, ListItem, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import { useUser } from '@local/features/accounts';
 import { useLiveFeedbackList } from './useLiveFeedbackList';
 import { LiveFeedbackAuthor } from './LiveFeedbackAuthor';
 
@@ -31,8 +32,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
+    const [user] = useUser();
     const classes = useStyles();
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
+    const [displayLiveFeedback, setDisplayLiveFeedback] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!user) setDisplayLiveFeedback(false);
+        else setDisplayLiveFeedback(true);
+    }, [user])
 
     return (
         <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
@@ -40,7 +48,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
-                            {liveFeedback.map((feedback) => (
+                            {displayLiveFeedback ? liveFeedback.map((feedback) => (
                                 <ListItem disableGutters key={feedback.id}>
                                     <Card className={classes.item}>
                                         <LiveFeedbackAuthor fragmentRef={feedback} />
@@ -49,7 +57,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                                         </CardContent>
                                     </Card>
                                 </ListItem>
-                            ))}
+                            )): <div />}
                         </List>
                     </Grid>
                 </Grid>
