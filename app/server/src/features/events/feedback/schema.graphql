@@ -2,7 +2,7 @@ type EventLiveFeedback implements Node {
     id: ID!
     message: String!
     event: Event
-    createdAt: String
+    createdAt: Date
     createdBy: User
 }
 
@@ -16,14 +16,31 @@ type EventLiveFeedbackConnection {
     pageInfo: PageInfo!
 }
 
-input CreateFeedback {
-    message: String!
+type FeedbackOperation {
+    operationType: Operation!
+    edge: EventLiveFeedbackEdge!
 }
 
+type EventFeedbackMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: EventLiveFeedbackEdge
+}
+
+input CreateFeedback {
+    message: String!
+    eventId: ID!
+}
+
+
 type Mutation {
-    createFeedback(input: CreateFeedback): EventLiveFeedback
+    createFeedback(input: CreateFeedback): EventFeedbackMutationResponse
 }
 
 type Query {
-    myFeedback: [EventLiveFeedback]
+    myFeedback(eventId: ID!): [EventLiveFeedback]
+}
+
+type Subscription {
+    feedbackCRUD(eventId: ID!): FeedbackOperation!
 }

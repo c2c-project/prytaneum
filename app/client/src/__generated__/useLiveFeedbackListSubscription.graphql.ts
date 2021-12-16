@@ -4,65 +4,60 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type CreateQuestion = {
+export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
+export type useLiveFeedbackListSubscriptionVariables = {
     eventId: string;
-    isFollowUp?: boolean | null;
-    isQuote?: boolean | null;
-    question: string;
-    refQuestion?: string | null;
 };
-export type QuoteMutationVariables = {
-    input: CreateQuestion;
-};
-export type QuoteMutationResponse = {
-    readonly createQuestion: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
+export type useLiveFeedbackListSubscriptionResponse = {
+    readonly feedbackCRUD: {
+        readonly operationType: Operation;
+        readonly edge: {
             readonly cursor: string;
             readonly node: {
                 readonly id: string;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+                readonly message: string;
+                readonly createdBy: {
+                    readonly id: string;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
             };
-        } | null;
+        };
     };
 };
-export type QuoteMutation = {
-    readonly response: QuoteMutationResponse;
-    readonly variables: QuoteMutationVariables;
+export type useLiveFeedbackListSubscription = {
+    readonly response: useLiveFeedbackListSubscriptionResponse;
+    readonly variables: useLiveFeedbackListSubscriptionVariables;
 };
 
 
 
 /*
-mutation QuoteMutation(
-  $input: CreateQuestion!
+subscription useLiveFeedbackListSubscription(
+  $eventId: ID!
 ) {
-  createQuestion(input: $input) {
-    isError
-    message
-    body {
+  feedbackCRUD(eventId: $eventId) {
+    operationType
+    edge {
       cursor
       node {
         id
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
+        message
+        createdBy {
+          id
+        }
+        ...LiveFeedbackAuthorFragment
       }
     }
   }
 }
 
-fragment QuestionAuthorFragment on EventQuestion {
+fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
   createdBy {
     id
     firstName
     avatar
   }
   createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
 }
 */
 
@@ -71,42 +66,42 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "eventId"
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
+    "name": "eventId",
+    "variableName": "eventId"
   }
 ],
 v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isError",
+  "name": "operationType",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "message",
+  "name": "cursor",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "cursor",
+  "name": "id",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "message",
   "storageKey": null
 };
 return {
@@ -114,45 +109,52 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "QuoteMutation",
+    "name": "useLiveFeedbackListSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
+        "concreteType": "FeedbackOperation",
         "kind": "LinkedField",
-        "name": "createQuestion",
+        "name": "feedbackCRUD",
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestionEdge",
+            "concreteType": "EventLiveFeedbackEdge",
             "kind": "LinkedField",
-            "name": "body",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v4/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "EventQuestion",
+                "concreteType": "EventLiveFeedback",
                 "kind": "LinkedField",
                 "name": "node",
                 "plural": false,
                 "selections": [
+                  (v4/*: any*/),
                   (v5/*: any*/),
                   {
+                    "alias": null,
                     "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionAuthorFragment"
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v4/*: any*/)
+                    ],
+                    "storageKey": null
                   },
                   {
                     "args": null,
                     "kind": "FragmentSpread",
-                    "name": "QuestionContentFragment"
+                    "name": "LiveFeedbackAuthorFragment"
                   }
                 ],
                 "storageKey": null
@@ -164,42 +166,42 @@ return {
         "storageKey": null
       }
     ],
-    "type": "Mutation",
+    "type": "Subscription",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "QuoteMutation",
+    "name": "useLiveFeedbackListSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "EventQuestionMutationResponse",
+        "concreteType": "FeedbackOperation",
         "kind": "LinkedField",
-        "name": "createQuestion",
+        "name": "feedbackCRUD",
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestionEdge",
+            "concreteType": "EventLiveFeedbackEdge",
             "kind": "LinkedField",
-            "name": "body",
+            "name": "edge",
             "plural": false,
             "selections": [
-              (v4/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "EventQuestion",
+                "concreteType": "EventLiveFeedback",
                 "kind": "LinkedField",
                 "name": "node",
                 "plural": false,
                 "selections": [
+                  (v4/*: any*/),
                   (v5/*: any*/),
                   {
                     "alias": null,
@@ -209,7 +211,7 @@ return {
                     "name": "createdBy",
                     "plural": false,
                     "selections": [
-                      (v5/*: any*/),
+                      (v4/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -233,13 +235,6 @@ return {
                     "kind": "ScalarField",
                     "name": "createdAt",
                     "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "question",
-                    "storageKey": null
                   }
                 ],
                 "storageKey": null
@@ -253,14 +248,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "edac19b9a4b664ae8fcd3dee48f82ce9",
+    "cacheID": "b38b4e003b98a793123615182b6bff7d",
     "id": null,
     "metadata": {},
-    "name": "QuoteMutation",
-    "operationKind": "mutation",
-    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "name": "useLiveFeedbackListSubscription",
+    "operationKind": "subscription",
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n"
   }
 };
 })();
-(node as any).hash = '4b9e014581115a01e74de4243c0341a4';
+(node as any).hash = 'f05c5c1ef52787706c77fa1b7172aa37';
 export default node;
