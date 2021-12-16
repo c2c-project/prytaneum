@@ -4,8 +4,8 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type DeleteMember = {
-    userId: string;
     orgId: string;
+    userId: string;
 };
 export type DeleteMemberMutationVariables = {
     input: DeleteMember;

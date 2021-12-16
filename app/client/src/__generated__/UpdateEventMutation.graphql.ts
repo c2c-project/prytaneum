@@ -4,16 +4,16 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type UpdateEvent = {
-    title?: string | null;
-    startDateTime?: Date | null;
-    endDateTime?: Date | null;
     description?: string | null;
-    topic?: string | null;
-    isQuestionFeedVisible?: boolean | null;
+    endDateTime?: Date | null;
+    eventId: string;
     isCollectRatingsEnabled?: boolean | null;
     isForumEnabled?: boolean | null;
     isPrivate?: boolean | null;
-    eventId: string;
+    isQuestionFeedVisible?: boolean | null;
+    startDateTime?: Date | null;
+    title?: string | null;
+    topic?: string | null;
 };
 export type UpdateEventMutationVariables = {
     input: UpdateEvent;

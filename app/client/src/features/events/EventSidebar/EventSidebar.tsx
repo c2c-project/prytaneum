@@ -18,6 +18,8 @@ import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
 import { useUser } from '@local/features/accounts';
+import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
+import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
@@ -32,6 +34,11 @@ const QuestionQueueTab = connect(() => ({
     badgeContent: 0,
     label: 'Question Queue',
 }))(MemoizedStyledTab);
+
+const LiveFeedbackTab = connect(() => ({
+    badgeContent: 0,
+    label: 'Live Feedback'
+}))(MemoizedStyledTab)
 
 const getTabVisibility = (settings: EventSidebarFragment) => ({
     isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
@@ -49,6 +56,7 @@ const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple
     // NOTE: order corresponds to order seen on screen
     if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, QuestionQueue]);
     if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, QuestionList]);
+    tabs.push([LiveFeedbackTab, LiveFeedbackList])
 
     return tabs;
 };
@@ -61,6 +69,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         ...EventDetailsCardFragment
         ...SpeakerListFragment
         ...useQuestionListFragment
+        ...useLiveFeedbackListFragment
         ...QuestionQueueFragment
         ...QuestionCarouselFragment
     }
@@ -123,6 +132,7 @@ export interface EventSidebarProps {
 export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
     const [state, setState] = React.useState<number>(0);
+    const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const [data, refetch] = useRefetchableFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
     const [user] = useUser();
 
@@ -132,6 +142,16 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
     const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
+
+    React.useEffect(() => {
+        if (data.isViewerModerator && state === 2) {
+            setDisplayFeedbackButton(true);
+        } else if (!data.isViewerModerator && state === 1) {
+            setDisplayFeedbackButton(true);
+        } else {
+            setDisplayFeedbackButton(false);
+        }
+    }, [state, data])
 
     return (
         <Grid
@@ -150,11 +170,19 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             >
                 <EventDetailsCard fragmentRef={data} />
                 <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
-                <AskQuestion
-                    className={classes.fullWidth}
-                    eventId={data.id}
-                    connectionKey='useQuestionListFragment_questions'
-                />
+                { // Moderator feedback state = 2, Participant feedback state = 1
+                    displayFeedbackButton ?
+                        <SubmitLiveFeedback 
+                            className={classes.fullWidth}
+                            eventId={data.id}
+                            // connectionKey='useLiveFeedbackListFragment_liveFeedback'
+                        /> :
+                        <AskQuestion
+                            className={classes.fullWidth}
+                            eventId={data.id}
+                            connectionKey='useQuestionListFragment_questions'
+                    />
+                }
             </Grid>
 
             {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
