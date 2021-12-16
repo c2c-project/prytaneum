@@ -5,11 +5,11 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type CreateQuestion = {
-    eventId: string;
-    isFollowUp?: boolean | null;
-    isQuote?: boolean | null;
     question: string;
+    isQuote?: boolean | null;
+    isFollowUp?: boolean | null;
     refQuestion?: string | null;
+    eventId: string;
 };
 export type QuoteMutationVariables = {
     input: CreateQuestion;

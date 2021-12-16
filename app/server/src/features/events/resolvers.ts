@@ -10,7 +10,6 @@ const toVideoId = toGlobalId('EventVideo');
 const toQuestionId = toGlobalId('EventQuestion');
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
-const toFeedbackId = toGlobalId('EventLiveFeedback');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -139,29 +138,10 @@ export const resolvers: Resolvers = {
                 pageInfo: {
                     hasNextPage: false,
                     hasPreviousPage: false,
-                    startCursor: edges[0]?.cursor.toString(),
-                    endCursor: edges[questions.length - 1]?.cursor.toString(),
+                    startCursor: edges[0].cursor.toString(),
+                    endCursor: edges[questions.length - 1].cursor.toString(),
                 },
             };
         },
-        async liveFeedback(parent, args, ctx, info) {
-            const { id: eventId } = fromGlobalId(parent.id);
-            const queryResult = await Event.findLiveFeedbackByEventId(eventId, ctx.prisma);
-            if (!queryResult) return connectionFromArray([], args);
-            const { feedback: liveFeedback } = queryResult;
-            const edges = liveFeedback
-                .map(toFeedbackId)
-                .map((feedback) => ({ node: feedback, cursor: feedback.createdAt.getTime().toString() }));
-            // TODO Filter the results if viewer is not a moderator
-            return {
-                edges,
-                pageInfo: {
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                    startCursor: edges[0]?.cursor.toString(),
-                    endCursor: edges[liveFeedback.length - 1]?.cursor.toString(),
-                },
-            };
-        }
     },
 };

@@ -5,16 +5,16 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UpdateEvent = {
-    description?: string | null;
+    title?: string | null;
+    startDateTime?: Date | null;
     endDateTime?: Date | null;
-    eventId: string;
+    description?: string | null;
+    topic?: string | null;
+    isQuestionFeedVisible?: boolean | null;
     isCollectRatingsEnabled?: boolean | null;
     isForumEnabled?: boolean | null;
     isPrivate?: boolean | null;
-    isQuestionFeedVisible?: boolean | null;
-    startDateTime?: Date | null;
-    title?: string | null;
-    topic?: string | null;
+    eventId: string;
 };
 export type GenericSettingsMutationVariables = {
     input: UpdateEvent;

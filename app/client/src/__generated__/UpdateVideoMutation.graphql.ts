@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type UpdateVideo = {
-    eventId: string;
-    lang?: string | null;
-    url?: string | null;
     videoId: string;
+    eventId: string;
+    url?: string | null;
+    lang?: string | null;
 };
 export type UpdateVideoMutationVariables = {
     input: UpdateVideo;

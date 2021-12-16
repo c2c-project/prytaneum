@@ -5,11 +5,11 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type RegistrationForm = {
-    confirmPassword: string;
-    email: string;
     firstName: string;
     lastName: string;
     password: string;
+    confirmPassword: string;
+    email: string;
 };
 export type RegisterFormMutationVariables = {
     input: RegistrationForm;

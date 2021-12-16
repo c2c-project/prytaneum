@@ -4,12 +4,12 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type CreateEvent = {
-    description: string;
-    endDateTime: Date;
-    orgId: string;
-    startDateTime: Date;
     title: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    description: string;
     topic: string;
+    orgId: string;
 };
 export type CreateEventMutationVariables = {
     input: CreateEvent;
