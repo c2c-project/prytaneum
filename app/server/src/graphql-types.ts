@@ -54,6 +54,10 @@ export type QuerynodeArgs = {
     id: Scalars['ID'];
 };
 
+export type QuerymyFeedbackArgs = {
+    eventId: Scalars['ID'];
+};
+
 export type QueryvalidateInviteArgs = {
     input: ValidateInvite;
 };
@@ -175,7 +179,7 @@ export type Mutation = {
     createMember: UserMutationResponse;
     /** Delete a member from the organization */
     deleteMember: UserMutationResponse;
-    createFeedback?: Maybe<EventLiveFeedback>;
+    createFeedback?: Maybe<EventFeedbackMutationResponse>;
     createInvite: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
@@ -485,6 +489,7 @@ export type Subscription = {
     eventUpdates: Event;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
+    feedbackCRUD: FeedbackOperation;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** subscription for whenever questions are added to the queue */
@@ -494,6 +499,10 @@ export type Subscription = {
 };
 
 export type SubscriptioneventUpdatesArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionfeedbackCRUDArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -593,7 +602,7 @@ export type EventLiveFeedback = Node & {
     id: Scalars['ID'];
     message: Scalars['String'];
     event?: Maybe<Event>;
-    createdAt?: Maybe<Scalars['String']>;
+    createdAt?: Maybe<Scalars['Date']>;
     createdBy?: Maybe<User>;
 };
 
@@ -609,8 +618,22 @@ export type EventLiveFeedbackConnection = {
     pageInfo: PageInfo;
 };
 
+export type FeedbackOperation = {
+    __typename?: 'FeedbackOperation';
+    operationType: Operation;
+    edge: EventLiveFeedbackEdge;
+};
+
+export type EventFeedbackMutationResponse = MutationResponse & {
+    __typename?: 'EventFeedbackMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<EventLiveFeedbackEdge>;
+};
+
 export type CreateFeedback = {
     message: Scalars['String'];
+    eventId: Scalars['ID'];
 };
 
 export type CreateInvite = {
@@ -658,7 +681,7 @@ export type DeleteModerator = {
 };
 
 export type UpdateModerator = {
-    userId: Scalars['ID'];
+    email: Scalars['String'];
     eventId: Scalars['ID'];
 };
 
@@ -980,6 +1003,7 @@ export type ResolversTypes = {
         | ResolversTypes['UserMutationResponse']
         | ResolversTypes['EventMutationResponse']
         | ResolversTypes['OrganizationMutationResponse']
+        | ResolversTypes['EventFeedbackMutationResponse']
         | ResolversTypes['InviteMutationResponse']
         | ResolversTypes['ModeratorMutationResponse']
         | ResolversTypes['EventQuestionMutationResponse']
@@ -1019,6 +1043,8 @@ export type ResolversTypes = {
     EventLiveFeedback: ResolverTypeWrapper<EventLiveFeedback>;
     EventLiveFeedbackEdge: ResolverTypeWrapper<EventLiveFeedbackEdge>;
     EventLiveFeedbackConnection: ResolverTypeWrapper<EventLiveFeedbackConnection>;
+    FeedbackOperation: ResolverTypeWrapper<FeedbackOperation>;
+    EventFeedbackMutationResponse: ResolverTypeWrapper<EventFeedbackMutationResponse>;
     CreateFeedback: CreateFeedback;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
@@ -1081,6 +1107,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['UserMutationResponse']
         | ResolversParentTypes['EventMutationResponse']
         | ResolversParentTypes['OrganizationMutationResponse']
+        | ResolversParentTypes['EventFeedbackMutationResponse']
         | ResolversParentTypes['InviteMutationResponse']
         | ResolversParentTypes['ModeratorMutationResponse']
         | ResolversParentTypes['EventQuestionMutationResponse']
@@ -1119,6 +1146,8 @@ export type ResolversParentTypes = {
     EventLiveFeedback: EventLiveFeedback;
     EventLiveFeedbackEdge: EventLiveFeedbackEdge;
     EventLiveFeedbackConnection: EventLiveFeedbackConnection;
+    FeedbackOperation: FeedbackOperation;
+    EventFeedbackMutationResponse: EventFeedbackMutationResponse;
     CreateFeedback: CreateFeedback;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
@@ -1195,7 +1224,12 @@ export type QueryResolvers<
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     myOrgs?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
-    myFeedback?: Resolver<Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>, ParentType, ContextType>;
+    myFeedback?: Resolver<
+        Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerymyFeedbackArgs, 'eventId'>
+    >;
     validateInvite?: Resolver<
         ResolversTypes['ValidateInviteQueryResponse'],
         ParentType,
@@ -1226,6 +1260,7 @@ export type MutationResponseResolvers<
         | 'UserMutationResponse'
         | 'EventMutationResponse'
         | 'OrganizationMutationResponse'
+        | 'EventFeedbackMutationResponse'
         | 'InviteMutationResponse'
         | 'ModeratorMutationResponse'
         | 'EventQuestionMutationResponse'
@@ -1389,7 +1424,7 @@ export type MutationResolvers<
         RequireFields<MutationdeleteMemberArgs, 'input'>
     >;
     createFeedback?: Resolver<
-        Maybe<ResolversTypes['EventLiveFeedback']>,
+        Maybe<ResolversTypes['EventFeedbackMutationResponse']>,
         ParentType,
         ContextType,
         RequireFields<MutationcreateFeedbackArgs, never>
@@ -1629,6 +1664,13 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType
     >;
+    feedbackCRUD?: SubscriptionResolver<
+        ResolversTypes['FeedbackOperation'],
+        'feedbackCRUD',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionfeedbackCRUDArgs, 'eventId'>
+    >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         ResolversTypes['EventLiveFeedback'],
         'eventLiveFeedbackCreated',
@@ -1720,7 +1762,7 @@ export type EventLiveFeedbackResolvers<
     id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
-    createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1740,6 +1782,25 @@ export type EventLiveFeedbackConnectionResolvers<
 > = {
     edges?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedbackEdge']>>, ParentType, ContextType>;
     pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackOperationResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['FeedbackOperation'] = ResolversParentTypes['FeedbackOperation']
+> = {
+    operationType?: Resolver<ResolversTypes['Operation'], ParentType, ContextType>;
+    edge?: Resolver<ResolversTypes['EventLiveFeedbackEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventFeedbackMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventFeedbackMutationResponse'] = ResolversParentTypes['EventFeedbackMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['EventLiveFeedbackEdge']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1976,6 +2037,8 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
     EventLiveFeedbackConnection?: EventLiveFeedbackConnectionResolvers<ContextType>;
+    FeedbackOperation?: FeedbackOperationResolvers<ContextType>;
+    EventFeedbackMutationResponse?: EventFeedbackMutationResponseResolvers<ContextType>;
     InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
     ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
@@ -2149,7 +2212,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         id?: LoaderResolver<Scalars['ID'], EventLiveFeedback, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventLiveFeedback, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventLiveFeedback, {}, TContext>;
-        createdAt?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedback, {}, TContext>;
+        createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedback, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventLiveFeedback, {}, TContext>;
     };
 
@@ -2161,6 +2224,17 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     EventLiveFeedbackConnection?: {
         edges?: LoaderResolver<Maybe<Array<EventLiveFeedbackEdge>>, EventLiveFeedbackConnection, {}, TContext>;
         pageInfo?: LoaderResolver<PageInfo, EventLiveFeedbackConnection, {}, TContext>;
+    };
+
+    FeedbackOperation?: {
+        operationType?: LoaderResolver<Operation, FeedbackOperation, {}, TContext>;
+        edge?: LoaderResolver<EventLiveFeedbackEdge, FeedbackOperation, {}, TContext>;
+    };
+
+    EventFeedbackMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], EventFeedbackMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], EventFeedbackMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<EventLiveFeedbackEdge>, EventFeedbackMutationResponse, {}, TContext>;
     };
 
     InviteMutationResponse?: {
