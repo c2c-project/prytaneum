@@ -855,7 +855,7 @@ export type UpdateEvent = {
 
 export type UpdateModerator = {
   eventId: Scalars['ID'];
-  userId: Scalars['ID'];
+  email: Scalars['String'];
 };
 
 /** Information that may be updated by the user */
