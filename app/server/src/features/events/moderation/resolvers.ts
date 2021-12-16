@@ -79,12 +79,11 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                const { id: userId } = fromGlobalId(args.input.userId);
-                const newMod = await Moderation.updateModerator(ctx.viewer.id, ctx.prisma, {
-                    ...args.input,
-                    eventId,
-                    userId,
-                });
+                // const { id: userId } = fromGlobalId(args.input.userId);
+                const queryResult = await Moderation.findUserIdByEmail(args.input.email, ctx.prisma);
+                if (!queryResult) return null;
+                const userId = queryResult.id;
+                const newMod = await Moderation.updateModerator(userId, eventId, ctx.prisma);
                 return toUserId(newMod);
             });
         },

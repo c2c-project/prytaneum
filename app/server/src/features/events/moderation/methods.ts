@@ -156,7 +156,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
  * but for now it's better if the organizer must remove and then re-add a different
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function updateModerator(userId: string, prisma: PrismaClient, input: UpdateModerator) {
+export async function updateModerator(userId: string, eventId: string, prisma: PrismaClient) {
     return null;
 }
 
@@ -219,5 +219,12 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
         data: {
             position: -1,
         },
+    });
+}
+
+export async function findUserIdByEmail(email: string, prisma: PrismaClient) {
+    return prisma.user.findUnique({
+        where: { email },
+        select: { id: true }
     });
 }
