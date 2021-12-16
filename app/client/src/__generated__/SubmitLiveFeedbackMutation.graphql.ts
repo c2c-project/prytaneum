@@ -3,18 +3,15 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type CreateQuestion = {
+export type CreateFeedback = {
     eventId: string;
-    isFollowUp?: boolean | null;
-    isQuote?: boolean | null;
-    question: string;
-    refQuestion?: string | null;
+    message: string;
 };
-export type AskQuestionMutationVariables = {
-    input: CreateQuestion;
+export type SubmitLiveFeedbackMutationVariables = {
+    input: CreateFeedback;
 };
-export type AskQuestionMutationResponse = {
-    readonly createQuestion: {
+export type SubmitLiveFeedbackMutationResponse = {
+    readonly createFeedback: {
         readonly isError: boolean;
         readonly message: string;
         readonly body: {
@@ -22,7 +19,7 @@ export type AskQuestionMutationResponse = {
             readonly node: {
                 readonly id: string;
                 readonly createdAt: Date | null;
-                readonly question: string | null;
+                readonly message: string;
                 readonly createdBy: {
                     readonly id: string;
                     readonly firstName: string | null;
@@ -30,20 +27,20 @@ export type AskQuestionMutationResponse = {
                 } | null;
             };
         } | null;
-    };
+    } | null;
 };
-export type AskQuestionMutation = {
-    readonly response: AskQuestionMutationResponse;
-    readonly variables: AskQuestionMutationVariables;
+export type SubmitLiveFeedbackMutation = {
+    readonly response: SubmitLiveFeedbackMutationResponse;
+    readonly variables: SubmitLiveFeedbackMutationVariables;
 };
 
 
 
 /*
-mutation AskQuestionMutation(
-  $input: CreateQuestion!
+mutation SubmitLiveFeedbackMutation(
+  $input: CreateFeedback!
 ) {
-  createQuestion(input: $input) {
+  createFeedback(input: $input) {
     isError
     message
     body {
@@ -51,7 +48,7 @@ mutation AskQuestionMutation(
       node {
         id
         createdAt
-        question
+        message
         createdBy {
           id
           firstName
@@ -75,10 +72,17 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = [
+v3 = [
   {
     "alias": null,
     "args": [
@@ -88,9 +92,9 @@ v2 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "EventQuestionMutationResponse",
+    "concreteType": "EventFeedbackMutationResponse",
     "kind": "LinkedField",
-    "name": "createQuestion",
+    "name": "createFeedback",
     "plural": false,
     "selections": [
       {
@@ -100,17 +104,11 @@ v2 = [
         "name": "isError",
         "storageKey": null
       },
+      (v1/*: any*/),
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "message",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "EventQuestionEdge",
+        "concreteType": "EventLiveFeedbackEdge",
         "kind": "LinkedField",
         "name": "body",
         "plural": false,
@@ -125,12 +123,12 @@ v2 = [
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventLiveFeedback",
             "kind": "LinkedField",
             "name": "node",
             "plural": false,
             "selections": [
-              (v1/*: any*/),
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -138,13 +136,7 @@ v2 = [
                 "name": "createdAt",
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "question",
-                "storageKey": null
-              },
+              (v1/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -153,7 +145,7 @@ v2 = [
                 "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v1/*: any*/),
+                  (v2/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -186,8 +178,8 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "AskQuestionMutation",
-    "selections": (v2/*: any*/),
+    "name": "SubmitLiveFeedbackMutation",
+    "selections": (v3/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -195,18 +187,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "AskQuestionMutation",
-    "selections": (v2/*: any*/)
+    "name": "SubmitLiveFeedbackMutation",
+    "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "d00f5cead282251c8c50d706a2b7819c",
+    "cacheID": "b1390731fc095265360c3aadf82c2aa5",
     "id": null,
     "metadata": {},
-    "name": "AskQuestionMutation",
+    "name": "SubmitLiveFeedbackMutation",
     "operationKind": "mutation",
-    "text": "mutation AskQuestionMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        createdAt\n        question\n        createdBy {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation SubmitLiveFeedbackMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        createdAt\n        message\n        createdBy {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '12c8dcac98bfb6588516e97ac05305e3';
+(node as any).hash = 'f5314b45540745841310fd8a809d1b87';
 export default node;

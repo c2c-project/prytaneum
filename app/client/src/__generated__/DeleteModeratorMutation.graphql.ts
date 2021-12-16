@@ -4,8 +4,8 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type DeleteModerator = {
-    userId: string;
     eventId: string;
+    userId: string;
 };
 export type DeleteModeratorMutationVariables = {
     input: DeleteModerator;
