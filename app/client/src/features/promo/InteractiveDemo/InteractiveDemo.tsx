@@ -346,35 +346,6 @@ const useStyles = makeStyles((theme) => ({
             margin: '-5.5rem 0'
         },
     },
-    roleicon: {
-        fontSize: '5.5rem',
-    },
-    partners: {
-        display: 'flex',
-        gap: '4rem',
-        justifyContent: 'center',
-        [theme.breakpoints.down('md')]: {
-            gap: '3rem',
-        },
-        [theme.breakpoints.down('sm')]: {
-            gap: '2rem',
-        },
-        [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
-            gap: '1rem',
-        },
-    },
-    arrowsection: {
-        display: 'flex',
-        justifyContent: 'center',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
-    downarrow: {
-        fontSize: '4rem',
-        transform: 'rotate(-90deg)'
-    }
 }));
 
 const DemoWindow = (
@@ -423,7 +394,7 @@ export function ParticipantDemo() {
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
-                                        src='https://i.ibb.co/cNvfQC8/cam1.png' 
+                                        src='/static/cam1.png' 
                                         width={1146}
                                         height={648}
                                         objectFit='contain'
@@ -431,7 +402,7 @@ export function ParticipantDemo() {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Image
-                                        src='https://i.ibb.co/xG0SYBT/cam2.png' 
+                                        src='/static/cam2.png' 
                                         width={1146}
                                         height={648}
                                         objectFit='contain'
@@ -719,7 +690,7 @@ export function ModeratorDemo() {
                             <div className={classes.windowdisplay}>
                                 <Grid item xs={6}>
                                     <Image
-                                        src='https://i.ibb.co/cNvfQC8/cam1.png' 
+                                        src='/static/cam1.png' 
                                         width={1146}
                                         height={648}
                                         objectFit='contain'
@@ -727,7 +698,7 @@ export function ModeratorDemo() {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Image
-                                        src='https://i.ibb.co/xG0SYBT/cam2.png' 
+                                        src='/static/cam2.png' 
                                         width={1146}
                                         height={648}
                                         objectFit='contain'
