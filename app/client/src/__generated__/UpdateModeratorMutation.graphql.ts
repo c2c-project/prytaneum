@@ -5,8 +5,8 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type UpdateModerator = {
+    email: string;
     eventId: string;
-    userId: string;
 };
 export type UpdateModeratorMutationVariables = {
     input: UpdateModerator;
