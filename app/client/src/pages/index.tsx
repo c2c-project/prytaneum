@@ -4,7 +4,6 @@ import { Grid } from '@material-ui/core';
 import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import RecordVoiceOverOutlinedIcon from '@material-ui/icons/RecordVoiceOverOutlined';
 import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { useUser } from '@local/features/accounts';
@@ -12,6 +11,7 @@ import { CallToAction } from '@local/features/promo/CallToAction'
 import { Blurb } from '@local/features/promo/Blurb'
 import { Carousel } from '@local/features/promo/Carousel';
 import { ParticipantDemo, ModeratorDemo } from '@local/features/promo/InteractiveDemo'
+import { ScrollButton } from '@local/features/promo/ScrollButton'
 
 const useStyles = makeStyles((theme) => ({
     landing: {
@@ -53,11 +53,15 @@ const useStyles = makeStyles((theme) => ({
             gap: '1rem',
         },
     },
+    sentinel: {
+        paddingTop: theme.spacing(4), // offset for scroll
+    }
 }));
 
 export default function Home() {
     const classes = useStyles();
     const router = useRouter();
+    const [user] = useUser();
 
     const roles = [
         <Blurb
@@ -94,7 +98,7 @@ export default function Home() {
         <ModeratorDemo/>,
     ]
 
-    const [user] = useUser();
+    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
         if (user) router.push('/organizations/me');
@@ -103,38 +107,33 @@ export default function Home() {
     return (
         <>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.landing}>
-                <CallToAction />
-                <Grid item xs={12} className={classes.arrowsection}>
-                    <ArrowBackIosRoundedIcon className={classes.downarrow} />
-                </Grid>
+                <CallToAction/>
+                <ScrollButton sentinelRef={sentinelRef}/>
             </Grid>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Blurb
-                    title='What is Prytaneum?'
-                    icon={null}
-                    paragraphs={
-                        [
-                            'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
-                            'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
-                        ]
-                    }
-                />
-                <Grid item xs={12}>
-                    <ParticipantDemo/>
+            <div ref={sentinelRef} className={classes.sentinel}>
+                <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
+                    <Blurb
+                        title='What is Prytaneum?'
+                        paragraphs={
+                            [
+                                'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
+                                'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
+                            ]
+                        }
+                    />
+                    <Grid item xs={12}>
+                        <ParticipantDemo/>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
                 <Blurb
                     title='A better solution for remote public engagement.'
-                    icon={null}
-                    paragraphs={null}
                 />
                 <Carousel cards={views}/>
             </Grid>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
                 <Blurb
-                    title={null}
-                    icon={null}
                     paragraphs={
                         [
                             'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
