@@ -8,7 +8,6 @@ import { useUser } from '@local/features/accounts';
 const useStyles = makeStyles((theme) => ({
     header: {
         marginBottom: theme.spacing(2),
-        marginBottom: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         [theme.breakpoints.down('sm')]: {
