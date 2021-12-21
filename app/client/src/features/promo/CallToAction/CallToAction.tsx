@@ -6,29 +6,15 @@ import { useRouter } from 'next/router';
 import { useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
-<<<<<<< HEAD
     header: {
         marginBottom: theme.spacing(2),
-=======
-    landing: {
-        width: '100%',
-        minHeight: '100vh',
-        margin: 0,
-        [theme.breakpoints.down('sm')]: {
-            minHeight: '90vh',
-        },
-    },
-    header: {
-        marginBottom: 20,
->>>>>>> feat(frontend): break up landing into components
+        marginBottom: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         [theme.breakpoints.down('sm')]: {
             alignItems: 'center'
         },
     },
-<<<<<<< HEAD
-=======
     title: {
         [theme.breakpoints.down('md')]: {
             marginTop: 50,
@@ -40,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
             marginTop: 20,
         },
     },
->>>>>>> feat(frontend): break up landing into components
     subtitle: {
         textAlign: 'right',
         color: '#272C6C',
@@ -52,11 +37,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     button: {
-<<<<<<< HEAD
         marginTop: theme.spacing(2),
-=======
-        marginTop: 20,
->>>>>>> feat(frontend): break up landing into components
         minWidth: 300,
         alignSelf: 'flex-start',
         fontSize: 24,
@@ -69,8 +50,6 @@ const useStyles = makeStyles((theme) => ({
             fontSize: 20,
         },
     },
-<<<<<<< HEAD
-=======
     arrowsection: {
         display: 'flex',
         justifyContent: 'center',
@@ -82,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '4rem',
         transform: 'rotate(-90deg)'
     }
->>>>>>> feat(frontend): break up landing into components
 }));
 
 export function CallToAction() {
@@ -93,14 +71,12 @@ export function CallToAction() {
     return (
         <>
             <Grid item xs={12} md={6} className={classes.header}>
-<<<<<<< HEAD
                 <Image
                     src='/static/prytaneum_logo2.svg' 
                     width={3483}
                     height={665}
                     objectFit='contain'
                 />
-=======
                 <div className={classes.title}>
                     <Image
                         src='/static/prytaneum_logo2.svg' 
@@ -109,7 +85,6 @@ export function CallToAction() {
                         objectFit='contain'
                     />
                 </div>
->>>>>>> feat(frontend): break up landing into components
                 <Typography variant='h5' className={classes.subtitle}>
                     A crucial tool for a better democracy.
                 </Typography>
