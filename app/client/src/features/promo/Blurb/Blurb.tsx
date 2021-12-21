@@ -20,15 +20,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-<<<<<<< HEAD
     title?: string;
     icon?: React.ReactNode;
     paragraphs?: string[];
-=======
-    title: string | null;
-    icon: React.ReactNode | null;
-    paragraphs: string[] | null;
->>>>>>> feat(frontend): break up landing into components
 }
 
 export function Blurb({title, icon, paragraphs}: Props) {
