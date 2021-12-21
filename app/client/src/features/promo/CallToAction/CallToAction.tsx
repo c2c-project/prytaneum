@@ -6,11 +6,6 @@ import { useRouter } from 'next/router';
 import { useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
-    landing: {
-        width: '100%',
-        height: '100%',
-        margin: 0,
-    },
     header: {
         marginBottom: theme.spacing(2),
         display: 'flex',
