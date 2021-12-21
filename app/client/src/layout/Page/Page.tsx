@@ -11,7 +11,6 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         flex: '1 1 100%',
         overflowY: 'auto',
-        overflowX: 'hidden',
         overscrollBehavior: 'none',
     },
 });
