@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minHeight: '100vh',
         margin: 0,
-        [theme.breakpoints.down('sm')]: {
-            minHeight: '90vh',
-        },
     },
     root: {
         width: '100%',
@@ -39,21 +36,6 @@ const useStyles = makeStyles((theme) => ({
     downarrow: {
         fontSize: '4rem',
         transform: 'rotate(-90deg)'
-    },
-    partners: {
-        display: 'flex',
-        gap: '4rem',
-        justifyContent: 'center',
-        [theme.breakpoints.down('md')]: {
-            gap: '3rem',
-        },
-        [theme.breakpoints.down('sm')]: {
-            gap: '2rem',
-        },
-        [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
-            gap: '1rem',
-        },
     },
     sentinel: {
         paddingTop: theme.spacing(4), // offset for scroll
@@ -144,20 +126,24 @@ export default function Home() {
                 />
                 <Carousel cards={roles}/>
             </Grid>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Grid item xs={12} className={classes.partners}>
+            <Grid container alignItems='center' justify='center' spacing={3} className={classes.root}>
+                <Grid item>
                     <Image
                         src='/static/democracy_fund_logo.svg' 
                         width={280}
                         height={200}
                         objectFit='contain'
                     />
+                </Grid>
+                <Grid item>
                     <Image
                         src='/static/prytaneum_logo.svg' 
                         width={150}
                         height={200}
                         objectFit='contain'
                     />
+                </Grid>
+                <Grid item>
                     <Image
                         src='/static/ucr_tecd_logo.svg' 
                         width={450}
