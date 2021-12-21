@@ -78,8 +78,16 @@ export default function Home() {
     ]
 
     const views = [
-        <ParticipantDemo/>,
-        <ModeratorDemo/>,
+        <ParticipantDemo 
+            title='Participant View' 
+            shadow='10px 10px 0 0 #4056a1' 
+            scale='scale(0.95)'
+        />,
+        <ModeratorDemo 
+            title='Moderator View' 
+            shadow='10px 10px 0 0 #8eafff' 
+            scale='scale(0.95)'
+        />,
     ]
 
     const sentinelRef = React.useRef<HTMLDivElement | null>(null);
@@ -106,7 +114,10 @@ export default function Home() {
                         }
                     />
                     <Grid item xs={12}>
-                        <ParticipantDemo/>
+                        <ParticipantDemo 
+                            shadow='10px 10px 0 0 #f5c64f' 
+                            scale='scale(0.95)'
+                        />
                     </Grid>
                 </Grid>
             </div>
