@@ -25,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         minHeight: '60vh',
-        margin: '2rem 0'
+        margin: 0,
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     arrowsection: {
         display: 'flex',
