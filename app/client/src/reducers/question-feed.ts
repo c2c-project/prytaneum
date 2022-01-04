@@ -1,4 +1,4 @@
-import type { Question as QuestionType, SocketIOEvents } from 'prytaneum-typings';
+import type { Question as QuestionType, SocketIOEvents } from './quesiton-queue';
 
 declare module 'react-redux' {
     interface DefaultRootState {
