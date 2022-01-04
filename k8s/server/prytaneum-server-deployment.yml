@@ -35,6 +35,11 @@ spec:
                 configMapKeyRef:
                   key: SERVER_PORT
                   name: prytaneum-server-config
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: prytaneum-server-config
             - name: DB_USER
               valueFrom:
                 secretKeyRef:

@@ -28,7 +28,6 @@ ENV DB_HOST = localhost
 ENV DB_USER = postgres
 ENV DB_PASSWORD = password
 ENV DB_NAME prytaneum-db
-ENV DATABASE_URL='postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?host=${DB_HOST}'
 
 WORKDIR /usr/src/app
 
