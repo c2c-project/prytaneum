@@ -9,4 +9,3 @@ data:
   HOST: 0.0.0.0
   NODE_ENV: production
   SERVER_PORT: "3002"
-  DATABASE_URL: "postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?host=${DB_HOST}"

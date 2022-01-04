@@ -37,26 +37,6 @@ spec:
                   name: prytaneum-server-config
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
-                  key: DATABASE_URL
-                  name: prytaneum-server-config
-            - name: DB_USER
-              valueFrom:
                 secretKeyRef:
-                  key: username
-                  name: db-secret
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: db-secret
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: database
-                  name: db-secret
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: host
+                  key: database_url
                   name: db-secret
