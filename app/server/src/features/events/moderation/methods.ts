@@ -178,9 +178,7 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
-    // using 7 digits since most events are ~1 hr and there are 7 digits of ms in 1 hr
-    // (there's no reasoning for why I chose do this, just had to choose an amount)
-    const calculatedPosition = parseInt(currentTimeMsStr.slice(-7), 10);
+    const calculatedPosition = parseInt(currentTimeMsStr.slice(-9), 10);
 
     // check if id is already non-negative
     const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
