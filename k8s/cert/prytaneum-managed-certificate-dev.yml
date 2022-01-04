@@ -1,9 +1,8 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: prytaneum-io-cert
+  name: dev-prytaneum-io-cert
 spec:
   domains:
-    - prytaneum.io
-    - www.prytaneum.io
+    - dev.prytaneum.io
     
