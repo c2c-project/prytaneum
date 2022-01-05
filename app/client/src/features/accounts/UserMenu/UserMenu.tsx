@@ -105,6 +105,7 @@ function UserName() {
 type TButtons = 'login' | 'register' | null;
 export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    // TODO remove unused query
     const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
     const [user] = useUser();
     const isClient = useIsClient();
@@ -114,10 +115,6 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
-
-    React.useEffect(() => {
-        // console.log(user);
-    }, [user])
     
     // if server, then default to rendering desktop version and not mobile
     // TODO: determine if the user is on desktop or mobile and render appropriately
