@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { graphql, useRefetchableFragment } from 'react-relay';
 
@@ -26,19 +25,11 @@ import { SpeakerList } from '../Speakers';
 
 type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
 
-const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
-    MemoizedStyledTab
-);
-// const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
-const QuestionQueueTab = connect(() => ({
-    badgeContent: 0,
-    label: 'Question Queue',
-}))(MemoizedStyledTab);
+const QuestionFeedTab = () => <MemoizedStyledTab label='Question Feed' onClick={() => {}} />
 
-const LiveFeedbackTab = connect(() => ({
-    badgeContent: 0,
-    label: 'Live Feedback'
-}))(MemoizedStyledTab)
+const QuestionQueueTab = () => <MemoizedStyledTab label='Question Queue' onClick={() => {}} />
+
+const LiveFeedbackTab = () => <MemoizedStyledTab label='Live Feedback' onClick={() => {}} />
 
 const getTabVisibility = (settings: EventSidebarFragment) => ({
     isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
