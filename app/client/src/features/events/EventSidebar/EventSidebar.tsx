@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Tab, Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { graphql, useRefetchableFragment } from 'react-relay';
 
 import {
     EventSidebarFragment$key,
-    EventSidebarFragment,
-    EventSidebarFragment$data,
 } from '@local/__generated__/EventSidebarFragment.graphql';
 import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
@@ -20,46 +17,8 @@ import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarou
 import { useUser } from '@local/features/accounts';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
-import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
-
-type CustomTabProps = Omit<StyledTabProps, 'label' | 'badgeContent'>;
-
-const QuestionFeedTab = connect((store) => ({ badgeContent: store.questions.buffer.length, label: 'Question Feed' }))(
-    MemoizedStyledTab
-);
-// const BreakoutTab = connect((store) => ({ badgeContent: store.chat.unread.length, label: 'Breakout Room' }))(StyledTab);
-const QuestionQueueTab = connect(() => ({
-    badgeContent: 0,
-    label: 'Question Queue',
-}))(MemoizedStyledTab);
-
-const LiveFeedbackTab = connect(() => ({
-    badgeContent: 0,
-    label: 'Live Feedback'
-}))(MemoizedStyledTab)
-
-const getTabVisibility = (settings: EventSidebarFragment) => ({
-    isQuestionFeedVisible: settings.isQuestionFeedVisible || settings.isViewerModerator,
-    isQueueVisible: settings.isViewerModerator,
-});
-
-type TabTuple = [
-    React.JSXElementConstructor<CustomTabProps>,
-    React.JSXElementConstructor<{ fragmentRef: EventSidebarFragment$data }>
-][];
-const buildTabs = (tabVisibility: ReturnType<typeof getTabVisibility>): TabTuple => {
-    const tabs: TabTuple = [];
-
-    // conditional tabs
-    // NOTE: order corresponds to order seen on screen
-    if (tabVisibility.isQueueVisible) tabs.push([QuestionQueueTab, QuestionQueue]);
-    if (tabVisibility.isQuestionFeedVisible) tabs.push([QuestionFeedTab, QuestionList]);
-    tabs.push([LiveFeedbackTab, LiveFeedbackList])
-
-    return tabs;
-};
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event @refetchable(queryName: "EventSidebarRefetchable") {
@@ -131,27 +90,33 @@ export interface EventSidebarProps {
 }
 export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
-    const [state, setState] = React.useState<number>(0);
+    const [tabIndex, setTabIndex] = React.useState<number>(1);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const [data, refetch] = useRefetchableFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
     const [user] = useUser();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
+        e.preventDefault();
+        setTabIndex(newTabIndex);
+    }
 
     React.useEffect(() => {
         refetch({}, { fetchPolicy: 'store-and-network' });
     }, [user, refetch]);
 
-    const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
-    const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
+    // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
+    // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
     React.useEffect(() => {
-        if (data.isViewerModerator && state === 2) {
+        if (data.isViewerModerator && tabIndex === 2) {
             setDisplayFeedbackButton(true);
-        } else if (!data.isViewerModerator && state === 1) {
+        } else if (!data.isViewerModerator && tabIndex === 1) {
             setDisplayFeedbackButton(true);
         } else {
             setDisplayFeedbackButton(false);
         }
-    }, [state, data])
+    }, [tabIndex, data])
 
     return (
         <Grid
@@ -187,22 +152,31 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
             {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
-            {tabs.length > 1 && (
-                <div className={clsx(classes.item, classes.fullWidth)}>
-                    <Grid item xs='auto'>
-                        {tabs.map(([Option], idx) => (
-                            <Option selected={state === idx} key={idx} onClick={() => setState(idx)} />
-                        ))}
-                    </Grid>
-                </div>
-            )}
-
+            { 
+                data.isViewerModerator &&
+                <Tabs value={tabIndex} onChange={handleTabChange}>
+                    <Tab label='Question Queue' />
+                    <Tab label='Question List' />
+                    <Tab label='Live Feedback' />
+                </Tabs>
+            }
+            { 
+                !data.isViewerModerator &&
+                <Tabs value={tabIndex} onChange={handleTabChange}>
+                    <Tab label='Question List' />
+                    <Tab label='Live Feedback' />
+                </Tabs>
+            }
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
-                {tabs.map(([, Panel], idx) => (
-                    <TabPanel key={idx} visible={state === idx}>
-                        <Panel fragmentRef={data} />
-                    </TabPanel>
-                ))}
+                <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
+                    <QuestionQueue fragmentRef={data} />
+                </TabPanel>
+                <TabPanel visible={data.isViewerModerator ? tabIndex === 1 : tabIndex === 0}>
+                    <QuestionList fragmentRef={data} />
+                </TabPanel>
+                <TabPanel visible={data.isViewerModerator ? tabIndex === 2 : tabIndex === 1}>
+                    <LiveFeedbackList fragmentRef={data} />
+                </TabPanel>
             </Grid>
         </Grid>
     );
