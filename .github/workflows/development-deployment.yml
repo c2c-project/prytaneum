@@ -14,7 +14,7 @@ env:
   CLIENT_IMAGE: prytaneum-client
   SERVER_IMAGE: prytaneum-server
   NAMESPACE: development
-  GRAPHQL_URL: ${{ secrets.DEV_GRAPHQL_URL }}
+  GRAPHQL_URL: https://dev.prytaneum.io/graphql
 
 jobs:
   setup-build-publish-deploy:
