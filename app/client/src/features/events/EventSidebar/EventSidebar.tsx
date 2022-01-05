@@ -154,7 +154,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
             { 
                 data.isViewerModerator &&
-                <Tabs value={tabIndex} onChange={handleTabChange}>
+                <Tabs variant='scrollable' scrollButtons='auto' value={tabIndex} onChange={handleTabChange}>
                     <Tab label='Question Queue' />
                     <Tab label='Question List' />
                     <Tab label='Live Feedback' />
