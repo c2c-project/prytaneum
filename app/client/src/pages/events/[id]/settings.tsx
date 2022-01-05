@@ -20,9 +20,9 @@ const Page: NextPage = () => {
 
     React.useEffect(() => {
         if (!user) {
-            router.push('/login');
+            router.push('/');
         }
-    });
+    }, [router, user]);
 
     if (!router.isReady || !queryRef) return <Loader />;
 
