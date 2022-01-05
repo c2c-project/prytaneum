@@ -1,10 +1,7 @@
-import * as React from 'react';
 import { useMutation, graphql } from 'react-relay';
-import { useRouter } from 'next/router';
 
 // import { Redirect } from '@local/domains/Logical/Redirect';
 import { logoutMutation } from '@local/__generated__/logoutMutation.graphql';
-import { Loader } from '@local/components/Loader';
 import { useIsClient, useEnvironment } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 
@@ -14,29 +11,32 @@ const LOGOUT_MUTATION = graphql`
     }
 `;
 
+interface Props {
+    onComplete?: () => void;
+}
+
 /** Logs the user out by redirecting to /login after clearing the window's local storage
  *  @category @local/domains/Auth
  *  @constructor Logout
  */
-export default function Logout() {
+export default function useLogout({ onComplete }: Props) {
     const [, setUser] = useUser();
     const { resetEnv } = useEnvironment();
     const [runMutation] = useMutation<logoutMutation>(LOGOUT_MUTATION);
     const isClient = useIsClient();
-    const router = useRouter();
 
-    React.useEffect(() => {
+    const logoutUser = () => {
         if (isClient) {
             runMutation({
                 variables: {},
                 onCompleted() {
-                    resetEnv();
                     setUser(null);
-                    router.push('/');
+                    resetEnv();
+                    if (onComplete) onComplete();
                 },
             });
         }
-    }, [runMutation, isClient, resetEnv, setUser, router]);
+    }
 
-    return <Loader />;
+    return { logoutUser };
 }

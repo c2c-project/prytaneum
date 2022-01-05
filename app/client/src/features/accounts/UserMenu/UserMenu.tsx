@@ -30,6 +30,7 @@ import { useIsClient } from '@local/features/core';
 import { useUser } from '../useUser';
 import { LoginForm } from '../LoginForm';
 import { RegisterForm } from '../RegisterForm';
+import useLogout from '../useLogout';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -105,23 +106,28 @@ type TButtons = 'login' | 'register' | null;
 export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
-    const [user, setUser] = useUser();
+    const [user] = useUser();
     const isClient = useIsClient();
     const classes = useStyles();
     const isSignedIn = React.useMemo(() => !!user, [user]);
-
+    
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
 
     React.useEffect(() => {
-        if (data && !user) setUser(data.me);
-    }, [data, setUser, user]);
-
+        // console.log(user);
+    }, [user])
+    
     // if server, then default to rendering desktop version and not mobile
     // TODO: determine if the user is on desktop or mobile and render appropriately
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
     const router = useRouter();
+    const { logoutUser } = useLogout({ 
+        onComplete: () => {
+            // TODO Check if in a private event and use router.replace('/')
+        }
+    });
 
     const handleNavigation = (path: string) => () => router.push(path);
 
@@ -213,7 +219,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                             </ListItemIcon>
                             <ListItemText primary='Settings' />
                         </MenuItem>
-                        <MenuItem button onClick={handleNavigation('/logout')}>
+                        <MenuItem button onClick={logoutUser}>
                             <ListItemIcon>
                                 <ExitToApp />
                             </ListItemIcon>
