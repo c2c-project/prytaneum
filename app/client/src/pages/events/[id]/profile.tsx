@@ -5,7 +5,6 @@ import { fetchQuery, graphql } from 'react-relay';
 
 import type { profileQuery, profileQueryResponse } from '@local/__generated__/profileQuery.graphql';
 import { initEnvironment } from '@local/features/core/relay';
-import { initializeStore } from '@local/reducers/store';
 import { PickRequired } from '@local/utils/ts-utils';
 import { EventProfile } from '@local/features/events';
 
@@ -27,9 +26,7 @@ const EVENT_PROFILE_QUERY = graphql`
 `;
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: string }>) {
-    const reduxStore = initializeStore();
     const baseProps = {
-        initialReduxState: reduxStore.getState(),
         hideSideNav: true,
         containerProps: { maxWidth: 'xl' },
     };

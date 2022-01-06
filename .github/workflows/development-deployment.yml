@@ -3,7 +3,7 @@ name: Build and Deploy development Version to GKE
 on:
   push:
     branches:
-      - dev
+      - dev 
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -102,7 +102,7 @@ jobs:
       - name: Deploy Certificate
         run: |-
           cd ./k8s/cert
-          kubectl apply -f ./prytaneum-managed-certificate.yml
+          kubectl apply -f ./prytaneum-managed-certificate-dev.yml
 
       - name: Set kubectl context
         run: |-

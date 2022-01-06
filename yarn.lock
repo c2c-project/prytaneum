@@ -44,7 +44,6 @@ __metadata:
     "@material-ui/icons": 4.11.2
     "@material-ui/lab": ^4.0.0-alpha.56
     "@material-ui/pickers": ^3.2.10
-    "@reduxjs/toolkit": ^1.5.0
     "@storybook/addon-a11y": ^6.2.9
     "@storybook/addon-essentials": ^6.2.9
     "@storybook/node-logger": ^6.2.9
@@ -61,11 +60,9 @@ __metadata:
     "@types/react": ^17.0.3
     "@types/react-beautiful-dnd": ^13.0.0
     "@types/react-dom": ^16.9.8
-    "@types/react-redux": ^7.1.16
     "@types/react-relay": ^11
     "@types/react-transition-group": ^4
     "@types/react-window": ^1.8.2
-    "@types/redux-devtools-extension": ^2
     "@types/relay-runtime": ^11
     "@types/smoothscroll-polyfill": ^0.3.1
     "@types/yup": ^0
@@ -82,19 +79,15 @@ __metadata:
     next: ^11.1.3
     notistack: ^1.0.6
     prop-types: ^15.7.2
-    prytaneum-typings: "https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.83"
     react: 17.0.2
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
     react-dom: 17.0.2
     react-is: ^16.13.1
     react-player: ^1.11.1
-    react-redux: ^7.2.2
     react-relay: ^11.0.2
     react-test-renderer: ^17.0.2
     react-transition-group: ^4.4.2
-    redux: ^4.1.0
-    redux-devtools-extension: ^2.13.9
     relay-compiler: ^11.0.2
     relay-compiler-language-typescript: ^14.0.0
     relay-runtime: ^11.0.2
@@ -3931,18 +3924,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.5.0":
-  version: 1.5.1
-  resolution: "@reduxjs/toolkit@npm:1.5.1"
-  dependencies:
-    immer: ^8.0.1
-    redux: ^4.0.0
-    redux-thunk: ^2.3.0
-    reselect: ^4.0.0
-  checksum: 5cdabdf04c3da3b7c5b86136e44325f7b185fb1b812bc432026781c888c3031730429282382eddeefc8bae1f38f6db01e84cbbc51c2d3f0c7a800a35f129dc18
-  languageName: node
-  linkType: hard
-
 "@samverschueren/stream-to-observable@npm:^0.3.0":
   version: 0.3.1
   resolution: "@samverschueren/stream-to-observable@npm:0.3.1"
@@ -5024,15 +5005,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bson@npm:*":
-  version: 4.0.5
-  resolution: "@types/bson@npm:4.0.5"
-  dependencies:
-    "@types/node": "*"
-  checksum: f6c74a68eec836010170e7091399b45fe39e2f7724372441cc00a0fbd0b9f44d901688504174d558edbf220922fa0c7c52fbc4aa0f2136194fa713101b8f2ec9
-  languageName: node
-  linkType: hard
-
 "@types/busboy@npm:^0.2.4":
   version: 0.2.4
   resolution: "@types/busboy@npm:0.2.4"
@@ -5387,16 +5359,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.5.32":
-  version: 3.6.20
-  resolution: "@types/mongodb@npm:3.6.20"
-  dependencies:
-    "@types/bson": "*"
-    "@types/node": "*"
-  checksum: e5397ada2ed728997f7c3f5424e8c28f682a635488be967c9c18a5de27b1641cf28bb42bc12026ac6d475c457a880e27097e13c8120350ba13219f4ccc030656
-  languageName: node
-  linkType: hard
-
 "@types/node-fetch@npm:^2.5.7":
   version: 2.5.10
   resolution: "@types/node-fetch@npm:2.5.10"
@@ -5418,13 +5380,6 @@ __metadata:
   version: 14.14.43
   resolution: "@types/node@npm:14.14.43"
   checksum: a7c80f91fb8a21dd590327561dd51042275f3190fbb167a9d4fad7b5f4f95ab5abbcc034e6791564c26081e4ad0568549355c4748bda68080b446cf274935dfd
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^14.14.6":
-  version: 14.17.9
-  resolution: "@types/node@npm:14.17.9"
-  checksum: e59b92e4346ed0db61e042d439f9658d1d3e8ad1d14825b714804cafae8ce22220ff6c8d907c4e4c6384aac748de07283fa321ef13cb8bdeb460eb789d634244
   languageName: node
   linkType: hard
 
@@ -5602,15 +5557,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 5dd962b769e88e4390dbfb93cdb99f5db964d80c1da92bf8c34a570971cae2c1bbe0c399bace0d070ef4a253d41aa8f40c6ac7c5bc6979ef24c95740819380e6
-  languageName: node
-  linkType: hard
-
-"@types/redux-devtools-extension@npm:^2":
-  version: 2.13.0
-  resolution: "@types/redux-devtools-extension@npm:2.13.0"
-  dependencies:
-    redux: ^3.6.0
-  checksum: 283e2946ae12e2716fb65a320ae53f62de9c88eda27fff56f07645c88b05a44cfd19e716216d128f5a3fe87e51fa0660eeb7176d7bdd152af9f2d661aeca6e31
   languageName: node
   linkType: hard
 
@@ -10907,13 +10853,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"faker@https://github.com/marak/Faker.js#v5.1.0":
-  version: 5.1.0
-  resolution: "faker@https://github.com/marak/Faker.js.git#commit=e0b392de967d3000f59ef712c666786aa5ae19b7"
-  checksum: 9e567f6b219f7d1ae52fd1f11107baf874b37e7e14d89d8115abc0a8f4341ef8d40c052f89aa62f9f5cd922f778db5abea1907dc0a4e6102706b3a06894b00b9
-  languageName: node
-  linkType: hard
-
 "fast-decode-uri-component@npm:^1.0.1":
   version: 1.0.1
   resolution: "fast-decode-uri-component@npm:1.0.1"
@@ -12883,13 +12822,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"immer@npm:^8.0.1":
-  version: 8.0.4
-  resolution: "immer@npm:8.0.4"
-  checksum: 9d3b28df1ac5bf6918c611e71c15bdb136588c21a3431100448f21325fef9b055cc9a44fe8b023f0c5ecbc66a2ba38f403c9a67d581f613b49d0e4ff15564f79
-  languageName: node
-  linkType: hard
-
 "immutable@npm:^4.0.0-rc.12":
   version: 4.0.0-rc.12
   resolution: "immutable@npm:4.0.0-rc.12"
@@ -14831,7 +14763,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.17.14, lodash-es@npm:^4.17.15, lodash-es@npm:^4.2.1":
+"lodash-es@npm:^4.17.14, lodash-es@npm:^4.17.15":
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
   checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
@@ -14957,7 +14889,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.2.1, lodash@npm:^4.5.1, lodash@npm:^4.7.0, lodash@npm:~4.17.0, lodash@npm:~4.17.20":
+"lodash@npm:4.17.21, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.5.1, lodash@npm:^4.7.0, lodash@npm:~4.17.0, lodash@npm:~4.17.20":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -17622,18 +17554,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prytaneum-typings@https://github.com/c2c-project/prytaneum-typings#v1.0.0-alpha.83":
-  version: 1.0.0
-  resolution: "prytaneum-typings@https://github.com/c2c-project/prytaneum-typings.git#commit=b78a1ee77c2fcdb137d456e65ac0064e6bbe630b"
-  dependencies:
-    "@types/faker": ^4.1.4
-    "@types/mongodb": ^3.5.32
-    "@types/node": ^14.14.6
-    faker: "https://github.com/marak/Faker.js#v5.1.0"
-  checksum: 3272c821fbf543ae7405af93494f97143aa1b3a0d72866138fa3b9921e7da19059dcd7de8b5ade138e258309bf0d66399cb791b978c024f3c8a8cad914d0d403
-  languageName: node
-  linkType: hard
-
 "prytaneum@workspace:.":
   version: 0.0.0-use.local
   resolution: "prytaneum@workspace:."
@@ -18196,7 +18116,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^7.2.0, react-redux@npm:^7.2.2":
+"react-redux@npm:^7.2.0":
   version: 7.2.4
   resolution: "react-redux@npm:7.2.4"
   dependencies:
@@ -18508,35 +18428,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"redux-devtools-extension@npm:^2.13.9":
-  version: 2.13.9
-  resolution: "redux-devtools-extension@npm:2.13.9"
-  peerDependencies:
-    redux: ^3.1.0 || ^4.0.0
-  checksum: 603d48fd6acf3922ef373b251ab3fdbb990035e90284191047b29d25b06ea18122bc4ef01e0704ccae495acb27ab5e47b560937e98213605dd88299470025db9
-  languageName: node
-  linkType: hard
-
-"redux-thunk@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "redux-thunk@npm:2.3.0"
-  checksum: d13f442ffc91249b534bf14884c33feff582894be2562169637dc9d4d70aec6423bfe6d66f88c46ac027ac1c0cd07d6c2dd4a61cf7695b8e43491de679df9bcf
-  languageName: node
-  linkType: hard
-
-"redux@npm:^3.6.0":
-  version: 3.7.2
-  resolution: "redux@npm:3.7.2"
-  dependencies:
-    lodash: ^4.2.1
-    lodash-es: ^4.2.1
-    loose-envify: ^1.1.0
-    symbol-observable: ^1.0.3
-  checksum: c349b77e68d009bc530d3cb6252a6a3e43e20a6e52f9483a048b24cd2f266d9bfa6f0bbd4769d40fe36795e2f7a7a884c3ddc92c13e82efd3328890f94821091
-  languageName: node
-  linkType: hard
-
-"redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.1.0":
+"redux@npm:^4.0.0, redux@npm:^4.0.4":
   version: 4.1.0
   resolution: "redux@npm:4.1.0"
   dependencies:
@@ -19001,13 +18893,6 @@ fsevents@^1.2.7:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: eee0e303adffb69be55d1a214e415cf42b7441ae858c76dfc5353148644f6fd6e698926fc4643f510d5c126d12a705e7c8ed7e38061113bdf37547ab356797ff
-  languageName: node
-  linkType: hard
-
-"reselect@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "reselect@npm:4.0.0"
-  checksum: ac7dfc9ef2cdb42b6fc87a856f3ce904c2e4363a2bc1e6fb7eea5f78902a6f506e4388e6509752984877c6dbfe501100c076671d334799eb5a1bfe9936cb2c12
   languageName: node
   linkType: hard
 
@@ -20574,7 +20459,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"symbol-observable@npm:1.2.0, symbol-observable@npm:^1.0.3, symbol-observable@npm:^1.0.4, symbol-observable@npm:^1.1.0":
+"symbol-observable@npm:1.2.0, symbol-observable@npm:^1.0.4, symbol-observable@npm:^1.1.0":
   version: 1.2.0
   resolution: "symbol-observable@npm:1.2.0"
   checksum: 48ffbc22e3d75f9853b3ff2ae94a44d84f386415110aea5effc24d84c502e03a4a6b7a8f75ebaf7b585780bda34eb5d6da3121f826a6f93398429d30032971b6
