@@ -102,18 +102,17 @@ export default function UserSettings({ id }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
-    const [user] = useUser();
+    const [user,, isLoading] = useUser();
     const router = useRouter();
 
-    const handleNavigation = (path: string) => () => router.push(path);
+    React.useEffect(() => {
+        if (!isLoading && !user) router.push('/')
+    }, [isLoading, router, user]);
 
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
         if (cont === null) setOpen(false);
     }, [cont]);
-
-    // this is a dev mistake, there's no <User> context higher up in the tree
-    if (!user) handleNavigation('/');
 
     const sections = [
         // {

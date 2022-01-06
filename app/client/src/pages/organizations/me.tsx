@@ -13,16 +13,16 @@ const Page: NextPage = () => {
     const router = useRouter();
     const [queryRef, loadQuery] = useQueryLoader<OrgListQuery>(ORG_LIST_QUERY);
     const isClient = useIsClient();
-    const [user] = useUser();
+    const [user,,isLoading] = useUser();
+
     React.useEffect(() => {
         if (isClient) loadQuery({});
     }, [isClient, loadQuery]);
+
     React.useEffect(() => {
-        if (!user) {
-            router.push('/login');
-        }
-    });
-    // TODO: something better than this?
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
+
     if (!queryRef) return <Loader />;
 
     return (
