@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "info": "next info",
-        "lint": "next lint",
+        "lint": "next lint --max-warnings 10",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
