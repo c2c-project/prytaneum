@@ -234,6 +234,7 @@ export default function UserGuide() {
                     width={1107}
                     height={1108}
                     objectFit='contain'
+                    alt='Prytaneum Logo'
                 />
             </Grid>
             <Grid item xs={12} sm={9} className={classes.section}>
@@ -243,8 +244,8 @@ export default function UserGuide() {
                 <Typography variant='body1' className={classes.paragraph}>
                     Participants are the residents who want to engage in discussion on a 
                     policy topic. In Prytaneum, participants can type in questions to add to a 
-                    question list; they can like, reply and quote another participant’s 
-                    question to follow up on one another’s questions. 
+                    question list; they can like, reply and quote another participant`&#39`s 
+                    question to follow up on one another`&#39`s questions. 
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
@@ -286,6 +287,7 @@ export default function UserGuide() {
                                 width={1146}
                                 height={648}
                                 objectFit='contain'
+                                alt='Cam 1'
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -294,6 +296,7 @@ export default function UserGuide() {
                                 width={1146}
                                 height={648}
                                 objectFit='contain'
+                                alt='Cam 2'
                             />
                         </Grid>
                     </Grid>
@@ -483,7 +486,7 @@ export default function UserGuide() {
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsectiontext}>
                 <Typography variant='body1' className={classes.paragraph}>
-                    <sup>2</sup> Clicking the down arrow toggles the visibility of the event’s 
+                    <sup>2</sup> Clicking the down arrow toggles the visibility of the event`&#39`s 
                     description
                 </Typography>
             </Grid>

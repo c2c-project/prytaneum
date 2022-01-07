@@ -76,6 +76,7 @@ export default function Home() {
                         width={3483}
                         height={665}
                         objectFit='contain'
+                        alt='Prytaneum Logo'
                     />
                 </div>
                 <Typography variant='h5' className={classes.subtitle}>
@@ -97,6 +98,7 @@ export default function Home() {
                     width={3292}
                     height={2097}
                     objectFit='contain'
+                    alt='Prytaneum Landing Graphic'
                 />
             </Grid>
         </Grid>

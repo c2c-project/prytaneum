@@ -90,7 +90,7 @@ export interface EventSidebarProps {
 }
 export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const classes = useStyles();
-    const [tabIndex, setTabIndex] = React.useState<number>(1);
+    const [tabIndex, setTabIndex] = React.useState<number>(0);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const [data, refetch] = useRefetchableFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
     const [user] = useUser();
