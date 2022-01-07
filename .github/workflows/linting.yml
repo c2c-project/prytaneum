@@ -12,7 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Yarn Install
+        run: yarn install
+
       - name: Lint Client
-        run: |-
-          yarn install \
-          yarn workspace @app/client lint
+        run: yarn workspace @app/client lint
