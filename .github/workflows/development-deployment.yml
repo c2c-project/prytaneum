@@ -1,9 +1,11 @@
 name: Build and Deploy development Version to GKE
 
 on:
-  push:
-    branches:
-      - dev 
+  workflow_run:
+    workflows: ["Linting"]
+    branches: [dev]
+    types:
+      - completed
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -17,10 +19,22 @@ env:
   GRAPHQL_URL: ${{ secrets.DEV_GRAPHQL_URL }}
 
 jobs:
+  on-failure:
+    name: Linting/Testing Failed
+    runs-on: ubuntu-latest
+    environment: development
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+
+    steps:
+      - name: Workflow Failure
+        run: |-
+          echo A failure has occoured in the workflow, deployment cancelled
+      
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: development
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout
