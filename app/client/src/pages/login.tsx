@@ -64,6 +64,7 @@ export default function Login() {
                     width={697}
                     height={383}
                     objectFit='contain'
+                    alt='Login Illustation'
                 />
             </Grid>
             <Grid item md={5} className={classes.formContainer}>
