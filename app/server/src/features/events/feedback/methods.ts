@@ -6,7 +6,6 @@ export async function myFeedback(userId: string, eventId: string, prisma: Prisma
     const result = await prisma.eventLiveFeedback.findMany({
         where: { createdById: userId, eventId }
     });
-    console.log(result);
     return result;
 }
 
