@@ -1,0 +1,54 @@
+{
+    "root": true,
+    "extends": [
+        "next",
+        "next/core-web-vitals",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "plugins": ["@typescript-eslint", "jest"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "ignorePatterns": ["**/*.stories.tsx", "**/*.stories.jsx", "**/*.test.tsx", "**/*.test.jsx"],
+      "rules": {
+        "quotes": ["error", "single"],
+        "indent": "off",
+        "@typescript-eslint/indent": ["error", 4, { "SwitchCase": 1 }],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/no-array-index-key": 0,
+        "react/forbid-prop-types": 0,
+        "react/no-find-dom-node": 0,
+        "react/jsx-curly-newline": ["off"],
+        "jsx-quotes": ["error", "prefer-single"],
+        "react/jsx-wrap-multilines": 0,
+        "react/react-in-jsx-scope": "off", // react 17 makes it unnecessary
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "**/__mocks__/*",
+                    "**/mock/**",
+                    "**/*.mock.ts",
+                    "**/*.tests.js",
+                    "**/*.test.ts",
+                    "**/*.test.tsx",
+                    "**/*.stories.*",
+                    "**/__tests__/**",
+                    "**/setupTests.ts",
+                    "**/scripts/**"
+                ]
+            }
+        ],
+        "import/no-absolute-path": 0,
+        "no-underscore-dangle": "off",
+        "func-names": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "react/jsx-props-no-spreading": "off",
+        "import/prefer-default-export": "off",
+        "react/require-default-props": "off",
+        "react/display-name": "off"
+      }
+}

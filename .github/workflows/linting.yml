@@ -1,0 +1,19 @@
+name: Linting
+
+on: [push, pull_request_target]
+
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Yarn Install
+        run: yarn install
+
+      - name: Lint Client
+        run: yarn workspace @app/client lint
