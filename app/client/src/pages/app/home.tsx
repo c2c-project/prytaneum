@@ -17,17 +17,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
     const router = useRouter();
-    const [user] = useUser();
+    const [user,, isLoading] = useUser();
     const classes = useStyles();
+    
     React.useEffect(() => {
-        if (!user) {
-            router.push('/login');
-        }
-    });
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
+
     return (
         <Grid className={classes.root} container justify='center' alignItems='center'>
             <Grid component={Paper} className={classes.paper} item>
-                <OrgForm onSubmit={() => console.log('yo')} />
+                <OrgForm onSubmit={() => router.push('/organizations/me')} />
             </Grid>
         </Grid>
     );

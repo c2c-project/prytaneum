@@ -90,11 +90,11 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const classes = useStyles();
     const router = useRouter();
     const { env } = useEnvironment();
-    const [user] = useUser();
+    const [user,, isLoading] = useUser();
 
     React.useEffect(() => {
-        if (!user) router.push('/login');
-    }, [user, router])
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
 
     const refetch = React.useCallback(() => {
         loadQuery(env, ORG_LIST_QUERY, {}, { fetchPolicy: 'store-and-network' });

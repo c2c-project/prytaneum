@@ -112,7 +112,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
                 <StyledListItem button onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
-                    {selected === 'Dashboard' && <MovingBg />}
+                    {selected === 'Dashboard'}
                     <StyledListItemIcon>
                         <DashboardIcon />
                     </StyledListItemIcon>
@@ -127,7 +127,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         onClick={handleClick('My Organizations')}
                         selected={selected === 'My Organizations'}
                     >
-                        {selected === 'My Organizations' && <MovingBg />}
+                        {selected === 'My Organizations'}
                         <StyledListItemIcon>
                             <ListIcon />
                         </StyledListItemIcon>
