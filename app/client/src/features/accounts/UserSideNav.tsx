@@ -134,18 +134,6 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         <ListItemText primary='My Organizations' />
                     </StyledListItem>
                 </>
-                {/* <>
-                    <StyledSubheader>Administrator</StyledSubheader>
-                    <StyledDivider />
-
-                    <StyledListItem button onClick={handleClick('User List')} selected={selected === 'User List'}>
-                        {selected === 'User List' && <MovingBg />}
-                        <StyledListItemIcon>
-                            <ListAltIcon />
-                        </StyledListItemIcon>
-                        <ListItemText primary='User List' />
-                    </StyledListItem>
-                </> */}
             </AnimateSharedLayout>
         </List>
     );
