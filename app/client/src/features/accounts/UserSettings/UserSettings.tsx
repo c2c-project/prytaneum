@@ -36,17 +36,16 @@ export default function UserSettings({ id }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
-    const [user] = useUser();
+    const [user,, isLoading] = useUser();
     const router = useRouter();
 
+    React.useEffect(() => {
+        if (!isLoading && !user) router.push('/')
+    }, [isLoading, router, user]);
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
         if (cont === null) setOpen(false);
     }, [cont]);
-
-    React.useEffect(() => {
-        if (!user) router.push('/')
-    }, [router, user])
 
     const sections = [
         {

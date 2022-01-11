@@ -5,13 +5,22 @@ import type { useUserFragment$key } from '@local/__generated__/useUserFragment.g
 
 // NOTE: don't use React.useContext with either of the below,
 // instead use the "useUser" hook found in this same folder
-type TState = useUserFragment$key | null | undefined; // undefined means it's not in the tree
-// read note above
-export const UserContext = React.createContext<TState>(undefined);
+type TUserState = useUserFragment$key | null | undefined; // undefined means it's not in the tree
+type TLoadingState = boolean;
+type TUserContext = {
+    userState: TUserState;
+    isLoadingState: TLoadingState;
+}
 
-type TDispatch = React.Dispatch<SetStateAction<TState>> | undefined;
 // read note above
-export const UserDispatch = React.createContext<TDispatch>(undefined);
+export const UserContext = React.createContext<TUserContext>({ userState: undefined, isLoadingState: true });
+
+type TUserDispatch = {
+    userDispatch: React.Dispatch<SetStateAction<TUserState>> | undefined;
+    isLoadingDispatch: React.Dispatch<SetStateAction<TLoadingState>> | undefined;
+}
+// read note above
+export const UserDispatch = React.createContext<TUserDispatch>({ userDispatch: undefined, isLoadingDispatch: undefined });
 
 interface UserProps {
     children: React.ReactNode | React.ReactNodeArray;
@@ -31,11 +40,12 @@ export const USER_CONTEXT_QUERY = graphql`
  * Does not block rendering of the app
  */
 export function UserProvider({ children, userInfo }: UserProps) {
-    const [user, setUser] = React.useState<TState>(userInfo ?? null);
+    const [user, setUser] = React.useState<TUserState>(userInfo ?? null);
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     return (
-        <UserContext.Provider value={user}>
-            <UserDispatch.Provider value={setUser}>{children}</UserDispatch.Provider>
+        <UserContext.Provider value={{ userState: user, isLoadingState: isLoading }}>
+            <UserDispatch.Provider value={{ userDispatch: setUser, isLoadingDispatch: setIsLoading }}>{children}</UserDispatch.Provider>
         </UserContext.Provider>
     );
 }

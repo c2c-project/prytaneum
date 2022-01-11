@@ -12,10 +12,10 @@ export default function VerifyEmail({ userId }: Props) {
     const router = useRouter();
 
     return ( <div></div>
-        // <VerifyEmailComponent
-        //     userId={userId}
-        //     onSuccess={() => router.push('/login')}
-        //     onFailure={() => router.push('/login')}
-        // />
+    // <VerifyEmailComponent
+    //     userId={userId}
+    //     onSuccess={() => router.push('/login')}
+    //     onFailure={() => router.push('/login')}
+    // />
     );
 }

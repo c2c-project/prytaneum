@@ -107,7 +107,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     // TODO remove unused query
     const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
-    const [user] = useUser();
+    const [user, setUser,, setIsLoading] = useUser();
     const isClient = useIsClient();
     const classes = useStyles();
     const isSignedIn = React.useMemo(() => !!user, [user]);
@@ -115,7 +115,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const isOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
     const width = React.useRef(0);
     const theme = useTheme();
-    
+
     // if server, then default to rendering desktop version and not mobile
     // TODO: determine if the user is on desktop or mobile and render appropriately
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
@@ -125,8 +125,14 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
             // TODO Check if in a private event and use router.replace('/')
         }
     });
-
     const handleNavigation = (path: string) => () => router.push(path);
+    
+    React.useEffect(() => {
+        if (data) setIsLoading(false);
+        if (data && !user) {
+            setUser(data.me);
+        }
+    }, [data, setUser, user, setIsLoading]);
 
     function handleOpen(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const { currentTarget } = e;

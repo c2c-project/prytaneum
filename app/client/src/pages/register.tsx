@@ -65,6 +65,7 @@ export default function RegisterPage() {
                     width={697}
                     height={383}
                     objectFit='contain'
+                    alt='Register Illustration'
                 />
             </Grid>
             <Grid item md={5} className={classes.formContainer}>
