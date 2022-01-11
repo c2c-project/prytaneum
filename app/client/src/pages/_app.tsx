@@ -18,6 +18,12 @@ export default function App({ Component, pageProps }: AppProps) {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);
+        // Unregister old service workers
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (const registration of registrations) {
+                registration.unregister();
+            }
+        });
     }, []);
 
     return (
