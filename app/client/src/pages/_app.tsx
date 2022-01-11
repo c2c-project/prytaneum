@@ -19,10 +19,10 @@ export default function App({ Component, pageProps }: AppProps) {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);
         // Unregister old service workers
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-            for (const registration of registrations) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+            registrations.forEach((registration) => {
                 registration.unregister();
-            }
+            });
         });
     }, []);
 
