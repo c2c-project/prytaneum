@@ -2,7 +2,7 @@ name: Build and Deploy development Version to GKE
 
 on:
   workflow_run:
-    workflows: ["Linting"]
+    workflows: ["Merge Linting"]
     branches: [dev]
     types:
       - completed
