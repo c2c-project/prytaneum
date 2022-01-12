@@ -2,7 +2,12 @@ import winston from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 const { combine, timestamp, errors, json } = winston.format;
 
-const loggingWinston = new LoggingWinston();
+const loggingWinston = new LoggingWinston({
+    serviceContext: {
+        service: 'prytaneum-server',
+        version: '1.0',
+    },
+});
 
 export function buildProductionLogger() {
     const logger = winston.createLogger({
