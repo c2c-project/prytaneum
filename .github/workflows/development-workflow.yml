@@ -4,9 +4,6 @@ on:
     pull_request_target:
         branches: [dev]
         types: [opened, closed, edited, synchronize, edited]
-    pull_request:
-        branches: [dev]
-        types: [opened, closed, edited, synchronize, edited]
     push:
 
 env:
