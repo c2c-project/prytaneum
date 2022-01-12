@@ -92,8 +92,8 @@ async function start() {
         server.register(AltairFastify);
 
         // Routes for kubernetes health checks
-        server.get('/', async (req, res) => ({ status: 'Healthy' }));
-        server.get('/healthz', async (req, res) => ({ status: 'Healthy' }));
+        server.get('/', async () => ({ status: 'Healthy' }));
+        server.get('/healthz', async () => ({ status: 'Healthy' }));
 
         verifyEnv();
         logger.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);

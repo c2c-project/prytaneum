@@ -33,7 +33,7 @@ jobs:
               run: yarn workspace @app/client lint
 
             - name: Lint Server
-              run: echo TODO
+              run: yarn workspace @app/server lint
 
     testing:
         name: Testing

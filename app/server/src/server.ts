@@ -1,5 +1,4 @@
 import fastify from 'fastify';
-import logger from '@local/lib/logger';
 
 export default function build() {
     const server = fastify({

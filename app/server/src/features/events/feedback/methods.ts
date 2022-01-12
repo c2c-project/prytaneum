@@ -1,6 +1,5 @@
 import { PrismaClient } from '@app/prisma';
 import { CreateFeedback } from '@local/graphql-types';
-import { errors } from '@local/features/utils';
 
 export async function myFeedback(userId: string, eventId: string, prisma: PrismaClient) {
     const result = await prisma.eventLiveFeedback.findMany({

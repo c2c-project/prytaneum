@@ -5,7 +5,6 @@ import {
     DeleteModerator,
     HideQuestion,
     UpdateQuestionPosition,
-    UpdateModerator,
     AddQuestionToQueue,
     RemoveQuestionFromQueue,
 } from '@local/graphql-types';

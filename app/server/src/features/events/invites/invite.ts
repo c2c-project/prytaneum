@@ -1,31 +1,30 @@
-import { server } from '@local/server';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import util from 'util';
-import { pipeline } from 'stream';
-import path from 'path';
+// import fs from 'fs';
+// import util from 'util';
+// import { pipeline } from 'stream';
+// import path from 'path';
 
-import { sendEmail } from '@local/lib/email/email';
-import { FastifyRequest } from 'fastify/types/request';
-import { errors } from '@local/features/utils';
+// import { sendEmail } from '@local/lib/email/email';
+// import { FastifyRequest } from 'fastify/types/request';
+// import { errors } from '@local/features/utils';
 
-const pump = util.promisify(pipeline);
+// const pump = util.promisify(pipeline);
 
-const paramsJsonSchema = {
-    type: 'object',
-    properties: {
-        email: { type: 'string' },
-        age: { type: 'number' }
-    }
-}
+// const paramsJsonSchema = {
+//     type: 'object',
+//     properties: {
+//         email: { type: 'string' },
+//         age: { type: 'number' }
+//     }
+// }
 
-const schema = {
-    params: paramsJsonSchema
-}
+// const schema = {
+//     params: paramsJsonSchema
+// }
 
-interface MulterRequest extends FastifyRequest {
-    file: any
-}
+// interface MulterRequest extends FastifyRequest {
+//     file: any
+// }
 
 export async function routes () {
     // server.post('/invite', { schema }, async (request, reply) => {
