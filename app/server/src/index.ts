@@ -79,6 +79,10 @@ async function start() {
             subscription: {
                 context: buildSubscriptionContext,
             },
+            errorFormatter: (error, ...args) => {
+                logger.error(error);
+                return mercurius.defaultErrorFormatter(error, ...args);
+            },
         });
 
         server.register(cookie, {
@@ -89,10 +93,10 @@ async function start() {
 
         // Routes for kubernetes health checks
         server.get('/', async (req, res) => ({ status: 'Healthy' }));
-        server.get('/healthz', async (req, res) => ({ status: 'Healthy' }))
+        server.get('/healthz', async (req, res) => ({ status: 'Healthy' }));
 
         verifyEnv();
-        logger.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`)
+        logger.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);
         logger.info(`Listening on ${runAddress}`);
     } catch (err) {
