@@ -1,4 +1,3 @@
-import winston from 'winston';
 import { buildProductionLogger } from './productionLogger';
 import { buildDevelopmentLogger } from './developmentLogger';
 

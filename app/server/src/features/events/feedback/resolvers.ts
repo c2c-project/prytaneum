@@ -9,7 +9,7 @@ const toUserId = toGlobalId('User');
 
 export const resolvers: Resolvers = {
     Query: {
-        async myFeedback(parent, args, ctx, info) {
+        async myFeedback(parent, args, ctx) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             if (!args.eventId) throw new Error(errors.invalidArgs);
             const { id: eventId } = fromGlobalId(args.eventId);
@@ -18,7 +18,7 @@ export const resolvers: Resolvers = {
         }
     },
     Mutation: {
-        async createFeedback(parent, args, ctx, info) {
+        async createFeedback(parent, args, ctx) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 if (!args.input) throw new Error(errors.invalidArgs);
@@ -53,7 +53,7 @@ export const resolvers: Resolvers = {
         }
     },
     EventLiveFeedback: {
-        async createdBy(parent, args, ctx, info) {
+        async createdBy(parent, args, ctx) {
             const { id: feedbackId } = fromGlobalId(parent.id);
             const submitter = await Feedback.findSubmitterByFeedbackId(feedbackId, ctx.prisma);
             return toUserId(submitter);
