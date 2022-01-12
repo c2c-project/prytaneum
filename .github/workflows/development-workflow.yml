@@ -42,14 +42,14 @@ jobs:
 
         steps:
             - name: TODO
-              run: echo TODO
+              run: echo ${{ github.event.pull_request_target }}
 
     build-publish-deploy-client:
         name: Build Publish and Deploy Client
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: github.event.pull_request_target.merged == true
+        if: github.event.pull_request_target.closed == true
 
         steps:
             - name: Checkout
@@ -107,7 +107,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: github.event.pull_request_target.merged == true
+        if: github.event.pull_request_target.closed == true
 
         steps:
             - name: Checkout
