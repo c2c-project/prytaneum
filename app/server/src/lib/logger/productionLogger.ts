@@ -1,18 +1,14 @@
 import winston from 'winston';
-const { combine, timestamp, printf } = winston.format;
+const { combine, timestamp, errors, json } = winston.format;
 
-const customFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} [${level}] ${message}`
-})
-
-export default function productionLogger(): winston.Logger {
-    return winston.createLogger({
+export function buildProductionLogger() {
+    const logger = winston.createLogger({
         level: 'http',
-        format: combine(timestamp(), customFormat),
+        format: combine(timestamp(), errors({ stack: true }), json()),
         defaultMeta: { service: 'Prytaneum Server' },
-        transports: [
-          new winston.transports.Console(),
-          new winston.transports.File({ filename: 'prytaneumServer.log' })
-        ],
-      });
+        transports: [new winston.transports.Console()],
+        exceptionHandlers: [new winston.transports.Console()],
+    });
+
+    return logger;
 }
