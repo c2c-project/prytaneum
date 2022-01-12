@@ -3,8 +3,6 @@ name: Developmment Testing, Linting, and Deployment Workflow
 on:
     pull_request_target:
         branches: [dev]
-    pull_request:
-        branches: [dev]
     push:
 
 env:
@@ -17,6 +15,7 @@ env:
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    MERGED: ${{ github.event.pull_request.merged }}
 
 jobs:
     linting:
@@ -44,14 +43,17 @@ jobs:
 
         steps:
             - name: TODO
-              run: echo Merged ${{ github.event.pull_request.merged }}
+              run: |
+                echo ${{ github.event.pull_request.merged }}
+                echo ${{ github.event.pull_request_target.merged }}
+                echo $MERGED
 
     build-publish-deploy-client:
         name: Build Publish and Deploy Client
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: ${{ github.event.pull_request.merged }}
+        if: github.event.pull_request.merged
 
         steps:
             - name: Checkout
@@ -109,7 +111,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: ${{ github.event.pull_request.merged }}
+        if: github.event.pull_request.merged
 
         steps:
             - name: Checkout
@@ -165,7 +167,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [build-publish-deploy-client, build-publish-deploy-server]
-        if: ${{ github.event.pull_request.merged }}
+        if: github.event.pull_request_target.merged == true
 
         steps:
             - name: Checkout
