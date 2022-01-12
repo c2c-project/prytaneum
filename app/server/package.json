@@ -2,7 +2,7 @@
     "name": "@app/server",
     "private": true,
     "scripts": {
-        "lint": "eslint --ext .js,.ts .",
+        "lint": "eslint --ext .js,.ts . --max-warnings 10",
         "build": "tsc -p tsconfig.json",
         "start": "dotenv -c production -- ts-node --transpile-only ./src/index.ts",
         "dev": "dotenv -c development -- ts-node-dev --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
