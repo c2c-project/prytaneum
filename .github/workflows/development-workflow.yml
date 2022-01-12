@@ -17,7 +17,6 @@ env:
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
-    MERGED: ${{ github.event.pull_request.merged }}
 
 jobs:
     linting:
@@ -45,14 +44,14 @@ jobs:
 
         steps:
             - name: TODO
-              run: echo "Merged :$MERGED"
+              run: echo Merged ${{ github.event.pull_request.merged }}
 
     build-publish-deploy-client:
         name: Build Publish and Deploy Client
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: $MERGED
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
@@ -110,7 +109,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        if: $MERGED
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
@@ -166,7 +165,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [build-publish-deploy-client, build-publish-deploy-server]
-        if: $MERGED
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
