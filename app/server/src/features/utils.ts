@@ -3,7 +3,7 @@
 import mercurius, { IResolvers } from 'mercurius';
 import * as Relay from 'graphql-relay';
 import { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
-
+import logger from '@local/lib/logger';
 
 /**
  * Resolver type used for making resolvers
@@ -33,7 +33,7 @@ export const errors = {
      */
     permissions: 'Insufficient permissions',
     fileNotFound: 'File not found',
-    fileSize: 'File too large'
+    fileSize: 'File too large',
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;
@@ -97,6 +97,7 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
             body: result,
         };
     } catch (e) {
+        logger.error(e.message);
         return {
             isError: true,
             message: e.message,
