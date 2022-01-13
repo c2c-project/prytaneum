@@ -1,5 +1,5 @@
 import { useMutation, graphql } from 'react-relay';
-import { useLogoutMutation } from '@local/__generated__/useLogoutMutation.graphql'
+import { useLogoutMutation } from '@local/__generated__/useLogoutMutation.graphql';
 import { useIsClient, useEnvironment } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 
@@ -30,7 +30,7 @@ export default function useLogout({ onComplete }: Props) {
                 if (onComplete) onComplete();
             },
         });
-    }
+    };
 
     return { logoutUser };
 }
