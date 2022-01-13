@@ -1,4 +1,4 @@
-name: Developmment Testing, Linting, and Deployment Workflow
+name: Development Workflow
 
 on:
     pull_request_target:
