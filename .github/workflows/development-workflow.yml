@@ -4,7 +4,6 @@ on:
     pull_request_target:
         branches: [dev]
         types: [opened, closed, edited, synchronize, edited]
-    push:
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
