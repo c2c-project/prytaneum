@@ -40,7 +40,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
     React.useEffect(() => {
         if (!user) setDisplayLiveFeedback(false);
         else setDisplayLiveFeedback(true);
-    }, [user])
+    }, [user]);
 
     return (
         <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
@@ -48,16 +48,22 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
-                            {displayLiveFeedback ? liveFeedback.map((feedback) => (
-                                <ListItem disableGutters key={feedback.id}>
-                                    <Card className={classes.item}>
-                                        <LiveFeedbackAuthor fragmentRef={feedback} />
-                                        <CardContent>
-                                            <Typography>{feedback.message}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </ListItem>
-                            )): <div />}
+                            {displayLiveFeedback ? (
+                                liveFeedback.map((feedback) => (
+                                    <ListItem disableGutters key={feedback.id}>
+                                        <Card className={classes.item}>
+                                            <LiveFeedbackAuthor fragmentRef={feedback} />
+                                            <CardContent>
+                                                <Typography style={{ wordBreak: 'break-word' }}>
+                                                    {feedback.message}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </ListItem>
+                                ))
+                            ) : (
+                                <div />
+                            )}
                         </List>
                     </Grid>
                 </Grid>

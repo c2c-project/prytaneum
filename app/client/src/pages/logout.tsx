@@ -26,29 +26,16 @@ export default function Logout() {
     const router = useRouter();
 
     React.useEffect(() => {
-        if (isClient) {
-            runMutation({
-                variables: {},
-                onCompleted() {
-                    resetEnv();
-                    setUser(null);
-                    router.push('/login');
-                },
-            });
-        }
-    }, [runMutation, isClient, resetEnv, setUser, router]);
-
-    React.useEffect(() => {
-        let handle: NodeJS.Timeout | undefined;
-        if (!user || user == null) {
-            handle = setTimeout(() => {
-                router.push('/login');
-            }, 1500);
-        }
-        return () => {
-            if (handle) clearTimeout(handle);
-        };
-    }, [user, router]);
+        if (!isClient) return;
+        runMutation({
+            variables: {},
+            onCompleted() {
+                resetEnv();
+                setUser(null);
+                router.push('/')
+            },
+        });
+    }, [runMutation, isClient, resetEnv, setUser, router, user]);
 
     return <Loader />;
 }

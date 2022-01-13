@@ -121,7 +121,12 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
         setEventList(data.myOrgs || []);
     }, [data]);
 
-    if (!user) return <Loader />;
+    React.useEffect(() => {
+        if (isLoading) return;
+        if (!user) router.push('/login');
+    }, [isLoading, user, router]);
+
+    if (isLoading) return <Loader />
 
     if (orgList.length === 0)
         return (

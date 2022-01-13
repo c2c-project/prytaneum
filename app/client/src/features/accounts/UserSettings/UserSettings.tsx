@@ -1,90 +1,24 @@
 import * as React from 'react';
 import {
-    // Typography,
     Grid,
     Divider,
 } from '@material-ui/core';
 
-// import { makeStyles } from '@material-ui/core/styles';
-
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-// import AppBar from 'layout/AppBar';
 
 import { SettingsMenu } from '@local/components/SettingsMenu/SettingsMenu';
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
-// import UserProfile from '../UserProfile/UserProfile';
 
 import {
-    // ButtonList,
-    // AppearAnonymous,
-    // Notifications,
-    // Appearance,
-    // Logout,
     ModifyUserEmail,
     ModifyUserPassword,
-    // DisableAccount,
     DeleteAccount,
-    // Feedback,
-    // AboutUs,
-    // PrivacyPolicy,
-    // TermsOfService,
-    // TownhallUserSettings,
-    // NotificationSettings,
 } from './components';
 
 interface Props {
     id?: string;
 }
-
-// const optionsList = [
-//     {
-//         title: 'Townhall',
-//         component: <TownhallUserSettings />,
-//     },
-//     {
-//         title: 'Notifications',
-//         component: <Notifications />,
-//     },
-//     {
-//         title: 'Appearance',
-//         component: <Appearance />,
-//     },
-// ];
-
-// const accountSettingsList = [
-//     {
-//         title: 'Logout',
-//         component: <Logout />,
-//     },
-//     {
-//         title: 'Disable Account',
-//         component: <DisableAccount />,
-//     },
-//     {
-//         title: 'Delete Account',
-//         component: <DeleteAccount />,
-//     },
-// ];
-
-// const informationList = [
-//     {
-//         title: 'Feedback',
-//         component: <Feedback />,
-//     },
-//     {
-//         title: 'About Us',
-//         component: <AboutUs />,
-//     },
-//     {
-//         title: 'Privacy Policy',
-//         component: <PrivacyPolicy />,
-//     },
-//     {
-//         title: 'Terms of Service',
-//         component: <TermsOfService />,
-//     },
-// ];
 
 /**
  * Displays the settings for User, using SettingsMenu,
@@ -108,40 +42,12 @@ export default function UserSettings({ id }: Props) {
     React.useEffect(() => {
         if (!isLoading && !user) router.push('/')
     }, [isLoading, router, user]);
-
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
         if (cont === null) setOpen(false);
     }, [cont]);
 
     const sections = [
-        // {
-        //     title: 'General',
-        //     description: 'General User Settings',
-        //     component: (
-        //         <Grid container spacing={2}>
-        //             <Grid item xs={12}>
-        //                 <UserProfile img='https://i.imgur.com/3beQH5s.jpeg' />
-        //             </Grid>
-        //             <Grid item xs={12}>
-        //                 <Divider />
-        //             </Grid>
-        //             <Grid item xs={12}>
-        //                 <DisableAccount />
-        //             </Grid>
-        //         </Grid>
-        //     ),
-        // },
-        // {
-        //     title: 'Townhall',
-        //     description: 'Change Townhall Settings',
-        //     component: <TownhallUserSettings settings={user?.settings} />,
-        // },
-        // {
-        //     title: 'Notifications',
-        //     description: 'Customize Notifications Receieved',
-        //     component: <NotificationSettings settings={user?.settings} />,
-        // },
         {
             title: 'Account Settings',
             description: 'View Account Settings',
@@ -167,13 +73,6 @@ export default function UserSettings({ id }: Props) {
                 </Grid>
             ),
         },
-        // {
-        //     title: 'Information',
-        //     description: 'Additional Information',
-        //     component: (
-        //         <ButtonList list={informationList} setContent={setContent} />
-        //     ),
-        // },
     ];
 
     return (

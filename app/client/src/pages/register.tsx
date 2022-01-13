@@ -5,7 +5,7 @@ import { Grid, Paper, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
-import { RegisterForm } from '@local/features/accounts';
+import { RegisterForm, useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,6 +51,12 @@ export default function RegisterPage() {
     const classes = useStyles();
     const router = useRouter();
 
+    const [user] = useUser();
+
+    React.useEffect(() => {
+        if (user) router.push('/organizations/me');
+    }, [user, router]);
+
     return (
         <Grid container alignItems='center' className={classes.root} justify='center'>
             <Grid item md={7}>
@@ -59,6 +65,7 @@ export default function RegisterPage() {
                     width={697}
                     height={383}
                     objectFit='contain'
+                    alt='Register Illustration'
                 />
             </Grid>
             <Grid item md={5} className={classes.formContainer}>
