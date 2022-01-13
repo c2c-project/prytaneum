@@ -6,7 +6,7 @@ import { sendEmail } from '@local/lib/email/email';
 import { register } from '@local/features/accounts/methods';
 import { fromGlobalId } from 'graphql-relay';
 import { canUserModify } from '../methods';
-import logger from '@local/lib/logger';
+import { server } from '@local/index';
 
 interface inviteMessage {
     eventName: string;
@@ -65,7 +65,7 @@ export async function validateInvite(token: string, eventId: string, prisma: Pri
         if (eventId !== tokenEventId) return { valid: false };
         return { valid: true };
     } catch (err) {
-        logger.error(err);
+        server.log.error(err);
         return { valid: false };
     }
 }

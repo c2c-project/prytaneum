@@ -8,7 +8,6 @@ import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 import fastifyCors from 'fastify-cors';
-import logger from './lib/logger';
 
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
@@ -34,6 +33,8 @@ function verifyEnv() {
     }
 }
 
+export const server = build();
+
 async function start() {
     // Google Cloud Run will set this environment variable for you, so
     // you can also use it to detect if you are running in Cloud Run
@@ -45,8 +46,7 @@ async function start() {
     const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST;
 
     try {
-        const server = build();
-
+        if (!server) throw new Error('Server Building Failed');
         // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
         mercuriusCodgen(server, {
             targetPath: join(__dirname, './graphql-types.ts'),
@@ -66,6 +66,13 @@ async function start() {
             },
         });
 
+        server.addHook('preHandler', (req, reply, next) => {
+            if (req.body) {
+              req.log.info({ body: req.body }, 'parsed body')
+            }
+            next()
+        });
+
         server.register(fastifyCors, {
             origin: '*',
             methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD'],
@@ -80,7 +87,7 @@ async function start() {
                 context: buildSubscriptionContext,
             },
             errorFormatter: (error, ...args) => {
-                logger.error(error);
+                server.log.error(error);
                 return mercurius.defaultErrorFormatter(error, ...args);
             },
         });
@@ -96,11 +103,11 @@ async function start() {
         server.get('/healthz', async () => ({ status: 'Healthy' }));
 
         verifyEnv();
-        logger.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);
+        server.log.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);
-        logger.info(`Listening on ${runAddress}`);
+        server.log.info(`Listening on ${runAddress}`);
     } catch (err) {
-        logger.error(err);
+        server.log.error(err);
         process.exit(1);
     }
 }
