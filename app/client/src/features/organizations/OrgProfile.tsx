@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
 import { Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -43,14 +42,9 @@ interface Props {
 }
 
 export const OrgProfile = ({ queryRef }: Props) => {
-    const router = useRouter();
     const classes = useStyles();
     const { node } = usePreloadedQuery(ORG_PROFILE, queryRef);
     const [user] = useUser();
-
-    React.useEffect(() => {
-        if (!user) router.push('/login');
-    }, [router, user]);
 
     if (!node || !user) return <Loader />;
 

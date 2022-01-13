@@ -19,24 +19,23 @@ const LOGOUT_MUTATION = graphql`
  *  @constructor Logout
  */
 export default function Logout() {
-    const [, setUser] = useUser();
+    const [user, setUser] = useUser();
     const { resetEnv } = useEnvironment();
     const [runMutation] = useMutation<logoutMutation>(LOGOUT_MUTATION);
     const isClient = useIsClient();
     const router = useRouter();
 
     React.useEffect(() => {
-        if (isClient) {
-            runMutation({
-                variables: {},
-                onCompleted() {
-                    resetEnv();
-                    setUser(null);
-                    router.push('/');
-                },
-            });
-        }
-    }, [runMutation, isClient, resetEnv, setUser, router]);
+        if (!isClient) return;
+        runMutation({
+            variables: {},
+            onCompleted() {
+                resetEnv();
+                setUser(null);
+                router.push('/')
+            },
+        });
+    }, [runMutation, isClient, resetEnv, setUser, router, user]);
 
     return <Loader />;
 }
