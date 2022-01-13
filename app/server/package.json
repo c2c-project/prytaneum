@@ -18,7 +18,7 @@
         "altair-fastify-plugin": "^4.0.2",
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
-        "fastify": "^3.15.1",
+        "fastify": "^3.25.3",
         "fastify-cookie": "^5.3.0",
         "fastify-cors": "^6.0.2",
         "fastify-multipart": "^4.0.7",
@@ -32,6 +32,7 @@
         "mercurius-codegen": "^1.6.1",
         "module-alias": "^2.2.2",
         "pino-pretty": "^7.1.0",
+        "uuid": "^8.3.2",
         "winston": "^3.3.3"
     },
     "devDependencies": {
@@ -44,6 +45,7 @@
         "@types/module-alias": "^2.0.1",
         "@types/node": "^15.0.1",
         "@types/prettier": "^2",
+        "@types/uuid": "^8",
         "@typescript-eslint/eslint-plugin": "^5.9.1",
         "@typescript-eslint/parser": "^5.9.1",
         "dotenv": "^8.2.0",

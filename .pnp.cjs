@@ -261,6 +261,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/module-alias", "npm:2.0.1"],
             ["@types/node", "npm:15.0.1"],
             ["@types/prettier", "npm:2.4.3"],
+            ["@types/uuid", "npm:8.3.4"],
             ["@typescript-eslint/eslint-plugin", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.9.1"],
             ["@typescript-eslint/parser", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.9.1"],
             ["altair-fastify-plugin", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:4.0.2"],
@@ -272,7 +273,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.6.0"],
             ["eslint-config-prettier", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.3.0"],
             ["eslint-plugin-prettier", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:4.0.0"],
-            ["fastify", "npm:3.15.1"],
+            ["fastify", "npm:3.25.3"],
             ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],
             ["fastify-cors", "npm:6.0.2"],
             ["fastify-multipart", "npm:4.0.7"],
@@ -291,6 +292,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],
             ["tsconfig-paths", "npm:3.9.0"],
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=d8b4e7"],
+            ["uuid", "npm:8.3.2"],
             ["winston", "npm:3.3.3"]
           ],
           "linkType": "SOFT",
@@ -5501,22 +5503,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@fastify/forwarded", [
-        ["npm:1.0.0", {
-          "packageLocation": "./.yarn/cache/@fastify-forwarded-npm-1.0.0-51e74f1aad-e3c2edf49e.zip/node_modules/@fastify/forwarded/",
+      ["@fastify/ajv-compiler", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@fastify-ajv-compiler-npm-1.1.0-8f156239a8-b8a2522ead.zip/node_modules/@fastify/ajv-compiler/",
           "packageDependencies": [
-            ["@fastify/forwarded", "npm:1.0.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@fastify/proxy-addr", [
-        ["npm:3.0.0", {
-          "packageLocation": "./.yarn/cache/@fastify-proxy-addr-npm-3.0.0-acb6c0f0d0-d747e35d4c.zip/node_modules/@fastify/proxy-addr/",
-          "packageDependencies": [
-            ["@fastify/proxy-addr", "npm:3.0.0"],
-            ["@fastify/forwarded", "npm:1.0.0"],
-            ["ipaddr.js", "npm:2.0.0"]
+            ["@fastify/ajv-compiler", "npm:1.1.0"],
+            ["ajv", "npm:6.12.6"]
           ],
           "linkType": "HARD",
         }]
@@ -10782,6 +10774,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/uuid", [
+        ["npm:8.3.4", {
+          "packageLocation": "./.yarn/cache/@types-uuid-npm-8.3.4-7547f4402c-6f11f3ff70.zip/node_modules/@types/uuid/",
+          "packageDependencies": [
+            ["@types/uuid", "npm:8.3.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/webpack", [
         ["npm:4.41.27", {
           "packageLocation": "./.yarn/cache/@types-webpack-npm-4.41.27-21730f257b-e502f30884.zip/node_modules/@types/webpack/",
@@ -12082,7 +12083,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["altair-fastify-plugin", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:4.0.2"],
             ["@types/fastify", null],
             ["altair-static", "npm:4.0.2"],
-            ["fastify", "npm:3.15.1"],
+            ["fastify", "npm:3.25.3"],
             ["fastify-plugin", "npm:2.3.4"],
             ["fastify-static", "npm:3.4.0"]
           ],
@@ -18393,6 +18394,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fast-safe-stringify", "npm:2.0.7"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:2.1.1", {
+          "packageLocation": "./.yarn/cache/fast-safe-stringify-npm-2.1.1-7ce89033ca-a851cbddc4.zip/node_modules/fast-safe-stringify/",
+          "packageDependencies": [
+            ["fast-safe-stringify", "npm:2.1.1"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["fast-text-encoding", [
@@ -18405,22 +18413,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["fastify", [
-        ["npm:3.15.1", {
-          "packageLocation": "./.yarn/cache/fastify-npm-3.15.1-a17ee31abc-85a4a01ef6.zip/node_modules/fastify/",
+        ["npm:3.25.3", {
+          "packageLocation": "./.yarn/cache/fastify-npm-3.25.3-229a9fe040-b0ab3f9ae1.zip/node_modules/fastify/",
           "packageDependencies": [
-            ["fastify", "npm:3.15.1"],
-            ["@fastify/proxy-addr", "npm:3.0.0"],
+            ["fastify", "npm:3.25.3"],
+            ["@fastify/ajv-compiler", "npm:1.1.0"],
             ["abstract-logging", "npm:2.0.1"],
-            ["ajv", "npm:6.12.6"],
             ["avvio", "npm:7.2.1"],
             ["fast-json-stringify", "npm:2.6.0"],
             ["fastify-error", "npm:0.3.1"],
-            ["fastify-warning", "npm:0.2.0"],
-            ["find-my-way", "npm:4.1.0"],
+            ["find-my-way", "npm:4.5.1"],
             ["flatstr", "npm:1.0.12"],
             ["light-my-request", "npm:4.4.1"],
-            ["pino", "npm:6.11.3"],
-            ["readable-stream", "npm:3.6.0"],
+            ["pino", "npm:6.13.4"],
+            ["process-warning", "npm:1.0.0"],
+            ["proxy-addr", "npm:2.0.7"],
             ["rfdc", "npm:1.3.0"],
             ["secure-json-parse", "npm:2.4.0"],
             ["semver", "npm:7.3.5"],
@@ -18444,7 +18451,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fastify", null],
             ["cookie", "npm:0.4.1"],
             ["cookie-signature", "npm:1.1.0"],
-            ["fastify", "npm:3.15.1"],
+            ["fastify", "npm:3.25.3"],
             ["fastify-plugin", "npm:3.0.0"]
           ],
           "packagePeers": [
@@ -18807,10 +18814,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["find-my-way", [
-        ["npm:4.1.0", {
-          "packageLocation": "./.yarn/cache/find-my-way-npm-4.1.0-6ba6035b1b-1142df6047.zip/node_modules/find-my-way/",
+        ["npm:4.5.1", {
+          "packageLocation": "./.yarn/cache/find-my-way-npm-4.5.1-f905fe6212-85b8c07d34.zip/node_modules/find-my-way/",
           "packageDependencies": [
-            ["find-my-way", "npm:4.1.0"],
+            ["find-my-way", "npm:4.5.1"],
             ["fast-decode-uri-component", "npm:1.0.1"],
             ["fast-deep-equal", "npm:3.1.3"],
             ["safe-regex2", "npm:2.0.0"],
@@ -19240,6 +19247,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/forwarded-npm-0.1.2-6143c1ba42-54695c5742.zip/node_modules/forwarded/",
           "packageDependencies": [
             ["forwarded", "npm:0.1.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:0.2.0", {
+          "packageLocation": "./.yarn/cache/forwarded-npm-0.2.0-6473dabe35-fd27e2394d.zip/node_modules/forwarded/",
+          "packageDependencies": [
+            ["forwarded", "npm:0.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -21188,13 +21202,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/ipaddr.js-npm-1.9.1-19ae7878b4-f88d382598.zip/node_modules/ipaddr.js/",
           "packageDependencies": [
             ["ipaddr.js", "npm:1.9.1"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:2.0.0", {
-          "packageLocation": "./.yarn/cache/ipaddr.js-npm-2.0.0-61e757f790-e4556c121f.zip/node_modules/ipaddr.js/",
-          "packageDependencies": [
-            ["ipaddr.js", "npm:2.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -23983,7 +23990,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/isomorphic-form-data", "npm:2.0.0"],
             ["end-of-stream", "npm:1.4.4"],
             ["events.on", "npm:1.0.1"],
-            ["fastify", "npm:3.15.1"],
+            ["fastify", "npm:3.25.3"],
             ["fastify-error", "npm:0.3.1"],
             ["fastify-plugin", "npm:3.0.0"],
             ["fastify-static", "npm:4.0.1"],
@@ -24032,7 +24039,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/graphql", null],
             ["@types/mercurius", null],
             ["chokidar", "npm:3.5.1"],
-            ["fastify", "npm:3.15.1"],
+            ["fastify", "npm:3.25.3"],
             ["graphql", "npm:15.5.0"],
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.6.1"],
             ["mkdirp", "npm:1.0.4"],
@@ -25963,15 +25970,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["pino", [
-        ["npm:6.11.3", {
-          "packageLocation": "./.yarn/cache/pino-npm-6.11.3-63b6174ef5-6fb82f11d4.zip/node_modules/pino/",
+        ["npm:6.13.4", {
+          "packageLocation": "./.yarn/cache/pino-npm-6.13.4-5dfd67b749-8146f2bcd1.zip/node_modules/pino/",
           "packageDependencies": [
-            ["pino", "npm:6.11.3"],
+            ["pino", "npm:6.13.4"],
             ["fast-redact", "npm:3.0.0"],
-            ["fast-safe-stringify", "npm:2.0.7"],
+            ["fast-safe-stringify", "npm:2.1.1"],
             ["flatstr", "npm:1.0.12"],
             ["pino-pretty", "npm:4.7.1"],
             ["pino-std-serializers", "npm:3.2.0"],
+            ["process-warning", "npm:1.0.0"],
             ["quick-format-unescaped", "npm:4.0.3"],
             ["sonic-boom", "npm:1.4.1"]
           ],
@@ -26425,6 +26433,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["process-warning", [
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/process-warning-npm-1.0.0-8b886c4a9d-c708a03241.zip/node_modules/process-warning/",
+          "packageDependencies": [
+            ["process-warning", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["progress", [
         ["npm:2.0.3", {
           "packageLocation": "./.yarn/cache/progress-npm-2.0.3-d1f87e2ac6-f67403fe7b.zip/node_modules/progress/",
@@ -26613,6 +26630,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["proxy-addr", "npm:2.0.6"],
             ["forwarded", "npm:0.1.2"],
+            ["ipaddr.js", "npm:1.9.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.0.7", {
+          "packageLocation": "./.yarn/cache/proxy-addr-npm-2.0.7-dae6552872-29c6990ce9.zip/node_modules/proxy-addr/",
+          "packageDependencies": [
+            ["proxy-addr", "npm:2.0.7"],
+            ["forwarded", "npm:0.2.0"],
             ["ipaddr.js", "npm:1.9.1"]
           ],
           "linkType": "HARD",
