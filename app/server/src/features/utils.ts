@@ -3,7 +3,7 @@
 import mercurius, { IResolvers } from 'mercurius';
 import * as Relay from 'graphql-relay';
 import { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
-import logger from '@local/lib/logger';
+import { server } from '@local/index';
 
 /**
  * Resolver type used for making resolvers
@@ -97,7 +97,7 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
             body: result,
         };
     } catch (e) {
-        logger.error(e.message);
+        server.log.error(e.message);
         return {
             isError: true,
             message: e.message,
