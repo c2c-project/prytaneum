@@ -35,6 +35,7 @@ export const errors = {
     permissions: 'Insufficient permissions',
     fileNotFound: 'File not found',
     fileSize: 'File too large',
+    email: 'Emailed failed to send due to an unexpected error'
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;
