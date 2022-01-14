@@ -18,7 +18,7 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) return null; // can't lookup "me" if not logged in
             const user = await User.findUserById(ctx.viewer.id, ctx.prisma);
             return toUserId(user);
-        },
+        }
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -65,6 +65,12 @@ export const resolvers: Resolvers = {
                 const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(updatedUser);
+            });
+        },
+        async resetPasswordRequest(parent, args, ctx, info) {
+            return runMutation(async () => {
+                const result = await User.resetPasswordRequest(ctx.prisma, args.input);
+                return result;
             });
         },
         async deleteAccount(parent, args, ctx, info) {
