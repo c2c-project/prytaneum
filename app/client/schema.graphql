@@ -481,6 +481,12 @@ type Mutation {
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
 
   """
+  send a reset password request if the account exists
+  returns false if an account with the provided email cannot be found
+  """
+  resetPasswordRequest(input: ResetPasswordForm!): ResetPasswordRequestMutationResponse!
+
+  """
   Start the event so that it is "live"
   """
   startEvent(eventId: String!): EventMutationResponse!
@@ -581,6 +587,16 @@ input RegistrationForm {
 input RemoveQuestionFromQueue {
   eventId: ID!
   questionId: ID!
+}
+
+input ResetPasswordForm {
+  email: String!
+}
+
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+  body: Boolean
+  isError: Boolean!
+  message: String!
 }
 
 type Subscription {

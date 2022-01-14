@@ -74,10 +74,20 @@ input LoginForm {
     password: String!
 }
 
+input ResetPasswordForm {
+    email: String!
+}
+
 type UserMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
     body: User
+}
+
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Boolean
 }
 
 type Query {
@@ -92,6 +102,11 @@ type Mutation {
     login(input: LoginForm!): UserMutationResponse!
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
+    """
+    send a reset password request if the account exists
+    returns false if an account with the provided email cannot be found
+    """
+    resetPasswordRequest(input: ResetPasswordForm!): ResetPasswordRequestMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action
