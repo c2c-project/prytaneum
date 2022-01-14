@@ -2,25 +2,11 @@ import { PrismaClient } from '@app/prisma';
 import jwt from 'jsonwebtoken';
 import { errors } from '@local/features/utils';
 import { CreateInvite } from '@local/graphql-types';
-import { sendEmail } from '@local/lib/email/email';
+import { sendInviteEmail } from './invite';
 import { register } from '@local/features/accounts/methods';
 import { fromGlobalId } from 'graphql-relay';
 import { canUserModify } from '../methods';
 import { server } from '@local/index';
-
-interface inviteMessage {
-    eventName: string;
-    eventId: string;
-    startTime: Date;
-    endTime: Date;
-    token: string;
-}
-
-const getInviteMessage = (vars: inviteMessage) => `
-    You have been invited to participate in this Prytaneum event: ${vars.eventName} 
-    starting at ${vars.startTime}
-    Join using the link https://prytaneum.io/events/${vars.eventId}/live?token=${vars.token}
-`;
 
 export async function invite(viewerId: string, prisma: PrismaClient, { email, eventId }: CreateInvite) {
     // Check if event exists
@@ -44,15 +30,15 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     // Sign token
     const token = jwt.sign({ eventId, invitedUserId }, process.env.JWT_SECRET); // TODO expire at some point
 
-    // Construct invite message
-    const inviteMessage = getInviteMessage({
-        eventName: queryResult.title,
-        eventId,
-        startTime: queryResult.startDateTime,
-        endTime: queryResult.endDateTime,
-        token,
-    });
-    return sendEmail(email, 'Prytaneum Invite', inviteMessage, new Date(), '');
+    // Send Email
+    return sendInviteEmail(
+        queryResult.title, 
+        eventId, 
+        queryResult.startDateTime, 
+        queryResult.endDateTime, 
+        email, 
+        token
+    );
 }
 
 export async function validateInvite(token: string, eventId: string, prisma: PrismaClient) {
