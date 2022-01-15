@@ -74,8 +74,18 @@ input LoginForm {
     password: String!
 }
 
-input ResetPasswordForm {
+input ResetPasswordRequestForm {
     email: String!
+}
+
+input ResetPasswordForm {
+    newPassword: String!
+    confirmNewPassword: String!
+    token: String!
+}
+
+input ValidatePasswordResetTokenForm {
+    token: String!
 }
 
 type UserMutationResponse implements MutationResponse {
@@ -90,11 +100,17 @@ type ResetPasswordRequestMutationResponse implements MutationResponse {
     body: Boolean
 }
 
+type ValidatePasswordResetTokenQueryResponse {
+    valid: Boolean!
+    message: String!
+}
+
 type Query {
     """
     Fetch user data about the current user
     """
     me: User
+    validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
 
 type Mutation {
@@ -106,7 +122,8 @@ type Mutation {
     send a reset password request if the account exists
     returns false if an account with the provided email cannot be found
     """
-    resetPasswordRequest(input: ResetPasswordForm!): ResetPasswordRequestMutationResponse!
+    resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+    resetPassword(input: ResetPasswordForm!): MutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action
