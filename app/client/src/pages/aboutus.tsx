@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { Grid, Typography, Hidden } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
