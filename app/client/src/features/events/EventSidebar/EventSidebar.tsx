@@ -6,9 +6,7 @@ import { Skeleton } from '@material-ui/lab';
 import clsx from 'clsx';
 import { graphql, useRefetchableFragment } from 'react-relay';
 
-import {
-    EventSidebarFragment$key,
-} from '@local/__generated__/EventSidebarFragment.graphql';
+import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
 import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
@@ -27,7 +25,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         isViewerModerator
         ...EventDetailsCardFragment
         ...SpeakerListFragment
-        ...useQuestionListFragment
+        ...useQuestionListFragment @arguments(first: 1000)
         ...useLiveFeedbackListFragment
         ...QuestionQueueFragment
         ...QuestionCarouselFragment
@@ -99,7 +97,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
         e.preventDefault();
         setTabIndex(newTabIndex);
-    }
+    };
 
     React.useEffect(() => {
         refetch({}, { fetchPolicy: 'store-and-network' });
@@ -116,7 +114,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         } else {
             setDisplayFeedbackButton(false);
         }
-    }, [tabIndex, data])
+    }, [tabIndex, data]);
 
     return (
         <Grid
@@ -135,38 +133,39 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             >
                 <EventDetailsCard fragmentRef={data} />
                 <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
-                { // Moderator feedback state = 2, Participant feedback state = 1
-                    displayFeedbackButton ?
-                        <SubmitLiveFeedback 
+                {
+                    // Moderator feedback state = 2, Participant feedback state = 1
+                    displayFeedbackButton ? (
+                        <SubmitLiveFeedback
                             className={classes.fullWidth}
                             eventId={data.id}
                             // connectionKey='useLiveFeedbackListFragment_liveFeedback'
-                        /> :
+                        />
+                    ) : (
                         <AskQuestion
                             className={classes.fullWidth}
                             eventId={data.id}
                             connectionKey='useQuestionListFragment_questions'
-                    />
+                        />
+                    )
                 }
             </Grid>
 
             {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
-            { 
-                data.isViewerModerator &&
+            {data.isViewerModerator && (
                 <Tabs variant='scrollable' scrollButtons='auto' value={tabIndex} onChange={handleTabChange}>
                     <Tab label='Question Queue' />
                     <Tab label='Question List' />
                     <Tab label='Live Feedback' />
                 </Tabs>
-            }
-            { 
-                !data.isViewerModerator &&
+            )}
+            {!data.isViewerModerator && (
                 <Tabs value={tabIndex} onChange={handleTabChange}>
                     <Tab label='Question List' />
                     <Tab label='Live Feedback' />
                 </Tabs>
-            }
+            )}
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
                     <QuestionQueue fragmentRef={data} />
