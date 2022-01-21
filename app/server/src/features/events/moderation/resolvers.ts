@@ -51,15 +51,14 @@ export const resolvers: Resolvers = {
         async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            const { event, currentQuestion } = await Moderation.changeCurrentQuestion(
+            const { event, newCurrentQuestion } = await Moderation.changeCurrentQuestion(
                 ctx.viewer.id,
                 ctx.prisma,
                 eventId,
                 1
             );
-
             const eventWithGlobalId = toEventId(event);
-            const currentQuestionWithGlobalId = toQuestionId(currentQuestion);
+            const newCurrentQuestionWithGlobalId = toQuestionId(newCurrentQuestion);
 
             // TODO: #QQRedesign delete once code complete
             ctx.pubsub.publish({
@@ -68,23 +67,26 @@ export const resolvers: Resolvers = {
                     eventUpdates: eventWithGlobalId,
                 },
             });
+
             ctx.pubsub.publish({
-                topic: 'questionAddedToRecord',
+                topic: 'enqueuedRemoveQuestion',
                 payload: {
-                    questionAddedToRecord: {
+                    enqueuedRemoveQuestion: {
                         edge: {
-                            node: currentQuestionWithGlobalId,
-                            cursor: currentQuestionWithGlobalId.createdAt.getTime().toString(),
+                            node: newCurrentQuestionWithGlobalId,
+                            cursor: newCurrentQuestionWithGlobalId.createdAt.getTime().toString(),
                         },
                     },
                 },
             });
+
             ctx.pubsub.publish({
-                topic: 'questionRemovedFromEnqueued',
+                topic: 'recordPushQuestion',
                 payload: {
-                    questionRemovedFromEnqueued: {
+                    recordPushQuestion: {
                         edge: {
-                            node: currentQuestionWithGlobalId,
+                            node: newCurrentQuestionWithGlobalId,
+                            cursor: newCurrentQuestionWithGlobalId.createdAt.getTime().toString(),
                         },
                     },
                 },
@@ -112,9 +114,9 @@ export const resolvers: Resolvers = {
                 },
             });
             ctx.pubsub.publish({
-                topic: 'questionRemovedFromRecord',
+                topic: 'enqueuedUnshiftQuestion',
                 payload: {
-                    questionRemovedFromRecord: {
+                    enqueuedUnshiftQuestion: {
                         edge: {
                             node: prevCurrentQuestionWithGlobalId,
                             cursor: prevCurrentQuestion.createdAt.getTime().toString(),
@@ -123,11 +125,12 @@ export const resolvers: Resolvers = {
                 },
             });
             ctx.pubsub.publish({
-                topic: 'questionAddedToEnqueued',
+                topic: 'recordRemoveQuestion',
                 payload: {
-                    questionAddedToEnqueued: {
+                    recordRemoveQuestion: {
                         edge: {
                             node: prevCurrentQuestionWithGlobalId,
+                            cursor: prevCurrentQuestion.createdAt.getTime().toString(),
                         },
                     },
                 },
@@ -241,11 +244,9 @@ export const resolvers: Resolvers = {
                     },
                 });
                 ctx.pubsub.publish({
-                    topic: 'questionAddedToEnqueued',
+                    topic: 'enqueuedPushQuestion',
                     payload: {
-                        edge: {
-                            questionAddedToEnqueued: questionWithGlobalId,
-                        },
+                        enqueuedPushQuestion: { edge },
                     },
                 });
                 return edge;
@@ -281,11 +282,9 @@ export const resolvers: Resolvers = {
                     },
                 });
                 ctx.pubsub.publish({
-                    topic: 'questionRemovedFromEnqueued',
+                    topic: 'enqueuedRemoveQuestion',
                     payload: {
-                        edge: {
-                            questionRemovedFromEnqueued: questionWithGlobalId,
-                        },
+                        enqueuedRemoveQuestion: { edge },
                     },
                 });
                 return edge;

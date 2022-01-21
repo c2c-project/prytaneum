@@ -584,6 +584,10 @@ input RemoveQuestionFromQueue {
 }
 
 type Subscription {
+  enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
 
@@ -612,6 +616,9 @@ type Subscription {
   questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
   questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
+  recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
 }
 
 input UpdateEmailForm {

@@ -151,7 +151,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
         data: { currentQuestion: nextQuestion.position },
         select: { currentQuestion: true, id: true },
     });
-    return { event: updatedEvent, currentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
+    return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
 }
 
 /**

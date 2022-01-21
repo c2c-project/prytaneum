@@ -844,6 +844,9 @@ export type RemoveQuestionFromQueue = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  enqueuedPushQuestion: EventQuestionEdgeContainer;
+  enqueuedRemoveQuestion: EventQuestionEdgeContainer;
+  enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
   /** TODO: #QQRedesign delete after code complete */
@@ -868,6 +871,24 @@ export type Subscription = {
   questionRemovedFromEnqueued: EventQuestionEdgeContainer;
   questionRemovedFromRecord: EventQuestionEdgeContainer;
   questionUpdated: EventQuestionEdgeContainer;
+  recordPushQuestion: EventQuestionEdgeContainer;
+  recordRemoveQuestion: EventQuestionEdgeContainer;
+  recordUnshiftQuestion: EventQuestionEdgeContainer;
+};
+
+
+export type SubscriptionEnqueuedPushQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEnqueuedRemoveQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEnqueuedUnshiftQuestionArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -927,6 +948,21 @@ export type SubscriptionQuestionRemovedFromRecordArgs = {
 
 
 export type SubscriptionQuestionUpdatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordPushQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordRemoveQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordUnshiftQuestionArgs = {
   eventId: Scalars['ID'];
 };
 

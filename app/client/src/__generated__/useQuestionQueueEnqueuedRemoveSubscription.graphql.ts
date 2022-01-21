@@ -4,12 +4,12 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type useQuestionQueueRemovedFromRecordSubscriptionVariables = {
+export type useQuestionQueueEnqueuedRemoveSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;
 };
-export type useQuestionQueueRemovedFromRecordSubscriptionResponse = {
-    readonly questionRemovedFromRecord: {
+export type useQuestionQueueEnqueuedRemoveSubscriptionResponse = {
+    readonly enqueuedRemoveQuestion: {
         readonly edge: {
             readonly node: {
                 readonly id: string;
@@ -17,18 +17,18 @@ export type useQuestionQueueRemovedFromRecordSubscriptionResponse = {
         };
     };
 };
-export type useQuestionQueueRemovedFromRecordSubscription = {
-    readonly response: useQuestionQueueRemovedFromRecordSubscriptionResponse;
-    readonly variables: useQuestionQueueRemovedFromRecordSubscriptionVariables;
+export type useQuestionQueueEnqueuedRemoveSubscription = {
+    readonly response: useQuestionQueueEnqueuedRemoveSubscriptionResponse;
+    readonly variables: useQuestionQueueEnqueuedRemoveSubscriptionVariables;
 };
 
 
 
 /*
-subscription useQuestionQueueRemovedFromRecordSubscription(
+subscription useQuestionQueueEnqueuedRemoveSubscription(
   $eventId: ID!
 ) {
-  questionRemovedFromRecord(eventId: $eventId) {
+  enqueuedRemoveQuestion(eventId: $eventId) {
     edge {
       node {
         id
@@ -71,14 +71,14 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "useQuestionQueueRemovedFromRecordSubscription",
+    "name": "useQuestionQueueEnqueuedRemoveSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "questionRemovedFromRecord",
+        "name": "enqueuedRemoveQuestion",
         "plural": false,
         "selections": [
           {
@@ -118,14 +118,14 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "useQuestionQueueRemovedFromRecordSubscription",
+    "name": "useQuestionQueueEnqueuedRemoveSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "questionRemovedFromRecord",
+        "name": "enqueuedRemoveQuestion",
         "plural": false,
         "selections": [
           {
@@ -173,14 +173,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a09384b87e0f29a551c173e778de2f81",
+    "cacheID": "1a1a718c090bf3138624cf07e43ce250",
     "id": null,
     "metadata": {},
-    "name": "useQuestionQueueRemovedFromRecordSubscription",
+    "name": "useQuestionQueueEnqueuedRemoveSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionQueueRemovedFromRecordSubscription(\n  $eventId: ID!\n) {\n  questionRemovedFromRecord(eventId: $eventId) {\n    edge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
+    "text": "subscription useQuestionQueueEnqueuedRemoveSubscription(\n  $eventId: ID!\n) {\n  enqueuedRemoveQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '63e1e1d736dd42bdf061fde38eb12ffd';
+(node as any).hash = '0866eec64d7bba55fd8b208c82fdd0aa';
 export default node;

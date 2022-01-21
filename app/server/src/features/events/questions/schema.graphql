@@ -129,6 +129,19 @@ type Subscription {
     questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
     questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
 
+
+    # Do not need to control the order that things 
+    # are removed since we cannot control that on the frontend
+    # We need to control the order that things are added since
+    # we control that with append or prepend ont he frontend
+    recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
+    enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
     questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
     questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
 }

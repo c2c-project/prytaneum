@@ -525,6 +525,18 @@ export type Subscription = {
     questionDeleted: EventQuestionEdgeContainer;
     questionAddedToRecord: EventQuestionEdgeContainer;
     questionRemovedFromRecord: EventQuestionEdgeContainer;
+    /**
+     * Do not need to control the order that things
+     * are removed since we cannot control that on the frontend
+     * We need to control the order that things are added since
+     * we control that with append or prepend ont he frontend
+     */
+    recordPushQuestion: EventQuestionEdgeContainer;
+    recordUnshiftQuestion: EventQuestionEdgeContainer;
+    recordRemoveQuestion: EventQuestionEdgeContainer;
+    enqueuedPushQuestion: EventQuestionEdgeContainer;
+    enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
+    enqueuedRemoveQuestion: EventQuestionEdgeContainer;
     questionAddedToEnqueued: EventQuestionEdgeContainer;
     questionRemovedFromEnqueued: EventQuestionEdgeContainer;
 };
@@ -566,6 +578,30 @@ export type SubscriptionquestionAddedToRecordArgs = {
 };
 
 export type SubscriptionquestionRemovedFromRecordArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionrecordPushQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionrecordUnshiftQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionrecordRemoveQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionenqueuedPushQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionenqueuedUnshiftQuestionArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionenqueuedRemoveQuestionArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -1822,6 +1858,48 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptionquestionRemovedFromRecordArgs, 'eventId'>
+    >;
+    recordPushQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'recordPushQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionrecordPushQuestionArgs, 'eventId'>
+    >;
+    recordUnshiftQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'recordUnshiftQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionrecordUnshiftQuestionArgs, 'eventId'>
+    >;
+    recordRemoveQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'recordRemoveQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionrecordRemoveQuestionArgs, 'eventId'>
+    >;
+    enqueuedPushQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'enqueuedPushQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionenqueuedPushQuestionArgs, 'eventId'>
+    >;
+    enqueuedUnshiftQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'enqueuedUnshiftQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionenqueuedUnshiftQuestionArgs, 'eventId'>
+    >;
+    enqueuedRemoveQuestion?: SubscriptionResolver<
+        ResolversTypes['EventQuestionEdgeContainer'],
+        'enqueuedRemoveQuestion',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionenqueuedRemoveQuestionArgs, 'eventId'>
     >;
     questionAddedToEnqueued?: SubscriptionResolver<
         ResolversTypes['EventQuestionEdgeContainer'],

@@ -158,6 +158,66 @@ export const resolvers: Resolvers = {
                 }
             ),
         },
+        enqueuedPushQuestion: {
+            subscribe: withFilter<{ enqueuedPushQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('enqueuedPushQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.enqueuedPushQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        enqueuedUnshiftQuestion: {
+            subscribe: withFilter<{ enqueuedUnshiftQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('enqueuedUnshiftQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.enqueuedUnshiftQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        enqueuedRemoveQuestion: {
+            subscribe: withFilter<{ enqueuedRemoveQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('enqueuedRemoveQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.enqueuedRemoveQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        recordPushQuestion: {
+            subscribe: withFilter<{ recordPushQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('recordPushQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.recordPushQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        recordUnshiftQuestion: {
+            subscribe: withFilter<{ recordUnshiftQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('recordUnshiftQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.recordUnshiftQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
+        recordRemoveQuestion: {
+            subscribe: withFilter<{ recordRemoveQuestion: EventQuestionEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('recordRemoveQuestion'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: questionId } = fromGlobalId(payload.recordRemoveQuestion.edge.node.id);
+                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                }
+            ),
+        },
     },
     EventQuestion: {
         async createdBy(parent, args, ctx, info) {

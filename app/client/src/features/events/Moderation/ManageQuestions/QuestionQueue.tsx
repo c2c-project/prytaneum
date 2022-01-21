@@ -170,9 +170,21 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── COMPUTED VALUES ────────────────────────────────────────────────────────────
     //
-    const enqueuedQuestions = React.useMemo(() => questionQueue?.enqueuedQuestions?.edges ?? [], [questionQueue]);
-    const questionRecord = React.useMemo(() => questionQueue?.questionRecord?.edges ?? [], [questionQueue]);
-    const canGoBackward = React.useMemo(() => questionRecord.length > 1, [questionRecord]);
+    const enqueuedQuestions = React.useMemo(
+        () =>
+            questionQueue?.enqueuedQuestions?.edges
+                ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
+                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
+        [questionQueue]
+    );
+    const questionRecord = React.useMemo(
+        () =>
+            questionQueue?.questionRecord?.edges
+                ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
+                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
+        [questionQueue]
+    );
+    const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
     const canGoForward = React.useMemo(() => enqueuedQuestions.length > 0, [enqueuedQuestions]);
     const currentQuestion = React.useMemo(
         () => (questionRecord.length > 0 ? questionRecord[questionRecord.length - 1] : null),
@@ -208,11 +220,11 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
             <Grid container justify='space-around'>
                 <Typography variant='body2'>
-                    <b>{questionQueue?.enqueuedQuestions?.edges?.length ?? 'Unknown'}</b>
+                    <b>{enqueuedQuestions.length ?? 'Unknown'}</b>
                     &nbsp;Remaining
                 </Typography>
                 <Typography variant='body2'>
-                    <b>{questionQueue?.questionRecord?.edges?.length ?? 'Unknown'}</b>
+                    <b>{questionRecord.length ?? 'Unknown'}</b>
                     &nbsp;Asked (Includes Current)
                 </Typography>
                 <Divider className={classes.divider} />
@@ -275,18 +287,15 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     <Paper className={classes.pastQuestionsContainer}>
                         <Typography variant='h5'>Past Questions</Typography>
                         <List>
-                            {questionQueue?.questionRecord?.edges
-                                ?.slice(0, -1) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
-                                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0))
-                                .map((question) => (
-                                    <ListItem key={question.node.id}>
-                                        <Card className={classes.fullWidth}>
-                                            <QuestionAuthor fragmentRef={question.node} />
-                                            <QuestionContent fragmentRef={question.node} />
-                                            <QuestionStats fragmentRef={question.node} />
-                                        </Card>
-                                    </ListItem>
-                                )) ?? []}
+                            {questionRecord.slice(0, -1).map((question) => (
+                                <ListItem key={question.node.id}>
+                                    <Card className={classes.fullWidth}>
+                                        <QuestionAuthor fragmentRef={question.node} />
+                                        <QuestionContent fragmentRef={question.node} />
+                                        <QuestionStats fragmentRef={question.node} />
+                                    </Card>
+                                </ListItem>
+                            )) ?? []}
                         </List>
                     </Paper>
                     {currentQuestion && (
@@ -304,25 +313,22 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     <DragDropContext onDragEnd={onDragEnd}>
                         <DropArea getStyle={getListStyle} droppableId='droppable'>
                             <Typography variant='h5'>In Queue</Typography>
-                            {questionQueue?.enqueuedQuestions?.edges
-                                ?.slice(0) // hacky way to copy the array -- feeling lazy TODO: more elegant solution
-                                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0))
-                                ?.map((question, idx) => (
-                                    <DragArea
-                                        getStyle={itemStyle}
-                                        key={question.node.id}
-                                        index={idx}
-                                        draggableId={question.node.id}
-                                    >
-                                        <ListItem>
-                                            <Card className={classes.fullWidth}>
-                                                <QuestionAuthor fragmentRef={question.node} />
-                                                <QuestionContent fragmentRef={question.node} />
-                                                <QuestionStats fragmentRef={question.node} />
-                                            </Card>
-                                        </ListItem>
-                                    </DragArea>
-                                )) ?? []}
+                            {enqueuedQuestions.map((question, idx) => (
+                                <DragArea
+                                    getStyle={itemStyle}
+                                    key={question.node.id}
+                                    index={idx}
+                                    draggableId={question.node.id}
+                                >
+                                    <ListItem>
+                                        <Card className={classes.fullWidth}>
+                                            <QuestionAuthor fragmentRef={question.node} />
+                                            <QuestionContent fragmentRef={question.node} />
+                                            <QuestionStats fragmentRef={question.node} />
+                                        </Card>
+                                    </ListItem>
+                                </DragArea>
+                            )) ?? []}
                         </DropArea>
                     </DragDropContext>
                 </DialogContent>
