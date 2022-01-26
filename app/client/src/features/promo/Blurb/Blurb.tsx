@@ -43,8 +43,8 @@ export function Blurb({title, icon, paragraphs}: Props) {
                 </div>
             }
             {
-                paragraphs?.map((paragraph) =>
-                    <Typography variant='body1' className={classes.paragraph}>
+                paragraphs?.map((paragraph, index) =>
+                    <Typography key={index} variant='body1' className={classes.paragraph}>
                         {paragraph}
                     </Typography>
                 )
