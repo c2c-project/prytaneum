@@ -12,6 +12,7 @@ import { Blurb } from '@local/features/promo/Blurb'
 import { Carousel } from '@local/features/promo/Carousel';
 import { ParticipantDemo, ModeratorDemo } from '@local/features/promo/InteractiveDemo'
 import { ScrollButton } from '@local/features/promo/ScrollButton'
+import { ConditionalRender } from '@local/components';
 
 const useStyles = makeStyles((theme) => ({
     landing: {
@@ -53,7 +54,7 @@ export default function Home() {
             icon={<PeopleAltOutlinedIcon/>}
             paragraphs={
                 [
-                    'The residents who want to engage in discussion on a policy topic. Participants can type and ask questions; they can like, quote, and reply to other participant&apos;s questions; they can participate in breakout rooms.',
+                    'The residents who want to engage in discussion on a policy topic. Participants can type and ask questions; they can like, quote, and reply to other participant\'s questions; they can participate in breakout rooms.',
                 ]
             }
         />,
@@ -62,7 +63,7 @@ export default function Home() {
             icon={<SupervisedUserCircleOutlinedIcon/>}
             paragraphs={
                 [
-                    'The mediators who handle participants&apos; questions to be answered by the speaker. Moderators see the full question list and the question queue that was  curated by the moderator assistants; they select which question to ask next;  they ask the question on the video call for the speaker to respond. Moderators interact with the speaker via a streaming service of the organizer&apos;s choice.',
+                    'The mediators who handle participants\' questions to be answered by the speaker. Moderators see the full question list and the question queue that was  curated by the moderator assistants; they select which question to ask next;  they ask the question on the video call for the speaker to respond. Moderators interact with the speaker via a streaming service of the organizer\'s choice.',
                 ]
             }
         />,
@@ -71,7 +72,7 @@ export default function Home() {
             icon={<RecordVoiceOverOutlinedIcon/>}
             paragraphs={
                 [
-                    'The main speaker of a discussion. The speaker does not see the question list or  the question queue. Instead, meetings appear like an ordinary video call with  the moderator. The speaker interacts with the moderators via a streaming service  of the organizer&apos;s choice.',
+                    'The main speaker of a discussion. The speaker does not see the question list or  the question queue. Instead, meetings appear like an ordinary video call with  the moderator. The speaker interacts with the moderators via a streaming service  of the organizer\'s choice.',
                 ]
             }
         />,
@@ -145,7 +146,9 @@ export default function Home() {
         <>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.landing}>
                 <CallToAction/>
-                <ScrollButton sentinelRef={sentinelRef}/>
+                <ConditionalRender client>
+                    <ScrollButton sentinelRef={sentinelRef}/>
+                </ConditionalRender>
             </Grid>
             <div ref={sentinelRef} className={classes.sentinel}>
                 <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
