@@ -18,6 +18,13 @@ export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
                     createdBy {
                         id
                     }
+                    refFeedback {
+                        createdBy {
+                            id
+                        }
+                        ...LiveFeedbackReplyFragment
+                    }
+                    ...LiveFeedbackReplyFragment
                     ...LiveFeedbackAuthorFragment
                 }
             }
@@ -39,6 +46,13 @@ export const USE_LIVE_FEEDBACK_LIST = graphql`
                     createdBy {
                         id
                     }
+                    refFeedback {
+                        createdBy {
+                            id
+                        }
+                        ...LiveFeedbackReplyFragment
+                    }
+                    ...LiveFeedbackReplyFragment
                     ...LiveFeedbackAuthorFragment
                 }
             }
@@ -86,9 +100,10 @@ export function useLiveFeedbackList({ fragmentRef }: Props) {
 
     useSubscription(config);
 
-    const filteredList = React.useMemo(
-        () => feedbackList.filter(feedback => feedback.createdBy?.id === user?.id), [feedbackList, user]
-    );
     
+    const filteredList = React.useMemo(
+        () => feedbackList.filter(feedback => feedback.createdBy?.id === user?.id || feedback.refFeedback?.createdBy?.id === user?.id), [feedbackList, user]
+    );
+
     return { liveFeedback: isModerator ? feedbackList : filteredList, eventId, connections: liveFeedback?.__id ? [liveFeedback.__id] : [] };
 }

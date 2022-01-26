@@ -10,14 +10,14 @@ import { useForm } from '@local/features/core';
 
 export type TLiveFeedbackFormState = { message: string };
 
-export interface QuestionFormProps {
-    quote?: React.ReactNode;
+export interface LiveFeedbackFormProps {
+    reply?: React.ReactNode;
     onSubmit?: (state: TLiveFeedbackFormState) => void;
     onCancel?: () => void;
 }
 
 // TODO: eliminate inline styles
-export function LiveFeedbackForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
+export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackFormProps) {
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
         message: '',
@@ -27,13 +27,13 @@ export function LiveFeedbackForm({ quote, onSubmit, onCancel }: QuestionFormProp
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
-            <FormTitle title='Live Feedback Form' />
-            {quote}
+            <FormTitle title={reply ? 'Live Feedback Reply Form' : 'Live Feedback Form'} />
+            {reply}
             <FormContent>
                 <TextField
                     id='feedback-field'
-                    name='feedback'
-                    label='Your Feedback...'
+                    name={reply ? 'feedback-reply' : 'feedback'}
+                    label={reply ? 'Feedback Reply...' : 'Your Feedback...'}
                     autoFocus
                     error={Boolean(errors.message)}
                     helperText={errors.message}
@@ -50,7 +50,7 @@ export function LiveFeedbackForm({ quote, onSubmit, onCancel }: QuestionFormProp
                     </Button>
                 )}
                 <Button disabled={!isFeedbackValid} type='submit' variant='contained' color='primary'>
-                    Ask
+                    {reply ? 'Reply' : 'Ask'}
                 </Button>
             </FormActions>
         </Form>

@@ -63,6 +63,12 @@ fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
   createdAt
 }
 
+fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+  id
+  message
+  ...LiveFeedbackAuthorFragment
+}
+
 fragment QuestionActionsFragment on EventQuestion {
   id
   ...QuoteFragment
@@ -169,6 +175,14 @@ fragment useLiveFeedbackListFragment on Event {
         createdBy {
           id
         }
+        refFeedback {
+          createdBy {
+            id
+          }
+          ...LiveFeedbackReplyFragment
+          id
+        }
+        ...LiveFeedbackReplyFragment
         ...LiveFeedbackAuthorFragment
         __typename
       }
@@ -375,7 +389,14 @@ v18 = [
     "name": "first",
     "value": 100
   }
-];
+],
+v19 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -616,14 +637,23 @@ return {
                         "plural": false,
                         "selections": [
                           (v3/*: any*/),
+                          (v19/*: any*/),
+                          (v12/*: any*/),
                           {
                             "alias": null,
                             "args": null,
-                            "kind": "ScalarField",
-                            "name": "message",
+                            "concreteType": "EventLiveFeedback",
+                            "kind": "LinkedField",
+                            "name": "refFeedback",
+                            "plural": false,
+                            "selections": [
+                              (v12/*: any*/),
+                              (v3/*: any*/),
+                              (v19/*: any*/),
+                              (v13/*: any*/)
+                            ],
                             "storageKey": null
                           },
-                          (v12/*: any*/),
                           (v13/*: any*/),
                           (v2/*: any*/)
                         ],
@@ -707,12 +737,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "251b723ba60a384090e3020528564fb6",
+    "cacheID": "e6d6a5adb0eab0c26607860e6fb08132",
     "id": null,
     "metadata": {},
     "name": "EventSidebarRefetchable",
     "operationKind": "query",
-    "text": "query EventSidebarRefetchable(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...EventSidebarFragment\n    id\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment_1EWyOX\n  ...useLiveFeedbackListFragment\n  ...QuestionQueueFragment\n  ...QuestionCarouselFragment\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        id\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQueueFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useLiveFeedbackListFragment on Event {\n  id\n  liveFeedback(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        ...LiveFeedbackAuthorFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionListFragment_1EWyOX on Event {\n  id\n  currentQuestion\n  questions(first: 1000, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query EventSidebarRefetchable(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...EventSidebarFragment\n    id\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  topic\n  description\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment_1EWyOX\n  ...useLiveFeedbackListFragment\n  ...QuestionQueueFragment\n  ...QuestionCarouselFragment\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        id\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQueueFragment on Event {\n  id\n  currentQuestion\n  queuedQuestions(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useLiveFeedbackListFragment on Event {\n  id\n  liveFeedback(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionListFragment_1EWyOX on Event {\n  id\n  currentQuestion\n  questions(first: 1000, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

@@ -19,7 +19,13 @@ export type useLiveFeedbackListSubscriptionResponse = {
                 readonly createdBy: {
                     readonly id: string;
                 } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
+                readonly refFeedback: {
+                    readonly createdBy: {
+                        readonly id: string;
+                    } | null;
+                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
             };
         };
     };
@@ -45,6 +51,14 @@ subscription useLiveFeedbackListSubscription(
         createdBy {
           id
         }
+        refFeedback {
+          createdBy {
+            id
+          }
+          ...LiveFeedbackReplyFragment
+          id
+        }
+        ...LiveFeedbackReplyFragment
         ...LiveFeedbackAuthorFragment
       }
     }
@@ -58,6 +72,12 @@ fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
     avatar
   }
   createdAt
+}
+
+fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+  id
+  message
+  ...LiveFeedbackAuthorFragment
 }
 */
 
@@ -103,6 +123,56 @@ v5 = {
   "kind": "ScalarField",
   "name": "message",
   "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v4/*: any*/)
+  ],
+  "storageKey": null
+},
+v7 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "LiveFeedbackReplyFragment"
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v4/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "avatar",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -139,18 +209,21 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  (v6/*: any*/),
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
+                    "concreteType": "EventLiveFeedback",
                     "kind": "LinkedField",
-                    "name": "createdBy",
+                    "name": "refFeedback",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/)
+                      (v6/*: any*/),
+                      (v7/*: any*/)
                     ],
                     "storageKey": null
                   },
+                  (v7/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -203,39 +276,23 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  (v8/*: any*/),
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
+                    "concreteType": "EventLiveFeedback",
                     "kind": "LinkedField",
-                    "name": "createdBy",
+                    "name": "refFeedback",
                     "plural": false,
                     "selections": [
+                      (v8/*: any*/),
                       (v4/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "firstName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "avatar",
-                        "storageKey": null
-                      }
+                      (v5/*: any*/),
+                      (v9/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "createdAt",
-                    "storageKey": null
-                  }
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -248,14 +305,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b38b4e003b98a793123615182b6bff7d",
+    "cacheID": "09d0b7abfb397ca6e066d562d5284311",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n"
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
   }
 };
 })();
-(node as any).hash = 'f05c5c1ef52787706c77fa1b7172aa37';
+(node as any).hash = '79317d818502fdfb191313facf1e3a2b';
 export default node;
