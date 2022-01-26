@@ -5,7 +5,6 @@ import * as Feedback from './methods';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toUserId = toGlobalId('User');
-// const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Query: {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
-import { Card, CardContent, Grid, List, ListItem, Typography, CardActions, Button } from '@material-ui/core';
+import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@material-ui/core';
 import clsx from 'clsx';
 import { useUser } from '@local/features/accounts';
 import { useLiveFeedbackList } from './useLiveFeedbackList';
