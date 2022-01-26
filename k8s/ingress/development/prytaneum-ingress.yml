@@ -5,11 +5,14 @@ metadata:
   namespace: development
   annotations:
     kubernetes.io/ingress.class: "gce"
+    networking.gke.io/v1beta1.FrontendConfig: "prytaneum-frontend-config"
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.regional-static-ip-name: dev-prytaneum-io
+    networking.gke.io/managed-certificates: dev-prytaneum-io-cert
 spec:
   rules:
-  - http:
+  - host: dev.prytaneum.io
+    http:
       paths:
       - backend:
           service:

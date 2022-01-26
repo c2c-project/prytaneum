@@ -7,10 +7,8 @@ import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
-import fastifyMultipart from 'fastify-multipart';
 import fastifyCors from 'fastify-cors';
 
-// import { routes as inviteRoute } from '@local/features/events/invites/invite';
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
 
@@ -35,6 +33,8 @@ function verifyEnv() {
     }
 }
 
+export const server = build();
+
 async function start() {
     // Google Cloud Run will set this environment variable for you, so
     // you can also use it to detect if you are running in Cloud Run
@@ -46,8 +46,7 @@ async function start() {
     const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST;
 
     try {
-        const server = build();
-
+        if (!server) throw new Error('Server Building Failed');
         // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
         mercuriusCodgen(server, {
             targetPath: join(__dirname, './graphql-types.ts'),
@@ -67,6 +66,13 @@ async function start() {
             },
         });
 
+        server.addHook('preHandler', (req, reply, next) => {
+            if (req.body) {
+              req.log.info({ body: req.body }, 'parsed body')
+            }
+            next()
+        });
+
         server.register(fastifyCors, {
             origin: '*',
             methods: ['POST', 'GET', 'DELETE', 'OPTIONS', 'PUT', 'HEAD'],
@@ -80,6 +86,10 @@ async function start() {
             subscription: {
                 context: buildSubscriptionContext,
             },
+            errorFormatter: (error, ...args) => {
+                server.log.error(error);
+                return mercurius.defaultErrorFormatter(error, ...args);
+            },
         });
 
         server.register(cookie, {
@@ -88,29 +98,16 @@ async function start() {
 
         server.register(AltairFastify);
 
-        // server.register(fastifyMultipart, {
-        //     limits: {
-        //         fieldNameSize: 100, // Max field name size in bytes
-        //         fieldSize: 100, // Max field value size in bytes
-        //         fields: 10, // Max number of non-file fields
-        //         fileSize: 1000000, // For multipart forms, the max file size in bytes
-        //         files: 1, // Max number of file fields
-        //         headerPairs: 2000, // Max number of header key=>value pairs
-        //     },
-        //     // attachFieldsToBody: true
-        // });
-
         // Routes for kubernetes health checks
-        server.get('/', async (req, res) => ({ status: 'Healthy' }));
-        server.get('/healthz', async (req, res) => ({ status: 'Healthy' }))
+        server.get('/', async () => ({ status: 'Healthy' }));
+        server.get('/healthz', async () => ({ status: 'Healthy' }));
 
-        // server.register(defaultRoute);
         verifyEnv();
-        console.log(`ENV: ${process.env.NODE_ENV} Server running on ${address}:${port}`);
+        server.log.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);
         const runAddress = await server.listen(port, address);
-        console.log(`Listening on ${runAddress}`);
+        server.log.info(`Listening on ${runAddress}`);
     } catch (err) {
-        console.error(err);
+        server.log.error(err);
         process.exit(1);
     }
 }

@@ -64,12 +64,13 @@ export default function Login() {
                     width={697}
                     height={383}
                     objectFit='contain'
+                    alt='Login Illustation'
                 />
             </Grid>
             <Grid item md={5} className={classes.formContainer}>
                 <Paper className={classes.paper}>
                     <LoginForm
-                        onSuccess={() => router.push('/app/home')}
+                        onSuccess={() => router.push('/organizations/me')}
                         secondaryActions={
                             <Link href='/register' className={classes.link}>
                                 Or, register an account

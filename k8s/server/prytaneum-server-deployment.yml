@@ -35,23 +35,23 @@ spec:
                 configMapKeyRef:
                   key: SERVER_PORT
                   name: prytaneum-server-config
-            - name: DB_USER
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  key: username
+                  key: database_url
                   name: db-secret
-            - name: DB_PASSWORD
+            - name: MAILGUN_API_KEY
               valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: db-secret
-            - name: DB_NAME
+                  key: api_key
+                  name: mailgun-secret
+            - name: MAILGUN_DOMAIN
               valueFrom:
                 secretKeyRef:
-                  key: database
-                  name: db-secret
-            - name: DB_HOST
+                  key: domain
+                  name: mailgun-secret
+            - name: MAILGUN_FROM_EMAIL
               valueFrom:
                 secretKeyRef:
-                  key: host
-                  name: db-secret
+                  key: from_email
+                  name: mailgun-secret 

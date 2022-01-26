@@ -71,20 +71,21 @@ export function EventSettings({ queryRef }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
-    const [user] = useUser();
+    const [user,, isLoading] = useUser();
     const [canView, setCanView] = React.useState(false);
 
     React.useEffect(() => {
-        if (!user) router.push('/login');
+        if (isLoading) return;
+        if (!user) router.push('/');
         else if (data.node?.isViewerModerator) {
             setCanView(true);
         } else {
             displaySnack('You must be a moderator to view');
-            router.push('/app/home');
+            router.back();
         }
-    }, [user, router, data, displaySnack]);
+    }, [isLoading, user, router, data, displaySnack]);
 
-    if (!data.node || !canView) return <Loader />;
+    if (!data.node || !canView || isLoading) return <Loader />;
 
     return (
         <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>

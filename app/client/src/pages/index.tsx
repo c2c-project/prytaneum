@@ -49,6 +49,7 @@ export default function Home() {
 
     const roles = [
         <Blurb
+            key='participant-role'
             title='Partcipant Role'
             icon={<PeopleAltOutlinedIcon/>}
             paragraphs={
@@ -58,6 +59,7 @@ export default function Home() {
             }
         />,
         <Blurb
+            key='moderator-role'
             title='Moderator Role'
             icon={<SupervisedUserCircleOutlinedIcon/>}
             paragraphs={
@@ -67,6 +69,7 @@ export default function Home() {
             }
         />,
         <Blurb
+            key='speaker-role'
             title='Speaker Role'
             icon={<RecordVoiceOverOutlinedIcon/>}
             paragraphs={
@@ -79,11 +82,13 @@ export default function Home() {
 
     const views = [
         <ParticipantDemo 
+            key='participant-view'
             title='Participant View' 
             shadow='10px 10px 0 0 #4056a1' 
             scale='scale(0.95)'
         />,
-        <ModeratorDemo 
+        <ModeratorDemo
+            key='moderator-view'
             title='Moderator View' 
             shadow='10px 10px 0 0 #8eafff' 
             scale='scale(0.95)'
@@ -144,6 +149,7 @@ export default function Home() {
                         width={280}
                         height={200}
                         objectFit='contain'
+                        alt='democracy fund logo'
                     />
                 </Grid>
                 <Grid item>
@@ -152,6 +158,7 @@ export default function Home() {
                         width={150}
                         height={200}
                         objectFit='contain'
+                        alt='prytaneum logo'
                     />
                 </Grid>
                 <Grid item>
@@ -160,6 +167,7 @@ export default function Home() {
                         width={450}
                         height={200}
                         objectFit='contain'
+                        alt='ucr tecd logo'
                     />
                 </Grid>
             </Grid>

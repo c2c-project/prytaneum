@@ -4,14 +4,14 @@ import * as Invites from './methods';
 
 export const resolvers: Resolvers = {
     Query: {
-        async validateInvite(parent, args, ctx, info) {
+        async validateInvite(parent, args, ctx) {
             const { id: eventId } = fromGlobalId(args.input.eventId);
             const { token } = args.input;
             return Invites.validateInvite(token, eventId, ctx.prisma);
         }
     },
     Mutation: {
-        async createInvite(parent, args, ctx, info) {
+        async createInvite(parent, args, ctx) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 return Invites.invite(ctx.viewer.id, ctx.prisma, args.input);

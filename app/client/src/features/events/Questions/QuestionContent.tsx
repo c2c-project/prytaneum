@@ -18,7 +18,7 @@ export function QuestionContent({ fragmentRef, typographyProps = {}, ...props }:
     const questionContentData = useFragment(QUESTION_CONTENT_FRAGMENT, fragmentRef);
     return (
         <CardContent {...props}>
-            <Typography {...typographyProps}>{questionContentData.question}</Typography>
+            <Typography style={{ wordBreak: 'break-word' }} {...typographyProps}>{questionContentData.question}</Typography>
         </CardContent>
     );
 }
