@@ -49,7 +49,7 @@ export default function Home() {
 
     const roles = [
         <Blurb
-            key='participant-role'
+            key='blurb1'
             title='Partcipant Role'
             icon={<PeopleAltOutlinedIcon/>}
             paragraphs={
@@ -59,7 +59,7 @@ export default function Home() {
             }
         />,
         <Blurb
-            key='moderator-role'
+            key='blurb2'
             title='Moderator Role'
             icon={<SupervisedUserCircleOutlinedIcon/>}
             paragraphs={
@@ -69,7 +69,7 @@ export default function Home() {
             }
         />,
         <Blurb
-            key='speaker-role'
+            key='blurb3'
             title='Speaker Role'
             icon={<RecordVoiceOverOutlinedIcon/>}
             paragraphs={
@@ -81,14 +81,14 @@ export default function Home() {
     ]
 
     const views = [
-        <ParticipantDemo 
-            key='participant-view'
+        <ParticipantDemo
+            key='view1'
             title='Participant View' 
             shadow='10px 10px 0 0 #4056a1' 
             scale='scale(0.95)'
         />,
         <ModeratorDemo
-            key='moderator-view'
+            key='view2'
             title='Moderator View' 
             shadow='10px 10px 0 0 #8eafff' 
             scale='scale(0.95)'
