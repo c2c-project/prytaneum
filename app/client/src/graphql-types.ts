@@ -34,7 +34,9 @@ export type CreateEvent = {
 
 export type CreateFeedback = {
   eventId: Scalars['ID'];
+  isReply?: Maybe<Scalars['Boolean']>;
   message: Scalars['String'];
+  refFeedbackId?: Maybe<Scalars['ID']>;
 };
 
 export type CreateInvite = {
@@ -249,9 +251,12 @@ export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
   createdAt?: Maybe<Scalars['Date']>;
   createdBy?: Maybe<User>;
+  createdById?: Maybe<Scalars['ID']>;
   event?: Maybe<Event>;
   id: Scalars['ID'];
+  isReply?: Maybe<Scalars['Boolean']>;
   message: Scalars['String'];
+  refFeedback?: Maybe<EventLiveFeedback>;
 };
 
 export type EventLiveFeedbackConnection = {

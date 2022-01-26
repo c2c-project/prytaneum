@@ -604,6 +604,9 @@ export type EventLiveFeedback = Node & {
     event?: Maybe<Event>;
     createdAt?: Maybe<Scalars['Date']>;
     createdBy?: Maybe<User>;
+    createdById?: Maybe<Scalars['ID']>;
+    isReply?: Maybe<Scalars['Boolean']>;
+    refFeedback?: Maybe<EventLiveFeedback>;
 };
 
 export type EventLiveFeedbackEdge = {
@@ -634,6 +637,8 @@ export type EventFeedbackMutationResponse = MutationResponse & {
 export type CreateFeedback = {
     message: Scalars['String'];
     eventId: Scalars['ID'];
+    refFeedbackId?: Maybe<Scalars['ID']>;
+    isReply?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateInvite = {
@@ -1764,6 +1769,9 @@ export type EventLiveFeedbackResolvers<
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    createdById?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    isReply?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    refFeedback?: Resolver<Maybe<ResolversTypes['EventLiveFeedback']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2214,6 +2222,9 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         event?: LoaderResolver<Maybe<Event>, EventLiveFeedback, {}, TContext>;
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedback, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, EventLiveFeedback, {}, TContext>;
+        createdById?: LoaderResolver<Maybe<Scalars['ID']>, EventLiveFeedback, {}, TContext>;
+        isReply?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedback, {}, TContext>;
+        refFeedback?: LoaderResolver<Maybe<EventLiveFeedback>, EventLiveFeedback, {}, TContext>;
     };
 
     EventLiveFeedbackEdge?: {
