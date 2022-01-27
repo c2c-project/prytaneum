@@ -121,37 +121,114 @@ export async function isEventRelevant(eventId: string, prisma: PrismaClient, fee
  * NOTE: race condition is here!!, probably better to use another server that would instantiate a session for us during a live event
  * but this is sufficient for now
  * OR another solution is to use $queryRaw and $executeRaw to write the appropriate logic as one sql query/statement
+ * TODO: delete
  */
 export async function changeCurrentQuestion(userId: string, prisma: PrismaClient, eventId: string, change: 1 | -1) {
     const hasPermission = await isModerator(userId, eventId, prisma);
     if (!hasPermission) throw new Error(errors.permissions);
 
     // first find the event's current question
-    const queryResult = await prisma.event.findUnique({
+    const dbEvent = await prisma.event.findUnique({
         where: { id: eventId },
         select: { currentQuestion: true },
     });
-    if (!queryResult) throw new Error(errors.DNE('Event'));
+
+    if (!dbEvent) throw new Error(errors.DNE('Event'));
 
     // the "next" question, where next can be +1 or -1
     const nextQuestion = await prisma.eventQuestion.findFirst({
-        where: { position: { [change === 1 ? 'gt' : 'lt']: queryResult.currentQuestion }, eventId },
+        where: {
+            eventId,
+            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: -1 } }],
+        },
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
 
     // could be null and that's okay, since we don't always have a currentQuestion -- start of event for example
     const currentQuestion = await prisma.eventQuestion.findFirst({
-        where: { position: queryResult.currentQuestion },
+        where: { position: dbEvent.currentQuestion, eventId },
     });
 
-    if (!nextQuestion) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+    if (!nextQuestion && !currentQuestion) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+
+    const updatedEvent = await prisma.event.update({
+        where: { id: eventId },
+        data: { currentQuestion: nextQuestion?.position ?? -1 },
+        select: { currentQuestion: true, id: true },
+    });
+    return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
+}
+
+async function getCurrentQuestionPosition(eventId: string, prisma: PrismaClient) {
+    const result = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: { currentQuestion: true },
+    });
+    return result?.currentQuestion;
+}
+
+export async function decrementQuestion(userId: string, prisma: PrismaClient, eventId: string) {
+    const hasPermission = await isModerator(userId, eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+
+    const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
+    const nextQuestionPosition = await prisma.eventQuestion.findFirst({
+        where: {
+            eventId,
+            position: { lt: currentQuestionPosition ?? -1 },
+        },
+        orderBy: { position: 'desc' },
+        select: { position: true },
+    });
+
+    if (!nextQuestionPosition) throw new Error('Cannot increment question');
+
+    const prevCurrentQuestion = await prisma.eventQuestion.findFirst({
+        where: {
+            eventId,
+            position: { equals: currentQuestionPosition },
+        },
+    });
+
+    if (!prevCurrentQuestion) throw new Error('Could not find previous question.');
+
+    const updatedEvent = await prisma.event.update({
+        where: { id: eventId },
+        data: { currentQuestion: nextQuestionPosition.position },
+        select: { currentQuestion: true, id: true },
+    });
+
+    return {
+        event: updatedEvent,
+        prevCurrentQuestion,
+    };
+}
+
+export async function incrementQuestion(userId: string, prisma: PrismaClient, eventId: string) {
+    const hasPermission = await isModerator(userId, eventId, prisma);
+    if (!hasPermission) throw new Error(errors.permissions);
+    const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
+    const nextQuestion = await prisma.eventQuestion.findFirst({
+        where: {
+            eventId,
+            position: { gt: currentQuestionPosition ?? -1 },
+        },
+        orderBy: { position: 'asc' },
+    });
+
+    if (!nextQuestion) throw new Error('Cannot increment question');
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
         data: { currentQuestion: nextQuestion.position },
         select: { currentQuestion: true, id: true },
     });
-    return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
+
+    return {
+        event: updatedEvent,
+        newCurrentQuestion: nextQuestion,
+        prevCurrentQuestionPosition: currentQuestionPosition,
+    };
 }
 
 /**
@@ -203,16 +280,16 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     if (!hasPermission) throw new Error(errors.permissions);
 
     // Find current question
-    const queryResult = await prisma.event.findUnique({
+    const event = await prisma.event.findUnique({
         where: { id: input.eventId },
         select: { currentQuestion: true },
     });
-    if (!queryResult) throw new Error(errors.DNE('Event'));
+    if (!event) throw new Error(errors.DNE('Event'));
 
-    const question = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
-    if (!question) throw new Error('Question cannot be found');
-    if (queryResult.currentQuestion === question.position) {
-        return question;
+    const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
+    if (!toBeRemoved) throw new Error('Question cannot be found');
+    if (event.currentQuestion >= toBeRemoved.position) {
+        return toBeRemoved;
     }
 
     // Set the position to -1 to remove it from the queue

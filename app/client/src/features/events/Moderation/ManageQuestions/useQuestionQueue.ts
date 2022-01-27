@@ -203,11 +203,11 @@ export function useQuestionQueue({ fragmentRef }: { fragmentRef: useQuestionQueu
         }),
         [questionQueue, eventId]
     );
-    useSubscription(enqueuedPushConfig);
-    useSubscription(enqueuedUnshiftConfig);
-    useSubscription(enqueuedRemoveConfig);
-    useSubscription(recordPushConfig);
-    useSubscription(recordUnshiftConfig);
-    useSubscription(recordRemoveConfig);
+    // useSubscription(enqueuedPushConfig);
+    // useSubscription(enqueuedUnshiftConfig);
+    // useSubscription(enqueuedRemoveConfig);
+    // useSubscription(recordPushConfig);
+    // useSubscription(recordUnshiftConfig);
+    // useSubscription(recordRemoveConfig);
     return questionQueue;
 }

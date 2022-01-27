@@ -211,9 +211,10 @@ export const resolvers: Resolvers = {
         recordRemoveQuestion: {
             subscribe: withFilter<{ recordRemoveQuestion: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('recordRemoveQuestion'),
-                (payload, args, ctx) => {
+                async (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.recordRemoveQuestion.edge.node.id);
+                    const temp = await Question.doesEventMatch(eventId, questionId, ctx.prisma);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),

@@ -20,6 +20,12 @@ import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useEvent } from '../../useEvent';
 import { useQuestionQueue } from './useQuestionQueue';
+import { useRecordPush } from './useRecordPush';
+import { useRecordRemove } from './useRecordRemove';
+import { useRecordUnshift } from './useRecordUnshift';
+import { useEnqueuedPush } from './useEnqueuedPush';
+import { useEnqueuedRemove } from './useEnqueuedRemove';
+import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -161,11 +167,30 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
     const questionQueue = useQuestionQueue({ fragmentRef });
+    const recordConnection = React.useMemo(
+        () => ({ connection: questionQueue?.questionRecord?.__id ?? '' }),
+        [questionQueue?.questionRecord]
+    );
+    const enqueuedConnection = React.useMemo(
+        () => ({ connection: questionQueue?.enqueuedQuestions?.__id ?? '' }),
+        [questionQueue?.enqueuedQuestions]
+    );
+
     const { eventId } = useEvent();
     const classes = useStyles();
     const ref = React.useRef<HTMLElement | null>(null);
     const [open, setOpen] = React.useState(false);
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
+
+    //
+    // ─── SUBSCRIPTION HOOKS ─────────────────────────────────────────────────────────
+    //
+    useRecordPush(recordConnection);
+    useRecordRemove(recordConnection);
+    useRecordUnshift(recordConnection);
+    useEnqueuedPush(enqueuedConnection);
+    useEnqueuedRemove(enqueuedConnection);
+    useEnqueuedUnshift(enqueuedConnection);
 
     //
     // ─── COMPUTED VALUES ────────────────────────────────────────────────────────────

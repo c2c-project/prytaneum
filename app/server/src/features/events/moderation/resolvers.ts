@@ -51,11 +51,10 @@ export const resolvers: Resolvers = {
         async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            const { event, newCurrentQuestion } = await Moderation.changeCurrentQuestion(
+            const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
                 ctx.viewer.id,
                 ctx.prisma,
-                eventId,
-                1
+                eventId
             );
             const eventWithGlobalId = toEventId(event);
             const newCurrentQuestionWithGlobalId = toQuestionId(newCurrentQuestion);
@@ -67,6 +66,8 @@ export const resolvers: Resolvers = {
                     eventUpdates: eventWithGlobalId,
                 },
             });
+
+            if (!newCurrentQuestionWithGlobalId) return eventWithGlobalId;
 
             ctx.pubsub.publish({
                 topic: 'enqueuedRemoveQuestion',
@@ -97,13 +98,12 @@ export const resolvers: Resolvers = {
         async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            const { event, prevCurrentQuestion } = await Moderation.changeCurrentQuestion(
+            const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
                 ctx.viewer.id,
                 ctx.prisma,
-                eventId,
-                -1
+                eventId
             );
-            if (!prevCurrentQuestion) throw new Error('No question to move back to!');
+
             const eventWithGlobalId = toEventId(event);
             const prevCurrentQuestionWithGlobalId = toQuestionId(prevCurrentQuestion);
             // TODO: #QQRedesign delete once code complete

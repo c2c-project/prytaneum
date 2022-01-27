@@ -92,6 +92,12 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
+        e.preventDefault();
+        setTabIndex(newTabIndex);
+    };
+
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
@@ -134,7 +140,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                         <AskQuestion
                             className={classes.fullWidth}
                             eventId={data.id}
-                            connectionKey='useQuestionListFragment_questions'
+                            // connectionKey='useQuestionListFragment_questions'
                         />
                     )
                 }
