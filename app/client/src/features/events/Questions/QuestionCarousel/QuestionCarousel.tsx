@@ -2,15 +2,13 @@ import { useMemo, useReducer, useEffect } from 'react';
 import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { graphql, useRefetchableFragment, useSubscription } from 'react-relay';
+import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
-import type { QuestionCarouselAddedSubscription } from '@local/__generated__/QuestionCarouselAddedSubscription.graphql';
-import type { QuestionCarouselRemovedSubscription } from '@local/__generated__/QuestionCarouselRemovedSubscription.graphql';
-import { useEvent } from '@local/features/events';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
+import { useRecordPush } from '../../Moderation/ManageQuestions/useRecordPush';
+import { useRecordRemove } from '../../Moderation/ManageQuestions/useRecordRemove';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -110,31 +108,15 @@ function reducer(state: TState, action: TActions): TState {
 
 export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
     const classes = useStyles();
-    const [data, refetch] = useRefetchableFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
+    const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
     const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
-    const { eventId } = useEvent();
-    const questionCarouselAddedConfig = useMemo<GraphQLSubscriptionConfig<QuestionCarouselAddedSubscription>>(
-        () => ({
-            variables: {
-                eventId,
-                connections: data.questionQueue?.questionRecord?.__id ? [data.questionQueue.questionRecord.__id] : [],
-            },
-            subscription: QUESTION_CAROUSEL_ADDED_SUBSCRIPTION,
-        }),
-        [eventId, data.questionQueue?.questionRecord?.__id]
+    const recordConnection = useMemo(
+        () => ({ connection: data.questionQueue?.questionRecord?.__id ?? '' }),
+        [data.questionQueue?.questionRecord]
     );
-    const questionCarouselRemovedConfig = useMemo<GraphQLSubscriptionConfig<QuestionCarouselRemovedSubscription>>(
-        () => ({
-            variables: {
-                eventId,
-                connections: data.questionQueue?.questionRecord?.__id ? [data.questionQueue.questionRecord.__id] : [],
-            },
-            subscription: QUESTION_CAROUSEL_ADDED_SUBSCRIPTION,
-        }),
-        [eventId, data.questionQueue?.questionRecord?.__id]
-    );
-    useSubscription(questionCarouselAddedConfig);
-    useSubscription(questionCarouselRemovedConfig);
+
+    useRecordPush(recordConnection);
+    useRecordRemove(recordConnection);
 
     // somewhat redundant, but ensures that everything is sorted
     const sortedQuestions = useMemo(
