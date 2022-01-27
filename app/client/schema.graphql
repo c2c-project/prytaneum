@@ -200,7 +200,6 @@ type EventConnection {
 type EventEdge {
   cursor: String!
   node: Event!
-<<<<<<< HEAD
 }
 
 type EventFeedbackMutationResponse implements MutationResponse {
@@ -211,12 +210,6 @@ type EventFeedbackMutationResponse implements MutationResponse {
 
 type EventLiveFeedback implements Node {
   createdAt: Date
-=======
-}
-
-type EventLiveFeedback implements Node {
-  createdAt: String
->>>>>>> fix(frontend): implement requested changes to about us page
   createdBy: User
   event: Event
   id: ID!
@@ -368,14 +361,11 @@ type EventVideoMutationResponse implements MutationResponse {
   body: EventVideo
   isError: Boolean!
   message: String!
-<<<<<<< HEAD
 }
 
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
-=======
->>>>>>> fix(frontend): implement requested changes to about us page
 }
 
 input HideQuestion {
@@ -600,8 +590,8 @@ input UpdateEvent {
 }
 
 input UpdateModerator {
+  email: String!
   eventId: ID!
-  userId: ID!
 }
 
 """Information that may be updated by the user"""

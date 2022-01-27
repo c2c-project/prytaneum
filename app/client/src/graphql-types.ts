@@ -236,7 +236,6 @@ export type EventEdge = {
   __typename?: 'EventEdge';
   cursor: Scalars['String'];
   node: Event;
-<<<<<<< HEAD
 };
 
 export type EventFeedbackMutationResponse = MutationResponse & {
@@ -244,17 +243,11 @@ export type EventFeedbackMutationResponse = MutationResponse & {
   body?: Maybe<EventLiveFeedbackEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-=======
->>>>>>> fix(frontend): implement requested changes to about us page
 };
 
 export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
-<<<<<<< HEAD
   createdAt?: Maybe<Scalars['Date']>;
-=======
-  createdAt?: Maybe<Scalars['String']>;
->>>>>>> fix(frontend): implement requested changes to about us page
   createdBy?: Maybe<User>;
   event?: Maybe<Event>;
   id: Scalars['ID'];
@@ -410,15 +403,12 @@ export type EventVideoMutationResponse = MutationResponse & {
   body?: Maybe<EventVideo>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-<<<<<<< HEAD
 };
 
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
   operationType: Operation;
-=======
->>>>>>> fix(frontend): implement requested changes to about us page
 };
 
 export type HideQuestion = {
@@ -864,8 +854,8 @@ export type UpdateEvent = {
 };
 
 export type UpdateModerator = {
+  email: Scalars['String'];
   eventId: Scalars['ID'];
-  userId: Scalars['ID'];
 };
 
 /** Information that may be updated by the user */
