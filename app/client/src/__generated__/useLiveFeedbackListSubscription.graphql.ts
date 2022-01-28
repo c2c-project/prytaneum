@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
 export type useLiveFeedbackListSubscriptionVariables = {
     eventId: string;

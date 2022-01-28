@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type EventsListPaginationQueryVariables = {
-    count?: number | null;
-    cursor?: string | null;
+    count?: number | null | undefined;
+    cursor?: string | null | undefined;
     id: string;
 };
 export type EventsListPaginationQueryResponse = {

@@ -3,14 +3,15 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type EventSettingsQueryVariables = {
     input: string;
 };
 export type EventSettingsQueryResponse = {
     readonly node: {
         readonly id: string;
-        readonly isViewerModerator?: boolean | null;
+        readonly isViewerModerator?: boolean | null | undefined;
         readonly " $fragmentRefs": FragmentRefs<"EventDetailsFragment" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "GenericSettingsFragment" | "ModeratorEventSettingsFragment">;
     } | null;
 };

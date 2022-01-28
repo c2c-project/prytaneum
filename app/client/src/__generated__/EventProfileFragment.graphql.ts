@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type EventProfileFragment = {
     readonly title: string | null;
     readonly topic: string | null;
@@ -22,7 +23,7 @@ export type EventProfileFragment = {
 };
 export type EventProfileFragment$data = EventProfileFragment;
 export type EventProfileFragment$key = {
-    readonly " $data"?: EventProfileFragment$data;
+    readonly " $data"?: EventProfileFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"EventProfileFragment">;
 };
 

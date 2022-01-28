@@ -215,3 +215,15 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
         select: { feedback: { orderBy: { createdAt: 'desc' } } },
     });
 }
+
+
+/**
+ * find queued questions by event id
+ * if position is greater than -1, then the question is queued
+ */
+export async function findQuestionQueueByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.event.findUnique({
+        where: { id: eventId },
+        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } }, currentQuestion: true },
+    });
+}

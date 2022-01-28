@@ -103,8 +103,14 @@ type Event implements Node {
 
     """
     Questions queued in this session by the moderator(s)
+    TODO: #QQRedesign delete after code complete
     """
-    queuedQuestions(first: Int, after: String): EventQuestionConnection
+    queuedQuestions(first: Int, after: String): EventQuestionConnection 
+
+    """
+    Questions having to do with the queue
+    """
+    questionQueue(first: Int, after: String): EventQuestionQueue
 
     """
     The question currently being asked, corresponds to a "position" value on the event question
@@ -184,5 +190,8 @@ type Query {
 }
 
 type Subscription {
+    """
+    TODO: #QQRedesign delete after code complete
+    """
     eventUpdates(eventId: ID!): Event!
 }

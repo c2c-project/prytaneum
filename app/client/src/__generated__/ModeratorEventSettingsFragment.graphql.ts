@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type ModeratorEventSettingsFragment = {
     readonly id: string;
     readonly moderators: {
@@ -23,7 +24,7 @@ export type ModeratorEventSettingsFragment = {
 };
 export type ModeratorEventSettingsFragment$data = ModeratorEventSettingsFragment;
 export type ModeratorEventSettingsFragment$key = {
-    readonly " $data"?: ModeratorEventSettingsFragment$data;
+    readonly " $data"?: ModeratorEventSettingsFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"ModeratorEventSettingsFragment">;
 };
 

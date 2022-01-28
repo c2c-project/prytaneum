@@ -3,18 +3,19 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type UpdateEvent = {
-    description?: string | null;
-    endDateTime?: Date | null;
+    description?: string | null | undefined;
+    endDateTime?: Date | null | undefined;
     eventId: string;
-    isCollectRatingsEnabled?: boolean | null;
-    isForumEnabled?: boolean | null;
-    isPrivate?: boolean | null;
-    isQuestionFeedVisible?: boolean | null;
-    startDateTime?: Date | null;
-    title?: string | null;
-    topic?: string | null;
+    isCollectRatingsEnabled?: boolean | null | undefined;
+    isForumEnabled?: boolean | null | undefined;
+    isPrivate?: boolean | null | undefined;
+    isQuestionFeedVisible?: boolean | null | undefined;
+    startDateTime?: Date | null | undefined;
+    title?: string | null | undefined;
+    topic?: string | null | undefined;
 };
 export type GenericSettingsMutationVariables = {
     input: UpdateEvent;
