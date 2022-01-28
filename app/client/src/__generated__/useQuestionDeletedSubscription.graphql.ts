@@ -5,43 +5,43 @@
 import { ConcreteRequest } from "relay-runtime";
 
 import {  } from "relay-runtime";
-export type useQuestionQueueEnqueuedPushSubscriptionVariables = {
+export type useQuestionDeletedSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;
 };
-export type useQuestionQueueEnqueuedPushSubscriptionResponse = {
-    readonly enqueuedPushQuestion: {
+export type useQuestionDeletedSubscriptionResponse = {
+    readonly questionDeleted: {
         readonly edge: {
+            readonly cursor: string;
             readonly node: {
                 readonly id: string;
                 readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
-            readonly cursor: string;
         };
     };
 };
-export type useQuestionQueueEnqueuedPushSubscription = {
-    readonly response: useQuestionQueueEnqueuedPushSubscriptionResponse;
-    readonly variables: useQuestionQueueEnqueuedPushSubscriptionVariables;
+export type useQuestionDeletedSubscription = {
+    readonly response: useQuestionDeletedSubscriptionResponse;
+    readonly variables: useQuestionDeletedSubscriptionVariables;
 };
 
 
 
 /*
-subscription useQuestionQueueEnqueuedPushSubscription(
+subscription useQuestionDeletedSubscription(
   $eventId: ID!
 ) {
-  enqueuedPushQuestion(eventId: $eventId) {
+  questionDeleted(eventId: $eventId) {
     edge {
+      cursor
       node {
         id
-        ...QuestionAuthorFragment
-        ...QuestionStatsFragment
-        ...QuestionContentFragment
         position
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
+        ...QuestionStatsFragment
       }
-      cursor
     }
   }
 }
@@ -87,21 +87,21 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "cursor",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "position",
+  "name": "id",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "cursor",
+  "name": "position",
   "storageKey": null
 };
 return {
@@ -112,14 +112,14 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "useQuestionQueueEnqueuedPushSubscription",
+    "name": "useQuestionDeletedSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "enqueuedPushQuestion",
+        "name": "questionDeleted",
         "plural": false,
         "selections": [
           {
@@ -130,6 +130,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -138,8 +139,8 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
                   (v4/*: any*/),
+                  (v5/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -148,17 +149,16 @@ return {
                   {
                     "args": null,
                     "kind": "FragmentSpread",
-                    "name": "QuestionStatsFragment"
+                    "name": "QuestionContentFragment"
                   },
                   {
                     "args": null,
                     "kind": "FragmentSpread",
-                    "name": "QuestionContentFragment"
+                    "name": "QuestionStatsFragment"
                   }
                 ],
                 "storageKey": null
-              },
-              (v5/*: any*/)
+              }
             ],
             "storageKey": null
           }
@@ -176,14 +176,14 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "useQuestionQueueEnqueuedPushSubscription",
+    "name": "useQuestionDeletedSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "enqueuedPushQuestion",
+        "name": "questionDeleted",
         "plural": false,
         "selections": [
           {
@@ -194,6 +194,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -202,7 +203,24 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "filters": null,
+                    "handle": "deleteEdge",
+                    "key": "",
+                    "kind": "ScalarHandle",
+                    "name": "id",
+                    "handleArgs": [
+                      {
+                        "kind": "Variable",
+                        "name": "connections",
+                        "variableName": "connections"
+                      }
+                    ]
+                  },
+                  (v5/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -211,7 +229,7 @@ return {
                     "name": "createdBy",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/),
+                      (v4/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -240,39 +258,21 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "likedByCount",
+                    "name": "question",
                     "storageKey": null
                   },
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "question",
+                    "name": "likedByCount",
                     "storageKey": null
-                  },
-                  (v4/*: any*/)
+                  }
                 ],
                 "storageKey": null
-              },
-              (v5/*: any*/)
+              }
             ],
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "appendEdge",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "edge",
-            "handleArgs": [
-              {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
-              }
-            ]
           }
         ],
         "storageKey": null
@@ -280,14 +280,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e69ac0cfb512625b35be5cdf8c66bbc0",
+    "cacheID": "26ea29cb633f9e27f0e064468fbd9e99",
     "id": null,
     "metadata": {},
-    "name": "useQuestionQueueEnqueuedPushSubscription",
+    "name": "useQuestionDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionQueueEnqueuedPushSubscription(\n  $eventId: ID!\n) {\n  enqueuedPushQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'cc98295b429f3da5547c318c31931e20';
+(node as any).hash = '16d3cbeca231d802e031a2ea9850458a';
 export default node;

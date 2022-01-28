@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const QUESTION_CAROUSEL_FRAGMENT = graphql`
     fragment QuestionCarouselFragment on Event
     @refetchable(queryName: "QuestionCarouselFragmentRefetchable")
-    @argumentDefinitions(first: { type: Int, defaultValue: 100 }, after: { type: String, defaultValue: "" }) {
+    @argumentDefinitions(first: { type: Int, defaultValue: 1000 }, after: { type: String, defaultValue: "" }) {
         id
         currentQuestion
         questionQueue {
@@ -38,32 +38,6 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
                         ...QuestionAuthorFragment
                         ...QuestionContentFragment
                     }
-                }
-            }
-        }
-    }
-`;
-
-export const QUESTION_CAROUSEL_ADDED_SUBSCRIPTION = graphql`
-    subscription QuestionCarouselAddedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionAddedToRecord(eventId: $eventId) {
-            edge @appendEdge(connections: $connections) {
-                node {
-                    id
-                    ...QuestionAuthorFragment
-                    ...QuestionContentFragment
-                }
-            }
-        }
-    }
-`;
-
-export const QUESTION_CAROUSEL_REMOVED_SUBSCRIPTION = graphql`
-    subscription QuestionCarouselRemovedSubscription($eventId: ID!, $connections: [ID!]!) {
-        questionRemovedFromRecord(eventId: $eventId) {
-            edge {
-                node {
-                    id @deleteEdge(connections: $connections)
                 }
             }
         }
@@ -115,8 +89,8 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
         [data.questionQueue?.questionRecord]
     );
 
-    useRecordPush(recordConnection);
-    useRecordRemove(recordConnection);
+    // useRecordPush(recordConnection);
+    // useRecordRemove(recordConnection);
 
     // somewhat redundant, but ensures that everything is sorted
     const sortedQuestions = useMemo(

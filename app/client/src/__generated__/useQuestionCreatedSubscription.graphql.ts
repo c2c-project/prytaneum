@@ -5,37 +5,42 @@
 import { ConcreteRequest } from "relay-runtime";
 
 import {  } from "relay-runtime";
-export type QuestionCarouselAddedSubscriptionVariables = {
+export type useQuestionCreatedSubscriptionVariables = {
     eventId: string;
     connections: Array<string>;
 };
-export type QuestionCarouselAddedSubscriptionResponse = {
-    readonly questionAddedToRecord: {
+export type useQuestionCreatedSubscriptionResponse = {
+    readonly questionCreated: {
         readonly edge: {
+            readonly cursor: string;
             readonly node: {
                 readonly id: string;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+                readonly position: number | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
         };
     };
 };
-export type QuestionCarouselAddedSubscription = {
-    readonly response: QuestionCarouselAddedSubscriptionResponse;
-    readonly variables: QuestionCarouselAddedSubscriptionVariables;
+export type useQuestionCreatedSubscription = {
+    readonly response: useQuestionCreatedSubscriptionResponse;
+    readonly variables: useQuestionCreatedSubscriptionVariables;
 };
 
 
 
 /*
-subscription QuestionCarouselAddedSubscription(
+subscription useQuestionCreatedSubscription(
   $eventId: ID!
 ) {
-  questionAddedToRecord(eventId: $eventId) {
+  questionCreated(eventId: $eventId) {
     edge {
+      cursor
       node {
         id
+        position
         ...QuestionAuthorFragment
         ...QuestionContentFragment
+        ...QuestionStatsFragment
       }
     }
   }
@@ -52,6 +57,11 @@ fragment QuestionAuthorFragment on EventQuestion {
 
 fragment QuestionContentFragment on EventQuestion {
   question
+}
+
+fragment QuestionStatsFragment on EventQuestion {
+  id
+  likedByCount
 }
 */
 
@@ -77,7 +87,21 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "position",
   "storageKey": null
 };
 return {
@@ -88,14 +112,14 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "QuestionCarouselAddedSubscription",
+    "name": "useQuestionCreatedSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "questionAddedToRecord",
+        "name": "questionCreated",
         "plural": false,
         "selections": [
           {
@@ -106,6 +130,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -114,7 +139,8 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -124,6 +150,11 @@ return {
                     "args": null,
                     "kind": "FragmentSpread",
                     "name": "QuestionContentFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionStatsFragment"
                   }
                 ],
                 "storageKey": null
@@ -145,14 +176,14 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "QuestionCarouselAddedSubscription",
+    "name": "useQuestionCreatedSubscription",
     "selections": [
       {
         "alias": null,
         "args": (v2/*: any*/),
         "concreteType": "EventQuestionEdgeContainer",
         "kind": "LinkedField",
-        "name": "questionAddedToRecord",
+        "name": "questionCreated",
         "plural": false,
         "selections": [
           {
@@ -163,6 +194,7 @@ return {
             "name": "edge",
             "plural": false,
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -171,7 +203,8 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -180,7 +213,7 @@ return {
                     "name": "createdBy",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/),
+                      (v4/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -211,6 +244,13 @@ return {
                     "kind": "ScalarField",
                     "name": "question",
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "likedByCount",
+                    "storageKey": null
                   }
                 ],
                 "storageKey": null
@@ -222,7 +262,7 @@ return {
             "alias": null,
             "args": null,
             "filters": null,
-            "handle": "appendEdge",
+            "handle": "prependEdge",
             "key": "",
             "kind": "LinkedHandle",
             "name": "edge",
@@ -240,14 +280,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e434a4ff5d49680a432f2f985229da03",
+    "cacheID": "3ff2002e7da389a8c55c1d671aa618f3",
     "id": null,
     "metadata": {},
-    "name": "QuestionCarouselAddedSubscription",
+    "name": "useQuestionCreatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription QuestionCarouselAddedSubscription(\n  $eventId: ID!\n) {\n  questionAddedToRecord(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "subscription useQuestionCreatedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '43bd1be73765535ab9dcc35ff62753e8';
+(node as any).hash = '5d4ef011380d5d51545edcebd26085d8';
 export default node;

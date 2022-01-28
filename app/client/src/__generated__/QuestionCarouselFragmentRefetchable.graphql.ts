@@ -25,7 +25,7 @@ export type QuestionCarouselFragmentRefetchable = {
 /*
 query QuestionCarouselFragmentRefetchable(
   $after: String = ""
-  $first: Int = 100
+  $first: Int = 1000
   $id: ID!
 ) {
   node(id: $id) {
@@ -80,7 +80,7 @@ var v0 = [
     "name": "after"
   },
   {
-    "defaultValue": 100,
+    "defaultValue": 1000,
     "kind": "LocalArgument",
     "name": "first"
   },
@@ -332,14 +332,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3d9733b46a49b56ddc42a52dcc11ded2",
+    "cacheID": "7fe7bf30ad57ffd12cb6152ff3b953a7",
     "id": null,
     "metadata": {},
     "name": "QuestionCarouselFragmentRefetchable",
     "operationKind": "query",
-    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 1000\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
   }
 };
 })();
-(node as any).hash = '83e92b6754fa8996590a9319134e91f7';
+(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
 export default node;
