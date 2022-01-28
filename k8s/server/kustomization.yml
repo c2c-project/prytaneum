@@ -4,3 +4,5 @@ resources:
   - ./prytaneum-server-deployment.yml
   - ./prytaneum-server-service.yml
   - ./prytaneum-server-configmap.yml
+  - ./prytaneum-backend-config.yml
+  
