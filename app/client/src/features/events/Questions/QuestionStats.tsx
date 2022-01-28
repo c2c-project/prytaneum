@@ -1,8 +1,17 @@
 import { graphql, useFragment } from 'react-relay';
-import { Badge, CardContent } from '@material-ui/core';
+import { Typography, CardContent } from '@material-ui/core';
 import ThumbUp from '@material-ui/icons/ThumbUp';
+import { makeStyles } from '@material-ui/core/styles';
 
 import type { QuestionStatsFragment$key } from '@local/__generated__/QuestionStatsFragment.graphql';
+
+const useStyles = makeStyles((theme) => ({
+    stats: {
+        display: 'flex',
+        gap: theme.spacing(0.5),
+        alignItems: 'center'
+    },
+}));
 
 export interface QuestionStatsProps {
     fragmentRef: QuestionStatsFragment$key;
@@ -17,12 +26,12 @@ export const QUESTION_STATS_FRAGMENT = graphql`
 
 export function QuestionStats({ fragmentRef }: QuestionStatsProps) {
     const data = useFragment(QUESTION_STATS_FRAGMENT, fragmentRef);
+    const classes = useStyles();
 
     return (
-        <CardContent>
-            <Badge showZero badgeContent={data.likedByCount}>
-                <ThumbUp color='disabled' />
-            </Badge>
+        <CardContent className={classes.stats}>
+            <ThumbUp fontSize='small' htmlColor='#8EAFFF' />
+            <Typography>{data.likedByCount}</Typography>
         </CardContent>
     );
 }
