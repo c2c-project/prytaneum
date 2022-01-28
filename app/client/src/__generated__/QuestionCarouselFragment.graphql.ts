@@ -3,39 +3,30 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import QuestionCarouselFragmentRefetchable from "./QuestionCarouselFragmentRefetchable.graphql";
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type QuestionCarouselFragment = {
     readonly id: string;
     readonly currentQuestion: number | null;
-    readonly questionQueue: {
-        readonly questionRecord: {
-            readonly __id: string;
-            readonly edges: ReadonlyArray<{
-                readonly cursor: string;
-                readonly node: {
-                    readonly position: number | null;
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-                };
-            }> | null;
-        } | null;
+    readonly queuedQuestions: {
+        readonly edges: ReadonlyArray<{
+            readonly cursor: string;
+            readonly node: {
+                readonly position: number | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+            };
+        }> | null;
     } | null;
     readonly " $refType": "QuestionCarouselFragment";
 };
 export type QuestionCarouselFragment$data = QuestionCarouselFragment;
 export type QuestionCarouselFragment$key = {
-    readonly " $data"?: QuestionCarouselFragment$data | undefined;
+    readonly " $data"?: QuestionCarouselFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"QuestionCarouselFragment">;
 };
 
 
 
-const node: ReaderFragment = (function(){
-var v0 = [
-  "questionQueue",
-  "questionRecord"
-];
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [
     {
       "defaultValue": "",
@@ -43,34 +34,19 @@ return {
       "name": "after"
     },
     {
-      "defaultValue": 1000,
+      "defaultValue": 100,
       "kind": "LocalArgument",
       "name": "first"
     }
   ],
   "kind": "Fragment",
   "metadata": {
-    "connection": [
-      {
-        "count": "first",
-        "cursor": "after",
-        "direction": "forward",
-        "path": (v0/*: any*/)
-      }
-    ],
     "refetch": {
-      "connection": {
-        "forward": {
-          "count": "first",
-          "cursor": "after"
-        },
-        "backward": null,
-        "path": (v0/*: any*/)
-      },
+      "connection": null,
       "fragmentPathInResult": [
         "node"
       ],
-      "operation": QuestionCarouselFragmentRefetchable,
+      "operation": require('./QuestionCarouselFragmentRefetchable.graphql.ts'),
       "identifierField": "id"
     }
   },
@@ -92,109 +68,65 @@ return {
     },
     {
       "alias": null,
-      "args": null,
-      "concreteType": "EventQuestionQueue",
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "after",
+          "variableName": "after"
+        },
+        {
+          "kind": "Variable",
+          "name": "first",
+          "variableName": "first"
+        }
+      ],
+      "concreteType": "EventQuestionConnection",
       "kind": "LinkedField",
-      "name": "questionQueue",
+      "name": "queuedQuestions",
       "plural": false,
       "selections": [
         {
-          "alias": "questionRecord",
+          "alias": null,
           "args": null,
-          "concreteType": "EventQuestionConnection",
+          "concreteType": "EventQuestionEdge",
           "kind": "LinkedField",
-          "name": "__QuestionCarousel_questionRecord_connection",
-          "plural": false,
+          "name": "edges",
+          "plural": true,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "concreteType": "EventQuestionEdge",
-              "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "cursor",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "EventQuestion",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "position",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "__typename",
-                      "storageKey": null
-                    },
-                    {
-                      "args": null,
-                      "kind": "FragmentSpread",
-                      "name": "QuestionAuthorFragment"
-                    },
-                    {
-                      "args": null,
-                      "kind": "FragmentSpread",
-                      "name": "QuestionContentFragment"
-                    }
-                  ],
-                  "storageKey": null
-                }
-              ],
+              "kind": "ScalarField",
+              "name": "cursor",
               "storageKey": null
             },
             {
               "alias": null,
               "args": null,
-              "concreteType": "PageInfo",
+              "concreteType": "EventQuestion",
               "kind": "LinkedField",
-              "name": "pageInfo",
+              "name": "node",
               "plural": false,
               "selections": [
                 {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
-                  "name": "endCursor",
+                  "name": "position",
                   "storageKey": null
                 },
                 {
-                  "alias": null,
                   "args": null,
-                  "kind": "ScalarField",
-                  "name": "hasNextPage",
-                  "storageKey": null
+                  "kind": "FragmentSpread",
+                  "name": "QuestionAuthorFragment"
+                },
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "QuestionContentFragment"
                 }
               ],
               "storageKey": null
-            },
-            {
-              "kind": "ClientExtension",
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "__id",
-                  "storageKey": null
-                }
-              ]
             }
           ],
           "storageKey": null
@@ -206,6 +138,5 @@ return {
   "type": "Event",
   "abstractKey": null
 };
-})();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+(node as any).hash = 'bfd207907fc023269ac34fb8582fc8d1';
 export default node;

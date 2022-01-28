@@ -56,7 +56,6 @@ type Mutation {
     updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
     addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
     removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
-    # TODO: #QQRedesign delete once code complete
     updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
 
     """
@@ -73,13 +72,11 @@ type Mutation {
 
     """
     Advance the current question
-    TODO: make this an EventMutationResponse
     """
     nextQuestion(eventId: ID!): Event!
 
     """
     Go to the previous question
-    TODO: make this an EventMutationResponse
     """
     prevQuestion(eventId: ID!): Event!
 }
@@ -92,7 +89,6 @@ type Subscription {
 
     """
     subscription for whenever questions are added to the queue
-    TODO: #QQRedesign delete once code complete
     """
     questionQueued(eventId: ID!): EventQuestion!
 }

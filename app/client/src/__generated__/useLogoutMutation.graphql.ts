@@ -3,7 +3,6 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
 export type useLogoutMutationVariables = {};
 export type useLogoutMutationResponse = {
     readonly logout: Date;

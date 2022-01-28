@@ -3,16 +3,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
-export type RemoveQuestionFromQueue = {
+export type UpdateQuestionQueue = {
+    adding: boolean;
     eventId: string;
     questionId: string;
 };
-export type DequeueQuestionButtonMutationVariables = {
-    input: RemoveQuestionFromQueue;
+export type QueueButtonMutationVariables = {
+    input: UpdateQuestionQueue;
 };
-export type DequeueQuestionButtonMutationResponse = {
-    readonly removeQuestionFromQueue: {
+export type QueueButtonMutationResponse = {
+    readonly updateQuestionQueue: {
         readonly isError: boolean;
         readonly message: string;
         readonly body: {
@@ -24,18 +24,18 @@ export type DequeueQuestionButtonMutationResponse = {
         } | null;
     };
 };
-export type DequeueQuestionButtonMutation = {
-    readonly response: DequeueQuestionButtonMutationResponse;
-    readonly variables: DequeueQuestionButtonMutationVariables;
+export type QueueButtonMutation = {
+    readonly response: QueueButtonMutationResponse;
+    readonly variables: QueueButtonMutationVariables;
 };
 
 
 
 /*
-mutation DequeueQuestionButtonMutation(
-  $input: RemoveQuestionFromQueue!
+mutation QueueButtonMutation(
+  $input: UpdateQuestionQueue!
 ) {
-  removeQuestionFromQueue(input: $input) {
+  updateQuestionQueue(input: $input) {
     isError
     message
     body {
@@ -69,7 +69,7 @@ v1 = [
     ],
     "concreteType": "EventQuestionMutationResponse",
     "kind": "LinkedField",
-    "name": "removeQuestionFromQueue",
+    "name": "updateQuestionQueue",
     "plural": false,
     "selections": [
       {
@@ -138,7 +138,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "DequeueQuestionButtonMutation",
+    "name": "QueueButtonMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -147,18 +147,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "DequeueQuestionButtonMutation",
+    "name": "QueueButtonMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "bab3fafa5cacc48aa6447ba39cfd9f21",
+    "cacheID": "d51abd2e7798ca5a080972f29a933fb4",
     "id": null,
     "metadata": {},
-    "name": "DequeueQuestionButtonMutation",
+    "name": "QueueButtonMutation",
     "operationKind": "mutation",
-    "text": "mutation DequeueQuestionButtonMutation(\n  $input: RemoveQuestionFromQueue!\n) {\n  removeQuestionFromQueue(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
+    "text": "mutation QueueButtonMutation(\n  $input: UpdateQuestionQueue!\n) {\n  updateQuestionQueue(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b6633a932e23782c1244f9b332e9766a';
+(node as any).hash = '1adf653c2e16503d73593819b657ff52';
 export default node;

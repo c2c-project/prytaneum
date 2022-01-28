@@ -3,8 +3,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type VideoEventSettingsFragment = {
     readonly id: string;
     readonly videos: {
@@ -22,7 +21,7 @@ export type VideoEventSettingsFragment = {
 };
 export type VideoEventSettingsFragment$data = VideoEventSettingsFragment;
 export type VideoEventSettingsFragment$key = {
-    readonly " $data"?: VideoEventSettingsFragment$data | undefined;
+    readonly " $data"?: VideoEventSettingsFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"VideoEventSettingsFragment">;
 };
 

@@ -3,41 +3,49 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionCreatedSubscriptionVariables = {
+import { FragmentRefs } from "relay-runtime";
+export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
+export type useQuestionListSubscriptionVariables = {
     eventId: string;
-    connections: Array<string>;
 };
-export type useQuestionCreatedSubscriptionResponse = {
-    readonly questionCreated: {
+export type useQuestionListSubscriptionResponse = {
+    readonly questionCRUD: {
+        readonly operationType: Operation;
         readonly edge: {
             readonly cursor: string;
             readonly node: {
                 readonly id: string;
                 readonly position: number | null;
+                readonly refQuestion: {
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                } | null;
                 readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
             };
         };
     };
 };
-export type useQuestionCreatedSubscription = {
-    readonly response: useQuestionCreatedSubscriptionResponse;
-    readonly variables: useQuestionCreatedSubscriptionVariables;
+export type useQuestionListSubscription = {
+    readonly response: useQuestionListSubscriptionResponse;
+    readonly variables: useQuestionListSubscriptionVariables;
 };
 
 
 
 /*
-subscription useQuestionCreatedSubscription(
+subscription useQuestionListSubscription(
   $eventId: ID!
 ) {
-  questionCreated(eventId: $eventId) {
+  questionCRUD(eventId: $eventId) {
+    operationType
     edge {
       cursor
       node {
         id
         position
+        refQuestion {
+          ...QuestionQuoteFragment
+          id
+        }
         ...QuestionAuthorFragment
         ...QuestionContentFragment
         ...QuestionStatsFragment
@@ -59,6 +67,12 @@ fragment QuestionContentFragment on EventQuestion {
   question
 }
 
+fragment QuestionQuoteFragment on EventQuestion {
+  id
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
+}
+
 fragment QuestionStatsFragment on EventQuestion {
   id
   likedByCount
@@ -66,23 +80,27 @@ fragment QuestionStatsFragment on EventQuestion {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "eventId"
-},
-v2 = [
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "eventId"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "eventId",
     "variableName": "eventId"
   }
 ],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "operationType",
+  "storageKey": null
+},
 v3 = {
   "alias": null,
   "args": null,
@@ -103,25 +121,63 @@ v5 = {
   "kind": "ScalarField",
   "name": "position",
   "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v4/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "avatar",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "useQuestionCreatedSubscription",
+    "name": "useQuestionListSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdgeContainer",
+        "args": (v1/*: any*/),
+        "concreteType": "QuestionOperation",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionCRUD",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -141,6 +197,22 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "EventQuestion",
+                    "kind": "LinkedField",
+                    "name": "refQuestion",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "args": null,
+                        "kind": "FragmentSpread",
+                        "name": "QuestionQuoteFragment"
+                      }
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -171,21 +243,19 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "useQuestionCreatedSubscription",
+    "name": "useQuestionListSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "EventQuestionEdgeContainer",
+        "args": (v1/*: any*/),
+        "concreteType": "QuestionOperation",
         "kind": "LinkedField",
-        "name": "questionCreated",
+        "name": "questionCRUD",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -208,43 +278,21 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
+                    "concreteType": "EventQuestion",
                     "kind": "LinkedField",
-                    "name": "createdBy",
+                    "name": "refQuestion",
                     "plural": false,
                     "selections": [
                       (v4/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "firstName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "avatar",
-                        "storageKey": null
-                      }
+                      (v6/*: any*/),
+                      (v7/*: any*/),
+                      (v8/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "createdAt",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "question",
-                    "storageKey": null
-                  },
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -257,22 +305,6 @@ return {
               }
             ],
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "prependEdge",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "edge",
-            "handleArgs": [
-              {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
-              }
-            ]
           }
         ],
         "storageKey": null
@@ -280,14 +312,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3ff2002e7da389a8c55c1d671aa618f3",
+    "cacheID": "19cf3306871cd116952b835cbe7268da",
     "id": null,
     "metadata": {},
-    "name": "useQuestionCreatedSubscription",
+    "name": "useQuestionListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionCreatedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionListSubscription(\n  $eventId: ID!\n) {\n  questionCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        position\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '5d4ef011380d5d51545edcebd26085d8';
+(node as any).hash = '2e9277a543f7f9d438dc03286cb8baf3';
 export default node;

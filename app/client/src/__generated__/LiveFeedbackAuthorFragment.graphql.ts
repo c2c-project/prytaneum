@@ -3,8 +3,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type LiveFeedbackAuthorFragment = {
     readonly createdBy: {
         readonly id: string;
@@ -16,7 +15,7 @@ export type LiveFeedbackAuthorFragment = {
 };
 export type LiveFeedbackAuthorFragment$data = LiveFeedbackAuthorFragment;
 export type LiveFeedbackAuthorFragment$key = {
-    readonly " $data"?: LiveFeedbackAuthorFragment$data | undefined;
+    readonly " $data"?: LiveFeedbackAuthorFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
 };
 

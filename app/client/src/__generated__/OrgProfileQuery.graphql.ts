@@ -3,17 +3,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type OrgProfileQueryVariables = {
     id: string;
-    count?: number | null | undefined;
-    cursor?: string | null | undefined;
+    count?: number | null;
+    cursor?: string | null;
 };
 export type OrgProfileQueryResponse = {
     readonly node: {
         readonly id: string;
-        readonly name?: string | undefined;
+        readonly name?: string;
         readonly " $fragmentRefs": FragmentRefs<"OrgEventListFragment" | "OrgMemberListFragment">;
     } | null;
 };

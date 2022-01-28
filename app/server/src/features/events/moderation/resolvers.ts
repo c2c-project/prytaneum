@@ -31,108 +31,38 @@ export const resolvers: Resolvers = {
                     node: questionWithGlobalId,
                     cursor: questionWithGlobalId.createdAt.getTime().toString(),
                 };
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                ctx.pubsub.publish({
-                    topic: 'questionUpdated',
-                    payload: {
-                        questionUpdated: { edge },
-                    },
-                });
                 return edge;
             });
         },
-        // TODO: make this a normal mutation response
         async nextQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
-                ctx.viewer.id,
-                ctx.prisma,
-                eventId
-            );
-            const eventWithGlobalId = toEventId(event);
-            const newCurrentQuestionWithGlobalId = toQuestionId(newCurrentQuestion);
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, 1);
+            const eventWithGlobalId = toEventId(updatedEvent);
 
-            // TODO: #QQRedesign delete once code complete
             ctx.pubsub.publish({
                 topic: 'eventUpdates',
                 payload: {
                     eventUpdates: eventWithGlobalId,
-                },
-            });
-
-            if (!newCurrentQuestionWithGlobalId) return eventWithGlobalId;
-
-            ctx.pubsub.publish({
-                topic: 'enqueuedRemoveQuestion',
-                payload: {
-                    enqueuedRemoveQuestion: {
-                        edge: {
-                            node: newCurrentQuestionWithGlobalId,
-                            cursor: newCurrentQuestionWithGlobalId.createdAt.getTime().toString(),
-                        },
-                    },
-                },
-            });
-
-            ctx.pubsub.publish({
-                topic: 'recordPushQuestion',
-                payload: {
-                    recordPushQuestion: {
-                        edge: {
-                            node: newCurrentQuestionWithGlobalId,
-                            cursor: newCurrentQuestionWithGlobalId.createdAt.getTime().toString(),
-                        },
-                    },
                 },
             });
             return eventWithGlobalId;
         },
-        // TODO: make this a normal mutation response
         async prevQuestion(parent, args, ctx, info) {
             if (!ctx.viewer.id) throw new Error(errors.noLogin);
             const { id: eventId } = fromGlobalId(args.eventId);
-            const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
-                ctx.viewer.id,
-                ctx.prisma,
-                eventId
-            );
-
-            const eventWithGlobalId = toEventId(event);
-            const prevCurrentQuestionWithGlobalId = toQuestionId(prevCurrentQuestion);
-            // TODO: #QQRedesign delete once code complete
+            const updatedEvent = await Moderation.changeCurrentQuestion(ctx.viewer.id, ctx.prisma, eventId, -1);
+            const eventWithGlobalId = toEventId(updatedEvent);
             ctx.pubsub.publish({
                 topic: 'eventUpdates',
                 payload: {
                     eventUpdates: eventWithGlobalId,
-                },
-            });
-            ctx.pubsub.publish({
-                topic: 'enqueuedUnshiftQuestion',
-                payload: {
-                    enqueuedUnshiftQuestion: {
-                        edge: {
-                            node: prevCurrentQuestionWithGlobalId,
-                            cursor: prevCurrentQuestion.createdAt.getTime().toString(),
-                        },
-                    },
-                },
-            });
-            ctx.pubsub.publish({
-                topic: 'recordRemoveQuestion',
-                payload: {
-                    recordRemoveQuestion: {
-                        edge: {
-                            node: prevCurrentQuestionWithGlobalId,
-                            cursor: prevCurrentQuestion.createdAt.getTime().toString(),
-                        },
-                    },
                 },
             });
             return eventWithGlobalId;
@@ -170,7 +100,6 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedMod);
             });
         },
-        // TODO: #QQRedesign delete once code complete
         updateQuestionQueue(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
@@ -197,14 +126,12 @@ export const resolvers: Resolvers = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionQueued',
                     payload: {
@@ -229,24 +156,16 @@ export const resolvers: Resolvers = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionQueued',
                     payload: {
                         questionQueued: questionWithGlobalId,
-                    },
-                });
-                ctx.pubsub.publish({
-                    topic: 'enqueuedPushQuestion',
-                    payload: {
-                        enqueuedPushQuestion: { edge },
                     },
                 });
                 return edge;
@@ -267,29 +186,21 @@ export const resolvers: Resolvers = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionCRUD',
                     payload: {
                         questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
                     },
                 });
-                // TODO: #QQRedesign delete once code complete
                 ctx.pubsub.publish({
                     topic: 'questionQueued',
                     payload: {
                         questionQueued: questionWithGlobalId,
                     },
                 });
-                ctx.pubsub.publish({
-                    topic: 'enqueuedRemoveQuestion',
-                    payload: {
-                        enqueuedRemoveQuestion: { edge },
-                    },
-                });
                 return edge;
-            });
-        },
+            })
+        }
     },
     Subscription: {
         eventLiveFeedbackCreated: {
@@ -299,7 +210,6 @@ export const resolvers: Resolvers = {
                     Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.id)
             ),
         },
-        // TODO: #QQRedesign delete once code complete
         questionQueued: {
             subscribe: withFilter<{ questionQueued: EventQuestion }>(
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('questionQueued'),

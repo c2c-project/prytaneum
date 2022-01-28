@@ -3,8 +3,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type OrgMemberListFragment = {
     readonly id: string;
     readonly members: {
@@ -22,7 +21,7 @@ export type OrgMemberListFragment = {
 };
 export type OrgMemberListFragment$data = OrgMemberListFragment;
 export type OrgMemberListFragment$key = {
-    readonly " $data"?: OrgMemberListFragment$data | undefined;
+    readonly " $data"?: OrgMemberListFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"OrgMemberListFragment">;
 };
 

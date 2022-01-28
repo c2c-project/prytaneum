@@ -3,8 +3,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type SpeakerListFragment = {
     readonly speakers: {
         readonly edges: ReadonlyArray<{
@@ -22,7 +21,7 @@ export type SpeakerListFragment = {
 };
 export type SpeakerListFragment$data = SpeakerListFragment;
 export type SpeakerListFragment$key = {
-    readonly " $data"?: SpeakerListFragment$data | undefined;
+    readonly " $data"?: SpeakerListFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"SpeakerListFragment">;
 };
 

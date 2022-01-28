@@ -3,8 +3,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type QuestionQuoteFragment = {
     readonly id: string;
     readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
@@ -12,7 +11,7 @@ export type QuestionQuoteFragment = {
 };
 export type QuestionQuoteFragment$data = QuestionQuoteFragment;
 export type QuestionQuoteFragment$key = {
-    readonly " $data"?: QuestionQuoteFragment$data | undefined;
+    readonly " $data"?: QuestionQuoteFragment$data;
     readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
 };
 

@@ -3,15 +3,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
 export type UpdateSpeaker = {
-    description?: string | null | undefined;
-    email?: string | null | undefined;
+    description?: string | null;
+    email?: string | null;
     eventId: string;
     id: string;
-    name?: string | null | undefined;
-    pictureUrl?: string | null | undefined;
-    title?: string | null | undefined;
+    name?: string | null;
+    pictureUrl?: string | null;
+    title?: string | null;
 };
 export type UpdateSpeakerMutationVariables = {
     input: UpdateSpeaker;

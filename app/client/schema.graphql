@@ -168,16 +168,10 @@ type Event implements Node {
   """Participants of the event -- individuals who showed up"""
   participants(after: String, first: Int): EventParticipantConnection
 
-  """Questions having to do with the queue"""
-  questionQueue(after: String, first: Int): EventQuestionQueue
-
   """All questions relating to this event"""
   questions(after: String, first: Int): EventQuestionConnection
 
-  """
-  Questions queued in this session by the moderator(s)
-  TODO: #QQRedesign delete after code complete
-  """
+  """Questions queued in this session by the moderator(s)"""
   queuedQuestions(after: String, first: Int): EventQuestionConnection
 
   """Registrants for this event -- individuals invited"""
@@ -298,25 +292,10 @@ type EventQuestionEdge {
   node: EventQuestion!
 }
 
-"""
-Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
-"""
-type EventQuestionEdgeContainer {
-  edge: EventQuestionEdge!
-}
-
 type EventQuestionMutationResponse implements MutationResponse {
   body: EventQuestionEdge
   isError: Boolean!
   message: String!
-}
-
-"""EventQuestionQueue is the entire queue of the event"""
-type EventQuestionQueue {
-  enqueuedQuestions(after: String, first: Int): EventQuestionConnection
-
-  """last index is current question"""
-  questionRecord(after: String, first: Int): EventQuestionConnection
 }
 
 type EventSpeaker implements Node {
@@ -456,16 +435,10 @@ type Mutation {
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
 
-  """
-  Advance the current question
-  TODO: make this an EventMutationResponse
-  """
+  """Advance the current question"""
   nextQuestion(eventId: ID!): Event!
 
-  """
-  Go to the previous question
-  TODO: make this an EventMutationResponse
-  """
+  """Go to the previous question"""
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
@@ -564,7 +537,6 @@ type Query {
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
 }
 
-"""TODO: #QQRedesign dlete after code complete"""
 type QuestionOperation {
   edge: EventQuestionEdge!
   operationType: Operation!
@@ -584,41 +556,19 @@ input RemoveQuestionFromQueue {
 }
 
 type Subscription {
-  enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
-  enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
-  enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
-
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-
-  """TODO: #QQRedesign delete after code complete"""
   eventUpdates(eventId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
 
   """subscription for whenever a new org is added"""
   orgUpdated: OrganizationSubscription!
-  questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
-  questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
-  """
-  Question subscription for all operations performed on questions
-  TODO: #QQRedesign delete after code complete
-  """
+  """Question subscription for all operations performed on questions"""
   questionCRUD(eventId: ID!): QuestionOperation!
-  questionCreated(eventId: ID!): EventQuestionEdgeContainer!
-  questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
 
-  """
-  subscription for whenever questions are added to the queue
-  TODO: #QQRedesign delete once code complete
-  """
+  """subscription for whenever questions are added to the queue"""
   questionQueued(eventId: ID!): EventQuestion!
-  questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
-  questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
-  questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
-  recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
-  recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
-  recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
 }
 
 input UpdateEmailForm {

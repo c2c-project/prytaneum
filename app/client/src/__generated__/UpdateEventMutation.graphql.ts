@@ -3,18 +3,17 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-
 export type UpdateEvent = {
-    description?: string | null | undefined;
-    endDateTime?: Date | null | undefined;
+    description?: string | null;
+    endDateTime?: Date | null;
     eventId: string;
-    isCollectRatingsEnabled?: boolean | null | undefined;
-    isForumEnabled?: boolean | null | undefined;
-    isPrivate?: boolean | null | undefined;
-    isQuestionFeedVisible?: boolean | null | undefined;
-    startDateTime?: Date | null | undefined;
-    title?: string | null | undefined;
-    topic?: string | null | undefined;
+    isCollectRatingsEnabled?: boolean | null;
+    isForumEnabled?: boolean | null;
+    isPrivate?: boolean | null;
+    isQuestionFeedVisible?: boolean | null;
+    startDateTime?: Date | null;
+    title?: string | null;
+    topic?: string | null;
 };
 export type UpdateEventMutationVariables = {
     input: UpdateEvent;
