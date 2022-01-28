@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type useQuestionListFragment = {
     readonly id: string;
     readonly currentQuestion: number | null;
@@ -28,7 +29,7 @@ export type useQuestionListFragment = {
 };
 export type useQuestionListFragment$data = useQuestionListFragment;
 export type useQuestionListFragment$key = {
-    readonly " $data"?: useQuestionListFragment$data;
+    readonly " $data"?: useQuestionListFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"useQuestionListFragment">;
 };
 
@@ -45,12 +46,12 @@ var v0 = {
 return {
   "argumentDefinitions": [
     {
-      "defaultValue": "",
+      "defaultValue": "1",
       "kind": "LocalArgument",
       "name": "after"
     },
     {
-      "defaultValue": 100,
+      "defaultValue": 1000,
       "kind": "LocalArgument",
       "name": "first"
     }
@@ -229,5 +230,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'b81afe8fd8d468a14a7585eca58ae56f';
+(node as any).hash = '8d9a9dd63c2ed5ff753c345fc99fe966';
 export default node;

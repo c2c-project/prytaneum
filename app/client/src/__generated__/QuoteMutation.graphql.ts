@@ -3,13 +3,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type CreateQuestion = {
     eventId: string;
-    isFollowUp?: boolean | null;
-    isQuote?: boolean | null;
+    isFollowUp?: boolean | null | undefined;
+    isQuote?: boolean | null | undefined;
     question: string;
-    refQuestion?: string | null;
+    refQuestion?: string | null | undefined;
 };
 export type QuoteMutationVariables = {
     input: CreateQuestion;

@@ -47,6 +47,17 @@ type EventQuestion implements Node {
     isMyQuestion: Boolean
 }
 
+"""
+EventQuestionQueue is the entire queue of the event
+"""
+type EventQuestionQueue {
+    """
+    last index is current question
+    """
+    questionRecord(first: Int, after: String): EventQuestionConnection
+    enqueuedQuestions(first: Int, after: String): EventQuestionConnection
+}
+
 type EventQuestionEdge {
     node: EventQuestion!
     cursor: String!
@@ -84,6 +95,9 @@ type EventQuestionMutationResponse implements MutationResponse {
     body: EventQuestionEdge
 }
 
+"""
+TODO: #QQRedesign dlete after code complete
+"""
 type QuestionOperation {
     operationType: Operation!
     edge: EventQuestionEdge!
@@ -94,11 +108,42 @@ type Mutation {
     alterLike(input: AlterLike!): EventQuestionMutationResponse!
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventQuestionEdgeContainer {
+    edge: EventQuestionEdge!
+}
+
 type Subscription {
     """
     Question subscription for all operations performed on questions
+    TODO: #QQRedesign delete after code complete
     """
     questionCRUD(eventId: ID!): QuestionOperation!
+
+    questionCreated(eventId: ID!): EventQuestionEdgeContainer!
+    questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
+    questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
+
+    questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
+    questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
+
+
+    # Do not need to control the order that things 
+    # are removed since we cannot control that on the frontend
+    # We need to control the order that things are added since
+    # we control that with append or prepend ont he frontend
+    recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
+    enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+    enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
+
+    questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
+    questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
 }
 
 type Query {

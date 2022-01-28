@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type UpdateVideo = {
     eventId: string;
-    lang?: string | null;
-    url?: string | null;
+    lang?: string | null | undefined;
+    url?: string | null | undefined;
     videoId: string;
 };
 export type UpdateVideoMutationVariables = {

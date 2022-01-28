@@ -3,7 +3,8 @@
 // @ts-nocheck
 
 import { ReaderFragment } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type GenericSettingsFragment = {
     readonly id: string;
     readonly isQuestionFeedVisible: boolean | null;
@@ -14,7 +15,7 @@ export type GenericSettingsFragment = {
 };
 export type GenericSettingsFragment$data = GenericSettingsFragment;
 export type GenericSettingsFragment$key = {
-    readonly " $data"?: GenericSettingsFragment$data;
+    readonly " $data"?: GenericSettingsFragment$data | undefined;
     readonly " $fragmentRefs": FragmentRefs<"GenericSettingsFragment">;
 };
 

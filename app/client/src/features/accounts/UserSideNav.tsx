@@ -112,28 +112,24 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
                 <StyledListItem button onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
-                    {selected === 'Dashboard'}
                     <StyledListItemIcon>
                         <DashboardIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='Dashboard' />
                 </StyledListItem>
-                <>
-                    <StyledSubheader>Organizations</StyledSubheader>
-                    <StyledDivider />
+                <StyledSubheader>Organizations</StyledSubheader>
+                <StyledDivider />
 
-                    <StyledListItem
-                        button
-                        onClick={handleClick('My Organizations')}
-                        selected={selected === 'My Organizations'}
-                    >
-                        {selected === 'My Organizations'}
-                        <StyledListItemIcon>
-                            <ListIcon />
-                        </StyledListItemIcon>
-                        <ListItemText primary='My Organizations' />
-                    </StyledListItem>
-                </>
+                <StyledListItem
+                    button
+                    onClick={handleClick('My Organizations')}
+                    selected={selected === 'My Organizations'}
+                >
+                    <StyledListItemIcon>
+                        <ListIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='My Organizations' />
+                </StyledListItem>
             </AnimateSharedLayout>
         </List>
     );

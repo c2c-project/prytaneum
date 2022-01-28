@@ -39,7 +39,6 @@ export function UpdateEvent({ eventId, onSubmit, ...eventFormProps }: UpdateEven
                 },
             },
             onCompleted(results) {
-                console.log(results.updateEvent)
                 if (results.updateEvent) onSubmit(results.updateEvent);
             },
         });

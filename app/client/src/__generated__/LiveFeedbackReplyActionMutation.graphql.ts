@@ -3,12 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type CreateFeedback = {
     eventId: string;
-    isReply?: boolean | null;
+    isReply?: boolean | null | undefined;
     message: string;
-    refFeedbackId?: string | null;
+    refFeedbackId?: string | null | undefined;
 };
 export type LiveFeedbackReplyActionMutationVariables = {
     input: CreateFeedback;
