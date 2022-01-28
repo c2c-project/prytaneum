@@ -54,7 +54,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { questions, connections, currentQuestion } = useQuestionList({ fragmentRef });
+    const { questions, connections } = useQuestionList({ fragmentRef });
     useQuestionCreated({ connections });
     useQuestionUpdated({ connections });
     useQuestionDeleted({ connections });
