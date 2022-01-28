@@ -9,7 +9,11 @@ const useStyles = makeStyles((theme) => ({
     stats: {
         display: 'flex',
         gap: theme.spacing(0.5),
-        alignItems: 'center'
+        alignItems: 'center',
+        width: 'min-content', // minimized width and height since the icon had too much of a height difference to buttons
+        height: 'min-content',
+        paddingTop: 0,
+        paddingBottom: '0 !important' // added !important for filler icon (for some reason, CSS wasn't being applied)
     },
 }));
 
