@@ -89,8 +89,8 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
         [data.questionQueue?.questionRecord]
     );
 
-    // useRecordPush(recordConnection);
-    // useRecordRemove(recordConnection);
+    useRecordPush(recordConnection);
+    useRecordRemove(recordConnection);
 
     // somewhat redundant, but ensures that everything is sorted
     const sortedQuestions = useMemo(
