@@ -21,7 +21,6 @@ export type QuestionActionProps = {
     like?: boolean;
     queue?: boolean;
     connections: string[];
-    currentQuestion: number | null;
 } & CardActionsProps;
 
 export function QuestionActions({
@@ -30,7 +29,6 @@ export function QuestionActions({
     queue = false,
     fragmentRef,
     connections,
-    currentQuestion,
     ...props
 }: QuestionActionProps) {
     const data = useFragment(QUESTION_ACTIONS_FRAGMENT, fragmentRef);
@@ -38,7 +36,7 @@ export function QuestionActions({
         <CardActions {...props}>
             {like && <Like fragmentRef={data} />}
             {quote && <Quote fragmentRef={data} connections={connections} />}
-            {queue && <QueueButton fragmentRef={data} currentQuestion={currentQuestion} />}
+            {queue && <QueueButton fragmentRef={data} />}
         </CardActions>
     );
 }

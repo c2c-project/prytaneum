@@ -110,7 +110,6 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             queue={isModerator && Boolean(user)}
                                             connections={connections}
                                             fragmentRef={question}
-                                            currentQuestion={currentQuestion}
                                         />
                                     </Card>
                                 </ListItem>
