@@ -2,14 +2,13 @@ import { useMemo, useReducer, useEffect } from 'react';
 import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { graphql, useRefetchableFragment, useSubscription } from 'react-relay';
+import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
-import type { QuestionCarouselSubscription } from '@local/__generated__/QuestionCarouselSubscription.graphql';
-import { useEvent } from '@local/features/events';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
+import { useRecordPush } from '../../Moderation/ManageQuestions/useRecordPush';
+import { useRecordRemove } from '../../Moderation/ManageQuestions/useRecordRemove';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,27 +25,21 @@ const useStyles = makeStyles((theme) => ({
 const QUESTION_CAROUSEL_FRAGMENT = graphql`
     fragment QuestionCarouselFragment on Event
     @refetchable(queryName: "QuestionCarouselFragmentRefetchable")
-    @argumentDefinitions(first: { type: Int, defaultValue: 100 }, after: { type: String, defaultValue: "" }) {
+    @argumentDefinitions(first: { type: Int, defaultValue: 1000 }, after: { type: String, defaultValue: "" }) {
         id
         currentQuestion
-        queuedQuestions(first: $first, after: $after) {
-            edges {
-                cursor
-                node {
-                    position
-                    ...QuestionAuthorFragment
-                    ...QuestionContentFragment
+        questionQueue {
+            questionRecord(first: $first, after: $after) @connection(key: "QuestionCarousel_questionRecord") {
+                __id
+                edges {
+                    cursor
+                    node {
+                        position
+                        ...QuestionAuthorFragment
+                        ...QuestionContentFragment
+                    }
                 }
             }
-        }
-    }
-`;
-
-export const QUESTION_CAROUSEL_SUBSCRIPTION = graphql`
-    subscription QuestionCarouselSubscription($eventId: ID!) {
-        eventUpdates(eventId: $eventId) {
-            id
-            currentQuestion
         }
     }
 `;
@@ -89,37 +82,32 @@ function reducer(state: TState, action: TActions): TState {
 
 export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
     const classes = useStyles();
-    const [data, refetch] = useRefetchableFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
+    const data = useFragment(QUESTION_CAROUSEL_FRAGMENT, fragmentRef);
     const [state, dispatch] = useReducer<typeof reducer>(reducer, { idx: -1, currQuestionIdx: -1 });
-    const { eventId } = useEvent();
-    const config = useMemo<GraphQLSubscriptionConfig<QuestionCarouselSubscription>>(
-        () => ({
-            variables: { eventId },
-            subscription: QUESTION_CAROUSEL_SUBSCRIPTION,
-            updater: () => {
-                refetch({}, { fetchPolicy: 'store-and-network' });
-            }
-        }),
-        [eventId, refetch]
+    const recordConnection = useMemo(
+        () => ({ connection: data.questionQueue?.questionRecord?.__id ?? '' }),
+        [data.questionQueue?.questionRecord]
     );
-    useSubscription(config);
 
+    // useRecordPush(recordConnection);
+    // useRecordRemove(recordConnection);
+
+    // somewhat redundant, but ensures that everything is sorted
     const sortedQuestions = useMemo(
         () =>
-            data.queuedQuestions?.edges
+            data.questionQueue?.questionRecord?.edges
                 ?.slice(0)
                 .sort((edgeA, edgeB) =>
                     edgeA.node.position && edgeB.node.position ? edgeA.node.position - edgeB.node.position : 0
                 ) ?? [],
         [data]
     );
-    const currQuestionIdx = useMemo(
-        () => sortedQuestions.findIndex(({ node }) => node.position !== null && node.position === data.currentQuestion),
-        [sortedQuestions, data.currentQuestion]
-    );
+
+    const currQuestionIdx = useMemo(() => sortedQuestions.length - 1, [sortedQuestions]);
 
     useEffect(() => {
-        if (state.currQuestionIdx !== currQuestionIdx) dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
+        if (state.currQuestionIdx !== currQuestionIdx)
+            dispatch({ type: 'updateCurrentQuestionIdx', payload: currQuestionIdx });
     }, [currQuestionIdx, state.currQuestionIdx]);
 
     // probably a better way to do this, but whatever

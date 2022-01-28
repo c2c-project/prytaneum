@@ -18,6 +18,9 @@ import { QuestionQuote } from '../QuestionQuote';
 import { QuestionStats } from '../QuestionStats';
 // import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
+import { useQuestionCreated } from './useQuestionCreated';
+import { useQuestionUpdated } from './useQuestionUpdated';
+import { useQuestionDeleted } from './useQuestionDeleted';
 
 interface Props {
     className?: string;
@@ -51,7 +54,10 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { questions, connections, currentQuestion } = useQuestionList({ fragmentRef });
+    const { questions, connections } = useQuestionList({ fragmentRef });
+    useQuestionCreated({ connections });
+    useQuestionUpdated({ connections });
+    useQuestionDeleted({ connections });
     // const [isPaused, setIsPaused] = React.useState();
 
     // function togglePause() {}
@@ -104,7 +110,6 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             queue={isModerator && Boolean(user)}
                                             connections={connections}
                                             fragmentRef={question}
-                                            currentQuestion={currentQuestion}
                                         />
                                     </Card>
                                 </ListItem>

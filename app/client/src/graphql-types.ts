@@ -159,9 +159,14 @@ export type Event = Node & {
   organization?: Maybe<Organization>;
   /** Participants of the event -- individuals who showed up */
   participants?: Maybe<EventParticipantConnection>;
+  /** Questions having to do with the queue */
+  questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
   questions?: Maybe<EventQuestionConnection>;
-  /** Questions queued in this session by the moderator(s) */
+  /**
+   * Questions queued in this session by the moderator(s)
+   * TODO: #QQRedesign delete after code complete
+   */
   queuedQuestions?: Maybe<EventQuestionConnection>;
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
@@ -196,6 +201,12 @@ export type EventModeratorsArgs = {
 
 
 export type EventParticipantsArgs = {
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+};
+
+
+export type EventQuestionQueueArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
@@ -332,11 +343,39 @@ export type EventQuestionEdge = {
   node: EventQuestion;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventQuestionEdgeContainer = {
+  __typename?: 'EventQuestionEdgeContainer';
+  edge: EventQuestionEdge;
+};
+
 export type EventQuestionMutationResponse = MutationResponse & {
   __typename?: 'EventQuestionMutationResponse';
   body?: Maybe<EventQuestionEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
+};
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueue = {
+  __typename?: 'EventQuestionQueue';
+  enqueuedQuestions?: Maybe<EventQuestionConnection>;
+  /** last index is current question */
+  questionRecord?: Maybe<EventQuestionConnection>;
+};
+
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueueEnqueuedQuestionsArgs = {
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+};
+
+
+/** EventQuestionQueue is the entire queue of the event */
+export type EventQuestionQueueQuestionRecordArgs = {
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 export type EventSpeaker = Node & {
@@ -472,9 +511,15 @@ export type Mutation = {
   login: UserMutationResponse;
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
-  /** Advance the current question */
+  /**
+   * Advance the current question
+   * TODO: make this an EventMutationResponse
+   */
   nextQuestion: Event;
-  /** Go to the previous question */
+  /**
+   * Go to the previous question
+   * TODO: make this an EventMutationResponse
+   */
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
@@ -777,6 +822,7 @@ export type QueryValidateInviteArgs = {
   input: ValidateInvite;
 };
 
+/** TODO: #QQRedesign dlete after code complete */
 export type QuestionOperation = {
   __typename?: 'QuestionOperation';
   edge: EventQuestionEdge;
@@ -798,16 +844,51 @@ export type RemoveQuestionFromQueue = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  enqueuedPushQuestion: EventQuestionEdgeContainer;
+  enqueuedRemoveQuestion: EventQuestionEdgeContainer;
+  enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
+  /** TODO: #QQRedesign delete after code complete */
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
-  /** Question subscription for all operations performed on questions */
+  questionAddedToEnqueued: EventQuestionEdgeContainer;
+  questionAddedToRecord: EventQuestionEdgeContainer;
+  /**
+   * Question subscription for all operations performed on questions
+   * TODO: #QQRedesign delete after code complete
+   */
   questionCRUD: QuestionOperation;
-  /** subscription for whenever questions are added to the queue */
+  questionCreated: EventQuestionEdgeContainer;
+  questionDeleted: EventQuestionEdgeContainer;
+  /**
+   * subscription for whenever questions are added to the queue
+   * TODO: #QQRedesign delete once code complete
+   */
   questionQueued: EventQuestion;
+  questionRemovedFromEnqueued: EventQuestionEdgeContainer;
+  questionRemovedFromRecord: EventQuestionEdgeContainer;
+  questionUpdated: EventQuestionEdgeContainer;
+  recordPushQuestion: EventQuestionEdgeContainer;
+  recordRemoveQuestion: EventQuestionEdgeContainer;
+  recordUnshiftQuestion: EventQuestionEdgeContainer;
+};
+
+
+export type SubscriptionEnqueuedPushQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEnqueuedRemoveQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionEnqueuedUnshiftQuestionArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -826,12 +907,62 @@ export type SubscriptionFeedbackCrudArgs = {
 };
 
 
+export type SubscriptionQuestionAddedToEnqueuedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionAddedToRecordArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type SubscriptionQuestionCrudArgs = {
   eventId: Scalars['ID'];
 };
 
 
+export type SubscriptionQuestionCreatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionDeletedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type SubscriptionQuestionQueuedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionRemovedFromEnqueuedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionRemovedFromRecordArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionUpdatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordPushQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordRemoveQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionRecordUnshiftQuestionArgs = {
   eventId: Scalars['ID'];
 };
 

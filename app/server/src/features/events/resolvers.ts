@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
-import type { Event as TEvent } from '@local/graphql-types';
+import type { Event as TEvent, EventQuestion } from '@local/graphql-types';
 import * as Event from './methods';
 
 const toEventId = toGlobalId('Event');
@@ -126,6 +126,7 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             return Event.isModerator(ctx.viewer.id, eventId, ctx.prisma);
         },
+        // TODO: #QQRedesign delete after code complete
         async queuedQuestions(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findQueuedQuestionsByEventId(eventId, ctx.prisma);
@@ -162,6 +163,38 @@ export const resolvers: Resolvers = {
                     endCursor: edges[liveFeedback.length - 1]?.cursor.toString(),
                 },
             };
-        }
+        },
+        async questionQueue(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const queryResult = await Event.findQuestionQueueByEventId(eventId, ctx.prisma);
+            const toQuestionEdge = (question: EventQuestion) => ({
+                node: question,
+                cursor: question.position?.toString() ?? '',
+            });
+            const makeConnection = <T extends ReturnType<typeof toQuestionEdge>[]>(edges: T) => ({
+                edges,
+                pageInfo: {
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: edges.length > 0 ? edges[0].cursor.toString() : '',
+                    endCursor: edges.length > 0 ? edges[edges.length - 1].cursor.toString() : '',
+                },
+            });
+            if (!queryResult) return null;
+
+            // many ways to do the following, done in similar ways for clarity
+            const questionRecordEdges = queryResult.questions
+                .filter((question) => question.position <= queryResult.currentQuestion)
+                .map(toQuestionId)
+                .map(toQuestionEdge);
+            const enqueuedQuestionsEdges = queryResult.questions
+                .filter((question) => question.position > queryResult.currentQuestion)
+                .map(toQuestionId)
+                .map(toQuestionEdge);
+            return {
+                questionRecord: makeConnection(questionRecordEdges),
+                enqueuedQuestions: makeConnection(enqueuedQuestionsEdges),
+            };
+        },
     },
 };
