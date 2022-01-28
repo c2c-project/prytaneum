@@ -14,7 +14,6 @@ import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
-import { MemoizedStyledTab, StyledTabProps } from './StyledTab';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
 
