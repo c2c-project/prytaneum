@@ -7,7 +7,7 @@ import type { useQuestionListFragment$key } from '@local/__generated__/useQuesti
 // TODO: make the pagination here better
 export const USE_QUESTION_LIST_FRAGMENT = graphql`
     fragment useQuestionListFragment on Event
-    @argumentDefinitions(first: { type: "Int", defaultValue: 100 }, after: { type: "String", defaultValue: "1" }) {
+    @argumentDefinitions(first: { type: "Int", defaultValue: 1000 }, after: { type: "String", defaultValue: "1" }) {
         id
         currentQuestion
         questions(first: $first, after: $after) @connection(key: "useQuestionListFragment_questions") {
