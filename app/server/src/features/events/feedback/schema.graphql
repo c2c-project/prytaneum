@@ -4,6 +4,9 @@ type EventLiveFeedback implements Node {
     event: Event
     createdAt: Date
     createdBy: User
+    createdById: ID
+    isReply: Boolean
+    refFeedback: EventLiveFeedback
 }
 
 type EventLiveFeedbackEdge {
@@ -30,6 +33,8 @@ type EventFeedbackMutationResponse implements MutationResponse {
 input CreateFeedback {
     message: String!
     eventId: ID!
+    refFeedbackId: ID
+    isReply: Boolean
 }
 
 

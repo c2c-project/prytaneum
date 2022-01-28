@@ -23,7 +23,9 @@ input CreateEvent {
 
 input CreateFeedback {
   eventId: ID!
+  isReply: Boolean
   message: String!
+  refFeedbackId: ID
 }
 
 input CreateInvite {
@@ -217,9 +219,12 @@ type EventFeedbackMutationResponse implements MutationResponse {
 type EventLiveFeedback implements Node {
   createdAt: Date
   createdBy: User
+  createdById: ID
   event: Event
   id: ID!
+  isReply: Boolean
   message: String!
+  refFeedback: EventLiveFeedback
 }
 
 type EventLiveFeedbackConnection {

@@ -113,6 +113,10 @@ model EventLiveFeedback {
     event Event @relation(fields: [eventId], references: [id])
     createdAt DateTime @default(now())
     message String @db.VarChar(500)
+    isReply Boolean @default(false)
+    refFeedbackId String? @db.Uuid
+    parentFeedback EventLiveFeedback[] @relation("reply")
+    refFeedback EventLiveFeedback? @relation("reply", fields: [refFeedbackId], references: [id])
 }
 
 model EventQuestion {

@@ -17,7 +17,13 @@ export type useLiveFeedbackListFragment = {
                 readonly createdBy: {
                     readonly id: string;
                 } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
+                readonly refFeedback: {
+                    readonly createdBy: {
+                        readonly id: string;
+                    } | null;
+                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
             };
         }> | null;
     } | null;
@@ -38,6 +44,23 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v0/*: any*/)
+  ],
+  "storageKey": null
+},
+v2 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "LiveFeedbackReplyFragment"
 };
 return {
   "argumentDefinitions": [
@@ -107,15 +130,17 @@ return {
                   "name": "message",
                   "storageKey": null
                 },
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
-                  "concreteType": "User",
+                  "concreteType": "EventLiveFeedback",
                   "kind": "LinkedField",
-                  "name": "createdBy",
+                  "name": "refFeedback",
                   "plural": false,
                   "selections": [
-                    (v0/*: any*/)
+                    (v1/*: any*/),
+                    (v2/*: any*/)
                   ],
                   "storageKey": null
                 },
@@ -126,6 +151,7 @@ return {
                   "name": "__typename",
                   "storageKey": null
                 },
+                (v2/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
@@ -182,5 +208,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'b59540cde23c196396e41ab63682403e';
+(node as any).hash = 'fd0a05fc621a67ccb998432d71870586';
 export default node;

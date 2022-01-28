@@ -5,7 +5,6 @@ import * as Feedback from './methods';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');
 const toUserId = toGlobalId('User');
-// const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -23,10 +22,12 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 if (!args.input) throw new Error(errors.invalidArgs);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                const feedback = await Feedback.createFeedback(ctx.viewer.id, eventId, ctx.prisma, args.input)
-                if (!feedback) return feedback;
+                const feedback = await Feedback.createFeedback(ctx.viewer.id, eventId, ctx.prisma, args.input);
+                const formattedFeedback = toFeedbackId(feedback);
+                if (formattedFeedback.refFeedback)
+                    formattedFeedback.refFeedback = toFeedbackId(formattedFeedback.refFeedback);
                 const edge = {
-                    node: toFeedbackId(feedback),
+                    node: formattedFeedback,
                     cursor: feedback.createdAt.getTime().toString()
                 }
                 ctx.pubsub.publish({
@@ -57,6 +58,11 @@ export const resolvers: Resolvers = {
             const { id: feedbackId } = fromGlobalId(parent.id);
             const submitter = await Feedback.findSubmitterByFeedbackId(feedbackId, ctx.prisma);
             return toUserId(submitter);
+        },
+        async refFeedback(parent, args, ctx, info) {
+            const { id: feedbackId } = fromGlobalId(parent.id);
+            const feedback = await Feedback.findRefFeedback(feedbackId, ctx.prisma);
+            return toFeedbackId(feedback);
         },
     },
 }

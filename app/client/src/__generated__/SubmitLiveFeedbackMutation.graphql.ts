@@ -6,7 +6,9 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type CreateFeedback = {
     eventId: string;
+    isReply?: boolean | null | undefined;
     message: string;
+    refFeedbackId?: string | null | undefined;
 };
 export type SubmitLiveFeedbackMutationVariables = {
     input: CreateFeedback;
