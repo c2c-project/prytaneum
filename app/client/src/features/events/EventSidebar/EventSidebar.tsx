@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Tab, Tabs } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import clsx from 'clsx';
@@ -16,6 +16,7 @@ import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedba
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
+import { Tabs } from '@local/components/Tabs'
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -69,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(1),
         boxShadow: theme.shadows[1],
-        // border: `1px solid ${theme.palette.secondary.main}`,
+        // border: 1px solid ${theme.palette.secondary.main},
     },
     pl: {
         paddingLeft: theme.spacing(2),
@@ -148,17 +149,25 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
             {data.isViewerModerator && (
-                <Tabs variant='scrollable' scrollButtons='auto' value={tabIndex} onChange={handleTabChange}>
-                    <Tab label='Question Queue' />
-                    <Tab label='Question List' />
-                    <Tab label='Live Feedback' />
-                </Tabs>
+                <Tabs 
+                    value={tabIndex}
+                    onChange={handleTabChange}
+                    tabs={[
+                        'Queue',
+                        'Questions',
+                        'Feedback',
+                    ]}
+                />
             )}
             {!data.isViewerModerator && (
-                <Tabs value={tabIndex} onChange={handleTabChange}>
-                    <Tab label='Question List' />
-                    <Tab label='Live Feedback' />
-                </Tabs>
+                <Tabs 
+                    value={tabIndex}
+                    onChange={handleTabChange}
+                    tabs={[
+                        'Questions',
+                        'Feedback',
+                    ]}
+                />
             )}
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
