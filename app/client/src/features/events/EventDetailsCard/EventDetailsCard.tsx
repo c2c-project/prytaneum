@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     },
     description: {
         marginBottom: theme.spacing(1),
-        color: '#B5B5B5'
     },
     divider: {
         background: 'black'
@@ -41,7 +40,7 @@ export function EventDetailsCard({ fragmentRef }: Props) {
             <Typography variant='h5' className={classes.title}>
                 {title}
             </Typography>
-            <Typography variant='body1' className={classes.description}>
+            <Typography color='textSecondary' variant='body1' className={classes.description}>
                 {description}
             </Typography>
             <Divider className={classes.divider} />
