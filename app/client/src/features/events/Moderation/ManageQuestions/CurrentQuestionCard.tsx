@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Chip, Card } from '@material-ui/core';
-import { graphql } from 'react-relay';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import type { useQuestionQueueFragment$key } from '@local/__generated__/useQuestionQueueFragment.graphql';
@@ -45,10 +44,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface QuestionQueueProps {
+    isViewerModerator: boolean;
     fragmentRef: useQuestionQueueFragment$key;
 }
 
-export function CurrentQuestionCard({ fragmentRef }: QuestionQueueProps) {
+export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
@@ -110,10 +110,12 @@ export function CurrentQuestionCard({ fragmentRef }: QuestionQueueProps) {
                     />
                     <QuestionAuthor fragmentRef={currentQuestion.node} />
                     <QuestionContent fragmentRef={currentQuestion.node} />
-                    <Grid container alignItems='center' justify='space-between' className={classes.currentQuestionActions}>
-                        <PreviousQuestionButton disabled={!canGoBackward} />
-                        <NextQuestionButton disabled={!canGoForward} />
-                    </Grid>
+                    { isViewerModerator &&
+                        <Grid container alignItems='center' justify='space-between' className={classes.currentQuestionActions}>
+                            <PreviousQuestionButton disabled={!canGoBackward} />
+                            <NextQuestionButton disabled={!canGoForward} />
+                        </Grid>
+                    }
 
                 </Card>
             }

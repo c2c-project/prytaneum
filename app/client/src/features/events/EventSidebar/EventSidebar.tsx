@@ -124,7 +124,10 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             wrap='nowrap'
         >
             <Grid item>
-                <CurrentQuestionCard fragmentRef={data} />
+                <CurrentQuestionCard
+                    isViewerModerator={Boolean(data.isViewerModerator)}
+                    fragmentRef={data}
+                />
             </Grid>
             <Grid
                 container
