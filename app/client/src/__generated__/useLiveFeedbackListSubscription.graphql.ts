@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<060ce6388e47e8156cad2fd3af454072>>
+ * @generated SignedSource<<827b11384caba0824a0f4c74df599ea7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,27 +14,27 @@ export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
 export type useLiveFeedbackListSubscription$variables = {
   eventId: string;
 };
-export type useLiveFeedbackListSubscriptionResponse = {
-    readonly feedbackCRUD: {
-        readonly operationType: Operation;
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly createdBy: {
-                    readonly id: string;
-                    readonly firstName: string | null;
-                } | null;
-                readonly refFeedback: {
-                    readonly createdBy: {
-                        readonly id: string;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
-                } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-            };
-        };
+export type useLiveFeedbackListSubscriptionVariables = useLiveFeedbackListSubscription$variables;
+export type useLiveFeedbackListSubscription$data = {
+  readonly feedbackCRUD: {
+    readonly operationType: Operation;
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly message: string;
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+        } | null;
+        readonly refFeedback: {
+          readonly createdBy: {
+            readonly id: string;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+      };
     };
   };
 };
@@ -43,54 +43,6 @@ export type useLiveFeedbackListSubscription = {
   variables: useLiveFeedbackListSubscriptionVariables;
   response: useLiveFeedbackListSubscription$data;
 };
-
-
-
-/*
-subscription useLiveFeedbackListSubscription(
-  $eventId: ID!
-) {
-  feedbackCRUD(eventId: $eventId) {
-    operationType
-    edge {
-      cursor
-      node {
-        id
-        message
-        createdBy {
-          id
-          firstName
-        }
-        refFeedback {
-          createdBy {
-            id
-          }
-          ...LiveFeedbackReplyFragment
-          id
-        }
-        ...LiveFeedbackReplyFragment
-        ...LiveFeedbackAuthorFragment
-      }
-    }
-  }
-}
-
-fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
-  createdBy {
-    id
-    firstName
-    lastName
-    avatar
-  }
-  createdAt
-}
-
-fragment LiveFeedbackReplyFragment on EventLiveFeedback {
-  id
-  message
-  ...LiveFeedbackAuthorFragment
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -344,5 +296,7 @@ return {
   }
 };
 })();
-(node as any).hash = '47ab729d3b19732e30514df5b46855d6';
+
+(node as any).hash = "47ab729d3b19732e30514df5b46855d6";
+
 export default node;

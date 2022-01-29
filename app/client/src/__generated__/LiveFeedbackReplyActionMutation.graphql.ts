@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<615c2974cddf9192daaa43a1b7dbfafb>>
+ * @generated SignedSource<<1d47a0d75c16c40b6ab326da54e99ef5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -39,37 +39,6 @@ export type LiveFeedbackReplyActionMutation = {
   variables: LiveFeedbackReplyActionMutationVariables;
   response: LiveFeedbackReplyActionMutation$data;
 };
-
-
-
-/*
-mutation LiveFeedbackReplyActionMutation(
-  $input: CreateFeedback!
-) {
-  createFeedback(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        message
-        ...LiveFeedbackAuthorFragment
-      }
-    }
-  }
-}
-
-fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
-  createdBy {
-    id
-    firstName
-    lastName
-    avatar
-  }
-  createdAt
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
