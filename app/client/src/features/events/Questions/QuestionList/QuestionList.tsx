@@ -48,10 +48,8 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-    },
-    cardFooter: {
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        paddingTop: theme.spacing(0.5),
+        borderRadius: '10px'
     },
     filler: {
         visibility: 'hidden'
@@ -110,7 +108,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                         <QuestionAuthor fragmentRef={question} />
                                         {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
-                                        <Grid container className={classes.cardFooter}>
+                                        <Grid container alignItems='center' justify='space-between'>
                                             {isModerator && <QuestionStats fragmentRef={question} />}
                                             <QuestionActions
                                                 style={
