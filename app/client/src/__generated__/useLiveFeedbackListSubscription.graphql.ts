@@ -14,26 +14,27 @@ export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
 export type useLiveFeedbackListSubscription$variables = {
   eventId: string;
 };
-export type useLiveFeedbackListSubscriptionVariables = useLiveFeedbackListSubscription$variables;
-export type useLiveFeedbackListSubscription$data = {
-  readonly feedbackCRUD: {
-    readonly operationType: Operation;
-    readonly edge: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly message: string;
-        readonly createdBy: {
-          readonly id: string;
-        } | null;
-        readonly refFeedback: {
-          readonly createdBy: {
-            readonly id: string;
-          } | null;
-          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
-        } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-      };
+export type useLiveFeedbackListSubscriptionResponse = {
+    readonly feedbackCRUD: {
+        readonly operationType: Operation;
+        readonly edge: {
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly message: string;
+                readonly createdBy: {
+                    readonly id: string;
+                    readonly firstName: string | null;
+                } | null;
+                readonly refFeedback: {
+                    readonly createdBy: {
+                        readonly id: string;
+                    } | null;
+                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+            };
+        };
     };
   };
 };
@@ -58,6 +59,7 @@ subscription useLiveFeedbackListSubscription(
         message
         createdBy {
           id
+          firstName
         }
         refFeedback {
           createdBy {
@@ -136,13 +138,8 @@ v5 = {
 v6 = {
   "alias": null,
   "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "createdBy",
-  "plural": false,
-  "selections": [
-    (v4/*: any*/)
-  ],
+  "kind": "ScalarField",
+  "name": "firstName",
   "storageKey": null
 },
 v7 = {
@@ -159,13 +156,7 @@ v8 = {
   "plural": false,
   "selections": [
     (v4/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "firstName",
-      "storageKey": null
-    },
+    (v6/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -225,7 +216,19 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
-                  (v6/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v4/*: any*/),
+                      (v6/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -234,7 +237,18 @@ return {
                     "name": "refFeedback",
                     "plural": false,
                     "selections": [
-                      (v6/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "User",
+                        "kind": "LinkedField",
+                        "name": "createdBy",
+                        "plural": false,
+                        "selections": [
+                          (v4/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
                       (v7/*: any*/)
                     ],
                     "storageKey": null
@@ -321,16 +335,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c371b9156ff44ad2e18a2cef70f06a35",
+    "cacheID": "1262a2f50f7a8a5f7d871d2b7afff342",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
   }
 };
 })();
-
-(node as any).hash = "79317d818502fdfb191313facf1e3a2b";
-
+(node as any).hash = '47ab729d3b19732e30514df5b46855d6';
 export default node;

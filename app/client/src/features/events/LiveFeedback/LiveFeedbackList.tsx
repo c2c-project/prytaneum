@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
+import { ArrayElement } from '@local/utils/ts-utils';
 import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@material-ui/core';
 import clsx from 'clsx';
 import { useUser } from '@local/features/accounts';
@@ -44,6 +46,16 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
     const { isModerator } = useEvent();
 
+    const accessors = React.useMemo<Accessors<ArrayElement<typeof liveFeedback>>[]>(
+        () => [
+            (f) => f?.message || '', // question text itself
+            (f) => f?.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(liveFeedback, accessors);
+
     React.useEffect(() => {
         if (!user) setDisplayLiveFeedback(false);
         else setDisplayLiveFeedback(true);
@@ -54,9 +66,15 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
             <div className={classes.content}>
                 <Grid container>
                     <Grid item xs={12}>
+                        <ListFilter
+                            className={classes.listFilter}
+                            onFilterChange={handleFilterChange}
+                            onSearch={handleSearch}
+                            length={filteredList.length}
+                        />
                         <List disablePadding>
                             {displayLiveFeedback ? (
-                                liveFeedback.map((feedback) => (
+                                liveFeedback.filter(feedback => filteredList.includes(feedback)).map((feedback) => (
                                     <ListItem disableGutters key={feedback.id}>
                                         <Card className={classes.item}>
                                             <LiveFeedbackAuthor fragmentRef={feedback} />
