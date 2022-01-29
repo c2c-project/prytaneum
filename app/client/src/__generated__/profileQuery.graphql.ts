@@ -1,55 +1,30 @@
+/**
+ * @generated SignedSource<<5d2f296ed42f6181e6385b7db62663bc>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type profileQueryVariables = {
-    id: string;
+import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type profileQuery$variables = {
+  id: string;
 };
-export type profileQueryResponse = {
-    readonly node: {
-        readonly id: string;
-        readonly " $fragmentRefs": FragmentRefs<"EventProfileFragment">;
-    } | null;
+export type profileQueryVariables = profileQuery$variables;
+export type profileQuery$data = {
+  readonly node: {
+    readonly id: string;
+    readonly " $fragmentSpreads": FragmentRefs<"EventProfileFragment">;
+  } | null;
 };
+export type profileQueryResponse = profileQuery$data;
 export type profileQuery = {
-    readonly response: profileQueryResponse;
-    readonly variables: profileQueryVariables;
+  variables: profileQueryVariables;
+  response: profileQuery$data;
 };
-
-
-
-/*
-query profileQuery(
-  $id: ID!
-) {
-  node(id: $id) {
-    __typename
-    id
-    ... on Event {
-      ...EventProfileFragment
-    }
-  }
-}
-
-fragment EventProfileFragment on Event {
-  title
-  topic
-  description
-  speakers {
-    edges {
-      node {
-        id
-        pictureUrl
-        name
-        title
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -223,5 +198,7 @@ return {
   }
 };
 })();
-(node as any).hash = '0ad778a6d58559e737c5b316c8bf99f4';
+
+(node as any).hash = "0ad778a6d58559e737c5b316c8bf99f4";
+
 export default node;

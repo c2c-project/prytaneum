@@ -1,22 +1,25 @@
+/**
+ * @generated SignedSource<<fa72f83c8cc8b5c28373d53527f640d3>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type QuestionActionsFragment = {
-    readonly id: string;
-    readonly " $fragmentRefs": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment">;
-    readonly " $refType": "QuestionActionsFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type QuestionActionsFragment$data = {
+  readonly id: string;
+  readonly " $fragmentSpreads": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment">;
+  readonly " $fragmentType": "QuestionActionsFragment";
 };
-export type QuestionActionsFragment$data = QuestionActionsFragment;
+export type QuestionActionsFragment = QuestionActionsFragment$data;
 export type QuestionActionsFragment$key = {
-    readonly " $data"?: QuestionActionsFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"QuestionActionsFragment">;
+  readonly " $data"?: QuestionActionsFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment">;
 };
-
-
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -50,5 +53,7 @@ const node: ReaderFragment = {
   "type": "EventQuestion",
   "abstractKey": null
 };
-(node as any).hash = 'fa1512172fd81210a0928ac95cd34c49';
+
+(node as any).hash = "fa1512172fd81210a0928ac95cd34c49";
+
 export default node;

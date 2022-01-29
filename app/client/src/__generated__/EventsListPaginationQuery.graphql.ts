@@ -1,62 +1,31 @@
+/**
+ * @generated SignedSource<<36c817e69359c81424646b19393c8158>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type EventsListPaginationQueryVariables = {
-    count?: number | null | undefined;
-    cursor?: string | null | undefined;
-    id: string;
+import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type EventsListPaginationQuery$variables = {
+  count?: number | null;
+  cursor?: string | null;
+  id: string;
 };
-export type EventsListPaginationQueryResponse = {
-    readonly node: {
-        readonly " $fragmentRefs": FragmentRefs<"OrgEventListFragment">;
-    } | null;
+export type EventsListPaginationQueryVariables = EventsListPaginationQuery$variables;
+export type EventsListPaginationQuery$data = {
+  readonly node: {
+    readonly " $fragmentSpreads": FragmentRefs<"OrgEventListFragment">;
+  } | null;
 };
+export type EventsListPaginationQueryResponse = EventsListPaginationQuery$data;
 export type EventsListPaginationQuery = {
-    readonly response: EventsListPaginationQueryResponse;
-    readonly variables: EventsListPaginationQueryVariables;
+  variables: EventsListPaginationQueryVariables;
+  response: EventsListPaginationQuery$data;
 };
-
-
-
-/*
-query EventsListPaginationQuery(
-  $count: Int
-  $cursor: String
-  $id: ID!
-) {
-  node(id: $id) {
-    __typename
-    ...OrgEventListFragment
-    id
-  }
-}
-
-fragment OrgEventListFragment on Organization {
-  id
-  events(first: $count, after: $cursor) {
-    edges {
-      cursor
-      node {
-        id
-        title
-        topic
-        startDateTime
-        __typename
-      }
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -297,5 +266,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'd5f6d5043b03cd265e2fe1cf45ff42d3';
+
+(node as any).hash = "d5f6d5043b03cd265e2fe1cf45ff42d3";
+
 export default node;

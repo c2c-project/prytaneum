@@ -1,46 +1,37 @@
+/**
+ * @generated SignedSource<<b7212194b553e8ccdcf7b38b80b4b99a>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type DeleteModerator = {
-    eventId: string;
-    userId: string;
+  eventId: string;
+  userId: string;
 };
-export type DeleteModeratorMutationVariables = {
-    input: DeleteModerator;
-    connections: Array<string>;
+export type DeleteModeratorMutation$variables = {
+  input: DeleteModerator;
+  connections: ReadonlyArray<string>;
 };
-export type DeleteModeratorMutationResponse = {
-    readonly deleteModerator: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-        } | null;
-    };
+export type DeleteModeratorMutationVariables = DeleteModeratorMutation$variables;
+export type DeleteModeratorMutation$data = {
+  readonly deleteModerator: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+    } | null;
+  };
 };
+export type DeleteModeratorMutationResponse = DeleteModeratorMutation$data;
 export type DeleteModeratorMutation = {
-    readonly response: DeleteModeratorMutationResponse;
-    readonly variables: DeleteModeratorMutationVariables;
+  variables: DeleteModeratorMutationVariables;
+  response: DeleteModeratorMutation$data;
 };
-
-
-
-/*
-mutation DeleteModeratorMutation(
-  $input: DeleteModerator!
-) {
-  deleteModerator(input: $input) {
-    isError
-    message
-    body {
-      id
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -182,5 +173,7 @@ return {
   }
 };
 })();
-(node as any).hash = '8b34dbebcf4e31ee9011e6eecf4a2e00';
+
+(node as any).hash = "8b34dbebcf4e31ee9011e6eecf4a2e00";
+
 export default node;

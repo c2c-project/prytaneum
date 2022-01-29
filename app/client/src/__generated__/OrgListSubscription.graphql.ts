@@ -1,7 +1,14 @@
+/**
+ * @generated SignedSource<<54b368183390607011713d053a840389>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
+<<<<<<< HEAD
 import { ConcreteRequest } from "relay-runtime";
 
 export type OrgListSubscriptionVariables = {};
@@ -9,21 +16,21 @@ export type OrgListSubscriptionResponse = {
     readonly orgUpdated: {
         readonly orgId: string;
     };
+=======
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+export type OrgListSubscription$variables = {};
+export type OrgListSubscriptionVariables = OrgListSubscription$variables;
+export type OrgListSubscription$data = {
+  readonly orgUpdated: {
+    readonly orgId: string;
+  };
+>>>>>>> bc7ab7a5 (chore(project): upgraded packages and removed some)
 };
+export type OrgListSubscriptionResponse = OrgListSubscription$data;
 export type OrgListSubscription = {
-    readonly response: OrgListSubscriptionResponse;
-    readonly variables: OrgListSubscriptionVariables;
+  variables: OrgListSubscriptionVariables;
+  response: OrgListSubscription$data;
 };
-
-
-
-/*
-subscription OrgListSubscription {
-  orgUpdated {
-    orgId
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -73,5 +80,7 @@ return {
   }
 };
 })();
-(node as any).hash = '9043447fdbbcb39351e9476faa870be5';
+
+(node as any).hash = "9043447fdbbcb39351e9476faa870be5";
+
 export default node;

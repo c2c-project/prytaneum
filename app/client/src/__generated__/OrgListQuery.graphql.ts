@@ -1,33 +1,28 @@
+/**
+ * @generated SignedSource<<9b853ee745eee4df4220980ffb410147>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type OrgListQueryVariables = {};
-export type OrgListQueryResponse = {
-    readonly myOrgs: ReadonlyArray<{
-        readonly id: string;
-        readonly name: string;
-        readonly createdAt: Date | null;
-    }> | null;
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type OrgListQuery$variables = {};
+export type OrgListQueryVariables = OrgListQuery$variables;
+export type OrgListQuery$data = {
+  readonly myOrgs: ReadonlyArray<{
+    readonly id: string;
+    readonly name: string;
+    readonly createdAt: Date | null;
+  }> | null;
 };
+export type OrgListQueryResponse = OrgListQuery$data;
 export type OrgListQuery = {
-    readonly response: OrgListQueryResponse;
-    readonly variables: OrgListQueryVariables;
+  variables: OrgListQueryVariables;
+  response: OrgListQuery$data;
 };
-
-
-
-/*
-query OrgListQuery {
-  myOrgs {
-    id
-    name
-    createdAt
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -91,5 +86,7 @@ return {
   }
 };
 })();
-(node as any).hash = '4c1ff725496c6c16d0ddba1d45ba77b6';
+
+(node as any).hash = "4c1ff725496c6c16d0ddba1d45ba77b6";
+
 export default node;

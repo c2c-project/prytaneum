@@ -1,41 +1,36 @@
+/**
+ * @generated SignedSource<<ce0383a3d7c8f1d0ba1366d22aa8b048>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-import QuestionCarouselFragmentRefetchable from "./QuestionCarouselFragmentRefetchable.graphql";
-import {  } from "relay-runtime";
-export type QuestionCarouselFragment = {
-    readonly id: string;
-    readonly currentQuestion: number | null;
-    readonly questionQueue: {
-        readonly questionRecord: {
-            readonly __id: string;
-            readonly edges: ReadonlyArray<{
-                readonly cursor: string;
-                readonly node: {
-                    readonly position: number | null;
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-                };
-            }> | null;
-        } | null;
-    } | null;
-    readonly " $refType": "QuestionCarouselFragment";
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type QuestionCarouselFragment$data = {
+  readonly id: string;
+  readonly currentQuestion: number | null;
+  readonly queuedQuestions: {
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "QuestionCarouselFragment";
 };
-export type QuestionCarouselFragment$data = QuestionCarouselFragment;
+export type QuestionCarouselFragment = QuestionCarouselFragment$data;
 export type QuestionCarouselFragment$key = {
-    readonly " $data"?: QuestionCarouselFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"QuestionCarouselFragment">;
+  readonly " $data"?: QuestionCarouselFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment">;
 };
 
-
-
-const node: ReaderFragment = (function(){
-var v0 = [
-  "questionQueue",
-  "questionRecord"
-];
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [
     {
       "defaultValue": "",
@@ -70,7 +65,7 @@ return {
       "fragmentPathInResult": [
         "node"
       ],
-      "operation": QuestionCarouselFragmentRefetchable,
+      "operation": require('./QuestionCarouselFragmentRefetchable.graphql'),
       "identifierField": "id"
     }
   },
@@ -206,6 +201,7 @@ return {
   "type": "Event",
   "abstractKey": null
 };
-})();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+
+(node as any).hash = "bfd207907fc023269ac34fb8582fc8d1";
+
 export default node;

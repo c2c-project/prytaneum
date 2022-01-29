@@ -1,39 +1,33 @@
+/**
+ * @generated SignedSource<<a7bb665376dc2dfda943a7a15c84d0e1>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateInvite = {
-    email: string;
-    eventId: string;
+  email: string;
+  eventId: string;
 };
-export type CreateInviteMutationVariables = {
-    input: CreateInvite;
+export type CreateInviteMutation$variables = {
+  input: CreateInvite;
 };
-export type CreateInviteMutationResponse = {
-    readonly createInvite: {
-        readonly isError: boolean;
-        readonly message: string;
-    };
+export type CreateInviteMutationVariables = CreateInviteMutation$variables;
+export type CreateInviteMutation$data = {
+  readonly createInvite: {
+    readonly isError: boolean;
+    readonly message: string;
+  };
 };
+export type CreateInviteMutationResponse = CreateInviteMutation$data;
 export type CreateInviteMutation = {
-    readonly response: CreateInviteMutationResponse;
-    readonly variables: CreateInviteMutationVariables;
+  variables: CreateInviteMutationVariables;
+  response: CreateInviteMutation$data;
 };
-
-
-
-/*
-mutation CreateInviteMutation(
-  $input: CreateInvite!
-) {
-  createInvite(input: $input) {
-    isError
-    message
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -103,5 +97,7 @@ return {
   }
 };
 })();
-(node as any).hash = '858a870da81b55350eaf926fe62ff37c';
+
+(node as any).hash = "858a870da81b55350eaf926fe62ff37c";
+
 export default node;

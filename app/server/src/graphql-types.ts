@@ -10,8 +10,9 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
     context: TContext,
     info: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
-    { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & {
+    [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: string;
@@ -1039,6 +1040,10 @@ export type EventVideoMutationResponse = MutationResponse & {
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
     fragment: string;
     resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -1053,6 +1058,7 @@ export type StitchingResolver<TResult, TParent, TContext, TArgs> =
     | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
     | ResolverFn<TResult, TParent, TContext, TArgs>
+    | ResolverWithResolve<TResult, TParent, TContext, TArgs>
     | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (

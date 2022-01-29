@@ -1,76 +1,31 @@
+/**
+ * @generated SignedSource<<dbb9bccf1017ac7d059aa223a515b678>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type QuestionCarouselFragmentRefetchableVariables = {
-    after?: string | null | undefined;
-    first?: number | null | undefined;
-    id: string;
+import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type QuestionCarouselFragmentRefetchable$variables = {
+  after?: string | null;
+  first?: number | null;
+  id: string;
 };
-export type QuestionCarouselFragmentRefetchableResponse = {
-    readonly node: {
-        readonly " $fragmentRefs": FragmentRefs<"QuestionCarouselFragment">;
-    } | null;
+export type QuestionCarouselFragmentRefetchableVariables = QuestionCarouselFragmentRefetchable$variables;
+export type QuestionCarouselFragmentRefetchable$data = {
+  readonly node: {
+    readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment">;
+  } | null;
 };
+export type QuestionCarouselFragmentRefetchableResponse = QuestionCarouselFragmentRefetchable$data;
 export type QuestionCarouselFragmentRefetchable = {
-    readonly response: QuestionCarouselFragmentRefetchableResponse;
-    readonly variables: QuestionCarouselFragmentRefetchableVariables;
+  variables: QuestionCarouselFragmentRefetchableVariables;
+  response: QuestionCarouselFragmentRefetchable$data;
 };
-
-
-
-/*
-query QuestionCarouselFragmentRefetchable(
-  $after: String = ""
-  $first: Int = 1000
-  $id: ID!
-) {
-  node(id: $id) {
-    __typename
-    ...QuestionCarouselFragment_2HEEH6
-    id
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionCarouselFragment_2HEEH6 on Event {
-  id
-  currentQuestion
-  questionQueue {
-    questionRecord(first: $first, after: $after) {
-      edges {
-        cursor
-        node {
-          position
-          ...QuestionAuthorFragment
-          ...QuestionContentFragment
-          id
-          __typename
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -341,5 +296,7 @@ return {
   }
 };
 })();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+
+(node as any).hash = "bfd207907fc023269ac34fb8582fc8d1";
+
 export default node;

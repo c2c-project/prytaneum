@@ -1,41 +1,38 @@
+/**
+ * @generated SignedSource<<c290e99b00dfd90e681236c84e6fe3dd>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useLiveFeedbackListFragment = {
-    readonly id: string;
-    readonly liveFeedback: {
-        readonly __id: string;
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly createdBy: {
-                    readonly id: string;
-                } | null;
-                readonly refFeedback: {
-                    readonly createdBy: {
-                        readonly id: string;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
-                } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "useLiveFeedbackListFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useLiveFeedbackListFragment$data = {
+  readonly id: string;
+  readonly liveFeedback: {
+    readonly __id: string;
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly message: string;
+        readonly createdBy: {
+          readonly id: string;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "useLiveFeedbackListFragment";
 };
-export type useLiveFeedbackListFragment$data = useLiveFeedbackListFragment;
+export type useLiveFeedbackListFragment = useLiveFeedbackListFragment$data;
 export type useLiveFeedbackListFragment$key = {
-    readonly " $data"?: useLiveFeedbackListFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"useLiveFeedbackListFragment">;
+  readonly " $data"?: useLiveFeedbackListFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackListFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -145,17 +142,16 @@ return {
                   "storageKey": null
                 },
                 {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "LiveFeedbackAuthorFragment"
+                },
+                {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
                   "name": "__typename",
                   "storageKey": null
-                },
-                (v2/*: any*/),
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "LiveFeedbackAuthorFragment"
                 }
               ],
               "storageKey": null
@@ -208,5 +204,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'fd0a05fc621a67ccb998432d71870586';
+
+(node as any).hash = "b59540cde23c196396e41ab63682403e";
+
 export default node;

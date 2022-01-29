@@ -1,51 +1,40 @@
+/**
+ * @generated SignedSource<<75e9d485c13407ac7eafc5c421826cba>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateVideo = {
-    eventId: string;
-    lang: string;
-    url: string;
+  eventId: string;
+  lang: string;
+  url: string;
 };
-export type CreateVideoMutationVariables = {
-    input: CreateVideo;
-    connections: Array<string>;
+export type CreateVideoMutation$variables = {
+  input: CreateVideo;
+  connections: ReadonlyArray<string>;
 };
-export type CreateVideoMutationResponse = {
-    readonly createVideo: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly url: string;
-            readonly lang: string;
-        } | null;
-    };
+export type CreateVideoMutationVariables = CreateVideoMutation$variables;
+export type CreateVideoMutation$data = {
+  readonly createVideo: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly url: string;
+      readonly lang: string;
+    } | null;
+  };
 };
+export type CreateVideoMutationResponse = CreateVideoMutation$data;
 export type CreateVideoMutation = {
-    readonly response: CreateVideoMutationResponse;
-    readonly variables: CreateVideoMutationVariables;
+  variables: CreateVideoMutationVariables;
+  response: CreateVideoMutation$data;
 };
-
-
-
-/*
-mutation CreateVideoMutation(
-  $input: CreateVideo!
-) {
-  createVideo(input: $input) {
-    isError
-    message
-    body {
-      id
-      url
-      lang
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -195,5 +184,7 @@ return {
   }
 };
 })();
-(node as any).hash = '35fd696317ec764920f6f83c4fa8c0a7';
+
+(node as any).hash = "35fd696317ec764920f6f83c4fa8c0a7";
+
 export default node;

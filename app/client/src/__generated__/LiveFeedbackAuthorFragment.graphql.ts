@@ -1,26 +1,29 @@
+/**
+ * @generated SignedSource<<d7e31e8658197b9083bdcd4751f55e55>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type LiveFeedbackAuthorFragment = {
-    readonly createdBy: {
-        readonly id: string;
-        readonly firstName: string | null;
-        readonly avatar: string | null;
-    } | null;
-    readonly createdAt: Date | null;
-    readonly " $refType": "LiveFeedbackAuthorFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type LiveFeedbackAuthorFragment$data = {
+  readonly createdBy: {
+    readonly id: string;
+    readonly firstName: string | null;
+    readonly avatar: string | null;
+  } | null;
+  readonly createdAt: Date | null;
+  readonly " $fragmentType": "LiveFeedbackAuthorFragment";
 };
-export type LiveFeedbackAuthorFragment$data = LiveFeedbackAuthorFragment;
+export type LiveFeedbackAuthorFragment = LiveFeedbackAuthorFragment$data;
 export type LiveFeedbackAuthorFragment$key = {
-    readonly " $data"?: LiveFeedbackAuthorFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
+  readonly " $data"?: LiveFeedbackAuthorFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
 };
-
-
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -71,5 +74,7 @@ const node: ReaderFragment = {
   "type": "EventLiveFeedback",
   "abstractKey": null
 };
-(node as any).hash = '5c8dee6dfe33b3d94fe26e813e4071b8';
+
+(node as any).hash = "5c8dee6dfe33b3d94fe26e813e4071b8";
+
 export default node;

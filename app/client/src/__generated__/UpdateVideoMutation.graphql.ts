@@ -1,51 +1,40 @@
+/**
+ * @generated SignedSource<<5f01914378ba65d000dee078e304a33f>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type UpdateVideo = {
-    eventId: string;
-    lang?: string | null | undefined;
-    url?: string | null | undefined;
-    videoId: string;
+  eventId: string;
+  lang?: string | null;
+  url?: string | null;
+  videoId: string;
 };
-export type UpdateVideoMutationVariables = {
-    input: UpdateVideo;
+export type UpdateVideoMutation$variables = {
+  input: UpdateVideo;
 };
-export type UpdateVideoMutationResponse = {
-    readonly updateVideo: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly url: string;
-            readonly lang: string;
-        } | null;
-    };
+export type UpdateVideoMutationVariables = UpdateVideoMutation$variables;
+export type UpdateVideoMutation$data = {
+  readonly updateVideo: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly url: string;
+      readonly lang: string;
+    } | null;
+  };
 };
+export type UpdateVideoMutationResponse = UpdateVideoMutation$data;
 export type UpdateVideoMutation = {
-    readonly response: UpdateVideoMutationResponse;
-    readonly variables: UpdateVideoMutationVariables;
+  variables: UpdateVideoMutationVariables;
+  response: UpdateVideoMutation$data;
 };
-
-
-
-/*
-mutation UpdateVideoMutation(
-  $input: UpdateVideo!
-) {
-  updateVideo(input: $input) {
-    isError
-    message
-    body {
-      id
-      url
-      lang
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -147,5 +136,7 @@ return {
   }
 };
 })();
-(node as any).hash = '36c7d2450a3ef9f36a53e79a4b31e0fb';
+
+(node as any).hash = "36c7d2450a3ef9f36a53e79a4b31e0fb";
+
 export default node;

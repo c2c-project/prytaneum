@@ -1,48 +1,37 @@
+/**
+ * @generated SignedSource<<971ecd1fd0eb727b6fe02a8b6c6836f1>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateOrganization = {
-    name: string;
+  name: string;
 };
-export type CreateOrgMutationVariables = {
-    input: CreateOrganization;
+export type CreateOrgMutation$variables = {
+  input: CreateOrganization;
 };
-export type CreateOrgMutationResponse = {
-    readonly createOrganization: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly name: string;
-            readonly createdAt: Date | null;
-        } | null;
-    };
+export type CreateOrgMutationVariables = CreateOrgMutation$variables;
+export type CreateOrgMutation$data = {
+  readonly createOrganization: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly name: string;
+      readonly createdAt: Date | null;
+    } | null;
+  };
 };
+export type CreateOrgMutationResponse = CreateOrgMutation$data;
 export type CreateOrgMutation = {
-    readonly response: CreateOrgMutationResponse;
-    readonly variables: CreateOrgMutationVariables;
+  variables: CreateOrgMutationVariables;
+  response: CreateOrgMutation$data;
 };
-
-
-
-/*
-mutation CreateOrgMutation(
-  $input: CreateOrganization!
-) {
-  createOrganization(input: $input) {
-    isError
-    message
-    body {
-      id
-      name
-      createdAt
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -144,5 +133,7 @@ return {
   }
 };
 })();
-(node as any).hash = '88409ef053597e667288c5b8720d31d9';
+
+(node as any).hash = "88409ef053597e667288c5b8720d31d9";
+
 export default node;

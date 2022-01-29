@@ -1,62 +1,47 @@
+/**
+ * @generated SignedSource<<4b0ac39bb94981dc366da38c785f9786>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type UpdateSpeaker = {
-    description?: string | null | undefined;
-    email?: string | null | undefined;
-    eventId: string;
-    id: string;
-    name?: string | null | undefined;
-    pictureUrl?: string | null | undefined;
-    title?: string | null | undefined;
+  description?: string | null;
+  email?: string | null;
+  eventId: string;
+  id: string;
+  name?: string | null;
+  pictureUrl?: string | null;
+  title?: string | null;
 };
-export type UpdateSpeakerMutationVariables = {
-    input: UpdateSpeaker;
+export type UpdateSpeakerMutation$variables = {
+  input: UpdateSpeaker;
 };
-export type UpdateSpeakerMutationResponse = {
-    readonly updateSpeaker: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly eventId: string | null;
-            readonly name: string | null;
-            readonly description: string | null;
-            readonly title: string | null;
-            readonly pictureUrl: string | null;
-            readonly email: string | null;
-        } | null;
-    };
+export type UpdateSpeakerMutationVariables = UpdateSpeakerMutation$variables;
+export type UpdateSpeakerMutation$data = {
+  readonly updateSpeaker: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly eventId: string | null;
+      readonly name: string | null;
+      readonly description: string | null;
+      readonly title: string | null;
+      readonly pictureUrl: string | null;
+      readonly email: string | null;
+    } | null;
+  };
 };
+export type UpdateSpeakerMutationResponse = UpdateSpeakerMutation$data;
 export type UpdateSpeakerMutation = {
-    readonly response: UpdateSpeakerMutationResponse;
-    readonly variables: UpdateSpeakerMutationVariables;
+  variables: UpdateSpeakerMutationVariables;
+  response: UpdateSpeakerMutation$data;
 };
-
-
-
-/*
-mutation UpdateSpeakerMutation(
-  $input: UpdateSpeaker!
-) {
-  updateSpeaker(input: $input) {
-    isError
-    message
-    body {
-      id
-      eventId
-      name
-      description
-      title
-      pictureUrl
-      email
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -186,5 +171,7 @@ return {
   }
 };
 })();
-(node as any).hash = '667470bddeb73a74af55a0a8f202dd78';
+
+(node as any).hash = "667470bddeb73a74af55a0a8f202dd78";
+
 export default node;

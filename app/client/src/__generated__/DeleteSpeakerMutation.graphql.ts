@@ -1,46 +1,37 @@
+/**
+ * @generated SignedSource<<f3c13ff81c50fa7c08b975829ad3fb3c>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type DeleteSpeaker = {
-    eventId: string;
-    id: string;
+  eventId: string;
+  id: string;
 };
-export type DeleteSpeakerMutationVariables = {
-    input: DeleteSpeaker;
-    connections: Array<string>;
+export type DeleteSpeakerMutation$variables = {
+  input: DeleteSpeaker;
+  connections: ReadonlyArray<string>;
 };
-export type DeleteSpeakerMutationResponse = {
-    readonly deleteSpeaker: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-        } | null;
-    };
+export type DeleteSpeakerMutationVariables = DeleteSpeakerMutation$variables;
+export type DeleteSpeakerMutation$data = {
+  readonly deleteSpeaker: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+    } | null;
+  };
 };
+export type DeleteSpeakerMutationResponse = DeleteSpeakerMutation$data;
 export type DeleteSpeakerMutation = {
-    readonly response: DeleteSpeakerMutationResponse;
-    readonly variables: DeleteSpeakerMutationVariables;
+  variables: DeleteSpeakerMutationVariables;
+  response: DeleteSpeakerMutation$data;
 };
-
-
-
-/*
-mutation DeleteSpeakerMutation(
-  $input: DeleteSpeaker!
-) {
-  deleteSpeaker(input: $input) {
-    isError
-    message
-    body {
-      id
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -182,5 +173,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'bc2546794af320ab5db29d24edb7e893';
+
+(node as any).hash = "bc2546794af320ab5db29d24edb7e893";
+
 export default node;
