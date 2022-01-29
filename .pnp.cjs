@@ -199,7 +199,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["relay-compiler-language-typescript", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:14.0.0"],
             ["relay-runtime", "npm:11.0.2"],
             ["smoothscroll-polyfill", "npm:0.4.4"],
-            ["subscriptions-transport-ws", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:0.9.18"],
+            ["subscriptions-transport-ws", "virtual:74d3e0648baada8018d636e3661a4132fa46cc49859b5262fb8e167c43db86560f37a016b7a7e42872fa34808b800506e133cdecde624e544693f70ca0dcde1a#npm:0.11.0"],
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=d8b4e7"],
             ["webpack", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.36.2"],
             ["yup", "npm:0.32.9"]
@@ -11611,15 +11611,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/async-each-npm-1.0.3-464af5d2f3-868651cfeb.zip/node_modules/async-each/",
           "packageDependencies": [
             ["async-each", "npm:1.0.3"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["async-limiter", [
-        ["npm:1.0.1", {
-          "packageLocation": "./.yarn/cache/async-limiter-npm-1.0.1-7e6819bcdb-2b849695b4.zip/node_modules/async-limiter/",
-          "packageDependencies": [
-            ["async-limiter", "npm:1.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -28768,13 +28759,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["npm:0.9.18", {
-          "packageLocation": "./.yarn/cache/subscriptions-transport-ws-npm-0.9.18-7d0f338bbd-d92e2b3e98.zip/node_modules/subscriptions-transport-ws/",
-          "packageDependencies": [
-            ["subscriptions-transport-ws", "npm:0.9.18"]
-          ],
-          "linkType": "SOFT",
-        }],
         ["virtual:396dd46b50da9da43bd1b233bb6cca9b865296560e4d733d2d6d763b8cb10c0db832e02e296fa6a7de41efa49cb1f64b5f7a485aca71def0b590b14e538deb25#npm:0.10.0", {
           "packageLocation": "./.yarn/__virtual__/subscriptions-transport-ws-virtual-8d102bad1d/0/cache/subscriptions-transport-ws-npm-0.10.0-9307652f19-0e34bb31e8.zip/node_modules/subscriptions-transport-ws/",
           "packageDependencies": [
@@ -28804,24 +28788,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["iterall", "npm:1.3.0"],
             ["symbol-observable", "npm:1.2.0"],
             ["ws", "virtual:8d102bad1dc4572adf9ddf0d42cdc9f2cd915bf3dd0c9f743f83ceea0feae77b0d2bff4eb6f58dc65534015e55506ed27b0549c566627e7fdf2aa7279f373189#npm:7.5.5"]
-          ],
-          "packagePeers": [
-            "@types/graphql",
-            "graphql"
-          ],
-          "linkType": "HARD",
-        }],
-        ["virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:0.9.18", {
-          "packageLocation": "./.yarn/__virtual__/subscriptions-transport-ws-virtual-270906d875/0/cache/subscriptions-transport-ws-npm-0.9.18-7d0f338bbd-d92e2b3e98.zip/node_modules/subscriptions-transport-ws/",
-          "packageDependencies": [
-            ["subscriptions-transport-ws", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:0.9.18"],
-            ["@types/graphql", null],
-            ["backo2", "npm:1.0.2"],
-            ["eventemitter3", "npm:3.1.2"],
-            ["graphql", "npm:15.8.0"],
-            ["iterall", "npm:1.3.0"],
-            ["symbol-observable", "npm:1.2.0"],
-            ["ws", "virtual:270906d875bc09bc5c500e4096835dea2ff3185e37f274c036717b0d226a3ed30fce1724b1538d813c4e065e3123065b3bdcb68fba124a70e76b8492df0ad990#npm:5.2.2"]
           ],
           "packagePeers": [
             "@types/graphql",
@@ -31325,13 +31291,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["ws", [
-        ["npm:5.2.2", {
-          "packageLocation": "./.yarn/cache/ws-npm-5.2.2-173bcd57b2-3da9352592.zip/node_modules/ws/",
-          "packageDependencies": [
-            ["ws", "npm:5.2.2"]
-          ],
-          "linkType": "SOFT",
-        }],
         ["npm:7.4.5", {
           "packageLocation": "./.yarn/cache/ws-npm-7.4.5-5c28d7e14e-5c7d1527f9.zip/node_modules/ws/",
           "packageDependencies": [
@@ -31366,24 +31325,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ws", "npm:8.4.2"]
           ],
           "linkType": "SOFT",
-        }],
-        ["virtual:270906d875bc09bc5c500e4096835dea2ff3185e37f274c036717b0d226a3ed30fce1724b1538d813c4e065e3123065b3bdcb68fba124a70e76b8492df0ad990#npm:5.2.2", {
-          "packageLocation": "./.yarn/__virtual__/ws-virtual-58bbec4b19/0/cache/ws-npm-5.2.2-173bcd57b2-3da9352592.zip/node_modules/ws/",
-          "packageDependencies": [
-            ["ws", "virtual:270906d875bc09bc5c500e4096835dea2ff3185e37f274c036717b0d226a3ed30fce1724b1538d813c4e065e3123065b3bdcb68fba124a70e76b8492df0ad990#npm:5.2.2"],
-            ["@types/bufferutil", null],
-            ["@types/utf-8-validate", null],
-            ["async-limiter", "npm:1.0.1"],
-            ["bufferutil", null],
-            ["utf-8-validate", null]
-          ],
-          "packagePeers": [
-            "@types/bufferutil",
-            "@types/utf-8-validate",
-            "bufferutil",
-            "utf-8-validate"
-          ],
-          "linkType": "HARD",
         }],
         ["virtual:396dd46b50da9da43bd1b233bb6cca9b865296560e4d733d2d6d763b8cb10c0db832e02e296fa6a7de41efa49cb1f64b5f7a485aca71def0b590b14e538deb25#npm:8.2.2", {
           "packageLocation": "./.yarn/__virtual__/ws-virtual-d95338f1b1/0/cache/ws-npm-8.2.2-1ddd364c77-25e764c631.zip/node_modules/ws/",

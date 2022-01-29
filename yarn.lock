@@ -103,7 +103,7 @@ __metadata:
     relay-compiler-language-typescript: ^14.0.0
     relay-runtime: ^11.0.2
     smoothscroll-polyfill: ^0.4.4
-    subscriptions-transport-ws: ^0.9.18
+    subscriptions-transport-ws: ^0.11.0
     typescript: 4.3.2
     webpack: ^5.36.2
     yup: ^0.32.9
@@ -7818,13 +7818,6 @@ __metadata:
   version: 1.0.3
   resolution: "async-each@npm:1.0.3"
   checksum: 868651cfeb209970b367fbb96df1e1c8dc0b22c681cda7238417005ab2a5fbd944ee524b43f2692977259a57b7cc2547e03ff68f2b5113dbdf953d48cc078dc3
-  languageName: node
-  linkType: hard
-
-"async-limiter@npm:~1.0.0":
-  version: 1.0.1
-  resolution: "async-limiter@npm:1.0.1"
-  checksum: 2b849695b465d93ad44c116220dee29a5aeb63adac16c1088983c339b0de57d76e82533e8e364a93a9f997f28bbfc6a92948cefc120652bd07f3b59f8d75cf2b
   languageName: node
   linkType: hard
 
@@ -22297,21 +22290,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"subscriptions-transport-ws@npm:^0.9.18":
-  version: 0.9.18
-  resolution: "subscriptions-transport-ws@npm:0.9.18"
-  dependencies:
-    backo2: ^1.0.2
-    eventemitter3: ^3.1.0
-    iterall: ^1.2.1
-    symbol-observable: ^1.0.4
-    ws: ^5.2.0
-  peerDependencies:
-    graphql: ">=0.10.0"
-  checksum: d92e2b3e98bfbcb3c93ed8bb760ae9136d1272b72989fa2fb7cf3e68ec1da4032f4b167405deaba8ba748a61187024b17c481a3fe6fe58f8360ffab2b597b6d9
-  languageName: node
-  linkType: hard
-
 "supports-color@npm:^2.0.0":
   version: 2.0.0
   resolution: "supports-color@npm:2.0.0"
@@ -24431,15 +24409,6 @@ typescript@^4.2.4:
     utf-8-validate:
       optional: true
   checksum: 25e764c631141bdca45badc86e69437b8791e57e461f9a16c0f7cd779baf70c3fbba07ecdd9e0d34fea1155ddcf62ef165cd7f81b68ed545bc7d455c15a85fb0
-  languageName: node
-  linkType: hard
-
-"ws@npm:^5.2.0":
-  version: 5.2.2
-  resolution: "ws@npm:5.2.2"
-  dependencies:
-    async-limiter: ~1.0.0
-  checksum: 3da93525921e6098aa9b6a370745ef3de9bb3f00427ecbb4755b671fce4810eb21cc1c80847fb639635ac72f0bb08d49b83a4a74896daf2f79e864d8cead1e13
   languageName: node
   linkType: hard
 
