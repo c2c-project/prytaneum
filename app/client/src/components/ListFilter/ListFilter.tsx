@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { Skeleton, SkeletonProps } from '@material-ui/lab';
 
 import { TextField } from '@local/components/TextField';
@@ -44,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
         marginLeft: theme.spacing(0.5),
     },
+    input: {
+        ['& fieldset']: {
+            borderRadius: 9999 // rounded text field
+        },
+    }
 }));
 
 type Filters = Set<string>;
@@ -115,12 +121,21 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
                         value={search}
                         onChange={handleSearch}
                         onKeyDown={handleKeyPress}
+                        className={classes.input}
                         InputProps={{
                             // TODO: animation change here
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                            // TODO: add refresh action
                             endAdornment:
                                 search === '' ? (
                                     <InputAdornment position='end'>
-                                        <SearchIcon />
+                                        <IconButton edge='end' onClick={clearSearch}>
+                                            <RefreshIcon />
+                                        </IconButton>
                                     </InputAdornment>
                                 ) : (
                                     <InputAdornment position='end'>
