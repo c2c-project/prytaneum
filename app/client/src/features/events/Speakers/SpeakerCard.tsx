@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     media: {
         width: '100%',
         height: 'auto',
+        maxHeight: 400, // to prevent image from overlapping card header/content
         clipPath: theme.custom.clipPath.slope,
         flex: '1 0 100%',
     },
