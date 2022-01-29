@@ -36,7 +36,7 @@ export function LiveFeedbackReply({ fragmentRef, className }: Props) {
         <Card className={clsx(className, classes.root)} elevation={0}>
             <LiveFeedbackAuthor fragmentRef={data} />
             <CardContent>
-                <Typography style={{ wordBreak: 'break-word' }}>
+                <Typography variant='inherit' style={{ wordBreak: 'break-word' }}>
                     {data.message}
                 </Typography>
             </CardContent>
