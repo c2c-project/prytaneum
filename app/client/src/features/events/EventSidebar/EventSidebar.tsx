@@ -15,6 +15,7 @@ import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarou
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
+import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard'
 import { SpeakerList } from '../Speakers';
 import { Tabs } from '@local/components/Tabs'
 
@@ -122,6 +123,9 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             alignItems='flex-start'
             wrap='nowrap'
         >
+            <Grid item>
+                <CurrentQuestionCard fragmentRef={data} />
+            </Grid>
             <Grid
                 container
                 direction='column'

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, Paper, Typography, Card, List, ListItem } from '@material-ui/core';
+import { Grid, Typography, Card, List, ListItem } from '@material-ui/core';
 import { graphql, useMutation } from 'react-relay';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -15,7 +15,6 @@ import DropArea from '@local/components/DropArea';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
-import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useEvent } from '../../useEvent';
 import { useQuestionQueue } from './useQuestionQueue';
 import { useRecordPush } from './useRecordPush';
@@ -43,16 +42,10 @@ const useStyles = makeStyles((theme) => ({
     empty: {
         margin: theme.spacing(5, 0),
     },
-    fullWidth: {
+    item: {
         width: '100%',
-    },
-    currentQuestionWrapper: {
-        backgroundColor: theme.palette.primary.main,
-        padding: theme.spacing(2),
-    },
-    currentQuestionTitle: {
-        marginBottom: theme.spacing(1),
-        color: 'white',
+        paddingTop: theme.spacing(0.5),
+        borderRadius: '10px'
     },
     dialogContent: {
         '& > *': {
@@ -69,15 +62,8 @@ const useStyles = makeStyles((theme) => ({
         padding: 'theme.spacing(1) 0',
         width: '10rem',
     },
-    cardFooter: {
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
     filler: {
         visibility: 'hidden'
-    },
-    test: {
-        background: 'blue'
     },
     relative: {
         position: 'relative'
@@ -99,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
         textAlign: 'center',
         color: '#B5B5B5'
-    }
+    },
 }));
 
 type QuestionNode = ArrayElement<
@@ -279,23 +265,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
 
     return (
         <>
-            <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
-                {currentQuestion && (
-                    <Card elevation={0} className={classes.fullWidth}>
-                        <QuestionAuthor fragmentRef={currentQuestion.node} />
-                        <QuestionContent fragmentRef={currentQuestion.node} />
-                    </Card>
-                )}
-                {!currentQuestion && (
-                    <Typography color='textSecondary' variant='body2' className={classes.empty}>
-                        There is no current question to display
-                    </Typography>
-                )}
-                <Grid container item justify='space-between'>
-                    <PreviousQuestionButton disabled={!canGoBackward} />
-                    <NextQuestionButton disabled={!canGoForward} variant='outlined' />
-                </Grid>
-            </Grid>
             <Grid className={classes.helperText}>
                 <Typography variant='caption'>
                     Drag and drop questions to re-order queue
@@ -319,10 +288,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                         className={classes.nextQuestion}
                                     />
                                 }
-                                <Card className={classes.fullWidth}>
+                                <Card className={classes.item}>
                                     <QuestionAuthor fragmentRef={question.node} />
                                     <QuestionContent fragmentRef={question.node} />
-                                    <Grid container className={classes.cardFooter}>
+                                    <Grid container alignItems='center' justify='space-between'>
                                         <QuestionStats fragmentRef={question.node} />
                                         <QuestionActions
                                             className={classes.questionActions}
@@ -345,7 +314,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             <List>
                 {questionRecord.slice(0, -1).map((question) => (
                     <ListItem key={question.node.id} disableGutters>
-                        <Card className={classes.fullWidth}>
+                        <Card className={classes.item}>
                             <QuestionAuthor fragmentRef={question.node} />
                             <QuestionContent fragmentRef={question.node} />
                             <QuestionStats fragmentRef={question.node} />
