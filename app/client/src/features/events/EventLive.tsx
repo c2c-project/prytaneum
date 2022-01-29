@@ -4,7 +4,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import clsx from 'clsx';
 import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery, useFragment } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
@@ -52,13 +51,6 @@ const useStyles = makeStyles((theme) => ({
     },
     target: {
         scrollMarginTop: '1rem',
-    },
-    item: {
-        // flex: 1,
-        // marginBottom: theme.spacing(1.5),
-    },
-    fullWidth: {
-        // width: '100%',
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -154,7 +146,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                         <EventVideo fragmentRef={node} />
                     </Grid>
                     <EventDetailsCard fragmentRef={data} />
-                    <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
+                    <SpeakerList fragmentRef={data} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>

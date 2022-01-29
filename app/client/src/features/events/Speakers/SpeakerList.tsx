@@ -1,7 +1,22 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Dialog, Avatar, ListItem, ListItemText, ListItemAvatar, List, Typography } from '@material-ui/core';
+import {
+    Dialog,
+    Avatar,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    List,
+    Typography,
+    Grid,
+    Collapse,
+    IconButton
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { graphql, useFragment } from 'react-relay';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import clsx from 'clsx';
 
 import { SpeakerListFragment$key } from '@local/__generated__/SpeakerListFragment.graphql';
 import { SpeakerCard } from './SpeakerCard';
@@ -28,39 +43,93 @@ export const SPEAKER_LIST_FRAGMENT = graphql`
     }
 `;
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(0.5),
+        fontSize: '2.5rem',
+    },
+    speakers: {
+        marginLeft: theme.spacing(2),
+        fontWeight: 600
+    },
+    noSpeakers: {
+        marginLeft: theme.spacing(2),
+    },
+    expand: {
+        padding: theme.spacing(1),
+        transform: 'rotate(0deg)',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    arrow: {
+        fontSize: '1.5rem',
+        color: 'black'
+    },
+    item: {
+        padding: theme.spacing(1),
+    }
+}));
+
 export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
+    const classes = useStyles();
     const { speakers } = useFragment(SPEAKER_LIST_FRAGMENT, fragmentRef);
     const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
     const [openCard, setOpenCard] = React.useState(''); // use id instead to determine which dialog to open
-    return speakers ? (
-        <List className={className}>
-            {speakerEdges.map(({ node }) => (
-                <li key={node.id}>
-                    <ListItem button onClick={() => setOpenCard(node.id)}>
-                        {node.pictureUrl && (
-                            <ListItemAvatar>
-                                <Avatar alt={`${node.name}-avatar`} src={node.pictureUrl} />
-                            </ListItemAvatar>
-                        )}
-                        <ListItemText primary={node.name} secondary={node.title} />
-                    </ListItem>
-                    {node.pictureUrl && node.name && node.title && node.description && (
-                        <Dialog open={openCard === node.id} onClose={() => setOpenCard('')}>
-                            <SpeakerCard
-                                image={node.pictureUrl}
-                                title={node.name}
-                                subtitle={node.title}
-                                description={node.description}
-                            />
-                        </Dialog>
-                    )}
-                </li>
-            ))}
-        </List>
+    const [isIn, setIsIn] = React.useState(false);
+
+    return (speakers && speakerEdges.length !== 0) ? (
+        <>
+            <Grid container alignItems='center' className={classes.root}>
+                <PeopleOutlineIcon fontSize='inherit' />
+                <Typography variant='h5' className={classes.speakers}>
+                    {speakerEdges.length} Speaker(s)
+                </Typography>
+                <IconButton
+                    className={clsx(classes.expand, { [classes.expandOpen]: isIn })}
+                    aria-label='show more'
+                    onClick={() => setIsIn((prev) => !prev)}
+                >
+                    <ArrowDropDownIcon className={classes.arrow} />
+                </IconButton>
+            </Grid>
+            <Collapse in={isIn}>
+                <List className={className}>
+                    {speakerEdges.map(({ node }) => (
+                        <li key={node.id}>
+                            <ListItem button onClick={() => setOpenCard(node.id)} className={classes.item}>
+                                {node.pictureUrl && (
+                                    <ListItemAvatar>
+                                        <Avatar alt={`${node.name}-avatar`} src={node.pictureUrl} />
+                                    </ListItemAvatar>
+                                )}
+                                <ListItemText primary={node.name} secondary={node.title} />
+                            </ListItem>
+                            {node.pictureUrl && node.name && node.title && node.description && (
+                                <Dialog open={openCard === node.id} onClose={() => setOpenCard('')}>
+                                    <SpeakerCard
+                                        image={node.pictureUrl}
+                                        title={node.name}
+                                        subtitle={node.title}
+                                        description={node.description}
+                                    />
+                                </Dialog>
+                            )}
+                        </li>
+                    ))}
+                </List>
+            </Collapse>
+        </>
     ) : (
-        <Typography align='center' color='textSecondary' variant='body2'>
-            No Speakers to display
-        </Typography>
+        <Grid container alignItems='center' className={classes.root}>
+            <PeopleOutlineIcon fontSize='inherit' />
+            <Typography color='textSecondary' variant='body1' className={classes.noSpeakers}>
+                No Speakers to display
+            </Typography>
+        </Grid>
     );
 }
 
