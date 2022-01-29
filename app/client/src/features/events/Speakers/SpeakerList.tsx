@@ -31,12 +31,12 @@ export const SPEAKER_LIST_FRAGMENT = graphql`
 export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
     const { speakers } = useFragment(SPEAKER_LIST_FRAGMENT, fragmentRef);
     const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
-    const [openCard, setOpenCard] = React.useState(false);
+    const [openCard, setOpenCard] = React.useState(''); // use id instead to determine which dialog to open
     return speakers ? (
         <List className={className}>
             {speakerEdges.map(({ node }) => (
                 <li key={node.id}>
-                    <ListItem button onClick={() => setOpenCard(true)}>
+                    <ListItem button onClick={() => setOpenCard(node.id)}>
                         {node.pictureUrl && (
                             <ListItemAvatar>
                                 <Avatar alt={`${node.name}-avatar`} src={node.pictureUrl} />
@@ -45,7 +45,7 @@ export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
                         <ListItemText primary={node.name} secondary={node.title} />
                     </ListItem>
                     {node.pictureUrl && node.name && node.title && node.description && (
-                        <Dialog open={openCard} onClose={() => setOpenCard(false)}>
+                        <Dialog open={openCard === node.id} onClose={() => setOpenCard('')}>
                             <SpeakerCard
                                 image={node.pictureUrl}
                                 title={node.name}
