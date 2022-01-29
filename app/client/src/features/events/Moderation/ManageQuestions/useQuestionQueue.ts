@@ -14,6 +14,10 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                     cursor
                     node {
                         id
+                        question
+                        createdBy {
+                            firstName
+                        }
                         ...QuestionAuthorFragment
                         ...QuestionStatsFragment
                         ...QuestionContentFragment
@@ -31,6 +35,10 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                     cursor
                     node {
                         id
+                        question
+                        createdBy {
+                            firstName
+                        }
                         ...QuestionActionsFragment
                         ...QuestionAuthorFragment
                         ...QuestionStatsFragment

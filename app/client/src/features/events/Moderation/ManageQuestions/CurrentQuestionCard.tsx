@@ -48,22 +48,6 @@ interface QuestionQueueProps {
     fragmentRef: useQuestionQueueFragment$key;
 }
 
-export const QUESTION_QUEUE_MUTATION = graphql`
-    mutation QuestionQueueMutation($input: UpdateQuestionPosition!) @raw_response_type {
-        updateQuestionPosition(input: $input) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    position
-                }
-            }
-        }
-    }
-`;
-
 export function CurrentQuestionCard({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<556f3c6c2cf0553ef711fc61c387704b>>
+ * @generated SignedSource<<7a27093fadd9fa47fd9801198dc04476>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,10 @@ export type useQuestionQueueFragment$data = {
         readonly cursor: string;
         readonly node: {
           readonly id: string;
+          readonly question: string | null;
+          readonly createdBy: {
+            readonly firstName: string | null;
+          } | null;
           readonly position: number | null;
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
@@ -34,6 +38,10 @@ export type useQuestionQueueFragment$data = {
         readonly cursor: string;
         readonly node: {
           readonly id: string;
+          readonly question: string | null;
+          readonly createdBy: {
+            readonly firstName: string | null;
+          } | null;
           readonly position: number | null;
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
@@ -67,28 +75,53 @@ v1 = {
   "storageKey": null
 },
 v2 = {
+  "alias": null,
   "args": null,
-  "kind": "FragmentSpread",
-  "name": "QuestionAuthorFragment"
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
 },
 v3 = {
+  "alias": null,
   "args": null,
-  "kind": "FragmentSpread",
-  "name": "QuestionStatsFragment"
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
 },
 v4 = {
   "args": null,
   "kind": "FragmentSpread",
-  "name": "QuestionContentFragment"
+  "name": "QuestionAuthorFragment"
 },
 v5 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionStatsFragment"
+},
+v6 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionContentFragment"
+},
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "position",
   "storageKey": null
 },
-v6 = {
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "EventQuestion",
@@ -104,14 +137,14 @@ v6 = {
   ],
   "storageKey": null
 },
-v7 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v8 = {
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "PageInfo",
@@ -136,7 +169,7 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = {
+v11 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -233,15 +266,17 @@ return {
                     (v4/*: any*/),
                     (v5/*: any*/),
                     (v6/*: any*/),
-                    (v7/*: any*/)
+                    (v7/*: any*/),
+                    (v8/*: any*/),
+                    (v9/*: any*/)
                   ],
                   "storageKey": null
                 }
               ],
               "storageKey": null
             },
-            (v8/*: any*/),
-            (v9/*: any*/)
+            (v10/*: any*/),
+            (v11/*: any*/)
           ],
           "storageKey": null
         },
@@ -271,25 +306,27 @@ return {
                   "plural": false,
                   "selections": [
                     (v0/*: any*/),
+                    (v2/*: any*/),
+                    (v3/*: any*/),
                     {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "QuestionActionsFragment"
                     },
-                    (v2/*: any*/),
-                    (v3/*: any*/),
                     (v4/*: any*/),
                     (v5/*: any*/),
                     (v6/*: any*/),
-                    (v7/*: any*/)
+                    (v7/*: any*/),
+                    (v8/*: any*/),
+                    (v9/*: any*/)
                   ],
                   "storageKey": null
                 }
               ],
               "storageKey": null
             },
-            (v8/*: any*/),
-            (v9/*: any*/)
+            (v10/*: any*/),
+            (v11/*: any*/)
           ],
           "storageKey": null
         }
@@ -302,6 +339,6 @@ return {
 };
 })();
 
-(node as any).hash = "f0fda8dedb259325adec27500ec5acf9";
+(node as any).hash = "83041d7b8a3882356dbe791565b11e26";
 
 export default node;

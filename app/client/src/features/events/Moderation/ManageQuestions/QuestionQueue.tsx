@@ -24,6 +24,8 @@ import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 import { QuestionActions } from '../../Questions/QuestionActions';
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
+import { FilterList } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: '#B5B5B5'
     },
+    listFilter: {
+        flex: 1,
+    },
 }));
 
 type QuestionNode = ArrayElement<
@@ -105,6 +110,10 @@ export const QUESTION_QUEUE_MUTATION = graphql`
                 cursor
                 node {
                     id
+                    question
+                    createdBy {
+                        firstName
+                    }
                     position
                 }
             }
@@ -154,6 +163,11 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                             cursor: list[sourceIdx].cursor,
                             node: {
                                 id: list[sourceIdx].node.id,
+                                question: list[sourceIdx].node.question,
+                                createdBy: {
+                                    firstName: list[sourceIdx].node.createdBy?.firstName || 'Unknown User',
+                                    id: list[sourceIdx].node.id
+                                },
                                 position: newPosition,
                             },
                         },
@@ -201,7 +215,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     const { eventId } = useEvent();
     const classes = useStyles();
     const ref = React.useRef<HTMLElement | null>(null);
-    const [open, setOpen] = React.useState(false);
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
 
     //
@@ -231,7 +244,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
         [questionQueue]
     );
-    const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
+    // const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
     const canGoForward = React.useMemo(() => enqueuedQuestions.length > 0, [enqueuedQuestions]);
     const currentQuestion = React.useMemo(
         () => (questionRecord.length > 0 ? questionRecord[questionRecord.length - 1] : null),
@@ -263,8 +276,24 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [enqueuedQuestions, reorder, currentQuestion]
     );
 
+    const accessors = React.useMemo<Accessors<ArrayElement<typeof enqueuedQuestions>>[]>(
+        () => [
+            (q) => q?.node.question || '', // question text itself
+            (q) => q?.node.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(enqueuedQuestions, accessors);
+
     return (
         <>
+            <ListFilter
+                className={classes.listFilter}
+                onFilterChange={handleFilterChange}
+                onSearch={handleSearch}
+                length={filteredList.length}
+            />
             <Grid className={classes.helperText}>
                 <Typography variant='caption'>
                     Drag and drop questions to re-order queue
@@ -272,7 +301,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             </Grid>
             <DragDropContext onDragEnd={onDragEnd}>
                 <DropArea getStyle={getListStyle} droppableId='droppable'>
-                    {enqueuedQuestions.map((question, idx) => (
+                    {enqueuedQuestions.filter(question => filteredList.includes(question)).map((question, idx) => (
                         <DragArea
                             getStyle={itemStyle}
                             key={question.node.id}
