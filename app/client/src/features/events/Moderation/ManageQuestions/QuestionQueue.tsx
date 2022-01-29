@@ -81,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
             background: '#E6B035',
         }
     },
+    previousQuestion: {
+        paddingBottom: theme.spacing(2),
+    },
     helperText: {
         width: '100%',
         paddingBottom: theme.spacing(2),
@@ -393,7 +396,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 <List>
                     {questionRecord.slice(0, -1).filter(question => prevFilteredList.includes(question)).map((question) => (
                         <ListItem key={question.node.id} disableGutters>
-                            <Card className={classes.item}>
+                            <Card className={`${classes.item} ${classes.previousQuestion}`}>
                                 <QuestionAuthor fragmentRef={question.node} />
                                 <QuestionContent fragmentRef={question.node} />
                                 <QuestionStats fragmentRef={question.node} />
