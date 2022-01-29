@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     video: {
         [theme.breakpoints.up('md')]: {
             // marginTop: theme.spacing(2),
-            marginLeft: theme.spacing(2),
+            // marginLeft: theme.spacing(2),
         },
         [theme.breakpoints.down('sm')]: {
             position: 'sticky',
@@ -144,17 +144,17 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
-                <Grid item md={8} className={classes.video}>
-                    <EventVideo fragmentRef={node} />
-                    <Grid
-                        container
-                        direction='column'
-                        wrap='nowrap'
-                        className={clsx(classes.item, classes.paper, classes.fullWidth)}
-                    >
-                        <EventDetailsCard fragmentRef={data} />
-                        <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
+                <Grid
+                    container item
+                    md={8}
+                    direction='column'
+                    wrap='nowrap'
+                >
+                    <Grid item className={classes.video}>
+                        <EventVideo fragmentRef={node} />
                     </Grid>
+                    <EventDetailsCard fragmentRef={data} />
+                    <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
