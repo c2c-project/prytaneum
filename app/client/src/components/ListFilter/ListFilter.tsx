@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
     search: {
         flex: 1,
+        marginBottom: theme.spacing(2),
     },
     iconContainer: {
         flexBasis: 'auto',

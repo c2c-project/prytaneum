@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Select, MenuItem, Grid, Typography, Card, List, ListItem } from '@material-ui/core';
+import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton } from '@material-ui/core';
 import { graphql, useMutation } from 'react-relay';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
 import type {
@@ -27,35 +28,10 @@ import { QuestionActions } from '../../Questions/QuestionActions';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(2),
-        maxWidth: 700,
-    },
-    title: {
-        marginLeft: theme.spacing(2),
-        // fontSize: 14,
-    },
-    divider: {
-        margin: theme.spacing(2, 0),
-        width: '100%',
-    },
-    empty: {
-        margin: theme.spacing(5, 0),
-    },
     item: {
         width: '100%',
         paddingTop: theme.spacing(0.5),
         borderRadius: '10px'
-    },
-    dialogContent: {
-        '& > *': {
-            marginBottom: theme.spacing(2),
-        },
-    },
-    pastQuestionsContainer: {
-        padding: theme.spacing(2),
-        backgroundColor: theme.palette.secondary.main,
     },
     questionActions: {
         display: 'flex',
@@ -91,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#B5B5B5'
     },
     select: {
-        width: '8rem',
+        width: '7.5rem',
         height: 'min-content',
         textAlign: 'center',
         textTransform: 'uppercase',
@@ -109,8 +85,12 @@ const useStyles = makeStyles((theme) => ({
     },
     listFilter: {
         flex: 1,
-        marginLeft: theme.spacing(1)
+        marginLeft: theme.spacing(0.5)
     },
+    filterIcon: {
+        height: 'min-content',
+        marginLeft: theme.spacing(0.5)
+    }
 }));
 
 type QuestionNode = ArrayElement<
@@ -336,6 +316,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         Previous
                     </MenuItem>
                 </Select>
+                {/* TODO: add filter functionality */}
+                <IconButton className={classes.filterIcon}>
+                    <FilterListIcon />
+                </IconButton>
                 <ListFilter
                     className={classes.listFilter}
                     onFilterChange={queueIndex === 0 ? handleFilterChange : prevHandleFilterChange}
