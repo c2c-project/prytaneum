@@ -17,7 +17,7 @@ export const QUESTION_CONTENT_FRAGMENT = graphql`
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        margin: '-0.5rem 0'
+        margin: theme.spacing(-2, 0, -1, 0)
     },
 }));
 
