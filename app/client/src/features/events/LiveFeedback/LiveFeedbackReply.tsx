@@ -6,8 +6,6 @@ import clsx from 'clsx';
 import { LiveFeedbackReplyFragment$key } from '@local/__generated__/LiveFeedbackReplyFragment.graphql';
 import { LiveFeedbackAuthor } from './LiveFeedbackAuthor';
 
-
-
 export const LIVE_FEEDBACK_REPLY_FRAGMENT = graphql`
     fragment LiveFeedbackReplyFragment on EventLiveFeedback {
         id
