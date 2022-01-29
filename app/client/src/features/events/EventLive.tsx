@@ -4,7 +4,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import clsx from 'clsx';
+import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery, useFragment } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
@@ -12,6 +13,9 @@ import { Fab } from '@local/components/Fab';
 import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
+import { EVENT_SIDEBAR_FRAGMENT } from './EventSidebar'
+import { EventDetailsCard } from './EventDetailsCard';
+import { SpeakerList } from './Speakers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,6 +53,20 @@ const useStyles = makeStyles((theme) => ({
     target: {
         scrollMarginTop: '1rem',
     },
+    item: {
+        // flex: 1,
+        // marginBottom: theme.spacing(1.5),
+    },
+    fullWidth: {
+        // width: '100%',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+        padding: theme.spacing(1),
+        boxShadow: theme.shadows[1],
+        // border: `1px solid ${theme.palette.secondary.main}`,
+    },
 }));
 
 export const EVENT_LIVE_QUERY = graphql`
@@ -80,6 +98,7 @@ export interface EventLiveProps {
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
+    const data = useFragment(EVENT_SIDEBAR_FRAGMENT, node);
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
     const classes = useStyles();
@@ -127,6 +146,15 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                 {!isMdUp && <div ref={topRef} />}
                 <Grid item md={8} className={classes.video}>
                     <EventVideo fragmentRef={node} />
+                    <Grid
+                        container
+                        direction='column'
+                        wrap='nowrap'
+                        className={clsx(classes.item, classes.paper, classes.fullWidth)}
+                    >
+                        <EventDetailsCard fragmentRef={data} />
+                        <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
+                    </Grid>
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>

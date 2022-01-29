@@ -58,10 +58,6 @@ const useStyles = makeStyles((theme) => ({
     rightJustify: {
         alignSelf: 'flex-end',
     },
-    item: {
-        // flex: 1,
-        // marginBottom: theme.spacing(1.5),
-    },
     fullWidth: {
         // width: '100%',
     },
@@ -71,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         boxShadow: theme.shadows[1],
     },
+    item: {},
     pl: {
         paddingLeft: theme.spacing(2),
     },
