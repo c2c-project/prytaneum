@@ -61,10 +61,10 @@ __metadata:
     "@types/react": ^17.0.3
     "@types/react-beautiful-dnd": ^13.0.0
     "@types/react-dom": ^16.9.8
-    "@types/react-relay": ^11
+    "@types/react-relay": ^13.0.0
     "@types/react-transition-group": ^4
     "@types/react-window": ^1.8.2
-    "@types/relay-runtime": ^11
+    "@types/relay-runtime": ^13.0.1
     "@types/smoothscroll-polyfill": ^0.3.1
     "@types/yup": ^0
     "@typescript-eslint/eslint-plugin": ^5.9.0
@@ -101,7 +101,7 @@ __metadata:
     react-transition-group: ^4.4.2
     relay-compiler: ^13.0.2
     relay-compiler-language-typescript: ^14.0.0
-    relay-runtime: ^11.0.2
+    relay-runtime: 12.0.0
     smoothscroll-polyfill: ^0.4.4
     subscriptions-transport-ws: ^0.11.0
     typescript: 4.3.2
@@ -173,7 +173,7 @@ __metadata:
     fastify-multipart: ^4.0.7
     form-data: ^4.0.0
     graphql: ^15.5.0
-    graphql-relay: ^0.10.0
+    graphql-relay: 0.9.0
     jsonwebtoken: ^8.5.1
     logstash: ^4.1.1
     mailgun.js: ^3.4.0
@@ -6075,13 +6075,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-relay@npm:^11":
-  version: 11.0.1
-  resolution: "@types/react-relay@npm:11.0.1"
+"@types/react-relay@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "@types/react-relay@npm:13.0.0"
   dependencies:
     "@types/react": "*"
     "@types/relay-runtime": "*"
-  checksum: 637ee2ccdb879a61b8de227b1450c6c21a1867a437fc50dc6ddaaa219068874c1c2fa38d423adde6341db426902ff05e4ca10447493022bdf895217f377fe2cb
+  checksum: 3ffe36084c20dc8b0197cdf3dc616b16ca6bc2661c705319582a8b6a53e1b73920a28fd4c1750d07bf96584907550cbef9b18da47f81572282de9c6569ece97b
   languageName: node
   linkType: hard
 
@@ -6143,10 +6143,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/relay-runtime@npm:*, @types/relay-runtime@npm:^11":
+"@types/relay-runtime@npm:*":
   version: 11.0.0
   resolution: "@types/relay-runtime@npm:11.0.0"
   checksum: 8cacdaf4e013e72bb27d7eb89df90fd10ba1f9c954e0ba61ac17162887aee6d1577ff4bbed380bf09210acf3c8182d57b254d06522999ec326fca176ec796684
+  languageName: node
+  linkType: hard
+
+"@types/relay-runtime@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "@types/relay-runtime@npm:13.0.1"
+  checksum: 286f32679e517ba4a665b51583d8784b7fc8e7669fefec86b2235309c55cc99c1b1add2fabcb71273add99a465268d680b79da54f37e58a1e873c3cb9d98b86d
   languageName: node
   linkType: hard
 
@@ -8196,43 +8203,6 @@ __metadata:
     core-js: ^2.5.0
     regenerator-runtime: ^0.10.5
   checksum: 6fb1a3c0bfe1b6fc56ce1afcf531878aa629b309277a05fbf3fe950589b24cb4052a6e487db21d318eb5336b68730a21f5ef62166b6cc8aea3406261054d1118
-  languageName: node
-  linkType: hard
-
-"babel-preset-fbjs@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "babel-preset-fbjs@npm:3.4.0"
-  dependencies:
-    "@babel/plugin-proposal-class-properties": ^7.0.0
-    "@babel/plugin-proposal-object-rest-spread": ^7.0.0
-    "@babel/plugin-syntax-class-properties": ^7.0.0
-    "@babel/plugin-syntax-flow": ^7.0.0
-    "@babel/plugin-syntax-jsx": ^7.0.0
-    "@babel/plugin-syntax-object-rest-spread": ^7.0.0
-    "@babel/plugin-transform-arrow-functions": ^7.0.0
-    "@babel/plugin-transform-block-scoped-functions": ^7.0.0
-    "@babel/plugin-transform-block-scoping": ^7.0.0
-    "@babel/plugin-transform-classes": ^7.0.0
-    "@babel/plugin-transform-computed-properties": ^7.0.0
-    "@babel/plugin-transform-destructuring": ^7.0.0
-    "@babel/plugin-transform-flow-strip-types": ^7.0.0
-    "@babel/plugin-transform-for-of": ^7.0.0
-    "@babel/plugin-transform-function-name": ^7.0.0
-    "@babel/plugin-transform-literals": ^7.0.0
-    "@babel/plugin-transform-member-expression-literals": ^7.0.0
-    "@babel/plugin-transform-modules-commonjs": ^7.0.0
-    "@babel/plugin-transform-object-super": ^7.0.0
-    "@babel/plugin-transform-parameters": ^7.0.0
-    "@babel/plugin-transform-property-literals": ^7.0.0
-    "@babel/plugin-transform-react-display-name": ^7.0.0
-    "@babel/plugin-transform-react-jsx": ^7.0.0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0
-    "@babel/plugin-transform-spread": ^7.0.0
-    "@babel/plugin-transform-template-literals": ^7.0.0
-    babel-plugin-syntax-trailing-function-commas: ^7.0.0-beta.0
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  checksum: b3352cf690729125997f254bc31b9c4db347f8646f1571958ced1c45f0da89439e183e1c88e35397eb0361b9e1fbb1dd8142d3f4647814deb427e53c54f44d5f
   languageName: node
   linkType: hard
 
@@ -13722,12 +13692,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-relay@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "graphql-relay@npm:0.10.0"
+"graphql-relay@npm:0.9.0":
+  version: 0.9.0
+  resolution: "graphql-relay@npm:0.9.0"
   peerDependencies:
-    graphql: ^16.2.0
-  checksum: 74b2b608ed7c18cc405d53fa7e482a68442a4dc7c0748bba029c59e1d23c6c6e5b8193c775eb73f6bb0dce49501f66af0453eb0b0f0362374cef9f97528852c0
+    graphql: ^15.5.3
+  checksum: 9b5c77e5f74249807de19ee748da057c6d333817a611a15a0013ad4f11f394ecb2f2039d0d03fd8c8429a03f39dfde64731b8e65f413db912335984a31fcb08d
   languageName: node
   linkType: hard
 
@@ -14430,13 +14400,6 @@ fsevents@^1.2.7:
   bin:
     image-size: bin/image-size.js
   checksum: 2d9d1edc43c0fa8effd27c44cd2d1b02ecc963219e78a76ac80b9d363f69c5aa19990cc23a323959ea510742ff07667e231f0852fd57eba5dc5b55432b58106d
-  languageName: node
-  linkType: hard
-
-"immutable@npm:^4.0.0-rc.12":
-  version: 4.0.0-rc.12
-  resolution: "immutable@npm:4.0.0-rc.12"
-  checksum: 69f5292e5683738e3f674ea5be1d0b4ffd3ef6215757c81009295f092966f546380a41c0df1203753cfd11f2389fefc16ba5935e5828d42948c6504001482328
   languageName: node
   linkType: hard
 
@@ -19948,9 +19911,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-relay@npm:^11.0.2":
-  version: 11.0.2
-  resolution: "react-relay@npm:11.0.2"
+"react-relay@npm:12.0.0":
+  version: 12.0.0
+  resolution: "react-relay@npm:12.0.0"
   dependencies:
     "@babel/runtime": ^7.0.0
     fbjs: ^3.0.0
@@ -20411,9 +20374,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"relay-compiler-language-typescript@npm:15.0.0":
-  version: 15.0.0
-  resolution: "relay-compiler-language-typescript@npm:15.0.0"
+"relay-compiler-language-typescript@npm:^14.0.0":
+  version: 14.3.0
+  resolution: "relay-compiler-language-typescript@npm:14.3.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -20421,8 +20384,8 @@ fsevents@^1.2.7:
     "@types/relay-runtime": ">=12.0.0"
     relay-compiler: ">=12.0.0"
     relay-runtime: ">=12.0.0"
-    typescript: ">=4.5.0"
-  checksum: 1d60db63ce0dfdf4b8435b3970228da7999b372a7355808b9d5ffcb6a8abb580b8eda96a490f9f63935449f1ada26a418aeb497bb122994788807c3d4d05d22c
+    typescript: ">=4.2.3"
+  checksum: 46ce092f9c68a22f04b56653051749ac3080a92b245de02b48382b5df8909c24a438a01cea86cc51374b36db5fccfd5e6774b98785b87541d06889fb5cd77054
   languageName: node
   linkType: hard
 
@@ -20461,17 +20424,6 @@ fsevents@^1.2.7:
   bin:
     relay-compiler: cli.js
   checksum: 72ddca947a59398b7c5a6b7405884e9d03d750609b7b5d23e7779f5fc4e1c86d04b41cef64c5974c2cebd884a769d9c5bd394a21e4fc87ba231bd04b9a42d27a
-  languageName: node
-  linkType: hard
-
-"relay-runtime@npm:12.0.0":
-  version: 12.0.0
-  resolution: "relay-runtime@npm:12.0.0"
-  dependencies:
-    "@babel/runtime": ^7.0.0
-    fbjs: ^3.0.0
-    invariant: ^2.2.4
-  checksum: 51cdc8a5e04188982452ae4e7c6ac7d6375ee769130d24ce8e8f9cdd45aa7e11ecd68670f56e30dcee1b4974585e88ecce19e69a9868b80cda0db7678c3b8f0a
   languageName: node
   linkType: hard
 
