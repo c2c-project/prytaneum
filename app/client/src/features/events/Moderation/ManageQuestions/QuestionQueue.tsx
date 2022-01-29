@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, Typography, Card, List, ListItem } from '@material-ui/core';
+import { Select, MenuItem, Grid, Typography, Card, List, ListItem } from '@material-ui/core';
 import { graphql, useMutation } from 'react-relay';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -25,7 +25,6 @@ import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 import { QuestionActions } from '../../Questions/QuestionActions';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
-import { FilterList } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -88,8 +87,26 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: '#B5B5B5'
     },
+    select: {
+        width: '8rem',
+        height: 'min-content',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+        fontSize: 'small',
+        fontWeight: 600,
+        ['& fieldset']: {
+            borderRadius: '7px' 
+        },
+    },
+    menuItem: {
+        textTransform: 'uppercase',
+        fontSize: 'small',
+        fontWeight: 600,
+        borderRadius: '5px',
+    },
     listFilter: {
         flex: 1,
+        marginLeft: theme.spacing(1)
     },
 }));
 
@@ -202,6 +219,12 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
+    const [queueIndex, setQueueIndex] = React.useState<number>(0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleQueueChange = (e: React.ChangeEvent<any>) => {
+        e.preventDefault();
+        setQueueIndex(e.target.value);
+    };
     const { questionQueue, connections } = useQuestionQueue({ fragmentRef });
     const recordConnection = React.useMemo(
         () => ({ connection: questionQueue?.questionRecord?.__id ?? '' }),
@@ -284,73 +307,101 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         []
     );
 
+    const prevAccessors = React.useMemo<Accessors<ArrayElement<typeof questionRecord>>[]>(
+        () => [
+            (q) => q?.node.question || '', // question text itself
+            (q) => q?.node.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
+
     const [filteredList, handleSearch, handleFilterChange] = useFilters(enqueuedQuestions, accessors);
+    const [prevFilteredList, prevHandleSearch, prevHandleFilterChange] = useFilters(questionRecord, prevAccessors);
 
     return (
         <>
-            <ListFilter
-                className={classes.listFilter}
-                onFilterChange={handleFilterChange}
-                onSearch={handleSearch}
-                length={filteredList.length}
-            />
-            <Grid className={classes.helperText}>
-                <Typography variant='caption'>
-                    Drag and drop questions to re-order queue
-                </Typography>
+            <Grid container>
+                <Select
+                    value={queueIndex}
+                    onChange={handleQueueChange}
+                    className={classes.select}
+                >
+                    <MenuItem value={0} className={classes.menuItem}>
+                        Upcoming
+                    </MenuItem>
+                    <MenuItem value={1} className={classes.menuItem}>
+                        Previous
+                    </MenuItem>
+                </Select>
+                <ListFilter
+                    className={classes.listFilter}
+                    onFilterChange={queueIndex === 0 ? handleFilterChange : prevHandleFilterChange}
+                    onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
+                    length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
+                />
             </Grid>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <DropArea getStyle={getListStyle} droppableId='droppable'>
-                    {enqueuedQuestions.filter(question => filteredList.includes(question)).map((question, idx) => (
-                        <DragArea
-                            getStyle={itemStyle}
-                            key={question.node.id}
-                            index={idx}
-                            draggableId={question.node.id}
-                        >
-                            <ListItem disableGutters className={classes.relative}>
-                                { question === nextQuestion &&
-                                    <NextQuestionButton
-                                        color='primary'
-                                        disabled={!canGoForward}
-                                        variant='contained'
-                                        className={classes.nextQuestion}
-                                    />
-                                }
-                                <Card className={classes.item}>
-                                    <QuestionAuthor fragmentRef={question.node} />
-                                    <QuestionContent fragmentRef={question.node} />
-                                    <Grid container alignItems='center' justify='space-between'>
-                                        <QuestionStats fragmentRef={question.node} />
-                                        <QuestionActions
-                                            className={classes.questionActions}
-                                            like={Boolean(false)}
-                                            quote={Boolean(false)}
-                                            queue={Boolean(true)}
-                                            connections={connections}
-                                            fragmentRef={question.node}
-                                        />
-                                        <span className={classes.filler}>
-                                            <QuestionStats fragmentRef={question.node} />
-                                        </span>
-                                    </Grid>
-                                </Card>
-                            </ListItem>
-                        </DragArea>
+            { queueIndex === 0 ?
+                <>
+                    <Grid className={classes.helperText}>
+                        <Typography variant='caption'>
+                            Drag and drop questions to re-order queue
+                        </Typography>
+                    </Grid>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <DropArea getStyle={getListStyle} droppableId='droppable'>
+                            {enqueuedQuestions.filter(question => filteredList.includes(question)).map((question, idx) => (
+                                <DragArea
+                                    getStyle={itemStyle}
+                                    key={question.node.id}
+                                    index={idx}
+                                    draggableId={question.node.id}
+                                >
+                                    <ListItem disableGutters className={classes.relative}>
+                                        { question === nextQuestion &&
+                                            <NextQuestionButton
+                                                color='primary'
+                                                disabled={!canGoForward}
+                                                variant='contained'
+                                                className={classes.nextQuestion}
+                                            />
+                                        }
+                                        <Card className={classes.item}>
+                                            <QuestionAuthor fragmentRef={question.node} />
+                                            <QuestionContent fragmentRef={question.node} />
+                                            <Grid container alignItems='center' justify='space-between'>
+                                                <QuestionStats fragmentRef={question.node} />
+                                                <QuestionActions
+                                                    className={classes.questionActions}
+                                                    like={Boolean(false)}
+                                                    quote={Boolean(false)}
+                                                    queue={Boolean(true)}
+                                                    connections={connections}
+                                                    fragmentRef={question.node}
+                                                />
+                                                <span className={classes.filler}>
+                                                    <QuestionStats fragmentRef={question.node} />
+                                                </span>
+                                            </Grid>
+                                        </Card>
+                                    </ListItem>
+                                </DragArea>
+                            )) ?? []}
+                        </DropArea>
+                    </DragDropContext>
+                </>
+                :
+                <List>
+                    {questionRecord.slice(0, -1).filter(question => prevFilteredList.includes(question)).map((question) => (
+                        <ListItem key={question.node.id} disableGutters>
+                            <Card className={classes.item}>
+                                <QuestionAuthor fragmentRef={question.node} />
+                                <QuestionContent fragmentRef={question.node} />
+                                <QuestionStats fragmentRef={question.node} />
+                            </Card>
+                        </ListItem>
                     )) ?? []}
-                </DropArea>
-            </DragDropContext>
-            <List>
-                {questionRecord.slice(0, -1).map((question) => (
-                    <ListItem key={question.node.id} disableGutters>
-                        <Card className={classes.item}>
-                            <QuestionAuthor fragmentRef={question.node} />
-                            <QuestionContent fragmentRef={question.node} />
-                            <QuestionStats fragmentRef={question.node} />
-                        </Card>
-                    </ListItem>
-                )) ?? []}
-            </List>
+                </List>
+            }
         </>
     );
 }
