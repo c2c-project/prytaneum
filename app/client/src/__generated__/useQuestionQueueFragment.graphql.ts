@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2d680f70ccd83c9da17862d6461473ec>>
+ * @generated SignedSource<<556f3c6c2cf0553ef711fc61c387704b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -38,7 +38,7 @@ export type useQuestionQueueFragment$data = {
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
           } | null;
-          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
         };
       }> | null;
     } | null;
@@ -59,120 +59,95 @@ var v0 = {
   "name": "id",
   "storageKey": null
 },
-v1 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "EventQuestionEdge",
-    "kind": "LinkedField",
-    "name": "edges",
-    "plural": true,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "cursor",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "EventQuestion",
-        "kind": "LinkedField",
-        "name": "node",
-        "plural": false,
-        "selections": [
-          (v0/*: any*/),
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionAuthorFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionStatsFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionContentFragment"
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "position",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventQuestion",
-            "kind": "LinkedField",
-            "name": "refQuestion",
-            "plural": false,
-            "selections": [
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "QuestionQuoteFragment"
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "PageInfo",
-    "kind": "LinkedField",
-    "name": "pageInfo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "endCursor",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "hasNextPage",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
-  {
-    "kind": "ClientExtension",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "__id",
-        "storageKey": null
-      }
-    ]
-  }
-];
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v2 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionAuthorFragment"
+},
+v3 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionStatsFragment"
+},
+v4 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "QuestionContentFragment"
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "position",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "EventQuestion",
+  "kind": "LinkedField",
+  "name": "refQuestion",
+  "plural": false,
+  "selections": [
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "QuestionQuoteFragment"
+    }
+  ],
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v9 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "__id",
+      "storageKey": null
+    }
+  ]
+};
 return {
   "argumentDefinitions": [
     {
@@ -234,7 +209,40 @@ return {
           "kind": "LinkedField",
           "name": "__QuestionQueueFragment_questionRecord_connection",
           "plural": false,
-          "selections": (v1/*: any*/),
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "EventQuestionEdge",
+              "kind": "LinkedField",
+              "name": "edges",
+              "plural": true,
+              "selections": [
+                (v1/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "EventQuestion",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    (v2/*: any*/),
+                    (v3/*: any*/),
+                    (v4/*: any*/),
+                    (v5/*: any*/),
+                    (v6/*: any*/),
+                    (v7/*: any*/)
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            },
+            (v8/*: any*/),
+            (v9/*: any*/)
+          ],
           "storageKey": null
         },
         {
@@ -244,7 +252,45 @@ return {
           "kind": "LinkedField",
           "name": "__QuestionQueueFragment_enqueuedQuestions_connection",
           "plural": false,
-          "selections": (v1/*: any*/),
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "EventQuestionEdge",
+              "kind": "LinkedField",
+              "name": "edges",
+              "plural": true,
+              "selections": [
+                (v1/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "EventQuestion",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "QuestionActionsFragment"
+                    },
+                    (v2/*: any*/),
+                    (v3/*: any*/),
+                    (v4/*: any*/),
+                    (v5/*: any*/),
+                    (v6/*: any*/),
+                    (v7/*: any*/)
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            },
+            (v8/*: any*/),
+            (v9/*: any*/)
+          ],
           "storageKey": null
         }
       ],
@@ -256,6 +302,6 @@ return {
 };
 })();
 
-(node as any).hash = "bf9a1f6c7fd332126002af6c4448e3dd";
+(node as any).hash = "f0fda8dedb259325adec27500ec5acf9";
 
 export default node;

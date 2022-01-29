@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
+import { Grid, Paper, Typography, Card, List, ListItem } from '@material-ui/core';
 import { graphql, useMutation } from 'react-relay';
-import ReorderIcon from '@material-ui/icons/Reorder';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
@@ -13,7 +12,6 @@ import type {
 } from '@local/__generated__/useQuestionQueueFragment.graphql';
 import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
-import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
@@ -26,6 +24,7 @@ import { useRecordUnshift } from './useRecordUnshift';
 import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
+import { QuestionActions } from '../../Questions/QuestionActions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,6 +63,43 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         backgroundColor: theme.palette.secondary.main,
     },
+    questionActions: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 'theme.spacing(1) 0',
+        width: '10rem',
+    },
+    cardFooter: {
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    filler: {
+        visibility: 'hidden'
+    },
+    test: {
+        background: 'blue'
+    },
+    relative: {
+        position: 'relative'
+    },
+    nextQuestion: {
+        paddingTop: theme.spacing(0.5),
+        paddingBottom: theme.spacing(0.5),
+        position: 'absolute',
+        top: theme.spacing(-1),
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#F5C64F',
+        '&:hover': {
+            background: '#E6B035',
+        }
+    },
+    helperText: {
+        width: '100%',
+        paddingBottom: theme.spacing(2),
+        textAlign: 'center',
+        color: '#B5B5B5'
+    }
 }));
 
 type QuestionNode = ArrayElement<
@@ -154,8 +190,8 @@ function useStyledQueue({ eventId }: { eventId: string }) {
     const itemStyle = React.useCallback(
         (isDragging: boolean): React.CSSProperties => ({
             userSelect: 'none',
-            margin: theme.spacing(0, 0, 4, 0),
-            filter: isDragging ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})` : '',
+            margin: theme.spacing(0, 0, 0, 0),
+            filter: isDragging ? 'drop-shadow(0 0 0.5rem #F5C64F50)' : '',
         }),
         [theme]
     );
@@ -166,7 +202,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
-    const questionQueue = useQuestionQueue({ fragmentRef });
+    const { questionQueue, connections } = useQuestionQueue({ fragmentRef });
     const recordConnection = React.useMemo(
         () => ({ connection: questionQueue?.questionRecord?.__id ?? '' }),
         [questionQueue?.questionRecord]
@@ -242,126 +278,81 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     );
 
     return (
-        <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
-            <Grid container justify='space-around'>
-                <Typography variant='body2'>
-                    <b>{enqueuedQuestions.length ?? 'Unknown'}</b>
-                    &nbsp;Remaining
-                </Typography>
-                <Typography variant='body2'>
-                    <b>{questionRecord.length ?? 'Unknown'}</b>
-                    &nbsp;Asked (Includes Current)
-                </Typography>
-                <Divider className={classes.divider} />
-                <Grid item xs={12}>
-                    <Typography className={classes.title} align='left' variant='h6'>
-                        Current
-                    </Typography>
-                </Grid>
-            </Grid>
-            {currentQuestion && (
-                <Card elevation={0} className={classes.fullWidth}>
-                    <QuestionAuthor fragmentRef={currentQuestion.node} />
-                    {currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
-                    <QuestionContent fragmentRef={currentQuestion.node} />
-                    <QuestionStats fragmentRef={currentQuestion.node} />
-                </Card>
-            )}
-            {!currentQuestion && (
-                <Typography color='textSecondary' variant='body2' className={classes.empty}>
-                    There is no current question to display
-                </Typography>
-            )}
-            <Grid container item justify='space-between'>
-                <PreviousQuestionButton disabled={!canGoBackward} />
-                <NextQuestionButton disabled={!canGoForward} variant='outlined' />
-            </Grid>
-            <Divider className={classes.divider} />
-            <Grid item xs={12}>
-                <Typography className={classes.title} align='left' variant='h6'>
-                    Up Next
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                {nextQuestion && (
-                    <Card elevation={0}>
-                        <QuestionAuthor fragmentRef={nextQuestion.node} />
-                        {nextQuestion.node.refQuestion && <QuestionQuote fragmentRef={nextQuestion.node.refQuestion} />}
-                        <QuestionContent fragmentRef={nextQuestion.node} />
-                        <QuestionStats fragmentRef={nextQuestion.node} />
+        <>
+            <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
+                {currentQuestion && (
+                    <Card elevation={0} className={classes.fullWidth}>
+                        <QuestionAuthor fragmentRef={currentQuestion.node} />
+                        <QuestionContent fragmentRef={currentQuestion.node} />
                     </Card>
                 )}
+                {!currentQuestion && (
+                    <Typography color='textSecondary' variant='body2' className={classes.empty}>
+                        There is no current question to display
+                    </Typography>
+                )}
+                <Grid container item justify='space-between'>
+                    <PreviousQuestionButton disabled={!canGoBackward} />
+                    <NextQuestionButton disabled={!canGoForward} variant='outlined' />
+                </Grid>
             </Grid>
-            {!nextQuestion && (
-                <Typography color='textSecondary' variant='body2' className={classes.empty}>
-                    There is no question to display
+            <Grid className={classes.helperText}>
+                <Typography variant='caption'>
+                    Drag and drop questions to re-order queue
                 </Typography>
-            )}
-
-            <Grid container item justify='flex-end'>
-                <Button variant='outlined' startIcon={<ReorderIcon />} onClick={() => setOpen(true)}>
-                    In Queue
-                </Button>
             </Grid>
-            <ResponsiveDialog
-                title='In Queue'
-                fullScreen
-                open={open}
-                onClose={() => setOpen(false)}
-                onEntered={scrollToCurrent}
-            >
-                <DialogContent className={classes.dialogContent}>
-                    <Paper className={classes.pastQuestionsContainer}>
-                        <Typography variant='h5'>Past Questions</Typography>
-                        <List>
-                            {questionRecord.slice(0, -1).map((question) => (
-                                <ListItem key={question.node.id}>
-                                    <Card className={classes.fullWidth}>
-                                        <QuestionAuthor fragmentRef={question.node} />
-                                        {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
-                                        <QuestionContent fragmentRef={question.node} />
+            <DragDropContext onDragEnd={onDragEnd}>
+                <DropArea getStyle={getListStyle} droppableId='droppable'>
+                    {enqueuedQuestions.map((question, idx) => (
+                        <DragArea
+                            getStyle={itemStyle}
+                            key={question.node.id}
+                            index={idx}
+                            draggableId={question.node.id}
+                        >
+                            <ListItem disableGutters className={classes.relative}>
+                                { question === nextQuestion &&
+                                    <NextQuestionButton
+                                        color='primary'
+                                        disabled={!canGoForward}
+                                        variant='contained'
+                                        className={classes.nextQuestion}
+                                    />
+                                }
+                                <Card className={classes.fullWidth}>
+                                    <QuestionAuthor fragmentRef={question.node} />
+                                    <QuestionContent fragmentRef={question.node} />
+                                    <Grid container className={classes.cardFooter}>
                                         <QuestionStats fragmentRef={question.node} />
-                                    </Card>
-                                </ListItem>
-                            )) ?? []}
-                        </List>
-                    </Paper>
-                    {currentQuestion && (
-                        <Paper className={classes.currentQuestionWrapper} ref={ref}>
-                            <Typography className={classes.currentQuestionTitle} variant='h5'>
-                                Current Question
-                            </Typography>
-                            <Card>
-                                <QuestionAuthor fragmentRef={currentQuestion.node} />
-                                <QuestionContent fragmentRef={currentQuestion.node} />
-                                <QuestionStats fragmentRef={currentQuestion.node} />
-                            </Card>
-                        </Paper>
-                    )}
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <DropArea getStyle={getListStyle} droppableId='droppable'>
-                            <Typography variant='h5'>In Queue</Typography>
-                            {enqueuedQuestions.map((question, idx) => (
-                                <DragArea
-                                    getStyle={itemStyle}
-                                    key={question.node.id}
-                                    index={idx}
-                                    draggableId={question.node.id}
-                                >
-                                    <ListItem>
-                                        <Card className={classes.fullWidth}>
-                                            <QuestionAuthor fragmentRef={question.node} />
-                                            {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
-                                            <QuestionContent fragmentRef={question.node} />
+                                        <QuestionActions
+                                            className={classes.questionActions}
+                                            like={Boolean(false)}
+                                            quote={Boolean(false)}
+                                            queue={Boolean(true)}
+                                            connections={connections}
+                                            fragmentRef={question.node}
+                                        />
+                                        <span className={classes.filler}>
                                             <QuestionStats fragmentRef={question.node} />
-                                        </Card>
-                                    </ListItem>
-                                </DragArea>
-                            )) ?? []}
-                        </DropArea>
-                    </DragDropContext>
-                </DialogContent>
-            </ResponsiveDialog>
-        </Grid>
+                                        </span>
+                                    </Grid>
+                                </Card>
+                            </ListItem>
+                        </DragArea>
+                    )) ?? []}
+                </DropArea>
+            </DragDropContext>
+            <List>
+                {questionRecord.slice(0, -1).map((question) => (
+                    <ListItem key={question.node.id} disableGutters>
+                        <Card className={classes.fullWidth}>
+                            <QuestionAuthor fragmentRef={question.node} />
+                            <QuestionContent fragmentRef={question.node} />
+                            <QuestionStats fragmentRef={question.node} />
+                        </Card>
+                    </ListItem>
+                )) ?? []}
+            </List>
+        </>
     );
 }
