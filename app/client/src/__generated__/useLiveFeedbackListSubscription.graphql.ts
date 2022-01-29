@@ -43,6 +43,53 @@ export type useLiveFeedbackListSubscription = {
   response: useLiveFeedbackListSubscription$data;
 };
 
+
+
+/*
+subscription useLiveFeedbackListSubscription(
+  $eventId: ID!
+) {
+  feedbackCRUD(eventId: $eventId) {
+    operationType
+    edge {
+      cursor
+      node {
+        id
+        message
+        createdBy {
+          id
+        }
+        refFeedback {
+          createdBy {
+            id
+          }
+          ...LiveFeedbackReplyFragment
+          id
+        }
+        ...LiveFeedbackReplyFragment
+        ...LiveFeedbackAuthorFragment
+      }
+    }
+  }
+}
+
+fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
+  createdBy {
+    id
+    firstName
+    lastName
+    avatar
+  }
+  createdAt
+}
+
+fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+  id
+  message
+  ...LiveFeedbackAuthorFragment
+}
+*/
+
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
@@ -117,6 +164,13 @@ v8 = {
       "args": null,
       "kind": "ScalarField",
       "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "lastName",
       "storageKey": null
     },
     {
@@ -267,12 +321,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "09d0b7abfb397ca6e066d562d5284311",
+    "cacheID": "c371b9156ff44ad2e18a2cef70f06a35",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
   }
 };
 })();

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Typography, CardHeader, CardHeaderProps } from '@material-ui/core';
+import { Avatar, Typography, CardHeader, CardHeaderProps } from '@material-ui/core';
 import { graphql, useFragment } from 'react-relay';
 
 import type { LiveFeedbackAuthorFragment$key } from '@local/__generated__/LiveFeedbackAuthorFragment.graphql';
@@ -14,6 +14,7 @@ export const LIVE_FEEDBACK_AUTHOR_FRAGMENT = graphql`
         createdBy {
             id
             firstName
+            lastName
             avatar
         }
         createdAt
@@ -41,7 +42,12 @@ export function LiveFeedbackAuthor({ fragmentRef, ...props }: LiveFeedbackAuthor
     );
     return (
         <CardHeader
-            title={<Typography>{authorData.createdBy?.firstName ?? 'Unknown User'}</Typography>}
+            avatar={
+                <Avatar>
+                    {authorData.createdBy?.firstName ? authorData.createdBy?.firstName[0] : 'U'}
+                </Avatar>
+            }
+            title={<Typography>{(authorData.createdBy?.firstName + ' ' + authorData.createdBy?.lastName) ?? 'Unknown User'}</Typography>}
             subheader={subheader}
             {...props}
         />

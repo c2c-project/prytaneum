@@ -83,7 +83,7 @@ export function LiveFeedbackReplyAction({ fragmentRef }: Props) {
             <Button
                 color='inherit'
                 onClick={open}
-                endIcon={<ReplyIcon fontSize='small' />}
+                startIcon={<ReplyIcon fontSize='small' />}
                 fullWidth
             >
                 Reply

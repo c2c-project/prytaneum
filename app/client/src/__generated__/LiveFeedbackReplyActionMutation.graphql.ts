@@ -40,6 +40,37 @@ export type LiveFeedbackReplyActionMutation = {
   response: LiveFeedbackReplyActionMutation$data;
 };
 
+
+
+/*
+mutation LiveFeedbackReplyActionMutation(
+  $input: CreateFeedback!
+) {
+  createFeedback(input: $input) {
+    isError
+    message
+    body {
+      cursor
+      node {
+        id
+        message
+        ...LiveFeedbackAuthorFragment
+      }
+    }
+  }
+}
+
+fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
+  createdBy {
+    id
+    firstName
+    lastName
+    avatar
+  }
+  createdAt
+}
+*/
+
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
@@ -192,6 +223,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -217,12 +255,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3b9d0f11bd84a05e5f1ac8a9d97c1f4a",
+    "cacheID": "7064e70fe8cd3c48ad45abe1b32dfb33",
     "id": null,
     "metadata": {},
     "name": "LiveFeedbackReplyActionMutation",
     "operationKind": "mutation",
-    "text": "mutation LiveFeedbackReplyActionMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        message\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n"
+    "text": "mutation LiveFeedbackReplyActionMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        message\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n"
   }
 };
 })();

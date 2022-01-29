@@ -16,7 +16,7 @@ interface Props {
     fragmentRef: useLiveFeedbackListFragment$key;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         // padding: theme.spacing(1.5),
     },
@@ -31,6 +31,9 @@ const useStyles = makeStyles(() => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+    },
+    body: {
+        margin: theme.spacing(-2, 0, -1, 0)
     },
 }));
 
@@ -58,8 +61,8 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                                         <Card className={classes.item}>
                                             <LiveFeedbackAuthor fragmentRef={feedback} />
                                             {feedback.refFeedback && <LiveFeedbackReply fragmentRef={feedback.refFeedback} />}
-                                            <CardContent>
-                                                <Typography style={{ wordBreak: 'break-word' }}>
+                                            <CardContent className={classes.body}>
+                                                <Typography variant='inherit' style={{ wordBreak: 'break-word' }}>
                                                     {feedback.message}
                                                 </Typography>
                                             </CardContent>
