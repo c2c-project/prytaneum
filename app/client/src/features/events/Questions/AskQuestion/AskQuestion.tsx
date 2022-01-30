@@ -1,65 +1,28 @@
 import * as React from 'react';
-import { Button, DialogContent } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
-import { useMutation, graphql } from 'react-relay';
 
-import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
-import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useSnack } from '@local/features/core';
+import { useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
-import { QuestionForm, TQuestionFormState } from '../QuestionForm';
+import { QuestionDialog } from './QuestionDialog'
 
 export interface AskQuestionProps {
     className?: string;
     eventId: string;
 }
 
-export const ASK_QUESTION_MUTATION = graphql`
-    mutation AskQuestionMutation($input: CreateQuestion!) {
-        createQuestion(input: $input) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    createdAt
-                    question
-                    createdBy {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-            }
-        }
-    }
-`;
-
 function AskQuestion({ className, eventId }: AskQuestionProps) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
-    const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
-    const { displaySnack } = useSnack();
-
-    function handleSubmit(form: TQuestionFormState) {
-        commit({
-            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
-            onCompleted(payload) {
-                if (payload.createQuestion.isError) displaySnack('Something went wrong!');
-                else close();
-            },
-        });
-    }
 
     return (
         <>
-            <ResponsiveDialog open={isOpen} onClose={close}>
-                <DialogContent>
-                    <QuestionForm onCancel={close} onSubmit={handleSubmit} />
-                </DialogContent>
-            </ResponsiveDialog>
+            <QuestionDialog
+                isOpen={isOpen}
+                close={close}
+                eventId={eventId}
+            />
 
             <Button
                 className={className}
@@ -69,7 +32,7 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
                 onClick={open}
                 startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
             >
-                {user ? 'Ask My Question' : 'Sign in to ask a question'}
+                {user ? 'Ask a Question' : 'Sign in to ask a question'}
             </Button>
         </>
     );

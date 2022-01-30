@@ -1,60 +1,28 @@
 import * as React from 'react';
-import { Button, DialogContent } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
-import { useMutation, graphql } from 'react-relay';
 
-import type { SubmitLiveFeedbackMutation } from '@local/__generated__/SubmitLiveFeedbackMutation.graphql';
-import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
-import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
+import { LiveFeedbackDialog } from './LiveFeedbackDialog';
 
 interface Props {
     className?: string;
     eventId: string;
 }
 
-export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
-    mutation SubmitLiveFeedbackMutation($input: CreateFeedback!) {
-        createFeedback(input: $input) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    createdAt
-                    message
-                    createdBy {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-            }
-        }
-    }
-`;
-
 export function SubmitLiveFeedback({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
-    const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
-
-    function handleSubmit(form: TLiveFeedbackFormState) {
-        commit({
-            variables: { input: { ...form, eventId } },
-            onCompleted: close,
-        });
-    }
 
     return (
         <>
-            <ResponsiveDialog open={isOpen} onClose={close}>
-                <DialogContent>
-                    <LiveFeedbackForm onCancel={close} onSubmit={handleSubmit} />
-                </DialogContent>
-            </ResponsiveDialog>
+            <LiveFeedbackDialog
+                isOpen={isOpen}
+                close={close}
+                eventId={eventId}
+            />
 
             <Button
                 className={className}
