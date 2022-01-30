@@ -15,7 +15,7 @@ interface OrgEventListProps {
 }
 
 const EVENT_FRAGEMENT = graphql`
-    fragment OrgEventListFragment on Organization @refetchable(queryName: "EventsListPaginationQuery") {
+    fragment OrgEventListFragment on Organization {
         id
         events(first: $count, after: $cursor) @connection(key: "OrgEventListFragment_events") {
             __id

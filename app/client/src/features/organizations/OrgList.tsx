@@ -12,34 +12,31 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Add, ChevronRight } from '@material-ui/icons';
 import { useRouter } from 'next/router';
-import { usePreloadedQuery, graphql, PreloadedQuery, useSubscription, loadQuery } from 'react-relay';
+import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
 
 import type { OrgListQuery } from '@local/__generated__/OrgListQuery.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { Fab } from '@local/components/Fab';
-import { CreateOrg, CreateOrgProps } from '@local/features/organizations';
-import { ArrayElement } from '@local/utils/ts-utils';
-import { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { OrgListSubscription } from '@local/__generated__/OrgListSubscription.graphql';
+import { CreateOrg, TCreateOrgProps } from '@local/features/organizations';
+
 import { Loader } from '@local/components/Loader';
-import { useEnvironment } from '../core';
 import { useUser } from '../accounts';
 
 export const ORG_LIST_QUERY = graphql`
-    query OrgListQuery {
-        myOrgs {
+    query OrgListQuery($first: Int, $after: String) {
+        me {
             id
-            name
-            createdAt
-        }
-    }
-`;
-
-// TODO Add subscription so list updates correctly when a new org is created
-export const ORG_LIST_SUBSCRIPTION = graphql`
-    subscription OrgListSubscription {
-        orgUpdated {
-            orgId
+            organizations(first: $first, after: $after) @connection(key: "OrgListQuery_organizations") {
+                __id
+                edges {
+                    cursor
+                    node {
+                        id
+                        name
+                        createdAt
+                    }
+                }
+            }
         }
     }
 `;
@@ -55,20 +52,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CreateOrgFab = ({ onSubmit: _onSubmit }: CreateOrgProps) => {
+const CreateOrgFab = ({ connection }: TCreateOrgProps) => {
     const [isOpen, open, close] = useResponsiveDialog(false);
-
-    // wraps the onSubmit so that we close the dialog when the form is submitted too
-    const onSubmit: typeof _onSubmit = (...params) => {
-        close();
-        _onSubmit(...params);
-    };
 
     return (
         <>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
-                    <CreateOrg onSubmit={onSubmit} />
+                    <CreateOrg connection={connection} onSubmit={close} />
                 </DialogContent>
             </ResponsiveDialog>
             <Fab onClick={open}>
@@ -82,53 +73,27 @@ export interface OrgListProps {
     queryRef: PreloadedQuery<OrgListQuery>;
 }
 
-type TOrganizationList = NonNullable<OrgListQuery['response']['myOrgs']>;
-
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
-    const [orgList, setEventList] = React.useState<TOrganizationList>(data.myOrgs || []);
     const classes = useStyles();
     const router = useRouter();
-    const { env } = useEnvironment();
-    const [user,, isLoading] = useUser();
+    const [user, , isLoading] = useUser();
+
+    const listOfOrgs = React.useMemo(() => data.me?.organizations?.edges ?? [], [data.me]);
+    const connectionId = React.useMemo(() => data.me?.organizations?.__id ?? '', [data.me?.organizations?.__id]);
 
     React.useEffect(() => {
         if (!isLoading && !user) router.push('/');
     }, [user, router, isLoading]);
-
-    const refetch = React.useCallback(() => {
-        loadQuery(env, ORG_LIST_QUERY, {}, { fetchPolicy: 'store-and-network' });
-    }, [env]);
-
-    const config = React.useMemo<GraphQLSubscriptionConfig<OrgListSubscription>>(
-        () => ({
-            variables: {},
-            subscription: ORG_LIST_SUBSCRIPTION,
-            updater: () => {
-                refetch();
-            },
-        }),
-        [refetch]
-    );
-
-    useSubscription(config);
-
-    const appendOrg = (org: ArrayElement<TOrganizationList>) => {
-        setEventList((prev) => [...prev, org]);
-    };
-
-    React.useEffect(() => {
-        setEventList(data.myOrgs || []);
-    }, [data]);
 
     React.useEffect(() => {
         if (isLoading) return;
         if (!user) router.push('/login');
     }, [isLoading, user, router]);
 
-    if (isLoading) return <Loader />
+    if (isLoading) return <Loader />;
 
-    if (orgList.length === 0)
+    if (listOfOrgs.length === 0)
         return (
             <Grid container justify='center'>
                 <Typography variant='body2' align='center'>
@@ -136,7 +101,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
                     <br />
                     Get started by clicking the + at the bottom right
                 </Typography>
-                <CreateOrgFab onSubmit={appendOrg} />
+                <CreateOrgFab connection={connectionId} />
             </Grid>
         );
 
@@ -144,21 +109,21 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
         <Grid component={Paper} className={classes.root} container direction='column'>
             <Typography variant='h4'>My Organizations</Typography>
             <List className={classes.listRoot}>
-                {orgList.map(({ id, name }) => (
+                {listOfOrgs.map(({ node: organization }) => (
                     <ListItem
                         button
-                        key={id}
+                        key={organization.id}
                         divider
-                        onClick={() => router.push(`/organizations/${encodeURIComponent(id)}`)}
+                        onClick={() => router.push(`/organizations/${encodeURIComponent(organization.id)}`)}
                     >
-                        <ListItemText primary={name} />
+                        <ListItemText primary={organization.name} />
                         <ListItemSecondaryAction>
                             <ChevronRight />
                         </ListItemSecondaryAction>
                     </ListItem>
                 ))}
             </List>
-            <CreateOrgFab onSubmit={appendOrg} />
+            <CreateOrgFab connection={connectionId} />
         </Grid>
     );
 };

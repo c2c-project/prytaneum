@@ -773,7 +773,7 @@ export type OrganizationEdge = {
 
 export type OrganizationMutationResponse = MutationResponse & {
   __typename?: 'OrganizationMutationResponse';
-  body?: Maybe<Organization>;
+  body?: Maybe<OrganizationEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -800,8 +800,6 @@ export type Query = {
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
-  /** Fetch organizations relevant to the current user */
-  myOrgs?: Maybe<Array<Organization>>;
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
@@ -1048,6 +1046,13 @@ export type User = Node & {
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+};
+
+
+/** User Data */
+export type UserOrganizationsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 export type UserConnection = {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e083763032e9cc8868c0b8b4b3a4d663>>
+ * @generated SignedSource<<08f421beacba16b7582186e7e67b8401>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
+import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type OrgEventListFragment$data = {
   readonly id: string;
@@ -39,10 +39,7 @@ export type OrgEventListFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
-  "events"
-],
-v1 = {
+var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -67,28 +64,15 @@ return {
         "count": "count",
         "cursor": "cursor",
         "direction": "forward",
-        "path": (v0/*: any*/)
+        "path": [
+          "events"
+        ]
       }
-    ],
-    "refetch": {
-      "connection": {
-        "forward": {
-          "count": "count",
-          "cursor": "cursor"
-        },
-        "backward": null,
-        "path": (v0/*: any*/)
-      },
-      "fragmentPathInResult": [
-        "node"
-      ],
-      "operation": require('./EventsListPaginationQuery.graphql'),
-      "identifierField": "id"
-    }
+    ]
   },
   "name": "OrgEventListFragment",
   "selections": [
-    (v1/*: any*/),
+    (v0/*: any*/),
     {
       "alias": "events",
       "args": null,
@@ -120,7 +104,7 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v1/*: any*/),
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -215,6 +199,6 @@ return {
 };
 })();
 
-(node as any).hash = "d5f6d5043b03cd265e2fe1cf45ff42d3";
+(node as any).hash = "d67ebde8bc7c9b62da92996d03c829f9";
 
 export default node;
