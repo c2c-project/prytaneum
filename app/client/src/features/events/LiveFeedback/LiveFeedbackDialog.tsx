@@ -8,6 +8,8 @@ import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
 
 interface Props {
     isOpen: boolean;
+    openDialog: string;
+    openLinked: () => void;
     close: () => void;
     eventId: string;
 }
@@ -34,7 +36,7 @@ export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
     }
 `;
 
-export function LiveFeedbackDialog({ isOpen, close, eventId }: Props) {
+export function LiveFeedbackDialog({ isOpen, openLinked, close, eventId }: Props) {
     const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
 
     function handleSubmit(form: TLiveFeedbackFormState) {
@@ -45,9 +47,17 @@ export function LiveFeedbackDialog({ isOpen, close, eventId }: Props) {
     }
 
     return (
-        <ResponsiveDialog open={isOpen} onClose={close}>
+        <ResponsiveDialog
+            open={isOpen}
+            currDialog='feedback'
+            onClose={close}
+        >
             <DialogContent>
-                <LiveFeedbackForm onCancel={close} onSubmit={handleSubmit} eventId={eventId} />
+                <LiveFeedbackForm
+                    openLinked={openLinked}
+                    onCancel={close}
+                    onSubmit={handleSubmit}
+                />
             </DialogContent>
         </ResponsiveDialog>
     );

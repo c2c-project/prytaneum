@@ -33,6 +33,7 @@ const Transition = React.forwardRef(function Transition(props: SlideProps, ref: 
 export type ResponsiveDialogProps = {
     title?: string;
     toolbar?: React.ReactElement;
+    currDialog?: string;
     onClose?: () => void;
 } & DialogProps;
 
@@ -79,6 +80,21 @@ export function useResponsiveDialog(initialState?: boolean) {
 
     // tuple state first, then helper functions -- order based on probable usage ie open/close will be used more than toggle
     return [isOpen, open, close, toggle] as const;
+}
+
+/**
+ * Helper hook for using linked dialogs
+ */
+export function useLinkedResponsiveDialog() {
+    // dialog state
+    const [openDialog, setState] = React.useState('');
+
+    // helper functions
+    const open = React.useCallback((currDialog?: string) => setState(currDialog || ''), [setState]);
+    const close = React.useCallback(() => setState(''), [setState]);
+
+    // tuple state first, then helper functions -- order based on probable usage ie open/close will be used more than toggle
+    return [openDialog, open, close] as const;
 }
 
 ResponsiveDialog.defaultProps = {

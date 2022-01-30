@@ -16,6 +16,9 @@ import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedba
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
+import { useLinkedResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { LiveFeedbackDialog } from '../LiveFeedback/LiveFeedbackDialog';
+import { QuestionDialog } from '../Questions/AskQuestion/QuestionDialog';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -90,12 +93,22 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const [tabIndex, setTabIndex] = React.useState<number>(0);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [openDialog, open, close] = useLinkedResponsiveDialog();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
         e.preventDefault();
         setTabIndex(newTabIndex);
     };
+
+    const handleOpenLinkedFeedbackForm = () => {
+        open('feedback');
+        setTabIndex(data.isViewerModerator ? 2 : 1);
+    }
+    const handleOpenLinkedQuestionForm = () => {
+        open('question');
+        setTabIndex(data.isViewerModerator ? 1 : 0);
+    }
 
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
@@ -132,13 +145,15 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     displayFeedbackButton ? (
                         <SubmitLiveFeedback
                             className={classes.fullWidth}
-                            eventId={data.id}
+                            open={() => open('feedback')}
+                            // eventId={data.id}
                             // connectionKey='useLiveFeedbackListFragment_liveFeedback'
                         />
                     ) : (
                         <AskQuestion
                             className={classes.fullWidth}
-                            eventId={data.id}
+                            open={() => open('question')}
+                            // eventId={data.id}
                             // connectionKey='useQuestionListFragment_questions'
                         />
                     )
@@ -171,6 +186,22 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     <LiveFeedbackList fragmentRef={data} />
                 </TabPanel>
             </Grid>
+
+            {/* relocate dialogs to allow one to open another */}
+            <LiveFeedbackDialog
+                isOpen={openDialog === 'feedback'}
+                openDialog={openDialog}
+                openLinked={handleOpenLinkedQuestionForm}
+                close={close}
+                eventId={data.id}
+            />
+            <QuestionDialog
+                isOpen={openDialog === 'question'}
+                openDialog={openDialog}
+                openLinked={handleOpenLinkedFeedbackForm}
+                close={close}
+                eventId={data.id}
+            />
         </Grid>
     );
 };

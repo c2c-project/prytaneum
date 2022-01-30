@@ -9,6 +9,8 @@ import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface Props {
     isOpen: boolean;
+    openDialog: string;
+    openLinked: () => void;
     close: () => void;
     eventId: string;
 }
@@ -35,7 +37,7 @@ export const ASK_QUESTION_MUTATION = graphql`
     }
 `;
 
-export function QuestionDialog({ isOpen, close, eventId }: Props) {
+export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
     const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
     const { displaySnack } = useSnack();
 
@@ -44,16 +46,24 @@ export function QuestionDialog({ isOpen, close, eventId }: Props) {
             variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
             onCompleted(payload) {
                 if (payload.createQuestion.isError) displaySnack('Something went wrong!');
-                else close();
+                else close;
             },
         });
     }
 
     return (
         <>
-            <ResponsiveDialog open={isOpen} onClose={close}>
+            <ResponsiveDialog
+                open={isOpen}
+                currDialog='question'
+                onClose={close}
+            >
                 <DialogContent>
-                    <QuestionForm onCancel={close} onSubmit={handleSubmit} eventId={eventId} />
+                    <QuestionForm
+                        openLinked={openLinked}
+                        onCancel={close}
+                        onSubmit={handleSubmit}
+                    />
                 </DialogContent>
             </ResponsiveDialog>
         </>

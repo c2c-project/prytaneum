@@ -3,26 +3,19 @@ import { Button } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
 
-import { useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
-import { QuestionDialog } from './QuestionDialog'
+// import { QuestionDialog } from './QuestionDialog'
 
 export interface AskQuestionProps {
     className?: string;
-    eventId: string;
+    open: () => void;
 }
 
-function AskQuestion({ className, eventId }: AskQuestionProps) {
-    const [isOpen, open, close] = useResponsiveDialog();
+function AskQuestion({ open, className }: AskQuestionProps) {
     const [user] = useUser();
 
     return (
         <>
-            <QuestionDialog
-                isOpen={isOpen}
-                close={close}
-                eventId={eventId}
-            />
 
             <Button
                 className={className}
