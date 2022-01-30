@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1dfa60ca29bd96d14c7ce3480c7337ee>>
+ * @generated SignedSource<<11f70e239e04c5507ca7fdb6f931ff84>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,9 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateFeedback = {
   eventId: string;
+  isReply?: boolean | null;
   message: string;
+  refFeedbackId?: string | null;
 };
 export type SubmitLiveFeedbackMutation$variables = {
   input: CreateFeedback;

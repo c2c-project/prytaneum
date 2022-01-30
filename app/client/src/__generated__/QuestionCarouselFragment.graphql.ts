@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ce0383a3d7c8f1d0ba1366d22aa8b048>>
+ * @generated SignedSource<<963f4a05618ca29de93ecf56efb02913>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,14 +13,17 @@ import { FragmentRefs } from "relay-runtime";
 export type QuestionCarouselFragment$data = {
   readonly id: string;
   readonly currentQuestion: number | null;
-  readonly queuedQuestions: {
-    readonly edges: ReadonlyArray<{
-      readonly cursor: string;
-      readonly node: {
-        readonly position: number | null;
-        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-      };
-    }> | null;
+  readonly questionQueue: {
+    readonly questionRecord: {
+      readonly __id: string;
+      readonly edges: ReadonlyArray<{
+        readonly cursor: string;
+        readonly node: {
+          readonly position: number | null;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+        };
+      }> | null;
+    } | null;
   } | null;
   readonly " $fragmentType": "QuestionCarouselFragment";
 };
@@ -30,7 +33,12 @@ export type QuestionCarouselFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = [
+  "questionQueue",
+  "questionRecord"
+];
+return {
   "argumentDefinitions": [
     {
       "defaultValue": "",
@@ -132,13 +140,6 @@ const node: ReaderFragment = {
                       "storageKey": null
                     },
                     {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "__typename",
-                      "storageKey": null
-                    },
-                    {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "QuestionAuthorFragment"
@@ -147,6 +148,13 @@ const node: ReaderFragment = {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "QuestionContentFragment"
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "__typename",
+                      "storageKey": null
                     }
                   ],
                   "storageKey": null
@@ -201,7 +209,8 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "bfd207907fc023269ac34fb8582fc8d1";
+(node as any).hash = "53bfaeeea5fa71c95f9c1ec7e6d9d1ee";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c290e99b00dfd90e681236c84e6fe3dd>>
+ * @generated SignedSource<<4553c1e8c219ddc84669efb5064e9eec>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,7 +22,13 @@ export type useLiveFeedbackListFragment$data = {
         readonly createdBy: {
           readonly id: string;
         } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
+        readonly refFeedback: {
+          readonly createdBy: {
+            readonly id: string;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
       };
     }> | null;
   } | null;
@@ -141,6 +147,7 @@ return {
                   ],
                   "storageKey": null
                 },
+                (v2/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
@@ -205,6 +212,6 @@ return {
 };
 })();
 
-(node as any).hash = "b59540cde23c196396e41ab63682403e";
+(node as any).hash = "fd0a05fc621a67ccb998432d71870586";
 
 export default node;

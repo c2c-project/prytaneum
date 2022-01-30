@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4285968b1cde4fe73fc5da036de973ad>>
+ * @generated SignedSource<<87735faf9256bf4117ee3d31de2d7478>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,13 +8,13 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
+import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EventSidebarFragment$data = {
   readonly id: string;
   readonly isQuestionFeedVisible: boolean | null;
   readonly isViewerModerator: boolean | null;
-  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "useLiveFeedbackListFragment" | "QuestionQueueFragment" | "QuestionCarouselFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment" | "QuestionCarouselFragment" | "useLiveFeedbackListFragment">;
   readonly " $fragmentType": "EventSidebarFragment";
 };
 export type EventSidebarFragment = EventSidebarFragment$data;
@@ -26,16 +26,7 @@ export type EventSidebarFragment$key = {
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": {
-    "refetch": {
-      "connection": null,
-      "fragmentPathInResult": [
-        "node"
-      ],
-      "operation": require('./EventSidebarRefetchable.graphql'),
-      "identifierField": "id"
-    }
-  },
+  "metadata": null,
   "name": "EventSidebarFragment",
   "selections": [
     {
@@ -94,6 +85,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "58d200b5b5beb1453a5f8a158d8cdc6a";
+(node as any).hash = "882c8f632e9bc8e70e39f916c5230f67";
 
 export default node;

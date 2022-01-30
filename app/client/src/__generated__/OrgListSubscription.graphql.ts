@@ -8,15 +8,6 @@
 /* eslint-disable */
 // @ts-nocheck
 
-<<<<<<< HEAD
-import { ConcreteRequest } from "relay-runtime";
-
-export type OrgListSubscriptionVariables = {};
-export type OrgListSubscriptionResponse = {
-    readonly orgUpdated: {
-        readonly orgId: string;
-    };
-=======
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type OrgListSubscription$variables = {};
 export type OrgListSubscriptionVariables = OrgListSubscription$variables;
@@ -24,7 +15,6 @@ export type OrgListSubscription$data = {
   readonly orgUpdated: {
     readonly orgId: string;
   };
->>>>>>> bc7ab7a5 (chore(project): upgraded packages and removed some)
 };
 export type OrgListSubscriptionResponse = OrgListSubscription$data;
 export type OrgListSubscription = {

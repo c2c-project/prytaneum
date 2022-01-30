@@ -35,9 +35,9 @@ export type CreateEvent = {
 
 export type CreateFeedback = {
   eventId: Scalars['ID'];
-  isReply?: Maybe<Scalars['Boolean']>;
+  isReply?: InputMaybe<Scalars['Boolean']>;
   message: Scalars['String'];
-  refFeedbackId?: Maybe<Scalars['ID']>;
+  refFeedbackId?: InputMaybe<Scalars['ID']>;
 };
 
 export type CreateInvite = {
@@ -209,8 +209,8 @@ export type EventParticipantsArgs = {
 
 
 export type EventQuestionQueueArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -372,15 +372,15 @@ export type EventQuestionQueue = {
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueueEnqueuedQuestionsArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueueQuestionRecordArgs = {
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 export type EventSpeaker = Node & {

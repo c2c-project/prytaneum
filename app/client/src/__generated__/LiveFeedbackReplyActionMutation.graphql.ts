@@ -1,67 +1,44 @@
+/**
+ * @generated SignedSource<<615c2974cddf9192daaa43a1b7dbfafb>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type CreateFeedback = {
-    eventId: string;
-    isReply?: boolean | null | undefined;
-    message: string;
-    refFeedbackId?: string | null | undefined;
+  eventId: string;
+  isReply?: boolean | null;
+  message: string;
+  refFeedbackId?: string | null;
 };
-export type LiveFeedbackReplyActionMutationVariables = {
-    input: CreateFeedback;
+export type LiveFeedbackReplyActionMutation$variables = {
+  input: CreateFeedback;
 };
-export type LiveFeedbackReplyActionMutationResponse = {
-    readonly createFeedback: {
-        readonly isError: boolean;
+export type LiveFeedbackReplyActionMutationVariables = LiveFeedbackReplyActionMutation$variables;
+export type LiveFeedbackReplyActionMutation$data = {
+  readonly createFeedback: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
         readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
-            };
-        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
+      };
     } | null;
+  } | null;
 };
+export type LiveFeedbackReplyActionMutationResponse = LiveFeedbackReplyActionMutation$data;
 export type LiveFeedbackReplyActionMutation = {
-    readonly response: LiveFeedbackReplyActionMutationResponse;
-    readonly variables: LiveFeedbackReplyActionMutationVariables;
+  variables: LiveFeedbackReplyActionMutationVariables;
+  response: LiveFeedbackReplyActionMutation$data;
 };
-
-
-
-/*
-mutation LiveFeedbackReplyActionMutation(
-  $input: CreateFeedback!
-) {
-  createFeedback(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        message
-        ...LiveFeedbackAuthorFragment
-      }
-    }
-  }
-}
-
-fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -249,5 +226,7 @@ return {
   }
 };
 })();
-(node as any).hash = '364fcb0b943e7a2340ad2399e8f65ece';
+
+(node as any).hash = "364fcb0b943e7a2340ad2399e8f65ece";
+
 export default node;

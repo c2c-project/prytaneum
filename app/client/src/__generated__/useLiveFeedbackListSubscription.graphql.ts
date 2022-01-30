@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a70a610e60744c7cd89b411203b94d3b>>
+ * @generated SignedSource<<060ce6388e47e8156cad2fd3af454072>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,7 +26,13 @@ export type useLiveFeedbackListSubscription$data = {
         readonly createdBy: {
           readonly id: string;
         } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
+        readonly refFeedback: {
+          readonly createdBy: {
+            readonly id: string;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
       };
     };
   };
@@ -271,6 +277,6 @@ return {
 };
 })();
 
-(node as any).hash = "f05c5c1ef52787706c77fa1b7172aa37";
+(node as any).hash = "79317d818502fdfb191313facf1e3a2b";
 
 export default node;

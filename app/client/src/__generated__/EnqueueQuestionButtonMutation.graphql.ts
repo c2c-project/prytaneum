@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<11b7e29692b444744f5db186071592c6>>
+ * @generated SignedSource<<6e378f26a54b5d386d8cc5aadfb9f922>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,17 +9,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type UpdateQuestionQueue = {
-  adding: boolean;
+export type AddQuestionToQueue = {
   eventId: string;
   questionId: string;
 };
-export type QueueButtonMutation$variables = {
-  input: UpdateQuestionQueue;
+export type EnqueueQuestionButtonMutation$variables = {
+  input: AddQuestionToQueue;
 };
-export type QueueButtonMutationVariables = QueueButtonMutation$variables;
-export type QueueButtonMutation$data = {
-  readonly updateQuestionQueue: {
+export type EnqueueQuestionButtonMutationVariables = EnqueueQuestionButtonMutation$variables;
+export type EnqueueQuestionButtonMutation$data = {
+  readonly addQuestionToQueue: {
     readonly isError: boolean;
     readonly message: string;
     readonly body: {
@@ -31,10 +30,10 @@ export type QueueButtonMutation$data = {
     } | null;
   };
 };
-export type QueueButtonMutationResponse = QueueButtonMutation$data;
-export type QueueButtonMutation = {
-  variables: QueueButtonMutationVariables;
-  response: QueueButtonMutation$data;
+export type EnqueueQuestionButtonMutationResponse = EnqueueQuestionButtonMutation$data;
+export type EnqueueQuestionButtonMutation = {
+  variables: EnqueueQuestionButtonMutationVariables;
+  response: EnqueueQuestionButtonMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -149,6 +148,6 @@ return {
 };
 })();
 
-(node as any).hash = "1adf653c2e16503d73593819b657ff52";
+(node as any).hash = "442b6fd88947fc2bcf3172aec73d9a08";
 
 export default node;

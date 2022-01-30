@@ -1,69 +1,37 @@
+/**
+ * @generated SignedSource<<ebe3f60386e25d6a836c0dc8042029c7>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionDeletedSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useQuestionDeletedSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useQuestionDeletedSubscriptionResponse = {
-    readonly questionDeleted: {
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-            };
-        };
+export type useQuestionDeletedSubscriptionVariables = useQuestionDeletedSubscription$variables;
+export type useQuestionDeletedSubscription$data = {
+  readonly questionDeleted: {
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+      };
     };
+  };
 };
+export type useQuestionDeletedSubscriptionResponse = useQuestionDeletedSubscription$data;
 export type useQuestionDeletedSubscription = {
-    readonly response: useQuestionDeletedSubscriptionResponse;
-    readonly variables: useQuestionDeletedSubscriptionVariables;
+  variables: useQuestionDeletedSubscriptionVariables;
+  response: useQuestionDeletedSubscription$data;
 };
-
-
-
-/*
-subscription useQuestionDeletedSubscription(
-  $eventId: ID!
-) {
-  questionDeleted(eventId: $eventId) {
-    edge {
-      cursor
-      node {
-        id
-        position
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-        ...QuestionStatsFragment
-      }
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -261,6 +229,7 @@ return {
                     "name": "question",
                     "storageKey": null
                   },
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -289,5 +258,7 @@ return {
   }
 };
 })();
-(node as any).hash = '16d3cbeca231d802e031a2ea9850458a';
+
+(node as any).hash = "16d3cbeca231d802e031a2ea9850458a";
+
 export default node;

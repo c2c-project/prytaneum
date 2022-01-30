@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d3fe3370eb5407a9d4892c9ac778c8e2>>
+ * @generated SignedSource<<22da51052edb7dbc47ea1f0b2c98703b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,31 +10,26 @@
 
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
-export type useQuestionListSubscription$variables = {
+export type useQuestionUpdatedSubscription$variables = {
   eventId: string;
 };
-export type useQuestionListSubscriptionVariables = useQuestionListSubscription$variables;
-export type useQuestionListSubscription$data = {
-  readonly questionCRUD: {
-    readonly operationType: Operation;
+export type useQuestionUpdatedSubscriptionVariables = useQuestionUpdatedSubscription$variables;
+export type useQuestionUpdatedSubscription$data = {
+  readonly questionUpdated: {
     readonly edge: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
         readonly position: number | null;
-        readonly refQuestion: {
-          readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
-        } | null;
         readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
       };
     };
   };
 };
-export type useQuestionListSubscriptionResponse = useQuestionListSubscription$data;
-export type useQuestionListSubscription = {
-  variables: useQuestionListSubscriptionVariables;
-  response: useQuestionListSubscription$data;
+export type useQuestionUpdatedSubscriptionResponse = useQuestionUpdatedSubscription$data;
+export type useQuestionUpdatedSubscription = {
+  variables: useQuestionUpdatedSubscriptionVariables;
+  response: useQuestionUpdatedSubscription$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -237,6 +232,6 @@ return {
 };
 })();
 
-(node as any).hash = "2e9277a543f7f9d438dc03286cb8baf3";
+(node as any).hash = "a43e6f07d31b997aef0368366a8cbd7f";
 
 export default node;
