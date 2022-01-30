@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery, useFragment } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useFragment } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
@@ -33,16 +33,11 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        // padding: theme.spacing(1.5),
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
         },
     },
     video: {
-        [theme.breakpoints.up('md')]: {
-            // marginTop: theme.spacing(2),
-            // marginLeft: theme.spacing(2),
-        },
         [theme.breakpoints.down('sm')]: {
             position: 'sticky',
             top: 0,
@@ -51,13 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
     target: {
         scrollMarginTop: '1rem',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: theme.shape.borderRadius,
-        padding: theme.spacing(1),
-        boxShadow: theme.shadows[1],
-        // border: `1px solid ${theme.palette.secondary.main}`,
     },
 }));
 
