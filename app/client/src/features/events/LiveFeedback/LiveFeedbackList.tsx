@@ -74,7 +74,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                         />
                         <List disablePadding>
                             {displayLiveFeedback ? (
-                                liveFeedback.filter(feedback => filteredList.includes(feedback)).map((feedback) => (
+                                filteredList.map((feedback) => (
                                     <ListItem disableGutters key={feedback.id}>
                                         <Card className={classes.item}>
                                             <LiveFeedbackAuthor fragmentRef={feedback} />
