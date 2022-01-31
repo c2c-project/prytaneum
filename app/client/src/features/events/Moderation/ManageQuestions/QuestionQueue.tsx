@@ -336,7 +336,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     </Grid>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <DropArea getStyle={getListStyle} droppableId='droppable'>
-                            {enqueuedQuestions.filter(question => filteredList.includes(question)).map((question, idx) => (
+                            {filteredList.map((question, idx) => (
                                 <DragArea
                                     getStyle={itemStyle}
                                     key={question.node.id}
@@ -378,7 +378,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 </>
                 :
                 <List>
-                    {questionRecord.slice(0, -1).filter(question => prevFilteredList.includes(question)).map((question) => (
+                    {prevFilteredList.map((question) => (
                         <ListItem key={question.node.id} disableGutters>
                             <Card className={`${classes.item} ${classes.previousQuestion}`}>
                                 <QuestionAuthor fragmentRef={question.node} />
