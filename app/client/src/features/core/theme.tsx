@@ -35,6 +35,22 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     }
 }
 
+declare module '@material-ui/core/styles/createPalette' {
+
+    interface Palette {
+        custom: {
+            creamCan: string;
+            lightBlue: string;
+        };
+    }
+    interface PaletteOptions {
+        custom?: {
+            creamCan?: string;
+            lightBlue?: string;
+        };
+    }
+}
+
 const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 const base = createMuiTheme({
@@ -95,6 +111,10 @@ const base = createMuiTheme({
         background: {
             default: '#f3f1ee',
         },
+        custom: {
+            creamCan: '#f5c64f',
+            lightBlue: '#8eafff',
+        }
     },
 });
 

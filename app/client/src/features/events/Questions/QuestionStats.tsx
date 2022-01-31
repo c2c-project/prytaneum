@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: 0,
         paddingBottom: '0 !important' // added !important for filler icon (for some reason, CSS wasn't being applied)
     },
+    icon: {
+        color: theme.palette.custom.lightBlue
+    }
 }));
 
 export interface QuestionStatsProps {
@@ -34,7 +37,7 @@ export function QuestionStats({ fragmentRef }: QuestionStatsProps) {
 
     return (
         <CardContent className={classes.stats}>
-            <ThumbUp fontSize='small' htmlColor='#8EAFFF' />
+            <ThumbUp fontSize='small' className={classes.icon} />
             <Typography>{data.likedByCount}</Typography>
         </CardContent>
     );

@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
         top: theme.spacing(-2),
         left: '50%',
         transform: 'translateX(-50%)',
-        background: '#F5C64F',
+        backgroundColor: theme.palette.custom.creamCan,
+        background: theme.palette.background.default,
         color: 'white',
         textTransform: 'uppercase',
         fontWeight: 600
