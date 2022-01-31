@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     questionActions: {
         display: 'flex',
         justifyContent: 'center',
-        padding: 'theme.spacing(1) 0',
     },
     item: {
         flex: 1,
