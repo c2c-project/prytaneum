@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         padding: theme.spacing(1),
-        background: '#DDDDDD',
+        backgroundColor: theme.palette.grey[300],
         borderRadius: '7px',
         gap: theme.spacing(1)
     },
