@@ -40,14 +40,23 @@ export function QuestionAuthor({ fragmentRef, ...props }: QuestionAuthorProps) {
         ),
         [time, month]
     );
+    // make author name given available data
+    const createAuthorName = () => {
+        let authorName = '';
+        if (authorData.createdBy) {
+            authorName += authorData.createdBy.firstName;
+            if (authorData.createdBy.lastName) { authorName += ' ' + authorData.createdBy.lastName; }
+        }
+        else { authorName = 'Unknown User'; }
+        return authorName
+    };
+    const authorName = createAuthorName();
+    
     return (
         <CardHeader
-            avatar={
-                <Avatar>
-                    {authorData.createdBy?.firstName ? authorData.createdBy?.firstName[0] : 'U'}
-                </Avatar>
-            }
-            title={<Typography>{(authorData.createdBy?.firstName + ' ' + authorData.createdBy?.lastName) ?? 'Unknown User'}</Typography>}
+            // get first letter of name to display
+            avatar={<Avatar>{authorName[0]}</Avatar>}
+            title={<Typography>{authorName}</Typography>}
             subheader={subheader}
             {...props}
         />
