@@ -173,13 +173,6 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
                         </Grid>
                     ))}
                 </Grid>
-                { displayNumResults && // hide number of results if on feedback tab and not logged in
-                    <Grid item xs={12} className={classes.resultsText}>
-                        <Typography variant='body2' color='textSecondary'>
-                            {`${length} Results Displayed`}
-                        </Typography>
-                    </Grid>
-                }
             </Grid>
             {filterMap && (
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
