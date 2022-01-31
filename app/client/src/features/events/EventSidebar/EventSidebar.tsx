@@ -70,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(1),
         boxShadow: theme.shadows[1],
-        // border: 1px solid ${theme.palette.secondary.main},
     },
     pl: {
         paddingLeft: theme.spacing(2),
@@ -97,6 +96,9 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         e.preventDefault();
         setTabIndex(newTabIndex);
     };
+
+    const moderatorTabs = ['Queue', 'Questions', 'Feedback']
+    const participantTabs = ['Questions', 'Feedback']
 
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
@@ -148,27 +150,13 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
             {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
-            {data.isViewerModerator && (
-                <Tabs 
-                    value={tabIndex}
-                    onChange={handleTabChange}
-                    tabs={[
-                        'Queue',
-                        'Questions',
-                        'Feedback',
-                    ]}
-                />
-            )}
-            {!data.isViewerModerator && (
-                <Tabs 
-                    value={tabIndex}
-                    onChange={handleTabChange}
-                    tabs={[
-                        'Questions',
-                        'Feedback',
-                    ]}
-                />
-            )}
+            <Tabs 
+                tabIndex={tabIndex}
+                onChange={handleTabChange}
+                // conditionally set which tabs are viewable to a moderator/participant
+                tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
+            />
+
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
                     <QuestionQueue fragmentRef={data} />
