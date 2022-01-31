@@ -95,18 +95,27 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
     const [openDialog, open, close] = useLinkedResponsiveDialog();
 
+    // create dialog ids using a combination of the eventId and actual dialog title
+    const feedbackDialogId = data.id + '-feedback';
+    const questionDialogId = data.id + '-question';
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
         e.preventDefault();
         setTabIndex(newTabIndex);
     };
 
-    const handleOpenLinkedFeedbackForm = () => {
-        open('feedback');
+    // helper functions to open linked dialog within initially opened dialog
+    const handleOpenLinkedFeedbackDialog = () => {
+        // open feedback dialog from question dialog
+        open(feedbackDialogId);
+        // switch to feedback tab (conditionally determined by user role)
         setTabIndex(data.isViewerModerator ? 2 : 1);
     }
-    const handleOpenLinkedQuestionForm = () => {
-        open('question');
+    const handleOpenLinkedQuestionDialog = () => {
+        // open question dialog from feedback dialog
+        open(questionDialogId);
+        // switch to question list tab (conditionally determined by user role)
         setTabIndex(data.isViewerModerator ? 1 : 0);
     }
 
@@ -145,14 +154,14 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     displayFeedbackButton ? (
                         <SubmitLiveFeedback
                             className={classes.fullWidth}
-                            open={() => open('feedback')}
+                            open={() => open(feedbackDialogId)}
                             // eventId={data.id}
                             // connectionKey='useLiveFeedbackListFragment_liveFeedback'
                         />
                     ) : (
                         <AskQuestion
                             className={classes.fullWidth}
-                            open={() => open('question')}
+                            open={() => open(questionDialogId)}
                             // eventId={data.id}
                             // connectionKey='useQuestionListFragment_questions'
                         />
@@ -189,16 +198,16 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
             {/* relocate dialogs to allow one to open another */}
             <LiveFeedbackDialog
-                isOpen={openDialog === 'feedback'}
+                isOpen={openDialog === feedbackDialogId}
                 openDialog={openDialog}
-                openLinked={handleOpenLinkedQuestionForm}
+                openLinked={handleOpenLinkedQuestionDialog}
                 close={close}
                 eventId={data.id}
             />
             <QuestionDialog
-                isOpen={openDialog === 'question'}
+                isOpen={openDialog === questionDialogId}
                 openDialog={openDialog}
-                openLinked={handleOpenLinkedFeedbackForm}
+                openLinked={handleOpenLinkedFeedbackDialog}
                 close={close}
                 eventId={data.id}
             />
