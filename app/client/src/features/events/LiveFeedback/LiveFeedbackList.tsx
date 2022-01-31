@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     body: {
-        margin: theme.spacing(-2, 0, -1, 0)
+        margin: theme.spacing(-2, 0, -1, 0) // removes extra padding in cards
     },
 }));
 
@@ -48,7 +48,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof liveFeedback>>[]>(
         () => [
-            (f) => f?.message || '', // question text itself
+            (f) => f?.message || '', // feedback text itself
             (f) => f?.createdBy?.firstName || '', // first name of the user
         ],
         []
