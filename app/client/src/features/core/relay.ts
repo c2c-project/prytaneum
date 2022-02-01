@@ -43,9 +43,6 @@ const createSubscriptionClient = () => {
     const [, ...url] = process.env.NEXT_PUBLIC_GRAPHQL_URL.split('://');
     return new SubscriptionClient([wsProtocol, ...url].join(''), {
         reconnect: true,
-        minTimeout: 18000,
-        timeout: 60000,
-        lazy: true
     });
 };
 
