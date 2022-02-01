@@ -33,7 +33,6 @@ const Transition = React.forwardRef(function Transition(props: SlideProps, ref: 
 export type ResponsiveDialogProps = {
     title?: string;
     toolbar?: React.ReactElement;
-    currDialog?: string;
     onClose?: () => void;
 } & DialogProps;
 
