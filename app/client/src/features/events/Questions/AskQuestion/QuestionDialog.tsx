@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { DialogContent } from '@material-ui/core';
-import { useMutation, graphql } from 'react-relay';
+import { useMutation } from 'react-relay';
 
 import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
+import { ASK_QUESTION_MUTATION } from './AskQuestion'
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useSnack } from '@local/features/core';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
@@ -14,28 +15,6 @@ export interface Props {
     close: () => void;
     eventId: string;
 }
-
-export const ASK_QUESTION_MUTATION = graphql`
-    mutation AskQuestionMutation($input: CreateQuestion!) {
-        createQuestion(input: $input) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    createdAt
-                    question
-                    createdBy {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-            }
-        }
-    }
-`;
 
 export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
     const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
@@ -52,20 +31,17 @@ export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
     }
 
     return (
-        <>
-            <ResponsiveDialog
-                open={isOpen}
-                currDialog='question'
-                onClose={close}
-            >
-                <DialogContent>
-                    <QuestionForm
-                        openLinked={openLinked}
-                        onCancel={close}
-                        onSubmit={handleSubmit}
-                    />
-                </DialogContent>
-            </ResponsiveDialog>
-        </>
+        <ResponsiveDialog
+            open={isOpen}
+            onClose={close}
+        >
+            <DialogContent>
+                <QuestionForm
+                    openLinked={openLinked}
+                    onCancel={close}
+                    onSubmit={handleSubmit}
+                />
+            </DialogContent>
+        </ResponsiveDialog>
     );
 }
