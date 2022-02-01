@@ -14,7 +14,7 @@ export type TQuestionFormState = { question: string };
 export interface QuestionFormProps {
     quote?: React.ReactNode;
     onSubmit?: (state: TQuestionFormState) => void;
-    openLinked: () => void;
+    openLinked: () => void; // opensl inked dialog
     onCancel?: () => void;
 }
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         ['& fieldset']: {
-            borderRadius: 9999,
+            borderRadius: 9999, // rounded text field
         },
     },
     button: {

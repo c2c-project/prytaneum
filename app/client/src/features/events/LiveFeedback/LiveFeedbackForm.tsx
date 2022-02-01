@@ -14,7 +14,7 @@ export type TLiveFeedbackFormState = { message: string };
 export interface LiveFeedbackFormProps {
     reply?: React.ReactNode;
     onSubmit?: (state: TLiveFeedbackFormState) => void;
-    openLinked: () => void;
+    openLinked: () => void; // opens linked dialog
     onCancel?: () => void;
 }
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         ['& fieldset']: {
-            borderRadius: 9999,
+            borderRadius: 9999, // round text field
         },
     },
     button: {

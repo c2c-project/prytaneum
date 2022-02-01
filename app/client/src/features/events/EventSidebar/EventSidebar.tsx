@@ -199,14 +199,12 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             {/* relocate dialogs to allow one to open another */}
             <LiveFeedbackDialog
                 isOpen={openDialog === feedbackDialogId}
-                openDialog={openDialog}
                 openLinked={handleOpenLinkedQuestionDialog}
                 close={close}
                 eventId={data.id}
             />
             <QuestionDialog
                 isOpen={openDialog === questionDialogId}
-                openDialog={openDialog}
                 openLinked={handleOpenLinkedFeedbackDialog}
                 close={close}
                 eventId={data.id}

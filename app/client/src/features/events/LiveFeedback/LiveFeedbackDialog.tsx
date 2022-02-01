@@ -9,9 +9,8 @@ import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
 
 interface Props {
     isOpen: boolean;
-    openDialog: string;
-    openLinked: () => void;
-    close: () => void;
+    openLinked: () => void; // opens linked dialog
+    close: () => void; // closes current dialog
     eventId: string;
 }
 

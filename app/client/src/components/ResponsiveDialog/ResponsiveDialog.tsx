@@ -82,17 +82,17 @@ export function useResponsiveDialog(initialState?: boolean) {
 }
 
 /**
- * Helper hook for using linked dialogs
+ * Helper hook for using linked dialogs (one dialog that can be used to open another)
  */
 export function useLinkedResponsiveDialog() {
-    // dialog state
+    // dialog state -- openDialog is the id of the current dialog that is open
     const [openDialog, setState] = React.useState('');
 
     // helper functions
     const open = React.useCallback((currDialog?: string) => setState(currDialog || ''), [setState]);
     const close = React.useCallback(() => setState(''), [setState]);
 
-    // tuple state first, then helper functions -- order based on probable usage ie open/close will be used more than toggle
+    // tuple state first, then helper functions
     return [openDialog, open, close] as const;
 }
 
