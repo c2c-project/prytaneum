@@ -14,17 +14,6 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center'
         },
     },
-    title: {
-        [theme.breakpoints.down('md')]: {
-            marginTop: 50,
-        },
-        [theme.breakpoints.down('sm')]: {
-            marginTop: 35,
-        },
-        [theme.breakpoints.down('xs')]: {
-            marginTop: 20,
-        },
-    },
     subtitle: {
         textAlign: 'right',
         color: '#272C6C',
@@ -49,17 +38,6 @@ const useStyles = makeStyles((theme) => ({
             fontSize: 20,
         },
     },
-    arrowsection: {
-        display: 'flex',
-        justifyContent: 'center',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
-    downarrow: {
-        fontSize: '4rem',
-        transform: 'rotate(-90deg)'
-    }
 }));
 
 export function CallToAction() {
@@ -76,14 +54,6 @@ export function CallToAction() {
                     height={665}
                     objectFit='contain'
                 />
-                <div className={classes.title}>
-                    <Image
-                        src='/static/prytaneum_logo2.svg' 
-                        width={3483}
-                        height={665}
-                        objectFit='contain'
-                    />
-                </div>
                 <Typography variant='h5' className={classes.subtitle}>
                     A crucial tool for a better democracy.
                 </Typography>

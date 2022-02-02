@@ -27,48 +27,6 @@ import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRigh
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-    landing: {
-        width: '100%',
-        minHeight: '100vh',
-        margin: 0,
-        [theme.breakpoints.down('sm')]: {
-            minHeight: '90vh',
-        },
-    },
-    root: {
-        width: '100%',
-        minHeight: '60vh',
-        margin: '2rem 0'
-    },
-    header: {
-        marginBottom: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        [theme.breakpoints.down('sm')]: {
-            alignItems: 'center'
-        },
-    },
-    title: {
-        [theme.breakpoints.down('md')]: {
-            marginTop: 50,
-        },
-        [theme.breakpoints.down('sm')]: {
-            marginTop: 35,
-        },
-        [theme.breakpoints.down('xs')]: {
-            marginTop: 20,
-        },
-    },
-    subtitle: {
-        textAlign: 'right',
-        color: '#272C6C',
-        [theme.breakpoints.down('md')]: {
-            textAlign: 'center'
-        },
-        [theme.breakpoints.down('xs')]: {
-            fontSize: 18
-        },
-    },
     button: {
         marginTop: 20,
         minWidth: 300,
@@ -101,9 +59,7 @@ const useStyles = makeStyles((theme) => ({
     windowheader: {
         display: 'flex',
         justifyContent: 'space-between',
-        width: '100%',
         padding: theme.spacing(1),
-        background: 'white',
         boxShadow: '0 5px 7px rgba(0,0,0,0.1)'
     },
     logo: {
@@ -200,11 +156,6 @@ const useStyles = makeStyles((theme) => ({
     },
     pinnedpaper: {
         position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        width: '100%',
-        padding: theme.spacing(2),
         paddingTop: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
             marginTop: '1rem',
@@ -331,6 +282,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }));
+
 interface WindowProps {
     children: React.ReactNode | React.ReactNodeArray;
     title?: string;
@@ -417,171 +369,49 @@ function Tabs() {
 function MeetingDisplay() {
     const classes = useStyles();
     return (
-        <DemoWindow title={title} shadow={shadow} scale={scale}>
-            <Tabs/>
-            <div className={classes.windowcontent}>
-                <MeetingDisplay/>
-                <Grid item xs={12} lg={5} className={classes.windowsidebar}>
-                    <Question
-                        pinned={Boolean(true)}
-                        name='Asami Gisela'
-                        date='10:12 AM · 11/20/2021'
-                        question='What are your calls to action concerning the homelessness in the city? What decisions will you be making to attend to the matter?'
+        <Grid item xs={12} lg={7}>
+            <div className={classes.windowdisplay}>
+                <Grid item xs={6}>
+                    <Image
+                        src='/static/cam1.png' 
+                        width={1146}
+                        height={648}
+                        objectFit='contain'
                     />
-                    <div className={classes.selectbuttons}>
-                        <Button
-                            variant={subModFeed === 'Queue' ? 'contained' : 'outlined'}
-                            color='primary'
-                            onClick={() => setSubModFeed('Queue')}
-                        >
-                            Queue
-                        </Button>
-                        { subModFeed === 'Queue' &&
-                            <div className={classes.desktopqueuebuttons}>
-                                <Button
-                                    size='small'
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={() => setSubModQueue('Upcoming')}
-                                    className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
-                                >
-                                    Upcoming
-                                </Button>
-                                <Button
-                                    size='small'
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={() => setSubModQueue('Past')}
-                                    className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
-                                >
-                                    Past
-                                </Button>
-                            </div>
-                        }
-                        <Button
-                            variant={subModFeed === 'Feed' ? 'contained' : 'outlined'}
-                            color='primary'
-                            onClick={() => setSubModFeed('Feed')}
-                        >
-                            Feed
-                        </Button>
-                        <Button
-                            variant={subModFeed === 'Feedback' ? 'contained' : 'outlined'}
-                            color='primary'
-                            onClick={() => setSubModFeed('Feedback')}
-                        >
-                            Feedback
-                        </Button>
-                    </div>
-                    { subModFeed === 'Queue' &&
-                        <div className={classes.mobilequeuebuttons}>
-                            <SubdirectoryArrowRightIcon />
-                            <Button
-                                size='small'
-                                variant='contained'
-                                color='primary'
-                                onClick={() => setSubModQueue('Upcoming')}
-                                className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
-                            >
-                                Upcoming
-                            </Button>
-                            <Button
-                                size='small'
-                                variant='contained'
-                                color='primary'
-                                onClick={() => setSubModQueue('Past')}
-                                className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
-                            >
-                                Past
-                            </Button>
-                        </div>
-                    }
-                    <SearchBar/>
-                    { subModFeed  === 'Queue' && subModQueue === 'Upcoming' &&
-                        <>
-                            <Typography variant='caption' className={classes.queuecaption}>
-                                Drag and drop questions to re-order queue
-                            </Typography>
-                            <ModQuestion
-                                pinned={Boolean(true)}
-                                enqueued={Boolean(true)}
-                                name='Theresa Young'
-                                date='10:09 AM · 11/20/2021'
-                                question='When do you believe decisions regarding solving this concern will have an impact in the future?'
-                            />
-                            <ModQuestion
-                                enqueued={Boolean(true)}
-                                name='Simon Turner'
-                                date='10:11 AM · 11/20/2021'
-                                question='How would you bring this certain concern to attention, and what are your steps to solving this issue?'
-                            />
-                        </>
-                    }
-                    { subModFeed  === 'Queue' && subModQueue === 'Past' &&
-                        <>
-                            <ModQuestion
-                                past={Boolean(true)}
-                                name='Olivia Powell'
-                                date='10:05 AM · 11/20/2021'
-                                question='What is your approach regarding concerns within the city?'
-                            />
-                            <ModQuestion
-                                past={Boolean(true)}
-                                name='Jasmine Payne'
-                                date='10:02 AM · 11/20/2021'
-                                question='How do you believe the recent actions towards solving homelessness in the city will actually help?'
-                            />
-                            <ModQuestion
-                                past={Boolean(true)}
-                                name='Dominic Baker'
-                                date='9:59 AM · 11/20/2021'
-                                question='What are your priorities regarding providing education to underrepresented minorities in the city?'
-                            />
-                        </>
-                    }
-                    { subModFeed  === 'Feed' &&
-                        <>
-                            <ModQuestion
-                                past={Boolean(false)}
-                                enqueued={Boolean(false)}
-                                likes={14}
-                                name='Asami Gisela'
-                                date='10:12 AM · 11/20/2021'
-                                question='What are your calls to action concerning the  homelessness in the city? What decisions will you be  making to attend to the matter?'
-                            />
-                            <ModQuestion
-                                past={Boolean(false)}
-                                enqueued={Boolean(false)}
-                                likes={11}
-                                name='Raul Aditya'
-                                date='10:15 AM · 11/20/2021'
-                                question='What do you think is the best way to tackle the issue with providing equal opportunities for education for  underrepresented communities in the city?'
-                            />
-                        </>
-                    }
-                    { subModFeed  === 'Feedback' &&
-                        <>
-                            <Feedback
-                                name='Lorem Ipsum'
-                                date='10:05 AM · 11/20/2021'
-                                feedback='Perhaps a more ideal solution would be...'
-                            />
-                            <Feedback
-                                name='Lorem Ipsum'
-                                date='10:02 AM · 11/20/2021'
-                                feedback='I think a better follow-up would be...'
-                            />
-                            <Feedback
-                                name='Lorem Ipsum'
-                                date='10:01 AM · 11/20/2021'
-                                feedback='I think you make a good point regarding...'
-                            />
-                        </>
-                    }
-                    
+                </Grid>
+                <Grid item xs={6}>
+                    <Image
+                        src='/static/cam2.png' 
+                        width={1146}
+                        height={648}
+                        objectFit='contain'
+                    />
                 </Grid>
             </div>
-        </DemoWindow>
+            <div className={classes.windowtitle}>
+                <div>
+                    <Typography variant='h6'>
+                        Town Hall Meeting
+                    </Typography>
+                    <Typography variant='caption'>
+                        Concerns within the city
+                    </Typography>
+                </div>
+                <div className={classes.userheader}>
+                    <div>
+                        <Avatar>E</Avatar>
+                    </div>
+                    <div>
+                        <Typography variant='h6'>
+                            Elias Dagmar
+                        </Typography>
+                        <Typography variant='caption'>
+                            Town Official
+                        </Typography>
+                    </div>
+                </div>
+            </div>
+        </Grid>
     );
 }
 
@@ -760,7 +590,7 @@ function ModQuestion({pinned, past, enqueued, likes, name, date, question}: ModQ
 export function ParticipantDemo({title, shadow, scale}: DemoProps) {
     const classes = useStyles();
     const [subViewerFeed, setSubViewerFeed] = React.useState('Feed')
-    
+
     return (
         <DemoWindow title={title} shadow={shadow} scale={scale}>
             <Tabs/>
@@ -843,7 +673,7 @@ export function ParticipantDemo({title, shadow, scale}: DemoProps) {
                             />
                         </>
                     }
-                    
+
                 </Grid>
             </div>
         </DemoWindow>
@@ -1017,7 +847,7 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                             />
                         </>
                     }
-                    
+
                 </Grid>
             </div>
         </DemoWindow>

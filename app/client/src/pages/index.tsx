@@ -49,7 +49,8 @@ export default function Home() {
     const [user] = useUser();
 
     const roles = [
-        <Blurb key='b1'
+        <Blurb
+            key='blurb1'
             title='Partcipant Role'
             icon={<PeopleAltOutlinedIcon/>}
             paragraphs={
@@ -58,7 +59,8 @@ export default function Home() {
                 ]
             }
         />,
-        <Blurb key='b2'
+        <Blurb
+            key='blurb2'
             title='Moderator Role'
             icon={<SupervisedUserCircleOutlinedIcon/>}
             paragraphs={
@@ -67,7 +69,8 @@ export default function Home() {
                 ]
             }
         />,
-        <Blurb key='b3'
+        <Blurb
+            key='blurb3'
             title='Speaker Role'
             icon={<RecordVoiceOverOutlinedIcon/>}
             paragraphs={
@@ -79,57 +82,14 @@ export default function Home() {
     ]
 
     const views = [
-        <ParticipantDemo key ='v1'
+        <ParticipantDemo
+            key='view1'
             title='Participant View' 
             shadow='10px 10px 0 0 #4056a1' 
             scale='scale(0.95)'
         />,
-        <ModeratorDemo key='v2'
-            title='Moderator View' 
-            shadow='10px 10px 0 0 #8eafff' 
-            scale='scale(0.95)'
-        />,
-    ]
-
-    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
-
-    const roles = [
-        <Blurb
-            title='Partcipant Role'
-            icon={<PeopleAltOutlinedIcon/>}
-            paragraphs={
-                [
-                    'The residents who want to engage in discussion on a policy topic. Participants can type and ask questions; they can like, quote, and reply to other participant&apos;s questions; they can participate in breakout rooms.',
-                ]
-            }
-        />,
-        <Blurb
-            title='Moderator Role'
-            icon={<SupervisedUserCircleOutlinedIcon/>}
-            paragraphs={
-                [
-                    'The mediators who handle participants&apos; questions to be answered by the speaker. Moderators see the full question list and the question queue that was  curated by the moderator assistants; they select which question to ask next;  they ask the question on the video call for the speaker to respond. Moderators interact with the speaker via a streaming service of the organizer&apos;s choice.',
-                ]
-            }
-        />,
-        <Blurb
-            title='Speaker Role'
-            icon={<RecordVoiceOverOutlinedIcon/>}
-            paragraphs={
-                [
-                    'The main speaker of a discussion. The speaker does not see the question list or  the question queue. Instead, meetings appear like an ordinary video call with  the moderator. The speaker interacts with the moderators via a streaming service  of the organizer&apos;s choice.',
-                ]
-            }
-        />,
-    ]
-
-    const views = [
-        <ParticipantDemo 
-            title='Participant View' 
-            shadow='10px 10px 0 0 #4056a1' 
-            scale='scale(0.95)'
-        />,
-        <ModeratorDemo 
+        <ModeratorDemo
+            key='view2'
             title='Moderator View' 
             shadow='10px 10px 0 0 #8eafff' 
             scale='scale(0.95)'
@@ -192,6 +152,7 @@ export default function Home() {
                         width={280}
                         height={200}
                         objectFit='contain'
+                        alt='democracy fund logo'
                     />
                 </Grid>
                 <Grid item>
@@ -200,6 +161,7 @@ export default function Home() {
                         width={150}
                         height={200}
                         objectFit='contain'
+                        alt='prytaneum logo'
                     />
                 </Grid>
                 <Grid item>
@@ -208,6 +170,7 @@ export default function Home() {
                         width={450}
                         height={200}
                         objectFit='contain'
+                        alt='ucr tecd logo'
                     />
                 </Grid>
             </Grid>
