@@ -3,7 +3,6 @@ import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/VpnKey';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
-
 import { ResetPasswordForm } from '@local/features/accounts/ResetPasswordForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(4),
     },
 }));
-
-// interface Props {
-//     token: string;
-// }
 
 // token is verified within actual form component, and
 // if no token is found within routing, user is redirected back to homepage

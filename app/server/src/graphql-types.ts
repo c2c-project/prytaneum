@@ -187,9 +187,8 @@ export type Mutation = {
     updateEmail: UserMutationResponse;
     updatePassword: UserMutationResponse;
     deleteAccount: UserMutationResponse;
-    resetPassword: ResetPasswordResponse;
-    /** The requestResetPassword just returns the token used to reset password */
     requestResetPassword: ForgotPassRequestResponse;
+    resetPassword: ResetPasswordResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -259,12 +258,12 @@ export type MutationdeleteAccountArgs = {
     input: DeleteAccountForm;
 };
 
-export type MutationresetPasswordArgs = {
-    input: ResetPasswordForm;
-};
-
 export type MutationrequestResetPasswordArgs = {
     input: ForgotPassRequestForm;
+};
+
+export type MutationresetPasswordArgs = {
+    input: ResetPasswordForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -1562,17 +1561,17 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationdeleteAccountArgs, 'input'>
     >;
-    resetPassword?: Resolver<
-        ResolversTypes['ResetPasswordResponse'],
-        ParentType,
-        ContextType,
-        RequireFields<MutationresetPasswordArgs, 'input'>
-    >;
     requestResetPassword?: Resolver<
         ResolversTypes['ForgotPassRequestResponse'],
         ParentType,
         ContextType,
         RequireFields<MutationrequestResetPasswordArgs, 'input'>
+    >;
+    resetPassword?: Resolver<
+        ResolversTypes['ResetPasswordResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<

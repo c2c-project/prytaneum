@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type ResetPasswordForm = {
-    token: string;
-    newPassword: string;
     confirmNewPassword: string;
+    newPassword: string;
+    token: string;
 };
 export type ResetPasswordRequestMutationVariables = {
     input: ResetPasswordForm;

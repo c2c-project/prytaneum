@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function ResetPasswordForm({ onSuccess, onFailure }: Props) {
     const [isPassVisible, setIsPassVisible] = React.useState(false);
-    
+
     // form state hooks
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     const [commit] = useMutation<ResetPasswordRequestMutation>(RESET_PASSWORD_FORM_MUTATION);

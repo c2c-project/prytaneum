@@ -396,18 +396,12 @@ type FeedbackOperation {
 
 input ForgotPassRequestForm {
   email: String!
-  newPassword: String!
-  confirmNewPassword: String!
-}
-
-input ForgotPassRequestForm {
-  email: String!
 }
 
 type ForgotPassRequestResponse implements MutationResponse {
+  body: String
   isError: Boolean!
   message: String!
-  body: String
 }
 
 input HideQuestion {
@@ -490,8 +484,6 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
-
-  """The requestResetPassword just returns the token used to reset password"""
   requestResetPassword(input: ForgotPassRequestForm!): ForgotPassRequestResponse!
   resetPassword(input: ResetPasswordForm!): ResetPasswordResponse!
 
@@ -609,15 +601,15 @@ input RemoveQuestionFromQueue {
 }
 
 input ResetPasswordForm {
-  token: String!
-  newPassword: String!
   confirmNewPassword: String!
+  newPassword: String!
+  token: String!
 }
 
 type ResetPasswordResponse implements MutationResponse {
+  body: Date
   isError: Boolean!
   message: String!
-  body: Date
 }
 
 type Subscription {
@@ -755,16 +747,16 @@ type UserMutationResponse implements MutationResponse {
 
 type UserSettings {
   currentEmail: String!
-  updateEmail: String
-  updatePassword: String
   deleteAccount: Boolean!
   isAnonymous: Boolean!
   isNotificationsEnabled: Boolean!
+  updateEmail: String
+  updatePassword: String
 }
 
 input ValidateInvite {
-  token: String!
   eventId: ID!
+  token: String!
 }
 
 type ValidateInviteQueryResponse {

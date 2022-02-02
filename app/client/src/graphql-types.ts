@@ -457,19 +457,13 @@ export type FeedbackOperation = {
 
 export type ForgotPassRequestForm = {
   email: Scalars['String'];
-  newPassword: Scalars['String'];
-  confirmNewPassword: Scalars['String'];
-};
-
-export type ForgotPassRequestForm = {
-  email: Scalars['String'];
 };
 
 export type ForgotPassRequestResponse = MutationResponse & {
   __typename?: 'ForgotPassRequestResponse';
+  body?: Maybe<Scalars['String']>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-  body?: Maybe<Scalars['String']>;
 };
 
 export type HideQuestion = {
@@ -545,7 +539,6 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
-  /** The requestResetPassword just returns the token used to reset password */
   requestResetPassword: ForgotPassRequestResponse;
   resetPassword: ResetPasswordResponse;
   /** Start the event so that it is "live" */
@@ -878,16 +871,16 @@ export type RemoveQuestionFromQueue = {
 };
 
 export type ResetPasswordForm = {
-  token: Scalars['String'];
-  newPassword: Scalars['String'];
   confirmNewPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type ResetPasswordResponse = MutationResponse & {
   __typename?: 'ResetPasswordResponse';
+  body?: Maybe<Scalars['Date']>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-  body?: Maybe<Scalars['Date']>;
 };
 
 export type Subscription = {
@@ -1115,16 +1108,16 @@ export type UserMutationResponse = MutationResponse & {
 export type UserSettings = {
   __typename?: 'UserSettings';
   currentEmail: Scalars['String'];
-  updateEmail?: Maybe<Scalars['String']>;
-  updatePassword?: Maybe<Scalars['String']>;
   deleteAccount: Scalars['Boolean'];
   isAnonymous: Scalars['Boolean'];
   isNotificationsEnabled: Scalars['Boolean'];
+  updateEmail?: Maybe<Scalars['String']>;
+  updatePassword?: Maybe<Scalars['String']>;
 };
 
 export type ValidateInvite = {
-  token: Scalars['String'];
   eventId: Scalars['ID'];
+  token: Scalars['String'];
 };
 
 export type ValidateInviteQueryResponse = {
