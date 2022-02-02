@@ -563,7 +563,6 @@ function ModQuestion({pinned, past, enqueued, likes, name, date, question}: ModQ
 export function ParticipantDemo({title, shadow, scale}: DemoProps) {
     const classes = useStyles();
     const [subViewerFeed, setSubViewerFeed] = React.useState('Feed')
-
     return (
         <DemoWindow title={title} shadow={shadow} scale={scale}>
             <Tabs/>
@@ -646,7 +645,6 @@ export function ParticipantDemo({title, shadow, scale}: DemoProps) {
                             />
                         </>
                     }
-
                 </Grid>
             </div>
         </DemoWindow>
@@ -820,7 +818,6 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                             />
                         </>
                     }
-
                 </Grid>
             </div>
         </DemoWindow>
