@@ -6,8 +6,6 @@ import { ConcreteRequest } from "relay-runtime";
 
 import {  } from "relay-runtime";
 export type UpdateEvent = {
-<<<<<<< HEAD
-<<<<<<< HEAD
     description?: string | null | undefined;
     endDateTime?: Date | null | undefined;
     eventId: string;
@@ -18,23 +16,6 @@ export type UpdateEvent = {
     startDateTime?: Date | null | undefined;
     title?: string | null | undefined;
     topic?: string | null | undefined;
-=======
-=======
->>>>>>> chore(project): updated generation
-    description?: string | null;
-    endDateTime?: Date | null;
-    eventId: string;
-    isCollectRatingsEnabled?: boolean | null;
-    isForumEnabled?: boolean | null;
-    isPrivate?: boolean | null;
-    isQuestionFeedVisible?: boolean | null;
-    startDateTime?: Date | null;
-    title?: string | null;
-    topic?: string | null;
-<<<<<<< HEAD
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 export type GenericSettingsMutationVariables = {
     input: UpdateEvent;

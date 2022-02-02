@@ -161,8 +161,6 @@ export type Event = Node & {
   organization?: Maybe<Organization>;
   /** Participants of the event -- individuals who showed up */
   participants?: Maybe<EventParticipantConnection>;
-<<<<<<< HEAD
-<<<<<<< HEAD
   /** Questions having to do with the queue */
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
@@ -171,13 +169,6 @@ export type Event = Node & {
    * Questions queued in this session by the moderator(s)
    * TODO: #QQRedesign delete after code complete
    */
-=======
-=======
->>>>>>> chore(project): updated generation
-  /** All questions relating to this event */
-  questions?: Maybe<EventQuestionConnection>;
-  /** Questions queued in this session by the moderator(s) */
->>>>>>> chore(project): updated generation
   queuedQuestions?: Maybe<EventQuestionConnection>;
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
@@ -200,46 +191,24 @@ export type EventInvitedArgs = {
 
 
 export type EventLiveFeedbackArgs = {
-<<<<<<< HEAD
-<<<<<<< HEAD
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventModeratorsArgs = {
-=======
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 export type EventParticipantsArgs = {
-=======
-export type EventModeratorsArgs = {
->>>>>>> chore(project): updated generation
-=======
-export type EventModeratorsArgs = {
->>>>>>> chore(project): updated generation
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 export type EventQuestionQueueArgs = {
-=======
-export type EventParticipantsArgs = {
->>>>>>> chore(project): updated generation
-=======
-export type EventParticipantsArgs = {
->>>>>>> chore(project): updated generation
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
 };
@@ -280,8 +249,6 @@ export type EventEdge = {
   __typename?: 'EventEdge';
   cursor: Scalars['String'];
   node: Event;
-<<<<<<< HEAD
-<<<<<<< HEAD
 };
 
 export type EventFeedbackMutationResponse = MutationResponse & {
@@ -289,16 +256,10 @@ export type EventFeedbackMutationResponse = MutationResponse & {
   body?: Maybe<EventLiveFeedbackEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-=======
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 
 export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
-<<<<<<< HEAD
-<<<<<<< HEAD
   createdAt?: Maybe<Scalars['Date']>;
   createdBy?: Maybe<User>;
   createdById?: Maybe<Scalars['ID']>;
@@ -307,18 +268,6 @@ export type EventLiveFeedback = Node & {
   isReply?: Maybe<Scalars['Boolean']>;
   message: Scalars['String'];
   refFeedback?: Maybe<EventLiveFeedback>;
-=======
-=======
->>>>>>> chore(project): updated generation
-  createdAt?: Maybe<Scalars['String']>;
-  createdBy?: Maybe<User>;
-  event?: Maybe<Event>;
-  id: Scalars['ID'];
-  message: Scalars['String'];
-<<<<<<< HEAD
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 
 export type EventLiveFeedbackConnection = {
@@ -397,18 +346,12 @@ export type EventQuestionEdge = {
   __typename?: 'EventQuestionEdge';
   cursor: Scalars['String'];
   node: EventQuestion;
-<<<<<<< HEAD
-<<<<<<< HEAD
 };
 
 /** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
 export type EventQuestionEdgeContainer = {
   __typename?: 'EventQuestionEdgeContainer';
   edge: EventQuestionEdge;
-=======
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 
 export type EventQuestionMutationResponse = MutationResponse & {
@@ -416,8 +359,6 @@ export type EventQuestionMutationResponse = MutationResponse & {
   body?: Maybe<EventQuestionEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-<<<<<<< HEAD
-<<<<<<< HEAD
 };
 
 /** EventQuestionQueue is the entire queue of the event */
@@ -440,10 +381,6 @@ export type EventQuestionQueueEnqueuedQuestionsArgs = {
 export type EventQuestionQueueQuestionRecordArgs = {
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
-=======
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 
 export type EventSpeaker = Node & {
@@ -510,18 +447,12 @@ export type EventVideoMutationResponse = MutationResponse & {
   body?: Maybe<EventVideo>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
-<<<<<<< HEAD
-<<<<<<< HEAD
 };
 
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
   operationType: Operation;
-=======
->>>>>>> chore(project): updated generation
-=======
->>>>>>> chore(project): updated generation
 };
 
 export type HideQuestion = {
