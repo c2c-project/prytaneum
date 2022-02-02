@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
     onSuccess?: () => void;
     secondaryActions?: React.ReactNode;
+    // use close function to close dialog when link to forgot password page is clicked
+    close?: () => void;
 }
 
 interface TLoginForm {
@@ -83,7 +85,7 @@ const intialState: TLoginForm = { email: '', password: '' };
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
+export function LoginForm({ onSuccess, secondaryActions, close }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const [, setUser] = useUser();
@@ -160,7 +162,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                         />
                         <Grid container justify='flex-end'>
                             <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary'>
+                                <MUILink className={classes.link} color='primary' onClick={close}>
                                     Forgot Password?
                                 </MUILink>
                             </Link>

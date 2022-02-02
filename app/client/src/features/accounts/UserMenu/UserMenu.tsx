@@ -179,7 +179,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
-                            <LoginForm onSuccess={close} />
+                            <LoginForm onSuccess={close} close={close} />
                         </DialogContent>
                     </ResponsiveDialog>
                     <Button color='primary' variant='outlined' onClick={handleClick('register')}>
