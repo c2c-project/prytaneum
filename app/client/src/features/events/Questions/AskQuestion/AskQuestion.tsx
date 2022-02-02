@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button } from '@material-ui/core';
-import { graphql } from 'react-relay';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import LockIcon from '@material-ui/icons/Lock';
 
@@ -10,28 +9,6 @@ export interface AskQuestionProps {
     className?: string;
     open: () => void;
 }
-
-export const ASK_QUESTION_MUTATION = graphql`
-    mutation AskQuestionMutation($input: CreateQuestion!) {
-        createQuestion(input: $input) {
-            isError
-            message
-            body {
-                cursor
-                node {
-                    id
-                    createdAt
-                    question
-                    createdBy {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-            }
-        }
-    }
-`;
 
 function AskQuestion({ open, className }: AskQuestionProps) {
     const [user] = useUser();

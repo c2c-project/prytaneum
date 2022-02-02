@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { DialogContent } from '@material-ui/core';
-import { useMutation } from 'react-relay';
+import { useMutation, graphql } from 'react-relay';
 
-import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
-import { ASK_QUESTION_MUTATION } from './AskQuestion'
+import type { QuestionDialogMutation } from '@local/__generated__/QuestionDialogMutation.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useSnack } from '@local/features/core';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
@@ -15,8 +14,30 @@ export interface Props {
     eventId: string;
 }
 
+export const QUESTION_DIALOG_MUTATION = graphql`
+    mutation QuestionDialogMutation($input: CreateQuestion!) {
+        createQuestion(input: $input) {
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                    createdAt
+                    question
+                    createdBy {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+            }
+        }
+    }
+`;
+
 export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
-    const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
+    const [commit] = useMutation<QuestionDialogMutation>(QUESTION_DIALOG_MUTATION);
     const { displaySnack } = useSnack();
 
     function handleSubmit(form: TQuestionFormState) {

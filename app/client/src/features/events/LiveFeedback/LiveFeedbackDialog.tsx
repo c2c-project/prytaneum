@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { DialogContent } from '@material-ui/core';
-import { useMutation } from 'react-relay';
+import { useMutation, graphql } from 'react-relay';
 
-import type { SubmitLiveFeedbackMutation } from '@local/__generated__/SubmitLiveFeedbackMutation.graphql';
-import { SUBMIT_LIVE_FEEDBACK_MUTATION } from './SubmitLiveFeedback'
+import type { LiveFeedbackDialogMutation } from '@local/__generated__/LiveFeedbackDialogMutation.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
 
@@ -14,8 +13,30 @@ interface Props {
     eventId: string;
 }
 
+export const LIVE_FEEDBACK_DIALOG_MUTATION = graphql`
+    mutation LiveFeedbackDialogMutation($input: CreateFeedback!) {
+        createFeedback(input: $input) {
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                    createdAt
+                    message
+                    createdBy {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+            }
+        }
+    }
+`;
+
 export function LiveFeedbackDialog({ isOpen, openLinked, close, eventId }: Props) {
-    const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
+    const [commit] = useMutation<LiveFeedbackDialogMutation>(LIVE_FEEDBACK_DIALOG_MUTATION);
 
     function handleSubmit(form: TLiveFeedbackFormState) {
         commit({

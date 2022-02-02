@@ -4,17 +4,18 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type CreateFeedback = {
+export type CreateQuestion = {
     eventId: string;
-    isReply?: boolean | null | undefined;
-    message: string;
-    refFeedbackId?: string | null | undefined;
+    isFollowUp?: boolean | null | undefined;
+    isQuote?: boolean | null | undefined;
+    question: string;
+    refQuestion?: string | null | undefined;
 };
-export type SubmitLiveFeedbackMutationVariables = {
-    input: CreateFeedback;
+export type QuestionDialogMutationVariables = {
+    input: CreateQuestion;
 };
-export type SubmitLiveFeedbackMutationResponse = {
-    readonly createFeedback: {
+export type QuestionDialogMutationResponse = {
+    readonly createQuestion: {
         readonly isError: boolean;
         readonly message: string;
         readonly body: {
@@ -22,7 +23,7 @@ export type SubmitLiveFeedbackMutationResponse = {
             readonly node: {
                 readonly id: string;
                 readonly createdAt: Date | null;
-                readonly message: string;
+                readonly question: string | null;
                 readonly createdBy: {
                     readonly id: string;
                     readonly firstName: string | null;
@@ -30,20 +31,20 @@ export type SubmitLiveFeedbackMutationResponse = {
                 } | null;
             };
         } | null;
-    } | null;
+    };
 };
-export type SubmitLiveFeedbackMutation = {
-    readonly response: SubmitLiveFeedbackMutationResponse;
-    readonly variables: SubmitLiveFeedbackMutationVariables;
+export type QuestionDialogMutation = {
+    readonly response: QuestionDialogMutationResponse;
+    readonly variables: QuestionDialogMutationVariables;
 };
 
 
 
 /*
-mutation SubmitLiveFeedbackMutation(
-  $input: CreateFeedback!
+mutation QuestionDialogMutation(
+  $input: CreateQuestion!
 ) {
-  createFeedback(input: $input) {
+  createQuestion(input: $input) {
     isError
     message
     body {
@@ -51,7 +52,7 @@ mutation SubmitLiveFeedbackMutation(
       node {
         id
         createdAt
-        message
+        question
         createdBy {
           id
           firstName
@@ -75,17 +76,10 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "message",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = [
+v2 = [
   {
     "alias": null,
     "args": [
@@ -95,9 +89,9 @@ v3 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "EventFeedbackMutationResponse",
+    "concreteType": "EventQuestionMutationResponse",
     "kind": "LinkedField",
-    "name": "createFeedback",
+    "name": "createQuestion",
     "plural": false,
     "selections": [
       {
@@ -107,11 +101,17 @@ v3 = [
         "name": "isError",
         "storageKey": null
       },
-      (v1/*: any*/),
       {
         "alias": null,
         "args": null,
-        "concreteType": "EventLiveFeedbackEdge",
+        "kind": "ScalarField",
+        "name": "message",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "EventQuestionEdge",
         "kind": "LinkedField",
         "name": "body",
         "plural": false,
@@ -126,12 +126,12 @@ v3 = [
           {
             "alias": null,
             "args": null,
-            "concreteType": "EventLiveFeedback",
+            "concreteType": "EventQuestion",
             "kind": "LinkedField",
             "name": "node",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v1/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -139,7 +139,13 @@ v3 = [
                 "name": "createdAt",
                 "storageKey": null
               },
-              (v1/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "question",
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": null,
@@ -148,7 +154,7 @@ v3 = [
                 "name": "createdBy",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
+                  (v1/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -181,8 +187,8 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "SubmitLiveFeedbackMutation",
-    "selections": (v3/*: any*/),
+    "name": "QuestionDialogMutation",
+    "selections": (v2/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -190,18 +196,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "SubmitLiveFeedbackMutation",
-    "selections": (v3/*: any*/)
+    "name": "QuestionDialogMutation",
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "b1390731fc095265360c3aadf82c2aa5",
+    "cacheID": "21f2dd9d5acd685c8446ea89974d0417",
     "id": null,
     "metadata": {},
-    "name": "SubmitLiveFeedbackMutation",
+    "name": "QuestionDialogMutation",
     "operationKind": "mutation",
-    "text": "mutation SubmitLiveFeedbackMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        createdAt\n        message\n        createdBy {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation QuestionDialogMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        createdAt\n        question\n        createdBy {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f5314b45540745841310fd8a809d1b87';
+(node as any).hash = '28eef0dd4276b1f1cb82758a031d2353';
 export default node;
