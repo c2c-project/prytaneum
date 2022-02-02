@@ -45,7 +45,7 @@ export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
             variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
             onCompleted(payload) {
                 if (payload.createQuestion.isError) displaySnack('Something went wrong!');
-                else close;
+                else close();
             },
         });
     }
