@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     section: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.5rem',
+        gap: theme.spacing(2),
         textAlign: 'center',
     },
     paragraph: {

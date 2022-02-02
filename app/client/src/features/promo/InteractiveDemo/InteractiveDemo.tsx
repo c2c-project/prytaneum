@@ -18,8 +18,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ReplyIcon from '@material-ui/icons/Reply';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
@@ -27,33 +25,10 @@ import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRigh
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-    button: {
-        marginTop: 20,
-        minWidth: 300,
-        alignSelf: 'flex-start',
-        fontSize: 24,
-        [theme.breakpoints.down('md')]: {
-            alignSelf: 'center'
-        },
-        [theme.breakpoints.down('xs')]: {
-            minWidth: 0,
-            width: '100%',
-            fontSize: 20,
-        },
-    },
-    section: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        textAlign: 'center',
-    },
-    paragraph: {
-        fontSize: '18px',
-    },
     window: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: theme.spacing(1),
         overflow: 'hidden',
     },
     windowheader: {
@@ -63,14 +38,14 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0 5px 7px rgba(0,0,0,0.1)'
     },
     logo: {
-        marginTop: '0.25rem',
-        marginLeft: '0.25rem',
+        marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
         width: 30,
         cursor: 'pointer',
     },
     tabs: {
         display: 'flex',
-        gap: '1.5rem',
+        gap: theme.spacing(2),
         alignItems: 'center',
         fontWeight: 700,
         textTransform: 'uppercase',
@@ -88,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     },
     user: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         alignItems: 'center',
         fontWeight: 700,
         cursor: 'pointer',
@@ -99,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     },
     windowcontent: {
         display: 'flex',
-        gap: '1rem',
+        gap: theme.spacing(2),
         padding: theme.spacing(2),
         [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
@@ -122,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
     windowsidebar: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: theme.spacing(2),
         [theme.breakpoints.down('md')]: {
             alignItems: 'center',
         },
@@ -130,18 +105,13 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.75rem',
+        gap: theme.spacing(1),
         width: '100%',
         padding: theme.spacing(2),
     },
-    buttonwrapper: {
-        display: 'flex',
-        gap: '0.5rem',
-        alignSelf: 'end',
-    },
     userheader: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
     },
     searchcontainer: {
         width: '100%',
@@ -151,14 +121,14 @@ const useStyles = makeStyles((theme) => ({
     },
     searchwrapper: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         width: '100%',
     },
     pinnedpaper: {
         position: 'relative',
         paddingTop: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
-            marginTop: '1rem',
+            marginTop: theme.spacing(2),
         },
     },
     pinheader: {
@@ -166,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
         top: '-1rem',
         left: '50%',
         display: 'flex',
-        gap: '2.5rem',
+        gap: theme.spacing(3),
         whiteSpace: 'nowrap',
         transform: 'translateX(-50%)',
     },
@@ -184,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: '0.5rem',
+        marginTop: theme.spacing(1),
     },
     userbutton: {
         fontSize: '12px',
@@ -194,7 +164,7 @@ const useStyles = makeStyles((theme) => ({
     },
     selectbuttons: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         alignItems: 'center',
         [theme.breakpoints.down('md')]: {
             width: '100%',
@@ -231,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
     },
     likes: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         alignItems: 'center',
         fontSize: '1rem',
         '& > *:nth-of-type(1)': {
@@ -255,8 +225,8 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     queuecaption: {
-        marginTop: '-0.5rem',
-        marginBottom: '1rem',
+        marginTop: theme.spacing(-1),
+        marginBottom: theme.spacing(2),
         textAlign: 'center',
         fontWeight: 600,
         color: 'grey',
@@ -267,16 +237,16 @@ const useStyles = makeStyles((theme) => ({
     },
     desktopqueuebuttons: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         [theme.breakpoints.down('xs')]: {
             display: 'none',
         },
     },
     mobilequeuebuttons: {
         display: 'flex',
-        gap: '0.5rem',
+        gap: theme.spacing(1),
         width: '100%',
-        marginTop: '-0.5rem',
+        marginTop: theme.spacing(-1),
         [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
@@ -343,6 +313,7 @@ function Tabs() {
             <div className={classes.tabs}>
                 <div className={classes.logo}>
                     <Image
+                        alt='Prytaneum Logo'
                         src='/static/prytaneum_logo.svg' 
                         width={50}
                         height={49}
@@ -373,6 +344,7 @@ function MeetingDisplay() {
             <div className={classes.windowdisplay}>
                 <Grid item xs={6}>
                     <Image
+                        alt='Speaker Camera'
                         src='/static/cam1.png' 
                         width={1146}
                         height={648}
@@ -381,6 +353,7 @@ function MeetingDisplay() {
                 </Grid>
                 <Grid item xs={6}>
                     <Image
+                        alt='Speaker Camera'
                         src='/static/cam2.png' 
                         width={1146}
                         height={648}

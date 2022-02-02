@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     downarrow: {
-        fontSize: '4rem',
+        fontSize: theme.spacing(5),
         transform: 'rotate(-90deg)'
     },
     sentinel: {

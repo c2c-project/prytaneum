@@ -49,6 +49,7 @@ export function CallToAction() {
         <>
             <Grid item xs={12} md={6} className={classes.header}>
                 <Image
+                    alt='Prytaneum Logo'
                     src='/static/prytaneum_logo2.svg' 
                     width={3483}
                     height={665}
@@ -69,6 +70,7 @@ export function CallToAction() {
             </Grid>
             <Grid item xs={12} md={6}>
                 <Image
+                    alt='Prytaneum Landing Graphic'
                     src='/static/prytaneum_landing_graphic.svg' 
                     width={3292}
                     height={2097}
