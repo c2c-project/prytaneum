@@ -65,3 +65,7 @@ export function QuestionDialog({ isOpen, openLinked, close, eventId }: Props) {
         </ResponsiveDialog>
     );
 }
+
+QuestionDialog.defaultProps = {
+    openLinked: null
+}

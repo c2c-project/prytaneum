@@ -97,3 +97,7 @@ export function LiveFeedbackForm({ reply, onSubmit, openLinked, onCancel }: Live
         </Form>
     );
 }
+
+LiveFeedbackForm.defaultProps = {
+    openLinked: null
+}

@@ -60,3 +60,7 @@ export function LiveFeedbackDialog({ isOpen, openLinked, close, eventId }: Props
         </ResponsiveDialog>
     );
 }
+
+LiveFeedbackDialog.defaultProps = {
+    openLinked: null
+}

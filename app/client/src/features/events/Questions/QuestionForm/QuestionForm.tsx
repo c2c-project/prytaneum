@@ -14,7 +14,7 @@ export type TQuestionFormState = { question: string };
 export interface QuestionFormProps {
     quote?: React.ReactNode;
     onSubmit?: (state: TQuestionFormState) => void;
-    openLinked: () => void; // opensl inked dialog
+    openLinked: () => void; // opens linked dialog
     onCancel?: () => void;
 }
 
@@ -96,4 +96,8 @@ export function QuestionForm({ quote, onSubmit, openLinked, onCancel }: Question
             </FormActions>
         </Form>
     );
+}
+
+QuestionForm.defaultProps = {
+    openLinked: null
 }
