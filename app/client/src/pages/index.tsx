@@ -11,13 +11,13 @@ import { CallToAction } from '@local/features/promo/CallToAction'
 import { Blurb } from '@local/features/promo/Blurb'
 import { Carousel } from '@local/features/promo/Carousel';
 import { ParticipantDemo, ModeratorDemo } from '@local/features/promo/InteractiveDemo'
-import { ScrollButton } from '@local/features/promo/ScrollButton'
-import { ConditionalRender } from '@local/components';
+// import { ScrollButton } from '@local/features/promo/ScrollButton'
+// import { ConditionalRender } from '@local/components';
 
 const useStyles = makeStyles((theme) => ({
     landing: {
         width: '100%',
-        minHeight: '100vh',
+        minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
         margin: 0,
     },
     root: {
@@ -38,9 +38,9 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '4rem',
         transform: 'rotate(-90deg)'
     },
-    sentinel: {
-        paddingTop: theme.spacing(4), // offset for scroll
-    }
+    // sentinel: {
+    //     paddingTop: theme.spacing(4), // offset for scroll
+    // }
 }));
 
 export default function Home() {
@@ -96,7 +96,7 @@ export default function Home() {
         />,
     ]
 
-    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
+    // const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
         if (user) router.push('/organizations/me');
@@ -106,29 +106,30 @@ export default function Home() {
         <>
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.landing}>
                 <CallToAction/>
+                {/* TODO: Fix auto-scroll
                 <ConditionalRender client>
                     <ScrollButton sentinelRef={sentinelRef}/>
-                </ConditionalRender>
+                </ConditionalRender> */}
             </Grid>
-            <div ref={sentinelRef} className={classes.sentinel}>
-                <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                    <Blurb
-                        title='What is Prytaneum?'
-                        paragraphs={
-                            [
-                                'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
-                                'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
-                            ]
-                        }
+            {/* <div ref={sentinelRef} className={classes.sentinel}> */}
+            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
+                <Blurb
+                    title='What is Prytaneum?'
+                    paragraphs={
+                        [
+                            'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
+                            'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
+                        ]
+                    }
+                />
+                <Grid item xs={12}>
+                    <ParticipantDemo 
+                        shadow='10px 10px 0 0 #f5c64f' 
+                        scale='scale(0.95)'
                     />
-                    <Grid item xs={12}>
-                        <ParticipantDemo 
-                            shadow='10px 10px 0 0 #f5c64f' 
-                            scale='scale(0.95)'
-                        />
-                    </Grid>
                 </Grid>
-            </div>
+            </Grid>
+            {/* </div> */}
             <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
                 <Blurb
                     title='A better solution for remote public engagement.'
