@@ -15,6 +15,9 @@ export type QuestionCarouselFragment = {
                 readonly cursor: string;
                 readonly node: {
                     readonly position: number | null;
+                    readonly refQuestion: {
+                        readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                    } | null;
                     readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
                 };
             }> | null;
@@ -139,6 +142,22 @@ return {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "EventQuestion",
+                      "kind": "LinkedField",
+                      "name": "refQuestion",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "args": null,
+                          "kind": "FragmentSpread",
+                          "name": "QuestionQuoteFragment"
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "kind": "ScalarField",
                       "name": "__typename",
                       "storageKey": null
@@ -207,5 +226,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+(node as any).hash = '7fad09102460a18a53dd9ff4523b5d58';
 export default node;

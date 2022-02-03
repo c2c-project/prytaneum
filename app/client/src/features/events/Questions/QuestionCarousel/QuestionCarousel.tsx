@@ -9,6 +9,7 @@ import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
 import { useRecordPush } from '../../Moderation/ManageQuestions/useRecordPush';
 import { useRecordRemove } from '../../Moderation/ManageQuestions/useRecordRemove';
+import { QuestionQuote } from '../QuestionQuote';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,6 +38,9 @@ const QUESTION_CAROUSEL_FRAGMENT = graphql`
                         position
                         ...QuestionAuthorFragment
                         ...QuestionContentFragment
+                        refQuestion {
+                            ...QuestionQuoteFragment
+                        }
                     }
                 }
             }
@@ -148,6 +152,7 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
                 {displayedQuestion ? (
                     <Grid item xs={12}>
                         <QuestionAuthor fragmentRef={displayedQuestion.node} />
+                        {displayedQuestion.node.refQuestion && <QuestionQuote fragmentRef={displayedQuestion.node.refQuestion} />}
                         <QuestionContent fragmentRef={displayedQuestion.node} />
                     </Grid>
                 ) : (

@@ -15,7 +15,7 @@ import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
 import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
+import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useEvent } from '../../useEvent';
@@ -262,6 +262,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
             {currentQuestion && (
                 <Card elevation={0} className={classes.fullWidth}>
                     <QuestionAuthor fragmentRef={currentQuestion.node} />
+                    {currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
                     <QuestionContent fragmentRef={currentQuestion.node} />
                     <QuestionStats fragmentRef={currentQuestion.node} />
                 </Card>
@@ -285,6 +286,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 {nextQuestion && (
                     <Card elevation={0}>
                         <QuestionAuthor fragmentRef={nextQuestion.node} />
+                        {nextQuestion.node.refQuestion && <QuestionQuote fragmentRef={nextQuestion.node.refQuestion} />}
                         <QuestionContent fragmentRef={nextQuestion.node} />
                         <QuestionStats fragmentRef={nextQuestion.node} />
                     </Card>
@@ -316,6 +318,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                 <ListItem key={question.node.id}>
                                     <Card className={classes.fullWidth}>
                                         <QuestionAuthor fragmentRef={question.node} />
+                                        {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
                                         <QuestionContent fragmentRef={question.node} />
                                         <QuestionStats fragmentRef={question.node} />
                                     </Card>
@@ -348,6 +351,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                     <ListItem>
                                         <Card className={classes.fullWidth}>
                                             <QuestionAuthor fragmentRef={question.node} />
+                                            {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
                                             <QuestionContent fragmentRef={question.node} />
                                             <QuestionStats fragmentRef={question.node} />
                                         </Card>

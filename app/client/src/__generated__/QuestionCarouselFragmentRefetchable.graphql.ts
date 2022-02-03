@@ -55,6 +55,10 @@ fragment QuestionCarouselFragment_2HEEH6 on Event {
           position
           ...QuestionAuthorFragment
           ...QuestionContentFragment
+          refQuestion {
+            ...QuestionQuoteFragment
+            id
+          }
           id
           __typename
         }
@@ -69,6 +73,12 @@ fragment QuestionCarouselFragment_2HEEH6 on Event {
 
 fragment QuestionContentFragment on EventQuestion {
   question
+}
+
+fragment QuestionQuoteFragment on EventQuestion {
+  id
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
 }
 */
 
@@ -121,6 +131,46 @@ v4 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "createdBy",
+  "plural": false,
+  "selections": [
+    (v4/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "firstName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "avatar",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
   "storageKey": null
 };
 return {
@@ -222,44 +272,22 @@ return {
                                 "name": "position",
                                 "storageKey": null
                               },
+                              (v5/*: any*/),
+                              (v6/*: any*/),
+                              (v7/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
-                                "concreteType": "User",
+                                "concreteType": "EventQuestion",
                                 "kind": "LinkedField",
-                                "name": "createdBy",
+                                "name": "refQuestion",
                                 "plural": false,
                                 "selections": [
                                   (v4/*: any*/),
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
-                                    "name": "firstName",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
-                                    "name": "avatar",
-                                    "storageKey": null
-                                  }
+                                  (v5/*: any*/),
+                                  (v6/*: any*/),
+                                  (v7/*: any*/)
                                 ],
-                                "storageKey": null
-                              },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "createdAt",
-                                "storageKey": null
-                              },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "question",
                                 "storageKey": null
                               },
                               (v4/*: any*/),
@@ -332,14 +360,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7fe7bf30ad57ffd12cb6152ff3b953a7",
+    "cacheID": "ffd99d9214694ae410521a0be9e2b710",
     "id": null,
     "metadata": {},
     "name": "QuestionCarouselFragmentRefetchable",
     "operationKind": "query",
-    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 1000\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "query QuestionCarouselFragmentRefetchable(\n  $after: String = \"\"\n  $first: Int = 1000\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...QuestionCarouselFragment_2HEEH6\n    id\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n"
   }
 };
 })();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+(node as any).hash = '7fad09102460a18a53dd9ff4523b5d58';
 export default node;

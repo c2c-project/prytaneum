@@ -16,6 +16,9 @@ export const USE_QUESTION_CREATED_SUBSCRIPTION = graphql`
                     ...QuestionAuthorFragment
                     ...QuestionContentFragment
                     ...QuestionStatsFragment
+                    refQuestion {
+                        ...QuestionQuoteFragment
+                    }
                 }
             }
         }

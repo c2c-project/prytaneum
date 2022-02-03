@@ -16,6 +16,9 @@ export type useQuestionQueueFragment = {
                 readonly node: {
                     readonly id: string;
                     readonly position: number | null;
+                    readonly refQuestion: {
+                        readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                    } | null;
                     readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
                 };
             }> | null;
@@ -27,6 +30,9 @@ export type useQuestionQueueFragment = {
                 readonly node: {
                     readonly id: string;
                     readonly position: number | null;
+                    readonly refQuestion: {
+                        readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                    } | null;
                     readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
                 };
             }> | null;
@@ -80,6 +86,22 @@ v1 = [
             "args": null,
             "kind": "ScalarField",
             "name": "position",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventQuestion",
+            "kind": "LinkedField",
+            "name": "refQuestion",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "QuestionQuoteFragment"
+              }
+            ],
             "storageKey": null
           },
           {
@@ -230,5 +252,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '127d1ea47e8ed31c5a61655b87db4c95';
+(node as any).hash = 'bf9a1f6c7fd332126002af6c4448e3dd';
 export default node;
