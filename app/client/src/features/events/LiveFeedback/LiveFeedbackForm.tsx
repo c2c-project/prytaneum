@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Link, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
@@ -13,11 +14,30 @@ export type TLiveFeedbackFormState = { message: string };
 export interface LiveFeedbackFormProps {
     reply?: React.ReactNode;
     onSubmit?: (state: TLiveFeedbackFormState) => void;
+    openLinked: () => void; // opens linked dialog
     onCancel?: () => void;
 }
 
+const useStyles = makeStyles((theme) => ({
+    form: {
+        paddingTop: theme.spacing(2)
+    },
+    input: {
+        ['& fieldset']: {
+            borderRadius: 9999, // round text field
+        },
+    },
+    button: {
+        borderRadius: '10px'
+    },
+    link: {
+        cursor: 'pointer'
+    }
+}));
+
 // TODO: eliminate inline styles
-export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackFormProps) {
+export function LiveFeedbackForm({ reply, onSubmit, openLinked, onCancel }: LiveFeedbackFormProps) {
+    const classes = useStyles();
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
         message: '',
@@ -26,14 +46,14 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
     const isFeedbackValid = React.useMemo(() => form.message.trim().length !== 0, [form]);
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
             <FormTitle title={reply ? 'Live Feedback Reply Form' : 'Live Feedback Form'} />
             {reply}
             <FormContent>
                 <TextField
                     id='feedback-field'
                     name={reply ? 'feedback-reply' : 'feedback'}
-                    label={reply ? 'Feedback Reply...' : 'Your Feedback...'}
+                    label={reply ? 'Feedback Reply' : 'Your Feedback'}
                     autoFocus
                     error={Boolean(errors.message)}
                     helperText={errors.message}
@@ -41,18 +61,43 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
                     multiline
                     value={form.message}
                     onChange={handleChange('message')}
+                    className={classes.input}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
-                {onCancel && (
-                    <Button color='primary' onClick={onCancel}>
-                        Cancel
-                    </Button>
-                )}
-                <Button disabled={!isFeedbackValid} type='submit' variant='contained' color='primary'>
-                    {reply ? 'Reply' : 'Ask'}
-                </Button>
+            <FormActions disableGrow gridProps={{ justify: 'space-between' }}>
+                <Link
+                    variant='body1'
+                    underline='always'
+                    onClick={openLinked}
+                    className={classes.link}
+                >
+                    Have a question instead?
+                </Link>
+                <Grid container spacing={1}>
+                    {onCancel && (
+                        <Grid item>
+                            <Button onClick={onCancel} className={classes.button}>
+                                Cancel
+                            </Button>
+                        </Grid>
+                    )}
+                    <Grid item>
+                        <Button
+                            disabled={!isFeedbackValid}
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
+                        >
+                            {reply ? 'Reply' : 'Ask'}
+                        </Button>
+                    </Grid>
+                </Grid>
             </FormActions>
         </Form>
     );
+}
+
+LiveFeedbackForm.defaultProps = {
+    openLinked: null
 }

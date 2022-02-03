@@ -16,6 +16,9 @@ import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedba
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
+import { useLinkedResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { LiveFeedbackDialog } from '../LiveFeedback/LiveFeedbackDialog';
+import { QuestionDialog } from '../Questions/AskQuestion/QuestionDialog';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -90,12 +93,31 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const [tabIndex, setTabIndex] = React.useState<number>(0);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [openDialog, open, close] = useLinkedResponsiveDialog();
+
+    // create dialog ids using a combination of the eventId and actual dialog title
+    const feedbackDialogId = data.id + '-feedback';
+    const questionDialogId = data.id + '-question';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
         e.preventDefault();
         setTabIndex(newTabIndex);
     };
+
+    // helper functions to open linked dialog within initially opened dialog
+    const handleOpenLinkedFeedbackDialog = () => {
+        // open feedback dialog from question dialog
+        open(feedbackDialogId);
+        // switch to feedback tab (conditionally determined by user role)
+        setTabIndex(data.isViewerModerator ? 2 : 1);
+    }
+    const handleOpenLinkedQuestionDialog = () => {
+        // open question dialog from feedback dialog
+        open(questionDialogId);
+        // switch to question list tab (conditionally determined by user role)
+        setTabIndex(data.isViewerModerator ? 1 : 0);
+    }
 
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
@@ -132,13 +154,15 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     displayFeedbackButton ? (
                         <SubmitLiveFeedback
                             className={classes.fullWidth}
-                            eventId={data.id}
+                            open={() => open(feedbackDialogId)}
+                            // eventId={data.id}
                             // connectionKey='useLiveFeedbackListFragment_liveFeedback'
                         />
                     ) : (
                         <AskQuestion
                             className={classes.fullWidth}
-                            eventId={data.id}
+                            open={() => open(questionDialogId)}
+                            // eventId={data.id}
                             // connectionKey='useQuestionListFragment_questions'
                         />
                     )
@@ -171,6 +195,20 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     <LiveFeedbackList fragmentRef={data} />
                 </TabPanel>
             </Grid>
+
+            {/* relocate dialogs to allow one to open another */}
+            <LiveFeedbackDialog
+                isOpen={openDialog === feedbackDialogId}
+                openLinked={handleOpenLinkedQuestionDialog}
+                close={close}
+                eventId={data.id}
+            />
+            <QuestionDialog
+                isOpen={openDialog === questionDialogId}
+                openLinked={handleOpenLinkedFeedbackDialog}
+                close={close}
+                eventId={data.id}
+            />
         </Grid>
     );
 };
