@@ -7,8 +7,8 @@
         "dev": "dotenv -c development -- ts-node-dev --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
         "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts",
         "typecheck": "tsc -p tsconfig.prod.json --noEmit",
-        "build": "yarn exec scripts/build.sh"
-        
+        "build": "yarn exec scripts/build.sh",
+        "prod": "yarn build && dotenv -e .env -- yarn node build/index.js"
     },
     "dependencies": {
         "@app/prisma": "workspace:app/prisma",
