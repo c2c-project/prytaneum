@@ -1,3 +1,12 @@
 graphql-types.ts
 prisma
-.next
+*.json
+*.js
+*.config.*
+*.graphql
+*.graphql.ts
+*.md
+*.yml
+*.csv
+*.css
+documentation/*
