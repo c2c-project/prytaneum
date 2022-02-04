@@ -7,3 +7,7 @@ set -e
 printf "Checking types...\n"
 yarn g:typecheck
 printf "No type errors! 🎉🎉🎉\n"
+
+printf "Linting project...\n"
+yarn g:lint-project
+printf "No lint errors! 🎉🎉🎉\n"
