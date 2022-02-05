@@ -51,7 +51,7 @@ const initSubscriptionClient = () => {
 
     // For SSG and SSR always create a new subscription client
     if (typeof window === 'undefined') return client;
-    if (!client) subscriptionClient = client;
+    if (!subscriptionClient) subscriptionClient = client;
 
     return client;
 };
