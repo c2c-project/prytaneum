@@ -1,49 +1,63 @@
-/**
- * @generated SignedSource<<120ca15d210fe42a54d86fcd863200b3>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
+
 export type UpdateEvent = {
-  description?: string | null;
-  endDateTime?: Date | null;
-  eventId: string;
-  isCollectRatingsEnabled?: boolean | null;
-  isForumEnabled?: boolean | null;
-  isPrivate?: boolean | null;
-  isQuestionFeedVisible?: boolean | null;
-  startDateTime?: Date | null;
-  title?: string | null;
-  topic?: string | null;
+    description?: string | null | undefined;
+    endDateTime?: Date | null | undefined;
+    eventId: string;
+    isCollectRatingsEnabled?: boolean | null | undefined;
+    isForumEnabled?: boolean | null | undefined;
+    isPrivate?: boolean | null | undefined;
+    isQuestionFeedVisible?: boolean | null | undefined;
+    startDateTime?: Date | null | undefined;
+    title?: string | null | undefined;
+    topic?: string | null | undefined;
 };
-export type UpdateEventMutation$variables = {
-  input: UpdateEvent;
+export type UpdateEventMutationVariables = {
+    input: UpdateEvent;
 };
-export type UpdateEventMutationVariables = UpdateEventMutation$variables;
-export type UpdateEventMutation$data = {
-  readonly updateEvent: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly title: string | null;
-      readonly topic: string | null;
-      readonly description: string | null;
-      readonly startDateTime: Date | null;
-      readonly endDateTime: Date | null;
-    } | null;
-  };
+export type UpdateEventMutationResponse = {
+    readonly updateEvent: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+            readonly title: string | null;
+            readonly topic: string | null;
+            readonly description: string | null;
+            readonly startDateTime: Date | null;
+            readonly endDateTime: Date | null;
+        } | null;
+    };
 };
-export type UpdateEventMutationResponse = UpdateEventMutation$data;
 export type UpdateEventMutation = {
-  variables: UpdateEventMutationVariables;
-  response: UpdateEventMutation$data;
+    readonly response: UpdateEventMutationResponse;
+    readonly variables: UpdateEventMutationVariables;
 };
+
+
+
+/*
+mutation UpdateEventMutation(
+  $input: UpdateEvent!
+) {
+  updateEvent(event: $input) {
+    isError
+    message
+    body {
+      id
+      title
+      topic
+      description
+      startDateTime
+      endDateTime
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -166,7 +180,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "857e7b460e6fd8ce95fa589244140122";
-
+(node as any).hash = '857e7b460e6fd8ce95fa589244140122';
 export default node;

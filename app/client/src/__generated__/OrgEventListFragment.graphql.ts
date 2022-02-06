@@ -1,45 +1,45 @@
-/**
- * @generated SignedSource<<08f421beacba16b7582186e7e67b8401>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type OrgEventListFragment$data = {
-  readonly id: string;
-  readonly events: {
-    readonly __id: string;
-    readonly edges: ReadonlyArray<{
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly title: string | null;
-        readonly topic: string | null;
-        readonly startDateTime: Date | null;
-      };
-    }> | null;
-    readonly pageInfo: {
-      readonly hasNextPage: boolean;
-      readonly hasPreviousPage: boolean;
-      readonly startCursor: string | null;
-      readonly endCursor: string | null;
-    };
-  } | null;
-  readonly " $fragmentType": "OrgEventListFragment";
+import { ReaderFragment } from "relay-runtime";
+import EventsListPaginationQuery from "./EventsListPaginationQuery.graphql";
+import {  } from "relay-runtime";
+export type OrgEventListFragment = {
+    readonly id: string;
+    readonly events: {
+        readonly __id: string;
+        readonly edges: ReadonlyArray<{
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly title: string | null;
+                readonly topic: string | null;
+                readonly startDateTime: Date | null;
+            };
+        }> | null;
+        readonly pageInfo: {
+            readonly hasNextPage: boolean;
+            readonly hasPreviousPage: boolean;
+            readonly startCursor: string | null;
+            readonly endCursor: string | null;
+        };
+    } | null;
+    readonly " $refType": "OrgEventListFragment";
 };
-export type OrgEventListFragment = OrgEventListFragment$data;
+export type OrgEventListFragment$data = OrgEventListFragment;
 export type OrgEventListFragment$key = {
-  readonly " $data"?: OrgEventListFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"OrgEventListFragment">;
+    readonly " $data"?: OrgEventListFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"OrgEventListFragment">;
 };
 
+
+
 const node: ReaderFragment = (function(){
-var v0 = {
+var v0 = [
+  "events"
+],
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -64,15 +64,28 @@ return {
         "count": "count",
         "cursor": "cursor",
         "direction": "forward",
-        "path": [
-          "events"
-        ]
+        "path": (v0/*: any*/)
       }
-    ]
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "count",
+          "cursor": "cursor"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": EventsListPaginationQuery,
+      "identifierField": "id"
+    }
   },
   "name": "OrgEventListFragment",
   "selections": [
-    (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": "events",
       "args": null,
@@ -104,7 +117,7 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v0/*: any*/),
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -198,7 +211,5 @@ return {
   "abstractKey": null
 };
 })();
-
-(node as any).hash = "d67ebde8bc7c9b62da92996d03c829f9";
-
+(node as any).hash = 'd5f6d5043b03cd265e2fe1cf45ff42d3';
 export default node;

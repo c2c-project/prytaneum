@@ -1,40 +1,52 @@
-/**
- * @generated SignedSource<<87c08ecfeac0056f06173934b3488011>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
+
 export type CreateMember = {
-  email: string;
-  orgId: string;
+    email: string;
+    orgId: string;
 };
-export type CreateMemberMutation$variables = {
-  input: CreateMember;
-  connections: ReadonlyArray<string>;
+export type CreateMemberMutationVariables = {
+    input: CreateMember;
+    connections: Array<string>;
 };
-export type CreateMemberMutationVariables = CreateMemberMutation$variables;
-export type CreateMemberMutation$data = {
-  readonly createMember: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
-  };
+export type CreateMemberMutationResponse = {
+    readonly createMember: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+            readonly firstName: string | null;
+            readonly lastName: string | null;
+            readonly avatar: string | null;
+        } | null;
+    };
 };
-export type CreateMemberMutationResponse = CreateMemberMutation$data;
 export type CreateMemberMutation = {
-  variables: CreateMemberMutationVariables;
-  response: CreateMemberMutation$data;
+    readonly response: CreateMemberMutationResponse;
+    readonly variables: CreateMemberMutationVariables;
 };
+
+
+
+/*
+mutation CreateMemberMutation(
+  $input: CreateMember!
+) {
+  createMember(input: $input) {
+    isError
+    message
+    body {
+      id
+      firstName
+      lastName
+      avatar
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -191,7 +203,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "c0d35809a6615bdce183f12f19e16124";
-
+(node as any).hash = 'c0d35809a6615bdce183f12f19e16124';
 export default node;

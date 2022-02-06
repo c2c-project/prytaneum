@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { connectionFromArray, fromGlobalId, toGlobalId as gqlToGlobalId } from 'graphql-relay';
-import { OrganizationSubscription } from '@local/graphql-types';
+import { connectionFromArray, fromGlobalId } from 'graphql-relay';
+import { Organization as OrgT, OrganizationSubscription } from '@local/graphql-types';
 import * as Organization from './methods';
 import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '../utils';
 import { isMemberOfOrg } from '../permissions';
@@ -10,6 +10,13 @@ const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
+    Query: {
+        async myOrgs(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return null;
+            const userOrgs = await Organization.findOrgsByUserId(ctx.viewer.id, ctx.prisma);
+            return userOrgs.map(toOrgId);
+        },
+    },
     Mutation: {
         async createOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
@@ -21,14 +28,14 @@ export const resolvers: Resolvers = {
                         orgUpdated: { orgId: createdOrg.id, deleteMember: false },
                     },
                 });
-                return { node: toOrgId(createdOrg), cursor: createdOrg.createdAt.getTime().toString() };
+                return toOrgId(createdOrg);
             });
         },
         async updateOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const updatedOrg = await Organization.updateOrg(ctx.viewer.id, ctx.prisma, args.input);
-                return { node: toOrgId(updatedOrg), cursor: updatedOrg.createdAt.getTime().toString() };
+                return toOrgId(updatedOrg);
             });
         },
         deleteOrganization() {

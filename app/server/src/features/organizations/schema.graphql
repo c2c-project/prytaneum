@@ -80,7 +80,7 @@ input DeleteMember {
 type OrganizationMutationResponse implements MutationResponse{
     isError: Boolean!
     message: String!
-    body: OrganizationEdge
+    body: Organization
 }
 
 type Mutation {
@@ -97,6 +97,13 @@ type Mutation {
     Delete a member from the organization
     """
     deleteMember(input: DeleteMember!): UserMutationResponse!
+}
+
+type Query {
+    """
+    Fetch organizations relevant to the current user
+    """
+    myOrgs: [Organization!]
 }
 
 type Subscription {

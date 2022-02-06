@@ -1,33 +1,42 @@
-/**
- * @generated SignedSource<<7eff935b75f98fe36889b5a3fc1bad3c>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
-export type useEnqueuedRemoveSubscription$variables = {
-  eventId: string;
-  connections: ReadonlyArray<string>;
+import { ConcreteRequest } from "relay-runtime";
+
+export type useEnqueuedRemoveSubscriptionVariables = {
+    eventId: string;
+    connections: Array<string>;
 };
-export type useEnqueuedRemoveSubscriptionVariables = useEnqueuedRemoveSubscription$variables;
-export type useEnqueuedRemoveSubscription$data = {
-  readonly enqueuedRemoveQuestion: {
-    readonly edge: {
-      readonly node: {
-        readonly id: string;
-      };
+export type useEnqueuedRemoveSubscriptionResponse = {
+    readonly enqueuedRemoveQuestion: {
+        readonly edge: {
+            readonly node: {
+                readonly id: string;
+            };
+        };
     };
-  };
 };
-export type useEnqueuedRemoveSubscriptionResponse = useEnqueuedRemoveSubscription$data;
 export type useEnqueuedRemoveSubscription = {
-  variables: useEnqueuedRemoveSubscriptionVariables;
-  response: useEnqueuedRemoveSubscription$data;
+    readonly response: useEnqueuedRemoveSubscriptionResponse;
+    readonly variables: useEnqueuedRemoveSubscriptionVariables;
 };
+
+
+
+/*
+subscription useEnqueuedRemoveSubscription(
+  $eventId: ID!
+) {
+  enqueuedRemoveQuestion(eventId: $eventId) {
+    edge {
+      node {
+        id
+      }
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -173,7 +182,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "4cf5bb021798b9ebadc33b258537388e";
-
+(node as any).hash = '4cf5bb021798b9ebadc33b258537388e';
 export default node;

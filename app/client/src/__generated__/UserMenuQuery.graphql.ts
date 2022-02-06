@@ -1,27 +1,39 @@
-/**
- * @generated SignedSource<<9881a53fcb22a30806b4b74416f9a865>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type UserMenuQuery$variables = {};
-export type UserMenuQueryVariables = UserMenuQuery$variables;
-export type UserMenuQuery$data = {
-  readonly me: {
-    readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
-  } | null;
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type UserMenuQueryVariables = {};
+export type UserMenuQueryResponse = {
+    readonly me: {
+        readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
+    } | null;
 };
-export type UserMenuQueryResponse = UserMenuQuery$data;
 export type UserMenuQuery = {
-  variables: UserMenuQueryVariables;
-  response: UserMenuQuery$data;
+    readonly response: UserMenuQueryResponse;
+    readonly variables: UserMenuQueryVariables;
 };
+
+
+
+/*
+query UserMenuQuery {
+  me {
+    ...useUserFragment
+    id
+  }
+}
+
+fragment useUserFragment on User {
+  id
+  firstName
+  lastName
+  email
+  avatar
+}
+*/
 
 const node: ConcreteRequest = {
   "fragment": {
@@ -113,7 +125,5 @@ const node: ConcreteRequest = {
     "text": "query UserMenuQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
   }
 };
-
-(node as any).hash = "518037acac8c928833607b93d3e30904";
-
+(node as any).hash = '518037acac8c928833607b93d3e30904';
 export default node;

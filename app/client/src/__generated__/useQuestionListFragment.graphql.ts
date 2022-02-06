@@ -1,42 +1,39 @@
-/**
- * @generated SignedSource<<0bd023b068dd449c302cb4a29b717d7b>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type useQuestionListFragment$data = {
-  readonly id: string;
-  readonly currentQuestion: number | null;
-  readonly questions: {
-    readonly __id: string;
-    readonly edges: ReadonlyArray<{
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly question: string | null;
-        readonly createdBy: {
-          readonly firstName: string | null;
-        } | null;
-        readonly refQuestion: {
-          readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
-        } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-      };
-    }> | null;
-  } | null;
-  readonly " $fragmentType": "useQuestionListFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type useQuestionListFragment = {
+    readonly id: string;
+    readonly currentQuestion: number | null;
+    readonly questions: {
+        readonly __id: string;
+        readonly edges: ReadonlyArray<{
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly question: string | null;
+                readonly createdBy: {
+                    readonly firstName: string | null;
+                } | null;
+                readonly refQuestion: {
+                    readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+            };
+        }> | null;
+    } | null;
+    readonly " $refType": "useQuestionListFragment";
 };
-export type useQuestionListFragment = useQuestionListFragment$data;
+export type useQuestionListFragment$data = useQuestionListFragment;
 export type useQuestionListFragment$key = {
-  readonly " $data"?: useQuestionListFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"useQuestionListFragment">;
+    readonly " $data"?: useQuestionListFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"useQuestionListFragment">;
 };
+
+
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -156,6 +153,13 @@ return {
                   "storageKey": null
                 },
                 {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "__typename",
+                  "storageKey": null
+                },
+                {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "QuestionActionsFragment"
@@ -174,13 +178,6 @@ return {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "QuestionStatsFragment"
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "__typename",
-                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -233,7 +230,5 @@ return {
   "abstractKey": null
 };
 })();
-
-(node as any).hash = "8d9a9dd63c2ed5ff753c345fc99fe966";
-
+(node as any).hash = '8d9a9dd63c2ed5ff753c345fc99fe966';
 export default node;

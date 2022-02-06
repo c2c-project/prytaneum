@@ -1,36 +1,68 @@
-/**
- * @generated SignedSource<<22da51052edb7dbc47ea1f0b2c98703b>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type useQuestionUpdatedSubscription$variables = {
-  eventId: string;
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type useQuestionUpdatedSubscriptionVariables = {
+    eventId: string;
 };
-export type useQuestionUpdatedSubscriptionVariables = useQuestionUpdatedSubscription$variables;
-export type useQuestionUpdatedSubscription$data = {
-  readonly questionUpdated: {
-    readonly edge: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly position: number | null;
-        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-      };
+export type useQuestionUpdatedSubscriptionResponse = {
+    readonly questionUpdated: {
+        readonly edge: {
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly position: number | null;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+            };
+        };
     };
-  };
 };
-export type useQuestionUpdatedSubscriptionResponse = useQuestionUpdatedSubscription$data;
 export type useQuestionUpdatedSubscription = {
-  variables: useQuestionUpdatedSubscriptionVariables;
-  response: useQuestionUpdatedSubscription$data;
+    readonly response: useQuestionUpdatedSubscriptionResponse;
+    readonly variables: useQuestionUpdatedSubscriptionVariables;
 };
+
+
+
+/*
+subscription useQuestionUpdatedSubscription(
+  $eventId: ID!
+) {
+  questionUpdated(eventId: $eventId) {
+    edge {
+      cursor
+      node {
+        id
+        position
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
+        ...QuestionStatsFragment
+      }
+    }
+  }
+}
+
+fragment QuestionAuthorFragment on EventQuestion {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
+fragment QuestionContentFragment on EventQuestion {
+  question
+}
+
+fragment QuestionStatsFragment on EventQuestion {
+  id
+  likedByCount
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -231,7 +263,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "a43e6f07d31b997aef0368366a8cbd7f";
-
+(node as any).hash = 'a43e6f07d31b997aef0368366a8cbd7f';
 export default node;

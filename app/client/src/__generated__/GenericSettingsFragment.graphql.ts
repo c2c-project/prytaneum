@@ -1,28 +1,25 @@
-/**
- * @generated SignedSource<<e44308679d160ed9b895b8976c40a359>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type GenericSettingsFragment$data = {
-  readonly id: string;
-  readonly isQuestionFeedVisible: boolean | null;
-  readonly isCollectRatingsEnabled: boolean | null;
-  readonly isForumEnabled: boolean | null;
-  readonly isPrivate: boolean | null;
-  readonly " $fragmentType": "GenericSettingsFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type GenericSettingsFragment = {
+    readonly id: string;
+    readonly isQuestionFeedVisible: boolean | null;
+    readonly isCollectRatingsEnabled: boolean | null;
+    readonly isForumEnabled: boolean | null;
+    readonly isPrivate: boolean | null;
+    readonly " $refType": "GenericSettingsFragment";
 };
-export type GenericSettingsFragment = GenericSettingsFragment$data;
+export type GenericSettingsFragment$data = GenericSettingsFragment;
 export type GenericSettingsFragment$key = {
-  readonly " $data"?: GenericSettingsFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"GenericSettingsFragment">;
+    readonly " $data"?: GenericSettingsFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"GenericSettingsFragment">;
 };
+
+
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -69,7 +66,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-
-(node as any).hash = "7e110cfffef7631bf0363a82b3ecba2d";
-
+(node as any).hash = '7e110cfffef7631bf0363a82b3ecba2d';
 export default node;

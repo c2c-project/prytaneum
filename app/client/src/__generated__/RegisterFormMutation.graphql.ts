@@ -1,40 +1,58 @@
-/**
- * @generated SignedSource<<84f0ea4965ce5cbb3de571d4dc8f4f9d>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type RegistrationForm = {
-  confirmPassword: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
+    confirmPassword: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
 };
-export type RegisterFormMutation$variables = {
-  input: RegistrationForm;
+export type RegisterFormMutationVariables = {
+    input: RegistrationForm;
 };
-export type RegisterFormMutationVariables = RegisterFormMutation$variables;
-export type RegisterFormMutation$data = {
-  readonly register: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
-    } | null;
-  };
+export type RegisterFormMutationResponse = {
+    readonly register: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
+        } | null;
+    };
 };
-export type RegisterFormMutationResponse = RegisterFormMutation$data;
 export type RegisterFormMutation = {
-  variables: RegisterFormMutationVariables;
-  response: RegisterFormMutation$data;
+    readonly response: RegisterFormMutationResponse;
+    readonly variables: RegisterFormMutationVariables;
 };
+
+
+
+/*
+mutation RegisterFormMutation(
+  $input: RegistrationForm!
+) {
+  register(input: $input) {
+    isError
+    message
+    body {
+      ...useUserFragment
+      id
+    }
+  }
+}
+
+fragment useUserFragment on User {
+  id
+  firstName
+  lastName
+  email
+  avatar
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -182,7 +200,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "9e6d68296bed730fc827c62e8365c373";
-
+(node as any).hash = '9e6d68296bed730fc827c62e8365c373';
 export default node;

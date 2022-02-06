@@ -1,27 +1,24 @@
-/**
- * @generated SignedSource<<6420d2523ad2e92586a275e65ef624f8>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type EventDetailsCardFragment$data = {
-  readonly id: string;
-  readonly title: string | null;
-  readonly topic: string | null;
-  readonly description: string | null;
-  readonly " $fragmentType": "EventDetailsCardFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type EventDetailsCardFragment = {
+    readonly id: string;
+    readonly title: string | null;
+    readonly topic: string | null;
+    readonly description: string | null;
+    readonly " $refType": "EventDetailsCardFragment";
 };
-export type EventDetailsCardFragment = EventDetailsCardFragment$data;
+export type EventDetailsCardFragment$data = EventDetailsCardFragment;
 export type EventDetailsCardFragment$key = {
-  readonly " $data"?: EventDetailsCardFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment">;
+    readonly " $data"?: EventDetailsCardFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"EventDetailsCardFragment">;
 };
+
+
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -61,7 +58,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-
-(node as any).hash = "f9a4117a4067d382d100f75a69edb731";
-
+(node as any).hash = 'f9a4117a4067d382d100f75a69edb731';
 export default node;

@@ -1,37 +1,46 @@
-/**
- * @generated SignedSource<<74228b5c1c03215a66cf4c28f4a8c9bd>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
+
 export type DeleteVideo = {
-  eventId: string;
-  id: string;
+    eventId: string;
+    id: string;
 };
-export type DeleteVideoMutation$variables = {
-  input: DeleteVideo;
-  connections: ReadonlyArray<string>;
+export type DeleteVideoMutationVariables = {
+    input: DeleteVideo;
+    connections: Array<string>;
 };
-export type DeleteVideoMutationVariables = DeleteVideoMutation$variables;
-export type DeleteVideoMutation$data = {
-  readonly deleteVideo: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly id: string;
-    } | null;
-  };
+export type DeleteVideoMutationResponse = {
+    readonly deleteVideo: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+        } | null;
+    };
 };
-export type DeleteVideoMutationResponse = DeleteVideoMutation$data;
 export type DeleteVideoMutation = {
-  variables: DeleteVideoMutationVariables;
-  response: DeleteVideoMutation$data;
+    readonly response: DeleteVideoMutationResponse;
+    readonly variables: DeleteVideoMutationVariables;
 };
+
+
+
+/*
+mutation DeleteVideoMutation(
+  $input: DeleteVideo!
+) {
+  deleteVideo(input: $input) {
+    isError
+    message
+    body {
+      id
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -173,7 +182,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "62024c492aea73a2af93a9ef3a6f33a4";
-
+(node as any).hash = '62024c492aea73a2af93a9ef3a6f33a4';
 export default node;

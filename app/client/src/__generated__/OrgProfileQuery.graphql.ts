@@ -1,33 +1,87 @@
-/**
- * @generated SignedSource<<755c76a39f3ee0a0fd22cb97cb4d3fa9>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type OrgProfileQuery$variables = {
-  id: string;
-  count?: number | null;
-  cursor?: string | null;
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type OrgProfileQueryVariables = {
+    id: string;
+    count?: number | null | undefined;
+    cursor?: string | null | undefined;
 };
-export type OrgProfileQueryVariables = OrgProfileQuery$variables;
-export type OrgProfileQuery$data = {
-  readonly node: {
-    readonly id: string;
-    readonly name?: string;
-    readonly " $fragmentSpreads": FragmentRefs<"OrgEventListFragment" | "OrgMemberListFragment">;
-  } | null;
+export type OrgProfileQueryResponse = {
+    readonly node: {
+        readonly id: string;
+        readonly name?: string | undefined;
+        readonly " $fragmentRefs": FragmentRefs<"OrgEventListFragment" | "OrgMemberListFragment">;
+    } | null;
 };
-export type OrgProfileQueryResponse = OrgProfileQuery$data;
 export type OrgProfileQuery = {
-  variables: OrgProfileQueryVariables;
-  response: OrgProfileQuery$data;
+    readonly response: OrgProfileQueryResponse;
+    readonly variables: OrgProfileQueryVariables;
 };
+
+
+
+/*
+query OrgProfileQuery(
+  $id: ID!
+  $count: Int
+  $cursor: String
+) {
+  node(id: $id) {
+    __typename
+    id
+    ... on Organization {
+      name
+      ...OrgEventListFragment
+      ...OrgMemberListFragment
+    }
+  }
+}
+
+fragment OrgEventListFragment on Organization {
+  id
+  events(first: $count, after: $cursor) {
+    edges {
+      cursor
+      node {
+        id
+        title
+        topic
+        startDateTime
+        __typename
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+fragment OrgMemberListFragment on Organization {
+  id
+  members(first: 100, after: "") {
+    edges {
+      cursor
+      node {
+        id
+        firstName
+        lastName
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -385,7 +439,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "8060b1e2faeaaa5ef610c559f0df1a8d";
-
+(node as any).hash = '8060b1e2faeaaa5ef610c559f0df1a8d';
 export default node;

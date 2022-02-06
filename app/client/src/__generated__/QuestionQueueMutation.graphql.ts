@@ -1,56 +1,68 @@
-/**
- * @generated SignedSource<<eebf4986f6f16eb65ec7e5722e89fcee>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
+
 export type UpdateQuestionPosition = {
-  eventId: string;
-  position: number;
-  questionId: string;
+    eventId: string;
+    position: number;
+    questionId: string;
 };
-export type QuestionQueueMutation$variables = {
-  input: UpdateQuestionPosition;
+export type QuestionQueueMutationVariables = {
+    input: UpdateQuestionPosition;
 };
-export type QuestionQueueMutationVariables = QuestionQueueMutation$variables;
-export type QuestionQueueMutation$data = {
-  readonly updateQuestionPosition: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly position: number | null;
-      };
-    } | null;
-  };
+export type QuestionQueueMutationResponse = {
+    readonly updateQuestionPosition: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly position: number | null;
+            };
+        } | null;
+    };
 };
-export type QuestionQueueMutationResponse = QuestionQueueMutation$data;
-export type QuestionQueueMutation$rawResponse = {
-  readonly updateQuestionPosition: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly position: number | null;
-      };
-    } | null;
-  };
+export type QuestionQueueMutationRawResponse = {
+    readonly updateQuestionPosition: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: ({
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly position: number | null;
+            };
+        }) | null;
+    };
 };
-export type QuestionQueueMutationRawResponse = QuestionQueueMutation$rawResponse;
 export type QuestionQueueMutation = {
-  variables: QuestionQueueMutationVariables;
-  response: QuestionQueueMutation$data;
-  rawResponse: QuestionQueueMutation$rawResponse;
+    readonly response: QuestionQueueMutationResponse;
+    readonly variables: QuestionQueueMutationVariables;
+    readonly rawResponse: QuestionQueueMutationRawResponse;
 };
+
+
+
+/*
+mutation QuestionQueueMutation(
+  $input: UpdateQuestionPosition!
+) {
+  updateQuestionPosition(input: $input) {
+    isError
+    message
+    body {
+      cursor
+      node {
+        id
+        position
+      }
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -163,7 +175,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "8ab3dc1fc2c96fa3f35bf76e9ca90b47";
-
+(node as any).hash = '8ab3dc1fc2c96fa3f35bf76e9ca90b47';
 export default node;

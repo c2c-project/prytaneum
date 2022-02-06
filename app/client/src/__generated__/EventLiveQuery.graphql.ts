@@ -1,31 +1,276 @@
-/**
- * @generated SignedSource<<e82457b5ab5b7e35cbf6201f6516460d>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type EventLiveQuery$variables = {
-  eventId: string;
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type EventLiveQueryVariables = {
+    eventId: string;
 };
-export type EventLiveQueryVariables = EventLiveQuery$variables;
-export type EventLiveQuery$data = {
-  readonly node: {
-    readonly id: string;
-    readonly isViewerModerator?: boolean | null;
-    readonly " $fragmentSpreads": FragmentRefs<"EventSidebarFragment" | "EventVideoFragment">;
-  } | null;
+export type EventLiveQueryResponse = {
+    readonly node: {
+        readonly id: string;
+        readonly isViewerModerator?: boolean | null | undefined;
+        readonly " $fragmentRefs": FragmentRefs<"EventSidebarFragment" | "EventVideoFragment">;
+    } | null;
 };
-export type EventLiveQueryResponse = EventLiveQuery$data;
 export type EventLiveQuery = {
-  variables: EventLiveQueryVariables;
-  response: EventLiveQuery$data;
+    readonly response: EventLiveQueryResponse;
+    readonly variables: EventLiveQueryVariables;
 };
+
+
+
+/*
+query EventLiveQuery(
+  $eventId: ID!
+) {
+  node(id: $eventId) {
+    __typename
+    id
+    ... on Event {
+      isViewerModerator
+      ...EventSidebarFragment
+      ...EventVideoFragment
+    }
+  }
+}
+
+fragment EventDetailsCardFragment on Event {
+  id
+  title
+  topic
+  description
+}
+
+fragment EventSidebarFragment on Event {
+  id
+  isQuestionFeedVisible
+  isViewerModerator
+  ...EventDetailsCardFragment
+  ...SpeakerListFragment
+  ...useQuestionListFragment
+  ...useQuestionQueueFragment
+  ...QuestionCarouselFragment
+  ...useLiveFeedbackListFragment
+}
+
+fragment EventVideoFragment on Event {
+  videos {
+    edges {
+      cursor
+      node {
+        url
+        lang
+        id
+      }
+    }
+  }
+}
+
+fragment LikeFragment on EventQuestion {
+  id
+  isLikedByViewer
+}
+
+fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
+fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+  id
+  message
+  ...LiveFeedbackAuthorFragment
+}
+
+fragment QuestionActionsFragment on EventQuestion {
+  id
+  ...QuoteFragment
+  ...LikeFragment
+  ...QueueButtonFragment
+}
+
+fragment QuestionAuthorFragment on EventQuestion {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
+fragment QuestionCarouselFragment on Event {
+  id
+  currentQuestion
+  questionQueue {
+    questionRecord(first: 1000, after: "") {
+      edges {
+        cursor
+        node {
+          position
+          ...QuestionAuthorFragment
+          ...QuestionContentFragment
+          id
+          __typename
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+
+fragment QuestionContentFragment on EventQuestion {
+  question
+}
+
+fragment QuestionQuoteFragment on EventQuestion {
+  id
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
+}
+
+fragment QuestionStatsFragment on EventQuestion {
+  id
+  likedByCount
+}
+
+fragment QueueButtonFragment on EventQuestion {
+  id
+  position
+}
+
+fragment QuoteFragment on EventQuestion {
+  id
+  ...QuestionAuthorFragment
+  ...QuestionContentFragment
+}
+
+fragment SpeakerListFragment on Event {
+  speakers {
+    edges {
+      node {
+        id
+        pictureUrl
+        name
+        description
+        title
+      }
+      cursor
+    }
+  }
+}
+
+fragment useLiveFeedbackListFragment on Event {
+  id
+  liveFeedback(first: 100, after: "") {
+    edges {
+      cursor
+      node {
+        id
+        message
+        createdBy {
+          id
+        }
+        refFeedback {
+          createdBy {
+            id
+          }
+          ...LiveFeedbackReplyFragment
+          id
+        }
+        ...LiveFeedbackReplyFragment
+        ...LiveFeedbackAuthorFragment
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment useQuestionListFragment on Event {
+  id
+  currentQuestion
+  questions(first: 1000, after: "1") {
+    edges {
+      cursor
+      node {
+        id
+        question
+        createdBy {
+          firstName
+          id
+        }
+        refQuestion {
+          ...QuestionQuoteFragment
+          id
+        }
+        ...QuestionActionsFragment
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
+        ...QuestionStatsFragment
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment useQuestionQueueFragment on Event {
+  id
+  currentQuestion
+  questionQueue {
+    questionRecord(first: 1000, after: "") {
+      edges {
+        cursor
+        node {
+          id
+          ...QuestionAuthorFragment
+          ...QuestionStatsFragment
+          ...QuestionContentFragment
+          position
+          __typename
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+    enqueuedQuestions(first: 1000, after: "") {
+      edges {
+        cursor
+        node {
+          id
+          ...QuestionAuthorFragment
+          ...QuestionStatsFragment
+          ...QuestionContentFragment
+          position
+          __typename
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -661,7 +906,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "98755a36a605ec6758bad8616e1ab958";
-
+(node as any).hash = '98755a36a605ec6758bad8616e1ab958';
 export default node;

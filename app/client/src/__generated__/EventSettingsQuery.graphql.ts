@@ -1,31 +1,125 @@
-/**
- * @generated SignedSource<<6ed4025f708e32715d8c22b6e6a0e7ae>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type EventSettingsQuery$variables = {
-  input: string;
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type EventSettingsQueryVariables = {
+    input: string;
 };
-export type EventSettingsQueryVariables = EventSettingsQuery$variables;
-export type EventSettingsQuery$data = {
-  readonly node: {
-    readonly id: string;
-    readonly isViewerModerator?: boolean | null;
-    readonly " $fragmentSpreads": FragmentRefs<"EventDetailsFragment" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "GenericSettingsFragment" | "ModeratorEventSettingsFragment">;
-  } | null;
+export type EventSettingsQueryResponse = {
+    readonly node: {
+        readonly id: string;
+        readonly isViewerModerator?: boolean | null | undefined;
+        readonly " $fragmentRefs": FragmentRefs<"EventDetailsFragment" | "SpeakerEventSettingsFragment" | "VideoEventSettingsFragment" | "GenericSettingsFragment" | "ModeratorEventSettingsFragment">;
+    } | null;
 };
-export type EventSettingsQueryResponse = EventSettingsQuery$data;
 export type EventSettingsQuery = {
-  variables: EventSettingsQueryVariables;
-  response: EventSettingsQuery$data;
+    readonly response: EventSettingsQueryResponse;
+    readonly variables: EventSettingsQueryVariables;
 };
+
+
+
+/*
+query EventSettingsQuery(
+  $input: ID!
+) {
+  node(id: $input) {
+    __typename
+    id
+    ... on Event {
+      isViewerModerator
+      ...EventDetailsFragment
+      ...SpeakerEventSettingsFragment
+      ...VideoEventSettingsFragment
+      ...GenericSettingsFragment
+      ...ModeratorEventSettingsFragment
+    }
+  }
+}
+
+fragment EventDetailsFragment on Event {
+  id
+  title
+  topic
+  description
+  startDateTime
+  endDateTime
+}
+
+fragment GenericSettingsFragment on Event {
+  id
+  isQuestionFeedVisible
+  isCollectRatingsEnabled
+  isForumEnabled
+  isPrivate
+}
+
+fragment ModeratorEventSettingsFragment on Event {
+  id
+  moderators(first: 10, after: "") {
+    edges {
+      cursor
+      node {
+        id
+        firstName
+        lastName
+        avatar
+        email
+        __typename
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment SpeakerEventSettingsFragment on Event {
+  id
+  speakers(first: 10, after: "") {
+    edges {
+      node {
+        id
+        eventId
+        name
+        title
+        description
+        pictureUrl
+        email
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment VideoEventSettingsFragment on Event {
+  id
+  videos(first: 10, after: "") {
+    edges {
+      node {
+        id
+        url
+        lang
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -487,7 +581,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "a11380f079f1dc66bd667adb468ff6d1";
-
+(node as any).hash = 'a11380f079f1dc66bd667adb468ff6d1';
 export default node;

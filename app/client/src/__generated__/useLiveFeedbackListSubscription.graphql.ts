@@ -1,47 +1,86 @@
-/**
- * @generated SignedSource<<060ce6388e47e8156cad2fd3af454072>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
-export type useLiveFeedbackListSubscription$variables = {
-  eventId: string;
+export type useLiveFeedbackListSubscriptionVariables = {
+    eventId: string;
 };
-export type useLiveFeedbackListSubscriptionVariables = useLiveFeedbackListSubscription$variables;
-export type useLiveFeedbackListSubscription$data = {
-  readonly feedbackCRUD: {
-    readonly operationType: Operation;
-    readonly edge: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly message: string;
-        readonly createdBy: {
-          readonly id: string;
-        } | null;
-        readonly refFeedback: {
-          readonly createdBy: {
-            readonly id: string;
-          } | null;
-          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
-        } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-      };
+export type useLiveFeedbackListSubscriptionResponse = {
+    readonly feedbackCRUD: {
+        readonly operationType: Operation;
+        readonly edge: {
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly message: string;
+                readonly createdBy: {
+                    readonly id: string;
+                } | null;
+                readonly refFeedback: {
+                    readonly createdBy: {
+                        readonly id: string;
+                    } | null;
+                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
+                } | null;
+                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+            };
+        };
     };
-  };
 };
-export type useLiveFeedbackListSubscriptionResponse = useLiveFeedbackListSubscription$data;
 export type useLiveFeedbackListSubscription = {
-  variables: useLiveFeedbackListSubscriptionVariables;
-  response: useLiveFeedbackListSubscription$data;
+    readonly response: useLiveFeedbackListSubscriptionResponse;
+    readonly variables: useLiveFeedbackListSubscriptionVariables;
 };
+
+
+
+/*
+subscription useLiveFeedbackListSubscription(
+  $eventId: ID!
+) {
+  feedbackCRUD(eventId: $eventId) {
+    operationType
+    edge {
+      cursor
+      node {
+        id
+        message
+        createdBy {
+          id
+        }
+        refFeedback {
+          createdBy {
+            id
+          }
+          ...LiveFeedbackReplyFragment
+          id
+        }
+        ...LiveFeedbackReplyFragment
+        ...LiveFeedbackAuthorFragment
+      }
+    }
+  }
+}
+
+fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
+fragment LiveFeedbackReplyFragment on EventLiveFeedback {
+  id
+  message
+  ...LiveFeedbackAuthorFragment
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -276,7 +315,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "79317d818502fdfb191313facf1e3a2b";
-
+(node as any).hash = '79317d818502fdfb191313facf1e3a2b';
 export default node;

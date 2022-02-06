@@ -2,7 +2,7 @@ import * as React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
-import { graphql, useFragment } from 'react-relay';
+import { graphql, usePaginationFragment } from 'react-relay';
 
 import type { OrgEventListFragment$key } from '@local/__generated__/OrgEventListFragment.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
@@ -15,7 +15,7 @@ interface OrgEventListProps {
 }
 
 const EVENT_FRAGEMENT = graphql`
-    fragment OrgEventListFragment on Organization {
+    fragment OrgEventListFragment on Organization @refetchable(queryName: "EventsListPaginationQuery") {
         id
         events(first: $count, after: $cursor) @connection(key: "OrgEventListFragment_events") {
             __id
@@ -39,7 +39,7 @@ const EVENT_FRAGEMENT = graphql`
 `;
 
 export function OrgEventList({ fragementRef, className }: OrgEventListProps) {
-    const data = useFragment(EVENT_FRAGEMENT, fragementRef);
+    const { data } = usePaginationFragment(EVENT_FRAGEMENT, fragementRef);
     const eventArr = React.useMemo(() => data.events?.edges || [], [data]);
     const router = useRouter();
     const handleNav = (path: string) => () => router.push(path);

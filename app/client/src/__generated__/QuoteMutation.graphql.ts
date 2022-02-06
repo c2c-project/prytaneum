@@ -1,44 +1,71 @@
-/**
- * @generated SignedSource<<196226b8dc501a95406ae7fbc5121374>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
+import { ConcreteRequest } from "relay-runtime";
+
+import {  } from "relay-runtime";
 export type CreateQuestion = {
-  eventId: string;
-  isFollowUp?: boolean | null;
-  isQuote?: boolean | null;
-  question: string;
-  refQuestion?: string | null;
+    eventId: string;
+    isFollowUp?: boolean | null | undefined;
+    isQuote?: boolean | null | undefined;
+    question: string;
+    refQuestion?: string | null | undefined;
 };
-export type QuoteMutation$variables = {
-  input: CreateQuestion;
+export type QuoteMutationVariables = {
+    input: CreateQuestion;
 };
-export type QuoteMutationVariables = QuoteMutation$variables;
-export type QuoteMutation$data = {
-  readonly createQuestion: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly cursor: string;
-      readonly node: {
-        readonly id: string;
-        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-      };
-    } | null;
-  };
+export type QuoteMutationResponse = {
+    readonly createQuestion: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly cursor: string;
+            readonly node: {
+                readonly id: string;
+                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+            };
+        } | null;
+    };
 };
-export type QuoteMutationResponse = QuoteMutation$data;
 export type QuoteMutation = {
-  variables: QuoteMutationVariables;
-  response: QuoteMutation$data;
+    readonly response: QuoteMutationResponse;
+    readonly variables: QuoteMutationVariables;
 };
+
+
+
+/*
+mutation QuoteMutation(
+  $input: CreateQuestion!
+) {
+  createQuestion(input: $input) {
+    isError
+    message
+    body {
+      cursor
+      node {
+        id
+        ...QuestionAuthorFragment
+        ...QuestionContentFragment
+      }
+    }
+  }
+}
+
+fragment QuestionAuthorFragment on EventQuestion {
+  createdBy {
+    id
+    firstName
+    avatar
+  }
+  createdAt
+}
+
+fragment QuestionContentFragment on EventQuestion {
+  question
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -236,7 +263,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "4b9e014581115a01e74de4243c0341a4";
-
+(node as any).hash = '4b9e014581115a01e74de4243c0341a4';
 export default node;

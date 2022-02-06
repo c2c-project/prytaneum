@@ -1,27 +1,24 @@
-/**
- * @generated SignedSource<<87735faf9256bf4117ee3d31de2d7478>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type EventSidebarFragment$data = {
-  readonly id: string;
-  readonly isQuestionFeedVisible: boolean | null;
-  readonly isViewerModerator: boolean | null;
-  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment" | "QuestionCarouselFragment" | "useLiveFeedbackListFragment">;
-  readonly " $fragmentType": "EventSidebarFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type EventSidebarFragment = {
+    readonly id: string;
+    readonly isQuestionFeedVisible: boolean | null;
+    readonly isViewerModerator: boolean | null;
+    readonly " $fragmentRefs": FragmentRefs<"EventDetailsCardFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment" | "QuestionCarouselFragment" | "useLiveFeedbackListFragment">;
+    readonly " $refType": "EventSidebarFragment";
 };
-export type EventSidebarFragment = EventSidebarFragment$data;
+export type EventSidebarFragment$data = EventSidebarFragment;
 export type EventSidebarFragment$key = {
-  readonly " $data"?: EventSidebarFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"EventSidebarFragment">;
+    readonly " $data"?: EventSidebarFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"EventSidebarFragment">;
 };
+
+
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -84,7 +81,5 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-
-(node as any).hash = "882c8f632e9bc8e70e39f916c5230f67";
-
+(node as any).hash = '882c8f632e9bc8e70e39f916c5230f67';
 export default node;

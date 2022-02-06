@@ -10,9 +10,8 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
     context: TContext,
     info: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & {
-    [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
+    { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: string;
@@ -44,6 +43,8 @@ export type Query = {
     me?: Maybe<User>;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
+    /** Fetch organizations relevant to the current user */
+    myOrgs?: Maybe<Array<Organization>>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
@@ -93,12 +94,6 @@ export type User = Node & {
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
     organizations?: Maybe<OrganizationConnection>;
-};
-
-/** User Data */
-export type UserorganizationsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -694,7 +689,7 @@ export type OrganizationMutationResponse = MutationResponse & {
     __typename?: 'OrganizationMutationResponse';
     isError: Scalars['Boolean'];
     message: Scalars['String'];
-    body?: Maybe<OrganizationEdge>;
+    body?: Maybe<Organization>;
 };
 
 export type EventLiveFeedback = Node & {
@@ -1044,10 +1039,6 @@ export type EventVideoMutationResponse = MutationResponse & {
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
-    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
     fragment: string;
     resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -1062,7 +1053,6 @@ export type StitchingResolver<TResult, TParent, TContext, TArgs> =
     | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
     | ResolverFn<TResult, TParent, TContext, TArgs>
-    | ResolverWithResolve<TResult, TParent, TContext, TArgs>
     | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
@@ -1148,7 +1138,6 @@ export type ResolversTypes = {
         | ResolversTypes['EventVideoMutationResponse'];
     Operation: Operation;
     User: ResolverTypeWrapper<User>;
-    Int: ResolverTypeWrapper<Scalars['Int']>;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -1160,6 +1149,7 @@ export type ResolversTypes = {
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
+    Int: ResolverTypeWrapper<Scalars['Int']>;
     EventEdge: ResolverTypeWrapper<EventEdge>;
     EventConnection: ResolverTypeWrapper<EventConnection>;
     CreateEvent: CreateEvent;
@@ -1253,7 +1243,6 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventSpeakerMutationResponse']
         | ResolversParentTypes['EventVideoMutationResponse'];
     User: User;
-    Int: Scalars['Int'];
     UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
@@ -1265,6 +1254,7 @@ export type ResolversParentTypes = {
     UserMutationResponse: UserMutationResponse;
     Mutation: {};
     Event: Event;
+    Int: Scalars['Int'];
     EventEdge: EventEdge;
     EventConnection: EventConnection;
     CreateEvent: CreateEvent;
@@ -1364,6 +1354,7 @@ export type QueryResolvers<
     node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QuerynodeArgs, 'id'>>;
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
+    myOrgs?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
@@ -1423,12 +1414,7 @@ export type UserResolvers<
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    organizations?: Resolver<
-        Maybe<ResolversTypes['OrganizationConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<UserorganizationsArgs, never>
-    >;
+    organizations?: Resolver<Maybe<ResolversTypes['OrganizationConnection']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1993,7 +1979,7 @@ export type OrganizationMutationResponseResolvers<
 > = {
     isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    body?: Resolver<Maybe<ResolversTypes['OrganizationEdge']>, ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2377,7 +2363,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
-        organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
+        organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, {}, TContext>;
     };
 
     UserSettings?: {
@@ -2480,7 +2466,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     OrganizationMutationResponse?: {
         isError?: LoaderResolver<Scalars['Boolean'], OrganizationMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], OrganizationMutationResponse, {}, TContext>;
-        body?: LoaderResolver<Maybe<OrganizationEdge>, OrganizationMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<Organization>, OrganizationMutationResponse, {}, TContext>;
     };
 
     EventLiveFeedback?: {

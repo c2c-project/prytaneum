@@ -1,35 +1,32 @@
-/**
- * @generated SignedSource<<7bb1b60111f0fff5001f1cede0d8b7d5>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type VideoEventSettingsFragment$data = {
-  readonly id: string;
-  readonly videos: {
-    readonly __id: string;
-    readonly edges: ReadonlyArray<{
-      readonly node: {
-        readonly id: string;
-        readonly url: string;
-        readonly lang: string;
-      };
-      readonly cursor: string;
-    }> | null;
-  } | null;
-  readonly " $fragmentType": "VideoEventSettingsFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type VideoEventSettingsFragment = {
+    readonly id: string;
+    readonly videos: {
+        readonly __id: string;
+        readonly edges: ReadonlyArray<{
+            readonly node: {
+                readonly id: string;
+                readonly url: string;
+                readonly lang: string;
+            };
+            readonly cursor: string;
+        }> | null;
+    } | null;
+    readonly " $refType": "VideoEventSettingsFragment";
 };
-export type VideoEventSettingsFragment = VideoEventSettingsFragment$data;
+export type VideoEventSettingsFragment$data = VideoEventSettingsFragment;
 export type VideoEventSettingsFragment$key = {
-  readonly " $data"?: VideoEventSettingsFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"VideoEventSettingsFragment">;
+    readonly " $data"?: VideoEventSettingsFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"VideoEventSettingsFragment">;
 };
+
+
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -172,7 +169,5 @@ return {
   "abstractKey": null
 };
 })();
-
-(node as any).hash = "9aaabb0071b13bb0b5e8796825f540d7";
-
+(node as any).hash = '9aaabb0071b13bb0b5e8796825f540d7';
 export default node;

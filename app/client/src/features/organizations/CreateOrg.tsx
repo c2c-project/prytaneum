@@ -5,36 +5,37 @@ import { useSnack } from '@local/features/core';
 import { OrgForm, OrgFormProps } from './OrgForm';
 
 export const CREATE_ORG_MUTATION = graphql`
-    mutation CreateOrgMutation($input: CreateOrganization!, $connections: [ID!]!) {
+    mutation CreateOrgMutation($input: CreateOrganization!) {
         createOrganization(input: $input) {
             isError
             message
-            body @appendEdge(connections: $connections) {
-                cursor
-                node {
-                    id
-                    name
-                    createdAt
-                }
+            body {
+                id
+                name
+                createdAt
             }
         }
     }
 `;
 
-export type TCreateOrgProps = { connection: string; onSubmit?: () => void };
+type TResponse = NonNullable<CreateOrgMutation['response']['createOrganization']['body']>;
+export interface CreateOrgProps {
+    onSubmit: (createdOrg: TResponse) => void;
+}
 
-export function CreateOrg({ connection, onSubmit }: TCreateOrgProps) {
+export function CreateOrg({ onSubmit }: CreateOrgProps) {
     const [commit] = useMutation<CreateOrgMutation>(CREATE_ORG_MUTATION);
     const { displaySnack } = useSnack();
     const handleSubmit: OrgFormProps['onSubmit'] = (submittedForm) => {
         commit({
             variables: {
                 input: submittedForm,
-                connections: !connection ? [] : [connection],
             },
             onCompleted({ createOrganization }) {
                 if (createOrganization.isError) displaySnack(createOrganization.message);
-                else if (onSubmit) onSubmit();
+                else if (createOrganization.body) {
+                    onSubmit(createOrganization.body);
+                }
             },
         });
     };

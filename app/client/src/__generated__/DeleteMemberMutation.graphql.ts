@@ -1,39 +1,51 @@
-/**
- * @generated SignedSource<<fa7edbeb7e315bf36613c4034b783f02>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
+
 export type DeleteMember = {
-  orgId: string;
-  userId: string;
+    orgId: string;
+    userId: string;
 };
-export type DeleteMemberMutation$variables = {
-  input: DeleteMember;
+export type DeleteMemberMutationVariables = {
+    input: DeleteMember;
 };
-export type DeleteMemberMutationVariables = DeleteMemberMutation$variables;
-export type DeleteMemberMutation$data = {
-  readonly deleteMember: {
-    readonly isError: boolean;
-    readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
-  };
+export type DeleteMemberMutationResponse = {
+    readonly deleteMember: {
+        readonly isError: boolean;
+        readonly message: string;
+        readonly body: {
+            readonly id: string;
+            readonly firstName: string | null;
+            readonly lastName: string | null;
+            readonly avatar: string | null;
+        } | null;
+    };
 };
-export type DeleteMemberMutationResponse = DeleteMemberMutation$data;
 export type DeleteMemberMutation = {
-  variables: DeleteMemberMutationVariables;
-  response: DeleteMemberMutation$data;
+    readonly response: DeleteMemberMutationResponse;
+    readonly variables: DeleteMemberMutationVariables;
 };
+
+
+
+/*
+mutation DeleteMemberMutation(
+  $input: DeleteMember!
+) {
+  deleteMember(input: $input) {
+    isError
+    message
+    body {
+      id
+      firstName
+      lastName
+      avatar
+    }
+  }
+}
+*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -142,7 +154,5 @@ return {
   }
 };
 })();
-
-(node as any).hash = "751101c05acc276e8a21e40194ee5be7";
-
+(node as any).hash = '751101c05acc276e8a21e40194ee5be7';
 export default node;

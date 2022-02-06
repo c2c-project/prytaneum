@@ -1,39 +1,36 @@
-/**
- * @generated SignedSource<<a144981d7e132d2a3bf782ab24d5c06e>>
- * @lightSyntaxTransform
- * @nogrep
- */
-
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
-export type SpeakerEventSettingsFragment$data = {
-  readonly id: string;
-  readonly speakers: {
-    readonly __id: string;
-    readonly edges: ReadonlyArray<{
-      readonly node: {
-        readonly id: string;
-        readonly eventId: string | null;
-        readonly name: string | null;
-        readonly title: string | null;
-        readonly description: string | null;
-        readonly pictureUrl: string | null;
-        readonly email: string | null;
-      };
-      readonly cursor: string;
-    }> | null;
-  } | null;
-  readonly " $fragmentType": "SpeakerEventSettingsFragment";
+import { ReaderFragment } from "relay-runtime";
+
+import {  } from "relay-runtime";
+export type SpeakerEventSettingsFragment = {
+    readonly id: string;
+    readonly speakers: {
+        readonly __id: string;
+        readonly edges: ReadonlyArray<{
+            readonly node: {
+                readonly id: string;
+                readonly eventId: string | null;
+                readonly name: string | null;
+                readonly title: string | null;
+                readonly description: string | null;
+                readonly pictureUrl: string | null;
+                readonly email: string | null;
+            };
+            readonly cursor: string;
+        }> | null;
+    } | null;
+    readonly " $refType": "SpeakerEventSettingsFragment";
 };
-export type SpeakerEventSettingsFragment = SpeakerEventSettingsFragment$data;
+export type SpeakerEventSettingsFragment$data = SpeakerEventSettingsFragment;
 export type SpeakerEventSettingsFragment$key = {
-  readonly " $data"?: SpeakerEventSettingsFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"SpeakerEventSettingsFragment">;
+    readonly " $data"?: SpeakerEventSettingsFragment$data | undefined;
+    readonly " $fragmentRefs": FragmentRefs<"SpeakerEventSettingsFragment">;
 };
+
+
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -204,7 +201,5 @@ return {
   "abstractKey": null
 };
 })();
-
-(node as any).hash = "ee95474be242ad3633b05dc22d88c5ba";
-
+(node as any).hash = 'ee95474be242ad3633b05dc22d88c5ba';
 export default node;

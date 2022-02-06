@@ -1,5 +1,4 @@
 export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -35,9 +34,9 @@ export type CreateEvent = {
 
 export type CreateFeedback = {
   eventId: Scalars['ID'];
-  isReply?: InputMaybe<Scalars['Boolean']>;
+  isReply?: Maybe<Scalars['Boolean']>;
   message: Scalars['String'];
-  refFeedbackId?: InputMaybe<Scalars['ID']>;
+  refFeedbackId?: Maybe<Scalars['ID']>;
 };
 
 export type CreateInvite = {
@@ -63,10 +62,10 @@ export type CreateOrganization = {
 
 export type CreateQuestion = {
   eventId: Scalars['ID'];
-  isFollowUp?: InputMaybe<Scalars['Boolean']>;
-  isQuote?: InputMaybe<Scalars['Boolean']>;
+  isFollowUp?: Maybe<Scalars['Boolean']>;
+  isQuote?: Maybe<Scalars['Boolean']>;
   question: Scalars['String'];
-  refQuestion?: InputMaybe<Scalars['ID']>;
+  refQuestion?: Maybe<Scalars['ID']>;
 };
 
 export type CreateSpeaker = {
@@ -84,6 +83,7 @@ export type CreateVideo = {
   lang: Scalars['String'];
   url: Scalars['String'];
 };
+
 
 export type DeleteAccountForm = {
   confirmPassword: Scalars['String'];
@@ -185,56 +185,56 @@ export type Event = Node & {
 
 
 export type EventInvitedArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventLiveFeedbackArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventModeratorsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventParticipantsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventQuestionQueueArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventQuestionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventQueuedQuestionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventSpeakersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type EventVideosArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 /** Connection to Events */
@@ -372,15 +372,15 @@ export type EventQuestionQueue = {
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueueEnqueuedQuestionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueueQuestionRecordArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 export type EventSpeaker = Node & {
@@ -558,7 +558,7 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationCreateFeedbackArgs = {
-  input?: InputMaybe<CreateFeedback>;
+  input?: Maybe<CreateFeedback>;
 };
 
 
@@ -749,14 +749,14 @@ export type Organization = Node & {
 
 
 export type OrganizationEventsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 
 export type OrganizationMembersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
 };
 
 export type OrganizationConnection = {
@@ -773,7 +773,7 @@ export type OrganizationEdge = {
 
 export type OrganizationMutationResponse = MutationResponse & {
   __typename?: 'OrganizationMutationResponse';
-  body?: Maybe<OrganizationEdge>;
+  body?: Maybe<Organization>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -800,6 +800,8 @@ export type Query = {
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+  /** Fetch organizations relevant to the current user */
+  myOrgs?: Maybe<Array<Organization>>;
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
@@ -975,16 +977,16 @@ export type UpdateEmailForm = {
 };
 
 export type UpdateEvent = {
-  description?: InputMaybe<Scalars['String']>;
-  endDateTime?: InputMaybe<Scalars['Date']>;
+  description?: Maybe<Scalars['String']>;
+  endDateTime?: Maybe<Scalars['Date']>;
   eventId: Scalars['String'];
-  isCollectRatingsEnabled?: InputMaybe<Scalars['Boolean']>;
-  isForumEnabled?: InputMaybe<Scalars['Boolean']>;
-  isPrivate?: InputMaybe<Scalars['Boolean']>;
-  isQuestionFeedVisible?: InputMaybe<Scalars['Boolean']>;
-  startDateTime?: InputMaybe<Scalars['Date']>;
-  title?: InputMaybe<Scalars['String']>;
-  topic?: InputMaybe<Scalars['String']>;
+  isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
+  isForumEnabled?: Maybe<Scalars['Boolean']>;
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
+  startDateTime?: Maybe<Scalars['Date']>;
+  title?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
 };
 
 export type UpdateModerator = {
@@ -1018,19 +1020,19 @@ export type UpdateQuestionQueue = {
 };
 
 export type UpdateSpeaker = {
-  description?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   id: Scalars['String'];
-  name?: InputMaybe<Scalars['String']>;
-  pictureUrl?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  pictureUrl?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };
 
 export type UpdateVideo = {
   eventId: Scalars['String'];
-  lang?: InputMaybe<Scalars['String']>;
-  url?: InputMaybe<Scalars['String']>;
+  lang?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
   videoId: Scalars['String'];
 };
 
@@ -1046,13 +1048,6 @@ export type User = Node & {
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
-};
-
-
-/** User Data */
-export type UserOrganizationsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
 };
 
 export type UserConnection = {

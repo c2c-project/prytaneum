@@ -21,7 +21,6 @@ app.use(
         changeOrigin: true,
         target: `http://${process.env.HOST}:${process.env.CLIENT_PORT}`,
         logLevel: 'debug',
-        ws: true,
     })
 );
 
