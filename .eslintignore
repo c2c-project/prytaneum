@@ -9,4 +9,7 @@ prisma
 *.yml
 *.csv
 *.css
+*.png
+*.sh
+_unused/*
 documentation/*
