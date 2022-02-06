@@ -27,14 +27,14 @@ export function useQuestionUpdated({ connections }: { connections: string[] }) {
 
     const createdConfig = useMemo<GraphQLSubscriptionConfig<useQuestionUpdatedSubscription>>(
         () => ({
-            variables: { 
-                eventId, 
-                connections
+            variables: {
+                eventId,
+                connections,
             },
             subscription: USE_QUESTION_UPDATED_SUBSCRIPTION,
         }),
         [eventId, connections]
     );
 
-    useSubscription(createdConfig);
+    useSubscription<useQuestionUpdatedSubscription>(createdConfig);
 }

@@ -61,7 +61,7 @@ __metadata:
     "@types/react": ^17.0.3
     "@types/react-beautiful-dnd": ^13.0.0
     "@types/react-dom": ^16.9.8
-    "@types/react-relay": ^13.0.0
+    "@types/react-relay": ^13.0.1
     "@types/react-transition-group": ^4
     "@types/react-window": ^1.8.2
     "@types/relay-runtime": ^13.0.1
@@ -123,7 +123,7 @@ __metadata:
     globby: ^11.0.3
     prisma: 2.21.2
     ts-node: ^9.1.1
-    typescript: ^4.2.4
+    typescript: 4.3.2
   languageName: unknown
   linkType: soft
 
@@ -5958,13 +5958,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-relay@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "@types/react-relay@npm:13.0.0"
+"@types/react-relay@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "@types/react-relay@npm:13.0.1"
   dependencies:
     "@types/react": "*"
     "@types/relay-runtime": "*"
-  checksum: 3ffe36084c20dc8b0197cdf3dc616b16ca6bc2661c705319582a8b6a53e1b73920a28fd4c1750d07bf96584907550cbef9b18da47f81572282de9c6569ece97b
+  checksum: c607c64d647212de1175e5e0630cfa4bb14a6bfe4393551bd34b521cf2ce7adce1bf38c9cac5191af5937074ee39f384f12e405bc3a0712237b5e9d5172f61c1
   languageName: node
   linkType: hard
 
@@ -6026,14 +6026,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/relay-runtime@npm:*":
-  version: 11.0.0
-  resolution: "@types/relay-runtime@npm:11.0.0"
-  checksum: 8cacdaf4e013e72bb27d7eb89df90fd10ba1f9c954e0ba61ac17162887aee6d1577ff4bbed380bf09210acf3c8182d57b254d06522999ec326fca176ec796684
-  languageName: node
-  linkType: hard
-
-"@types/relay-runtime@npm:^13.0.1":
+"@types/relay-runtime@npm:*, @types/relay-runtime@npm:^13.0.1":
   version: 13.0.1
   resolution: "@types/relay-runtime@npm:13.0.1"
   checksum: 286f32679e517ba4a665b51583d8784b7fc8e7669fefec86b2235309c55cc99c1b1add2fabcb71273add99a465268d680b79da54f37e58a1e873c3cb9d98b86d
@@ -22636,16 +22629,6 @@ typescript@4.3.2:
   languageName: node
   linkType: hard
 
-typescript@^4.2.4:
-  version: 4.2.4
-  resolution: "typescript@npm:4.2.4"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 89c397df192f239359ad798b96d8e8d552e12c0c189ac5676cec4c20c410d6eec636b8e59a88f2aef0a56d961a9678d99c400099be9b7cae2f7b062eb4b7b171
-  languageName: node
-  linkType: hard
-
 "typescript@patch:typescript@4.3.2#~builtin<compat/typescript>":
   version: 4.3.2
   resolution: "typescript@patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=d8b4e7"
@@ -22653,16 +22636,6 @@ typescript@^4.2.4:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 3d3dec06ba6e5b05caa292355712ed9db813fa1c2377630b1f24b42e5ee8957f0bcdd5efd1500c970a11a6f684897f5728f5542ac822932227159a0611499a5e
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^4.2.4#~builtin<compat/typescript>":
-  version: 4.2.4
-  resolution: "typescript@patch:typescript@npm%3A4.2.4#~builtin<compat/typescript>::version=4.2.4&hash=d8b4e7"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 3d8ac56cd91f6f60e69aff212cb3601c8affd8dd7b3fac115b836b7d59ab8c7b21778635f07971cbcb6035019df1abefe3047c1d46f3d42d087ceb0552af0206
   languageName: node
   linkType: hard
 
