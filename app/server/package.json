@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@app/prisma": "workspace:app/prisma",
+        "@google-cloud/pubsub": "^2.18.5",
         "@graphql-tools/load-files": "^6.3.2",
         "@graphql-tools/merge": "^6.2.13",
         "@graphql-tools/schema": "^7.1.3",
