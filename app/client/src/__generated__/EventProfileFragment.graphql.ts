@@ -1,33 +1,36 @@
+/**
+ * @generated SignedSource<<c49995c9e5236a463da3b997b3ddf373>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type EventProfileFragment = {
-    readonly title: string | null;
-    readonly topic: string | null;
-    readonly description: string | null;
-    readonly speakers: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly id: string;
-                readonly pictureUrl: string | null;
-                readonly name: string | null;
-                readonly title: string | null;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "EventProfileFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type EventProfileFragment$data = {
+  readonly title: string | null;
+  readonly topic: string | null;
+  readonly description: string | null;
+  readonly speakers: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly pictureUrl: string | null;
+        readonly name: string | null;
+        readonly title: string | null;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "EventProfileFragment";
 };
-export type EventProfileFragment$data = EventProfileFragment;
+export type EventProfileFragment = EventProfileFragment$data;
 export type EventProfileFragment$key = {
-    readonly " $data"?: EventProfileFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"EventProfileFragment">;
+  readonly " $data"?: EventProfileFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"EventProfileFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -118,5 +121,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '2454d2803763726d41b4129f4054aad0';
+
+(node as any).hash = "2454d2803763726d41b4129f4054aad0";
+
 export default node;

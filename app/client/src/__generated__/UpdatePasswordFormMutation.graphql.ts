@@ -1,57 +1,39 @@
+/**
+ * @generated SignedSource<<3547429ddedd698d9ab682050e603a2d>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type UpdatePasswordForm = {
-    confirmNewPassword: string;
-    email: string;
-    newPassword: string;
-    oldPassword: string;
+  confirmNewPassword: string;
+  email: string;
+  newPassword: string;
+  oldPassword: string;
 };
-export type UpdatePasswordFormMutationVariables = {
-    input: UpdatePasswordForm;
+export type UpdatePasswordFormMutation$variables = {
+  input: UpdatePasswordForm;
 };
-export type UpdatePasswordFormMutationResponse = {
-    readonly updatePassword: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
-        } | null;
-    };
+export type UpdatePasswordFormMutationVariables = UpdatePasswordFormMutation$variables;
+export type UpdatePasswordFormMutation$data = {
+  readonly updatePassword: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
+    } | null;
+  };
 };
+export type UpdatePasswordFormMutationResponse = UpdatePasswordFormMutation$data;
 export type UpdatePasswordFormMutation = {
-    readonly response: UpdatePasswordFormMutationResponse;
-    readonly variables: UpdatePasswordFormMutationVariables;
+  variables: UpdatePasswordFormMutationVariables;
+  response: UpdatePasswordFormMutation$data;
 };
-
-
-
-/*
-mutation UpdatePasswordFormMutation(
-  $input: UpdatePasswordForm!
-) {
-  updatePassword(input: $input) {
-    isError
-    message
-    body {
-      ...useUserFragment
-      id
-    }
-  }
-}
-
-fragment useUserFragment on User {
-  id
-  firstName
-  lastName
-  email
-  avatar
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -199,5 +181,7 @@ return {
   }
 };
 })();
-(node as any).hash = '15fe76876144550acdd05e4a78f1852f';
+
+(node as any).hash = "15fe76876144550acdd05e4a78f1852f";
+
 export default node;

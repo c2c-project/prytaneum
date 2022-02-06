@@ -1,68 +1,49 @@
+/**
+ * @generated SignedSource<<cd81638bac1b6a1733e29280684d01ed>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateQuestion = {
-    eventId: string;
-    isFollowUp?: boolean | null | undefined;
-    isQuote?: boolean | null | undefined;
-    question: string;
-    refQuestion?: string | null | undefined;
+  eventId: string;
+  isFollowUp?: boolean | null;
+  isQuote?: boolean | null;
+  question: string;
+  refQuestion?: string | null;
 };
-export type AskQuestionMutationVariables = {
-    input: CreateQuestion;
+export type AskQuestionMutation$variables = {
+  input: CreateQuestion;
 };
-export type AskQuestionMutationResponse = {
-    readonly createQuestion: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly createdAt: Date | null;
-                readonly question: string | null;
-                readonly createdBy: {
-                    readonly id: string;
-                    readonly firstName: string | null;
-                    readonly lastName: string | null;
-                } | null;
-            };
+export type AskQuestionMutationVariables = AskQuestionMutation$variables;
+export type AskQuestionMutation$data = {
+  readonly createQuestion: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly createdAt: Date | null;
+        readonly question: string | null;
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+          readonly lastName: string | null;
         } | null;
-    };
+      };
+    } | null;
+  };
 };
+export type AskQuestionMutationResponse = AskQuestionMutation$data;
 export type AskQuestionMutation = {
-    readonly response: AskQuestionMutationResponse;
-    readonly variables: AskQuestionMutationVariables;
+  variables: AskQuestionMutationVariables;
+  response: AskQuestionMutation$data;
 };
-
-
-
-/*
-mutation AskQuestionMutation(
-  $input: CreateQuestion!
-) {
-  createQuestion(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        createdAt
-        question
-        createdBy {
-          id
-          firstName
-          lastName
-        }
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -209,5 +190,7 @@ return {
   }
 };
 })();
-(node as any).hash = '12c8dcac98bfb6588516e97ac05305e3';
+
+(node as any).hash = "12c8dcac98bfb6588516e97ac05305e3";
+
 export default node;

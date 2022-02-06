@@ -1,62 +1,47 @@
+/**
+ * @generated SignedSource<<298f8947e62dd1becc85d209ebf2524a>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateSpeaker = {
-    description: string;
-    email: string;
-    eventId: string;
-    name: string;
-    pictureUrl: string;
-    title: string;
+  description: string;
+  email: string;
+  eventId: string;
+  name: string;
+  pictureUrl: string;
+  title: string;
 };
-export type CreateSpeakerMutationVariables = {
-    input: CreateSpeaker;
-    connections: Array<string>;
+export type CreateSpeakerMutation$variables = {
+  input: CreateSpeaker;
+  connections: ReadonlyArray<string>;
 };
-export type CreateSpeakerMutationResponse = {
-    readonly createSpeaker: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly eventId: string | null;
-            readonly name: string | null;
-            readonly description: string | null;
-            readonly title: string | null;
-            readonly pictureUrl: string | null;
-            readonly email: string | null;
-        } | null;
-    };
+export type CreateSpeakerMutationVariables = CreateSpeakerMutation$variables;
+export type CreateSpeakerMutation$data = {
+  readonly createSpeaker: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly eventId: string | null;
+      readonly name: string | null;
+      readonly description: string | null;
+      readonly title: string | null;
+      readonly pictureUrl: string | null;
+      readonly email: string | null;
+    } | null;
+  };
 };
+export type CreateSpeakerMutationResponse = CreateSpeakerMutation$data;
 export type CreateSpeakerMutation = {
-    readonly response: CreateSpeakerMutationResponse;
-    readonly variables: CreateSpeakerMutationVariables;
+  variables: CreateSpeakerMutationVariables;
+  response: CreateSpeakerMutation$data;
 };
-
-
-
-/*
-mutation CreateSpeakerMutation(
-  $input: CreateSpeaker!
-) {
-  createSpeaker(input: $input) {
-    isError
-    message
-    body {
-      id
-      eventId
-      name
-      description
-      title
-      pictureUrl
-      email
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -234,5 +219,7 @@ return {
   }
 };
 })();
-(node as any).hash = '6dd1fe01c451016cfb63e807e6884530';
+
+(node as any).hash = "6dd1fe01c451016cfb63e807e6884530";
+
 export default node;

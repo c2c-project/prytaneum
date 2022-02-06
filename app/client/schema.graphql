@@ -536,7 +536,7 @@ type OrganizationEdge {
 }
 
 type OrganizationMutationResponse implements MutationResponse {
-  body: Organization
+  body: OrganizationEdge
   isError: Boolean!
   message: String!
 }
@@ -561,9 +561,6 @@ type Query {
   """Fetch user data about the current user"""
   me: User
   myFeedback(eventId: ID!): [EventLiveFeedback]
-
-  """Fetch organizations relevant to the current user"""
-  myOrgs: [Organization!]
   node(id: ID!): Node
   questionsByEventId(eventId: ID!): [EventQuestion!]
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
@@ -702,7 +699,7 @@ type User implements Node {
   lastName: String
 
   """Organizations that this user belongs to"""
-  organizations: OrganizationConnection
+  organizations(after: String, first: Int): OrganizationConnection
 }
 
 type UserConnection {

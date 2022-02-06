@@ -1,35 +1,29 @@
+/**
+ * @generated SignedSource<<3bb1e353c6527e0846b18d241e045856>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type ValidateInviteQueryVariables = {
-    token: string;
-    eventId: string;
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type ValidateInviteQuery$variables = {
+  token: string;
+  eventId: string;
 };
-export type ValidateInviteQueryResponse = {
-    readonly validateInvite: {
-        readonly valid: boolean;
-    };
+export type ValidateInviteQueryVariables = ValidateInviteQuery$variables;
+export type ValidateInviteQuery$data = {
+  readonly validateInvite: {
+    readonly valid: boolean;
+  };
 };
+export type ValidateInviteQueryResponse = ValidateInviteQuery$data;
 export type ValidateInviteQuery = {
-    readonly response: ValidateInviteQueryResponse;
-    readonly variables: ValidateInviteQueryVariables;
+  variables: ValidateInviteQueryVariables;
+  response: ValidateInviteQuery$data;
 };
-
-
-
-/*
-query ValidateInviteQuery(
-  $token: String!
-  $eventId: ID!
-) {
-  validateInvite(input: {token: $token, eventId: $eventId}) {
-    valid
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -112,5 +106,7 @@ return {
   }
 };
 })();
-(node as any).hash = '3d9ed8edb405c82cec726d830562912d';
+
+(node as any).hash = "3d9ed8edb405c82cec726d830562912d";
+
 export default node;

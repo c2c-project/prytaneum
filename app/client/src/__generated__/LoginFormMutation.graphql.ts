@@ -1,55 +1,37 @@
+/**
+ * @generated SignedSource<<d1ad8f59ebeccbd9b1ecefcb59121ea0>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type LoginForm = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 };
-export type LoginFormMutationVariables = {
-    input: LoginForm;
+export type LoginFormMutation$variables = {
+  input: LoginForm;
 };
-export type LoginFormMutationResponse = {
-    readonly login: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
-        } | null;
-    };
+export type LoginFormMutationVariables = LoginFormMutation$variables;
+export type LoginFormMutation$data = {
+  readonly login: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
+    } | null;
+  };
 };
+export type LoginFormMutationResponse = LoginFormMutation$data;
 export type LoginFormMutation = {
-    readonly response: LoginFormMutationResponse;
-    readonly variables: LoginFormMutationVariables;
+  variables: LoginFormMutationVariables;
+  response: LoginFormMutation$data;
 };
-
-
-
-/*
-mutation LoginFormMutation(
-  $input: LoginForm!
-) {
-  login(input: $input) {
-    isError
-    message
-    body {
-      ...useUserFragment
-      id
-    }
-  }
-}
-
-fragment useUserFragment on User {
-  id
-  firstName
-  lastName
-  email
-  avatar
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -197,5 +179,7 @@ return {
   }
 };
 })();
-(node as any).hash = '3e81fe58f4668e7cc29191e028f130de';
+
+(node as any).hash = "3e81fe58f4668e7cc29191e028f130de";
+
 export default node;

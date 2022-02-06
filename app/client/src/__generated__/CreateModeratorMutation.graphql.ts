@@ -1,52 +1,40 @@
+/**
+ * @generated SignedSource<<117e772e1f0ea6db40dbcf3c7b9ce143>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateModerator = {
-    email: string;
-    eventId: string;
+  email: string;
+  eventId: string;
 };
-export type CreateModeratorMutationVariables = {
-    input: CreateModerator;
-    connections: Array<string>;
+export type CreateModeratorMutation$variables = {
+  input: CreateModerator;
+  connections: ReadonlyArray<string>;
 };
-export type CreateModeratorMutationResponse = {
-    readonly createModerator: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly firstName: string | null;
-            readonly lastName: string | null;
-            readonly avatar: string | null;
-        } | null;
-    };
+export type CreateModeratorMutationVariables = CreateModeratorMutation$variables;
+export type CreateModeratorMutation$data = {
+  readonly createModerator: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly firstName: string | null;
+      readonly lastName: string | null;
+      readonly avatar: string | null;
+    } | null;
+  };
 };
+export type CreateModeratorMutationResponse = CreateModeratorMutation$data;
 export type CreateModeratorMutation = {
-    readonly response: CreateModeratorMutationResponse;
-    readonly variables: CreateModeratorMutationVariables;
+  variables: CreateModeratorMutationVariables;
+  response: CreateModeratorMutation$data;
 };
-
-
-
-/*
-mutation CreateModeratorMutation(
-  $input: CreateModerator!
-) {
-  createModerator(input: $input) {
-    isError
-    message
-    body {
-      id
-      firstName
-      lastName
-      avatar
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -203,5 +191,7 @@ return {
   }
 };
 })();
-(node as any).hash = '874bb64474bf711f22a3d4e5be0427f1';
+
+(node as any).hash = "874bb64474bf711f22a3d4e5be0427f1";
+
 export default node;

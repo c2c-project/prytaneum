@@ -1,53 +1,40 @@
+/**
+ * @generated SignedSource<<19cbbb4bd5df351659b95886736bdc72>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type RemoveQuestionFromQueue = {
-    eventId: string;
-    questionId: string;
+  eventId: string;
+  questionId: string;
 };
-export type DequeueQuestionButtonMutationVariables = {
-    input: RemoveQuestionFromQueue;
+export type DequeueQuestionButtonMutation$variables = {
+  input: RemoveQuestionFromQueue;
 };
-export type DequeueQuestionButtonMutationResponse = {
-    readonly removeQuestionFromQueue: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-            };
-        } | null;
-    };
+export type DequeueQuestionButtonMutationVariables = DequeueQuestionButtonMutation$variables;
+export type DequeueQuestionButtonMutation$data = {
+  readonly removeQuestionFromQueue: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+      };
+    } | null;
+  };
 };
+export type DequeueQuestionButtonMutationResponse = DequeueQuestionButtonMutation$data;
 export type DequeueQuestionButtonMutation = {
-    readonly response: DequeueQuestionButtonMutationResponse;
-    readonly variables: DequeueQuestionButtonMutationVariables;
+  variables: DequeueQuestionButtonMutationVariables;
+  response: DequeueQuestionButtonMutation$data;
 };
-
-
-
-/*
-mutation DequeueQuestionButtonMutation(
-  $input: RemoveQuestionFromQueue!
-) {
-  removeQuestionFromQueue(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        position
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -160,5 +147,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'b6633a932e23782c1244f9b332e9766a';
+
+(node as any).hash = "b6633a932e23782c1244f9b332e9766a";
+
 export default node;

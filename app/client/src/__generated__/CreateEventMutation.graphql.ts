@@ -1,56 +1,44 @@
+/**
+ * @generated SignedSource<<ff1a26e9e1ae394ac4d209304a591487>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateEvent = {
-    description: string;
-    endDateTime: Date;
-    orgId: string;
-    startDateTime: Date;
-    title: string;
-    topic: string;
+  description: string;
+  endDateTime: Date;
+  orgId: string;
+  startDateTime: Date;
+  title: string;
+  topic: string;
 };
-export type CreateEventMutationVariables = {
-    input: CreateEvent;
-    connections: Array<string>;
+export type CreateEventMutation$variables = {
+  input: CreateEvent;
+  connections: ReadonlyArray<string>;
 };
-export type CreateEventMutationResponse = {
-    readonly createEvent: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly id: string;
-            readonly title: string | null;
-            readonly topic: string | null;
-            readonly startDateTime: Date | null;
-        } | null;
-    };
+export type CreateEventMutationVariables = CreateEventMutation$variables;
+export type CreateEventMutation$data = {
+  readonly createEvent: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly id: string;
+      readonly title: string | null;
+      readonly topic: string | null;
+      readonly startDateTime: Date | null;
+    } | null;
+  };
 };
+export type CreateEventMutationResponse = CreateEventMutation$data;
 export type CreateEventMutation = {
-    readonly response: CreateEventMutationResponse;
-    readonly variables: CreateEventMutationVariables;
+  variables: CreateEventMutationVariables;
+  response: CreateEventMutation$data;
 };
-
-
-
-/*
-mutation CreateEventMutation(
-  $input: CreateEvent!
-) {
-  createEvent(event: $input) {
-    isError
-    message
-    body {
-      id
-      title
-      topic
-      startDateTime
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -207,5 +195,7 @@ return {
   }
 };
 })();
-(node as any).hash = '5fbc15ecd24557ffc7e5c5233e0f9183';
+
+(node as any).hash = "5fbc15ecd24557ffc7e5c5233e0f9183";
+
 export default node;

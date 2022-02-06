@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
 const QUESTION_CAROUSEL_FRAGMENT = graphql`
     fragment QuestionCarouselFragment on Event
-    @refetchable(queryName: "QuestionCarouselFragmentRefetchable")
     @argumentDefinitions(first: { type: Int, defaultValue: 1000 }, after: { type: String, defaultValue: "" }) {
         id
         currentQuestion
