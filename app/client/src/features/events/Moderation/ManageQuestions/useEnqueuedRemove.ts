@@ -30,5 +30,5 @@ export function useEnqueuedRemove({ connection }: { connection: string }) {
         [eventId, connection]
     );
 
-    useSubscription(enqueuedRemoveConfig);
+    useSubscription<useEnqueuedRemoveSubscription>(enqueuedRemoveConfig);
 }

@@ -35,5 +35,5 @@ export function useEnqueuedUnshift({ connection }: { connection: string }) {
         }),
         [connection, eventId]
     );
-    useSubscription(enqueuedUnshiftConfig);
+    useSubscription<useEnqueuedUnshiftSubscription>(enqueuedUnshiftConfig);
 }

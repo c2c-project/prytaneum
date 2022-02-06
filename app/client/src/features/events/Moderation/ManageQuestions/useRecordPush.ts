@@ -34,5 +34,5 @@ export function useRecordPush({ connection }: { connection: string }) {
         }),
         [eventId, connection]
     );
-    useSubscription(recordPushConfig);
+    useSubscription<useRecordPushSubscription>(recordPushConfig);
 }
