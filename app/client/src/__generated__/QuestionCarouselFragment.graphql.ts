@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6fa4659d1c1a82169bfe64a3ccaf30f0>>
+ * @generated SignedSource<<f4aafaa27fe031a890cd61d8710f1dc1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,9 @@ export type QuestionCarouselFragment$data = {
         readonly cursor: string;
         readonly node: {
           readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
           readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
         };
       }> | null;
@@ -135,6 +138,22 @@ const node: ReaderFragment = {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "EventQuestion",
+                      "kind": "LinkedField",
+                      "name": "refQuestion",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "args": null,
+                          "kind": "FragmentSpread",
+                          "name": "QuestionQuoteFragment"
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "kind": "ScalarField",
                       "name": "__typename",
                       "storageKey": null
@@ -193,6 +212,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "a1f5a90ac18867206dda027664976066";
+(node as any).hash = "3ac4d55a5cb8ef2d660ab91ca40b5391";
 
 export default node;

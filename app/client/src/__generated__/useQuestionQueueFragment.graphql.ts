@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<87d818c6d6a0ea59babf5f51729ab0c7>>
+ * @generated SignedSource<<2d680f70ccd83c9da17862d6461473ec>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,9 @@ export type useQuestionQueueFragment$data = {
         readonly node: {
           readonly id: string;
           readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
           readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
         };
       }> | null;
@@ -32,6 +35,9 @@ export type useQuestionQueueFragment$data = {
         readonly node: {
           readonly id: string;
           readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
           readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
         };
       }> | null;
@@ -98,6 +104,22 @@ v1 = [
             "args": null,
             "kind": "ScalarField",
             "name": "position",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventQuestion",
+            "kind": "LinkedField",
+            "name": "refQuestion",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "QuestionQuoteFragment"
+              }
+            ],
             "storageKey": null
           },
           {
@@ -234,6 +256,6 @@ return {
 };
 })();
 
-(node as any).hash = "127d1ea47e8ed31c5a61655b87db4c95";
+(node as any).hash = "bf9a1f6c7fd332126002af6c4448e3dd";
 
 export default node;

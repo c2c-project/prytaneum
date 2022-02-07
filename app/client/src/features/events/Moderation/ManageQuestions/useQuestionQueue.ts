@@ -18,6 +18,9 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                         ...QuestionStatsFragment
                         ...QuestionContentFragment
                         position
+                        refQuestion {
+                            ...QuestionQuoteFragment
+                        }
                     }
                 }
             }
@@ -32,6 +35,9 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                         ...QuestionStatsFragment
                         ...QuestionContentFragment
                         position
+                        refQuestion {
+                            ...QuestionQuoteFragment
+                        }
                     }
                 }
             }
