@@ -324,7 +324,7 @@ export function QuestionQueue({ handleQueueDisplay, fragmentRef }: QuestionQueue
                 </IconButton>
                 <ListFilter
                     className={classes.listFilter}
-                    onFilterChange={queueIndex === 0 ? handleFilterChange : prevHandleFilterChange}
+                    onFilterChange={queueIndex === 0 ? () => handleFilterChange : () => prevHandleFilterChange}
                     onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
                     length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
                 />
@@ -356,6 +356,7 @@ export function QuestionQueue({ handleQueueDisplay, fragmentRef }: QuestionQueue
                                         }
                                         <Card className={classes.item}>
                                             <QuestionAuthor fragmentRef={question.node} />
+                                            {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
                                             <QuestionContent fragmentRef={question.node} />
                                             <Grid container alignItems='center' justify='space-between'>
                                                 <QuestionStats fragmentRef={question.node} />
