@@ -16,7 +16,7 @@ type User implements Node {
     """
     Organizations that this user belongs to
     """
-    organizations: OrganizationConnection
+    organizations(first: Int, after: String): OrganizationConnection
 }
 
 type UserSettings {

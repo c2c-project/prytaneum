@@ -1,52 +1,55 @@
+/**
+ * @generated SignedSource<<2d680f70ccd83c9da17862d6461473ec>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionQueueFragment = {
-    readonly id: string;
-    readonly currentQuestion: number | null;
-    readonly questionQueue: {
-        readonly questionRecord: {
-            readonly __id: string;
-            readonly edges: ReadonlyArray<{
-                readonly cursor: string;
-                readonly node: {
-                    readonly id: string;
-                    readonly position: number | null;
-                    readonly refQuestion: {
-                        readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-                };
-            }> | null;
-        } | null;
-        readonly enqueuedQuestions: {
-            readonly __id: string;
-            readonly edges: ReadonlyArray<{
-                readonly cursor: string;
-                readonly node: {
-                    readonly id: string;
-                    readonly position: number | null;
-                    readonly refQuestion: {
-                        readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-                };
-            }> | null;
-        } | null;
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useQuestionQueueFragment$data = {
+  readonly id: string;
+  readonly currentQuestion: number | null;
+  readonly questionQueue: {
+    readonly questionRecord: {
+      readonly __id: string;
+      readonly edges: ReadonlyArray<{
+        readonly cursor: string;
+        readonly node: {
+          readonly id: string;
+          readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+        };
+      }> | null;
     } | null;
-    readonly " $refType": "useQuestionQueueFragment";
+    readonly enqueuedQuestions: {
+      readonly __id: string;
+      readonly edges: ReadonlyArray<{
+        readonly cursor: string;
+        readonly node: {
+          readonly id: string;
+          readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+        };
+      }> | null;
+    } | null;
+  } | null;
+  readonly " $fragmentType": "useQuestionQueueFragment";
 };
-export type useQuestionQueueFragment$data = useQuestionQueueFragment;
+export type useQuestionQueueFragment = useQuestionQueueFragment$data;
 export type useQuestionQueueFragment$key = {
-    readonly " $data"?: useQuestionQueueFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"useQuestionQueueFragment">;
+  readonly " $data"?: useQuestionQueueFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"useQuestionQueueFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -82,6 +85,21 @@ v1 = [
         "selections": [
           (v0/*: any*/),
           {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "QuestionAuthorFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "QuestionStatsFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "QuestionContentFragment"
+          },
+          {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
@@ -110,21 +128,6 @@ v1 = [
             "kind": "ScalarField",
             "name": "__typename",
             "storageKey": null
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionAuthorFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionStatsFragment"
-          },
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "QuestionContentFragment"
           }
         ],
         "storageKey": null
@@ -252,5 +255,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'bf9a1f6c7fd332126002af6c4448e3dd';
+
+(node as any).hash = "bf9a1f6c7fd332126002af6c4448e3dd";
+
 export default node;

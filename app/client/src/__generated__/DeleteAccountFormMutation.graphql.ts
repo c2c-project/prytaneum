@@ -1,56 +1,38 @@
+/**
+ * @generated SignedSource<<283d3247ce705dcdd2bfeb5969a2acc5>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type DeleteAccountForm = {
-    confirmPassword: string;
-    email: string;
-    password: string;
+  confirmPassword: string;
+  email: string;
+  password: string;
 };
-export type DeleteAccountFormMutationVariables = {
-    input: DeleteAccountForm;
+export type DeleteAccountFormMutation$variables = {
+  input: DeleteAccountForm;
 };
-export type DeleteAccountFormMutationResponse = {
-    readonly deleteAccount: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
-        } | null;
-    };
+export type DeleteAccountFormMutationVariables = DeleteAccountFormMutation$variables;
+export type DeleteAccountFormMutation$data = {
+  readonly deleteAccount: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
+    } | null;
+  };
 };
+export type DeleteAccountFormMutationResponse = DeleteAccountFormMutation$data;
 export type DeleteAccountFormMutation = {
-    readonly response: DeleteAccountFormMutationResponse;
-    readonly variables: DeleteAccountFormMutationVariables;
+  variables: DeleteAccountFormMutationVariables;
+  response: DeleteAccountFormMutation$data;
 };
-
-
-
-/*
-mutation DeleteAccountFormMutation(
-  $input: DeleteAccountForm!
-) {
-  deleteAccount(input: $input) {
-    isError
-    message
-    body {
-      ...useUserFragment
-      id
-    }
-  }
-}
-
-fragment useUserFragment on User {
-  id
-  firstName
-  lastName
-  email
-  avatar
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -198,5 +180,7 @@ return {
   }
 };
 })();
-(node as any).hash = '137e46c3e60fc346de5d6b61eb2703fe';
+
+(node as any).hash = "137e46c3e60fc346de5d6b61eb2703fe";
+
 export default node;

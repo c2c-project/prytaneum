@@ -29,5 +29,5 @@ export function useRecordRemove({ connection }: { connection: string }) {
         }),
         [eventId, connection]
     );
-    useSubscription(recordRemoveConfig);
+    useSubscription<useRecordRemoveSubscription>(recordRemoveConfig);
 }

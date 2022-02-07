@@ -34,5 +34,5 @@ export function useRecordUnshift({ connection }: { connection: string }) {
         }),
         [connection, eventId]
     );
-    useSubscription(recordUnshiftConfig);
+    useSubscription<useRecordUnshiftSubscription>(recordUnshiftConfig);
 }

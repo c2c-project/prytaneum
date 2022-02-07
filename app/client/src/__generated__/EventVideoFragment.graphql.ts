@@ -1,29 +1,32 @@
+/**
+ * @generated SignedSource<<7ab43f273f868615b90de07a507f105d>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type EventVideoFragment = {
-    readonly videos: {
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly url: string;
-                readonly lang: string;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "EventVideoFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type EventVideoFragment$data = {
+  readonly videos: {
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly url: string;
+        readonly lang: string;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "EventVideoFragment";
 };
-export type EventVideoFragment$data = EventVideoFragment;
+export type EventVideoFragment = EventVideoFragment$data;
 export type EventVideoFragment$key = {
-    readonly " $data"?: EventVideoFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"EventVideoFragment">;
+  readonly " $data"?: EventVideoFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"EventVideoFragment">;
 };
-
-
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -89,5 +92,7 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'acc5636c631dd6f529095f96d1ef93c8';
+
+(node as any).hash = "acc5636c631dd6f529095f96d1ef93c8";
+
 export default node;

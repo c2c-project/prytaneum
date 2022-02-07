@@ -1,39 +1,27 @@
+/**
+ * @generated SignedSource<<044710593615525ccc6d31a579558fd2>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type UserSideNavQueryVariables = {};
-export type UserSideNavQueryResponse = {
-    readonly me: {
-        readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
-    } | null;
+import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type UserSideNavQuery$variables = {};
+export type UserSideNavQueryVariables = UserSideNavQuery$variables;
+export type UserSideNavQuery$data = {
+  readonly me: {
+    readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
+  } | null;
 };
+export type UserSideNavQueryResponse = UserSideNavQuery$data;
 export type UserSideNavQuery = {
-    readonly response: UserSideNavQueryResponse;
-    readonly variables: UserSideNavQueryVariables;
+  variables: UserSideNavQueryVariables;
+  response: UserSideNavQuery$data;
 };
-
-
-
-/*
-query UserSideNavQuery {
-  me {
-    ...useUserFragment
-    id
-  }
-}
-
-fragment useUserFragment on User {
-  id
-  firstName
-  lastName
-  email
-  avatar
-}
-*/
 
 const node: ConcreteRequest = {
   "fragment": {
@@ -125,5 +113,7 @@ const node: ConcreteRequest = {
     "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
   }
 };
-(node as any).hash = 'ada95e4d12e255eede6562623e353c0c';
+
+(node as any).hash = "ada95e4d12e255eede6562623e353c0c";
+
 export default node;

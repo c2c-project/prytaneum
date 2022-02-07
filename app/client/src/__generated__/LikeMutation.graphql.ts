@@ -1,53 +1,40 @@
+/**
+ * @generated SignedSource<<92e455879a487d2174cc50c4fa4fd898>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type AlterLike = {
-    questionId: string;
-    to: boolean;
+  questionId: string;
+  to: boolean;
 };
-export type LikeMutationVariables = {
-    input: AlterLike;
+export type LikeMutation$variables = {
+  input: AlterLike;
 };
-export type LikeMutationResponse = {
-    readonly alterLike: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly isLikedByViewer: boolean | null;
-            };
-        } | null;
-    };
+export type LikeMutationVariables = LikeMutation$variables;
+export type LikeMutation$data = {
+  readonly alterLike: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly isLikedByViewer: boolean | null;
+      };
+    } | null;
+  };
 };
+export type LikeMutationResponse = LikeMutation$data;
 export type LikeMutation = {
-    readonly response: LikeMutationResponse;
-    readonly variables: LikeMutationVariables;
+  variables: LikeMutationVariables;
+  response: LikeMutation$data;
 };
-
-
-
-/*
-mutation LikeMutation(
-  $input: AlterLike!
-) {
-  alterLike(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        isLikedByViewer
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -160,5 +147,7 @@ return {
   }
 };
 })();
-(node as any).hash = '554bc19afbc9e9df04cd60d28097e10e';
+
+(node as any).hash = "554bc19afbc9e9df04cd60d28097e10e";
+
 export default node;

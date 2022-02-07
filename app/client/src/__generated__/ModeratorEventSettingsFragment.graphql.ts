@@ -1,34 +1,37 @@
+/**
+ * @generated SignedSource<<16b6f30a94b47f51270fb1fc0191cdd5>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type ModeratorEventSettingsFragment = {
-    readonly id: string;
-    readonly moderators: {
-        readonly __id: string;
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly firstName: string | null;
-                readonly lastName: string | null;
-                readonly avatar: string | null;
-                readonly email: string | null;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "ModeratorEventSettingsFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type ModeratorEventSettingsFragment$data = {
+  readonly id: string;
+  readonly moderators: {
+    readonly __id: string;
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly firstName: string | null;
+        readonly lastName: string | null;
+        readonly avatar: string | null;
+        readonly email: string | null;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "ModeratorEventSettingsFragment";
 };
-export type ModeratorEventSettingsFragment$data = ModeratorEventSettingsFragment;
+export type ModeratorEventSettingsFragment = ModeratorEventSettingsFragment$data;
 export type ModeratorEventSettingsFragment$key = {
-    readonly " $data"?: ModeratorEventSettingsFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"ModeratorEventSettingsFragment">;
+  readonly " $data"?: ModeratorEventSettingsFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"ModeratorEventSettingsFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -185,5 +188,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '8a6dccefba69d5985997281b6b805814';
+
+(node as any).hash = "8a6dccefba69d5985997281b6b805814";
+
 export default node;

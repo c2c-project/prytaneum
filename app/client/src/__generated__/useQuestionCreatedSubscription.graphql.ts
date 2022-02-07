@@ -1,82 +1,40 @@
+/**
+ * @generated SignedSource<<973fcc553d1dd7c5afccbe38315ed609>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionCreatedSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useQuestionCreatedSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useQuestionCreatedSubscriptionResponse = {
-    readonly questionCreated: {
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly refQuestion: {
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionQuoteFragment">;
-                } | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-            };
-        };
+export type useQuestionCreatedSubscriptionVariables = useQuestionCreatedSubscription$variables;
+export type useQuestionCreatedSubscription$data = {
+  readonly questionCreated: {
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly refQuestion: {
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+      };
     };
+  };
 };
+export type useQuestionCreatedSubscriptionResponse = useQuestionCreatedSubscription$data;
 export type useQuestionCreatedSubscription = {
-    readonly response: useQuestionCreatedSubscriptionResponse;
-    readonly variables: useQuestionCreatedSubscriptionVariables;
+  variables: useQuestionCreatedSubscriptionVariables;
+  response: useQuestionCreatedSubscription$data;
 };
-
-
-
-/*
-subscription useQuestionCreatedSubscription(
-  $eventId: ID!
-) {
-  questionCreated(eventId: $eventId) {
-    edge {
-      cursor
-      node {
-        id
-        position
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-        ...QuestionStatsFragment
-        refQuestion {
-          ...QuestionQuoteFragment
-          id
-        }
-      }
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionQuoteFragment on EventQuestion {
-  id
-  ...QuestionAuthorFragment
-  ...QuestionContentFragment
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -195,6 +153,21 @@ return {
                   (v4/*: any*/),
                   (v5/*: any*/),
                   {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionAuthorFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionContentFragment"
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "QuestionStatsFragment"
+                  },
+                  {
                     "alias": null,
                     "args": null,
                     "concreteType": "EventQuestion",
@@ -209,21 +182,6 @@ return {
                       }
                     ],
                     "storageKey": null
-                  },
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionAuthorFragment"
-                  },
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionContentFragment"
-                  },
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "QuestionStatsFragment"
                   }
                 ],
                 "storageKey": null
@@ -336,5 +294,7 @@ return {
   }
 };
 })();
-(node as any).hash = '23c4e7bc74a9e8c2de5150e8e36d8fdc';
+
+(node as any).hash = "23c4e7bc74a9e8c2de5150e8e36d8fdc";
+
 export default node;
