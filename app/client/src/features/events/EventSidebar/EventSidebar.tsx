@@ -13,10 +13,10 @@ import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
+import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
-import { Tabs } from '@local/components/Tabs'
-import { QuestionCarousel } from '../Questions/QuestionCarousel';
+import { Tabs } from '@local/components/Tabs';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
