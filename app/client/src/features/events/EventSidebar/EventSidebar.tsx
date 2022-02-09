@@ -91,6 +91,8 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const [tabIndex, setTabIndex] = React.useState<number>(0);
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [displayCurrentQuestionCard, setDisplayCurrentQuestionCard] = React.useState<boolean>(false);
+    const [isPrevQuestionQueue, setIsPrevQuestionQueue] = React.useState<boolean>(false); // question queue display is previous questions
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
@@ -105,6 +107,12 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
     React.useEffect(() => {
+        if (data.isViewerModerator && tabIndex == 0) {
+            setDisplayCurrentQuestionCard(!isPrevQuestionQueue);
+        } else {
+            setDisplayCurrentQuestionCard(true);
+        }
+
         if (data.isViewerModerator && tabIndex === 2) {
             setDisplayFeedbackButton(true);
         } else if (!data.isViewerModerator && tabIndex === 1) {
@@ -112,7 +120,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         } else {
             setDisplayFeedbackButton(false);
         }
-    }, [tabIndex, data]);
+    }, [tabIndex, data, isPrevQuestionQueue]);
 
     return (
         <Grid
@@ -123,12 +131,14 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             alignItems='flex-start'
             wrap='nowrap'
         >
-            <Grid item>
-                <CurrentQuestionCard
-                    isViewerModerator={Boolean(data.isViewerModerator)}
-                    fragmentRef={data}
-                />
-            </Grid>
+            { displayCurrentQuestionCard &&
+                <Grid item>
+                    <CurrentQuestionCard
+                        isViewerModerator={Boolean(data.isViewerModerator)}
+                        fragmentRef={data}
+                    />
+                </Grid>
+            }
             <Grid
                 container
                 direction='column'
@@ -166,7 +176,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
-                    <QuestionQueue fragmentRef={data} />
+                    <QuestionQueue handleQueueDisplay={setIsPrevQuestionQueue} fragmentRef={data} />
                 </TabPanel>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 1 : tabIndex === 0}>
                     <QuestionList fragmentRef={data} />
