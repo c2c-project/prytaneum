@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     body: {
         margin: theme.spacing(-2, 0, -1, 0) // removes extra padding in cards
     },
+    notSignedInMessage: {
+        paddingTop: theme.spacing(2) // add padding since number of results were hidden
+    }
 }));
 
 export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
@@ -71,6 +74,7 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                             onFilterChange={handleFilterChange}
                             onSearch={handleSearch}
                             length={filteredList.length}
+                            displayNumResults={Boolean(user)} // only display for users logged in
                         />
                         <List disablePadding>
                             {displayLiveFeedback ? (
@@ -91,7 +95,9 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                                     </ListItem>
                                 ))
                             ) : (
-                                <Typography align='center'>Sign in to submit Live Feedback</Typography>
+                                <Typography align='center' className={classes.notSignedInMessage}>
+                                    Sign in to submit Live Feedback
+                                </Typography>
                             )}
                         </List>
                     </Grid>

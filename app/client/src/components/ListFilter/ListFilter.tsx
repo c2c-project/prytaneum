@@ -29,6 +29,7 @@ export interface Props<T> {
     onFilterChange: (f: FilterFunc<T>[]) => void;
     className?: string;
     menuIcons?: JSX.Element[];
+    displayNumResults?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +55,7 @@ export function ListFilterSkeleton(props: SkeletonProps) {
     );
 }
 
-export default function ListFilter<T>({ filterMap, onSearch, length, onFilterChange, menuIcons, className }: Props<T>) {
+export default function ListFilter<T>({ filterMap, onSearch, length, onFilterChange, menuIcons, displayNumResults, className }: Props<T>) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -156,11 +157,13 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
                         </Grid>
                     ))}
                 </Grid>
-                <Grid item xs={12} className={classes.resultsText}>
-                    <Typography variant='body2' color='textSecondary'>
-                        {`${length} Results Displayed`}
-                    </Typography>
-                </Grid>
+                { displayNumResults && // hide number of results if on feedback tab and not logged in
+                    <Grid item xs={12} className={classes.resultsText}>
+                        <Typography variant='body2' color='textSecondary'>
+                            {`${length} Results Displayed`}
+                        </Typography>
+                    </Grid>
+                }
             </Grid>
             {filterMap && (
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
@@ -180,4 +183,5 @@ ListFilter.defaultProps = {
     menuIcons: [],
     className: undefined,
     filterMap: undefined,
+    displayNumResults: true,
 };
