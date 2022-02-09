@@ -11,7 +11,6 @@ import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
-import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
