@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
+import { ArrayElement } from '@local/utils/ts-utils';
 import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@material-ui/core';
 import clsx from 'clsx';
 import { useUser } from '@local/features/accounts';
@@ -16,7 +18,7 @@ interface Props {
     fragmentRef: useLiveFeedbackListFragment$key;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         // padding: theme.spacing(1.5),
     },
@@ -32,6 +34,12 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
     },
+    body: {
+        margin: theme.spacing(-2, 0, -1, 0) // removes extra padding in cards
+    },
+    notSignedInMessage: {
+        paddingTop: theme.spacing(2) // add padding since number of results were hidden
+    }
 }));
 
 export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
@@ -40,6 +48,16 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
     const [displayLiveFeedback, setDisplayLiveFeedback] = React.useState(false);
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
     const { isModerator } = useEvent();
+
+    const accessors = React.useMemo<Accessors<ArrayElement<typeof liveFeedback>>[]>(
+        () => [
+            (f) => f?.message || '', // feedback text itself
+            (f) => f?.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(liveFeedback, accessors);
 
     React.useEffect(() => {
         if (!user) setDisplayLiveFeedback(false);
@@ -51,15 +69,22 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
             <div className={classes.content}>
                 <Grid container>
                     <Grid item xs={12}>
+                        <ListFilter
+                            className={classes.listFilter}
+                            onFilterChange={handleFilterChange}
+                            onSearch={handleSearch}
+                            length={filteredList.length}
+                            displayNumResults={Boolean(user)} // only display for users logged in
+                        />
                         <List disablePadding>
                             {displayLiveFeedback ? (
-                                liveFeedback.map((feedback) => (
+                                filteredList.map((feedback) => (
                                     <ListItem disableGutters key={feedback.id}>
                                         <Card className={classes.item}>
                                             <LiveFeedbackAuthor fragmentRef={feedback} />
                                             {feedback.refFeedback && <LiveFeedbackReply fragmentRef={feedback.refFeedback} />}
-                                            <CardContent>
-                                                <Typography style={{ wordBreak: 'break-word' }}>
+                                            <CardContent className={classes.body}>
+                                                <Typography variant='inherit' style={{ wordBreak: 'break-word' }}>
                                                     {feedback.message}
                                                 </Typography>
                                             </CardContent>
@@ -70,7 +95,9 @@ export function LiveFeedbackList({ className, style, fragmentRef }: Props) {
                                     </ListItem>
                                 ))
                             ) : (
-                                <Typography align='center'>Sign in to submit Live Feedback</Typography>
+                                <Typography align='center' className={classes.notSignedInMessage}>
+                                    Sign in to submit Live Feedback
+                                </Typography>
                             )}
                         </List>
                     </Grid>

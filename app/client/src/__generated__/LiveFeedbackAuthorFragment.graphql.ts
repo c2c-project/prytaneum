@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d7e31e8658197b9083bdcd4751f55e55>>
+ * @generated SignedSource<<25bf9de57a2ed5e506ce1746acefb653>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type LiveFeedbackAuthorFragment$data = {
   readonly createdBy: {
     readonly id: string;
     readonly firstName: string | null;
+    readonly lastName: string | null;
     readonly avatar: string | null;
   } | null;
   readonly createdAt: Date | null;
@@ -57,6 +58,13 @@ const node: ReaderFragment = {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
+          "name": "lastName",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
           "name": "avatar",
           "storageKey": null
         }
@@ -75,6 +83,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "5c8dee6dfe33b3d94fe26e813e4071b8";
+(node as any).hash = "a0a13d002b29cf7f098fd4cd05756b36";
 
 export default node;

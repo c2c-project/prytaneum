@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4553c1e8c219ddc84669efb5064e9eec>>
+ * @generated SignedSource<<4abcdfaefa35dfc0ca1f48e03f85e5e2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,7 @@ export type useLiveFeedbackListFragment$data = {
         readonly message: string;
         readonly createdBy: {
           readonly id: string;
+          readonly firstName: string | null;
         } | null;
         readonly refFeedback: {
           readonly createdBy: {
@@ -49,18 +50,6 @@ var v0 = {
   "storageKey": null
 },
 v1 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "createdBy",
-  "plural": false,
-  "selections": [
-    (v0/*: any*/)
-  ],
-  "storageKey": null
-},
-v2 = {
   "args": null,
   "kind": "FragmentSpread",
   "name": "LiveFeedbackReplyFragment"
@@ -133,7 +122,25 @@ return {
                   "name": "message",
                   "storageKey": null
                 },
-                (v1/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "createdBy",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "firstName",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
                 {
                   "alias": null,
                   "args": null,
@@ -142,12 +149,23 @@ return {
                   "name": "refFeedback",
                   "plural": false,
                   "selections": [
-                    (v1/*: any*/),
-                    (v2/*: any*/)
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "User",
+                      "kind": "LinkedField",
+                      "name": "createdBy",
+                      "plural": false,
+                      "selections": [
+                        (v0/*: any*/)
+                      ],
+                      "storageKey": null
+                    },
+                    (v1/*: any*/)
                   ],
                   "storageKey": null
                 },
-                (v2/*: any*/),
+                (v1/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
@@ -212,6 +230,6 @@ return {
 };
 })();
 
-(node as any).hash = "fd0a05fc621a67ccb998432d71870586";
+(node as any).hash = "aad2990e7cbff0102230cb08a28f5bc5";
 
 export default node;

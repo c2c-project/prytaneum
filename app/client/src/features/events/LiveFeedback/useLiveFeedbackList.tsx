@@ -17,6 +17,7 @@ export const USE_LIVE_FEEDBACK_LIST_SUBSCRIPTION = graphql`
                     message
                     createdBy {
                         id
+                        firstName
                     }
                     refFeedback {
                         createdBy {
@@ -45,6 +46,7 @@ export const USE_LIVE_FEEDBACK_LIST = graphql`
                     message
                     createdBy {
                         id
+                        firstName
                     }
                     refFeedback {
                         createdBy {
