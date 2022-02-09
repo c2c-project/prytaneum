@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useFragment } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
@@ -12,7 +12,6 @@ import { Fab } from '@local/components/Fab';
 import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
-import { EVENT_SIDEBAR_FRAGMENT } from './EventSidebar'
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 
@@ -57,6 +56,8 @@ export const EVENT_LIVE_QUERY = graphql`
                 isViewerModerator
                 ...EventSidebarFragment
                 ...EventVideoFragment
+                ...EventDetailsCardFragment
+                ...SpeakerListFragment
             }
         }
     }
@@ -78,7 +79,6 @@ export interface EventLiveProps {
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    const data = useFragment(EVENT_SIDEBAR_FRAGMENT, node);
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
     const classes = useStyles();
@@ -133,8 +133,8 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                     <Grid item className={classes.video}>
                         <EventVideo fragmentRef={node} />
                     </Grid>
-                    <EventDetailsCard fragmentRef={data} />
-                    <SpeakerList fragmentRef={data} />
+                    <EventDetailsCard fragmentRef={node} />
+                    <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
