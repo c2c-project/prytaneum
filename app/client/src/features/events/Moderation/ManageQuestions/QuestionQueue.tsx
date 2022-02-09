@@ -256,10 +256,15 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         () => (questionRecord.length > 0 ? questionRecord[questionRecord.length - 1] : null),
         [questionRecord]
     );
+    const prevQuestions = React.useMemo(
+        () => (questionRecord.length > 0 ? questionRecord.slice(0, -1) : []), // removes current question from display in tab for previous questions
+        [questionRecord]
+    );
     const nextQuestion = React.useMemo(
         () => (canGoForward ? enqueuedQuestions[0] : null),
         [canGoForward, enqueuedQuestions]
     );
+    
 
     //
     // ─── UTILITIES ──────────────────────────────────────────────────────────────────
@@ -290,7 +295,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         []
     );
 
-    const prevAccessors = React.useMemo<Accessors<ArrayElement<typeof questionRecord>>[]>(
+    const prevAccessors = React.useMemo<Accessors<ArrayElement<typeof prevQuestions>>[]>(
         () => [
             (q) => q?.node.question || '', // question text itself
             (q) => q?.node.createdBy?.firstName || '', // first name of the user
@@ -299,7 +304,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     );
 
     const [filteredList, handleSearch, handleFilterChange] = useFilters(enqueuedQuestions, accessors);
-    const [prevFilteredList, prevHandleSearch, prevHandleFilterChange] = useFilters(questionRecord, prevAccessors);
+    const [prevFilteredList, prevHandleSearch, prevHandleFilterChange] = useFilters(prevQuestions, prevAccessors);
 
     return (
         <>
