@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Chip, Card } from '@material-ui/core';
@@ -117,7 +116,6 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                             <NextQuestionButton disabled={!canGoForward} />
                         </Grid>
                     }
-
                 </Card>
             }
         </>
