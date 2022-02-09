@@ -98,7 +98,6 @@ type QuestionNode = ArrayElement<
 >;
 
 interface QuestionQueueProps {
-    handleQueueDisplay: (arg0: boolean) => void; // modifies boolean value if previous questions are currently displayed
     fragmentRef: useQuestionQueueFragment$key;
 }
 
@@ -199,7 +198,7 @@ function useStyledQueue({ eventId }: { eventId: string }) {
     return [reorder, getListStyle, itemStyle] as const;
 }
 
-export function QuestionQueue({ handleQueueDisplay, fragmentRef }: QuestionQueueProps) {
+export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
@@ -208,7 +207,6 @@ export function QuestionQueue({ handleQueueDisplay, fragmentRef }: QuestionQueue
     const handleQueueChange = (e: React.ChangeEvent<any>) => {
         e.preventDefault();
         setQueueIndex(e.target.value);
-        handleQueueDisplay(e.target.value === 1); // true if view shows previous questions
     };
     const { questionQueue, connections } = useQuestionQueue({ fragmentRef });
     const recordConnection = React.useMemo(
