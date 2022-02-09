@@ -4,7 +4,7 @@ import { Grid, Chip, Card } from '@material-ui/core';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import type { useQuestionQueueFragment$key } from '@local/__generated__/useQuestionQueueFragment.graphql';
-import { QuestionAuthor, QuestionContent } from '../../Questions';
+import { QuestionAuthor, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useQuestionQueue } from './useQuestionQueue';
@@ -109,6 +109,7 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
                         className={classes.answeringNow}
                     />
                     <QuestionAuthor fragmentRef={currentQuestion.node} />
+                    {currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
                     <QuestionContent fragmentRef={currentQuestion.node} />
                     { isViewerModerator &&
                         <Grid container alignItems='center' justify='space-between' className={classes.currentQuestionActions}>

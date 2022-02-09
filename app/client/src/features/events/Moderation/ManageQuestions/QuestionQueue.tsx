@@ -388,6 +388,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         <ListItem key={question.node.id} disableGutters>
                             <Card className={`${classes.item} ${classes.previousQuestion}`}>
                                 <QuestionAuthor fragmentRef={question.node} />
+                                {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
                                 <QuestionContent fragmentRef={question.node} />
                                 <QuestionStats fragmentRef={question.node} />
                             </Card>
