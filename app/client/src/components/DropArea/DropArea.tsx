@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     Droppable,
     DroppableProvided,
-    DroppableStateSnapshot,
+    // DroppableStateSnapshot,
     DroppableProps,
 } from 'react-beautiful-dnd';
 import { Grid } from '@material-ui/core';
@@ -18,11 +18,12 @@ export default function DropArea(
 ) {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { children, getStyle, ...rest } = props;
+    if (getStyle) console.log();
     return (
         <Droppable {...rest}>
             {(
                 provided: DroppableProvided,
-                snapshot: DroppableStateSnapshot
+                // snapshot: DroppableStateSnapshot
             ) => {
                 return (
                     <Grid

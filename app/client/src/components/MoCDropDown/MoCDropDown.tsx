@@ -41,6 +41,8 @@ export default function MoCDropdown() {
         setInput(event.target.value as string);
     };
 
+    useEffect(() => setData2([]), []);
+
     // useEffect(() => {
     //     const url = `https://api.propublica.org/congress/v1/116/${chamber}/members.json`;
     //     axios

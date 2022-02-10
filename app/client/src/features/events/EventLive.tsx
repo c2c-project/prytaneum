@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, fetchQuery, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
@@ -12,6 +12,8 @@ import { Fab } from '@local/components/Fab';
 import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
+import { EventDetailsCard } from './EventDetailsCard';
+import { SpeakerList } from './Speakers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,16 +32,11 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        // padding: theme.spacing(1.5),
         [theme.breakpoints.up('md')]: {
             overflowY: 'scroll',
         },
     },
     video: {
-        [theme.breakpoints.up('md')]: {
-            // marginTop: theme.spacing(2),
-            marginLeft: theme.spacing(2),
-        },
         [theme.breakpoints.down('sm')]: {
             position: 'sticky',
             top: 0,
@@ -59,6 +56,8 @@ export const EVENT_LIVE_QUERY = graphql`
                 isViewerModerator
                 ...EventSidebarFragment
                 ...EventVideoFragment
+                ...EventDetailsCardFragment
+                ...SpeakerListFragment
             }
         }
     }
@@ -125,8 +124,17 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
-                <Grid item md={8} className={classes.video}>
-                    <EventVideo fragmentRef={node} />
+                <Grid
+                    container item
+                    md={8}
+                    direction='column'
+                    wrap='nowrap'
+                >
+                    <Grid item className={classes.video}>
+                        <EventVideo fragmentRef={node} />
+                    </Grid>
+                    <EventDetailsCard fragmentRef={node} />
+                    <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} onScroll={handleScroll}>
