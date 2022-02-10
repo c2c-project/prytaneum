@@ -14,8 +14,6 @@ import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
-import { EventDetailsCard } from '../EventDetailsCard';
-import { SpeakerList } from '../Speakers';
 import { Tabs } from '@local/components/Tabs';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
@@ -94,8 +92,8 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         setTabIndex(newTabIndex);
     };
 
-    const moderatorTabs = ['Queue', 'Questions', 'Feedback']
-    const participantTabs = ['Questions', 'Feedback']
+    const moderatorTabs = ['Queue', 'Questions', 'Feedback'];
+    const participantTabs = ['Questions', 'Feedback'];
 
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
@@ -126,14 +124,20 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     fragmentRef={data}
                 /> */}
             </Grid>
+
+            <Tabs
+                tabIndex={tabIndex}
+                onChange={handleTabChange}
+                // conditionally set which tabs are viewable to a moderator/participant
+                tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
+            />
+
             <Grid
                 container
                 direction='column'
                 wrap='nowrap'
                 className={clsx(classes.item, classes.paper, classes.fullWidth)}
             >
-                <EventDetailsCard fragmentRef={data} />
-                <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
                 {
                     // Moderator feedback state = 2, Participant feedback state = 1
                     displayFeedbackButton ? (
@@ -151,13 +155,6 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     )
                 }
             </Grid>
-
-            <Tabs 
-                tabIndex={tabIndex}
-                onChange={handleTabChange}
-                // conditionally set which tabs are viewable to a moderator/participant
-                tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
-            />
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
