@@ -15,6 +15,7 @@ import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedba
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { Tabs } from '@local/components/Tabs';
+import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -119,10 +120,9 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         >
             <Grid item>
                 {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
-                {/* <CurrentQuestionCard
-                    isViewerModerator={Boolean(data.isViewerModerator)}
-                    fragmentRef={data}
-                /> */}
+                {data.isViewerModerator && (
+                    <CurrentQuestionCard isViewerModerator={Boolean(data.isViewerModerator)} fragmentRef={data} />
+                )}
             </Grid>
 
             <Tabs
