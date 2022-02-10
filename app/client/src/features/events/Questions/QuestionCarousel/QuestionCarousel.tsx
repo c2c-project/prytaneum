@@ -130,7 +130,7 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
                     <ChevronLeft />
                 </IconButton>
                 <Button onClick={() => dispatch({ type: 'goToCurrent' })} className={classes.btn}>
-                    {state.idx === state.currQuestionIdx ? 'Answering Now' : 'Go To Current'}
+                    {state.idx === state.currQuestionIdx ? 'Upcoming Question' : 'Go To Current'}
                 </Button>
                 <IconButton
                     disabled={state.currQuestionIdx === state.idx || state.idx === -1}

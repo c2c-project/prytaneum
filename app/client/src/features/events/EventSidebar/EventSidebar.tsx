@@ -11,12 +11,12 @@ import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
-import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { EventDetailsCard } from '../EventDetailsCard';
 import { SpeakerList } from '../Speakers';
 import { Tabs } from '@local/components/Tabs'
+import { QuestionCarousel } from '../Questions/QuestionCarousel';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -122,6 +122,13 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             alignItems='flex-start'
             wrap='nowrap'
         >
+            <Grid item>
+                {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
+                {/* <CurrentQuestionCard
+                    isViewerModerator={Boolean(data.isViewerModerator)}
+                    fragmentRef={data}
+                /> */}
+            </Grid>
             <Grid
                 container
                 direction='column'
@@ -147,8 +154,6 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     )
                 }
             </Grid>
-
-            {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
 
             <Tabs 
                 tabIndex={tabIndex}

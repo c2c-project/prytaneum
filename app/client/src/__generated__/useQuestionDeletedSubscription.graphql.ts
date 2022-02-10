@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ebe3f60386e25d6a836c0dc8042029c7>>
+ * @generated SignedSource<<4293a31fa5e618e574b1795f1790c499>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -209,6 +209,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -249,12 +256,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "26ea29cb633f9e27f0e064468fbd9e99",
+    "cacheID": "53c7398ad617da6374e256493c67b5bf",
     "id": null,
     "metadata": {},
     "name": "useQuestionDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();

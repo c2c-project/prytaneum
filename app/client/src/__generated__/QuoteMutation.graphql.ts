@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<196226b8dc501a95406ae7fbc5121374>>
+ * @generated SignedSource<<5e6b969250e5b30d38604e892413d5bf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -195,6 +195,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -227,12 +234,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "edac19b9a4b664ae8fcd3dee48f82ce9",
+    "cacheID": "4cfe4be57b7208a5f78ed7cd4819995b",
     "id": null,
     "metadata": {},
     "name": "QuoteMutation",
     "operationKind": "mutation",
-    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
   }
 };
 })();

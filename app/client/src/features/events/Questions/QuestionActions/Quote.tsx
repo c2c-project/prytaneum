@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, DialogContent, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import QuoteIcon from '@material-ui/icons/FormatQuoteOutlined';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
 import { graphql, useMutation, useFragment } from 'react-relay';
 
 import type { QuoteFragment$key } from '@local/__generated__/QuoteFragment.graphql';
@@ -92,7 +92,7 @@ export function Quote({ className, connections, fragmentRef }: QuoteProps) {
             <Button
                 color='inherit'
                 onClick={open}
-                endIcon={<QuoteIcon fontSize='small' />}
+                endIcon={<FormatQuoteIcon fontSize='small' />}
                 fullWidth
                 className={className}
             >

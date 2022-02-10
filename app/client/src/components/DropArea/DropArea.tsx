@@ -6,7 +6,7 @@ import {
     DroppableStateSnapshot,
     DroppableProps,
 } from 'react-beautiful-dnd';
-import Card from '@material-ui/core/Card';
+import { Grid } from '@material-ui/core';
 
 interface Props {
     getStyle?: (isDraggingOver: boolean) => React.CSSProperties;
@@ -25,22 +25,19 @@ export default function DropArea(
                 snapshot: DroppableStateSnapshot
             ) => {
                 return (
-                    <Card
+                    <Grid
+                        container
+                        direction='column'
                         // recommended method from the library maintainer itself
                         // eslint-disable-next-line @typescript-eslint/unbound-method
                         ref={provided.innerRef}
-                        style={
-                            getStyle
-                                ? getStyle(snapshot.isDraggingOver)
-                                : undefined
-                        }
                         // also recommende method from the library
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...provided.droppableProps}
                     >
                         {children}
                         {provided.placeholder}
-                    </Card>
+                    </Grid>
                 );
             }}
         </Droppable>

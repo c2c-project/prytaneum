@@ -14,6 +14,10 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                     cursor
                     node {
                         id
+                        question
+                        createdBy {
+                            firstName
+                        }
                         ...QuestionAuthorFragment
                         ...QuestionStatsFragment
                         ...QuestionContentFragment
@@ -31,6 +35,11 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
                     cursor
                     node {
                         id
+                        question
+                        createdBy {
+                            firstName
+                        }
+                        ...QuestionActionsFragment
                         ...QuestionAuthorFragment
                         ...QuestionStatsFragment
                         ...QuestionContentFragment
@@ -47,5 +56,5 @@ export const USE_QUESTION_QUEUE_FRAGMENT = graphql`
 
 export function useQuestionQueue({ fragmentRef }: { fragmentRef: useQuestionQueueFragment$key }) {
     const { questionQueue } = useFragment(USE_QUESTION_QUEUE_FRAGMENT, fragmentRef);
-    return questionQueue;
+    return { questionQueue, connections: questionQueue?.enqueuedQuestions?.__id ? [questionQueue.enqueuedQuestions.__id] : [] };
 }
