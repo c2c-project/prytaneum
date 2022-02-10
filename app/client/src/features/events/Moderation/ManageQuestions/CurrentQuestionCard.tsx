@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Chip, Card } from '@material-ui/core';
+import { Grid, Chip, Card, Typography } from '@material-ui/core';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import type { useQuestionQueueFragment$key } from '@local/__generated__/useQuestionQueueFragment.graphql';
@@ -40,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
     },
     currentQuestionActions: {
         padding: theme.spacing(0, 1, 1, 1)
+    },
+    text: {
+        margin: 'auto',
+        paddingTop: '20px'
+    },
+    typographyContainer: {
+        alignItems: 'center',
     }
 }));
 
@@ -100,25 +107,26 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
 
     return (
         <>
-            { currentQuestion &&
-                <Card className={`${classes.item} ${classes.relative}`}>
-                    <Chip
-                        color='secondary'
-                        icon={<BookmarkIcon fontSize='small' />}
-                        label='Answering Now'
-                        className={classes.answeringNow}
-                    />
-                    <QuestionAuthor fragmentRef={currentQuestion.node} />
-                    {currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
-                    <QuestionContent fragmentRef={currentQuestion.node} />
-                    { isViewerModerator &&
-                        <Grid container alignItems='center' justify='space-between' className={classes.currentQuestionActions}>
-                            <PreviousQuestionButton disabled={!canGoBackward} />
-                            <NextQuestionButton disabled={!canGoForward} />
-                        </Grid>
-                    }
-                </Card>
-            }
+            <Card className={`${classes.item} ${classes.relative}`}>
+                <Chip
+                    color='secondary'
+                    icon={<BookmarkIcon fontSize='small' />}
+                    label='Answering Now'
+                    className={classes.answeringNow}
+                />
+                { currentQuestion && <QuestionAuthor fragmentRef={currentQuestion.node} />}
+                {currentQuestion && currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
+                {currentQuestion && <QuestionContent fragmentRef={currentQuestion.node} />}
+                <Grid container alignItems='center' className={classes.typographyContainer}>
+                    {!currentQuestion && <Typography className={classes.text}>No Current Question</Typography>} 
+                </Grid>
+                { isViewerModerator &&
+                    <Grid container alignItems='center' justify='space-between' className={classes.currentQuestionActions}>
+                        <PreviousQuestionButton disabled={!canGoBackward} />
+                        <NextQuestionButton disabled={!canGoForward} />
+                    </Grid>
+                }
+            </Card>
         </>
     );
 }
