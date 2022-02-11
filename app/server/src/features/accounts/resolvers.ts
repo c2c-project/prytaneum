@@ -3,6 +3,7 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import { eventNames } from 'node:process';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
