@@ -3,9 +3,11 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import { eventNames } from 'node:process';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
+const toEventId = toGlobalId('Event');
 
 const cookieOptions: CookieSerializeOptions = {
     sameSite: 'lax'
@@ -25,6 +27,12 @@ export const resolvers: Resolvers = {
             const userOrgs = await User.findOrgsByUserId(userId, ctx.prisma);
             if (!userOrgs) return null;
             return connectionFromArray(userOrgs.map(toOrgId), args);
+        },
+        async events(parent, args, ctx, info) {
+            const { id: userId } = fromGlobalId(parent.id);
+            const userEvents = await User.findEventsByUserId(userId, ctx.prisma);
+            if (!userEvents) return null;
+            return connectionFromArray(userEvents.map(toEventId), args);
         },
     },
     Mutation: {
