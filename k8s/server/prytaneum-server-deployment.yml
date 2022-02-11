@@ -70,7 +70,7 @@ spec:
                   key: from_email
                   name: mailgun-secret 
             - name: "GOOGLE_APPLICATION_CREDENTIALS"
-              value: "/var/secrets/google/pubsub-service-account.json"
+              value: "/var/secrets/google/key.json"
           volumeMounts:
             - name: "service-account"
               mountPath: "/var/secrets/google"
