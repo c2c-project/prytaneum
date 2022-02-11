@@ -679,6 +679,9 @@ type User implements Node {
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
   email: String
+
+  """Events that this user is a moderator of, or has been invited to"""
+  events(after: String, first: Int): EventConnection
   firstName: String
   id: ID!
   isEmailVerified: Boolean

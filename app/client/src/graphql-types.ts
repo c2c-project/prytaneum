@@ -1010,12 +1010,21 @@ export type User = Node & {
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  /** Events that this user is a moderator of, or has been invited to */
+  events?: Maybe<EventConnection>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isEmailVerified?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+};
+
+
+/** User Data */
+export type UserEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
