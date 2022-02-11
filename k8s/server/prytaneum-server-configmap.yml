@@ -9,3 +9,5 @@ data:
   HOST: 0.0.0.0
   NODE_ENV: production
   SERVER_PORT: "3002"
+  GCP_PROJECT_ID: prytaneum-project
+  PUB_SUB_PREFIX: projects/prytaneum-project/topics/

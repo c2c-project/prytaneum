@@ -8,6 +8,7 @@ import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 import fastifyCors from 'fastify-cors';
+import { MQGCP } from './lib/mqgcp';
 
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
@@ -30,6 +31,7 @@ function verifyEnv() {
         if (!process.env.JWT_SECRET) throw new Error('Must define JWT_SECRET in production');
         if (!process.env.SERVER_PORT) throw new Error('Must define PORT in production');
         if (!process.env.HOST) throw new Error('Must define HOST in production');
+        if (!process.env.GCP_PROJECT_ID) throw new Error('Must define GCP_PROJECT_ID in production');
     }
 }
 
@@ -85,6 +87,7 @@ async function start() {
             // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
+                emitter: new MQGCP()
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);
