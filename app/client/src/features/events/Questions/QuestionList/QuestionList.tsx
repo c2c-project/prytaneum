@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
     },
     filler: {
         visibility: 'hidden'
+    },
+    text: {
+        margin: 'auto'
     }
 }));
 
@@ -101,6 +104,12 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
+                            <Grid container alignItems='center'>
+                                <Typography className={classes.text} variant='body2'>
+                                    <b>{filteredList.length}</b>
+                                    &nbsp; Questions Displayed
+                                </Typography>
+                            </Grid>
                             {filteredList.map((question) => (
                                 <ListItem disableGutters key={question.id}>
                                     <Card className={classes.item}>
