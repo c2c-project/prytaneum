@@ -3317,14 +3317,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["regenerator-runtime", "npm:0.13.8"]
           ],
           "linkType": "HARD",
-        }],
-        ["npm:7.15.4", {
-          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.15.4-52ce5bf6ea-c408254304.zip/node_modules/@babel/runtime/",
-          "packageDependencies": [
-            ["@babel/runtime", "npm:7.15.4"],
-            ["regenerator-runtime", "npm:0.13.8"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["@babel/runtime-corejs3", [
@@ -6060,82 +6052,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@next/polyfill-module", [
-        ["npm:12.0.4", {
-          "packageLocation": "./.yarn/cache/@next-polyfill-module-npm-12.0.4-06677031c5-701f563ef8.zip/node_modules/@next/polyfill-module/",
-          "packageDependencies": [
-            ["@next/polyfill-module", "npm:12.0.4"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@next/react-dev-overlay", [
-        ["npm:12.0.4", {
-          "packageLocation": "./.yarn/cache/@next-react-dev-overlay-npm-12.0.4-05495b4cf0-ac54baf041.zip/node_modules/@next/react-dev-overlay/",
-          "packageDependencies": [
-            ["@next/react-dev-overlay", "npm:12.0.4"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:74b6b4c547f69baf9c1721b11ed0743d88e305287cf52b434fdc391eff959b941750035ce5dde1686a0dea758e48c88ccd6c26dfdc1077f566e4bfb031f135fc#npm:12.0.4", {
-          "packageLocation": "./.yarn/__virtual__/@next-react-dev-overlay-virtual-9adc1d17d5/0/cache/@next-react-dev-overlay-npm-12.0.4-05495b4cf0-ac54baf041.zip/node_modules/@next/react-dev-overlay/",
-          "packageDependencies": [
-            ["@next/react-dev-overlay", "virtual:74b6b4c547f69baf9c1721b11ed0743d88e305287cf52b434fdc391eff959b941750035ce5dde1686a0dea758e48c88ccd6c26dfdc1077f566e4bfb031f135fc#npm:12.0.4"],
-            ["@babel/code-frame", "npm:7.12.11"],
-            ["@types/react", "npm:17.0.4"],
-            ["@types/react-dom", "npm:16.9.12"],
-            ["@types/webpack", null],
-            ["anser", "npm:1.4.9"],
-            ["chalk", "npm:4.0.0"],
-            ["classnames", "npm:2.2.6"],
-            ["css.escape", "npm:1.5.1"],
-            ["data-uri-to-buffer", "npm:3.0.1"],
-            ["platform", "npm:1.3.6"],
-            ["react", "npm:17.0.2"],
-            ["react-dom", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"],
-            ["shell-quote", "npm:1.7.3"],
-            ["source-map", "npm:0.8.0-beta.0"],
-            ["stacktrace-parser", "npm:0.1.10"],
-            ["strip-ansi", "npm:6.0.1"],
-            ["webpack", null]
-          ],
-          "packagePeers": [
-            "@types/react-dom",
-            "@types/react",
-            "@types/webpack",
-            "react-dom",
-            "react",
-            "webpack"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@next/react-refresh-utils", [
-        ["npm:12.0.4", {
-          "packageLocation": "./.yarn/cache/@next-react-refresh-utils-npm-12.0.4-d8661f51f6-7c1c9c3284.zip/node_modules/@next/react-refresh-utils/",
-          "packageDependencies": [
-            ["@next/react-refresh-utils", "npm:12.0.4"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:74b6b4c547f69baf9c1721b11ed0743d88e305287cf52b434fdc391eff959b941750035ce5dde1686a0dea758e48c88ccd6c26dfdc1077f566e4bfb031f135fc#npm:12.0.4", {
-          "packageLocation": "./.yarn/__virtual__/@next-react-refresh-utils-virtual-63498dc967/0/cache/@next-react-refresh-utils-npm-12.0.4-d8661f51f6-7c1c9c3284.zip/node_modules/@next/react-refresh-utils/",
-          "packageDependencies": [
-            ["@next/react-refresh-utils", "virtual:74b6b4c547f69baf9c1721b11ed0743d88e305287cf52b434fdc391eff959b941750035ce5dde1686a0dea758e48c88ccd6c26dfdc1077f566e4bfb031f135fc#npm:12.0.4"],
-            ["@types/react-refresh", null],
-            ["@types/webpack", null],
-            ["react-refresh", "npm:0.8.3"],
-            ["webpack", null]
-          ],
-          "packagePeers": [
-            "@types/react-refresh",
-            "@types/webpack",
-            "react-refresh",
-            "webpack"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@next/swc-android-arm64", [
         ["npm:12.0.10", {
           "packageLocation": "./.yarn/unplugged/@next-swc-android-arm64-npm-12.0.10-f0058469cd/node_modules/@next/swc-android-arm64/",
@@ -6659,15 +6575,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@protobufjs-utf8-npm-1.1.0-02c590807c-f9bf3163d1.zip/node_modules/@protobufjs/utf8/",
           "packageDependencies": [
             ["@protobufjs/utf8", "npm:1.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@rushstack/eslint-patch", [
-        ["npm:1.1.0", {
-          "packageLocation": "./.yarn/cache/@rushstack-eslint-patch-npm-1.1.0-49ab40dc81-4602c23454.zip/node_modules/@rushstack/eslint-patch/",
-          "packageDependencies": [
-            ["@rushstack/eslint-patch", "npm:1.1.0"]
           ],
           "linkType": "HARD",
         }]
@@ -10396,13 +10303,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/acorn-npm-8.2.2-70bc42e84f-46d3205ed2.zip/node_modules/acorn/",
           "packageDependencies": [
             ["acorn", "npm:8.2.2"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:8.5.0", {
-          "packageLocation": "./.yarn/cache/acorn-npm-8.5.0-faed0ea119-2e4c1dbed3.zip/node_modules/acorn/",
-          "packageDependencies": [
-            ["acorn", "npm:8.5.0"]
           ],
           "linkType": "HARD",
         }]
