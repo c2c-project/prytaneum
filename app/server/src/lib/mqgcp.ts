@@ -1,5 +1,6 @@
 import MQEmitter, { Message } from 'mqemitter';
 import { PubSub, Message as TGcpMessage } from '@google-cloud/pubsub';
+import { server } from '../index';
 
 interface MyMessage extends Message {
     // Optional to make tsc happy, but it's not really optional.
@@ -44,7 +45,7 @@ export class MQGCP {
                 .then((topic) => topic.publishMessage({ json: message.payload }))
                 .then(() => {
                     if (callback) callback(err);
-                });
+                }).catch((err) => server.log.error(err));
         });
     }
 
@@ -54,7 +55,7 @@ export class MQGCP {
                 .then((subscription) => subscription.removeListener(event, listener))
                 .then(() => {
                     if (callback) callback();
-                });
+                }).catch((err) => server.log.error(err));
         });
     }
 
@@ -69,7 +70,7 @@ export class MQGCP {
             }))
             .then(() => {
                 if (onDone) onDone();
-            });
+            }).catch((err) => server.log.error(err));
         });
     }
 }
