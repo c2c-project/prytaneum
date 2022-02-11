@@ -62,12 +62,29 @@ export class MQGCP {
     on(event: string, listener: TListener, onDone: () => void) {
         this.mqEmitter.on(event, listener, () => {
             this.getOrCreateSubscription(event)
-            .then((subscription) => subscription.on('message', (message: TGcpMessage) => {
-                const payload = JSON.parse(message.data.toString());
-                listener(payload, () => {
+            .then((subscription) => {
+                let messageCount = 0;
+                function messageHandler(message: TGcpMessage) {
+                    server.log.info('Received message', message.id);
+                    server.log.info('\tData: ', message.data.toString());
+                    messageCount += 1;
                     message.ack();
-                })
-            }))
+                }
+
+                subscription.on('message', (message: TGcpMessage) => {
+                    messageHandler(message);
+                    const payload = JSON.parse(message.data.toString());
+                    listener(payload, () => { server.log.info('Listener') })
+                });
+
+
+                const timeout = 20;
+
+                setTimeout(() => {
+                    subscription.removeListener('message', messageHandler);
+                    server.log.info(`timeout done, ${messageCount} message(s) received.`);
+                }, timeout * 1000);
+            })
             .then(() => {
                 if (onDone) onDone();
             }).catch((err) => server.log.error(err));
