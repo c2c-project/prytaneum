@@ -35,6 +35,20 @@ spec:
                 configMapKeyRef:
                   key: SERVER_PORT
                   name: prytaneum-server-config
+            - name: GCP_PROJECT_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: GCP_PROJECT_ID
+                  name: prytaneum-server-config
+            - name: PUB_SUB_PREFIX
+              valueFrom:
+                configMapKeyRef:
+                  key: PUB_SUB_PREFIX
+                  name: prytaneum-server-config
+            - name: POD_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
