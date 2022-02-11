@@ -8,6 +8,7 @@ import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 import fastifyCors from 'fastify-cors';
+import { MQGCP } from './lib/mqgcp';
 
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
@@ -86,6 +87,7 @@ async function start() {
             // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
+                emitter: new MQGCP()
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);

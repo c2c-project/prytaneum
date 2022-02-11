@@ -282,6 +282,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.9.1"],
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.8.0"],
             ["module-alias", "npm:2.2.2"],
+            ["mqemitter", "npm:4.5.0"],
             ["pino-pretty", "npm:7.1.0"],
             ["prettier", "npm:2.5.1"],
             ["prisma", "npm:3.4.0"],
