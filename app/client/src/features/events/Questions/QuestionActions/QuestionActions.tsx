@@ -35,7 +35,7 @@ export function QuestionActions({
     return (
         <CardActions {...props}>
             {like && <Like fragmentRef={data} />}
-            {quote && <Quote fragmentRef={data} connections={connections} />}
+            {quote && <Quote fragmentRef={data} />}
             {queue && <QueueButton fragmentRef={data} />}
         </CardActions>
     );

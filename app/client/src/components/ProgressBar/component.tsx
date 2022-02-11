@@ -1,11 +1,6 @@
 import * as React from 'react';
 // original code here: https://github.com/sghall/react-compound-slider/blob/master/docs/src/demos/horizontal/@local/components.tsx
-import {
-    GetRailProps,
-    GetHandleProps,
-    GetTrackProps,
-    SliderItem,
-} from 'react-compound-slider';
+import { GetRailProps, GetHandleProps, GetTrackProps, SliderItem } from 'react-compound-slider';
 import PropTypes from 'prop-types';
 
 // *******************************************************
@@ -35,15 +30,13 @@ interface SliderRailProps {
 }
 
 // eslint-disable-next-line react/prop-types
-export const SliderRail = ({ getRailProps }: SliderRailProps) => {
-    return (
-        <>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <div style={railOuterStyle} {...getRailProps()} />
-            <div style={railInnerStyle} />
-        </>
-    );
-};
+export const SliderRail = ({ getRailProps }: SliderRailProps) => (
+    <>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <div style={railOuterStyle} {...getRailProps()} />
+        <div style={railInnerStyle} />
+    </>
+);
 
 // *******************************************************
 // HANDLE COMPONENT
@@ -62,45 +55,43 @@ export const Handle = ({
     disabled = false,
     // eslint-disable-next-line react/prop-types
     getHandleProps,
-}: HandleProps) => {
-    return (
-        <>
-            <div
-                style={{
-                    left: `${percent}%`,
-                    position: 'absolute',
-                    transform: 'translate(-50%, -50%)',
-                    WebkitTapHighlightColor: 'rgba(0,0,0,0)',
-                    zIndex: 5,
-                    width: 28,
-                    height: 42,
-                    cursor: 'pointer',
-                    backgroundColor: 'none',
-                }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...getHandleProps(id)}
-            />
-            <div
-                role='slider'
-                aria-valuemin={min}
-                aria-valuemax={max}
-                aria-valuenow={value}
-                aria-label='slider'
-                style={{
-                    left: `${percent}%`,
-                    position: 'absolute',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 2,
-                    width: 24,
-                    height: 24,
-                    borderRadius: '50%',
-                    boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
-                    backgroundColor: disabled ? '#666' : '#9BBFD4',
-                }}
-            />
-        </>
-    );
-};
+}: HandleProps) => (
+    <>
+        <div
+            style={{
+                left: `${percent}%`,
+                position: 'absolute',
+                transform: 'translate(-50%, -50%)',
+                WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+                zIndex: 5,
+                width: 28,
+                height: 42,
+                cursor: 'pointer',
+                backgroundColor: 'none',
+            }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...getHandleProps(id)}
+        />
+        <div
+            role='slider'
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-valuenow={value}
+            aria-label='slider'
+            style={{
+                left: `${percent}%`,
+                position: 'absolute',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 2,
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
+                backgroundColor: disabled ? '#666' : '#9BBFD4',
+            }}
+        />
+    </>
+);
 
 Handle.propTypes = {
     domain: PropTypes.array.isRequired,
@@ -122,30 +113,28 @@ export const KeyboardHandle = ({
     disabled = false,
     // eslint-disable-next-line react/prop-types
     getHandleProps,
-}: HandleProps) => {
-    return (
-        // eslint-disable-next-line react/button-has-type
-        <button
-            role='slider'
-            aria-valuemin={min}
-            aria-valuemax={max}
-            aria-valuenow={value}
-            style={{
-                left: `${percent}%`,
-                position: 'absolute',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 2,
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
-                backgroundColor: disabled ? '#666' : '#9BBFD4',
-            }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...getHandleProps(id)}
-        />
-    );
-};
+}: HandleProps) => (
+    // eslint-disable-next-line react/button-has-type
+    <button
+        role='slider'
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        style={{
+            left: `${percent}%`,
+            position: 'absolute',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 2,
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
+            backgroundColor: disabled ? '#666' : '#9BBFD4',
+        }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...getHandleProps(id)}
+    />
+);
 KeyboardHandle.propTypes = {
     domain: PropTypes.array.isRequired,
     disabled: PropTypes.bool,
@@ -173,27 +162,25 @@ export const Track = ({
     // eslint-disable-next-line react/prop-types
     getTrackProps,
     disabled = false,
-}: TrackProps) => {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                transform: 'translate(0%, -50%)',
-                height: 14,
-                zIndex: 1,
-                backgroundColor: disabled ? '#999' : '#607E9E',
-                borderRadius: 7,
-                cursor: 'pointer',
-                // eslint-disable-next-line react/prop-types
-                left: `${source.percent}%`,
-                // eslint-disable-next-line react/prop-types
-                width: `${target.percent - source.percent}%`,
-            }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...getTrackProps()}
-        />
-    );
-};
+}: TrackProps) => (
+    <div
+        style={{
+            position: 'absolute',
+            transform: 'translate(0%, -50%)',
+            height: 14,
+            zIndex: 1,
+            backgroundColor: disabled ? '#999' : '#607E9E',
+            borderRadius: 7,
+            cursor: 'pointer',
+            // eslint-disable-next-line react/prop-types
+            left: `${source.percent}%`,
+            // eslint-disable-next-line react/prop-types
+            width: `${target.percent - source.percent}%`,
+        }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...getTrackProps()}
+    />
+);
 Track.propTypes = {
     disabled: PropTypes.bool,
 };
@@ -218,35 +205,33 @@ export const Tick = ({
     // TODO: what is this even for?
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     format = (num) => num.toString(),
-}: TickProps) => {
-    return (
-        <div>
-            <div
-                style={{
-                    position: 'absolute',
-                    marginTop: -20,
-                    width: 1,
-                    height: 40,
-                    backgroundColor: 'rgb(200,200,200)',
-                    // eslint-disable-next-line react/prop-types
-                    left: `${tick.percent}%`,
-                }}
-            />
-            <div
-                style={{
-                    position: 'absolute',
-                    marginTop: 22,
-                    fontSize: 10,
-                    textAlign: 'center',
-                    marginLeft: `${-(100 / count) / 2}%`,
-                    width: `${100 / count}%`,
-                    // eslint-disable-next-line react/prop-types
-                    left: `${tick.percent}%`,
-                }}
-            />
-        </div>
-    );
-};
+}: TickProps) => (
+    <div>
+        <div
+            style={{
+                position: 'absolute',
+                marginTop: -20,
+                width: 1,
+                height: 40,
+                backgroundColor: 'rgb(200,200,200)',
+                // eslint-disable-next-line react/prop-types
+                left: `${tick.percent}%`,
+            }}
+        />
+        <div
+            style={{
+                position: 'absolute',
+                marginTop: 22,
+                fontSize: 10,
+                textAlign: 'center',
+                marginLeft: `${-(100 / count) / 2}%`,
+                width: `${100 / count}%`,
+                // eslint-disable-next-line react/prop-types
+                left: `${tick.percent}%`,
+            }}
+        />
+    </div>
+);
 Tick.propTypes = {
     count: PropTypes.number.isRequired,
     format: PropTypes.func,

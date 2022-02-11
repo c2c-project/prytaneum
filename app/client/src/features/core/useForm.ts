@@ -2,11 +2,9 @@
 import * as React from 'react';
 import * as Yup from 'yup';
 
-type TSchema<T extends Record<string, unknown>> = Yup.ObjectSchema<
-    {
-        [key in keyof T]: Yup.SchemaOf<T[key]>;
-    }
->;
+type TSchema<T extends Record<string, unknown>> = Yup.ObjectSchema<{
+    [key in keyof T]: Yup.SchemaOf<T[key]>;
+}>;
 
 export function useForm<TForm extends Record<string, unknown>>(initialState: TForm, validationSchema?: TSchema<TForm>) {
     const [state, setState] = React.useState(initialState);
@@ -35,9 +33,8 @@ export function useForm<TForm extends Record<string, unknown>>(initialState: TFo
                         .then(() => {
                             callback(state);
                         })
-                        .catch((err) => {
+                        .catch(() => {
                             // TODO: parse yup errors appropriately
-                            console.log(err);
                         });
                 } else {
                     callback(state);

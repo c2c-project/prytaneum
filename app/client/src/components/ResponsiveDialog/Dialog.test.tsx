@@ -1,8 +1,9 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-filename-extension */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import ResponsiveDialog from './ResponsiveDialog';
+import { ResponsiveDialog } from './ResponsiveDialog';
 
 jest.mock('@material-ui/core/useMediaQuery', () => () => true);
 
@@ -46,9 +47,7 @@ describe('Dialog', function () {
                 container
             );
         });
-        const button = document.querySelector(
-            '[aria-label="close"]'
-        ) as HTMLButtonElement;
+        const button = document.querySelector('[aria-label="close"]') as HTMLButtonElement;
         ReactTestUtils.act(() => {
             button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });

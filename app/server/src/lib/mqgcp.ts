@@ -1,40 +1,43 @@
 import MQEmitter, { Message } from 'mqemitter';
+import type { FastifyLoggerInstance } from 'fastify';
 import { PubSub, Message as TGcpMessage } from '@google-cloud/pubsub';
-import { server } from '../index';
 
 interface MyMessage extends Message {
     // Optional to make tsc happy, but it's not really optional.
-    payload?: Record<string, unknown>
+    payload?: Record<string, unknown>;
 }
 
 type TListener = (message: MyMessage, done: () => void) => void;
 
-
 export class MQGCP {
     mqEmitter: ReturnType<typeof MQEmitter>;
+
     pubsub: PubSub;
 
-    constructor() {
+    logger: FastifyLoggerInstance;
+
+    constructor(logger: FastifyLoggerInstance) {
         this.mqEmitter = MQEmitter();
         this.pubsub = new PubSub({ projectId: process.env.GCP_PROJECT_ID });
+        this.logger = logger;
     }
 
-    private getSubscriptionName(topicName: string) {
+    private static getSubscriptionName(topicName: string) {
         return `${topicName}_${process.env.POD_ID}`;
     }
 
     private async getOrCreateTopic(topicName: string) {
         let topic = this.pubsub.topic(topicName);
         const [exists] = await topic.exists();
-        if (!exists) topic = (await this.pubsub.createTopic(topicName))[0];
+        if (!exists) [topic] = await this.pubsub.createTopic(topicName);
         return topic;
     }
 
     private async getOrCreateSubscription(topicName: string) {
         const topic = await this.getOrCreateTopic(topicName);
-        let subscription = topic.subscription(this.getSubscriptionName(topicName));    
+        let subscription = topic.subscription(MQGCP.getSubscriptionName(topicName));
         const [exists] = await subscription.exists();
-        if (!exists) subscription = (await topic.createSubscription(this.getSubscriptionName(topicName)))[0];
+        if (!exists) [subscription] = await topic.createSubscription(MQGCP.getSubscriptionName(topicName));
         return subscription;
     }
 
@@ -45,7 +48,8 @@ export class MQGCP {
                 .then((topic) => topic.publishMessage({ json: message.payload }))
                 .then(() => {
                     if (callback) callback(err);
-                }).catch((err) => server.log.error(err));
+                })
+                .catch((_err) => this.logger.error(_err));
         });
     }
 
@@ -55,40 +59,43 @@ export class MQGCP {
                 .then((subscription) => subscription.removeListener(event, listener))
                 .then(() => {
                     if (callback) callback();
-                }).catch((err) => server.log.error(err));
+                })
+                .catch((err) => this.logger.error(err));
         });
     }
 
     on(event: string, listener: TListener, onDone: () => void) {
         this.mqEmitter.on(event, listener, () => {
             this.getOrCreateSubscription(event)
-            .then((subscription) => {
-                let messageCount = 0;
-                function messageHandler(message: TGcpMessage) {
-                    server.log.info('Received message', message, ' | ', JSON.stringify(message));
-                    server.log.info('Data: ', message.data.toString(), ' | ', JSON.parse(message.data.toString()));
-                    messageCount += 1;
-                    message.ack();
-                }
+                .then((subscription) => {
+                    let messageCount = 0;
+                    const messageHandler = (message: TGcpMessage) => {
+                        this.logger.info('Received message', message, ' | ', JSON.stringify(message));
+                        this.logger.info('Data: ', message.data.toString(), ' | ', JSON.parse(message.data.toString()));
+                        messageCount += 1;
+                        message.ack();
+                    };
 
-                subscription.on('message', (message: TGcpMessage) => {
-                    messageHandler(message);
-                    const payload = JSON.parse(message.data.toString());
-                    server.log.info(`Payload: ${payload}`);
-                    listener(payload, () => { server.log.info('Listener') })
-                });
+                    subscription.on('message', (message: TGcpMessage) => {
+                        messageHandler(message);
+                        const payload = JSON.parse(message.data.toString());
+                        this.logger.info(`Payload: ${payload}`);
+                        listener(payload, () => {
+                            this.logger.info('Listener');
+                        });
+                    });
 
+                    const timeout = 60;
 
-                const timeout = 60;
-
-                setTimeout(() => {
-                    subscription.removeListener('message', messageHandler);
-                    server.log.info(`timeout done, ${messageCount} message(s) received.`);
-                }, timeout * 1000);
-            })
-            .then(() => {
-                if (onDone) onDone();
-            }).catch((err) => server.log.error(err));
+                    setTimeout(() => {
+                        subscription.removeListener('message', messageHandler);
+                        this.logger.info(`timeout done, ${messageCount} message(s) received.`);
+                    }, timeout * 1000);
+                })
+                .then(() => {
+                    if (onDone) onDone();
+                })
+                .catch((err) => this.logger.error(err));
         });
     }
 }

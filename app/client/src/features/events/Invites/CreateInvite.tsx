@@ -23,7 +23,7 @@ export const CreateInvite = ({ onSubmit, eventId }: CreateInviteProps) => {
     function handleSubmit(form: TInviteForm) {
         commit({
             variables: { input: { ...form, eventId } },
-            onCompleted(data) {
+            onCompleted() {
                 onSubmit();
             },
         });
