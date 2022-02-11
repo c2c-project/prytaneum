@@ -2,12 +2,19 @@ import jwt from 'jsonwebtoken';
 import { sendEmail } from '@local/lib/email/email';
 
 export interface InviteEmailTemplateVariables {
-    eventStartDate: string,
-    inviteUrl: string,
-    eventName: string
+    eventStartDate: string;
+    inviteUrl: string;
+    eventName: string;
 }
 
-export const sendInviteEmail = (eventName: string, eventId: string, startTime: Date, endTime: Date, invitee: string | Array<string>, token: string) => {
+export const sendInviteEmail = (
+    eventName: string,
+    eventId: string,
+    startTime: Date,
+    endTime: Date,
+    invitee: string | Array<string>,
+    token: string
+) => {
     const inviteUrl = `prytaneum.io/events/${eventId}/live?token=${token}`;
 
     sendEmail({
@@ -17,10 +24,10 @@ export const sendInviteEmail = (eventName: string, eventId: string, startTime: D
         'h:X-Mailgun-Variables': JSON.stringify({
             eventStartDate: startTime.toUTCString(),
             inviteUrl,
-            eventName
-        } as InviteEmailTemplateVariables)
-    })
-}
+            eventName,
+        } as InviteEmailTemplateVariables),
+    });
+};
 
 /**
  * @description generates a link to unsubscribe from emails
@@ -36,7 +43,7 @@ export const generateUnsubscribeLink = (email: string, townHallId: string): stri
     return `prytaneum.io/unsubscribe/${token}`;
 };
 
-interface RecipiantVariables {
+export interface RecipientVariables {
     [key: string]: { fName: string; inviteLink: string; unsubLink: string };
 }
 

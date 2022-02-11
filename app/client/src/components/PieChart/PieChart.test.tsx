@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -24,7 +25,6 @@ const Nivo: PieDatum[] = [
     {
         id: 'hack',
         value: 234,
-   
     },
 ];
 

@@ -42,16 +42,15 @@ export function QuestionAuthor({ fragmentRef, ...props }: QuestionAuthorProps) {
     );
     // make author name given available data
     const createAuthorName = () => {
-        let authorName = '';
-        if (authorData.createdBy) {
-            authorName += authorData.createdBy.firstName;
-            if (authorData.createdBy.lastName) { authorName += ' ' + authorData.createdBy.lastName; }
+        let authorName = 'Unknown User';
+        if (authorData.createdBy && authorData.createdBy.firstName) {
+            authorName = authorData.createdBy.firstName;
+            if (authorData.createdBy.lastName) authorName = `${authorName} ${authorData.createdBy.lastName}`;
         }
-        else { authorName = 'Unknown User'; }
-        return authorName
+        return authorName;
     };
     const authorName = createAuthorName();
-    
+
     return (
         <CardHeader
             // get first letter of name to display

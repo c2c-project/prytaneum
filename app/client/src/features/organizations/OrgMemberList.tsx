@@ -2,7 +2,6 @@ import * as React from 'react';
 import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
-import { useRouter } from 'next/router';
 import { Add } from '@material-ui/icons';
 import { graphql, useFragment } from 'react-relay';
 import { useUser } from '@local/features/accounts/useUser';
@@ -54,9 +53,9 @@ export const ORG_MEMBERS = graphql`
 `;
 
 export interface SelectedMember {
-    readonly id: string,
-    readonly firstName: string | null
-    readonly lastName: string | null
+    readonly id: string;
+    readonly firstName: string | null;
+    readonly lastName: string | null;
 }
 
 export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
@@ -64,29 +63,27 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
     const [selectedMember, setSelectedMember] = React.useState({
         id: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
     } as SelectedMember);
-    const [user, setUser] = useUser();
+    const [user] = useUser();
     const data = useFragment(ORG_MEMBERS, fragmentRef);
     const members = React.useMemo(() => data.members?.edges || [], [data]);
-    const router = useRouter();
-    const handleNav = (path: string) => () => router.push(path);
     const connectionId = React.useMemo(() => data.members?.__id, [data]);
     const [canView, setCanView] = React.useState(false);
 
     const close = () => {
         setIsConfDialogOpen(false);
-    }
+    };
 
     React.useEffect(() => {
-        members.every(member => {
+        members.every((member) => {
             if (member.node.id === user?.id) {
                 setCanView(true);
                 return false;
             }
             return true;
-        })
-    }, [user, members])
+        });
+    }, [user, members]);
 
     if (!canView) return <Loader />;
 
@@ -98,7 +95,7 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                         members.map(({ node }) => (
                             <ListItem button key={node.id} divider>
                                 <ListItemText primary={`${node.firstName} ${node.lastName}`} />
-                                {user?.id !== node.id ?
+                                {user?.id !== node.id ? (
                                     <IconButton
                                         className='deleteMember'
                                         onClick={() => {
@@ -109,7 +106,10 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                                         aria-label='delete member'
                                     >
                                         <ClearIcon />
-                                    </IconButton> : <></>}
+                                    </IconButton>
+                                ) : (
+                                    <></>
+                                )}
                             </ListItem>
                         ))
                     ) : (

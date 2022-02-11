@@ -59,7 +59,7 @@ export const resolvers: Resolvers = {
             const submitter = await Feedback.findSubmitterByFeedbackId(feedbackId, ctx.prisma);
             return toUserId(submitter);
         },
-        async refFeedback(parent, args, ctx, info) {
+        async refFeedback(parent, args, ctx) {
             const { id: feedbackId } = fromGlobalId(parent.id);
             const feedback = await Feedback.findRefFeedback(feedbackId, ctx.prisma);
             return toFeedbackId(feedback);

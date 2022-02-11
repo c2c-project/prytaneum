@@ -5,7 +5,7 @@ import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton } 
 import { graphql, useMutation } from 'react-relay';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
 import type {
     useQuestionQueueFragment$data,
@@ -14,6 +14,7 @@ import type {
 import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
 import { ArrayElement } from '@local/utils/ts-utils';
+
 import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
 import { useEvent } from '../../useEvent';
@@ -25,13 +26,12 @@ import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
 import { QuestionActions } from '../../Questions/QuestionActions';
-import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 
 const useStyles = makeStyles((theme) => ({
     item: {
         width: '100%',
         paddingTop: theme.spacing(0.5),
-        borderRadius: '10px'
+        borderRadius: '10px',
     },
     questionActions: {
         display: 'flex',
@@ -40,10 +40,10 @@ const useStyles = makeStyles((theme) => ({
         width: '10rem',
     },
     filler: {
-        visibility: 'hidden'
+        visibility: 'hidden',
     },
     relative: {
-        position: 'relative'
+        position: 'relative',
     },
     nextQuestion: {
         paddingTop: theme.spacing(0.5),
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         background: '#F5C64F',
         '&:hover': {
             background: '#E6B035',
-        }
+        },
     },
     previousQuestion: {
         paddingBottom: theme.spacing(2),
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         paddingBottom: theme.spacing(2),
         textAlign: 'center',
-        color: '#B5B5B5'
+        color: '#B5B5B5',
     },
     select: {
         width: '7.5rem',
@@ -73,8 +73,8 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'uppercase',
         fontSize: 'small',
         fontWeight: 600,
-        ['& fieldset']: {
-            borderRadius: '7px' 
+        '& fieldset': {
+            borderRadius: '7px',
         },
     },
     menuItem: {
@@ -85,12 +85,12 @@ const useStyles = makeStyles((theme) => ({
     },
     listFilter: {
         flex: 1,
-        marginLeft: theme.spacing(0.5)
+        marginLeft: theme.spacing(0.5),
     },
     filterIcon: {
         height: 'min-content',
-        marginLeft: theme.spacing(0.5)
-    }
+        marginLeft: theme.spacing(0.5),
+    },
 }));
 
 type QuestionNode = ArrayElement<
@@ -166,7 +166,7 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                                 question: list[sourceIdx].node.question,
                                 createdBy: {
                                     firstName: list[sourceIdx].node.createdBy?.firstName || 'Unknown User',
-                                    id: list[sourceIdx].node.id
+                                    id: list[sourceIdx].node.id,
                                 },
                                 position: newPosition,
                             },
@@ -220,7 +220,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
 
     const { eventId } = useEvent();
     const classes = useStyles();
-    const ref = React.useRef<HTMLElement | null>(null);
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
 
     //
@@ -264,14 +263,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         () => (canGoForward ? enqueuedQuestions[0] : null),
         [canGoForward, enqueuedQuestions]
     );
-    
 
     //
     // ─── UTILITIES ──────────────────────────────────────────────────────────────────
     //
-    const scrollToCurrent = () => {
-        ref.current?.scrollIntoView();
-    };
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -309,11 +304,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     return (
         <>
             <Grid container>
-                <Select
-                    value={queueIndex}
-                    onChange={handleQueueChange}
-                    className={classes.select}
-                >
+                <Select value={queueIndex} onChange={handleQueueChange} className={classes.select}>
                     <MenuItem value={0} className={classes.menuItem}>
                         Upcoming
                     </MenuItem>
@@ -332,12 +323,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
                 />
             </Grid>
-            { queueIndex === 0 ?
+            {queueIndex === 0 ? (
                 <>
                     <Grid className={classes.helperText}>
-                        <Typography variant='caption'>
-                            Drag and drop questions to re-order queue
-                        </Typography>
+                        <Typography variant='caption'>Drag and drop questions to re-order queue</Typography>
                     </Grid>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <DropArea getStyle={getListStyle} droppableId='droppable'>
@@ -349,17 +338,19 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                     draggableId={question.node.id}
                                 >
                                     <ListItem disableGutters className={classes.relative}>
-                                        { question === nextQuestion &&
+                                        {question === nextQuestion && (
                                             <NextQuestionButton
                                                 color='primary'
                                                 disabled={!canGoForward}
                                                 variant='contained'
                                                 className={classes.nextQuestion}
                                             />
-                                        }
+                                        )}
                                         <Card className={classes.item}>
                                             <QuestionAuthor fragmentRef={question.node} />
-                                            {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
+                                            {question.node.refQuestion && (
+                                                <QuestionQuote fragmentRef={question.node.refQuestion} />
+                                            )}
                                             <QuestionContent fragmentRef={question.node} />
                                             <Grid container alignItems='center' justify='space-between'>
                                                 <QuestionStats fragmentRef={question.node} />
@@ -382,7 +373,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         </DropArea>
                     </DragDropContext>
                 </>
-                :
+            ) : (
                 <List>
                     {prevFilteredList.reverse().map((question) => (
                         <ListItem key={question.node.id} disableGutters>
@@ -395,7 +386,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                         </ListItem>
                     )) ?? []}
                 </List>
-            }
+            )}
         </>
     );
 }

@@ -8,21 +8,20 @@ import { EventDetailsCardFragment$key } from '@local/__generated__/EventDetailsC
 const useStyles = makeStyles((theme) => ({
     title: {
         marginTop: theme.spacing(1),
-        fontWeight: 700
+        fontWeight: 700,
     },
     description: {
         marginBottom: theme.spacing(1),
     },
     divider: {
-        background: 'black'
-    }
+        background: 'black',
+    },
 }));
 
 export const EVENT_DETAILS_CARD_FRAGMENT = graphql`
     fragment EventDetailsCardFragment on Event {
         id
         title
-        topic
         description
     }
 `;
@@ -32,7 +31,7 @@ interface Props {
 }
 
 export function EventDetailsCard({ fragmentRef }: Props) {
-    const { topic, title, description } = useFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
+    const { title, description } = useFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
     const classes = useStyles();
 
     return (
@@ -47,7 +46,3 @@ export function EventDetailsCard({ fragmentRef }: Props) {
         </Grid>
     );
 }
-
-EventDetailsCard.defaultProps = {
-    className: undefined,
-};

@@ -1,9 +1,10 @@
+/* eslint-disable prefer-arrow-callback */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import ThemeProvider from '@local/contexts/Theme';
+import { ThemeProvider } from '@local/features/core';
 
-import TextField from './TextField';
+import { TextField } from './TextField';
 
 describe('TextField', function () {
     let container: HTMLDivElement | null = null;
@@ -55,7 +56,7 @@ describe('TextField', function () {
         // enter in our simVal into the form
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(valueNode, {
-                target: ({ value: simVal.v } as unknown) as EventTarget,
+                target: { value: simVal.v } as unknown as EventTarget,
             });
         });
 

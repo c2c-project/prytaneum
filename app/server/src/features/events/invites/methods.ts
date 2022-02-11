@@ -2,11 +2,12 @@ import { PrismaClient } from '@app/prisma';
 import jwt from 'jsonwebtoken';
 import { errors } from '@local/features/utils';
 import { CreateInvite } from '@local/graphql-types';
-import { sendInviteEmail } from './invite';
 import { register } from '@local/features/accounts/methods';
 import { fromGlobalId } from 'graphql-relay';
-import { canUserModify } from '../methods';
 import { server } from '@local/index';
+
+import { sendInviteEmail } from './invite';
+import { canUserModify } from '../methods';
 
 export async function invite(viewerId: string, prisma: PrismaClient, { email, eventId }: CreateInvite) {
     // Check if event exists
@@ -41,6 +42,8 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     );
 }
 
+// FIXME:
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function validateInvite(token: string, eventId: string, prisma: PrismaClient) {
     try {
         const result = jwt.verify(token, process.env.JWT_SECRET) as { eventId: string; invitedUserId: string };

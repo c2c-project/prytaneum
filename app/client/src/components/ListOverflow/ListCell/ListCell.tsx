@@ -1,12 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-    ListItem,
-    ListItemAvatar,
-    Avatar,
-    ListItemText,
-} from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
 
 export interface Props {
     primary: string;
@@ -15,18 +10,16 @@ export interface Props {
 }
 // FIXME:
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ListCell = ({ primary, secondary, avatar }: Props) => {
-    return (
-        <li>
-            <ListItem button>
-                <ListItemAvatar>
-                    <Avatar />
-                </ListItemAvatar>
-                <ListItemText primary={primary} secondary={secondary} />
-            </ListItem>
-        </li>
-    );
-};
+const ListCell = ({ primary, secondary, avatar }: Props) => (
+    <li>
+        <ListItem button>
+            <ListItemAvatar>
+                <Avatar />
+            </ListItemAvatar>
+            <ListItemText primary={primary} secondary={secondary} />
+        </ListItem>
+    </li>
+);
 
 ListCell.defaultProps = {
     secondary: '',
