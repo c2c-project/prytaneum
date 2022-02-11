@@ -65,6 +65,36 @@ export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {
 }
 
 /**
+ * get events that this particular user is a moderator of, or has been invited to
+ */
+export async function findEventsByUserId(userId: string, prisma: PrismaClient) {
+    const results = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+            moderatorOf: {
+                include: {
+                    event: true,
+                }
+            },
+            invitedOf: {
+                include: {
+                    event: true,
+                }
+            }
+        }
+    });
+
+    if (!results) return null;
+
+    // prepare data for graphql layer
+    const userIsModerator = results.moderatorOf.map(({ event }) => event);
+    const userIsInvited = results.invitedOf.map(({ event }) => event);
+    const formattedData = userIsModerator.concat(userIsInvited);
+
+    return formattedData;
+}
+
+/**
  * function called when a user is registering themselves
  */
 export async function registerSelf(prisma: PrismaClient, input: RegistrationForm) {
