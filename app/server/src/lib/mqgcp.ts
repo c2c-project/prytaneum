@@ -37,7 +37,13 @@ export class MQGCP {
         const topic = await this.getOrCreateTopic(topicName);
         let subscription = topic.subscription(MQGCP.getSubscriptionName(topicName));
         const [exists] = await subscription.exists();
-        if (!exists) [subscription] = await topic.createSubscription(MQGCP.getSubscriptionName(topicName));
+        if (!exists)
+            [subscription] = await topic.createSubscription(MQGCP.getSubscriptionName(topicName), {
+                deadLetterPolicy: {
+                    deadLetterTopic: topic.name,
+                    maxDeliveryAttempts: 10,
+                },
+            });
         return subscription;
     }
 
