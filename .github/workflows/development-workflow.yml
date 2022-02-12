@@ -49,7 +49,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        # if: ${{ github.event.pull_request.merged }}
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
@@ -107,7 +107,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [linting, testing]
-        # if: ${{ github.event.pull_request.merged }}
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
@@ -163,7 +163,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: development
         needs: [build-publish-deploy-client, build-publish-deploy-server]
-        # if: ${{ github.event.pull_request.merged }}
+        if: ${{ github.event.pull_request.merged }}
 
         steps:
             - name: Checkout
