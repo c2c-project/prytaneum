@@ -54,7 +54,7 @@ async function start() {
             context: buildContext,
             subscription: {
                 context: buildSubscriptionContext,
-                emitter: process.env.NODE_ENV === 'development' ? undefined : emitter,
+                // emitter: process.env.NODE_ENV === 'development' ? undefined : emitter,
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);
