@@ -17,23 +17,23 @@ env:
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
 
 jobs:
-    linting:
-        name: Linting
-        runs-on: ubuntu-latest
-        environment: development
+#     linting:
+#         name: Linting
+#         runs-on: ubuntu-latest
+#         environment: development
 
-        steps:
-            - name: Setup
-              uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
-              with:
-                node-version: '14'
+#         steps:
+#             - name: Setup
+#               uses: actions/checkout@v2
+#             - uses: actions/setup-node@v2
+#               with:
+#                 node-version: '14'
 
-            - name: Yarn Install
-              run: yarn install
+#             - name: Yarn Install
+#               run: yarn install
 
-            - name: Lint Project
-              run: yarn g:lint-project
+#             - name: Lint Project
+#               run: yarn g:lint-project
 
     testing:
         name: Testing
@@ -48,7 +48,7 @@ jobs:
         name: Build Publish and Deploy Client
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, testing]
+#         needs: [linting, testing]
         if: ${{ github.event.pull_request.merged }}
 
         steps:
@@ -106,7 +106,7 @@ jobs:
         name: Build Publish and Deploy Server
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, testing]
+#         needs: [linting, testing]
         if: ${{ github.event.pull_request.merged }}
 
         steps:
