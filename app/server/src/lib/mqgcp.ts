@@ -65,8 +65,8 @@ export class MQGCP {
             .then((subscription) => {
                 let messageCount = 0;
                 function messageHandler(message: TGcpMessage) {
-                    server.log.info('Received message', message.id);
-                    server.log.info('\tData: ', message.data.toString());
+                    server.log.info('Received message', ' | ', message.toString(), ' | ', JSON.stringify(message), ' | ', JSON.parse(message.toString()));
+                    server.log.info('Data: ', JSON.stringify(JSON.parse(message.data.toString())), ' | ', JSON.parse(message.data.toString()));
                     messageCount += 1;
                     message.ack();
                 }
@@ -74,11 +74,12 @@ export class MQGCP {
                 subscription.on('message', (message: TGcpMessage) => {
                     messageHandler(message);
                     const payload = JSON.parse(message.data.toString());
+                    server.log.info(`Payload: ${payload}`);
                     listener(payload, () => { server.log.info('Listener') })
                 });
 
 
-                const timeout = 20;
+                const timeout = 60;
 
                 setTimeout(() => {
                     subscription.removeListener('message', messageHandler);

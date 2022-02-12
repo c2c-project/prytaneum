@@ -87,7 +87,7 @@ async function start() {
             // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
-                // emitter: new MQGCP()
+                emitter: new MQGCP()
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);

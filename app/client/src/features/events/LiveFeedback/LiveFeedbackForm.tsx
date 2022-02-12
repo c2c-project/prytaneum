@@ -33,7 +33,7 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
                 <TextField
                     id='feedback-field'
                     name={reply ? 'feedback-reply' : 'feedback'}
-                    label={reply ? 'Feedback Reply...' : 'Your Feedback...'}
+                    label={reply ? 'Feedback Reply...' : 'Send your feedback directly to the moderators'}
                     autoFocus
                     error={Boolean(errors.message)}
                     helperText={errors.message}
