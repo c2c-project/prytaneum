@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - master
+            - prod
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
