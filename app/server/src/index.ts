@@ -38,8 +38,21 @@ function verifyEnv() {
 }
 
 export const server = build();
+const emitter = new MQGCP(server.log);
+
+const cleanup = () => {
+    emitter.close();
+};
+
+process.on('exit', cleanup);
+process.on('SIGINT', cleanup);
+process.on('uncaughtException', cleanup);
+process.on('SIGUSR1', cleanup);
+process.on('SIGUSR2', cleanup);
+process.on('beforeExit', cleanup);
 
 async function start() {
+    
     // Google Cloud Run will set this environment variable for you, so
     // you can also use it to detect if you are running in Cloud Run
     const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
@@ -88,7 +101,7 @@ async function start() {
             context: buildContext,
             subscription: {
                 context: buildSubscriptionContext,
-                emitter: process.env.NODE_ENV === 'development' ? undefined : new MQGCP(server.log),
+                emitter: process.env.NODE_ENV === 'development' ? undefined : emitter,
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);

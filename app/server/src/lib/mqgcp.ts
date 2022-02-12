@@ -1,6 +1,7 @@
 import MQEmitter, { Message } from 'mqemitter';
 import type { FastifyLoggerInstance } from 'fastify';
-import { PubSub, Message as TGcpMessage } from '@google-cloud/pubsub';
+import { PubSub, Message as TGcpMessage, Subscription } from '@google-cloud/pubsub';
+import { Readable } from 'stream';
 
 interface MyMessage extends Message {
     // Optional to make tsc happy, but it's not really optional.
@@ -22,6 +23,11 @@ export class MQGCP {
         this.logger = logger;
     }
 
+    private async getOrCreateDeadLetterTopic() {
+        const topic = await this.getOrCreateTopic('dead_letter');
+        return topic;
+    }
+
     private static getSubscriptionName(topicName: string) {
         return `${topicName}_${process.env.POD_ID}`;
     }
@@ -37,10 +43,11 @@ export class MQGCP {
         const topic = await this.getOrCreateTopic(topicName);
         let subscription = topic.subscription(MQGCP.getSubscriptionName(topicName));
         const [exists] = await subscription.exists();
+        const dlTopic = await this.getOrCreateDeadLetterTopic();
         if (!exists)
             [subscription] = await topic.createSubscription(MQGCP.getSubscriptionName(topicName), {
                 deadLetterPolicy: {
-                    deadLetterTopic: topic.name,
+                    deadLetterTopic: dlTopic.name,
                     maxDeliveryAttempts: 10,
                 },
             });
@@ -102,5 +109,13 @@ export class MQGCP {
                 })
                 .catch((err) => this.logger.error(err));
         });
+    }
+
+    async close() {
+        const readable = Readable.from(this.pubsub.getSubscriptionsStream());
+        readable.addListener('data', (subscription: Subscription) => {
+            subscription.delete();
+        });
+        await this.pubsub.close();
     }
 }
