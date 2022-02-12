@@ -232,7 +232,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@app/server", "workspace:app/server"],
             ["@app/prisma", "workspace:app/prisma"],
-            ["@google-cloud/pubsub", "npm:2.18.5"],
+            ["@google-cloud/pubsub", "npm:2.17.0"],
             ["@graphql-tools/load-files", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.5.3"],
             ["@graphql-tools/merge", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.2.17"],
             ["@graphql-tools/schema", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.1.5"],
@@ -4064,22 +4064,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@google-cloud/pubsub", [
-        ["npm:2.18.5", {
-          "packageLocation": "./.yarn/cache/@google-cloud-pubsub-npm-2.18.5-7a892e3060-832f1a6d32.zip/node_modules/@google-cloud/pubsub/",
+        ["npm:2.17.0", {
+          "packageLocation": "./.yarn/cache/@google-cloud-pubsub-npm-2.17.0-1919b948db-c7023ffa50.zip/node_modules/@google-cloud/pubsub/",
           "packageDependencies": [
-            ["@google-cloud/pubsub", "npm:2.18.5"],
+            ["@google-cloud/pubsub", "npm:2.17.0"],
             ["@google-cloud/paginator", "npm:3.0.6"],
             ["@google-cloud/precise-date", "npm:2.0.4"],
             ["@google-cloud/projectify", "npm:2.1.1"],
             ["@google-cloud/promisify", "npm:2.0.4"],
             ["@opentelemetry/api", "npm:1.1.0"],
-            ["@opentelemetry/semantic-conventions", "npm:1.0.1"],
+            ["@opentelemetry/semantic-conventions", "npm:0.24.0"],
             ["@types/duplexify", "npm:3.6.1"],
             ["@types/long", "npm:4.0.1"],
             ["arrify", "npm:2.0.1"],
             ["extend", "npm:3.0.2"],
             ["google-auth-library", "npm:7.11.0"],
-            ["google-gax", "npm:2.29.4"],
+            ["google-gax", "npm:2.29.7"],
             ["is-stream-ended", "npm:0.1.4"],
             ["lodash.snakecase", "npm:4.1.1"],
             ["p-defer", "npm:3.0.0"]
@@ -6353,10 +6353,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@opentelemetry/semantic-conventions", [
-        ["npm:1.0.1", {
-          "packageLocation": "./.yarn/cache/@opentelemetry-semantic-conventions-npm-1.0.1-db37946131-c17dd64941.zip/node_modules/@opentelemetry/semantic-conventions/",
+        ["npm:0.24.0", {
+          "packageLocation": "./.yarn/cache/@opentelemetry-semantic-conventions-npm-0.24.0-a81d338727-56e0e817a0.zip/node_modules/@opentelemetry/semantic-conventions/",
           "packageDependencies": [
-            ["@opentelemetry/semantic-conventions", "npm:1.0.1"]
+            ["@opentelemetry/semantic-conventions", "npm:0.24.0"]
           ],
           "linkType": "HARD",
         }]
@@ -17600,10 +17600,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["google-gax", [
-        ["npm:2.29.4", {
-          "packageLocation": "./.yarn/cache/google-gax-npm-2.29.4-ef9e91e5f8-346ba13802.zip/node_modules/google-gax/",
+        ["npm:2.29.7", {
+          "packageLocation": "./.yarn/cache/google-gax-npm-2.29.7-6a792d899a-bbca9cbe5c.zip/node_modules/google-gax/",
           "packageDependencies": [
-            ["google-gax", "npm:2.29.4"],
+            ["google-gax", "npm:2.29.7"],
             ["@grpc/grpc-js", "npm:1.5.4"],
             ["@grpc/proto-loader", "npm:0.6.9"],
             ["@types/long", "npm:4.0.1"],
