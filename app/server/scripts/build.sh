@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Makes it so that the script exist if any command fails 
 # https://intoli.com/blog/exit-on-errors-in-bash-scripts/
