@@ -1,15 +1,16 @@
 import React from 'react';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useEvent } from '../useEvent';
 import { graphql, useFragment, useMutation } from 'react-relay';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Card, CardContent, DialogContent, Typography } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
+import { LiveFeedbackReplyFragment$key } from '@local/__generated__/LiveFeedbackReplyFragment.graphql';
+import { LiveFeedbackReplyActionMutation } from '@local/__generated__/LiveFeedbackReplyActionMutation.graphql';
+
+import { useEvent } from '../useEvent';
 import { LiveFeedbackForm, LiveFeedbackFormProps } from './LiveFeedbackForm';
 import { LiveFeedbackAuthor } from './LiveFeedbackAuthor';
-import { LiveFeedbackReplyFragment$key } from '@local/__generated__/LiveFeedbackReplyFragment.graphql';
 import { LIVE_FEEDBACK_REPLY_FRAGMENT } from './LiveFeedbackReply';
-import { LiveFeedbackReplyActionMutation } from '@local/__generated__/LiveFeedbackReplyActionMutation.graphql';
 
 const useStyles = makeStyles((theme) => ({
     card: {

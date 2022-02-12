@@ -44,7 +44,6 @@ export function CreateSpeaker({ eventId, onSubmit, connections }: CreateSpeakerP
                 connections: connections ?? [],
             },
             onCompleted(results) {
-                console.log(results);
                 if (results.createSpeaker) onSubmit(results.createSpeaker);
             },
         });

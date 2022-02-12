@@ -70,9 +70,9 @@ async function start() {
 
         server.addHook('preHandler', (req, reply, next) => {
             if (req.body) {
-              req.log.info({ body: req.body }, 'parsed body')
+                req.log.info({ body: req.body }, 'parsed body');
             }
-            next()
+            next();
         });
 
         server.register(fastifyCors, {
@@ -87,7 +87,7 @@ async function start() {
             // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
-                emitter: new MQGCP()
+                emitter: process.env.NODE_ENV === 'development' ? undefined : new MQGCP(server.log),
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);

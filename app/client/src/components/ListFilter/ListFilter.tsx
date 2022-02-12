@@ -46,10 +46,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     input: {
-        ['& fieldset']: {
-            borderRadius: 9999 // rounded text field
+        '& fieldset': {
+            borderRadius: 9999, // rounded text field
         },
-    }
+    },
 }));
 
 type Filters = Set<string>;
@@ -61,7 +61,16 @@ export function ListFilterSkeleton(props: SkeletonProps) {
     );
 }
 
-export default function ListFilter<T>({ filterMap, onSearch, length, onFilterChange, menuIcons, displayNumResults, className }: Props<T>) {
+// FIXME: delete dead code
+export default function ListFilter<T>({
+    filterMap,
+    onSearch,
+    // length,
+    onFilterChange,
+    menuIcons,
+    // displayNumResults,
+    className,
+}: Props<T>) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

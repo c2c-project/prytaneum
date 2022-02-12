@@ -1,8 +1,9 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-filename-extension */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import Picker from './DateTimePicker';
+import { DateTimePicker } from './DateTimePicker';
 
 describe('DateTimePicker', function () {
     let container: HTMLDivElement | null = null;
@@ -26,10 +27,7 @@ describe('DateTimePicker', function () {
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
         ReactTestUtils.act(() => {
-            render(
-                <Picker id='test' value='test' onChange={() => {}} />,
-                container
-            );
+            render(<DateTimePicker id='test' value='test' onChange={() => {}} />, container);
         });
         expect(document.getElementById('test')).toBeTruthy();
     });

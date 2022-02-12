@@ -13,16 +13,13 @@ export type PieDatumWithColor = PieDatum & {
 
 interface Props {
     height: number;
-    data: PieDatum[];
+    // FIXME:
+    // data: PieDatum[];
 }
 export type AccessorFunc = (datum: PieDatum) => string;
 
 export type ValueFormatter = (value: number) => string | number;
 
-export default function TownhallNivo({ height, data }: Props) {
-    return (
-        <div style={{ height }}>
-            {/* <ResponsivePie data={data} /> */}
-        </div>
-    );
+export default function TownhallNivo({ height }: Props) {
+    return <div style={{ height }}>{/* <ResponsivePie data={data} /> */}</div>;
 }

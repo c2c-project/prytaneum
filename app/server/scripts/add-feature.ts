@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Script that initializes a feature folder in the format required by the project
  */
@@ -6,6 +7,11 @@ import { join } from 'path';
 import fs from 'fs';
 
 const [featureName, parentFeat] = process.argv.slice(2);
+const TEMPLATE_DIR = `${__dirname}/../templates`;
+const SCHEMA_FILE_PATH = `${TEMPLATE_DIR}/schema.template.graphql`;
+const METHODS_FILE_PATH = `${TEMPLATE_DIR}/methods.template.ts`;
+const RESOLVERS_FILE_PATH = `${TEMPLATE_DIR}/resolvers.template.ts`;
+const README_FILE_PATH = `${TEMPLATE_DIR}/readme.template.md`;
 
 function toKebabCase(str: string) {
     return str.trim().replace(/[A-Z]/g, (chunk) => `-${chunk.toLowerCase()}`);
@@ -14,7 +20,7 @@ function toKebabCase(str: string) {
 // idk what else to call it, but it does this -- kebab-case -> Kebab Case
 function toRegularCase(str: string) {
     return (
-        str.charAt(0).toUpperCase() + str.slice(1).replace(/-([a-z])/g, (chunk) => ' ' + chunk.slice(1).toUpperCase())
+        str.charAt(0).toUpperCase() + str.slice(1).replace(/-([a-z])/g, (chunk) => ` ${chunk.slice(1).toUpperCase()}`)
     );
 }
 
@@ -25,25 +31,32 @@ function toPascalCase(str: string) {
 
 if (!featureName) throw new Error('No feature name provided');
 
-const DIR = join(__dirname, '../src/features');
+const FEATURE_DIR = join(__dirname, '../src/features');
 const kebabFeatureName = toKebabCase(featureName);
-const folder = parentFeat ? `${DIR}/${toKebabCase(parentFeat)}/${kebabFeatureName}` : `${DIR}/${kebabFeatureName}`;
+const FOLDER = parentFeat
+    ? `${FEATURE_DIR}/${toKebabCase(parentFeat)}/${kebabFeatureName}`
+    : `${FEATURE_DIR}/${kebabFeatureName}`;
 const isSubFeature = Boolean(parentFeat);
 
-const readme = `${isSubFeature ? '\n###' : '#'} ${toRegularCase(kebabFeatureName)} Features \n`;
-const schema = `type ${toPascalCase(kebabFeatureName)} {\n\n}`;
-const resolvers = `import { Resolvers } from '@local/features/utils';\nimport * as ${toPascalCase(kebabFeatureName)} from './methods';\n\nexport const resolvers: Resolvers = {};`;
-const methods = `import { PrismaClient } from '@app/prisma';\nimport { Maybe, errors } from '@local/features/utils';`;
+// Methods could technically be a straight fs.copyFileSync, but leaving like this for clarity.
+const methods = fs.readFileSync(METHODS_FILE_PATH).toString();
+const resolvers = fs.readFileSync(RESOLVERS_FILE_PATH).toString().replace('$1', toPascalCase(kebabFeatureName));
+const readme = fs
+    .readFileSync(README_FILE_PATH)
+    .toString()
+    .replace('$1', isSubFeature ? '\n###' : '#')
+    .replace('$2', toRegularCase(kebabFeatureName));
+const schema = fs.readFileSync(SCHEMA_FILE_PATH).toString().replace('$1', toPascalCase(kebabFeatureName));
 
-if (fs.existsSync(folder)) throw new Error("Folder already exists. Double check what you're doing");
+if (fs.existsSync(FOLDER)) throw new Error('Folder already exists. Double check the file name.');
 
-fs.mkdirSync(folder);
+fs.mkdirSync(FOLDER);
 
-if (isSubFeature) fs.writeFileSync(`${DIR}/${toKebabCase(parentFeat)}/README.md`, readme, { flag: 'a+' });
-else fs.writeFileSync(`${folder}/README.md`, readme, { flag: 'w+' });
+if (isSubFeature) fs.writeFileSync(`${FEATURE_DIR}/${toKebabCase(parentFeat)}/README.md`, readme, { flag: 'a+' });
+else fs.writeFileSync(`${FOLDER}/README.md`, readme, { flag: 'w+' });
 
-fs.writeFileSync(`${folder}/schema.graphql`, schema, { flag: 'w+' });
-fs.writeFileSync(`${folder}/resolvers.ts`, resolvers, { flag: 'w+' });
-fs.writeFileSync(`${folder}/methods.ts`, methods, { flag: 'w+' });
+fs.writeFileSync(`${FOLDER}/schema.graphql`, schema, { flag: 'w+' });
+fs.writeFileSync(`${FOLDER}/resolvers.ts`, resolvers, { flag: 'w+' });
+fs.writeFileSync(`${FOLDER}/methods.ts`, methods, { flag: 'w+' });
 
 console.log('Successfully added feature files');

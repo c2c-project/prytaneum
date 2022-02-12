@@ -14,7 +14,6 @@ import { QuestionContent } from '../QuestionContent';
 
 interface QuoteProps {
     className?: string;
-    connections: string[];
     fragmentRef: QuoteFragment$key;
 }
 
@@ -50,7 +49,7 @@ export const QUOTE_FRAGMENT = graphql`
     }
 `;
 
-export function Quote({ className, connections, fragmentRef }: QuoteProps) {
+export function Quote({ className, fragmentRef }: QuoteProps) {
     const [isOpen, open, close] = useResponsiveDialog(false);
     const { eventId } = useEvent();
     const classes = useStyles();
@@ -66,8 +65,8 @@ export function Quote({ className, connections, fragmentRef }: QuoteProps) {
                     eventId,
                     isQuote: true,
                     refQuestion: data.id,
-                }
-            }
+                },
+            },
         });
         close();
     };

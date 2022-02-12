@@ -79,7 +79,7 @@ export interface EventLiveProps {
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+    usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -111,25 +111,13 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         });
     };
 
-    React.useEffect(() => {
-        const { valid } = validateInvite;
-        console.log(valid);
-        // Check if event is private
-        // If private, check if valid & redirect if invalid
-    }, [validateInvite]);
-
     if (!node) return <EventSidebarLoader />;
 
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
-                <Grid
-                    container item
-                    md={8}
-                    direction='column'
-                    wrap='nowrap'
-                >
+                <Grid container item md={8} direction='column' wrap='nowrap'>
                     <Grid item className={classes.video}>
                         <EventVideo fragmentRef={node} />
                     </Grid>

@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Autocomplete, {
-    AutocompleteChangeReason,
-    AutocompleteChangeDetails,
-} from '@material-ui/lab/Autocomplete';
+import Autocomplete, { AutocompleteChangeReason, AutocompleteChangeDetails } from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { TextField, Checkbox } from '@material-ui/core';
@@ -42,9 +39,7 @@ export interface Props {
 }
 
 const ComboSelect = ({ options, onChange, selectedFilter, label }: Props) => {
-    const selectedSet = React.useMemo(() => new Set(selectedFilter), [
-        selectedFilter,
-    ]);
+    const selectedSet = React.useMemo(() => new Set(selectedFilter), [selectedFilter]);
     const classes = useStyles();
 
     return (
@@ -56,9 +51,7 @@ const ComboSelect = ({ options, onChange, selectedFilter, label }: Props) => {
             classes={{ tag: classes.chip }}
             disableCloseOnSelect
             defaultValue={selectedFilter}
-            getOptionLabel={(option: string) => {
-                return option;
-            }}
+            getOptionLabel={(option: string) => option}
             renderOption={(option: string) => (
                 <>
                     <Checkbox

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, InputAdornment, Grid, Divider, Avatar, Typography } from '@material-ui/core';
+import { Button, IconButton, InputAdornment, Grid, Typography } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 // import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
