@@ -70,7 +70,6 @@ export class MQGCP {
                 .then((subscription) => {
                     let messageCount = 0;
                     const messageHandler = (message: TGcpMessage) => {
-                        this.logger.info('Received message', message, ' | ', JSON.stringify(message));
                         this.logger.info('Data: ', message.data.toString(), ' | ', JSON.parse(message.data.toString()));
                         messageCount += 1;
                         message.ack();
