@@ -29,11 +29,8 @@ jobs:
             - name: Yarn Install
               run: yarn install
 
-            - name: Lint Client
-              run: yarn workspace @app/client lint
-
-            - name: Lint Server
-              run: yarn workspace @app/server lint
+            - name: Lint Project
+              run: yarn g:lint-project
 
     testing:
         name: Testing
