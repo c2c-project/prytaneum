@@ -92,7 +92,7 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ questionCreated: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCreated'),
                 (payload, args, ctx) => {
-                    console.log('QUESITON CREATED: ', payload);
+                    ctx.reply.log.info('Question Created: ', payload);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.questionCreated.edge.node.id);
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
