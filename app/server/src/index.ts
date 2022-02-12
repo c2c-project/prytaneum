@@ -1,69 +1,21 @@
-import { loadFilesSync } from '@graphql-tools/load-files';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { join } from 'path';
 import mercurius from 'mercurius';
 import mercuriusCodgen from 'mercurius-codegen';
 import cookie, { FastifyCookieOptions } from 'fastify-cookie';
 import AltairFastify from 'altair-fastify-plugin';
 import fastifyCors from 'fastify-cors';
+import { schema, checkEnv, initCleanup } from '@local/core';
 import { MQGCP } from './lib/mqgcp';
 
 import { buildContext, buildSubscriptionContext } from './context';
 import build from './server';
 
-const typeDefsArr = loadFilesSync(join(__dirname, './features/**/*.graphql'));
-const typeDefs = mergeTypeDefs(typeDefsArr);
-// TODO: use glob or some other method to grab relevent files
-const resolverArr = loadFilesSync([
-    join(__dirname, './features/**/resolvers.ts'),
-    join(__dirname, './features/type-parsers.ts'),
-    join(__dirname, './features/type-parsers.js'),
-    join(__dirname, './features/**/resolvers.js'),
-]);
-
-const resolvers = mergeResolvers(resolverArr);
-
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-function verifyEnv() {
-    if (!process.env.NODE_ENV) throw new Error('Must define NODE_ENV');
-    if (process.env.NODE_ENV === 'production') {
-        if (!process.env.COOKIE_SECRET) throw new Error('Must define COOKIE_SECRET in production');
-        if (!process.env.JWT_SECRET) throw new Error('Must define JWT_SECRET in production');
-        if (!process.env.SERVER_PORT) throw new Error('Must define PORT in production');
-        if (!process.env.HOST) throw new Error('Must define HOST in production');
-        if (!process.env.GCP_PROJECT_ID) throw new Error('Must define GCP_PROJECT_ID in production');
-    }
-}
-
 export const server = build();
 const emitter = new MQGCP(server.log);
 
-const cleanup = () => {
-    emitter.close();
-};
-
-process.on('exit', cleanup);
-process.on('SIGINT', cleanup);
-process.on('uncaughtException', cleanup);
-process.on('SIGUSR1', cleanup);
-process.on('SIGUSR2', cleanup);
-process.on('beforeExit', cleanup);
-process.on('SIGTERM', cleanup);
-process.on('SIGKILL', cleanup);
-
 async function start() {
-    // Google Cloud Run will set this environment variable for you, so
-    // you can also use it to detect if you are running in Cloud Run
-    const IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
-
-    const port = process.env.SERVER_PORT || '3002';
-
-    // You must listen on all IPV4 addresses in Cloud Run
-    const address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : process.env.HOST;
-
     try {
+        initCleanup(emitter);
         if (!server) throw new Error('Server Building Failed');
         // does not run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
         mercuriusCodgen(server, {
@@ -120,9 +72,9 @@ async function start() {
         server.get('/', async () => ({ status: 'Healthy' }));
         server.get('/healthz', async () => ({ status: 'Healthy' }));
 
-        verifyEnv();
-        server.log.info(`${process.env.NODE_ENV} Server running on ${address}:${port}`);
-        const runAddress = await server.listen(port, address);
+        checkEnv();
+        server.log.info(`${process.env.NODE_ENV} Server running on ${process.env.HOST}:${process.env.PORT}`);
+        const runAddress = await server.listen(process.env.PORT, process.env.HOST);
         server.log.info(`Listening on ${runAddress}`);
     } catch (err) {
         server.log.error(err);
