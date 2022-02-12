@@ -87,7 +87,7 @@ async function start() {
             // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
-                emitter: new MQGCP(),
+                emitter: process.env.NODE_ENV === 'development' ? undefined : new MQGCP(server.log),
             },
             errorFormatter: (error, ...args) => {
                 server.log.error(error);
