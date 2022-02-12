@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -15,11 +14,14 @@ import build from './server';
 
 const typeDefsArr = loadFilesSync(join(__dirname, './features/**/*.graphql'));
 const typeDefs = mergeTypeDefs(typeDefsArr);
-
+// TODO: use glob or some other method to grab relevent files
 const resolverArr = loadFilesSync([
     join(__dirname, './features/**/resolvers.ts'),
     join(__dirname, './features/type-parsers.ts'),
+    join(__dirname, './features/type-parsers.js'),
+    join(__dirname, './features/**/resolvers.js'),
 ]);
+
 const resolvers = mergeResolvers(resolverArr);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
@@ -84,7 +86,6 @@ async function start() {
             schema,
             graphiql: process.env.NODE_ENV === 'development',
             context: buildContext,
-            // subscription: true,
             subscription: {
                 context: buildSubscriptionContext,
                 emitter: process.env.NODE_ENV === 'development' ? undefined : new MQGCP(server.log),
