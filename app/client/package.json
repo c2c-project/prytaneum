@@ -3,10 +3,10 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "info": "next info",
-        "dev": "next dev",
-        "build": "next build",
         "start": "next start",
+        "dev": "next dev",
+        "info": "next info",
+        "build": "next build",
         "relay": "relay-compiler --watch",
         "typecheck": "tsc -p tsconfig.prod.json --noEmit"
     },

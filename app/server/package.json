@@ -4,9 +4,9 @@
     "scripts": {
         "start": "dotenv -c production -- ts-node-dev -r tsconfig-paths/register --transpile-only ./src/index.ts",
         "dev": "dotenv -c development -- ts-node-dev --watch ./src/features -r tsconfig-paths/register --rs --transpile-only --no-notify --exit-child ./src/index.ts",
+        "build": "yarn exec scripts/build.sh",
         "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts",
         "typecheck": "tsc -p tsconfig.prod.json --noEmit",
-        "build": "yarn exec scripts/build.sh",
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js"
     },
     "dependencies": {
