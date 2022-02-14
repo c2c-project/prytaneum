@@ -43,6 +43,7 @@ module.exports = {
         'import/prefer-default-export': 'off',
         // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
         'react/require-default-props': 'off',
+        'import/no-anonymous-default-export': 'off',
     },
     overrides: [
         {
