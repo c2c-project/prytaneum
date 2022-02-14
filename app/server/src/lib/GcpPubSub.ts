@@ -1,7 +1,10 @@
+/* eslint-disable */
 import MQEmitter, { Message } from 'mqemitter';
 import type { FastifyLoggerInstance } from 'fastify';
 import { PubSub, Message as TGcpMessage, Subscription } from '@google-cloud/pubsub';
 import { Readable } from 'stream';
+import { TtlCache } from './TtlCache';
+import { InMemoryCache } from './InMemoryCache';
 
 interface MyMessage extends Message {
     // Optional to make tsc happy, but it's not really optional.
@@ -10,17 +13,30 @@ interface MyMessage extends Message {
 
 type TListener = (message: MyMessage, done: () => void) => void;
 
-export class MQGCP {
-    mqEmitter: ReturnType<typeof MQEmitter>;
+// FIXME: this currently does not work due to issues that will be written elsewhere
+export class GcpPubSub {
+    private mqEmitter: ReturnType<typeof MQEmitter>;
 
-    pubsub: PubSub;
+    private pubsub: PubSub;
 
-    logger: FastifyLoggerInstance;
+    private logger: FastifyLoggerInstance;
+
+    // Caches what message id's we've already seen in case we get multiple deliveries.
+    private ttlCache: TtlCache;
+
+    // Caches what topics we already know exist or have.
+    private topicCache: InMemoryCache;
+
+    // Caches what subscriptions we already know exist or have.
+    private subscriptionCache: InMemoryCache;
 
     constructor(logger: FastifyLoggerInstance) {
         this.mqEmitter = MQEmitter();
         this.pubsub = new PubSub({ projectId: process.env.GCP_PROJECT_ID });
-        this.logger = logger;
+        this.logger = logger.child({ module: 'GcpPubSub' });
+        this.ttlCache = new TtlCache(this.logger);
+        this.topicCache = new InMemoryCache(this.logger);
+        this.subscriptionCache = new InMemoryCache(this.logger);
     }
 
     private async getOrCreateDeadLetterTopic() {
@@ -28,33 +44,42 @@ export class MQGCP {
         return topic;
     }
 
-    private static getSubscriptionName(topicName: string) {
-        return `${topicName}_${process.env.POD_ID}`;
+    private getSubscriptionName(topicName: string) {
+        const name = `${topicName}_${process.env.POD_ID}`;
+        this.logger.debug(`Creating subscription named: ${name}`);
+        return name;
     }
 
     private async getOrCreateTopic(topicName: string) {
         let topic = this.pubsub.topic(topicName);
         const [exists] = await topic.exists();
-        if (!exists) [topic] = await this.pubsub.createTopic(topicName);
+        if (!exists) {
+            this.logger.debug(`Creating topic named: ${topic.name}`);
+            [topic] = await topic.create();
+        }
         return topic;
     }
 
     private async getOrCreateSubscription(topicName: string) {
         const topic = await this.getOrCreateTopic(topicName);
-        let subscription = topic.subscription(MQGCP.getSubscriptionName(topicName));
+        let subscription = topic.subscription(this.getSubscriptionName(topicName));
         const [exists] = await subscription.exists();
         const dlTopic = await this.getOrCreateDeadLetterTopic();
-        if (!exists)
-            [subscription] = await topic.createSubscription(MQGCP.getSubscriptionName(topicName), {
+        this.logger.debug(`Subscription ${subscription.name} ${exists ? 'already exists.' : 'does not exist.'}`);
+        if (!exists) {
+            this.logger.debug(`Creating subscription named: ${subscription.name}`);
+            [subscription] = await subscription.create({
                 deadLetterPolicy: {
                     deadLetterTopic: dlTopic.name,
                     maxDeliveryAttempts: 10,
                 },
             });
+        } else [subscription] = await subscription.get();
         return subscription;
     }
 
     emit(message: MyMessage, callback: (err?: Error) => void) {
+        this.logger.debug(`Message emitted ${JSON.stringify(message)}`);
         this.mqEmitter.emit(message, (err) => {
             if (err && callback) callback(err);
             this.getOrCreateTopic(message.topic)
@@ -67,6 +92,7 @@ export class MQGCP {
     }
 
     removeListener(event: string, listener: TListener, callback?: () => void) {
+        this.logger.debug(`Removing listener for event: ${event}`);
         this.mqEmitter.removeListener(event, listener, () => {
             this.getOrCreateSubscription(event)
                 .then((subscription) => subscription.removeListener(event, listener))
@@ -78,36 +104,20 @@ export class MQGCP {
     }
 
     on(event: string, listener: TListener, onDone: () => void) {
+        this.logger.debug(`Adding listener for event: ${event}`);
         this.mqEmitter.on(event, listener, () => {
             this.getOrCreateSubscription(event)
-                .then((subscription) => {
-                    let messageCount = 0;
-                    const messageHandler = (message: TGcpMessage) => {
-                        this.logger.info('Data: ', message.data.toString(), ' | ', JSON.parse(message.data.toString()));
-                        messageCount += 1;
-                        message.ack();
-                    };
-
+                .then((subscription) =>
                     subscription.on('message', (message: TGcpMessage) => {
-                        messageHandler(message);
                         const payload = JSON.parse(message.data.toString());
-                        this.logger.info(`Payload: ${payload}`);
                         listener(payload, () => {
-                            this.logger.info('Listener');
+                            message.ack();
                         });
-                    });
-
-                    const timeout = 60;
-
-                    setTimeout(() => {
-                        subscription.removeListener('message', messageHandler);
-                        this.logger.info(`timeout done, ${messageCount} message(s) received.`);
-                    }, timeout * 1000);
-                })
+                    })
+                )
                 .then(() => {
                     if (onDone) onDone();
-                })
-                .catch((err) => this.logger.error(err));
+                });
         });
     }
 
