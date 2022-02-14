@@ -1,10 +1,9 @@
 import { PrismaClient } from '@app/prisma';
-import jwt from 'jsonwebtoken';
 import { errors } from '@local/features/utils';
 import { CreateInvite } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 import { fromGlobalId } from 'graphql-relay';
-import { server } from '@local/index';
+import { verify, sign } from '@local/lib/jwt';
 
 import { sendInviteEmail } from './invite';
 import { canUserModify } from '../methods';
@@ -29,15 +28,15 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     }
 
     // Sign token
-    const token = jwt.sign({ eventId, invitedUserId }, process.env.JWT_SECRET); // TODO expire at some point
+    const token = await sign({ eventId, invitedUserId }); // TODO: expire at some point
 
     // Send Email
     return sendInviteEmail(
-        queryResult.title, 
-        eventId, 
-        queryResult.startDateTime, 
-        queryResult.endDateTime, 
-        email, 
+        queryResult.title,
+        eventId,
+        queryResult.startDateTime,
+        queryResult.endDateTime,
+        email,
         token
     );
 }
@@ -45,16 +44,11 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
 // FIXME:
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function validateInvite(token: string, eventId: string, prisma: PrismaClient) {
-    try {
-        const result = jwt.verify(token, process.env.JWT_SECRET) as { eventId: string; invitedUserId: string };
-        if (!result.eventId) return { valid: false };
-        const { id: tokenEventId } = fromGlobalId(result.eventId);
+    const result = (await verify(token)) as { eventId: string; invitedUserId: string };
+    if (!result.eventId) return { valid: false };
+    const { id: tokenEventId } = fromGlobalId(result.eventId);
 
-        // Ensure token is being used for the correct event
-        if (eventId !== tokenEventId) return { valid: false };
-        return { valid: true };
-    } catch (err) {
-        server.log.error(err);
-        return { valid: false };
-    }
+    // Ensure token is being used for the correct event
+    if (eventId !== tokenEventId) return { valid: false };
+    return { valid: true };
 }
