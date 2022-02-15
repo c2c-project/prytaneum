@@ -17,7 +17,8 @@ If you don't already have the main repo of prytaneum as a remote repo, do the fo
 ```bash
 git remote add upstream git@github.com:c2c-project/prytaneum.git
 ```
-**NOTE**: You can name the remote anything you want `upstream`,`c2c`, or `something`.  The above and following examples uses the name `upstream`.
+
+**NOTE**: You can name the remote anything you want `upstream`,`c2c`, or `something`. The above and following examples uses the name `upstream`.  
 You can think of this as setting up another "source" from which your git client can fetch updates from. You're probably already familiar with `origin` as a source. When you first clone a repository, origin is a remote repository already set up for you based on the address from which you cloned the repository. Disclaimer: I'm not a git expert, but I've gotten by with thinking of things in this way.
 
 Adding prytaneum as a new remote allows you to do the following:
@@ -54,14 +55,14 @@ You're all set to open the PR!
 
 ### FAQ
 
-1. What is rebasing?   
-[This will probably answer most of your questions](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase)
+1. What is rebasing?  
+   [This will probably answer most of your questions](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase)
 
-2. Why rebase instead of merging?   
-Honestly, it's just preference. Rebasing in interactive mode forces you to make sure your changes are merged correctly commit-by-commit instead of all at one time in a git merge (the default strategy in a git pull). __Pro-tip:__ you can change the default behavior of `git pull` to rebase: `git config --global pull.rebase true`.  If you don't want to change it for all of your projects with git, just remove the `--global` flag.
+2. Why rebase instead of merging?  
+   Honestly, it's just preference. Rebasing in interactive mode forces you to make sure your changes are merged correctly commit-by-commit instead of all at one time in a git merge (the default strategy in a git pull). **Pro-tip:** you can change the default behavior of `git pull` to rebase: `git config --global pull.rebase true`. If you don't want to change it for all of your projects with git, just remove the `--global` flag.
 
-3. Is there something wrong with merging?   
-Nope. This is all just preference. There is a tradeoff with rebasing: rebasing changes history. When you're rebasing, any changes you make or conflicts you resolve is actively changing the history. If you're rebasing a public branch, this can be problematic. If you're the only one editing said branch, then it's not really an issue to `git push --force`, however, this should always be done with caution. If you google "git rebase vs merge" you'll find lots of passionate discussion :)
+3. Is there something wrong with merging?  
+   Nope. This is all just preference. There is a tradeoff with rebasing: rebasing changes history. When you're rebasing, any changes you make or conflicts you resolve is actively changing the history. If you're rebasing a public branch, this can be problematic. If you're the only one editing said branch, then it's not really an issue to `git push --force`, however, this should always be done with caution. If you google "git rebase vs merge" you'll find lots of passionate discussion :)
 
 4. I have a merge commit, is that bad?  
-Not at all.  We'll still merge the PR, just make sure the diff isn't something outrageous.
+   Not at all. We'll still merge the PR, just make sure the diff isn't something outrageous.
