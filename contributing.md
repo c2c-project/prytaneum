@@ -17,7 +17,7 @@ If you don't already have the main repo of prytaneum as a remote repo, do the fo
 ```bash
 git remote add upstream git@github.com:c2c-project/prytaneum.git
 ```
-
+**NOTE**: You can name the remote anything you want `upstream`,`c2c`, or `something`.  The above and following examples uses the name `upstream`.
 You can think of this as setting up another "source" from which your git client can fetch updates from. You're probably already familiar with `origin` as a source. When you first clone a repository, origin is a remote repository already set up for you based on the address from which you cloned the repository. Disclaimer: I'm not a git expert, but I've gotten by with thinking of things in this way.
 
 Adding prytaneum as a new remote allows you to do the following:
