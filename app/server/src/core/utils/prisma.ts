@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 
 // Prisma client must be a singleton
 let _prisma: PrismaClient | null = null;

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 import { CreateOrganization, UpdateOrganization, CreateMember, DeleteMember } from '@local/graphql-types';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';

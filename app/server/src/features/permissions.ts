@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 
 /**
  * permisison check to see if a user can create an event
