@@ -10,7 +10,6 @@ const isNumber = (value: unknown): value is number => !Number.isNaN(Number(value
 // ─── ISVALID FUNCTIONS FOR REACH ENV VARIABLE ───────────────────────────────────
 //
 
-// There are only 3 values which are valid for NODE_ENV. At the moment we don't use staging, but we may in the future
 const isValidNodeEnv =
     process.env.NODE_ENV === 'production' ||
     process.env.NODE_ENV === 'development' ||
@@ -35,7 +34,7 @@ const isValidHost =
     // These values may change in the future
     (process.env.HOST === '0.0.0.0' || process.env.HOST === '127.0.0.1' || process.env.HOST === 'localhost');
 
-// This does not need to be defined in production
+// This only needs to be defined in production.
 const isValidGcpProjectId = isProduction ? isString(process.env.GCP_PROJECT_ID) : true;
 
 export function checkEnv() {
