@@ -208,7 +208,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/load-files", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.5.3"],
             ["@graphql-tools/merge", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.2.17"],
             ["@graphql-tools/schema", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.1.5"],
-            ["@prisma/client", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.21.2"],
+            ["@prisma/client", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:3.9.2"],
             ["@types/bcryptjs", "npm:2.4.2"],
             ["@types/cors", "npm:2.8.12"],
             ["@types/jsonwebtoken", "npm:8.5.1"],
@@ -238,7 +238,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["module-alias", "npm:2.2.2"],
             ["mqemitter", "npm:4.5.0"],
             ["pino-pretty", "npm:7.1.0"],
-            ["prisma", "npm:3.4.0"],
+            ["prisma", "npm:3.9.2"],
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],
             ["tsconfig-paths", "npm:3.9.0"],
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=d8b4e7"],
@@ -8627,20 +8627,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@prisma/client", [
-        ["npm:2.21.2", {
-          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-aedf995145/node_modules/@prisma/client/",
+        ["npm:3.9.2", {
+          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-57021d6eed/node_modules/@prisma/client/",
           "packageDependencies": [
-            ["@prisma/client", "npm:2.21.2"]
+            ["@prisma/client", "npm:3.9.2"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.21.2", {
-          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-aedf995145/node_modules/@prisma/client/",
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:3.9.2", {
+          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-57021d6eed/node_modules/@prisma/client/",
           "packageDependencies": [
-            ["@prisma/client", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.21.2"],
-            ["@prisma/engines-version", "npm:2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d"],
+            ["@prisma/client", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:3.9.2"],
+            ["@prisma/engines-version", "npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009"],
             ["@types/prisma", null],
-            ["prisma", "npm:3.4.0"]
+            ["prisma", "npm:3.9.2"]
           ],
           "packagePeers": [
             "@types/prisma",
@@ -8650,19 +8650,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@prisma/engines", [
-        ["npm:3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85", {
-          "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85-09ce7bf47c/node_modules/@prisma/engines/",
+        ["npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009", {
+          "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009-c1aff4e71f/node_modules/@prisma/engines/",
           "packageDependencies": [
-            ["@prisma/engines", "npm:3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85"]
+            ["@prisma/engines", "npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@prisma/engines-version", [
-        ["npm:2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d", {
-          "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d-e2e09dd643-7fd5e3e87f.zip/node_modules/@prisma/engines-version/",
+        ["npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009", {
+          "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009-0bf56c444c-413d478fc1.zip/node_modules/@prisma/engines-version/",
           "packageDependencies": [
-            ["@prisma/engines-version", "npm:2.21.0-36.e421996c87d5f3c8f7eeadd502d4ad402c89464d"]
+            ["@prisma/engines-version", "npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009"]
           ],
           "linkType": "HARD",
         }]
@@ -26703,11 +26703,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prisma", [
-        ["npm:3.4.0", {
-          "packageLocation": "./.yarn/unplugged/prisma-npm-3.4.0-af6b65de85/node_modules/prisma/",
+        ["npm:3.9.2", {
+          "packageLocation": "./.yarn/unplugged/prisma-npm-3.9.2-ec628eff87/node_modules/prisma/",
           "packageDependencies": [
-            ["prisma", "npm:3.4.0"],
-            ["@prisma/engines", "npm:3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85"]
+            ["prisma", "npm:3.9.2"],
+            ["@prisma/engines", "npm:3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009"]
           ],
           "linkType": "HARD",
         }]
