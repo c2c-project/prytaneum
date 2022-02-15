@@ -32,7 +32,7 @@ const isValidPort = isNumber(process.env.PORT);
 const isValidHost =
     isString(process.env.HOST) &&
     // These values may change in the future
-    (process.env.HOST === '0.0.0.0' || process.env.host === '127.0.0.1' || process.env.HOST === 'localhost');
+    (process.env.HOST === '0.0.0.0' || process.env.HOST === '127.0.0.1' || process.env.HOST === 'localhost');
 
 // This does not need to be defined in production
 const isValidGcpProjectId = isProduction ? isString(process.env.GCP_PROJECT_ID) : true;
