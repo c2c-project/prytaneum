@@ -43,7 +43,7 @@ const makeDevelopmentServer = () =>
 
 const makeServer = process.env.NODE_ENV === 'production' ? makeProductionServer : makeDevelopmentServer;
 
-export function getServer() {
+export function getOrCreateServer() {
     const server = _server ?? makeServer();
     if (!_server) _server = server;
     return server;
