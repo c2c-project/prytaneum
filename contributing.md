@@ -33,8 +33,8 @@ Please run the following commands
 git remote add upstream git@github.com:c2c-project/prytaneum.git # You may need to setup ssh keys
 git fetch upstream
 ```
-
-**NOTE**: You may use a name other than `upstream`. However, `upstream` will be assumed throughout this guide.
+**NOTE**: You can name the remote anything you want `upstream`,`c2c`, or `something`.  The above and following examples uses the name `upstream`.
+You can think of this as setting up another "source" from which your git client can fetch updates from. You're probably already familiar with `origin` as a source. When you first clone a repository, origin is a remote repository already set up for you based on the address from which you cloned the repository. Disclaimer: I'm not a git expert, but I've gotten by with thinking of things in this way.
 
 ### Optional
 
