@@ -14,7 +14,8 @@ const isNumber = (value: unknown): value is number => !Number.isNaN(Number(value
 const isValidNodeEnv =
     process.env.NODE_ENV === 'production' ||
     process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'staging';
+    process.env.NODE_ENV === 'staging' ||
+    process.env.NODE_ENV === 'test';
 
 const isProduction = process.env.NODE_ENV === 'production';
 

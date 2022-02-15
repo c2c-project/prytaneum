@@ -1,4 +1,4 @@
-import { getServer } from './server';
+import { getOrCreateServer } from './server';
 import { checkEnv } from './check-env';
 import { initGracefulShutdown } from './graceful-shutdown';
 import { setupMetaRoutes } from './meta-routes';
@@ -6,7 +6,7 @@ import * as plugins from './plugins';
 import * as hooks from './hooks';
 
 export function startup() {
-    const server = getServer();
+    const server = getOrCreateServer();
     server.log.info('Performing setup checks...');
     checkEnv();
     initGracefulShutdown();
