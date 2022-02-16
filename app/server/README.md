@@ -1,5 +1,11 @@
 # Prytaneum GraphQL server
 
+## Env
+
+We load our environment using [dotenv-cli](https://www.npmjs.com/package/dotenv-cli). The TL;DR is that if you want to override an environment variable, create a `.env.local` file within the `/server` directory. Our .gitignore SHOULD always ignore this file, but it never hurts to double check. 
+
+You may be thinking, "Why would I want to override the default environment variables?" A typical use case is where you want to use some real API key to prototype your changes, but you definitely don't want to commit a real API key to the repo :smiley:. For more information on cascading environment variables, read [this](https://github.com/entropitor/dotenv-cli#cascading-env-variables) and the corresponding [issue](https://github.com/entropitor/dotenv-cli/issues/37).
+
 ## Workflow
 
 ### Adding a feature
