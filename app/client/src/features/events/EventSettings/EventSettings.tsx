@@ -18,6 +18,8 @@ import { EventDetails } from './EventDetails';
 import { ModeratorEventSettings } from '../Moderation';
 import { EventContext } from '../EventContext';
 import { InviteEventSettings } from '../Invites/InviteEventSettings';
+import { DeleteEventSettings } from '../Delete/DeleteEventSettings';
+import { DeleteEvent } from '../DeleteEvent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +73,7 @@ export function EventSettings({ queryRef }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
-    const [user,, isLoading] = useUser();
+    const [user, , isLoading] = useUser();
     const [canView, setCanView] = React.useState(false);
 
     React.useEffect(() => {
@@ -138,6 +140,16 @@ export function EventSettings({ queryRef }: Props) {
                                 description: 'Invite people to join the event',
                                 component: (
                                     <InviteEventSettings
+                                        className={classes.settingsSection}
+                                        fragmentRef={data.node}
+                                    />
+                                )
+                            },
+                            {
+                                title: 'Delete Event',
+                                description: 'Click here to delete your event',
+                                component: (
+                                    <DeleteEvent
                                         className={classes.settingsSection}
                                         fragmentRef={data.node}
                                     />
