@@ -105,7 +105,7 @@ export async function findMembersByOrgId(prisma: PrismaClient, orgId: string) {
  * does NOT require user login
  */
 export async function findEventsByOrgId(prisma: PrismaClient, orgId: string) {
-    return prisma.event.findMany({ where: { ordId: orgId }, orderBy: { createdAt: 'desc' } });
+    return prisma.event.findMany({ where: { orgId: orgId }, orderBy: { createdAt: 'desc' } });
 }
 
 export async function isViewerMember(userId: string | null, prisma: PrismaClient, orgId: string) {
