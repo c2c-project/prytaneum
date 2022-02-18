@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@material-ui/core';
-import QueueIcon from '@material-ui/icons/QueueOutlined';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { graphql, useMutation } from 'react-relay';
 
 import type { EnqueueQuestionButtonMutation } from '@local/__generated__/EnqueueQuestionButtonMutation.graphql';
@@ -58,7 +58,7 @@ export function EnqueueQuestionButton({ questionId }: QueueButtonProps) {
         });
     };
     return (
-        <Button fullWidth endIcon={<QueueIcon fontSize='small' />} onClick={handleClick}>
+        <Button fullWidth endIcon={<AddCircleIcon fontSize='small' />} onClick={handleClick}>
             Enqueue
         </Button>
     );

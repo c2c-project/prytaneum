@@ -1,69 +1,37 @@
+/**
+ * @generated SignedSource<<06c00819bd5bb734618219f250bd57be>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useRecordPushSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useRecordPushSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useRecordPushSubscriptionResponse = {
-    readonly recordPushQuestion: {
-        readonly edge: {
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-            };
-            readonly cursor: string;
-        };
+export type useRecordPushSubscriptionVariables = useRecordPushSubscription$variables;
+export type useRecordPushSubscription$data = {
+  readonly recordPushQuestion: {
+    readonly edge: {
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+      };
+      readonly cursor: string;
     };
+  };
 };
+export type useRecordPushSubscriptionResponse = useRecordPushSubscription$data;
 export type useRecordPushSubscription = {
-    readonly response: useRecordPushSubscriptionResponse;
-    readonly variables: useRecordPushSubscriptionVariables;
+  variables: useRecordPushSubscriptionVariables;
+  response: useRecordPushSubscription$data;
 };
-
-
-
-/*
-subscription useRecordPushSubscription(
-  $eventId: ID!
-) {
-  recordPushQuestion(eventId: $eventId) {
-    edge {
-      node {
-        id
-        ...QuestionAuthorFragment
-        ...QuestionStatsFragment
-        ...QuestionContentFragment
-        position
-      }
-      cursor
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -139,7 +107,6 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -154,7 +121,8 @@ return {
                     "args": null,
                     "kind": "FragmentSpread",
                     "name": "QuestionContentFragment"
-                  }
+                  },
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -223,6 +191,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -280,14 +255,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "82c633534ff425978ed6b0829f879489",
+    "cacheID": "dcff8aec72ded50cb47231ab1b42a22b",
     "id": null,
     "metadata": {},
     "name": "useRecordPushSubscription",
     "operationKind": "subscription",
-    "text": "subscription useRecordPushSubscription(\n  $eventId: ID!\n) {\n  recordPushQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useRecordPushSubscription(\n  $eventId: ID!\n) {\n  recordPushQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'e522de2cf70c6942c37c779618ad77b5';
+
+(node as any).hash = "e522de2cf70c6942c37c779618ad77b5";
+
 export default node;

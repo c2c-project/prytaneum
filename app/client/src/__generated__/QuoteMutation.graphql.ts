@@ -1,71 +1,44 @@
+/**
+ * @generated SignedSource<<5e6b969250e5b30d38604e892413d5bf>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type CreateQuestion = {
-    eventId: string;
-    isFollowUp?: boolean | null | undefined;
-    isQuote?: boolean | null | undefined;
-    question: string;
-    refQuestion?: string | null | undefined;
+  eventId: string;
+  isFollowUp?: boolean | null;
+  isQuote?: boolean | null;
+  question: string;
+  refQuestion?: string | null;
 };
-export type QuoteMutationVariables = {
-    input: CreateQuestion;
+export type QuoteMutation$variables = {
+  input: CreateQuestion;
 };
-export type QuoteMutationResponse = {
-    readonly createQuestion: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-            };
-        } | null;
-    };
+export type QuoteMutationVariables = QuoteMutation$variables;
+export type QuoteMutation$data = {
+  readonly createQuestion: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+      };
+    } | null;
+  };
 };
+export type QuoteMutationResponse = QuoteMutation$data;
 export type QuoteMutation = {
-    readonly response: QuoteMutationResponse;
-    readonly variables: QuoteMutationVariables;
+  variables: QuoteMutationVariables;
+  response: QuoteMutation$data;
 };
-
-
-
-/*
-mutation QuoteMutation(
-  $input: CreateQuestion!
-) {
-  createQuestion(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-      }
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -222,6 +195,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -254,14 +234,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "edac19b9a4b664ae8fcd3dee48f82ce9",
+    "cacheID": "4cfe4be57b7208a5f78ed7cd4819995b",
     "id": null,
     "metadata": {},
     "name": "QuoteMutation",
     "operationKind": "mutation",
-    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
+    "text": "mutation QuoteMutation(\n  $input: CreateQuestion!\n) {\n  createQuestion(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n"
   }
 };
 })();
-(node as any).hash = '4b9e014581115a01e74de4243c0341a4';
+
+(node as any).hash = "4b9e014581115a01e74de4243c0341a4";
+
 export default node;

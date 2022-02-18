@@ -1,8 +1,9 @@
+/* eslint-disable prefer-arrow-callback */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Fab from './Fab';
+import { Fab } from './Fab';
 
 describe('Fab', function () {
     let container: HTMLDivElement | null = null;

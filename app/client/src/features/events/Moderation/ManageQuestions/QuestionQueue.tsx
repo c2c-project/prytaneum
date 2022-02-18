@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, Paper, Typography, Divider, Card, Button, List, ListItem, DialogContent } from '@material-ui/core';
+import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton } from '@material-ui/core';
 import { graphql, useMutation } from 'react-relay';
-import ReorderIcon from '@material-ui/icons/Reorder';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-
+import FilterListIcon from '@material-ui/icons/FilterList';
+import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
 import type {
     useQuestionQueueFragment$data,
@@ -13,11 +13,10 @@ import type {
 } from '@local/__generated__/useQuestionQueueFragment.graphql';
 import DragArea from '@local/components/DragArea';
 import DropArea from '@local/components/DropArea';
-import { ResponsiveDialog } from '@local/components';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { QuestionAuthor, QuestionStats, QuestionContent } from '../../Questions';
+
+import { QuestionAuthor, QuestionStats, QuestionContent, QuestionQuote } from '../../Questions';
 import { NextQuestionButton } from './NextQuestionButton';
-import { PreviousQuestionButton } from './PreviousQuestionButton';
 import { useEvent } from '../../useEvent';
 import { useQuestionQueue } from './useQuestionQueue';
 import { useRecordPush } from './useRecordPush';
@@ -26,43 +25,71 @@ import { useRecordUnshift } from './useRecordUnshift';
 import { useEnqueuedPush } from './useEnqueuedPush';
 import { useEnqueuedRemove } from './useEnqueuedRemove';
 import { useEnqueuedUnshift } from './useEnqueuedUnshift';
+import { QuestionActions } from '../../Questions/QuestionActions';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(2),
-        maxWidth: 700,
-    },
-    title: {
-        marginLeft: theme.spacing(2),
-        // fontSize: 14,
-    },
-    divider: {
-        margin: theme.spacing(2, 0),
+    item: {
         width: '100%',
+        paddingTop: theme.spacing(0.5),
+        borderRadius: '10px',
     },
-    empty: {
-        margin: theme.spacing(5, 0),
+    questionActions: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 'theme.spacing(1) 0',
+        width: '10rem',
     },
-    fullWidth: {
-        width: '100%',
+    filler: {
+        visibility: 'hidden',
     },
-    currentQuestionWrapper: {
-        backgroundColor: theme.palette.primary.main,
-        padding: theme.spacing(2),
+    relative: {
+        position: 'relative',
     },
-    currentQuestionTitle: {
-        marginBottom: theme.spacing(1),
-        color: 'white',
-    },
-    dialogContent: {
-        '& > *': {
-            marginBottom: theme.spacing(2),
+    nextQuestion: {
+        paddingTop: theme.spacing(0.5),
+        paddingBottom: theme.spacing(0.5),
+        position: 'absolute',
+        top: theme.spacing(-1),
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#F5C64F',
+        '&:hover': {
+            background: '#E6B035',
         },
     },
-    pastQuestionsContainer: {
-        padding: theme.spacing(2),
-        backgroundColor: theme.palette.secondary.main,
+    previousQuestion: {
+        paddingBottom: theme.spacing(2),
+    },
+    helperText: {
+        width: '100%',
+        paddingBottom: theme.spacing(2),
+        textAlign: 'center',
+        color: '#B5B5B5',
+    },
+    select: {
+        width: '7.5rem',
+        height: 'min-content',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+        fontSize: 'small',
+        fontWeight: 600,
+        '& fieldset': {
+            borderRadius: '7px',
+        },
+    },
+    menuItem: {
+        textTransform: 'uppercase',
+        fontSize: 'small',
+        fontWeight: 600,
+        borderRadius: '5px',
+    },
+    listFilter: {
+        flex: 1,
+        marginLeft: theme.spacing(0.5),
+    },
+    filterIcon: {
+        height: 'min-content',
+        marginLeft: theme.spacing(0.5),
     },
 }));
 
@@ -83,6 +110,10 @@ export const QUESTION_QUEUE_MUTATION = graphql`
                 cursor
                 node {
                     id
+                    question
+                    createdBy {
+                        firstName
+                    }
                     position
                 }
             }
@@ -132,6 +163,11 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                             cursor: list[sourceIdx].cursor,
                             node: {
                                 id: list[sourceIdx].node.id,
+                                question: list[sourceIdx].node.question,
+                                createdBy: {
+                                    firstName: list[sourceIdx].node.createdBy?.firstName || 'Unknown User',
+                                    id: list[sourceIdx].node.id,
+                                },
                                 position: newPosition,
                             },
                         },
@@ -154,8 +190,8 @@ function useStyledQueue({ eventId }: { eventId: string }) {
     const itemStyle = React.useCallback(
         (isDragging: boolean): React.CSSProperties => ({
             userSelect: 'none',
-            margin: theme.spacing(0, 0, 4, 0),
-            filter: isDragging ? `drop-shadow(0 0 .75rem ${theme.palette.secondary.light})` : '',
+            margin: theme.spacing(0, 0, 0, 0),
+            filter: isDragging ? 'drop-shadow(0 0 0.5rem #F5C64F50)' : '',
         }),
         [theme]
     );
@@ -166,7 +202,13 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── HOOKS ──────────────────────────────────────────────────────────────────────
     //
-    const questionQueue = useQuestionQueue({ fragmentRef });
+    const [queueIndex, setQueueIndex] = React.useState<number>(0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleQueueChange = (e: React.ChangeEvent<any>) => {
+        e.preventDefault();
+        setQueueIndex(e.target.value);
+    };
+    const { questionQueue, connections } = useQuestionQueue({ fragmentRef });
     const recordConnection = React.useMemo(
         () => ({ connection: questionQueue?.questionRecord?.__id ?? '' }),
         [questionQueue?.questionRecord]
@@ -178,8 +220,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
 
     const { eventId } = useEvent();
     const classes = useStyles();
-    const ref = React.useRef<HTMLElement | null>(null);
-    const [open, setOpen] = React.useState(false);
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
 
     //
@@ -209,10 +249,14 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
         [questionQueue]
     );
-    const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
+    // const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
     const canGoForward = React.useMemo(() => enqueuedQuestions.length > 0, [enqueuedQuestions]);
     const currentQuestion = React.useMemo(
         () => (questionRecord.length > 0 ? questionRecord[questionRecord.length - 1] : null),
+        [questionRecord]
+    );
+    const prevQuestions = React.useMemo(
+        () => (questionRecord.length > 0 ? questionRecord.slice(0, -1) : []), // removes current question from display in tab for previous questions
         [questionRecord]
     );
     const nextQuestion = React.useMemo(
@@ -223,9 +267,6 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     // ─── UTILITIES ──────────────────────────────────────────────────────────────────
     //
-    const scrollToCurrent = () => {
-        ref.current?.scrollIntoView();
-    };
 
     const onDragEnd = React.useCallback(
         (result: DropResult) => {
@@ -241,123 +282,111 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         [enqueuedQuestions, reorder, currentQuestion]
     );
 
-    return (
-        <Grid container component={Paper} className={classes.root} justify='center' alignContent='flex-start'>
-            <Grid container justify='space-around'>
-                <Typography variant='body2'>
-                    <b>{enqueuedQuestions.length ?? 'Unknown'}</b>
-                    &nbsp;Remaining
-                </Typography>
-                <Typography variant='body2'>
-                    <b>{questionRecord.length ?? 'Unknown'}</b>
-                    &nbsp;Asked (Includes Current)
-                </Typography>
-                <Divider className={classes.divider} />
-                <Grid item xs={12}>
-                    <Typography className={classes.title} align='left' variant='h6'>
-                        Current
-                    </Typography>
-                </Grid>
-            </Grid>
-            {currentQuestion && (
-                <Card elevation={0} className={classes.fullWidth}>
-                    <QuestionAuthor fragmentRef={currentQuestion.node} />
-                    <QuestionContent fragmentRef={currentQuestion.node} />
-                    <QuestionStats fragmentRef={currentQuestion.node} />
-                </Card>
-            )}
-            {!currentQuestion && (
-                <Typography color='textSecondary' variant='body2' className={classes.empty}>
-                    There is no current question to display
-                </Typography>
-            )}
-            <Grid container item justify='space-between'>
-                <PreviousQuestionButton disabled={!canGoBackward} />
-                <NextQuestionButton disabled={!canGoForward} variant='outlined' />
-            </Grid>
-            <Divider className={classes.divider} />
-            <Grid item xs={12}>
-                <Typography className={classes.title} align='left' variant='h6'>
-                    Up Next
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                {nextQuestion && (
-                    <Card elevation={0}>
-                        <QuestionAuthor fragmentRef={nextQuestion.node} />
-                        <QuestionContent fragmentRef={nextQuestion.node} />
-                        <QuestionStats fragmentRef={nextQuestion.node} />
-                    </Card>
-                )}
-            </Grid>
-            {!nextQuestion && (
-                <Typography color='textSecondary' variant='body2' className={classes.empty}>
-                    There is no question to display
-                </Typography>
-            )}
+    const accessors = React.useMemo<Accessors<ArrayElement<typeof enqueuedQuestions>>[]>(
+        () => [
+            (q) => q?.node.question || '', // question text itself
+            (q) => q?.node.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
 
-            <Grid container item justify='flex-end'>
-                <Button variant='outlined' startIcon={<ReorderIcon />} onClick={() => setOpen(true)}>
-                    In Queue
-                </Button>
+    const prevAccessors = React.useMemo<Accessors<ArrayElement<typeof prevQuestions>>[]>(
+        () => [
+            (q) => q?.node.question || '', // question text itself
+            (q) => q?.node.createdBy?.firstName || '', // first name of the user
+        ],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(enqueuedQuestions, accessors);
+    const [prevFilteredList, prevHandleSearch, prevHandleFilterChange] = useFilters(prevQuestions, prevAccessors);
+
+    return (
+        <>
+            <Grid container>
+                <Select value={queueIndex} onChange={handleQueueChange} className={classes.select}>
+                    <MenuItem value={0} className={classes.menuItem}>
+                        Upcoming
+                    </MenuItem>
+                    <MenuItem value={1} className={classes.menuItem}>
+                        Previous
+                    </MenuItem>
+                </Select>
+                {/* TODO: add filter functionality */}
+                <IconButton className={classes.filterIcon}>
+                    <FilterListIcon />
+                </IconButton>
+                <ListFilter
+                    className={classes.listFilter}
+                    onFilterChange={queueIndex === 0 ? () => handleFilterChange : () => prevHandleFilterChange}
+                    onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
+                    length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
+                />
             </Grid>
-            <ResponsiveDialog
-                title='In Queue'
-                fullScreen
-                open={open}
-                onClose={() => setOpen(false)}
-                onEntered={scrollToCurrent}
-            >
-                <DialogContent className={classes.dialogContent}>
-                    <Paper className={classes.pastQuestionsContainer}>
-                        <Typography variant='h5'>Past Questions</Typography>
-                        <List>
-                            {questionRecord.slice(0, -1).map((question) => (
-                                <ListItem key={question.node.id}>
-                                    <Card className={classes.fullWidth}>
-                                        <QuestionAuthor fragmentRef={question.node} />
-                                        <QuestionContent fragmentRef={question.node} />
-                                        <QuestionStats fragmentRef={question.node} />
-                                    </Card>
-                                </ListItem>
-                            )) ?? []}
-                        </List>
-                    </Paper>
-                    {currentQuestion && (
-                        <Paper className={classes.currentQuestionWrapper} ref={ref}>
-                            <Typography className={classes.currentQuestionTitle} variant='h5'>
-                                Current Question
-                            </Typography>
-                            <Card>
-                                <QuestionAuthor fragmentRef={currentQuestion.node} />
-                                <QuestionContent fragmentRef={currentQuestion.node} />
-                                <QuestionStats fragmentRef={currentQuestion.node} />
-                            </Card>
-                        </Paper>
-                    )}
+            {queueIndex === 0 ? (
+                <>
+                    <Grid className={classes.helperText}>
+                        <Typography variant='caption'>Drag and drop questions to re-order queue</Typography>
+                    </Grid>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <DropArea getStyle={getListStyle} droppableId='droppable'>
-                            <Typography variant='h5'>In Queue</Typography>
-                            {enqueuedQuestions.map((question, idx) => (
+                            {filteredList.map((question, idx) => (
                                 <DragArea
                                     getStyle={itemStyle}
                                     key={question.node.id}
                                     index={idx}
                                     draggableId={question.node.id}
                                 >
-                                    <ListItem>
-                                        <Card className={classes.fullWidth}>
+                                    <ListItem disableGutters className={classes.relative}>
+                                        {question === nextQuestion && (
+                                            <NextQuestionButton
+                                                color='primary'
+                                                disabled={!canGoForward}
+                                                variant='contained'
+                                                className={classes.nextQuestion}
+                                            />
+                                        )}
+                                        <Card className={classes.item}>
                                             <QuestionAuthor fragmentRef={question.node} />
+                                            {question.node.refQuestion && (
+                                                <QuestionQuote fragmentRef={question.node.refQuestion} />
+                                            )}
                                             <QuestionContent fragmentRef={question.node} />
-                                            <QuestionStats fragmentRef={question.node} />
+                                            <Grid container alignItems='center' justify='space-between'>
+                                                <QuestionStats fragmentRef={question.node} />
+                                                <QuestionActions
+                                                    className={classes.questionActions}
+                                                    like={Boolean(false)}
+                                                    quote={Boolean(false)}
+                                                    queue={Boolean(true)}
+                                                    connections={connections}
+                                                    fragmentRef={question.node}
+                                                />
+                                                <span className={classes.filler}>
+                                                    <QuestionStats fragmentRef={question.node} />
+                                                </span>
+                                            </Grid>
                                         </Card>
                                     </ListItem>
                                 </DragArea>
                             )) ?? []}
                         </DropArea>
                     </DragDropContext>
-                </DialogContent>
-            </ResponsiveDialog>
-        </Grid>
+                </>
+            ) : (
+                <List>
+                    {prevFilteredList.reverse().map((question) => (
+                        <ListItem key={question.node.id} disableGutters>
+                            <Card className={`${classes.item} ${classes.previousQuestion}`}>
+                                <QuestionAuthor fragmentRef={question.node} />
+                                {question.node.refQuestion && <QuestionQuote fragmentRef={question.node.refQuestion} />}
+                                <QuestionContent fragmentRef={question.node} />
+                                <QuestionStats fragmentRef={question.node} />
+                            </Card>
+                        </ListItem>
+                    )) ?? []}
+                </List>
+            )}
+        </>
     );
 }

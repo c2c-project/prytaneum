@@ -1,67 +1,48 @@
+/**
+ * @generated SignedSource<<11f70e239e04c5507ca7fdb6f931ff84>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type CreateFeedback = {
-    eventId: string;
-    isReply?: boolean | null | undefined;
-    message: string;
-    refFeedbackId?: string | null | undefined;
+  eventId: string;
+  isReply?: boolean | null;
+  message: string;
+  refFeedbackId?: string | null;
 };
-export type SubmitLiveFeedbackMutationVariables = {
-    input: CreateFeedback;
+export type SubmitLiveFeedbackMutation$variables = {
+  input: CreateFeedback;
 };
-export type SubmitLiveFeedbackMutationResponse = {
-    readonly createFeedback: {
-        readonly isError: boolean;
+export type SubmitLiveFeedbackMutationVariables = SubmitLiveFeedbackMutation$variables;
+export type SubmitLiveFeedbackMutation$data = {
+  readonly createFeedback: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly createdAt: Date | null;
         readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly createdAt: Date | null;
-                readonly message: string;
-                readonly createdBy: {
-                    readonly id: string;
-                    readonly firstName: string | null;
-                    readonly lastName: string | null;
-                } | null;
-            };
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+          readonly lastName: string | null;
         } | null;
+      };
     } | null;
+  } | null;
 };
+export type SubmitLiveFeedbackMutationResponse = SubmitLiveFeedbackMutation$data;
 export type SubmitLiveFeedbackMutation = {
-    readonly response: SubmitLiveFeedbackMutationResponse;
-    readonly variables: SubmitLiveFeedbackMutationVariables;
+  variables: SubmitLiveFeedbackMutationVariables;
+  response: SubmitLiveFeedbackMutation$data;
 };
-
-
-
-/*
-mutation SubmitLiveFeedbackMutation(
-  $input: CreateFeedback!
-) {
-  createFeedback(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        createdAt
-        message
-        createdBy {
-          id
-          firstName
-          lastName
-        }
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -203,5 +184,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'f5314b45540745841310fd8a809d1b87';
+
+(node as any).hash = "f5314b45540745841310fd8a809d1b87";
+
 export default node;

@@ -1,67 +1,44 @@
+/**
+ * @generated SignedSource<<1d47a0d75c16c40b6ab326da54e99ef5>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type CreateFeedback = {
-    eventId: string;
-    isReply?: boolean | null | undefined;
-    message: string;
-    refFeedbackId?: string | null | undefined;
+  eventId: string;
+  isReply?: boolean | null;
+  message: string;
+  refFeedbackId?: string | null;
 };
-export type LiveFeedbackReplyActionMutationVariables = {
-    input: CreateFeedback;
+export type LiveFeedbackReplyActionMutation$variables = {
+  input: CreateFeedback;
 };
-export type LiveFeedbackReplyActionMutationResponse = {
-    readonly createFeedback: {
-        readonly isError: boolean;
+export type LiveFeedbackReplyActionMutationVariables = LiveFeedbackReplyActionMutation$variables;
+export type LiveFeedbackReplyActionMutation$data = {
+  readonly createFeedback: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
         readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackAuthorFragment">;
-            };
-        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
+      };
     } | null;
+  } | null;
 };
+export type LiveFeedbackReplyActionMutationResponse = LiveFeedbackReplyActionMutation$data;
 export type LiveFeedbackReplyActionMutation = {
-    readonly response: LiveFeedbackReplyActionMutationResponse;
-    readonly variables: LiveFeedbackReplyActionMutationVariables;
+  variables: LiveFeedbackReplyActionMutationVariables;
+  response: LiveFeedbackReplyActionMutation$data;
 };
-
-
-
-/*
-mutation LiveFeedbackReplyActionMutation(
-  $input: CreateFeedback!
-) {
-  createFeedback(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        message
-        ...LiveFeedbackAuthorFragment
-      }
-    }
-  }
-}
-
-fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -215,6 +192,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -240,14 +224,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3b9d0f11bd84a05e5f1ac8a9d97c1f4a",
+    "cacheID": "7064e70fe8cd3c48ad45abe1b32dfb33",
     "id": null,
     "metadata": {},
     "name": "LiveFeedbackReplyActionMutation",
     "operationKind": "mutation",
-    "text": "mutation LiveFeedbackReplyActionMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        message\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n"
+    "text": "mutation LiveFeedbackReplyActionMutation(\n  $input: CreateFeedback!\n) {\n  createFeedback(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        message\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n"
   }
 };
 })();
-(node as any).hash = '364fcb0b943e7a2340ad2399e8f65ece';
+
+(node as any).hash = "364fcb0b943e7a2340ad2399e8f65ece";
+
 export default node;

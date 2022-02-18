@@ -3,15 +3,12 @@ import * as React from 'react';
 import { List, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ListIcon from '@material-ui/icons/List';
-// import { AdminPanelSettingsIcon } from '@material-ui/icons';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
-import { MovingBg } from '@local/layout/SideNav/MovingBg';
 import {
     StyledSubheader,
     StyledDivider,
@@ -93,7 +90,7 @@ export function UserSideNavLoader() {
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
-    const data = usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
+    usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
     function handleClick(key: Keys) {

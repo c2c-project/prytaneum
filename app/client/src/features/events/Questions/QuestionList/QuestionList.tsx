@@ -40,14 +40,22 @@ const useStyles = makeStyles((theme) => ({
         flex: '1 1 100%',
     },
     questionActions: {
-        padding: 0,
-        color: theme.palette.primary.light,
+        display: 'flex',
+        justifyContent: 'center',
     },
     item: {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        paddingTop: theme.spacing(0.5),
+        borderRadius: '10px'
     },
+    filler: {
+        visibility: 'hidden'
+    },
+    text: {
+        margin: 'auto'
+    }
 }));
 
 export function QuestionList({ className, style, fragmentRef }: Props) {
@@ -96,21 +104,39 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
+                            <Grid container alignItems='center'>
+                                <Typography className={classes.text} variant='body2'>
+                                    <b>{filteredList.length}</b>
+                                    &nbsp; Questions Displayed
+                                </Typography>
+                            </Grid>
                             {filteredList.map((question) => (
                                 <ListItem disableGutters key={question.id}>
                                     <Card className={classes.item}>
                                         <QuestionAuthor fragmentRef={question} />
                                         {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
-                                        {isModerator && <QuestionStats fragmentRef={question} />}
-                                        <QuestionActions
-                                            className={classes.questionActions}
-                                            like={!isModerator && Boolean(user)}
-                                            quote={!isModerator && Boolean(user)}
-                                            queue={isModerator && Boolean(user)}
-                                            connections={connections}
-                                            fragmentRef={question}
-                                        />
+                                        <Grid container alignItems='center' justify='space-between'>
+                                            {isModerator && <QuestionStats fragmentRef={question} />}
+                                            <QuestionActions
+                                                style={
+                                                    !isModerator 
+                                                        ? { width: '100%'} 
+                                                        : { width: '100%', maxWidth: '10rem'}
+                                                }
+                                                className={classes.questionActions}
+                                                like={!isModerator && Boolean(user)}
+                                                quote={!isModerator && Boolean(user)}
+                                                queue={isModerator && Boolean(user)}
+                                                connections={connections}
+                                                fragmentRef={question}
+                                            />
+                                            {isModerator && // filler to justify moderator queue button
+                                                <span className={classes.filler}>
+                                                    <QuestionStats fragmentRef={question} />
+                                                </span>
+                                            }
+                                        </Grid>
                                     </Card>
                                 </ListItem>
                             ))}

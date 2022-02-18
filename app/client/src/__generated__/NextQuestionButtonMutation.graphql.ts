@@ -1,35 +1,29 @@
+/**
+ * @generated SignedSource<<b1af62cd9d7072bbaecbf419d70eace7>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type NextQuestionButtonMutationVariables = {
-    eventId: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type NextQuestionButtonMutation$variables = {
+  eventId: string;
 };
-export type NextQuestionButtonMutationResponse = {
-    readonly nextQuestion: {
-        readonly id: string;
-        readonly currentQuestion: number | null;
-    };
+export type NextQuestionButtonMutationVariables = NextQuestionButtonMutation$variables;
+export type NextQuestionButtonMutation$data = {
+  readonly nextQuestion: {
+    readonly id: string;
+    readonly currentQuestion: number | null;
+  };
 };
+export type NextQuestionButtonMutationResponse = NextQuestionButtonMutation$data;
 export type NextQuestionButtonMutation = {
-    readonly response: NextQuestionButtonMutationResponse;
-    readonly variables: NextQuestionButtonMutationVariables;
+  variables: NextQuestionButtonMutationVariables;
+  response: NextQuestionButtonMutation$data;
 };
-
-
-
-/*
-mutation NextQuestionButtonMutation(
-  $eventId: ID!
-) {
-  nextQuestion(eventId: $eventId) {
-    id
-    currentQuestion
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -99,5 +93,7 @@ return {
   }
 };
 })();
-(node as any).hash = '6e0b196203af346eac891d579b4d3143';
+
+(node as any).hash = "6e0b196203af346eac891d579b4d3143";
+
 export default node;

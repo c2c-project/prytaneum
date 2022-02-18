@@ -1,41 +1,45 @@
+/**
+ * @generated SignedSource<<4abcdfaefa35dfc0ca1f48e03f85e5e2>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useLiveFeedbackListFragment = {
-    readonly id: string;
-    readonly liveFeedback: {
-        readonly __id: string;
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly createdBy: {
-                    readonly id: string;
-                } | null;
-                readonly refFeedback: {
-                    readonly createdBy: {
-                        readonly id: string;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
-                } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "useLiveFeedbackListFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useLiveFeedbackListFragment$data = {
+  readonly id: string;
+  readonly liveFeedback: {
+    readonly __id: string;
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly message: string;
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+        } | null;
+        readonly refFeedback: {
+          readonly createdBy: {
+            readonly id: string;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "useLiveFeedbackListFragment";
 };
-export type useLiveFeedbackListFragment$data = useLiveFeedbackListFragment;
+export type useLiveFeedbackListFragment = useLiveFeedbackListFragment$data;
 export type useLiveFeedbackListFragment$key = {
-    readonly " $data"?: useLiveFeedbackListFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"useLiveFeedbackListFragment">;
+  readonly " $data"?: useLiveFeedbackListFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackListFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -46,18 +50,6 @@ var v0 = {
   "storageKey": null
 },
 v1 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "createdBy",
-  "plural": false,
-  "selections": [
-    (v0/*: any*/)
-  ],
-  "storageKey": null
-},
-v2 = {
   "args": null,
   "kind": "FragmentSpread",
   "name": "LiveFeedbackReplyFragment"
@@ -130,7 +122,25 @@ return {
                   "name": "message",
                   "storageKey": null
                 },
-                (v1/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "createdBy",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "firstName",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
                 {
                   "alias": null,
                   "args": null,
@@ -139,10 +149,27 @@ return {
                   "name": "refFeedback",
                   "plural": false,
                   "selections": [
-                    (v1/*: any*/),
-                    (v2/*: any*/)
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "User",
+                      "kind": "LinkedField",
+                      "name": "createdBy",
+                      "plural": false,
+                      "selections": [
+                        (v0/*: any*/)
+                      ],
+                      "storageKey": null
+                    },
+                    (v1/*: any*/)
                   ],
                   "storageKey": null
+                },
+                (v1/*: any*/),
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "LiveFeedbackAuthorFragment"
                 },
                 {
                   "alias": null,
@@ -150,12 +177,6 @@ return {
                   "kind": "ScalarField",
                   "name": "__typename",
                   "storageKey": null
-                },
-                (v2/*: any*/),
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "LiveFeedbackAuthorFragment"
                 }
               ],
               "storageKey": null
@@ -208,5 +229,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'fd0a05fc621a67ccb998432d71870586';
+
+(node as any).hash = "aad2990e7cbff0102230cb08a28f5bc5";
+
 export default node;

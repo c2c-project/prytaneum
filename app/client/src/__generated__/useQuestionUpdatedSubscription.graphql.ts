@@ -1,68 +1,36 @@
+/**
+ * @generated SignedSource<<f319184f3608ca4863e07ea13d9c2a46>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionUpdatedSubscriptionVariables = {
-    eventId: string;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useQuestionUpdatedSubscription$variables = {
+  eventId: string;
 };
-export type useQuestionUpdatedSubscriptionResponse = {
-    readonly questionUpdated: {
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-            };
-        };
+export type useQuestionUpdatedSubscriptionVariables = useQuestionUpdatedSubscription$variables;
+export type useQuestionUpdatedSubscription$data = {
+  readonly questionUpdated: {
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+      };
     };
+  };
 };
+export type useQuestionUpdatedSubscriptionResponse = useQuestionUpdatedSubscription$data;
 export type useQuestionUpdatedSubscription = {
-    readonly response: useQuestionUpdatedSubscriptionResponse;
-    readonly variables: useQuestionUpdatedSubscriptionVariables;
+  variables: useQuestionUpdatedSubscriptionVariables;
+  response: useQuestionUpdatedSubscription$data;
 };
-
-
-
-/*
-subscription useQuestionUpdatedSubscription(
-  $eventId: ID!
-) {
-  questionUpdated(eventId: $eventId) {
-    edge {
-      cursor
-      node {
-        id
-        position
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-        ...QuestionStatsFragment
-      }
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -215,6 +183,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -254,14 +229,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ab5397ca34bfa53ab404893b2d18f962",
+    "cacheID": "ca827eebaf4e7b307ff44728a475226f",
     "id": null,
     "metadata": {},
     "name": "useQuestionUpdatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionUpdatedSubscription(\n  $eventId: ID!\n) {\n  questionUpdated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionUpdatedSubscription(\n  $eventId: ID!\n) {\n  questionUpdated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'a43e6f07d31b997aef0368366a8cbd7f';
+
+(node as any).hash = "a43e6f07d31b997aef0368366a8cbd7f";
+
 export default node;

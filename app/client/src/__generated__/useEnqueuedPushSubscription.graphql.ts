@@ -1,69 +1,37 @@
+/**
+ * @generated SignedSource<<69189086eaa00117fcde4598436b3a0d>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useEnqueuedPushSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useEnqueuedPushSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useEnqueuedPushSubscriptionResponse = {
-    readonly enqueuedPushQuestion: {
-        readonly edge: {
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-            };
-            readonly cursor: string;
-        };
+export type useEnqueuedPushSubscriptionVariables = useEnqueuedPushSubscription$variables;
+export type useEnqueuedPushSubscription$data = {
+  readonly enqueuedPushQuestion: {
+    readonly edge: {
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+      };
+      readonly cursor: string;
     };
+  };
 };
+export type useEnqueuedPushSubscriptionResponse = useEnqueuedPushSubscription$data;
 export type useEnqueuedPushSubscription = {
-    readonly response: useEnqueuedPushSubscriptionResponse;
-    readonly variables: useEnqueuedPushSubscriptionVariables;
+  variables: useEnqueuedPushSubscriptionVariables;
+  response: useEnqueuedPushSubscription$data;
 };
-
-
-
-/*
-subscription useEnqueuedPushSubscription(
-  $eventId: ID!
-) {
-  enqueuedPushQuestion(eventId: $eventId) {
-    edge {
-      node {
-        id
-        ...QuestionAuthorFragment
-        ...QuestionStatsFragment
-        ...QuestionContentFragment
-        position
-      }
-      cursor
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -139,7 +107,6 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -154,7 +121,8 @@ return {
                     "args": null,
                     "kind": "FragmentSpread",
                     "name": "QuestionContentFragment"
-                  }
+                  },
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -223,6 +191,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -280,14 +255,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3fb9a357fefc8b480b60fb0a34387a12",
+    "cacheID": "67c87713b931d5b1f7adb5afcf1b64b0",
     "id": null,
     "metadata": {},
     "name": "useEnqueuedPushSubscription",
     "operationKind": "subscription",
-    "text": "subscription useEnqueuedPushSubscription(\n  $eventId: ID!\n) {\n  enqueuedPushQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useEnqueuedPushSubscription(\n  $eventId: ID!\n) {\n  enqueuedPushQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '46ed48d79487121ab1e593a9d24cbd92';
+
+(node as any).hash = "46ed48d79487121ab1e593a9d24cbd92";
+
 export default node;

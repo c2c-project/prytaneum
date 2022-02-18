@@ -1,69 +1,37 @@
+/**
+ * @generated SignedSource<<db793c965384115d5a31a37316c35c7b>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useRecordUnshiftSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useRecordUnshiftSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useRecordUnshiftSubscriptionResponse = {
-    readonly recordUnshiftQuestion: {
-        readonly edge: {
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-            };
-            readonly cursor: string;
-        };
+export type useRecordUnshiftSubscriptionVariables = useRecordUnshiftSubscription$variables;
+export type useRecordUnshiftSubscription$data = {
+  readonly recordUnshiftQuestion: {
+    readonly edge: {
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+      };
+      readonly cursor: string;
     };
+  };
 };
+export type useRecordUnshiftSubscriptionResponse = useRecordUnshiftSubscription$data;
 export type useRecordUnshiftSubscription = {
-    readonly response: useRecordUnshiftSubscriptionResponse;
-    readonly variables: useRecordUnshiftSubscriptionVariables;
+  variables: useRecordUnshiftSubscriptionVariables;
+  response: useRecordUnshiftSubscription$data;
 };
-
-
-
-/*
-subscription useRecordUnshiftSubscription(
-  $eventId: ID!
-) {
-  recordUnshiftQuestion(eventId: $eventId) {
-    edge {
-      node {
-        id
-        ...QuestionAuthorFragment
-        ...QuestionStatsFragment
-        ...QuestionContentFragment
-        position
-      }
-      cursor
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -139,7 +107,6 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  (v4/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -154,7 +121,8 @@ return {
                     "args": null,
                     "kind": "FragmentSpread",
                     "name": "QuestionContentFragment"
-                  }
+                  },
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -223,6 +191,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -280,14 +255,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "bbb6ba98d16766bb63a1dded06c6c07d",
+    "cacheID": "f60df4d601fd5d54f77715515f4dffe9",
     "id": null,
     "metadata": {},
     "name": "useRecordUnshiftSubscription",
     "operationKind": "subscription",
-    "text": "subscription useRecordUnshiftSubscription(\n  $eventId: ID!\n) {\n  recordUnshiftQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useRecordUnshiftSubscription(\n  $eventId: ID!\n) {\n  recordUnshiftQuestion(eventId: $eventId) {\n    edge {\n      node {\n        id\n        ...QuestionAuthorFragment\n        ...QuestionStatsFragment\n        ...QuestionContentFragment\n        position\n      }\n      cursor\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = 'c99b41f0b2e5a07b6a77d8d07a2a9ed3';
+
+(node as any).hash = "c99b41f0b2e5a07b6a77d8d07a2a9ed3";
+
 export default node;

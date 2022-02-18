@@ -30,9 +30,9 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { makeInitialState } from '@local/utils/ts-utils';
-import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql'
-import type { UpdatePasswordFormMutation } from '@local/__generated__/UpdatePasswordFormMutation.graphql'
-import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql'
+import type { UpdateEmailFormMutation } from '@local/__generated__/UpdateEmailFormMutation.graphql';
+import type { UpdatePasswordFormMutation } from '@local/__generated__/UpdatePasswordFormMutation.graphql';
+import type { DeleteAccountFormMutation } from '@local/__generated__/DeleteAccountFormMutation.graphql';
 import { UPDATE_EMAIL_FORM_MUTATION } from './UpdateEmailForm';
 import { UPDATE_PASSWORD_FORM_MUTATION } from './UpdatePasswordForm';
 import { DELETE_ACCOUNT_FORM_MUTATION } from './DeleteAccountForm';
@@ -52,9 +52,9 @@ const initialModifyUserEmail: TUpdateEmailForm = { newEmail: '' };
 
 // used for modifying user password
 export type TUpdatePasswordForm = {
-    oldPassword: string,
-    newPassword: string,
-    confirmNewPassword: string,
+    oldPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
 };
 
 type TUpdatePasswordSchema = {
@@ -74,8 +74,8 @@ const initialModifyUserPassword: TUpdatePasswordForm = {
 
 // used for deleting user account
 export type TDeleteAccountForm = {
-    password: string,
-    confirmPassword: string,
+    password: string;
+    confirmPassword: string;
 };
 
 type TDeleteAccountSchema = {
@@ -89,20 +89,6 @@ const deleteAccountValidationSchema = Yup.object().shape<TDeleteAccountSchema>({
 const intiialDeleteAccount: TDeleteAccountForm = {
     password: '',
     confirmPassword: '',
-};
-
-/* DEPTH = 3 CURRYING HERE, 
-    top to bottom: 
-        1. Pass in the setState function
-        2. Pass in the key of the checkbox in the state
-        3. handle the change in checkboxes state
-*/
-const buildCheckboxUpdate = <U extends Record<string, boolean | string[]>>(
-    setState: React.Dispatch<React.SetStateAction<U>>
-) => (id: keyof U) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    // e.preventDefault();
-    const { checked } = e.target;
-    setState((prev) => ({ ...prev, [id]: checked }));
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -119,10 +105,6 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(1),
     },
 }));
-
-
-
-
 
 // all really small one time user @local/components go here
 interface DisplayItem {
@@ -141,10 +123,7 @@ export function TownhallUserSettings({ settings }: { settings: UserSettings }) {
     // TODO: API Request
     return (
         <SettingsList>
-            <SettingsItem
-                helpText={text.townhall.anonymous}
-                name='Appear Anonymous'
-            >
+            <SettingsItem helpText={text.townhall.anonymous} name='Appear Anonymous'>
                 <Switch
                     checked={settings?.isAnonymous}
                     // onChange={buildHandler('anonymous')}
@@ -167,10 +146,7 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
                 />
             </SettingsItem>
             <Collapse>
-                <SettingsItem
-                    helpText={text.notifications.types}
-                    name='Notification Types'
-                >
+                <SettingsItem helpText={text.notifications.types} name='Notification Types'>
                     <div>TODO</div>
                 </SettingsItem>
             </Collapse>
@@ -184,7 +160,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
 
     // user feedback
     const { displaySnack } = useSnack();
-    
+
     const [, setUser] = useUser();
 
     // styling hook
@@ -194,12 +170,12 @@ export function ModifyUserEmail({ user }: { user: User }) {
         initialValues: makeInitialState(initialModifyUserEmail),
         validationSchema: updateEmailValidationSchema,
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        onSubmit: handleCommit
+        onSubmit: handleCommit,
     });
     function handleCommit(submittedForm: TUpdateEmailForm) {
         // add user email to input passed into the commit
-        const userEmail = user.email ? user.email : ''
-        const completeForm = { currentEmail: userEmail, ...submittedForm }
+        const userEmail = user.email ? user.email : '';
+        const completeForm = { currentEmail: userEmail, ...submittedForm };
         commit({
             variables: { input: completeForm },
             onCompleted({ updateEmail }) {
@@ -251,7 +227,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                 </Grid>
             </Form>
         </Grid>
-    )
+    );
 }
 
 export function ModifyUserPassword({ user }: { user: User }) {
@@ -261,7 +237,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
 
     // user feedback
     const { displaySnack } = useSnack();
-    
+
     const [, setUser] = useUser();
 
     // styling hook
@@ -271,12 +247,12 @@ export function ModifyUserPassword({ user }: { user: User }) {
         initialValues: makeInitialState(initialModifyUserPassword),
         validationSchema: updatePasswordValidationSchema,
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        onSubmit: handleCommit
+        onSubmit: handleCommit,
     });
     function handleCommit(submittedForm: TUpdatePasswordForm) {
         // add user email to input passed into the commit
-        const userEmail = user.email ? user.email : ''
-        const completeForm = { email: userEmail, ...submittedForm }
+        const userEmail = user.email ? user.email : '';
+        const completeForm = { email: userEmail, ...submittedForm };
         commit({
             variables: { input: completeForm },
             onCompleted({ updatePassword }) {
@@ -285,7 +261,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                 } else {
                     displaySnack('Password changed successfully!');
                     setUser(updatePassword.body);
-                    resetForm()
+                    resetForm();
                 }
             },
         });
@@ -298,10 +274,11 @@ export function ModifyUserPassword({ user }: { user: User }) {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body2'>
-                    Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least one number, and at least one special character (e.g. +_!@#$%^&*., ?).
+                    Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least
+                    one number, and at least one special character (e.g. +_!@#$%^&*., ?).
                 </Typography>
             </Grid>
-            
+
             <Form className={classes.form} onSubmit={handleSubmit}>
                 <FormContent>
                     <TextField
@@ -389,18 +366,14 @@ export function ModifyUserPassword({ user }: { user: User }) {
                 </Grid>
             </Form>
         </Grid>
-    )
+    );
 }
 
 export const ButtonList = ({ list, setContent }: Props) => (
     <List>
         {list.map(({ title, component }) => (
             <li key={title}>
-                <ListItem
-                    key={title}
-                    button
-                    onClick={() => setContent(component)}
-                >
+                <ListItem key={title} button onClick={() => setContent(component)}>
                     <ListItemText primary={title} />
                 </ListItem>
             </li>
@@ -453,11 +426,7 @@ export const DisableAccount = () => {
                     to log into your account.'
                 name='Disable Account'
             >
-                <Button
-                    variant='outlined'
-                    onClick={() => setOpen(true)}
-                    style={{ color: 'red', borderColor: 'red' }}
-                >
+                <Button variant='outlined' onClick={() => setOpen(true)} style={{ color: 'red', borderColor: 'red' }}>
                     Disable
                 </Button>
             </SettingsItem>
@@ -469,9 +438,8 @@ export const DisableAccount = () => {
                 onConfirm={() => console.log('TODO')}
                 title='Disable Account?'
             >
-                You will no longer receive notifications about Town Halls and
-                you can no longer join live Town Halls. You will still be able
-                to log into your account.
+                You will no longer receive notifications about Town Halls and you can no longer join live Town Halls.
+                You will still be able to log into your account.
             </ConfirmationDialog>
         </div>
     );
@@ -494,12 +462,12 @@ export function DeleteAccount({ user }: { user: User }) {
         initialValues: makeInitialState(intiialDeleteAccount),
         validationSchema: deleteAccountValidationSchema,
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        onSubmit: handleCommit
+        onSubmit: handleCommit,
     });
     function handleCommit(submittedForm: TDeleteAccountForm) {
         // add user email to input passed into the commit
-        const userEmail = user.email ? user.email : ''
-        const completeForm = { email: userEmail, ...submittedForm }
+        const userEmail = user.email ? user.email : '';
+        const completeForm = { email: userEmail, ...submittedForm };
         commit({
             variables: { input: completeForm },
             onCompleted({ deleteAccount }) {
@@ -514,21 +482,18 @@ export function DeleteAccount({ user }: { user: User }) {
             },
         });
     }
-    
+
     return (
         <Grid container spacing={2}>
             <Grid component='span' item xs={12}>
                 <Typography variant='h6'>Delete Account</Typography>
             </Grid>
             <Grid component='span' item xs={12}>
-                <Typography variant='body2'>
-                    All of your account information will be erased from Prytaneum.
-                </Typography>
+                <Typography variant='body2'>All of your account information will be erased from Prytaneum.</Typography>
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body2'>
-                    <b>This action is irreversible.</b> Please enter your password below
-                    twice to confirm.
+                    <b>This action is irreversible.</b> Please enter your password below twice to confirm.
                 </Typography>
             </Grid>
             <Form className={classes.form} onSubmit={handleSubmit}>
@@ -565,7 +530,6 @@ export function DeleteAccount({ user }: { user: User }) {
                 </Grid>
             </Form>
         </Grid>
-        
     );
 }
 

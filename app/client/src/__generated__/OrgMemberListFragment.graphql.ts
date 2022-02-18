@@ -1,32 +1,35 @@
+/**
+ * @generated SignedSource<<828ea49a3f924c395d6f17a19352831a>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type OrgMemberListFragment = {
-    readonly id: string;
-    readonly members: {
-        readonly __id: string;
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly firstName: string | null;
-                readonly lastName: string | null;
-            };
-        }> | null;
-    } | null;
-    readonly " $refType": "OrgMemberListFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type OrgMemberListFragment$data = {
+  readonly id: string;
+  readonly members: {
+    readonly __id: string;
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly firstName: string | null;
+        readonly lastName: string | null;
+      };
+    }> | null;
+  } | null;
+  readonly " $fragmentType": "OrgMemberListFragment";
 };
-export type OrgMemberListFragment$data = OrgMemberListFragment;
+export type OrgMemberListFragment = OrgMemberListFragment$data;
 export type OrgMemberListFragment$key = {
-    readonly " $data"?: OrgMemberListFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"OrgMemberListFragment">;
+  readonly " $data"?: OrgMemberListFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"OrgMemberListFragment">;
 };
-
-
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -169,5 +172,7 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'fbb92ee032fee0a45a76539f658081aa';
+
+(node as any).hash = "fbb92ee032fee0a45a76539f658081aa";
+
 export default node;

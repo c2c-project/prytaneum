@@ -35,5 +35,5 @@ export function useEnqueuedPush({ connection }: { connection: string }) {
         [eventId, connection]
     );
 
-    useSubscription(enqueuedPushConfig);
+    useSubscription<useEnqueuedPushSubscription>(enqueuedPushConfig);
 }

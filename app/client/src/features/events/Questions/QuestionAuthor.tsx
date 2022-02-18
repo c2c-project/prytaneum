@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Typography, CardHeader, CardHeaderProps } from '@material-ui/core';
+import { Avatar, Typography, CardHeader, CardHeaderProps } from '@material-ui/core';
 import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionAuthorFragment$key } from '@local/__generated__/QuestionAuthorFragment.graphql';
@@ -14,6 +14,7 @@ export const QUESTION_AUTHOR_FRAGMENT = graphql`
         createdBy {
             id
             firstName
+            lastName
             avatar
         }
         createdAt
@@ -39,9 +40,22 @@ export function QuestionAuthor({ fragmentRef, ...props }: QuestionAuthorProps) {
         ),
         [time, month]
     );
+    // make author name given available data
+    const createAuthorName = () => {
+        let authorName = 'Unknown User';
+        if (authorData.createdBy && authorData.createdBy.firstName) {
+            authorName = authorData.createdBy.firstName;
+            if (authorData.createdBy.lastName) authorName = `${authorName} ${authorData.createdBy.lastName}`;
+        }
+        return authorName;
+    };
+    const authorName = createAuthorName();
+
     return (
         <CardHeader
-            title={<Typography>{authorData.createdBy?.firstName ?? 'Unknown User'}</Typography>}
+            // get first letter of name to display
+            avatar={<Avatar>{authorName[0]}</Avatar>}
+            title={<Typography>{authorName}</Typography>}
             subheader={subheader}
             {...props}
         />

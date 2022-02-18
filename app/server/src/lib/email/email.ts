@@ -1,4 +1,5 @@
 import mg from './client';
+
 export interface EmailConfig {
     to: string | Array<string>;
     subject: string;
@@ -9,17 +10,14 @@ export interface EmailConfig {
     'h:X-Mailgun-Variables'?: string;
 }
 
-
 /**
  * @description internal function to use mg api to send email
  * @param {EmailConfig} mailgun email configuration
  * @returns {Promise<string>}
  */
-export async function sendEmail(
-    config: EmailConfig
-) {
+export async function sendEmail(config: EmailConfig) {
     if (!process.env.MAILGUN_DOMAIN) throw new Error('MAILGUN_DOMAIN not configured');
-    
+
     if (process.env.NODE_ENV === 'test') {
         return new Promise<string>((resolve) => resolve('success'));
     }

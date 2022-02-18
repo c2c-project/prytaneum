@@ -1,86 +1,48 @@
+/**
+ * @generated SignedSource<<827b11384caba0824a0f4c74df599ea7>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
-export type useLiveFeedbackListSubscriptionVariables = {
-    eventId: string;
+export type useLiveFeedbackListSubscription$variables = {
+  eventId: string;
 };
-export type useLiveFeedbackListSubscriptionResponse = {
-    readonly feedbackCRUD: {
-        readonly operationType: Operation;
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly message: string;
-                readonly createdBy: {
-                    readonly id: string;
-                } | null;
-                readonly refFeedback: {
-                    readonly createdBy: {
-                        readonly id: string;
-                    } | null;
-                    readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment">;
-                } | null;
-                readonly " $fragmentRefs": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
-            };
-        };
+export type useLiveFeedbackListSubscriptionVariables = useLiveFeedbackListSubscription$variables;
+export type useLiveFeedbackListSubscription$data = {
+  readonly feedbackCRUD: {
+    readonly operationType: Operation;
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly message: string;
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+        } | null;
+        readonly refFeedback: {
+          readonly createdBy: {
+            readonly id: string;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
+        } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+      };
     };
+  };
 };
+export type useLiveFeedbackListSubscriptionResponse = useLiveFeedbackListSubscription$data;
 export type useLiveFeedbackListSubscription = {
-    readonly response: useLiveFeedbackListSubscriptionResponse;
-    readonly variables: useLiveFeedbackListSubscriptionVariables;
+  variables: useLiveFeedbackListSubscriptionVariables;
+  response: useLiveFeedbackListSubscription$data;
 };
-
-
-
-/*
-subscription useLiveFeedbackListSubscription(
-  $eventId: ID!
-) {
-  feedbackCRUD(eventId: $eventId) {
-    operationType
-    edge {
-      cursor
-      node {
-        id
-        message
-        createdBy {
-          id
-        }
-        refFeedback {
-          createdBy {
-            id
-          }
-          ...LiveFeedbackReplyFragment
-          id
-        }
-        ...LiveFeedbackReplyFragment
-        ...LiveFeedbackAuthorFragment
-      }
-    }
-  }
-}
-
-fragment LiveFeedbackAuthorFragment on EventLiveFeedback {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment LiveFeedbackReplyFragment on EventLiveFeedback {
-  id
-  message
-  ...LiveFeedbackAuthorFragment
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -128,13 +90,8 @@ v5 = {
 v6 = {
   "alias": null,
   "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "createdBy",
-  "plural": false,
-  "selections": [
-    (v4/*: any*/)
-  ],
+  "kind": "ScalarField",
+  "name": "firstName",
   "storageKey": null
 },
 v7 = {
@@ -151,11 +108,12 @@ v8 = {
   "plural": false,
   "selections": [
     (v4/*: any*/),
+    (v6/*: any*/),
     {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "firstName",
+      "name": "lastName",
       "storageKey": null
     },
     {
@@ -210,7 +168,19 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
-                  (v6/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v4/*: any*/),
+                      (v6/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -219,7 +189,18 @@ return {
                     "name": "refFeedback",
                     "plural": false,
                     "selections": [
-                      (v6/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "User",
+                        "kind": "LinkedField",
+                        "name": "createdBy",
+                        "plural": false,
+                        "selections": [
+                          (v4/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
                       (v7/*: any*/)
                     ],
                     "storageKey": null
@@ -306,14 +287,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "09d0b7abfb397ca6e066d562d5284311",
+    "cacheID": "1262a2f50f7a8a5f7d871d2b7afff342",
     "id": null,
     "metadata": {},
     "name": "useLiveFeedbackListSubscription",
     "operationKind": "subscription",
-    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
+    "text": "subscription useLiveFeedbackListSubscription(\n  $eventId: ID!\n) {\n  feedbackCRUD(eventId: $eventId) {\n    operationType\n    edge {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n      }\n    }\n  }\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n"
   }
 };
 })();
-(node as any).hash = '79317d818502fdfb191313facf1e3a2b';
+
+(node as any).hash = "47ab729d3b19732e30514df5b46855d6";
+
 export default node;

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import globby from 'globby';
 import { join } from 'path';
 import writeToCsv from './utils/write-to-csv';
@@ -16,6 +17,7 @@ async function main() {
     };
 
     for (let i = 0; i < results.length; i += 1) {
+        // eslint-disable-next-line no-continue
         if (!results[i].gen) continue;
         const arr = new Array(10).fill(0);
         const generated = arr.map(() => results[i].gen());

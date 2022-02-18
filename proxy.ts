@@ -6,7 +6,7 @@ const app = express();
 // graphql server
 app.use(
     '/graphql',
-    createProxyMiddleware({
+    createProxyMiddleware('/graphql', {
         changeOrigin: true,
         ws: true,
         target: `http://${process.env.HOST}:${process.env.SERVER_PORT}`,
@@ -21,6 +21,7 @@ app.use(
         changeOrigin: true,
         target: `http://${process.env.HOST}:${process.env.CLIENT_PORT}`,
         logLevel: 'debug',
+        ws: true,
     })
 );
 

@@ -1,2 +1,21 @@
 graphql-types.ts
 prisma
+_unused
+documentation
+
+# Extensions to ignore
+*.json
+*.js
+*.config.*
+*.graphql
+*.graphql.ts
+*.md
+*.yml
+*.csv
+*.css
+*.png
+*.sh
+*.svg
+*.ico
+*.jpg
+*.template.*

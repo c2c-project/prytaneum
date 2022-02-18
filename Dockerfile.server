@@ -1,34 +1,27 @@
-FROM node:14 AS base-stage
+FROM node:14-alpine AS base-stage
 
 WORKDIR /usr/src/app
 
-COPY ./app/server/package.json ./package.json
-
-# Remove @app/prisma from the package.json
-RUN sed -i '/@app\/prisma/d' ./package.json
+COPY . .
 
 RUN yarn install
+RUN yarn workspace @app/db prisma generate
 
-COPY ./app/server/src/ ./src/
-COPY ./app/server/.env ./.env
-COPY ./app/server/tsconfig.json ./tsconfig.json
-COPY ./app/server/schema.prisma ./schema.prisma
-
-RUN yarn prisma generate
-
-# Replace @app/prisma imports to @prisma/client
-RUN grep -RiIl '@app\/prisma' | xargs sed -i 's/@app\/prisma/@prisma\/client/g'
-
-FROM node:14 AS production-stage
+FROM node:14-alpine AS production-stage
 
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 ENV SERVER_PORT 3002
+ENV GCP_PROJECT_ID prytaneum-project
+
+RUN unset PUBSUB_EMULATOR_HOST
 
 WORKDIR /usr/src/app
 
 COPY --from=base-stage /usr/src/app/ ./
 
 EXPOSE 3002
-
-CMD ["yarn", "start"]
+RUN apk update \
+&& apk add --no-cache rsync
+RUN yarn workspace @app/server build
+CMD ["yarn", "workspace", "@app/server", "prod"]

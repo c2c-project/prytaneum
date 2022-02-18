@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Tab, Tabs } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import clsx from 'clsx';
@@ -11,11 +11,11 @@ import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
-import { QuestionCarousel } from '@local/features/events/Questions/QuestionCarousel';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
-import { EventDetailsCard } from '../EventDetailsCard';
-import { SpeakerList } from '../Speakers';
+import { Tabs } from '@local/components/Tabs';
+import { QuestionCarousel } from '../Questions/QuestionCarousel';
+import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -57,10 +57,6 @@ const useStyles = makeStyles((theme) => ({
     rightJustify: {
         alignSelf: 'flex-end',
     },
-    item: {
-        // flex: 1,
-        // marginBottom: theme.spacing(1.5),
-    },
     fullWidth: {
         // width: '100%',
     },
@@ -69,8 +65,8 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(1),
         boxShadow: theme.shadows[1],
-        // border: `1px solid ${theme.palette.secondary.main}`,
     },
+    item: {},
     pl: {
         paddingLeft: theme.spacing(2),
     },
@@ -97,6 +93,9 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         setTabIndex(newTabIndex);
     };
 
+    const moderatorTabs = ['Queue', 'Questions', 'Feedback'];
+    const participantTabs = ['Questions', 'Feedback'];
+
     // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
     // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
 
@@ -119,14 +118,26 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             alignItems='flex-start'
             wrap='nowrap'
         >
+            <Grid item>
+                {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
+                {data.isViewerModerator && (
+                    <CurrentQuestionCard isViewerModerator={Boolean(data.isViewerModerator)} fragmentRef={data} />
+                )}
+            </Grid>
+
+            <Tabs
+                tabIndex={tabIndex}
+                onChange={handleTabChange}
+                // conditionally set which tabs are viewable to a moderator/participant
+                tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
+            />
+
             <Grid
                 container
                 direction='column'
                 wrap='nowrap'
                 className={clsx(classes.item, classes.paper, classes.fullWidth)}
             >
-                <EventDetailsCard fragmentRef={data} />
-                <SpeakerList className={clsx(classes.item, classes.fullWidth)} fragmentRef={data} />
                 {
                     // Moderator feedback state = 2, Participant feedback state = 1
                     displayFeedbackButton ? (
@@ -145,21 +156,6 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                 }
             </Grid>
 
-            {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
-
-            {data.isViewerModerator && (
-                <Tabs variant='scrollable' scrollButtons='auto' value={tabIndex} onChange={handleTabChange}>
-                    <Tab label='Question Queue' />
-                    <Tab label='Question List' />
-                    <Tab label='Live Feedback' />
-                </Tabs>
-            )}
-            {!data.isViewerModerator && (
-                <Tabs value={tabIndex} onChange={handleTabChange}>
-                    <Tab label='Question List' />
-                    <Tab label='Live Feedback' />
-                </Tabs>
-            )}
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
                 <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
                     <QuestionQueue fragmentRef={data} />

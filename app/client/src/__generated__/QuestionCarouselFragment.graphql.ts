@@ -1,41 +1,42 @@
+/**
+ * @generated SignedSource<<f4aafaa27fe031a890cd61d8710f1dc1>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-import QuestionCarouselFragmentRefetchable from "./QuestionCarouselFragmentRefetchable.graphql";
-import {  } from "relay-runtime";
-export type QuestionCarouselFragment = {
-    readonly id: string;
-    readonly currentQuestion: number | null;
-    readonly questionQueue: {
-        readonly questionRecord: {
-            readonly __id: string;
-            readonly edges: ReadonlyArray<{
-                readonly cursor: string;
-                readonly node: {
-                    readonly position: number | null;
-                    readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
-                };
-            }> | null;
-        } | null;
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type QuestionCarouselFragment$data = {
+  readonly id: string;
+  readonly currentQuestion: number | null;
+  readonly questionQueue: {
+    readonly questionRecord: {
+      readonly __id: string;
+      readonly edges: ReadonlyArray<{
+        readonly cursor: string;
+        readonly node: {
+          readonly position: number | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
+        };
+      }> | null;
     } | null;
-    readonly " $refType": "QuestionCarouselFragment";
+  } | null;
+  readonly " $fragmentType": "QuestionCarouselFragment";
 };
-export type QuestionCarouselFragment$data = QuestionCarouselFragment;
+export type QuestionCarouselFragment = QuestionCarouselFragment$data;
 export type QuestionCarouselFragment$key = {
-    readonly " $data"?: QuestionCarouselFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"QuestionCarouselFragment">;
+  readonly " $data"?: QuestionCarouselFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment">;
 };
 
-
-
-const node: ReaderFragment = (function(){
-var v0 = [
-  "questionQueue",
-  "questionRecord"
-];
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [
     {
       "defaultValue": "",
@@ -55,24 +56,12 @@ return {
         "count": "first",
         "cursor": "after",
         "direction": "forward",
-        "path": (v0/*: any*/)
+        "path": [
+          "questionQueue",
+          "questionRecord"
+        ]
       }
-    ],
-    "refetch": {
-      "connection": {
-        "forward": {
-          "count": "first",
-          "cursor": "after"
-        },
-        "backward": null,
-        "path": (v0/*: any*/)
-      },
-      "fragmentPathInResult": [
-        "node"
-      ],
-      "operation": QuestionCarouselFragmentRefetchable,
-      "identifierField": "id"
-    }
+    ]
   },
   "name": "QuestionCarouselFragment",
   "selections": [
@@ -137,13 +126,6 @@ return {
                       "storageKey": null
                     },
                     {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "__typename",
-                      "storageKey": null
-                    },
-                    {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "QuestionAuthorFragment"
@@ -152,6 +134,29 @@ return {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "QuestionContentFragment"
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "EventQuestion",
+                      "kind": "LinkedField",
+                      "name": "refQuestion",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "args": null,
+                          "kind": "FragmentSpread",
+                          "name": "QuestionQuoteFragment"
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "__typename",
+                      "storageKey": null
                     }
                   ],
                   "storageKey": null
@@ -206,6 +211,7 @@ return {
   "type": "Event",
   "abstractKey": null
 };
-})();
-(node as any).hash = '53bfaeeea5fa71c95f9c1ec7e6d9d1ee';
+
+(node as any).hash = "3ac4d55a5cb8ef2d660ab91ca40b5391";
+
 export default node;

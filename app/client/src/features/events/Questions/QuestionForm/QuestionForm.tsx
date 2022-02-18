@@ -33,7 +33,7 @@ export function QuestionForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
                 <TextField
                     id='question-field'
                     name='question'
-                    label='Your Question...'
+                    label='Add your question for everyone to see'
                     autoFocus
                     error={Boolean(errors.question)}
                     helperText={errors.question}

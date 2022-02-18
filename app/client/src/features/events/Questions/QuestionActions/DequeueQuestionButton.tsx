@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@material-ui/core';
-import RemoveFromQueueIcon from '@material-ui/icons/RemoveFromQueue';
+import CancelIcon from '@material-ui/icons/Cancel';
 import { graphql, useMutation } from 'react-relay';
 
 import type { DequeueQuestionButtonMutation } from '@local/__generated__/DequeueQuestionButtonMutation.graphql';
@@ -50,7 +50,7 @@ export function DequeueQuestionButton({ questionId }: QueueButtonProps) {
         });
     };
     return (
-        <Button fullWidth color='secondary' endIcon={<RemoveFromQueueIcon fontSize='small' />} onClick={handleClick}>
+        <Button fullWidth color='secondary' endIcon={<CancelIcon fontSize='small' />} onClick={handleClick}>
             Dequeue
         </Button>
     );

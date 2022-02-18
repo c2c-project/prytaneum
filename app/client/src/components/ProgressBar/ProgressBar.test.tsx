@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -39,10 +40,7 @@ describe('Progress', function () {
     // eslint-disable-next-line jest/expect-expect
     it('should render', () => {
         ReactTestUtils.act(() => {
-            render(
-                <Progress timeline={timelineData} currentVal={100} />,
-                container
-            );
+            render(<Progress timeline={timelineData} currentVal={100} />, container);
         });
     });
 });

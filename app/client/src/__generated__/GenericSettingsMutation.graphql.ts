@@ -1,63 +1,45 @@
+/**
+ * @generated SignedSource<<15dece26edf670bec43c39feda981344>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type UpdateEvent = {
-    description?: string | null | undefined;
-    endDateTime?: Date | null | undefined;
-    eventId: string;
-    isCollectRatingsEnabled?: boolean | null | undefined;
-    isForumEnabled?: boolean | null | undefined;
-    isPrivate?: boolean | null | undefined;
-    isQuestionFeedVisible?: boolean | null | undefined;
-    startDateTime?: Date | null | undefined;
-    title?: string | null | undefined;
-    topic?: string | null | undefined;
+  description?: string | null;
+  endDateTime?: Date | null;
+  eventId: string;
+  isCollectRatingsEnabled?: boolean | null;
+  isForumEnabled?: boolean | null;
+  isPrivate?: boolean | null;
+  isQuestionFeedVisible?: boolean | null;
+  startDateTime?: Date | null;
+  title?: string | null;
+  topic?: string | null;
 };
-export type GenericSettingsMutationVariables = {
-    input: UpdateEvent;
+export type GenericSettingsMutation$variables = {
+  input: UpdateEvent;
 };
-export type GenericSettingsMutationResponse = {
-    readonly updateEvent: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly " $fragmentRefs": FragmentRefs<"GenericSettingsFragment">;
-        } | null;
-    };
+export type GenericSettingsMutationVariables = GenericSettingsMutation$variables;
+export type GenericSettingsMutation$data = {
+  readonly updateEvent: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly " $fragmentSpreads": FragmentRefs<"GenericSettingsFragment">;
+    } | null;
+  };
 };
+export type GenericSettingsMutationResponse = GenericSettingsMutation$data;
 export type GenericSettingsMutation = {
-    readonly response: GenericSettingsMutationResponse;
-    readonly variables: GenericSettingsMutationVariables;
+  variables: GenericSettingsMutationVariables;
+  response: GenericSettingsMutation$data;
 };
-
-
-
-/*
-mutation GenericSettingsMutation(
-  $input: UpdateEvent!
-) {
-  updateEvent(event: $input) {
-    isError
-    message
-    body {
-      ...GenericSettingsFragment
-      id
-    }
-  }
-}
-
-fragment GenericSettingsFragment on Event {
-  id
-  isQuestionFeedVisible
-  isCollectRatingsEnabled
-  isForumEnabled
-  isPrivate
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -205,5 +187,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'd0fd6b5cf844706def65f9f1269638a1';
+
+(node as any).hash = "d0fd6b5cf844706def65f9f1269638a1";
+
 export default node;

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-filename-extension */
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';

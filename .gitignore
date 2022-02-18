@@ -118,3 +118,6 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+build
+_unused

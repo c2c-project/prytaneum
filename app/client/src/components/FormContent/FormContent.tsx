@@ -19,25 +19,12 @@ export function FormContent({ children, className }: Props) {
     const count = React.Children.count(children);
 
     return (
-        <Grid
-            item
-            xs={12}
-            container
-            className={className}
-            alignItems='center'
-            alignContent='center'
-        >
-            {React.Children.map(children, (child, idx) => {
-                return (
-                    <Grid
-                        item
-                        xs={12}
-                        className={idx < count - 1 ? classes.item : ''}
-                    >
-                        {child}
-                    </Grid>
-                );
-            })}
+        <Grid item xs={12} container className={className} alignItems='center' alignContent='center'>
+            {React.Children.map(children, (child, idx) => (
+                <Grid item xs={12} className={idx < count - 1 ? classes.item : ''}>
+                    {child}
+                </Grid>
+            ))}
         </Grid>
     );
 }

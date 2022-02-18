@@ -1,55 +1,37 @@
+/**
+ * @generated SignedSource<<8412959d349dea22d42fe28e4c70e470>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type UpdateEmailForm = {
-    currentEmail: string;
-    newEmail: string;
+  currentEmail: string;
+  newEmail: string;
 };
-export type UpdateEmailFormMutationVariables = {
-    input: UpdateEmailForm;
+export type UpdateEmailFormMutation$variables = {
+  input: UpdateEmailForm;
 };
-export type UpdateEmailFormMutationResponse = {
-    readonly updateEmail: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly " $fragmentRefs": FragmentRefs<"useUserFragment">;
-        } | null;
-    };
+export type UpdateEmailFormMutationVariables = UpdateEmailFormMutation$variables;
+export type UpdateEmailFormMutation$data = {
+  readonly updateEmail: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
+    } | null;
+  };
 };
+export type UpdateEmailFormMutationResponse = UpdateEmailFormMutation$data;
 export type UpdateEmailFormMutation = {
-    readonly response: UpdateEmailFormMutationResponse;
-    readonly variables: UpdateEmailFormMutationVariables;
+  variables: UpdateEmailFormMutationVariables;
+  response: UpdateEmailFormMutation$data;
 };
-
-
-
-/*
-mutation UpdateEmailFormMutation(
-  $input: UpdateEmailForm!
-) {
-  updateEmail(input: $input) {
-    isError
-    message
-    body {
-      ...useUserFragment
-      id
-    }
-  }
-}
-
-fragment useUserFragment on User {
-  id
-  firstName
-  lastName
-  email
-  avatar
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -197,5 +179,7 @@ return {
   }
 };
 })();
-(node as any).hash = '6ac72dd60d5a3e1a85087b7701b1753a';
+
+(node as any).hash = "6ac72dd60d5a3e1a85087b7701b1753a";
+
 export default node;

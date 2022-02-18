@@ -1,24 +1,26 @@
+/**
+ * @generated SignedSource<<0ec4379dbf0b4f5e47098ff5503c1bb0>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type EventDetailsCardFragment = {
-    readonly id: string;
-    readonly title: string | null;
-    readonly topic: string | null;
-    readonly description: string | null;
-    readonly " $refType": "EventDetailsCardFragment";
+import { Fragment, ReaderFragment } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type EventDetailsCardFragment$data = {
+  readonly id: string;
+  readonly title: string | null;
+  readonly description: string | null;
+  readonly " $fragmentType": "EventDetailsCardFragment";
 };
-export type EventDetailsCardFragment$data = EventDetailsCardFragment;
+export type EventDetailsCardFragment = EventDetailsCardFragment$data;
 export type EventDetailsCardFragment$key = {
-    readonly " $data"?: EventDetailsCardFragment$data | undefined;
-    readonly " $fragmentRefs": FragmentRefs<"EventDetailsCardFragment">;
+  readonly " $data"?: EventDetailsCardFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment">;
 };
-
-
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
@@ -44,13 +46,6 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "topic",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "description",
       "storageKey": null
     }
@@ -58,5 +53,7 @@ const node: ReaderFragment = {
   "type": "Event",
   "abstractKey": null
 };
-(node as any).hash = 'f9a4117a4067d382d100f75a69edb731';
+
+(node as any).hash = "865221d61780dc50e499786c19c574a2";
+
 export default node;

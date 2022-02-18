@@ -1,69 +1,37 @@
+/**
+ * @generated SignedSource<<4293a31fa5e618e574b1795f1790c499>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-import {  } from "relay-runtime";
-export type useQuestionDeletedSubscriptionVariables = {
-    eventId: string;
-    connections: Array<string>;
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type useQuestionDeletedSubscription$variables = {
+  eventId: string;
+  connections: ReadonlyArray<string>;
 };
-export type useQuestionDeletedSubscriptionResponse = {
-    readonly questionDeleted: {
-        readonly edge: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-                readonly " $fragmentRefs": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
-            };
-        };
+export type useQuestionDeletedSubscriptionVariables = useQuestionDeletedSubscription$variables;
+export type useQuestionDeletedSubscription$data = {
+  readonly questionDeleted: {
+    readonly edge: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly position: number | null;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+      };
     };
+  };
 };
+export type useQuestionDeletedSubscriptionResponse = useQuestionDeletedSubscription$data;
 export type useQuestionDeletedSubscription = {
-    readonly response: useQuestionDeletedSubscriptionResponse;
-    readonly variables: useQuestionDeletedSubscriptionVariables;
+  variables: useQuestionDeletedSubscriptionVariables;
+  response: useQuestionDeletedSubscription$data;
 };
-
-
-
-/*
-subscription useQuestionDeletedSubscription(
-  $eventId: ID!
-) {
-  questionDeleted(eventId: $eventId) {
-    edge {
-      cursor
-      node {
-        id
-        position
-        ...QuestionAuthorFragment
-        ...QuestionContentFragment
-        ...QuestionStatsFragment
-      }
-    }
-  }
-}
-
-fragment QuestionAuthorFragment on EventQuestion {
-  createdBy {
-    id
-    firstName
-    avatar
-  }
-  createdAt
-}
-
-fragment QuestionContentFragment on EventQuestion {
-  question
-}
-
-fragment QuestionStatsFragment on EventQuestion {
-  id
-  likedByCount
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -241,6 +209,13 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "avatar",
                         "storageKey": null
                       }
@@ -261,6 +236,7 @@ return {
                     "name": "question",
                     "storageKey": null
                   },
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -280,14 +256,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "26ea29cb633f9e27f0e064468fbd9e99",
+    "cacheID": "53c7398ad617da6374e256493c67b5bf",
     "id": null,
     "metadata": {},
     "name": "useQuestionDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionDeletedSubscription(\n  $eventId: ID!\n) {\n  questionDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
-(node as any).hash = '16d3cbeca231d802e031a2ea9850458a';
+
+(node as any).hash = "16d3cbeca231d802e031a2ea9850458a";
+
 export default node;

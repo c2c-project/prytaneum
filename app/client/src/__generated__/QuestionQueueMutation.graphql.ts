@@ -1,68 +1,65 @@
+/**
+ * @generated SignedSource<<c26191486286d7ae8a784e92d8db435e>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type UpdateQuestionPosition = {
-    eventId: string;
-    position: number;
-    questionId: string;
+  eventId: string;
+  position: number;
+  questionId: string;
 };
-export type QuestionQueueMutationVariables = {
-    input: UpdateQuestionPosition;
+export type QuestionQueueMutation$variables = {
+  input: UpdateQuestionPosition;
 };
-export type QuestionQueueMutationResponse = {
-    readonly updateQuestionPosition: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: {
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-            };
+export type QuestionQueueMutationVariables = QuestionQueueMutation$variables;
+export type QuestionQueueMutation$data = {
+  readonly updateQuestionPosition: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly question: string | null;
+        readonly createdBy: {
+          readonly firstName: string | null;
         } | null;
-    };
+        readonly position: number | null;
+      };
+    } | null;
+  };
 };
-export type QuestionQueueMutationRawResponse = {
-    readonly updateQuestionPosition: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: ({
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly position: number | null;
-            };
-        }) | null;
-    };
+export type QuestionQueueMutationResponse = QuestionQueueMutation$data;
+export type QuestionQueueMutation$rawResponse = {
+  readonly updateQuestionPosition: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: {
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly question: string | null;
+        readonly createdBy: {
+          readonly firstName: string | null;
+          readonly id: string;
+        } | null;
+        readonly position: number | null;
+      };
+    } | null;
+  };
 };
+export type QuestionQueueMutationRawResponse = QuestionQueueMutation$rawResponse;
 export type QuestionQueueMutation = {
-    readonly response: QuestionQueueMutationResponse;
-    readonly variables: QuestionQueueMutationVariables;
-    readonly rawResponse: QuestionQueueMutationRawResponse;
+  variables: QuestionQueueMutationVariables;
+  response: QuestionQueueMutation$data;
+  rawResponse: QuestionQueueMutation$rawResponse;
 };
-
-
-
-/*
-mutation QuestionQueueMutation(
-  $input: UpdateQuestionPosition!
-) {
-  updateQuestionPosition(input: $input) {
-    isError
-    message
-    body {
-      cursor
-      node {
-        id
-        position
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -74,68 +71,110 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "EventQuestionMutationResponse",
-    "kind": "LinkedField",
-    "name": "updateQuestionPosition",
-    "plural": false,
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input"
+  }
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isError",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "question",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "firstName",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "position",
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "QuestionQueueMutation",
     "selections": [
       {
         "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isError",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "message",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "EventQuestionEdge",
+        "args": (v1/*: any*/),
+        "concreteType": "EventQuestionMutationResponse",
         "kind": "LinkedField",
-        "name": "body",
+        "name": "updateQuestionPosition",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "cursor",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventQuestion",
+            "concreteType": "EventQuestionEdge",
             "kind": "LinkedField",
-            "name": "node",
+            "name": "body",
             "plural": false,
             "selections": [
+              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "position",
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v7/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v8/*: any*/)
+                ],
                 "storageKey": null
               }
             ],
@@ -145,16 +184,6 @@ v1 = [
         "storageKey": null
       }
     ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "QuestionQueueMutation",
-    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -163,17 +192,72 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "QuestionQueueMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "EventQuestionMutationResponse",
+        "kind": "LinkedField",
+        "name": "updateQuestionPosition",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventQuestionEdge",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventQuestion",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v7/*: any*/),
+                      (v5/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v8/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "2d7a5e85f80973632c7bb58ebdcd6a72",
+    "cacheID": "d81b33f4d92004792283cb8c780fc2f8",
     "id": null,
     "metadata": {},
     "name": "QuestionQueueMutation",
     "operationKind": "mutation",
-    "text": "mutation QuestionQueueMutation(\n  $input: UpdateQuestionPosition!\n) {\n  updateQuestionPosition(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        position\n      }\n    }\n  }\n}\n"
+    "text": "mutation QuestionQueueMutation(\n  $input: UpdateQuestionPosition!\n) {\n  updateQuestionPosition(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        position\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8ab3dc1fc2c96fa3f35bf76e9ca90b47';
+
+(node as any).hash = "dbced572ae8572ce239520f31ebcee65";
+
 export default node;

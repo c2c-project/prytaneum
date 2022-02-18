@@ -8,13 +8,13 @@ import {
     InputAdornment,
     Badge,
     Checkbox,
-    Typography,
     Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { Skeleton, SkeletonProps } from '@material-ui/lab';
 
 import { TextField } from '@local/components/TextField';
@@ -29,6 +29,7 @@ export interface Props<T> {
     onFilterChange: (f: FilterFunc<T>[]) => void;
     className?: string;
     menuIcons?: JSX.Element[];
+    displayNumResults?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -37,11 +38,17 @@ const useStyles = makeStyles((theme) => ({
     },
     search: {
         flex: 1,
+        marginBottom: theme.spacing(2),
     },
     iconContainer: {
         flexBasis: 'auto',
         width: 'auto',
         marginLeft: theme.spacing(0.5),
+    },
+    input: {
+        '& fieldset': {
+            borderRadius: 9999, // rounded text field
+        },
     },
 }));
 
@@ -54,7 +61,16 @@ export function ListFilterSkeleton(props: SkeletonProps) {
     );
 }
 
-export default function ListFilter<T>({ filterMap, onSearch, length, onFilterChange, menuIcons, className }: Props<T>) {
+// FIXME: delete dead code
+export default function ListFilter<T>({
+    filterMap,
+    onSearch,
+    // length,
+    onFilterChange,
+    menuIcons,
+    // displayNumResults,
+    className,
+}: Props<T>) {
     const classes = useStyles();
     const [filters, setFilters] = React.useState<Filters>(new Set());
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -114,12 +130,21 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
                         value={search}
                         onChange={handleSearch}
                         onKeyDown={handleKeyPress}
+                        className={classes.input}
                         InputProps={{
                             // TODO: animation change here
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                            // TODO: add refresh action
                             endAdornment:
                                 search === '' ? (
                                     <InputAdornment position='end'>
-                                        <SearchIcon />
+                                        <IconButton edge='end' onClick={clearSearch}>
+                                            <RefreshIcon />
+                                        </IconButton>
                                     </InputAdornment>
                                 ) : (
                                     <InputAdornment position='end'>
@@ -156,11 +181,6 @@ export default function ListFilter<T>({ filterMap, onSearch, length, onFilterCha
                         </Grid>
                     ))}
                 </Grid>
-                <Grid item xs={12} className={classes.resultsText}>
-                    <Typography variant='body2' color='textSecondary'>
-                        {`${length} Results Displayed`}
-                    </Typography>
-                </Grid>
             </Grid>
             {filterMap && (
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
@@ -180,4 +200,5 @@ ListFilter.defaultProps = {
     menuIcons: [],
     className: undefined,
     filterMap: undefined,
+    displayNumResults: true,
 };

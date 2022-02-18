@@ -1,13 +1,6 @@
 module.exports = {
     plugins: ['jest', '@typescript-eslint'],
-    extends: [
-        'react-app',
-        'airbnb-typescript',
-        'prettier',
-        'plugin:@typescript-eslint/recommended',
-        // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        // 'plugin:jest/recommended',
-    ],
+    extends: ['react-app', 'airbnb-typescript', 'prettier'],
     parserOptions: {
         project: './tsconfig.base.json',
     },
@@ -38,7 +31,7 @@ module.exports = {
                     '**/*.stories.*',
                     '**/__tests__/**',
                     '**/setupTests.ts',
-                    '**/scripts/**'
+                    '**/scripts/**',
                 ],
             },
         ],
@@ -50,6 +43,7 @@ module.exports = {
         'import/prefer-default-export': 'off',
         // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
         'react/require-default-props': 'off',
+        'import/no-anonymous-default-export': 'off',
     },
     overrides: [
         {
