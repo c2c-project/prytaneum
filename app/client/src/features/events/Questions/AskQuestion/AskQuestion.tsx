@@ -10,6 +10,7 @@ import { useSnack } from '@local/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
+import ValidationError from './ValidationError';
 
 export interface AskQuestionProps {
     className?: string;
@@ -45,25 +46,25 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
     const { displaySnack } = useSnack();
 
     function handleSubmit(form: TQuestionFormState) {
-        try {
-            commit({
-                variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
-                onCompleted(payload) {
-                    if (payload.createQuestion.isError) displaySnack('Something went wrong!');
-                    else {
-                        ga.event({
-                            action: 'submit_question',
-                            category: 'questions',
-                            label: 'live event',
-                            value: form.question,
-                        });
-                        close();
-                    }
-                },
-            });
-        } catch (err) {
-            displaySnack(err.message);
-        }
+        commit({
+            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
+            onCompleted(payload) {
+                try {
+                    if (payload.createQuestion.isError) throw new Error('Something went wrong!');
+                    if (form.question.length >= 1000) throw new ValidationError('Question is too long!');
+                    if (new URL(form.question)) throw new ValidationError('no links are allowed!');
+                    ga.event({
+                        action: 'submit_question',
+                        category: 'questions',
+                        label: 'live event',
+                        value: form.question,
+                    });
+                    close();
+                } catch (err) {
+                    displaySnack(err.message);
+                }
+            },
+        });
     }
 
     return (
