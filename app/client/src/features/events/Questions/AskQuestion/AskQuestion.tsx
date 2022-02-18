@@ -38,6 +38,18 @@ export const ASK_QUESTION_MUTATION = graphql`
         }
     }
 `;
+function isURL(str: string) {
+    const pattern = new RegExp(
+        '^(https?:\\/\\/)?' +
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+            '((\\d{1,3}\\.){3}\\d{1,3}))' +
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+            '(\\?[;&a-z\\d%_.~+=-]*)?' +
+            '(\\#[-a-z\\d_]*)?$',
+        'i'
+    );
+    return !!pattern.test(str);
+}
 
 function AskQuestion({ className, eventId }: AskQuestionProps) {
     const [isOpen, open, close] = useResponsiveDialog();
@@ -50,7 +62,7 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
             variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
             onCompleted(payload) {
                 try {
-                    if (payload.createQuestion.isError) throw new Error('Something went wrong!');
+                    if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
                     if (form.question.length >= 1000) throw new ValidationError('Question is too long!');
                     if (new URL(form.question)) throw new ValidationError('no links are allowed!');
                     ga.event({
@@ -60,12 +72,27 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
                         value: form.question,
                     });
                     close();
+                    displaySnack('Question submitted!');
                 } catch (err) {
                     displaySnack(err.message);
                 }
             },
         });
     }
+    // function handleSubmit(form: TQuestionFormState) {
+    //     commit({
+    //         variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
+    //         onCompleted() {
+    //             try {
+    //                 if (form.question.length >= 1000) throw new ValidationError('Question is too long!')
+    //                 if (new URL(form.question)) throw new ValidationError('no links are allowed!')
+    //                 close();
+    //             } catch(err){
+    //                 displaySnack(err.message);
+    //             }
+    //         },
+    //     });
+    // }
 
     return (
         <>
