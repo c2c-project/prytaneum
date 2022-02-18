@@ -38,6 +38,7 @@ export const ASK_QUESTION_MUTATION = graphql`
         }
     }
 `;
+
 function isURL(str: string) {
     const pattern = new RegExp(
         '^(https?:\\/\\/)?' +
@@ -80,20 +81,6 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
             displaySnack(err.message);
         }
     }
-    // function handleSubmit(form: TQuestionFormState) {
-    //     commit({
-    //         variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
-    //         onCompleted() {
-    //             try {
-    //                 if (form.question.length >= 1000) throw new ValidationError('Question is too long!')
-    //                 if (new URL(form.question)) throw new ValidationError('no links are allowed!')
-    //                 close();
-    //             } catch(err){
-    //                 displaySnack(err.message);
-    //             }
-    //         },
-    //     });
-    // }
 
     return (
         <>
