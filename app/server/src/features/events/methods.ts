@@ -146,7 +146,9 @@ export async function deleteEvent(userId: string, prisma: PrismaClient, input: D
     const eventWithGlobalId = toEventId(eventToDelete)
 
     //validation is event title matches actual event title
-    if (title !== eventWithGlobalId.title) throw new Error('Deleting event failed: Invalid event title.');
+    const isValidEventTitle = await bcrypt.compare(title, eventWithGlobalId.title)
+
+    if (!isValidEventTitle) throw new Error('Deleting event failed: Invalid event title.');
 
     //validation if event titles match
     if (title !== confirmTitle) throw new Error('Event titles must match');
