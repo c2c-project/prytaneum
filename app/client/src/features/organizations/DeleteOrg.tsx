@@ -6,16 +6,13 @@ import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/C
 import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 
 const DELETE_ORG_MUTATION = graphql`
-    mutation DeleteOrgMutation($input: DeleteOrganization!, $connections: [ID!]!) {
+    mutation DeleteOrgMutation($input: DeleteOrganization!,  $connections: [ID!]!) {
         deleteOrganization(input: $input) {
             isError
             message
-            body @appendEdge(connections: $connections) {
-                cursor
+            body {
                 node {
-                    id
-                    name
-                    createdAt
+                    id @deleteEdge(connections: $connections)
                 }
             }
         }
@@ -34,26 +31,21 @@ export function DeleteOrganization(props: DeleteOrgProps) {
     const curryOnConfirm = () => {
         if (!orgId) return; // could be empty string
         commit({
-            variables: { input: { userId: orgId } },
-            updater: (store: RecordSourceSelectorProxy) => {
-                const OrgProxy = store.get(orgId);
-                if (!OrgProxy) return;
-                // const conn = ConnectionHandler.getConnection(OrgProxy, 'OrgListQuery_organizations');
-                // if (!conn) return;
-                ConnectionHandler.deleteNode(OrgProxy);
-
-            },
-            onCompleted: ({ deleteOrg }) => {
-                if (deleteOrg.isError) {
-                    displaySnack(deleteOrg.message);
+            variables: { input: { orgId: orgId }, connections },
+            onCompleted: ({ deleteOrganization }) => {
+                if (deleteOrganization.isError) {
+                    displaySnack(deleteOrganization.message);
                 } else {
                     onConfirm();
                 }
-            }
+            },
+            //onCompleted: (payload) => console.log(payload),
         });
     };
 
-    return <ConfirmationDialog onConfirm={curryOnConfirm} {...propsSubset}>
-        {children}
-    </ConfirmationDialog>
+    return (
+        <ConfirmationDialog onConfirm={curryOnConfirm} {...propsSubset}>
+            {children}
+        </ConfirmationDialog>
+    );
 }

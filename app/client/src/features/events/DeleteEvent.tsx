@@ -26,15 +26,12 @@ import { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragm
 import { EVENT_DETAILS_FRAGMENT } from './EventSettings/EventDetails';
 
 export const DELETE_EVENT_MUTATION = graphql`
-    mutation DeleteEventMutation($input: DeleteEvent!) {
+    mutation DeleteEventMutation($input: DeleteEvent!, $connections: [ID!]!) {
         deleteEvent(event: $input) {
             isError
             message
             body {
-                id
-                title
-                topic
-                startDateTime
+                id @deleteEdge(connections: $connections)
             }
         }
     }
@@ -102,7 +99,7 @@ export const DeleteEvent = ({ fragmentRef, className }: EventSettingsProps) => {
     const { displaySnack } = useSnack();
 
     function handleCommit(submittedForm: TDeleteEvent) {
-        const completeForm = { ...submittedForm }
+        const completeForm = { ...submittedForm };
         commit({
             variables: { input: completeForm },
             onCompleted({ deleteEvent }) {
@@ -116,6 +113,7 @@ export const DeleteEvent = ({ fragmentRef, className }: EventSettingsProps) => {
                 }
             },
         });
+
     }
 
     return (

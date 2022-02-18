@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e50bfbeab0c8ea8febeaed49dc229c54>>
+ * @generated SignedSource<<0a40d0a8108013cedefa8dee060fdb41>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,11 +22,8 @@ export type DeleteOrgMutation$data = {
     readonly isError: boolean;
     readonly message: string;
     readonly body: {
-      readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly name: string;
-        readonly createdAt: Date | null;
       };
     } | null;
   };
@@ -72,51 +69,8 @@ v4 = {
 v5 = {
   "alias": null,
   "args": null,
-  "concreteType": "OrganizationEdge",
-  "kind": "LinkedField",
-  "name": "body",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "cursor",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "Organization",
-      "kind": "LinkedField",
-      "name": "node",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "name",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "createdAt",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    }
-  ],
+  "kind": "ScalarField",
+  "name": "id",
   "storageKey": null
 };
 return {
@@ -139,7 +93,29 @@ return {
         "selections": [
           (v3/*: any*/),
           (v4/*: any*/),
-          (v5/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "OrganizationEdge",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Organization",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
@@ -166,22 +142,44 @@ return {
         "selections": [
           (v3/*: any*/),
           (v4/*: any*/),
-          (v5/*: any*/),
           {
             "alias": null,
             "args": null,
-            "filters": null,
-            "handle": "appendEdge",
-            "key": "",
-            "kind": "LinkedHandle",
+            "concreteType": "OrganizationEdge",
+            "kind": "LinkedField",
             "name": "body",
-            "handleArgs": [
+            "plural": false,
+            "selections": [
               {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
+                "alias": null,
+                "args": null,
+                "concreteType": "Organization",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "filters": null,
+                    "handle": "deleteEdge",
+                    "key": "",
+                    "kind": "ScalarHandle",
+                    "name": "id",
+                    "handleArgs": [
+                      {
+                        "kind": "Variable",
+                        "name": "connections",
+                        "variableName": "connections"
+                      }
+                    ]
+                  }
+                ],
+                "storageKey": null
               }
-            ]
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -189,16 +187,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6dc67658dd17af7454acf00e3c218c0f",
+    "cacheID": "757fca8a24af2bff516645c591b34df5",
     "id": null,
     "metadata": {},
     "name": "DeleteOrgMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteOrgMutation(\n  $input: DeleteOrganization!\n) {\n  deleteOrganization(input: $input) {\n    isError\n    message\n    body {\n      cursor\n      node {\n        id\n        name\n        createdAt\n      }\n    }\n  }\n}\n"
+    "text": "mutation DeleteOrgMutation(\n  $input: DeleteOrganization!\n) {\n  deleteOrganization(input: $input) {\n    isError\n    message\n    body {\n      node {\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d0d880b32c315ba9d10579e15cf2f429";
+(node as any).hash = "f235a445e28f0d8cddc9fafd299f3eb7";
 
 export default node;

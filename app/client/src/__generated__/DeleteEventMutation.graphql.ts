@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af87217feb7b48dfd760fb2f10e5362e>>
+ * @generated SignedSource<<00c6e1b533d1e6ae8ee0f6925777f289>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,7 @@ export type DeleteEvent = {
 };
 export type DeleteEventMutation$variables = {
   input: DeleteEvent;
+  connections: ReadonlyArray<string>;
 };
 export type DeleteEventMutationVariables = DeleteEventMutation$variables;
 export type DeleteEventMutation$data = {
@@ -24,9 +25,6 @@ export type DeleteEventMutation$data = {
     readonly message: string;
     readonly body: {
       readonly id: string;
-      readonly title: string | null;
-      readonly topic: string | null;
-      readonly startDateTime: Date | null;
     } | null;
   };
 };
@@ -37,113 +35,146 @@ export type DeleteEventMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "input"
+},
+v2 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
+    "kind": "Variable",
+    "name": "event",
+    "variableName": "input"
   }
 ],
-v1 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "event",
-        "variableName": "input"
-      }
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isError",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
     ],
-    "concreteType": "EventMutationResponse",
-    "kind": "LinkedField",
-    "name": "deleteEvent",
-    "plural": false,
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "DeleteEventMutation",
     "selections": [
       {
         "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isError",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "message",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Event",
+        "args": (v2/*: any*/),
+        "concreteType": "EventMutationResponse",
         "kind": "LinkedField",
-        "name": "body",
+        "name": "deleteEvent",
         "plural": false,
         "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "title",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "topic",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "startDateTime",
+            "concreteType": "Event",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/)
+            ],
             "storageKey": null
           }
         ],
         "storageKey": null
       }
     ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "DeleteEventMutation",
-    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "DeleteEventMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "EventMutationResponse",
+        "kind": "LinkedField",
+        "name": "deleteEvent",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Event",
+            "kind": "LinkedField",
+            "name": "body",
+            "plural": false,
+            "selections": [
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "deleteEdge",
+                "key": "",
+                "kind": "ScalarHandle",
+                "name": "id",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "b59fd9b4436cbdd78ca897d29bb72445",
+    "cacheID": "a89caef29668696e8a6ed443f75c6ffb",
     "id": null,
     "metadata": {},
     "name": "DeleteEventMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteEventMutation(\n  $input: DeleteEvent!\n) {\n  deleteEvent(event: $input) {\n    isError\n    message\n    body {\n      id\n      title\n      topic\n      startDateTime\n    }\n  }\n}\n"
+    "text": "mutation DeleteEventMutation(\n  $input: DeleteEvent!\n) {\n  deleteEvent(event: $input) {\n    isError\n    message\n    body {\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "deb6011e7df079378429f81b2c5ecf69";
+(node as any).hash = "4fb19ab8fb1b098fa3f3ef2b35b84d66";
 
 export default node;
