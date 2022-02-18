@@ -52,7 +52,7 @@ export function DeleteMember(props: DeleteMemberProps) {
         });
     };
 
-    return <ConfirmationDialog onConfirm={curryOnConfirm} { ...propsSubset}>
+    return <ConfirmationDialog onConfirm={curryOnConfirm} {...propsSubset}>
         {children}
     </ConfirmationDialog>
 }

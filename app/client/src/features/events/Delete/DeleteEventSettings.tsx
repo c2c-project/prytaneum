@@ -77,25 +77,7 @@ export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     //     });
     // }
 
-    const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
-
-    const close = () => {
-        setIsConfDialogOpen(false);
-    }
-
     return (
-        // <DeleteEvent
-        //     open={isConfDialogOpen}
-        //     onClose={close}
-        //     title={`Delete "${eventTitle}" event?`}
-        //     onConfirm={close}
-        //     eventId={eventTitle}
-        // >
-        //     <>
-        //         Are you sure you want to delete the&nbsp;
-        //         <b>{eventTitle}</b> event?
-        //     </>
-        // </DeleteEvent>
         <Grid container spacing={2}>
             <Grid component='span' item xs={12}>
                 <Typography variant='body2'>
