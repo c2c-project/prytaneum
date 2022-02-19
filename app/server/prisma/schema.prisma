@@ -58,8 +58,8 @@ model Organization {
 model OrgMember {
     userId String @db.Uuid
     orgId String @db.Uuid
-    organization Organization @relation(fields: [orgId], references: [id])
-    user User @relation(fields: [userId], references: [id])
+    organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     events Event[]
     // orgName String // de-normalized field from an Organization
     // memberName String // denormalized field from the User 
