@@ -35,7 +35,7 @@ model User {
 
 model UserSettings {
     userId String @db.Uuid
-    user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     currentEmail String
     updateEmail String
     updatePassword String
@@ -58,8 +58,8 @@ model Organization {
 model OrgMember {
     userId String @db.Uuid
     orgId String @db.Uuid
-    organization Organization @relation(fields: [orgId], references: [id])
-    user User @relation(fields: [userId], references: [id])
+    organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     events Event[]
     // orgName String // de-normalized field from an Organization
     // memberName String // denormalized field from the User 
@@ -71,8 +71,8 @@ model Event {
     id String @id @default(uuid()) @db.Uuid
     createdById String @db.Uuid
     orgId String @db.Uuid
-    organization Organization @relation(fields: [orgId], references: [id])
-    createdByUser OrgMember @relation(fields: [createdById, orgId], references: [userId, orgId])
+    organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+    createdByUser OrgMember @relation(fields: [createdById, orgId], references: [userId, orgId], onDelete: Cascade)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     title String @db.VarChar(100)
@@ -100,7 +100,7 @@ model Event {
 model EventVideo {
     id String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [id])
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
     url String
     lang String
 }
@@ -108,27 +108,27 @@ model EventVideo {
 model EventLiveFeedback {
     id String @id @default(uuid()) @db.Uuid
     createdById String @db.Uuid
-    createdByUser User @relation(fields: [createdById], references: [id])
+    createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [id])
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
     message String @db.VarChar(500)
     isReply Boolean @default(false)
     refFeedbackId String? @db.Uuid
     parentFeedback EventLiveFeedback[] @relation("reply")
-    refFeedback EventLiveFeedback? @relation("reply", fields: [refFeedbackId], references: [id])
+    refFeedback EventLiveFeedback? @relation("reply", fields: [refFeedbackId], references: [id], onDelete: Cascade)
 }
 
 model EventQuestion {
     id String @id @default(uuid()) @db.Uuid
     eventId String @db.Uuid
-    event Event @relation(fields: [eventId], references: [id])
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
     refQuestionId String? @db.Uuid
     parentQuestion EventQuestion[] @relation("quote")
-    refQuestion EventQuestion? @relation("quote", fields: [refQuestionId], references: [id])
+    refQuestion EventQuestion? @relation("quote", fields: [refQuestionId], references: [id], onDelete: Cascade)
     createdById String @db.Uuid
-    createdByUser User @relation(fields: [createdById], references: [id])
+    createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
     question String @db.VarChar(500)
     // if position is -1, then the question is not queued
     position Int @default(-1)
@@ -144,8 +144,8 @@ model EventQuestion {
 model EventQuestionLike {
     likedQuestion String @db.Uuid
     likedBy String @db.Uuid
-    question EventQuestion @relation(fields: [likedQuestion], references: [id])
-    user User @relation(fields: [likedBy], references: [id])
+    question EventQuestion @relation(fields: [likedQuestion], references: [id], onDelete: Cascade)
+    user User @relation(fields: [likedBy], references: [id], onDelete: Cascade)
 
     @@id([likedBy, likedQuestion])
 }
@@ -153,8 +153,8 @@ model EventQuestionLike {
 model EventModerator {
     eventId String @db.Uuid
     userId String @db.Uuid
-    user User @relation(fields: [userId], references: [id])
-    event Event @relation(fields: [eventId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     @@id([eventId, userId])
 }
@@ -162,8 +162,8 @@ model EventModerator {
 model EventInvited {
     eventId String @db.Uuid
     userId String @db.Uuid
-    user User @relation(fields: [userId], references: [id])
-    event Event @relation(fields: [eventId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     @@id([eventId, userId])
 }
@@ -176,15 +176,15 @@ model EventSpeaker {
     description String @db.VarChar(500)
     title String @db.VarChar(100)
     pictureUrl String @db.VarChar(200)
-    event Event @relation(fields: [eventId], references: [id])
-    user User @relation(fields: [email], references: [email])
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [email], references: [email], onDelete: Cascade)
 }
 
 model EventRegistrant {
     userId String @db.Uuid
     eventId String @db.Uuid
-    user User @relation(fields: [userId], references: [id])
-    event Event @relation(fields: [eventId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     @@id([userId, eventId])
 }
