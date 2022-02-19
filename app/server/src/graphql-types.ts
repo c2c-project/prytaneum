@@ -497,6 +497,8 @@ export type UpdateEvent = {
 
 export type DeleteEvent = {
     eventId: Scalars['String'];
+    title: Scalars['String'];
+    confirmTitle: Scalars['String'];
 };
 
 export type EventMutationResponse = MutationResponse & {

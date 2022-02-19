@@ -83,7 +83,9 @@ input DeleteAccountForm {
 }
 
 input DeleteEvent {
+  confirmTitle: String!
   eventId: String!
+  title: String!
 }
 
 input DeleteMember {

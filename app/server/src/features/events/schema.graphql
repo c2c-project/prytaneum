@@ -158,6 +158,8 @@ input UpdateEvent {
 
 input DeleteEvent {
     eventId: String!
+    title: String!
+    confirmTitle: String!
 }
 
 type EventMutationResponse implements MutationResponse {

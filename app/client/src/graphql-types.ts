@@ -92,7 +92,9 @@ export type DeleteAccountForm = {
 };
 
 export type DeleteEvent = {
+  confirmTitle: Scalars['String'];
   eventId: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type DeleteMember = {

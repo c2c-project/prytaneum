@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8158cd5dad92e22e3d780616479f1b0d>>
+ * @generated SignedSource<<af87217feb7b48dfd760fb2f10e5362e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,9 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type DeleteEvent = {
+  confirmTitle: string;
   eventId: string;
+  title: string;
 };
 export type DeleteEventMutation$variables = {
   input: DeleteEvent;
