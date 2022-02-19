@@ -24,6 +24,7 @@ interface EventSettingsProps {
     fragmentRef: EventDetailsFragment$key;
     className?: string;
 }
+
 // used for deleting user Event
 export type TDeleteEvent = {
     title: string;
@@ -38,7 +39,7 @@ const deleteEventValidationSchema = Yup.object().shape<TDeleteEventSchema>({
     confirmTitle: Yup.string(),
 });
 
-const intiialDeleteEvent: TDeleteEvent = {
+const intialDeleteEvent: TDeleteEvent = {
     title: '',
     confirmTitle: '',
 };
@@ -75,7 +76,7 @@ export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     const classes = useStyles();
 
     const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TDeleteEvent>({
-        initialValues: makeInitialState(intiialDeleteEvent),
+        initialValues: makeInitialState(intialDeleteEvent),
         validationSchema: deleteEventValidationSchema,
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         onSubmit: handleCommit,
@@ -92,8 +93,9 @@ export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 } else {
                     displaySnack('Event deleted successfully!');
                     resetForm();
-                    // route to events after successfully deleting event
-                    router.push('/events');
+                    //route to list of organizations after successfully deleting event
+                    //IMPROVEMENT: routing back to organization event list instead of lists of organizations
+                    router.push(`/organizations/me`);
                 }
             },
         });
