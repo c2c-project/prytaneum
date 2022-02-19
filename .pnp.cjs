@@ -231,7 +231,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["graphql", "npm:15.8.0"],
             ["graphql-relay", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:0.9.0"],
             ["jsonwebtoken", "npm:8.5.1"],
-            ["logstash", "npm:4.1.1"],
             ["mailgun.js", "npm:3.4.0"],
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.9.1"],
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:1.8.0"],
@@ -11723,15 +11722,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/responselike", "npm:1.0.0"],
             ["@types/node", "npm:14.14.41"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/retry", [
-        ["npm:0.12.1", {
-          "packageLocation": "./.yarn/cache/@types-retry-npm-0.12.1-05f3303aac-5f46b25560.zip/node_modules/@types/retry/",
-          "packageDependencies": [
-            ["@types/retry", "npm:0.12.1"]
           ],
           "linkType": "HARD",
         }]
@@ -23848,18 +23838,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["logstash", [
-        ["npm:4.1.1", {
-          "packageLocation": "./.yarn/cache/logstash-npm-4.1.1-2962a4b36d-db68658e5e.zip/node_modules/logstash/",
-          "packageDependencies": [
-            ["logstash", "npm:4.1.1"],
-            ["isomorphic-fetch", "npm:3.0.0"],
-            ["p-queue", "npm:6.6.2"],
-            ["p-retry", "npm:4.6.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["lolex", [
         ["npm:5.1.2", {
           "packageLocation": "./.yarn/cache/lolex-npm-5.1.2-bbf21736b7-7eb468d4ef.zip/node_modules/lolex/",
@@ -25901,28 +25879,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["p-map", "npm:4.0.0"],
             ["aggregate-error", "npm:3.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["p-queue", [
-        ["npm:6.6.2", {
-          "packageLocation": "./.yarn/cache/p-queue-npm-6.6.2-b173c5bfa8-832642fcc4.zip/node_modules/p-queue/",
-          "packageDependencies": [
-            ["p-queue", "npm:6.6.2"],
-            ["eventemitter3", "npm:4.0.7"],
-            ["p-timeout", "npm:3.2.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["p-retry", [
-        ["npm:4.6.1", {
-          "packageLocation": "./.yarn/cache/p-retry-npm-4.6.1-1a06a28faf-e6d540413b.zip/node_modules/p-retry/",
-          "packageDependencies": [
-            ["p-retry", "npm:4.6.1"],
-            ["@types/retry", "npm:0.12.1"],
-            ["retry", "npm:0.13.1"]
           ],
           "linkType": "HARD",
         }]
@@ -28897,13 +28853,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/retry-npm-0.12.0-72ac7fb4cc-623bd7d2e5.zip/node_modules/retry/",
           "packageDependencies": [
             ["retry", "npm:0.12.0"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:0.13.1", {
-          "packageLocation": "./.yarn/cache/retry-npm-0.13.1-89eb100ab6-47c4d5be67.zip/node_modules/retry/",
-          "packageDependencies": [
-            ["retry", "npm:0.13.1"]
           ],
           "linkType": "HARD",
         }]

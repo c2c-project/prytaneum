@@ -138,7 +138,6 @@ __metadata:
     graphql: ^15.5.0
     graphql-relay: 0.9.0
     jsonwebtoken: ^8.5.1
-    logstash: ^4.1.1
     mailgun.js: ^3.4.0
     mercurius: ^7.6.1
     mercurius-codegen: ^1.6.1
@@ -7379,13 +7378,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/retry@npm:^0.12.0":
-  version: 0.12.1
-  resolution: "@types/retry@npm:0.12.1"
-  checksum: 5f46b2556053655f78262bb33040dc58417c900457cc63ff37d6c35349814471453ef511af0cec76a540c601296cd2b22f64bab1ab649c0dacc0223765ba876c
-  languageName: node
-  linkType: hard
-
 "@types/scheduler@npm:*":
   version: 0.16.1
   resolution: "@types/scheduler@npm:0.16.1"
@@ -13003,7 +12995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4":
+"eventemitter3@npm:^4.0.0":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
@@ -17545,17 +17537,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"logstash@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "logstash@npm:4.1.1"
-  dependencies:
-    isomorphic-fetch: ^3.0.0
-    p-queue: ^6.6.2
-    p-retry: ^4.2.0
-  checksum: db68658e5ea8a1b11becab21b3b4b955f4f901e6e744d89da9942a20c8790424635573f235581d17130429bc128d52ba750c4afd3a2b993e11c07c436659d286
-  languageName: node
-  linkType: hard
-
 "lolex@npm:^5.0.0":
   version: 5.1.2
   resolution: "lolex@npm:5.1.2"
@@ -19375,27 +19356,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"p-queue@npm:^6.6.2":
-  version: 6.6.2
-  resolution: "p-queue@npm:6.6.2"
-  dependencies:
-    eventemitter3: ^4.0.4
-    p-timeout: ^3.2.0
-  checksum: 832642fcc4ab6477b43e6d7c30209ab10952969ed211c6d6f2931be8a4f9935e3578c72e8cce053dc34f2eb6941a408a2c516a54904e989851a1a209cf19761c
-  languageName: node
-  linkType: hard
-
-"p-retry@npm:^4.2.0":
-  version: 4.6.1
-  resolution: "p-retry@npm:4.6.1"
-  dependencies:
-    "@types/retry": ^0.12.0
-    retry: ^0.13.1
-  checksum: e6d540413bb3d0b96e0db44f74a7af1dce41f5005e6e84d617960110b148348c86a3987be07797749e3ddd55817dd3a8ffd6eae3428758bc2994d987e48c3a70
-  languageName: node
-  linkType: hard
-
-"p-timeout@npm:^3.1.0, p-timeout@npm:^3.2.0":
+"p-timeout@npm:^3.1.0":
   version: 3.2.0
   resolution: "p-timeout@npm:3.2.0"
   dependencies:
@@ -21820,13 +21781,6 @@ resolve@^2.0.0-next.3:
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
   checksum: 623bd7d2e5119467ba66202d733ec3c2e2e26568074923bc0585b6b99db14f357e79bdedb63cab56cec47491c4a0da7e6021a7465ca6dc4f481d3898fdd3158c
-  languageName: node
-  linkType: hard
-
-"retry@npm:^0.13.1":
-  version: 0.13.1
-  resolution: "retry@npm:0.13.1"
-  checksum: 47c4d5be674f7c13eee4cfe927345023972197dbbdfba5d3af7e461d13b44de1bfd663bfc80d2f601f8ef3fc8164c16dd99655a221921954a65d044a2fc1233b
   languageName: node
   linkType: hard
 
