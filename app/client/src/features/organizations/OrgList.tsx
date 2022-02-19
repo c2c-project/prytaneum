@@ -94,6 +94,8 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
 
     const close = () => {
         setIsConfDialogOpen(false);
+        //forces page to reload so that it will update
+        location.reload();
     }
 
     const listOfOrgs = React.useMemo(() => data.me?.organizations?.edges ?? [], [data.me]);

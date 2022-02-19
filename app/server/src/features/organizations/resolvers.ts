@@ -35,15 +35,12 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: orgId } = fromGlobalId(args.input.orgId);
-                const deletedOrg = await Organization.deleteOrg(ctx.viewer.id, ctx.prisma, {
+                await Organization.deleteOrg(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     orgId,
                 });
-                return toOrgId(deletedOrg);
+                return orgId;
             });
-            // unimplemented on purpose
-            // return Organization.deleteOrg();
-            // return { isError: true, message: 'Unable to delete', body: null };
         },
         createMember(parent, args, ctx, info) {
             return runMutation(async () => {
