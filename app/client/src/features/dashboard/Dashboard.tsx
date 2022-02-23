@@ -36,7 +36,10 @@ export const DASHBOARD_QUERY = graphql`
                 edges {
                     node {
                         id
-                        ...DashboardEventFragment
+                        title
+                        description
+                        startDateTime
+                        endDateTime
                     }
                 }
             }
@@ -115,6 +118,42 @@ export function Dashboard({ queryRef }: Props) {
         );
     }
 
+    // Get current date to categorize events as current or upcoming
+    const d = new Date();
+    const currentDate = {
+        year: d.getFullYear(),
+        month: d.getMonth(),
+        day: d.getDate(),
+        time: d.getTime(),
+    };
+
+    // Store current events
+    const current_events = listOfEvents.map(({ node: event }) => {
+        if (event.startDateTime && event.endDateTime) {
+            const eventStartDate = new Date(event.startDateTime.toString());
+            const eventEndDate = new Date(event.endDateTime.toString());
+            const eventStartTime = eventStartDate.getTime();
+            const eventEndTime = eventEndDate.getTime();
+            if (currentDate.year === eventStartDate.getFullYear() && 
+                currentDate.month === eventStartDate.getMonth() && 
+                currentDate.day === eventStartDate.getDate() &&
+                currentDate.time > eventStartTime &&
+                currentDate.time < eventEndTime) {
+                return event;
+            }
+        }
+    });
+
+    // Store upcoming events
+    const upcoming_events = listOfEvents.map(({ node: event }) => {
+        if (event.startDateTime) {
+            const eventStartDate = new Date(event.startDateTime.toString());
+            if (d < eventStartDate) {
+                return event;
+            }
+        }
+    });
+
     return (
         // <FadeThrough animKey='dashboard-page'>
         <Grid container>
@@ -125,11 +164,18 @@ export function Dashboard({ queryRef }: Props) {
                             Current Events
                         </Typography>
                         <Grid container justify='space-between' alignItems='center' spacing={1}>
-                            {listOfEvents.map(({ node }) =>
-                                <>
-                                    <DashboardEvent fragmentRef = {node} />
-                                </>
-                            )}
+                            {current_events.map((event) => {
+                                if (event?.id && event?.description && event?.title)
+                                    return (
+                                        <DashboardEvent
+                                            key={event?.id} 
+                                            id={event?.id} 
+                                            title={event?.title} 
+                                            description={event?.description} 
+                                            live={true} 
+                                        />
+                                    )
+                            })}
                         </Grid>
                     </CardContent>
                 </Card>
@@ -141,11 +187,18 @@ export function Dashboard({ queryRef }: Props) {
                             Upcoming Events
                         </Typography>
                         <Grid container justify='space-between' alignItems='center' spacing={1}>
-                            {listOfEvents.map(({ node }) =>
-                                <>
-                                    <DashboardEvent fragmentRef = {node} />
-                                </>
-                            )}
+                            {upcoming_events.map((event) => {
+                                if (event?.id && event?.description && event?.title)
+                                    return (
+                                        <DashboardEvent
+                                            key={event?.id} 
+                                            id={event?.id} 
+                                            title={event?.title} 
+                                            description={event?.description} 
+                                            live={false} 
+                                        />
+                                    )
+                            })}
                         </Grid>
                     </CardContent>
                 </Card>
@@ -156,7 +209,7 @@ export function Dashboard({ queryRef }: Props) {
                         <IconButton
                             aria-label='view future event'
                         >
-                            <Add style={{ fontSize: 32, color: 'black' }}/>
+                            <Add style={{ fontSize: 32, color: 'black' }} />
                         </IconButton>
                     </CardContent>
                 </Card>
