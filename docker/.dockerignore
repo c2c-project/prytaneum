@@ -1,0 +1,11 @@
+Dockerfile
+npm-debug.log
+.next
+build
+documentation
+.vscode
+.husky
+.github
+_unused
+*.md
+.git

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 import { CreateQuestion, AlterLike } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
 import { errors } from '@local/features/utils';

@@ -5,9 +5,9 @@
 set -e
 
 printf "Checking types...\n"
-yarn g:typecheck
+yarn workspaces foreach -p run typecheck
 printf "No type errors! 🎉🎉🎉\n"
 
 printf "Linting project...\n"
-yarn g:lint-project
+yarn workspaces foreach -p run lint
 printf "No lint errors! 🎉🎉🎉\n"

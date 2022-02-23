@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import { Event, PrismaClient } from '@app/prisma';
+import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 import { errors, filterFields } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';

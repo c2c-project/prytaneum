@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 import { errors } from '@local/features/utils';
 import { CreateInvite } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';

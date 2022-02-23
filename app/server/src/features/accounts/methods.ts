@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';

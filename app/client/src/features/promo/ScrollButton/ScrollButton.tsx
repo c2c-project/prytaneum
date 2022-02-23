@@ -24,7 +24,8 @@ interface Props {
 
 export function ScrollButton({sentinelRef}: Props) {
     const classes = useStyles();
-    const [scrollToAnchor, isAnchorInView] = useScrollTo(sentinelRef);
+    // FIXME:
+    const [scrollToAnchor/*, isAnchorInView*/] = useScrollTo(sentinelRef);
 
     return (
         <Grid item xs={12} className={classes.arrowsection}>
