@@ -1,7 +1,11 @@
+# Specfic files
 graphql-types.ts
-prisma
-_unused
+
+# Folders
+__generated__
 documentation
+assets
+_unused
 
 # Extensions to ignore
 *.json

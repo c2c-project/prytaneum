@@ -1,23 +1,14 @@
 module.exports = {
-    plugins: ['jest', '@typescript-eslint'],
-    extends: ['react-app', 'airbnb-typescript', 'prettier'],
+    plugins: ['@typescript-eslint', 'import'],
+    extends: ['airbnb-typescript/base', 'prettier'],
     parserOptions: {
-        project: './tsconfig.base.json',
+        project: './tsconfig.json',
     },
     rules: {
         quotes: ['error', 'single'],
         indent: 'off',
         '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        'react/jsx-indent': ['error', 4],
-        'react/jsx-indent-props': ['error', 4],
-        'react/no-array-index-key': 0,
-        'react/forbid-prop-types': 0,
-        'react/no-find-dom-node': 0,
-        'react/jsx-curly-newline': ['off'],
-        'jsx-quotes': ['error', 'prefer-single'],
-        'react/jsx-wrap-multilines': 0,
-        'react/react-in-jsx-scope': 'off', // react 17 makes it unnecessary
         'import/no-extraneous-dependencies': [
             'error',
             {
@@ -39,10 +30,7 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'func-names': 'off',
         '@typescript-eslint/naming-convention': 'off',
-        'react/jsx-props-no-spreading': 'off',
         'import/prefer-default-export': 'off',
-        // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
-        'react/require-default-props': 'off',
         'import/no-anonymous-default-export': 'off',
     },
     overrides: [
@@ -56,7 +44,6 @@ module.exports = {
     env: {
         node: true,
         browser: true,
-        'jest/globals': true,
     },
     settings: {
         'import/resolver': {

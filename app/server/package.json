@@ -8,7 +8,8 @@
         "add-feat": "ts-node-dev --script-mode ./scripts/add-feature.ts",
         "typecheck": "tsc -p tsconfig.prod.json --noEmit",
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js",
-        "generate": "yarn pnpify prisma generate"
+        "generate": "yarn pnpify prisma generate",
+        "lint": "eslint \"src/**\""
     },
     "dependencies": {
         "@google-cloud/pubsub": "2.17.0",
@@ -41,12 +42,20 @@
     "devDependencies": {
         "@types/bcryptjs": "^2",
         "@types/cors": "^2",
+        "@types/eslint": "^7",
         "@types/jsonwebtoken": "^8",
         "@types/mailgun-js": "^0.22.11",
         "@types/module-alias": "^2.0.1",
         "@types/node": "^15.0.1",
         "@types/uuid": "^8",
+        "@typescript-eslint/eslint-plugin": "^5.12.0",
+        "@typescript-eslint/parser": "^5.12.0",
         "@yarnpkg/pnpify": "^3.1.1-rc.15",
+        "eslint": "^8.9.0",
+        "eslint-config-airbnb-typescript": "^16.1.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-import-resolver-node": "^0.3.6",
+        "eslint-plugin-import": "^2.25.4",
         "prisma": "^3.9.2",
         "ts-node-dev": "^1.1.6",
         "tsconfig-paths": "^3.9.0",
