@@ -51,19 +51,20 @@ export function Layout({
     const [user] = useUser();
 
     const theme = useTheme();
-    const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
+    // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
+    const isLgDown = useMediaQuery(theme.breakpoints.down(1520));
 
     return (
         <Page>
             <AppBar>
-                {!noSideNav && isMdDown && user && (
+                {!noSideNav && isLgDown && user && (
                     <IconButton className={classes.menuIcon} onClick={() => setOpen(!open)} color='inherit'>
                         <MenuIcon />
                     </IconButton>
                 )}
             </AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
-                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isMdDown || !!noSideNav || !user} />
+                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isLgDown || !!noSideNav || !user} />
                 <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}
                 </Main>
