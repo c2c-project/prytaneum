@@ -2,3 +2,4 @@
 graphql-types.ts linguist-generated
 .pnp.cjs linguist-generated
 .pnp.loader.mjs linguist-generated
+*.zip linguist-generated
