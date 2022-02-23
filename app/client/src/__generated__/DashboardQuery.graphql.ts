@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f1f092412d6b7af1e04a8acf45c516eb>>
+ * @generated SignedSource<<7b630388d39350c447a80a36cc2e08d3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,6 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
 export type DashboardQuery$variables = {};
 export type DashboardQueryVariables = DashboardQuery$variables;
 export type DashboardQuery$data = {
@@ -18,7 +17,10 @@ export type DashboardQuery$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly id: string;
-          readonly " $fragmentSpreads": FragmentRefs<"DashboardEventFragment">;
+          readonly title: string | null;
+          readonly description: string | null;
+          readonly startDateTime: Date | null;
+          readonly endDateTime: Date | null;
         };
       }> | null;
     } | null;
@@ -37,6 +39,68 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "EventConnection",
+  "kind": "LinkedField",
+  "name": "events",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "EventEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Event",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v0/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "title",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "description",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "startDateTime",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "endDateTime",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -53,45 +117,7 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventConnection",
-            "kind": "LinkedField",
-            "name": "events",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "EventEdge",
-                "kind": "LinkedField",
-                "name": "edges",
-                "plural": true,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Event",
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v0/*: any*/),
-                      {
-                        "args": null,
-                        "kind": "FragmentSpread",
-                        "name": "DashboardEventFragment"
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
+          (v1/*: any*/)
         ],
         "storageKey": null
       }
@@ -113,61 +139,7 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "EventConnection",
-            "kind": "LinkedField",
-            "name": "events",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "EventEdge",
-                "kind": "LinkedField",
-                "name": "edges",
-                "plural": true,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Event",
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v0/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "description",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "startDateTime",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "endDateTime",
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
+          (v1/*: any*/),
           (v0/*: any*/)
         ],
         "storageKey": null
@@ -175,16 +147,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cf4c9d4412e263b9571538b254a9f0b7",
+    "cacheID": "833ab224298cc3f64a1df1565af79953",
     "id": null,
     "metadata": {},
     "name": "DashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          ...DashboardEventFragment\n        }\n      }\n    }\n    id\n  }\n}\n\nfragment DashboardEventFragment on Event {\n  id\n  description\n  startDateTime\n  endDateTime\n}\n"
+    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          title\n          description\n          startDateTime\n          endDateTime\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f05f84dec5b811eea703caae81b0448f";
+(node as any).hash = "c5c7e9390881a379d7afa2d592e8772d";
 
 export default node;
