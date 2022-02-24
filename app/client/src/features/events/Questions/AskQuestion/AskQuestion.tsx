@@ -10,6 +10,7 @@ import { useSnack } from '@local/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
 import { isURL } from '@local/utils';
+import { QUESTIONS_MAX_LENGTH } from '@local/utils/rules';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {
@@ -51,7 +52,7 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
             onCompleted(payload) {
                 try {
                     if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
-                    if (form.question.length >= 1000) throw new Error('Question is too long!');
+                    if (form.question.length >= QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
                     if (isURL(form.question)) throw new Error('no links are allowed!');
                     ga.event({
                         action: 'submit_question',
