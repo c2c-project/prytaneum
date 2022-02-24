@@ -33,7 +33,7 @@ jobs:
               run: yarn install
 
             - name: Lint Project
-              run: yarn workspaces foreach -p lint
+              run: yarn workspaces foreach -p run lint
 
     testing:
         name: Testing
