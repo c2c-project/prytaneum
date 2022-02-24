@@ -9,7 +9,8 @@ import { ResponsiveDialog, useResponsiveDialog } from '@local/components/Respons
 import { useSnack } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
-import { isURL } from '@local/utils';
+import { isURL } from '@local/utils/index';
+import { QUESTIONS_MAX_LENGTH } from '@local/utils/rules';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {
@@ -47,8 +48,8 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
 
     function handleSubmit(form: TQuestionFormState) {
         try {
-            if (form.question.length >= 1000) throw new Error('Question is too long!');
-            if (isURL(form.question)) throw new Error('no links are allowed!');
+            if (form.question.length >= QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
+            if (isURL(form.question)) throw new Error('No links are allowed!');
             commit({
                 variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
                 onCompleted(payload) {
