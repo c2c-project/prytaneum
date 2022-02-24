@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 const AboutUs = () => {
     const classes = useStyles();
     return (
-        <Grid className={classes.root} container direction='column' justify='center' alignItems='center' spacing={3}>
+        <Grid className={classes.root} container direction='column' justifyContent='center' alignItems='center' spacing={3}>
             <Grid item>
                 <Typography variant='h1'>About Us</Typography>
             </Grid>

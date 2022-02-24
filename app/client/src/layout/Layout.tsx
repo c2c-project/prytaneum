@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { Grid, useMediaQuery, IconButton, ContainerProps } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Grid, useMediaQuery, IconButton, ContainerProps } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '@local/features/accounts';
 
 import Main from './Main';
@@ -51,14 +52,20 @@ export function Layout({
     const [user] = useUser();
 
     const theme = useTheme();
+    // FIXME: had to take out hardcoded value due to mui v5 migration
     // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
-    const isLgDown = useMediaQuery(theme.breakpoints.down(1520));
+    const isLgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
     return (
         <Page>
             <AppBar>
                 {!noSideNav && isLgDown && user && (
-                    <IconButton className={classes.menuIcon} onClick={() => setOpen(!open)} color='inherit'>
+                    <IconButton
+                        className={classes.menuIcon}
+                        onClick={() => setOpen(!open)}
+                        color='inherit'
+                        size='large'
+                    >
                         <MenuIcon />
                     </IconButton>
                 )}

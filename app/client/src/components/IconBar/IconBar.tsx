@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import makeStyles from '@mui/styles/makeStyles';
+import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -27,7 +27,7 @@ export default function IconBar({ children }: Props) {
 
     return (
         <div className={classes.root}>
-            <Grid container justify='space-evenly'>
+            <Grid container justifyContent='space-evenly'>
                 {React.Children.map(children, (child, idx) => {
                     // clone the child and apply the button styles
                     const StylizedChild = React.cloneElement(child, {

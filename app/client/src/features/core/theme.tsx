@@ -1,7 +1,22 @@
-import { createMuiTheme, Theme } from '@material-ui/core/styles';
+import { createTheme, Theme } from '@mui/material/styles';
 // TODO: implement user prefers schema for dark or light mode
 
-declare module '@material-ui/core/styles/createMuiTheme' {
+declare module '@mui/material/styles/createPalette' {
+    interface Palette {
+        custom: {
+            creamCan: string;
+            lightBlue: string;
+        };
+    }
+    interface PaletteOptions {
+        custom?: {
+            creamCan?: string;
+            lightBlue?: string;
+        };
+    }
+}
+
+declare module '@mui/material/styles' {
     interface Theme {
         custom: {
             borderRadius: string;
@@ -17,45 +32,30 @@ declare module '@material-ui/core/styles/createMuiTheme' {
             };
         };
     }
-    // allow configuration using `createMuiTheme`
+    // allow configuration using `createTheme`
     interface ThemeOptions {
-        custom?: {
-            borderRadius?: string;
-            maxHW?: {
+        custom: {
+            borderRadius: string;
+            maxHW: {
                 height: string;
                 width: string;
             };
-            media?: {
+            media: {
                 minHeight: string;
             };
-            clipPath?: {
+            clipPath: {
                 slope: string;
             };
         };
     }
 }
 
-declare module '@material-ui/core/styles/createPalette' {
-
-    interface Palette {
-        custom: {
-            creamCan: string;
-            lightBlue: string;
-        };
-    }
-    interface PaletteOptions {
-        custom?: {
-            creamCan?: string;
-            lightBlue?: string;
-        };
-    }
-}
-
 const easingFunc = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
-const base = createMuiTheme({
+const base = createTheme({
     typography: {
-        fontFamily: '\'Manrope\', sans-serif',
+        // eslint-disable-next-line quotes
+        fontFamily: "'Manrope', sans-serif",
         h4: {
             fontWeight: 600,
         },
@@ -92,7 +92,7 @@ const base = createMuiTheme({
     shape: {
         borderRadius: 18,
     },
-    props: {
+    components: {
         MuiPaper: {
             // elevation: 3,
         },
@@ -101,10 +101,14 @@ const base = createMuiTheme({
             // elevation: 3
         },
         MuiTextField: {
-            variant: 'outlined',
+            defaultProps: {
+                variant: 'outlined',
+            },
         },
         MuiSelect: {
-            variant: 'outlined',
+            defaultProps: {
+                variant: 'outlined',
+            },
         },
     },
     palette: {
@@ -114,7 +118,7 @@ const base = createMuiTheme({
         custom: {
             creamCan: '#f5c64f',
             lightBlue: '#8eafff',
-        }
+        },
     },
 });
 
@@ -124,7 +128,7 @@ export interface TThemes {
 }
 
 export const themes: TThemes = {
-    dark: createMuiTheme({
+    dark: createTheme({
         ...base,
         palette: {
             ...base.palette,
@@ -132,7 +136,7 @@ export const themes: TThemes = {
             secondary: { main: '#f13c20' },
         },
     }),
-    light: createMuiTheme({
+    light: createTheme({
         ...base,
         palette: {
             ...base.palette,

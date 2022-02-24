@@ -5,7 +5,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { ResponsiveDialog } from './ResponsiveDialog';
 
-jest.mock('@material-ui/core/useMediaQuery', () => () => true);
+jest.mock('@mui/material/useMediaQuery', () => () => true);
 
 describe('Dialog', function () {
     let container: HTMLDivElement | null = null;

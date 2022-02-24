@@ -1,28 +1,19 @@
 import * as React from 'react';
 import Image from 'next/image';
-import {
-    Grid,
-    Typography,
-    Paper,
-    Button,
-    IconButton,
-    Avatar,
-    InputAdornment,
-    Chip,
-} from '@material-ui/core';
+import { Grid, Typography, Paper, Button, IconButton, Avatar, InputAdornment, Chip } from '@mui/material';
 import { TextField } from '@local/components/TextField';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import SearchIcon from '@material-ui/icons/Search';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
-import ReplyIcon from '@material-ui/icons/Reply';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-import { makeStyles } from '@material-ui/core/styles';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import SearchIcon from '@mui/icons-material/Search';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import ReplyIcon from '@mui/icons-material/Reply';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     window: {
@@ -35,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         padding: theme.spacing(1),
-        boxShadow: '0 5px 7px rgba(0,0,0,0.1)'
+        boxShadow: '0 5px 7px rgba(0,0,0,0.1)',
     },
     logo: {
         marginTop: theme.spacing(1),
@@ -52,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         '& > div': {
             cursor: 'pointer',
         },
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             '& > div': {
                 display: 'none',
             },
@@ -76,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         gap: theme.spacing(2),
         padding: theme.spacing(2),
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             flexDirection: 'column',
         },
     },
@@ -87,10 +78,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         backgroundColor: 'black',
         height: '65%',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             minHeight: '70vh',
         },
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             minHeight: '50vh',
         },
     },
@@ -98,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(2),
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             alignItems: 'center',
         },
     },
@@ -115,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
     },
     searchcontainer: {
         width: '100%',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             display: 'none',
         },
     },
@@ -127,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
     pinnedpaper: {
         position: 'relative',
         paddingTop: theme.spacing(3),
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             marginTop: theme.spacing(2),
         },
     },
@@ -166,7 +157,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         gap: theme.spacing(1),
         alignItems: 'center',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             width: '100%',
         },
     },
@@ -176,18 +167,18 @@ const useStyles = makeStyles((theme) => ({
     feedbackwrapper: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     feedbuttons: {
         display: 'flex',
         '& > *': {
             width: '50%',
-        }
+        },
     },
     pinnedbuttons: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     modfeedrow: {
         display: 'flex',
@@ -206,8 +197,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '1rem',
         '& > *:nth-of-type(1)': {
             fontSize: '1.25rem',
-            color: '#8eafff'
-        }
+            color: '#8eafff',
+        },
     },
     filler: {
         visibility: 'hidden',
@@ -216,13 +207,13 @@ const useStyles = makeStyles((theme) => ({
         background: '#8eafff',
         '&:hover': {
             background: '#7ea0f2',
-        }
+        },
     },
     queuebuttoninactive: {
         background: '#c4d5ff',
         '&:hover': {
             background: '#aec2f2',
-        }
+        },
     },
     queuecaption: {
         marginTop: theme.spacing(-1),
@@ -230,7 +221,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontWeight: 600,
         color: 'grey',
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             marginTop: 0,
             marginBottom: 0,
         },
@@ -238,7 +229,7 @@ const useStyles = makeStyles((theme) => ({
     desktopqueuebuttons: {
         display: 'flex',
         gap: theme.spacing(1),
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             display: 'none',
         },
     },
@@ -290,13 +281,11 @@ interface FeedbackProps {
     feedback: string;
 }
 
-function DemoWindow({children, title, shadow, scale}: WindowProps) {
+function DemoWindow({ children, title, shadow, scale }: WindowProps) {
     const classes = useStyles();
     return (
         <div style={{ transform: scale }} className={`${classes.subview}`}>
-            <Typography variant='body1'>
-                {title}
-            </Typography>
+            <Typography variant='body1'>{title}</Typography>
             <div style={{ boxShadow: shadow }}>
                 <Paper elevation={3} square className={classes.window}>
                     {children}
@@ -314,7 +303,7 @@ function Tabs() {
                 <div className={classes.logo}>
                     <Image
                         alt='Prytaneum Logo'
-                        src='/static/prytaneum_logo.svg' 
+                        src='/static/prytaneum_logo.svg'
                         width={50}
                         height={49}
                         objectFit='contain'
@@ -328,10 +317,8 @@ function Tabs() {
                 <div>
                     <Avatar className={classes.avatar}>L</Avatar>
                 </div>
-                <div>
-                    Lorem Ipsum
-                </div>
-                <KeyboardArrowDownIcon className={classes.arrow}/>
+                <div>Lorem Ipsum</div>
+                <KeyboardArrowDownIcon className={classes.arrow} />
             </div>
         </Grid>
     );
@@ -343,44 +330,24 @@ function MeetingDisplay() {
         <Grid item xs={12} lg={7}>
             <div className={classes.windowdisplay}>
                 <Grid item xs={6}>
-                    <Image
-                        alt='Speaker Camera'
-                        src='/static/cam1.png' 
-                        width={1146}
-                        height={648}
-                        objectFit='contain'
-                    />
+                    <Image alt='Speaker Camera' src='/static/cam1.png' width={1146} height={648} objectFit='contain' />
                 </Grid>
                 <Grid item xs={6}>
-                    <Image
-                        alt='Speaker Camera'
-                        src='/static/cam2.png' 
-                        width={1146}
-                        height={648}
-                        objectFit='contain'
-                    />
+                    <Image alt='Speaker Camera' src='/static/cam2.png' width={1146} height={648} objectFit='contain' />
                 </Grid>
             </div>
             <div className={classes.windowtitle}>
                 <div>
-                    <Typography variant='h6'>
-                        Town Hall Meeting
-                    </Typography>
-                    <Typography variant='caption'>
-                        Concerns within the city
-                    </Typography>
+                    <Typography variant='h6'>Town Hall Meeting</Typography>
+                    <Typography variant='caption'>Concerns within the city</Typography>
                 </div>
                 <div className={classes.userheader}>
                     <div>
                         <Avatar>E</Avatar>
                     </div>
                     <div>
-                        <Typography variant='h6'>
-                            Elias Dagmar
-                        </Typography>
-                        <Typography variant='caption'>
-                            Town Official
-                        </Typography>
+                        <Typography variant='h6'>Elias Dagmar</Typography>
+                        <Typography variant='caption'>Town Official</Typography>
                     </div>
                 </div>
             </div>
@@ -399,75 +366,64 @@ function SearchBar() {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position='end'>
-                                <IconButton
-                                    aria-label='toggle password visibility'
-                                    edge='end'
-                                >
+                                <IconButton aria-label='toggle password visibility' edge='end' size='large'>
                                     <SearchIcon />
                                 </IconButton>
                             </InputAdornment>
                         ),
                     }}
                 />
-                <IconButton disabled>
+                <IconButton disabled size='large'>
                     <RefreshIcon />
                 </IconButton>
             </div>
-            <Typography variant='caption'>
-                10 Results Displayed
-            </Typography>
+            <Typography variant='caption'>10 Results Displayed</Typography>
         </div>
     );
 }
 
-function Question({pinned, name, date, question}: QuestionProps) {
+function Question({ pinned, name, date, question }: QuestionProps) {
     const classes = useStyles();
     return (
         <Paper elevation={3} className={`${classes.paper} ${pinned && classes.pinnedpaper}`}>
-            {
-                pinned &&
+            {pinned && (
                 <div className={classes.pinheader}>
-                    <Chip 
+                    <Chip
                         size='small'
                         color='secondary'
-                        icon={<BookmarkIcon/>}
+                        icon={<BookmarkIcon />}
                         label='Answering Now'
                         className={classes.chip}
                     />
                 </div>
-            }
+            )}
             <div className={classes.userheader}>
                 <div>
                     <Avatar>{name[0]}</Avatar>
                 </div>
                 <div>
-                    <Typography variant='subtitle2'>
-                        {name}
-                    </Typography>
-                    <Typography variant='caption'>
-                        {date}
-                    </Typography>
+                    <Typography variant='subtitle2'>{name}</Typography>
+                    <Typography variant='caption'>{date}</Typography>
                 </div>
             </div>
             <Typography variant='subtitle2' className={classes.papertext}>
                 {question}
             </Typography>
-            {   
-                !pinned &&
+            {!pinned && (
                 <div className={classes.feedbuttons}>
-                    <Button size='small' endIcon={<ThumbUpIcon/>}>
+                    <Button size='small' endIcon={<ThumbUpIcon />}>
                         Like
                     </Button>
-                    <Button size='small' endIcon={<FormatQuoteIcon/>}>
+                    <Button size='small' endIcon={<FormatQuoteIcon />}>
                         Quote
                     </Button>
                 </div>
-            }
+            )}
         </Paper>
     );
 }
 
-function Feedback({me, name, date, feedback}: FeedbackProps) {
+function Feedback({ me, name, date, feedback }: FeedbackProps) {
     const classes = useStyles();
     return (
         <Paper elevation={3} className={classes.paper}>
@@ -476,98 +432,83 @@ function Feedback({me, name, date, feedback}: FeedbackProps) {
                     <Avatar>{name[0]}</Avatar>
                 </div>
                 <div>
-                    <Typography variant='subtitle2'>
-                        {me ? 'Yourself' : name}
-                    </Typography>
-                    <Typography variant='caption'>
-                        {date}
-                    </Typography>
+                    <Typography variant='subtitle2'>{me ? 'Yourself' : name}</Typography>
+                    <Typography variant='caption'>{date}</Typography>
                 </div>
             </div>
             <div className={classes.feedbackwrapper}>
                 <Typography variant='subtitle2' className={classes.papertext}>
                     {feedback}
                 </Typography>
-                { 
-                    !me &&
-                    <Button
-                        variant='text'
-                        startIcon={<ReplyIcon/>}
-                        className={classes.userbutton}
-                    >
+                {!me && (
+                    <Button variant='text' startIcon={<ReplyIcon />} className={classes.userbutton}>
                         Reply
                     </Button>
-                }
+                )}
             </div>
         </Paper>
     );
 }
 
-function ModQuestion({pinned, past, enqueued, likes, name, date, question}: ModQuestionProps) {
+function ModQuestion({ pinned, past, enqueued, likes, name, date, question }: ModQuestionProps) {
     const classes = useStyles();
     return (
         <Paper elevation={3} className={`${classes.paper} ${pinned && classes.pinnedpaper}`}>
-            {
-                pinned &&
+            {pinned && (
                 <div className={classes.pinheader}>
-                    <Chip 
+                    <Chip
                         size='small'
                         color='secondary'
-                        icon={<BookmarkIcon/>}
+                        icon={<BookmarkIcon />}
                         label='Next Question'
                         className={classes.chip}
                     />
                 </div>
-            }
+            )}
             <div className={classes.userheader}>
                 <div>
                     <Avatar>{name[0]}</Avatar>
                 </div>
                 <div>
-                    <Typography variant='subtitle2'>
-                        {name}
-                    </Typography>
-                    <Typography variant='caption'>
-                        {date}
-                    </Typography>
+                    <Typography variant='subtitle2'>{name}</Typography>
+                    <Typography variant='caption'>{date}</Typography>
                 </div>
             </div>
             <Typography variant='subtitle2' className={classes.papertext}>
                 {question}
             </Typography>
-            {
-                !past && (enqueued ?
+            {!past &&
+                (enqueued ? (
                     <div className={classes.modfeedrowqueue}>
-                        <Button size='small' endIcon={<RemoveCircleIcon/>}>
+                        <Button size='small' endIcon={<RemoveCircleIcon />}>
                             Dequeue
                         </Button>
                     </div>
-                    :
+                ) : (
                     <div className={classes.modfeedrow}>
                         <div className={classes.likes}>
-                            <ThumbUpIcon/> {likes}
+                            <ThumbUpIcon /> {likes}
                         </div>
-                        <Button size='small' endIcon={<AddCircleIcon/>}>
+                        <Button size='small' endIcon={<AddCircleIcon />}>
                             Enqueue
                         </Button>
                         <div className={`${classes.likes} ${classes.filler}`}>
-                            <ThumbUpIcon/> {likes}
+                            <ThumbUpIcon /> {likes}
                         </div>
                     </div>
-                )
-            }
+                ))}
         </Paper>
     );
 }
 
-export function ParticipantDemo({title, shadow, scale}: DemoProps) {
+export function ParticipantDemo({ title, shadow, scale }: DemoProps) {
     const classes = useStyles();
-    const [subViewerFeed, setSubViewerFeed] = React.useState('Feed')
+    const [subViewerFeed, setSubViewerFeed] = React.useState('Feed');
     return (
         <DemoWindow title={title} shadow={shadow} scale={scale}>
-            <Tabs/>
+            <Tabs />
             <div className={classes.windowcontent}>
-                <MeetingDisplay/>
+                <MeetingDisplay />
                 <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                     <Question
                         pinned={Boolean(true)}
@@ -591,14 +532,14 @@ export function ParticipantDemo({title, shadow, scale}: DemoProps) {
                             Feedback
                         </Button>
                     </div>
-                    <SearchBar/>
-                    { subViewerFeed  === 'Feed' ?
+                    <SearchBar />
+                    {subViewerFeed === 'Feed' ? (
                         <>
                             <Button
                                 fullWidth
                                 variant='contained'
                                 color='primary'
-                                startIcon={<QuestionAnswerIcon/>}
+                                startIcon={<QuestionAnswerIcon />}
                                 className={classes.userbutton}
                             >
                                 Ask a Question
@@ -614,13 +555,13 @@ export function ParticipantDemo({title, shadow, scale}: DemoProps) {
                                 question='What do you think is the best way to tackle the issue with providing equal opportunities for education for  underrepresented communities in the city?'
                             />
                         </>
-                        :
+                    ) : (
                         <>
                             <Button
                                 fullWidth
                                 variant='contained'
                                 color='primary'
-                                startIcon={<QuestionAnswerIcon/>}
+                                startIcon={<QuestionAnswerIcon />}
                                 className={classes.userbutton}
                             >
                                 Give Feedback
@@ -644,23 +585,23 @@ export function ParticipantDemo({title, shadow, scale}: DemoProps) {
                                 feedback='I think you make a good point regarding...'
                             />
                         </>
-                    }
+                    )}
                 </Grid>
             </div>
         </DemoWindow>
     );
 }
 
-export function ModeratorDemo({title, shadow, scale}: DemoProps) {
+export function ModeratorDemo({ title, shadow, scale }: DemoProps) {
     const classes = useStyles();
-    const [subModFeed, setSubModFeed] = React.useState('Queue')
-    const [subModQueue, setSubModQueue] = React.useState('Upcoming')
+    const [subModFeed, setSubModFeed] = React.useState('Queue');
+    const [subModQueue, setSubModQueue] = React.useState('Upcoming');
 
     return (
         <DemoWindow title={title} shadow={shadow} scale={scale}>
-            <Tabs/>
+            <Tabs />
             <div className={classes.windowcontent}>
-                <MeetingDisplay/>
+                <MeetingDisplay />
                 <Grid item xs={12} lg={5} className={classes.windowsidebar}>
                     <Question
                         pinned={Boolean(true)}
@@ -676,14 +617,18 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                         >
                             Queue
                         </Button>
-                        { subModFeed === 'Queue' &&
+                        {subModFeed === 'Queue' && (
                             <div className={classes.desktopqueuebuttons}>
                                 <Button
                                     size='small'
                                     variant='contained'
                                     color='primary'
                                     onClick={() => setSubModQueue('Upcoming')}
-                                    className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    className={
+                                        subModQueue === 'Upcoming'
+                                            ? `${classes.queuebuttonactive}`
+                                            : `${classes.queuebuttoninactive}`
+                                    }
                                 >
                                     Upcoming
                                 </Button>
@@ -692,12 +637,16 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                     variant='contained'
                                     color='primary'
                                     onClick={() => setSubModQueue('Past')}
-                                    className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                    className={
+                                        subModQueue === 'Past'
+                                            ? `${classes.queuebuttonactive}`
+                                            : `${classes.queuebuttoninactive}`
+                                    }
                                 >
                                     Past
                                 </Button>
                             </div>
-                        }
+                        )}
                         <Button
                             variant={subModFeed === 'Feed' ? 'contained' : 'outlined'}
                             color='primary'
@@ -713,7 +662,7 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                             Feedback
                         </Button>
                     </div>
-                    { subModFeed === 'Queue' &&
+                    {subModFeed === 'Queue' && (
                         <div className={classes.mobilequeuebuttons}>
                             <SubdirectoryArrowRightIcon />
                             <Button
@@ -721,7 +670,11 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 variant='contained'
                                 color='primary'
                                 onClick={() => setSubModQueue('Upcoming')}
-                                className={subModQueue === 'Upcoming' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                className={
+                                    subModQueue === 'Upcoming'
+                                        ? `${classes.queuebuttonactive}`
+                                        : `${classes.queuebuttoninactive}`
+                                }
                             >
                                 Upcoming
                             </Button>
@@ -730,14 +683,18 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 variant='contained'
                                 color='primary'
                                 onClick={() => setSubModQueue('Past')}
-                                className={subModQueue === 'Past' ? `${classes.queuebuttonactive}` : `${classes.queuebuttoninactive}`}
+                                className={
+                                    subModQueue === 'Past'
+                                        ? `${classes.queuebuttonactive}`
+                                        : `${classes.queuebuttoninactive}`
+                                }
                             >
                                 Past
                             </Button>
                         </div>
-                    }
-                    <SearchBar/>
-                    { subModFeed  === 'Queue' && subModQueue === 'Upcoming' &&
+                    )}
+                    <SearchBar />
+                    {subModFeed === 'Queue' && subModQueue === 'Upcoming' && (
                         <>
                             <Typography variant='caption' className={classes.queuecaption}>
                                 Drag and drop questions to re-order queue
@@ -756,8 +713,8 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 question='How would you bring this certain concern to attention, and what are your steps to solving this issue?'
                             />
                         </>
-                    }
-                    { subModFeed  === 'Queue' && subModQueue === 'Past' &&
+                    )}
+                    {subModFeed === 'Queue' && subModQueue === 'Past' && (
                         <>
                             <ModQuestion
                                 past={Boolean(true)}
@@ -778,8 +735,8 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 question='What are your priorities regarding providing education to underrepresented minorities in the city?'
                             />
                         </>
-                    }
-                    { subModFeed  === 'Feed' &&
+                    )}
+                    {subModFeed === 'Feed' && (
                         <>
                             <ModQuestion
                                 past={Boolean(false)}
@@ -798,8 +755,8 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 question='What do you think is the best way to tackle the issue with providing equal opportunities for education for  underrepresented communities in the city?'
                             />
                         </>
-                    }
-                    { subModFeed  === 'Feedback' &&
+                    )}
+                    {subModFeed === 'Feedback' && (
                         <>
                             <Feedback
                                 name='Lorem Ipsum'
@@ -817,7 +774,7 @@ export function ModeratorDemo({title, shadow, scale}: DemoProps) {
                                 feedback='I think you make a good point regarding...'
                             />
                         </>
-                    }
+                    )}
                 </Grid>
             </div>
         </DemoWindow>

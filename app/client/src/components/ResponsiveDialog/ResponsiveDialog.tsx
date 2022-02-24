@@ -1,16 +1,17 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MUIDialog, { DialogProps } from '@material-ui/core/Dialog';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide, { SlideProps } from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { DialogTitle } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import MUIDialog, { DialogProps } from '@mui/material/Dialog';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide, { SlideProps } from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { DialogTitle } from '@mui/material';
 
 const useStyles = makeStyles({
     appBar: {
@@ -43,14 +44,14 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
     const { children, title, fullScreen: _fullscreen, ...rest } = props;
     const classes = useStyles();
     const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm')) || _fullscreen;
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md')) || _fullscreen;
 
     return (
         <MUIDialog fullScreen={fullScreen} TransitionComponent={Transition} {...rest}>
             {fullScreen && (
                 <AppBar elevation={0} className={classes.appBar}>
                     <Toolbar>
-                        <IconButton edge='start' color='inherit' onClick={rest.onClose} aria-label='close'>
+                        <IconButton edge='start' color='inherit' onClick={rest.onClose} aria-label='close' size='large'>
                             <CloseIcon />
                         </IconButton>
                         <Typography component='span' variant='h6' className={classes.title}>

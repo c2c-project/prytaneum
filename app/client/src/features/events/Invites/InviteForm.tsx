@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import * as Yup from 'yup';
 
 import { Form } from '@local/components/Form';
@@ -39,7 +39,7 @@ export function InviteForm({ form, onSubmit }: InviteProps) {
                     type='email'
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <Button type='submit' variant='contained' color='primary'>
                     Submit
                 </Button>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
+import { Button, DialogActions, DialogContentText, DialogContent } from '@mui/material';
 
 import { ResponsiveDialog } from '../ResponsiveDialog';
 import { LoadingButton } from '../LoadingButton';

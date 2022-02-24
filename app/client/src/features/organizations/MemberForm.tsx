@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
@@ -32,7 +32,7 @@ export function MemberForm({ onSubmit, form: formProp }: MemberFormProps) {
                     helperText={errors.email}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <Button variant='contained' color='primary' type='submit'>
                     Invite
                 </Button>

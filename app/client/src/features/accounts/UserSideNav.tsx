@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { List, ListItemText } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ListIcon from '@material-ui/icons/List';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import { List, ListItemText } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import ListIcon from '@mui/icons-material/List';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
@@ -15,7 +15,7 @@ import {
     StyledListItemIcon,
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
-import { Skeleton } from '@material-ui/lab';
+import { Skeleton } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -108,7 +108,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <StyledListItem button onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
+                <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
                     <StyledListItemIcon>
                         <DashboardIcon />
                     </StyledListItemIcon>
@@ -117,11 +117,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
 
-                <StyledListItem
-                    button
-                    onClick={handleClick('My Organizations')}
-                    selected={selected === 'My Organizations'}
-                >
+                <StyledListItem onClick={handleClick('My Organizations')} selected={selected === 'My Organizations'}>
                     <StyledListItemIcon>
                         <ListIcon />
                     </StyledListItemIcon>

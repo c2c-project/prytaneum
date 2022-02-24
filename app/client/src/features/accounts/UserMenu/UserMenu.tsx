@@ -13,15 +13,16 @@ import {
     IconButton,
     Button,
     DialogContent,
-} from '@material-ui/core';
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import MoreVert from '@material-ui/icons/MoreVert';
-import Settings from '@material-ui/icons/Settings';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
+import ExitToApp from '@mui/icons-material/ExitToApp';
+import MoreVert from '@mui/icons-material/MoreVert';
+import Settings from '@mui/icons-material/Settings';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { Skeleton } from '@material-ui/lab';
+import { Skeleton } from '@mui/material';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
@@ -69,7 +70,7 @@ export function UserMenuLoader() {
     const classes = useStyles();
     return (
         <>
-            <Skeleton variant='circle' className={classes.avatar} />
+            <Skeleton variant='circular' className={classes.avatar} />
             <Skeleton height='100%' width={100} />
         </>
     );
@@ -134,7 +135,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         if (data && !user) {
             setUser(data.me);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     function handleOpen(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -164,7 +165,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                 </ButtonBase>
             );
         return (
-            <IconButton onClick={handleOpen}>
+            <IconButton onClick={handleOpen} size='large'>
                 <MoreVert />
             </IconButton>
         );
@@ -208,24 +209,24 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                             vertical: 'top',
                             horizontal: 'left',
                         }}
-                        getContentAnchorEl={null}
                         PaperProps={{
                             className: classes.paper,
                             style: { minWidth: width.current },
                         }}
                     >
                         {!isSmUp && (
-                            <MenuItem button={false} divider>
+                            // FIXME: this will now be a button
+                            <MenuItem divider>
                                 <UserName />
                             </MenuItem>
                         )}
-                        <MenuItem button onClick={handleNavigation('/settings')}>
+                        <MenuItem onClick={handleNavigation('/settings')}>
                             <ListItemIcon>
                                 <Settings />
                             </ListItemIcon>
                             <ListItemText primary='Settings' />
                         </MenuItem>
-                        <MenuItem button onClick={logoutUser}>
+                        <MenuItem onClick={logoutUser}>
                             <ListItemIcon>
                                 <ExitToApp />
                             </ListItemIcon>

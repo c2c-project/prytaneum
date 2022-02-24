@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
+import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@mui/material';
 import { useRouter } from 'next/router';
-import { Add } from '@material-ui/icons';
+import { Add } from '@mui/icons-material';
 import { graphql, useFragment } from 'react-relay';
 
 import type { OrgEventListFragment$key } from '@local/__generated__/OrgEventListFragment.graphql';
@@ -70,7 +70,7 @@ export function OrgEventList({ fragementRef, className }: OrgEventListProps) {
                     </Typography>
                 )}
             </Grid>
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <ResponsiveDialog open={isOpen} onClose={close} title='Create Event'>
                     <DialogContent>
                         <CreateEvent

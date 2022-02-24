@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useQueryLoader } from 'react-relay';
-import { Hidden, Drawer } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Hidden, Drawer } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import { ConditionalRender } from '@local/components';
 import { UserSideNav, USER_SIDE_NAV_QUERY, UserSideNavProps, UserSideNavLoader, useUser } from '@local/features/accounts';
 
 const Loader = () => (
-    <Hidden mdDown>
+    <Hidden lgDown>
         <UserSideNavLoader />
     </Hidden>
 );

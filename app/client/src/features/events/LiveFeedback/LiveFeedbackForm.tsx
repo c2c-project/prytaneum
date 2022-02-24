@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
@@ -43,7 +43,7 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
                     onChange={handleChange('message')}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
                     <Button color='primary' onClick={onCancel}>
                         Cancel

@@ -2,9 +2,14 @@
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import { ThemeProvider } from '@local/features/core';
+import { ThemeProvider, Theme, StyledEngineProvider } from '@local/features/core';
 
 import { TextField } from './TextField';
+
+declare module '@mui/styles/defaultTheme' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface DefaultTheme extends Theme {}
+}
 
 describe('TextField', function () {
     let container: HTMLDivElement | null = null;
@@ -36,15 +41,17 @@ describe('TextField', function () {
         const onClick = jest.fn();
         ReactTestUtils.act(() => {
             render(
-                <ThemeProvider>
-                    <TextField
-                        id='testing'
-                        required
-                        label='Test Label'
-                        value='Test value in the box'
-                        onChange={onClick}
-                    />
-                </ThemeProvider>,
+                <StyledEngineProvider injectFirst>
+                    <ThemeProvider>
+                        <TextField
+                            id='testing'
+                            required
+                            label='Test Label'
+                            value='Test value in the box'
+                            onChange={onClick}
+                        />
+                    </ThemeProvider>
+                </StyledEngineProvider>,
                 container
             );
         });

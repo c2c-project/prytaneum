@@ -11,9 +11,9 @@ import {
     MenuItem,
     ListItemSecondaryAction,
     IconButton,
-} from '@material-ui/core';
-import { Add, MoreVert } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Add, MoreVert } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useFragment } from 'react-relay';
 
 import type { VideoEventSettingsFragment$key } from '@local/__generated__/VideoEventSettingsFragment.graphql';
@@ -143,7 +143,7 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
     const openFormDialog = () => dispatch({ type: 'dialog/create-video' });
 
     return (
-        <Grid container justify='center' className={className}>
+        <Grid container justifyContent='center' className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     {focusedVideo !== null ? (
@@ -183,7 +183,7 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
                         <ListItem key={id} disableGutters>
                             <ListItemText primary={lang} secondary={url} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu({ id, url, lang })}>
+                                <IconButton onClick={openMenu({ id, url, lang })} size='large'>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -195,7 +195,7 @@ export const VideoEventSettings = ({ fragmentRef, className }: EventSettingsProp
                     No videos to display
                 </Typography>
             )}
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Add Video
                 </Button>

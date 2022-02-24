@@ -1,6 +1,6 @@
 import * as React from 'react';
-import SettingsIcon from '@material-ui/icons/Settings';
-import TownhallIcon from '@material-ui/icons/AccountBalance';
+import SettingsIcon from '@mui/icons-material/Settings';
+import TownhallIcon from '@mui/icons-material/AccountBalance';
 
 import Component from './IconBar';
 

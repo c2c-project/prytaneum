@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 import type { CreateSpeaker as CreateType } from '@local/graphql-types';
 import { FormTitle } from '@local/components/FormTitle';
@@ -74,7 +74,7 @@ export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
                     onChange={handleChange('email')}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <Button variant='contained' color='primary' type='submit'>
                     Submit
                 </Button>

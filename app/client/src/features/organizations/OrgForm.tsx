@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { LoadingButton } from '@local/components/LoadingButton';
 import { TextField } from '@local/components/TextField';
@@ -33,7 +33,7 @@ export function OrgForm({ onSubmit }: OrgFormProps) {
                     onChange={handleChange('name')}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <LoadingButton loading={false}>
                     <Button variant='contained' color='primary' type='submit'>
                         Create

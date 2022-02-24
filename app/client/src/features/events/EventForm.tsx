@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -111,7 +111,7 @@ export function EventForm(props: EventFormProps) {
                     onChange={(value) => setFieldValue('endDateTime', value)}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
                     <Button color='primary' disableElevation onClick={onCancel}>
                         Cancel

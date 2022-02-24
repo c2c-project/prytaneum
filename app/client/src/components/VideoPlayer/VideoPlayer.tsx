@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Grid } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Typography, Grid } from '@mui/material';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
 
 const useStyles = makeStyles({
@@ -50,7 +50,7 @@ export function VideoPlayer({ url, rest }: ReactPlayerProps) {
                         {...rest}
                     />
                 ) : (
-                    <Grid container justify='center' alignContent='center' className={classes.placeholder}>
+                    <Grid container justifyContent='center' alignContent='center' className={classes.placeholder}>
                         <Typography>At the start time of the event refresh your browser to see the video</Typography>
                     </Grid>
                 )}

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { IconButton, Tooltip, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { IconButton, Tooltip, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
 
 import { TextField, Props as TextFieldProps } from '@local/components/TextField';
@@ -32,7 +32,7 @@ export const CopyText = React.forwardRef<HTMLDivElement, Props>(
                 </Grid>
                 <Grid item xs='auto'>
                     <Tooltip title='Copy' aria-label='copy'>
-                        <IconButton onPointerUp={() => copy(text)} edge='end'>
+                        <IconButton onPointerUp={() => copy(text)} edge='end' size='large'>
                             <CopyIcon />
                         </IconButton>
                     </Tooltip>

@@ -1,6 +1,6 @@
-import { Paper, Grid, Typography, Divider, Button } from '@material-ui/core';
+import { Paper, Grid, Typography, Divider, Button } from '@mui/material';
 import { graphql, useFragment } from 'react-relay';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import type { EventProfileFragment$key } from '@local/__generated__/EventProfileFragment.graphql';
 
@@ -39,7 +39,7 @@ export function EventProfile({ fragmentRef }: EventProfileProps) {
     const data = useFragment(EVENT_PROFILE_FRAGMENT, fragmentRef);
     const classes = useStyles();
     return (
-        <Grid container justify='center'>
+        <Grid container justifyContent='center'>
             <Grid item xs={12} md={8}>
                 <Grid component={Paper} className={classes.paper}>
                     <Grid item xs={12}>
@@ -50,7 +50,7 @@ export function EventProfile({ fragmentRef }: EventProfileProps) {
                         <Typography paragraph>{data.description}</Typography>
                     </Grid>
                     <Divider />
-                    <Grid container item xs={12} justify='center'>
+                    <Grid container item xs={12} justifyContent='center'>
                         <Button variant='contained' color='primary'>
                             I want to attend
                         </Button>

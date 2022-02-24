@@ -2,9 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Card, CardContent, CardHeader, IconButton } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { useTheme } from '@material-ui/core/styles';
+import { Card, CardContent, CardHeader, IconButton } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useTheme } from '@mui/material/styles';
 
 import DropArea from '../DropArea';
 import DragArea from '../DragArea';
@@ -72,7 +72,7 @@ export default function DndList() {
                         variant: 'h6',
                     }}
                     action={
-                        <IconButton aria-label='settings'>
+                        <IconButton aria-label='settings' size='large'>
                             <MoreVertIcon />
                         </IconButton>
                     }

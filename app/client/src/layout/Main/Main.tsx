@@ -6,8 +6,8 @@ import {
     Container as MUIContainer,
     ContainerProps,
     Theme,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 
 type Props = {

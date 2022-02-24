@@ -1,5 +1,5 @@
-import { Grid, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Button } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +30,7 @@ export const Tabs = ({ tabIndex, onChange, tabs }: Props) => {
                 <Button
                     key={tabTitle}
                     // conditionally styles the color/variant selected tab
-                    color={idx === tabIndex ? 'primary' : 'default'}
+                    color={idx === tabIndex ? 'primary' : 'inherit'}
                     variant={idx === tabIndex ? 'contained' : 'text'}
                     onClick={(e) => onChange(e, idx)}
                     className={classes.button}

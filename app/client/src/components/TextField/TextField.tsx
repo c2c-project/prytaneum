@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import MUITextField, { TextFieldProps } from '@material-ui/core/TextField';
+import MUITextField, { TextFieldProps } from '@mui/material/TextField';
 
 function toSnakeCase(str?: string) {
     if (!str) return undefined;

@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Card, List, ListItem, Typography } from '@material-ui/core';
-// import { Pause, PlayArrow } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Card, List, ListItem, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
@@ -116,7 +115,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                         <QuestionAuthor fragmentRef={question} />
                                         {question.refQuestion && <QuestionQuote fragmentRef={question.refQuestion} />}
                                         <QuestionContent fragmentRef={question} />
-                                        <Grid container alignItems='center' justify='space-between'>
+                                        <Grid container alignItems='center' justifyContent='space-between'>
                                             {isModerator && <QuestionStats fragmentRef={question} />}
                                             <QuestionActions
                                                 style={

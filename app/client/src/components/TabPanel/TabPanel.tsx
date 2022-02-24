@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 

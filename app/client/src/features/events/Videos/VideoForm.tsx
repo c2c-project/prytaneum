@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
@@ -29,7 +29,7 @@ export const VideoForm = ({ form = { url: '', lang: '' }, onSubmit }: VideoFormP
                 />
                 <TextField helperText={errors.url} value={state.url} label='Video URL' onChange={handleChange('url')} />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <Button variant='contained' color='primary' type='submit'>
                     Submit
                 </Button>
