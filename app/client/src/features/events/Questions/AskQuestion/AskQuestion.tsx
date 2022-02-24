@@ -10,7 +10,6 @@ import { useSnack } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
-import ValidationError from './ValidationError';
 
 export interface AskQuestionProps {
     className?: string;
@@ -60,8 +59,8 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
 
     function handleSubmit(form: TQuestionFormState) {
         try {
-            if (form.question.length >= 1000) throw new ValidationError('Question is too long!');
-            if (new URL(form.question)) throw new ValidationError('no links are allowed!');
+            if (form.question.length >= 1000) throw new Error('Question is too long!');
+            if (isURL(form.question)) throw new Error('no links are allowed!');
             commit({
                 variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
                 onCompleted(payload) {
