@@ -9,6 +9,7 @@ import { ResponsiveDialog, useResponsiveDialog } from '@local/components/Respons
 import { useSnack } from '@local/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
+import { isURL } from '@local/utils';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {
@@ -38,19 +39,6 @@ export const ASK_QUESTION_MUTATION = graphql`
     }
 `;
 
-function isURL(str: string) {
-    const pattern = new RegExp(
-        '^(https?:\\/\\/)?' +
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-            '((\\d{1,3}\\.){3}\\d{1,3}))' +
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-            '(\\?[;&a-z\\d%_.~+=-]*)?' +
-            '(\\#[-a-z\\d_]*)?$',
-        'i'
-    );
-    return !!pattern.test(str);
-}
-
 function AskQuestion({ className, eventId }: AskQuestionProps) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
@@ -63,8 +51,8 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
             onCompleted(payload) {
                 try {
                     if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
-                    if (form.question.length >= 1000) throw new ValidationError('Question is too long!');
-                    if (isURL(form.question)) throw new ValidationError('no links are allowed!');
+                    if (form.question.length >= 1000) throw new Error('Question is too long!');
+                    if (isURL(form.question)) throw new Error('no links are allowed!');
                     ga.event({
                         action: 'submit_question',
                         category: 'questions',
