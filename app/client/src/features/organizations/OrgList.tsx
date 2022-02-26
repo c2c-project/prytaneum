@@ -85,12 +85,10 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
     const router = useRouter();
+    const initialState = {id: '', name: ''};
     const [user, , isLoading] = useUser();
     const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
-    const [selectedOrg, setSelectedOrg] = React.useState({
-        id: '',
-        name: ''
-    } as SelectedOrg);
+    const [selectedOrg, setSelectedOrg] = React.useState(initialState);
 
     const close = () => {
         setIsConfDialogOpen(false);

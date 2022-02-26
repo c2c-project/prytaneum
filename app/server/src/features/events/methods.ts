@@ -145,11 +145,11 @@ export async function deleteEvent(userId: string, prisma: PrismaClient, input: D
     const eventToDelete = await prisma.event.findUnique({ where: { id: eventId } });
     const eventWithGlobalId = toEventId(eventToDelete)
 
-    //validation is event title matches actual event title
-    if (title !== eventWithGlobalId.title) throw new Error('Deleting event failed: Invalid event title.');
-
     //validation if event titles match
     if (title !== confirmTitle) throw new Error('Event titles must match');
+    
+    //validation is if event title matches actual event title
+    if (title !== eventWithGlobalId.title) throw new Error('Deleting event failed: Invalid event title.');
 
     //delete user by event id
     return prisma.event.delete({ where: { id: eventId } });

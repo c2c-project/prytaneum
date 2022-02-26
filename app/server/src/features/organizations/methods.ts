@@ -72,11 +72,7 @@ export async function updateOrg(userId: string, prisma: PrismaClient, { name, or
 }
 
 export async function deleteOrg(userId: string, prisma: PrismaClient, { orgId }: DeleteOrganization) {
-    // UNIMPLEMENTED on purpose
-    // probably don't want deletes to happen since permissions are not robust (yet) and
-    // cascades are scary with that in mind
-    // ie we'll want a backup or recovery process along with more robust permissions before we can delete willy nilly
-
+   
     //current permissions to delete organization is if they are a member of the organization then they can delete
     const hasPermissions = await isMemberOfOrg(userId, orgId, prisma);
     if (!hasPermissions) throw new Error(errors.permissions);
@@ -112,7 +108,7 @@ export async function findMembersByOrgId(prisma: PrismaClient, orgId: string) {
  * does NOT require user login
  */
 export async function findEventsByOrgId(prisma: PrismaClient, orgId: string) {
-    return prisma.event.findMany({ where: { orgId: orgId }, orderBy: { createdAt: 'desc' } });
+    return prisma.event.findMany({ where: { orgId }, orderBy: { createdAt: 'desc' } });
 }
 
 export async function isViewerMember(userId: string | null, prisma: PrismaClient, orgId: string) {

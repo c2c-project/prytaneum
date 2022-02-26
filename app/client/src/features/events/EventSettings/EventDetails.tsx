@@ -7,7 +7,6 @@ import clsx from 'clsx';
 
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
-// import type { OrgIdFragment$key } from '@local/__generated__/OrgIdFragment.graphql';
 import { formatDate } from '@local/utils/format';
 import { UpdateEvent } from '@local/features/events';
 
@@ -26,14 +25,6 @@ export interface EventDetailsProps {
     fragmentRef: EventDetailsFragment$key;
     className?: string;
 }
-
-// const EVENT_DETAILS_ORG_ID_FRAGMENT = graphql`
-//     fragment EventDetailsOrgIdFragment on Event {
-//         organization {
-//             id
-//         }
-//     }
-// `
 
 export const EVENT_DETAILS_FRAGMENT = graphql`
     fragment EventDetailsFragment on Event {

@@ -1,25 +1,26 @@
 import * as React from 'react';
+import * as Yup from 'yup';
 import {
     Typography,
     Button,
     Grid
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
+import { useMutation, useFragment } from 'react-relay';
+import { useRouter } from 'next/router';
+import { useFormik } from 'formik';
+
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { TextField } from '@local/components/TextField';
-import { useFragment } from 'react-relay';
 import { useSnack } from '@local/features/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { useMutation } from 'react-relay';
-import { useRouter } from 'next/router';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { makeInitialState } from '@local/utils/ts-utils';
 import type { DeleteEventMutation } from '@local/__generated__/DeleteEventMutation.graphql';
 import { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { DELETE_EVENT_MUTATION } from '../DeleteEvent';
-import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
+
 
 interface DeleteEventSettingsProps {
     fragmentRef: EventDetailsFragment$key;
@@ -46,12 +47,6 @@ const intialDeleteEvent: TDeleteEvent = {
 };
 
 const useStyles = makeStyles((theme) => ({
-    // indent: {
-    //     paddingLeft: theme.spacing(4),
-    // },
-    // fullWidth: {
-    //     width: '100%',
-    // },
     form: {
         margin: theme.spacing(0, 1, 0, 1),
     },
@@ -67,7 +62,6 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
     const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
     const { title: eventTitle } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
 
-    // user feedback
     const { displaySnack } = useSnack();
 
     // routing hook
@@ -83,11 +77,12 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
         onSubmit: handleCommit,
     });
     function handleCommit(submittedForm: TDeleteEvent) {
-        // add user email to input passed into the commit
-        const eventI = eventId ? eventId : '';
+        // add eventId to input passed into the commit
+        if (!eventId) return;
+        const eventI = eventId;
         const completeForm = { eventId: eventI, ...submittedForm };
         commit({
-            variables: { input: completeForm },
+            variables: { input: completeForm},
             onCompleted({ deleteEvent }) {
                 if (deleteEvent.isError) {
                     displaySnack(deleteEvent.message);
@@ -95,11 +90,8 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
                     displaySnack('Event deleted successfully!');
                     //forces the page to reload which lets it route back to the proper page
                     window.location.reload()
-                    //resetForm();
                     //route to list of organizations after successfully deleting event
-                    //IMPROVEMENT: routing back to organization event list instead of lists of organizations
-                    //for some reason, it routes back to the proper organization page??
-                    //router.push(`/organizations/me`);
+                    //TODO: https://github.com/c2c-project/prytaneum/issues/265#issue-1152493329
                 }
             },
         });
@@ -124,7 +116,6 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
                         error={Boolean(errors.title)}
                         required
                         variant='outlined'
-                        // type='password'
                         value={values.title}
                         onChange={handleChange('title')}
                         spellCheck={false}
@@ -136,7 +127,6 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
                         error={Boolean(errors.confirmTitle)}
                         required
                         variant='outlined'
-                        // type='password'
                         value={values.confirmTitle}
                         onChange={handleChange('confirmTitle')}
                         spellCheck={false}

@@ -105,7 +105,7 @@ type Event implements Node {
     Questions queued in this session by the moderator(s)
     TODO: #QQRedesign delete after code complete
     """
-    queuedQuestions(first: Int, after: String): EventQuestionConnection 
+    queuedQuestions(first: Int, after: String): EventQuestionConnection
 
     """
     Questions having to do with the queue
@@ -155,7 +155,9 @@ input UpdateEvent {
     isPrivate: Boolean
     eventId: String!
 }
-
+"""
+In order to delete an event, user must provide a title and a confirmation title, similar to account deletion.
+"""
 input DeleteEvent {
     eventId: String!
     title: String!
