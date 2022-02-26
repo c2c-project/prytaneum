@@ -93,12 +93,13 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
                     displaySnack(deleteEvent.message);
                 } else {
                     displaySnack('Event deleted successfully!');
+                    //forces the page to reload which lets it route back to the proper page
                     window.location.reload()
-                    resetForm();
+                    //resetForm();
                     //route to list of organizations after successfully deleting event
                     //IMPROVEMENT: routing back to organization event list instead of lists of organizations
                     //for some reason, it routes back to the proper organization page??
-                    router.push(`/organizations/me`);
+                    //router.push(`/organizations/me`);
                 }
             },
         });
