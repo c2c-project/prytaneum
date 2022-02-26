@@ -35,11 +35,11 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: orgId } = fromGlobalId(args.input.orgId);
-                await Organization.deleteOrg(ctx.viewer.id, ctx.prisma, {
+                const deletedOrg = await Organization.deleteOrg(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     orgId,
                 });
-                return orgId;
+                return { node: toOrgId(deletedOrg), cursor: deletedOrg.createdAt.getTime().toString() };
             });
         },
         createMember(parent, args, ctx, info) {

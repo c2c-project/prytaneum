@@ -6,7 +6,7 @@ const DELETE_EVENT_MUTATION = graphql`
             isError
             message
             body {
-                id
+                id 
                 title
                 topic
                 startDateTime

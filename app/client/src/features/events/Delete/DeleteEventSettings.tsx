@@ -19,8 +19,9 @@ import type { DeleteEventMutation } from '@local/__generated__/DeleteEventMutati
 import { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { DELETE_EVENT_MUTATION } from '../DeleteEvent';
+import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 
-interface EventSettingsProps {
+interface DeleteEventSettingsProps {
     fragmentRef: EventDetailsFragment$key;
     className?: string;
 }
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
+export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSettingsProps) => {
     // form state hooks
     const [commit] = useMutation<DeleteEventMutation>(DELETE_EVENT_MUTATION);
 
@@ -92,9 +93,11 @@ export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     displaySnack(deleteEvent.message);
                 } else {
                     displaySnack('Event deleted successfully!');
+                    window.location.reload()
                     resetForm();
                     //route to list of organizations after successfully deleting event
                     //IMPROVEMENT: routing back to organization event list instead of lists of organizations
+                    //for some reason, it routes back to the proper organization page??
                     router.push(`/organizations/me`);
                 }
             },
@@ -147,5 +150,3 @@ export const DeleteEventSettings = ({ fragmentRef, className }: EventSettingsPro
         </Grid>
     );
 }
-
-
