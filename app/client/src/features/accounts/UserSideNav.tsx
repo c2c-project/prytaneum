@@ -19,14 +19,8 @@ import { Skeleton } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 250, // think this is from material.io spec, I just know this number (adjusted)
         padding: theme.spacing(0, 1.5),
         flex: 1,
-        [theme.breakpoints.up('lg')]: {
-            // height + margin
-            top: 64 + theme.spacing(6), // visual testing for height of the toolbar
-            position: 'fixed',
-        },
     },
 }));
 
@@ -116,7 +110,6 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
-
                 <StyledListItem onClick={handleClick('My Organizations')} selected={selected === 'My Organizations'}>
                     <StyledListItemIcon>
                         <ListIcon />

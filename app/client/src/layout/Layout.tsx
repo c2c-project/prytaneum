@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { Grid, useMediaQuery, IconButton, ContainerProps } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '@local/features/accounts';
@@ -51,15 +50,17 @@ export function Layout({
     const classes = useStyles();
     const [user] = useUser();
 
-    const theme = useTheme();
-    // FIXME: had to take out hardcoded value due to mui v5 migration
     // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
-    const isLgDown = useMediaQuery(theme.breakpoints.down('lg'));
+    const isLargeScreen = useMediaQuery('(max-width:1520px)');
+    const isSideNavHidden = React.useMemo(
+        () => isLargeScreen || !!noSideNav || !user,
+        [isLargeScreen, noSideNav, user]
+    );
 
     return (
         <Page>
-            <AppBar>
-                {!noSideNav && isLgDown && user && (
+            <AppBar sx={{ zIndex: (theme) => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
+                {isSideNavHidden && (
                     <IconButton
                         className={classes.menuIcon}
                         onClick={() => setOpen(!open)}
@@ -71,7 +72,7 @@ export function Layout({
                 )}
             </AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
-                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isLgDown || !!noSideNav || !user} />
+                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isSideNavHidden} />
                 <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}
                 </Main>

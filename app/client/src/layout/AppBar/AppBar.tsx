@@ -1,6 +1,6 @@
 import * as React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import MUIAppBar from '@mui/material/AppBar';
+import MUIAppBar, { AppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useQueryLoader } from 'react-relay';
 
@@ -43,15 +43,10 @@ function PreloadedUserMenu() {
     return <UserMenu queryRef={queryRef} />;
 }
 
-export interface AppBarProps {
-    children: React.ReactNode | React.ReactNodeArray;
-}
-
-export function AppBar({ children }: AppBarProps) {
+export function AppBar({ children, ...rest }: AppBarProps) {
     const classes = useStyles();
-
     return (
-        <MUIAppBar className={classes.appbar} position='sticky'>
+        <MUIAppBar className={classes.appbar} position='sticky' {...rest}>
             <Toolbar>
                 {children}
                 <Title />
