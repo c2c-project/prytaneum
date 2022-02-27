@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, InputAdornment, Grid, Typography } from '@mui/material';
+import { Button, IconButton, InputAdornment, Grid, Typography, TextField } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import makeStyles from '@mui/styles/makeStyles';
@@ -10,7 +10,6 @@ import { graphql, useMutation } from 'react-relay';
 import type { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/features/core';

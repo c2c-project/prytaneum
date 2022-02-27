@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
 
 export type TLiveFeedbackFormState = { message: string };

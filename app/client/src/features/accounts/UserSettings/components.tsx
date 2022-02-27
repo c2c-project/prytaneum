@@ -11,13 +11,13 @@ import {
     Link as MUILink,
     IconButton,
     InputAdornment,
+    TextField
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';

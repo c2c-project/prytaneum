@@ -65,7 +65,6 @@ const base = createTheme({
         button: {
             lineHeight: '1.75em',
             fontWeight: 600,
-            // fontSize: 'rem',
         },
     },
     custom: {
@@ -93,15 +92,18 @@ const base = createTheme({
         borderRadius: 18,
     },
     components: {
-        MuiPaper: {
-            // elevation: 3,
-        },
-        MuiCard: {
-            // raised: true,
-            // elevation: 3
+        MuiInputBase: {
+            defaultProps: {
+                fullWidth: true,
+                autoComplete: 'off',
+                autoCorrect: 'off',
+                autoCapitalize: 'none',
+            },
         },
         MuiTextField: {
             defaultProps: {
+                // For some reason, this property is not inherited from MuiInputBase
+                fullWidth: true,
                 variant: 'outlined',
             },
         },

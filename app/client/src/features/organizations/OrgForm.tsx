@@ -1,7 +1,6 @@
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 import { LoadingButton } from '@local/components/LoadingButton';
-import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
 import type { CreateOrganization } from '@local/graphql-types';
 import { Form } from '@local/components/Form';

@@ -9,6 +9,7 @@ import {
     Badge,
     Checkbox,
     Tooltip,
+    TextField,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import FilterIcon from '@mui/icons-material/FilterList';
@@ -18,7 +19,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { Skeleton } from '@mui/material';
 import { SkeletonProps } from '@mui/lab';
 
-import { TextField } from '@local/components/TextField';
 import { FilterFunc } from '@local/utils/filters';
 
 export interface Props<T> {

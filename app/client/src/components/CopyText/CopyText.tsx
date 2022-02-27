@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { IconButton, Tooltip, Grid } from '@mui/material';
+import { IconButton, Tooltip, Grid, TextField, TextFieldProps } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
-
-import { TextField, Props as TextFieldProps } from '@local/components/TextField';
 
 import useCopy from '@local/features/core/useCopy';
 

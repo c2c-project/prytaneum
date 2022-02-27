@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
@@ -81,9 +80,3 @@ export function useResponsiveDialog(initialState?: boolean) {
     // tuple state first, then helper functions -- order based on probable usage ie open/close will be used more than toggle
     return [isOpen, open, close, toggle] as const;
 }
-
-ResponsiveDialog.defaultProps = {
-    title: undefined,
-    onEntered: undefined,
-    onExit: undefined,
-};

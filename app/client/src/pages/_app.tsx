@@ -1,9 +1,9 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { StyledEngineProvider, Theme } from '@mui/material/styles';
-import DateFnsUtils from '@date-io/date-fns';
 import { AppProps } from 'next/app';
+import { LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Head from 'next/head';
 import { RelayEnvironmentProvider } from 'react-relay';
 
@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider>
                         <CssBaseline />
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <SnackContext maxSnack={1}>
                                 <UserProvider userInfo={pageProps.userInfo}>
                                     <Layout
@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
                                     </Layout>
                                 </UserProvider>
                             </SnackContext>
-                        </MuiPickersUtilsProvider>
+                        </LocalizationProvider>
                     </ThemeProvider>
                 </StyledEngineProvider>
             </RelayEnvironmentProvider>

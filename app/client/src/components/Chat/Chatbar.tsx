@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, TextField } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 
 import SendIcon from '@mui/icons-material/Send';
-
-import { TextField } from '@local/components/TextField';
 
 const useStyles = makeStyles((theme) => ({
     btn: {

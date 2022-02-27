@@ -15,8 +15,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    TextField,
 } from '@mui/material';
-import { TextField } from '@local/components/TextField';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

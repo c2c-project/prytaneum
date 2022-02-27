@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
+import { MobileDateTimePicker } from '@mui/lab';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -8,8 +9,6 @@ import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
-import { TextField } from '@local/components/TextField';
-import { DateTimePicker } from '@local/components/DateTimePicker';
 import { makeInitialState } from '@local/utils/ts-utils';
 
 export interface EventFormProps {
@@ -86,29 +85,31 @@ export function EventForm(props: EventFormProps) {
                     value={values.description}
                     onChange={handleChange}
                 />
-                <DateTimePicker
-                    error={Boolean(errors.startDateTime)}
-                    helperText={errors.startDateTime}
-                    fullWidth
-                    required
-                    autoComplete='off'
-                    id='date'
-                    label='Start Date & Time'
-                    inputVariant='outlined'
+                <MobileDateTimePicker
                     value={values.startDateTime}
                     onChange={(value) => setFieldValue('startDateTime', value)}
+                    renderInput={(innerProps) => (
+                        <TextField
+                            {...innerProps}
+                            label='Start Date & Time'
+                            required
+                            error={Boolean(errors.startDateTime)}
+                            helperText={errors.startDateTime}
+                        />
+                    )}
                 />
-                <DateTimePicker
-                    error={Boolean(errors.endDateTime)}
-                    helperText={errors.endDateTime}
-                    fullWidth
-                    required
-                    autoComplete='off'
-                    id='date'
-                    label='End Date & Time'
-                    inputVariant='outlined'
+                <MobileDateTimePicker
                     value={values.endDateTime}
                     onChange={(value) => setFieldValue('endDateTime', value)}
+                    renderInput={(innerProps) => (
+                        <TextField
+                            {...innerProps}
+                            label='End Date & Time'
+                            required
+                            error={Boolean(errors.endDateTime)}
+                            helperText={errors.endDateTime}
+                        />
+                    )}
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
