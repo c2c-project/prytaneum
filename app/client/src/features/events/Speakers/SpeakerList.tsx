@@ -10,12 +10,12 @@ import {
     Typography,
     Grid,
     Collapse,
-    IconButton
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+    IconButton,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useFragment } from 'react-relay';
-import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import clsx from 'clsx';
 
 import { SpeakerListFragment$key } from '@local/__generated__/SpeakerListFragment.graphql';
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
     speakers: {
         marginLeft: theme.spacing(2),
-        fontWeight: 600
+        fontWeight: 600,
     },
     noSpeakers: {
         marginLeft: theme.spacing(2),
@@ -67,11 +67,11 @@ const useStyles = makeStyles((theme) => ({
     },
     arrow: {
         fontSize: '1.5rem',
-        color: 'black'
+        color: 'black',
     },
     item: {
         padding: theme.spacing(1),
-    }
+    },
 }));
 
 export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
@@ -81,7 +81,7 @@ export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
     const [openCard, setOpenCard] = React.useState(''); // use id instead to determine which dialog to open
     const [isIn, setIsIn] = React.useState(false);
 
-    return (speakers && speakerEdges.length !== 0) ? (
+    return speakers && speakerEdges.length !== 0 ? (
         <>
             <Grid container alignItems='center' className={classes.root}>
                 <PeopleOutlineIcon fontSize='inherit' />
@@ -92,6 +92,7 @@ export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
                     className={clsx(classes.expand, { [classes.expandOpen]: isIn })}
                     aria-label='show more'
                     onClick={() => setIsIn((prev) => !prev)}
+                    size='large'
                 >
                     <ArrowDropDownIcon className={classes.arrow} />
                 </IconButton>

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import ArrowDownIcon from '@material-ui/icons/ExpandMore';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography } from '@mui/material';
+import ArrowDownIcon from '@mui/icons-material/ExpandMore';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { Fab } from '@local/components/Fab';
 import useScrollTo from '@local/features/core/useScrollTo';
@@ -69,7 +69,7 @@ export default function ChatContent({ children, onScrollToBottom }: Props) {
 
     if (React.Children.count(children) === 0)
         return (
-            <Grid container item xs={12} justify='center' direction='column' className={classes.root}>
+            <Grid container item xs={12} justifyContent='center' direction='column' className={classes.root}>
                 <Typography variant='h5' paragraph align='center'>
                     Nothing to display here :(
                 </Typography>

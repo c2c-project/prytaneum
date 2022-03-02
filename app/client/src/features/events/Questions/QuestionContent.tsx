@@ -1,6 +1,6 @@
 import { graphql, useFragment } from 'react-relay';
-import { CardContent, CardContentProps, Typography, TypographyProps } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { CardContent, CardContentProps, Typography, TypographyProps } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 import type { QuestionContentFragment$key } from '@local/__generated__/QuestionContentFragment.graphql';
 

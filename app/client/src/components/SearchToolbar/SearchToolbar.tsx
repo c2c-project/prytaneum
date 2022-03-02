@@ -1,10 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-
-import { TextField } from '@local/components/TextField';
+import makeStyles from '@mui/styles/makeStyles';
+import { Paper, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const useStyles = makeStyles((theme) => ({
     root: {

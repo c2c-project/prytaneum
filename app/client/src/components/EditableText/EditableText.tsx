@@ -1,16 +1,8 @@
 import * as React from 'react';
-import {
-    Grid,
-    Typography,
-    IconButton,
-    Input,
-    FormControl,
-    InputProps,
-    FormHelperText,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
+import { Grid, Typography, IconButton, Input, FormControl, InputProps, FormHelperText } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,13 +34,7 @@ interface Props {
     helperText?: string;
 }
 
-export default function EditableText({
-    value,
-    onChange,
-    label,
-    inputProps,
-    helperText,
-}: Props) {
+export default function EditableText({ value, onChange, label, inputProps, helperText }: Props) {
     const [isEditing, setIsEditing] = React.useState(false);
     const ref = React.useRef<HTMLInputElement | null>(null);
     const classes = useStyles();
@@ -71,9 +57,7 @@ export default function EditableText({
                                 ref={ref}
                                 id='component-simple'
                                 autoFocus
-                                onFocus={({ currentTarget }) =>
-                                    currentTarget.select()
-                                }
+                                onFocus={({ currentTarget }) => currentTarget.select()}
                                 value={value}
                                 onChange={(e) => {
                                     const { value: textFieldValue } = e.target;
@@ -82,10 +66,7 @@ export default function EditableText({
                                 // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...inputProps}
                             />
-                            <FormHelperText
-                                id='component-helper-text'
-                                className={classes.helperText}
-                            >
+                            <FormHelperText id='component-helper-text' className={classes.helperText}>
                                 {helperText}
                             </FormHelperText>
                         </FormControl>
@@ -100,7 +81,7 @@ export default function EditableText({
                         </>
                     )}
                 </div>
-                <IconButton type='submit' edge='end'>
+                <IconButton type='submit' edge='end' size='large'>
                     {isEditing ? <SaveIcon /> : <EditIcon />}
                 </IconButton>
             </Grid>

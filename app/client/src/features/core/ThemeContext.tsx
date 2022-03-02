@@ -1,7 +1,12 @@
 import * as React from 'react';
-import { ThemeProvider as MUIThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider as MUIThemeProvider, Theme } from '@mui/material/styles';
 
 import { themes, TThemes } from './theme';
+
+declare module '@mui/styles/defaultTheme' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface DefaultTheme extends Theme {}
+}
 
 interface Props {
     children: JSX.Element | JSX.Element[];

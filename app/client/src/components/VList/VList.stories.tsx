@@ -1,6 +1,6 @@
 import * as React from 'react';
 import faker from 'faker/locale/en';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent } from '@mui/material';
 
 import VList from './VList';
 

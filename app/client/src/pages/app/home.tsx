@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { Paper, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { OrgForm } from '@local/features/organizations';
 import { useUser } from '@local/features/accounts';
 
@@ -25,7 +25,7 @@ const Home = () => {
     }, [user, router, isLoading]);
 
     return (
-        <Grid className={classes.root} container justify='center' alignItems='center'>
+        <Grid className={classes.root} container justifyContent='center' alignItems='center'>
             <Grid component={Paper} className={classes.paper} item>
                 <OrgForm onSubmit={() => router.push('/organizations/me')} />
             </Grid>

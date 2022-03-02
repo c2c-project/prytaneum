@@ -14,9 +14,9 @@ import {
     IconButton,
     ListItemAvatar,
     Avatar,
-} from '@material-ui/core';
-import { Add, MoreVert } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Add, MoreVert } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useFragment } from 'react-relay';
 
 import type {
@@ -174,7 +174,7 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
     // };
 
     return (
-        <Grid container justify='center' className={className}>
+        <Grid container justifyContent='center' className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     {focusedSpeaker !== null ? (
@@ -218,7 +218,7 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
                             </ListItemAvatar>
                             <ListItemText primary={node.name} secondary={node.title} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu(node)}>
+                                <IconButton onClick={openMenu(node)} size='large'>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -230,7 +230,7 @@ export const SpeakerEventSettings = ({ fragmentRef, className }: EventSettingsPr
                     No speakers to display
                 </Typography>
             )}
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Add Speaker
                 </Button>

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { Grid } from '@material-ui/core';
-import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
-import RecordVoiceOverOutlinedIcon from '@material-ui/icons/RecordVoiceOverOutlined';
-import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@mui/material';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import RecordVoiceOverOutlinedIcon from '@mui/icons-material/RecordVoiceOverOutlined';
+import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import { useUser } from '@local/features/accounts';
 import { CallToAction } from '@local/features/promo/CallToAction'
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     arrowsection: {
         display: 'flex',
         justifyContent: 'center',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             display: 'none',
         },
     },
@@ -102,79 +102,77 @@ export default function Home() {
         if (user) router.push('/organizations/me');
     }, [user, router]);
 
-    return (
-        <>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.landing}>
-                <CallToAction/>
-                {/* TODO: Fix auto-scroll
-                <ConditionalRender client>
-                    <ScrollButton sentinelRef={sentinelRef}/>
-                </ConditionalRender> */}
-            </Grid>
-            {/* <div ref={sentinelRef} className={classes.sentinel}> */}
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Blurb
-                    title='What is Prytaneum?'
-                    paragraphs={
-                        [
-                            'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
-                            'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
-                        ]
-                    }
+    return <>
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.landing}>
+            <CallToAction/>
+            {/* TODO: Fix auto-scroll
+            <ConditionalRender client>
+                <ScrollButton sentinelRef={sentinelRef}/>
+            </ConditionalRender> */}
+        </Grid>
+        {/* <div ref={sentinelRef} className={classes.sentinel}> */}
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+            <Blurb
+                title='What is Prytaneum?'
+                paragraphs={
+                    [
+                        'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
+                        'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.'
+                    ]
+                }
+            />
+            <Grid item xs={12}>
+                <ParticipantDemo 
+                    shadow='10px 10px 0 0 #f5c64f' 
+                    scale='scale(0.95)'
                 />
-                <Grid item xs={12}>
-                    <ParticipantDemo 
-                        shadow='10px 10px 0 0 #f5c64f' 
-                        scale='scale(0.95)'
-                    />
-                </Grid>
             </Grid>
-            {/* </div> */}
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Blurb
-                    title='A better solution for remote public engagement.'
+        </Grid>
+        {/* </div> */}
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+            <Blurb
+                title='A better solution for remote public engagement.'
+            />
+            <Carousel cards={views}/>
+        </Grid>
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+            <Blurb
+                paragraphs={
+                    [
+                        'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
+                    ]
+                }
+            />
+            <Carousel cards={roles}/>
+        </Grid>
+        <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
+            <Grid item>
+                <Image
+                    src='/static/democracy_fund_logo.svg' 
+                    width={280}
+                    height={200}
+                    objectFit='contain'
+                    alt='democracy fund logo'
                 />
-                <Carousel cards={views}/>
             </Grid>
-            <Grid container alignItems='center' justify='center' spacing={2} className={classes.root}>
-                <Blurb
-                    paragraphs={
-                        [
-                            'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
-                        ]
-                    }
+            <Grid item>
+                <Image
+                    src='/static/prytaneum_logo.svg' 
+                    width={150}
+                    height={200}
+                    objectFit='contain'
+                    alt='prytaneum logo'
                 />
-                <Carousel cards={roles}/>
             </Grid>
-            <Grid container alignItems='center' justify='center' spacing={3} className={classes.root}>
-                <Grid item>
-                    <Image
-                        src='/static/democracy_fund_logo.svg' 
-                        width={280}
-                        height={200}
-                        objectFit='contain'
-                        alt='democracy fund logo'
-                    />
-                </Grid>
-                <Grid item>
-                    <Image
-                        src='/static/prytaneum_logo.svg' 
-                        width={150}
-                        height={200}
-                        objectFit='contain'
-                        alt='prytaneum logo'
-                    />
-                </Grid>
-                <Grid item>
-                    <Image
-                        src='/static/ucr_tecd_logo.svg' 
-                        width={450}
-                        height={200}
-                        objectFit='contain'
-                        alt='ucr tecd logo'
-                    />
-                </Grid>
+            <Grid item>
+                <Image
+                    src='/static/ucr_tecd_logo.svg' 
+                    width={450}
+                    height={200}
+                    objectFit='contain'
+                    alt='ucr tecd logo'
+                />
             </Grid>
-        </>
-    );
+        </Grid>
+    </>;
 }

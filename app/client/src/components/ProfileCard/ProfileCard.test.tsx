@@ -6,7 +6,7 @@
 // import { ReferenceNames } from 'prytaneum-typings';
 // import ProfileCard from './ProfileCard';
 
-// jest.mock('@material-ui/core/useMediaQuery', () => () => true);
+// jest.mock('@mui/material/useMediaQuery', () => () => true);
 
 // describe('ProfileCard', () => {
 //     let container: HTMLDivElement | null = null;

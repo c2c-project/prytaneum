@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Grid, Paper, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Paper, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import type { OrgProfileQuery } from '@local/__generated__/OrgProfileQuery.graphql';

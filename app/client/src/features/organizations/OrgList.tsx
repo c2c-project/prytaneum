@@ -8,9 +8,9 @@ import {
     ListItem,
     ListItemText,
     ListItemSecondaryAction,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Add, ChevronRight } from '@material-ui/icons';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Add, ChevronRight } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
 
@@ -95,7 +95,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
 
     if (listOfOrgs.length === 0)
         return (
-            <Grid container justify='center'>
+            <Grid container justifyContent='center'>
                 <Typography variant='body2' align='center'>
                     No organizations to display
                     <br />

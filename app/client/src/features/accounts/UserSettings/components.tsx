@@ -11,19 +11,19 @@ import {
     Link as MUILink,
     IconButton,
     InputAdornment,
-} from '@material-ui/core';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+    TextField
+} from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { User, UserSettings } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
 import { useUser } from '@local/features/accounts';
 import { useSnack } from '@local/features/core';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useMutation } from 'react-relay';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -312,6 +312,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                                         onClick={() => setIsPassVisible(!isPassVisible)}
                                         onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
+                                        size='large'
                                     >
                                         {isPassVisible ? (
                                             <VisibilityOff color={errors.newPassword ? 'error' : undefined} />
@@ -342,6 +343,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                                         onClick={() => setIsPassVisible(!isPassVisible)}
                                         onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
+                                        size='large'
                                     >
                                         {isPassVisible ? (
                                             <VisibilityOff color={errors.confirmNewPassword ? 'error' : undefined} />
@@ -359,7 +361,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
                         Update password
                     </Button>
                     <Link href='/forgot-password' passHref>
-                        <MUILink className={classes.link} color='primary'>
+                        <MUILink className={classes.link} color='primary' underline='hover'>
                             Forgot Password?
                         </MUILink>
                     </Link>

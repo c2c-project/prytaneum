@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { Button } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { graphql, useMutation } from 'react-relay';
 
 import type { EnqueueQuestionButtonMutation } from '@local/__generated__/EnqueueQuestionButtonMutation.graphql';

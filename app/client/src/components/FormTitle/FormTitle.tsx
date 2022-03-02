@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, TypographyProps } from '@material-ui/core';
+import { Grid, Typography, TypographyProps } from '@mui/material';
 
 interface Props {
     title: string;

@@ -1,7 +1,7 @@
 import { graphql, useFragment } from 'react-relay';
-import { Typography, CardContent } from '@material-ui/core';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography, CardContent } from '@mui/material';
+import ThumbUp from '@mui/icons-material/ThumbUp';
+import makeStyles from '@mui/styles/makeStyles';
 
 import type { QuestionStatsFragment$key } from '@local/__generated__/QuestionStatsFragment.graphql';
 

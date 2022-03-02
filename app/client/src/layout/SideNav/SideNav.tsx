@@ -1,14 +1,19 @@
 import * as React from 'react';
 import { useQueryLoader } from 'react-relay';
-import { Hidden, Drawer } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Hidden, Drawer, Toolbar } from '@mui/material';
 
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import { ConditionalRender } from '@local/components';
-import { UserSideNav, USER_SIDE_NAV_QUERY, UserSideNavProps, UserSideNavLoader, useUser } from '@local/features/accounts';
+import {
+    UserSideNav,
+    USER_SIDE_NAV_QUERY,
+    UserSideNavProps,
+    UserSideNavLoader,
+    useUser,
+} from '@local/features/accounts';
 
 const Loader = () => (
-    <Hidden mdDown>
+    <Hidden lgDown>
         <UserSideNavLoader />
     </Hidden>
 );
@@ -25,14 +30,8 @@ export function PreloadUserSideNav(props: PreloadedUserSideNavProps) {
     return <UserSideNav queryRef={queryRef} {...props} />;
 }
 
-const useStyles = makeStyles((theme) => ({
-    drawer: {
-        padding: theme.spacing(2, 0),
-    },
-}));
 type SideNavProps = { isHidden: boolean; isOpen: boolean; close: () => void };
 export function SideNav({ isHidden: _isHidden, isOpen, close }: SideNavProps) {
-    const classes = useStyles();
     const [user] = useUser();
     const isHidden = React.useMemo(() => _isHidden || !user, [_isHidden, user]);
 
@@ -42,16 +41,24 @@ export function SideNav({ isHidden: _isHidden, isOpen, close }: SideNavProps) {
                 <React.Suspense fallback={isHidden ? <></> : <Loader />}>
                     <Drawer
                         variant={isHidden ? 'temporary' : 'permanent'}
-                        classes={{ paper: classes.drawer }}
                         open={isOpen}
                         onClose={close}
                         ModalProps={{
                             keepMounted: true, // slide in animation does not work otherwise
                         }}
+                        sx={{
+                            width: 250,
+                            flexShrink: 0,
+                            '& .MuiDrawer-paper': {
+                                width: 250,
+                                boxSizing: 'border-box',
+                                padding: (theme) => theme.spacing(2, 0),
+                            },
+                        }}
                     >
+                        {!isHidden && <Toolbar />}
                         <PreloadUserSideNav onClick={close} />
                     </Drawer>
-                    {!isHidden && <div style={{ paddingRight: 240 }} />}
                 </React.Suspense>
             </ConditionalRender>
             <ConditionalRender server>
