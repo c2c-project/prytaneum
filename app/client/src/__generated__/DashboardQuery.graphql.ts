@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7b630388d39350c447a80a36cc2e08d3>>
+ * @generated SignedSource<<35f43b89e930eb645c7d54dea53b1ce8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,9 @@ export type DashboardQuery$data = {
           readonly description: string | null;
           readonly startDateTime: Date | null;
           readonly endDateTime: Date | null;
+          readonly organization: {
+            readonly name: string;
+          } | null;
         };
       }> | null;
     } | null;
@@ -43,63 +46,36 @@ var v0 = {
 v1 = {
   "alias": null,
   "args": null,
-  "concreteType": "EventConnection",
-  "kind": "LinkedField",
-  "name": "events",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "EventEdge",
-      "kind": "LinkedField",
-      "name": "edges",
-      "plural": true,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "Event",
-          "kind": "LinkedField",
-          "name": "node",
-          "plural": false,
-          "selections": [
-            (v0/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "title",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "description",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "startDateTime",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "endDateTime",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    }
-  ],
+  "kind": "ScalarField",
+  "name": "title",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "startDateTime",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "endDateTime",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
   "storageKey": null
 };
 return {
@@ -117,7 +93,56 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Event",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v1/*: any*/),
+                      (v2/*: any*/),
+                      (v3/*: any*/),
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Organization",
+                        "kind": "LinkedField",
+                        "name": "organization",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
@@ -139,7 +164,57 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "EventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "EventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Event",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v1/*: any*/),
+                      (v2/*: any*/),
+                      (v3/*: any*/),
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Organization",
+                        "kind": "LinkedField",
+                        "name": "organization",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/),
+                          (v0/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
           (v0/*: any*/)
         ],
         "storageKey": null
@@ -147,16 +222,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "833ab224298cc3f64a1df1565af79953",
+    "cacheID": "4affa1943be3b0b1a5096a59ac67851d",
     "id": null,
     "metadata": {},
     "name": "DashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          title\n          description\n          startDateTime\n          endDateTime\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          title\n          description\n          startDateTime\n          endDateTime\n          organization {\n            name\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c5c7e9390881a379d7afa2d592e8772d";
+(node as any).hash = "519ff8f3ddf06e6f64aa447eb4b9d4ce";
 
 export default node;
