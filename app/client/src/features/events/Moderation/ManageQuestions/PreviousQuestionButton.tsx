@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from '@material-ui/core';
+import { Button, ButtonProps } from '@mui/material';
 import { graphql, useMutation } from 'react-relay';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 
 import type { PreviousQuestionButtonMutation } from '@local/__generated__/PreviousQuestionButtonMutation.graphql';
 import { useEvent } from '../../useEvent';

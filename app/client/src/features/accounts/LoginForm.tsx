@@ -9,18 +9,18 @@ import {
     // Divider,
     // Avatar,
     Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+    TextField,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Link from 'next/link';
 import { useMutation, graphql } from 'react-relay';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/features/core';
@@ -107,7 +107,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     };
 
     return (
-        <Grid container justify='center'>
+        <Grid container justifyContent='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -147,6 +147,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                                             onClick={() => setIsPassVisible(!isPassVisible)}
                                             onMouseDown={(e) => e.preventDefault()}
                                             edge='end'
+                                            size='large'
                                         >
                                             {isPassVisible ? (
                                                 <VisibilityOff color={errors.password ? 'error' : undefined} />
@@ -158,9 +159,9 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                                 ),
                             }}
                         />
-                        <Grid container justify='flex-end'>
+                        <Grid container justifyContent='flex-end'>
                             <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary'>
+                                <MUILink className={classes.link} color='primary' underline='hover'>
                                     Forgot Password?
                                 </MUILink>
                             </Link>

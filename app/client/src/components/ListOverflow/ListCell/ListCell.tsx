@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 
 export interface Props {
     primary: string;

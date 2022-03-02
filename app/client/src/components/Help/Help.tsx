@@ -1,16 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import {
-    Paper,
-    IconButton,
-    Popper,
-    Grow,
-    ClickAwayListener,
-    Typography,
-    PopperPlacementType,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import HelpIcon from '@material-ui/icons/Help';
+import { Paper, IconButton, Popper, Grow, ClickAwayListener, Typography, PopperPlacementType } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import HelpIcon from '@mui/icons-material/Help';
 
 interface RequiredProps {
     children: JSX.Element | string;
@@ -34,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             maxWidth: '35vw',
         },
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down('sm')]: {
             maxWidth: '90vw',
         },
     },
@@ -48,26 +40,18 @@ export default function Help({ children, edge, placement }: Props) {
         <>
             <IconButton
                 edge={edge}
-                onClick={({ currentTarget }) =>
-                    anchor ? setAnchor(null) : setAnchor(currentTarget)
-                }
+                onClick={({ currentTarget }) => (anchor ? setAnchor(null) : setAnchor(currentTarget))}
+                size='large'
             >
                 <HelpIcon />
             </IconButton>
-            <Popper
-                placement={placement}
-                open={Boolean(anchor)}
-                anchorEl={anchor}
-                transition
-            >
+            <Popper placement={placement} open={Boolean(anchor)} anchorEl={anchor} transition>
                 {({ TransitionProps }) => (
                     <ClickAwayListener onClickAway={() => setAnchor(null)}>
                         <Grow {...TransitionProps} timeout={350}>
                             <Paper className={classes.paper}>
                                 {typeof children === 'string' ? (
-                                    <Typography variant='body2'>
-                                        {children}
-                                    </Typography>
+                                    <Typography variant='body2'>{children}</Typography>
                                 ) : (
                                     children
                                 )}

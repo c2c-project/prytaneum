@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 import * as React from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 
 const useStyles = makeStyles({
@@ -24,7 +24,7 @@ export default function SettingsItem({ helpText, name, className, children }: Pr
             item
             xs={12}
             container
-            justify='flex-start'
+            justifyContent='flex-start'
             alignItems='center'
             className={helpText ? className : clsx([className, classes.grow])}
         >

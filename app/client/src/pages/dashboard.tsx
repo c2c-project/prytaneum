@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { Card, CardContent, Grid, Typography, Divider, Button, Link, IconButton } from '@material-ui/core';
-import { ChevronRight, Add } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Card, CardContent, Grid, Typography, Divider, Button, Link, IconButton } from '@mui/material';
+import { ChevronRight, Add } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 
 // import TitleCard from '@local/components/TitleCard';
 // import FadeThrough from '@local/animations/FadeThrough';
@@ -30,12 +30,14 @@ const useStyles = makeStyles((theme) => ({
 const dummyCurrentEvents = [
     {
         title: 'Event 1',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         link: '/dashboard',
     },
     {
         title: 'Event 2',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         link: '/dashboard',
     },
 ];
@@ -56,12 +58,13 @@ const dummyFutureEvents = [
         date: 'Friday, July 31st',
         link: '/dashboard',
     },
-]
+];
 
 export default function Dashboard() {
     const classes = useStyles();
     return (
         // <FadeThrough animKey='dashboard-page'>
+        // </FadeThrough>
         <Grid container>
             <Grid item xs={12} className={classes.item}>
                 <Card className={classes.card}>
@@ -69,20 +72,18 @@ export default function Dashboard() {
                         <Typography variant='h6' className={classes.title}>
                             Current Events
                         </Typography>
-                        <Grid container justify='space-between' alignItems='center' spacing={1}>
-                            {dummyCurrentEvents.map(({ title, description, link }, idx) =>
+                        <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
+                            {dummyCurrentEvents.map(({ title, description, link }, idx) => (
                                 <>
                                     <Grid item xs={12} sm={8} className={classes.text}>
-                                        <Typography variant='subtitle2'>
-                                            {title}
-                                        </Typography>
+                                        <Typography variant='subtitle2'>{title}</Typography>
                                         <Typography variant='body2' className={classes.secondaryText}>
                                             {description}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Link href={link}>
-                                            <Button 
+                                        <Link href={link} underline='hover'>
+                                            <Button
                                                 aria-label='view live feed of current event'
                                                 variant='contained'
                                                 color='primary'
@@ -91,13 +92,13 @@ export default function Dashboard() {
                                             </Button>
                                         </Link>
                                     </Grid>
-                                    {idx !== dummyCurrentEvents.length - 1 &&
+                                    {idx !== dummyCurrentEvents.length - 1 && (
                                         <Grid item xs={12} style={{ marginTop: 2 }}>
                                             <Divider />
                                         </Grid>
-                                    }
+                                    )}
                                 </>
-                            )}
+                            ))}
                         </Grid>
                     </CardContent>
                 </Card>
@@ -108,44 +109,38 @@ export default function Dashboard() {
                         <Typography variant='h6' className={classes.title}>
                             Upcoming Events
                         </Typography>
-                        <Grid container justify='space-between' alignItems='center' spacing={1}>
-                            {dummyFutureEvents.map(({ title, date, link }, idx) =>
+                        <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
+                            {dummyFutureEvents.map(({ title, date, link }, idx) => (
                                 <>
                                     <Grid item className={classes.text}>
-                                        <Typography variant='subtitle2'>
-                                            {title}
-                                        </Typography>
+                                        <Typography variant='subtitle2'>{title}</Typography>
                                         <Typography variant='body2' className={classes.secondaryText}>
                                             {date}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Link href={link}>
-                                            <IconButton
-                                                aria-label='view future event'
-                                            >
-                                                <ChevronRight/>
+                                        <Link href={link} underline='hover'>
+                                            <IconButton aria-label='view future event' size='large'>
+                                                <ChevronRight />
                                             </IconButton>
                                         </Link>
                                     </Grid>
-                                    {idx !== dummyFutureEvents.length - 1 &&
+                                    {idx !== dummyFutureEvents.length - 1 && (
                                         <Grid item xs={12}>
                                             <Divider />
                                         </Grid>
-                                    }
+                                    )}
                                 </>
-                            )}
+                            ))}
                         </Grid>
                     </CardContent>
                 </Card>
             </Grid>
             <Grid item>
                 <Card>
-                    <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12, }}>
-                        <IconButton
-                            aria-label='view future event'
-                        >
-                            <Add style={{ fontSize: 32, color: 'black' }}/>
+                    <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
+                        <IconButton aria-label='view future event' size='large'>
+                            <Add style={{ fontSize: 32, color: 'black' }} />
                         </IconButton>
                     </CardContent>
                 </Card>
@@ -159,6 +154,5 @@ export default function Dashboard() {
             </Grid> */}
             {/* </RequireRoles> */}
         </Grid>
-        // </FadeThrough>
     );
 }

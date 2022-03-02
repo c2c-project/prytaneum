@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Tab as MUITab, TabProps, Theme } from '@material-ui/core';
-import { makeStyles, lighten, darken } from '@material-ui/core/styles';
+import { Tab as MUITab, TabProps, Theme } from '@mui/material';
+import { lighten, darken } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props {
     variant?: 'secondary' | 'primary';

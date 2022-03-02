@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { Typography, Grid, Button, DialogContent } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Grid, Button, DialogContent } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFragment, graphql } from 'react-relay';
-import { Edit } from '@material-ui/icons';
+import { Edit } from '@mui/icons-material';
 import clsx from 'clsx';
 
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
@@ -82,7 +82,7 @@ export function EventDetails({ fragmentRef, className }: EventDetailsProps) {
                     <Typography className={classes.indent}>{value}</Typography>
                 </Grid>
             ))}
-            <Grid item xs={12} container justify='flex-end'>
+            <Grid item xs={12} container justifyContent='flex-end'>
                 <Grid item>
                     <Button variant='outlined' onClick={open} startIcon={<Edit />}>
                         Modify Details

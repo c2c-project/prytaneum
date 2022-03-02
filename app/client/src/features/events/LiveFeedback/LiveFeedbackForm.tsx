@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
 
 export type TLiveFeedbackFormState = { message: string };
@@ -43,7 +42,7 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
                     onChange={handleChange('message')}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
                     <Button color='primary' onClick={onCancel}>
                         Cancel

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Skeleton } from '@material-ui/lab';
+import { Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Skeleton } from '@mui/material';
 import clsx from 'clsx';
 import { graphql, useFragment } from 'react-relay';
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
 
         padding: theme.spacing(0, 1, 1, 1),
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             padding: theme.spacing(1),
         },
         [theme.breakpoints.up('md')]: {
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function EventSidebarLoader() {
-    return <Skeleton variant='rect' height={500} width={200} />;
+    return <Skeleton variant='rectangular' height={500} width={200} />;
 }
 export interface EventSidebarProps {
     fragmentRef: EventSidebarFragment$key;

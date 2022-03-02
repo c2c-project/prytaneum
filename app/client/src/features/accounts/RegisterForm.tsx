@@ -1,17 +1,15 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, InputAdornment, Grid, Typography } from '@material-ui/core';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-// import AccountCirlceOutline from '@material-ui/icons/AccountCircleOutlined';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, IconButton, InputAdornment, Grid, Typography, TextField } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useMutation } from 'react-relay';
 
 import type { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/features/core';
@@ -96,7 +94,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     }
 
     return (
-        <Grid container justify='center'>
+        <Grid container justifyContent='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <AccountCirlceOutline />
@@ -154,6 +152,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                                         onClick={() => setIsPassVisible(!isPassVisible)}
                                         onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
+                                        size='large'
                                     >
                                         {isPassVisible ? (
                                             <VisibilityOff color={errors.password ? 'error' : undefined} />
@@ -182,6 +181,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                                         onClick={() => setIsPassVisible(!isPassVisible)}
                                         onMouseDown={(e) => e.preventDefault()}
                                         edge='end'
+                                        size='large'
                                     >
                                         {isPassVisible ? (
                                             <VisibilityOff color={errors.confirmPassword ? 'error' : undefined} />

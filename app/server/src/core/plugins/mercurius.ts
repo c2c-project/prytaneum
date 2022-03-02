@@ -38,7 +38,7 @@ async function makeRequestContext(req: FastifyRequest, reply: FastifyReply) {
         userId = id;
     }
     return {
-        prisma: getPrismaClient(),
+        prisma: getPrismaClient(reply.log),
         viewer: {
             id: userId,
         },
@@ -52,7 +52,7 @@ async function makeSubscriptionContext(_: any, req: FastifyRequest) {
         userId = id;
     }
     return {
-        prisma: getPrismaClient(),
+        prisma: getPrismaClient(req.log),
         viewer: {
             id: userId,
         },

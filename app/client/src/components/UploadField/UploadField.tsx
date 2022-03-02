@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import makeStyles from '@mui/styles/makeStyles';
+import Grid from '@mui/material/Grid';
 
 const useStyles = makeStyles((theme) => ({
     button: {

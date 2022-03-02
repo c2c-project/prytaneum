@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
+import { StyledEngineProvider } from '@mui/material/styles';
 import ReactTestUtils from 'react-dom/test-utils';
-import ThemeProvider from '@local/contexts/Theme';
+import { ThemeProvider } from '@local/features/core';
 
-import Loader from './Loader';
+import { Loader } from './Loader';
 
 describe('Loader', () => {
     let container: HTMLDivElement | null = null;
@@ -28,11 +29,13 @@ describe('Loader', () => {
     it('should render', () => {
         ReactTestUtils.act(() => {
             render(
-                <ThemeProvider>
-                    <div id='test'>
-                        <Loader />
-                    </div>
-                </ThemeProvider>,
+                <StyledEngineProvider injectFirst>
+                    <ThemeProvider>
+                        <div id='test'>
+                            <Loader />
+                        </div>
+                    </ThemeProvider>
+                </StyledEngineProvider>,
                 container
             );
         });

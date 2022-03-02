@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Autocomplete, { AutocompleteChangeReason, AutocompleteChangeDetails } from '@material-ui/lab/Autocomplete';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { TextField, Checkbox } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import Autocomplete, { AutocompleteChangeReason, AutocompleteChangeDetails } from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { TextField, Checkbox } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     '@keyframes grow': {
@@ -52,7 +52,8 @@ const ComboSelect = ({ options, onChange, selectedFilter, label }: Props) => {
             disableCloseOnSelect
             defaultValue={selectedFilter}
             getOptionLabel={(option: string) => option}
-            renderOption={(option: string) => (
+            // FIXME: potentially broken here from mui v5 migration
+            renderOption={(_, option: string) => (
                 <>
                     <Checkbox
                         className={classes.checkBoxIcon}

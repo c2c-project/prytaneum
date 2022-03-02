@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Grid from '@material-ui/core/Grid';
-import { Avatar } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-// import DoneIcon from '@material-ui/icons/Done';
-
-import { TextField } from '@local/components/TextField';
+import Grid from '@mui/material/Grid';
+import { Avatar, TextField } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+// import DoneIcon from '@mui/icons-material/Done';
 
 interface Props {
     // eslint-disable-next-line react/require-default-props

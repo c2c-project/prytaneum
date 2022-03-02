@@ -10,8 +10,9 @@ import {
     ListSubheader,
     Avatar,
     Divider,
-} from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 
 export interface Datum {
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         // backgroundColor: 'inherit',
         marker: 'none',
         backgroundColor: theme.palette.background.paper,
-        // margin: `${theme.spacing(2)}px 0px ${theme.spacing(2)}px 0px`,
+        // margin: `${theme.spacing(2)} 0px ${theme.spacing(2)} 0px`,
         // boxShadow: theme.shadows[2],
     },
     ul: {
