@@ -34,6 +34,7 @@ interface DashboardEventProps {
     title: string,
     description: string,
     startDateTime: Date,
+    organization: string,
 }
 
 export function DashboardEvent(props: DashboardEventProps) {
@@ -43,7 +44,12 @@ export function DashboardEvent(props: DashboardEventProps) {
         <>
             <ListItemText
                 primary={props.title}
-                secondary={props.startDateTime && formatDate(props.startDateTime)}
+                secondary={
+                    <div>
+                        <div>{props.startDateTime && formatDate(props.startDateTime)}</div>
+                        <div>{props.organization}</div>
+                    </div>
+                }
             />
         </>
     );
