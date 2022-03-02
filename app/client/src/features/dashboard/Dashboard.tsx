@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, CardContent, Divider, Grid, Link, List, ListItem, Typography, IconButton } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Link, List, ListItem, Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add } from '@material-ui/icons';
 
@@ -41,6 +41,9 @@ export const DASHBOARD_QUERY = graphql`
                         description
                         startDateTime
                         endDateTime
+                        organization {
+                            name
+                        }
                     }
                 }
             }
@@ -72,7 +75,7 @@ export function Dashboard({ queryRef }: Props) {
 
     // Store current events
     // Would prefer to use `isActive` member of Event node, but this doesn't seem to have been implemented yet
-    const current_events = listOfEvents.map(({ node: event }) => {
+    const current_events = listOfEvents.filter(({ node: event }) => {
         if (event.startDateTime && event.endDateTime) {
             const eventStartDate = new Date(event.startDateTime.toString());
             const eventEndDate = new Date(event.endDateTime.toString());
@@ -83,17 +86,17 @@ export function Dashboard({ queryRef }: Props) {
                 currentDate.day === eventStartDate.getDate() &&
                 currentDate.time > eventStartTime &&
                 currentDate.time < eventEndTime) {
-                return event;
+                return true;
             }
         }
     });
 
     // Store upcoming events
-    const upcoming_events = listOfEvents.map(({ node: event }) => {
+    const upcoming_events = listOfEvents.filter(({ node: event }) => {
         if (event.startDateTime) {
             const eventStartDate = new Date(event.startDateTime.toString());
             if (d < eventStartDate) {
-                return event;
+                return true;
             }
         }
     });
@@ -111,8 +114,8 @@ export function Dashboard({ queryRef }: Props) {
                             <Grid container item direction='column'>
                                 <Grid item xs={12}>
                                     <List>
-                                        {current_events.map((event, idx) => {
-                                            if (event?.id && event?.description && event?.title && event?.startDateTime) {
+                                        {current_events.map(({ node: event }, idx) => {
+                                            if (event?.id && event?.description && event?.title && event?.startDateTime && event?.organization?.name) {
                                                 return (
                                                     <ListItem
                                                         button
@@ -121,11 +124,12 @@ export function Dashboard({ queryRef }: Props) {
                                                         onClick={handleNav(`/events/${event?.id}/settings`)}
                                                     >
                                                         <DashboardEvent
-                                                            key={event?.id}
-                                                            id={event?.id}
-                                                            title={event?.title}
-                                                            description={event?.description}
-                                                            startDateTime={event?.startDateTime}
+                                                            key={event.id}
+                                                            id={event.id}
+                                                            title={event.title}
+                                                            description={event.description}
+                                                            startDateTime={event.startDateTime}
+                                                            organization={event.organization.name}
                                                         />
                                                         <Grid item>
                                                             <Link href={event?.id}>
@@ -167,8 +171,8 @@ export function Dashboard({ queryRef }: Props) {
                             <Grid container item direction='column'>
                                 <Grid item xs={12}>
                                     <List>
-                                        {upcoming_events.map((event, idx) => {
-                                            if (event?.id && event?.description && event?.title && event?.startDateTime)
+                                        {upcoming_events.map(({ node: event }, idx) => {
+                                            if (event?.id && event?.description && event?.title && event?.startDateTime && event?.organization?.name)
                                                 return (
                                                     <ListItem
                                                         button
@@ -177,11 +181,12 @@ export function Dashboard({ queryRef }: Props) {
                                                         onClick={handleNav(`/events/${event?.id}/settings`)}
                                                     >
                                                         <DashboardEvent
-                                                            key={event?.id}
-                                                            id={event?.id}
-                                                            title={event?.title}
-                                                            description={event?.description}
-                                                            startDateTime={event?.startDateTime}
+                                                            key={event.id}
+                                                            id={event.id}
+                                                            title={event.title}
+                                                            description={event.description}
+                                                            startDateTime={event.startDateTime}
+                                                            organization={event.organization.name}
                                                         />
                                                     </ListItem>
                                                 )
