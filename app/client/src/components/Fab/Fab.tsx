@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import MUIFab, { FabProps } from '@material-ui/core/Fab';
-import Zoom, { ZoomProps as _ZoomProps } from '@material-ui/core/Zoom';
-import { makeStyles } from '@material-ui/core/styles';
+import MUIFab, { FabProps } from '@mui/material/Fab';
+import Zoom, { ZoomProps as _ZoomProps } from '@mui/material/Zoom';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     fab: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
  *  @param props
  *  @param @todo
  */
-export function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: _ZoomProps }) {
+export function Fab({ children, ZoomProps, ...rest }: FabProps & { ZoomProps?: Omit<_ZoomProps, 'children'> }) {
     const classes = useStyles();
     return (
         <Zoom in timeout={300} {...ZoomProps}>

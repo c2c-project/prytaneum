@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { ListItem, ListItemIcon, ListSubheader, ListSubheaderProps, Divider } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { ListItemButton, ListItemIcon, ListSubheader, ListSubheaderProps, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 
 export const StyledListItem = withStyles((theme) => ({
     selected: {
@@ -13,7 +14,7 @@ export const StyledListItem = withStyles((theme) => ({
     root: {
         borderRadius: theme.custom.borderRadius,
     },
-}))(ListItem);
+}))(ListItemButton);
 
 export const StyledListItemIcon = withStyles({
     root: {

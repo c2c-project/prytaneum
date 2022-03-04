@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, useMediaQuery } from '@material-ui/core';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Grid, useMediaQuery } from '@mui/material';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
             flexDirection: 'row',
             flexWrap: 'nowrap',
         },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
             overflowY: 'scroll',
             flexWrap: 'nowrap',
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     video: {
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             position: 'sticky',
             top: 0,
             zIndex: theme.zIndex.appBar,

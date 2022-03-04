@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Avatar, Grid, TypographyProps } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Avatar, Grid, TypographyProps } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { formatDate } from '@local/utils/format';
 

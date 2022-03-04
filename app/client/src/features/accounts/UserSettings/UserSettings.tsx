@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     Grid,
     Divider,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 

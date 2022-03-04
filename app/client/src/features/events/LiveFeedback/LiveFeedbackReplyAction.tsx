@@ -1,9 +1,9 @@
 import React from 'react';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { graphql, useFragment, useMutation } from 'react-relay';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Card, CardContent, DialogContent, Typography } from '@material-ui/core';
-import ReplyIcon from '@material-ui/icons/Reply';
+import makeStyles from '@mui/styles/makeStyles';
+import { Button, Card, CardContent, DialogContent, Typography } from '@mui/material';
+import ReplyIcon from '@mui/icons-material/Reply';
 import { LiveFeedbackReplyFragment$key } from '@local/__generated__/LiveFeedbackReplyFragment.graphql';
 import { LiveFeedbackReplyActionMutation } from '@local/__generated__/LiveFeedbackReplyActionMutation.graphql';
 

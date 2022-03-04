@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Meta } from '@storybook/react';
-import { Tabs } from '@material-ui/core';
+import { Tabs } from '@mui/material';
 
 import Main from '@local/layout/Main';
 import Component from './Tab';
@@ -17,8 +17,8 @@ export function ChipTab() {
                     value={state}
                     onChange={(_e, value) => setState(value)}
                     variant='scrollable'
-                    scrollButtons='on'
-                >
+                    scrollButtons
+                    allowScrollButtonsMobile>
                     <Component label='test1' />
                     <Component label='test2' />
                     <Component label='test3' />

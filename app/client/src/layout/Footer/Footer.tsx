@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Container, Grid, Box, Link } from '@material-ui/core';
+import { Container, Grid, Box, Link } from '@mui/material';
 
 export function Footer() {
     return (
@@ -11,37 +11,55 @@ export function Footer() {
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Learn More</Box>
                             <Box>
-                                <Link href='/'>Home</Link>
+                                <Link href='/' underline='hover'>
+                                    Home
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/aboutus'>About Us</Link>
+                                <Link href='/aboutus' underline='hover'>
+                                    About Us
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Mission</Link>
+                                <Link href='/' underline='hover'>
+                                    Mission
+                                </Link>
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Account</Box>
                             <Box>
-                                <Link href='/'>Login</Link>
+                                <Link href='/' underline='hover'>
+                                    Login
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Sign Up</Link>
+                                <Link href='/' underline='hover'>
+                                    Sign Up
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Privacy</Link>
+                                <Link href='/' underline='hover'>
+                                    Privacy
+                                </Link>
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box borderBottom={1}>Support</Box>
                             <Box>
-                                <Link href='/'>FAQ</Link>
+                                <Link href='/' underline='hover'>
+                                    FAQ
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Contact</Link>
+                                <Link href='/' underline='hover'>
+                                    Contact
+                                </Link>
                             </Box>
                             <Box>
-                                <Link href='/'>Privacy</Link>
+                                <Link href='/' underline='hover'>
+                                    Privacy
+                                </Link>
                             </Box>
                         </Grid>
                     </Grid>

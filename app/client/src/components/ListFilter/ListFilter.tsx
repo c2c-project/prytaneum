@@ -9,15 +9,16 @@ import {
     Badge,
     Checkbox,
     Tooltip,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import FilterIcon from '@material-ui/icons/FilterList';
-import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from '@material-ui/icons/Close';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import { Skeleton, SkeletonProps } from '@material-ui/lab';
+    TextField,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import FilterIcon from '@mui/icons-material/FilterList';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Skeleton } from '@mui/material';
+import { SkeletonProps } from '@mui/lab';
 
-import { TextField } from '@local/components/TextField';
 import { FilterFunc } from '@local/utils/filters';
 
 export interface Props<T> {
@@ -57,7 +58,13 @@ type Op = (s: Filters) => void;
 
 export function ListFilterSkeleton(props: SkeletonProps) {
     return (
-        <Skeleton variant='rect' style={{ margin: '8px 0', marginBottom: 12 }} width='100%' height={56} {...props} />
+        <Skeleton
+            variant='rectangular'
+            style={{ margin: '8px 0', marginBottom: 12 }}
+            width='100%'
+            height={56}
+            {...props}
+        />
     );
 }
 
@@ -142,13 +149,13 @@ export default function ListFilter<T>({
                             endAdornment:
                                 search === '' ? (
                                     <InputAdornment position='end'>
-                                        <IconButton edge='end' onClick={clearSearch}>
+                                        <IconButton edge='end' onClick={clearSearch} size='large'>
                                             <RefreshIcon />
                                         </IconButton>
                                     </InputAdornment>
                                 ) : (
                                     <InputAdornment position='end'>
-                                        <IconButton edge='end' onClick={clearSearch}>
+                                        <IconButton edge='end' onClick={clearSearch} size='large'>
                                             <CloseIcon />
                                         </IconButton>
                                     </InputAdornment>
@@ -159,7 +166,7 @@ export default function ListFilter<T>({
                 <Grid
                     item
                     container
-                    justify='space-evenly'
+                    justifyContent='space-evenly'
                     xs='auto'
                     alignItems='center'
                     className={classes.iconContainer}
@@ -167,7 +174,11 @@ export default function ListFilter<T>({
                     {filterMap && (
                         <Grid item xs='auto'>
                             <Tooltip title='Filter'>
-                                <IconButton color='inherit' onClick={({ currentTarget }) => setAnchorEl(currentTarget)}>
+                                <IconButton
+                                    color='inherit'
+                                    onClick={({ currentTarget }) => setAnchorEl(currentTarget)}
+                                    size='large'
+                                >
                                     <Badge badgeContent={filters.size} color='secondary'>
                                         <FilterIcon />
                                     </Badge>
@@ -185,7 +196,7 @@ export default function ListFilter<T>({
             {filterMap && (
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
                     {Object.keys(filterMap).map((option) => (
-                        <MenuItem key={option} button onClick={() => toggleFilter(option)}>
+                        <MenuItem key={option} onClick={() => toggleFilter(option)}>
                             <Checkbox checked={filters.has(option)} />
                             <ListItemText primary={option} />
                         </MenuItem>

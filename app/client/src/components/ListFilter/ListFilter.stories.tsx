@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Meta, Story } from '@storybook/react';
 import faker from 'faker/locale/en';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText } from '@mui/material';
 
 import { search as utilSearch, applyFilters, FilterFunc } from '@local/utils/filters';
 import ListFilter, { Props } from './ListFilter';

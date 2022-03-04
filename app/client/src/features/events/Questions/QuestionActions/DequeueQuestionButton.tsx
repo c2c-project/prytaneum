@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
-import CancelIcon from '@material-ui/icons/Cancel';
+import { Button } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { graphql, useMutation } from 'react-relay';
 
 import type { DequeueQuestionButtonMutation } from '@local/__generated__/DequeueQuestionButtonMutation.graphql';

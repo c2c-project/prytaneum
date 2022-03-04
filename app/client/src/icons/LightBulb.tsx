@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 export default React.forwardRef<SVGSVGElement, SvgIconProps>((props, ref) => (
     <SvgIcon {...props} ref={ref}>

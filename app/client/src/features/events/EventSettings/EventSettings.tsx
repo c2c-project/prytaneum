@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider } from '@mui/material';
 
 import { SettingsMenu } from '@local/components/SettingsMenu';
 import type { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery.graphql';

@@ -1,7 +1,7 @@
 import { useMemo, useReducer, useEffect } from 'react';
-import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { ChevronLeft, ChevronRight } from '@material-ui/icons';
+import { Card, Paper, Button, IconButton, Grid, CardContent, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionCarouselFragment$key } from '@local/__generated__/QuestionCarouselFragment.graphql';
@@ -121,11 +121,12 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
 
     return (
         <Paper className={classes.root}>
-            <Grid container justify='space-between'>
+            <Grid container justifyContent='space-between'>
                 <IconButton
                     disabled={state.idx === 0 || state.idx === -1}
                     className={classes.btn}
                     onClick={() => dispatch({ type: 'previous' })}
+                    size='large'
                 >
                     <ChevronLeft />
                 </IconButton>
@@ -136,6 +137,7 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
                     disabled={state.currQuestionIdx === state.idx || state.idx === -1}
                     className={classes.btn}
                     onClick={() => dispatch({ type: 'next' })}
+                    size='large'
                 >
                     <ChevronRight />
                 </IconButton>
@@ -146,12 +148,14 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
                 className={classes.card}
                 container
                 alignItems='center'
-                justify='center'
+                justifyContent='center'
             >
                 {displayedQuestion ? (
                     <Grid item xs={12}>
                         <QuestionAuthor fragmentRef={displayedQuestion.node} />
-                        {displayedQuestion.node.refQuestion && <QuestionQuote fragmentRef={displayedQuestion.node.refQuestion} />}
+                        {displayedQuestion.node.refQuestion && (
+                            <QuestionQuote fragmentRef={displayedQuestion.node.refQuestion} />
+                        )}
                         <QuestionContent fragmentRef={displayedQuestion.node} />
                     </Grid>
                 ) : (

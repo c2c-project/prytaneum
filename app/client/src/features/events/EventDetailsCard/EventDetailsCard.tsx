@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Grid, Typography, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useFragment } from 'react-relay';
 
 import { EventDetailsCardFragment$key } from '@local/__generated__/EventDetailsCardFragment.graphql';

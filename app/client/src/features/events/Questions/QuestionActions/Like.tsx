@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
-import ThumbUp from '@material-ui/icons/ThumbUp';
+import { Button } from '@mui/material';
+import ThumbUp from '@mui/icons-material/ThumbUp';
 import { graphql, useMutation, useFragment } from 'react-relay';
 
 import type { LikeMutation } from '@local/__generated__/LikeMutation.graphql';

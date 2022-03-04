@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton } from '@material-ui/core';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton, SelectProps } from '@mui/material';
 import { graphql, useMutation } from 'react-relay';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import type { QuestionQueueMutation } from '@local/__generated__/QuestionQueueMutation.graphql';
 import type {
@@ -204,9 +205,11 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
     //
     const [queueIndex, setQueueIndex] = React.useState<number>(0);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleQueueChange = (e: React.ChangeEvent<any>) => {
+    const handleQueueChange: SelectProps<number>['onChange'] = (e) => {
         e.preventDefault();
-        setQueueIndex(e.target.value);
+        // We already know this is a number,
+        // the casting is required due to typescript types not merging correctly I believe
+        setQueueIndex(e.target.value as unknown as number);
     };
     const { questionQueue, connections } = useQuestionQueue({ fragmentRef });
     const recordConnection = React.useMemo(
@@ -313,7 +316,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                     </MenuItem>
                 </Select>
                 {/* TODO: add filter functionality */}
-                <IconButton className={classes.filterIcon}>
+                <IconButton className={classes.filterIcon} size='large'>
                     <FilterListIcon />
                 </IconButton>
                 <ListFilter
@@ -352,7 +355,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                                 <QuestionQuote fragmentRef={question.node.refQuestion} />
                                             )}
                                             <QuestionContent fragmentRef={question.node} />
-                                            <Grid container alignItems='center' justify='space-between'>
+                                            <Grid container alignItems='center' justifyContent='space-between'>
                                                 <QuestionStats fragmentRef={question.node} />
                                                 <QuestionActions
                                                     className={classes.questionActions}

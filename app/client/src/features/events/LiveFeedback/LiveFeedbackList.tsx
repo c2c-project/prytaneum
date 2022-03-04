@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
-import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@material-ui/core';
+import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@mui/material';
 import clsx from 'clsx';
 import { useUser } from '@local/features/accounts';
 import { useLiveFeedbackList } from './useLiveFeedbackList';

@@ -1,7 +1,6 @@
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 
 import { LoadingButton } from '@local/components/LoadingButton';
-import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
 import type { CreateOrganization } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
@@ -33,7 +32,7 @@ export function OrgForm({ onSubmit }: OrgFormProps) {
                     onChange={handleChange('name')}
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <LoadingButton loading={false}>
                     <Button variant='contained' color='primary' type='submit'>
                         Create

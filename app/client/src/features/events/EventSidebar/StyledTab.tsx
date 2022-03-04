@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
-import { Badge } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Badge } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 import ChipTab from '@local/components/ChipTab';
 
@@ -29,7 +29,7 @@ function StyledTab({ label, selected, onClick, badgeContent }: StyledTabProps) {
     return (
         <Badge
             badgeContent={badgeContent}
-            overlap='circle'
+            overlap='circular'
             color='secondary'
             classes={{ root: classes.root, badge: classes.badge }}
         >
@@ -38,7 +38,8 @@ function StyledTab({ label, selected, onClick, badgeContent }: StyledTabProps) {
                 aria-controls={`${label}-panel`}
                 role='tab'
                 label={label}
-                selected={selected}
+                // FIXME: had to remove this due to MUI v5 upgrade
+                // selected={selected}
                 value={label}
                 onClick={onClick}
             />

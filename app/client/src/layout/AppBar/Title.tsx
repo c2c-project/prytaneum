@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 // import { useRouter } from 'next/router';
 // import { useUser } from '@local/features/accounts';
 

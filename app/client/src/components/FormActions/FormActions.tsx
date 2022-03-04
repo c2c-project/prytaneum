@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, GridProps } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, GridProps } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 
 interface Props {
@@ -36,7 +36,7 @@ export function FormActions({ children, gridProps, disableGrow }: Props) {
             item
             xs={12}
             container
-            justify='space-evenly'
+            justifyContent='space-evenly'
             alignContent='flex-end'
             alignItems='center'
             // eslint-disable-next-line react/jsx-props-no-spreading

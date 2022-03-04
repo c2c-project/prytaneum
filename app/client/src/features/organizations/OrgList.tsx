@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Add, ChevronRight } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
 
@@ -110,7 +111,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
 
     if (listOfOrgs.length === 0)
         return (
-            <Grid container justify='center'>
+            <Grid container justifyContent='center'>
                 <Typography variant='body2' align='center'>
                     No organizations to display
                     <br />

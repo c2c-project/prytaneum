@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Avatar, Typography, CardHeader, CardHeaderProps } from '@material-ui/core';
+import { Avatar, Typography, CardHeader, CardHeaderProps } from '@mui/material';
 import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionAuthorFragment$key } from '@local/__generated__/QuestionAuthorFragment.graphql';

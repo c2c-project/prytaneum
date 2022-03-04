@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { Grid, Paper, Link } from '@material-ui/core';
-// import BackIcon from '@material-ui/icons/ArrowBack';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Paper, Link } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 
 import { RegisterForm, useUser } from '@local/features/accounts';
@@ -11,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             flexDirection: 'column-reverse',
         },
         flexGrow: 1,
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     formContainer: {
         display: 'flex',
         justifyContent: 'flex-end',
-        marginBottom: 20
+        marginBottom: 20,
     },
     paper: {
         maxWidth: 425,
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             color: theme.palette.primary.main,
         },
-    }
+    },
 }));
 
 export default function RegisterPage() {
@@ -58,10 +57,10 @@ export default function RegisterPage() {
     }, [user, router]);
 
     return (
-        <Grid container alignItems='center' className={classes.root} justify='center'>
+        <Grid container alignItems='center' className={classes.root} justifyContent='center'>
             <Grid item md={7}>
                 <Image
-                    src='/static/login_illustration.png' 
+                    src='/static/login_illustration.png'
                     width={697}
                     height={383}
                     objectFit='contain'
@@ -73,7 +72,7 @@ export default function RegisterPage() {
                     <RegisterForm
                         onSuccess={() => router.push('/app/home')}
                         secondaryActions={
-                            <Link href='/login' className={classes.link}>
+                            <Link href='/login' className={classes.link} underline='hover'>
                                 Already have an account?
                             </Link>
                         }
