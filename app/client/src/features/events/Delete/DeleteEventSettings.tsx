@@ -78,11 +78,9 @@ export const DeleteEventSettings = ({ fragmentRef, className }: DeleteEventSetti
     });
     function handleCommit(submittedForm: TDeleteEvent) {
         // add eventId to input passed into the commit
-        if (!eventId) return;
-        const eventI = eventId;
-        const completeForm = { eventId: eventI, ...submittedForm };
+        if (!eventId) return; //eventId could be empty
         commit({
-            variables: { input: completeForm},
+            variables: { input: {eventId, ...submittedForm} },
             onCompleted({ deleteEvent }) {
                 if (deleteEvent.isError) {
                     displaySnack(deleteEvent.message);
