@@ -4,6 +4,8 @@ import { List, ListItemText } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ListIcon from '@mui/icons-material/List';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
@@ -29,6 +31,8 @@ enum Nav {
     'User List',
     // 'Admin Settings',
     'Dashboard',
+    'About Us',
+    'User Guide'
 }
 type Keys = keyof typeof Nav;
 
@@ -45,6 +49,8 @@ const urls: Record<Keys, string> = {
     'User List': '/user-list',
     // 'Admin Settings': '/app/admin/settings',
     Dashboard: '/dashboard',
+    'About Us': '/aboutus',
+    'User Guide': '/user-guide',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -107,6 +113,18 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         <DashboardIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='Dashboard' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('About Us')} selected={selected === 'About Us'}>
+                    <StyledListItemIcon>
+                        <PeopleIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='About Us' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('User Guide')} selected={selected === 'User Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='User Guide' />
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
