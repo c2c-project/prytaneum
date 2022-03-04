@@ -14,12 +14,9 @@ export function debounce<T extends Callback>(cb: T, timeout: number): Callback {
         }, timeout);
     };
 }
+// source link for Regex https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 export function isURL(str: string) {
-    const pattern = new RegExp('^(https?:\\/\\/)?'+
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ 
-      '((\\d{1,3}\\.){3}\\d{1,3}))'+ 
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ 
-      '(\\?[;&a-z\\d%_.~+=-]*)?'+ 
-      '(\\#[-a-z\\d_]*)?$','i'); 
+    const pattern = new RegExp(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi); 
     return !!pattern.test(str);
 }
+
