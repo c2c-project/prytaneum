@@ -1,1 +1,2 @@
 export const QUESTIONS_MAX_LENGTH = 1000
+export const FEEDBACK_MAX_LENGTH = 1000
