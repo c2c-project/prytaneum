@@ -1,16 +1,14 @@
 import * as React from 'react';
+import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { useRouter } from 'next/router';
 
 import { Button, Card, CardContent, Grid, Link, List, ListItem, Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add } from '@material-ui/icons';
 
-import { useRouter } from 'next/router';
-import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-
+import { Loader } from '@local/components/Loader';
 import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
-
-import { Loader } from '@local/components/Loader';
 
 const useStyles = makeStyles((theme) => ({
     item: {
@@ -65,37 +63,25 @@ export function Dashboard({ queryRef }: Props) {
     if(!data) return <Loader />;
 
     // Get current date to categorize events as current or upcoming
-    const d = new Date();
-    const currentDate = {
-        year: d.getFullYear(),
-        month: d.getMonth(),
-        day: d.getDate(),
-        time: d.getTime(),
-    };
+    const currentDateTime = new Date();
 
     // Store current events
-    // Would prefer to use `isActive` member of Event node, but this doesn't seem to have been implemented yet
-    const current_events = listOfEvents.filter(({ node: event }) => {
+    const currentEvents = listOfEvents.filter(({ node: event }) => {
         if (event.startDateTime && event.endDateTime) {
-            const eventStartDate = new Date(event.startDateTime.toString());
-            const eventEndDate = new Date(event.endDateTime.toString());
-            const eventStartTime = eventStartDate.getTime();
-            const eventEndTime = eventEndDate.getTime();
-            if (currentDate.year === eventStartDate.getFullYear() && 
-                currentDate.month === eventStartDate.getMonth() && 
-                currentDate.day === eventStartDate.getDate() &&
-                currentDate.time > eventStartTime &&
-                currentDate.time < eventEndTime) {
+            const eventStartDateTime = new Date(event.startDateTime)
+            const eventEndDateTime = new Date(event.endDateTime)
+            if (eventStartDateTime.getTime() < currentDateTime.getTime() && 
+                eventEndDateTime.getTime() > currentDateTime.getTime()) {
                 return true;
             }
         }
     });
 
     // Store upcoming events
-    const upcoming_events = listOfEvents.filter(({ node: event }) => {
+    const upcomingEvents = listOfEvents.filter(({ node: event }) => {
         if (event.startDateTime) {
-            const eventStartDate = new Date(event.startDateTime.toString());
-            if (d < eventStartDate) {
+            const eventStartDateTime = new Date(event.startDateTime);
+            if (currentDateTime < eventStartDateTime) {
                 return true;
             }
         }
@@ -110,17 +96,17 @@ export function Dashboard({ queryRef }: Props) {
                         <Typography variant='h6' className={classes.title}>
                             Current Events
                         </Typography>
-                        {current_events.length > 0 ? (
+                        {currentEvents.length > 0 ? (
                             <Grid container item direction='column'>
                                 <Grid item xs={12}>
                                     <List>
-                                        {current_events.map(({ node: event }, idx) => {
+                                        {currentEvents.map(({ node: event }, idx) => {
                                             if (event?.id && event?.description && event?.title && event?.startDateTime && event?.organization?.name) {
                                                 return (
                                                     <ListItem
                                                         button
                                                         key={event?.id}
-                                                        divider={idx !== current_events.length - 1}
+                                                        divider={idx !== currentEvents.length - 1}
                                                         onClick={handleNav(`/events/${event?.id}/settings`)}
                                                     >
                                                         <DashboardEvent
@@ -132,7 +118,7 @@ export function Dashboard({ queryRef }: Props) {
                                                             organization={event.organization.name}
                                                         />
                                                         <Grid item>
-                                                            <Link href={event?.id}>
+                                                            <Link href={`events/${event?.id}/live`}>
                                                                 <Button
                                                                     aria-label='view live feed of current event'
                                                                     variant='contained'
@@ -167,17 +153,17 @@ export function Dashboard({ queryRef }: Props) {
                         <Typography variant='h6' className={classes.title}>
                             Upcoming Events
                         </Typography>
-                        {upcoming_events.length > 0 ? (
+                        {upcomingEvents.length > 0 ? (
                             <Grid container item direction='column'>
                                 <Grid item xs={12}>
                                     <List>
-                                        {upcoming_events.map(({ node: event }, idx) => {
+                                        {upcomingEvents.map(({ node: event }, idx) => {
                                             if (event?.id && event?.description && event?.title && event?.startDateTime && event?.organization?.name)
                                                 return (
                                                     <ListItem
                                                         button
                                                         key={event?.id}
-                                                        divider={idx !== upcoming_events.length - 1}
+                                                        divider={idx !== upcomingEvents.length - 1}
                                                         onClick={handleNav(`/events/${event?.id}/settings`)}
                                                     >
                                                         <DashboardEvent
