@@ -68,8 +68,8 @@ export function Dashboard({ queryRef }: Props) {
     // Store current events
     const currentEvents = listOfEvents.filter(({ node: event }) => {
         if (event.startDateTime && event.endDateTime) {
-            const eventStartDateTime = new Date(event.startDateTime)
-            const eventEndDateTime = new Date(event.endDateTime)
+            const eventStartDateTime = new Date(event.startDateTime);
+            const eventEndDateTime = new Date(event.endDateTime);
             if (eventStartDateTime.getTime() < currentDateTime.getTime() && 
                 eventEndDateTime.getTime() > currentDateTime.getTime()) {
                 return true;
