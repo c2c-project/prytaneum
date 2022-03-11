@@ -8,11 +8,10 @@ import {
     ListItem,
     ListItemText,
     ListItemSecondaryAction,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Add, ChevronRight } from '@material-ui/icons';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
+} from '@mui/material';
+import { Add, ChevronRight } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
@@ -82,11 +81,11 @@ export interface SelectedOrg {
     readonly name: string | null
 }
 
+const initialState = {id: '', name: ''}
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
     const router = useRouter();
-    const initialState = {id: '', name: ''};
     const [user, , isLoading] = useUser();
     const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
     const [selectedOrg, setSelectedOrg] = React.useState(initialState);

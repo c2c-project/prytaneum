@@ -3,9 +3,10 @@ import * as Yup from 'yup';
 import {
     Typography,
     Button,
-    Grid
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+    Grid,
+    TextField
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 import { useMutation, useFragment } from 'react-relay';
 import { useRouter } from 'next/router';
@@ -13,7 +14,6 @@ import { useFormik } from 'formik';
 
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
 import { useSnack } from '@local/features/core';
 import { makeInitialState } from '@local/utils/ts-utils';
 import type { DeleteEventMutation } from '@local/__generated__/DeleteEventMutation.graphql';
