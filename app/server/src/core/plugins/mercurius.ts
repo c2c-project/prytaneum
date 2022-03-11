@@ -4,7 +4,7 @@ import { fromGlobalId } from 'graphql-relay';
 import mercuriusCodgen from 'mercurius-codegen';
 import { join } from 'path';
 
-import { GcpPubSub } from '@local/lib/GcpPubSub';
+// import { GcpPubSub } from '@local/lib/GcpPubSub';
 import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
 
@@ -84,7 +84,7 @@ export function attachMercuriusTo(server: FastifyInstance) {
         context: makeRequestContext,
         subscription: {
             context: makeSubscriptionContext,
-            emitter: process.env.NODE_ENV === 'development' ? undefined : new GcpPubSub(server.log),
+            // emitter: process.env.NODE_ENV === 'development' ? undefined : new GcpPubSub(server.log),
         },
     });
 
