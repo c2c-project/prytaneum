@@ -19,7 +19,6 @@ export const resolvers: Resolvers = {
             return value.toISOString(); // value sent to the client
         },
         parseLiteral(ast) {
-            // eslint-disable-next-line react/destructuring-assignment
             if (ast.kind === Kind.INT) {
                 return new Date(ast.value); // ast value is always in string format
             }

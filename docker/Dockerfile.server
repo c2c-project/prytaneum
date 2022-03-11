@@ -1,0 +1,39 @@
+FROM node:14-alpine AS build-stage
+WORKDIR /usr/monorepo
+# Copy everything
+COPY . .
+# Rebuild packages necessary.
+RUN yarn install
+# Ensure prisma types are generated appropriately.
+RUN yarn workspace @app/server generate
+# rsync is required for the server build script
+RUN apk update \
+&& apk add --no-cache rsync
+# Generates a build folder in app/server
+RUN yarn workspace @app/server build
+
+FROM node:14-alpine AS production-stage
+WORKDIR /usr/monorepo
+# Set appropriate env variables
+ENV NODE_ENV production
+ENV HOST 0.0.0.0
+ENV SERVER_PORT 3002
+ENV GCP_PROJECT_ID prytaneum-project
+# Unset certain env variables
+RUN unset PUBSUB_EMULATOR_HOST
+# Project specific files
+COPY --from=build-stage /usr/monorepo/package.json ./
+COPY --from=build-stage /usr/monorepo/.yarnrc.yml ./
+COPY --from=build-stage /usr/monorepo/yarn.lock ./
+COPY --from=build-stage /usr/monorepo/.pnp.cjs ./
+COPY --from=build-stage /usr/monorepo/.nvmrc ./
+COPY --from=build-stage /usr/monorepo/.yarn/releases ./.yarn/releases
+COPY --from=build-stage /usr/monorepo/.yarn/plugins ./.yarn/plugins
+# Server specific files
+COPY --from=build-stage /usr/monorepo/app/server/build ./app/server/build
+COPY --from=build-stage /usr/monorepo/app/server/package.json ./app/server
+COPY --from=build-stage /usr/monorepo/app/server/.env.production ./app/server
+# Install only packages necessary for the server to run
+RUN yarn workspaces focus --production @app/server
+EXPOSE 3002
+CMD ["yarn", "workspace", "@app/server", "prod"]

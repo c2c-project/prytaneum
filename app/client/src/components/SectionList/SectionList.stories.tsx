@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import faker from 'faker/locale/en';
 
 import Component, { Section, Datum } from '.';

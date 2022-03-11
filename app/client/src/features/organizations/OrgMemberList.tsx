@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Add } from '@material-ui/icons';
+import { List, ListItem, ListItemText, Typography, Grid, Button, DialogContent } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Add } from '@mui/icons-material';
 import { graphql, useFragment } from 'react-relay';
 import { useUser } from '@local/features/accounts/useUser';
 
@@ -104,6 +104,7 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                                         }}
                                         aria-expanded={isConfDialogOpen}
                                         aria-label='delete member'
+                                        size='large'
                                     >
                                         <ClearIcon />
                                     </IconButton>
@@ -119,7 +120,7 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                     )}
                 </List>
             </Grid>
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <DeleteMember
                     open={isConfDialogOpen}
                     onClose={close}
@@ -135,7 +136,7 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                     </>
                 </DeleteMember>
             </Grid>
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <CreateMemberDialog orgId={data.id} connections={[connectionId ?? '']} />
             </Grid>
         </Grid>

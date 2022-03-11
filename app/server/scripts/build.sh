@@ -26,7 +26,7 @@ printf "Successfully built typescript files!\n"
 printf "Copying graphql files...\n"
 # Step 2. Copy all graphql files
 # https://stackoverflow.com/questions/9952000/using-rsync-include-and-exclude-options-to-include-directory-and-file-by-pattern
-rsync -zar --include='*/' --include='*.graphql' --exclude='*' src/ build/
+rsync -zar --include='*/' --include='*.graphql' --include='prisma/**' --exclude='*' src/ build/
 printf "Successfully copied graphql files!\n"
 
 printf "Build completed!\n"

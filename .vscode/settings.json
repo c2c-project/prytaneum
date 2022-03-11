@@ -5,5 +5,10 @@
   },
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "eslint.nodePath": ".yarn/sdks"
+  "eslint.nodePath": ".yarn/sdks",
+  "eslint.workingDirectories": [
+    "app/client",
+    "app/server"
+  ],
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js"
 }

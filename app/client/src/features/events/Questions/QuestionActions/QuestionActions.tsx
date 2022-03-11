@@ -1,4 +1,4 @@
-import { CardActions, CardActionsProps } from '@material-ui/core';
+import { CardActions, CardActionsProps } from '@mui/material';
 import { graphql, useFragment } from 'react-relay';
 
 import type { QuestionActionsFragment$key } from '@local/__generated__/QuestionActionsFragment.graphql';

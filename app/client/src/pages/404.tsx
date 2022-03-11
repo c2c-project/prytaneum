@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Grid, Typography, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props {
     errorMessage?: string;
@@ -25,8 +25,8 @@ export default function NotFound({ errorMessage }: Props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Grid container justify='center' direction='column' alignContent='stretch'>
-                <Grid container justify='center'>
+            <Grid container justifyContent='center' direction='column' alignContent='stretch'>
+                <Grid container justifyContent='center'>
                     <Typography variant='h3' color='error' display='inline'>
                         404
                     </Typography>
@@ -36,13 +36,13 @@ export default function NotFound({ errorMessage }: Props) {
                     </Typography>
                 </Grid>
                 <Divider variant='middle' className={classes.spacing} />
-                <Grid container justify='center' className={classes.spacing}>
+                <Grid container justifyContent='center' className={classes.spacing}>
                     <Typography variant='subtitle2' component='div'>
                         Please check the link and try again
                     </Typography>
                 </Grid>
                 {errorMessage && (
-                    <Grid container justify='center'>
+                    <Grid container justifyContent='center'>
                         <Typography>
                             We received the following error: &nbsp;
                             <b>{errorMessage}</b>

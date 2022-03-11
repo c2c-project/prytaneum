@@ -1,22 +1,22 @@
 // import * as React from 'react';
-// import Card from '@material-ui/core/Card';
-// import Typography from '@material-ui/core/Typography';
-// import Grid from '@material-ui/core/Grid';
-// import Avatar from '@material-ui/core/Avatar';
-// import IconButton from '@material-ui/core/IconButton';
-// import OpenIcon from '@material-ui/icons/Launch';
+// import Card from '@mui/material/Card';
+// import Typography from '@mui/material/Typography';
+// import Grid from '@mui/material/Grid';
+// import Avatar from '@mui/material/Avatar';
+// import IconButton from '@mui/material/IconButton';
+// import OpenIcon from '@mui/icons-material/Launch';
 // import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-// import GithubIcon from '@material-ui/icons/GitHub';
-// import LinkedInIcon from '@material-ui/icons/LinkedIn';
-// import ResumeIcon from '@material-ui/icons/Description';
-// import PersonalWebsiteIcon from '@material-ui/icons/Web';
-// import EmailIcon from '@material-ui/icons/Email';
-// import PhoneIcon from '@material-ui/icons/Phone';
-// import OtherIcon from '@material-ui/icons/PermContactCalendar';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogContentText from '@mui/material/DialogContentText';
+// import GithubIcon from '@mui/icons-material/GitHub';
+// import LinkedInIcon from '@mui/icons-material/LinkedIn';
+// import ResumeIcon from '@mui/icons-material/Description';
+// import PersonalWebsiteIcon from '@mui/icons-material/Web';
+// import EmailIcon from '@mui/icons-material/Email';
+// import PhoneIcon from '@mui/icons-material/Phone';
+// import OtherIcon from '@mui/icons-material/PermContactCalendar';
 
-// import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+// import { makeStyles, createStyles, Theme } from '@mui/material/styles';
 
 // import { formatDate } from '@local/utils/format';
 // import { TeamMember, ReferenceNames } from 'prytaneum-typings';

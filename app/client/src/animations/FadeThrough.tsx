@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { motion, AnimationProps, MotionProps } from 'framer-motion';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles({
     motion: { top: 0, bottom: 0, left: 0, right: 0, position: 'absolute' },

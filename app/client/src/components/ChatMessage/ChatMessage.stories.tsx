@@ -1,7 +1,7 @@
 // import * as React from 'react';
 // import { Meta, Story } from '@storybook/react';
 // import { makeChatMessage } from 'prytaneum-typings';
-// import StarIcon from '@material-ui/icons/Star';
+// import StarIcon from '@mui/icons-material/Star';
 
 // import ChatMessage from './ChatMessage';
 

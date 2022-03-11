@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 interface Props {
     children: JSX.Element | JSX.Element[];

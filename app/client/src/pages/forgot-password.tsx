@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Typography, Avatar, Paper, Grid } from '@material-ui/core';
-import RefreshIcon from '@material-ui/icons/VpnKey';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Avatar, Paper, Grid } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/VpnKey';
+import makeStyles from '@mui/styles/makeStyles';
 
 // import ForgotPassRequestForm from '@local/features/accounts/ForgotPassRequest';
 
@@ -38,7 +38,7 @@ export default function ForgotPassRequest() {
     const classes = useStyles();
 
     return (
-        <Grid container alignContent='center' className={classes.root} justify='center'>
+        <Grid container alignContent='center' className={classes.root} justifyContent='center'>
             <Paper className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <RefreshIcon />

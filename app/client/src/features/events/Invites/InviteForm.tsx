@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 import * as Yup from 'yup';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { TextField } from '@local/components/TextField';
 import { useForm } from '@local/features/core';
 
 export type TInviteForm = { email: string };
@@ -39,7 +38,7 @@ export function InviteForm({ form, onSubmit }: InviteProps) {
                     type='email'
                 />
             </FormContent>
-            <FormActions disableGrow gridProps={{ justify: 'flex-end' }}>
+            <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 <Button type='submit' variant='contained' color='primary'>
                     Submit
                 </Button>

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@app/prisma';
+import { PrismaClient } from '@local/__generated__/prisma';
 import { fromGlobalId } from 'graphql-relay';
 
 import { Node } from '@local/graphql-types';

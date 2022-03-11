@@ -33,7 +33,7 @@ jobs:
               run: yarn install
 
             - name: Lint Project
-              run: yarn g:lint-project
+              run: yarn workspaces foreach -p run lint
 
     testing:
         name: Testing
@@ -75,7 +75,7 @@ jobs:
             - name: Build Client
               run: |-
                   docker build \
-                    -f Dockerfile.client \
+                    -f ./docker/Dockerfile.client \
                     --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
@@ -114,7 +114,7 @@ jobs:
             - name: Build Server
               run: |-
                   docker build \
-                    -f Dockerfile.server \
+                    -f ./docker/Dockerfile.server \
                     --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \

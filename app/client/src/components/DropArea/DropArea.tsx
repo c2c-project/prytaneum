@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { Droppable, DroppableProvided, DroppableProps } from 'react-beautiful-dnd';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 interface Props {
     getStyle?: (isDraggingOver: boolean) => React.CSSProperties;

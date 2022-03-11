@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button, DialogContent } from '@material-ui/core';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import LockIcon from '@material-ui/icons/Lock';
+import { Button, DialogContent } from '@mui/material';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import LockIcon from '@mui/icons-material/Lock';
 import { useMutation, graphql } from 'react-relay';
 
 import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';

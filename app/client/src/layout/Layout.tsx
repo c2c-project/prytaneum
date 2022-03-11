@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { Grid, useMediaQuery, IconButton, ContainerProps } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Grid, useMediaQuery, IconButton, ContainerProps } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '@local/features/accounts';
 
 import Main from './Main';
@@ -50,20 +50,29 @@ export function Layout({
     const classes = useStyles();
     const [user] = useUser();
 
-    const theme = useTheme();
-    const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
+    // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
+    const isLargeScreen = useMediaQuery('(max-width:1520px)');
+    const isSideNavHidden = React.useMemo(
+        () => isLargeScreen || !!noSideNav || !user,
+        [isLargeScreen, noSideNav, user]
+    );
 
     return (
         <Page>
-            <AppBar>
-                {!noSideNav && isMdDown && user && (
-                    <IconButton className={classes.menuIcon} onClick={() => setOpen(!open)} color='inherit'>
+            <AppBar sx={{ zIndex: (theme) => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
+                {isSideNavHidden && (
+                    <IconButton
+                        className={classes.menuIcon}
+                        onClick={() => setOpen(!open)}
+                        color='inherit'
+                        size='large'
+                    >
                         <MenuIcon />
                     </IconButton>
                 )}
             </AppBar>
             <Grid container alignItems='flex-start' item xs={12}>
-                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isMdDown || !!noSideNav || !user} />
+                <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isSideNavHidden} />
                 <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}
                 </Main>

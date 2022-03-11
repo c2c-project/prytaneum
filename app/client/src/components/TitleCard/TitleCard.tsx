@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
     Card,
     CardContent,
@@ -12,7 +14,7 @@ import {
     ListItemIcon,
     ListSubheader,
     Hidden,
-} from '@material-ui/core';
+} from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
         media: {
             position: 'relative',
-            [theme.breakpoints.down('xs')]: {
+            [theme.breakpoints.down('sm')]: {
                 width: '100%',
             },
             [theme.breakpoints.up('sm')]: {
@@ -85,7 +87,7 @@ export default function TitleCard({ stats, title, statsTitle }: Props) {
                 <CardMedia className={classes.media}>
                     <Typography className={classes.title}>{title}</Typography>
                 </CardMedia>
-                <Hidden xsDown>
+                <Hidden smDown>
                     <CardContent className={classes.content}>
                         <List>
                             <ListSubheader>{statsTitle}</ListSubheader>

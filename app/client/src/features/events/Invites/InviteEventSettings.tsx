@@ -5,9 +5,10 @@ import {
     Button,
     DialogContent,
     Collapse,
-} from '@material-ui/core';
-import { Add } from '@material-ui/icons';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Add } from '@mui/icons-material';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useFragment } from 'react-relay';
 import { CopyText } from '@local/components/CopyText';
 
@@ -98,13 +99,13 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     }
 
     return (
-        <Grid container justify='center' className={className}>
+        <Grid container justifyContent='center' className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     <CreateInvite onSubmit={close} eventId={eventId} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Grid item container justify='center' direction='column' alignItems='flex-end'>
+            <Grid item container justifyContent='center' direction='column' alignItems='flex-end'>
                 <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
                     Invite
                 </Button>
@@ -113,7 +114,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                         Invite Link
                     </Button>
                 </LoadingButton>
-                <Grid item container justify='center' xs={12}>
+                <Grid item container justifyContent='center' xs={12}>
                     <Collapse in={open}>
                         <CopyText TextFieldProps={{ label: 'Invite Link' }} className={classes.text} text={link} />
                     </Collapse>

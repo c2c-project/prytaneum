@@ -14,9 +14,9 @@ import {
     IconButton,
     ListItemAvatar,
     Avatar,
-} from '@material-ui/core';
-import { Add, MoreVert } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Add, MoreVert } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useFragment } from 'react-relay';
 
 import type {
@@ -160,7 +160,7 @@ export const ModeratorEventSettings = ({ fragmentRef, className }: EventSettings
     const openFormDialog = () => dispatch({ type: 'dialog/create-moderator' });
 
     return (
-        <Grid container justify='center' className={className}>
+        <Grid container justifyContent='center' className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     {focusedModerator !== null ? (
@@ -203,7 +203,7 @@ export const ModeratorEventSettings = ({ fragmentRef, className }: EventSettings
                             </ListItemAvatar>
                             <ListItemText primary={`${firstName} ${lastName}`} secondary={email} />
                             <ListItemSecondaryAction>
-                                <IconButton onClick={openMenu({ id, firstName, lastName, email, avatar })}>
+                                <IconButton onClick={openMenu({ id, firstName, lastName, email, avatar })} size='large'>
                                     <MoreVert />
                                 </IconButton>
                             </ListItemSecondaryAction>
@@ -215,7 +215,7 @@ export const ModeratorEventSettings = ({ fragmentRef, className }: EventSettings
                     No moderators to display
                 </Typography>
             )}
-            <Grid container justify='flex-end'>
+            <Grid container justifyContent='flex-end'>
                 <Button variant='outlined' onClick={openFormDialog} startIcon={<Add />}>
                     Add Moderator
                 </Button>
