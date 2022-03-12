@@ -3,7 +3,7 @@ name: Development Workflow
 on:
     pull_request_target:
         branches: [dev]
-        types: [opened, closed, edited, synchronize]
+        types: [opened, edited]
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
