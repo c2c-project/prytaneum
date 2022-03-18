@@ -35,6 +35,11 @@ spec:
                 configMapKeyRef:
                   key: SERVER_PORT
                   name: prytaneum-server-config
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: prytaneum-server-config
+                  key: REIDS_HOST
             - name: GCP_PROJECT_ID
               valueFrom:
                 configMapKeyRef:
@@ -69,6 +74,11 @@ spec:
                 secretKeyRef:
                   key: from_email
                   name: mailgun-secret 
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PASSWORD
+                  name: redis-secret
             - name: "GOOGLE_APPLICATION_CREDENTIALS"
               value: "/var/secrets/google/key.json"
           volumeMounts:
