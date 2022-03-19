@@ -81,7 +81,7 @@ export interface SelectedOrg {
     readonly name: string | null
 }
 
-const initialState = {id: '', name: ''}
+const initialState = { id: '', name: '' }
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
@@ -148,7 +148,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
                     </ListItem>
                 ))}
             </List>
-            <Grid container justify='flex-end'>
+            <Grid container>
                 <DeleteOrganization
                     open={isConfDialogOpen}
                     onClose={close}

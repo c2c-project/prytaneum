@@ -18,7 +18,7 @@ import { EventDetails } from './EventDetails';
 import { ModeratorEventSettings } from '../Moderation';
 import { EventContext } from '../EventContext';
 import { InviteEventSettings } from '../Invites/InviteEventSettings';
-import { DeleteEventSettings } from '../Delete/DeleteEventSettings';
+import { DeleteEvent } from '../DeleteEvent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -148,7 +148,7 @@ export function EventSettings({ queryRef }: Props) {
                                 title: 'Delete Event',
                                 description: 'Click here to delete your event',
                                 component: (
-                                    <DeleteEventSettings
+                                    <DeleteEvent
                                         className={classes.settingsSection}
                                         fragmentRef={data.node}
                                     />
