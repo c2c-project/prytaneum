@@ -50,6 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
                                     <Layout
                                         hideSideNav={pageProps.hideSideNav}
                                         ContainerProps={pageProps.containerProps}
+                                        disablePadding={pageProps.disablePadding}
                                     >
                                         <Component {...pageProps} />
                                     </Layout>
