@@ -37,8 +37,8 @@ export function EventDetailsCard({ fragmentRef }: Props) {
     const { title, description, startDateTime, endDateTime } = useFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
     const classes = useStyles();
 
-    const startTime = formatDate(startDateTime ? new Date(startDateTime) : new Date(), 'h:mmaa');
-    const endTime = formatDate(endDateTime ? new Date(endDateTime) : new Date(), 'h:mmaa');
+    const startTime = React.useMemo(() => formatDate(startDateTime ? new Date(startDateTime) : new Date(), 'h:mmaa'), [startDateTime]);
+    const endTime = React.useMemo(() => formatDate(endDateTime ? new Date(endDateTime) : new Date(), 'h:mmaa'), [endDateTime]);
     
     return (
         <Grid container direction='column'>
