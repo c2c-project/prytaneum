@@ -126,7 +126,7 @@ export function TownhallUserSettings({ settings }: { settings: UserSettings }) {
             <SettingsItem helpText={text.townhall.anonymous} name='Appear Anonymous'>
                 <Switch
                     checked={settings?.isAnonymous}
-                    // onChange={buildHandler('anonymous')}
+                // onChange={buildHandler('anonymous')}
                 />
             </SettingsItem>
         </SettingsList>
@@ -142,7 +142,7 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
                     checked={settings?.isNotificationsEnabled}
-                    // onChange={buildHandler('enabled')}
+                // onChange={buildHandler('enabled')}
                 />
             </SettingsItem>
             <Collapse>
@@ -394,7 +394,7 @@ export const AppearAnonymous = () => (
 
 export const Notifications = () => (
     <span>
-        <button type='button' onClick={() => {}}>
+        <button type='button' onClick={() => { }}>
             Notify me about upcoming Townhalls
         </button>
     </span>
@@ -411,7 +411,7 @@ export const Logout = () => (
     <span>
         <button
             type='button'
-            onClick={() => {}} // ROUTING: to /Login or /TownhallList
+            onClick={() => { }} // ROUTING: to /Login or /TownhallList
         >
             Click here to return to the home page
         </button>

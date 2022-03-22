@@ -9,8 +9,10 @@ import {
     ListItemText,
     ListItemSecondaryAction,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Add, ChevronRight } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
 
@@ -21,6 +23,7 @@ import { CreateOrg, TCreateOrgProps } from '@local/features/organizations';
 
 import { Loader } from '@local/components/Loader';
 import { useUser } from '../accounts';
+import { DeleteOrganization } from './DeleteOrg';
 
 export const ORG_LIST_QUERY = graphql`
     query OrgListQuery($first: Int, $after: String) {
@@ -73,11 +76,23 @@ export interface OrgListProps {
     queryRef: PreloadedQuery<OrgListQuery>;
 }
 
+export interface SelectedOrg {
+    readonly id: string,
+    readonly name: string | null
+}
+
+const initialState = { id: '', name: '' }
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
     const router = useRouter();
     const [user, , isLoading] = useUser();
+    const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
+    const [selectedOrg, setSelectedOrg] = React.useState(initialState);
+
+    const close = () => {
+        setIsConfDialogOpen(false);
+    }
 
     const listOfOrgs = React.useMemo(() => data.me?.organizations?.edges ?? [], [data.me]);
     const connectionId = React.useMemo(() => data.me?.organizations?.__id ?? '', [data.me?.organizations?.__id]);
@@ -118,11 +133,36 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
                     >
                         <ListItemText primary={organization.name} />
                         <ListItemSecondaryAction>
-                            <ChevronRight />
+                            <IconButton
+                                className='deleteOrg'
+                                onClick={() => {
+                                    setSelectedOrg(organization);
+                                    setIsConfDialogOpen(true);
+                                }}
+                                aria-expanded={isConfDialogOpen}
+                                aria-label='delete organization'
+                            >
+                                <ClearIcon />
+                            </IconButton>
                         </ListItemSecondaryAction>
                     </ListItem>
                 ))}
             </List>
+            <Grid container>
+                <DeleteOrganization
+                    open={isConfDialogOpen}
+                    onClose={close}
+                    title={`Delete "${selectedOrg.name}" organization?`}
+                    onConfirm={close}
+                    orgId={selectedOrg.id}
+                    connections={[connectionId ?? '']}
+                >
+                    <>
+                        Are you sure you want to delete the&nbsp;
+                        <b>{selectedOrg.name}</b> organization?
+                    </>
+                </DeleteOrganization>
+            </Grid>
             <CreateOrgFab connection={connectionId} />
         </Grid>
     );

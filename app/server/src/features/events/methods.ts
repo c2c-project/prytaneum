@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/indent */
 import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
-import { errors, filterFields } from '@local/features/utils';
+import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
+import bcrypt from 'bcryptjs';
 
 export { isModerator } from './moderation/methods';
+const toEventId = toGlobalId('Event');
 
 /**
  * get a specific event by its id
@@ -134,8 +136,23 @@ export async function deleteEvent(userId: string, prisma: PrismaClient, input: D
 
     // check if the user has valid permissions
     if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
+    const {
+        eventId,
+        title,
+        confirmTitle
+    } = input
 
-    return prisma.event.delete({ where: { id: input.eventId } });
+    const eventToDelete = await prisma.event.findUnique({ where: { id: eventId } });
+    const eventWithGlobalId = toEventId(eventToDelete)
+
+    //validation if event titles match
+    if (title !== confirmTitle) throw new Error('Event titles must match');
+    
+    //validation is if event title matches actual event title
+    if (title !== eventWithGlobalId.title) throw new Error('Deleting event failed: Invalid event title.');
+
+    //delete user by event id
+    return prisma.event.delete({ where: { id: eventId } });
 }
 
 /**

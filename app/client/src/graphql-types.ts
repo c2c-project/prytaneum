@@ -91,8 +91,11 @@ export type DeleteAccountForm = {
   password: Scalars['String'];
 };
 
+/** In order to delete an event, user must provide a title and a confirmation title, similar to account deletion. */
 export type DeleteEvent = {
+  confirmTitle: Scalars['String'];
   eventId: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type DeleteMember = {

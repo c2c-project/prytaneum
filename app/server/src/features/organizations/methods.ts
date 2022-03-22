@@ -1,5 +1,11 @@
 import { PrismaClient } from '@local/__generated__/prisma';
-import { CreateOrganization, UpdateOrganization, CreateMember, DeleteMember } from '@local/graphql-types';
+import {
+    CreateOrganization,
+    UpdateOrganization,
+    DeleteOrganization,
+    CreateMember,
+    DeleteMember,
+} from '@local/graphql-types';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';
 import { errors } from '../utils';
@@ -64,12 +70,17 @@ export async function updateOrg(userId: string, prisma: PrismaClient, { name, or
     return updatedOrg;
 }
 
-export async function deleteOrg() {
-    // UNIMPLEMENTED on purpose
-    // probably don't want deletes to happen since permissions are not robust (yet) and
-    // cascades are scary with that in mind
-    // ie we'll want a backup or recovery process along with more robust permissions before we can delete willy nilly
-    return null;
+export async function deleteOrg(userId: string, prisma: PrismaClient, { orgId }: DeleteOrganization) {
+   
+    //current permissions to delete organization is if they are a member of the organization then they can delete
+    const hasPermissions = await isMemberOfOrg(userId, orgId, prisma);
+    if (!hasPermissions) throw new Error(errors.permissions);
+
+    const deletedOrg = await prisma.organization.delete({
+        where: { id: orgId },
+    });
+
+    return deletedOrg;
 }
 
 /**
