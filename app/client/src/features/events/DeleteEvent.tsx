@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         color: theme.palette.custom.danger,
+        borderColor: theme.palette.custom.danger,
     }
 }));
 
