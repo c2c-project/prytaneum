@@ -36,7 +36,7 @@ const DELETE_EVENT_MUTATION = graphql`
     }
 `;
 
-interface DeleteEventSettingsProps {
+interface DeleteEventProps {
     fragmentRef: EventDetailsFragment$key;
     className?: string;
 }
@@ -62,14 +62,17 @@ const intialDeleteEvent: TDeleteEvent = {
 
 const useStyles = makeStyles((theme) => ({
     form: {
-        margin: theme.spacing(0, 1, 0, 1),
+        margin: theme.spacing(1, 0),
     },
     link: {
         paddingLeft: theme.spacing(1),
     },
+    button: {
+        color: theme.palette.custom.danger,
+    }
 }));
 
-export const DeleteEvent = ({ fragmentRef, className }: DeleteEventSettingsProps) => {
+export const DeleteEvent = ({ fragmentRef, className }: DeleteEventProps) => {
     // form state hooks
     const [commit] = useMutation<DeleteEventMutation>(DELETE_EVENT_MUTATION);
 
@@ -146,7 +149,7 @@ export const DeleteEvent = ({ fragmentRef, className }: DeleteEventSettingsProps
                     />
                 </FormContent>
                 <Grid item xs={12}>
-                    <Button type='submit' variant='outlined' style={{ color: 'red', borderColor: 'red' }}>
+                    <Button className={classes.button} type='submit' variant='outlined'>
                         Delete Event
                     </Button>
                 </Grid>
