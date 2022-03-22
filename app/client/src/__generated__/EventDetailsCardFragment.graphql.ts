@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0ec4379dbf0b4f5e47098ff5503c1bb0>>
+ * @generated SignedSource<<57799113975d149aa31070abb6abf24b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,8 @@ export type EventDetailsCardFragment$data = {
   readonly id: string;
   readonly title: string | null;
   readonly description: string | null;
+  readonly startDateTime: Date | null;
+  readonly endDateTime: Date | null;
   readonly " $fragmentType": "EventDetailsCardFragment";
 };
 export type EventDetailsCardFragment = EventDetailsCardFragment$data;
@@ -48,12 +50,26 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "description",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "startDateTime",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endDateTime",
+      "storageKey": null
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
 
-(node as any).hash = "865221d61780dc50e499786c19c574a2";
+(node as any).hash = "ae3a9a413619b0f8684d73e066c4290e";
 
 export default node;
