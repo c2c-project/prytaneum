@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: prytaneum-server-config
-                  key: REIDS_HOST
+                  key: REDIS_HOST
             - name: GCP_PROJECT_ID
               valueFrom:
                 configMapKeyRef:
