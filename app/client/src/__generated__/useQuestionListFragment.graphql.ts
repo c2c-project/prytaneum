@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0bd023b068dd449c302cb4a29b717d7b>>
+ * @generated SignedSource<<f588a93c531a802de543fd05c31a8615>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionListFragment$data = {
   readonly id: string;
@@ -39,7 +39,10 @@ export type useQuestionListFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = {
+var v0 = [
+  "questions"
+],
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -49,12 +52,12 @@ var v0 = {
 return {
   "argumentDefinitions": [
     {
-      "defaultValue": "1",
+      "defaultValue": "",
       "kind": "LocalArgument",
       "name": "after"
     },
     {
-      "defaultValue": 1000,
+      "defaultValue": 10,
       "kind": "LocalArgument",
       "name": "first"
     }
@@ -66,15 +69,28 @@ return {
         "count": "first",
         "cursor": "after",
         "direction": "forward",
-        "path": [
-          "questions"
-        ]
+        "path": (v0/*: any*/)
       }
-    ]
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "first",
+          "cursor": "after"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./questionListPagination.graphql'),
+      "identifierField": "id"
+    }
   },
   "name": "useQuestionListFragment",
   "selections": [
-    (v0/*: any*/),
+    (v1/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -113,7 +129,7 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v0/*: any*/),
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -234,6 +250,6 @@ return {
 };
 })();
 
-(node as any).hash = "8d9a9dd63c2ed5ff753c345fc99fe966";
+(node as any).hash = "5f75d904dca3677b98bc4d59f1250710";
 
 export default node;

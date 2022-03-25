@@ -126,7 +126,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                     <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
-                    <div className={classes.panes} onScroll={handleScroll}>
+                    <div className={classes.panes} id='event-sidebar-scroller' onScroll={handleScroll}>
                         {isMdUp && <div ref={topRef} className={classes.target} />}
                         <EventSidebar fragmentRef={node} />
                     </div>
