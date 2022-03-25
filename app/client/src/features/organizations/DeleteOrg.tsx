@@ -1,5 +1,4 @@
 import { graphql, useMutation } from 'react-relay';
-import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 
 import type { DeleteOrgMutation } from '@local/__generated__/DeleteOrgMutation.graphql';
 import { useSnack } from '@local/features/core/useSnack';

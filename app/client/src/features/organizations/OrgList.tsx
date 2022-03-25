@@ -9,7 +9,7 @@ import {
     ListItemText,
     ListItemSecondaryAction,
 } from '@mui/material';
-import { Add, ChevronRight } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import makeStyles from '@mui/styles/makeStyles';

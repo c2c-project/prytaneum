@@ -3,7 +3,6 @@ import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
-import bcrypt from 'bcryptjs';
 
 export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
@@ -149,7 +148,7 @@ export async function deleteEvent(userId: string, prisma: PrismaClient, input: D
     if (title !== confirmTitle) throw new Error('Event titles must match');
     
     //validation is if event title matches actual event title
-    if (title !== eventWithGlobalId.title) throw new Error('Deleting event failed: Invalid event title.');
+    if (title !== eventWithGlobalId?.title) throw new Error('Deleting event failed: Invalid event title.');
 
     //delete user by event id
     return prisma.event.delete({ where: { id: eventId } });

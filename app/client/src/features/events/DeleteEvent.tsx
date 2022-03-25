@@ -7,9 +7,7 @@ import {
     TextField
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 import { useMutation, useFragment } from 'react-relay';
-import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { graphql } from 'react-relay';
 
@@ -73,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const DeleteEvent = ({ fragmentRef, className }: DeleteEventProps) => {
+export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
     // form state hooks
     const [commit] = useMutation<DeleteEventMutation>(DELETE_EVENT_MUTATION);
 
@@ -81,9 +79,6 @@ export const DeleteEvent = ({ fragmentRef, className }: DeleteEventProps) => {
     const { title: eventTitle } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
 
     const { displaySnack } = useSnack();
-
-    // routing hook
-    const router = useRouter();
 
     // styling hook
     const classes = useStyles();
@@ -107,7 +102,7 @@ export const DeleteEvent = ({ fragmentRef, className }: DeleteEventProps) => {
         });
     }
 
-    const { handleSubmit, handleChange, values, errors, resetForm } = useFormik<TDeleteEvent>({
+    const { handleSubmit, handleChange, values, errors } = useFormik<TDeleteEvent>({
         initialValues: makeInitialState(intialDeleteEvent),
         validationSchema: deleteEventValidationSchema,
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
