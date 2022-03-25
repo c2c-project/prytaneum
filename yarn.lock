@@ -91,6 +91,7 @@ __metadata:
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
     react-dom: 17.0.2
+    react-infinite-scroll-component: ^6.1.0
     react-is: ^16.13.1
     react-player: ^1.11.1
     react-relay: ^13.0.2
@@ -21096,6 +21097,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-infinite-scroll-component@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-infinite-scroll-component@npm:6.1.0"
+  dependencies:
+    throttle-debounce: ^2.1.0
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 3708398934366df907dbad215247ebc1033221957ce7e32289ea31750cce70aa16513e2d03743e06c8b868ac7c542d12d5dbb6c830fd408433a4762f3cb5ecfb
+  languageName: node
+  linkType: hard
+
 "react-inspector@npm:^5.1.0":
   version: 5.1.1
   resolution: "react-inspector@npm:5.1.1"
@@ -23787,6 +23799,13 @@ resolve@^2.0.0-next.3:
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
   checksum: b6937a38c80c7f84d9c11dd75e49d5c44f71d95e810a3250bd1f1797fc7117c57698204adf676b71497acc205d769d65c16ae8fa10afad832ae1322630aef10a
+  languageName: node
+  linkType: hard
+
+"throttle-debounce@npm:^2.1.0":
+  version: 2.3.0
+  resolution: "throttle-debounce@npm:2.3.0"
+  checksum: 6d90aa2ddb294f8dad13d854a1cfcd88fdb757469669a096a7da10f515ee466857ac1e750649cb9da931165c6f36feb448318e7cb92570f0a3679d20e860a925
   languageName: node
   linkType: hard
 
