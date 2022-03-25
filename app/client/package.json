@@ -36,6 +36,7 @@
         "react-relay": "^13.0.2",
         "react-transition-group": "^4.4.2",
         "relay-runtime": "^13.0.2",
+        "sharp": "^0.30.3",
         "smoothscroll-polyfill": "^0.4.4",
         "subscriptions-transport-ws": "^0.11.0",
         "yup": "^0.32.11"
@@ -64,6 +65,7 @@
         "@types/react-transition-group": "^4",
         "@types/react-window": "^1.8.2",
         "@types/relay-runtime": "^13.0.1",
+        "@types/sharp": "^0",
         "@types/smoothscroll-polyfill": "^0.3.1",
         "@types/yup": "^0",
         "@typescript-eslint/eslint-plugin": "^5.12.0",
