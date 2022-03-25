@@ -3,7 +3,6 @@ import { graphql, usePaginationFragment } from 'react-relay';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
 
-// TODO: make the pagination here better
 export const USE_QUESTION_LIST_FRAGMENT = graphql`
     fragment useQuestionListFragment on Event
     @refetchable(queryName: "questionListPagination")
@@ -41,7 +40,6 @@ export function useQuestionList({ fragmentRef }: TArgs) {
     const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
         usePaginationFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
     const { questions, id: eventId, currentQuestion } = data;
-    // const { questions, id: eventId, currentQuestion } = useFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
     const questionList = React.useMemo(
         () => (questions?.edges ? questions.edges.map(({ node, cursor }) => { return { ...node, cursor }}) : []),
         [questions]
