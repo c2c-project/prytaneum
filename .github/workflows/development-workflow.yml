@@ -51,6 +51,9 @@ jobs:
 
             - name: Yarn Install
               run: yarn install
+              
+            - name: Prisma Generate
+              run: yarn workspace @app/server generate
 
             - name: Type Check Project
               run: yarn workspaces foreach -p run typecheck
