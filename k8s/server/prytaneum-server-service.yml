@@ -19,4 +19,4 @@ spec:
   selector:
     app: prytaneum-server
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP
