@@ -82,8 +82,13 @@ input DeleteAccountForm {
   password: String!
 }
 
+"""
+In order to delete an event, user must provide a title and a confirmation title, similar to account deletion.
+"""
 input DeleteEvent {
+  confirmTitle: String!
   eventId: String!
+  title: String!
 }
 
 input DeleteMember {
