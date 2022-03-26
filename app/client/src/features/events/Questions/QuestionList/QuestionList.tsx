@@ -16,7 +16,6 @@ import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
 import { QuestionQuote } from '../QuestionQuote';
 import { QuestionStats } from '../QuestionStats';
-// import { filters as filterFuncs } from './utils';
 import { useQuestionList } from './useQuestionList';
 import { useQuestionCreated } from './useQuestionCreated';
 import { useQuestionUpdated } from './useQuestionUpdated';
@@ -64,6 +63,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
     const [user] = useUser();
     const { isModerator } = useEvent();
     const { questions, connections, loadNext, hasNext, refetch } = useQuestionList({ fragmentRef });
+    const MAX_QUESTIONS_DISPLAYED = 50;
     useQuestionCreated({ connections });
     useQuestionUpdated({ connections });
     useQuestionDeleted({ connections });
@@ -105,16 +105,17 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                 <Grid container>
                     <Grid item xs={12}>
                         <List disablePadding>
+                            {/* TODO: Restore Later 
                             <Grid container alignItems='center'>
                                 <Typography className={classes.text} variant='body2'>
-                                    <b>{filteredList.length}</b>
+                                    <b>{filteredList.length <= MAX_QUESTIONS_DISPLAYED ? filteredList.length : MAX_QUESTIONS_DISPLAYED}</b>
                                     &nbsp; Questions Displayed
                                 </Typography>
-                            </Grid>
+                            </Grid> */}
                             <InfiniteScroll
-                                dataLength={filteredList.length}
-                                next={() => loadNext(5)}
-                                hasMore={hasNext}
+                                dataLength={isModerator ? filteredList.length : filteredList.slice(0,MAX_QUESTIONS_DISPLAYED).length}
+                                next={() => loadNext(10)}
+                                hasMore={hasNext && (filteredList.length < MAX_QUESTIONS_DISPLAYED || isModerator)}
                                 loader={<Loader />}
                                 refreshFunction={() => refetch({ after: filteredList[filteredList.length - 1].cursor }, { fetchPolicy: 'store-and-network' })}
                                 pullDownToRefresh
@@ -122,7 +123,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                 hasChildren
                                 scrollableTarget='event-sidebar-scroller'
                             >
-                                {filteredList.map((question) => (
+                                {(isModerator ? filteredList : filteredList.slice(0,MAX_QUESTIONS_DISPLAYED)).map((question) => (
                                     <ListItem disableGutters key={question.id}>
                                         <Card className={classes.item}>
                                             <QuestionAuthor fragmentRef={question} />
