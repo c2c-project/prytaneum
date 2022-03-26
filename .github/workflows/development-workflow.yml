@@ -34,7 +34,7 @@ jobs:
               run: yarn install
 
             - name: Lint Project
-              run: yarn g:lint-project
+              run: yarn workspaces foreach -p run lint
     
     typechecking:
         name: Type Check
@@ -53,7 +53,7 @@ jobs:
               run: yarn install
 
             - name: Type Check Project
-              run: yarn workspaces foreach -p run lint
+              run: yarn workspaces foreach -p run typecheck
 
     testing:
         name: Testing
