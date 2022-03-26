@@ -3,7 +3,7 @@
 //
 
 const isString = (value: unknown): value is string => typeof value === 'string';
-const isSecret = (value: string) => value === 'secret';
+// const isSecret = (value: string) => value === 'secret';
 const isNumber = (value: unknown): value is number => !Number.isNaN(Number(value));
 
 //
@@ -18,13 +18,13 @@ const isValidNodeEnv =
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const isValidCookieSecret = isProduction
-    ? isString(process.env.COOKIE_SECRET) && !isSecret(process.env.COOKIE_SECRET)
-    : isString(process.env.COOKIE_SECRET);
+// const isValidCookieSecret = isProduction
+//     ? isString(process.env.COOKIE_SECRET) && !isSecret(process.env.COOKIE_SECRET)
+//     : isString(process.env.COOKIE_SECRET);
 
-const isValidJwtSecret = isProduction
-    ? isString(process.env.COOKIE_SECRET) && !isSecret(process.env.COOKIE_SECRET)
-    : isString(process.env.COOKIE_SECRET);
+// const isValidJwtSecret = isProduction
+//     ? isString(process.env.COOKIE_SECRET) && !isSecret(process.env.COOKIE_SECRET)
+//     : isString(process.env.COOKIE_SECRET);
 
 // Any number is a valid port.
 const isValidPort = isNumber(process.env.PORT);
@@ -39,8 +39,8 @@ const isValidGcpProjectId = isProduction ? isString(process.env.GCP_PROJECT_ID) 
 
 export function checkEnv() {
     if (!isValidNodeEnv) throw new Error('NODE_ENV is not a valid value');
-    if (!isValidCookieSecret) throw new Error('COOKIE_SECRET is not valid');
-    if (!isValidJwtSecret) throw new Error('JWT_SECRET is not valid');
+    // if (!isValidCookieSecret) throw new Error('COOKIE_SECRET is not valid');
+    // if (!isValidJwtSecret) throw new Error('JWT_SECRET is not valid');
     if (!isValidPort) throw new Error('PORT is not valid');
     if (!isValidHost) throw new Error('HOST is not valid');
     if (!isValidGcpProjectId) throw new Error('GCP_PROJECT_ID is not valid');

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/lab';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import type { CreateEvent as FormType } from '@local/graphql-types';
@@ -9,7 +8,7 @@ import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
-import { makeInitialState } from '@local/utils/ts-utils';
+import { useForm } from '../core';
 
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
@@ -48,16 +47,10 @@ const initialState: TEventForm = {
 export function EventForm(props: EventFormProps) {
     const { onCancel, onSubmit, title, className, form } = props;
 
-    const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik<TEventForm>({
-        initialValues: makeInitialState(initialState, form),
-        validationSchema,
-        onSubmit,
-        // not sure how I feel about this
-        // validateOnChange: false,
-    });
+    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(form || initialState, validationSchema);
 
     return (
-        <Form onSubmit={handleSubmit} className={className}>
+        <Form onSubmit={handleSubmit(onSubmit)} className={className}>
             {title && <FormTitle title='Townhall Form' />}
             <FormContent>
                 <TextField
@@ -66,28 +59,28 @@ export function EventForm(props: EventFormProps) {
                     helperText={errors.title}
                     required
                     label='Title'
-                    value={values.title}
-                    onChange={handleChange}
+                    value={state.title}
+                    onChange={handleChange('title')}
                 />
                 <TextField
                     error={Boolean(errors.topic)}
                     helperText={errors.topic}
                     required
                     label='Topic'
-                    value={values.topic}
-                    onChange={handleChange}
+                    value={state.topic}
+                    onChange={handleChange('topic')}
                 />
                 <TextField
                     error={Boolean(errors.description)}
                     helperText={errors.description}
                     required
                     label='Description'
-                    value={values.description}
-                    onChange={handleChange}
+                    value={state.description}
+                    onChange={handleChange('description')}
                 />
                 <MobileDateTimePicker
-                    value={values.startDateTime}
-                    onChange={(value) => setFieldValue('startDateTime', value)}
+                    value={state.startDateTime}
+                    onChange={(value) => setState(currentState => ({ ...currentState, startDateTime: value || new Date() }))}
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
@@ -99,8 +92,8 @@ export function EventForm(props: EventFormProps) {
                     )}
                 />
                 <MobileDateTimePicker
-                    value={values.endDateTime}
-                    onChange={(value) => setFieldValue('endDateTime', value)}
+                    value={state.endDateTime}
+                    onChange={(value) => setState(currentState => ({ ...currentState, endDateTime: value || new Date() }))}
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}

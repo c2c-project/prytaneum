@@ -7,7 +7,7 @@ let _prisma: PrismaClient | null = null;
 
 export function getPrismaClient(logger: FastifyLoggerInstance) {
     const prisma = _prisma ?? new PrismaClient();
-    if (!prisma) {
+    if (!_prisma) {
         logger.debug('Instantiating new prisma client.');
         _prisma = prisma;
     }
