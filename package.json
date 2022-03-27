@@ -49,5 +49,5 @@
         "ts-node-dev": "^1.1.6",
         "yarn": "^1.22.17"
     },
-    "packageManager": "yarn@3.1.1"
+    "packageManager": "yarn@3.2.0"
 }
