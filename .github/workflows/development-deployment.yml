@@ -71,7 +71,7 @@ jobs:
                   kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
-                  
+
     build-publish-deploy-server:
         name: Build Publish and Deploy Server
         runs-on: ubuntu-latest
