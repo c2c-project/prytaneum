@@ -5,6 +5,7 @@ on:
         branches: [dev]
         types: [opened, edited, synchronize]
 
+
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: prytaneum-dev-cluster
@@ -25,7 +26,7 @@ jobs:
         steps:
             - name: Setup
               uses: actions/checkout@v2
-
+              
             - uses: actions/setup-node@v2
               with:
                 node-version: '16'
