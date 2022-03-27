@@ -5,5 +5,8 @@ module.exports = {
     },
     typescript: {
         tsconfigPath: './tsconfig.prod.json'
-    }
+    },
+    experimental: {
+        outputStandalone: true,
+    },
 };
