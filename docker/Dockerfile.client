@@ -1,39 +1,39 @@
-FROM node:14.15.4 as base-stage
+FROM node:16-alpine as base-stage
 
-RUN apt-get update
+RUN apk add --no-cache libc6-compat
 RUN yarn set version berry
 
 # Build Stage
 FROM base-stage as build-stage
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY . .
 
 RUN yarn install
 
 # Build Client
-WORKDIR /usr/src/app/app/client
+WORKDIR /app/app/client
 
 ARG GRAPHQL_URL=https://prytaneum.io/graphql
 ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}
 
 RUN yarn build
 
-FROM node:14.15.4 as production-stage
+FROM node:16-alpine as production-stage
+
+WORKDIR /app
 
 RUN yarn set version berry
-
-WORKDIR /usr/src/app
 
 ARG DEPLOYMENT_ENV=production
 ENV DEPLOYMENT_ENV ${DEPLOYMENT_ENV}
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 
-COPY --from=build-stage /usr/src/app/app/client/*.json ./app/client/
-COPY --from=build-stage /usr/src/app/app/client/.next ./app/client/.next
-COPY --from=build-stage /usr/src/app/app/client/public ./app/client/public
-COPY --from=build-stage /usr/src/app/*.json ./
+COPY --from=build-stage /app/app/client/*.json ./app/client/
+COPY --from=build-stage /app/app/client/.next ./app/client/.next
+COPY --from=build-stage /app/app/client/public ./app/client/public
+COPY --from=build-stage /app/*.json ./
 
 RUN yarn plugin import workspace-tools
 RUN yarn workspaces focus @app/client --production
