@@ -24,10 +24,11 @@ COPY --from=build-stage /usr/monorepo/.nvmrc ./
 COPY --from=build-stage /usr/monorepo/.yarn/releases ./.yarn/releases
 COPY --from=build-stage /usr/monorepo/.yarn/plugins ./.yarn/plugins
 # Client specific files
-COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
-COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
-COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
-COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
+COPY --from=build-stage /usr/monorepo/app/client ./app/client
+# COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
+# COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
+# COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
+# COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
 RUN yarn workspaces focus --production @app/client
 EXPOSE 3000
 CMD ["yarn", "workspace", "@app/client", "start"]
