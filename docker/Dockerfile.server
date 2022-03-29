@@ -17,11 +17,11 @@ WORKDIR /usr/monorepo
 # Set appropriate env variables
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
-ENV SERVER_PORT 3002
+ENV PORT 3002
 ENV GCP_PROJECT_ID prytaneum-project
 # Unset certain env variables
 RUN unset PUBSUB_EMULATOR_HOST
-# Project specific files
+# Monorepo files
 COPY --from=build-stage /usr/monorepo/package.json ./
 COPY --from=build-stage /usr/monorepo/.yarnrc.yml ./
 COPY --from=build-stage /usr/monorepo/yarn.lock ./
