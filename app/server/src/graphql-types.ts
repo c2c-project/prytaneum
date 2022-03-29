@@ -208,6 +208,7 @@ export type Mutation = {
      */
     prevQuestion: Event;
     createQuestion: EventQuestionMutationResponse;
+    deleteQuestion: EventQuestionMutationResponse;
     alterLike: EventQuestionMutationResponse;
     createSpeaker: EventSpeakerMutationResponse;
     deleteSpeaker: EventSpeakerMutationResponse;
@@ -327,6 +328,10 @@ export type MutationprevQuestionArgs = {
 
 export type MutationcreateQuestionArgs = {
     input: CreateQuestion;
+};
+
+export type MutationdeleteQuestionArgs = {
+    input: DeleteQuestion;
 };
 
 export type MutationalterLikeArgs = {
@@ -909,6 +914,10 @@ export type CreateQuestion = {
     eventId: Scalars['ID'];
 };
 
+export type DeleteQuestion = {
+    questionId: Scalars['ID'];
+};
+
 export type AlterLike = {
     questionId: Scalars['ID'];
     /** True if the user is attempting to like the question; false if they are trying to remove a like */
@@ -1208,6 +1217,7 @@ export type ResolversTypes = {
     EventQuestionConnection: ResolverTypeWrapper<EventQuestionConnection>;
     Like: ResolverTypeWrapper<Like>;
     CreateQuestion: CreateQuestion;
+    DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: ResolverTypeWrapper<EventQuestionMutationResponse>;
     QuestionOperation: ResolverTypeWrapper<QuestionOperation>;
@@ -1313,6 +1323,7 @@ export type ResolversParentTypes = {
     EventQuestionConnection: EventQuestionConnection;
     Like: Like;
     CreateQuestion: CreateQuestion;
+    DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: EventQuestionMutationResponse;
     QuestionOperation: QuestionOperation;
@@ -1648,6 +1659,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationcreateQuestionArgs, 'input'>
+    >;
+    deleteQuestion?: Resolver<
+        ResolversTypes['EventQuestionMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationdeleteQuestionArgs, 'input'>
     >;
     alterLike?: Resolver<
         ResolversTypes['EventQuestionMutationResponse'],

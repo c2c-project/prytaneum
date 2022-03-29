@@ -29,8 +29,12 @@ export function QueueButton({ fragmentRef }: QueueButtonProps) {
 
     // TODO: add an animation for this using framer motion
     return isQueued ? (
-        <DequeueQuestionButton questionId={questionId} />
+        <div>
+            <DequeueQuestionButton questionId={questionId} />
+        </div>
     ) : (
-        <EnqueueQuestionButton questionId={questionId} />
+        <div>
+            <EnqueueQuestionButton questionId={questionId} />
+        </div>
     );
 }

@@ -149,9 +149,10 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                                                     : { width: '100%', maxWidth: '10rem' }
                                                             }
                                                             className={classes.questionActions}
-                                                            like={!isModerator && Boolean(user)}
-                                                            quote={!isModerator && Boolean(user)}
-                                                            queue={isModerator && Boolean(user)}
+                                                            likeEnabled={!isModerator && Boolean(user)}
+                                                            quoteEnabled={!isModerator && Boolean(user)}
+                                                            queueEnabled={isModerator && Boolean(user)}
+                                                            deleteEnabled={isModerator && Boolean(user)}
                                                             connections={connections}
                                                             fragmentRef={question}
                                                         />
@@ -185,9 +186,10 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                                             : { width: '100%', maxWidth: '10rem' }
                                                     }
                                                     className={classes.questionActions}
-                                                    like={!isModerator && Boolean(user)}
-                                                    quote={!isModerator && Boolean(user)}
-                                                    queue={isModerator && Boolean(user)}
+                                                    likeEnabled={!isModerator && Boolean(user)}
+                                                    quoteEnabled={!isModerator && Boolean(user)}
+                                                    queueEnabled={isModerator && Boolean(user)}
+                                                    deleteEnabled={isModerator && Boolean(user)}
                                                     connections={connections}
                                                     fragmentRef={question}
                                                 />

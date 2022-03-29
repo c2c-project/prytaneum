@@ -106,6 +106,10 @@ input DeleteOrganization {
   orgId: ID!
 }
 
+input DeleteQuestion {
+  questionId: ID!
+}
+
 input DeleteSpeaker {
   """Necessary for verifying user permissions"""
   eventId: String!
@@ -455,6 +459,7 @@ type Mutation {
   """Removes a moderator from a given event"""
   deleteModerator(input: DeleteModerator!): ModeratorMutationResponse!
   deleteOrganization(input: DeleteOrganization!): OrganizationMutationResponse!
+  deleteQuestion(input: DeleteQuestion!): EventQuestionMutationResponse!
   deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
   deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
 

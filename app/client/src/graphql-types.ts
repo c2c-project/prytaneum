@@ -113,6 +113,10 @@ export type DeleteOrganization = {
   orgId: Scalars['ID'];
 };
 
+export type DeleteQuestion = {
+  questionId: Scalars['ID'];
+};
+
 export type DeleteSpeaker = {
   /** Necessary for verifying user permissions */
   eventId: Scalars['String'];
@@ -511,6 +515,7 @@ export type Mutation = {
   /** Removes a moderator from a given event */
   deleteModerator: ModeratorMutationResponse;
   deleteOrganization: OrganizationMutationResponse;
+  deleteQuestion: EventQuestionMutationResponse;
   deleteSpeaker: EventSpeakerMutationResponse;
   deleteVideo: EventVideoMutationResponse;
   /** End the event so that it is not live */
@@ -622,6 +627,11 @@ export type MutationDeleteModeratorArgs = {
 
 export type MutationDeleteOrganizationArgs = {
   input: DeleteOrganization;
+};
+
+
+export type MutationDeleteQuestionArgs = {
+  input: DeleteQuestion;
 };
 
 

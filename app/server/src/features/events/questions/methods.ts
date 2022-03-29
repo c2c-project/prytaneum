@@ -26,8 +26,17 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
             lang: 'EN', // TODO:
         },
         include: {
-            refQuestion: true
-        }
+            refQuestion: true,
+        },
+    });
+}
+
+/**
+ *  Remove a question from an event
+ */
+export async function deleteQuestion(questionId: string, prisma: PrismaClient) {
+    return prisma.eventQuestion.delete({
+        where: { id: questionId },
     });
 }
 
