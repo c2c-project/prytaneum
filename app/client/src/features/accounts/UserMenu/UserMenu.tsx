@@ -123,8 +123,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const router = useRouter();
     const { logoutUser } = useLogout({
         onComplete: () => {
-            // TODO Check if in a private event and use router.replace('/')
-            router.push('/');
+            router.reload();
         },
     });
     const handleNavigation = (path: string) => () => router.push(path);
@@ -180,7 +179,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
-                            <LoginForm onSuccess={close} />
+                            <LoginForm onSuccess={() => { close(); router.reload(); }} />
                         </DialogContent>
                     </ResponsiveDialog>
                     <Button color='primary' variant='outlined' onClick={handleClick('register')}>

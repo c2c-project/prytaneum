@@ -70,7 +70,7 @@ export default function Login() {
             <Grid item md={5} className={classes.formContainer}>
                 <Paper className={classes.paper}>
                     <LoginForm
-                        onSuccess={() => router.push('/organizations/me')}
+                        onSuccess={() => router.reload()}
                         secondaryActions={
                             <Link href='/register' className={classes.link} underline='hover'>
                                 Or, register an account
