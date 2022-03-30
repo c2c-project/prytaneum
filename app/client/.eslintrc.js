@@ -7,10 +7,7 @@ module.exports = {
     rules: {
         quotes: ['error', 'single'],
         indent: 'off',
-        '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        'react/jsx-indent': ['error', 4],
-        'react/jsx-indent-props': ['error', 4],
         'react/no-array-index-key': 0,
         'react/forbid-prop-types': 0,
         'react/no-find-dom-node': 0,
