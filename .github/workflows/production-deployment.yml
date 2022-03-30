@@ -111,7 +111,6 @@ jobs:
 
             # Push the Server image to Google Container Registry
             - name: Publish Server
-              if: steps.changes.outputs.server == 'true'
               run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
