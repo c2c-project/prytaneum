@@ -26,6 +26,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                  filters: |
+                      client:
+                        - 'app/client/**'
+
             # Setup gcloud CLI
             - uses: google-github-actions/setup-gcloud@v0.2.0
               with:
@@ -45,6 +52,7 @@ jobs:
 
             # Build the Client
             - name: Build Client
+              if: steps.changes.outputs.client == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.client \
@@ -57,18 +65,21 @@ jobs:
 
             # Push the Client image to Google Container Registry
             - name: Publish Client
+              if: steps.changes.outputs.client == 'true'
               run: docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
+              if: steps.changes.outputs.client == 'true'
               run: |-
                   curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
                   chmod u+x ./kustomize
 
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Client
+              if: steps.changes.outputs.client == 'true'
               run: |-
-                  cd ./k8s/client
+                  cd ./k8s/client/production
                   kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
@@ -81,6 +92,13 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                  filters: |
+                      server:
+                        - 'app/server/**'
 
             # Setup gcloud CLI
             - uses: google-github-actions/setup-gcloud@v0.2.0
@@ -101,6 +119,7 @@ jobs:
 
             # Build the Server
             - name: Build Server
+              if: steps.changes.outputs.server == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.server \
@@ -111,18 +130,21 @@ jobs:
 
             # Push the Server image to Google Container Registry
             - name: Publish Server
+              if: steps.changes.outputs.server == 'true'
               run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
+              if: steps.changes.outputs.server == 'true'
               run: |-
                   curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
                   chmod u+x ./kustomize
 
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Server
+              if: steps.changes.outputs.server == 'true'
               run: |-
-                  cd ./k8s/server
+                  cd ./k8s/server/production
                   kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -

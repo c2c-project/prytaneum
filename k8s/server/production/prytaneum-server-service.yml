@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    beta.cloud.google.com/backend-config: '{"ports":{"80":"prytaneum-backendconfig"}}'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: prytaneum-server
+  name: prytaneum-server-service
+  namespace: production
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3002
+  selector:
+    app: prytaneum-server
+  sessionAffinity: None
+  type: ClusterIP

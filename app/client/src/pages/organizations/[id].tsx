@@ -25,7 +25,7 @@ const Page: NextPage = () => {
     if (!router.isReady || !queryRef) return <Loader />;
 
     return (
-        <React.Suspense fallback='loading..'>
+        <React.Suspense fallback={<Loader />}>
             <OrgProfile queryRef={queryRef} />
         </React.Suspense>
     );
