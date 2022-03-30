@@ -7,6 +7,7 @@ import type { profileQuery, profileQueryResponse } from '@local/__generated__/pr
 import { initEnvironment } from '@local/features/core/relay';
 import { PickRequired } from '@local/utils/ts-utils';
 import { EventProfile } from '@local/features/events';
+import { Loader } from '@local/components/Loader';
 
 function doesCtxHaveId(
     ctx: GetServerSidePropsContext<{ id?: string }>
@@ -41,7 +42,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: st
 
 const ProfilePage: NextPage<profileQueryResponse> = ({ node }) => {
     if (!node) {
-        return <div>loading...</div>;
+        return <Loader />;
     }
     return <EventProfile fragmentRef={node} />;
 };
