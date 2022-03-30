@@ -76,8 +76,7 @@ export function EventSettings({ queryRef }: Props) {
     const [canView, setCanView] = React.useState(false);
 
     React.useEffect(() => {
-        if (isLoading) return;
-        if (!user) router.push('/');
+        if (!isLoading && !user) router.push('/');
         else if (data.node?.isViewerModerator) {
             setCanView(true);
         } else {

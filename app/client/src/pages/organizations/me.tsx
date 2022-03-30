@@ -26,7 +26,7 @@ const Page: NextPage = () => {
     if (!queryRef) return <Loader />;
 
     return (
-        <React.Suspense fallback='loading...'>
+        <React.Suspense fallback={<Loader />}>
             <OrgList queryRef={queryRef} />
         </React.Suspense>
     );
