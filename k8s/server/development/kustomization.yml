@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+replicas:
+  - name: prytaneum-server
+    count: 1
+resources:
+  - ./prytaneum-server-deployment.yml
+  - ./prytaneum-server-service.yml
+  - ./prytaneum-server-configmap.yml
+  - ./prytaneum-backend-config.yml
+  

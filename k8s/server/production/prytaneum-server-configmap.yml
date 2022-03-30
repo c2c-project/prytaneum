@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prytaneum-server-config
+  namespace: production
+  labels:
+    app: prytaneum-server
+data:
+  HOST: 0.0.0.0
+  NODE_ENV: production
+  SERVER_PORT: "3002"
+  GCP_PROJECT_ID: prytaneum-project
+  PUB_SUB_PREFIX: projects/prytaneum-project/topics/
