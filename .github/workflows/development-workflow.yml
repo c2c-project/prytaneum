@@ -5,7 +5,6 @@ on:
         branches: [dev]
         types: [opened, edited, synchronize]
 
-
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: prytaneum-dev-cluster
@@ -26,17 +25,17 @@ jobs:
         steps:
             - name: Setup
               uses: actions/checkout@v2
-              
+
             - uses: actions/setup-node@v2
               with:
-                node-version: '16'
+                  node-version: '16'
 
             - name: Yarn Install
               run: yarn install
 
             - name: Lint Project
               run: yarn workspaces foreach -p run lint
-    
+
     typechecking:
         name: Type Check
         runs-on: ubuntu-latest
@@ -48,11 +47,11 @@ jobs:
 
             - uses: actions/setup-node@v2
               with:
-                node-version: '16'
+                  node-version: '16'
 
             - name: Yarn Install
               run: yarn install
-              
+
             - name: Prisma Generate
               run: yarn workspace @app/server generate
 
@@ -78,6 +77,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                  filters: |
+                      client:
+                        - 'app/client/**'
+
             # Setup gcloud CLI
             - uses: google-github-actions/setup-gcloud@v0.2.0
               with:
@@ -97,6 +103,7 @@ jobs:
 
             # Build the Client
             - name: Build Client
+              if: steps.changes.outputs.client == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.client \
@@ -117,6 +124,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                  filters: |
+                      server:
+                        - 'app/server/**'
+
             # Setup gcloud CLI
             - uses: google-github-actions/setup-gcloud@v0.2.0
               with:
@@ -136,6 +150,7 @@ jobs:
 
             # Build the Server
             - name: Build Server
+              if: steps.changes.outputs.server == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.server \
