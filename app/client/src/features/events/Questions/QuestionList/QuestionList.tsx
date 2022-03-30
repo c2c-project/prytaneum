@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Grid, Card, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
@@ -20,7 +19,8 @@ import { useQuestionList } from './useQuestionList';
 import { useQuestionCreated } from './useQuestionCreated';
 import { useQuestionUpdated } from './useQuestionUpdated';
 import { useQuestionDeleted } from './useQuestionDeleted';
-import { Loader } from '@local/components/Loader/Loader.stories';
+import { Loader } from '@local/components/Loader';
+import InfiniteScroll from '@local/components/InfiniteScroll';
 
 interface Props {
     className?: string;
@@ -62,7 +62,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { questions, connections, loadNext, hasNext, refetch } = useQuestionList({ fragmentRef });
+    const { questions, connections, hasNext, loadNext, refetch } = useQuestionList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;
     useQuestionCreated({ connections });
     useQuestionUpdated({ connections });
@@ -114,9 +114,7 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                             </Grid> */}
                             {isModerator ? (
                                 <InfiniteScroll
-                                    dataLength={
-                                        filteredList.length
-                                    }
+                                    dataLength={filteredList.length}
                                     next={() => loadNext(10)}
                                     hasMore={hasNext && (filteredList.length < MAX_QUESTIONS_DISPLAYED || isModerator)}
                                     loader={<Loader />}
@@ -131,77 +129,75 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                     hasChildren
                                     scrollableTarget='event-sidebar-scroller'
                                 >
-                                    {filteredList.map(
-                                        (question) => (
-                                            <ListItem disableGutters key={question.id}>
-                                                <Card className={classes.item}>
-                                                    <QuestionAuthor fragmentRef={question} />
-                                                    {question.refQuestion && (
-                                                        <QuestionQuote fragmentRef={question.refQuestion} />
-                                                    )}
-                                                    <QuestionContent fragmentRef={question} />
-                                                    <Grid container alignItems='center' justifyContent='space-between'>
-                                                        {isModerator && <QuestionStats fragmentRef={question} />}
-                                                        <QuestionActions
-                                                            style={
-                                                                !isModerator
-                                                                    ? { width: '100%' }
-                                                                    : { width: '100%', maxWidth: '10rem' }
-                                                            }
-                                                            className={classes.questionActions}
-                                                            like={!isModerator && Boolean(user)}
-                                                            quote={!isModerator && Boolean(user)}
-                                                            queue={isModerator && Boolean(user)}
-                                                            connections={connections}
-                                                            fragmentRef={question}
-                                                        />
-                                                        {isModerator && ( // filler to justify moderator queue button
-                                                            <span className={classes.filler}>
-                                                                <QuestionStats fragmentRef={question} />
-                                                            </span>
-                                                        )}
-                                                    </Grid>
-                                                </Card>
-                                            </ListItem>
-                                        )
-                                    )}
-                                </InfiniteScroll>
-                            ) : 
-                            (isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
-                                (question) => (
-                                    <ListItem disableGutters key={question.id}>
-                                        <Card className={classes.item}>
-                                            <QuestionAuthor fragmentRef={question} />
-                                            {question.refQuestion && (
-                                                <QuestionQuote fragmentRef={question.refQuestion} />
-                                            )}
-                                            <QuestionContent fragmentRef={question} />
-                                            <Grid container alignItems='center' justifyContent='space-between'>
-                                                {isModerator && <QuestionStats fragmentRef={question} />}
-                                                <QuestionActions
-                                                    style={
-                                                        !isModerator
-                                                            ? { width: '100%' }
-                                                            : { width: '100%', maxWidth: '10rem' }
-                                                    }
-                                                    className={classes.questionActions}
-                                                    like={!isModerator && Boolean(user)}
-                                                    quote={!isModerator && Boolean(user)}
-                                                    queue={isModerator && Boolean(user)}
-                                                    connections={connections}
-                                                    fragmentRef={question}
-                                                />
-                                                {isModerator && ( // filler to justify moderator queue button
-                                                    <span className={classes.filler}>
-                                                        <QuestionStats fragmentRef={question} />
-                                                    </span>
+                                    {filteredList.map((question) => (
+                                        <ListItem disableGutters key={question.id}>
+                                            <Card className={classes.item}>
+                                                <QuestionAuthor fragmentRef={question} />
+                                                {question.refQuestion && (
+                                                    <QuestionQuote fragmentRef={question.refQuestion} />
                                                 )}
-                                            </Grid>
-                                        </Card>
-                                    </ListItem>
+                                                <QuestionContent fragmentRef={question} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    {isModerator && <QuestionStats fragmentRef={question} />}
+                                                    <QuestionActions
+                                                        style={
+                                                            !isModerator
+                                                                ? { width: '100%' }
+                                                                : { width: '100%', maxWidth: '10rem' }
+                                                        }
+                                                        className={classes.questionActions}
+                                                        like={!isModerator && Boolean(user)}
+                                                        quote={!isModerator && Boolean(user)}
+                                                        queue={isModerator && Boolean(user)}
+                                                        connections={connections}
+                                                        fragmentRef={question}
+                                                    />
+                                                    {isModerator && ( // filler to justify moderator queue button
+                                                        <span className={classes.filler}>
+                                                            <QuestionStats fragmentRef={question} />
+                                                        </span>
+                                                    )}
+                                                </Grid>
+                                            </Card>
+                                        </ListItem>
+                                    ))}
+                                </InfiniteScroll>
+                            ) : (
+                                (isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
+                                    (question) => (
+                                        <ListItem disableGutters key={question.id}>
+                                            <Card className={classes.item}>
+                                                <QuestionAuthor fragmentRef={question} />
+                                                {question.refQuestion && (
+                                                    <QuestionQuote fragmentRef={question.refQuestion} />
+                                                )}
+                                                <QuestionContent fragmentRef={question} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    {isModerator && <QuestionStats fragmentRef={question} />}
+                                                    <QuestionActions
+                                                        style={
+                                                            !isModerator
+                                                                ? { width: '100%' }
+                                                                : { width: '100%', maxWidth: '10rem' }
+                                                        }
+                                                        className={classes.questionActions}
+                                                        like={!isModerator && Boolean(user)}
+                                                        quote={!isModerator && Boolean(user)}
+                                                        queue={isModerator && Boolean(user)}
+                                                        connections={connections}
+                                                        fragmentRef={question}
+                                                    />
+                                                    {isModerator && ( // filler to justify moderator queue button
+                                                        <span className={classes.filler}>
+                                                            <QuestionStats fragmentRef={question} />
+                                                        </span>
+                                                    )}
+                                                </Grid>
+                                            </Card>
+                                        </ListItem>
+                                    )
                                 )
-                            )
-                            }
+                            )}
                             {filteredList.length === 0 && questions.length !== 0 && (
                                 <Typography align='center' variant='body2'>
                                     No results to display
