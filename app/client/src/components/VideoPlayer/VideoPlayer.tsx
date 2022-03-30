@@ -51,7 +51,7 @@ export function VideoPlayer({ url, rest }: ReactPlayerProps) {
                     />
                 ) : (
                     <Grid container justifyContent='center' alignContent='center' className={classes.placeholder}>
-                        <Typography>At the start time of the event refresh your browser to see the video</Typography>
+                        <Typography>Prytaneum: A Crucial Tool for Democracy</Typography>
                     </Grid>
                 )}
             </div>
