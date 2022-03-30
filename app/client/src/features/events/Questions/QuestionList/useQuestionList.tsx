@@ -44,8 +44,8 @@ export function useQuestionList({ fragmentRef }: TArgs) {
         () =>
             questions?.edges
                 ? questions.edges.map(({ node, cursor }) => {
-                      return { ...node, cursor };
-                  })
+                    return { ...node, cursor };
+                })
                 : [],
         [questions]
     );

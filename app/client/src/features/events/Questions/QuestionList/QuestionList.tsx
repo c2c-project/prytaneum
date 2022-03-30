@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Grid, Card, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import type { useQuestionListFragment$key } from '@local/__generated__/useQuestionListFragment.graphql';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
@@ -20,7 +21,6 @@ import { useQuestionCreated } from './useQuestionCreated';
 import { useQuestionUpdated } from './useQuestionUpdated';
 import { useQuestionDeleted } from './useQuestionDeleted';
 import { Loader } from '@local/components/Loader';
-import InfiniteScroll from '@local/components/InfiniteScroll';
 
 interface Props {
     className?: string;
