@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6e9e3740aacac01c9e056108e1683c01>>
+ * @generated SignedSource<<05e54393bc1af193ab19cf5f79dab102>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -35,7 +35,7 @@ var v0 = [
     "name": "after"
   },
   {
-    "defaultValue": 10,
+    "defaultValue": 50,
     "kind": "LocalArgument",
     "name": "first"
   },
@@ -331,16 +331,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "36a639735cbdef5473a1069e91e7e095",
+    "cacheID": "e3853a096caf9ea3db9f2cf851252d55",
     "id": null,
     "metadata": {},
     "name": "questionListPagination",
     "operationKind": "query",
-    "text": "query questionListPagination(\n  $after: String = \"\"\n  $first: Int = 10\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useQuestionListFragment_2HEEH6\n    id\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment useQuestionListFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questions(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query questionListPagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useQuestionListFragment_2HEEH6\n    id\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment useQuestionListFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questions(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5f75d904dca3677b98bc4d59f1250710";
+(node as any).hash = "04d5e0c47685ba15a2a54c9e5aafe145";
 
 export default node;
