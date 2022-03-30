@@ -67,7 +67,7 @@ jobs:
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Client
               run: |-
-                  cd ./k8s/client
+                  cd ./k8s/client/development
                   kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
@@ -121,8 +121,8 @@ jobs:
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Server
               run: |-
-                  cd ./k8s/server
-                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
+                  cd ./k8s/server/development
+                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG="gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
