@@ -122,9 +122,6 @@ export const resolvers: Resolvers = {
                     const { eventId: questionEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.questionDeleted.edge.node.id);
-                    console.log('Question ID: ', questionId);
-                    console.log('Event ID: ', eventId);
-                    console.log('Question Event ID', questionEventId);
                     return eventId === questionEventId;
                 }
             ),
