@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
     // https://arturocampos.dev/blog/nextjs-with-google-analytics <- referenced for the router implementation
     useEffect(() => {
         const handleRouteChange = (url: any) => {
-            ga.pageview(url)
+            ga.pageview(url, document.title)
         }
 
         router.events.on('routeChangeComplete', handleRouteChange)

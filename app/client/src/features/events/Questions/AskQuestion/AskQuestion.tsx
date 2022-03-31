@@ -8,6 +8,7 @@ import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutati
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useSnack } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
+import * as ga from '@local/utils/ga/index';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {
@@ -51,6 +52,25 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
                 else close();
             },
         });
+        try {
+            commit({
+                variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
+                onCompleted(payload) {
+                    if (payload.createQuestion.isError) displaySnack('Something went wrong!');
+                    else {
+                        ga.event({
+                            action: 'submit_question',
+                            category: 'questions',
+                            label: 'live event',
+                            value: form.question,
+                        });
+                        close();
+                    }
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message);
+        }
     }
 
     return (
