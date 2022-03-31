@@ -11,6 +11,9 @@ import { UserProvider } from '@local/features/accounts/UserContext';
 import { ThemeProvider, SnackContext, useEnvironment } from '@local/features/core';
 import { Layout } from '@local/layout';
 import '@local/index.css';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import * as ga from '../utils/ga/index'
 
 declare module '@mui/styles/defaultTheme' {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -18,6 +21,21 @@ declare module '@mui/styles/defaultTheme' {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+    const router = useRouter()
+
+    // https://arturocampos.dev/blog/nextjs-with-google-analytics <- referenced for the router implementation
+    useEffect(() => {
+        const handleRouteChange = (url: any) => {
+            ga.pageview(url)
+        }
+
+        router.events.on('routeChangeComplete', handleRouteChange)
+
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange)
+        }
+    }, [router.events])
+
     const { env } = useEnvironment(pageProps.initialRecords);
 
     React.useEffect(() => {
