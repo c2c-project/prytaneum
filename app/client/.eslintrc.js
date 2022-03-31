@@ -1,6 +1,6 @@
 module.exports = {
     plugins: ['jest', '@typescript-eslint'],
-    extends: ['react-app', 'airbnb-typescript', 'prettier'],
+    extends: ['next/core-web-vitals', 'react-app', 'airbnb-typescript', 'prettier'],
     parserOptions: {
         project: './tsconfig.json',
     },
@@ -41,6 +41,7 @@ module.exports = {
         // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
         'react/require-default-props': 'off',
         'import/no-anonymous-default-export': 'off',
+        "react/display-name": [0, { "ignoreTranspilerName": true }]
     },
     overrides: [
         {
