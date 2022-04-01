@@ -1,9 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
-import Image from 'next/image';
 import makeStyles from '@mui/styles/makeStyles';
-// import { useRouter } from 'next/router';
-// import { useUser } from '@local/features/accounts';
-
 
 const useStyles = makeStyles(() => ({
     titleContainer: {
@@ -15,27 +12,28 @@ const useStyles = makeStyles(() => ({
         flexGrow: 0,
         width: 25,
         cursor: 'pointer',
-        marginRight: '15px'
+        marginRight: '15px',
+    },
+    logo: {
+        width: 50,
+        height: 50,
+        padding: 4,
+        objectFit: 'contain',
     },
 }));
 
 export default function Title() {
     const classes = useStyles();
-    // const [user] = useUser();
     // const router = useRouter();
-
-    // const handleNavigation = (path: string) => () => router.push(path);
 
     return (
         <div className={classes.titleContainer}>
             <div className={classes.title}>
-                <Image
-                    src='/static/prytaneum_logo.svg' 
+                <img
+                    src='/static/prytaneum_logo.svg'
                     alt='Prytaneum Logo'
-                    width={97}
-                    height={135}
-                    objectFit='contain'
-                    // onClick={user ? handleNavigation('/app/home') : handleNavigation('/')}
+                    className={classes.logo}
+                    // onClick={() => router.push('/')}
                 />
             </div>
         </div>
