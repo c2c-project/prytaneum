@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7101c0688fa887cf3b78f73f1f1ab4b5>>
+ * @generated SignedSource<<a695f60dab75116c974e69b31a8085af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,8 @@ export type useQuestionListFragment$data = {
       readonly node: {
         readonly id: string;
         readonly question: string | null;
+        readonly isVisible: boolean | null;
+        readonly position: number | null;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
@@ -140,6 +142,20 @@ return {
                 {
                   "alias": null,
                   "args": null,
+                  "kind": "ScalarField",
+                  "name": "isVisible",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "position",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
                   "concreteType": "User",
                   "kind": "LinkedField",
                   "name": "createdBy",
@@ -250,6 +266,6 @@ return {
 };
 })();
 
-(node as any).hash = "04d5e0c47685ba15a2a54c9e5aafe145";
+(node as any).hash = "e9b69c0ce085b8a702455eacfe12a8ca";
 
 export default node;

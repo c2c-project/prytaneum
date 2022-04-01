@@ -34,9 +34,12 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
 /**
  *  Remove a question from an event
  */
-export async function deleteQuestion(questionId: string, prisma: PrismaClient) {
-    return prisma.eventQuestion.delete({
+export async function updateQuestionVisibility(questionId: string, isVisible: boolean, prisma: PrismaClient) {
+    return prisma.eventQuestion.update({
         where: { id: questionId },
+        data: {
+            isVisible,
+        },
     });
 }
 
@@ -141,4 +144,13 @@ export async function isMyQuestion(userId: string, questionId: string, prisma: P
         select: { id: true },
     });
     return Boolean(queryResult);
+}
+
+export async function isEnqueued(questionId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.eventQuestion.findFirst({
+        where: { id: questionId },
+        select: { position: true },
+    });
+    if (!queryResult) throw new Error(errors.DNE('question'));
+    return queryResult.position !== -1;
 }

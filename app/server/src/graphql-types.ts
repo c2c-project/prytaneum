@@ -916,6 +916,7 @@ export type CreateQuestion = {
 
 export type DeleteQuestion = {
     questionId: Scalars['ID'];
+    isVisible: Scalars['Boolean'];
 };
 
 export type AlterLike = {

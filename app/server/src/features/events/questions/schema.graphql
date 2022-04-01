@@ -83,6 +83,7 @@ input CreateQuestion {
 
 input DeleteQuestion {
     questionId: ID!
+    isVisible: Boolean!
 }
 
 input AlterLike {

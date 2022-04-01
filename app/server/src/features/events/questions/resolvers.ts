@@ -40,9 +40,14 @@ export const resolvers: Resolvers = {
         async deleteQuestion(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new Error(errors.noLogin);
-                // TODO: Add check to ensure question is not currently enqueued (or also remove from queue/record)
                 const { id: questionId } = fromGlobalId(args.input.questionId);
-                const deletedQuestion = await Question.deleteQuestion(questionId, ctx.prisma);
+                const enqueued = await Question.isEnqueued(questionId, ctx.prisma);
+                if (enqueued) throw new Error('Cannot delete an enqueued question');
+                const deletedQuestion = await Question.updateQuestionVisibility(
+                    questionId,
+                    args.input.isVisible,
+                    ctx.prisma
+                );
                 const formattedQuestion = toQuestionId(deletedQuestion);
                 const edge = {
                     node: formattedQuestion,

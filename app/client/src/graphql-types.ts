@@ -114,6 +114,7 @@ export type DeleteOrganization = {
 };
 
 export type DeleteQuestion = {
+  isVisible: Scalars['Boolean'];
   questionId: Scalars['ID'];
 };
 

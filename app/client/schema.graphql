@@ -107,6 +107,7 @@ input DeleteOrganization {
 }
 
 input DeleteQuestion {
+  isVisible: Boolean!
   questionId: ID!
 }
 
