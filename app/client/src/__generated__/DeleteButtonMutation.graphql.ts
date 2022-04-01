@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1a9cb9333c9c66cb1d45628140f85883>>
+ * @generated SignedSource<<4b153adca03e886b115995dad1c4b9c8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,7 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type DeleteQuestion = {
+  isVisible: boolean;
   questionId: string;
 };
 export type DeleteButtonMutation$variables = {

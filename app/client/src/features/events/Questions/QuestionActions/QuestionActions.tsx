@@ -9,10 +9,13 @@ import { Quote } from './Quote';
 import { QueueButton } from './QueueButton';
 import { DeleteButton } from './DeleteButton';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     actions: {
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    delete: {
+        color: theme.palette.custom.danger,
     },
 }));
 
@@ -51,7 +54,7 @@ export function QuestionActions({
             {likeEnabled && <Like fragmentRef={data} />}
             {quoteEnabled && <Quote fragmentRef={data} />}
             {queueEnabled && <QueueButton fragmentRef={data} />}
-            {deleteEnabled && <DeleteButton fragmentRef={data} />}
+            {deleteEnabled && <DeleteButton fragmentRef={data} className={classes.delete} />}
         </CardActions>
     );
 }
