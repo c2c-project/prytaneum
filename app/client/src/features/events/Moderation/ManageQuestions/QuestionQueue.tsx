@@ -359,9 +359,10 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                                                 <QuestionStats fragmentRef={question.node} />
                                                 <QuestionActions
                                                     className={classes.questionActions}
-                                                    like={Boolean(false)}
-                                                    quote={Boolean(false)}
-                                                    queue={Boolean(true)}
+                                                    likeEnabled={Boolean(false)}
+                                                    quoteEnabled={Boolean(false)}
+                                                    queueEnabled={Boolean(true)}
+                                                    deleteEnabled={Boolean(false)}
                                                     connections={connections}
                                                     fragmentRef={question.node}
                                                 />

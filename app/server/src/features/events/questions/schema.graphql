@@ -81,6 +81,11 @@ input CreateQuestion {
     eventId: ID!
 }
 
+input DeleteQuestion {
+    questionId: ID!
+    isVisible: Boolean!
+}
+
 input AlterLike {
     questionId: ID!
     """
@@ -105,6 +110,7 @@ type QuestionOperation {
 
 type Mutation {
     createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
+    deleteQuestion(input: DeleteQuestion!): EventQuestionMutationResponse!
     alterLike(input: AlterLike!): EventQuestionMutationResponse!
 }
 
@@ -129,8 +135,7 @@ type Subscription {
     questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
     questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
 
-
-    # Do not need to control the order that things 
+    # Do not need to control the order that things
     # are removed since we cannot control that on the frontend
     # We need to control the order that things are added since
     # we control that with append or prepend ont he frontend

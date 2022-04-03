@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<68863c468cd2859b7405c52bdc377542>>
+ * @generated SignedSource<<ad339dc3b7d79c3b54b0563e5f32cfea>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,6 +22,7 @@ export type useQuestionCreatedSubscription$data = {
       readonly node: {
         readonly id: string;
         readonly position: number | null;
+        readonly isVisible: boolean | null;
         readonly refQuestion: {
           readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
         } | null;
@@ -78,6 +79,13 @@ v5 = {
 v6 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "isVisible",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
   "concreteType": "User",
   "kind": "LinkedField",
   "name": "createdBy",
@@ -108,14 +116,14 @@ v6 = {
   ],
   "storageKey": null
 },
-v7 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "createdAt",
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -159,6 +167,7 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  (v6/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -242,6 +251,7 @@ return {
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/),
+                  (v9/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -258,9 +268,9 @@ return {
                     "plural": false,
                     "selections": [
                       (v4/*: any*/),
-                      (v6/*: any*/),
                       (v7/*: any*/),
-                      (v8/*: any*/)
+                      (v8/*: any*/),
+                      (v9/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -292,16 +302,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ccf0bd9310a02bdd78010805f6ddd718",
+    "cacheID": "2424d4faefe74fb61c1b215dc1c16ddc",
     "id": null,
     "metadata": {},
     "name": "useQuestionCreatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useQuestionCreatedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useQuestionCreatedSubscription(\n  $eventId: ID!\n) {\n  questionCreated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        isVisible\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
 
-(node as any).hash = "23c4e7bc74a9e8c2de5150e8e36d8fdc";
+(node as any).hash = "b0e8a52bc8a0fc61bdd71c50467934dd";
 
 export default node;
