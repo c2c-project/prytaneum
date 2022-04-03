@@ -21,6 +21,8 @@ import { useQuestionCreated } from './useQuestionCreated';
 import { useQuestionUpdated } from './useQuestionUpdated';
 import { useQuestionDeleted } from './useQuestionDeleted';
 import { Loader } from '@local/components/Loader/Loader.stories';
+import { OperationType } from 'relay-runtime';
+import { LoadMoreFn } from 'react-relay';
 
 interface Props {
     className?: string;
@@ -58,11 +60,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+interface InfiniteScrollerProps {
+    children: React.ReactNode | React.ReactNodeArray;
+    isModerator: boolean;
+    filteredList: Array<any>;
+    loadNext: LoadMoreFn<OperationType>;
+    hasNext: boolean;
+}
+
+export function InfiniteScroller({ children, isModerator, filteredList, loadNext, hasNext }: InfiniteScrollerProps) {
+    return isModerator ? (
+        <InfiniteScroll
+            dataLength={filteredList.length}
+            next={() => loadNext(10)}
+            hasMore={hasNext}
+            loader={<Loader />}
+            hasChildren
+            scrollableTarget='event-sidebar-scroller'
+        >
+            {children}
+        </InfiniteScroll>
+    ) : (
+        <>{children}</>
+    );
+}
+
 export function QuestionList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { questions, connections, loadNext, hasNext, refetch } = useQuestionList({ fragmentRef });
+    const { questions, connections, loadNext, hasNext } = useQuestionList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;
     useQuestionCreated({ connections });
     useQuestionUpdated({ connections });
@@ -112,59 +139,13 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                     &nbsp; Questions Displayed
                                 </Typography>
                             </Grid> */}
-                            {isModerator ? (
-                                <InfiniteScroll
-                                    dataLength={filteredList.length}
-                                    next={() => loadNext(10)}
-                                    hasMore={hasNext && (filteredList.length < MAX_QUESTIONS_DISPLAYED || isModerator)}
-                                    loader={<Loader />}
-                                    refreshFunction={() =>
-                                        refetch(
-                                            { after: filteredList[filteredList.length - 1].cursor },
-                                            { fetchPolicy: 'store-and-network' }
-                                        )
-                                    }
-                                    pullDownToRefresh
-                                    pullDownToRefreshThreshold={50}
-                                    hasChildren
-                                    scrollableTarget='event-sidebar-scroller'
-                                >
-                                    {filteredList.map((question) => (
-                                        <ListItem disableGutters key={question.id}>
-                                            <Card className={classes.item}>
-                                                <QuestionAuthor fragmentRef={question} />
-                                                {question.refQuestion && (
-                                                    <QuestionQuote fragmentRef={question.refQuestion} />
-                                                )}
-                                                <QuestionContent fragmentRef={question} />
-                                                <Grid container alignItems='center' justifyContent='space-between'>
-                                                    {isModerator && <QuestionStats fragmentRef={question} />}
-                                                    <QuestionActions
-                                                        style={
-                                                            !isModerator
-                                                                ? { width: '100%' }
-                                                                : { width: '100%', maxWidth: '10rem' }
-                                                        }
-                                                        className={classes.questionActions}
-                                                        likeEnabled={!isModerator && Boolean(user)}
-                                                        quoteEnabled={!isModerator && Boolean(user)}
-                                                        queueEnabled={isModerator && Boolean(user)}
-                                                        deleteEnabled={isModerator && Boolean(user)}
-                                                        connections={connections}
-                                                        fragmentRef={question}
-                                                    />
-                                                    {isModerator && ( // filler to justify moderator queue button
-                                                        <span className={classes.filler}>
-                                                            <QuestionStats fragmentRef={question} />
-                                                        </span>
-                                                    )}
-                                                </Grid>
-                                            </Card>
-                                        </ListItem>
-                                    ))}
-                                </InfiniteScroll>
-                            ) : (
-                                (isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
+                            <InfiniteScroller
+                                isModerator={isModerator}
+                                filteredList={filteredList}
+                                hasNext={hasNext}
+                                loadNext={loadNext}
+                            >
+                                {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
                                     (question) => (
                                         <ListItem disableGutters key={question.id}>
                                             <Card className={classes.item}>
@@ -198,8 +179,8 @@ export function QuestionList({ className, style, fragmentRef }: Props) {
                                             </Card>
                                         </ListItem>
                                     )
-                                )
-                            )}
+                                )}
+                            </InfiniteScroller>
                             {filteredList.length === 0 && questions.length !== 0 && (
                                 <Typography align='center' variant='body2'>
                                     No results to display
