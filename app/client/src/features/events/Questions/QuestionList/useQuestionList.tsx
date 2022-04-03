@@ -16,8 +16,6 @@ export const USE_QUESTION_LIST_FRAGMENT = graphql`
                 node {
                     id
                     question
-                    isVisible
-                    position
                     createdBy {
                         firstName
                     }

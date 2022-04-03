@@ -9,7 +9,6 @@ import { useSnack } from '@local/features/core/useSnack';
 const DELETE_QUESTION_FRAGMENT = graphql`
     fragment DeleteButtonFragment on EventQuestion {
         id
-        isVisible
         position
     }
 `;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1342b5d6d58f6cd905ad5c4601a762eb>>
+ * @generated SignedSource<<33c089f99091bd9d7ae280bc0a0b0de1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -202,20 +202,6 @@ return {
                           {
                             "alias": null,
                             "args": null,
-                            "kind": "ScalarField",
-                            "name": "isVisible",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "position",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
                             "concreteType": "User",
                             "kind": "LinkedField",
                             "name": "createdBy",
@@ -263,6 +249,13 @@ return {
                             "args": null,
                             "kind": "ScalarField",
                             "name": "isLikedByViewer",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "position",
                             "storageKey": null
                           },
                           {
@@ -338,16 +331,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f19ae5ed4d2df26e3b7883211a5318db",
+    "cacheID": "35ea787e4b1ce5323418d36a88030710",
     "id": null,
     "metadata": {},
     "name": "questionListPagination",
     "operationKind": "query",
-    "text": "query questionListPagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useQuestionListFragment_2HEEH6\n    id\n  }\n}\n\nfragment DeleteButtonFragment on EventQuestion {\n  id\n  isVisible\n  position\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n  ...DeleteButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment useQuestionListFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questions(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        question\n        isVisible\n        position\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query questionListPagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useQuestionListFragment_2HEEH6\n    id\n  }\n}\n\nfragment DeleteButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n  ...DeleteButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment useQuestionListFragment_2HEEH6 on Event {\n  id\n  currentQuestion\n  questions(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e9b69c0ce085b8a702455eacfe12a8ca";
+(node as any).hash = "04d5e0c47685ba15a2a54c9e5aafe145";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7e2b91408ecf5ac5f14401484db107c2>>
+ * @generated SignedSource<<b18e2503e04bd230133eb4602b4e2215>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,6 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type DeleteButtonFragment$data = {
   readonly id: string;
-  readonly isVisible: boolean | null;
   readonly position: number | null;
   readonly " $fragmentType": "DeleteButtonFragment";
 };
@@ -39,13 +38,6 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "isVisible",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "position",
       "storageKey": null
     }
@@ -54,6 +46,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "27e144383fa5bcf45e730a8a20c5812f";
+(node as any).hash = "d696fb5604bca81c5acb324272b71e87";
 
 export default node;
