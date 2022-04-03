@@ -20,7 +20,7 @@ import { useQuestionList } from './useQuestionList';
 import { useQuestionCreated } from './useQuestionCreated';
 import { useQuestionUpdated } from './useQuestionUpdated';
 import { useQuestionDeleted } from './useQuestionDeleted';
-import { Loader } from '@local/components/Loader/Loader.stories';
+import { Loader } from '@local/components/Loader';
 import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
 
