@@ -13,6 +13,7 @@ export const USE_QUESTION_CREATED_SUBSCRIPTION = graphql`
                 node {
                     id
                     position
+                    isVisible
                     ...QuestionAuthorFragment
                     ...QuestionContentFragment
                     ...QuestionStatsFragment

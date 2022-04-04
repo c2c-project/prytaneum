@@ -41,9 +41,26 @@ export function useQuestionList({ fragmentRef }: TArgs) {
         usePaginationFragment(USE_QUESTION_LIST_FRAGMENT, fragmentRef);
     const { questions, id: eventId, currentQuestion } = data;
     const questionList = React.useMemo(
-        () => (questions?.edges ? questions.edges.map(({ node, cursor }) => { return { ...node, cursor }}) : []),
+        () =>
+            questions?.edges
+                ? questions.edges.map(({ node, cursor }) => {
+                      return { ...node, cursor };
+                  })
+                : [],
         [questions]
     );
 
-    return { questions: questionList, eventId, connections: questions?.__id ? [questions.__id] : [], currentQuestion, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch };
+    return {
+        questions: questionList,
+        eventId,
+        connections: questions?.__id ? [questions.__id] : [],
+        currentQuestion,
+        loadNext,
+        loadPrevious,
+        hasNext,
+        hasPrevious,
+        isLoadingNext,
+        isLoadingPrevious,
+        refetch,
+    };
 }

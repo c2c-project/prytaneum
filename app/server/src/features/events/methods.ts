@@ -135,18 +135,14 @@ export async function deleteEvent(userId: string, prisma: PrismaClient, input: D
 
     // check if the user has valid permissions
     if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
-    const {
-        eventId,
-        title,
-        confirmTitle
-    } = input
+    const { eventId, title, confirmTitle } = input;
 
     const eventToDelete = await prisma.event.findUnique({ where: { id: eventId } });
-    const eventWithGlobalId = toEventId(eventToDelete)
+    const eventWithGlobalId = toEventId(eventToDelete);
 
     //validation if event titles match
     if (title !== confirmTitle) throw new Error('Event titles must match');
-    
+
     //validation is if event title matches actual event title
     if (title !== eventWithGlobalId?.title) throw new Error('Deleting event failed: Invalid event title.');
 
@@ -198,7 +194,7 @@ export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
  * find questions by event id
  */
 export async function findQuestionsByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventQuestion.findMany({ where: { eventId }, orderBy: { createdAt: 'desc' } });
+    return prisma.eventQuestion.findMany({ where: { eventId, isVisible: true }, orderBy: { createdAt: 'desc' } });
 }
 
 /**
@@ -231,7 +227,6 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
         select: { feedback: { orderBy: { createdAt: 'desc' } } },
     });
 }
-
 
 /**
  * find queued questions by event id

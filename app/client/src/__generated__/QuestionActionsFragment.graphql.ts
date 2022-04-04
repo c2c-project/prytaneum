@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa72f83c8cc8b5c28373d53527f640d3>>
+ * @generated SignedSource<<f4d4af8533fb8b120fb029236c3abc42>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type QuestionActionsFragment$data = {
   readonly id: string;
-  readonly " $fragmentSpreads": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment" | "DeleteButtonFragment">;
   readonly " $fragmentType": "QuestionActionsFragment";
 };
 export type QuestionActionsFragment = QuestionActionsFragment$data;
@@ -48,12 +48,17 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "QueueButtonFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "DeleteButtonFragment"
     }
   ],
   "type": "EventQuestion",
   "abstractKey": null
 };
 
-(node as any).hash = "fa1512172fd81210a0928ac95cd34c49";
+(node as any).hash = "2f2059e2937c61a6e289313523508f77";
 
 export default node;

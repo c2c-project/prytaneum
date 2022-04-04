@@ -27,13 +27,6 @@ export const resolvers: Resolvers = {
                     node: formattedQuestion,
                     cursor: formattedQuestion.createdAt.getTime().toString(),
                 };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'CREATE', edge } as QuestionOperation,
-                    },
-                });
                 ctx.pubsub.publish({
                     topic: 'questionCreated',
                     payload: {
@@ -41,7 +34,33 @@ export const resolvers: Resolvers = {
                     },
                 });
 
-                // TODO: better cursors
+                return edge;
+            });
+        },
+        async deleteQuestion(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const { id: questionId } = fromGlobalId(args.input.questionId);
+                const enqueued = await Question.isEnqueued(questionId, ctx.prisma);
+                if (enqueued) throw new Error('Cannot delete an enqueued question');
+                const deletedQuestion = await Question.updateQuestionVisibility(
+                    questionId,
+                    args.input.isVisible,
+                    ctx.prisma
+                );
+                const formattedQuestion = toQuestionId(deletedQuestion);
+                const edge = {
+                    node: formattedQuestion,
+                    cursor: formattedQuestion.createdAt.getTime().toString(),
+                };
+                ctx.pubsub.publish({
+                    topic: 'questionDeleted',
+                    payload: {
+                        questionDeleted: { edge },
+                        eventId: formattedQuestion.eventId,
+                    },
+                });
+
                 return edge;
             });
         },
@@ -59,13 +78,6 @@ export const resolvers: Resolvers = {
                     node: toQuestionId(question),
                     cursor: question.createdAt.getTime().toString(),
                 };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
-                    },
-                });
                 ctx.pubsub.publish({
                     topic: 'questionUpdated',
                     payload: {
@@ -109,12 +121,13 @@ export const resolvers: Resolvers = {
             ),
         },
         questionDeleted: {
-            subscribe: withFilter<{ questionDeleted: EventQuestionEdgeContainer }>(
+            subscribe: withFilter<{ questionDeleted: EventQuestionEdgeContainer; eventId: string }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionDeleted'),
                 (payload, args, ctx) => {
+                    const { eventId: questionEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.questionDeleted.edge.node.id);
-                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
+                    return eventId === questionEventId;
                 }
             ),
         },

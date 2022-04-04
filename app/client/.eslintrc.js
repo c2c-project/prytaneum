@@ -1,16 +1,13 @@
 module.exports = {
     plugins: ['jest', '@typescript-eslint'],
-    extends: ['react-app', 'airbnb-typescript', 'prettier'],
+    extends: ['next/core-web-vitals', 'react-app', 'airbnb-typescript', 'prettier'],
     parserOptions: {
         project: './tsconfig.json',
     },
     rules: {
         quotes: ['error', 'single'],
         indent: 'off',
-        '@typescript-eslint/indent': ['error', 4, { SwitchCase: 1 }],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        'react/jsx-indent': ['error', 4],
-        'react/jsx-indent-props': ['error', 4],
         'react/no-array-index-key': 0,
         'react/forbid-prop-types': 0,
         'react/no-find-dom-node': 0,
@@ -44,6 +41,7 @@ module.exports = {
         // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
         'react/require-default-props': 'off',
         'import/no-anonymous-default-export': 'off',
+        "react/display-name": [0, { "ignoreTranspilerName": true }]
     },
     overrides: [
         {
