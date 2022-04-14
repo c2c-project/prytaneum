@@ -9,6 +9,13 @@ import type {
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';
 import { errors } from '../utils';
+/** 
+ * given a user id, return the associated email
+*/
+export async function findEmailByViewerId(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: {id: userId }, select: { email: true }});
+    return queryResult;
+}
 
 /**
  * find an organization by user id
