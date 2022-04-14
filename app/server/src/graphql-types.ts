@@ -55,6 +55,7 @@ export type Query = {
     /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
+    isOrganizer?: Maybe<'Boolean'>;
 };
 
 export type QuerynodeArgs = {
@@ -1725,6 +1726,11 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
+    >;
+    isOrganizer?: Resolver<
+        ResolversTypes['Boolean'],
+        ParentType,
+        ContextType
     >;
 };
 
