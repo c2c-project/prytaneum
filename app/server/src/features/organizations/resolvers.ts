@@ -4,12 +4,21 @@ import type { OrganizationSubscription } from '@local/graphql-types';
 import * as Organization from './methods';
 import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '../utils';
 import { isMemberOfOrg } from '../permissions';
+import { bucket } from '../../../config'
 
 const toOrgId = toGlobalId('Organization');
 const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
+    Query: {
+        async isOrganizer(parent, args, ctx, info) {
+            const email = await Organization.findEmailByViewerId(ctx.viewer.id!, ctx.prisma);
+            if (email) { return true; }
+            return false;
+            // parse through csv file using bucket and return true if email address exists
+        },
+    },
     Mutation: {
         async createOrganization(parent, args, ctx, info) {
             return runMutation(async () => {

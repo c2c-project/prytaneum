@@ -47,6 +47,7 @@ export type Query = {
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
+    isOrganizer?: Maybe<'Boolean'>;
 };
 
 export type QuerynodeArgs = {
@@ -1396,6 +1397,11 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
+    >;
+    isOrganizer?: Resolver<
+        ResolversTypes['Boolean'],
+        ParentType,
+        ContextType
     >;
 };
 
