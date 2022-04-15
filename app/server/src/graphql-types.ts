@@ -44,10 +44,10 @@ export type Query = {
     me?: Maybe<User>;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
+    isOrganizer: Scalars['Boolean'];
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
-    isOrganizer?: Maybe<'Boolean'>;
 };
 
 export type QuerynodeArgs = {
@@ -1380,6 +1380,7 @@ export type QueryResolvers<
     node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QuerynodeArgs, 'id'>>;
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
+    isOrganizer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
@@ -1397,11 +1398,6 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
-    >;
-    isOrganizer?: Resolver<
-        ResolversTypes['Boolean'],
-        ParentType,
-        ContextType
     >;
 };
 

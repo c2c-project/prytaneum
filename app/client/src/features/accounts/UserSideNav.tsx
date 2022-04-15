@@ -8,9 +8,10 @@ import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+import { graphql, usePreloadedQuery, PreloadedQuery, useQueryLoader } from 'react-relay';
 
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
+import type { UserSideNavOrganizerQuery } from '@local/__generated__/UserSideNavOrganizerQuery.graphql';
 import {
     StyledSubheader,
     StyledDivider,
@@ -51,7 +52,7 @@ const urls: Record<Keys, string> = {
     'My Organizations': '/organizations/me',
     'User List': '/user-list',
     // 'Admin Settings': '/app/admin/settings',
-    Dashboard: '/dashboard',
+    'Dashboard': '/dashboard',
     'About Us': '/aboutus',
     'Getting Started Guide': '/guides/getting-started',
     'Organizer Guide': '/guides/organizer',
@@ -82,6 +83,12 @@ export const USER_SIDE_NAV_QUERY = graphql`
     }
 `;
 
+export const IS_ORGANIZER_QUERY = graphql`
+    query UserSideNavOrganizerQuery {
+        isOrganizer
+    }
+`;
+
 export function UserSideNavLoader() {
     const classes = useStyles();
     return (
@@ -94,6 +101,12 @@ export function UserSideNavLoader() {
 }
 
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
+    const [isOrganizerQueryRef, loadisOrganizerQueryRef] =
+        useQueryLoader<UserSideNavOrganizerQuery>(IS_ORGANIZER_QUERY);
+    React.useEffect(() => {
+        if (!isOrganizerQueryRef) loadisOrganizerQueryRef({});
+    }, [isOrganizerQueryRef, loadisOrganizerQueryRef]);
+
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
@@ -155,12 +168,18 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
-                <StyledListItem onClick={handleClick('My Organizations')} selected={selected === 'My Organizations'}>
-                    <StyledListItemIcon>
-                        <ListIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='My Organizations' />
-                </StyledListItem>
+
+                {isOrganizerQueryRef && (
+                    <StyledListItem
+                        onClick={handleClick('My Organizations')}
+                        selected={selected === 'My Organizations'}
+                    >
+                        <StyledListItemIcon>
+                            <ListIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary='My Organizations' />
+                    </StyledListItem>
+                )}
             </AnimateSharedLayout>
         </List>
     );
