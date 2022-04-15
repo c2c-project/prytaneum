@@ -662,6 +662,7 @@ type Query {
 
   """Fetch all events"""
   events: [Event!]
+  isOrganizer: Boolean!
 
   """Fetch user data about the current user"""
   me: User

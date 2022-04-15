@@ -941,6 +941,7 @@ export type Query = {
   event?: Maybe<Event>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
+  isOrganizer: Scalars['Boolean'];
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;

@@ -47,6 +47,7 @@ export type Query = {
     events?: Maybe<Array<Event>>;
     /** Fetch a single event */
     event?: Maybe<Event>;
+    isOrganizer: Scalars['Boolean'];
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
     prompt?: Maybe<EventLiveFeedbackPrompt>;
@@ -55,7 +56,6 @@ export type Query = {
     /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
-    isOrganizer?: Maybe<'Boolean'>;
 };
 
 export type QuerynodeArgs = {
@@ -1684,7 +1684,6 @@ export type QueryResolvers<
         RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
     >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
-    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
@@ -1726,11 +1725,6 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QueryquestionsByEventIdArgs, 'eventId'>
-    >;
-    isOrganizer?: Resolver<
-        ResolversTypes['Boolean'],
-        ParentType,
-        ContextType
     >;
 };
 

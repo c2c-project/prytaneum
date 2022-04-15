@@ -27,7 +27,7 @@ export function PreloadUserSideNav(props: PreloadedUserSideNavProps) {
 
     if (!queryRef) return <Loader />;
 
-    return <UserSideNav queryRef={queryRef} {...props} />;
+    return <UserSideNav queryRef={queryRef} {...props}/>;
 }
 
 type SideNavProps = { isHidden: boolean; isOpen: boolean; close: () => void };
