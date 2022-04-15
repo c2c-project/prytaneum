@@ -245,7 +245,7 @@ export default function UserGuide() {
                 <Typography variant='body1' className={classes.paragraph}>
                     Participants are the residents who want to engage in discussion on a policy topic. In Prytaneum,
                     participants can type in questions to add to a question list; they can like, reply and quote another
-                    participant`&#39`s question to follow up on one another`&#39`s questions.
+                    participant&#39;s question to follow up on one another&#39;s questions.
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
@@ -457,7 +457,7 @@ export default function UserGuide() {
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsectiontext}>
                 <Typography variant='body1' className={classes.paragraph}>
-                    <sup>2</sup> Clicking the down arrow toggles the visibility of the event`&#39`s description
+                    <sup>2</sup> Clicking the down arrow toggles the visibility of the event&#39;s description
                 </Typography>
             </Grid>
             <Grid item xs={12} md={6} className={classes.subsection}>
