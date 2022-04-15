@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<044710593615525ccc6d31a579558fd2>>
+ * @generated SignedSource<<aed9249074f53f7e08768fd592999233>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,7 @@ export type UserSideNavQuery$data = {
   readonly me: {
     readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
   } | null;
+  readonly isOrganizer: boolean;
 };
 export type UserSideNavQueryResponse = UserSideNavQuery$data;
 export type UserSideNavQuery = {
@@ -23,7 +24,15 @@ export type UserSideNavQuery = {
   response: UserSideNavQuery$data;
 };
 
-const node: ConcreteRequest = {
+const node: ConcreteRequest = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isOrganizer",
+  "storageKey": null
+};
+return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
@@ -45,7 +54,8 @@ const node: ConcreteRequest = {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v0/*: any*/)
     ],
     "type": "Query",
     "abstractKey": null
@@ -101,19 +111,21 @@ const node: ConcreteRequest = {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v0/*: any*/)
     ]
   },
   "params": {
-    "cacheID": "5c710a6d9a092bbe757ee947810af494",
+    "cacheID": "78f3d20333b33edc82eb0835901351cb",
     "id": null,
     "metadata": {},
     "name": "UserSideNavQuery",
     "operationKind": "query",
-    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
+    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n  isOrganizer\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
   }
 };
+})();
 
-(node as any).hash = "ada95e4d12e255eede6562623e353c0c";
+(node as any).hash = "cd8bc8887f585d297f133d7499558c64";
 
 export default node;

@@ -14,7 +14,7 @@ export const resolvers: Resolvers = {
     Query: {
         async isOrganizer(parent, args, ctx, info) {
             const email = await Organization.findEmailByViewerId(ctx.viewer.id!, ctx.prisma);
-            return false;
+            return true;
             // parse through csv file using bucket and return true if email address exists
         },
     },
