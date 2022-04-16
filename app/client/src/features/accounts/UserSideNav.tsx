@@ -9,9 +9,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
-
+import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
-// import type { UserSideNavOrganizerQuery } from '@local/__generated__/UserSideNavOrganizerQuery.graphql';
+
 import {
     StyledSubheader,
     StyledDivider,
@@ -96,17 +96,20 @@ export function UserSideNavLoader() {
 }
 
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
-    // const [isOrganizerQueryRef, loadisOrganizerQueryRef] = useQueryLoader<UserSideNavOrganizerQuery>(USER_SIDE_NAV_QUERY);
-    // React.useEffect(() => {
-    //     if (!isOrganizerQueryRef) loadisOrganizerQueryRef({});
-    // }, [isOrganizerQueryRef, loadisOrganizerQueryRef]);
-
     const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
 
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
+
+    const { displaySnack } = useSnack();
+    React.useEffect(() => {
+        if (!data.isOrganizer && router.pathname === '/organizations/me') {
+            router.push('/dashboard');
+            displaySnack('Organizers-only path!');
+        }
+    }, [data.isOrganizer, displaySnack, router]);
 
     function handleClick(key: Keys) {
         return () => {
