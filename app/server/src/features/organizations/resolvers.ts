@@ -10,13 +10,6 @@ const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
-    Query: {
-        async isOrganizer(parent, args, ctx, info) {
-            const email = await Organization.findOrgsByUserId(ctx.viewer.id!, ctx.prisma);
-            return false;
-            // parse through csv file using bucket and return true if email address exists
-        },
-    },
     Mutation: {
         async createOrganization(parent, args, ctx, info) {
             return runMutation(async () => {

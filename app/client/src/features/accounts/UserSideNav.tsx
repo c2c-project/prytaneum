@@ -8,11 +8,10 @@ import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { graphql, usePreloadedQuery, PreloadedQuery, useQueryLoader } from 'react-relay';
+import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
 import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
-import type { UserSideNavOrganizerQuery } from '@local/__generated__/UserSideNavOrganizerQuery.graphql';
 import {
     StyledSubheader,
     StyledDivider,
@@ -87,12 +86,6 @@ export const USER_SIDE_NAV_QUERY = graphql`
     }
 `;
 
-export const IS_ORGANIZER_QUERY = graphql`
-    query UserSideNavOrganizerQuery {
-        isOrganizer
-    }
-`;
-
 export function UserSideNavLoader() {
     const classes = useStyles();
     return (
@@ -107,11 +100,6 @@ export function UserSideNavLoader() {
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     // const { isModerator } = useEvent();
     const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
-    const [isOrganizerQueryRef, loadisOrganizerQueryRef] =
-        useQueryLoader<UserSideNavOrganizerQuery>(IS_ORGANIZER_QUERY);
-    React.useEffect(() => {
-        if (!isOrganizerQueryRef) loadisOrganizerQueryRef({});
-    }, [isOrganizerQueryRef, loadisOrganizerQueryRef]);
 
     const classes = useStyles();
     const router = useRouter();
