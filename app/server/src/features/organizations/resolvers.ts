@@ -5,6 +5,8 @@ import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '@local/f
 import { isMemberOfOrg } from '@local/features/permissions';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type { OrganizationSubscription } from '@local/graphql-types';
+import { Storage } from '@google-cloud/storage';
+import fs from 'fs';
 
 const toOrgId = toGlobalId('Organization');
 const toUserId = toGlobalId('User');
@@ -13,12 +15,35 @@ const toEventId = toGlobalId('Event');
 export const resolvers: Resolvers = {
     Query: {
         async isOrganizer(parent, args, ctx, info) {
-            const email = await Organization.findEmailByViewerId(ctx.viewer.id!, ctx.prisma);
-            if (email) {
-                return true;
+            if (!ctx.viewer.id) {
+                return false;
             }
-            return false;
-            // parse through csv file using bucket and return true if email address exists
+            const email = await Organization.findEmailByViewerId(ctx.viewer.id, ctx.prisma);
+            const bucketName = 'list-of-organizers';
+            const fileName = 'list-of-organizers.csv';
+            const storage = new Storage({
+                projectId: 'prytaneum-345522',
+                keyFilename:
+                    '/Users/minsookim/Documents/Github/prytaneum/app/server/src/features/organizations/serviceAccount.json',
+            });
+            const options = {
+                destination: './downloadedFile.txt',
+            };
+            const file = storage.bucket(bucketName).file(fileName);
+            let found = false;
+            try {
+                const csvData = await file.download(options);
+            } catch (err) {
+                throw new Error(err);
+            }
+            const allFileContents = fs.readFileSync('./downloadedFile.txt', 'utf-8');
+            // eslint-disable-next-line consistent-return
+            allFileContents.split(/\r?\n/).forEach((line) => {
+                if (line === email?.email) {
+                    found = true;
+                }
+            });
+            return found;
         },
     },
     Mutation: {
