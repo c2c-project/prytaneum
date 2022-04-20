@@ -59,14 +59,34 @@ jobs:
             - name: Type Check Project
               run: yarn workspaces foreach -p run typecheck
 
-    testing:
-        name: Testing
+    e2e-testing:
+        name: E2E Testing
+        timeout-minutes: 60
         runs-on: ubuntu-latest
-        environment: development
-
         steps:
-            - name: TODO
-              run: echo TODO
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            - name: Prisma Generate
+              run: yarn workspace @app/server generate
+
+            - name: Install Playwright
+              run: yarn workspace @app/client run playwright install --with-deps
+
+            - name: Run Playwright tests
+              run: yarn workspace @app/client run test:e2e:ci
+
+            - uses: actions/upload-artifact@v2
+              if: always()
+              with:
+                  name: allure-report
+                  path: app/client/allure-report/
+                  retention-days: 30
 
     build-client:
         name: Build Client
