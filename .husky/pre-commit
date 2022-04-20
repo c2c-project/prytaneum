@@ -11,3 +11,7 @@ printf "No type errors! 🎉🎉🎉\n"
 printf "Linting project...\n"
 yarn workspaces foreach -p run lint
 printf "No lint errors! 🎉🎉🎉\n"
+
+printf "E2E testing...\n"
+yarn workspace @app/client run test:e2e:ci
+printf "All tests passing! 🎉🎉🎉\n"
