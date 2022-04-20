@@ -11,17 +11,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         [theme.breakpoints.down('md')]: {
-            alignItems: 'center'
+            alignItems: 'center',
         },
     },
     subtitle: {
         textAlign: 'right',
         color: '#272C6C',
         [theme.breakpoints.down('lg')]: {
-            textAlign: 'center'
+            textAlign: 'center',
         },
         [theme.breakpoints.down('sm')]: {
-            fontSize: 18
+            fontSize: 18,
         },
     },
     button: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'flex-start',
         fontSize: 24,
         [theme.breakpoints.down('lg')]: {
-            alignSelf: 'center'
+            alignSelf: 'center',
         },
         [theme.breakpoints.down('sm')]: {
             minWidth: 0,
@@ -50,7 +50,7 @@ export function CallToAction() {
             <Grid item xs={12} md={6} className={classes.header}>
                 <Image
                     alt='Prytaneum Logo'
-                    src='/static/prytaneum_logo2.svg' 
+                    src='/static/prytaneum_logo2.svg'
                     width={3483}
                     height={665}
                     objectFit='contain'
@@ -58,20 +58,31 @@ export function CallToAction() {
                 <Typography variant='h5' className={classes.subtitle}>
                     A crucial tool for a better democracy.
                 </Typography>
-                {user ? 
-                    <Button variant='contained' color='secondary' className={classes.button} onClick={() => router.push('/app/home')}>
+                {user ? (
+                    <Button
+                        variant='contained'
+                        color='secondary'
+                        className={classes.button}
+                        onClick={() => router.push('/app/home')}
+                    >
                         Go to Dashboard
                     </Button>
-                    : 
-                    <Button variant='contained' color='secondary' className={classes.button} onClick={() => router.push('/register')}>
+                ) : (
+                    <Button
+                        data-test-id='landing-button'
+                        variant='contained'
+                        color='secondary'
+                        className={classes.button}
+                        onClick={() => router.push('/register')}
+                    >
                         Register
                     </Button>
-                }
+                )}
             </Grid>
             <Grid item xs={12} md={6}>
                 <Image
                     alt='Prytaneum Landing Graphic'
-                    src='/static/prytaneum_landing_graphic.svg' 
+                    src='/static/prytaneum_landing_graphic.svg'
                     width={3292}
                     height={2097}
                     objectFit='contain'
