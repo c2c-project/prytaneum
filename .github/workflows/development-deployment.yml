@@ -14,6 +14,7 @@ env:
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
 
 jobs:
     build-publish-deploy-client:
@@ -52,6 +53,7 @@ jobs:
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg GRAPHQL_URL="$GRAPHQL_URL" \
                     --build-arg DEPLOYMENT_ENV="development" \
+                    --build-arg GOOGLE_ANALYTICS_ID="$GOOGLE_ANALYTICS_ID" \
                     .
 
             # Push the Client image to Google Container Registry
