@@ -9,20 +9,23 @@ export default class MyDocument extends Document {
             <Html lang='en'>
                 <Head>
                     {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
-                    <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_TRACKING_ID}`}/>
+                    <script
+                        async
+                        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+                    />
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
                                 window.dataLayer = window.dataLayer || [];
                                 function gtag(){dataLayer.push(arguments);}
                                 gtag('js', new Date());
-                                gtag('config', '${process.env.GA_TRACKING_ID}', { page_path: window.location.pathname });
+                                gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', { page_path: window.location.pathname });
                                 `,
                         }}
                     />
                     {/* PWA primary color */}
                     <meta name='theme-color' content={themes.dark.palette.primary.main} />
-                    <link 
+                    <link
                         rel='stylesheet'
                         href='https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap'
                     />
