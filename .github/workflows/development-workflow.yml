@@ -6,7 +6,6 @@ on:
         types: [opened, edited, synchronize]
 
 env:
-    PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: prytaneum-dev-cluster
     GKE_ZONE: us-central1-a
     CLIENT_DEPLOYMENT: prytaneum-client
@@ -16,6 +15,7 @@ env:
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
     GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+    CI: 1
 
 jobs:
     linting:
@@ -61,10 +61,14 @@ jobs:
 
     e2e-testing:
         name: E2E Testing
-        timeout-minutes: 60
         runs-on: ubuntu-latest
+        environment: development
+        timeout-minutes: 60
+
         steps:
-            - uses: actions/checkout@v2
+            - name: Setup
+              uses: actions/checkout@v2
+
             - uses: actions/setup-node@v2
               with:
                   node-version: '16'
@@ -77,6 +81,9 @@ jobs:
 
             - name: Install Playwright
               run: yarn workspace @app/client run playwright install --with-deps
+
+            - name: Install Playwright Microsoft Edge
+              run: yarn workspace @app/client run playwright install msedge
 
             - name: Run Playwright tests
               run: yarn workspace @app/client run test:e2e:ci
@@ -92,7 +99,7 @@ jobs:
         name: Build Client
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, testing, typechecking]
+        needs: [linting, e2e-testing, typechecking]
 
         steps:
             - name: Checkout
@@ -104,43 +111,22 @@ jobs:
                   filters: |
                       client:
                         - 'app/client/**'
-
-            # Setup gcloud CLI
-            - uses: google-github-actions/setup-gcloud@v0.2.0
-              with:
-                  service_account_key: ${{ secrets.GKE_SA_KEY }}
-                  project_id: ${{ secrets.GKE_PROJECT_ID }}
-
-            # Configure Docker to use the gcloud command-line tool as a credential
-            # helper for authentication
-            - run: |-
-                  gcloud --quiet auth configure-docker
-            # Get the GKE credentials so we can deploy to the cluster
-            - uses: google-github-actions/get-gke-credentials@v0.2.1
-              with:
-                  cluster_name: ${{ env.GKE_CLUSTER }}
-                  location: ${{ env.GKE_ZONE }}
-                  credentials: ${{ secrets.GKE_SA_KEY }}
-
             # Build the Client
             - name: Build Client
-              if: steps.changes.outputs.client == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.client \
-                    --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg GRAPHQL_URL="$GRAPHQL_URL" \
                     --build-arg DEPLOYMENT_ENV="development" \
                     --build-arg GOOGLE_ANALYTICS_ID="$GOOGLE_ANALYTICS_ID" \
                     .
-
     build-server:
         name: Build Server
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, testing, typechecking]
+        needs: [linting, e2e-testing, typechecking]
 
         steps:
             - name: Checkout
@@ -152,31 +138,11 @@ jobs:
                   filters: |
                       server:
                         - 'app/server/**'
-
-            # Setup gcloud CLI
-            - uses: google-github-actions/setup-gcloud@v0.2.0
-              with:
-                  service_account_key: ${{ secrets.GKE_SA_KEY }}
-                  project_id: ${{ secrets.GKE_PROJECT_ID }}
-
-            # Configure Docker to use the gcloud command-line tool as a credential
-            # helper for authentication
-            - run: |-
-                  gcloud --quiet auth configure-docker
-            # Get the GKE credentials so we can deploy to the cluster
-            - uses: google-github-actions/get-gke-credentials@v0.2.1
-              with:
-                  cluster_name: ${{ env.GKE_CLUSTER }}
-                  location: ${{ env.GKE_ZONE }}
-                  credentials: ${{ secrets.GKE_SA_KEY }}
-
             # Build the Server
             - name: Build Server
-              if: steps.changes.outputs.server == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.server \
-                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     .
