@@ -32,4 +32,11 @@ yarn-error.log*
 
 # vercel
 .vercel
+
 _unused
+
+# playwright
+test-results/
+playwright-report/
+allure-report/
+allure-results/

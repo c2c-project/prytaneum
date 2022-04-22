@@ -179,10 +179,20 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
-                            <LoginForm onSuccess={() => { close(); router.reload(); }} />
+                            <LoginForm
+                                onSuccess={() => {
+                                    close();
+                                    router.reload();
+                                }}
+                            />
                         </DialogContent>
                     </ResponsiveDialog>
-                    <Button color='primary' variant='outlined' onClick={handleClick('register')}>
+                    <Button
+                        data-test-id='appbar-register-button'
+                        color='primary'
+                        variant='outlined'
+                        onClick={handleClick('register')}
+                    >
                         Register
                     </Button>
                     <ResponsiveDialog open={type === 'register'} onClose={close}>

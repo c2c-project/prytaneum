@@ -9,3 +9,7 @@ documentation
 _unused
 *.md
 .git
+test-results
+playwright-report
+allure-report
+allure-results

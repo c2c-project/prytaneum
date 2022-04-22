@@ -29,6 +29,8 @@ module.exports = {
                     '**/__tests__/**',
                     '**/setupTests.ts',
                     '**/scripts/**',
+                    '**/*.spec.ts',
+                    '**/*.spec.tsx',
                 ],
             },
         ],
@@ -41,7 +43,7 @@ module.exports = {
         // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/
         'react/require-default-props': 'off',
         'import/no-anonymous-default-export': 'off',
-        "react/display-name": [0, { "ignoreTranspilerName": true }]
+        'react/display-name': [0, { ignoreTranspilerName: true }],
     },
     overrides: [
         {
