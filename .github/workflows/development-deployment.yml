@@ -14,7 +14,7 @@ env:
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
-    GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+    GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
 
 jobs:
     build-publish-deploy-client:
