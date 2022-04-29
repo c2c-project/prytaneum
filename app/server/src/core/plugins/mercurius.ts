@@ -10,8 +10,8 @@ import { loadSchema, getPrismaClient } from '../utils';
 
 export const redisEmitter = redis({
     port: 6379,
-    host: process.env.NODE_ENV === 'production' ? process.env.REDIS_HOST : 'localhost',
-    password: process.env.NODE_ENV === 'production' ? process.env.REDIS_PASSWORD : '',
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASSWORD,
 });
 
 /**
