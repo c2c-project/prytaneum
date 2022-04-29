@@ -10,8 +10,10 @@
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js",
         "generate": "yarn pnpify prisma generate",
         "lint": "eslint \"src/**\"",
-        "test": "jest",
-        "test:coverage": "jest --coverage"
+        "test:unit": "dotenv -c test jest src/ --runInBand",
+        "test:integration": "dotenv -c test jest integration/ --detectOpenHandles --runInBand",
+        "test:coverage": "jest --coverage",
+        "test:ci": "yarn test:unit && yarn test:integration"
     },
     "dependencies": {
         "@google-cloud/pubsub": "2.17.0",
@@ -52,6 +54,7 @@
         "@types/mailgun-js": "^0.22.11",
         "@types/module-alias": "^2.0.1",
         "@types/node": "^15.0.1",
+        "@types/supertest": "^2.0.12",
         "@types/uuid": "^8",
         "@typescript-eslint/eslint-plugin": "^5.12.0",
         "@typescript-eslint/parser": "^5.12.0",
@@ -63,7 +66,9 @@
         "eslint-plugin-import": "^2.25.4",
         "jest": "^27.5.1",
         "jest-mock-extended": "^2.0.5",
+        "mercurius-integration-testing": "^4.0.0",
         "prisma": "^3.9.2",
+        "supertest": "^6.2.3",
         "ts-jest": "^27.1.4",
         "ts-node-dev": "^1.1.6",
         "tsconfig-paths": "^3.9.0",
