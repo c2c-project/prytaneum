@@ -10,10 +10,12 @@
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js",
         "generate": "yarn pnpify prisma generate",
         "lint": "eslint \"src/**\"",
+        "prisma-db-push": "prisma db push --skip-generate",
+        "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
         "test:unit": "dotenv -c test jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:integration": "dotenv -c test jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:coverage": "jest --coverage",
-        "test:ci": "yarn test:unit && yarn test:integration"
+        "test:ci": "yarn g:start-test-db && yarn test:prisma-db-push && yarn test:unit && yarn test:integration"
     },
     "dependencies": {
         "@google-cloud/pubsub": "2.17.0",
