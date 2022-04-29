@@ -14,6 +14,8 @@
         "g:start-client": "yarn workspace @app/client start",
         "g:client-relay": "yarn workspace @app/client relay",
         "g:start-db": "yarn exec db/start-db.sh",
+        "g:stop-db": "yarn exec db/stop-db.sh",
+        "g:start-test-db": "yarn exec db/start-test-db.sh",
         "g:start-proxy": "yarn workspace prytaneum ts-node-dev -r ./scripts/env.ts ./proxy.ts",
         "g:dev-project": "concurrently -n relay,proxy,codegen,server,client,db -c \"black.bgCyan,black.bgYellow.bold,bgCyan.bold,bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"yarn g:client-relay\" \"yarn g:start-proxy\" \"yarn g:codegen --watch\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\"",
         "g:dev-e2e-project": "concurrently -n proxy,server,client,db \"yarn g:start-proxy\" \"yarn g:dev-server\" \"yarn g:dev-client\" \"yarn g:start-db\"",

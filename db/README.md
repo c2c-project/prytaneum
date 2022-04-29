@@ -16,12 +16,19 @@ This workspace handles everything to do with the Prytaneum PostgresQL database.
 ## Common Commands
 
 ### Start db
-`yarn start-db`
+
+`yarn g:start-db`
+
+### Start test db
+
+`yarn g:start-test-db`
 
 ### Stop db
-`yarn stop-db`
+
+`yarn g:stop-db`
 
 ### View db logs
+
 Get the container id from running `docker ps`  
 Run `docker logs <container id>`
 
