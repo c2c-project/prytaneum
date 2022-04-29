@@ -18,8 +18,6 @@ module.exports = {
                     '**/*.mock.ts',
                     '**/*.tests.js',
                     '**/*.test.ts',
-                    '**/*.test.tsx',
-                    '**/*.spec.ts',
                     '**/*.spec.ts',
                     '**/*.stories.*',
                     '**/__tests__/**',
