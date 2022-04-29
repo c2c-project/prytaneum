@@ -19,31 +19,7 @@ export const resolvers: Resolvers = {
                 return false;
             }
             const email = await Organization.findEmailByViewerId(ctx.viewer.id, ctx.prisma);
-            const bucketName = 'list-of-organizers';
-            const fileName = 'list-of-organizers.csv';
-            const storage = new Storage({
-                projectId: 'prytaneum-345522',
-                keyFilename:
-                    '/Users/minsookim/Documents/Github/prytaneum/app/server/src/features/organizations/serviceAccount.json',
-            });
-            const options = {
-                destination: './downloadedFile.txt',
-            };
-            const file = storage.bucket(bucketName).file(fileName);
-            let found = false;
-            try {
-                const csvData = await file.download(options);
-            } catch (err) {
-                throw new Error(err);
-            }
-            const allFileContents = fs.readFileSync('./downloadedFile.txt', 'utf-8');
-            // eslint-disable-next-line consistent-return
-            allFileContents.split(/\r?\n/).forEach((line) => {
-                if (line === email?.email) {
-                    found = true;
-                }
-            });
-            return found;
+            return Organization.isOnOrganizerList(email?.email!);
         },
     },
     Mutation: {
