@@ -1,6 +1,6 @@
 import { getOrCreateServer } from '@local/core/server';
 import supertest from 'supertest';
-import { setupMetaRoutes } from '../src/core/meta-routes';
+import { setupMetaRoutes } from './meta-routes';
 
 const server = getOrCreateServer();
 

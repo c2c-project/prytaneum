@@ -10,8 +10,8 @@
         "prod": "dotenv -e .env.production -- yarn node -r module-alias/register build/index.js",
         "generate": "yarn pnpify prisma generate",
         "lint": "eslint \"src/**\"",
-        "test:unit": "dotenv -c test jest src/ --runInBand",
-        "test:integration": "dotenv -c test jest integration/ --detectOpenHandles --runInBand",
+        "test:unit": "dotenv -c test jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
+        "test:integration": "dotenv -c test jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:coverage": "jest --coverage",
         "test:ci": "yarn test:unit && yarn test:integration"
     },
