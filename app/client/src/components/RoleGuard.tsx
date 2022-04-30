@@ -1,13 +1,14 @@
-import { useUser } from '@local/features/accounts';
+import router from 'next/router';
+
 export interface RoleGuardProps {
     organizer?: boolean;
+    moderator?: boolean;
     children: JSX.Element | JSX.Element[];
 }
 
-// By default this component will not render any children unless the user is an organizer
-export function RoleGuard({ organizer, children }: RoleGuardProps){
-    const [user] = useUser();
-    if (!user) return <></> // if user is not logged in
-    if (user.isOrganizer && organizer) return <>{children}</> // if user is organizer
-    return <></> // if the user is logged in but not an organizer // bug: isOrganizer is not returning correctly
+export function RoleGuard({ organizer = false, moderator = false, children }: RoleGuardProps){
+    if (organizer) return <>{children}</>
+    else router.push('/dashboard');
+    if (moderator) return <>{children}</>
+    return <></>
 }

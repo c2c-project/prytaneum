@@ -167,7 +167,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer>
+                <RoleGuard organizer={data.isOrganizer}>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />
