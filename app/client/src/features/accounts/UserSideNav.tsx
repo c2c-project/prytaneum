@@ -19,6 +19,8 @@ import {
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
 import { Skeleton } from '@mui/material';
+import { RoleGuard } from '@local/components/RoleGuard';
+// import { useEvent } from '../events';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,6 +98,7 @@ export function UserSideNavLoader() {
 }
 
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
+    // const { isModerator } = useEvent();
     const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
 
     const classes = useStyles();
@@ -165,20 +168,38 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <StyledSubheader>Organizations</StyledSubheader>
-                <StyledDivider />
+                <RoleGuard organizer={data.isOrganizer}>
+                    <>
+                        <StyledSubheader>Organizations</StyledSubheader>
+                        <StyledDivider />
 
-                {isOrganizerQueryRef && (
-                    <StyledListItem
-                        onClick={handleClick('My Organizations')}
-                        selected={selected === 'My Organizations'}
-                    >
-                        <StyledListItemIcon>
-                            <ListIcon />
-                        </StyledListItemIcon>
-                        <ListItemText primary='My Organizations' />
-                    </StyledListItem>
-                )}
+                        <StyledListItem
+                            onClick={handleClick('My Organizations')}
+                            selected={selected === 'My Organizations'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='My Organizations' />
+                        </StyledListItem>
+                    </>
+                </RoleGuard>
+                {/* <RoleGuard organizer={data.isOrganizer} moderator={isModerator}>
+                    <>
+                        <StyledSubheader>MODERATOR AND ORGANIZER</StyledSubheader>
+                        <StyledDivider />
+
+                        <StyledListItem
+                            onClick={handleClick('My Organizations')}
+                            selected={selected === 'My Organizations'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='MODERATOR AND ORGANIZER' />
+                        </StyledListItem>
+                    </>
+                </RoleGuard> */}
             </AnimateSharedLayout>
         </List>
     );
