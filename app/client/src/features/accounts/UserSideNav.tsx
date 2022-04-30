@@ -9,6 +9,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+
 import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 
@@ -19,6 +20,8 @@ import {
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
 import { Skeleton } from '@mui/material';
+import { RoleGuard } from '@local/components/RoleGuard';
+// import { useEvent } from '../events';
 import { useUser } from './useUser';
 
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +104,7 @@ export function UserSideNavLoader() {
 }
 
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
+    // const { isModerator } = useEvent();
     const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
 
     const classes = useStyles();
@@ -171,20 +175,38 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <StyledSubheader>Organizations</StyledSubheader>
-                <StyledDivider />
+                <RoleGuard organizer={data.isOrganizer}>
+                    <>
+                        <StyledSubheader>Organizations</StyledSubheader>
+                        <StyledDivider />
 
-                {isOrganizerQueryRef && (
-                    <StyledListItem
-                        onClick={handleClick('My Organizations')}
-                        selected={selected === 'My Organizations'}
-                    >
-                        <StyledListItemIcon>
-                            <ListIcon />
-                        </StyledListItemIcon>
-                        <ListItemText primary='My Organizations' />
-                    </StyledListItem>
-                )}
+                        <StyledListItem
+                            onClick={handleClick('My Organizations')}
+                            selected={selected === 'My Organizations'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='My Organizations' />
+                        </StyledListItem>
+                    </>
+                </RoleGuard>
+                {/* <RoleGuard organizer={data.isOrganizer} moderator={isModerator}>
+                    <>
+                        <StyledSubheader>MODERATOR AND ORGANIZER</StyledSubheader>
+                        <StyledDivider />
+
+                        <StyledListItem
+                            onClick={handleClick('My Organizations')}
+                            selected={selected === 'My Organizations'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='MODERATOR AND ORGANIZER' />
+                        </StyledListItem>
+                    </>
+                </RoleGuard> */}
                 {user?.isAdmin === true && (
                     <React.Fragment>
                         <StyledSubheader>Admin</StyledSubheader>
