@@ -1,3 +1,4 @@
+// From prisma docs https://www.prisma.io/docs/guides/testing/unit-testing#singleton
 import { PrismaClient } from '../../src/__generated__/prisma';
 import { mockDeep, mockReset } from 'jest-mock-extended';
 import { DeepMockProxy } from 'jest-mock-extended/lib/cjs/Mock';
