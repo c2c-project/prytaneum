@@ -12,9 +12,9 @@
         "lint": "eslint \"src/**\"",
         "prisma-db-push": "prisma db push --skip-generate",
         "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
-        "test:unit": "dotenv -c test jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
-        "test:integration": "dotenv -c test jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
-        "test:coverage": "jest --coverage",
+        "test:unit": "dotenv -c test -- jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
+        "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
+        "test:coverage": "dotenv -c test -- jest --coverage",
         "test:ci": "yarn g:start-test-db && yarn test:prisma-db-push && yarn test:unit && yarn test:integration"
     },
     "dependencies": {
