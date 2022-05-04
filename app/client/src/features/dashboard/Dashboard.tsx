@@ -2,9 +2,9 @@ import * as React from 'react';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { useRouter } from 'next/router';
 
-import { Button, Card, CardContent, Grid, Link, List, ListItem, Typography, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Add } from '@material-ui/icons';
+import { Button, Card, CardContent, Grid, Link, List, ListItem, Typography, IconButton } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Add } from '@mui/icons-material';
 
 import { Loader } from '@local/components/Loader';
 import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
