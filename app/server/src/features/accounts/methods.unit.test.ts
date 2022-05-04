@@ -43,16 +43,16 @@ describe('register', () => {
     });
 
     test('should register new user with null password', async () => {
-        const emptyPassword = '';
+        const nullPassword = null;
 
         const expectedOutput = {
             ...userData,
-            password: await bcrypt.hash(emptyPassword, 10),
+            password: null,
         };
 
         prismaMock.user.create.mockResolvedValueOnce(expectedOutput);
 
-        const output = await AccountMethods.register(prismaMock, userData, emptyPassword);
+        const output = await AccountMethods.register(prismaMock, userData, nullPassword);
 
         expect(output).toEqual(expectedOutput);
     });
