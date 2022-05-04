@@ -136,7 +136,7 @@ export function Dashboard({ queryRef }: Props) {
                                 </Grid>
                             </Grid>
                         ) : (
-                            <Grid container justify='space-between' alignItems='center' spacing={1}>
+                            <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
                                 <Grid item xs={12} sm={8} className={classes.text}>
                                     <Typography variant='subtitle2'>
                                         No Events To Display
@@ -182,7 +182,7 @@ export function Dashboard({ queryRef }: Props) {
                                 </Grid>
                             </Grid>
                         ) : (
-                            <Grid container justify='space-between' alignItems='center' spacing={1}>
+                            <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
                                 <Grid item className={classes.text}>
                                     <Typography variant='subtitle2'>
                                         No Events To Display
