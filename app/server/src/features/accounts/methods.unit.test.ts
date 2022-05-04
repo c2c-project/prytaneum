@@ -4,6 +4,10 @@ import { prismaMock } from '../../../mocks/prisma/singleton';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
 
+jest.mock('@local/lib/jwt', () => ({
+    ...jest.requireActual('@local/lib/jwt'), // import and retain the original functionalities
+}));
+
 const toUserId = toGlobalId('User');
 
 const userTextPassword = 'testPassword';
@@ -29,9 +33,7 @@ beforeAll(async () => {
  */
 describe('register', () => {
     test('should register new user with a password', async () => {
-        const expectedOutput = {
-            ...userData,
-        };
+        const expectedOutput = { ...userData };
 
         prismaMock.user.create.mockResolvedValueOnce(expectedOutput);
 
@@ -61,9 +63,7 @@ describe('register', () => {
  */
 describe('findUserById', () => {
     test('should find a user', async () => {
-        const expectedOutput = {
-            ...userData,
-        };
+        const expectedOutput = { ...userData };
 
         prismaMock.user.findUnique.mockResolvedValueOnce(expectedOutput);
 
@@ -150,9 +150,7 @@ describe('registerSelf', () => {
         };
 
         // mock registered user
-        const registeredUser = {
-            ...userData,
-        };
+        const registeredUser = { ...userData };
 
         prismaMock.user.create.mockResolvedValueOnce(registeredUser);
 
@@ -203,9 +201,7 @@ describe('loginWithPassword', () => {
     });
 
     test('should throw if password is inavlid', async () => {
-        const user = {
-            ...userData,
-        };
+        const user = { ...userData };
 
         const input = {
             email: userData.email,
@@ -220,9 +216,7 @@ describe('loginWithPassword', () => {
     });
 
     test('should login user successfully', async () => {
-        const user = {
-            ...userData,
-        };
+        const user = { ...userData };
 
         const input = {
             email: userData.email,
@@ -237,6 +231,232 @@ describe('loginWithPassword', () => {
         const expectedOutput = { user, token };
 
         const output = await AccountMethods.loginWithPassword(prismaMock, input);
+
+        expect(output).toEqual(expectedOutput);
+    });
+});
+
+describe('updateEmail', () => {
+    test('should throw if no user is account with new email already exists', async () => {
+        const user = { ...userData };
+
+        const input = { currentEmail: 'test@test.com', newEmail: userData.email };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updateEmail(prismaMock, input)).rejects.toThrow(
+            'Updating email failed: Another user exists with this email. Please input a different email.'
+        );
+    });
+    test('should return updated user and token when successful', async () => {
+        const newEmail = 'newEmail@test.com';
+
+        const user = { ...userData, email: newEmail };
+
+        const input = { currentEmail: userData.email, newEmail };
+
+        prismaMock.user.update.mockResolvedValueOnce(user);
+
+        const userWithGlobalId = toUserId(user);
+        const token = await jwt.sign({ id: userWithGlobalId.id });
+
+        const expectedOutput = { updatedUser: user, token };
+
+        const output = await AccountMethods.updateEmail(prismaMock, input);
+
+        expect(output).toEqual(expectedOutput);
+    });
+});
+
+describe('updatePassword', () => {
+    test('should throw if account does not exist', async () => {
+        const newPassword = 'newPassword1!';
+
+        const input = {
+            email: 'dne@test.com',
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(null);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow('Account not found.');
+    });
+    test('should throw if account has no existing password', async () => {
+        const user = { ...userData, password: '' };
+
+        const newPassword = 'newPassword1!';
+
+        const input = {
+            email: userData.email,
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
+            'Updating password failed: Missing password.'
+        );
+    });
+    test('should throw if oldPassword is wrong', async () => {
+        const user = { ...userData };
+
+        const newPassword = 'newPassword1!';
+
+        const input = {
+            email: userData.email,
+            oldPassword: 'wrongPassword',
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
+            'Updating password failed: Invalid password.'
+        );
+    });
+    test('should throw if password is shorter than 8 characters', async () => {
+        const user = { ...userData };
+
+        const newPassword = 'shortpw';
+
+        const input = {
+            email: userData.email,
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
+            'New password must be at least 8 characters.'
+        );
+    });
+    test('should throw if password does not contain at least 1 number and 1 symbol', async () => {
+        const user = { ...userData };
+
+        const newPassword = 'invalidPassword';
+
+        const input = {
+            email: userData.email,
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
+            'New password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.'
+        );
+    });
+    test('should throw if new passwords do not match', async () => {
+        const user = { ...userData };
+
+        const newPassword = 'newPassword1!';
+
+        const input = {
+            email: userData.email,
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: 'mismatchedNewPassword',
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow('Passwords must match.');
+    });
+    test('should update password sucessfully', async () => {
+        const user = { ...userData };
+
+        const newPassword = 'newPassword1!';
+        const newPasswordHashed = await bcrypt.hash(newPassword, 10);
+
+        const input = {
+            email: userData.email,
+            oldPassword: userTextPassword,
+            newPassword,
+            confirmNewPassword: newPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        const updatedUser = { ...userData, password: newPasswordHashed };
+
+        prismaMock.user.update.mockResolvedValueOnce(updatedUser);
+
+        const userWithGlobalId = toUserId(updatedUser);
+        const token = await jwt.sign({ id: userWithGlobalId.id });
+
+        const expectedOutput = { updatedUser, token };
+
+        const output = await AccountMethods.updatePassword(prismaMock, input);
+
+        expect(output).toEqual(expectedOutput);
+    });
+});
+
+describe('deleteAccount', () => {
+    test('should throw if account has no existing password', async () => {
+        const user = { ...userData, password: '' };
+
+        const input = { email: userData.email, password: userTextPassword, confirmPassword: userTextPassword };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
+            'Deleting account failed: Missing password.'
+        );
+    });
+    test('should throw if oldPassword is wrong', async () => {
+        const user = { ...userData };
+
+        const input = {
+            email: userData.email,
+            password: 'wrongPassword',
+            confirmPassword: 'wrongPassword',
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
+            'Deleting account failed: Invalid password.'
+        );
+    });
+    test('should throw if new passwords do not match', async () => {
+        const user = { ...userData };
+
+        const input = {
+            email: userData.email,
+            password: userTextPassword,
+            confirmPassword: 'mismatchedPassword',
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow('Passwords must match.');
+    });
+    test('should delete account sucessfully', async () => {
+        const user = { ...userData };
+
+        const input = {
+            email: userData.email,
+            password: userTextPassword,
+            confirmPassword: userTextPassword,
+        };
+
+        prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+        prismaMock.user.delete.mockResolvedValueOnce(user);
+
+        const expectedOutput = { deletedUser: userData };
+
+        const output = await AccountMethods.deleteAccount(prismaMock, input);
 
         expect(output).toEqual(expectedOutput);
     });

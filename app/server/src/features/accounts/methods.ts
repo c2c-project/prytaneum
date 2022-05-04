@@ -3,7 +3,13 @@ import { PrismaClient } from '@local/__generated__/prisma';
 import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
-import { DeleteAccountForm, LoginForm, RegistrationForm, UpdateEmailForm, UpdatePasswordForm } from '@local/graphql-types';
+import {
+    DeleteAccountForm,
+    LoginForm,
+    RegistrationForm,
+    UpdateEmailForm,
+    UpdatePasswordForm,
+} from '@local/graphql-types';
 
 const toUserId = toGlobalId('User');
 
@@ -115,13 +121,14 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
 
     // validiation if no other user exists with the new email
     const user = await prisma.user.findUnique({ where: { email: newEmail } });
-    if (user) throw new Error('Updating email failed: Another user exists with this email. Please input a different email.');
+    if (user)
+        throw new Error('Updating email failed: Another user exists with this email. Please input a different email.');
 
     // update user email
     const updatedUser = await prisma.user.update({
         where: { email: currentEmail },
-        data: { email: newEmail }
-    })
+        data: { email: newEmail },
+    });
 
     // generate token
     const token = await jwt.sign({ id: toUserId(updatedUser).id });
@@ -134,15 +141,13 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
  * updates the user's password
  */
 export async function updatePassword(prisma: PrismaClient, input: UpdatePasswordForm) {
-    const {
-        email,
-        oldPassword,
-        newPassword,
-        confirmNewPassword
-    } = input;
-    
+    const { email, oldPassword, newPassword, confirmNewPassword } = input;
+
     // fetch user for password validation
     const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) throw new Error('Account not found.');
+
     const userWithGlobalId = toUserId(user);
 
     // if there is no password, the user must finish registering their account, how to let them know... TODO:
@@ -159,7 +164,10 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
     // validation if new password is strong
     // strong passwords are alphanumeric with a mixture of lowercase/uppercase characters and at least one special character
     const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*., ?])');
-    if (!regex.test(newPassword)) throw new Error('New password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.');
+    if (!regex.test(newPassword))
+        throw new Error(
+            'New password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.'
+        );
 
     // validation if new passwords match
     if (newPassword !== confirmNewPassword) throw new Error('Passwords must match.');
@@ -169,8 +177,8 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
     // update user password
     const updatedUser = await prisma.user.update({
         where: { email },
-        data: { password: encryptedPassword }
-    })
+        data: { password: encryptedPassword },
+    });
 
     // generate token
     const token = await jwt.sign({ id: toUserId(updatedUser).id });
@@ -183,12 +191,8 @@ export async function updatePassword(prisma: PrismaClient, input: UpdatePassword
  * deletes the user's account
  */
 export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountForm) {
-    const {
-        email,
-        password,
-        confirmPassword
-    } = input;
-    
+    const { email, password, confirmPassword } = input;
+
     // fetch user for password validation
     const user = await prisma.user.findUnique({ where: { email } });
     const userWithGlobalId = toUserId(user);
@@ -205,7 +209,7 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
     if (password !== confirmPassword) throw new Error('Passwords must match.');
 
     // delete user by email
-    const deletedUser = await prisma.user.delete({ where: { email }});
+    const deletedUser = await prisma.user.delete({ where: { email } });
 
     // return deleted user
     return { deletedUser };
