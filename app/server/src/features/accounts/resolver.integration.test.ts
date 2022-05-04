@@ -5,7 +5,6 @@ import { createMercuriusTestClient } from 'mercurius-integration-testing';
 import * as plugins from '@local/core/plugins';
 import { redisEmitter } from '@local/core/plugins/mercurius';
 import * as jwt from '@local/lib/jwt';
-import faker from '@faker-js/faker';
 import { toGlobalId } from '../utils';
 
 const server = getOrCreateServer();
@@ -13,12 +12,13 @@ const testClient = createMercuriusTestClient(server);
 const prisma = getPrismaClient(server.log);
 
 const toUserId = toGlobalId('User');
+
 const userData = {
-    email: faker.internet.email(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    id: faker.datatype.uuid(),
-    password: faker.internet.password(),
+    id: '4136cd0b-d90b-4af7-b485-5d1ded8db252',
+    email: 'sallySmith@test.com',
+    firstName: 'Sally',
+    lastName: 'Smith',
+    password: 'testPassword',
     preferredLang: 'EN',
 };
 

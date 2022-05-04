@@ -288,7 +288,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/server@workspace:app/server"
   dependencies:
-    "@faker-js/faker": ^6.2.0
     "@google-cloud/pubsub": 2.17.0
     "@graphql-tools/load-files": ^6.3.2
     "@graphql-tools/merge": ^6.2.13
@@ -5713,13 +5712,6 @@ __metadata:
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
   checksum: 784aa2157e2808b52bbbaf1d1cfca9a6ba0b2faaa3696eb7a1229d4b357400fbd8a6aa09a16e7ae0868ea075d3a8f365cf5928b6d05a1df47f40a1167423a4fa
-  languageName: node
-  linkType: hard
-
-"@faker-js/faker@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@faker-js/faker@npm:6.2.0"
-  checksum: 8caffc9e55c9eb5bc5ee8824366338cb81469ed9cb591c38f06be73e8e4366d48eb6ced78e9f4c3530d0ed5f4c63bf50edf45c514cb25151a9567a7ebe45a4b1
   languageName: node
   linkType: hard
 

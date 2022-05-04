@@ -3,25 +3,25 @@ import * as AccountMethods from './methods';
 import { prismaMock } from '../../../mocks/prisma/singleton';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
-import { faker } from '@faker-js/faker';
 
 const toUserId = toGlobalId('User');
-const userTextPassword = faker.internet.password();
+
+const userTextPassword = 'testPassword';
 const userData = {
-    id: faker.datatype.uuid(),
+    id: '4136cd0b-d90b-4af7-b485-5d1ded8db252',
     createdAt: new Date(),
-    email: faker.internet.email(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    fullName: '',
+    email: 'sallySmith@test.com',
+    firstName: 'Sally',
+    lastName: 'Smith',
+    fullName: 'Sally Smith',
     password: userTextPassword,
     preferredLang: 'EN',
     canMakeOrgs: false,
 };
 
 beforeAll(async () => {
+    // Store hashed password to properly mock prisma response data
     userData.password = await bcrypt.hash(userData.password, 10);
-    userData.fullName = userData.firstName + ' ' + userData.lastName;
 });
 
 /*
@@ -156,8 +156,8 @@ describe('registerSelf', () => {
 
         prismaMock.user.create.mockResolvedValueOnce(registeredUser);
 
-        // get jwt token to compare
-        const token = await jwt.sign({ id: toUserId(registeredUser).id });
+        const userWithGlobalId = toUserId(registeredUser);
+        const token = await jwt.sign({ id: userWithGlobalId.id });
 
         const expectedOutput = { registeredUser, token };
 
@@ -171,8 +171,8 @@ describe('registerSelf', () => {
             email: userData.email,
             firstName: userData.firstName,
             lastName: userData.lastName,
-            password: faker.internet.password(),
-            confirmPassword: faker.internet.password() + '#',
+            password: 'password',
+            confirmPassword: 'mismatchedPassword',
         };
 
         await expect(AccountMethods.registerSelf(prismaMock, input)).rejects.toThrow('Passwords must match');
@@ -192,7 +192,7 @@ describe('loginWithPassword', () => {
         // mock input for a login form
         const input = {
             email: userData.email,
-            password: faker.internet.password(),
+            password: 'nonNullPassword',
         };
 
         prismaMock.user.findUnique.mockResolvedValueOnce(user);
@@ -209,7 +209,7 @@ describe('loginWithPassword', () => {
 
         const input = {
             email: userData.email,
-            password: userTextPassword + '#',
+            password: 'invalidPassword',
         };
 
         prismaMock.user.findUnique.mockResolvedValueOnce(user);

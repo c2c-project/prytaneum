@@ -389,7 +389,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./app/server/",\
           "packageDependencies": [\
             ["@app/server", "workspace:app/server"],\
-            ["@faker-js/faker", "npm:6.2.0"],\
             ["@google-cloud/pubsub", "npm:2.17.0"],\
             ["@graphql-tools/load-files", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.5.3"],\
             ["@graphql-tools/merge", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.2.17"],\
@@ -10332,15 +10331,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-yaml", "npm:4.1.0"],\
             ["minimatch", "npm:3.0.4"],\
             ["strip-json-comments", "npm:3.1.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@faker-js/faker", [\
-        ["npm:6.2.0", {\
-          "packageLocation": "./.yarn/cache/@faker-js-faker-npm-6.2.0-12f809fbd4-8caffc9e55.zip/node_modules/@faker-js/faker/",\
-          "packageDependencies": [\
-            ["@faker-js/faker", "npm:6.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
