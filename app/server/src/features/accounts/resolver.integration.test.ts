@@ -23,9 +23,14 @@ const userData = {
 };
 
 beforeAll(async () => {
+    // Attack relevant plugins
     plugins.attachCookieTo(server);
     plugins.attachMercuriusTo(server);
+
+    // hash password as they are never stored in plaintext on the DB
     const encryptedPassword = await bcrypt.hash(userData.password, 10);
+
+    // Add user to test DB
     await prisma.user.create({
         data: {
             ...userData,
@@ -35,11 +40,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await prisma.user.delete({
-        where: {
-            id: userData.id,
-        },
-    });
+    await prisma.user.deleteMany();
     await prisma.$disconnect();
     redisEmitter.close(() => {});
     await server.close();

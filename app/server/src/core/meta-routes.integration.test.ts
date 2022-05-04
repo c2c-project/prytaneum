@@ -1,5 +1,6 @@
-import { getOrCreateServer } from '@local/core/server';
+// Using supertest to test non /grapqhl routes
 import supertest from 'supertest';
+import { getOrCreateServer } from '@local/core/server';
 import { setupMetaRoutes } from './meta-routes';
 
 const server = getOrCreateServer();
