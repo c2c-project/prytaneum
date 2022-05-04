@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { ListItemText } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ListItemText } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { formatDate } from '@local/utils/format';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,6 @@ interface DashboardEventProps {
 }
 
 export function DashboardEvent(props: DashboardEventProps) {
-    const classes = useStyles();
 
     return (
         <>
