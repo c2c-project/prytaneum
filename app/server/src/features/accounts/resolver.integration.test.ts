@@ -46,42 +46,44 @@ afterAll(async () => {
     await server.close();
 });
 
-describe('Query', () => {
-    describe('[me]', () => {
-        test('[me] query with no cookie should return null', async () => {
-            // Arrange
-            const query = 'query { me { id } }';
+describe('account resolvers', () => {
+    describe('Query', () => {
+        describe('[me]', () => {
+            test('[me] query with no cookie should return null', async () => {
+                // Arrange
+                const query = 'query { me { id } }';
 
-            // Act
-            const queryResponse = await testClient.query(query);
+                // Act
+                const queryResponse = await testClient.query(query);
 
-            // Assert
-            expect(queryResponse.data).toEqual({ me: null });
-        });
-        test('[me] query with non-existing account cookie should return null', async () => {
-            // Arrange
-            const query = 'query { me { id } }';
-            const token = await jwt.sign({ id: '' });
-            testClient.setCookies({ jwt: token });
+                // Assert
+                expect(queryResponse.data).toEqual({ me: null });
+            });
+            test('[me] query with non-existing account cookie should return null', async () => {
+                // Arrange
+                const query = 'query { me { id } }';
+                const token = await jwt.sign({ id: '' });
+                testClient.setCookies({ jwt: token });
 
-            // Act
-            const queryResponse = await testClient.query(query);
+                // Act
+                const queryResponse = await testClient.query(query);
 
-            // Assert
-            expect(queryResponse.data).toEqual({ me: null });
-        });
-        test('[me] query with existing account cookie should return user id', async () => {
-            // Arrange
-            const query = 'query { me { id } }';
-            const user = toUserId(userData);
-            const token = await jwt.sign({ id: user.id });
-            testClient.setCookies({ jwt: token });
+                // Assert
+                expect(queryResponse.data).toEqual({ me: null });
+            });
+            test('[me] query with existing account cookie should return user id', async () => {
+                // Arrange
+                const query = 'query { me { id } }';
+                const user = toUserId(userData);
+                const token = await jwt.sign({ id: user.id });
+                testClient.setCookies({ jwt: token });
 
-            // Act
-            const queryResponse = await testClient.query(query);
+                // Act
+                const queryResponse = await testClient.query(query);
 
-            // Assert
-            expect(queryResponse.data).toEqual({ me: { id: user.id } });
+                // Assert
+                expect(queryResponse.data).toEqual({ me: { id: user.id } });
+            });
         });
     });
 });
