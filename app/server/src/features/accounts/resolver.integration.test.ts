@@ -57,7 +57,8 @@ describe('account resolvers', () => {
                 const queryResponse = await testClient.query(query);
 
                 // Assert
-                expect(queryResponse.data).toEqual({ me: null });
+                const expectedResponse = { data: { me: null } };
+                expect(queryResponse).toEqual(expectedResponse);
             });
             test('[me] query with non-existing account cookie should return null', async () => {
                 // Arrange
@@ -69,7 +70,8 @@ describe('account resolvers', () => {
                 const queryResponse = await testClient.query(query);
 
                 // Assert
-                expect(queryResponse.data).toEqual({ me: null });
+                const expectedResponse = { data: { me: null } };
+                expect(queryResponse).toEqual(expectedResponse);
             });
             test('[me] query with existing account cookie should return user id', async () => {
                 // Arrange
@@ -82,7 +84,55 @@ describe('account resolvers', () => {
                 const queryResponse = await testClient.query(query);
 
                 // Assert
-                expect(queryResponse.data).toEqual({ me: { id: user.id } });
+                const expectedResponse = { data: { me: { id: user.id } } };
+                expect(queryResponse).toEqual(expectedResponse);
+            });
+        });
+    });
+    describe('User', () => {
+        describe('organizations', () => {
+            test('should return empty list of edges when user has no organizations', async () => {
+                // Arrange
+                const query = 'query { me { organizations { edges { node { name } } } } }';
+                const user = toUserId(userData);
+                const token = await jwt.sign({ id: user.id });
+                testClient.setCookies({ jwt: token });
+
+                // Act
+                const queryResponse = await testClient.query(query);
+
+                // Assert
+                const expectedResponse = { data: { me: { organizations: { edges: [] } } } };
+                expect(queryResponse).toEqual(expectedResponse);
+            });
+
+            describe('user with organizations', () => {
+                beforeAll(async () => {
+                    await prisma.organization.create({
+                        data: { name: 'testOrg', members: { create: [{ userId: userData.id }] } },
+                    });
+                });
+
+                afterAll(async () => {
+                    await prisma.organization.deleteMany();
+                });
+
+                test('should return list of edges with organization node', async () => {
+                    // Arrange
+                    const query = 'query { me { organizations { edges { node { name } } } } }';
+                    const user = toUserId(userData);
+                    const token = await jwt.sign({ id: user.id });
+                    testClient.setCookies({ jwt: token });
+
+                    // Act
+                    const queryResponse = await testClient.query(query);
+
+                    // Assert
+                    const expectedResponse = {
+                        data: { me: { organizations: { edges: [{ node: { name: 'testOrg' } }] } } },
+                    };
+                    expect(queryResponse).toEqual(expectedResponse);
+                });
             });
         });
     });
