@@ -47,8 +47,8 @@ export default function Landing() {
     const roles = [
         <Blurb
             key='blurb1'
-            title='Partcipant Role'
-            icon={<PeopleAltOutlinedIcon/>}
+            title='Participant Role'
+            icon={<PeopleAltOutlinedIcon />}
             paragraphs={
                 [
                     'The residents who want to engage in discussion on a policy topic. Participants can type and ask questions; they can like, quote, and reply to other participant\'s questions; they can participate in breakout rooms.',
@@ -58,7 +58,7 @@ export default function Landing() {
         <Blurb
             key='blurb2'
             title='Moderator Role'
-            icon={<SupervisedUserCircleOutlinedIcon/>}
+            icon={<SupervisedUserCircleOutlinedIcon />}
             paragraphs={
                 [
                     'The mediators who handle participants\' questions to be answered by the speaker. Moderators see the full question list and the question queue that was  curated by the moderator assistants; they select which question to ask next;  they ask the question on the video call for the speaker to respond. Moderators interact with the speaker via a streaming service of the organizer\'s choice.',
@@ -68,7 +68,7 @@ export default function Landing() {
         <Blurb
             key='blurb3'
             title='Speaker Role'
-            icon={<RecordVoiceOverOutlinedIcon/>}
+            icon={<RecordVoiceOverOutlinedIcon />}
             paragraphs={
                 [
                     'The main speaker of a discussion. The speaker does not see the question list or  the question queue. Instead, meetings appear like an ordinary video call with  the moderator. The speaker interacts with the moderators via a streaming service  of the organizer\'s choice.',
@@ -80,14 +80,14 @@ export default function Landing() {
     const views = [
         <ParticipantDemo
             key='view1'
-            title='Participant View' 
-            shadow='10px 10px 0 0 #4056a1' 
+            title='Participant View'
+            shadow='10px 10px 0 0 #4056a1'
             scale='scale(0.95)'
         />,
         <ModeratorDemo
             key='view2'
-            title='Moderator View' 
-            shadow='10px 10px 0 0 #8eafff' 
+            title='Moderator View'
+            shadow='10px 10px 0 0 #8eafff'
             scale='scale(0.95)'
         />,
     ]
@@ -96,7 +96,7 @@ export default function Landing() {
 
     return <>
         <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.landing}>
-            <CallToAction/>
+            <CallToAction />
             {/* TODO: Fix auto-scroll
             <ConditionalRender client>
                 <ScrollButton sentinelRef={sentinelRef}/>
@@ -114,8 +114,8 @@ export default function Landing() {
                 }
             />
             <Grid item xs={12}>
-                <ParticipantDemo 
-                    shadow='10px 10px 0 0 #f5c64f' 
+                <ParticipantDemo
+                    shadow='10px 10px 0 0 #f5c64f'
                     scale='scale(0.95)'
                 />
             </Grid>
@@ -125,7 +125,7 @@ export default function Landing() {
             <Blurb
                 title='A better solution for remote public engagement.'
             />
-            <Carousel cards={views}/>
+            <Carousel cards={views} />
         </Grid>
         <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
             <Blurb
@@ -135,12 +135,12 @@ export default function Landing() {
                     ]
                 }
             />
-            <Carousel cards={roles}/>
+            <Carousel cards={roles} />
         </Grid>
         <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
             <Grid item>
                 <Image
-                    src='/static/democracy_fund_logo.svg' 
+                    src='/static/democracy_fund_logo.svg'
                     width={280}
                     height={200}
                     objectFit='contain'
@@ -149,7 +149,7 @@ export default function Landing() {
             </Grid>
             <Grid item>
                 <Image
-                    src='/static/prytaneum_logo.svg' 
+                    src='/static/prytaneum_logo.svg'
                     width={150}
                     height={200}
                     objectFit='contain'
@@ -158,7 +158,7 @@ export default function Landing() {
             </Grid>
             <Grid item>
                 <Image
-                    src='/static/ucr_tecd_logo.svg' 
+                    src='/static/ucr_tecd_logo.svg'
                     width={450}
                     height={200}
                     objectFit='contain'
