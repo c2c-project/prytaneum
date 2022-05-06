@@ -204,7 +204,7 @@ describe('account methods', () => {
     });
 
     describe('updateEmail', () => {
-        test('should throw if no user is account with new email already exists', async () => {
+        test('should throw if new email is already associated with an existing account', async () => {
             // Arrange
             const user = { ...userData };
             const input = { currentEmail: 'test@test.com', newEmail: userData.email };
