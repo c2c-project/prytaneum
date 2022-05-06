@@ -106,7 +106,6 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
             <Form className={classes.form} onSubmit={handleSubmit(commitMutation)}>
                 <FormContent>
                     <TextField
-                        data-test-id='login-email-text'
                         id='login-email'
                         required
                         type='email'
@@ -119,7 +118,6 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
                     />
                     <>
                         <TextField
-                            data-test-id='login-password-text'
                             id='login-password'
                             required
                             error={Boolean(errors.password)}

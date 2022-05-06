@@ -4,11 +4,11 @@ test.describe('page redirects', () => {
     test.describe.configure({ mode: 'parallel' });
     test('login page should have email form', async ({ page }) => {
         await page.goto('/login');
-        await expect(page.locator('[data-test-id=login-email-text]')).toContainText('Email');
+        await expect(page.locator('input[type="email"]')).toBeVisible();
     })
     test('login page should have password form', async ({ page }) => {
         await page.goto('/login');
-        await expect(page.locator('[data-test-id=login-password-text]')).toContainText('Password');
+        await expect(page.locator('input[type="password"]')).toBeVisible();
     });
 })
 test.describe('errors', () => {
