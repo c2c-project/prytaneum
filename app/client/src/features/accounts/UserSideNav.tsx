@@ -9,6 +9,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+
 import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 
