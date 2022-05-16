@@ -43,7 +43,7 @@ export async function isOnOrganizerList(email: string) {
 /** 
  * given a user id, return the associated email
 */
-export async function findEmailByViewerId(userId: string, prisma: PrismaClient) {
+export async function findEmailByUserId(userId: string, prisma: PrismaClient) {
     const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { email: true }});
     return queryResult;
 }
