@@ -40,3 +40,24 @@ test.describe('errors', () => {
         await expect(page.locator('text=Passwords must matchDismiss')).toBeVisible(); //times out for some reason currently
     })
 })
+//some backend issues
+test.describe('success', () => {
+    test('Registers successfully with correctly filled fields', async ({ page }) => {
+        await page.goto('/register');
+        await page.locator('text=First Name *First Name * >> input[type="text"]').click();
+        await page.locator('text=First Name *First Name * >> input[type="text"]').fill('Robert');
+        await page.locator('text=Last Name *Last Name * >> input[type="text"]').click();
+        await page.locator('text=Last Name *Last Name * >> input[type="text"]').fill('Doe');
+        await page.locator('input[type="email"]').click();
+        await page.locator('input[type="email"]').fill('RDsldfjksdffs@gmail.com');
+        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').click();
+        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').fill('RobertDoePwd');
+        await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').click();
+        await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').fill('RobertDoePwd');
+        await Promise.all([
+            page.waitForNavigation({ url: '/app/home' }),
+            page.locator('text=RegisterAlready have an account? >> button').click()
+        ]);
+        await expect(page).toHaveURL('/app/home');
+    })
+})

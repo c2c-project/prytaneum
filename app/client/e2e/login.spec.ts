@@ -22,3 +22,18 @@ test.describe('errors', () => {
         await expect(page.locator('text=Login failed; Invalid email or password.Dismiss')).toBeVisible(); 
     })
 })
+//some backend issues
+test.describe('success', () => {
+    test('Logs in successfully with correct credentials', async ({ page }) => {
+        await page.goto('/login');
+        await page.locator('input[type="email"]').click();
+        await page.locator('input[type="email"]').fill('a@test.com');
+        await page.locator('input[type="email"]').press('Tab');
+        await page.locator('input[type="password"]').fill('a');
+        await Promise.all([
+            page.waitForNavigation({ url: '/organizations/me' }),
+            page.locator('text=LoginOr, register an account >> button').click()
+        ]);
+        await expect(page).toHaveURL('/organizations/me');
+    })
+})
