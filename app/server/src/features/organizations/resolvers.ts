@@ -18,7 +18,7 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) {
                 return false;
             }
-            const email = await Organization.findEmailByViewerId(ctx.viewer.id, ctx.prisma);
+            const email = await Organization.findEmailByUserId(ctx.viewer.id, ctx.prisma);
             return Organization.isOnOrganizerList(email?.email!);
         },
     },
