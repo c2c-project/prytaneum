@@ -7,7 +7,9 @@ export interface RoleGuardProps {
 }
 
 export function RoleGuard({ organizer = false, moderator = false, children }: RoleGuardProps){
-    if (organizer) return <>{children}</>
+    const { isModerator, isOrganizer } = useEvent(); //returning null because its "not within the tree?"
+    if (isModerator && moderator) return <>{children}</>
+    else if (isOrganizer && organizer) return <>{children}</>
     else router.push('/dashboard');
     if (moderator) return <>{children}</>
     return <></>
