@@ -61,3 +61,5 @@ test.describe('success', () => {
         await expect(page).toHaveURL('/app/home');
     })
 })
+//display error when submitted with empty fields (feature not implemented)
+//display error when invalid email entered (feature not implemented)

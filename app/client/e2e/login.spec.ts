@@ -37,3 +37,4 @@ test.describe('success', () => {
         await expect(page).toHaveURL('/organizations/me');
     })
 })
+//display error when submitted with empty fields (feature not implemented)
