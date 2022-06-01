@@ -42,7 +42,7 @@
         "react-relay": "^13.0.2",
         "react-transition-group": "^4.4.2",
         "relay-runtime": "^13.0.2",
-        "sharp": "^0.30.3",
+        "sharp": "^0.30.5",
         "smoothscroll-polyfill": "^0.4.4",
         "subscriptions-transport-ws": "^0.11.0",
         "yup": "^0.32.11"
