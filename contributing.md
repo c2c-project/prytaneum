@@ -75,6 +75,8 @@ When you push to your forked branch you'll probably have to force push. That's o
 
 1. What is rebasing?  
    [This will probably answer most of your questions](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase)
+   
+   [Here is a useful video that can also be referenced.](https://www.youtube.com/watch?v=f1wnYdLEpgI&list=PLZbjkP1oQ5zZG-7auCO54cNuHQ0_GBC7k&index=3)
 
 2. Why rebase instead of merging?  
    Honestly, it's just preference. Rebasing in interactive mode forces you to make sure your changes are merged correctly commit-by-commit instead of all at one time in a git merge (the default strategy in a git pull). **Pro-tip:** you can change the default behavior of `git pull` to rebase: `git config --global pull.rebase true`. If you don't want to change it for all of your projects with git, just remove the `--global` flag.
