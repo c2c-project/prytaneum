@@ -1,22 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {
-    Button,
-    InputAdornment,
-    IconButton,
-    Link as MUILink,
-    Grid,
-    // Divider,
-    // Avatar,
-    Typography,
-    TextField,
-} from '@mui/material';
+import { Button, InputAdornment, IconButton, Link as MUILink, Grid, Typography, TextField } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Link from 'next/link';
 import { useMutation, graphql } from 'react-relay';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphql';
 import { Form } from '@local/components/Form';
@@ -51,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
     onSuccess?: () => void;
     secondaryActions?: React.ReactNode;
+    demo?: boolean;
 }
 
 interface TLoginForm {
@@ -83,7 +73,7 @@ const intialState: TLoginForm = { email: '', password: '' };
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
+export function LoginForm({ onSuccess, secondaryActions, demo }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const [, setUser] = useUser();
@@ -116,7 +106,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                     Login
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(commitMutation)}>
+            <Form className={classes.form} onSubmit={!demo ? handleSubmit(commitMutation) : () => null}>
                 <FormContent>
                     <TextField
                         id='login-email'
@@ -160,7 +150,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                             }}
                         />
                         <Grid container justifyContent='flex-end'>
-                            <Link href='/forgot-password' passHref>
+                            <Link href={!demo ? '/forgot-password' : '#'} passHref>
                                 <MUILink className={classes.link} color='primary' underline='hover'>
                                     Forgot Password?
                                 </MUILink>

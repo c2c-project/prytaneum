@@ -15,9 +15,10 @@ import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/features/core';
 
 interface Props {
-    onSuccess: () => void;
-    onFailure: () => void;
+    onSuccess?: () => void;
+    onFailure?: () => void;
     secondaryActions?: React.ReactNode;
+    demo?: boolean;
 }
 
 const initialState = {
@@ -60,21 +61,14 @@ const REGISTER_FORM_MUTATION = graphql`
         }
     }
 `;
-export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) {
+export function RegisterForm({ onSuccess, onFailure, secondaryActions, demo }: Props) {
     // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(initialState);
     const [commit, isLoading] = useMutation<RegisterFormMutation>(REGISTER_FORM_MUTATION);
 
-    // styling hook
     const classes = useStyles();
-
-    // request hook
-    // const
-
     const [, setUser] = useUser();
-
-    // user feedback
     const { displaySnack } = useSnack();
 
     function handleCommit(submittedForm: TRegisterForm) {
@@ -103,7 +97,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     Register
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+            <Form className={classes.form} onSubmit={!demo ? handleSubmit(handleCommit) : () => null}>
                 <FormContent>
                     <TextField
                         id='register-first-name'

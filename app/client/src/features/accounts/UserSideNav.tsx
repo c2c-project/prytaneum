@@ -32,7 +32,9 @@ enum Nav {
     // 'Admin Settings',
     'Dashboard',
     'About Us',
-    'User Guide'
+    'User Guide',
+    'Getting Started Guide',
+    'Organizer Guide',
 }
 type Keys = keyof typeof Nav;
 
@@ -51,6 +53,8 @@ const urls: Record<Keys, string> = {
     Dashboard: '/dashboard',
     'About Us': '/aboutus',
     'User Guide': '/user-guide',
+    'Getting Started Guide': '/guides/getting-started',
+    'Organizer Guide': '/guides/organizer',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -125,6 +129,21 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         <AssignmentIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='User Guide' />
+                </StyledListItem>
+                <StyledListItem
+                    onClick={handleClick('Getting Started Guide')}
+                    selected={selected === 'Getting Started Guide'}
+                >
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Getting Started Guide' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('Organizer Guide')} selected={selected === 'Organizer Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Organizer Guide' />
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
