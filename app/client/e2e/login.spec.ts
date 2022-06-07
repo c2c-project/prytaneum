@@ -31,7 +31,7 @@ test.describe('success', () => {
         await page.locator('input[type="email"]').press('Tab');
         await page.locator('input[type="password"]').fill('a');
         await Promise.all([
-            page.waitForNavigation({ url: '/organizations/me' }),
+            page.waitForNavigation(/*{ url: 'http://localhost:8080/organizations/me' }*/),
             page.locator('text=LoginOr, register an account >> button').click()
         ]);
         await expect(page).toHaveURL('/organizations/me');
