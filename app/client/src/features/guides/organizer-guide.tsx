@@ -74,7 +74,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} sm={9} className={classes.section}>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon} /> <b>Organizer Guide</b>
+                    <BookOutlinedIcon className={classes.icon} /> <b>Guide to Prytaneum:</b> Organizer
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
                     As an organizer, you maintain and set up events for your organizations.

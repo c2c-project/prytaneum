@@ -162,7 +162,7 @@ export default function ModeratorGuide() {
             </Grid>
             <Grid item xs={12} sm={9} className={classes.section}>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon} /> <b>Moderator Guide</b>
+                    <BookOutlinedIcon className={classes.icon} /> <b>Guide to Prytaneum:</b> Moderator
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
                     Being a moderator for an event means you are leading the discussion and are curating participant

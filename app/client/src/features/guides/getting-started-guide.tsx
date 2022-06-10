@@ -65,7 +65,7 @@ export default function GettingStartedGuide() {
             </Grid>
             <Grid item xs={12} sm={9} className={classes.section}>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon} /> <b>Getting Started Guide</b>
+                    <BookOutlinedIcon className={classes.icon} /> <b>Guide to Prytaneum:</b> Getting Started
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
                     An introduction to Prytaneum
