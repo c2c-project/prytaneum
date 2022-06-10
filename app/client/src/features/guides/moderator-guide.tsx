@@ -57,7 +57,7 @@ const useStyles = makeStyles(() => ({
         transform: 'translateY(-69%)',
         zIndex: 100,
     },
-    upcomingQuestionInfo: {
+    answeringNowInfo: {
         position: 'absolute',
         top: '4%',
         right: '-1.25rem',
@@ -191,8 +191,8 @@ export default function ModeratorGuide() {
                 <Typography variant='body1' className={classes.paragraph} component='span'>
                     The moderator event view is one of the two views Prytaneum offers. The other view being the
                     participant event view, which you can find more information on in the{' '}
-                    {<Link href='/participant'>participant user guide</Link>}. With the moderator event view, you manage
-                    the questions queue by enqueuing participant questions and reordering them. Click on any{' '}
+                    {<Link href='/guides/participant'>participant user guide</Link>}. With the moderator event view, you
+                    manage the questions queue by enqueuing participant questions and reordering them. Click on any{' '}
                     {<Chip color='secondary' icon={<HelpIcon />} label='#' />} to reveal more information about the
                     corresponding element.
                 </Typography>
@@ -220,7 +220,7 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='3'
                         size='small'
-                        className={classes.upcomingQuestionInfo}
+                        className={classes.answeringNowInfo}
                         onClick={() => handleClickOpen(3)}
                     />
                     <Chip
