@@ -35,6 +35,7 @@ enum Nav {
     'User Guide',
     'Getting Started Guide',
     'Organizer Guide',
+    'Moderator Guide',
 }
 type Keys = keyof typeof Nav;
 
@@ -55,6 +56,7 @@ const urls: Record<Keys, string> = {
     'User Guide': '/user-guide',
     'Getting Started Guide': '/guides/getting-started',
     'Organizer Guide': '/guides/organizer',
+    'Moderator Guide': '/guides/moderator',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -144,6 +146,12 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         <AssignmentIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='Organizer Guide' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('Moderator Guide')} selected={selected === 'Moderator Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Moderator Guide' />
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
