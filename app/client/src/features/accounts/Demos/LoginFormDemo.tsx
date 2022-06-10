@@ -1,18 +1,13 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { Button, InputAdornment, IconButton, Link as MUILink, Grid, Typography, TextField } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Link from 'next/link';
-import { useMutation, graphql } from 'react-relay';
 
-import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useForm } from '@local/features/core';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -37,63 +32,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface Props {
-    onSuccess?: () => void;
-    secondaryActions?: React.ReactNode;
-}
-
 interface TLoginForm {
     [index: string]: string;
     email: string;
     password: string;
 }
 
-const LOGIN_FORM_MUTATION = graphql`
-    mutation LoginFormMutation($input: LoginForm!) {
-        login(input: $input) {
-            isError
-            message
-            body {
-                ...useUserFragment
-            }
-        }
-    }
-`;
-
 const intialState: TLoginForm = { email: '', password: '' };
-/** Function to request a password reset, calls onSuccess if worked, otherwise, calls onFailure
- * @category @local/domains/Auth
- * @constructor ForgotPassRequest
- * @param props
- * @param {"() => void"} onSuccess function to call if successful
- * @param {"() => void"} onFailure function to call if failed
- * @example
- * const onS = () => {};
- * const onF = () => {};
- * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
- */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
-    const classes = useStyles();
-    const { displaySnack } = useSnack();
-    const [, setUser] = useUser();
-    const [isPassVisible, setIsPassVisible] = React.useState(false);
-    const [form, errors, handleSubmit, handleChange] = useForm(intialState);
-    const [commit, isLoading] = useMutation<LoginFormMutation>(LOGIN_FORM_MUTATION);
 
-    const commitMutation = (submittedForm: TLoginForm) => {
-        commit({
-            variables: {
-                input: submittedForm,
-            },
-            onCompleted({ login }) {
-                if (login.isError) displaySnack(login.message);
-                else {
-                    setUser(login.body);
-                    if (onSuccess) onSuccess();
-                }
-            },
-        });
-    };
+export function LoginFormDemo() {
+    const classes = useStyles();
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
+    const [form, errors, , handleChange] = useForm(intialState);
 
     return (
         <Grid container justifyContent='center'>
@@ -105,7 +55,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                     Login
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(commitMutation)}>
+            <Form className={classes.form} onSubmit={() => {}}>
                 <FormContent>
                     <TextField
                         id='login-email'
@@ -149,43 +99,20 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                             }}
                         />
                         <Grid container justifyContent='flex-end'>
-                            <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary' underline='hover'>
-                                    Forgot Password?
-                                </MUILink>
-                            </Link>
+                            <MUILink className={classes.link} color='primary' underline='hover'>
+                                Forgot Password?
+                            </MUILink>
                         </Grid>
                     </>
                 </FormContent>
                 <Grid container item direction='column' className={classes.buttonGroup}>
-                    <LoadingButton loading={isLoading}>
-                        <Button
-                            fullWidth
-                            type='submit'
-                            variant='contained'
-                            color='secondary'
-                            disabled={form.password.length === 0 || form.email.length === 0}
-                        >
+                    <LoadingButton loading={false}>
+                        <Button fullWidth variant='contained' color='secondary'>
                             Login
                         </Button>
                     </LoadingButton>
-                    {secondaryActions && (
-                        <>
-                            {/* <Divider className={classes.divider} /> */}
-                            {secondaryActions}
-                        </>
-                    )}
                 </Grid>
             </Form>
         </Grid>
     );
 }
-
-LoginForm.defaultProps = {
-    onSuccess: undefined,
-    demo: false,
-};
-
-LoginForm.propTypes = {
-    onSuccess: PropTypes.func,
-};

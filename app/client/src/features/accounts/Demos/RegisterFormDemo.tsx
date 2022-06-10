@@ -1,24 +1,14 @@
 /* eslint-disable react/jsx-curly-newline */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { Button, IconButton, InputAdornment, Grid, Typography, TextField } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import makeStyles from '@mui/styles/makeStyles';
-import { graphql, useMutation } from 'react-relay';
 
-import type { RegisterFormMutation } from '@local/__generated__/RegisterFormMutation.graphql';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
-
-interface Props {
-    onSuccess?: () => void;
-    onFailure?: () => void;
-    secondaryActions?: React.ReactNode;
-}
+import { useForm } from '@local/features/core';
 
 const initialState = {
     email: '',
@@ -49,42 +39,13 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(4),
     },
 }));
-const REGISTER_FORM_MUTATION = graphql`
-    mutation RegisterFormMutation($input: RegistrationForm!) {
-        register(input: $input) {
-            isError
-            message
-            body {
-                ...useUserFragment
-            }
-        }
-    }
-`;
-export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) {
+
+export function RegisterFormDemo() {
     // form state hooks
     const [isPassVisible, setIsPassVisible] = React.useState(false);
-    const [form, errors, handleSubmit, handleChange] = useForm(initialState);
-    const [commit, isLoading] = useMutation<RegisterFormMutation>(REGISTER_FORM_MUTATION);
+    const [form, errors, , handleChange] = useForm(initialState);
 
     const classes = useStyles();
-    const [, setUser] = useUser();
-    const { displaySnack } = useSnack();
-
-    function handleCommit(submittedForm: TRegisterForm) {
-        commit({
-            variables: { input: submittedForm },
-            onCompleted({ register }) {
-                if (register.isError) {
-                    displaySnack(register.message);
-                    if (onFailure) onFailure();
-                } else {
-                    setUser(register.body);
-                    if (onSuccess) onSuccess();
-                }
-            },
-            onError: onFailure,
-        });
-    }
 
     return (
         <Grid container justifyContent='center'>
@@ -93,7 +54,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     Register
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
+            <Form className={classes.form} onSubmit={() => {}}>
                 <FormContent>
                     <TextField
                         id='register-first-name'
@@ -184,36 +145,13 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     />
                 </FormContent>
                 <Grid container item direction='column' className={classes.btnGroup}>
-                    <LoadingButton loading={isLoading}>
-                        <Button
-                            fullWidth
-                            type='submit'
-                            variant='contained'
-                            color='secondary'
-                            disabled={
-                                form.email.length === 0 ||
-                                form.firstName.length === 0 ||
-                                form.lastName.length === 0 ||
-                                form.password.length === 0 ||
-                                form.confirmPassword.length === 0
-                            }
-                        >
+                    <LoadingButton loading={false}>
+                        <Button fullWidth variant='contained' color='secondary'>
                             Register
                         </Button>
                     </LoadingButton>
-                    {secondaryActions && <>{secondaryActions}</>}
                 </Grid>
             </Form>
         </Grid>
     );
 }
-
-RegisterForm.defaultProps = {
-    onSuccess: () => {},
-    onFailure: () => {},
-};
-
-RegisterForm.propTypes = {
-    onSuccess: PropTypes.func.isRequired,
-    onFailure: PropTypes.func,
-};

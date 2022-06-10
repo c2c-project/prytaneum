@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-    Grid,
-    Divider,
-} from '@mui/material';
+import { Grid, Divider } from '@mui/material';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 
@@ -10,11 +7,7 @@ import { SettingsMenu } from '@local/components/SettingsMenu/SettingsMenu';
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
 
-import {
-    ModifyUserEmail,
-    ModifyUserPassword,
-    DeleteAccount,
-} from './components';
+import { ModifyUserEmail, ModifyUserPassword, DeleteAccount } from './components';
 
 interface Props {
     id?: string;
@@ -36,11 +29,11 @@ export default function UserSettings({ id }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
-    const [user,, isLoading] = useUser();
+    const [user, , isLoading] = useUser();
     const router = useRouter();
 
     React.useEffect(() => {
-        if (!isLoading && !user) router.push('/')
+        if (!isLoading && !user) router.push('/');
     }, [isLoading, router, user]);
     React.useEffect(() => {
         if (cont !== null) setOpen(true);

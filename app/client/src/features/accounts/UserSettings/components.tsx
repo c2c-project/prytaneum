@@ -11,7 +11,7 @@ import {
     Link as MUILink,
     IconButton,
     InputAdornment,
-    TextField
+    TextField,
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -126,7 +126,7 @@ export function TownhallUserSettings({ settings }: { settings: UserSettings }) {
             <SettingsItem helpText={text.townhall.anonymous} name='Appear Anonymous'>
                 <Switch
                     checked={settings?.isAnonymous}
-                // onChange={buildHandler('anonymous')}
+                    // onChange={buildHandler('anonymous')}
                 />
             </SettingsItem>
         </SettingsList>
@@ -142,7 +142,7 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
             <SettingsItem helpText={text.notifications.enabled} name='Enabled'>
                 <Switch
                     checked={settings?.isNotificationsEnabled}
-                // onChange={buildHandler('enabled')}
+                    // onChange={buildHandler('enabled')}
                 />
             </SettingsItem>
             <Collapse>
@@ -154,7 +154,7 @@ export function NotificationSettings({ settings }: { settings: UserSettings }) {
     );
 }
 
-export function ModifyUserEmail({ user }: { user: User }) {
+export function ModifyUserEmail({ user, demo }: { user: User; demo?: boolean }) {
     // form state hooks
     const [commit] = useMutation<UpdateEmailFormMutation>(UPDATE_EMAIL_FORM_MUTATION);
 
@@ -197,7 +197,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
             </Grid>
             <Grid component='span' item xs={12}>
                 <Typography variant='body1'>
-                    <b>Current email:</b> {user?.email}
+                    <b>Current email:</b> {!demo ? user?.email : 'test@test.com'}
                 </Typography>
             </Grid>
             <Grid component='span' item xs={12}>
@@ -205,7 +205,7 @@ export function ModifyUserEmail({ user }: { user: User }) {
                     A verification email will be sent to the new email to confirm the update.
                 </Typography>
             </Grid>
-            <Form className={classes.form} onSubmit={handleSubmit}>
+            <Form className={classes.form} onSubmit={!demo ? handleSubmit : () => {}}>
                 <FormContent>
                     <TextField
                         inputProps={{ 'aria-label': 'Enter your new email' }}
@@ -394,7 +394,7 @@ export const AppearAnonymous = () => (
 
 export const Notifications = () => (
     <span>
-        <button type='button' onClick={() => { }}>
+        <button type='button' onClick={() => {}}>
             Notify me about upcoming Townhalls
         </button>
     </span>
@@ -411,7 +411,7 @@ export const Logout = () => (
     <span>
         <button
             type='button'
-            onClick={() => { }} // ROUTING: to /Login or /TownhallList
+            onClick={() => {}} // ROUTING: to /Login or /TownhallList
         >
             Click here to return to the home page
         </button>
@@ -558,3 +558,229 @@ export const TermsOfService = () => (
         <h1>plz no hurt us we no hurt u</h1>
     </span>
 );
+
+export function ModifyUserEmailDemo() {
+    // styling hook
+    const classes = useStyles();
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TUpdateEmailForm>({
+        initialValues: makeInitialState(initialModifyUserEmail),
+        validationSchema: updateEmailValidationSchema,
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        onSubmit: () => {},
+    });
+
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Change Email</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body1'>
+                    <b>Current email:</b> test@test.com
+                </Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    A verification email will be sent to the new email to confirm the update.
+                </Typography>
+            </Grid>
+            <Form className={classes.form} onSubmit={handleSubmit}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your new email' }}
+                        label='Enter your new email'
+                        helperText={errors.newEmail}
+                        error={Boolean(errors.newEmail)}
+                        required
+                        type='email'
+                        variant='outlined'
+                        value={values.newEmail}
+                        onChange={handleChange('newEmail')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button type='submit' variant='outlined' color='primary'>
+                        Update email
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
+    );
+}
+
+export function ModifyUserPasswordDemo() {
+    // form state hooks
+    const [isPassVisible, setIsPassVisible] = React.useState(false);
+
+    // styling hook
+    const classes = useStyles();
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TUpdatePasswordForm>({
+        initialValues: makeInitialState(initialModifyUserPassword),
+        validationSchema: updatePasswordValidationSchema,
+        onSubmit: () => {},
+    });
+
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Change Password</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    Passwords must be at least 8 characters and contain both lowercase and uppercase letters, at least
+                    one number, and at least one special character (e.g. +_!@#$%^&*., ?).
+                </Typography>
+            </Grid>
+
+            <Form className={classes.form} onSubmit={handleSubmit}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your old password' }}
+                        label='Enter your old password'
+                        helperText={errors.oldPassword}
+                        error={Boolean(errors.oldPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={values.oldPassword}
+                        onChange={handleChange('oldPassword')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        label='Enter your new password'
+                        helperText={errors.newPassword}
+                        error={Boolean(errors.newPassword)}
+                        required
+                        variant='outlined'
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={values.newPassword}
+                        onChange={handleChange('newPassword')}
+                        spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                        size='large'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.newPassword ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.newPassword ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        label='Confirm your new password'
+                        helperText={errors.confirmNewPassword}
+                        error={Boolean(errors.confirmNewPassword)}
+                        required
+                        variant='outlined'
+                        type={isPassVisible ? 'text' : 'password'}
+                        value={values.confirmNewPassword}
+                        onChange={handleChange('confirmNewPassword')}
+                        spellCheck={false}
+                        InputProps={{
+                            'aria-label': 'Enter your new password again',
+                            endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        aria-label='toggle password visibility'
+                                        onClick={() => setIsPassVisible(!isPassVisible)}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        edge='end'
+                                        size='large'
+                                    >
+                                        {isPassVisible ? (
+                                            <VisibilityOff color={errors.confirmNewPassword ? 'error' : undefined} />
+                                        ) : (
+                                            <Visibility color={errors.confirmNewPassword ? 'error' : undefined} />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button type='submit' variant='outlined' color='primary'>
+                        Update password
+                    </Button>
+                    <MUILink className={classes.link} color='primary' underline='hover'>
+                        Forgot Password?
+                    </MUILink>
+                </Grid>
+            </Form>
+        </Grid>
+    );
+}
+
+export function DeleteAccountDemo() {
+    // styling hook
+    const classes = useStyles();
+
+    const { handleSubmit, handleChange, values, errors } = useFormik<TDeleteAccountForm>({
+        initialValues: makeInitialState(intiialDeleteAccount),
+        validationSchema: deleteAccountValidationSchema,
+        onSubmit: () => {},
+    });
+
+    return (
+        <Grid container spacing={2}>
+            <Grid component='span' item xs={12}>
+                <Typography variant='h6'>Delete Account</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>All of your account information will be erased from Prytaneum.</Typography>
+            </Grid>
+            <Grid component='span' item xs={12}>
+                <Typography variant='body2'>
+                    <b>This action is irreversible.</b> Please enter your password below twice to confirm.
+                </Typography>
+            </Grid>
+            <Form className={classes.form} onSubmit={handleSubmit}>
+                <FormContent>
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your password' }}
+                        label='Enter your password'
+                        helperText={errors.password}
+                        error={Boolean(errors.password)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={values.password}
+                        onChange={handleChange('password')}
+                        spellCheck={false}
+                    />
+                    <TextField
+                        inputProps={{ 'aria-label': 'Enter your password again' }}
+                        label='Confirm your password to DELETE your account'
+                        helperText={errors.confirmPassword}
+                        error={Boolean(errors.confirmPassword)}
+                        required
+                        variant='outlined'
+                        type='password'
+                        value={values.confirmPassword}
+                        onChange={handleChange('confirmPassword')}
+                        spellCheck={false}
+                    />
+                </FormContent>
+                <Grid component='span' item xs={12}>
+                    <Button type='submit' variant='outlined' style={{ color: 'red', borderColor: 'red' }}>
+                        Delete account
+                    </Button>
+                </Grid>
+            </Form>
+        </Grid>
+    );
+}

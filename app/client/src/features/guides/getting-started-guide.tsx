@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { Grid, Link, Paper, Typography } from '@mui/material';
+import { Chip, Grid, Link, Paper, Typography } from '@mui/material';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import makeStyles from '@mui/styles/makeStyles';
+import HelpIcon from '@mui/icons-material/Help';
 
-import { LoginForm, RegisterForm } from '@local/features/accounts';
+import { RegisterFormDemo, LoginFormDemo, UserSettingsDemo } from '@local/features/accounts/Demos';
+import { DashboardDemo } from '@local/features/dashboard/Demos/DashboardDemo';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         fontSize: '2.25rem',
     },
-    paper: {
+    paperMobile: {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
@@ -38,29 +40,17 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 425,
         padding: theme.spacing(2),
     },
+    paperDesktop: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        width: '100%',
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function GettingStartedGuide() {
     const classes = useStyles();
-
-    // const [open, setOpen] = React.useState(false);
-    // const [infoIndex, setInfoIndex] = React.useState(0);
-
-    // const info = [
-    //     {
-    //         title: 'Meeting Window',
-    //         text: 'The window where you will see the speaker(s) and moderator(s).',
-    //     },
-    // ];
-
-    // const handleClickOpen = (index: number) => {
-    //     setInfoIndex(index - 1);
-    //     setOpen(true);
-    // };
-
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
 
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
@@ -103,15 +93,8 @@ export default function GettingStartedGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
-                {/* <Image
-                    src='/static/guide/login-form.png'
-                    width={431}
-                    height={339}
-                    objectFit='contain'
-                    alt='Login Form'
-                /> */}
-                <Paper className={classes.paper}>
-                    <LoginForm demo={true} />
+                <Paper className={classes.paperMobile}>
+                    <LoginFormDemo />
                 </Paper>
             </Grid>
             <Grid item xs={12} className={classes.section}>
@@ -125,34 +108,23 @@ export default function GettingStartedGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
-                {/* <Image
-                    src='/static/guide/register-form.png'
-                    width={428}
-                    height={574}
-                    objectFit='contain'
-                    alt='Login Form'
-                /> */}
-                <Paper className={classes.paper}>
-                    <RegisterForm demo={true} />
+                <Paper className={classes.paperMobile}>
+                    <RegisterFormDemo />
                 </Paper>
             </Grid>
             <Grid item xs={12} className={classes.section}>
                 <Typography variant='h4' id='dashboard'>
                     Dashboard
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' className={classes.paragraph} component='span'>
                     After logging in, you will see your Prytaneum dashboard. Within your dashboard, you have the ability
-                    to see current events taking place and upcoming events you are invited to.
+                    to see current events taking place and upcoming events you are invited to. Click on any{' '}
+                    {<Chip color='secondary' icon={<HelpIcon />} label='#' />} to reveal more information about the
+                    corresponding element.
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
-                <Image
-                    src='/static/guide/dashboard.png'
-                    width={1920}
-                    height={1080}
-                    objectFit='contain'
-                    alt='dashboard'
-                />
+                <DashboardDemo />
             </Grid>
             <Grid item xs={12} className={classes.section}>
                 <Typography variant='h4' id='account-settings'>
@@ -165,13 +137,9 @@ export default function GettingStartedGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
-                <Image
-                    src='/static/guide/account-settings.png'
-                    width={1175}
-                    height={1044}
-                    objectFit='contain'
-                    alt='dashboard'
-                />
+                <Paper className={classes.paperDesktop}>
+                    <UserSettingsDemo />
+                </Paper>
             </Grid>
         </Grid>
     );
