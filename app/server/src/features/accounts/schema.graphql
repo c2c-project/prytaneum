@@ -7,7 +7,7 @@ type User implements Node {
     lastName: String
     email: String
     isEmailVerified: Boolean
-
+    isOrganizer: Boolean
     """
     Avatar URL if null then no avatar is uploaded
     """

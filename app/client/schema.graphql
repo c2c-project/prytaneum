@@ -708,6 +708,7 @@ type User implements Node {
   firstName: String
   id: ID!
   isEmailVerified: Boolean
+  isOrganizer: Boolean
   lastName: String
 
   """Organizations that this user belongs to"""

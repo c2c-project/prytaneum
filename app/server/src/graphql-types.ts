@@ -90,6 +90,7 @@ export type User = Node & {
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
     isEmailVerified?: Maybe<Scalars['Boolean']>;
+    isOrganizer?: Maybe<Scalars['Boolean']>;
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
@@ -1439,6 +1440,7 @@ export type UserResolvers<
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isOrganizer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<
         Maybe<ResolversTypes['OrganizationConnection']>,
@@ -2399,6 +2401,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isOrganizer?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
     };
