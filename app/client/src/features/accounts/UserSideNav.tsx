@@ -106,7 +106,6 @@ export function UserSideNavLoader() {
 export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     // const { isModerator } = useEvent();
     const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
-
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
@@ -175,7 +174,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer={data.isOrganizer}>
+                <RoleGuard organizer>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />
