@@ -9,36 +9,6 @@ import type {
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';
 import { errors } from '../utils';
-import { Storage } from '@google-cloud/storage';
-import fs from 'fs';
-/** 
- * given an email, returns if email exists on csv file on google cloud storage bucket
-*/
-export async function isOnOrganizerList(email: string) {
-    const bucketName = 'organizers';
-    const fileName = 'list-of-organizers.csv';
-    const storage = new Storage({
-        projectId: process.env.GCP_PROJECT_ID,
-        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    });
-    const file = storage.bucket(bucketName).file(fileName);
-    let found = false;
-    const options = {
-        destination: process.env.ORGANIZER_FILE_PATH,
-    };
-    try {
-        await file.download(options);
-    } catch (err) {
-        throw new Error(err);
-    }
-    const allFileContents = fs.readFileSync(process.env.ORGANIZER_FILE_PATH, 'utf-8');
-    allFileContents.split(/\r?\n?,/).forEach((line) => {
-        if (line === email) {
-            found = true;
-        }
-    });
-    return found;
-}
 
 /** 
  * given a user id, return the associated email

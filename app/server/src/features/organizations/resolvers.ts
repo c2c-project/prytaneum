@@ -10,15 +10,6 @@ const toUserId = toGlobalId('User');
 const toEventId = toGlobalId('Event');
 
 export const resolvers: Resolvers = {
-    Query: {
-        async isOrganizer(parent, args, ctx, info) {
-            if (!ctx.viewer.id) {
-                return false;
-            }
-            const email = await Organization.findEmailByUserId(ctx.viewer.id, ctx.prisma);
-            return Organization.isOnOrganizerList(email?.email!);
-        },
-    },
     Mutation: {
         async createOrganization(parent, args, ctx, info) {
             return runMutation(async () => {

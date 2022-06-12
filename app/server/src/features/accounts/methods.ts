@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@local/__generated__/prisma';
 import { toGlobalId } from '@local/features/utils';
+import fs from 'fs';
+// import { Storage } from '@google-cloud/storage';
 
 import * as jwt from '@local/lib/jwt';
 import type {
@@ -14,6 +16,48 @@ import type {
 const toUserId = toGlobalId('User');
 
 type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
+
+/** 
+ * given an email, returns if email exists on csv file on google cloud storage bucket
+*/
+export async function isOnOrganizerList(email: string) {
+    // const bucketName = 'organizers';
+    // const fileName = 'list-of-organizers.csv';
+    // const storage = new Storage({
+    //     projectId: process.env.GCP_PROJECT_ID,
+    //     keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    // });
+    // const file = storage.bucket(bucketName).file(fileName);
+    
+    let found = false;
+    // const options = {
+    //     destination: process.env.ORGANIZER_FILE_PATH,
+    // };
+    // try {
+    //     await file.download(options);
+    // } catch (err) {
+    //     throw new Error(err);
+    // }
+
+    // not working rn for some reason
+    let localFilePath = __dirname + '/listOfOrganizers.csv' //delete later
+    const allFileContents = fs.readFileSync(/*process.env.ORGANIZER_FILE_PATH*/localFilePath, 'utf-8');
+    allFileContents.split(/\r?\n?,/).forEach((line: string) => {
+        if (line === email) {
+            found = true;
+        }
+    });
+    return found;
+    // return true;
+}
+
+/** 
+ * given a user id, return the associated email
+*/
+export async function findEmailByUserId(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { email: true }});
+    return queryResult;
+}
 
 /**
  * registers a user optionally with a password
