@@ -1255,6 +1255,7 @@ export type User = Node & {
   id: Scalars['ID'];
   isAdmin?: Maybe<Scalars['Boolean']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
+  isOrganizer?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;

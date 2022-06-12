@@ -10,6 +10,7 @@ export const USE_USER_FRAGMENT = graphql`
         lastName
         email
         avatar
+        isOrganizer
         isAdmin
     }
 `;

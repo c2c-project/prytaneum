@@ -831,6 +831,7 @@ type User implements Node {
   id: ID!
   isAdmin: Boolean
   isEmailVerified: Boolean
+  isOrganizer: Boolean
   lastName: String
 
   """Organizations that this user belongs to"""

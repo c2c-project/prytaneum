@@ -9,7 +9,7 @@ type User implements Node {
     isEmailVerified: Boolean
     isAdmin: Boolean
     canMakeOrgs: Boolean
-
+    isOrganizer: Boolean
     """
     Avatar URL if null then no avatar is uploaded
     """
