@@ -33,6 +33,13 @@ export const resolvers: Resolvers = {
                 return { valid: false, message: errors.jwt };
             }
         },
+        async isOrganizer(parent, args, ctx, info) {
+            if (!ctx.viewer.id) {
+                return false;
+            }
+            const email = await User.findEmailByUserId(ctx.viewer.id, ctx.prisma);
+            return User.isOnOrganizerList(email?.email!);
+        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
