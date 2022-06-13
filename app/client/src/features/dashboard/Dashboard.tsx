@@ -8,6 +8,7 @@ import { Add } from '@mui/icons-material';
 
 import { Loader } from '@local/components/Loader';
 import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
+import { useUser } from '@local/features/accounts';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +59,13 @@ export function Dashboard({ queryRef }: Props) {
     const listOfEvents = React.useMemo(() => data.me?.events?.edges ?? [], [data.me]);
     const classes = useStyles();
     const router = useRouter();
+    const [user,,isLoading] = useUser();
     const handleNav = (path: string) => () => router.push(path);
+
+    // Verify user is logged in
+    React.useEffect(() => {
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
     
     if(!data) return <Loader />;
 
