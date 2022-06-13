@@ -34,6 +34,8 @@ const config: PlaywrightTestConfig = {
     reporter: process.env.CI ? 'github' : [['list'], ['experimental-allure-playwright']],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
+        /* Used for loading login state. */
+        storageState: 'storageState.json',
         /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
         actionTimeout: 0,
         /* Base URL to use in actions like `await page.goto('/')`. */

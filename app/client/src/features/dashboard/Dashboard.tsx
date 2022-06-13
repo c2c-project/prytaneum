@@ -198,6 +198,7 @@ export function Dashboard({ queryRef }: Props) {
                     <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12, }}>
                         <IconButton
                             aria-label='view future event'
+                            onClick={handleNav('/organizations/me')}
                         >
                             <Add style={{ fontSize: 32, color: 'black' }} />
                         </IconButton>
