@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
     title: 'Prytaneum Developer Documentation',
     tagline: 'For developers of Prytaneum',
-    url: 'https://c2c-project.github.io/prytaneum',
-    baseUrl: '/',
+    url: 'https://c2c-project.github.io/',
+    baseUrl: 'prytaneum/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     // favicon: 'img/favicon.ico',
