@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
     title: 'Prytaneum Developer Documentation',
     tagline: 'For developers of Prytaneum',
-    url: 'https://your-docusaurus-test-site.com',
+    url: 'https://c2c-project.github.io/prytaneum',
     baseUrl: '/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
@@ -78,23 +78,6 @@ const config = {
                             {
                                 label: 'Getting Started',
                                 to: '/docs/category/getting-started',
-                            },
-                        ],
-                    },
-                    {
-                        title: 'Community',
-                        items: [
-                            {
-                                label: 'Stack Overflow',
-                                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-                            },
-                            {
-                                label: 'Discord',
-                                href: 'https://discordapp.com/invite/docusaurus',
-                            },
-                            {
-                                label: 'Twitter',
-                                href: 'https://twitter.com/docusaurus',
                             },
                         ],
                     },
