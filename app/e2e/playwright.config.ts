@@ -10,7 +10,9 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-    testDir: './',
+    /* Used for saving and using login state. */
+    globalSetup: require.resolve('./e2e/wessels-test-setup.ts'),
+    testDir: './e2e',
     /* Maximum time one test can run for. */
     timeout: 60 * 1000,
     expect: {
@@ -30,6 +32,8 @@ const config: PlaywrightTestConfig = {
     reporter: process.env.CI ? 'github' : [['list'], ['experimental-allure-playwright']],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
+        /* Used for loading login state. */
+        storageState: 'storageState.json',
         /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
         actionTimeout: 0,
         /* Base URL to use in actions like `await page.goto('/')`. */
