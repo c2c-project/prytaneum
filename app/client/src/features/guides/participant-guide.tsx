@@ -23,6 +23,9 @@ const useStyles = makeStyles(() => ({
         paddingLeft: '1rem',
         scrollPaddingTop: '-10rem',
     },
+    heading: {
+        paddingTop: '80px',
+    },
     paragraph: {
         fontSize: '18px',
     },
@@ -168,7 +171,7 @@ export default function ParticipantGuide() {
                 <Link href='#participantEventView'>Participant Event View</Link>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='attendingEvents'>
+                <Typography variant='h4' id='attendingEvents' className={classes.heading}>
                     Attending an Event as a Participant
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
@@ -178,7 +181,7 @@ export default function ParticipantGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='participantEventView'>
+                <Typography variant='h4' id='participantEventView' className={classes.heading}>
                     Participant Event View
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph} component='span'>

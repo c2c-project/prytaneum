@@ -23,6 +23,9 @@ const useStyles = makeStyles(() => ({
         paddingLeft: '1rem',
         scrollPaddingTop: '-10rem',
     },
+    heading: {
+        paddingTop: '80px',
+    },
     paragraph: {
         fontSize: '18px',
     },
@@ -175,7 +178,7 @@ export default function ModeratorGuide() {
                 <Link href='#moderatorEventView'>ModeratorEventView</Link>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='becomingAModerator'>
+                <Typography variant='h4' id='becomingAModerator' className={classes.heading}>
                     Becoming a Moderator
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
@@ -185,7 +188,7 @@ export default function ModeratorGuide() {
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='moderatorEventView'>
+                <Typography variant='h4' id='moderatorEventView' className={classes.heading}>
                     Moderator Event View
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph} component='span'>

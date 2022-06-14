@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '1rem',
         scrollPaddingTop: '-10rem',
     },
+    heading: {
+        paddingTop: '80px',
+    },
     paragraph: {
         fontSize: '18px',
     },
@@ -78,7 +81,7 @@ export default function GettingStartedGuide() {
                 <Link href='#account-settings'>Account Settings</Link>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='sign-in-or-registering'>
+                <Typography variant='h4' id='sign-in-or-registering' className={classes.heading}>
                     Signing In or Registering
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
@@ -113,7 +116,7 @@ export default function GettingStartedGuide() {
                 </Paper>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='dashboard'>
+                <Typography variant='h4' id='dashboard' className={classes.heading}>
                     Dashboard
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph} component='span'>
@@ -127,7 +130,7 @@ export default function GettingStartedGuide() {
                 <DashboardDemo />
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='account-settings'>
+                <Typography variant='h4' id='account-settings' className={classes.heading}>
                     Account Settings
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>

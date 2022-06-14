@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '1rem',
         scrollPaddingTop: '-10rem',
     },
+    heading: {
+        paddingTop: '80px',
+    },
     paragraph: {
         fontSize: '18px',
     },
@@ -87,7 +90,7 @@ export default function OrganizerGuide() {
                 <Link href='#managing-events'>Managing Events/Event Settings</Link>
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='organizations-page'>
+                <Typography variant='h4' id='organizations-page' className={classes.heading}>
                     Organization&#39;s Page
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
@@ -130,7 +133,7 @@ export default function OrganizerGuide() {
                 />
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='managing-organizations'>
+                <Typography variant='h4' id='managing-organizations' className={classes.heading}>
                     Managing Organizations
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
@@ -166,7 +169,7 @@ export default function OrganizerGuide() {
                 />
             </Grid>
             <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='managing-events'>
+                <Typography variant='h4' id='managing-events' className={classes.heading}>
                     Managing Events/Event Settings
                 </Typography>
                 <Typography variant='body1' className={classes.paragraph}>
