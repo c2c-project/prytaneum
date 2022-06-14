@@ -29,6 +29,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:app/docs"\
       },\
       {\
+        "name": "@app/e2e",\
+        "reference": "workspace:app/e2e"\
+      },\
+      {\
         "name": "@app/server",\
         "reference": "workspace:app/server"\
       }\
@@ -38,6 +42,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "fallbackExclusionList": [\
       ["@app/client", ["workspace:app/client"]],\
       ["@app/docs", ["workspace:app/docs"]],\
+      ["@app/e2e", ["workspace:app/e2e"]],\
       ["@app/server", ["workspace:app/server"]],\
       ["prytaneum", ["workspace:."]]\
     ],\
@@ -290,7 +295,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mui/lab", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.0.0-alpha.70"],\
             ["@mui/material", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.4.3"],\
             ["@mui/styles", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.4.2"],\
-            ["@playwright/test", "npm:1.21.1"],\
             ["@storybook/addon-a11y", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.4.15"],\
             ["@storybook/addon-essentials", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.4.15"],\
             ["@storybook/node-logger", "npm:6.2.9"],\
@@ -316,7 +320,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yup", "npm:0.29.11"],\
             ["@typescript-eslint/eslint-plugin", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.12.0"],\
             ["@typescript-eslint/parser", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.12.0"],\
-            ["allure-commandline", "npm:2.17.2"],\
             ["babel-loader", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:8.2.2"],\
             ["babel-plugin-import", "npm:1.13.3"],\
             ["babel-plugin-relay", "npm:13.0.2"],\
@@ -336,14 +339,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-jsx-a11y", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.5.1"],\
             ["eslint-plugin-react", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:7.28.0"],\
             ["eslint-plugin-react-hooks", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:4.3.0"],\
-            ["experimental-allure-playwright", "npm:0.0.3"],\
             ["formik", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.2.6"],\
             ["framer-motion", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:3.10.6"],\
             ["graphql", "npm:15.8.0"],\
             ["jest-environment-jsdom-sixteen", "npm:1.0.3"],\
             ["next", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:12.1.1"],\
             ["notistack", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.0.3"],\
-            ["playwright", "npm:1.21.1"],\
             ["prop-types", "npm:15.7.2"],\
             ["react", "npm:17.0.2"],\
             ["react-beautiful-dnd", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:13.1.0"],\
@@ -380,6 +381,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prism-react-renderer", "virtual:b5929648edbc04ce7fde762cd33d60ccc639addb10637f12c5a93d8d2b880d93e1d9cf460ddba0ede04da45b71eee2e372c7dd44f924e4e8f495507c463a5185#npm:1.3.3"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:b5929648edbc04ce7fde762cd33d60ccc639addb10637f12c5a93d8d2b880d93e1d9cf460ddba0ede04da45b71eee2e372c7dd44f924e4e8f495507c463a5185#npm:17.0.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@app/e2e", [\
+        ["workspace:app/e2e", {\
+          "packageLocation": "./app/e2e/",\
+          "packageDependencies": [\
+            ["@app/e2e", "workspace:app/e2e"],\
+            ["@playwright/test", "npm:1.21.1"],\
+            ["allure-commandline", "npm:2.17.2"],\
+            ["dotenv-cli", "npm:5.1.0"],\
+            ["experimental-allure-playwright", "npm:0.0.3"],\
+            ["playwright", "npm:1.21.1"],\
+            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"]\
           ],\
           "linkType": "SOFT"\
         }]\
