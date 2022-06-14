@@ -32,7 +32,6 @@ enum Nav {
     // 'Admin Settings',
     'Dashboard',
     'About Us',
-    'User Guide',
     'Getting Started Guide',
     'Organizer Guide',
     'Moderator Guide',
@@ -54,7 +53,6 @@ const urls: Record<Keys, string> = {
     // 'Admin Settings': '/app/admin/settings',
     Dashboard: '/dashboard',
     'About Us': '/aboutus',
-    'User Guide': '/user-guide',
     'Getting Started Guide': '/guides/getting-started',
     'Organizer Guide': '/guides/organizer',
     'Moderator Guide': '/guides/moderator',
@@ -127,12 +125,6 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         <PeopleIcon />
                     </StyledListItemIcon>
                     <ListItemText primary='About Us' />
-                </StyledListItem>
-                <StyledListItem onClick={handleClick('User Guide')} selected={selected === 'User Guide'}>
-                    <StyledListItemIcon>
-                        <AssignmentIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='User Guide' />
                 </StyledListItem>
                 <StyledListItem
                     onClick={handleClick('Getting Started Guide')}
