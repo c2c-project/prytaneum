@@ -55,3 +55,45 @@ test('User is directed back to Dashboard on refresh.', async ({ page }) => {
     await page.reload();
     await expect(page).toHaveURL('/dashboard');
 });
+
+// Will fail on mobile browsers. The logout button is different across desktop and mobile browsers.
+test('User is directed to landing page if not logged in -- Test for Desktop.', async ({ page }) => {
+    // Go to Dashboard
+    await page.goto('/dashboard');
+
+    // Logout
+    await page.locator('text=MMICHAEL WESSELS').click();
+    await Promise.all([
+        page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
+        page.locator('text=Logout').click()
+    ]);
+
+    // Attempt to navigate to Dashboard
+    await Promise.all([
+        page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
+        page.goto('/dashboard')
+    ]);
+
+    await expect(page).toHaveURL('/');
+});
+
+// Will fail on desktop browsers. The logout button is different across desktop and mobile browsers.
+test('User is directed to landing page if not logged in -- Test for Mobile.', async ({ page }) => {
+    // Go to Dashboard
+    await page.goto('/dashboard');
+
+    // Logout
+    await page.locator('[data-testid="MoreVertIcon"]').click();
+    await Promise.all([
+        page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
+        page.locator('text=Logout').click()
+    ]);
+
+    // Attempt to navigate to Dashboard
+    await Promise.all([
+        page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
+        page.goto('/dashboard')
+    ]);
+
+    await expect(page).toHaveURL('/');
+});
