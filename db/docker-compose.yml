@@ -1,13 +1,18 @@
+# Set the version of docker compose to use
 version: '3.6'
+
+# The containers that compose the project
 services:
-    postgres:
+    db:
         image: postgres:13
         restart: always
         volumes:
             - db_data:/var/lib/postgresql/data
         ports:
-            - '${POSTGRES_PORT}:5432'
+            - '3003:5432'
         environment:
-            - POSTGRES_PASSWORD
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgrespassword
+            POSTGRES_DB: postgres
 volumes:
     db_data:

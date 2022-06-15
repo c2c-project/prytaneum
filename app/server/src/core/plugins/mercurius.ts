@@ -8,6 +8,12 @@ import redis from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
 
+export const redisEmitter = redis({
+    port: 6379,
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASSWORD,
+});
+
 /**
  * Helper function for extracting the the authentication JWT from a `FastifyRequest`
  */
@@ -76,12 +82,6 @@ declare module 'mercurius' {
 //
 
 export function attachMercuriusTo(server: FastifyInstance) {
-    const redisEmitter = redis({
-        port: 6379,
-        host: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.REDIS_HOST,
-        password: process.env.NODE_ENV === 'development' ? '' : process.env.REDIS_PASSWORD,
-    });
-
     server.log.debug('Attaching Mercurius.');
     const schema = loadSchema(server.log);
     server.register(mercurius, {
@@ -90,10 +90,11 @@ export function attachMercuriusTo(server: FastifyInstance) {
         context: makeRequestContext,
         subscription: {
             context: makeSubscriptionContext,
-            emitter: process.env.NODE_ENV === 'development' ? undefined : redisEmitter
+            emitter: process.env.NODE_ENV === 'production' ? redisEmitter : undefined,
         },
     });
 
+    if (process.env.NODE_ENV === 'test') return;
     // Does NOT run in production -- https://github.com/mercurius-js/mercurius-typescript/tree/master/packages/mercurius-codegen
     mercuriusCodgen(server, {
         // Should be src/graphql-types.ts

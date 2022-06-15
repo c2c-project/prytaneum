@@ -34,6 +34,10 @@ const isValidHost =
     // These values may change in the future
     (process.env.HOST === '0.0.0.0' || process.env.HOST === '127.0.0.1' || process.env.HOST === 'localhost');
 
+const isValidRedisHost = isString(process.env.REDIS_HOST);
+
+const isValidRedisPassword = isString(process.env.REDIS_PASSWORD);
+
 // This only needs to be defined in production.
 const isValidGcpProjectId = isProduction ? isString(process.env.GCP_PROJECT_ID) : true;
 
@@ -44,4 +48,6 @@ export function checkEnv() {
     if (!isValidPort) throw new Error('PORT is not valid');
     if (!isValidHost) throw new Error('HOST is not valid');
     if (!isValidGcpProjectId) throw new Error('GCP_PROJECT_ID is not valid');
+    if (!isValidRedisHost) throw new Error('REDIS_HOST is not valid');
+    if (!isValidRedisPassword) throw new Error('REDIS_PASSWORD is not valid');
 }
