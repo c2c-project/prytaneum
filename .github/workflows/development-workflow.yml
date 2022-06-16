@@ -118,7 +118,7 @@ jobs:
               run: yarn workspace @app/server generate
 
             - name: Run tests
-              run: yarn workspace @app/client run test:ci
+              run: yarn workspace @app/server run test:ci
 
     build-client:
         name: Build Client
