@@ -4,9 +4,15 @@ import { fromGlobalId } from 'graphql-relay';
 import mercuriusCodgen from 'mercurius-codegen';
 import { join } from 'path';
 
-import redis, { MQEmitterRedis } from 'mqemitter-redis';
+import redis from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
+
+export const redisEmitter = redis({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD,
+});
 
 /**
  * Helper function for extracting the the authentication JWT from a `FastifyRequest`
@@ -78,26 +84,14 @@ declare module 'mercurius' {
 export function attachMercuriusTo(server: FastifyInstance) {
     server.log.debug('Attaching Mercurius.');
     const schema = loadSchema(server.log);
-
-    const subscription = { context: makeSubscriptionContext } as {
-        context: typeof makeSubscriptionContext;
-        emitter?: MQEmitterRedis;
-    };
-
-    if (process.env.NODE_ENV === 'production') {
-        const redisEmitter = redis({
-            port: 6379,
-            host: process.env.REDIS_HOST,
-            password: process.env.REDIS_PASSWORD,
-        });
-        subscription.emitter = redisEmitter;
-    }
-
     server.register(mercurius, {
         schema,
         graphiql: process.env.NODE_ENV === 'development',
         context: makeRequestContext,
-        subscription,
+        subscription: {
+            context: makeSubscriptionContext,
+            emitter: redisEmitter,
+        },
     });
 
     if (process.env.NODE_ENV === 'test') return;
