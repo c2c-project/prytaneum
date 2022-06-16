@@ -156,7 +156,7 @@ jobs:
         name: Build Server
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, e2e-testing, typechecking]
+        needs: [linting, e2e-testing, server-testing, typechecking]
 
         steps:
             - name: Checkout
