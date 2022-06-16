@@ -3,7 +3,6 @@ import { getOrCreateServer } from '@local/core/server';
 import { getPrismaClient } from '@local/core/utils';
 import { createMercuriusTestClient } from 'mercurius-integration-testing';
 import * as plugins from '@local/core/plugins';
-import { redisEmitter } from '@local/core/plugins/mercurius';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
 
@@ -37,14 +36,11 @@ beforeAll(async () => {
             password: encryptedPassword,
         },
     });
-
-    console.log('NODE ENV: ', process.env.NODE_ENV);
 });
 
 afterAll(async () => {
     await prisma.user.deleteMany();
     await prisma.$disconnect();
-    redisEmitter.close(() => {});
     await server.close();
 });
 
