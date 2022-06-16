@@ -3,11 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "test:e2e": "playwright test && yarn allure:generate-report",
-        "test:e2e:ci": "dotenv -v CI=1 -- yarn run test:e2e",
-        "test:e2e:headed": "playwright test --headed && yarn allure:generate-report",
+        "test": "playwright test && yarn allure:generate-report",
+        "ci:test": "dotenv -v CI=1 -- yarn run test",
+        "debug": "playwright test --headed && yarn allure:generate-report",
         "allure:generate-report": "allure generate ./allure-results --clean",
-        "allure:report": "allure open ./allure-report"
+        "allure:open-report": "allure open ./allure-report"
     },
     "devDependencies": {
         "@playwright/test": "^1.22.2",

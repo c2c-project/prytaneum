@@ -60,8 +60,8 @@ jobs:
             - name: Type Check Project
               run: yarn workspaces foreach -p run typecheck
 
-    client-testing:
-        name: E2E Client Testing
+    e2e-testing:
+        name: E2E Testing
         runs-on: ubuntu-latest
         environment: development
         timeout-minutes: 60
@@ -88,7 +88,7 @@ jobs:
               run: yarn workspace @app/e2e run playwright install msedge
 
             - name: Run Playwright tests
-              run: yarn workspace @app/e2e run test:e2e:ci
+              run: yarn workspace @app/e2e run ci:test
 
             - uses: actions/upload-artifact@v2
               if: always()
@@ -129,7 +129,7 @@ jobs:
         name: Build Client
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, client-testing, typechecking]
+        needs: [linting, e2e-testing, typechecking]
 
         steps:
             - name: Checkout
@@ -156,7 +156,7 @@ jobs:
         name: Build Server
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, client-testing, typechecking]
+        needs: [linting, e2e-testing, typechecking]
 
         steps:
             - name: Checkout
