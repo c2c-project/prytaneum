@@ -37,6 +37,8 @@ beforeAll(async () => {
             password: encryptedPassword,
         },
     });
+
+    console.log('NODE ENV: ', process.env.NODE_ENV);
 });
 
 afterAll(async () => {
