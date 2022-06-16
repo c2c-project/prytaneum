@@ -88,7 +88,7 @@ jobs:
               run: yarn workspace @app/e2e run playwright install msedge
 
             - name: Run Playwright tests
-              run: yarn workspace @app/e2e run ci:test
+              run: yarn workspace @app/e2e run test:ci
 
             - uses: actions/upload-artifact@v2
               if: always()
