@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "test": "playwright test && yarn allure:generate-report",
+        "test": "yarn g:start-test-db && yarn workspace @app/server prisma-db-seed && playwright test && yarn allure:generate-report",
         "test:ci": "dotenv -v CI=1 -- yarn run test",
         "debug": "playwright test --headed && yarn allure:generate-report",
         "allure:generate-report": "allure generate ./allure-results --clean",
