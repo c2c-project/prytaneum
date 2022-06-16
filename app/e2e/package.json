@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "test": "playwright test && yarn allure:generate-report",
-        "ci:test": "dotenv -v CI=1 -- yarn run test",
+        "test:ci": "dotenv -v CI=1 -- yarn run test",
         "debug": "playwright test --headed && yarn allure:generate-report",
         "allure:generate-report": "allure generate ./allure-results --clean",
         "allure:open-report": "allure open ./allure-report"
