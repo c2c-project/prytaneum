@@ -4,7 +4,7 @@ import { fromGlobalId } from 'graphql-relay';
 import mercuriusCodgen from 'mercurius-codegen';
 import { join } from 'path';
 
-import redis from 'mqemitter-redis';
+import redis, { MQEmitterRedis } from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
 
@@ -78,21 +78,26 @@ declare module 'mercurius' {
 export function attachMercuriusTo(server: FastifyInstance) {
     server.log.debug('Attaching Mercurius.');
     const schema = loadSchema(server.log);
+
+    const subscription = { context: makeSubscriptionContext } as {
+        context: typeof makeSubscriptionContext;
+        emitter?: MQEmitterRedis;
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+        const redisEmitter = redis({
+            port: 6379,
+            host: process.env.REDIS_HOST,
+            password: process.env.REDIS_PASSWORD,
+        });
+        subscription.emitter = redisEmitter;
+    }
+
     server.register(mercurius, {
         schema,
         graphiql: process.env.NODE_ENV === 'development',
         context: makeRequestContext,
-        subscription: {
-            context: makeSubscriptionContext,
-            emitter:
-                process.env.NODE_ENV === 'production'
-                    ? redis({
-                        port: 6379,
-                        host: process.env.REDIS_HOST,
-                        password: process.env.REDIS_PASSWORD,
-                    })
-                    : undefined,
-        },
+        subscription,
     });
 
     if (process.env.NODE_ENV === 'test') return;
