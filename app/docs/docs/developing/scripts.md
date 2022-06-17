@@ -36,6 +36,21 @@ yarn workspace @app/client
 -   `typecheck`: Check that all types are correct.
 -   `lint`: Lint the client.
 
+## E2E
+
+Prefix scripts with
+
+```bash
+yarn workspace @app/e2e
+```
+
+-   `pretest`: Starts up the project and seeds the DB in preperation to run the playwright tests.
+-   `test`: Runs playwright tests.
+-   `test:ci`: Runs playwright tests with the environment variable set to `CI=1` so the configuration can be set to run on the CI/CD pipeline.
+-   `debug`: Runs playwright tests in headed mode, allowing for playwright to open browsers locally to monitor tests as they execute.
+-   `allure:generate-report`: Takes the test results under the folder `app/e2e/allure-results` and generates a report at `app/e2e/allure-report`.
+-   `allure:open-report`: Generates and opens an allure report in the browser.
+
 ## Server
 
 Prefix scripts with
@@ -59,22 +74,7 @@ yarn workspace @app/server add-feat somNewFeature # will add feature/some-new-fe
 -   `lint`: Lint the server.
 -   `prisma-db-push`: Pushes the current prisma schema to the DB.
 -   `prisma-db-seed`: Seeds the DB using the file `app/server/prisma/seed.ts`.
--   `test:prisma-db-push`: Pushes the current schema with the test `NODE_ENV`.
--   `test:unit`: Runs unit tests using jest with the test `NODE_ENV`.
--   `test:integration`: Runs integration tests using jest with the test `NODE_ENV`
+-   `test:prisma-db-push`: Pushes the current schema with the `NODE_ENV=test`.
+-   `test:unit`: Runs unit tests using jest with the `NODE_ENV=test`.
+-   `test:integration`: Runs integration tests using jest with the `NODE_ENV=test`
 -   `test:ci`: Runs all server tests after ensuring the test DB is running. Used for CI/CD pipeline.
-
-## E2E
-
-Prefix scripts with
-
-```bash
-yarn workspace @app/e2e
-```
-
--   `pretest`: Starts up the project and seeds the DB in preperation to run the playwright tests.
--   `test`: Runs playwright tests.
--   `test:ci`: Runs playwright tests with the environment variable set to `CI=1` so the configuration can be set to run on the CI/CD pipeline.
--   `debug`: Runs playwright tests in headed mode, allowing for playwright to open browsers locally to monitor tests as they execute.
--   `allure:generate-report`: Takes the test results under the folder `app/e2e/allure-results` and generates a report at `app/e2e/allure-report`.
--   `allure:open-report`: Generates and opens an allure report in the browser.
