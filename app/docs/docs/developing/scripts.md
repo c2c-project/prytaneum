@@ -35,11 +35,6 @@ yarn workspace @app/client
 -   `relay`: Start the relay compiler in watch mode.
 -   `typecheck`: Check that all types are correct.
 -   `lint`: Lint the client.
--   `test:e2e`: Perform an e2e test.
--   `test:e2e:ci`: For CI use only.
--   `test:e2e:headed`: Runs test in headed mode, useful for debugging tests. [docs](https://playwright.dev/docs/debug#run-in-headed-mode)
--   `allure:generate-report`: Generate coverage stats.
--   `allure:report`: Open the web view of the report.
 
 ## Server
 
@@ -77,8 +72,9 @@ Prefix scripts with
 yarn workspace @app/e2e
 ```
 
--   `test`: Runs playwright tests and generates an allure report of the test results.
+-   `pretest`: Starts up the project and seeds the DB in preperation to run the playwright tests.
+-   `test`: Runs playwright tests.
 -   `test:ci`: Runs playwright tests with the environment variable set to `CI=1` so the configuration can be set to run on the CI/CD pipeline.
 -   `debug`: Runs playwright tests in headed mode, allowing for playwright to open browsers locally to monitor tests as they execute.
--   `allure:generate-report`: generates the allure results under the folder `app/e2e/allure-results` and a report at `app/e2e/allure-report`.
--   `allure:open-report`: Opens a generated allure report in the local browser.
+-   `allure:generate-report`: Takes the test results under the folder `app/e2e/allure-results` and generates a report at `app/e2e/allure-report`.
+-   `allure:open-report`: Generates and opens an allure report in the browser.

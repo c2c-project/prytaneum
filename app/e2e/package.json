@@ -3,11 +3,12 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "test": "yarn g:start-test-db && yarn workspace @app/server prisma-db-seed && playwright test && yarn allure:generate-report",
+        "pretest": "yarn g:start-test-db && yarn workspace @app/server prisma-db-seed",
+        "test": "yarn pretest && playwright test",
         "test:ci": "dotenv -v CI=1 -- yarn run test",
-        "debug": "playwright test --headed && yarn allure:generate-report",
+        "debug": "playwright test --headed",
         "allure:generate-report": "allure generate ./allure-results --clean",
-        "allure:open-report": "allure open ./allure-report"
+        "allure:open-report": "yarn allure:generate-report && allure open ./allure-report"
     },
     "devDependencies": {
         "@playwright/test": "^1.22.2",
