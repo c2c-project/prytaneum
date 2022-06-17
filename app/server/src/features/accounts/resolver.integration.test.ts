@@ -5,7 +5,6 @@ import { createMercuriusTestClient } from 'mercurius-integration-testing';
 import * as plugins from '@local/core/plugins';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
-import { redisEmitter } from '@local/core/plugins';
 
 const server = getOrCreateServer();
 const testClient = createMercuriusTestClient(server);
@@ -42,7 +41,6 @@ beforeAll(async () => {
 afterAll(async () => {
     await prisma.user.deleteMany();
     await prisma.$disconnect();
-    redisEmitter.close(() => {});
     await server.close();
 });
 
