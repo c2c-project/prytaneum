@@ -358,7 +358,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-transition-group", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:4.4.2"],\
             ["relay-compiler", "npm:13.0.2"],\
             ["relay-runtime", "npm:13.0.2"],\
-            ["sharp", "npm:0.30.3"],\
+            ["sharp", "npm:0.30.6"],\
             ["smoothscroll-polyfill", "npm:0.4.4"],\
             ["subscriptions-transport-ws", "virtual:74d3e0648baada8018d636e3661a4132fa46cc49859b5262fb8e167c43db86560f37a016b7a7e42872fa34808b800506e133cdecde624e544693f70ca0dcde1a#npm:0.11.0"],\
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"],\
@@ -21324,10 +21324,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["color", [\
-        ["npm:4.2.1", {\
-          "packageLocation": "./.yarn/cache/color-npm-4.2.1-84e5ad29c4-03fb3100a8.zip/node_modules/color/",\
+        ["npm:4.2.3", {\
+          "packageLocation": "./.yarn/cache/color-npm-4.2.3-4a23227581-0579629c02.zip/node_modules/color/",\
           "packageDependencies": [\
-            ["color", "npm:4.2.1"],\
+            ["color", "npm:4.2.3"],\
             ["color-convert", "npm:2.0.1"],\
             ["color-string", "npm:1.9.0"]\
           ],\
@@ -33529,10 +33529,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["node-addon-api", [\
-        ["npm:4.3.0", {\
-          "packageLocation": "./.yarn/unplugged/node-addon-api-npm-4.3.0-a07a1232df/node_modules/node-addon-api/",\
+        ["npm:5.0.0", {\
+          "packageLocation": "./.yarn/unplugged/node-addon-api-npm-5.0.0-c0def7fecf/node_modules/node-addon-api/",\
           "packageDependencies": [\
-            ["node-addon-api", "npm:4.3.0"],\
+            ["node-addon-api", "npm:5.0.0"],\
             ["node-gyp", "npm:8.0.0"]\
           ],\
           "linkType": "HARD"\
@@ -36198,10 +36198,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["prebuild-install", [\
-        ["npm:7.0.1", {\
-          "packageLocation": "./.yarn/cache/prebuild-install-npm-7.0.1-f63021d62e-117c8966f2.zip/node_modules/prebuild-install/",\
+        ["npm:7.1.1", {\
+          "packageLocation": "./.yarn/cache/prebuild-install-npm-7.1.1-cb9fc9d341-dbf96d0146.zip/node_modules/prebuild-install/",\
           "packageDependencies": [\
-            ["prebuild-install", "npm:7.0.1"],\
+            ["prebuild-install", "npm:7.1.1"],\
             ["detect-libc", "npm:2.0.1"],\
             ["expand-template", "npm:2.0.3"],\
             ["github-from-package", "npm:0.0.0"],\
@@ -36209,7 +36209,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mkdirp-classic", "npm:0.5.3"],\
             ["napi-build-utils", "npm:1.0.2"],\
             ["node-abi", "npm:3.8.0"],\
-            ["npmlog", "npm:4.1.2"],\
             ["pump", "npm:3.0.0"],\
             ["rc", "npm:1.2.8"],\
             ["simple-get", "npm:4.0.1"],\
@@ -39685,16 +39684,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["sharp", [\
-        ["npm:0.30.3", {\
-          "packageLocation": "./.yarn/unplugged/sharp-npm-0.30.3-360bdcb17e/node_modules/sharp/",\
+        ["npm:0.30.6", {\
+          "packageLocation": "./.yarn/unplugged/sharp-npm-0.30.6-4067fc2ceb/node_modules/sharp/",\
           "packageDependencies": [\
-            ["sharp", "npm:0.30.3"],\
-            ["color", "npm:4.2.1"],\
+            ["sharp", "npm:0.30.6"],\
+            ["color", "npm:4.2.3"],\
             ["detect-libc", "npm:2.0.1"],\
-            ["node-addon-api", "npm:4.3.0"],\
+            ["node-addon-api", "npm:5.0.0"],\
             ["node-gyp", "npm:8.0.0"],\
-            ["prebuild-install", "npm:7.0.1"],\
-            ["semver", "npm:7.3.5"],\
+            ["prebuild-install", "npm:7.1.1"],\
+            ["semver", "npm:7.3.7"],\
             ["simple-get", "npm:4.0.1"],\
             ["tar-fs", "npm:2.1.1"],\
             ["tunnel-agent", "npm:0.6.0"]\
