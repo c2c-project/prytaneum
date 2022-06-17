@@ -8,12 +8,6 @@ import redis from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
 
-export const redisEmitter = redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD,
-});
-
 /**
  * Helper function for extracting the the authentication JWT from a `FastifyRequest`
  */
@@ -90,7 +84,14 @@ export function attachMercuriusTo(server: FastifyInstance) {
         context: makeRequestContext,
         subscription: {
             context: makeSubscriptionContext,
-            emitter: redisEmitter,
+            emitter:
+                process.env.NODE_ENV === 'production'
+                    ? redis({
+                        host: process.env.REDIS_HOST,
+                        port: process.env.REDIS_PORT,
+                        password: process.env.REDIS_PASSWORD,
+                    })
+                    : undefined,
         },
     });
 
