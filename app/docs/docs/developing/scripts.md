@@ -14,6 +14,8 @@ All scripts at the root directory are prefixed with `g:` for global.
 -   `g:start-client`: Start the client with NODE_ENV=production.
 -   `g:client-relay`: Generate `relay` type defs on the client.
 -   `g:start-db`: Start the database using `docker` and `docker-compose`. See `db/start-db.sh`.
+-   `g:start-test-db`: Starts a test specific database using `docker` and `docker-compose`. See `db/start-test-db.sh`.
+-   `g:stop-db`: Stops the currently running database. See `db/stop-db.sh`.
 -   `g:start-proxy`: Start the proxy that sits in front of the client and server.
 -   `g:dev-project`: Start the database, server, client, and proxy with NODE_ENV=development.
 -   `g:start-project`: Start the database, server, client, and proxy with NODE_ENV=production.
@@ -33,11 +35,21 @@ yarn workspace @app/client
 -   `relay`: Start the relay compiler in watch mode.
 -   `typecheck`: Check that all types are correct.
 -   `lint`: Lint the client.
--   `test:e2e`: Perform an e2e test.
--   `test:e2e:ci`: For CI use only.
--   `test:e2e:headed`: Runs test in headed mode, useful for debugging tests. [docs](https://playwright.dev/docs/debug#run-in-headed-mode)
--   `allure:generate-report`: Generate coverage stats.
--   `allure:report`: Open the web view of the report.
+
+## E2E
+
+Prefix scripts with
+
+```bash
+yarn workspace @app/e2e
+```
+
+-   `pretest`: Starts up the project and seeds the DB in preperation to run the playwright tests.
+-   `test`: Runs playwright tests.
+-   `test:ci`: Runs playwright tests with the environment variable set to `CI=1` so the configuration can be set to run on the CI/CD pipeline.
+-   `debug`: Runs playwright tests in headed mode, allowing for playwright to open browsers locally to monitor tests as they execute.
+-   `allure:generate-report`: Takes the test results under the folder `app/e2e/allure-results` and generates a report at `app/e2e/allure-report`.
+-   `allure:open-report`: Generates and opens an allure report in the browser.
 
 ## Server
 
@@ -60,3 +72,9 @@ yarn workspace @app/server add-feat somNewFeature # will add feature/some-new-fe
 -   `prod`: Only used in prod for running the application
 -   `generate`: Generate prisma types. Only necessary to run when the database has been or is being modified and when running the project for the first time.
 -   `lint`: Lint the server.
+-   `prisma-db-push`: Pushes the current prisma schema to the DB.
+-   `prisma-db-seed`: Seeds the DB using the file `app/server/prisma/seed.ts`.
+-   `test:prisma-db-push`: Pushes the current schema with the `NODE_ENV=test`.
+-   `test:unit`: Runs unit tests using jest with the `NODE_ENV=test`.
+-   `test:integration`: Runs integration tests using jest with the `NODE_ENV=test`
+-   `test:ci`: Runs all server tests after ensuring the test DB is running. Used for CI/CD pipeline.

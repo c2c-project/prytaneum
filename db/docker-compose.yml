@@ -14,5 +14,19 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgrespassword
             POSTGRES_DB: postgres
+
+    cache:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server --save 20 1 --loglevel warning
+        volumes:
+            - cache:/data
+        environment:
+            REDIS_HOST: cache
+            REDIS_PORT: 6379
+            REDIS_PASSWORD:
 volumes:
     db_data:
+    cache:

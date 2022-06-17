@@ -9,8 +9,8 @@ import { verify } from '@local/lib/jwt';
 import { loadSchema, getPrismaClient } from '../utils';
 
 export const redisEmitter = redis({
-    port: 6379,
     host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD,
 });
 
@@ -90,7 +90,7 @@ export function attachMercuriusTo(server: FastifyInstance) {
         context: makeRequestContext,
         subscription: {
             context: makeSubscriptionContext,
-            emitter: process.env.NODE_ENV === 'production' ? redisEmitter : undefined,
+            emitter: redisEmitter,
         },
     });
 

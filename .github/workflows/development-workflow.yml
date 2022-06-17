@@ -60,8 +60,8 @@ jobs:
             - name: Type Check Project
               run: yarn workspaces foreach -p run typecheck
 
-    client-testing:
-        name: E2E Client Testing
+    e2e-testing:
+        name: E2E Testing
         runs-on: ubuntu-latest
         environment: development
         timeout-minutes: 60
@@ -74,6 +74,11 @@ jobs:
               with:
                   node-version: '16'
 
+            - name: Start Redis
+              uses: supercharge/redis-github-action@1.4.0
+              with:
+                  redis-version: 6
+
             - name: Yarn Install
               run: yarn install
 
@@ -81,20 +86,20 @@ jobs:
               run: yarn workspace @app/server generate
 
             - name: Install Playwright
-              run: yarn workspace @app/client run playwright install --with-deps
+              run: yarn workspace @app/e2e run playwright install --with-deps
 
             # Adding extra browser for testing on edge since it is not included by default
             - name: Install Playwright Microsoft Edge
-              run: yarn workspace @app/client run playwright install msedge
+              run: yarn workspace @app/e2e run playwright install msedge
 
             - name: Run Playwright tests
-              run: yarn workspace @app/client run test:e2e:ci
+              run: yarn workspace @app/e2e run test:ci
 
             - uses: actions/upload-artifact@v2
               if: always()
               with:
                   name: allure-report
-                  path: app/client/allure-report/
+                  path: app/e2e/allure-report/
                   retention-days: 30
 
     server-testing:
@@ -129,7 +134,7 @@ jobs:
         name: Build Client
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, client-testing, typechecking]
+        needs: [linting, e2e-testing, typechecking]
 
         steps:
             - name: Checkout
@@ -156,7 +161,7 @@ jobs:
         name: Build Server
         runs-on: ubuntu-latest
         environment: development
-        needs: [linting, client-testing, typechecking]
+        needs: [linting, e2e-testing, server-testing, typechecking]
 
         steps:
             - name: Checkout
