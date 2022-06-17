@@ -252,7 +252,7 @@ export default function ParticipantGuide() {
                         onClick={() => handleClickOpen(7)}
                     />
                     <Image
-                        src='/static/guide/event-live-participant-view.png'
+                        src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-participant-view.png'
                         width={1486}
                         height={845}
                         objectFit='contain'

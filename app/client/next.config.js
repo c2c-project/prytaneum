@@ -1,7 +1,7 @@
 module.exports = {
     webpack5: true,
     images: {
-        domains: ['i.ibb.co'],
+        domains: ['storage.googleapis.com'],
     },
     typescript: {
         tsconfigPath: './tsconfig.prod.json'
