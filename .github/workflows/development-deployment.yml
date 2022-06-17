@@ -2,7 +2,7 @@ name: Dev deploy
 
 on:
     push:
-        branches: [deploy-dev]
+        branches: [deploy-dev, staging]
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
