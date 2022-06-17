@@ -259,7 +259,7 @@ export default function ModeratorGuide() {
                         onClick={() => handleClickOpen(7)}
                     />
                     <Image
-                        src='/static/guide/event-live-mod-view-queue.png'
+                        src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-mod-view-queue.png'
                         width={1469}
                         height={827}
                         objectFit='contain'

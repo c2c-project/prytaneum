@@ -102,22 +102,24 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/org-list-page.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/org-list-page.png'
                     width={1920}
                     height={1080}
                     objectFit='contain'
                     alt='dashboard'
+                    priority={true}
                 />
             </Grid>
             <Grid item xs={12} className={classes.section}>
                 <Typography variant='body1' className={classes.paragraph}>
                     If you don&#39;t have an organization yet, you can create one by clicking the{' '}
                     <Image
-                        src='/static/guide/fab.svg'
+                        src='/static/fab.svg'
                         width={27}
                         height={28}
                         objectFit='contain'
                         alt='Prytaneum Logo'
+                        priority={true}
                     />{' '}
                     in the bottom right corner of the page. Selecting an organization will show you the
                     organization&#39;s events and members. Here, you can create new events and invite new members.
@@ -125,7 +127,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/event-list-page.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/event-list-page.png'
                     width={1920}
                     height={1080}
                     objectFit='contain'
@@ -145,7 +147,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/create-event-form.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/create-event-form.png'
                     width={560}
                     height={580}
                     objectFit='contain'
@@ -161,7 +163,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/org-add-member-form.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/org-add-member-form.png'
                     width={552}
                     height={223}
                     objectFit='contain'
@@ -180,7 +182,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/event-settings-page.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/event-settings.png'
                     width={1920}
                     height={1080}
                     objectFit='contain'
@@ -195,7 +197,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/event-settings-1.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/event-settings-1.png'
                     width={1165}
                     height={396}
                     objectFit='contain'
@@ -213,7 +215,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/event-settings-2.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/event-settings-2.png'
                     width={1167}
                     height={757}
                     objectFit='contain'
@@ -228,7 +230,7 @@ export default function OrganizerGuide() {
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>
                 <Image
-                    src='/static/guide/event-settings-3.png'
+                    src='https://storage.googleapis.com/prytaneum.io/static/guide/event-settings-3.png'
                     width={1187}
                     height={634}
                     objectFit='contain'
