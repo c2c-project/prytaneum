@@ -32,7 +32,10 @@ enum Nav {
     // 'Admin Settings',
     'Dashboard',
     'About Us',
-    'User Guide'
+    'Getting Started Guide',
+    'Organizer Guide',
+    'Moderator Guide',
+    'Participant Guide',
 }
 type Keys = keyof typeof Nav;
 
@@ -50,7 +53,10 @@ const urls: Record<Keys, string> = {
     // 'Admin Settings': '/app/admin/settings',
     Dashboard: '/dashboard',
     'About Us': '/aboutus',
-    'User Guide': '/user-guide',
+    'Getting Started Guide': '/guides/getting-started',
+    'Organizer Guide': '/guides/organizer',
+    'Moderator Guide': '/guides/moderator',
+    'Participant Guide': '/guides/participant',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -120,11 +126,32 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='About Us' />
                 </StyledListItem>
-                <StyledListItem onClick={handleClick('User Guide')} selected={selected === 'User Guide'}>
+                <StyledListItem
+                    onClick={handleClick('Getting Started Guide')}
+                    selected={selected === 'Getting Started Guide'}
+                >
                     <StyledListItemIcon>
                         <AssignmentIcon />
                     </StyledListItemIcon>
-                    <ListItemText primary='User Guide' />
+                    <ListItemText primary='Getting Started Guide' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('Organizer Guide')} selected={selected === 'Organizer Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Organizer Guide' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('Moderator Guide')} selected={selected === 'Moderator Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Moderator Guide' />
+                </StyledListItem>
+                <StyledListItem onClick={handleClick('Participant Guide')} selected={selected === 'Participant Guide'}>
+                    <StyledListItemIcon>
+                        <AssignmentIcon />
+                    </StyledListItemIcon>
+                    <ListItemText primary='Participant Guide' />
                 </StyledListItem>
                 <StyledSubheader>Organizations</StyledSubheader>
                 <StyledDivider />
