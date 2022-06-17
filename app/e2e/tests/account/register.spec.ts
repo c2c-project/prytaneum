@@ -22,7 +22,7 @@ test.describe('display fields', () => {
     test('register page should have a confirm password field', async ({ page }) => {
         await expect(page.locator('label:has-text("Confirm Password *")')).toBeVisible();
     });
-})
+});
 test.describe('errors', () => {
     test.beforeEach(async ({ page }) => {
         // arange
@@ -33,8 +33,12 @@ test.describe('errors', () => {
         await page.locator('text=Last Name *Last Name * >> input[type="text"]').fill('Doe');
         await page.locator('input[type="email"]').click();
         await page.locator('input[type="email"]').fill('JohnDoe@gmail.com');
-        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').click();
-        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').fill('JohnDoePwd');
+        await page
+            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
+            .click();
+        await page
+            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
+            .fill('JohnDoePwd');
         await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').click();
         await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').fill('diffPwd');
     });
@@ -43,8 +47,8 @@ test.describe('errors', () => {
         await page.locator('text=RegisterAlready have an account? >> button').click();
         // assert
         await expect(page.locator('text=Passwords must matchDismiss')).toBeVisible(); //times out for some reason currently
-    })
-})
+    });
+});
 //some backend issues
 // test.describe('success', () => {
 //     test('Registers successfully with correctly filled fields', async ({ page }) => {
