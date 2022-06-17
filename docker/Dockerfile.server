@@ -37,5 +37,6 @@ COPY --from=build-stage /usr/monorepo/app/server ./app/server
 # COPY --from=build-stage /usr/monorepo/app/server/.env.production ./app/server
 # Install only packages necessary for the server to run
 RUN yarn workspaces focus --production @app/server
+USER node
 EXPOSE 3002
 CMD ["yarn", "workspace", "@app/server", "prod"]
