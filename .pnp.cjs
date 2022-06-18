@@ -33,6 +33,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:app/e2e"\
       },\
       {\
+        "name": "@app/proxy",\
+        "reference": "workspace:app/proxy"\
+      },\
+      {\
         "name": "@app/server",\
         "reference": "workspace:app/server"\
       }\
@@ -43,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@app/client", ["workspace:app/client"]],\
       ["@app/docs", ["workspace:app/docs"]],\
       ["@app/e2e", ["workspace:app/e2e"]],\
+      ["@app/proxy", ["workspace:app/proxy"]],\
       ["@app/server", ["workspace:app/server"]],\
       ["prytaneum", ["workspace:."]]\
     ],\
@@ -61,25 +66,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
-            ["@types/babel__core", "npm:7.1.14"],\
-            ["@types/concurrently", "npm:6.0.1"],\
-            ["@types/eslint", "npm:7.29.0"],\
-            ["@types/express", "npm:4.17.11"],\
             ["@types/node", "npm:14.14.41"],\
-            ["@types/prettier", "npm:2.4.4"],\
-            ["concurrently", "npm:6.0.2"],\
-            ["dotenv", "npm:10.0.0"],\
-            ["dotenv-expand", "npm:5.1.0"],\
+            ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
-            ["express", "npm:4.17.1"],\
             ["graphql", "npm:15.8.0"],\
             ["graphql-tag", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.12.6"],\
-            ["http-proxy-middleware", "npm:2.0.0"],\
             ["husky", "npm:6.0.0"],\
             ["prettier", "npm:2.5.1"],\
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],\
-            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"],\
-            ["yarn", "npm:1.22.17"]\
+            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -396,6 +391,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv-cli", "npm:5.1.0"],\
             ["experimental-allure-playwright", "npm:0.0.3"],\
             ["playwright", "npm:1.22.2"],\
+            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@app/proxy", [\
+        ["workspace:app/proxy", {\
+          "packageLocation": "./app/proxy/",\
+          "packageDependencies": [\
+            ["@app/proxy", "workspace:app/proxy"],\
+            ["@types/express", "npm:4.17.11"],\
+            ["@types/node", "npm:14.14.41"],\
+            ["dotenv", "npm:10.0.0"],\
+            ["dotenv-cli", "npm:4.0.0"],\
+            ["dotenv-expand", "npm:5.1.0"],\
+            ["express", "npm:4.17.1"],\
+            ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6"],\
+            ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],\
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"]\
           ],\
           "linkType": "SOFT"\
@@ -15573,16 +15586,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["@types/concurrently", [\
-        ["npm:6.0.1", {\
-          "packageLocation": "./.yarn/cache/@types-concurrently-npm-6.0.1-1dca9032fb-bce951256c.zip/node_modules/@types/concurrently/",\
-          "packageDependencies": [\
-            ["@types/concurrently", "npm:6.0.1"],\
-            ["@types/node", "npm:14.14.41"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["@types/connect", [\
         ["npm:3.4.34", {\
           "packageLocation": "./.yarn/cache/@types-connect-npm-3.4.34-39e4f7bb55-c6e2aa299c.zip/node_modules/@types/connect/",\
@@ -15820,14 +15823,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/http-proxy", [\
-        ["npm:1.17.5", {\
-          "packageLocation": "./.yarn/cache/@types-http-proxy-npm-1.17.5-6f2ee5a793-4f78392424.zip/node_modules/@types/http-proxy/",\
-          "packageDependencies": [\
-            ["@types/http-proxy", "npm:1.17.5"],\
-            ["@types/node", "npm:14.14.41"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:1.17.9", {\
           "packageLocation": "./.yarn/cache/@types-http-proxy-npm-1.17.9-fa2f5ce316-7a6746d007.zip/node_modules/@types/http-proxy/",\
           "packageDependencies": [\
@@ -16189,13 +16184,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/prettier", [\
-        ["npm:2.4.4", {\
-          "packageLocation": "./.yarn/cache/@types-prettier-npm-2.4.4-bab324963d-2c2cc57efd.zip/node_modules/@types/prettier/",\
-          "packageDependencies": [\
-            ["@types/prettier", "npm:2.4.4"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:2.6.0", {\
           "packageLocation": "./.yarn/cache/@types-prettier-npm-2.6.0-68db36c8c1-946f1f82ce.zip/node_modules/@types/prettier/",\
           "packageDependencies": [\
@@ -21613,19 +21601,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["concurrently", [\
-        ["npm:6.0.2", {\
-          "packageLocation": "./.yarn/cache/concurrently-npm-6.0.2-f267b33683-461bf3e201.zip/node_modules/concurrently/",\
+        ["npm:7.2.2", {\
+          "packageLocation": "./.yarn/cache/concurrently-npm-7.2.2-acda7e7c25-ae9604032d.zip/node_modules/concurrently/",\
           "packageDependencies": [\
-            ["concurrently", "npm:6.0.2"],\
+            ["concurrently", "npm:7.2.2"],\
             ["chalk", "npm:4.1.0"],\
             ["date-fns", "npm:2.21.1"],\
             ["lodash", "npm:4.17.21"],\
-            ["read-pkg", "npm:5.2.0"],\
-            ["rxjs", "npm:6.6.7"],\
+            ["rxjs", "npm:7.5.5"],\
+            ["shell-quote", "npm:1.7.3"],\
             ["spawn-command", "npm:0.0.2"],\
             ["supports-color", "npm:8.1.1"],\
             ["tree-kill", "npm:1.2.2"],\
-            ["yargs", "npm:16.2.0"]\
+            ["yargs", "npm:17.5.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -28574,24 +28562,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["http-proxy-middleware", [\
-        ["npm:2.0.0", {\
-          "packageLocation": "./.yarn/cache/http-proxy-middleware-npm-2.0.0-7f3b446cec-1cf880d06f.zip/node_modules/http-proxy-middleware/",\
-          "packageDependencies": [\
-            ["http-proxy-middleware", "npm:2.0.0"],\
-            ["@types/http-proxy", "npm:1.17.5"],\
-            ["http-proxy", "npm:1.18.1"],\
-            ["is-glob", "npm:4.0.1"],\
-            ["is-plain-obj", "npm:3.0.0"],\
-            ["micromatch", "npm:4.0.4"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:2.0.6", {\
           "packageLocation": "./.yarn/cache/http-proxy-middleware-npm-2.0.6-3bb17658ee-2ee85bc878.zip/node_modules/http-proxy-middleware/",\
           "packageDependencies": [\
             ["http-proxy-middleware", "npm:2.0.6"]\
           ],\
           "linkType": "SOFT"\
+        }],\
+        ["virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6", {\
+          "packageLocation": "./.yarn/__virtual__/http-proxy-middleware-virtual-80f12166c2/0/cache/http-proxy-middleware-npm-2.0.6-3bb17658ee-2ee85bc878.zip/node_modules/http-proxy-middleware/",\
+          "packageDependencies": [\
+            ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6"],\
+            ["@types/express", "npm:4.17.11"],\
+            ["@types/http-proxy", "npm:1.17.9"],\
+            ["http-proxy", "npm:1.18.1"],\
+            ["is-glob", "npm:4.0.1"],\
+            ["is-plain-obj", "npm:3.0.0"],\
+            ["micromatch", "npm:4.0.4"]\
+          ],\
+          "packagePeers": [\
+            "@types/express"\
+          ],\
+          "linkType": "HARD"\
         }],\
         ["virtual:9ce3e1aeb4d7b149f7e8ad3b56dcf9613fa535dca6d9311a058ccb64208667ff7d898ca443cbfdacd6e5e42cbff8ba2e896a254d6809cf37f8b991d790b88442#npm:2.0.6", {\
           "packageLocation": "./.yarn/__virtual__/http-proxy-middleware-virtual-f7314a8396/0/cache/http-proxy-middleware-npm-2.0.6-3bb17658ee-2ee85bc878.zip/node_modules/http-proxy-middleware/",\
@@ -36667,25 +36659,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
-            ["@types/babel__core", "npm:7.1.14"],\
-            ["@types/concurrently", "npm:6.0.1"],\
-            ["@types/eslint", "npm:7.29.0"],\
-            ["@types/express", "npm:4.17.11"],\
             ["@types/node", "npm:14.14.41"],\
-            ["@types/prettier", "npm:2.4.4"],\
-            ["concurrently", "npm:6.0.2"],\
-            ["dotenv", "npm:10.0.0"],\
-            ["dotenv-expand", "npm:5.1.0"],\
+            ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
-            ["express", "npm:4.17.1"],\
             ["graphql", "npm:15.8.0"],\
             ["graphql-tag", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.12.6"],\
-            ["http-proxy-middleware", "npm:2.0.0"],\
             ["husky", "npm:6.0.0"],\
             ["prettier", "npm:2.5.1"],\
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],\
-            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"],\
-            ["yarn", "npm:1.22.17"]\
+            ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=bda367"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -44447,6 +44429,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yargs-parser", "npm:20.2.7"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:17.5.1", {\
+          "packageLocation": "./.yarn/cache/yargs-npm-17.5.1-0902fa46de-00d58a2c05.zip/node_modules/yargs/",\
+          "packageDependencies": [\
+            ["yargs", "npm:17.5.1"],\
+            ["cliui", "npm:7.0.4"],\
+            ["escalade", "npm:3.1.1"],\
+            ["get-caller-file", "npm:2.0.5"],\
+            ["require-directory", "npm:2.1.1"],\
+            ["string-width", "npm:4.2.3"],\
+            ["y18n", "npm:5.0.8"],\
+            ["yargs-parser", "npm:21.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["yargs-parser", [\
@@ -44472,13 +44468,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yargs-parser", "npm:20.2.9"]\
           ],\
           "linkType": "HARD"\
-        }]\
-      ]],\
-      ["yarn", [\
-        ["npm:1.22.17", {\
-          "packageLocation": "./.yarn/unplugged/yarn-npm-1.22.17-2a65122719/node_modules/yarn/",\
+        }],\
+        ["npm:21.0.1", {\
+          "packageLocation": "./.yarn/cache/yargs-parser-npm-21.0.1-b778fd3462-c3ea2ed12c.zip/node_modules/yargs-parser/",\
           "packageDependencies": [\
-            ["yarn", "npm:1.22.17"]\
+            ["yargs-parser", "npm:21.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
