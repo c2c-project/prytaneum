@@ -1,4 +1,4 @@
-name: Test deployment for dev docs
+name: Docs build
 
 on:
     pull_request:
@@ -9,8 +9,8 @@ on:
             - 'app/docs/**'
 
 jobs:
-    test-deploy:
-        name: Test deployment
+    build:
+        name: Build
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2

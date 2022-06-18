@@ -1,38 +1,31 @@
-name: Build and Deploy Production Version to GKE
+name: Deploy staging client
 
 on:
     push:
         branches:
-            - master
-            - deploy-prod
+            - deploy-dev
+        paths:
+            - 'app/client/**'
+
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: prytaneum-dev-cluster
     GKE_ZONE: us-central1-a
     CLIENT_DEPLOYMENT: prytaneum-client
-    SERVER_DEPLOYMENT: prytaneum-server
     CLIENT_IMAGE: prytaneum-client
-    SERVER_IMAGE: prytaneum-server
-    NAMESPACE: production
-    GRAPHQL_URL: https://prytaneum.io/graphql
-    GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+    NAMESPACE: development
+    GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
 
 jobs:
-    build-publish-deploy-client:
-        name: Build Publish and Deploy Client
+    deploy:
+        name: Deploy
         runs-on: ubuntu-latest
-        environment: production
+        environment: development
 
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-
-            - uses: dorny/paths-filter@v2
-              id: changes
-              with:
-                  filters: |
-                      client:
-                        - 'app/client/**'
 
             # Setup gcloud CLI
             - uses: google-github-actions/setup-gcloud@v0.2.0
@@ -53,7 +46,6 @@ jobs:
 
             # Build the Client
             - name: Build Client
-              if: steps.changes.outputs.client == 'true'
               run: |-
                   docker build \
                     -f ./docker/Dockerfile.client \
@@ -61,101 +53,33 @@ jobs:
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg GRAPHQL_URL="$GRAPHQL_URL" \
-                    --build-arg DEPLOYMENT_ENV="production" \
+                    --build-arg DEPLOYMENT_ENV="development" \
                     --build-arg GOOGLE_ANALYTICS_ID="$GOOGLE_ANALYTICS_ID" \
                     .
 
             # Push the Client image to Google Container Registry
             - name: Publish Client
-              if: steps.changes.outputs.client == 'true'
               run: docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA"
 
             # Set up kustomize
             - name: Set up Kustomize
-              if: steps.changes.outputs.client == 'true'
               run: |-
                   curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
                   chmod u+x ./kustomize
 
             # Deploy the Docker image to the GKE cluster
             - name: Kustomize & Deploy Client
-              if: steps.changes.outputs.client == 'true'
               run: |-
-                  cd ./k8s/client/production
+                  cd ./k8s/client/development
                   kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
-    build-publish-deploy-server:
-        name: Build Publish and Deploy Server
+    finalize:
+        name: Finalize
         runs-on: ubuntu-latest
-        environment: production
-
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-
-            - uses: dorny/paths-filter@v2
-              id: changes
-              with:
-                  filters: |
-                      server:
-                        - 'app/server/**'
-
-            # Setup gcloud CLI
-            - uses: google-github-actions/setup-gcloud@v0.2.0
-              with:
-                  service_account_key: ${{ secrets.GKE_SA_KEY }}
-                  project_id: ${{ secrets.GKE_PROJECT_ID }}
-
-            # Configure Docker to use the gcloud command-line tool as a credential
-            # helper for authentication
-            - run: |-
-                  gcloud --quiet auth configure-docker
-            # Get the GKE credentials so we can deploy to the cluster
-            - uses: google-github-actions/get-gke-credentials@v0.2.1
-              with:
-                  cluster_name: ${{ env.GKE_CLUSTER }}
-                  location: ${{ env.GKE_ZONE }}
-                  credentials: ${{ secrets.GKE_SA_KEY }}
-
-            # Build the Server
-            - name: Build Server
-              if: steps.changes.outputs.server == 'true'
-              run: |-
-                  docker build \
-                    -f ./docker/Dockerfile.server \
-                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
-                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
-                    --build-arg GITHUB_REF="$GITHUB_REF" \
-                    .
-
-            # Push the Server image to Google Container Registry
-            - name: Publish Server
-              if: steps.changes.outputs.server == 'true'
-              run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
-
-            # Set up kustomize
-            - name: Set up Kustomize
-              if: steps.changes.outputs.server == 'true'
-              run: |-
-                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-                  chmod u+x ./kustomize
-
-            # Deploy the Docker image to the GKE cluster
-            - name: Kustomize & Deploy Server
-              if: steps.changes.outputs.server == 'true'
-              run: |-
-                  cd ./k8s/server/production
-                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
-                  kustomize edit set namespace $NAMESPACE
-                  kustomize build . | kubectl apply -f -
-
-    finalize-deployment:
-        name: Finalize Deployment
-        runs-on: ubuntu-latest
-        environment: production
-        needs: [build-publish-deploy-client, build-publish-deploy-server]
+        environment: development
+        needs: [deploy]
 
         steps:
             - name: Checkout
@@ -180,7 +104,7 @@ jobs:
 
             - name: Kustomize & Deploy Ingress
               run: |-
-                  cd ./k8s/ingress/production
+                  cd ./k8s/ingress/development
                   kubectl apply -f ./prytaneum-ingress.yml
 
             - name: Deploy Certificate
@@ -195,5 +119,4 @@ jobs:
             - name: Deployment Rollout Check
               run: |-
                   kubectl rollout status deployment/prytaneum-client
-                  kubectl rollout status deployment/prytaneum-server
                   kubectl get services -o wide
