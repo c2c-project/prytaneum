@@ -124,19 +124,17 @@ export function Dashboard({ queryRef }: Props) {
                                                             startDateTime={event.startDateTime}
                                                             organization={event.organization.name}
                                                         />
-                                                        <Grid item>
-                                                            <Link href={`events/${event?.id}/live`}>
-                                                                <Button
-                                                                    aria-label='view live feed of current event'
-                                                                    variant='contained'
-                                                                    color='primary'
-                                                                >
-                                                                    Live Feed
-                                                                </Button>
-                                                            </Link>
-                                                        </Grid>
+                                                        <Link href={`/events/${event?.id}/live`}>
+                                                            <Button
+                                                                aria-label='view live feed of current event'
+                                                                variant='contained'
+                                                                color='primary'
+                                                            >
+                                                                Live Feed
+                                                            </Button>
+                                                        </Link>
                                                     </ListItem>
-                                                )
+                                                );
                                             }
                                         })}
                                     </List>
