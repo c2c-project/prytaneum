@@ -124,7 +124,7 @@ export function Dashboard({ queryRef }: Props) {
                                                             startDateTime={event.startDateTime}
                                                             organization={event.organization.name}
                                                         />
-                                                        <Link href={`/events/${event?.id}/live`}>
+                                                        <Link onClick={handleNav(`/events/${event?.id}/live`)}>
                                                             <Button
                                                                 aria-label='view live feed of current event'
                                                                 variant='contained'
