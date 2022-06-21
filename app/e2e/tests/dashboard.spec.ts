@@ -25,7 +25,11 @@ test('Dashboard has link to live feed for Current Events.', async ({ page }) => 
     await page.goto('/dashboard');
 
     // Select Live Feed
-    await page.locator('text=Live Feed').click()
+    await Promise.all([
+        page.locator('[aria-label="view live feed of current event"]').click(),
+        page.waitForNavigation(/*{ url: 'http://localhost:8080/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/live'}*/)
+        
+    ])
     await expect(page).toHaveURL('/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/live');
 });
 
@@ -34,7 +38,7 @@ test('Dashboard takes user to Event Settings when selecting a Current Event.', a
     await page.goto('/dashboard');
 
     // Click on Current Event
-    page.locator('text=Test 106/13/2022Wessels TestLive Feed').click();
+    await page.locator('text=Test 106/21/2022Wessels TestLive Feed').click();
     await expect(page).toHaveURL('/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/settings');
 });
 
@@ -42,8 +46,8 @@ test('Dashboard takes user to Event Settings when selecting an Upcoming Event.',
     // Go to Dashboard
     await page.goto('/dashboard');
 
-    // Click on Current Event
-    await page.locator('div[role="button"]:has-text("Test 206/15/2022Wessels Test")').click();
+    // Click on Upcoming Event
+    await page.locator('div[role="button"]:has-text("Test 206/25/2022Wessels Test")').click();
     await expect(page).toHaveURL('/events/RXZlbnQ6NjMxNGYxNjUtZmMyYS00ZjkxLWE3ODItZjk1M2Q1M2E3OTIw/settings');
 });
 
@@ -51,13 +55,13 @@ test('User is directed back to Dashboard on refresh.', async ({ page }) => {
     // Go to Dashboard
     await page.goto('/dashboard');
 
-    // Click on Current Event
+    // Refresh the Page
     await page.reload();
     await expect(page).toHaveURL('/dashboard');
 });
 
 // Will fail on mobile browsers. The logout button is different across desktop and mobile browsers.
-test('User is directed to landing page if not logged in -- Test for Desktop.', async ({ page }) => {
+test('User is directed to landing page if not logged in -- Desktop.', async ({ page }) => {
     // Go to Dashboard
     await page.goto('/dashboard');
 
@@ -70,15 +74,15 @@ test('User is directed to landing page if not logged in -- Test for Desktop.', a
 
     // Attempt to navigate to Dashboard
     await Promise.all([
+        page.goto('/dashboard'),
         page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
-        page.goto('/dashboard')
     ]);
 
     await expect(page).toHaveURL('/');
 });
 
 // Will fail on desktop browsers. The logout button is different across desktop and mobile browsers.
-test('User is directed to landing page if not logged in -- Test for Mobile.', async ({ page }) => {
+test('User is directed to landing page if not logged in -- Mobile.', async ({ page }) => {
     // Go to Dashboard
     await page.goto('/dashboard');
 
@@ -91,8 +95,8 @@ test('User is directed to landing page if not logged in -- Test for Mobile.', as
 
     // Attempt to navigate to Dashboard
     await Promise.all([
+        page.goto('/dashboard'),
         page.waitForNavigation(/*{ url: 'http://localhost:8080/' }*/),
-        page.goto('/dashboard')
     ]);
 
     await expect(page).toHaveURL('/');
