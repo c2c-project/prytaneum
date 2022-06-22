@@ -11,8 +11,8 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
  */
 const config: PlaywrightTestConfig = {
     /* Used for saving and using login state. */
-    globalSetup: require.resolve('./e2e/wessels-test-setup.ts'),
-    testDir: './e2e',
+    globalSetup: require.resolve('./tests/wessels-test-setup.ts'),
+    testDir: './tests',
     /* Maximum time one test can run for. */
     timeout: 60 * 1000,
     expect: {
