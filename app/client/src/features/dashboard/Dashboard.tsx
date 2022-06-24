@@ -3,14 +3,14 @@ import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { useRouter } from 'next/router';
 import { isBefore, isAfter } from 'date-fns';
 
-import { Button, Card, CardContent, Grid, Link, List, ListItem, Typography, IconButton } from '@mui/material';
+import { Card, CardContent, Grid, List, Typography, IconButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Add } from '@mui/icons-material';
 
 import { Loader } from '@local/components/Loader';
-import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
 import { useUser } from '@local/features/accounts';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
+import { DashboardEventListItem } from './DashboardEventListItem';
 
 const useStyles = makeStyles((theme) => ({
     item: {
@@ -101,54 +101,24 @@ export function Dashboard({ queryRef }: Props) {
                             Current Events
                         </Typography>
                         {ongoingEvents.length > 0 ? (
-                            <Grid container item direction='column'>
-                                <Grid item xs={12}>
-                                    <List>
-                                        {ongoingEvents.map(({ node: event }, idx) => {
-                                            if (
-                                                event?.id &&
-                                                event?.description &&
-                                                event?.title &&
-                                                event?.startDateTime &&
-                                                event?.organization?.name
-                                            ) {
-                                                return (
-                                                    <ListItem
-                                                        button
-                                                        key={event?.id}
-                                                        divider={idx !== ongoingEvents.length - 1}
-                                                        onClick={handleNav(`/events/${event?.id}/settings`)}
-                                                    >
-                                                        <DashboardEvent
-                                                            key={event.id}
-                                                            id={event.id}
-                                                            title={event.title}
-                                                            description={event.description}
-                                                            startDateTime={event.startDateTime}
-                                                            organization={event.organization.name}
-                                                        />
-                                                        <Link onClick={handleNav(`/events/${event?.id}/live`)}>
-                                                            <Button
-                                                                aria-label='view live feed of current event'
-                                                                variant='contained'
-                                                                color='primary'
-                                                            >
-                                                                Live Feed
-                                                            </Button>
-                                                        </Link>
-                                                    </ListItem>
-                                                );
-                                            }
-                                        })}
-                                    </List>
-                                </Grid>
-                            </Grid>
+                            <List>
+                                {ongoingEvents.map(({ node: event }, idx) => {
+                                    let divider = true;
+                                    if (idx === ongoingEvents.length - 1) divider = false;
+                                    return (
+                                        <DashboardEventListItem
+                                            key={event.id}
+                                            event={event}
+                                            ongoing={true}
+                                            divider={divider}
+                                        />
+                                    );
+                                })}
+                            </List>
                         ) : (
-                            <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
-                                <Grid item xs={12} sm={8} className={classes.text}>
-                                    <Typography variant='subtitle2'>No Events To Display</Typography>
-                                </Grid>
-                            </Grid>
+                            <Typography className={classes.text} variant='subtitle2'>
+                                No Events To Display
+                            </Typography>
                         )}
                     </CardContent>
                 </Card>
@@ -160,44 +130,24 @@ export function Dashboard({ queryRef }: Props) {
                             Upcoming Events
                         </Typography>
                         {upcomingEvents.length > 0 ? (
-                            <Grid container item direction='column'>
-                                <Grid item xs={12}>
-                                    <List>
-                                        {upcomingEvents.map(({ node: event }, idx) => {
-                                            if (
-                                                event?.id &&
-                                                event?.description &&
-                                                event?.title &&
-                                                event?.startDateTime &&
-                                                event?.organization?.name
-                                            )
-                                                return (
-                                                    <ListItem
-                                                        button
-                                                        key={event?.id}
-                                                        divider={idx !== upcomingEvents.length - 1}
-                                                        onClick={handleNav(`/events/${event?.id}/settings`)}
-                                                    >
-                                                        <DashboardEvent
-                                                            key={event.id}
-                                                            id={event.id}
-                                                            title={event.title}
-                                                            description={event.description}
-                                                            startDateTime={event.startDateTime}
-                                                            organization={event.organization.name}
-                                                        />
-                                                    </ListItem>
-                                                );
-                                        })}
-                                    </List>
-                                </Grid>
-                            </Grid>
+                            <List>
+                                {upcomingEvents.map(({ node: event }, idx) => {
+                                    let divider = true;
+                                    if (idx === upcomingEvents.length - 1) divider = false;
+                                    return (
+                                        <DashboardEventListItem
+                                            key={event.id}
+                                            event={event}
+                                            ongoing={false}
+                                            divider={divider}
+                                        />
+                                    );
+                                })}
+                            </List>
                         ) : (
-                            <Grid container justifyContent='space-between' alignItems='center' spacing={1}>
-                                <Grid item className={classes.text}>
-                                    <Typography variant='subtitle2'>No Events To Display</Typography>
-                                </Grid>
-                            </Grid>
+                            <Typography className={classes.text} variant='subtitle2'>
+                                No Events To Display
+                            </Typography>
                         )}
                     </CardContent>
                 </Card>
