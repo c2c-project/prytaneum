@@ -13,10 +13,10 @@ import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql
 
 const useStyles = makeStyles((theme) => ({
     item: {
-        margin: theme.spacing(0, 0, 4, 0),
+        marginBottom: theme.spacing(4),
     },
     card: {
-        padding: theme.spacing(1, 1, 1, 1),
+        padding: theme.spacing(1),
     },
     title: {
         marginBottom: theme.spacing(1),
@@ -95,7 +95,6 @@ export function Dashboard({ queryRef }: Props) {
     });
 
     return (
-        // <FadeThrough animKey='dashboard-page'>
         <Grid container>
             <Grid item xs={12} className={classes.item}>
                 <Card className={classes.card}>
@@ -213,12 +212,6 @@ export function Dashboard({ queryRef }: Props) {
                     Create Event
                 </Typography>
             </Grid>
-            {/* <RequireRoles requiredRoles={['admin']} redirect={false}> */}
-            {/* <Grid className={classes.item} item xs={12}>
-                <RoleInvite />
-            </Grid> */}
-            {/* </RequireRoles> */}
         </Grid>
-        // </FadeThrough>
     );
 }
