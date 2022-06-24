@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { Button, IconButton, Link, ListItem } from '@mui/material';
-import { ChevronRight } from '@mui/icons-material';
+import { Button, ListItem, ListItemSecondaryAction } from '@mui/material';
 import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
 
 interface DashboardEventListItemProps {
@@ -24,7 +23,7 @@ export function DashboardEventListItem({ event, ongoing, divider }: DashboardEve
     const handleNav = (path: string) => () => router.push(path);
 
     return (
-        <ListItem key={event.id} divider={divider}>
+        <ListItem key={event.id} divider={divider} button onClick={handleNav(`/events/${event.id}/settings`)}>
             {event.title && event.description && event.startDateTime && event?.organization?.name && (
                 <DashboardEvent
                     key={event.id}
@@ -36,20 +35,17 @@ export function DashboardEventListItem({ event, ongoing, divider }: DashboardEve
                 />
             )}
 
-            {ongoing ? (
-                <Link onClick={handleNav(`/events/${event.id}/live`)}>
-                    <Button aria-label='view live feed of current event' variant='contained' color='primary'>
+            {ongoing && (
+                <ListItemSecondaryAction>
+                    <Button
+                        aria-label='view live feed of current event'
+                        variant='contained'
+                        color='primary'
+                        onClick={handleNav(`/events/${event.id}/live`)}
+                    >
                         Live Feed
                     </Button>
-                </Link>
-            ) : (
-                <IconButton
-                    aria-label='view future event'
-                    size='large'
-                    onClick={handleNav(`/events/${event.id}/settings`)}
-                >
-                    <ChevronRight />
-                </IconButton>
+                </ListItemSecondaryAction>
             )}
         </ListItem>
     );
