@@ -193,6 +193,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                 <Grid container item direction='column' className={classes.btnGroup}>
                     <LoadingButton loading={isLoading}>
                         <Button
+                            data-test-id='register-form-submit'
                             fullWidth
                             type='submit'
                             variant='contained'

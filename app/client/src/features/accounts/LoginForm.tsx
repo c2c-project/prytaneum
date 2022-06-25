@@ -161,6 +161,7 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
                 <Grid container item direction='column' className={classes.buttonGroup}>
                     <LoadingButton loading={isLoading}>
                         <Button
+                            data-test-id='login-form-submit'
                             fullWidth
                             type='submit'
                             variant='contained'
