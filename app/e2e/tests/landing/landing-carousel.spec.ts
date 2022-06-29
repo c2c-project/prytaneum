@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('carousel buttons', () => {
+    test.use({ storageState: undefined });
     test('views carousel buttons next and back should go from participant view <-> moderator view', async ({ page }) => {
         await page.goto('/');
         await page.locator('text=Next').first().click();

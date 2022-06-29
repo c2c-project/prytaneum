@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('landing page text', () => {
+    test.use({ storageState: undefined });
     test('what is prytaneum text should be visible', async ({ page }) => {
         await page.goto('/');
         await Promise.all([

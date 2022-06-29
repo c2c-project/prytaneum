@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('landing page registration and authentication', () => {
+    test.use({ storageState: undefined });
+
     test('landing page should have register button', async ({ page }) => {
         await page.goto('/');
         await page.locator('[data-test-id=landing-button]').click();
@@ -23,11 +25,11 @@ test.describe('landing page registration and authentication', () => {
     });
 
     test('after authentication, should be redirected', async ({ page }) => {
-        await page.goto('/'),
-        await page.locator('text=Login').click(),
-        await page.locator('input[type="email"]').fill('test@prytaneum.io'),
-        await page.locator('input[type="password"]').click(),
-        await page.locator('input[type="password"]').fill('password'),
+        await page.goto('/');
+        await page.locator('text=Login').click();
+        await page.locator('input[type="email"]').fill('test@prytaneum.io');
+        await page.locator('input[type="password"]').click();
+        await page.locator('input[type="password"]').fill('password');
         await Promise.all([
             page.waitForNavigation({ url: 'http://localhost:8080/organizations/me' }),
             page.locator('div[role="dialog"] button:has-text("Login")').click()

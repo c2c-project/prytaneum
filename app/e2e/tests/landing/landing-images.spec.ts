@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('landing page images', () => {
+    test.use({ storageState: undefined });
     test('image at start of landing page should be visible', async ({ page }) => {
         await page.goto('/');
         await Promise.all([
