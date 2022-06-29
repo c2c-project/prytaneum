@@ -3,6 +3,9 @@ import { PrismaClient } from '../src/__generated__/prisma';
 const prisma = new PrismaClient();
 
 async function main() {
+    await prisma.event.deleteMany();
+    await prisma.organization.deleteMany();
+    await prisma.user.deleteMany();
     const encryptedPassword = await bcrypt.hash('password', 10);
 
     const testUser = await prisma.user.upsert({
