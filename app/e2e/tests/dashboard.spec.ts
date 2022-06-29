@@ -16,7 +16,7 @@ test('Dashboard has sections for Current Events and Upcoming Events.', async ({ 
     // Check that Current Events div and text are present
     await expect(page.locator('text=Current Events')).toHaveCount(1);
 
-    // Check that Current Events div and text are present
+    // Check that Upcoming Events div and text are present
     await expect(page.locator('text=Upcoming Events')).toHaveCount(1);
 });
 
@@ -25,30 +25,41 @@ test('Dashboard has link to live feed for Current Events.', async ({ page }) => 
     await page.goto('/dashboard');
 
     // Select Live Feed
-    await Promise.all([
-        page.locator('[aria-label="view live feed of current event"]').click(),
-        page.waitForNavigation(/*{ url: 'http://localhost:8080/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/live'}*/)
-        
-    ])
-    await expect(page).toHaveURL('/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/live');
+    await page.locator('[aria-label="view live feed of current event"]').click(),
+    await expect(page).toHaveURL(/.*live/);
 });
 
 test('Dashboard takes user to Event Settings when selecting a Current Event.', async ({ page }) => {
+    const today = new Date();
+
     // Go to Dashboard
     await page.goto('/dashboard');
 
     // Click on Current Event
-    await page.locator('text=Test 106/21/2022Wessels TestLive Feed').click();
-    await expect(page).toHaveURL('/events/RXZlbnQ6N2JmZWFmNmItMGJiMi00NTAxLWJjMDYtNWM1ZjFlYWQyZTA1/settings');
+    await page.locator('div[role="button"]:has-text("Active Test Event' + today.toLocaleDateString('en-US', {month: '2-digit'}) + '")').click();
+    
+    // Verify we are directed to the event's settings page
+    await expect(page.locator('text=Event Settings')).toHaveCount(1);
+    await expect(page.locator('text=titleActive Test Event >> p')).toHaveCount(1);
+    await expect(page.locator('text=Active Test Topic')).toHaveCount(1);
+    await expect(page.locator('text=Active Test Description')).toHaveCount(1);
 });
 
 test('Dashboard takes user to Event Settings when selecting an Upcoming Event.', async ({ page }) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
     // Go to Dashboard
     await page.goto('/dashboard');
 
     // Click on Upcoming Event
-    await page.locator('div[role="button"]:has-text("Test 206/25/2022Wessels Test")').click();
-    await expect(page).toHaveURL('/events/RXZlbnQ6NjMxNGYxNjUtZmMyYS00ZjkxLWE3ODItZjk1M2Q1M2E3OTIw/settings');
+    await page.locator('div[role="button"]:has-text("Upcoming Test Event' + tomorrow.toLocaleDateString('en-US', {month: '2-digit'}) + '")').click();
+
+    // Verify we are directed to the event's settings page
+    await expect(page.locator('text=Event Settings')).toHaveCount(1);
+    await expect(page.locator('text=titleUpcoming Test Event >> p')).toHaveCount(1);
+    await expect(page.locator('text=Upcoming Test Topic')).toHaveCount(1);
+    await expect(page.locator('text=Upcoming Test Description')).toHaveCount(1);
 });
 
 test('User is directed back to Dashboard on refresh.', async ({ page }) => {
