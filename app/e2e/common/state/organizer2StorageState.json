@@ -1,0 +1,15 @@
+{
+  "cookies": [
+    {
+      "sameSite": "Lax",
+      "name": "jwt",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZYTmxjanBsTTJVNU5EYzJNaTAzTm1Sa0xUUTNNbUl0WWpCa05DMHdPR1V5T0dVd016TTFOalE9IiwiaWF0IjoxNjYwMjU5MzEwfQ.5mrkvPVTVJ8D5VnkGDPaAKfQ7LVoKML8ElvJATTi8nw",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false
+    }
+  ],
+  "origins": []
+}
