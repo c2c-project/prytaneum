@@ -1,5 +1,3 @@
-import router from 'next/router';
-
 export interface RoleGuardProps {
     organizer?: boolean;
     moderator?: boolean;
@@ -8,7 +6,6 @@ export interface RoleGuardProps {
 
 export function RoleGuard({ organizer = false, moderator = false, children }: RoleGuardProps){
     if (organizer) return <>{children}</>
-    else router.push('/dashboard');
     if (moderator) return <>{children}</>
     return <></>
 }

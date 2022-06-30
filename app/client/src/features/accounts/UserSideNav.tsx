@@ -9,7 +9,6 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
-
 import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import {
@@ -104,6 +103,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const router = useRouter();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
+    // TODO Move check to the /organizations/me page (Should not be doing routing permission checks within components)
     const { displaySnack } = useSnack();
     React.useEffect(() => {
         if (!data.isOrganizer && router.pathname === '/organizations/me') {
@@ -166,7 +166,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer>
+                <RoleGuard organizer={data.isOrganizer}>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />
