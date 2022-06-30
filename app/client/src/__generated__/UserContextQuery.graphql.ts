@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2b03404b36328bb080dc9483daeaa921>>
+ * @generated SignedSource<<2581bcbcb29bb8e5224812e97586abae>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -98,6 +98,13 @@ const node: ConcreteRequest = {
             "kind": "ScalarField",
             "name": "avatar",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "isOrganizer",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -105,12 +112,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "90f0708ce8bba366bf8f9c4764abf926",
+    "cacheID": "6115693aa990921a30a4209ede04e88f",
     "id": null,
     "metadata": {},
     "name": "UserContextQuery",
     "operationKind": "query",
-    "text": "query UserContextQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
+    "text": "query UserContextQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n}\n"
   }
 };
 

@@ -15,6 +15,7 @@ async function main() {
             fullName: 'Test User',
             password: encryptedPassword,
             preferredLang: 'EN',
+            canMakeOrgs: true
         },
     });
 

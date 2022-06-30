@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aed9249074f53f7e08768fd592999233>>
+ * @generated SignedSource<<c8bdafe7cdec2779dd947c88c70fb792>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -108,7 +108,8 @@ return {
             "kind": "ScalarField",
             "name": "avatar",
             "storageKey": null
-          }
+          },
+          (v0/*: any*/)
         ],
         "storageKey": null
       },
@@ -116,12 +117,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "78f3d20333b33edc82eb0835901351cb",
+    "cacheID": "bd7a74b69fedeb33abe76abeb1fa8263",
     "id": null,
     "metadata": {},
     "name": "UserSideNavQuery",
     "operationKind": "query",
-    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n  isOrganizer\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
+    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n  isOrganizer\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n}\n"
   }
 };
 })();

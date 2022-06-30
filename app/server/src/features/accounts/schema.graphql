@@ -69,6 +69,10 @@ input LoginForm {
     password: String!
 }
 
+input OrganizerForm {
+    email: String!
+}
+
 type UserMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
@@ -88,6 +92,9 @@ type Mutation {
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+    makeOrganizer(input: OrganizerForm!): UserMutationResponse!
+    removeOrganizer(input: OrganizerForm!): UserMutationResponse!
+
     """
     The logout just returns the timestamp of the logout action
     """

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8412959d349dea22d42fe28e4c70e470>>
+ * @generated SignedSource<<9e052a4ac560b553475f888db93fd8e1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -160,6 +160,13 @@ return {
                 "kind": "ScalarField",
                 "name": "avatar",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isOrganizer",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -170,12 +177,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cd71c793e6e7606379cef71c6e38f095",
+    "cacheID": "36199969d06c432f252d3da10bdf2cac",
     "id": null,
     "metadata": {},
     "name": "UpdateEmailFormMutation",
     "operationKind": "mutation",
-    "text": "mutation UpdateEmailFormMutation(\n  $input: UpdateEmailForm!\n) {\n  updateEmail(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
+    "text": "mutation UpdateEmailFormMutation(\n  $input: UpdateEmailForm!\n) {\n  updateEmail(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n}\n"
   }
 };
 })();

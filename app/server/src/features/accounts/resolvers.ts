@@ -3,6 +3,7 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import { errors } from '../utils';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
@@ -20,8 +21,7 @@ export const resolvers: Resolvers = {
         },
         async isOrganizer(parent, args, ctx, info) {
             if (!ctx.viewer.id) { return false; }
-            const email = await User.findEmailByUserId(ctx.viewer.id, ctx.prisma);
-            return User.isOnOrganizerList(email?.email!);
+            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
         },
     },
     User: {
@@ -72,5 +72,19 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedUser);
             });
         },
+        async makeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.makeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
+                return toUserId(updatedUser);
+            })
+        },
+        async removeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.removeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
+                return toUserId(updatedUser);
+            })
+        }
     },
 };
