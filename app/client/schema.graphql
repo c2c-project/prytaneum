@@ -554,6 +554,7 @@ type Mutation {
 
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
+  makeOrganizer(input: OrganizerForm!): UserMutationResponse!
 
   """
   Advance the current question
@@ -567,6 +568,7 @@ type Mutation {
   """
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
+  removeOrganizer(input: OrganizerForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
   resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
 
@@ -647,6 +649,10 @@ type OrganizationSubscription {
   deleteMember: Boolean!
   orgId: ID!
   userId: ID
+}
+
+input OrganizerForm {
+  email: String!
 }
 
 type PageInfo {

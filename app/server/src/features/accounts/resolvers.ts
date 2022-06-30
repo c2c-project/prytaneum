@@ -34,9 +34,7 @@ export const resolvers: Resolvers = {
             }
         },
         async isOrganizer(parent, args, ctx, info) {
-            if (!ctx.viewer.id) {
-                return false;
-            }
+            if (!ctx.viewer.id) return false;
             const email = await User.findEmailByUserId(ctx.viewer.id, ctx.prisma);
             return User.isOnOrganizerList(email?.email!);
         },
@@ -134,6 +132,20 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const updatedUser = await User.updateOrganizer(ctx.viewer.id, ctx.prisma, args.input);
+                return toUserId(updatedUser);
+            });
+        },
+        async makeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.makeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
+                return toUserId(updatedUser);
+            });
+        },
+        async removeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.removeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
                 return toUserId(updatedUser);
             });
         },

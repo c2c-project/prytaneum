@@ -620,6 +620,7 @@ export type Mutation = {
   login: UserMutationResponse;
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
+  makeOrganizer: UserMutationResponse;
   /**
    * Advance the current question
    * TODO: make this an EventMutationResponse
@@ -631,6 +632,7 @@ export type Mutation = {
    */
   prevQuestion: Event;
   register: UserMutationResponse;
+  removeOrganizer: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   /**
@@ -773,6 +775,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationMakeOrganizerArgs = {
+  input: OrganizerForm;
+};
+
+
 export type MutationNextQuestionArgs = {
   eventId: Scalars['ID'];
 };
@@ -785,6 +792,11 @@ export type MutationPrevQuestionArgs = {
 
 export type MutationRegisterArgs = {
   input: RegistrationForm;
+};
+
+
+export type MutationRemoveOrganizerArgs = {
+  input: OrganizerForm;
 };
 
 
@@ -925,6 +937,10 @@ export type OrganizationSubscription = {
   deleteMember: Scalars['Boolean'];
   orgId: Scalars['ID'];
   userId?: Maybe<Scalars['ID']>;
+};
+
+export type OrganizerForm = {
+  email: Scalars['String'];
 };
 
 export type PageInfo = {

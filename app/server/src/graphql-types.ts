@@ -251,6 +251,10 @@ export type ValidatePasswordResetTokenForm = {
     token: Scalars['String'];
 };
 
+export type OrganizerForm = {
+    email: Scalars['String'];
+};
+
 export type UserMutationResponse = MutationResponse & {
     __typename?: 'UserMutationResponse';
     isError: Scalars['Boolean'];
@@ -291,6 +295,8 @@ export type Mutation = {
     resetPassword: ResetPasswordMutationResponse;
     deleteAccount: UserMutationResponse;
     updateOrganizer: UserMutationResponse;
+    makeOrganizer: UserMutationResponse;
+    removeOrganizer: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -372,6 +378,14 @@ export type MutationdeleteAccountArgs = {
 
 export type MutationupdateOrganizerArgs = {
     input: UpdateOrganizerForm;
+};
+
+export type MutationmakeOrganizerArgs = {
+    input: OrganizerForm;
+};
+
+export type MutationremoveOrganizerArgs = {
+    input: OrganizerForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -1421,6 +1435,7 @@ export type ResolversTypes = {
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
     ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     ResetPasswordRequestMutationResponse: ResolverTypeWrapper<ResetPasswordRequestMutationResponse>;
     ResetPasswordMutationResponse: ResolverTypeWrapper<ResetPasswordMutationResponse>;
@@ -1554,6 +1569,7 @@ export type ResolversParentTypes = {
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
     ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: UserMutationResponse;
     ResetPasswordRequestMutationResponse: ResetPasswordRequestMutationResponse;
     ResetPasswordMutationResponse: ResetPasswordMutationResponse;
@@ -1924,6 +1940,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationupdateOrganizerArgs, 'input'>
+    >;
+    makeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationmakeOrganizerArgs, 'input'>
+    >;
+    removeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveOrganizerArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<

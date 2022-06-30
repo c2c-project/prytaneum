@@ -130,6 +130,10 @@ input ValidatePasswordResetTokenForm {
     token: String!
 }
 
+input OrganizerForm {
+    email: String!
+}
+
 type UserMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
@@ -173,6 +177,9 @@ type Mutation {
     resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
     updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
+    makeOrganizer(input: OrganizerForm!): UserMutationResponse!
+    removeOrganizer(input: OrganizerForm!): UserMutationResponse!
+
     """
     The logout just returns the timestamp of the logout action
     """

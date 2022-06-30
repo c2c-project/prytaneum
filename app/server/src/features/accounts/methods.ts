@@ -5,7 +5,7 @@ import { errors, toGlobalId } from '@local/features/utils';
 import fs from 'fs';
 
 import * as jwt from '@local/lib/jwt';
-import type {
+import {
     DeleteAccountForm,
     LoginForm,
     RegistrationForm,
@@ -14,6 +14,7 @@ import type {
     ResetPasswordRequestForm,
     ResetPasswordForm,
     UpdateOrganizerForm,
+    OrganizerForm,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
@@ -56,6 +57,12 @@ export async function isOnOrganizerList(email: string) {
     });
     return found;
     // return true;
+}
+
+export async function isOrganizer(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult) throw new Error(errors.DNE('user'));
+    return queryResult.canMakeOrgs;
 }
 
 /**
@@ -456,19 +463,4 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
-}
-
-export async function updateOrganizer(viewerId: string, prisma: PrismaClient, input: UpdateOrganizerForm) {
-    // Only admins should be able to query for all users.
-    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
-    if (!queryResult) return null;
-    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all events.' });
-
-    const { id, canMakeOrgs } = input;
-    const { id: userId } = fromGlobalId(id);
-    const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: { canMakeOrgs },
-    });
-    return updatedUser;
 }
