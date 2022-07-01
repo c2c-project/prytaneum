@@ -76,6 +76,12 @@ export const resolvers: Resolvers = {
             const events = await findAllEvents(ctx.viewer.id, filter, ctx.prisma);
             return connectionFromArray(events.map(toEventId), args);
         },
+        async isOrganizer(parent, args, ctx, info) {
+            if (!ctx.viewer.id) {
+                return false;
+            }
+            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
+        },
     },
     Mutation: {
         async register(parent, args, ctx, info) {

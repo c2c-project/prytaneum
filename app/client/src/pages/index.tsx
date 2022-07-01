@@ -12,7 +12,7 @@ export default function Home() {
     const [checkComplete, setCheckComplete] = useState<boolean>(false);
 
     useEffect(() => {
-        if (user && !isLoading) router.push('/organizations/me');
+        if (user && !isLoading) router.push('/dashboard');
         if (!user && !isLoading) setCheckComplete(true);
     }, [user, router, isLoading]);
 

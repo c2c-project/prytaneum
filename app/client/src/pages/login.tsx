@@ -55,7 +55,7 @@ export default function Login() {
     const [user] = useUser();
 
     React.useEffect(() => {
-        if (user) router.push('/organizations/me');
+        if (user) router.push('/dashboard');
     }, [user, router]);
 
     return (
