@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSnackbar, OptionsObject, SnackbarKey } from 'notistack';
-import Button from '@material-ui/core/Button';
+import { Button } from '@mui/material';
 
 export function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Grid, IconButton, InputAdornment, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Grid, IconButton, InputAdornment, Typography, TextField } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
 import { Form } from '@local/components/Form';
 import { useForm, useSnack } from '../core';
 import { graphql } from 'relay-runtime';
@@ -8,8 +9,6 @@ import { useMutation } from 'react-relay';
 import { PasswordResetFormMutation } from '@local/__generated__/PasswordResetFormMutation.graphql';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { FormContent } from '@local/components/FormContent';
-import { TextField } from '@local/components/TextField';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 
 interface Props {
@@ -94,7 +93,7 @@ export function PasswordResetForm({ onSuccess, onFailure, token, tokenReady }: P
     }
 
     return (
-        <Grid container justify='center'>
+        <Grid container justifyContent='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
                 <Typography variant='h6'>Reset Password</Typography>
             </Grid>
