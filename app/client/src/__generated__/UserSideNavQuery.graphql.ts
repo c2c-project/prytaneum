@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c8bdafe7cdec2779dd947c88c70fb792>>
+ * @generated SignedSource<<c1e5a4889edbab17ee867ad23baef942>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,9 +14,9 @@ export type UserSideNavQuery$variables = {};
 export type UserSideNavQueryVariables = UserSideNavQuery$variables;
 export type UserSideNavQuery$data = {
   readonly me: {
+    readonly isOrganizer: boolean | null;
     readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
   } | null;
-  readonly isOrganizer: boolean;
 };
 export type UserSideNavQueryResponse = UserSideNavQuery$data;
 export type UserSideNavQuery = {
@@ -51,11 +51,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "useUserFragment"
-          }
+          },
+          (v0/*: any*/)
         ],
         "storageKey": null
-      },
-      (v0/*: any*/)
+      }
     ],
     "type": "Query",
     "abstractKey": null
@@ -112,21 +112,20 @@ return {
           (v0/*: any*/)
         ],
         "storageKey": null
-      },
-      (v0/*: any*/)
+      }
     ]
   },
   "params": {
-    "cacheID": "bd7a74b69fedeb33abe76abeb1fa8263",
+    "cacheID": "f068b0043b466f215d7663e5c355d481",
     "id": null,
     "metadata": {},
     "name": "UserSideNavQuery",
     "operationKind": "query",
-    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n  isOrganizer\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n}\n"
+    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    isOrganizer\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n}\n"
   }
 };
 })();
 
-(node as any).hash = "cd8bc8887f585d297f133d7499558c64";
+(node as any).hash = "51385573ee1fbcb2c4a249958e9e150e";
 
 export default node;

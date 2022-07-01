@@ -32,7 +32,7 @@ export default function Logout() {
             onCompleted() {
                 resetEnv();
                 setUser(null);
-                router.push('/')
+                router.push('/');
             },
         });
     }, [runMutation, isClient, resetEnv, setUser, router, user]);

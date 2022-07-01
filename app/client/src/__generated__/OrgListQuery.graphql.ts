@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<233e23e6671962fd434569d1d0e7319e>>
+ * @generated SignedSource<<10e00543a2a63e06b8978552f2c2c0b9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,7 @@ export type OrgListQueryVariables = OrgListQuery$variables;
 export type OrgListQuery$data = {
   readonly me: {
     readonly id: string;
+    readonly isOrganizer: boolean | null;
     readonly organizations: {
       readonly __id: string;
       readonly edges: ReadonlyArray<{
@@ -54,7 +55,14 @@ v2 = {
   "name": "id",
   "storageKey": null
 },
-v3 = [
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isOrganizer",
+  "storageKey": null
+},
+v4 = [
   {
     "alias": null,
     "args": null,
@@ -144,7 +152,7 @@ v3 = [
     ]
   }
 ],
-v4 = [
+v5 = [
   {
     "kind": "Variable",
     "name": "after",
@@ -175,6 +183,7 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": "organizations",
             "args": null,
@@ -182,7 +191,7 @@ return {
             "kind": "LinkedField",
             "name": "__OrgListQuery_organizations_connection",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v4/*: any*/),
             "storageKey": null
           }
         ],
@@ -210,19 +219,20 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v5/*: any*/),
             "concreteType": "OrganizationConnection",
             "kind": "LinkedField",
             "name": "organizations",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v4/*: any*/),
             "storageKey": null
           },
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v5/*: any*/),
             "filters": null,
             "handle": "connection",
             "key": "OrgListQuery_organizations",
@@ -235,7 +245,7 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ed1765ad576187d6a0b594604ae887c0",
+    "cacheID": "0a1c3da2922f5eb0c6aa870e5250d764",
     "id": null,
     "metadata": {
       "connection": [
@@ -252,11 +262,11 @@ return {
     },
     "name": "OrgListQuery",
     "operationKind": "query",
-    "text": "query OrgListQuery(\n  $first: Int\n  $after: String\n) {\n  me {\n    id\n    organizations(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          createdAt\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
+    "text": "query OrgListQuery(\n  $first: Int\n  $after: String\n) {\n  me {\n    id\n    isOrganizer\n    organizations(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          createdAt\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9d66dfba6ef031fabf8b6c0cff438792";
+(node as any).hash = "565fde609feb41dad67c2742003e229e";
 
 export default node;

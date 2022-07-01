@@ -1,8 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import { Card, CardContent, Grid, Typography, Divider, Button, Link, IconButton } from '@mui/material';
 import { ChevronRight, Add } from '@mui/icons-material';
 import makeStyles from '@mui/styles/makeStyles';
+import { Loader } from '@local/components/Loader';
+import { useUser } from '@local/features/accounts';
 
 // import TitleCard from '@local/components/TitleCard';
 // import FadeThrough from '@local/animations/FadeThrough';
@@ -62,6 +65,15 @@ const dummyFutureEvents = [
 
 export default function Dashboard() {
     const classes = useStyles();
+    const router = useRouter();
+    const [user,,isLoading] = useUser();
+
+    React.useEffect(() => {
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
+
+    if (isLoading || !user) return <Loader />;
+
     return (
         // <FadeThrough animKey='dashboard-page'>
         // </FadeThrough>

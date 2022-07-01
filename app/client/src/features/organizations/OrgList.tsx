@@ -22,13 +22,13 @@ import { Fab } from '@local/components/Fab';
 import { CreateOrg, TCreateOrgProps } from '@local/features/organizations';
 
 import { Loader } from '@local/components/Loader';
-import { useUser } from '../accounts';
 import { DeleteOrganization } from './DeleteOrg';
 
 export const ORG_LIST_QUERY = graphql`
     query OrgListQuery($first: Int, $after: String) {
         me {
             id
+            isOrganizer
             organizations(first: $first, after: $after) @connection(key: "OrgListQuery_organizations") {
                 __id
                 edges {
@@ -86,7 +86,6 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
     const router = useRouter();
-    const [user, , isLoading] = useUser();
     const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
     const [selectedOrg, setSelectedOrg] = React.useState(initialState);
 
@@ -98,15 +97,10 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
     const connectionId = React.useMemo(() => data.me?.organizations?.__id ?? '', [data.me?.organizations?.__id]);
 
     React.useEffect(() => {
-        if (!isLoading && !user) router.push('/');
-    }, [user, router, isLoading]);
+        if (!data.me?.isOrganizer) router.push('/');
+    }, [data, router]);
 
-    React.useEffect(() => {
-        if (isLoading) return;
-        if (!user) router.push('/login');
-    }, [isLoading, user, router]);
-
-    if (isLoading) return <Loader />;
+    if (!data.me || !data.me.isOrganizer) return <Loader />;
 
     if (listOfOrgs.length === 0)
         return (

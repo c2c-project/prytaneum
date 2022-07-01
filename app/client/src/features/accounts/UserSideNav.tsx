@@ -9,7 +9,6 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
-import { useSnack } from '@local/features/core';
 import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import {
     StyledSubheader,
@@ -80,8 +79,8 @@ export const USER_SIDE_NAV_QUERY = graphql`
     query UserSideNavQuery {
         me {
             ...useUserFragment
+            isOrganizer
         }
-        isOrganizer
     }
 `;
 
@@ -103,15 +102,6 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const router = useRouter();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
-    // TODO Move check to the /organizations/me page (Should not be doing routing permission checks within components)
-    const { displaySnack } = useSnack();
-    React.useEffect(() => {
-        if (!data.isOrganizer && router.pathname === '/organizations/me') {
-            router.push('/dashboard');
-            displaySnack('Organizers-only path!');
-        }
-    }, [data.isOrganizer, displaySnack, router]);
-
     function handleClick(key: Keys) {
         return () => {
             setSelected(key);
@@ -127,12 +117,14 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
-                    <StyledListItemIcon>
-                        <DashboardIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='Dashboard' />
-                </StyledListItem>
+                <RoleGuard authenticated>
+                    <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
+                        <StyledListItemIcon>
+                            <DashboardIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary='Dashboard' />
+                    </StyledListItem>
+                </RoleGuard>
                 <StyledListItem onClick={handleClick('About Us')} selected={selected === 'About Us'}>
                     <StyledListItemIcon>
                         <PeopleIcon />
@@ -166,7 +158,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer={data.isOrganizer}>
+                <RoleGuard organizer={data.me?.isOrganizer || false}>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />

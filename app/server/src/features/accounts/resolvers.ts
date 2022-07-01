@@ -18,11 +18,7 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) return null; // can't lookup "me" if not logged in
             const user = await User.findUserById(ctx.viewer.id, ctx.prisma);
             return toUserId(user);
-        },
-        async isOrganizer(parent, args, ctx, info) {
-            if (!ctx.viewer.id) { return false; }
-            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
-        },
+        }
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -30,6 +26,10 @@ export const resolvers: Resolvers = {
             const userOrgs = await User.findOrgsByUserId(userId, ctx.prisma);
             if (!userOrgs) return null;
             return connectionFromArray(userOrgs.map(toOrgId), args);
+        },
+        async isOrganizer(parent, args, ctx, info) {
+            if (!ctx.viewer.id) { return false; }
+            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
         },
     },
     Mutation: {
