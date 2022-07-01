@@ -6,19 +6,17 @@ import ListIcon from '@mui/icons-material/List';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Skeleton } from '@mui/material';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
-import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import {
     StyledSubheader,
     StyledDivider,
     StyledListItemIcon,
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
-import { Skeleton } from '@mui/material';
+import { useUser } from '@local/features/accounts';
 import { RoleGuard } from '@local/components/RoleGuard';
-// import { useEvent } from '../events';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,7 +39,6 @@ enum Nav {
 type Keys = keyof typeof Nav;
 
 export interface UserSideNavProps {
-    queryRef: PreloadedQuery<UserSideNavQuery>;
     /**
      * this is mainly used as an extra affect of click an item
      */
@@ -52,7 +49,7 @@ const urls: Record<Keys, string> = {
     'My Organizations': '/organizations/me',
     'User List': '/user-list',
     // 'Admin Settings': '/app/admin/settings',
-    'Dashboard': '/dashboard',
+    Dashboard: '/dashboard',
     'About Us': '/aboutus',
     'Getting Started Guide': '/guides/getting-started',
     'Organizer Guide': '/guides/organizer',
@@ -73,17 +70,6 @@ const findTab = (pathname: string): Keys | undefined => {
 //     return tab;
 // }
 
-// only need to know that the user is logged in for now, later we'll check some roles here or something
-// and populate the side nav based on the data
-export const USER_SIDE_NAV_QUERY = graphql`
-    query UserSideNavQuery {
-        me {
-            ...useUserFragment
-            isOrganizer
-        }
-    }
-`;
-
 export function UserSideNavLoader() {
     const classes = useStyles();
     return (
@@ -95,11 +81,10 @@ export function UserSideNavLoader() {
     );
 }
 
-export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
-    // const { isModerator } = useEvent();
-    const data = usePreloadedQuery<UserSideNavQuery>(USER_SIDE_NAV_QUERY, queryRef);
+export function UserSideNav({ onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
+    const [user] = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
     function handleClick(key: Keys) {
@@ -117,7 +102,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <RoleGuard authenticated>
+                <RoleGuard authenticated={!!user}>
                     <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
                         <StyledListItemIcon>
                             <DashboardIcon />
@@ -158,7 +143,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer={data.me?.isOrganizer || false}>
+                <RoleGuard organizer={user?.isOrganizer || false}>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />

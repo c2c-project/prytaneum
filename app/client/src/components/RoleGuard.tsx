@@ -1,6 +1,3 @@
-import * as React from 'react';
-import { useUser } from '@local/features/accounts';
-
 export interface RoleGuardProps {
     authenticated?: boolean;
     organizer?: boolean;
@@ -8,13 +5,10 @@ export interface RoleGuardProps {
     children: JSX.Element | JSX.Element[];
 }
 
-export function RoleGuard({ authenticated = false, organizer = false, moderator = false, children }: RoleGuardProps){
-    const [user] = useUser();
-
-    if (authenticated) {
-        if (user) return <>{children}</>;
-    }
-    if (organizer) return <>{children}</>
-    if (moderator) return <>{children}</>
-    return <></>
+/**
+ * By default this component will not render any children unless the user is authenticated a moderator or an organizer of a particular event.
+ */
+export function RoleGuard({ authenticated = false, organizer = false, moderator = false, children }: RoleGuardProps) {
+    if (authenticated || organizer || moderator) return <>{children}</>;
+    return <></>;
 }

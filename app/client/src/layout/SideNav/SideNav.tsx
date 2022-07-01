@@ -1,34 +1,13 @@
 import * as React from 'react';
-import { useQueryLoader } from 'react-relay';
 import { Hidden, Drawer, Toolbar } from '@mui/material';
-
-import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import { ConditionalRender } from '@local/components';
-import {
-    UserSideNav,
-    USER_SIDE_NAV_QUERY,
-    UserSideNavProps,
-    UserSideNavLoader,
-    useUser,
-} from '@local/features/accounts';
+import { UserSideNav, UserSideNavLoader, useUser } from '@local/features/accounts';
 
 const Loader = () => (
     <Hidden lgDown>
         <UserSideNavLoader />
     </Hidden>
 );
-
-type PreloadedUserSideNavProps = Omit<UserSideNavProps, 'queryRef'>;
-export function PreloadUserSideNav(props: PreloadedUserSideNavProps) {
-    const [queryRef, loadQuery] = useQueryLoader<UserSideNavQuery>(USER_SIDE_NAV_QUERY);
-    React.useEffect(() => {
-        if (!queryRef) loadQuery({});
-    }, [queryRef, loadQuery]);
-
-    if (!queryRef) return <Loader />;
-
-    return <UserSideNav queryRef={queryRef} {...props}/>;
-}
 
 type SideNavProps = { isHidden: boolean; isOpen: boolean; close: () => void };
 export function SideNav({ isHidden: _isHidden, isOpen, close }: SideNavProps) {
@@ -57,7 +36,7 @@ export function SideNav({ isHidden: _isHidden, isOpen, close }: SideNavProps) {
                         }}
                     >
                         {!isHidden && <Toolbar />}
-                        <PreloadUserSideNav onClick={close} />
+                        <UserSideNav onClick={close} />
                     </Drawer>
                 </React.Suspense>
             </ConditionalRender>
