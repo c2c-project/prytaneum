@@ -66,7 +66,7 @@ const dummyFutureEvents = [
 export default function Dashboard() {
     const classes = useStyles();
     const router = useRouter();
-    const [user,,isLoading] = useUser();
+    const [user, , isLoading] = useUser();
 
     React.useEffect(() => {
         if (!isLoading && !user) router.push('/');
