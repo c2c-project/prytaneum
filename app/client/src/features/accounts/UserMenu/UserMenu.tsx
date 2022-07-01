@@ -122,9 +122,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
     const router = useRouter();
     const { logoutUser } = useLogout({
-        onComplete: () => {
-            router.reload();
-        },
+        onComplete: () => {},
     });
     const handleNavigation = (path: string) => () => router.push(path);
 
