@@ -29,10 +29,10 @@ test.describe('landing page registration and authentication', () => {
         await page.locator('input[type="password"]').click(),
         await page.locator('input[type="password"]').fill('password'),
         await Promise.all([
-            page.waitForNavigation({ url: 'http://localhost:8080/organizations/me' }),
+            page.waitForNavigation({ url: 'http://localhost:8080/dashboard' }),
             page.locator('div[role="dialog"] button:has-text("Login")').click()
         ]);
-        await expect(page).toHaveURL('/organizations/me');
+        await expect(page).toHaveURL('/dashboard');
     });
 });
 
