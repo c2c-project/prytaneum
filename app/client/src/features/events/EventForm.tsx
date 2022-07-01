@@ -13,7 +13,6 @@ import { useForm } from '../core';
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
-    title?: boolean;
     className?: string;
     form?: TEventForm;
 }
@@ -45,13 +44,16 @@ const initialState: TEventForm = {
 };
 
 export function EventForm(props: EventFormProps) {
-    const { onCancel, onSubmit, title, className, form } = props;
+    const { onCancel, onSubmit, className, form } = props;
 
-    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(form || initialState, validationSchema);
+    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(
+        form || initialState,
+        validationSchema
+    );
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
-            {title && <FormTitle title='Townhall Form' />}
+            <FormTitle title='Create Event' />
             <FormContent>
                 <TextField
                     autoFocus
@@ -80,7 +82,9 @@ export function EventForm(props: EventFormProps) {
                 />
                 <MobileDateTimePicker
                     value={state.startDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, startDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, startDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
@@ -93,7 +97,9 @@ export function EventForm(props: EventFormProps) {
                 />
                 <MobileDateTimePicker
                     value={state.endDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, endDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, endDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
