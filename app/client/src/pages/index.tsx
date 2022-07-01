@@ -4,11 +4,9 @@ import { useRouter } from 'next/router';
 import Landing from '@local/features/landing/Landing';
 import { Loader } from '@local/components/Loader';
 
-
-
 export default function Home() {
     const router = useRouter();
-    const [user,, isLoading] = useUser();
+    const [user, , isLoading] = useUser();
     const [checkComplete, setCheckComplete] = useState<boolean>(false);
 
     useEffect(() => {
@@ -16,6 +14,5 @@ export default function Home() {
         if (!user && !isLoading) setCheckComplete(true);
     }, [user, router, isLoading]);
 
-    return checkComplete ? <Landing /> : <Loader />
-        
+    return checkComplete ? <Landing /> : <Loader />;
 }
