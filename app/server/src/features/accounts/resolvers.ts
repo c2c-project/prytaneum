@@ -4,7 +4,6 @@ import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/util
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
 import * as jwt from '@local/lib/jwt';
-import { server } from '@local/index';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
@@ -23,15 +22,15 @@ export const resolvers: Resolvers = {
         },
         async validatePasswordResetToken(parent, args, ctx, info) {
             const { token } = args.input;
-            
+
             try {
                 await jwt.verify(token);
                 return { valid: true, message: '' };
             } catch (err) {
-                server.log.error(err);
-                return { valid: false, message: errors.jwt }
+                ctx.app.log.error(err);
+                return { valid: false, message: errors.jwt };
             }
-        }
+        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -91,7 +90,7 @@ export const resolvers: Resolvers = {
                 // No need to return anything, a no error response is fine
                 // since the user will simply be redirected to login after resetting
                 await User.resetPassword(ctx.prisma, args.input);
-            })
+            });
         },
         async deleteAccount(parent, args, ctx, info) {
             return runMutation(async () => {
