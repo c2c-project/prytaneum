@@ -122,7 +122,10 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
     const router = useRouter();
     const { logoutUser } = useLogout({
-        onComplete: () => {},
+        onComplete: () => {
+            // TODO: find a way to update even live ui without reload
+            if (router.pathname === '/events/[id]/live') router.reload();
+        },
     });
     const handleNavigation = (path: string) => () => router.push(path);
 
