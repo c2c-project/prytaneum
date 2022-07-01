@@ -801,6 +801,10 @@ export type QueryValidateInviteArgs = {
     input: ValidateInvite;
 };
 
+export type QueryValidatePasswordResetTokenArgs = {
+    input: ValidatePasswordResetTokenForm;
+};
+
 /** TODO: #QQRedesign dlete after code complete */
 export type QuestionOperation = {
     __typename?: 'QuestionOperation';

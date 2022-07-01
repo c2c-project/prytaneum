@@ -1,39 +1,33 @@
+/**
+ * @generated SignedSource<<0588dbe1aa3f9cc2742bd19950db1364>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type ResetPasswordRequestForm = {
-    email: string;
+  email: string;
 };
-export type PasswordResetRequestFormMutationVariables = {
-    input: ResetPasswordRequestForm;
+export type PasswordResetRequestFormMutation$variables = {
+  input: ResetPasswordRequestForm;
 };
-export type PasswordResetRequestFormMutationResponse = {
-    readonly resetPasswordRequest: {
-        readonly isError: boolean;
-        readonly message: string;
-        readonly body: boolean | null;
-    };
+export type PasswordResetRequestFormMutationVariables = PasswordResetRequestFormMutation$variables;
+export type PasswordResetRequestFormMutation$data = {
+  readonly resetPasswordRequest: {
+    readonly isError: boolean;
+    readonly message: string;
+    readonly body: boolean | null;
+  };
 };
+export type PasswordResetRequestFormMutationResponse = PasswordResetRequestFormMutation$data;
 export type PasswordResetRequestFormMutation = {
-    readonly response: PasswordResetRequestFormMutationResponse;
-    readonly variables: PasswordResetRequestFormMutationVariables;
+  variables: PasswordResetRequestFormMutationVariables;
+  response: PasswordResetRequestFormMutation$data;
 };
-
-
-
-/*
-mutation PasswordResetRequestFormMutation(
-  $input: ResetPasswordRequestForm!
-) {
-  resetPasswordRequest(input: $input) {
-    isError
-    message
-    body
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -110,5 +104,7 @@ return {
   }
 };
 })();
-(node as any).hash = '231c73825be949869a7c631605a54a10';
+
+(node as any).hash = "231c73825be949869a7c631605a54a10";
+
 export default node;
