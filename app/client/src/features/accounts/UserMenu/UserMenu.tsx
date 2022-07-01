@@ -122,9 +122,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm')) || !isClient;
     const router = useRouter();
     const { logoutUser } = useLogout({
-        onComplete: () => {
-            router.reload();
-        },
+        onComplete: () => {},
     });
     const handleNavigation = (path: string) => () => router.push(path);
 
@@ -197,7 +195,12 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'register'} onClose={close}>
                         <DialogContent>
-                            <RegisterForm onSuccess={close} />
+                            <RegisterForm
+                                onSuccess={() => {
+                                    close();
+                                    router.reload();
+                                }}
+                            />
                         </DialogContent>
                     </ResponsiveDialog>
                 </>
