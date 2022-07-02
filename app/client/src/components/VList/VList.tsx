@@ -1,7 +1,7 @@
 /* eslint-disable */ // FIXME:
 import * as React from 'react';
 
-import { useCache } from '@local/features/core';
+import { useCache } from '@local/core';
 
 interface Props {
     children: React.ReactNode | React.ReactNodeArray;
