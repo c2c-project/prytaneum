@@ -8,7 +8,7 @@ import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
-import { useForm } from '../core';
+import { useForm } from '@local/core';
 
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;

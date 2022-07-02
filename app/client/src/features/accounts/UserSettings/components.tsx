@@ -22,7 +22,7 @@ import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
 import { useUser } from '@local/features/accounts';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import makeStyles from '@mui/styles/makeStyles';
 import { useMutation } from 'react-relay';
 import Link from 'next/link';
