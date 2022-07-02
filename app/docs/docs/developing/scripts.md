@@ -10,6 +10,8 @@ All scripts at the root directory are prefixed with `g:` for global.
 -   `g:start-db`: Start the database using `docker` and `docker-compose`. See `db/start-db.sh`.
 -   `g:start-test-db`: Starts a test specific database using `docker` and `docker-compose`. See `db/start-test-db.sh`.
 -   `g:stop-db`: Stops the currently running database. See `db/stop-db.sh`.
+-   `g:husky`: Installs husky
+-   `g:dev`: Starts the project in development mode.
 
 ## Client
 
