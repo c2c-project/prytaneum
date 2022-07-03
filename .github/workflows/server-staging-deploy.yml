@@ -1,4 +1,4 @@
-name: Dev deploy
+name: Deploy staging server
 
 on:
     push:
