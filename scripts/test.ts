@@ -1,5 +1,5 @@
 /**
- * This script is used to setup a minimal test environment.
+ * This script is used to setup a minimal development server intended for e2e tests.
  */
 
 import concurrently from 'concurrently';

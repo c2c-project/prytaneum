@@ -12,6 +12,7 @@ All scripts at the root directory are prefixed with `g:` for global.
 -   `g:stop-db`: Stops the currently running database. See `db/stop-db.sh`.
 -   `g:husky`: Installs husky
 -   `g:dev`: Starts the project in development mode.
+-   `g:dev-test`: Starts a minimal development instance intended for testing in CI/CD.
 
 ## Client
 

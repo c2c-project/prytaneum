@@ -51,7 +51,7 @@ jobs:
             - name: Yarn Install
               run: yarn install
 
-            - name: Lint Project
+            - name: Test Project
               run: yarn workspace @app/server test:ci
 
     lint:

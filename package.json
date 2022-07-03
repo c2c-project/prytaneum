@@ -8,6 +8,7 @@
         "g:husky": "husky install",
         "g:commit": "commit",
         "g:dev": "ts-node-dev -- ./scripts/dev.ts",
+        "g:dev-test": "ts-node-dev -- ./scripts/test.ts",
         "g:start-test-db": "yarn exec db/start-test-db.sh",
         "g:start-db": "yarn exec db/start-db.sh",
         "g:stop-db": "yarn exec db/stop-db.sh"
