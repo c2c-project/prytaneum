@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
     push:
         branches:
-            - dev
+            - staging
         paths:
             # Only run when docs are modified
             - 'app/docs/**'

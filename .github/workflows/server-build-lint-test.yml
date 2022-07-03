@@ -3,6 +3,7 @@ on:
     pull_request:
         branches:
             - dev
+            - staging
         paths:
             - 'app/server/**'
 

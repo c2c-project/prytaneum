@@ -3,7 +3,7 @@ name: Docs build
 on:
     pull_request:
         branches:
-            - dev
+            - staging
         paths:
             # Only run when docs are modified
             - 'app/docs/**'

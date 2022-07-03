@@ -3,7 +3,7 @@ name: Deploy staging client
 on:
     push:
         branches:
-            - deploy-dev
+            - staging
         paths:
             - 'app/client/**'
 

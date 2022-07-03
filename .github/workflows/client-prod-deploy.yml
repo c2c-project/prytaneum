@@ -3,7 +3,7 @@ name: Deploy production client
 on:
     push:
         branches:
-            - deploy-prod
+            - prod
         paths:
           - 'app/client/**'
 env:

@@ -3,7 +3,8 @@ name: Deploy production server
 on:
     push:
         branches:
-            - deploy-prod
+            - prod
+
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: prytaneum-dev-cluster
