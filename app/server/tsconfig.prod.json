@@ -1,4 +1,12 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["**/*.test.*", "**/scripts/*.ts", "**/graphql-types.ts", "*.d.ts", "**/*.template.ts"]
+    "exclude": [
+        "**/*.test.*",
+        "**/scripts/*.ts",
+        "**/graphql-types.ts",
+        "*.d.ts",
+        "**/*.template.ts",
+        "mocks/**",
+        "prisma/**"
+    ]
 }
