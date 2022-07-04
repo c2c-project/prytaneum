@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-import { Resolvers } from '@local/graphql-types';
+import type { Resolvers } from '@local/graphql-types';
 
 /**
  * The date type expects a date string from the client

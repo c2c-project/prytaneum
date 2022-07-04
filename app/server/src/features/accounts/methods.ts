@@ -3,7 +3,7 @@ import { PrismaClient } from '@local/__generated__/prisma';
 import { toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
-import {
+import type {
     DeleteAccountForm,
     LoginForm,
     RegistrationForm,

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@local/__generated__/prisma';
-import { CreateFeedback } from '@local/graphql-types';
+import type { CreateFeedback } from '@local/graphql-types';
 import { fromGlobalId } from 'graphql-relay';
 
 export async function myFeedback(userId: string, eventId: string, prisma: PrismaClient) {
