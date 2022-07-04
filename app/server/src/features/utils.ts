@@ -4,6 +4,7 @@ import mercurius, { IResolvers } from 'mercurius';
 import * as Relay from 'graphql-relay';
 import { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
 import { getOrCreateServer } from '@local/core/server';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 /**
  * Resolver type used for making resolvers
@@ -97,10 +98,19 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
             body: result,
         };
     } catch (e) {
+        if (e instanceof ProtectedError) {
+            getOrCreateServer().log.error(e.internalMessage);
+            return {
+                isError: true,
+                message: e.userMessage,
+                body: null,
+            };
+        }
+        getOrCreateServer().log.error('Error is not an instance of ProtectedError!');
         getOrCreateServer().log.error(e.message);
         return {
             isError: true,
-            message: e.message,
+            message: 'Internal server error. Please try again.',
             body: null,
         };
     }
