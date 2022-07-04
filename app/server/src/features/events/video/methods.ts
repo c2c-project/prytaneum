@@ -1,5 +1,5 @@
 import { PrismaClient } from '@local/__generated__/prisma';
-import { CreateVideo, UpdateVideo, DeleteVideo } from '@local/graphql-types';
+import type { CreateVideo, UpdateVideo, DeleteVideo } from '@local/graphql-types';
 import { errors } from '@local/features/utils';
 import { canUserModify } from '../methods';
 

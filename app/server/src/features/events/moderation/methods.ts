@@ -1,6 +1,6 @@
 import { PrismaClient } from '@local/__generated__/prisma';
 import { errors } from '@local/features/utils';
-import {
+import type {
     CreateModerator,
     DeleteModerator,
     HideQuestion,

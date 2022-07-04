@@ -1,5 +1,5 @@
 import { PrismaClient } from '@local/__generated__/prisma';
-import {
+import type {
     CreateOrganization,
     UpdateOrganization,
     DeleteOrganization,

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@local/__generated__/prisma';
 import { fromGlobalId } from 'graphql-relay';
 
-import { Node } from '@local/graphql-types';
+import type { Node } from '@local/graphql-types';
 import { findUserById } from './accounts/methods';
 import { findEventById } from './events/methods';
 import { findOrgById } from './organizations/methods';

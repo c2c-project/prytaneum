@@ -1,6 +1,6 @@
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { fromGlobalId } from 'graphql-relay';
-import { FeedbackOperation } from '@local/graphql-types';
+import type { FeedbackOperation } from '@local/graphql-types';
 import * as Feedback from './methods';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');

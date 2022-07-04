@@ -2,7 +2,7 @@
 // import { Resolvers as IResolvers } from '@local/graphql-types';
 import mercurius, { IResolvers } from 'mercurius';
 import * as Relay from 'graphql-relay';
-import { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
+import type { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
 import { getOrCreateServer } from '@local/core/server';
 
 /**
