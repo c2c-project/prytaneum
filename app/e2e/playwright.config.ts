@@ -88,7 +88,7 @@ const config: PlaywrightTestConfig = {
 
     /* Run your local dev server before starting the tests */
     webServer: {
-        command: 'yarn g:dev-e2e-project',
+        command: 'yarn g:dev-test',
         port: 8080,
     },
 };

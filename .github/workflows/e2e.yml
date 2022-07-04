@@ -1,0 +1,50 @@
+name: Test end-to-end
+
+on:
+    pull_request:
+        branches:
+            - staging
+            - prod
+
+jobs:
+    e2e:
+        name: E2E Testing
+        runs-on: ubuntu-latest
+        environment: development
+        timeout-minutes: 60
+
+        steps:
+            - name: Setup
+              uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Start Redis
+              uses: supercharge/redis-github-action@1.4.0
+              with:
+                  redis-version: 6
+
+            - name: Yarn Install
+              run: yarn install
+
+            - name: Prisma Generate
+              run: yarn workspace @app/server generate
+
+            - name: Install Playwright
+              run: yarn workspace @app/e2e run playwright install --with-deps
+
+            # Adding extra browser for testing on edge since it is not included by default
+            - name: Install Playwright Microsoft Edge
+              run: yarn workspace @app/e2e run playwright install msedge
+
+            - name: Run Playwright tests
+              run: yarn workspace @app/e2e run test:ci
+
+            - uses: actions/upload-artifact@v2
+              if: always()
+              with:
+                  name: allure-report
+                  path: app/e2e/allure-report/
+                  retention-days: 30

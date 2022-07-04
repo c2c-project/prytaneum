@@ -1,0 +1,25 @@
+name: Docs build
+
+on:
+    pull_request:
+        branches:
+            - staging
+        paths:
+            # Only run when docs are modified
+            - 'app/docs/**'
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
+                  cache: yarn
+
+            - name: Install dependencies
+              run: yarn workspace @app/docs install
+            - name: Test build website
+              run: yarn workspace @app/docs build
