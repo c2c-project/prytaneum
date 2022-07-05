@@ -6,9 +6,9 @@ on:
             - staging
             - prod
         paths:
-            - '/app/client/**'
-            - '/app/server/**'
-            - '/app/e2e/**'
+            - 'app/client/**'
+            - 'app/server/**'
+            - 'app/e2e/**'
 
 jobs:
     e2e:
