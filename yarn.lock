@@ -20034,20 +20034,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "http-proxy-middleware@npm:2.0.0"
-  dependencies:
-    "@types/http-proxy": ^1.17.5
-    http-proxy: ^1.18.1
-    is-glob: ^4.0.1
-    is-plain-obj: ^3.0.0
-    micromatch: ^4.0.2
-  checksum: 1cf880d06f7ba44836e890f738df3fa257a03591fea47b09be60476bf4a9fc997fd329f857c997797372904a5ad4a150bbf7d933a8b048c78dfb84231e9f0b90
-  languageName: node
-  linkType: hard
-
-"http-proxy-middleware@npm:^2.0.3":
+"http-proxy-middleware@npm:^2.0.3, http-proxy-middleware@npm:^2.0.6":
   version: 2.0.6
   resolution: "http-proxy-middleware@npm:2.0.6"
   dependencies:
@@ -26893,19 +26880,16 @@ fsevents@^1.2.7:
   version: 0.0.0-use.local
   resolution: "prytaneum@workspace:."
   dependencies:
-    "@commitlint/cli": ^16.2.1
-    "@commitlint/config-conventional": ^16.2.1
-    "@commitlint/prompt-cli": ^16.2.1
+    "@commitlint/cli": ^17.0.2
+    "@commitlint/config-conventional": ^17.0.2
+    "@commitlint/prompt-cli": ^17.0.0
     "@graphql-codegen/cli": ^2.4.0
     "@graphql-codegen/introspection": ^2.1.1
     "@graphql-codegen/typescript": ^2.4.2
     "@graphql-codegen/typescript-operations": ^2.2.2
     "@graphql-codegen/typescript-resolvers": ^2.4.3
     "@types/node": ^14.14.41
-    "@types/prettier": ^2
-    concurrently: ^6.0.2
-    dotenv: ^10.0.0
-    dotenv-expand: ^5.1.0
+    concurrently: ^7.2.2
     eslint: ^8.9.0
     graphql: ^15.5.3
     graphql-tag: ^2.12.6

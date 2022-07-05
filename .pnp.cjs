@@ -58,19 +58,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@commitlint/cli", "npm:16.2.1"],\
-            ["@commitlint/config-conventional", "npm:16.2.1"],\
-            ["@commitlint/prompt-cli", "npm:16.2.1"],\
+            ["@commitlint/cli", "npm:17.0.2"],\
+            ["@commitlint/config-conventional", "npm:17.0.2"],\
+            ["@commitlint/prompt-cli", "npm:17.0.0"],\
             ["@graphql-codegen/cli", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.0"],\
             ["@graphql-codegen/introspection", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.1.1"],\
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
             ["@types/node", "npm:14.14.41"],\
-            ["@types/prettier", "npm:2.4.4"],\
-            ["concurrently", "npm:6.0.2"],\
-            ["dotenv", "npm:10.0.0"],\
-            ["dotenv-expand", "npm:5.1.0"],\
+            ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
             ["graphql", "npm:15.8.0"],\
             ["graphql-tag", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.12.6"],\
@@ -36735,19 +36732,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["prytaneum", "workspace:."],\
-            ["@commitlint/cli", "npm:16.2.1"],\
-            ["@commitlint/config-conventional", "npm:16.2.1"],\
-            ["@commitlint/prompt-cli", "npm:16.2.1"],\
+            ["@commitlint/cli", "npm:17.0.2"],\
+            ["@commitlint/config-conventional", "npm:17.0.2"],\
+            ["@commitlint/prompt-cli", "npm:17.0.0"],\
             ["@graphql-codegen/cli", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.0"],\
             ["@graphql-codegen/introspection", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.1.1"],\
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
             ["@types/node", "npm:14.14.41"],\
-            ["@types/prettier", "npm:2.4.4"],\
-            ["concurrently", "npm:6.0.2"],\
-            ["dotenv", "npm:10.0.0"],\
-            ["dotenv-expand", "npm:5.1.0"],\
+            ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
             ["graphql", "npm:15.8.0"],\
             ["graphql-tag", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.12.6"],\
