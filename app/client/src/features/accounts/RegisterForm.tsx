@@ -12,7 +12,7 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useSnack, useForm } from '@local/core';
 
 interface Props {
     onSuccess?: () => void;

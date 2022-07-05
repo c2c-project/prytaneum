@@ -1,7 +1,7 @@
 import { graphql, useMutation } from 'react-relay';
 
 import type { DeleteOrgMutation } from '@local/__generated__/DeleteOrgMutation.graphql';
-import { useSnack } from '@local/features/core/useSnack';
+import { useSnack } from '@local/core/useSnack';
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 
 const DELETE_ORG_MUTATION = graphql`
