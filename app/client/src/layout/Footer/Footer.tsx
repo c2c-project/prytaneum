@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Container, Grid, Box, Link } from '@material-ui/core';
+import { Container, Grid, Box, Link } from '@mui/material';
 import { useUser } from '@local/features/accounts';
 
 export function Footer() {

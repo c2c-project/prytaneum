@@ -70,7 +70,7 @@ export default function UserSettings({ id }: Props) {
 
     return (
         <div id={id} style={{ width: '100%', height: '100%' }}>
-            <SettingsMenu title='User Settings' config={sections} />
+            <SettingsMenu config={sections} />
             <ResponsiveDialog open={open} onClose={() => setContent(null)}>
                 {cont || <div />}
             </ResponsiveDialog>

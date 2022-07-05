@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -90,9 +89,12 @@ export function EventSettings({ queryRef }: Props) {
     return (
         <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
             <div className={classes.root}>
+                <Typography variant='h2' className={classes.title}>
+                    Event Settings
+                </Typography>
+                <Divider className={classes.titleDivider} />
                 {data.node && (
                     <SettingsMenu
-                        title='Event Settings'
                         config={[
                             {
                                 title: 'Details',
@@ -134,22 +136,14 @@ export function EventSettings({ queryRef }: Props) {
                                 title: 'Invites',
                                 description: 'Invite people to join the event',
                                 component: (
-                                    <InviteEventSettings
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
+                                    <InviteEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
                             },
                             {
                                 title: 'Delete Event',
                                 description: 'Click here to delete your event',
-                                component: (
-                                    <DeleteEvent
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
-                            }
+                                component: <DeleteEvent className={classes.settingsSection} fragmentRef={data.node} />,
+                            },
                         ]}
                     />
                 )}

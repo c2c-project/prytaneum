@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import {
-    Grid,
-    Button,
-    DialogContent,
-    Collapse,
-} from '@mui/material';
+import { Grid, Button, DialogContent, Collapse } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
@@ -15,7 +10,7 @@ import { CopyText } from '@local/components/CopyText';
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails'
+import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
 
 interface EventSettingsProps {
@@ -44,9 +39,7 @@ interface TState {
     anchorEl: HTMLElement | null;
 }
 
-type Action =
-    | { type: 'dialog/create-invite'; payload?: never }
-    | { type: 'dialog/close-all'; payload?: never };
+type Action = { type: 'dialog/create-invite'; payload?: never } | { type: 'dialog/close-all'; payload?: never };
 
 const reducer = (state: TState, action: Action): TState => {
     switch (action.type) {
@@ -96,7 +89,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     const toggleInviteLink = () => {
         if (link === '') generateInviteLink();
         setOpen(!open);
-    }
+    };
 
     return (
         <Grid container justifyContent='center' className={className}>
@@ -105,13 +98,13 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     <CreateInvite onSubmit={close} eventId={eventId} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Grid container justify='space-between'>
-                <Grid item container justify='center' xs={6}>
+            <Grid container justifyContent='space-between'>
+                <Grid item container justifyContent='center' xs={6}>
                     <Collapse in={open}>
                         <CopyText TextFieldProps={{ label: 'Invite Link' }} className={classes.text} text={link} />
                     </Collapse>
                 </Grid>
-                <Grid item justify='center' xs='auto'>
+                <Grid item justifyContent='center' xs='auto'>
                     <LoadingButton loading={false}>
                         <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
                             {open ? 'Hide invite link' : 'Reveal invite link'}
@@ -119,7 +112,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     </LoadingButton>
                 </Grid>
             </Grid>
-            <Grid item container justify='center' direction='column' alignItems='flex-end'>
+            <Grid item container justifyContent='center' direction='column' alignItems='flex-end'>
                 <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
                     Invite
                 </Button>
