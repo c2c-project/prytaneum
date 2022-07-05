@@ -22,7 +22,7 @@
         "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:all": "yarn pretest && dotenv -c test -- jest \"src/.*.test\\.ts\" --detectOpenHandles --runInBand",
         "test:coverage": "dotenv -c test -- jest --coverage",
-        "test:ci": "yarn pretest && yarn test:unit && yarn test:integration"
+        "test:ci": "yarn pretest && yarn test:all"
     },
     "prisma": {
         "seed": "ts-node-dev ./prisma/seed.ts"
