@@ -1,6 +1,6 @@
 FROM node:16.14.2-alpine AS build-stage
 WORKDIR /usr/monorepo
-# Copy all nessisary files/folders
+# Copy all necessary files/folders
 COPY package.json .
 COPY yarn.lock .
 COPY .yarnrc.yml .
