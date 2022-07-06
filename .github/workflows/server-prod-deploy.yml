@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - prod
+            - 'docker/Dockerfile.server'
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}

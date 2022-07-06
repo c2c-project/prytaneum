@@ -6,6 +6,7 @@ on:
             - staging
         paths:
             - 'app/client/**'
+            - 'docker/Dockerfile.client'
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
