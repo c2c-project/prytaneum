@@ -13,7 +13,7 @@ import { graphql } from 'react-relay';
 
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 import { makeInitialState } from '@local/utils/ts-utils';
 import type { DeleteEventMutation } from '@local/__generated__/DeleteEventMutation.graphql';
 import { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';

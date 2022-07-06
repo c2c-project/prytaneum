@@ -6,7 +6,7 @@ import { useMutation, graphql } from 'react-relay';
 
 import type { AskQuestionMutation } from '@local/__generated__/AskQuestionMutation.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';

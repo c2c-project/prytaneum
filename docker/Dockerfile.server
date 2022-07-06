@@ -1,15 +1,7 @@
 FROM node:16.14.2-alpine AS build-stage
 WORKDIR /usr/monorepo
-# Copy all necessary files/folders
-COPY package.json .
-COPY yarn.lock .
-COPY .yarnrc.yml .
-COPY .yarn ./.yarn
-COPY .nvmrc .
-COPY tsconfig.json .
-COPY .pnp.cjs .
-COPY .pnp.loader.mjs .
-COPY app/server ./app/server
+# Copy everything
+COPY . .
 # Rebuild packages necessary.
 RUN yarn install
 # Ensure prisma types are generated appropriately.

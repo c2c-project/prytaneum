@@ -1,7 +1,7 @@
 import { graphql, useMutation } from 'react-relay';
 
 import type { DeleteMemberMutation } from '@local/__generated__/DeleteMemberMutation.graphql';
-import { useSnack } from '@local/core/useSnack';
+import { useSnack } from '@local/features/core/useSnack';
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 import { ConnectionHandler, RecordSourceSelectorProxy } from 'relay-runtime';
 

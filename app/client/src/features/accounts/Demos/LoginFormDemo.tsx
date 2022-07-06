@@ -7,7 +7,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useForm } from '@local/core';
+import { useForm } from '@local/features/core';
 
 const useStyles = makeStyles((theme) => ({
     link: {

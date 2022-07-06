@@ -1,4 +1,4 @@
-import { useIsClient } from '@local/core';
+import { useIsClient } from '@local/features/core';
 
 export interface ConditionalRenderProps {
     server?: boolean;

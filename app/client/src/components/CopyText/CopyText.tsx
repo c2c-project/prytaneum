@@ -4,7 +4,7 @@ import { IconButton, Tooltip, Grid, TextField, TextFieldProps } from '@mui/mater
 import makeStyles from '@mui/styles/makeStyles';
 import { ContentCopy as CopyIcon } from '@local/icons/ContentCopy';
 
-import useCopy from '@local/core/useCopy';
+import useCopy from '@local/features/core/useCopy';
 
 const useStyles = makeStyles((theme) => ({
     text: {

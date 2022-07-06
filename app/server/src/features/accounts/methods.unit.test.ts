@@ -3,7 +3,6 @@ import * as AccountMethods from './methods';
 import { prismaMock } from '../../../mocks/prisma/singleton';
 import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
-import { ProtectedError } from '@local/lib/ProtectedError';
 
 jest.mock('@local/lib/jwt', () => ({
     ...jest.requireActual('@local/lib/jwt'), // import and retain the original functionalities
@@ -11,7 +10,7 @@ jest.mock('@local/lib/jwt', () => ({
 
 const toUserId = toGlobalId('User');
 
-const userTextPassword = '12345678*aB';
+const userTextPassword = 'testPassword';
 const userData = {
     id: '4136cd0b-d90b-4af7-b485-5d1ded8db252',
     createdAt: new Date(),
@@ -158,9 +157,7 @@ describe('account methods', () => {
             };
 
             // Assert
-            await expect(AccountMethods.registerSelf(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Passwords must match.' })
-            );
+            await expect(AccountMethods.registerSelf(prismaMock, input)).rejects.toThrow('Passwords must match');
         });
     });
 
@@ -173,7 +170,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.loginWithPassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Login failed; Invalid email or password.'
             );
         });
 
@@ -185,7 +182,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.loginWithPassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Login failed; Invalid email or password.'
             );
         });
 
@@ -215,10 +212,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updateEmail(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'A link to activate your account has been emailed to the address provided.',
-                    internalMessage: 'A user with the email already exists.',
-                })
+                'Updating email failed: Another user exists with this email. Please input a different email.'
             );
         });
         test('should return updated user and token when successful', async () => {
@@ -252,9 +246,7 @@ describe('account methods', () => {
             prismaMock.user.findUnique.mockResolvedValueOnce(null);
 
             // Assert
-            await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
-            );
+            await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow('Account not found.');
         });
         test('should throw if account has no existing password', async () => {
             // Arrange
@@ -270,7 +262,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Updating password failed: Missing password.'
             );
         });
         test('should throw if oldPassword is wrong', async () => {
@@ -287,7 +279,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Updating password failed: Invalid password.'
             );
         });
         test('should throw if password is shorter than 8 characters', async () => {
@@ -304,7 +296,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'New passwords must be at least 8 characters.' })
+                'New password must be at least 8 characters.'
             );
         });
         test('should throw if password does not contain at least 1 number and 1 symbol', async () => {
@@ -321,9 +313,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Password missing required complexity:\nnumber character\nspecial character.',
-                })
+                'New password must contain a mixture of lowercase and uppercase letters, at least one number, and at least one special character.'
             );
         });
         test('should throw if new passwords do not match', async () => {
@@ -339,9 +329,7 @@ describe('account methods', () => {
             prismaMock.user.findUnique.mockResolvedValueOnce(user);
 
             // Assert
-            await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Passwords must match.' })
-            );
+            await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow('Passwords must match.');
         });
         test('should update password sucessfully', async () => {
             // Arrange
@@ -378,7 +366,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Deleting account failed: Missing password.'
             );
         });
         test('should throw if oldPassword is wrong', async () => {
@@ -392,7 +380,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
+                'Deleting account failed: Invalid password.'
             );
         });
         test('should throw if new passwords do not match', async () => {
@@ -406,9 +394,7 @@ describe('account methods', () => {
             prismaMock.user.findUnique.mockResolvedValueOnce(user);
 
             // Assert
-            await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({ userMessage: 'Passwords must match.' })
-            );
+            await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow('Passwords must match.');
         });
         test('should delete account sucessfully', async () => {
             // Arrange

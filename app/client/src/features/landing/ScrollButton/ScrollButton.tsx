@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, IconButton } from '@mui/material';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import makeStyles from '@mui/styles/makeStyles';
-import useScrollTo from '@local/core/useScrollTo';
+import useScrollTo from '@local/features/core/useScrollTo';
 
 const useStyles = makeStyles((theme) => ({
     arrowsection: {

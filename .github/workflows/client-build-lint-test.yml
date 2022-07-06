@@ -6,7 +6,6 @@ on:
             - staging
         paths:
             - 'app/client/**'
-            - 'docker/Dockerfile.client'
 
 jobs:
     build:

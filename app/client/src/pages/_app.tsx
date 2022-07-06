@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { RelayEnvironmentProvider } from 'react-relay';
 
 import { UserProvider } from '@local/features/accounts/UserContext';
-import { ThemeProvider, SnackContext, useEnvironment } from '@local/core';
+import { ThemeProvider, SnackContext, useEnvironment } from '@local/features/core';
 import { Layout } from '@local/layout';
 import '@local/index.css';
 import { useRouter } from 'next/router';

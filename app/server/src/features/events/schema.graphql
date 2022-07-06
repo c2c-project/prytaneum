@@ -102,6 +102,12 @@ type Event implements Node {
     isViewerInvited: Boolean
 
     """
+    Questions queued in this session by the moderator(s)
+    TODO: #QQRedesign delete after code complete
+    """
+    queuedQuestions(first: Int, after: String): EventQuestionConnection
+
+    """
     Questions having to do with the queue
     """
     questionQueue(first: Int, after: String): EventQuestionQueue
@@ -188,5 +194,8 @@ type Query {
 }
 
 type Subscription {
+    """
+    TODO: #QQRedesign delete after code complete
+    """
     eventUpdates(eventId: ID!): Event!
 }

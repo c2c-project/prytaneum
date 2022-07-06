@@ -4,7 +4,7 @@ import { Button, TextField } from '@mui/material';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { useForm } from '@local/core';
+import { useForm } from '@local/features/core';
 import { FormTitle } from '@local/components/FormTitle';
 
 export type TVideoForm = { url: string; lang: string };

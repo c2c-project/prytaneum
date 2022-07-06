@@ -5,7 +5,7 @@ import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { useForm } from '@local/core';
+import { useForm } from '@local/features/core';
 
 export type TQuestionFormState = { question: string };
 

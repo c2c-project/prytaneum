@@ -1,6 +1,6 @@
 import { Button, TextField } from '@mui/material';
 
-import { useForm } from '@local/core';
+import { useForm } from '@local/features/core';
 import type { CreateMember } from '@local/graphql-types';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';

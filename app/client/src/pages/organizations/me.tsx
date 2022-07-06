@@ -5,7 +5,7 @@ import { useQueryLoader } from 'react-relay';
 
 import { OrgListQuery } from '@local/__generated__/OrgListQuery.graphql';
 import { ORG_LIST_QUERY, OrgList } from '@local/features/organizations';
-import { useIsClient } from '@local/core';
+import { useIsClient } from '@local/features/core';
 import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 

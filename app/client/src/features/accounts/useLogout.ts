@@ -1,6 +1,6 @@
 import { useMutation, graphql } from 'react-relay';
 import { useLogoutMutation } from '@local/__generated__/useLogoutMutation.graphql';
-import { useIsClient, useEnvironment } from '@local/core';
+import { useIsClient, useEnvironment } from '@local/features/core';
 import { useUser } from '@local/features/accounts';
 
 const USE_LOGOUT_MUTATION = graphql`
