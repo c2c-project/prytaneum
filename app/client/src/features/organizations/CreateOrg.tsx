@@ -1,7 +1,7 @@
 import { useMutation, graphql } from 'react-relay';
 
 import type { CreateOrgMutation } from '@local/__generated__/CreateOrgMutation.graphql';
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 import { OrgForm, OrgFormProps } from './OrgForm';
 
 export const CREATE_ORG_MUTATION = graphql`

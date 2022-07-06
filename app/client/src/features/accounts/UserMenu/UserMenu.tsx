@@ -27,7 +27,7 @@ import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import type { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
-import { useIsClient } from '@local/core';
+import { useIsClient } from '@local/features/core';
 import { useUser } from '../useUser';
 import { LoginForm } from '../LoginForm';
 import { RegisterForm } from '../RegisterForm';

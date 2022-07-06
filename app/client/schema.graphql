@@ -186,6 +186,12 @@ type Event implements Node {
   """All questions relating to this event"""
   questions(after: String, first: Int): EventQuestionConnection
 
+  """
+  Questions queued in this session by the moderator(s)
+  TODO: #QQRedesign delete after code complete
+  """
+  queuedQuestions(after: String, first: Int): EventQuestionConnection
+
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
 
@@ -490,6 +496,7 @@ type Mutation {
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
   updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
+  updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
   updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
 }
@@ -570,6 +577,12 @@ type Query {
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
 }
 
+"""TODO: #QQRedesign dlete after code complete"""
+type QuestionOperation {
+  edge: EventQuestionEdge!
+  operationType: Operation!
+}
+
 input RegistrationForm {
   confirmPassword: String!
   email: String!
@@ -590,6 +603,8 @@ type Subscription {
 
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
+
+  """TODO: #QQRedesign delete after code complete"""
   eventUpdates(eventId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
 
@@ -598,9 +613,19 @@ type Subscription {
   questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
-  """Question subscription for all operations performed on questions"""
+  """
+  Question subscription for all operations performed on questions
+  TODO: #QQRedesign delete after code complete
+  """
+  questionCRUD(eventId: ID!): QuestionOperation!
   questionCreated(eventId: ID!): EventQuestionEdgeContainer!
   questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
+
+  """
+  subscription for whenever questions are added to the queue
+  TODO: #QQRedesign delete once code complete
+  """
+  questionQueued(eventId: ID!): EventQuestion!
   questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
   questionUpdated(eventId: ID!): EventQuestionEdgeContainer!

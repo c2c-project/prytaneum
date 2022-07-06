@@ -126,6 +126,25 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             return Event.isModerator(ctx.viewer.id, eventId, ctx.prisma);
         },
+        // TODO: #QQRedesign delete after code complete
+        async queuedQuestions(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const queryResult = await Event.findQueuedQuestionsByEventId(eventId, ctx.prisma);
+            if (!queryResult) return connectionFromArray([], args);
+            const { questions } = queryResult;
+            const edges = questions
+                .map(toQuestionId)
+                .map((question) => ({ node: question, cursor: question.position.toString() }));
+            return {
+                edges,
+                pageInfo: {
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: edges[0]?.cursor.toString(),
+                    endCursor: edges[questions.length - 1]?.cursor.toString(),
+                },
+            };
+        },
         async liveFeedback(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findLiveFeedbackByEventId(eventId, ctx.prisma);

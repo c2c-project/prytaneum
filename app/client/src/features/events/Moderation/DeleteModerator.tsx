@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 import type { DeleteModeratorMutation } from '@local/__generated__/DeleteModeratorMutation.graphql';
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 

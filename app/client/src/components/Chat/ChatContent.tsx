@@ -4,7 +4,7 @@ import ArrowDownIcon from '@mui/icons-material/ExpandMore';
 import makeStyles from '@mui/styles/makeStyles';
 
 import { Fab } from '@local/components/Fab';
-import useScrollTo from '@local/core/useScrollTo';
+import useScrollTo from '@local/features/core/useScrollTo';
 
 export interface Props {
     children: React.ReactNode | React.ReactNodeArray;

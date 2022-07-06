@@ -5,7 +5,7 @@ import { graphql, useMutation } from 'react-relay';
 
 import type { DequeueQuestionButtonMutation } from '@local/__generated__/DequeueQuestionButtonMutation.graphql';
 import { useEvent } from '@local/features/events';
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 
 export interface QueueButtonProps {
     questionId: string;

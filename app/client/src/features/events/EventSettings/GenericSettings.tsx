@@ -10,7 +10,7 @@ import type { GenericSettingsMutation } from '@local/__generated__/GenericSettin
 
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useSnack } from '@local/core';
+import { useSnack } from '@local/features/core';
 
 const HELPT_TEXT = {
     isQuestionFeedVisible:

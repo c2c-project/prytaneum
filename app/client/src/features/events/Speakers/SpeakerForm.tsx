@@ -7,7 +7,7 @@ import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { useForm } from '@local/core';
+import { useForm } from '@local/features/core';
 import { NullableFields, makeInitialState } from '@local/utils/ts-utils';
 
 export type TSpeakerForm = Omit<CreateType, 'eventId' | 'id'>;

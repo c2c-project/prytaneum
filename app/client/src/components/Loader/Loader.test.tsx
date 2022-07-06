@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import ReactTestUtils from 'react-dom/test-utils';
-import { ThemeProvider } from '@local/core';
+import { ThemeProvider } from '@local/features/core';
 
 import { Loader } from './Loader';
 
