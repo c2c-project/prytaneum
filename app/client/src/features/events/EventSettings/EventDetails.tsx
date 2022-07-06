@@ -60,7 +60,7 @@ export function EventDetails({ fragmentRef, className }: EventDetailsProps) {
 
     return (
         <Grid container className={clsx(classes.root, className)}>
-            <ResponsiveDialog open={isOpen} onClose={close} title='Event Details'>
+            <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
                     <UpdateEvent
                         form={{

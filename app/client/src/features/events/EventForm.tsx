@@ -14,6 +14,7 @@ export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
     className?: string;
+    title?: string;
     form?: TEventForm;
 }
 
@@ -43,7 +44,7 @@ const initialState: TEventForm = {
     topic: '',
 };
 
-export function EventForm({ onCancel, onSubmit, className, form }: EventFormProps) {
+export function EventForm({ onCancel, onSubmit, title, className, form }: EventFormProps) {
     const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(
         form || initialState,
         validationSchema
@@ -51,7 +52,7 @@ export function EventForm({ onCancel, onSubmit, className, form }: EventFormProp
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
-            <FormTitle title='Create Event' />
+            <FormTitle title={title || 'Event Form'} />
             <FormContent>
                 <TextField
                     autoFocus

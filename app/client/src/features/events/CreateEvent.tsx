@@ -46,5 +46,5 @@ export function CreateEvent({ orgId, onSubmit, connections, ...eventFormProps }:
         });
     }
 
-    return <EventForm {...eventFormProps} onSubmit={handleSubmit} />;
+    return <EventForm {...eventFormProps} onSubmit={handleSubmit} title='Create Event' />;
 }
