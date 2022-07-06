@@ -8,7 +8,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useForm } from '@local/features/core';
+import { useForm } from '@local/core';
 
 const initialState = {
     email: '',

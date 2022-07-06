@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import type { EventQuestionEdge, EventQuestionEdgeContainer, QuestionOperation } from '@local/graphql-types';
+import type { EventQuestionEdgeContainer } from '@local/graphql-types';
 import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
@@ -89,17 +89,6 @@ export const resolvers: Resolvers = {
         },
     },
     Subscription: {
-        // TODO: #QQRedesign delete after code complete
-        questionCRUD: {
-            subscribe: withFilter<{ questionCRUD: QuestionOperation }>(
-                (parent, args, ctx) => ctx.pubsub.subscribe('questionCRUD'),
-                (payload, args, ctx) => {
-                    const { id: questionId } = fromGlobalId(payload.questionCRUD.edge.node.id);
-                    const { id: eventId } = fromGlobalId(args.eventId);
-                    return Question.doesEventMatch(eventId, questionId, ctx.prisma);
-                }
-            ),
-        },
         questionCreated: {
             subscribe: withFilter<{ questionCreated: EventQuestionEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCreated'),
