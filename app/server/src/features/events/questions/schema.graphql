@@ -19,7 +19,7 @@ type EventQuestion implements Node {
     The actual content of the question
     """
     question: String
-    position: Int
+    position: BigInt
     isVisible: Boolean
     isAsked: Boolean
     lang: String
