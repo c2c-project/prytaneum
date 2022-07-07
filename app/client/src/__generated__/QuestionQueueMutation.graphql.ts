@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c26191486286d7ae8a784e92d8db435e>>
+ * @generated SignedSource<<4789d5a11f213150ba6ae6a2d5b20260>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type UpdateQuestionPosition = {
   eventId: string;
-  position: number;
+  position: any;
   questionId: string;
 };
 export type QuestionQueueMutation$variables = {
@@ -30,7 +30,7 @@ export type QuestionQueueMutation$data = {
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
-        readonly position: number | null;
+        readonly position: any | null;
       };
     } | null;
   };
@@ -49,7 +49,7 @@ export type QuestionQueueMutation$rawResponse = {
           readonly firstName: string | null;
           readonly id: string;
         } | null;
-        readonly position: number | null;
+        readonly position: any | null;
       };
     } | null;
   };
