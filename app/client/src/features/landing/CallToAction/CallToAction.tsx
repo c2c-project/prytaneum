@@ -49,6 +49,7 @@ export function CallToAction() {
         <>
             <Grid item xs={12} md={6} className={classes.header}>
                 <Image
+                    data-test-id='landing-prytanum-logo'
                     alt='Prytaneum Logo'
                     src='/static/prytaneum_logo2.svg'
                     width={3483}
