@@ -2,13 +2,13 @@
 
 ## Pattern
 
-For our e2e tests we are using a custom version of the [POM](https://playwright.dev/docs/pom) (Page Object Model). The idea is for the class to handle all the locators and expects, abstracting each step of the testing to make the tests themselves clear and easy to follow. We also want to design the tests in a user flow centric way, putting focus on ensuring a user can perform a given action without encountering issues along the way.
+For our e2e tests we are using the [Page Object Model](https://playwright.dev/docs/pom) (POM). The idea is for the class to handle all the locators and expects, abstracting each step of the testing to make the tests themselves clear and easy to follow. We also want to design the tests in a user flow centric way, putting focus on ensuring a user can perform a given action without encountering issues along the way.
 
 ## Landing Page Login Example
 
-We want to test that a user can log in from the landing page and be redirected to the correct protected route. Traditionally in playwright this would be done via direct playwright page interactions
+We want to test that a user can log in from the landing page and be redirected to the correct protected route. Typically without POM in playwright this would be done via direct playwright page interactions
 
-### Traditional Way
+### Without POM
 
 ```ts
 test('I can login from the app bar', async ({ page }) => {
@@ -35,8 +35,12 @@ Rather than putting all these page locators and interactions within the test, we
 
 When constructing we can locate all the components we want to interact with or ensure is visible/hidden for the user.
 As for the actions, they can all be represented as methods.
-NOTE: Even if the component is not currently in the DOM you can still set it in the constructor since the locator is dynamic.
-NOTE: Keep the methods small and in the scope of one specific task as shown in the example below. No one method should be perfomring multiple actions.
+:::note
+Even if the component is not currently in the DOM you can still set it in the constructor since the locator is dynamic.
+:::
+:::note
+Keep the methods small and in the scope of one specific task as shown in the example below. No one method should be performing multiple actions.
+:::
 
 ```ts
 export class PlaywrightLandingPage {
