@@ -8,9 +8,9 @@ test.describe('landing page login button', () => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnLogin();
-        await landing.see(landing.LoginFormModal);
+        await landing.see(landing.loginFormModal);
         await landing.presEscape();
-        await landing.doNotSee(landing.LoginFormModal);
+        await landing.doNotSee(landing.loginFormModal);
     });
 
     test('app bar login form works', async ({ page }) => {

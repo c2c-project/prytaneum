@@ -8,9 +8,9 @@ test.describe('landing page registration buttons', () => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnRegister();
-        await landing.see(landing.RegisterFormModal);
+        await landing.see(landing.registerFormModal);
         await landing.presEscape();
-        await landing.doNotSee(landing.RegisterFormModal);
+        await landing.doNotSee(landing.registerFormModal);
     });
 
     test('app bar register form works', async ({ page }) => {

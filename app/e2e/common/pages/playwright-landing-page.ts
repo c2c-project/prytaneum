@@ -13,11 +13,11 @@ export class PlaywrightLandingPage {
     readonly prytaneumLogoSubheader: Locator;
     readonly landingGraphic: Locator;
     readonly bottomPrytaneumLogo: Locator;
-    readonly DemocracyFundLogo: Locator;
+    readonly democracyFundLogo: Locator;
     readonly UCRTecdLogo: Locator;
     // Modals
-    readonly LoginFormModal: Locator;
-    readonly RegisterFormModal: Locator;
+    readonly loginFormModal: Locator;
+    readonly registerFormModal: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -32,11 +32,11 @@ export class PlaywrightLandingPage {
         this.landingGraphic = page.locator('img[alt="Prytaneum Landing Graphic"]');
         this.appBarPrytaneumLogo = page.locator('[data-test-id="prytaneum-title-logo"]');
         this.bottomPrytaneumLogo = page.locator('img[alt="prytaneum logo"]');
-        this.DemocracyFundLogo = page.locator('img[alt="democracy fund logo"]');
+        this.democracyFundLogo = page.locator('img[alt="democracy fund logo"]');
         this.UCRTecdLogo = page.locator('img[alt="ucr tecd logo"]');
 
-        this.LoginFormModal = page.locator('[data-test-id="login-form"]');
-        this.RegisterFormModal = page.locator('[data-test-id="register-form"]');
+        this.loginFormModal = page.locator('[data-test-id="login-form"]');
+        this.registerFormModal = page.locator('[data-test-id="register-form"]');
     }
     // Dynamic Locators
     async locateSideNavText(text: string) {

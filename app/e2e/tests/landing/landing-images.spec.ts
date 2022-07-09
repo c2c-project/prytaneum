@@ -12,7 +12,7 @@ test('landing page images should be visible', async ({ page }) => {
         landing.see(landing.prytaneumLogoSubheader),
         landing.see(landing.landingGraphic),
         landing.see(landing.bottomPrytaneumLogo),
-        landing.see(landing.DemocracyFundLogo),
+        landing.see(landing.democracyFundLogo),
         landing.see(landing.UCRTecdLogo),
     ]);
 });
