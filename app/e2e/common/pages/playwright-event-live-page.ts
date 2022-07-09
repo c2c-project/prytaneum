@@ -10,7 +10,7 @@ export class PlaywrightEventLivePage {
         this.eventId = eventId;
     }
 
-    async goto(eventId: string) {
-        await this.page.goto(`/events/${eventId}/live`);
+    async goto() {
+        await this.page.goto(`/events/${this.eventId}/live`);
     }
 }
