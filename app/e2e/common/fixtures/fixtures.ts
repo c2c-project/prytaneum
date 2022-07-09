@@ -1,3 +1,4 @@
+// From Playwright documentation: https://playwright.dev/docs/test-auth#testing-multiple-roles-with-pom-fixtures
 import { PlaywrightOrganizationsPage } from '@local/common/pages/playwright-organizations-page';
 import { test as base } from '@playwright/test';
 
