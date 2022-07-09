@@ -3,7 +3,7 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 
 test.use({ storageState: undefined });
 
-test('landing page images should be visible', async ({ page }) => {
+test('I can see landing images', async ({ page }) => {
     const landing = new PlaywrightLandingPage(page);
     await landing.goto();
     await Promise.all([

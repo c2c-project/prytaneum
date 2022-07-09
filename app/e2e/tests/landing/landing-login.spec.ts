@@ -4,7 +4,7 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 test.describe('landing page login button', () => {
     test.use({ storageState: undefined });
 
-    test('app bar login form modal closes with escape', async ({ page }) => {
+    test('I can close the login modal if I accidentally open it', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnLogin();
@@ -13,7 +13,7 @@ test.describe('landing page login button', () => {
         await landing.doNotSee(landing.loginFormModal);
     });
 
-    test('app bar login form works', async ({ page }) => {
+    test('I can login from the app bar', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnLogin();

@@ -4,7 +4,7 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 test.describe('landing page side nav', () => {
     test.use({ storageState: undefined });
 
-    test('displays valid unauthenicated routes', async ({ page }) => {
+    test('I can see routes that do not require authentication when opening the sidenav', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.openSideNav();

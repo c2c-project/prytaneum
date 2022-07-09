@@ -4,7 +4,7 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 test.describe('landing page registration buttons', () => {
     test.use({ storageState: undefined });
 
-    test('app bar register form opens and closes', async ({ page }) => {
+    test('I can close the register modal if I accidently open it', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnRegister();
@@ -13,7 +13,7 @@ test.describe('landing page registration buttons', () => {
         await landing.doNotSee(landing.registerFormModal);
     });
 
-    test('app bar register form works', async ({ page }) => {
+    test('I can register from the app bar', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnRegister();
@@ -26,7 +26,7 @@ test.describe('landing page registration buttons', () => {
         await landing.amLoggedIn();
     });
 
-    test('larger register button redirects to registration page', async ({ page }) => {
+    test('I can be redicrected via the large register button', async ({ page }) => {
         const landing = new PlaywrightLandingPage(page);
         await landing.goto();
         await landing.clickOnLargeRegisterButton();
