@@ -4,17 +4,17 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 async function globalTeardown() {
     // Setup Context
     const browser = await chromium.launch();
-    const context = await browser.newContext({ baseURL: 'http://localhost:8080' });
+    const context = await browser.newContext({ baseURL: process.env.BASE_URL || 'http://localhost:8080' });
     // Open new page
     const page = await context.newPage();
-    const landingPage = new PlaywrightLandingPage(page);
-    await landingPage.goto();
-    // Login
-    await landingPage.appBarLogin({
-        email: `test@example.com`,
-        password: 'Password1!',
-    });
+    const landing = new PlaywrightLandingPage(page);
+    await landing.goto();
+    await landing.clickOnLogin();
+    await landing.fillInEmail('test@example.com');
+    await landing.fillInPassword('Password1!');
+    await landing.submitLoginForm();
     // Delete Account
+    // TODO update once methods exist for these actions
     await page.locator('[data-test-id="appbar-user-menu"]').click();
     await Promise.all([
         page.waitForNavigation(/*{ url: '/settings' }*/),

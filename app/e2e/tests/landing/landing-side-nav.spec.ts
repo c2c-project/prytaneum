@@ -5,22 +5,21 @@ test.describe('landing page side nav', () => {
     test.use({ storageState: undefined });
 
     test('displays valid unauthenicated routes', async ({ page }) => {
-        // Arrange
-        const landingPage = new PlaywrightLandingPage(page);
-        await landingPage.goto();
-        // Assert
-        await landingPage.sideNavDisplaysText('About Us');
-        await landingPage.sideNavDisplaysText('Getting Started Guide');
-        await landingPage.sideNavDisplaysText('Organizer Guide');
-        await landingPage.sideNavDisplaysText('Moderator Guide');
-        await landingPage.sideNavDisplaysText('Participant Guide');
+        const landing = new PlaywrightLandingPage(page);
+        await landing.goto();
+        await landing.openSideNav();
+        await landing.see(await landing.locateSideNavText('About Us'));
+        await landing.see(await landing.locateSideNavText('Getting Started Guide'));
+        await landing.see(await landing.locateSideNavText('Organizer Guide'));
+        await landing.see(await landing.locateSideNavText('Moderator Guide'));
+        await landing.see(await landing.locateSideNavText('Participant Guide'));
     });
 
-    // TODO: uncomment once sidenav hides protected routes
-    // test('hides authenticated routes', async ({ page }) => {
-    //     const landingPage = new PlaywrightLandingPage(page);
-    //     await landingPage.goto();
-    //     await landingPage.sideNavHidesText('Dashboard');
-    //     await landingPage.sideNavHidesText('My Organizations');
+    // TODO: check that authenticated routes are hidden once routes are properly hidden
+    // test('displays valid unauthenicated routes', async ({ page }) => {
+    //     const landing = new PlaywrightLandingPage(page);
+    //     await landing.goto();
+    //     await landing.doNotSee(await landing.locateSideNavText('Dashboard'));
+    //     await landing.doNotSee(await landing.locateSideNavText('My Organizations'));
     // });
 });

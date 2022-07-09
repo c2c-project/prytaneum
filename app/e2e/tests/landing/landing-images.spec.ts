@@ -4,17 +4,15 @@ import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-pa
 test.use({ storageState: undefined });
 
 test('landing page images should be visible', async ({ page }) => {
-    // Arrange
-    const landingPage = new PlaywrightLandingPage(page);
-    await landingPage.goto();
-    // Assert
+    const landing = new PlaywrightLandingPage(page);
+    await landing.goto();
     await Promise.all([
-        expect(landingPage.appBarPrytaneumLogo).toBeVisible(),
-        expect(landingPage.prytanumTextLogo).toBeVisible(),
-        expect(landingPage.prytaneumLogoSubheader).toBeVisible(),
-        expect(landingPage.landingGraphic).toBeVisible(),
-        expect(landingPage.bottomPrytaneumLogo).toBeVisible(),
-        expect(landingPage.DemocracyFundLogo).toBeVisible(),
-        expect(landingPage.UCRTecdLogo).toBeVisible(),
+        landing.see(landing.appBarPrytaneumLogo),
+        landing.see(landing.prytanumTextLogo),
+        landing.see(landing.prytaneumLogoSubheader),
+        landing.see(landing.landingGraphic),
+        landing.see(landing.bottomPrytaneumLogo),
+        landing.see(landing.DemocracyFundLogo),
+        landing.see(landing.UCRTecdLogo),
     ]);
 });

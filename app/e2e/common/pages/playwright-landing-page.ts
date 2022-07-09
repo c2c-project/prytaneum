@@ -1,27 +1,12 @@
 // playwright-landing-page.ts
 import { expect, Locator, Page } from '@playwright/test';
-
-interface RegisterForm {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-}
-
-interface LoginForm {
-    email: string;
-    password: string;
-}
-
 export class PlaywrightLandingPage {
     readonly page: Page;
     // Buttons
     readonly appBarHamburgerButton: Locator;
     readonly appBarRegisterButton: Locator;
     readonly appBarLoginButton: Locator;
-    readonly landingButton: Locator;
-    readonly nextButtons: Locator;
-    readonly backButtons: Locator;
+    readonly largeRegisterButton: Locator;
     // Logos/Graphics
     readonly appBarPrytaneumLogo: Locator;
     readonly prytanumTextLogo: Locator;
@@ -30,6 +15,9 @@ export class PlaywrightLandingPage {
     readonly bottomPrytaneumLogo: Locator;
     readonly DemocracyFundLogo: Locator;
     readonly UCRTecdLogo: Locator;
+    // Modals
+    readonly LoginFormModal: Locator;
+    readonly RegisterFormModal: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -37,9 +25,7 @@ export class PlaywrightLandingPage {
         this.appBarHamburgerButton = page.locator('header button').first();
         this.appBarRegisterButton = page.locator('[data-test-id="appbar-register-button"]');
         this.appBarLoginButton = page.locator('[data-test-id="appbar-login-button"]');
-        this.landingButton = page.locator('[data-test-id=landing-button]');
-        this.nextButtons = page.locator('text=Next');
-        this.backButtons = page.locator('text=Back');
+        this.largeRegisterButton = page.locator('[data-test-id="large-register-button"]');
 
         this.prytanumTextLogo = page.locator('[data-test-id="landing-prytanum-logo"]');
         this.prytaneumLogoSubheader = page.locator('text=A crucial tool for a better democracy.');
@@ -48,111 +34,97 @@ export class PlaywrightLandingPage {
         this.bottomPrytaneumLogo = page.locator('img[alt="prytaneum logo"]');
         this.DemocracyFundLogo = page.locator('img[alt="democracy fund logo"]');
         this.UCRTecdLogo = page.locator('img[alt="ucr tecd logo"]');
+
+        this.LoginFormModal = page.locator('[data-test-id="login-form"]');
+        this.RegisterFormModal = page.locator('[data-test-id="register-form"]');
     }
-    // Methods
+    // Dynamic Locators
+    async locateSideNavText(text: string) {
+        return this.page.locator(`div[role="button"]:has-text("${text}")`);
+    }
+    // Actions
     async goto() {
         await this.page.goto('/');
     }
 
-    async sideNavDisplaysText(text: string) {
-        await this.appBarHamburgerButton.click();
-        await expect(this.page.locator(`div[role="button"]:has-text("${text}")`)).toBeVisible();
-        await this.appBarHamburgerButton.press('Escape');
-    }
-
-    async sideNavHidesText(text: string) {
-        await this.appBarHamburgerButton.click();
-        await expect(this.page.locator(`div[role="button"]:has-text("${text}")`)).toBeHidden();
-        await this.appBarHamburgerButton.press('Escape');
-    }
-
-    async appBarRegisterOpensAndCloses() {
-        await this.appBarRegisterButton.click();
-        await Promise.all([
-            expect(this.page.locator('div[role="dialog"] div:has-text("Register")').nth(2)).toBeVisible(),
-            expect(this.page.locator('text=First Name *First Name * >> input[type="text"]')).toBeVisible(),
-            expect(this.page.locator('text=Last Name *Last Name * >> input[type="text"]')).toBeVisible(),
-            expect(this.page.locator('input[type="email"]')).toBeVisible(),
-            expect(
-                this.page.locator(
-                    'text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]'
-                )
-            ).toBeVisible(),
-            expect(
-                this.page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]')
-            ).toBeVisible(),
-            expect(this.page.locator('form div:has-text("Register")')).toBeVisible(),
-        ]);
-        await this.page.locator('form div:has-text("Register")').press('Escape');
-        await Promise.all([
-            expect(this.page.locator('div[role="dialog"] div:has-text("Register")').nth(2)).toBeHidden(),
-            expect(this.page.locator('text=First Name *First Name * >> input[type="text"]')).toBeHidden(),
-            expect(this.page.locator('text=Last Name *Last Name * >> input[type="text"]')).toBeHidden(),
-            expect(this.page.locator('input[type="email"]')).toBeHidden(),
-            expect(
-                this.page.locator(
-                    'text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]'
-                )
-            ).toBeHidden(),
-            expect(
-                this.page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]')
-            ).toBeHidden(),
-            expect(this.page.locator('form div:has-text("Register")')).toBeHidden(),
-        ]);
-    }
-
-    async appBarRegister({ email, password, firstName, lastName }: RegisterForm) {
-        await this.appBarRegisterButton.click();
-        // Fill out registration form
-        await this.page.locator('text=First Name *First Name * >> input[type="text"]').click();
-        await this.page.locator('text=First Name *First Name * >> input[type="text"]').fill(firstName);
-        await this.page.locator('text=Last Name *Last Name * >> input[type="text"]').click();
-        await this.page.locator('text=Last Name *Last Name * >> input[type="text"]').fill(lastName);
-        await this.page.locator('input[type="email"]').click();
-        await this.page.locator('input[type="email"]').fill(email);
-        await this.page
-            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
-            .click();
-        await this.page
-            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
-            .fill(password);
-        await this.page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').click();
-        await this.page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').fill(password);
-        // Submit registration form
-        await Promise.all([
-            this.page.waitForNavigation(/*{ url: '/organizations/me' }*/),
-            this.page.locator('div[role="dialog"] button:has-text("Register")').click(),
-        ]);
-    }
-
-    async appBarLoginOpensAndCloses() {
+    async clickOnLogin() {
         await this.appBarLoginButton.click();
-
-        await Promise.all([
-            expect(this.page.locator('input[type="email"]')).toBeVisible(),
-            expect(this.page.locator('input[type="password"]')).toBeVisible(),
-            expect(this.page.locator('text=Forgot Password?')).toBeVisible(),
-            expect(this.page.locator('form div:has-text("Login")')).toBeVisible(),
-        ]);
-        await this.page.locator('form div:has-text("Login")').press('Escape');
-        await Promise.all([
-            expect(this.page.locator('input[type="email"]')).toBeHidden(),
-            expect(this.page.locator('input[type="password"]')).toBeHidden(),
-            expect(this.page.locator('text=Forgot Password?')).toBeHidden(),
-            expect(this.page.locator('form div:has-text("Login")')).toBeHidden(),
-        ]);
     }
 
-    async appBarLogin({ email, password }: LoginForm) {
-        await this.appBarLoginButton.click();
-        // Fill out login form
-        await this.page.locator('input[type="email"]').fill(email);
-        await this.page.locator('input[type="password"]').click();
-        await this.page.locator('input[type="password"]').fill(password);
-        // Submit login form
-        await Promise.all([
-            this.page.waitForNavigation(/*{ url: '/organizations/me' }*/),
-            this.page.locator('div[role="dialog"] button:has-text("Login")').click(),
-        ]);
+    async clickOnRegister() {
+        await this.appBarRegisterButton.click();
+    }
+
+    async openSideNav() {
+        await this.appBarHamburgerButton.click();
+    }
+
+    async presEscape() {
+        this.page.keyboard.press('Escape');
+    }
+
+    async fillInFirstName(firstName: string) {
+        const firstNameInput = this.page.locator('text=First Name *First Name * >> input[type="text"]');
+        await expect(firstNameInput).toBeVisible();
+        await firstNameInput.click();
+        await firstNameInput.fill(firstName);
+    }
+
+    async fillInLastName(lastName: string) {
+        const lastNameInput = this.page.locator('text=Last Name *Last Name * >> input[type="text"]');
+        await expect(lastNameInput).toBeVisible();
+        await lastNameInput.click();
+        await lastNameInput.fill(lastName);
+    }
+
+    async fillInEmail(email: string) {
+        const emailInput = this.page.locator('input[type="email"]');
+        await expect(emailInput).toBeVisible();
+        await emailInput.fill(email);
+    }
+
+    async fillInPassword(password: string) {
+        const passwordInput = this.page.locator('input[type="password"]').first();
+        await expect(passwordInput).toBeVisible();
+        await passwordInput.fill(password);
+    }
+
+    async fillInConfirmPassword(password: string) {
+        const confirmPasswordInput = this.page.locator('input[type="password"]').nth(1);
+        await expect(confirmPasswordInput).toBeVisible();
+        await confirmPasswordInput.fill(password);
+    }
+
+    async submitLoginForm() {
+        const loginButton = this.page.locator('div[role="dialog"] button:has-text("Login")');
+        await expect(loginButton).toBeVisible();
+        await Promise.all([this.page.waitForNavigation(), loginButton.click()]);
+    }
+
+    async submitRegisterForm() {
+        const registerButton = this.page.locator('div[role="dialog"] button:has-text("Register")');
+        await expect(registerButton).toBeVisible();
+        await Promise.all([this.page.waitForNavigation(), registerButton.click()]);
+    }
+
+    async clickOnLargeRegisterButton() {
+        await expect(this.largeRegisterButton).toBeVisible();
+        await Promise.all([this.page.waitForNavigation(), this.largeRegisterButton.click()]);
+    }
+    // Route Checks
+    async amLoggedIn() {
+        await expect(this.page).toHaveURL('/organizations/me');
+    }
+
+    async amOnRegistrationPage() {
+        await expect(this.page).toHaveURL('/register');
+    }
+    // Helpers
+    async see(component: Locator) {
+        await expect(component).toBeVisible();
+    }
+
+    async doNotSee(component: Locator) {
+        await expect(component).toBeHidden();
     }
 }

@@ -70,7 +70,7 @@ export function CallToAction() {
                     </Button>
                 ) : (
                     <Button
-                        data-test-id='landing-button'
+                        data-test-id='large-register-button'
                         variant='contained'
                         color='secondary'
                         className={classes.button}
