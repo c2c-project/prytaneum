@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Grid, Typography, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Form } from '@local/components/Form';
-import { useForm, useSnack } from '../core';
+import { useForm, useSnack } from '@local/core';
 import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
 import { PasswordResetRequestFormMutation } from '@local/__generated__/PasswordResetRequestFormMutation.graphql';

@@ -3,7 +3,7 @@ import { Button, Grid, IconButton, InputAdornment, Typography, TextField } from 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
 import { Form } from '@local/components/Form';
-import { useForm, useSnack } from '../core';
+import { useForm, useSnack } from '@local/core';
 import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
 import { PasswordResetFormMutation } from '@local/__generated__/PasswordResetFormMutation.graphql';
