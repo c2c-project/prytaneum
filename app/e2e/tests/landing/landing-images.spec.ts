@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-page';
 
 test.use({ storageState: undefined });
