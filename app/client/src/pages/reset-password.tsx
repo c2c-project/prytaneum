@@ -30,7 +30,7 @@ export default function ForgotPasswordReset() {
             <Paper className={classes.paper}>
                 <PasswordResetForm
                     onSuccess={() => router.push('/login')}
-                    onFailure={() => router.push('/reset-password-request')}
+                    onFailure={() => router.push('/forgot-password')}
                     token={router.query.token}
                     tokenReady={router.isReady}
                 />
