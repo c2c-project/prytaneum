@@ -87,7 +87,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     }
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='register-form' container justifyContent='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
                 <Typography component='h1' variant='h6'>
                     Register

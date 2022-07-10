@@ -1,15 +1,18 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-page';
 
-test.describe('landing page images', () => {
-    test('image at start of landing page should be visible', async ({ page }) => {
-        await page.goto('/');
-        await Promise.all([
-            expect(page.locator('#page div:has-text("A crucial tool for a better democracy.Register")').nth(2)).toBeVisible(),
-            expect(page.locator('text=HomeDashboardAbout UsLLorem IpsumTown Hall MeetingConcerns within the cityEElias').first()).toBeVisible(),
-            expect(page.locator('#page div:has-text("Participant ViewHomeDashboardAbout UsLLorem IpsumTown Hall MeetingConcerns withi")').nth(3)).toBeVisible(),
-            expect(page.locator('img[alt="democracy fund logo"]')).toBeVisible(),
-            expect(page.locator('img[alt="prytaneum logo"]')).toBeVisible(), 
-            expect(page.locator('img[alt="ucr tecd logo"]')).toBeVisible(),
-        ]);
-    });
+test.use({ storageState: undefined });
+
+test('I can see landing images', async ({ page }) => {
+    const landing = new PlaywrightLandingPage(page);
+    await landing.goto();
+    await Promise.all([
+        landing.see(landing.appBarPrytaneumLogo),
+        landing.see(landing.prytanumTextLogo),
+        landing.see(landing.prytaneumLogoSubheader),
+        landing.see(landing.landingGraphic),
+        landing.see(landing.bottomPrytaneumLogo),
+        landing.see(landing.democracyFundLogo),
+        landing.see(landing.UCRTecdLogo),
+    ]);
 });

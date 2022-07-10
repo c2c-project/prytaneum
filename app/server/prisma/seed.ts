@@ -3,23 +3,33 @@ import { PrismaClient } from '../src/__generated__/prisma';
 const prisma = new PrismaClient();
 
 async function main() {
-    const encryptedPassword = await bcrypt.hash('password', 10);
-
-    const testUser = await prisma.user.upsert({
-        where: { email: 'test@prytaneum.io' },
-        update: {},
-        create: {
-            email: 'test@prytaneum.io',
+    // Ensure database tables are empty
+    await prisma.event.deleteMany();
+    await prisma.organization.deleteMany();
+    await prisma.user.deleteMany();
+    // Default User
+    await prisma.user.create({
+        data: {
+            email: 'test@example.com',
             firstName: 'Test',
             lastName: 'User',
             fullName: 'Test User',
-            password: encryptedPassword,
+            password: await bcrypt.hash('Password1!', 10),
             preferredLang: 'EN',
         },
     });
-
-    console.log('DB Seeded.');
-    console.log({ testUser });
+    // Organizer
+    await prisma.user.create({
+        data: {
+            email: 'organizer@example.com',
+            firstName: 'Test',
+            lastName: 'Organizer',
+            fullName: 'Test Organizer',
+            password: await bcrypt.hash('Password1!', 10),
+            preferredLang: 'EN',
+            canMakeOrgs: true,
+        },
+    });
 }
 
 main()
