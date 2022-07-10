@@ -1,6 +1,9 @@
 import { graphql, useMutation } from 'react-relay';
 
-import type { UpdateEventMutation, UpdateEventMutationResponse } from '@local/__generated__/UpdateEventMutation.graphql';
+import type {
+    UpdateEventMutation,
+    UpdateEventMutationResponse,
+} from '@local/__generated__/UpdateEventMutation.graphql';
 import { EventForm, TEventForm, EventFormProps } from './EventForm';
 
 export const UPDATE_EVENT_MUTATION = graphql`
@@ -44,5 +47,5 @@ export function UpdateEvent({ eventId, onSubmit, ...eventFormProps }: UpdateEven
         });
     }
 
-    return <EventForm {...eventFormProps} onSubmit={handleSubmit} />;
+    return <EventForm {...eventFormProps} onSubmit={handleSubmit} title='Update Event Details' />;
 }

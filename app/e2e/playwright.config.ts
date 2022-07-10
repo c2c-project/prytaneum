@@ -10,7 +10,11 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-    testDir: './',
+    /* Used for saving login state and creating orgs/events. */
+    globalSetup: require.resolve('./common/global/test-setup.ts'),
+    /* Used for tearing down the orgs/events created during setup. */
+    globalTeardown: require.resolve('./common/global/test-teardown.ts'),
+    testDir: './tests',
     /* Maximum time one test can run for. */
     timeout: 60 * 1000,
     expect: {

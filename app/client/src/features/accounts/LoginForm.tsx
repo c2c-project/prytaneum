@@ -96,7 +96,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     };
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='login-form' container justifyContent='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />

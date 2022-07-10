@@ -6,7 +6,7 @@
         "pretest": "yarn g:start-test-db && yarn workspace @app/server prisma-db-push && yarn workspace @app/server prisma-db-seed",
         "test": "yarn pretest && playwright test",
         "test:ci": "dotenv -v CI=1 -- yarn run test",
-        "debug": "playwright test --headed",
+        "debug": "yarn pretest && playwright test --headed",
         "allure:generate-report": "allure generate ./allure-results --clean",
         "allure:open-report": "yarn allure:generate-report && allure open ./allure-report"
     },

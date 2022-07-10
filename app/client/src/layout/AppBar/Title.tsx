@@ -30,6 +30,7 @@ export default function Title() {
         <div className={classes.titleContainer}>
             <div className={classes.title}>
                 <img
+                    data-test-id='prytaneum-title-logo'
                     src='/static/prytaneum_logo.svg'
                     alt='Prytaneum Logo'
                     className={classes.logo}
