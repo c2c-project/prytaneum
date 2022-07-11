@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9f1b57a86b68de1751e215311431ccf4>>
+ * @generated SignedSource<<b15be443d5cb0e66244aae576c458336>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,17 +10,17 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type UserMenuQuery$variables = {};
-export type UserMenuQueryVariables = UserMenuQuery$variables;
-export type UserMenuQuery$data = {
+export type UserSideNavQuery$variables = {};
+export type UserSideNavQueryVariables = UserSideNavQuery$variables;
+export type UserSideNavQuery$data = {
   readonly me: {
     readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
   } | null;
 };
-export type UserMenuQueryResponse = UserMenuQuery$data;
-export type UserMenuQuery = {
-  variables: UserMenuQueryVariables;
-  response: UserMenuQuery$data;
+export type UserSideNavQueryResponse = UserSideNavQuery$data;
+export type UserSideNavQuery = {
+  variables: UserSideNavQueryVariables;
+  response: UserSideNavQuery$data;
 };
 
 const node: ConcreteRequest = {
@@ -28,7 +28,7 @@ const node: ConcreteRequest = {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "UserMenuQuery",
+    "name": "UserSideNavQuery",
     "selections": [
       {
         "alias": null,
@@ -54,7 +54,7 @@ const node: ConcreteRequest = {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "UserMenuQuery",
+    "name": "UserSideNavQuery",
     "selections": [
       {
         "alias": null,
@@ -119,15 +119,15 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "b67a97b8b55fbf8d82d3d57a168b3f13",
+    "cacheID": "d3f2a7dd37d12d5a2f21a606ef152f5a",
     "id": null,
     "metadata": {},
-    "name": "UserMenuQuery",
+    "name": "UserSideNavQuery",
     "operationKind": "query",
-    "text": "query UserMenuQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n  isAdmin\n}\n"
+    "text": "query UserSideNavQuery {\n  me {\n    ...useUserFragment\n    id\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n  isAdmin\n}\n"
   }
 };
 
-(node as any).hash = "518037acac8c928833607b93d3e30904";
+(node as any).hash = "ada95e4d12e255eede6562623e353c0c";
 
 export default node;

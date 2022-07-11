@@ -41,7 +41,7 @@ export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
 
 export function SubmitLiveFeedback({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
-    const [user] = useUser();
+    const { user } = useUser();
     const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
     const { displaySnack } = useSnack();
 

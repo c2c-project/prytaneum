@@ -17,6 +17,9 @@ import {
 } from '@local/layout/SideNav/StyledComponents';
 import { useUser } from '@local/features/accounts';
 import { RoleGuard } from '@local/components/RoleGuard';
+import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+
+import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +44,7 @@ enum Nav {
 type Keys = keyof typeof Nav;
 
 export interface UserSideNavProps {
+    queryRef: PreloadedQuery<UserSideNavQuery>;
     /**
      * this is mainly used as an extra affect of click an item
      */
@@ -74,6 +78,16 @@ const findTab = (pathname: string): Keys | undefined => {
 //     return tab;
 // }
 
+// only need to know that the user is logged in for now, later we'll check some roles here or something
+// and populate the side nav based on the data
+export const USER_SIDE_NAV_QUERY = graphql`
+    query UserSideNavQuery {
+        me {
+            ...useUserFragment
+        }
+    }
+`;
+
 export function UserSideNavLoader() {
     const classes = useStyles();
     return (
@@ -85,12 +99,13 @@ export function UserSideNavLoader() {
     );
 }
 
-export function UserSideNav({ onClick }: UserSideNavProps) {
+export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
-    const [user] = useUser();
+    const { user } = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
+    const [isOrganizer, setIsOrganizer] = React.useState(false);
 
     function handleClick(key: Keys) {
         return () => {
@@ -101,20 +116,28 @@ export function UserSideNav({ onClick }: UserSideNavProps) {
     }
 
     React.useEffect(() => {
+        console.log(user);
+        if (user?.isOrganizer) setIsOrganizer(true);
+        else setIsOrganizer(false);
+    }, [user]);
+
+    React.useEffect(() => {
         if (findTab(router.pathname) !== selected) setSelected(findTab(router.pathname));
     }, [router.pathname, selected]);
 
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <RoleGuard authenticated={!!user}>
+                {!!user ? (
                     <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
                         <StyledListItemIcon>
                             <DashboardIcon />
                         </StyledListItemIcon>
                         <ListItemText primary='Dashboard' />
                     </StyledListItem>
-                </RoleGuard>
+                ) : (
+                    <></>
+                )}
                 <StyledListItem onClick={handleClick('About Us')} selected={selected === 'About Us'}>
                     <StyledListItemIcon>
                         <PeopleIcon />
@@ -148,7 +171,7 @@ export function UserSideNav({ onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <RoleGuard organizer={user?.isOrganizer || false}>
+                <RoleGuard organizer={isOrganizer}>
                     <>
                         <StyledSubheader>Organizations</StyledSubheader>
                         <StyledDivider />

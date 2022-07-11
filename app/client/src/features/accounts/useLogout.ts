@@ -15,7 +15,7 @@ interface Props {
 
 // Logs out the user using mutation & setting user context to null
 export default function useLogout({ onComplete }: Props) {
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
     const { resetEnv } = useEnvironment();
     const [runMutation] = useMutation<useLogoutMutation>(USE_LOGOUT_MUTATION);
     const isClient = useIsClient();

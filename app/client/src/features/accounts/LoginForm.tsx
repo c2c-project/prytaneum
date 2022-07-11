@@ -76,7 +76,7 @@ const intialState: TLoginForm = { email: '', password: '' };
 export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [commit, isLoading] = useMutation<LoginFormMutation>(LOGIN_FORM_MUTATION);

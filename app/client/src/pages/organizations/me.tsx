@@ -13,7 +13,7 @@ const Page: NextPage = () => {
     const router = useRouter();
     const [queryRef, loadQuery] = useQueryLoader<OrgListQuery>(ORG_LIST_QUERY);
     const isClient = useIsClient();
-    const [user,,isLoading] = useUser();
+    const { user, isLoading } = useUser();
 
     React.useEffect(() => {
         if (isClient) loadQuery({});

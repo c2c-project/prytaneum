@@ -7,7 +7,7 @@ import { Loader } from '@local/components/Loader';
 export default function Login() {
     const router = useRouter();
 
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
 
     React.useEffect(() => {
         if (!isLoading && !user) router.push('/');

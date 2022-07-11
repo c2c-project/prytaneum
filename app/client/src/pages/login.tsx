@@ -52,7 +52,7 @@ export default function Login() {
     const classes = useStyles();
     const router = useRouter();
 
-    const [user] = useUser();
+    const { user } = useUser();
 
     React.useEffect(() => {
         if (user) router.push('/dashboard');
