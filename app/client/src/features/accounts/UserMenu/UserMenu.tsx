@@ -116,20 +116,18 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const router = useRouter();
     const { logoutUser } = useLogout({
         onComplete: () => {
-            // TODO: find a way to update even live ui without reload
-            if (router.pathname === '/events/[id]/live') router.reload();
+            router.reload();
         },
     });
     const handleNavigation = (path: string) => () => router.push(path);
 
     React.useEffect(() => {
-        if (!data) setIsLoading(true);
-        if (data) setIsLoading(false);
+        setIsLoading(true);
         if (data && !user) {
             setUser(data.me);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+        setIsLoading(false);
+    }, [data, setIsLoading, setUser, user]);
 
     function handleOpen(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const { currentTarget } = e;
@@ -185,6 +183,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                                 onSuccess={() => {
                                     router.reload();
                                     close();
+                                    router.reload();
                                 }}
                             />
                         </DialogContent>

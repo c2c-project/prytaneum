@@ -11,7 +11,6 @@ import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphq
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useUser } from '@local/features/accounts';
 import { useSnack, useForm } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +75,6 @@ const intialState: TLoginForm = { email: '', password: '' };
 export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
-    const { setUser } = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [commit, isLoading] = useMutation<LoginFormMutation>(LOGIN_FORM_MUTATION);
@@ -89,7 +87,6 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
             onCompleted({ login }) {
                 if (login.isError) displaySnack(login.message, { variant: 'error' });
                 else {
-                    setUser(login.body);
                     if (onSuccess) onSuccess();
                 }
             },

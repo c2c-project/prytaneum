@@ -116,7 +116,6 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     }
 
     React.useEffect(() => {
-        console.log(user);
         if (user?.isOrganizer) setIsOrganizer(true);
         else setIsOrganizer(false);
     }, [user]);
