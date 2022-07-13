@@ -31,7 +31,6 @@ export default function Logout() {
             variables: {},
             onCompleted() {
                 resetEnv();
-                setUser(null);
                 router.push('/');
             },
         });

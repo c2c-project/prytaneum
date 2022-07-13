@@ -12,14 +12,6 @@ import { errors } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
 
 /**
- * given a user id, return the associated email
- */
-export async function findEmailByViewerId(userId: string, prisma: PrismaClient) {
-    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
-    return queryResult;
-}
-
-/**
  * find an organization by user id
  */
 export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {

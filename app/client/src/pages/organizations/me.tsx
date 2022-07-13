@@ -23,7 +23,7 @@ const Page: NextPage = () => {
         if (!isLoading && !user) router.push('/');
     }, [user, router, isLoading]);
 
-    if (!queryRef || isLoading || !user) return <Loader />;
+    if (!queryRef || isLoading) return <Loader />;
 
     return (
         <React.Suspense fallback={<Loader />}>

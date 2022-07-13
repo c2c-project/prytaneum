@@ -2,8 +2,6 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@local/__generated__/prisma';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import { errors, toGlobalId } from '@local/features/utils';
-import fs from 'fs';
-
 import * as jwt from '@local/lib/jwt';
 import {
     DeleteAccountForm,
@@ -13,55 +11,23 @@ import {
     UpdatePasswordForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
-    UpdateOrganizerForm,
     OrganizerForm,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
 import { sendEmail } from '@local/lib/email/email';
-import { fromGlobalId } from 'graphql-relay';
 
 const toUserId = toGlobalId('User');
 
 type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
 
-/**
- * given an email, returns if email exists on csv file on google cloud storage bucket
- */
-export async function isOnOrganizerList(email: string) {
-    // const bucketName = 'organizers';
-    // const fileName = 'list-of-organizers.csv';
-    // const storage = new Storage({
-    //     projectId: process.env.GCP_PROJECT_ID,
-    //     keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    // });
-    // const file = storage.bucket(bucketName).file(fileName);
-
-    let found = false;
-    // const options = {
-    //     destination: process.env.ORGANIZER_FILE_PATH,
-    // };
-    // try {
-    //     await file.download(options);
-    // } catch (err) {
-    //     throw new Error(err);
-    // }
-
-    // not working rn for some reason
-    let localFilePath = __dirname + '/listOfOrganizers.csv'; //delete later
-    const allFileContents = fs.readFileSync(/*process.env.ORGANIZER_FILE_PATH*/ localFilePath, 'utf-8');
-    allFileContents.split(/\r?\n?,/).forEach((line: string) => {
-        if (line === email) {
-            found = true;
-        }
-    });
-    return found;
-    // return true;
-}
-
 export async function isOrganizer(userId: string, prisma: PrismaClient) {
     const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
-    if (!queryResult) throw new Error(errors.DNE('user'));
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
     return queryResult.canMakeOrgs;
 }
 
@@ -463,4 +429,42 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
+}
+
+export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO validate product key to elevate account to organizer
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: true },
+    });
+    return updatedUser;
+}
+
+export async function removeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO Check if admin account once admin accounts are implemented
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: false },
+    });
+    return updatedUser;
 }

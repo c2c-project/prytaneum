@@ -4,7 +4,7 @@ import UserSettings from '@local/features/accounts/UserSettings';
 import { useUser } from '@local/features/accounts';
 import { Loader } from '@local/components/Loader';
 
-export default function Login() {
+export default function Settings() {
     const router = useRouter();
 
     const { user, isLoading } = useUser();

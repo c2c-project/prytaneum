@@ -5,8 +5,6 @@ import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '@local/f
 import { isMemberOfOrg } from '@local/features/permissions';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type { OrganizationSubscription } from '@local/graphql-types';
-import { Storage } from '@google-cloud/storage';
-import fs from 'fs';
 
 const toOrgId = toGlobalId('Organization');
 const toUserId = toGlobalId('User');
