@@ -1,8 +1,6 @@
 import { test } from '@playwright/test';
 import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-page';
 
-test.use({ storageState: undefined });
-
 test('I can see landing images', async ({ page }) => {
     const landing = new PlaywrightLandingPage(page);
     await landing.goto();
