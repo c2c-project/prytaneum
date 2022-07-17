@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f3c13ff81c50fa7c08b975829ad3fb3c>>
+ * @generated SignedSource<<570fc7c4b3e3033f1c68acc6fad24c58>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,23 +14,21 @@ export type DeleteSpeaker = {
   id: string;
 };
 export type DeleteSpeakerMutation$variables = {
-  input: DeleteSpeaker;
   connections: ReadonlyArray<string>;
+  input: DeleteSpeaker;
 };
-export type DeleteSpeakerMutationVariables = DeleteSpeakerMutation$variables;
 export type DeleteSpeakerMutation$data = {
   readonly deleteSpeaker: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly id: string;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteSpeakerMutationResponse = DeleteSpeakerMutation$data;
 export type DeleteSpeakerMutation = {
-  variables: DeleteSpeakerMutationVariables;
   response: DeleteSpeakerMutation$data;
+  variables: DeleteSpeakerMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

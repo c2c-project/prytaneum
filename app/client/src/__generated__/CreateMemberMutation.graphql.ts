@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<87c08ecfeac0056f06173934b3488011>>
+ * @generated SignedSource<<5646dee3d573a82f54758678436035d1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,26 +14,24 @@ export type CreateMember = {
   orgId: string;
 };
 export type CreateMemberMutation$variables = {
-  input: CreateMember;
   connections: ReadonlyArray<string>;
+  input: CreateMember;
 };
-export type CreateMemberMutationVariables = CreateMemberMutation$variables;
 export type CreateMemberMutation$data = {
   readonly createMember: {
+    readonly body: {
+      readonly avatar: string | null;
+      readonly firstName: string | null;
+      readonly id: string;
+      readonly lastName: string | null;
+    } | null;
     readonly isError: boolean;
     readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
   };
 };
-export type CreateMemberMutationResponse = CreateMemberMutation$data;
 export type CreateMemberMutation = {
-  variables: CreateMemberMutationVariables;
   response: CreateMemberMutation$data;
+  variables: CreateMemberMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7bb1b60111f0fff5001f1cede0d8b7d5>>
+ * @generated SignedSource<<7aa33df486740b061691cea1c601c638>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,17 +15,16 @@ export type VideoEventSettingsFragment$data = {
   readonly videos: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly url: string;
         readonly lang: string;
+        readonly url: string;
       };
-      readonly cursor: string;
     }> | null;
   } | null;
   readonly " $fragmentType": "VideoEventSettingsFragment";
 };
-export type VideoEventSettingsFragment = VideoEventSettingsFragment$data;
 export type VideoEventSettingsFragment$key = {
   readonly " $data"?: VideoEventSettingsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"VideoEventSettingsFragment">;

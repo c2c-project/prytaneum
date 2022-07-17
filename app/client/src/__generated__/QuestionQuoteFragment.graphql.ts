@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f68ca7ceaabf664a25ec76dd418ca70e>>
+ * @generated SignedSource<<f19429ee6c4744326186ef03e9e922d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type QuestionQuoteFragment$data = {
   readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
   readonly " $fragmentType": "QuestionQuoteFragment";
 };
-export type QuestionQuoteFragment = QuestionQuoteFragment$data;
 export type QuestionQuoteFragment$key = {
   readonly " $data"?: QuestionQuoteFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a144981d7e132d2a3bf782ab24d5c06e>>
+ * @generated SignedSource<<a0eca5b6e6d3740291d75fb41e68a142>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,21 +15,20 @@ export type SpeakerEventSettingsFragment$data = {
   readonly speakers: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
-      readonly node: {
-        readonly id: string;
-        readonly eventId: string | null;
-        readonly name: string | null;
-        readonly title: string | null;
-        readonly description: string | null;
-        readonly pictureUrl: string | null;
-        readonly email: string | null;
-      };
       readonly cursor: string;
+      readonly node: {
+        readonly description: string | null;
+        readonly email: string | null;
+        readonly eventId: string | null;
+        readonly id: string;
+        readonly name: string | null;
+        readonly pictureUrl: string | null;
+        readonly title: string | null;
+      };
     }> | null;
   } | null;
   readonly " $fragmentType": "SpeakerEventSettingsFragment";
 };
-export type SpeakerEventSettingsFragment = SpeakerEventSettingsFragment$data;
 export type SpeakerEventSettingsFragment$key = {
   readonly " $data"?: SpeakerEventSettingsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"SpeakerEventSettingsFragment">;

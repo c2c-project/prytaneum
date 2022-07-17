@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5663195815e39d042486b6d06efdc019>>
+ * @generated SignedSource<<22a53736e7f027464412e270628bb8a6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,25 +17,23 @@ export type CreateFeedbackPrompt = {
 export type SubmitLiveFeedbackPromptMutation$variables = {
   input: CreateFeedbackPrompt;
 };
-export type SubmitLiveFeedbackPromptMutationVariables = SubmitLiveFeedbackPromptMutation$variables;
 export type SubmitLiveFeedbackPromptMutation$data = {
   readonly createFeedbackPrompt: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly createdAt: Date | null;
+        readonly id: string;
         readonly prompt: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type SubmitLiveFeedbackPromptMutationResponse = SubmitLiveFeedbackPromptMutation$data;
 export type SubmitLiveFeedbackPromptMutation = {
-  variables: SubmitLiveFeedbackPromptMutationVariables;
   response: SubmitLiveFeedbackPromptMutation$data;
+  variables: SubmitLiveFeedbackPromptMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

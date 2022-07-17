@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f6a545b55f7bf1afc85715fd5911b99>>
+ * @generated SignedSource<<0aa0156b678c8da779ecec690e2e0429>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,30 +18,28 @@ export type CreateFeedback = {
 export type SubmitLiveFeedbackMutation$variables = {
   input: CreateFeedback;
 };
-export type SubmitLiveFeedbackMutationVariables = SubmitLiveFeedbackMutation$variables;
 export type SubmitLiveFeedbackMutation$data = {
   readonly createFeedback: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly createdAt: Date | null;
-        readonly message: string;
         readonly createdBy: {
-          readonly id: string;
           readonly firstName: string | null;
+          readonly id: string;
           readonly lastName: string | null;
         } | null;
+        readonly id: string;
+        readonly message: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type SubmitLiveFeedbackMutationResponse = SubmitLiveFeedbackMutation$data;
 export type SubmitLiveFeedbackMutation = {
-  variables: SubmitLiveFeedbackMutationVariables;
   response: SubmitLiveFeedbackMutation$data;
+  variables: SubmitLiveFeedbackMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<26d147467364b2bcb2987f97203c8f86>>
+ * @generated SignedSource<<8feddedb6b114df02443465ba4262a36>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,22 +13,20 @@ import { FragmentRefs } from "relay-runtime";
 export type LiveMessagesQuery$variables = {
   eventId: string;
 };
-export type LiveMessagesQueryVariables = LiveMessagesQuery$variables;
 export type LiveMessagesQuery$data = {
   readonly eventBroadcastMessages: ReadonlyArray<{
-    readonly id: string;
     readonly broadcastMessage: string;
-    readonly isVisible: boolean | null;
     readonly createdBy: {
       readonly firstName: string | null;
     } | null;
+    readonly id: string;
+    readonly isVisible: boolean | null;
     readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
   }> | null;
 };
-export type LiveMessagesQueryResponse = LiveMessagesQuery$data;
 export type LiveMessagesQuery = {
-  variables: LiveMessagesQueryVariables;
   response: LiveMessagesQuery$data;
+  variables: LiveMessagesQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

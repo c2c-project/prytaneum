@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f4d4af8533fb8b120fb029236c3abc42>>
+ * @generated SignedSource<<61b1b36a3af8b45e746858ccb535f678>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,10 +12,9 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type QuestionActionsFragment$data = {
   readonly id: string;
-  readonly " $fragmentSpreads": FragmentRefs<"QuoteFragment" | "LikeFragment" | "QueueButtonFragment" | "DeleteButtonFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"DeleteButtonFragment" | "LikeFragment" | "QueueButtonFragment" | "QuoteFragment">;
   readonly " $fragmentType": "QuestionActionsFragment";
 };
-export type QuestionActionsFragment = QuestionActionsFragment$data;
 export type QuestionActionsFragment$key = {
   readonly " $data"?: QuestionActionsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment">;

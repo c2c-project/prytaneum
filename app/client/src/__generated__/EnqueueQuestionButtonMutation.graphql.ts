@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<90d62d687fa9bfe9abb10896fe7307a4>>
+ * @generated SignedSource<<c0eefae76bc23799a562248b37219e55>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,11 +16,8 @@ export type AddQuestionToQueue = {
 export type EnqueueQuestionButtonMutation$variables = {
   input: AddQuestionToQueue;
 };
-export type EnqueueQuestionButtonMutationVariables = EnqueueQuestionButtonMutation$variables;
 export type EnqueueQuestionButtonMutation$data = {
   readonly addQuestionToQueue: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -28,12 +25,13 @@ export type EnqueueQuestionButtonMutation$data = {
         readonly position: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type EnqueueQuestionButtonMutationResponse = EnqueueQuestionButtonMutation$data;
 export type EnqueueQuestionButtonMutation = {
-  variables: EnqueueQuestionButtonMutationVariables;
   response: EnqueueQuestionButtonMutation$data;
+  variables: EnqueueQuestionButtonMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

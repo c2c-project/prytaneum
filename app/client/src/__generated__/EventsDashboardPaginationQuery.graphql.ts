@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4bb35e887b4e6fa4d241e82fb24ceca3>>
+ * @generated SignedSource<<a6e85938a33f0354f45f2d718d392c0d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,16 +20,14 @@ export type EventsDashboardPaginationQuery$variables = {
   first?: number | null;
   id: string;
 };
-export type EventsDashboardPaginationQueryVariables = EventsDashboardPaginationQuery$variables;
 export type EventsDashboardPaginationQuery$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useEventsDashboardFragment">;
   } | null;
 };
-export type EventsDashboardPaginationQueryResponse = EventsDashboardPaginationQuery$data;
 export type EventsDashboardPaginationQuery = {
-  variables: EventsDashboardPaginationQueryVariables;
   response: EventsDashboardPaginationQuery$data;
+  variables: EventsDashboardPaginationQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

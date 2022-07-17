@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0cb49efdd75df6e8ea67a83b819a126f>>
+ * @generated SignedSource<<99eee2134dd8122cda7be75525d171d7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,18 +11,18 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useViewerOnlyQuestionListFragment$data = {
-  readonly id: string;
   readonly currentQuestion: string | null;
+  readonly id: string;
   readonly questions: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly question: string | null;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
+        readonly id: string;
+        readonly question: string | null;
         readonly refQuestion: {
           readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
         } | null;
@@ -32,7 +32,6 @@ export type useViewerOnlyQuestionListFragment$data = {
   } | null;
   readonly " $fragmentType": "useViewerOnlyQuestionListFragment";
 };
-export type useViewerOnlyQuestionListFragment = useViewerOnlyQuestionListFragment$data;
 export type useViewerOnlyQuestionListFragment$key = {
   readonly " $data"?: useViewerOnlyQuestionListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useViewerOnlyQuestionListFragment">;

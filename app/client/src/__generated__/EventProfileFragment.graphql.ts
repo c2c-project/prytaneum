@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c49995c9e5236a463da3b997b3ddf373>>
+ * @generated SignedSource<<be1e3c1c535c94d0badb9d335866160c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,22 +11,21 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EventProfileFragment$data = {
-  readonly title: string | null;
-  readonly topic: string | null;
   readonly description: string | null;
   readonly speakers: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly id: string;
-        readonly pictureUrl: string | null;
         readonly name: string | null;
+        readonly pictureUrl: string | null;
         readonly title: string | null;
       };
     }> | null;
   } | null;
+  readonly title: string | null;
+  readonly topic: string | null;
   readonly " $fragmentType": "EventProfileFragment";
 };
-export type EventProfileFragment = EventProfileFragment$data;
 export type EventProfileFragment$key = {
   readonly " $data"?: EventProfileFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"EventProfileFragment">;

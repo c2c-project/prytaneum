@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d3376371788e962504793735e9c6b33>>
+ * @generated SignedSource<<9198b84caa6041a266ccf7d13d66311b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,17 +12,15 @@ import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useLiveFeedbackPromptResultsSharedSubscription$variables = {
   eventId: string;
 };
-export type useLiveFeedbackPromptResultsSharedSubscriptionVariables = useLiveFeedbackPromptResultsSharedSubscription$variables;
 export type useLiveFeedbackPromptResultsSharedSubscription$data = {
   readonly feedbackPromptResultsShared: {
     readonly id: string;
     readonly prompt: string;
   };
 };
-export type useLiveFeedbackPromptResultsSharedSubscriptionResponse = useLiveFeedbackPromptResultsSharedSubscription$data;
 export type useLiveFeedbackPromptResultsSharedSubscription = {
-  variables: useLiveFeedbackPromptResultsSharedSubscriptionVariables;
   response: useLiveFeedbackPromptResultsSharedSubscription$data;
+  variables: useLiveFeedbackPromptResultsSharedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5453cade0edfcb35350ab93b4668b4fc>>
+ * @generated SignedSource<<6bae3440cbdd8405a5990636dcac11ca>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,14 +10,12 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type logoutMutation$variables = {};
-export type logoutMutationVariables = logoutMutation$variables;
 export type logoutMutation$data = {
   readonly logout: Date;
 };
-export type logoutMutationResponse = logoutMutation$data;
 export type logoutMutation = {
-  variables: logoutMutationVariables;
   response: logoutMutation$data;
+  variables: logoutMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

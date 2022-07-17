@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3ee74aefeeaf6e27a09e77c08f0d6319>>
+ * @generated SignedSource<<ce4fa26067372bf1c751b8788f396f95>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,20 +10,18 @@
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type PostEventFeedbackMutation$variables = {
-  feedback: string;
   eventId: string;
+  feedback: string;
 };
-export type PostEventFeedbackMutationVariables = PostEventFeedbackMutation$variables;
 export type PostEventFeedbackMutation$data = {
   readonly submitPostEventFeedback: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type PostEventFeedbackMutationResponse = PostEventFeedbackMutation$data;
 export type PostEventFeedbackMutation = {
-  variables: PostEventFeedbackMutationVariables;
   response: PostEventFeedbackMutation$data;
+  variables: PostEventFeedbackMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

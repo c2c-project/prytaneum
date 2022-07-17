@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<74228b5c1c03215a66cf4c28f4a8c9bd>>
+ * @generated SignedSource<<330b47716a1759011140d3881e92e584>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,23 +14,21 @@ export type DeleteVideo = {
   id: string;
 };
 export type DeleteVideoMutation$variables = {
-  input: DeleteVideo;
   connections: ReadonlyArray<string>;
+  input: DeleteVideo;
 };
-export type DeleteVideoMutationVariables = DeleteVideoMutation$variables;
 export type DeleteVideoMutation$data = {
   readonly deleteVideo: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly id: string;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteVideoMutationResponse = DeleteVideoMutation$data;
 export type DeleteVideoMutation = {
-  variables: DeleteVideoMutationVariables;
   response: DeleteVideoMutation$data;
+  variables: DeleteVideoMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

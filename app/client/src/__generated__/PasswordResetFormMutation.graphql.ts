@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f7164e2c0a2f3b30c2429795d87f2ab>>
+ * @generated SignedSource<<7e6359ace9aa4c1af07470db683b72e4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,17 +17,15 @@ export type ResetPasswordForm = {
 export type PasswordResetFormMutation$variables = {
   input: ResetPasswordForm;
 };
-export type PasswordResetFormMutationVariables = PasswordResetFormMutation$variables;
 export type PasswordResetFormMutation$data = {
   readonly resetPassword: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type PasswordResetFormMutationResponse = PasswordResetFormMutation$data;
 export type PasswordResetFormMutation = {
-  variables: PasswordResetFormMutationVariables;
   response: PasswordResetFormMutation$data;
+  variables: PasswordResetFormMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

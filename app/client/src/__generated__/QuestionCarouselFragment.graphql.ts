@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2ae91ef4f99de5a5f9b15652c0ffc67a>>
+ * @generated SignedSource<<e52185f2f187594e6f287584b44258d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,8 +11,8 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type QuestionCarouselFragment$data = {
-  readonly id: string;
   readonly currentQuestion: string | null;
+  readonly id: string;
   readonly questionQueue: {
     readonly questionRecord: {
       readonly __id: string;
@@ -30,7 +30,6 @@ export type QuestionCarouselFragment$data = {
   } | null;
   readonly " $fragmentType": "QuestionCarouselFragment";
 };
-export type QuestionCarouselFragment = QuestionCarouselFragment$data;
 export type QuestionCarouselFragment$key = {
   readonly " $data"?: QuestionCarouselFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment">;

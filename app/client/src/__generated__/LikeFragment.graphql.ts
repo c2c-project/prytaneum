@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f06847359d8404c2ba70ad2b136cb3ad>>
+ * @generated SignedSource<<56ebe0ef0ef6a5219d96715fd9cdf542>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type LikeFragment$data = {
   readonly isLikedByViewer: boolean | null;
   readonly " $fragmentType": "LikeFragment";
 };
-export type LikeFragment = LikeFragment$data;
 export type LikeFragment$key = {
   readonly " $data"?: LikeFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"LikeFragment">;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<478815fae46ce2160f151bf15d624230>>
+ * @generated SignedSource<<eb09b5b6fddb873aff0252585455b759>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,17 +16,15 @@ export type CreateBroadcastMessage = {
 export type BroadcastMessageInputMutation$variables = {
   input: CreateBroadcastMessage;
 };
-export type BroadcastMessageInputMutationVariables = BroadcastMessageInputMutation$variables;
 export type BroadcastMessageInputMutation$data = {
   readonly createBroadcastMessage: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type BroadcastMessageInputMutationResponse = BroadcastMessageInputMutation$data;
 export type BroadcastMessageInputMutation = {
-  variables: BroadcastMessageInputMutationVariables;
   response: BroadcastMessageInputMutation$data;
+  variables: BroadcastMessageInputMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

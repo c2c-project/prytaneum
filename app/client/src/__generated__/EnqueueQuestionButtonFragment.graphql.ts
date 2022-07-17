@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<552770f62994ab6585da1eaa2c98e7f8>>
+ * @generated SignedSource<<c270da208bda45da4cedb806ea6ebc3f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type EnqueueQuestionButtonFragment$data = {
   readonly position: string;
   readonly " $fragmentType": "EnqueueQuestionButtonFragment";
 };
-export type EnqueueQuestionButtonFragment = EnqueueQuestionButtonFragment$data;
 export type EnqueueQuestionButtonFragment$key = {
   readonly " $data"?: EnqueueQuestionButtonFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"EnqueueQuestionButtonFragment">;

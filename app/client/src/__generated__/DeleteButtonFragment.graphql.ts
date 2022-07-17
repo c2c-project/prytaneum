@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c62e3718af1bc8afc6c6c3aeb938bcd2>>
+ * @generated SignedSource<<0e3e12f23cbf54fd19b9074cb6e03ffa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type DeleteButtonFragment$data = {
   readonly position: string;
   readonly " $fragmentType": "DeleteButtonFragment";
 };
-export type DeleteButtonFragment = DeleteButtonFragment$data;
 export type DeleteButtonFragment$key = {
   readonly " $data"?: DeleteButtonFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"DeleteButtonFragment">;

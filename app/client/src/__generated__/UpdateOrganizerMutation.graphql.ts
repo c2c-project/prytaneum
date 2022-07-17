@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fb3157e8b895642133e3aaea52615f50>>
+ * @generated SignedSource<<bcd7dea4fa72a4d406147932d0b5d611>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,21 +16,19 @@ export type UpdateOrganizerForm = {
 export type UpdateOrganizerMutation$variables = {
   input: UpdateOrganizerForm;
 };
-export type UpdateOrganizerMutationVariables = UpdateOrganizerMutation$variables;
 export type UpdateOrganizerMutation$data = {
   readonly updateOrganizer: {
+    readonly body: {
+      readonly email: string | null;
+      readonly id: string;
+    } | null;
     readonly isError: boolean;
     readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly email: string | null;
-    } | null;
   };
 };
-export type UpdateOrganizerMutationResponse = UpdateOrganizerMutation$data;
 export type UpdateOrganizerMutation = {
-  variables: UpdateOrganizerMutationVariables;
   response: UpdateOrganizerMutation$data;
+  variables: UpdateOrganizerMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

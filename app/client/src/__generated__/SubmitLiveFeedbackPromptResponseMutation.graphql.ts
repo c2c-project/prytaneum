@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7575d2ab18ebbc03ac6e8a0f9b9d3b86>>
+ * @generated SignedSource<<86527a339910ba2b578c8ea0dec1c27d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,23 +18,21 @@ export type CreateFeedbackPromptResponse = {
 export type SubmitLiveFeedbackPromptResponseMutation$variables = {
   input: CreateFeedbackPromptResponse;
 };
-export type SubmitLiveFeedbackPromptResponseMutationVariables = SubmitLiveFeedbackPromptResponseMutation$variables;
 export type SubmitLiveFeedbackPromptResponseMutation$data = {
   readonly createFeedbackPromptResponse: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type SubmitLiveFeedbackPromptResponseMutationResponse = SubmitLiveFeedbackPromptResponseMutation$data;
 export type SubmitLiveFeedbackPromptResponseMutation = {
-  variables: SubmitLiveFeedbackPromptResponseMutationVariables;
   response: SubmitLiveFeedbackPromptResponseMutation$data;
+  variables: SubmitLiveFeedbackPromptResponseMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

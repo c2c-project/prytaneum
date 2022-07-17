@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7bf4e4482309959b1f16b3ace011bffc>>
+ * @generated SignedSource<<40d9fe0fa8605afbfc1ec4c60f810060>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,16 +12,14 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type ModeratorActionsStartEventMutation$variables = {
   eventId: string;
 };
-export type ModeratorActionsStartEventMutationVariables = ModeratorActionsStartEventMutation$variables;
 export type ModeratorActionsStartEventMutation$data = {
   readonly startEvent: {
     readonly message: string;
   };
 };
-export type ModeratorActionsStartEventMutationResponse = ModeratorActionsStartEventMutation$data;
 export type ModeratorActionsStartEventMutation = {
-  variables: ModeratorActionsStartEventMutationVariables;
   response: ModeratorActionsStartEventMutation$data;
+  variables: ModeratorActionsStartEventMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

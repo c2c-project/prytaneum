@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6c559c63993b81ebf77c9a426876954c>>
+ * @generated SignedSource<<6185e1a9580f34c3981483fd7818ca2b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,16 +13,14 @@ import { FragmentRefs } from "relay-runtime";
 export type EventVideoRefetchQuery$variables = {
   id: string;
 };
-export type EventVideoRefetchQueryVariables = EventVideoRefetchQuery$variables;
 export type EventVideoRefetchQuery$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"EventVideoFragment">;
   } | null;
 };
-export type EventVideoRefetchQueryResponse = EventVideoRefetchQuery$data;
 export type EventVideoRefetchQuery = {
-  variables: EventVideoRefetchQueryVariables;
   response: EventVideoRefetchQuery$data;
+  variables: EventVideoRefetchQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

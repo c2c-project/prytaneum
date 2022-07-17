@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6f127d459154dc64d7fadd5b567a7bba>>
+ * @generated SignedSource<<ede0be35c7d580518c7c93330ec7a7f3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,16 +11,14 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type UsersDashboardQuery$variables = {};
-export type UsersDashboardQueryVariables = UsersDashboardQuery$variables;
 export type UsersDashboardQuery$data = {
   readonly me: {
     readonly " $fragmentSpreads": FragmentRefs<"useUsersDashboardFragment">;
   } | null;
 };
-export type UsersDashboardQueryResponse = UsersDashboardQuery$data;
 export type UsersDashboardQuery = {
-  variables: UsersDashboardQueryVariables;
   response: UsersDashboardQuery$data;
+  variables: UsersDashboardQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

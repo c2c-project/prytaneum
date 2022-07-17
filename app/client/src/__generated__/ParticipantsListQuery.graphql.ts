@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<97bd1d50dabc855e3e324321dce9ab78>>
+ * @generated SignedSource<<e36c881c215d0de7383d3de1cbffd044>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,22 +12,20 @@ import { ConcreteRequest, Query } from 'relay-runtime';
 export type ParticipantsListQuery$variables = {
   eventId: string;
 };
-export type ParticipantsListQueryVariables = ParticipantsListQuery$variables;
 export type ParticipantsListQuery$data = {
   readonly eventParticipants: ReadonlyArray<{
+    readonly isMuted: boolean;
     readonly user: {
-      readonly id: string;
       readonly firstName: string | null;
+      readonly id: string;
       readonly lastName: string | null;
       readonly moderatorOf: boolean | null;
     };
-    readonly isMuted: boolean;
   } | null>;
 };
-export type ParticipantsListQueryResponse = ParticipantsListQuery$data;
 export type ParticipantsListQuery = {
-  variables: ParticipantsListQueryVariables;
   response: ParticipantsListQuery$data;
+  variables: ParticipantsListQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

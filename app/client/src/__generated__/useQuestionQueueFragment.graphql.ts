@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b3fa6a0880dc1d11facc0cd112246708>>
+ * @generated SignedSource<<d39629cb1597b4d75597dc92b4cccca2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,49 +11,48 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionQueueFragment$data = {
-  readonly id: string;
   readonly currentQuestion: string | null;
+  readonly id: string;
   readonly questionQueue: {
-    readonly questionRecord: {
-      readonly __id: string;
-      readonly edges: ReadonlyArray<{
-        readonly cursor: string;
-        readonly node: {
-          readonly id: string;
-          readonly question: string | null;
-          readonly createdBy: {
-            readonly firstName: string | null;
-          } | null;
-          readonly position: string;
-          readonly refQuestion: {
-            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
-          } | null;
-          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
-        };
-      }> | null;
-    } | null;
     readonly enqueuedQuestions: {
       readonly __id: string;
       readonly edges: ReadonlyArray<{
         readonly cursor: string;
         readonly node: {
-          readonly id: string;
-          readonly question: string | null;
           readonly createdBy: {
             readonly firstName: string | null;
           } | null;
+          readonly id: string;
           readonly position: string;
+          readonly question: string | null;
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
           } | null;
-          readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionActionsFragment" | "QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
+        };
+      }> | null;
+    } | null;
+    readonly questionRecord: {
+      readonly __id: string;
+      readonly edges: ReadonlyArray<{
+        readonly cursor: string;
+        readonly node: {
+          readonly createdBy: {
+            readonly firstName: string | null;
+          } | null;
+          readonly id: string;
+          readonly position: string;
+          readonly question: string | null;
+          readonly refQuestion: {
+            readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
+          } | null;
+          readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
         };
       }> | null;
     } | null;
   } | null;
   readonly " $fragmentType": "useQuestionQueueFragment";
 };
-export type useQuestionQueueFragment = useQuestionQueueFragment$data;
 export type useQuestionQueueFragment$key = {
   readonly " $data"?: useQuestionQueueFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useQuestionQueueFragment">;

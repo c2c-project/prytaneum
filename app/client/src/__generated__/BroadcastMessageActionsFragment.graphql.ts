@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b64f33637bf0ae184fa3be3de7efb364>>
+ * @generated SignedSource<<9d71561b8f7a27314c5c3ff37a266184>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type BroadcastMessageActionsFragment$data = {
   readonly " $fragmentSpreads": FragmentRefs<"DeleteBroadcastMessageButtonFragment" | "EditBroadcastMessageButtonFragment">;
   readonly " $fragmentType": "BroadcastMessageActionsFragment";
 };
-export type BroadcastMessageActionsFragment = BroadcastMessageActionsFragment$data;
 export type BroadcastMessageActionsFragment$key = {
   readonly " $data"?: BroadcastMessageActionsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageActionsFragment">;

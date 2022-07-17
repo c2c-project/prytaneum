@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d2f296ed42f6181e6385b7db62663bc>>
+ * @generated SignedSource<<b28f4939a1321ac7423d9ef2860464a3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,17 +13,15 @@ import { FragmentRefs } from "relay-runtime";
 export type profileQuery$variables = {
   id: string;
 };
-export type profileQueryVariables = profileQuery$variables;
 export type profileQuery$data = {
   readonly node: {
     readonly id: string;
     readonly " $fragmentSpreads": FragmentRefs<"EventProfileFragment">;
   } | null;
 };
-export type profileQueryResponse = profileQuery$data;
 export type profileQuery = {
-  variables: profileQueryVariables;
   response: profileQuery$data;
+  variables: profileQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

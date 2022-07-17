@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1532f5b79c488e530243ef4020106923>>
+ * @generated SignedSource<<6ca2f75cb7c67bf13dcacf1353773409>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,17 +11,16 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useEventDetailsFragment$data = {
-  readonly id: string;
-  readonly title: string | null;
-  readonly topic: string | null;
   readonly description: string | null;
-  readonly startDateTime: Date | null;
   readonly endDateTime: Date | null;
+  readonly id: string;
   readonly isActive: boolean | null;
   readonly isViewerModerator: boolean | null;
+  readonly startDateTime: Date | null;
+  readonly title: string | null;
+  readonly topic: string | null;
   readonly " $fragmentType": "useEventDetailsFragment";
 };
-export type useEventDetailsFragment = useEventDetailsFragment$data;
 export type useEventDetailsFragment$key = {
   readonly " $data"?: useEventDetailsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useEventDetailsFragment">;

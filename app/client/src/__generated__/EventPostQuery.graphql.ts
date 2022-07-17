@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<40f06db56783b929afe78c20abefefc9>>
+ * @generated SignedSource<<de64130464583ee783513d0bb93664b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,20 +13,18 @@ import { FragmentRefs } from "relay-runtime";
 export type EventPostQuery$variables = {
   eventId: string;
 };
-export type EventPostQueryVariables = EventPostQuery$variables;
 export type EventPostQuery$data = {
   readonly node: {
     readonly id: string;
+    readonly isActive?: boolean | null;
     readonly isViewerModerator?: boolean | null;
     readonly startDateTime?: Date | null;
-    readonly isActive?: boolean | null;
-    readonly " $fragmentSpreads": FragmentRefs<"useQuestionListFragment" | "useLiveFeedbackListFragment" | "useEventDetailsFragment" | "SpeakerListFragment" | "EventVideoFragment">;
+    readonly " $fragmentSpreads": FragmentRefs<"EventVideoFragment" | "SpeakerListFragment" | "useEventDetailsFragment" | "useLiveFeedbackListFragment" | "useQuestionListFragment">;
   } | null;
 };
-export type EventPostQueryResponse = EventPostQuery$data;
 export type EventPostQuery = {
-  variables: EventPostQueryVariables;
   response: EventPostQuery$data;
+  variables: EventPostQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

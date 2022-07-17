@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4b0ac39bb94981dc366da38c785f9786>>
+ * @generated SignedSource<<443a7c9b590e5bc871fa5c65a5a958bc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,26 +21,24 @@ export type UpdateSpeaker = {
 export type UpdateSpeakerMutation$variables = {
   input: UpdateSpeaker;
 };
-export type UpdateSpeakerMutationVariables = UpdateSpeakerMutation$variables;
 export type UpdateSpeakerMutation$data = {
   readonly updateSpeaker: {
+    readonly body: {
+      readonly description: string | null;
+      readonly email: string | null;
+      readonly eventId: string | null;
+      readonly id: string;
+      readonly name: string | null;
+      readonly pictureUrl: string | null;
+      readonly title: string | null;
+    } | null;
     readonly isError: boolean;
     readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly eventId: string | null;
-      readonly name: string | null;
-      readonly description: string | null;
-      readonly title: string | null;
-      readonly pictureUrl: string | null;
-      readonly email: string | null;
-    } | null;
   };
 };
-export type UpdateSpeakerMutationResponse = UpdateSpeakerMutation$data;
 export type UpdateSpeakerMutation = {
-  variables: UpdateSpeakerMutationVariables;
   response: UpdateSpeakerMutation$data;
+  variables: UpdateSpeakerMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

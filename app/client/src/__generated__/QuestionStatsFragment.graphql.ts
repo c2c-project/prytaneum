@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<650d72de5d6c8f5f47f25b516d376ec4>>
+ * @generated SignedSource<<263ff3dce6ccaf4ad8e001a62cb8b013>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type QuestionStatsFragment$data = {
   readonly likedByCount: number | null;
   readonly " $fragmentType": "QuestionStatsFragment";
 };
-export type QuestionStatsFragment = QuestionStatsFragment$data;
 export type QuestionStatsFragment$key = {
   readonly " $data"?: QuestionStatsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"QuestionStatsFragment">;

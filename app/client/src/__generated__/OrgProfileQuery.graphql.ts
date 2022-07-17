@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<755c76a39f3ee0a0fd22cb97cb4d3fa9>>
+ * @generated SignedSource<<9c9c9611a6b565c947fc931fedacf14d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,11 +11,10 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type OrgProfileQuery$variables = {
-  id: string;
   count?: number | null;
   cursor?: string | null;
+  id: string;
 };
-export type OrgProfileQueryVariables = OrgProfileQuery$variables;
 export type OrgProfileQuery$data = {
   readonly node: {
     readonly id: string;
@@ -23,10 +22,9 @@ export type OrgProfileQuery$data = {
     readonly " $fragmentSpreads": FragmentRefs<"OrgEventListFragment" | "OrgMemberListFragment">;
   } | null;
 };
-export type OrgProfileQueryResponse = OrgProfileQuery$data;
 export type OrgProfileQuery = {
-  variables: OrgProfileQueryVariables;
   response: OrgProfileQuery$data;
+  variables: OrgProfileQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4b2cffb970bfb50ef69c64bd2f6bdcfb>>
+ * @generated SignedSource<<5218c5113a540a2b53fe670876eb785e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,17 +12,15 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type PreviousQuestionButtonMutation$variables = {
   eventId: string;
 };
-export type PreviousQuestionButtonMutationVariables = PreviousQuestionButtonMutation$variables;
 export type PreviousQuestionButtonMutation$data = {
   readonly prevQuestion: {
-    readonly id: string;
     readonly currentQuestion: string | null;
+    readonly id: string;
   };
 };
-export type PreviousQuestionButtonMutationResponse = PreviousQuestionButtonMutation$data;
 export type PreviousQuestionButtonMutation = {
-  variables: PreviousQuestionButtonMutationVariables;
   response: PreviousQuestionButtonMutation$data;
+  variables: PreviousQuestionButtonMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

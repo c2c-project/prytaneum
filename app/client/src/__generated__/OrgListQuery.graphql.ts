@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8c1d6300d03a7c013fbaee40c4d6a55b>>
+ * @generated SignedSource<<1a13eacc19aad3b41e07df667888edeb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,10 +10,9 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type OrgListQuery$variables = {
-  first?: number | null;
   after?: string | null;
+  first?: number | null;
 };
-export type OrgListQueryVariables = OrgListQuery$variables;
 export type OrgListQuery$data = {
   readonly me: {
     readonly organizations: {
@@ -21,18 +20,17 @@ export type OrgListQuery$data = {
       readonly edges: ReadonlyArray<{
         readonly cursor: string;
         readonly node: {
+          readonly createdAt: Date | null;
           readonly id: string;
           readonly name: string;
-          readonly createdAt: Date | null;
         };
       }> | null;
     } | null;
   } | null;
 };
-export type OrgListQueryResponse = OrgListQuery$data;
 export type OrgListQuery = {
-  variables: OrgListQueryVariables;
   response: OrgListQuery$data;
+  variables: OrgListQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

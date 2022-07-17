@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<57bececb72baa305990326ddeabda930>>
+ * @generated SignedSource<<567f496443a93da9f754dae6cbe9b273>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,6 @@ export type EditBroadcastMessageButtonFragment$data = {
   readonly id: string;
   readonly " $fragmentType": "EditBroadcastMessageButtonFragment";
 };
-export type EditBroadcastMessageButtonFragment = EditBroadcastMessageButtonFragment$data;
 export type EditBroadcastMessageButtonFragment$key = {
   readonly " $data"?: EditBroadcastMessageButtonFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"EditBroadcastMessageButtonFragment">;

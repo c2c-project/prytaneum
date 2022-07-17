@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c7b009baac7bffa59632505af9ef5137>>
+ * @generated SignedSource<<83d5f2971f33ddcbb4fbe5b8a38b18ea>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,6 @@ export type useViewerOnlyQuestionUpdatedSubscription$variables = {
   eventId: string;
   viewerOnly?: boolean | null;
 };
-export type useViewerOnlyQuestionUpdatedSubscriptionVariables = useViewerOnlyQuestionUpdatedSubscription$variables;
 export type useViewerOnlyQuestionUpdatedSubscription$data = {
   readonly questionUpdated: {
     readonly edge: {
@@ -27,10 +26,9 @@ export type useViewerOnlyQuestionUpdatedSubscription$data = {
     };
   };
 };
-export type useViewerOnlyQuestionUpdatedSubscriptionResponse = useViewerOnlyQuestionUpdatedSubscription$data;
 export type useViewerOnlyQuestionUpdatedSubscription = {
-  variables: useViewerOnlyQuestionUpdatedSubscriptionVariables;
   response: useViewerOnlyQuestionUpdatedSubscription$data;
+  variables: useViewerOnlyQuestionUpdatedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

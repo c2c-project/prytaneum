@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fcf7a21e27d2fab52e24720f90dce3be>>
+ * @generated SignedSource<<2c0373d90f2f99383a99f4729eea5fe6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,17 +12,15 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type usePingEventMutation$variables = {
   eventId: string;
 };
-export type usePingEventMutationVariables = usePingEventMutation$variables;
 export type usePingEventMutation$data = {
   readonly participantPingEvent: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type usePingEventMutationResponse = usePingEventMutation$data;
 export type usePingEventMutation = {
-  variables: usePingEventMutationVariables;
   response: usePingEventMutation$data;
+  variables: usePingEventMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

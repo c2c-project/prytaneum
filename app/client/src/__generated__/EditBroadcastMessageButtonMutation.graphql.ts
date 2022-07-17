@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d893038a303fbec438f9de51e9ac4a4>>
+ * @generated SignedSource<<79b6314f1255f25308f43457d14538b1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,23 +16,21 @@ export type EditBroadcastMessage = {
 export type EditBroadcastMessageButtonMutation$variables = {
   input: EditBroadcastMessage;
 };
-export type EditBroadcastMessageButtonMutationVariables = EditBroadcastMessageButtonMutation$variables;
 export type EditBroadcastMessageButtonMutation$data = {
   readonly editBroadcastMessage: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type EditBroadcastMessageButtonMutationResponse = EditBroadcastMessageButtonMutation$data;
 export type EditBroadcastMessageButtonMutation = {
-  variables: EditBroadcastMessageButtonMutationVariables;
   response: EditBroadcastMessageButtonMutation$data;
+  variables: EditBroadcastMessageButtonMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

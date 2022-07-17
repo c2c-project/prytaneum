@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<827b11384caba0824a0f4c74df599ea7>>
+ * @generated SignedSource<<af0c708986df94c81a3c890996ccf3b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,34 +14,32 @@ export type Operation = "CREATE" | "DELETE" | "UPDATE" | "%future added value";
 export type useLiveFeedbackListSubscription$variables = {
   eventId: string;
 };
-export type useLiveFeedbackListSubscriptionVariables = useLiveFeedbackListSubscription$variables;
 export type useLiveFeedbackListSubscription$data = {
   readonly feedbackCRUD: {
-    readonly operationType: Operation;
     readonly edge: {
       readonly cursor: string;
       readonly node: {
+        readonly createdBy: {
+          readonly firstName: string | null;
+          readonly id: string;
+        } | null;
         readonly id: string;
         readonly message: string;
-        readonly createdBy: {
-          readonly id: string;
-          readonly firstName: string | null;
-        } | null;
         readonly refFeedback: {
           readonly createdBy: {
             readonly id: string;
           } | null;
           readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
         } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment" | "LiveFeedbackReplyFragment">;
       };
     };
+    readonly operationType: Operation;
   };
 };
-export type useLiveFeedbackListSubscriptionResponse = useLiveFeedbackListSubscription$data;
 export type useLiveFeedbackListSubscription = {
-  variables: useLiveFeedbackListSubscriptionVariables;
   response: useLiveFeedbackListSubscription$data;
+  variables: useLiveFeedbackListSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

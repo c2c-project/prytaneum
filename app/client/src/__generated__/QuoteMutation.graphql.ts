@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5e6b969250e5b30d38604e892413d5bf>>
+ * @generated SignedSource<<87485f9fdb485266460a2b87b9331250>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,11 +20,8 @@ export type CreateQuestion = {
 export type QuoteMutation$variables = {
   input: CreateQuestion;
 };
-export type QuoteMutationVariables = QuoteMutation$variables;
 export type QuoteMutation$data = {
   readonly createQuestion: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -32,12 +29,13 @@ export type QuoteMutation$data = {
         readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment">;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type QuoteMutationResponse = QuoteMutation$data;
 export type QuoteMutation = {
-  variables: QuoteMutationVariables;
   response: QuoteMutation$data;
+  variables: QuoteMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

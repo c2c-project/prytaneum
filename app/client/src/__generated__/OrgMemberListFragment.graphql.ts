@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<828ea49a3f924c395d6f17a19352831a>>
+ * @generated SignedSource<<f2b29f513ae74f968965e8d761fd0a6b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,15 +17,14 @@ export type OrgMemberListFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly firstName: string | null;
+        readonly id: string;
         readonly lastName: string | null;
       };
     }> | null;
   } | null;
   readonly " $fragmentType": "OrgMemberListFragment";
 };
-export type OrgMemberListFragment = OrgMemberListFragment$data;
 export type OrgMemberListFragment$key = {
   readonly " $data"?: OrgMemberListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"OrgMemberListFragment">;

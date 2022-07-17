@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9021320b7689fc9247db9e4e31998160>>
+ * @generated SignedSource<<b441c6ea5c4d3a1e924e3b7e618a2bd5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,20 +17,18 @@ export type UpdateEmailForm = {
 export type UpdateEmailFormMutation$variables = {
   input: UpdateEmailForm;
 };
-export type UpdateEmailFormMutationVariables = UpdateEmailFormMutation$variables;
 export type UpdateEmailFormMutation$data = {
   readonly updateEmail: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type UpdateEmailFormMutationResponse = UpdateEmailFormMutation$data;
 export type UpdateEmailFormMutation = {
-  variables: UpdateEmailFormMutationVariables;
   response: UpdateEmailFormMutation$data;
+  variables: UpdateEmailFormMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

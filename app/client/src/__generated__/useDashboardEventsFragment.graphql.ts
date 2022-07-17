@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d8bd9f1b0608e4a217f3a598c0ae475e>>
+ * @generated SignedSource<<66b84a3dbe7d106157e0c143a57c2a6e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,26 +11,25 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useDashboardEventsFragment$data = {
-  readonly id: string;
   readonly events: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
       readonly node: {
-        readonly id: string;
-        readonly title: string | null;
         readonly description: string | null;
-        readonly startDateTime: Date | null;
         readonly endDateTime: Date | null;
+        readonly id: string;
         readonly isViewerModerator: boolean | null;
         readonly organization: {
           readonly name: string;
         } | null;
+        readonly startDateTime: Date | null;
+        readonly title: string | null;
       };
     }> | null;
   } | null;
+  readonly id: string;
   readonly " $fragmentType": "useDashboardEventsFragment";
 };
-export type useDashboardEventsFragment = useDashboardEventsFragment$data;
 export type useDashboardEventsFragment$key = {
   readonly " $data"?: useDashboardEventsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useDashboardEventsFragment">;

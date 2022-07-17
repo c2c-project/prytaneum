@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<92e455879a487d2174cc50c4fa4fd898>>
+ * @generated SignedSource<<495b186dd341c7db96800cd5fcf8ba82>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,11 +16,8 @@ export type AlterLike = {
 export type LikeMutation$variables = {
   input: AlterLike;
 };
-export type LikeMutationVariables = LikeMutation$variables;
 export type LikeMutation$data = {
   readonly alterLike: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -28,12 +25,13 @@ export type LikeMutation$data = {
         readonly isLikedByViewer: boolean | null;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type LikeMutationResponse = LikeMutation$data;
 export type LikeMutation = {
-  variables: LikeMutationVariables;
   response: LikeMutation$data;
+  variables: LikeMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

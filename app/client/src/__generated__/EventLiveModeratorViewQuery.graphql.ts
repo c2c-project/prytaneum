@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<33ee351b6c312b6586455fce59da5321>>
+ * @generated SignedSource<<87fdfe7c869da603df194b0dda769be7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,20 +13,18 @@ import { FragmentRefs } from "relay-runtime";
 export type EventLiveModeratorViewQuery$variables = {
   eventId: string;
 };
-export type EventLiveModeratorViewQueryVariables = EventLiveModeratorViewQuery$variables;
 export type EventLiveModeratorViewQuery$data = {
   readonly node: {
     readonly id: string;
-    readonly isViewerModerator?: boolean | null;
     readonly isActive?: boolean | null;
     readonly isPrivate?: boolean | null;
-    readonly " $fragmentSpreads": FragmentRefs<"useBroadcastMessageListFragment" | "EventVideoFragment" | "useEventDetailsFragment" | "SpeakerListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment" | "QuestionCarouselFragment" | "useLiveFeedbackListFragment">;
+    readonly isViewerModerator?: boolean | null;
+    readonly " $fragmentSpreads": FragmentRefs<"EventVideoFragment" | "QuestionCarouselFragment" | "SpeakerListFragment" | "useBroadcastMessageListFragment" | "useEventDetailsFragment" | "useLiveFeedbackListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment">;
   } | null;
 };
-export type EventLiveModeratorViewQueryResponse = EventLiveModeratorViewQuery$data;
 export type EventLiveModeratorViewQuery = {
-  variables: EventLiveModeratorViewQueryVariables;
   response: EventLiveModeratorViewQuery$data;
+  variables: EventLiveModeratorViewQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

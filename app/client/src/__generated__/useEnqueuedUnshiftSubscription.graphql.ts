@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<be52533a56ee78c191348071cec1bdb7>>
+ * @generated SignedSource<<562db404ff67b6b1f3df4261169801f5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,26 +11,24 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useEnqueuedUnshiftSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useEnqueuedUnshiftSubscriptionVariables = useEnqueuedUnshiftSubscription$variables;
 export type useEnqueuedUnshiftSubscription$data = {
   readonly enqueuedUnshiftQuestion: {
     readonly edge: {
+      readonly cursor: string;
       readonly node: {
         readonly id: string;
         readonly position: string;
-        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
       };
-      readonly cursor: string;
     };
   };
 };
-export type useEnqueuedUnshiftSubscriptionResponse = useEnqueuedUnshiftSubscription$data;
 export type useEnqueuedUnshiftSubscription = {
-  variables: useEnqueuedUnshiftSubscriptionVariables;
   response: useEnqueuedUnshiftSubscription$data;
+  variables: useEnqueuedUnshiftSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

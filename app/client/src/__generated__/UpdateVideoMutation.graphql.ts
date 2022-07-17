@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f01914378ba65d000dee078e304a33f>>
+ * @generated SignedSource<<aa36dc62ca33c4db33b6decb97277c17>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,22 +18,20 @@ export type UpdateVideo = {
 export type UpdateVideoMutation$variables = {
   input: UpdateVideo;
 };
-export type UpdateVideoMutationVariables = UpdateVideoMutation$variables;
 export type UpdateVideoMutation$data = {
   readonly updateVideo: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly id: string;
-      readonly url: string;
       readonly lang: string;
+      readonly url: string;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type UpdateVideoMutationResponse = UpdateVideoMutation$data;
 export type UpdateVideoMutation = {
-  variables: UpdateVideoMutationVariables;
   response: UpdateVideoMutation$data;
+  variables: UpdateVideoMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

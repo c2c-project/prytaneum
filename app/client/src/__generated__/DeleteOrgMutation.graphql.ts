@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0a40d0a8108013cedefa8dee060fdb41>>
+ * @generated SignedSource<<2248fe0fa9dae27b370ed16f6693e03a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,25 +13,23 @@ export type DeleteOrganization = {
   orgId: string;
 };
 export type DeleteOrgMutation$variables = {
-  input: DeleteOrganization;
   connections: ReadonlyArray<string>;
+  input: DeleteOrganization;
 };
-export type DeleteOrgMutationVariables = DeleteOrgMutation$variables;
 export type DeleteOrgMutation$data = {
   readonly deleteOrganization: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly node: {
         readonly id: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteOrgMutationResponse = DeleteOrgMutation$data;
 export type DeleteOrgMutation = {
-  variables: DeleteOrgMutationVariables;
   response: DeleteOrgMutation$data;
+  variables: DeleteOrgMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

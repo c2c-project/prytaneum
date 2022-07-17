@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<36b420517e2392172d53dce6468d7a58>>
+ * @generated SignedSource<<c74e16a08f4dcf87120329d5cede3357>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,30 +11,29 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useBroadcastMessageListFragment$data = {
-  readonly id: string;
-  readonly currentBroadcastMessage: number | null;
   readonly broadcastMessages: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly broadcastMessage: string;
-        readonly isVisible: boolean | null;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
+        readonly id: string;
+        readonly isVisible: boolean | null;
         readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageActionsFragment" | "BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
       };
     }> | null;
     readonly pageInfo: {
-      readonly startCursor: string | null;
       readonly endCursor: string | null;
+      readonly startCursor: string | null;
     };
   } | null;
+  readonly currentBroadcastMessage: number | null;
+  readonly id: string;
   readonly " $fragmentType": "useBroadcastMessageListFragment";
 };
-export type useBroadcastMessageListFragment = useBroadcastMessageListFragment$data;
 export type useBroadcastMessageListFragment$key = {
   readonly " $data"?: useBroadcastMessageListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useBroadcastMessageListFragment">;

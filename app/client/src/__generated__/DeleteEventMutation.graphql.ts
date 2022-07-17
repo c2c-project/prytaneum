@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af87217feb7b48dfd760fb2f10e5362e>>
+ * @generated SignedSource<<237703d122990348009d3e0d9d85b6da>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,23 +17,21 @@ export type DeleteEvent = {
 export type DeleteEventMutation$variables = {
   input: DeleteEvent;
 };
-export type DeleteEventMutationVariables = DeleteEventMutation$variables;
 export type DeleteEventMutation$data = {
   readonly deleteEvent: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly id: string;
+      readonly startDateTime: Date | null;
       readonly title: string | null;
       readonly topic: string | null;
-      readonly startDateTime: Date | null;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteEventMutationResponse = DeleteEventMutation$data;
 export type DeleteEventMutation = {
-  variables: DeleteEventMutationVariables;
   response: DeleteEventMutation$data;
+  variables: DeleteEventMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c9e2dd4cfd217f0a09c86035abb82e4f>>
+ * @generated SignedSource<<c0593c8694c9f238122d9a78822d0abf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,19 +13,17 @@ import { FragmentRefs } from "relay-runtime";
 export type viewerOnlyQuestionListPagination$variables = {
   after?: string | null;
   first?: number | null;
-  viewerOnly?: boolean | null;
   id: string;
+  viewerOnly?: boolean | null;
 };
-export type viewerOnlyQuestionListPaginationVariables = viewerOnlyQuestionListPagination$variables;
 export type viewerOnlyQuestionListPagination$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useViewerOnlyQuestionListFragment">;
   } | null;
 };
-export type viewerOnlyQuestionListPaginationResponse = viewerOnlyQuestionListPagination$data;
 export type viewerOnlyQuestionListPagination = {
-  variables: viewerOnlyQuestionListPaginationVariables;
   response: viewerOnlyQuestionListPagination$data;
+  variables: viewerOnlyQuestionListPagination$variables;
 };
 
 const node: ConcreteRequest = (function(){
