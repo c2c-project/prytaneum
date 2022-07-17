@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<16b6f30a94b47f51270fb1fc0191cdd5>>
+ * @generated SignedSource<<e82f9944c3175a68f2dd45a3af678ced>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,17 +17,16 @@ export type ModeratorEventSettingsFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly firstName: string | null;
-        readonly lastName: string | null;
         readonly avatar: string | null;
         readonly email: string | null;
+        readonly firstName: string | null;
+        readonly id: string;
+        readonly lastName: string | null;
       };
     }> | null;
   } | null;
   readonly " $fragmentType": "ModeratorEventSettingsFragment";
 };
-export type ModeratorEventSettingsFragment = ModeratorEventSettingsFragment$data;
 export type ModeratorEventSettingsFragment$key = {
   readonly " $data"?: ModeratorEventSettingsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"ModeratorEventSettingsFragment">;

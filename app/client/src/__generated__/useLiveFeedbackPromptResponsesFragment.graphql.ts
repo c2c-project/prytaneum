@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<97ad859f1619d24f849c278c8d54f463>>
+ * @generated SignedSource<<03ef151a99ca0d80610ece5dc983d5a5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,26 +17,25 @@ export type useLiveFeedbackPromptResponsesFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly isOpenEnded: boolean | null;
-        readonly response: string | null;
-        readonly isVote: boolean | null;
-        readonly vote: string | null;
         readonly createdAt: Date | null;
         readonly createdBy: {
-          readonly id: string;
           readonly firstName: string | null;
+          readonly id: string;
         } | null;
+        readonly id: string;
+        readonly isOpenEnded: boolean | null;
+        readonly isVote: boolean | null;
         readonly prompt: {
           readonly id: string;
           readonly prompt: string;
         } | null;
+        readonly response: string | null;
+        readonly vote: string | null;
       };
     }> | null;
   } | null;
   readonly " $fragmentType": "useLiveFeedbackPromptResponsesFragment";
 };
-export type useLiveFeedbackPromptResponsesFragment = useLiveFeedbackPromptResponsesFragment$data;
 export type useLiveFeedbackPromptResponsesFragment$key = {
   readonly " $data"?: useLiveFeedbackPromptResponsesFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptResponsesFragment">;

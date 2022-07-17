@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<96abb9d9003f80a94fdf36c17f582d36>>
+ * @generated SignedSource<<eb5c65c35540ec117c5a51fdc9e0fcc5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,18 +11,17 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionCreatedSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useQuestionCreatedSubscriptionVariables = useQuestionCreatedSubscription$variables;
 export type useQuestionCreatedSubscription$data = {
   readonly questionCreated: {
     readonly edge: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly position: string;
         readonly isVisible: boolean | null;
+        readonly position: string;
         readonly refQuestion: {
           readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
         } | null;
@@ -31,10 +30,9 @@ export type useQuestionCreatedSubscription$data = {
     };
   };
 };
-export type useQuestionCreatedSubscriptionResponse = useQuestionCreatedSubscription$data;
 export type useQuestionCreatedSubscription = {
-  variables: useQuestionCreatedSubscriptionVariables;
   response: useQuestionCreatedSubscription$data;
+  variables: useQuestionCreatedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1e78c335c26ce50d1575f3c33b6f3053>>
+ * @generated SignedSource<<080f6caa9270c2e85ea137ad5eab956e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,21 +14,20 @@ export type useEventsDashboardFragment$data = {
   readonly allEvents: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly endDateTime: Date | null;
         readonly id: string;
-        readonly title: string | null;
         readonly organization: {
           readonly id: string;
           readonly name: string;
         } | null;
         readonly startDateTime: Date | null;
-        readonly endDateTime: Date | null;
+        readonly title: string | null;
       };
     }> | null;
   } | null;
   readonly id: string;
   readonly " $fragmentType": "useEventsDashboardFragment";
 };
-export type useEventsDashboardFragment = useEventsDashboardFragment$data;
 export type useEventsDashboardFragment$key = {
   readonly " $data"?: useEventsDashboardFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useEventsDashboardFragment">;

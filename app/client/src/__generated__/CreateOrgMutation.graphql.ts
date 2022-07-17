@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b3279df358665d2a973bdeb4eee57b8>>
+ * @generated SignedSource<<daeb1461b1f6a4614c279750f62addaf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,28 +13,26 @@ export type CreateOrganization = {
   name: string;
 };
 export type CreateOrgMutation$variables = {
-  input: CreateOrganization;
   connections: ReadonlyArray<string>;
+  input: CreateOrganization;
 };
-export type CreateOrgMutationVariables = CreateOrgMutation$variables;
 export type CreateOrgMutation$data = {
   readonly createOrganization: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
+        readonly createdAt: Date | null;
         readonly id: string;
         readonly name: string;
-        readonly createdAt: Date | null;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type CreateOrgMutationResponse = CreateOrgMutation$data;
 export type CreateOrgMutation = {
-  variables: CreateOrgMutationVariables;
   response: CreateOrgMutation$data;
+  variables: CreateOrgMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

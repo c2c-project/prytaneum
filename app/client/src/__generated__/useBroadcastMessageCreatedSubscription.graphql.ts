@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3360036e93b1e565c293e1499cd52e9d>>
+ * @generated SignedSource<<97971320478c9b7ac6b739fa424ebca6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,27 +11,25 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useBroadcastMessageCreatedSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useBroadcastMessageCreatedSubscriptionVariables = useBroadcastMessageCreatedSubscription$variables;
 export type useBroadcastMessageCreatedSubscription$data = {
   readonly broadcastMessageCreated: {
     readonly edge: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly position: number | null;
         readonly isVisible: boolean | null;
+        readonly position: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
       };
     };
   };
 };
-export type useBroadcastMessageCreatedSubscriptionResponse = useBroadcastMessageCreatedSubscription$data;
 export type useBroadcastMessageCreatedSubscription = {
-  variables: useBroadcastMessageCreatedSubscriptionVariables;
   response: useBroadcastMessageCreatedSubscription$data;
+  variables: useBroadcastMessageCreatedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

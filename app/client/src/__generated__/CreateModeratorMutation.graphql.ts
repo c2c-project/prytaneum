@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<117e772e1f0ea6db40dbcf3c7b9ce143>>
+ * @generated SignedSource<<c97f7cb04e727da1e12f35ba12a29d94>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,26 +14,24 @@ export type CreateModerator = {
   eventId: string;
 };
 export type CreateModeratorMutation$variables = {
-  input: CreateModerator;
   connections: ReadonlyArray<string>;
+  input: CreateModerator;
 };
-export type CreateModeratorMutationVariables = CreateModeratorMutation$variables;
 export type CreateModeratorMutation$data = {
   readonly createModerator: {
+    readonly body: {
+      readonly avatar: string | null;
+      readonly firstName: string | null;
+      readonly id: string;
+      readonly lastName: string | null;
+    } | null;
     readonly isError: boolean;
     readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
   };
 };
-export type CreateModeratorMutationResponse = CreateModeratorMutation$data;
 export type CreateModeratorMutation = {
-  variables: CreateModeratorMutationVariables;
   response: CreateModeratorMutation$data;
+  variables: CreateModeratorMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

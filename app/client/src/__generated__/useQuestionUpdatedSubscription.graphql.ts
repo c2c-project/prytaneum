@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3f17cea5031451b6989f2bd3458da417>>
+ * @generated SignedSource<<aed0c5a30d0771d24fe5460ca45c1b21>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,6 @@ import { FragmentRefs } from "relay-runtime";
 export type useQuestionUpdatedSubscription$variables = {
   eventId: string;
 };
-export type useQuestionUpdatedSubscriptionVariables = useQuestionUpdatedSubscription$variables;
 export type useQuestionUpdatedSubscription$data = {
   readonly questionUpdated: {
     readonly edge: {
@@ -26,10 +25,9 @@ export type useQuestionUpdatedSubscription$data = {
     };
   };
 };
-export type useQuestionUpdatedSubscriptionResponse = useQuestionUpdatedSubscription$data;
 export type useQuestionUpdatedSubscription = {
-  variables: useQuestionUpdatedSubscriptionVariables;
   response: useQuestionUpdatedSubscription$data;
+  variables: useQuestionUpdatedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<85382d3e5d816d757da632713aedc8bd>>
+ * @generated SignedSource<<d3f3ac98c6f5d7d03dc5a62b17e4ffbc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,24 +12,22 @@ import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useEventUpdatesSubscription$variables = {
   userId: string;
 };
-export type useEventUpdatesSubscriptionVariables = useEventUpdatesSubscription$variables;
 export type useEventUpdatesSubscription$data = {
   readonly eventUpdates: {
-    readonly id: string;
-    readonly title: string | null;
     readonly description: string | null;
-    readonly startDateTime: Date | null;
     readonly endDateTime: Date | null;
+    readonly id: string;
     readonly isViewerModerator: boolean | null;
     readonly organization: {
       readonly name: string;
     } | null;
+    readonly startDateTime: Date | null;
+    readonly title: string | null;
   };
 };
-export type useEventUpdatesSubscriptionResponse = useEventUpdatesSubscription$data;
 export type useEventUpdatesSubscription = {
-  variables: useEventUpdatesSubscriptionVariables;
   response: useEventUpdatesSubscription$data;
+  variables: useEventUpdatesSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

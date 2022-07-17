@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b91125cfa066ee0ad72b35ef5ee87141>>
+ * @generated SignedSource<<fb27eeb616bd02d1d2a1b0c8898b9f36>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,11 +19,8 @@ export type CreateFeedback = {
 export type LiveFeedbackReplyActionMutation$variables = {
   input: CreateFeedback;
 };
-export type LiveFeedbackReplyActionMutationVariables = LiveFeedbackReplyActionMutation$variables;
 export type LiveFeedbackReplyActionMutation$data = {
   readonly createFeedback: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -32,12 +29,13 @@ export type LiveFeedbackReplyActionMutation$data = {
         readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type LiveFeedbackReplyActionMutationResponse = LiveFeedbackReplyActionMutation$data;
 export type LiveFeedbackReplyActionMutation = {
-  variables: LiveFeedbackReplyActionMutationVariables;
   response: LiveFeedbackReplyActionMutation$data;
+  variables: LiveFeedbackReplyActionMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

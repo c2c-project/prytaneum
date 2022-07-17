@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8c79984c6d0c28107550d4174125d668>>
+ * @generated SignedSource<<45367ca772622b75412317be2f16b2b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,18 +12,16 @@ import { ConcreteRequest, Query } from 'relay-runtime';
 export type ViewLiveFeedbackPromptResultsQuery$variables = {
   promptId: string;
 };
-export type ViewLiveFeedbackPromptResultsQueryVariables = ViewLiveFeedbackPromptResultsQuery$variables;
 export type ViewLiveFeedbackPromptResultsQuery$data = {
   readonly promptResponseVotes: {
-    readonly for: number;
     readonly against: number;
     readonly conflicted: number;
+    readonly for: number;
   };
 };
-export type ViewLiveFeedbackPromptResultsQueryResponse = ViewLiveFeedbackPromptResultsQuery$data;
 export type ViewLiveFeedbackPromptResultsQuery = {
-  variables: ViewLiveFeedbackPromptResultsQueryVariables;
   response: ViewLiveFeedbackPromptResultsQuery$data;
+  variables: ViewLiveFeedbackPromptResultsQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

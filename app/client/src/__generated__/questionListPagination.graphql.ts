@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<33c089f99091bd9d7ae280bc0a0b0de1>>
+ * @generated SignedSource<<35af8a11ee5cbe3da85aa97c4de8a999>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,16 +15,14 @@ export type questionListPagination$variables = {
   first?: number | null;
   id: string;
 };
-export type questionListPaginationVariables = questionListPagination$variables;
 export type questionListPagination$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useQuestionListFragment">;
   } | null;
 };
-export type questionListPaginationResponse = questionListPagination$data;
 export type questionListPagination = {
-  variables: questionListPaginationVariables;
   response: questionListPagination$data;
+  variables: questionListPagination$variables;
 };
 
 const node: ConcreteRequest = (function(){

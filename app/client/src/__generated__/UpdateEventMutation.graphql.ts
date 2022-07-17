@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<120ca15d210fe42a54d86fcd863200b3>>
+ * @generated SignedSource<<f3143b887d654ff358126aa18919915c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,25 +24,23 @@ export type UpdateEvent = {
 export type UpdateEventMutation$variables = {
   input: UpdateEvent;
 };
-export type UpdateEventMutationVariables = UpdateEventMutation$variables;
 export type UpdateEventMutation$data = {
   readonly updateEvent: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
+      readonly description: string | null;
+      readonly endDateTime: Date | null;
       readonly id: string;
+      readonly startDateTime: Date | null;
       readonly title: string | null;
       readonly topic: string | null;
-      readonly description: string | null;
-      readonly startDateTime: Date | null;
-      readonly endDateTime: Date | null;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type UpdateEventMutationResponse = UpdateEventMutation$data;
 export type UpdateEventMutation = {
-  variables: UpdateEventMutationVariables;
   response: UpdateEventMutation$data;
+  variables: UpdateEventMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

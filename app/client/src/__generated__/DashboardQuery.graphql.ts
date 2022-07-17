@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a3512a84c2ef7439f18f572f6b692430>>
+ * @generated SignedSource<<0362a0677d9407cdd0feeee1374ffc55>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,31 +10,29 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type DashboardQuery$variables = {};
-export type DashboardQueryVariables = DashboardQuery$variables;
 export type DashboardQuery$data = {
   readonly me: {
     readonly events: {
       readonly __id: string;
       readonly edges: ReadonlyArray<{
         readonly node: {
-          readonly id: string;
-          readonly title: string | null;
           readonly description: string | null;
-          readonly startDateTime: Date | null;
           readonly endDateTime: Date | null;
+          readonly id: string;
           readonly isViewerModerator: boolean | null;
           readonly organization: {
             readonly name: string;
           } | null;
+          readonly startDateTime: Date | null;
+          readonly title: string | null;
         };
       }> | null;
     } | null;
   } | null;
 };
-export type DashboardQueryResponse = DashboardQuery$data;
 export type DashboardQuery = {
-  variables: DashboardQueryVariables;
   response: DashboardQuery$data;
+  variables: DashboardQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

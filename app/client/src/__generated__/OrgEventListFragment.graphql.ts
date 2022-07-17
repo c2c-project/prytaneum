@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<08f421beacba16b7582186e7e67b8401>>
+ * @generated SignedSource<<2df336da009ab1db20b877161cf6a38d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,28 +11,27 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type OrgEventListFragment$data = {
-  readonly id: string;
   readonly events: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
         readonly id: string;
+        readonly startDateTime: Date | null;
         readonly title: string | null;
         readonly topic: string | null;
-        readonly startDateTime: Date | null;
       };
     }> | null;
     readonly pageInfo: {
+      readonly endCursor: string | null;
       readonly hasNextPage: boolean;
       readonly hasPreviousPage: boolean;
       readonly startCursor: string | null;
-      readonly endCursor: string | null;
     };
   } | null;
+  readonly id: string;
   readonly " $fragmentType": "OrgEventListFragment";
 };
-export type OrgEventListFragment = OrgEventListFragment$data;
 export type OrgEventListFragment$key = {
   readonly " $data"?: OrgEventListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"OrgEventListFragment">;

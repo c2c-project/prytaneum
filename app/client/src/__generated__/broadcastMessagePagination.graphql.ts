@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1df3f5c892f1e7e0d144b5e2834313eb>>
+ * @generated SignedSource<<ac6d05e592ec297423d1e99807f74d90>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,16 +15,14 @@ export type broadcastMessagePagination$variables = {
   first?: number | null;
   id: string;
 };
-export type broadcastMessagePaginationVariables = broadcastMessagePagination$variables;
 export type broadcastMessagePagination$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useBroadcastMessageListFragment">;
   } | null;
 };
-export type broadcastMessagePaginationResponse = broadcastMessagePagination$data;
 export type broadcastMessagePagination = {
-  variables: broadcastMessagePaginationVariables;
   response: broadcastMessagePagination$data;
+  variables: broadcastMessagePagination$variables;
 };
 
 const node: ConcreteRequest = (function(){

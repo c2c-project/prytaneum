@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a7bb665376dc2dfda943a7a15c84d0e1>>
+ * @generated SignedSource<<af8772b8fd548eef48d57089145681ef>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,17 +16,15 @@ export type CreateInvite = {
 export type CreateInviteMutation$variables = {
   input: CreateInvite;
 };
-export type CreateInviteMutationVariables = CreateInviteMutation$variables;
 export type CreateInviteMutation$data = {
   readonly createInvite: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type CreateInviteMutationResponse = CreateInviteMutation$data;
 export type CreateInviteMutation = {
-  variables: CreateInviteMutationVariables;
   response: CreateInviteMutation$data;
+  variables: CreateInviteMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

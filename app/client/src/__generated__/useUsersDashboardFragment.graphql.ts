@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ae3a2755b21a46b74b01b6e2c2144978>>
+ * @generated SignedSource<<0c01ee3b6f0e55f7a8cae50dfd2afa70>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,23 +11,22 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useUsersDashboardFragment$data = {
+  readonly id: string;
   readonly users: {
     readonly edges: ReadonlyArray<{
       readonly node: {
-        readonly id: string;
-        readonly firstName: string | null;
-        readonly lastName: string | null;
-        readonly email: string | null;
         readonly avatar: string | null;
-        readonly isAdmin: boolean | null;
         readonly canMakeOrgs: boolean | null;
+        readonly email: string | null;
+        readonly firstName: string | null;
+        readonly id: string;
+        readonly isAdmin: boolean | null;
+        readonly lastName: string | null;
       };
     }> | null;
   } | null;
-  readonly id: string;
   readonly " $fragmentType": "useUsersDashboardFragment";
 };
-export type useUsersDashboardFragment = useUsersDashboardFragment$data;
 export type useUsersDashboardFragment$key = {
   readonly " $data"?: useUsersDashboardFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useUsersDashboardFragment">;

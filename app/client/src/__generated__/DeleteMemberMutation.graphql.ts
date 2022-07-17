@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa7edbeb7e315bf36613c4034b783f02>>
+ * @generated SignedSource<<572ccc4ddbc473d220f1dce9af977836>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,23 +16,21 @@ export type DeleteMember = {
 export type DeleteMemberMutation$variables = {
   input: DeleteMember;
 };
-export type DeleteMemberMutationVariables = DeleteMemberMutation$variables;
 export type DeleteMemberMutation$data = {
   readonly deleteMember: {
+    readonly body: {
+      readonly avatar: string | null;
+      readonly firstName: string | null;
+      readonly id: string;
+      readonly lastName: string | null;
+    } | null;
     readonly isError: boolean;
     readonly message: string;
-    readonly body: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
   };
 };
-export type DeleteMemberMutationResponse = DeleteMemberMutation$data;
 export type DeleteMemberMutation = {
-  variables: DeleteMemberMutationVariables;
   response: DeleteMemberMutation$data;
+  variables: DeleteMemberMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

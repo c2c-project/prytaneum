@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cd81638bac1b6a1733e29280684d01ed>>
+ * @generated SignedSource<<05ef50d93182150f09d2242ef14d1b56>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,30 +19,28 @@ export type CreateQuestion = {
 export type AskQuestionMutation$variables = {
   input: CreateQuestion;
 };
-export type AskQuestionMutationVariables = AskQuestionMutation$variables;
 export type AskQuestionMutation$data = {
   readonly createQuestion: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly createdAt: Date | null;
-        readonly question: string | null;
         readonly createdBy: {
-          readonly id: string;
           readonly firstName: string | null;
+          readonly id: string;
           readonly lastName: string | null;
         } | null;
+        readonly id: string;
+        readonly question: string | null;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type AskQuestionMutationResponse = AskQuestionMutation$data;
 export type AskQuestionMutation = {
-  variables: AskQuestionMutationVariables;
   response: AskQuestionMutation$data;
+  variables: AskQuestionMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

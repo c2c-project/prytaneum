@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3bd6016266a262d76c5037669d92e848>>
+ * @generated SignedSource<<d8c5952a2cb611fe1de20d2644587ccb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,6 @@ export type LiveFeedbackReplyFragment$data = {
   readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
   readonly " $fragmentType": "LiveFeedbackReplyFragment";
 };
-export type LiveFeedbackReplyFragment = LiveFeedbackReplyFragment$data;
 export type LiveFeedbackReplyFragment$key = {
   readonly " $data"?: LiveFeedbackReplyFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<67763c79e768ac846332d13571c49c25>>
+ * @generated SignedSource<<501961b1269e9891cc177a8211d73739>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,11 +16,8 @@ export type RemoveQuestionFromQueue = {
 export type DequeueQuestionButtonMutation$variables = {
   input: RemoveQuestionFromQueue;
 };
-export type DequeueQuestionButtonMutationVariables = DequeueQuestionButtonMutation$variables;
 export type DequeueQuestionButtonMutation$data = {
   readonly removeQuestionFromQueue: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -28,12 +25,13 @@ export type DequeueQuestionButtonMutation$data = {
         readonly position: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DequeueQuestionButtonMutationResponse = DequeueQuestionButtonMutation$data;
 export type DequeueQuestionButtonMutation = {
-  variables: DequeueQuestionButtonMutationVariables;
   response: DequeueQuestionButtonMutation$data;
+  variables: DequeueQuestionButtonMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

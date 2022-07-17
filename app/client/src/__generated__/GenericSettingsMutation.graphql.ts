@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<15dece26edf670bec43c39feda981344>>
+ * @generated SignedSource<<6a5fb8d7c0132e03181e6a259b760e76>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,20 +25,18 @@ export type UpdateEvent = {
 export type GenericSettingsMutation$variables = {
   input: UpdateEvent;
 };
-export type GenericSettingsMutationVariables = GenericSettingsMutation$variables;
 export type GenericSettingsMutation$data = {
   readonly updateEvent: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly " $fragmentSpreads": FragmentRefs<"GenericSettingsFragment">;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type GenericSettingsMutationResponse = GenericSettingsMutation$data;
 export type GenericSettingsMutation = {
-  variables: GenericSettingsMutationVariables;
   response: GenericSettingsMutation$data;
+  variables: GenericSettingsMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

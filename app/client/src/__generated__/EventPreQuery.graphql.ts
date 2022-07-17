@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78a63df50941df0725d90e248618388a>>
+ * @generated SignedSource<<12dcef6dbfb592089816597ed214de26>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,17 +13,15 @@ import { FragmentRefs } from "relay-runtime";
 export type EventPreQuery$variables = {
   eventId: string;
 };
-export type EventPreQueryVariables = EventPreQuery$variables;
 export type EventPreQuery$data = {
   readonly node: {
     readonly id: string;
-    readonly " $fragmentSpreads": FragmentRefs<"useViewerOnlyQuestionListFragment" | "useLiveFeedbackListFragment" | "useEventDetailsFragment" | "SpeakerListFragment">;
+    readonly " $fragmentSpreads": FragmentRefs<"SpeakerListFragment" | "useEventDetailsFragment" | "useLiveFeedbackListFragment" | "useViewerOnlyQuestionListFragment">;
   } | null;
 };
-export type EventPreQueryResponse = EventPreQuery$data;
 export type EventPreQuery = {
-  variables: EventPreQueryVariables;
   response: EventPreQuery$data;
+  variables: EventPreQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

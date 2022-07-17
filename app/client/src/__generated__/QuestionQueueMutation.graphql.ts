@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0bed71fc1a378d793078391e4d87ce65>>
+ * @generated SignedSource<<3d7b7533dc922c810e67270cbb55aba0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,48 +17,45 @@ export type UpdateQuestionPosition = {
 export type QuestionQueueMutation$variables = {
   input: UpdateQuestionPosition;
 };
-export type QuestionQueueMutationVariables = QuestionQueueMutation$variables;
 export type QuestionQueueMutation$data = {
   readonly updateQuestionPosition: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly question: string | null;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
+        readonly id: string;
         readonly position: string;
+        readonly question: string | null;
       };
     } | null;
-  };
-};
-export type QuestionQueueMutationResponse = QuestionQueueMutation$data;
-export type QuestionQueueMutation$rawResponse = {
-  readonly updateQuestionPosition: {
     readonly isError: boolean;
     readonly message: string;
+  };
+};
+export type QuestionQueueMutation$rawResponse = {
+  readonly updateQuestionPosition: {
     readonly body: {
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly question: string | null;
         readonly createdBy: {
           readonly firstName: string | null;
           readonly id: string;
         } | null;
+        readonly id: string;
         readonly position: string;
+        readonly question: string | null;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type QuestionQueueMutationRawResponse = QuestionQueueMutation$rawResponse;
 export type QuestionQueueMutation = {
-  variables: QuestionQueueMutationVariables;
-  response: QuestionQueueMutation$data;
   rawResponse: QuestionQueueMutation$rawResponse;
+  response: QuestionQueueMutation$data;
+  variables: QuestionQueueMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

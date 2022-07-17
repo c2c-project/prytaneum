@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<454356a3284e08f387c58aced18234b7>>
+ * @generated SignedSource<<d5dfc8d3102dbf5366fe2954d81724e3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,22 +11,21 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type SpeakerListFragment$data = {
+  readonly id: string;
   readonly speakers: {
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly pictureUrl: string | null;
-        readonly name: string | null;
         readonly description: string | null;
+        readonly id: string;
+        readonly name: string | null;
+        readonly pictureUrl: string | null;
         readonly title: string | null;
       };
-      readonly cursor: string;
     }> | null;
   } | null;
-  readonly id: string;
   readonly " $fragmentType": "SpeakerListFragment";
 };
-export type SpeakerListFragment = SpeakerListFragment$data;
 export type SpeakerListFragment$key = {
   readonly " $data"?: SpeakerListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"SpeakerListFragment">;

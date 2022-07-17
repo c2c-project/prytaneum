@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4abcdfaefa35dfc0ca1f48e03f85e5e2>>
+ * @generated SignedSource<<c2ab41008873c8f9eff6c6812e1f7411>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,25 +17,24 @@ export type useLiveFeedbackListFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
+        readonly createdBy: {
+          readonly firstName: string | null;
+          readonly id: string;
+        } | null;
         readonly id: string;
         readonly message: string;
-        readonly createdBy: {
-          readonly id: string;
-          readonly firstName: string | null;
-        } | null;
         readonly refFeedback: {
           readonly createdBy: {
             readonly id: string;
           } | null;
           readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment">;
         } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackReplyFragment" | "LiveFeedbackAuthorFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment" | "LiveFeedbackReplyFragment">;
       };
     }> | null;
   } | null;
   readonly " $fragmentType": "useLiveFeedbackListFragment";
 };
-export type useLiveFeedbackListFragment = useLiveFeedbackListFragment$data;
 export type useLiveFeedbackListFragment$key = {
   readonly " $data"?: useLiveFeedbackListFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackListFragment">;

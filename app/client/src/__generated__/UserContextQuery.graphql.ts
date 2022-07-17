@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<819346715477de976a6cc1e7afa9fc27>>
+ * @generated SignedSource<<99ea74c8d99d9bd7467d6fdded14aa4b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,16 +11,14 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type UserContextQuery$variables = {};
-export type UserContextQueryVariables = UserContextQuery$variables;
 export type UserContextQuery$data = {
   readonly me: {
     readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
   } | null;
 };
-export type UserContextQueryResponse = UserContextQuery$data;
 export type UserContextQuery = {
-  variables: UserContextQueryVariables;
   response: UserContextQuery$data;
+  variables: UserContextQuery$variables;
 };
 
 const node: ConcreteRequest = {

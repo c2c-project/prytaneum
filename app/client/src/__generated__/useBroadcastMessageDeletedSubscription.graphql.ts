@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9527dd99cf31815ac2cb5a6f5b5423ab>>
+ * @generated SignedSource<<53d08edc4b908abf1ac4a56fa6140b92>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,9 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useBroadcastMessageDeletedSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useBroadcastMessageDeletedSubscriptionVariables = useBroadcastMessageDeletedSubscription$variables;
 export type useBroadcastMessageDeletedSubscription$data = {
   readonly broadcastMessageDeleted: {
     readonly edge: {
@@ -27,10 +26,9 @@ export type useBroadcastMessageDeletedSubscription$data = {
     };
   };
 };
-export type useBroadcastMessageDeletedSubscriptionResponse = useBroadcastMessageDeletedSubscription$data;
 export type useBroadcastMessageDeletedSubscription = {
-  variables: useBroadcastMessageDeletedSubscriptionVariables;
   response: useBroadcastMessageDeletedSubscription$data;
+  variables: useBroadcastMessageDeletedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

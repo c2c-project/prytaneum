@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b345d7bbbae80295a234043dabc71d7b>>
+ * @generated SignedSource<<f409beaa74d879b658d82df4494627e5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,19 +11,18 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EventVideoFragment$data = {
+  readonly id: string;
   readonly videos: {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly url: string;
         readonly lang: string;
+        readonly url: string;
       };
     }> | null;
   } | null;
-  readonly id: string;
   readonly " $fragmentType": "EventVideoFragment";
 };
-export type EventVideoFragment = EventVideoFragment$data;
 export type EventVideoFragment$key = {
   readonly " $data"?: EventVideoFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"EventVideoFragment">;

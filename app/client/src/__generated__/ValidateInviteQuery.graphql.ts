@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e4007b24e0547f5279d979885afd04ab>>
+ * @generated SignedSource<<9bb0c1f48036aa620c9f9d3d0030fc8e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,27 +10,25 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type ValidateInviteQuery$variables = {
-  token: string;
   eventId: string;
+  token: string;
 };
-export type ValidateInviteQueryVariables = ValidateInviteQuery$variables;
 export type ValidateInviteQuery$data = {
   readonly validateInvite: {
-    readonly valid: boolean;
     readonly user: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly email: string | null;
       readonly avatar: string | null;
+      readonly email: string | null;
+      readonly firstName: string | null;
+      readonly id: string;
       readonly isAdmin: boolean | null;
+      readonly lastName: string | null;
     } | null;
+    readonly valid: boolean;
   };
 };
-export type ValidateInviteQueryResponse = ValidateInviteQuery$data;
 export type ValidateInviteQuery = {
-  variables: ValidateInviteQueryVariables;
   response: ValidateInviteQuery$data;
+  variables: ValidateInviteQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

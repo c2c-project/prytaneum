@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<396aa6f0d3a80c183ea61785816de547>>
+ * @generated SignedSource<<1ced1e1c5b7433924023f1b82fa4872b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,14 +12,12 @@ import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useParticipantMutedSubscription$variables = {
   eventId: string;
 };
-export type useParticipantMutedSubscriptionVariables = useParticipantMutedSubscription$variables;
 export type useParticipantMutedSubscription$data = {
   readonly participantMuted: boolean | null;
 };
-export type useParticipantMutedSubscriptionResponse = useParticipantMutedSubscription$data;
 export type useParticipantMutedSubscription = {
-  variables: useParticipantMutedSubscriptionVariables;
   response: useParticipantMutedSubscription$data;
+  variables: useParticipantMutedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

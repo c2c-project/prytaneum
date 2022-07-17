@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3617d3fa986fe5decea911fb78d7695e>>
+ * @generated SignedSource<<81dd1178d8d4eae745d61476893c16e3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,9 @@
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionDeletedSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useQuestionDeletedSubscriptionVariables = useQuestionDeletedSubscription$variables;
 export type useQuestionDeletedSubscription$data = {
   readonly questionDeleted: {
     readonly edge: {
@@ -27,10 +26,9 @@ export type useQuestionDeletedSubscription$data = {
     };
   };
 };
-export type useQuestionDeletedSubscriptionResponse = useQuestionDeletedSubscription$data;
 export type useQuestionDeletedSubscription = {
-  variables: useQuestionDeletedSubscriptionVariables;
   response: useQuestionDeletedSubscription$data;
+  variables: useQuestionDeletedSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

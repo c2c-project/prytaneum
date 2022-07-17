@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c6bc7b3093f53090f77c24d243878b5>>
+ * @generated SignedSource<<36498e4ed5984017b299aa3be3df5e58>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,20 +17,18 @@ export type LoginForm = {
 export type LoginFormMutation$variables = {
   input: LoginForm;
 };
-export type LoginFormMutationVariables = LoginFormMutation$variables;
 export type LoginFormMutation$data = {
   readonly login: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type LoginFormMutationResponse = LoginFormMutation$data;
 export type LoginFormMutation = {
-  variables: LoginFormMutationVariables;
   response: LoginFormMutation$data;
+  variables: LoginFormMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9ecc0c8a697bc16bb3e9c9910cb3b62c>>
+ * @generated SignedSource<<f7050f4bc16b2c24a40d2c44779e9818>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,11 +17,11 @@ export type useLiveFeedbackPromptsFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
-        readonly prompt: string;
-        readonly isVote: boolean | null;
-        readonly isOpenEnded: boolean | null;
         readonly createdAt: Date | null;
+        readonly id: string;
+        readonly isOpenEnded: boolean | null;
+        readonly isVote: boolean | null;
+        readonly prompt: string;
         readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptResponsesFragment">;
       };
     }> | null;
@@ -31,7 +31,6 @@ export type useLiveFeedbackPromptsFragment$data = {
   } | null;
   readonly " $fragmentType": "useLiveFeedbackPromptsFragment";
 };
-export type useLiveFeedbackPromptsFragment = useLiveFeedbackPromptsFragment$data;
 export type useLiveFeedbackPromptsFragment$key = {
   readonly " $data"?: useLiveFeedbackPromptsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptsFragment">;

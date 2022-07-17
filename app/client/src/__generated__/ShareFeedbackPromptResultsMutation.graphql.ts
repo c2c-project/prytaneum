@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e5aa1673723021a593390cde5a564fa9>>
+ * @generated SignedSource<<cf4104f560b18308b5c3459ea8139478>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,11 +13,8 @@ export type ShareFeedbackPromptResultsMutation$variables = {
   eventId: string;
   promptId: string;
 };
-export type ShareFeedbackPromptResultsMutationVariables = ShareFeedbackPromptResultsMutation$variables;
 export type ShareFeedbackPromptResultsMutation$data = {
   readonly shareFeedbackPromptResults: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
@@ -25,12 +22,13 @@ export type ShareFeedbackPromptResultsMutation$data = {
         readonly prompt: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type ShareFeedbackPromptResultsMutationResponse = ShareFeedbackPromptResultsMutation$data;
 export type ShareFeedbackPromptResultsMutation = {
-  variables: ShareFeedbackPromptResultsMutationVariables;
   response: ShareFeedbackPromptResultsMutation$data;
+  variables: ShareFeedbackPromptResultsMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

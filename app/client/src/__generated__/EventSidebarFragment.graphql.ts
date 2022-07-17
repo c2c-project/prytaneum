@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f589576d97d22a0fe30c922cb785a37>>
+ * @generated SignedSource<<ab63a300087160d489e1a20ce03ac0e9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,10 +14,9 @@ export type EventSidebarFragment$data = {
   readonly id: string;
   readonly isQuestionFeedVisible: boolean | null;
   readonly isViewerModerator: boolean | null;
-  readonly " $fragmentSpreads": FragmentRefs<"SpeakerListFragment" | "useQuestionListFragment" | "useBroadcastMessageListFragment" | "useQuestionQueueFragment" | "QuestionCarouselFragment" | "useLiveFeedbackListFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"QuestionCarouselFragment" | "SpeakerListFragment" | "useBroadcastMessageListFragment" | "useLiveFeedbackListFragment" | "useQuestionListFragment" | "useQuestionQueueFragment">;
   readonly " $fragmentType": "EventSidebarFragment";
 };
-export type EventSidebarFragment = EventSidebarFragment$data;
 export type EventSidebarFragment$key = {
   readonly " $data"?: EventSidebarFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"EventSidebarFragment">;

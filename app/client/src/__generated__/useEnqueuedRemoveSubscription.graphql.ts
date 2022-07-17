@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7eff935b75f98fe36889b5a3fc1bad3c>>
+ * @generated SignedSource<<a527d73d9a683bc8d921681f56097cda>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,10 +10,9 @@
 
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 export type useEnqueuedRemoveSubscription$variables = {
-  eventId: string;
   connections: ReadonlyArray<string>;
+  eventId: string;
 };
-export type useEnqueuedRemoveSubscriptionVariables = useEnqueuedRemoveSubscription$variables;
 export type useEnqueuedRemoveSubscription$data = {
   readonly enqueuedRemoveQuestion: {
     readonly edge: {
@@ -23,10 +22,9 @@ export type useEnqueuedRemoveSubscription$data = {
     };
   };
 };
-export type useEnqueuedRemoveSubscriptionResponse = useEnqueuedRemoveSubscription$data;
 export type useEnqueuedRemoveSubscription = {
-  variables: useEnqueuedRemoveSubscriptionVariables;
   response: useEnqueuedRemoveSubscription$data;
+  variables: useEnqueuedRemoveSubscription$variables;
 };
 
 const node: ConcreteRequest = (function(){

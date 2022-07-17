@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a4c9aa2eb4b5242874f9a476d0f03883>>
+ * @generated SignedSource<<5d3009e89b886d6aa941a5d30b8dc4f7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,16 +13,14 @@ import { FragmentRefs } from "relay-runtime";
 export type SpeakerListRefetchQuery$variables = {
   id: string;
 };
-export type SpeakerListRefetchQueryVariables = SpeakerListRefetchQuery$variables;
 export type SpeakerListRefetchQuery$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"SpeakerListFragment">;
   } | null;
 };
-export type SpeakerListRefetchQueryResponse = SpeakerListRefetchQuery$data;
 export type SpeakerListRefetchQuery = {
-  variables: SpeakerListRefetchQueryVariables;
   response: SpeakerListRefetchQuery$data;
+  variables: SpeakerListRefetchQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

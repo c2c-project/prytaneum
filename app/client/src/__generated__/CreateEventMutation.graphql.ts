@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ff1a26e9e1ae394ac4d209304a591487>>
+ * @generated SignedSource<<3cc44b68d7750d5990b3a268535e77c8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,26 +18,24 @@ export type CreateEvent = {
   topic: string;
 };
 export type CreateEventMutation$variables = {
-  input: CreateEvent;
   connections: ReadonlyArray<string>;
+  input: CreateEvent;
 };
-export type CreateEventMutationVariables = CreateEventMutation$variables;
 export type CreateEventMutation$data = {
   readonly createEvent: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly id: string;
+      readonly startDateTime: Date | null;
       readonly title: string | null;
       readonly topic: string | null;
-      readonly startDateTime: Date | null;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type CreateEventMutationResponse = CreateEventMutation$data;
 export type CreateEventMutation = {
-  variables: CreateEventMutationVariables;
   response: CreateEventMutation$data;
+  variables: CreateEventMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

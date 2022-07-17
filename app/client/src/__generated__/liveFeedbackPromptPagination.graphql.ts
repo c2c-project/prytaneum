@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<99ae16eff35a71e05a1d20f6354189de>>
+ * @generated SignedSource<<22868cd94c43bce00ebb85919103c5f1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,16 +15,14 @@ export type liveFeedbackPromptPagination$variables = {
   first?: number | null;
   id: string;
 };
-export type liveFeedbackPromptPaginationVariables = liveFeedbackPromptPagination$variables;
 export type liveFeedbackPromptPagination$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptsFragment">;
   } | null;
 };
-export type liveFeedbackPromptPaginationResponse = liveFeedbackPromptPagination$data;
 export type liveFeedbackPromptPagination = {
-  variables: liveFeedbackPromptPaginationVariables;
   response: liveFeedbackPromptPagination$data;
+  variables: liveFeedbackPromptPagination$variables;
 };
 
 const node: ConcreteRequest = (function(){

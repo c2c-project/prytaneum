@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e44308679d160ed9b895b8976c40a359>>
+ * @generated SignedSource<<0cac82a1371915e3e0ce5d08254e000a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,13 +12,12 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type GenericSettingsFragment$data = {
   readonly id: string;
-  readonly isQuestionFeedVisible: boolean | null;
   readonly isCollectRatingsEnabled: boolean | null;
   readonly isForumEnabled: boolean | null;
   readonly isPrivate: boolean | null;
+  readonly isQuestionFeedVisible: boolean | null;
   readonly " $fragmentType": "GenericSettingsFragment";
 };
-export type GenericSettingsFragment = GenericSettingsFragment$data;
 export type GenericSettingsFragment$key = {
   readonly " $data"?: GenericSettingsFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"GenericSettingsFragment">;

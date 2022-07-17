@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6e9a2356592880eae222730c37b25530>>
+ * @generated SignedSource<<35570743d2fa1921d0f374312c771d82>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,23 +16,21 @@ export type DeleteBroadcastMessage = {
 export type DeleteBroadcastMessageButtonMutation$variables = {
   input: DeleteBroadcastMessage;
 };
-export type DeleteBroadcastMessageButtonMutationVariables = DeleteBroadcastMessageButtonMutation$variables;
 export type DeleteBroadcastMessageButtonMutation$data = {
   readonly deleteBroadcastMessage: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
       };
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteBroadcastMessageButtonMutationResponse = DeleteBroadcastMessageButtonMutation$data;
 export type DeleteBroadcastMessageButtonMutation = {
-  variables: DeleteBroadcastMessageButtonMutationVariables;
   response: DeleteBroadcastMessageButtonMutation$data;
+  variables: DeleteBroadcastMessageButtonMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

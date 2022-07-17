@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<456f1a7f27c3b54ae20a22732dff45fd>>
+ * @generated SignedSource<<5b67dbbd23734cc9dc8006f340340076>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,25 +12,23 @@ import { ConcreteRequest, Query } from 'relay-runtime';
 export type LiveFeedbackPromptResponseListQuery$variables = {
   promptId: string;
 };
-export type LiveFeedbackPromptResponseListQueryVariables = LiveFeedbackPromptResponseListQuery$variables;
 export type LiveFeedbackPromptResponseListQuery$data = {
   readonly promptResponses: ReadonlyArray<{
+    readonly createdAt: Date | null;
+    readonly createdBy: {
+      readonly avatar: string | null;
+      readonly firstName: string | null;
+      readonly id: string;
+      readonly lastName: string | null;
+    } | null;
     readonly id: string;
     readonly response: string | null;
     readonly vote: string | null;
-    readonly createdAt: Date | null;
-    readonly createdBy: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly avatar: string | null;
-    } | null;
   }> | null;
 };
-export type LiveFeedbackPromptResponseListQueryResponse = LiveFeedbackPromptResponseListQuery$data;
 export type LiveFeedbackPromptResponseListQuery = {
-  variables: LiveFeedbackPromptResponseListQueryVariables;
   response: LiveFeedbackPromptResponseListQuery$data;
+  variables: LiveFeedbackPromptResponseListQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

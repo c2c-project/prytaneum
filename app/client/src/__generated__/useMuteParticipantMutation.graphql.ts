@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<14f4fdf6511a451a8a646bb2b8a34697>>
+ * @generated SignedSource<<00de349520b86b2a5370e92461a8687c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,17 +13,15 @@ export type useMuteParticipantMutation$variables = {
   eventId: string;
   userId: string;
 };
-export type useMuteParticipantMutationVariables = useMuteParticipantMutation$variables;
 export type useMuteParticipantMutation$data = {
   readonly muteParticipant: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type useMuteParticipantMutationResponse = useMuteParticipantMutation$data;
 export type useMuteParticipantMutation = {
-  variables: useMuteParticipantMutationVariables;
   response: useMuteParticipantMutation$data;
+  variables: useMuteParticipantMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

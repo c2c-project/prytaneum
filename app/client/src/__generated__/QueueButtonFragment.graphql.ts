@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<535978cebcc3e11665f878f0b5a69c14>>
+ * @generated SignedSource<<1fa81e6dfc4b57451f02b74c2a228d2d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,6 @@ export type QueueButtonFragment$data = {
   readonly position: string;
   readonly " $fragmentType": "QueueButtonFragment";
 };
-export type QueueButtonFragment = QueueButtonFragment$data;
 export type QueueButtonFragment$key = {
   readonly " $data"?: QueueButtonFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"QueueButtonFragment">;

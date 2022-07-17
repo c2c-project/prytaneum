@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ae04f333230cd8e73095bf7bc16d3813>>
+ * @generated SignedSource<<e3634be1f1585b56c2061e7bb4d3bae9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,20 +18,18 @@ export type DeleteAccountForm = {
 export type DeleteAccountFormMutation$variables = {
   input: DeleteAccountForm;
 };
-export type DeleteAccountFormMutationVariables = DeleteAccountFormMutation$variables;
 export type DeleteAccountFormMutation$data = {
   readonly deleteAccount: {
-    readonly isError: boolean;
-    readonly message: string;
     readonly body: {
       readonly " $fragmentSpreads": FragmentRefs<"useUserFragment">;
     } | null;
+    readonly isError: boolean;
+    readonly message: string;
   };
 };
-export type DeleteAccountFormMutationResponse = DeleteAccountFormMutation$data;
 export type DeleteAccountFormMutation = {
-  variables: DeleteAccountFormMutationVariables;
   response: DeleteAccountFormMutation$data;
+  variables: DeleteAccountFormMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
