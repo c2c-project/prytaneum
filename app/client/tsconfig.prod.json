@@ -1,4 +1,7 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["**/*.test.*", "**/_unused/**", "**/*.stories.*"]
+    "exclude": ["**/*.test.*", "**/_unused/**", "**/*.stories.*"],
+    "compilerOptions": {
+        "incremental": true
+    }
 }
