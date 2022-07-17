@@ -408,7 +408,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv", "npm:10.0.0"],\
             ["dotenv-cli", "npm:4.0.0"],\
             ["dotenv-expand", "npm:5.1.0"],\
-            ["express", "npm:4.17.1"],\
+            ["express", "npm:4.18.1"],\
             ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6"],\
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:1.1.6"],\
             ["typescript", "patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=a1c5e5"]\
