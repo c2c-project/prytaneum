@@ -406,7 +406,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.14"],\
             ["@types/node", "npm:14.14.41"],\
             ["dotenv", "npm:10.0.0"],\
-            ["dotenv-cli", "npm:4.0.0"],\
+            ["dotenv-cli", "npm:5.1.0"],\
             ["dotenv-expand", "npm:5.1.0"],\
             ["express", "npm:4.18.1"],\
             ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6"],\
@@ -447,7 +447,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bcryptjs", "npm:2.4.3"],\
             ["cors", "npm:2.8.5"],\
             ["dotenv", "npm:8.2.0"],\
-            ["dotenv-cli", "npm:4.0.0"],\
+            ["dotenv-cli", "npm:5.1.0"],\
             ["dotenv-expand", "npm:5.1.0"],\
             ["eslint", "npm:8.9.0"],\
             ["eslint-config-airbnb-typescript", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:16.1.0"],\
@@ -23668,17 +23668,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["dotenv-cli", [\
-        ["npm:4.0.0", {\
-          "packageLocation": "./.yarn/cache/dotenv-cli-npm-4.0.0-e83f369a7b-b7c72091e4.zip/node_modules/dotenv-cli/",\
-          "packageDependencies": [\
-            ["dotenv-cli", "npm:4.0.0"],\
-            ["cross-spawn", "npm:7.0.3"],\
-            ["dotenv", "npm:8.2.0"],\
-            ["dotenv-expand", "npm:5.1.0"],\
-            ["minimist", "npm:1.2.5"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:5.1.0", {\
           "packageLocation": "./.yarn/cache/dotenv-cli-npm-5.1.0-d24bbc5670-dd060623c4.zip/node_modules/dotenv-cli/",\
           "packageDependencies": [\
