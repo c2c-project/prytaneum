@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
-import type { Event as TEvent, EventQuestion } from '@local/graphql-types';
 import * as Event from './methods';
+import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import type { Event as TEvent, EventQuestion } from '@local/graphql-types';
 
 const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
@@ -27,7 +28,7 @@ export const resolvers: Resolvers = {
     Mutation: {
         async createEvent(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: orgId } = fromGlobalId(args.event.orgId);
                 const createdEvent = await Event.createEvent(ctx.viewer.id, ctx.prisma, {
                     ...args.event,
@@ -38,7 +39,7 @@ export const resolvers: Resolvers = {
         },
         async updateEvent(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.event.eventId);
                 const updatedEvent = await Event.updateEvent(ctx.viewer.id, ctx.prisma, { ...args.event, eventId });
                 const eventWithGlobalId = toEventId(updatedEvent);
@@ -51,7 +52,7 @@ export const resolvers: Resolvers = {
         },
         async deleteEvent(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.event.eventId);
                 const deletedEvent = await Event.deleteEvent(ctx.viewer.id, ctx.prisma, { ...args.event, eventId });
                 return toEventId(deletedEvent);
@@ -59,7 +60,7 @@ export const resolvers: Resolvers = {
         },
         async startEvent(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, eventId, true);
                 const eventWithGlobalId = toEventId(updatedEvent);
@@ -72,7 +73,7 @@ export const resolvers: Resolvers = {
         },
         async endEvent(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.eventId);
                 const updatedEvent = await Event.changeEventStatus(ctx.viewer.id, ctx.prisma, eventId, false);
                 const eventWithGlobalId = toEventId(updatedEvent);

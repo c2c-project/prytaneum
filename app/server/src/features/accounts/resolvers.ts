@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
 
@@ -8,8 +7,8 @@ const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
 
 const cookieOptions: CookieSerializeOptions = {
-    sameSite: 'lax'
-}
+    sameSite: 'lax',
+};
 
 export const resolvers: Resolvers = {
     Query: {

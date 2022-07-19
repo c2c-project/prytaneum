@@ -9,6 +9,7 @@ import type {
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';
 import { errors } from '../utils';
+import { ProtectedError } from '../../lib/ProtectedError';
 
 /**
  * find an organization by user id
@@ -35,7 +36,11 @@ export async function findOrgById(orgId: string, prisma: PrismaClient) {
 export async function createOrg(userId: string, prisma: PrismaClient, { name }: CreateOrganization) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user) throw new Error(errors.DNE('Login')); // user doesn't exist for some reason...
+    if (!user)
+        throw new ProtectedError({
+            userMessage: ProtectedError.internalServerErrorMessage,
+            internalMessage: errors.DNE('User'),
+        }); // user doesn't exist for some reason...
 
     // create the org, while adding the current user as a member
     // reference: https://www.prisma.io/docs/guides/performance-and-optimization/prisma-client-transactions-guide/#dependent-writes
@@ -58,7 +63,7 @@ export async function updateOrg(userId: string, prisma: PrismaClient, { name, or
     const result = await prisma.orgMember.findFirst({ where: { userId, orgId }, select: { userId: true } });
 
     // result is null if the user is not part of the organization
-    if (!result) throw new Error(errors.permissions);
+    if (!result) throw new ProtectedError({ userMessage: errors.permissions });
 
     // update the org and return the result
     const updatedOrg = await prisma.organization.update({
@@ -74,7 +79,7 @@ export async function deleteOrg(userId: string, prisma: PrismaClient, { orgId }:
    
     //current permissions to delete organization is if they are a member of the organization then they can delete
     const hasPermissions = await isMemberOfOrg(userId, orgId, prisma);
-    if (!hasPermissions) throw new Error(errors.permissions);
+    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     const deletedOrg = await prisma.organization.delete({
         where: { id: orgId },
@@ -120,7 +125,7 @@ export async function createMember(userId: string, prisma: PrismaClient, input: 
     // first I have to check if the user has permission to add a member
     // the policy for now is that any member can add any other member
     const hasPermissions = await isMemberOfOrg(userId, input.orgId, prisma);
-    if (!hasPermissions) throw new Error(errors.permissions);
+    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     // then we'll have to check if the user exists
     // if they don't exist create a "shadow" account
@@ -146,7 +151,7 @@ export async function createMember(userId: string, prisma: PrismaClient, input: 
 
 export async function deleteMember(userId: string, prisma: PrismaClient, input: DeleteMember) {
     const hasPermissions = await isMemberOfOrg(userId, input.orgId, prisma);
-    if (!hasPermissions) throw new Error(errors.permissions);
+    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     await prisma.orgMember.delete({ where: { userId_orgId: { userId: input.userId, orgId: input.orgId } } });
 

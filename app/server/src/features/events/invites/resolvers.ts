@@ -1,6 +1,7 @@
 import { fromGlobalId } from 'graphql-relay';
-import { Resolvers, errors, runMutation } from '@local/features/utils';
 import * as Invites from './methods';
+import { Resolvers, errors, runMutation } from '@local/features/utils';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -14,7 +15,7 @@ export const resolvers: Resolvers = {
     Mutation: {
         async createInvite(parent, args, ctx) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 return Invites.invite(ctx.viewer.id, ctx.prisma, args.input);
             });
         },
