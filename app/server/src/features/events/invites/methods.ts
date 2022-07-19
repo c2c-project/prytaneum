@@ -13,7 +13,10 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     const { id: globalEventId } = fromGlobalId(eventId);
     const queryResult = await prisma.event.findUnique({ where: { id: globalEventId } });
     if (!queryResult)
-        throw new ProtectedError({ userMessage: 'Event not found.', internalMessage: errors.DNE('Event') });
+        throw new ProtectedError({
+            userMessage: 'Event not found.',
+            internalMessage: `Count not find event with id ${eventId}.`,
+        });
 
     // Check if viewer has permission to invite
     if (!canUserModify(viewerId, globalEventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });

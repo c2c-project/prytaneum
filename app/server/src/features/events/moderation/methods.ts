@@ -137,7 +137,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     if (!dbEvent)
         throw new ProtectedError({
             userMessage: ProtectedError.internalServerErrorMessage,
-            internalMessage: errors.DNE('Event'),
+            internalMessage: `Could not find event with id ${eventId}.`,
         });
 
     // the "next" question, where next can be +1 or -1
@@ -270,7 +270,7 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     // check if id is already non-negative
     const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
     // if the question isn't found with the -1 position, then it's already in queue
-    if (!question) throw new ProtectedError({ userMessage: 'Question is already in queue' });
+    if (!question) throw new ProtectedError({ userMessage: 'Question is already in queue.' });
 
     return prisma.eventQuestion.update({
         where: { id: input.questionId },
@@ -293,11 +293,11 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     if (!event)
         throw new ProtectedError({
             userMessage: ProtectedError.internalServerErrorMessage,
-            internalMessage: errors.DNE('Event'),
+            internalMessage: `Could not find event with id ${input.eventId}.`,
         });
 
     const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
-    if (!toBeRemoved) throw new ProtectedError({ userMessage: 'Question cannot be found' });
+    if (!toBeRemoved) throw new ProtectedError({ userMessage: 'Question cannot be found.' });
     if (event.currentQuestion >= toBeRemoved.position) {
         return toBeRemoved;
     }

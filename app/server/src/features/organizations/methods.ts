@@ -39,7 +39,7 @@ export async function createOrg(userId: string, prisma: PrismaClient, { name }: 
     if (!user)
         throw new ProtectedError({
             userMessage: ProtectedError.internalServerErrorMessage,
-            internalMessage: errors.DNE('User'),
+            internalMessage: `Could not find user with id ${userId}.`,
         }); // user doesn't exist for some reason...
 
     // create the org, while adding the current user as a member
