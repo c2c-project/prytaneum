@@ -12,7 +12,7 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useSnack, useForm } from '@local/core';
 
 interface Props {
     onSuccess?: () => void;
@@ -87,7 +87,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     }
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='register-form' container justifyContent='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
                 <Typography component='h1' variant='h6'>
                     Register

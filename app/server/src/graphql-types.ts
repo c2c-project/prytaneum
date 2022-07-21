@@ -198,8 +198,6 @@ export type Mutation = {
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
     removeQuestionFromQueue: EventQuestionMutationResponse;
-    /** TODO: #QQRedesign delete once code complete */
-    updateQuestionQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
@@ -310,10 +308,6 @@ export type MutationremoveQuestionFromQueueArgs = {
     input: RemoveQuestionFromQueue;
 };
 
-export type MutationupdateQuestionQueueArgs = {
-    input: UpdateQuestionQueue;
-};
-
 export type MutationcreateModeratorArgs = {
     input: CreateModerator;
 };
@@ -416,11 +410,6 @@ export type Event = Node & {
     invited?: Maybe<UserConnection>;
     /** Whether or not the viewer is invited */
     isViewerInvited?: Maybe<Scalars['Boolean']>;
-    /**
-     * Questions queued in this session by the moderator(s)
-     * TODO: #QQRedesign delete after code complete
-     */
-    queuedQuestions?: Maybe<EventQuestionConnection>;
     /** Questions having to do with the queue */
     questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
@@ -458,11 +447,6 @@ export type EventmoderatorsArgs = {
 };
 
 export type EventinvitedArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
-};
-
-export type EventqueuedQuestionsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -524,23 +508,13 @@ export type EventMutationResponse = MutationResponse & {
 
 export type Subscription = {
     __typename?: 'Subscription';
-    /** TODO: #QQRedesign delete after code complete */
     eventUpdates: Event;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
-    /**
-     * subscription for whenever questions are added to the queue
-     * TODO: #QQRedesign delete once code complete
-     */
-    questionQueued: EventQuestion;
-    /**
-     * Question subscription for all operations performed on questions
-     * TODO: #QQRedesign delete after code complete
-     */
-    questionCRUD: QuestionOperation;
+    /** Question subscription for all operations performed on questions */
     questionCreated: EventQuestionEdgeContainer;
     questionUpdated: EventQuestionEdgeContainer;
     questionDeleted: EventQuestionEdgeContainer;
@@ -571,14 +545,6 @@ export type SubscriptionfeedbackCRUDArgs = {
 };
 
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionQueuedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionCRUDArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -940,13 +906,6 @@ export type EventQuestionMutationResponse = MutationResponse & {
     body?: Maybe<EventQuestionEdge>;
 };
 
-/** TODO: #QQRedesign dlete after code complete */
-export type QuestionOperation = {
-    __typename?: 'QuestionOperation';
-    operationType: Operation;
-    edge: EventQuestionEdge;
-};
-
 /** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
 export type EventQuestionEdgeContainer = {
     __typename?: 'EventQuestionEdgeContainer';
@@ -1229,7 +1188,6 @@ export type ResolversTypes = {
     DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: ResolverTypeWrapper<EventQuestionMutationResponse>;
-    QuestionOperation: ResolverTypeWrapper<QuestionOperation>;
     EventQuestionEdgeContainer: ResolverTypeWrapper<EventQuestionEdgeContainer>;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
     EventSpeakerEdge: ResolverTypeWrapper<EventSpeakerEdge>;
@@ -1335,7 +1293,6 @@ export type ResolversParentTypes = {
     DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: EventQuestionMutationResponse;
-    QuestionOperation: QuestionOperation;
     EventQuestionEdgeContainer: EventQuestionEdgeContainer;
     EventSpeaker: EventSpeaker;
     EventSpeakerEdge: EventSpeakerEdge;
@@ -1633,12 +1590,6 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationremoveQuestionFromQueueArgs, 'input'>
     >;
-    updateQuestionQueue?: Resolver<
-        ResolversTypes['EventQuestionMutationResponse'],
-        ParentType,
-        ContextType,
-        RequireFields<MutationupdateQuestionQueueArgs, 'input'>
-    >;
     createModerator?: Resolver<
         ResolversTypes['ModeratorMutationResponse'],
         ParentType,
@@ -1789,12 +1740,6 @@ export type EventResolvers<
         RequireFields<EventinvitedArgs, never>
     >;
     isViewerInvited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    queuedQuestions?: Resolver<
-        Maybe<ResolversTypes['EventQuestionConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<EventqueuedQuestionsArgs, never>
-    >;
     questionQueue?: Resolver<
         Maybe<ResolversTypes['EventQuestionQueue']>,
         ParentType,
@@ -1863,20 +1808,6 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
-    >;
-    questionQueued?: SubscriptionResolver<
-        ResolversTypes['EventQuestion'],
-        'questionQueued',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionQueuedArgs, 'eventId'>
-    >;
-    questionCRUD?: SubscriptionResolver<
-        ResolversTypes['QuestionOperation'],
-        'questionCRUD',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
     >;
     questionCreated?: SubscriptionResolver<
         ResolversTypes['EventQuestionEdgeContainer'],
@@ -2219,15 +2150,6 @@ export type EventQuestionMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QuestionOperationResolvers<
-    ContextType = MercuriusContext,
-    ParentType extends ResolversParentTypes['QuestionOperation'] = ResolversParentTypes['QuestionOperation']
-> = {
-    operationType?: Resolver<ResolversTypes['Operation'], ParentType, ContextType>;
-    edge?: Resolver<ResolversTypes['EventQuestionEdge'], ParentType, ContextType>;
-    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type EventQuestionEdgeContainerResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventQuestionEdgeContainer'] = ResolversParentTypes['EventQuestionEdgeContainer']
@@ -2358,7 +2280,6 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventQuestionConnection?: EventQuestionConnectionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;
     EventQuestionMutationResponse?: EventQuestionMutationResponseResolvers<ContextType>;
-    QuestionOperation?: QuestionOperationResolvers<ContextType>;
     EventQuestionEdgeContainer?: EventQuestionEdgeContainerResolvers<ContextType>;
     EventSpeaker?: EventSpeakerResolvers<ContextType>;
     EventSpeakerEdge?: EventSpeakerEdgeResolvers<ContextType>;
@@ -2467,7 +2388,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
-        queuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventqueuedQuestionsArgs, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
         currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
@@ -2636,11 +2556,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], EventQuestionMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventQuestionMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<EventQuestionEdge>, EventQuestionMutationResponse, {}, TContext>;
-    };
-
-    QuestionOperation?: {
-        operationType?: LoaderResolver<Operation, QuestionOperation, {}, TContext>;
-        edge?: LoaderResolver<EventQuestionEdge, QuestionOperation, {}, TContext>;
     };
 
     EventQuestionEdgeContainer?: {

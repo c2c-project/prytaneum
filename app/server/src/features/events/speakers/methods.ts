@@ -1,6 +1,6 @@
 import { PrismaClient } from '@local/__generated__/prisma';
 import { errors } from '@local/features/utils';
-import { DeleteSpeaker, CreateSpeaker, UpdateSpeaker } from '@local/graphql-types';
+import type { DeleteSpeaker, CreateSpeaker, UpdateSpeaker } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 import { canUserModify } from '@local/features/events/methods';
 

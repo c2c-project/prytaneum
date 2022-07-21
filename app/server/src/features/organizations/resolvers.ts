@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId, toGlobalId as gqlToGlobalId } from 'graphql-relay';
-import { OrganizationSubscription } from '@local/graphql-types';
+import type { OrganizationSubscription } from '@local/graphql-types';
 import * as Organization from './methods';
 import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '../utils';
 import { isMemberOfOrg } from '../permissions';

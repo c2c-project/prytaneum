@@ -1,0 +1,65 @@
+name: Client build, lint, and test
+on:
+    pull_request:
+        branches:
+            - dev
+            - staging
+        paths:
+            - 'app/client/**'
+            - 'docker/Dockerfile.client'
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        environment: development
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Build the client via docker so we are as close to the real build as possible.
+            - name: Docker build
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.client \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg GRAPHQL_URL="123" \
+                    --build-arg DEPLOYMENT_ENV="development" \
+                    --build-arg GOOGLE_ANALYTICS_ID="123" \
+                    .
+
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        environment: development
+
+        steps:
+            - name: No Op
+              run: echo "There are no client tests yet :)"
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        environment: development
+
+        steps:
+            - name: Setup
+              uses: actions/checkout@v2
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            - name: Lint Project
+              run: yarn workspace @app/client lint

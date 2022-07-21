@@ -12,7 +12,7 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
 import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useSnack, useForm } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -96,7 +96,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     };
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='login-form' container justifyContent='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />

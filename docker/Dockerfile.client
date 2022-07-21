@@ -1,6 +1,16 @@
 FROM node:16.14.2-alpine AS build-stage
 WORKDIR /usr/monorepo
-COPY . .
+# Copy all necessary files/folders
+COPY package.json .
+COPY yarn.lock .
+COPY .yarnrc.yml .
+COPY .yarn ./.yarn
+COPY .nvmrc .
+COPY tsconfig.json .
+COPY .pnp.cjs .
+COPY .pnp.loader.mjs .
+COPY app/client ./app/client
+# Set up build environment variables
 ARG GRAPHQL_URL=https://prytaneum.io/graphql
 ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}
 ARG GOOGLE_ANALYTICS_ID=secret
@@ -10,7 +20,6 @@ RUN apk add --no-cache libc6-compat
 RUN yarn install
 RUN yarn workspace @app/client build
 
-# Production image, copy all the files and run next
 FROM node:16.14.2-alpine AS production-stage
 WORKDIR /usr/monorepo
 # Set appropriate env variables
@@ -28,11 +37,11 @@ COPY --from=build-stage /usr/monorepo/.nvmrc ./
 COPY --from=build-stage /usr/monorepo/.yarn/releases ./.yarn/releases
 COPY --from=build-stage /usr/monorepo/.yarn/plugins ./.yarn/plugins
 # Client specific files
-COPY --from=build-stage /usr/monorepo/app/client ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
-# COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
+COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
+COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
+COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
+COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
+# Install only packages necessary for the client to run
 RUN yarn workspaces focus --production @app/client
 EXPOSE 3000
 CMD ["yarn", "workspace", "@app/client", "start"]

@@ -173,11 +173,6 @@ export type Event = Node & {
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
   questions?: Maybe<EventQuestionConnection>;
-  /**
-   * Questions queued in this session by the moderator(s)
-   * TODO: #QQRedesign delete after code complete
-   */
-  queuedQuestions?: Maybe<EventQuestionConnection>;
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
   /** Speakers for this event */
@@ -223,12 +218,6 @@ export type EventQuestionQueueArgs = {
 
 
 export type EventQuestionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type EventQueuedQuestionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -545,7 +534,6 @@ export type Mutation = {
   updateOrganization: OrganizationMutationResponse;
   updatePassword: UserMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
-  updateQuestionQueue: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
@@ -716,11 +704,6 @@ export type MutationUpdateQuestionPositionArgs = {
 };
 
 
-export type MutationUpdateQuestionQueueArgs = {
-  input: UpdateQuestionQueue;
-};
-
-
 export type MutationUpdateSpeakerArgs = {
   input: UpdateSpeaker;
 };
@@ -839,13 +822,6 @@ export type QueryValidateInviteArgs = {
   input: ValidateInvite;
 };
 
-/** TODO: #QQRedesign dlete after code complete */
-export type QuestionOperation = {
-  __typename?: 'QuestionOperation';
-  edge: EventQuestionEdge;
-  operationType: Operation;
-};
-
 export type RegistrationForm = {
   confirmPassword: Scalars['String'];
   email: Scalars['String'];
@@ -866,25 +842,15 @@ export type Subscription = {
   enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
-  /** TODO: #QQRedesign delete after code complete */
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
   questionAddedToEnqueued: EventQuestionEdgeContainer;
   questionAddedToRecord: EventQuestionEdgeContainer;
-  /**
-   * Question subscription for all operations performed on questions
-   * TODO: #QQRedesign delete after code complete
-   */
-  questionCRUD: QuestionOperation;
+  /** Question subscription for all operations performed on questions */
   questionCreated: EventQuestionEdgeContainer;
   questionDeleted: EventQuestionEdgeContainer;
-  /**
-   * subscription for whenever questions are added to the queue
-   * TODO: #QQRedesign delete once code complete
-   */
-  questionQueued: EventQuestion;
   questionRemovedFromEnqueued: EventQuestionEdgeContainer;
   questionRemovedFromRecord: EventQuestionEdgeContainer;
   questionUpdated: EventQuestionEdgeContainer;
@@ -934,22 +900,12 @@ export type SubscriptionQuestionAddedToRecordArgs = {
 };
 
 
-export type SubscriptionQuestionCrudArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type SubscriptionQuestionCreatedArgs = {
   eventId: Scalars['ID'];
 };
 
 
 export type SubscriptionQuestionDeletedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionQuestionQueuedArgs = {
   eventId: Scalars['ID'];
 };
 

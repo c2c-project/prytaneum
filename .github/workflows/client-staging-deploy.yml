@@ -1,0 +1,123 @@
+name: Deploy staging client
+
+on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'app/client/**'
+            - 'docker/Dockerfile.client'
+
+env:
+    PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+    GKE_CLUSTER: prytaneum-dev-cluster
+    GKE_ZONE: us-central1-a
+    CLIENT_DEPLOYMENT: prytaneum-client
+    CLIENT_IMAGE: prytaneum-client
+    NAMESPACE: development
+    GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
+
+jobs:
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        environment: development
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v0.8.0'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v0.6.0
+              with:
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            # Build the Client
+            - name: Build Client
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.client \
+                    --tag "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    --build-arg GRAPHQL_URL="$GRAPHQL_URL" \
+                    --build-arg DEPLOYMENT_ENV="development" \
+                    --build-arg GOOGLE_ANALYTICS_ID="$GOOGLE_ANALYTICS_ID" \
+                    .
+
+            # Push the Client image to Google Container Registry
+            - name: Publish Client
+              run: docker push "gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA"
+
+            # Set up kustomize
+            - name: Set up Kustomize
+              run: |-
+                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+                  chmod u+x ./kustomize
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy Client
+              run: |-
+                  cd ./k8s/client/development
+                  kustomize edit set image gcr.io/PROJECT_ID/CLIENT_IMAGE:TAG=gcr.io/$PROJECT_ID/$CLIENT_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+    finalize:
+        name: Finalize
+        runs-on: ubuntu-latest
+        environment: development
+        needs: [deploy]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v0.8.0'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v0.6.0
+              with:
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/prytaneum-client
+                  kubectl get services -o wide

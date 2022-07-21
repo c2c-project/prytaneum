@@ -71,7 +71,7 @@ export function OrgEventList({ fragementRef, className }: OrgEventListProps) {
                 )}
             </Grid>
             <Grid container justifyContent='flex-end'>
-                <ResponsiveDialog open={isOpen} onClose={close} title='Create Event'>
+                <ResponsiveDialog open={isOpen} onClose={close}>
                     <DialogContent>
                         <CreateEvent
                             connections={data.events ? [data.events.__id] : []}

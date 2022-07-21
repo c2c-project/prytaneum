@@ -8,13 +8,13 @@ import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { Form } from '@local/components/Form';
-import { useForm } from '../core';
+import { useForm } from '@local/core';
 
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
-    title?: boolean;
     className?: string;
+    title?: string;
     form?: TEventForm;
 }
 
@@ -44,14 +44,15 @@ const initialState: TEventForm = {
     topic: '',
 };
 
-export function EventForm(props: EventFormProps) {
-    const { onCancel, onSubmit, title, className, form } = props;
-
-    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(form || initialState, validationSchema);
+export function EventForm({ onCancel, onSubmit, title, className, form }: EventFormProps) {
+    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(
+        form || initialState,
+        validationSchema
+    );
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
-            {title && <FormTitle title='Townhall Form' />}
+            <FormTitle title={title || 'Event Form'} />
             <FormContent>
                 <TextField
                     autoFocus
@@ -80,7 +81,9 @@ export function EventForm(props: EventFormProps) {
                 />
                 <MobileDateTimePicker
                     value={state.startDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, startDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, startDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
@@ -93,7 +96,9 @@ export function EventForm(props: EventFormProps) {
                 />
                 <MobileDateTimePicker
                     value={state.endDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, endDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, endDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}

@@ -7,18 +7,12 @@ Documentation for all scripts in each respective `package.json` file.
 All scripts at the root directory are prefixed with `g:` for global.
 
 -   `g:commit`: Add a commit using the `commitlint` prompt.
--   `g:codegen`: Generate files using graphql codegen.
--   `g:dev-server`: Start the server with NODE_ENV=development.
--   `g:start-server`: Start the server with NODE_ENV=production.
--   `g:dev-client`: Start the client with NODE_ENV=development.
--   `g:start-client`: Start the client with NODE_ENV=production.
--   `g:client-relay`: Generate `relay` type defs on the client.
 -   `g:start-db`: Start the database using `docker` and `docker-compose`. See `db/start-db.sh`.
 -   `g:start-test-db`: Starts a test specific database using `docker` and `docker-compose`. See `db/start-test-db.sh`.
 -   `g:stop-db`: Stops the currently running database. See `db/stop-db.sh`.
--   `g:start-proxy`: Start the proxy that sits in front of the client and server.
--   `g:dev-project`: Start the database, server, client, and proxy with NODE_ENV=development.
--   `g:start-project`: Start the database, server, client, and proxy with NODE_ENV=production.
+-   `g:husky`: Installs husky
+-   `g:dev`: Starts the project in development mode.
+-   `g:dev-test`: Starts a minimal development instance intended for testing in CI/CD.
 
 ## Client
 

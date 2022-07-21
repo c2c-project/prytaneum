@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
 import Image from 'next/image';
 import {
@@ -93,6 +94,9 @@ const useStyles = makeStyles(() => ({
         transform: 'translateY(-54%)',
         zIndex: 100,
     },
+    contain: {
+        objectFit: 'contain'
+    }
 }));
 
 export default function ParticipantGuide() {
@@ -251,13 +255,11 @@ export default function ParticipantGuide() {
                         className={classes.questionCardInfo}
                         onClick={() => handleClickOpen(7)}
                     />
-                    <Image
+                    <img
                         src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-participant-view.png'
-                        width={1486}
-                        height={845}
-                        objectFit='contain'
-                        alt='dashboard'
-                        priority={true}
+                        width='100%'
+                        className={classes.contain}
+                        alt='Event Live Participant View'
                     />
                 </div>
             </Grid>

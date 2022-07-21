@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
 import Image from 'next/image';
 import {
@@ -95,6 +96,9 @@ const useStyles = makeStyles(() => ({
         transform: 'translateY(-59%)',
         zIndex: 100,
     },
+    contain: {
+        objectFit: 'contain'
+    }
 }));
 
 export default function ModeratorGuide() {
@@ -258,13 +262,11 @@ export default function ModeratorGuide() {
                         className={classes.questionCardInfo}
                         onClick={() => handleClickOpen(7)}
                     />
-                    <Image
+                    <img
                         src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-mod-view-queue.png'
-                        width={1469}
-                        height={827}
-                        objectFit='contain'
-                        alt='dashboard'
-                        priority={true}
+                        width='100%'
+                        className={classes.contain}
+                        alt='Event Live Moderator View'
                     />
                 </div>
             </Grid>

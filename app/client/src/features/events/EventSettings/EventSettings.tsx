@@ -10,7 +10,7 @@ import type { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
 import { Loader } from '@local/components/Loader';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import { VideoEventSettings } from '../Videos';
 import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
