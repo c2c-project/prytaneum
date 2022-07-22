@@ -26,11 +26,19 @@ async function validateAuthenticationAttempt(prisma: PrismaClient, email: string
     // If there is no password set, the user likely needs to finish registering their account.
     // TODO: In order not to let an attacker know that this is the case, it's best to send
     // a follow up email to the user's account rather than display a specific error message in the app itself.
-    if (!user?.password) throw new ProtectedError({ userMessage: ProtectedError.loginErrorMessage });
+    if (!user?.password)
+        throw new ProtectedError({
+            userMessage: ProtectedError.loginErrorMessage,
+            internalMessage: `User with email: ${email} does not exist or has no password set.`,
+        });
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 
-    if (!isCorrectPassword) throw new ProtectedError({ userMessage: ProtectedError.loginErrorMessage });
+    if (!isCorrectPassword)
+        throw new ProtectedError({
+            userMessage: ProtectedError.loginErrorMessage,
+            internalMessage: 'Incorrect password.',
+        });
 
     return user;
 }
