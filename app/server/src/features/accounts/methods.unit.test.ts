@@ -217,7 +217,7 @@ describe('account methods', () => {
             await expect(AccountMethods.updateEmail(prismaMock, input)).rejects.toThrow(
                 new ProtectedError({
                     userMessage: 'A link to activate your account has been emailed to the address provided.',
-                    internalMessage: 'A user with the email already exists.',
+                    internalMessage: `A user with the email ${input.newEmail} already exists.`,
                 })
             );
         });

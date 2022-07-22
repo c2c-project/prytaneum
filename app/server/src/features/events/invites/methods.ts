@@ -1,21 +1,25 @@
-import { PrismaClient } from '@local/__generated__/prisma';
-import { errors } from '@local/features/utils';
-import type { CreateInvite } from '@local/graphql-types';
-import { register } from '@local/features/accounts/methods';
 import { fromGlobalId } from 'graphql-relay';
-import { verify, sign } from '@local/lib/jwt';
-
+import { PrismaClient } from '@local/__generated__/prisma';
+import { register } from '@local/features/accounts/methods';
+import { canUserModify } from '@local/features/events/methods';
 import { sendInviteEmail } from './invite';
-import { canUserModify } from '../methods';
+import { errors } from '@local/features/utils';
+import { verify, sign } from '@local/lib/jwt';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import type { CreateInvite } from '@local/graphql-types';
 
 export async function invite(viewerId: string, prisma: PrismaClient, { email, eventId }: CreateInvite) {
     // Check if event exists
     const { id: globalEventId } = fromGlobalId(eventId);
     const queryResult = await prisma.event.findUnique({ where: { id: globalEventId } });
-    if (!queryResult) throw new Error('Event not found');
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Event not found.',
+            internalMessage: `Count not find event with id ${eventId}.`,
+        });
 
     // Check if viewer has permission to invite
-    if (!canUserModify(viewerId, globalEventId, prisma)) throw new Error(errors.permissions);
+    if (!canUserModify(viewerId, globalEventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
 
     // check if email already exists
     let userResult = await prisma.user.findFirst({ where: { email } });
