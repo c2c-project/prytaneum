@@ -205,7 +205,7 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
         throw new ProtectedError({
             userMessage: ProtectedError.accountCreationErrorMessage,
             // This is probably only useful for debugging purposes, but it's still fine to log this anyways.
-            internalMessage: 'A user with the email already exists.',
+            internalMessage: `A user with the email ${newEmail} already exists.`,
         });
 
     // update user email
