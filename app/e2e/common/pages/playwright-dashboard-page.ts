@@ -48,4 +48,9 @@ export class PlaywrightDashboardPage {
     async goto() {
         await this.page.goto('/dashboard');
     }
+
+    async clickOnEvent(eventName: string, eventDate: Date, orgName: string) {
+        const formattedDate = eventDate.toLocaleDateString('en-US', {month: '2-digit', day: 'numeric', year: 'numeric'});
+        await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}${orgName}")`).click();
+    }
 }
