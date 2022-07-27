@@ -65,4 +65,52 @@ export class PlaywrightOrganizationsPage {
     async clickConfirmDeleteOrganizationButton() {
         await this.page.locator('text=Confirm').click();
     }
+
+    async clickOnCreateEvent() {
+        await this.page.locator('text=New Event').click();
+    }
+
+    async fillInEventName(eventName: string) {
+        await this.page.locator('text=Title *Title * >> input[type="text"]').fill(eventName);
+        await this.page.locator('text=Topic *Topic * >> input[type="text"]').fill(`${eventName} Topic`);
+        await this.page
+            .locator('text=Description *Description * >> input[type="text"]')
+            .fill(`${eventName} Description`);
+    }
+
+    async fillInEventTime(eventDate: Date) {
+        // Today's Date is stored in variables to make the Start and End Date/Time selectors more readable
+        const today = new Date();
+        const todayMonth = today.toLocaleDateString('en-US', { month: 'short' });
+        const todayDate = today.toLocaleDateString('en-US', { day: '2-digit' });
+        const todayYear = today.getFullYear();
+
+        // Set Start Date/Time
+        await this.page
+            .locator(
+                `text=Start Date & Time *Start Date & Time * >> [aria-label="Choose date\\, selected date is ${todayMonth} ${todayDate}\\, ${todayYear}"]`
+            )
+            .click();
+        await this.page.locator('[aria-label="calendar view is open\\, go to text input view"]').click();
+        await this.page
+            .locator('[placeholder="mm\\/dd\\/yyyy hh\\:mm \\(a\\|p\\)m"]')
+            .fill(`${eventDate.toLocaleDateString()} 12:00 am`);
+        await this.page.locator('text=OK').click();
+
+        // Set End Date/Time
+        await this.page
+            .locator(
+                `text=End Date & Time *End Date & Time * >> [aria-label="Choose date\\, selected date is ${todayMonth} ${todayDate}\\, ${todayYear}"]`
+            )
+            .click();
+        await this.page.locator('[aria-label="calendar view is open\\, go to text input view"]').click();
+        await this.page
+            .locator('[placeholder="mm\\/dd\\/yyyy hh\\:mm \\(a\\|p\\)m"]')
+            .fill(`${eventDate.toLocaleDateString()} 11:59 pm`);
+        await this.page.locator('text=OK').click();
+    }
+
+    async submitEventForm() {
+        await this.page.locator('button:has-text("Create")').click();
+    }
 }
