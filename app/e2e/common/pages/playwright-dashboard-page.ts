@@ -1,5 +1,4 @@
-// playwright-dashboard-page.ts
-import { Browser, expect, Locator, Page } from '@playwright/test';
+import { Browser, Locator, Page } from '@playwright/test';
 import { Device, getIndexByDevice } from '@local/common/utils';
 
 export class PlaywrightDashboardPage {
@@ -8,6 +7,7 @@ export class PlaywrightDashboardPage {
 
     readonly currentEventsSection: Locator;
     readonly upcomingEventsSection: Locator;
+    readonly createEventButton: Locator;
 
     constructor(page: Page, device: Device) {
         this.page = page;
@@ -15,6 +15,7 @@ export class PlaywrightDashboardPage {
 
         this.currentEventsSection = page.locator('text=Current Events');
         this.upcomingEventsSection = page.locator('text=Upcoming Events');
+        this.createEventButton = page.locator('[aria-label="view future event"]');
     }
 
     /**
@@ -49,8 +50,29 @@ export class PlaywrightDashboardPage {
         await this.page.goto('/dashboard');
     }
 
+    async reload() {
+        await this.page.reload();
+    }
+
     async clickOnEvent(eventName: string, eventDate: Date, orgName: string) {
-        const formattedDate = eventDate.toLocaleDateString('en-US', {month: '2-digit', day: 'numeric', year: 'numeric'});
-        await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}${orgName}")`).click();
+        const formattedDate = eventDate.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'});
+        await Promise.all([
+            await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}${orgName}")`).click(),
+            await this.page.waitForNavigation()
+        ]);
+    }
+
+    async clickOnCreateEvent() {
+        await Promise.all([
+            await this.createEventButton.click(),
+            await this.page.waitForNavigation()
+        ]);
+    }
+
+    async clickOnLiveFeed() {
+        await Promise.all([
+            await this.page.locator('[aria-label="view live feed of current event"]').click(),
+            await this.page.waitForNavigation()
+        ]);
     }
 }

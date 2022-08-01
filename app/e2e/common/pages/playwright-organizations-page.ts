@@ -82,9 +82,9 @@ export class PlaywrightOrganizationsPage {
         // Today's Date is stored in variables to make the Start and End Date/Time selectors more readable
         const today = new Date();
         const todayMonth = today.toLocaleDateString('en-US', { month: 'short' });
-        const todayDate = today.toLocaleDateString('en-US', { day: '2-digit' });
+        const todayDate = today.toLocaleDateString('en-US', { day: 'numeric' });
         const todayYear = today.getFullYear();
-
+        
         // Set Start Date/Time
         await this.page
             .locator(
