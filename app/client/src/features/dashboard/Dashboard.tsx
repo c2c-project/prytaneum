@@ -2,33 +2,41 @@ import * as React from 'react';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { useRouter } from 'next/router';
 import { isBefore, isAfter } from 'date-fns';
-
-import { Card, CardContent, Grid, List, Typography, IconButton } from '@mui/material';
+import { Card, CardContent, Grid, Typography, IconButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Add } from '@mui/icons-material';
 
 import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
-import { DashboardEventListItem } from './DashboardEventListItem';
+import { DashboardEventList } from './DashboardEventList';
 
 const useStyles = makeStyles((theme) => ({
-    item: {
-        marginBottom: theme.spacing(4),
-    },
-    card: {
-        padding: theme.spacing(1),
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-    },
-    text: {
-        marginLeft: theme.spacing(1),
-    },
     secondaryText: {
         color: theme.palette.text.secondary,
     },
+    addIcon: {
+        fontSize: 32,
+        color: 'black',
+    },
+    addIconTitle: {
+        marginTop: 8,
+    },
 }));
+
+export interface Event {
+    node: {
+        id: string;
+        title: string | null;
+        description: string | null;
+        startDateTime: Date | null;
+        endDateTime: Date | null;
+        isViewerModerator: boolean | null;
+        organization: {
+            name: string;
+        } | null;
+    };
+}
 
 export const DASHBOARD_QUERY = graphql`
     query DashboardQuery {
@@ -41,6 +49,7 @@ export const DASHBOARD_QUERY = graphql`
                         description
                         startDateTime
                         endDateTime
+                        isViewerModerator
                         organization {
                             name
                         }
@@ -94,73 +103,17 @@ export function Dashboard({ queryRef }: Props) {
 
     return (
         <Grid container>
-            <Grid item xs={12} className={classes.item}>
-                <Card className={classes.card}>
-                    <CardContent>
-                        <Typography variant='h6' className={classes.title}>
-                            Current Events
-                        </Typography>
-                        {ongoingEvents.length > 0 ? (
-                            <List>
-                                {ongoingEvents.map(({ node: event }, idx) => {
-                                    let divider = true;
-                                    if (idx === ongoingEvents.length - 1) divider = false;
-                                    return (
-                                        <DashboardEventListItem
-                                            key={event.id}
-                                            event={event}
-                                            ongoing={true}
-                                            divider={divider}
-                                        />
-                                    );
-                                })}
-                            </List>
-                        ) : (
-                            <Typography className={classes.text} variant='subtitle2'>
-                                No Events To Display
-                            </Typography>
-                        )}
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={12} className={classes.item}>
-                <Card className={classes.card}>
-                    <CardContent>
-                        <Typography variant='h6' className={classes.title}>
-                            Upcoming Events
-                        </Typography>
-                        {upcomingEvents.length > 0 ? (
-                            <List>
-                                {upcomingEvents.map(({ node: event }, idx) => {
-                                    let divider = true;
-                                    if (idx === upcomingEvents.length - 1) divider = false;
-                                    return (
-                                        <DashboardEventListItem
-                                            key={event.id}
-                                            event={event}
-                                            ongoing={false}
-                                            divider={divider}
-                                        />
-                                    );
-                                })}
-                            </List>
-                        ) : (
-                            <Typography className={classes.text} variant='subtitle2'>
-                                No Events To Display
-                            </Typography>
-                        )}
-                    </CardContent>
-                </Card>
-            </Grid>
+            <DashboardEventList eventList={ongoingEvents} ongoing={true} />
+            <DashboardEventList eventList={upcomingEvents} ongoing={false} />
             <Grid item>
                 <Card>
                     <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
                         <IconButton aria-label='view future event' onClick={handleNav('/organizations/me')}>
-                            <Add style={{ fontSize: 32, color: 'black' }} />
+                            <Add className={classes.addIcon} />
                         </IconButton>
                     </CardContent>
                 </Card>
-                <Typography variant='subtitle2' style={{ marginTop: 8 }}>
+                <Typography variant='subtitle2' className={classes.addIconTitle}>
                     Create Event
                 </Typography>
             </Grid>
