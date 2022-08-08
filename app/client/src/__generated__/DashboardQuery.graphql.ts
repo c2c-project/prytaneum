@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<35f43b89e930eb645c7d54dea53b1ce8>>
+ * @generated SignedSource<<9dcb3449dd243ad58bd3219a26c4a6db>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,7 @@ export type DashboardQuery$data = {
           readonly description: string | null;
           readonly startDateTime: Date | null;
           readonly endDateTime: Date | null;
+          readonly isViewerModerator: boolean | null;
           readonly organization: {
             readonly name: string;
           } | null;
@@ -75,6 +76,13 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isViewerModerator",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 };
@@ -122,6 +130,7 @@ return {
                       (v2/*: any*/),
                       (v3/*: any*/),
                       (v4/*: any*/),
+                      (v5/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -130,7 +139,7 @@ return {
                         "name": "organization",
                         "plural": false,
                         "selections": [
-                          (v5/*: any*/)
+                          (v6/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -193,6 +202,7 @@ return {
                       (v2/*: any*/),
                       (v3/*: any*/),
                       (v4/*: any*/),
+                      (v5/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -201,7 +211,7 @@ return {
                         "name": "organization",
                         "plural": false,
                         "selections": [
-                          (v5/*: any*/),
+                          (v6/*: any*/),
                           (v0/*: any*/)
                         ],
                         "storageKey": null
@@ -222,16 +232,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4affa1943be3b0b1a5096a59ac67851d",
+    "cacheID": "4945ffb631e4b943c24142863264c6e0",
     "id": null,
     "metadata": {},
     "name": "DashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          title\n          description\n          startDateTime\n          endDateTime\n          organization {\n            name\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query DashboardQuery {\n  me {\n    events {\n      edges {\n        node {\n          id\n          title\n          description\n          startDateTime\n          endDateTime\n          isViewerModerator\n          organization {\n            name\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "519ff8f3ddf06e6f64aa447eb4b9d4ce";
+(node as any).hash = "cde2b2f74e80f599d283235544a751db";
 
 export default node;

@@ -9,8 +9,8 @@ const toOrgId = toGlobalId('Organization');
 const toEventId = toGlobalId('Event');
 
 const cookieOptions: CookieSerializeOptions = {
-    sameSite: 'lax'
-}
+    sameSite: 'lax',
+};
 
 export const resolvers: Resolvers = {
     Query: {
@@ -29,7 +29,7 @@ export const resolvers: Resolvers = {
         },
         async events(parent, args, ctx, info) {
             const { id: userId } = fromGlobalId(parent.id);
-            const userEvents = await User.findEventsByUserId(userId, ctx.prisma);
+            const userEvents = await User.findUsersEventsByUserId(userId, ctx.prisma);
             if (!userEvents) return null;
             return connectionFromArray(userEvents.map(toEventId), args);
         },

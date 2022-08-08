@@ -4,24 +4,22 @@ import { formatDate } from '@local/utils/format';
 
 interface DashboardEventProps {
     id: string;
-    title: string;
-    description: string;
-    startDateTime: Date;
-    organization: string;
+    title: string | null;
+    description: string | null;
+    startDateTime: Date | null;
+    organization: string | undefined;
 }
 
-export function DashboardEvent(props: DashboardEventProps) {
+export function DashboardEvent({ title, startDateTime, organization }: DashboardEventProps) {
     return (
-        <>
-            <ListItemText
-                primary={props.title}
-                secondary={
-                    <div>
-                        <div>{props.startDateTime && formatDate(props.startDateTime)}</div>
-                        <div>{props.organization}</div>
-                    </div>
-                }
-            />
-        </>
+        <ListItemText
+            primary={title}
+            secondary={
+                <div>
+                    <div>{startDateTime && formatDate(startDateTime)}</div>
+                    <div>{organization}</div>
+                </div>
+            }
+        />
     );
 }
