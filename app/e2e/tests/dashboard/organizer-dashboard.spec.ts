@@ -7,8 +7,11 @@ export default function organizerTests() {
             await dashboardPageOrganizer.goto();
 
             // Select ongoing event
-            const today = new Date();
-            await dashboardPageOrganizer.clickOnEvent('Ongoing Event', today, 'Test Organization');
+            await dashboardPageOrganizer.clickOnEvent(
+                'Ongoing Event',
+                dashboardPageOrganizer.today,
+                'Test Organization'
+            );
 
             // Verify we are directed to the event's settings page
             await expect(dashboardPageOrganizer.page).toHaveURL(/.*settings/);

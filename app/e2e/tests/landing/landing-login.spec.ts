@@ -1,8 +1,6 @@
 import { test } from '@playwright/test';
 import { PlaywrightLandingPage } from '@local/common/pages/playwright-landing-page';
 
-test.describe.configure({ mode: 'parallel' });
-
 test('I can close the login modal if I accidentally open it', async ({ page }) => {
     const landing = new PlaywrightLandingPage(page);
     await landing.goto();
