@@ -22,19 +22,16 @@ test.beforeAll(async ({ browser, device }) => {
     await organizationsPage.submitOrganizationForm();
 
     // Create ongoing event
-    const today = new Date();
     await organizationsPage.clickOnOrganization('Test Organization');
     await organizationsPage.clickOnCreateEvent();
     await organizationsPage.fillInEventName('Ongoing Event');
-    await organizationsPage.fillInEventTime(today);
+    await organizationsPage.fillInEventTime(organizationsPage.today);
     await organizationsPage.submitEventForm();
 
     // Create upcoming event
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
     await organizationsPage.clickOnCreateEvent();
     await organizationsPage.fillInEventName('Upcoming Event');
-    await organizationsPage.fillInEventTime(tomorrow);
+    await organizationsPage.fillInEventTime(organizationsPage.tomorrow);
     await organizationsPage.submitEventForm();
 });
 

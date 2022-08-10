@@ -8,6 +8,7 @@ export class PlaywrightDashboardPage {
     readonly currentEventsSection: Locator;
     readonly upcomingEventsSection: Locator;
     readonly createEventButton: Locator;
+    readonly today: Date;
 
     constructor(page: Page, device: Device) {
         this.page = page;
@@ -16,6 +17,7 @@ export class PlaywrightDashboardPage {
         this.currentEventsSection = page.locator('text=Current Events');
         this.upcomingEventsSection = page.locator('text=Upcoming Events');
         this.createEventButton = page.locator('[aria-label="view future event"]');
+        this.today = new Date();
     }
 
     /**
@@ -55,24 +57,25 @@ export class PlaywrightDashboardPage {
     }
 
     async clickOnEvent(eventName: string, eventDate: Date, orgName: string) {
-        const formattedDate = eventDate.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'});
+        const formattedDate = eventDate.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+        });
         await Promise.all([
             await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}${orgName}")`).click(),
-            await this.page.waitForNavigation()
+            await this.page.waitForNavigation(),
         ]);
     }
 
     async clickOnCreateEvent() {
-        await Promise.all([
-            await this.createEventButton.click(),
-            await this.page.waitForNavigation()
-        ]);
+        await Promise.all([await this.createEventButton.click(), await this.page.waitForNavigation()]);
     }
 
     async clickOnLiveFeed() {
         await Promise.all([
             await this.page.locator('[aria-label="view live feed of current event"]').click(),
-            await this.page.waitForNavigation()
+            await this.page.waitForNavigation(),
         ]);
     }
 }

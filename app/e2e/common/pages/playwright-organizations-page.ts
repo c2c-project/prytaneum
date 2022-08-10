@@ -9,6 +9,8 @@ export class PlaywrightOrganizationsPage {
     readonly createOrganizationButton: Locator;
     readonly createOrganizationInput: Locator;
     readonly createOrganizationSubmitButton: Locator;
+    readonly today: Date;
+    readonly tomorrow: Date;
 
     constructor(page: Page, device: Device) {
         this.page = page;
@@ -17,6 +19,9 @@ export class PlaywrightOrganizationsPage {
         this.createOrganizationButton = page.locator('[data-test-id="create-organization-button"]');
         this.createOrganizationInput = page.locator('input[type="text"]');
         this.createOrganizationSubmitButton = page.locator('button:has-text("Create")');
+        this.today = new Date();
+        this.tomorrow = new Date();
+        this.tomorrow.setDate(this.today.getDate() + 1);
     }
 
     /**
@@ -80,11 +85,10 @@ export class PlaywrightOrganizationsPage {
 
     async fillInEventTime(eventDate: Date) {
         // Today's Date is stored in variables to make the Start and End Date/Time selectors more readable
-        const today = new Date();
-        const todayMonth = today.toLocaleDateString('en-US', { month: 'short' });
-        const todayDate = today.toLocaleDateString('en-US', { day: 'numeric' });
-        const todayYear = today.getFullYear();
-        
+        const todayMonth = this.today.toLocaleDateString('en-US', { month: 'short' });
+        const todayDate = this.today.toLocaleDateString('en-US', { day: 'numeric' });
+        const todayYear = this.today.getFullYear();
+
         // Set Start Date/Time
         await this.page
             .locator(
