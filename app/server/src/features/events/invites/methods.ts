@@ -30,6 +30,8 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
         userResult = await register(prisma, { email });
         invitedUserId = userResult.id;
     }
+    // Add to invitedOf for event
+    await prisma.eventInvited.create({ data: { eventId: globalEventId, userId: invitedUserId } });
 
     // Sign token
     const token = await sign({ eventId, invitedUserId }); // TODO: expire at some point

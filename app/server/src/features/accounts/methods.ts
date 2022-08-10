@@ -176,10 +176,10 @@ export async function findUsersEventsByUserId(userId: string, prisma: PrismaClie
 
     if (!results) return null;
 
-    // prepare data for graphql layer & remove duplicate events (where user is both moderator of and invited to)
     let formattedData = results.moderatorOf.map(({ event }) => event);
-    formattedData = formattedData.filter((event, index) => {
-        return formattedData.indexOf(event) === index;
+    // Check if event id already exists in the array. If it does, don't add it again.
+    results.invitedOf.forEach(({ event }) => {
+        if (!formattedData.find(({ id }) => id === event.id)) formattedData.push(event);
     });
     return formattedData;
 }
