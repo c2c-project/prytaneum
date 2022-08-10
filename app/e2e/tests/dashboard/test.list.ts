@@ -4,10 +4,9 @@ import { PlaywrightOrganizationsPage } from '@local/common/pages';
 import organizerTests from './organizer-dashboard.spec';
 import userTests from './user-dashboard.spec';
 
-// Tests in ilst can be run in parallel as long as the setup/teardown is the same for all test suites.
-// If the setup/teardown is different for any test suite, then tests should be run in serial.
 // https://playwright.dev/docs/test-parallel#serial-mode
 // Use `test.describe.configure({ mode: 'serial' });` to run tests in serial.
+test.describe.configure({ mode: 'serial' });
 
 // Dashboard tests setup and teardown
 // Create organization and events that can be used to test the dashboard
