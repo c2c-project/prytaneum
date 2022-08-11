@@ -12,14 +12,10 @@ interface DashboardEventProps {
 
 export function DashboardEvent({ title, startDateTime, organization }: DashboardEventProps) {
     return (
-        <ListItemText
-            primary={title}
-            secondary={
-                <div>
-                    <div>{startDateTime && formatDate(startDateTime)}</div>
-                    <div>{organization}</div>
-                </div>
-            }
-        />
+        <div>
+            <ListItemText primary={title} />
+            <ListItemText secondary={startDateTime && formatDate(startDateTime)} />
+            <ListItemText secondary={organization} />
+        </div>
     );
 }
