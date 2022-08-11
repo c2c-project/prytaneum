@@ -35,7 +35,7 @@ const makeDevelopmentServer = () =>
         logger: {
             level: process.env.LOG_LEVEL ?? 'debug',
             prettyPrint: {
-                translateTime: 'SYS:HH:MM:ss Z',
+                translateTime: 'HH:MM:ss Z',
                 ignore: 'pid,hostname,res,reqId,req',
             },
         },
