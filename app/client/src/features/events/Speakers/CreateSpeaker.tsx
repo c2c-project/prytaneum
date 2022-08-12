@@ -2,7 +2,7 @@ import { graphql, useMutation } from 'react-relay';
 
 import type {
     CreateSpeakerMutation,
-    CreateSpeakerMutationResponse,
+    CreateSpeakerMutation$data,
 } from '@local/__generated__/CreateSpeakerMutation.graphql';
 import { SpeakerForm, TSpeakerForm } from './SpeakerForm';
 
@@ -24,7 +24,7 @@ const CREATE_SPEAKER_MUTATION = graphql`
     }
 `;
 
-export type TCreatedSpeaker = CreateSpeakerMutationResponse['createSpeaker'];
+export type TCreatedSpeaker = CreateSpeakerMutation$data['createSpeaker'];
 export interface CreateSpeakerProps {
     eventId: string;
     onSubmit: (speaker: TCreatedSpeaker) => void;

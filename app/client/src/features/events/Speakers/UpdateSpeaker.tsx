@@ -2,7 +2,7 @@ import { graphql, useMutation } from 'react-relay';
 
 import type {
     UpdateSpeakerMutation,
-    UpdateSpeakerMutationResponse,
+    UpdateSpeakerMutation$data,
 } from '@local/__generated__/UpdateSpeakerMutation.graphql';
 import { NullableFields } from '@local/utils/ts-utils';
 import { SpeakerForm, TSpeakerForm } from './SpeakerForm';
@@ -25,7 +25,7 @@ const UPDATE_SPEAKER_MUTATION = graphql`
     }
 `;
 
-export type TUpdatedSpeaker = UpdateSpeakerMutationResponse['updateSpeaker'];
+export type TUpdatedSpeaker = UpdateSpeakerMutation$data['updateSpeaker'];
 export interface UpdateSpeakerProps {
     form: NullableFields<TSpeakerForm>;
     speakerId: string;

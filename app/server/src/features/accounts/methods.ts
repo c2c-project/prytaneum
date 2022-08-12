@@ -58,10 +58,10 @@ function validatePasswordsMatch(password: string, confirmPassword: string) {
 async function hashPassword(password: string) {
     try {
         return await bcrypt.hash(password, 10);
-    } catch (error) {
+    } catch (error: any) {
         throw new ProtectedError({
             userMessage: 'Internal server error. Please try again later.',
-            internalMessage: 'Error hashing password: ' + error.message,
+            internalMessage: 'Error hashing password: ' + error?.message,
         });
     }
 }
