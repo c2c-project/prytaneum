@@ -3,6 +3,7 @@ import { PlaywrightLandingPage } from '@local/common/pages';
 import { getOrganizersByDeviceAmmount, getUsersByDeviceAmmount } from '@local/common/utils';
 
 async function globalSetup() {
+    const startTime = performance.now();
     console.log('Running Global Setup...');
     console.log('Validating Environment...');
     if (!process.env.BASE_URL) throw new Error('BASE_URL is not set');
@@ -58,6 +59,8 @@ async function globalSetup() {
 
     await browser.close();
     console.log('Global Setup Complete');
+    const endTime = performance.now();
+    console.log(`Global Setup took ${(endTime - startTime) / 1000} seconds`);
 }
 
 export default globalSetup;
