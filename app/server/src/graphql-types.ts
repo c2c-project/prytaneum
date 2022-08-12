@@ -93,10 +93,18 @@ export type User = Node & {
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
     organizations?: Maybe<OrganizationConnection>;
+    /** Events that this user is a moderator of, or has been invited to */
+    events?: Maybe<EventConnection>;
 };
 
 /** User Data */
 export type UserorganizationsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+/** User Data */
+export type UsereventsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -1401,6 +1409,12 @@ export type UserResolvers<
         ContextType,
         RequireFields<UserorganizationsArgs, never>
     >;
+    events?: Resolver<
+        Maybe<ResolversTypes['EventConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UsereventsArgs, never>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2320,6 +2334,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
+        events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
     };
 
     UserSettings?: {
