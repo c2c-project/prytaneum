@@ -124,6 +124,86 @@ describe('account methods', () => {
         });
     });
 
+    describe('findUsersEventsByUserId', () => {
+        test('should find a single event; user is moderator', async () => {
+            // Arrange
+            const user = {
+                ...userData,
+                moderatorOf: [{ event: { id: 1, title: 'Ongoing Event' } }],
+            };
+            prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+            // Act
+            const output = await AccountMethods.findUsersEventsByUserId(userData.id, prismaMock);
+            const outputTitles = output?.map(({ title }) => title);
+
+            // Assert
+            const expectedOutput = ['Ongoing Event'];
+            expect(outputTitles).toEqual(expectedOutput);
+        });
+
+        test('should find a single event; user is invited', async () => {
+            // Arrange
+            const user = {
+                ...userData,
+                invitedOf: [{ event: { id: 1, title: 'Test Event' } }],
+            };
+            prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+            // Act
+            const output = await AccountMethods.findUsersEventsByUserId(userData.id, prismaMock);
+            const outputTitles = output?.map(({ title }) => title);
+
+            // Assert
+            const expectedOutput = ['Test Event'];
+            expect(outputTitles).toEqual(expectedOutput);
+        });
+
+        test('should find multiple events', async () => {
+            // Arrange
+            const user = {
+                ...userData,
+                moderatorOf: [{ event: { id: 1, title: 'Ongoing Event' } }],
+                invitedOf: [{ event: { id: 2, title: '2nd Ongoing Event' } }],
+            };
+            prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+            // Act
+            const output = await AccountMethods.findUsersEventsByUserId(userData.id, prismaMock);
+            const outputTitles = output?.map(({ title }) => title);
+
+            // Assert
+            const expectedOutput = ['Ongoing Event', '2nd Ongoing Event'];
+            expect(outputTitles).toEqual(expectedOutput);
+        });
+
+        test('should return only one event if user is both a moderator and invited', async () => {
+            // Arrange
+            const user = {
+                ...userData,
+                moderatorOf: [{ event: { id: 1, title: 'Upcoming Event' } }],
+                invitedOf: [{ event: { id: 1, title: 'Upcoming Event' } }],
+            };
+            prismaMock.user.findUnique.mockResolvedValueOnce(user);
+
+            // Act
+            const output = await AccountMethods.findUsersEventsByUserId(userData.id, prismaMock);
+            const outputTitles = output?.map(({ title }) => title);
+
+            // Assert
+            const expectedOutput = ['Upcoming Event'];
+            expect(outputTitles).toEqual(expectedOutput);
+        });
+
+        test('should not find events', async () => {
+            // Arrange
+            prismaMock.user.findUnique.mockRejectedValueOnce(null);
+
+            // Assert
+            await expect(AccountMethods.findUsersEventsByUserId(userData.id, prismaMock)).rejects.toBeNull();
+        });
+    });
+
     describe('registerSelf', () => {
         test('should register a user if passwords match', async () => {
             // Arrange

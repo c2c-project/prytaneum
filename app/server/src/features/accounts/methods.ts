@@ -12,6 +12,7 @@ import type {
     UpdatePasswordForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
+    Event,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
@@ -189,9 +190,12 @@ export async function findUsersEventsByUserId(userId: string, prisma: PrismaClie
 
     if (!results) return null;
 
-    let formattedData = results.moderatorOf.map(({ event }) => event);
+    const formattedData: Event[] = [];
+    results.moderatorOf?.forEach(({ event }) => {
+        formattedData.push(event);
+    });
     // Check if event id already exists in the array. If it does, don't add it again.
-    results.invitedOf.forEach(({ event }) => {
+    results.invitedOf?.forEach(({ event }) => {
         if (!formattedData.find(({ id }) => id === event.id)) formattedData.push(event);
     });
     return formattedData;
