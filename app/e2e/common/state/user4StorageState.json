@@ -3,7 +3,7 @@
     {
       "sameSite": "Lax",
       "name": "jwt",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZYTmxjam8xWkdGbVlUWmlOeTFsWkRJeExUUXdZak10WVRJell5MWhabU5rTnpKalpHSmhZVGM9IiwiaWF0IjoxNjYwMjU5Mjk2fQ.AdEAeaif9T_YQDWCl6JLkYSJbl-ZitmsmpkCX2msgcA",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZYTmxjam94TXpSaE0yWTJZUzB6WlRGakxUUXhOemt0T1RVM1lpMDBOekZpT0RZeE5EQm1NV1U9IiwiaWF0IjoxNjYwMjY0MDk5fQ.YY1VNBZu5k_PzTRuUE2aXL1NpxWvnzQzDT5FvuRlzRs",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
