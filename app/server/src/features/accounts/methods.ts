@@ -152,6 +152,39 @@ export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {
 }
 
 /**
+ * get events that this particular user is a moderator of, or has been invited to
+ * @param userId
+ * @param prisma
+ * @returns Event[]
+ */
+export async function findUsersEventsByUserId(userId: string, prisma: PrismaClient) {
+    const results = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+            moderatorOf: {
+                include: {
+                    event: true,
+                },
+            },
+            invitedOf: {
+                include: {
+                    event: true,
+                },
+            },
+        },
+    });
+
+    if (!results) return null;
+
+    let formattedData = results.moderatorOf.map(({ event }) => event);
+    // Check if event id already exists in the array. If it does, don't add it again.
+    results.invitedOf.forEach(({ event }) => {
+        if (!formattedData.find(({ id }) => id === event.id)) formattedData.push(event);
+    });
+    return formattedData;
+}
+
+/**
  * function called when a user is registering themselves
  */
 export async function registerSelf(prisma: PrismaClient, input: RegistrationForm) {

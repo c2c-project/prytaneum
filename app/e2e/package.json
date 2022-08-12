@@ -4,9 +4,9 @@
     "private": true,
     "scripts": {
         "pretest": "yarn g:start-test-db && yarn workspace @app/server prisma-db-push && yarn workspace @app/server prisma-db-seed",
-        "test": "yarn pretest && playwright test",
-        "test:ci": "dotenv -v CI=1 -- yarn run test",
-        "debug": "yarn pretest && playwright test --headed",
+        "test": "yarn pretest && dotenv -e .env.development -- playwright test",
+        "test:ci": "dotenv -e .env.test -- yarn run test",
+        "debug": "yarn pretest && dotenv -e .env.development -- playwright test --headed",
         "allure:generate-report": "allure generate ./allure-results --clean",
         "allure:open-report": "yarn allure:generate-report && allure open ./allure-report"
     },
