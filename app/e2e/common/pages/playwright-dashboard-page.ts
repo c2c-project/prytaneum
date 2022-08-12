@@ -74,7 +74,7 @@ export class PlaywrightDashboardPage {
 
     async clickOnLiveFeed() {
         await Promise.all([
-            await this.page.locator('[aria-label="view live feed of current event"]').click(),
+            await this.page.locator('[aria-label="view live feed of current event"]').first().click(),
             await this.page.waitForNavigation(),
         ]);
     }
