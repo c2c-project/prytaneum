@@ -3,7 +3,7 @@ import * as React from 'react';
 import { NextPage, GetServerSidePropsContext } from 'next';
 import { fetchQuery, graphql } from 'react-relay';
 
-import type { profileQuery, profileQueryResponse } from '@local/__generated__/profileQuery.graphql';
+import type { profileQuery, profileQuery$data } from '@local/__generated__/profileQuery.graphql';
 import { initEnvironment } from '@local/core/relay';
 import { PickRequired } from '@local/utils/ts-utils';
 import { EventProfile } from '@local/features/events';
@@ -40,7 +40,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext<{ id: st
     return { props: { ...baseProps, ...queryProps, initialRecords } };
 }
 
-const ProfilePage: NextPage<profileQueryResponse> = ({ node }) => {
+const ProfilePage: NextPage<profileQuery$data> = ({ node }) => {
     if (!node) {
         return <Loader />;
     }

@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import type {
-    CreateVideoMutation,
-    CreateVideoMutationResponse,
-} from '@local/__generated__/CreateVideoMutation.graphql';
+import type { CreateVideoMutation, CreateVideoMutation$data } from '@local/__generated__/CreateVideoMutation.graphql';
 import { VideoForm, TVideoForm } from './VideoForm';
 
 interface CreateVideoProps {
-    onSubmit: (res: CreateVideoMutationResponse['createVideo']['body']) => void;
+    onSubmit: (res: CreateVideoMutation$data['createVideo']['body']) => void;
     eventId: string;
     connections: string[];
 }

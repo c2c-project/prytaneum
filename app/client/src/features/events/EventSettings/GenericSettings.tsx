@@ -4,7 +4,7 @@ import { graphql, useFragment, useMutation } from 'react-relay';
 
 import type {
     GenericSettingsFragment$key,
-    GenericSettingsFragment,
+    GenericSettingsFragment$data,
 } from '@local/__generated__/GenericSettingsFragment.graphql';
 import type { GenericSettingsMutation } from '@local/__generated__/GenericSettingsMutation.graphql';
 
@@ -59,7 +59,7 @@ export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) 
 
     const [commit] = useMutation<GenericSettingsMutation>(GENERIC_SETTINGS_MUTATION);
 
-    function handleChange(key: keyof GenericSettingsFragment) {
+    function handleChange(key: keyof GenericSettingsFragment$data) {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
             const { checked } = e.target;
             commit({

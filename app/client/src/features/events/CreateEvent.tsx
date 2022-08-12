@@ -1,9 +1,6 @@
 import { graphql, useMutation } from 'react-relay';
 
-import type {
-    CreateEventMutation,
-    CreateEventMutationResponse,
-} from '@local/__generated__/CreateEventMutation.graphql';
+import type { CreateEventMutation, CreateEventMutation$data } from '@local/__generated__/CreateEventMutation.graphql';
 import { EventForm, TEventForm, EventFormProps } from './EventForm';
 
 export const CREATE_EVENT_MUTATION = graphql`
@@ -21,7 +18,7 @@ export const CREATE_EVENT_MUTATION = graphql`
     }
 `;
 
-export type TCreatedEvent = NonNullable<CreateEventMutationResponse['createEvent']>;
+export type TCreatedEvent = NonNullable<CreateEventMutation$data['createEvent']>;
 export type CreateEventProps = {
     orgId: string;
     onSubmit?: (event: TCreatedEvent) => void;
