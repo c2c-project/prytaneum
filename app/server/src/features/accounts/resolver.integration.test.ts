@@ -133,5 +133,198 @@ describe('account resolvers', () => {
                 });
             });
         });
+
+        describe('events', () => {
+            test('should return empty list of edges when user is not moderator or invited to any events', async () => {
+                // Arrange
+                const query = 'query { me { events { edges { node { title } } } } }';
+                const user = toUserId(userData);
+                const token = await jwt.sign({ id: user.id });
+                testClient.setCookies({ jwt: token });
+
+                // Act
+                const queryResponse = await testClient.query(query);
+
+                // Assert
+                const expectedResponse = { data: { me: { events: { edges: [] } } } };
+                expect(queryResponse).toEqual(expectedResponse);
+            });
+
+            describe('user is moderator and invited to same event', () => {
+                beforeAll(async () => {
+                    const today = new Date();
+                    await prisma.event.create({
+                        data: {
+                            title: 'test event',
+                            startDateTime: today,
+                            endDateTime: today,
+                            description: 'for testing',
+                            topic: 'test',
+                            isActive: true,
+                            isQuestionFeedVisible: true,
+                            isCollectRatingsEnabled: true,
+                            isForumEnabled: true,
+                            isPrivate: true,
+                            organization: { create: { name: 'testOrg' } },
+                            createdByUser: {
+                                create: {
+                                    organization: { create: { name: 'testOrg' } },
+                                    user: { connect: { email: userData.email } },
+                                },
+                            },
+                            moderators: { create: [{ userId: userData.id }] },
+                            invited: { create: [{ userId: userData.id }] },
+                        },
+                    });
+                });
+
+                afterAll(async () => {
+                    await prisma.event.deleteMany();
+                });
+
+                test('should return only one edge with event that user is both a moderator and invited to', async () => {
+                    // Arrange
+                    const query = 'query { me { events { edges { node { title } } } } }';
+                    const user = toUserId(userData);
+                    const token = await jwt.sign({ id: user.id });
+                    testClient.setCookies({ jwt: token });
+
+                    // Act
+                    const queryResponse = await testClient.query(query);
+
+                    // Assert
+                    const expectedResponse = {
+                        data: { me: { events: { edges: [{ node: { title: 'test event' } }] } } },
+                    };
+                    expect(queryResponse).toEqual(expectedResponse);
+                });
+            });
+
+            describe('user is moderator and invited to several events', () => {
+                beforeAll(async () => {
+                    const today = new Date();
+                    await prisma.event.create({
+                        data: {
+                            title: 'invited event 1',
+                            startDateTime: today,
+                            endDateTime: today,
+                            description: 'for testing',
+                            topic: 'test',
+                            isActive: true,
+                            isQuestionFeedVisible: true,
+                            isCollectRatingsEnabled: true,
+                            isForumEnabled: true,
+                            isPrivate: true,
+                            organization: { create: { name: 'testOrg' } },
+                            createdByUser: {
+                                create: {
+                                    organization: { create: { name: 'testOrg' } },
+                                    user: { connect: { email: userData.email } },
+                                },
+                            },
+                            invited: { create: [{ userId: userData.id }] },
+                        },
+                    });
+                    await prisma.event.create({
+                        data: {
+                            title: 'invited event 2',
+                            startDateTime: today,
+                            endDateTime: today,
+                            description: 'for testing',
+                            topic: 'test',
+                            isActive: true,
+                            isQuestionFeedVisible: true,
+                            isCollectRatingsEnabled: true,
+                            isForumEnabled: true,
+                            isPrivate: true,
+                            organization: { create: { name: 'testOrg' } },
+                            createdByUser: {
+                                create: {
+                                    organization: { create: { name: 'testOrg' } },
+                                    user: { connect: { email: userData.email } },
+                                },
+                            },
+                            invited: { create: [{ userId: userData.id }] },
+                        },
+                    });
+                    await prisma.event.create({
+                        data: {
+                            title: 'moderator event 1',
+                            startDateTime: today,
+                            endDateTime: today,
+                            description: 'for testing',
+                            topic: 'test',
+                            isActive: true,
+                            isQuestionFeedVisible: true,
+                            isCollectRatingsEnabled: true,
+                            isForumEnabled: true,
+                            isPrivate: true,
+                            organization: { create: { name: 'testOrg' } },
+                            createdByUser: {
+                                create: {
+                                    organization: { create: { name: 'testOrg' } },
+                                    user: { connect: { email: userData.email } },
+                                },
+                            },
+                            moderators: { create: [{ userId: userData.id }] },
+                        },
+                    });
+                    await prisma.event.create({
+                        data: {
+                            title: 'moderator event 2',
+                            startDateTime: today,
+                            endDateTime: today,
+                            description: 'for testing',
+                            topic: 'test',
+                            isActive: true,
+                            isQuestionFeedVisible: true,
+                            isCollectRatingsEnabled: true,
+                            isForumEnabled: true,
+                            isPrivate: true,
+                            organization: { create: { name: 'testOrg' } },
+                            createdByUser: {
+                                create: {
+                                    organization: { create: { name: 'testOrg' } },
+                                    user: { connect: { email: userData.email } },
+                                },
+                            },
+                            moderators: { create: [{ userId: userData.id }] },
+                        },
+                    });
+                });
+
+                afterAll(async () => {
+                    await prisma.event.deleteMany();
+                });
+
+                test('should return list of edges with event nodes', async () => {
+                    // Arrange
+                    const query = 'query { me { events { edges { node { title } } } } }';
+                    const user = toUserId(userData);
+                    const token = await jwt.sign({ id: user.id });
+                    testClient.setCookies({ jwt: token });
+
+                    // Act
+                    const queryResponse = await testClient.query(query);
+
+                    // Assert
+                    const expectedResponse = {
+                        data: {
+                            me: {
+                                events: {
+                                    edges: [
+                                        { node: { title: 'moderator event 1' } },
+                                        { node: { title: 'moderator event 2' } },
+                                        { node: { title: 'invited event 1' } },
+                                        { node: { title: 'invited event 2' } },
+                                    ],
+                                },
+                            },
+                        },
+                    };
+                    expect(queryResponse).toEqual(expectedResponse);
+                });
+            });
+        });
     });
 });
