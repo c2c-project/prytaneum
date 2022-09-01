@@ -230,6 +230,13 @@ type EventEdge {
   node: Event!
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventEdgeContainer {
+  edge: EventEdge!
+}
+
 type EventFeedbackMutationResponse implements MutationResponse {
   body: EventLiveFeedbackEdge
   isError: Boolean!
@@ -695,10 +702,12 @@ type Subscription {
   enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  eventCreated(userId: ID!): EventEdgeContainer!
+  eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
 
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-  eventUpdates(eventId: ID!): Event!
+  eventUpdates(userId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
   feedbackPrompted(eventId: ID!): EventLiveFeedbackPrompt!
 

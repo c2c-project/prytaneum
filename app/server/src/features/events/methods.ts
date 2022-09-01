@@ -182,6 +182,17 @@ export async function findModeratorsByEventId(eventId: string, prisma: PrismaCli
 }
 
 /**
+ * find invited users for the given event
+ * @param eventId
+ * @param prisma
+ * @returns list of users
+ */
+export async function findInvitedByEventId(eventId: string, prisma: PrismaClient) {
+    const results = await prisma.eventInvited.findMany({ where: { eventId }, include: { user: true } });
+    return results.map(({ user }) => user);
+}
+
+/**
  * find an organization based on the event (probably inefficient)
  */
 export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {

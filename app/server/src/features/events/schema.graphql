@@ -196,6 +196,15 @@ type Query {
     event(eventId: ID!): Event
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventEdgeContainer {
+    edge: EventEdge!
+}
+
 type Subscription {
-    eventUpdates(eventId: ID!): Event!
+    eventUpdates(userId: ID!): Event!
+    eventCreated(userId: ID!): EventEdgeContainer!
+    eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
 }

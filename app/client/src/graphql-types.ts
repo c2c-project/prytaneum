@@ -269,6 +269,12 @@ export type EventEdge = {
   node: Event;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventEdgeContainer = {
+  __typename?: 'EventEdgeContainer';
+  edge: EventEdge;
+};
+
 export type EventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'EventFeedbackMutationResponse';
   body?: Maybe<EventLiveFeedbackEdge>;
@@ -1007,6 +1013,8 @@ export type Subscription = {
   enqueuedPushQuestion: EventQuestionEdgeContainer;
   enqueuedRemoveQuestion: EventQuestionEdgeContainer;
   enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
+  eventCreated: EventEdgeContainer;
+  eventDeleted: EventEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
@@ -1043,13 +1051,23 @@ export type SubscriptionEnqueuedUnshiftQuestionArgs = {
 };
 
 
+export type SubscriptionEventCreatedArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type SubscriptionEventDeletedArgs = {
+  eventIds: Array<Scalars['ID']>;
+};
+
+
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
   eventId: Scalars['ID'];
 };
 
 
 export type SubscriptionEventUpdatesArgs = {
-  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
