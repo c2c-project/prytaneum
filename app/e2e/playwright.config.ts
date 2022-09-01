@@ -27,8 +27,7 @@ const config: PlaywrightTestConfig = {
     /* Retry on CI only */
     retries: process.env.CI ? 3 : 0,
     /* Amount of workers based on number of browsers being tested */
-    //workers: process.env.CI ? 1 : 6,
-    workers: 2,
+    workers: process.env.CI ? 1 : 6,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: process.env.CI ? 'github' : [['list'], ['experimental-allure-playwright']],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
