@@ -7504,7 +7504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.28.1":
+"@playwright/test@npm:^1.25.2, @playwright/test@npm:^1.28.1":
   version: 1.28.1
   resolution: "@playwright/test@npm:1.28.1"
   dependencies:
