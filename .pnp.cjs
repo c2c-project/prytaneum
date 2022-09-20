@@ -389,7 +389,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@app/e2e", "workspace:app/e2e"],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@types/node", "npm:17.0.42"],\
-            ["allure-commandline", "npm:2.17.2"],\
+            ["allure-commandline", "npm:2.18.1"],\
             ["dotenv-cli", "npm:5.1.0"],\
             ["experimental-allure-playwright", "npm:0.0.3"],\
             ["playwright", "npm:1.28.1"],\
@@ -18278,10 +18278,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["allure-commandline", [\
-        ["npm:2.17.2", {\
-          "packageLocation": "./.yarn/unplugged/allure-commandline-npm-2.17.2-4892997d72/node_modules/allure-commandline/",\
+        ["npm:2.18.1", {\
+          "packageLocation": "./.yarn/unplugged/allure-commandline-npm-2.18.1-d48cd693ef/node_modules/allure-commandline/",\
           "packageDependencies": [\
-            ["allure-commandline", "npm:2.17.2"]\
+            ["allure-commandline", "npm:2.18.1"]\
           ],\
           "linkType": "HARD"\
         }]\
