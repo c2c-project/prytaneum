@@ -99,7 +99,8 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
         };
     } catch (e) {
         if (e instanceof ProtectedError) {
-            getOrCreateServer().log.error(e.internalMessage);
+            // Display internal message if one exists, otherwise just display uesrMessage
+            getOrCreateServer().log.error(e.internalMessage === '' ? e.userMessage : e.internalMessage);
             return {
                 isError: true,
                 message: e.userMessage,
