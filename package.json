@@ -34,5 +34,5 @@
         "graphql-tag": "^2.12.6",
         "ts-node-dev": "^1.1.6"
     },
-    "packageManager": "yarn@3.2.0"
+    "packageManager": "yarn@3.2.3"
 }
