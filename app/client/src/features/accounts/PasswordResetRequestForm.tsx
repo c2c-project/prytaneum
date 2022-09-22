@@ -83,6 +83,7 @@ export function PasswordResetRequestForm({ onSuccess, onFailure }: Props) {
             <Form className={classes.form} onSubmit={handleSubmit(handleCommit)}>
                 <FormContent>
                     <TextField
+                        aria-label='Enter your email'
                         id='password-reset-request-email'
                         helperText={errors.email}
                         required
@@ -91,6 +92,7 @@ export function PasswordResetRequestForm({ onSuccess, onFailure }: Props) {
                         label='Email'
                         autoFocus
                         error={Boolean(errors.email)}
+                        spellCheck={false}
                     />
                 </FormContent>
                 <Grid container item direction='column' className={classes.btnGroup}>
