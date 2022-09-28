@@ -526,6 +526,12 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
+  resetPassword: MutationResponse;
+  /**
+   * send a reset password request if the account exists
+   * returns false if an account with the provided email cannot be found
+   */
+  resetPasswordRequest: ResetPasswordRequestMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
@@ -669,6 +675,16 @@ export type MutationRemoveQuestionFromQueueArgs = {
 };
 
 
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordForm;
+};
+
+
+export type MutationResetPasswordRequestArgs = {
+  input: ResetPasswordRequestForm;
+};
+
+
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
 };
@@ -800,6 +816,7 @@ export type Query = {
   node?: Maybe<Node>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
+  validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
 };
 
 
@@ -822,6 +839,11 @@ export type QueryValidateInviteArgs = {
   input: ValidateInvite;
 };
 
+
+export type QueryValidatePasswordResetTokenArgs = {
+  input: ValidatePasswordResetTokenForm;
+};
+
 export type RegistrationForm = {
   confirmPassword: Scalars['String'];
   email: Scalars['String'];
@@ -833,6 +855,23 @@ export type RegistrationForm = {
 export type RemoveQuestionFromQueue = {
   eventId: Scalars['ID'];
   questionId: Scalars['ID'];
+};
+
+export type ResetPasswordForm = {
+  confirmNewPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type ResetPasswordRequestForm = {
+  email: Scalars['String'];
+};
+
+export type ResetPasswordRequestMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordRequestMutationResponse';
+  body?: Maybe<Scalars['Boolean']>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
 };
 
 export type Subscription = {
@@ -1070,5 +1109,15 @@ export type ValidateInvite = {
 
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
+  valid: Scalars['Boolean'];
+};
+
+export type ValidatePasswordResetTokenForm = {
+  token: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenQueryResponse = {
+  __typename?: 'ValidatePasswordResetTokenQueryResponse';
+  message: Scalars['String'];
   valid: Scalars['Boolean'];
 };

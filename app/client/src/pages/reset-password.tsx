@@ -1,7 +1,9 @@
-import React from 'react';
-import { PasswordResetRequestForm } from '@local/features/accounts/PasswordResetRequestForm';
+import * as React from 'react';
 import { Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import { useRouter } from 'next/router';
+import { PasswordResetForm } from '@local/features/accounts/PasswordResetForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,13 +21,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ForgotPassword() {
+export default function ForgotPasswordReset() {
     const classes = useStyles();
+    const router = useRouter();
 
     return (
         <Grid container direction='column' className={classes.root} alignContent='center' justifyContent='center'>
             <Paper className={classes.paper}>
-                <PasswordResetRequestForm onSuccess={() => null} onFailure={() => null} />
+                <PasswordResetForm
+                    onSuccess={() => router.push('/login')}
+                    onFailure={() => router.push('/forgot-password')}
+                    token={router.query.token}
+                    tokenReady={router.isReady}
+                />
             </Paper>
         </Grid>
     );

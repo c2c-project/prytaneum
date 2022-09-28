@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     onSuccess?: () => void;
+    close?: () => void;
     secondaryActions?: React.ReactNode;
 }
 
@@ -72,7 +73,7 @@ const intialState: TLoginForm = { email: '', password: '' };
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
+export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const [, setUser] = useUser();
@@ -150,7 +151,14 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                         />
                         <Grid container justifyContent='flex-end'>
                             <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary' underline='hover'>
+                                <MUILink
+                                    className={classes.link}
+                                    color='primary'
+                                    underline='hover'
+                                    onClick={() => {
+                                        if (close) close();
+                                    }}
+                                >
                                     Forgot Password?
                                 </MUILink>
                             </Link>

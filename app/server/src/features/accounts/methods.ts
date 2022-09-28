@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@local/__generated__/prisma';
-import { toGlobalId } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
+import { errors, toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
 import type {
@@ -10,7 +10,12 @@ import type {
     RegistrationForm,
     UpdateEmailForm,
     UpdatePasswordForm,
+    ResetPasswordRequestForm,
+    ResetPasswordForm,
 } from '@local/graphql-types';
+
+import { getOrCreateServer } from '@local/core/server';
+import { sendEmail } from '@local/lib/email/email';
 
 const toUserId = toGlobalId('User');
 
@@ -304,4 +309,59 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
 
     // return deleted user
     return { deletedUser };
+}
+
+export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPasswordRequestForm) {
+    const result = await prisma.user.findUnique({
+        where: { email: input.email },
+    });
+
+    const accountFound = !!result;
+
+    // No need to send email if the account does not exist
+    if (!accountFound) throw new Error('No account with that email was found');
+
+    const token = await jwt.sign({ email: input.email });
+    const passwordResetLink = `prytaneum.io/reset-password?token=${token}`;
+
+    try {
+        await sendEmail({
+            to: input.email,
+            subject: 'Password Reset',
+            template: 'password-reset',
+            'h:X-Mailgun-Variables': JSON.stringify({ passwordResetLink }),
+        });
+        return accountFound;
+    } catch (err) {
+        const server = getOrCreateServer();
+        server.log.error(err);
+        throw new Error(errors.email);
+    }
+}
+
+export async function resetPassword(prisma: PrismaClient, input: ResetPasswordForm) {
+    const { newPassword, confirmNewPassword, token } = input;
+    let email;
+
+    // Ensure token is valid
+    try {
+        const result = (await jwt.verify(token)) as { email?: string };
+        if (!result.email) throw new Error(errors.jwt);
+        email = result.email;
+    } catch (err) {
+        const server = getOrCreateServer();
+        server.log.error(err);
+        throw new Error(errors.jwt);
+    }
+
+    // Ensure passwords match
+    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match');
+
+    const encryptedPassword = newPassword ? await bcrypt.hash(newPassword, 10) : null;
+
+    // update user password
+    await prisma.user.update({
+        where: { email },
+        data: { password: encryptedPassword },
+    });
 }

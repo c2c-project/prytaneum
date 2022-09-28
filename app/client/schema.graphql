@@ -479,6 +479,13 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
+  resetPassword(input: ResetPasswordForm!): MutationResponse!
+
+  """
+  send a reset password request if the account exists
+  returns false if an account with the provided email cannot be found
+  """
+  resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
 
   """
   Start the event so that it is "live"
@@ -568,6 +575,7 @@ type Query {
   node(id: ID!): Node
   questionsByEventId(eventId: ID!): [EventQuestion!]
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
+  validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
 
 input RegistrationForm {
@@ -581,6 +589,22 @@ input RegistrationForm {
 input RemoveQuestionFromQueue {
   eventId: ID!
   questionId: ID!
+}
+
+input ResetPasswordForm {
+  confirmNewPassword: String!
+  newPassword: String!
+  token: String!
+}
+
+input ResetPasswordRequestForm {
+  email: String!
+}
+
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+  body: Boolean
+  isError: Boolean!
+  message: String!
 }
 
 type Subscription {
@@ -722,5 +746,14 @@ input ValidateInvite {
 }
 
 type ValidateInviteQueryResponse {
+  valid: Boolean!
+}
+
+input ValidatePasswordResetTokenForm {
+  token: String!
+}
+
+type ValidatePasswordResetTokenQueryResponse {
+  message: String!
   valid: Boolean!
 }

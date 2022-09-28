@@ -187,6 +187,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
                             <LoginForm
+                                close={close}
                                 onSuccess={() => {
                                     close();
                                     router.reload();

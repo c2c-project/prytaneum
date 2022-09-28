@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
+import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import * as jwt from '@local/lib/jwt';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
@@ -18,6 +19,17 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) return null; // can't lookup "me" if not logged in
             const user = await User.findUserById(ctx.viewer.id, ctx.prisma);
             return toUserId(user);
+        },
+        async validatePasswordResetToken(parent, args, ctx, info) {
+            const { token } = args.input;
+
+            try {
+                await jwt.verify(token);
+                return { valid: true, message: '' };
+            } catch (err) {
+                ctx.app.log.error(err);
+                return { valid: false, message: errors.jwt };
+            }
         },
     },
     User: {
@@ -65,6 +77,19 @@ export const resolvers: Resolvers = {
                 const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(updatedUser);
+            });
+        },
+        async resetPasswordRequest(parent, args, ctx, info) {
+            return runMutation(async () => {
+                const result = await User.resetPasswordRequest(ctx.prisma, args.input);
+                return result;
+            });
+        },
+        async resetPassword(parent, args, ctx, info) {
+            return runMutation(async () => {
+                // No need to return anything, a no error response is fine
+                // since the user will simply be redirected to login after resetting
+                await User.resetPassword(ctx.prisma, args.input);
             });
         },
         async deleteAccount(parent, args, ctx, info) {
