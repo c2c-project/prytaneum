@@ -87,9 +87,7 @@ export const resolvers: Resolvers = {
         },
         async resetPassword(parent, args, ctx, info) {
             return runMutation(async () => {
-                // No need to return anything, a no error response is fine
-                // since the user will simply be redirected to login after resetting
-                await User.resetPassword(ctx.prisma, args.input);
+                return User.resetPassword(ctx.prisma, args.input);
             });
         },
         async deleteAccount(parent, args, ctx, info) {
