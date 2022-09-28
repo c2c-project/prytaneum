@@ -42,6 +42,7 @@ export type Query = {
     node?: Maybe<Node>;
     /** Fetch user data about the current user */
     me?: Maybe<User>;
+    validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
@@ -51,6 +52,10 @@ export type Query = {
 
 export type QuerynodeArgs = {
     id: Scalars['ID'];
+};
+
+export type QueryvalidatePasswordResetTokenArgs = {
+    input: ValidatePasswordResetTokenForm;
 };
 
 export type QuerymyFeedbackArgs = {
@@ -162,11 +167,38 @@ export type LoginForm = {
     password: Scalars['String'];
 };
 
+export type ResetPasswordRequestForm = {
+    email: Scalars['String'];
+};
+
+export type ResetPasswordForm = {
+    newPassword: Scalars['String'];
+    confirmNewPassword: Scalars['String'];
+    token: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenForm = {
+    token: Scalars['String'];
+};
+
 export type UserMutationResponse = MutationResponse & {
     __typename?: 'UserMutationResponse';
     isError: Scalars['Boolean'];
     message: Scalars['String'];
     body?: Maybe<User>;
+};
+
+export type ResetPasswordRequestMutationResponse = MutationResponse & {
+    __typename?: 'ResetPasswordRequestMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<Scalars['Boolean']>;
+};
+
+export type ValidatePasswordResetTokenQueryResponse = {
+    __typename?: 'ValidatePasswordResetTokenQueryResponse';
+    valid: Scalars['Boolean'];
+    message: Scalars['String'];
 };
 
 export type Mutation = {
@@ -175,6 +207,12 @@ export type Mutation = {
     login: UserMutationResponse;
     updateEmail: UserMutationResponse;
     updatePassword: UserMutationResponse;
+    /**
+     * send a reset password request if the account exists
+     * returns false if an account with the provided email cannot be found
+     */
+    resetPasswordRequest: ResetPasswordRequestMutationResponse;
+    resetPassword: MutationResponse;
     deleteAccount: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
@@ -238,6 +276,14 @@ export type MutationupdateEmailArgs = {
 
 export type MutationupdatePasswordArgs = {
     input: UpdatePasswordForm;
+};
+
+export type MutationresetPasswordRequestArgs = {
+    input: ResetPasswordRequestForm;
+};
+
+export type MutationresetPasswordArgs = {
+    input: ResetPasswordForm;
 };
 
 export type MutationdeleteAccountArgs = {
@@ -1118,6 +1164,7 @@ export type ResolversTypes = {
     Error: ResolverTypeWrapper<Error>;
     MutationResponse:
         | ResolversTypes['UserMutationResponse']
+        | ResolversTypes['ResetPasswordRequestMutationResponse']
         | ResolversTypes['EventMutationResponse']
         | ResolversTypes['OrganizationMutationResponse']
         | ResolversTypes['EventFeedbackMutationResponse']
@@ -1137,7 +1184,12 @@ export type ResolversTypes = {
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
+    ResetPasswordRequestForm: ResetPasswordRequestForm;
+    ResetPasswordForm: ResetPasswordForm;
+    ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
+    ResetPasswordRequestMutationResponse: ResolverTypeWrapper<ResetPasswordRequestMutationResponse>;
+    ValidatePasswordResetTokenQueryResponse: ResolverTypeWrapper<ValidatePasswordResetTokenQueryResponse>;
     Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
     EventEdge: ResolverTypeWrapper<EventEdge>;
@@ -1224,6 +1276,7 @@ export type ResolversParentTypes = {
     Error: Error;
     MutationResponse:
         | ResolversParentTypes['UserMutationResponse']
+        | ResolversParentTypes['ResetPasswordRequestMutationResponse']
         | ResolversParentTypes['EventMutationResponse']
         | ResolversParentTypes['OrganizationMutationResponse']
         | ResolversParentTypes['EventFeedbackMutationResponse']
@@ -1242,7 +1295,12 @@ export type ResolversParentTypes = {
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
     LoginForm: LoginForm;
+    ResetPasswordRequestForm: ResetPasswordRequestForm;
+    ResetPasswordForm: ResetPasswordForm;
+    ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
     UserMutationResponse: UserMutationResponse;
+    ResetPasswordRequestMutationResponse: ResetPasswordRequestMutationResponse;
+    ValidatePasswordResetTokenQueryResponse: ValidatePasswordResetTokenQueryResponse;
     Mutation: {};
     Event: Event;
     EventEdge: EventEdge;
@@ -1343,6 +1401,12 @@ export type QueryResolvers<
 > = {
     node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QuerynodeArgs, 'id'>>;
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    validatePasswordResetToken?: Resolver<
+        ResolversTypes['ValidatePasswordResetTokenQueryResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
+    >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
@@ -1378,6 +1442,7 @@ export type MutationResponseResolvers<
 > = {
     __resolveType: TypeResolveFn<
         | 'UserMutationResponse'
+        | 'ResetPasswordRequestMutationResponse'
         | 'EventMutationResponse'
         | 'OrganizationMutationResponse'
         | 'EventFeedbackMutationResponse'
@@ -1459,6 +1524,25 @@ export type UserMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ResetPasswordRequestMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ResetPasswordRequestMutationResponse'] = ResolversParentTypes['ResetPasswordRequestMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ValidatePasswordResetTokenQueryResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ValidatePasswordResetTokenQueryResponse'] = ResolversParentTypes['ValidatePasswordResetTokenQueryResponse']
+> = {
+    valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
@@ -1486,6 +1570,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationupdatePasswordArgs, 'input'>
+    >;
+    resetPasswordRequest?: Resolver<
+        ResolversTypes['ResetPasswordRequestMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordRequestArgs, 'input'>
+    >;
+    resetPassword?: Resolver<
+        ResolversTypes['MutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordArgs, 'input'>
     >;
     deleteAccount?: Resolver<
         ResolversTypes['UserMutationResponse'],
@@ -2252,6 +2348,8 @@ export type Resolvers<ContextType = MercuriusContext> = {
     UserEdge?: UserEdgeResolvers<ContextType>;
     UserConnection?: UserConnectionResolvers<ContextType>;
     UserMutationResponse?: UserMutationResponseResolvers<ContextType>;
+    ResetPasswordRequestMutationResponse?: ResetPasswordRequestMutationResponseResolvers<ContextType>;
+    ValidatePasswordResetTokenQueryResponse?: ValidatePasswordResetTokenQueryResponseResolvers<ContextType>;
     Mutation?: MutationResolvers<ContextType>;
     Event?: EventResolvers<ContextType>;
     EventEdge?: EventEdgeResolvers<ContextType>;
@@ -2360,6 +2458,17 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], UserMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], UserMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<User>, UserMutationResponse, {}, TContext>;
+    };
+
+    ResetPasswordRequestMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], ResetPasswordRequestMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], ResetPasswordRequestMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<Scalars['Boolean']>, ResetPasswordRequestMutationResponse, {}, TContext>;
+    };
+
+    ValidatePasswordResetTokenQueryResponse?: {
+        valid?: LoaderResolver<Scalars['Boolean'], ValidatePasswordResetTokenQueryResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], ValidatePasswordResetTokenQueryResponse, {}, TContext>;
     };
 
     Event?: {
