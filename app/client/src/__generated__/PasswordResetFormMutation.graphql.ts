@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2e4933466c576ef181efe121b8b8dd2d>>
+ * @generated SignedSource<<5f7164e2c0a2f3b30c2429795d87f2ab>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -40,46 +40,44 @@ var v0 = [
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "input",
-    "variableName": "input"
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "input",
+        "variableName": "input"
+      }
+    ],
+    "concreteType": "ResetPasswordMutationResponse",
+    "kind": "LinkedField",
+    "name": "resetPassword",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isError",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "message",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
   }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isError",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "message",
-  "storageKey": null
-};
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "PasswordResetFormMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "resetPassword",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -88,36 +86,15 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "PasswordResetFormMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "resetPassword",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
-          (v2/*: any*/),
-          (v3/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "4e74390fec7ddcd687563965ab736dbe",
+    "cacheID": "9e3c62760b4e814a348fbcbbb8c74b06",
     "id": null,
     "metadata": {},
     "name": "PasswordResetFormMutation",
     "operationKind": "mutation",
-    "text": "mutation PasswordResetFormMutation(\n  $input: ResetPasswordForm!\n) {\n  resetPassword(input: $input) {\n    __typename\n    isError\n    message\n  }\n}\n"
+    "text": "mutation PasswordResetFormMutation(\n  $input: ResetPasswordForm!\n) {\n  resetPassword(input: $input) {\n    isError\n    message\n  }\n}\n"
   }
 };
 })();

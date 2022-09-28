@@ -479,7 +479,7 @@ type Mutation {
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
-  resetPassword(input: ResetPasswordForm!): MutationResponse!
+  resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
 
   """
   send a reset password request if the account exists
@@ -595,6 +595,11 @@ input ResetPasswordForm {
   confirmNewPassword: String!
   newPassword: String!
   token: String!
+}
+
+type ResetPasswordMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
 }
 
 input ResetPasswordRequestForm {
