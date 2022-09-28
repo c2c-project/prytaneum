@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { ListItem } from '@mui/material';
+import { ListItem, ListItemAvatar } from '@mui/material';
+import { Shield } from '@mui/icons-material';
 import { DashboardEvent } from '@local/features/dashboard/DashboardEvent';
 
 interface DashboardEventListItemProps {
@@ -10,6 +11,7 @@ interface DashboardEventListItemProps {
         description: string | null;
         startDateTime: Date | null;
         endDateTime: Date | null;
+        isViewerModerator: boolean | null;
         organization: {
             name: string;
         } | null;
@@ -24,6 +26,11 @@ export function DashboardEventListItem({ event, divider, children }: DashboardEv
 
     return (
         <ListItem key={event.id} divider={divider} button onClick={handleNav(`/events/${event.id}/settings`)}>
+            {event.isViewerModerator && (
+                <ListItemAvatar>
+                    <Shield />
+                </ListItemAvatar>
+            )}
             <DashboardEvent
                 key={event.id}
                 id={event.id}
