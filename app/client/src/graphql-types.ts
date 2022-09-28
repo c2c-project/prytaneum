@@ -526,7 +526,7 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
-  resetPassword: MutationResponse;
+  resetPassword: ResetPasswordMutationResponse;
   /**
    * send a reset password request if the account exists
    * returns false if an account with the provided email cannot be found
@@ -861,6 +861,12 @@ export type ResetPasswordForm = {
   confirmNewPassword: Scalars['String'];
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type ResetPasswordMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
 };
 
 export type ResetPasswordRequestForm = {
