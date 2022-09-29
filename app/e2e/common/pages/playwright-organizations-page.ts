@@ -117,4 +117,11 @@ export class PlaywrightOrganizationsPage {
     async submitEventForm() {
         await this.page.locator('button:has-text("Create")').click();
     }
+
+    async clickOnEvent(eventName: string) {
+        await Promise.all([
+            await this.page.locator(`div[role="button"]:has-text("${eventName}")`).first().click(),
+            await this.page.waitForNavigation(),
+        ]);
+    }
 }
