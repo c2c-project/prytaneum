@@ -1629,7 +1629,6 @@ export type QueryResolvers<
         RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
     >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
-    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
