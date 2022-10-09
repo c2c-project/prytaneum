@@ -18,6 +18,7 @@ export const resolvers: Resolvers = {
     Query: {
         async events(parent, args, ctx, info) {
             const foundEvents = await Event.findPublicEvents(ctx.prisma);
+            console.log(foundEvents.map(toEventId));
             return foundEvents.map(toEventId);
         },
         async event(parent, args, ctx, info) {

@@ -6,6 +6,8 @@ import makeStyles from '@mui/styles/makeStyles';
 
 import { ConditionalRender } from '@local/components';
 import { PreloadedEventLive, EventLiveLoader } from '@local/features/events';
+import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import type { liveQuery } from '@local/__generated__/liveQuery.graphql'
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -28,16 +30,58 @@ export async function getServerSideProps() {
     return { props: baseProps };
 }
 
-const Live: NextPage = () => {
+export interface LiveProps {
+    queryRef: PreloadedQuery<liveQuery>;
+}
+
+export const LIVE_QUERY = graphql`
+    query liveQuery($eventId: ID!) {
+        findSingleEvent(id: $eventId) {
+            startDateTime
+            endDateTime
+        }
+    }
+`
+
+export default function Live(initialQueryRef: PreloadedQuery<liveQuery>) {
     const router = useRouter();
     const classes = useStyles();
+    const id = router.query.id
+
+    // const data = usePreloadedQuery<liveQuery>(
+    //     LIVE_QUERY, initialQueryRef
+    // )
+
+    const [queryReference, loadQuery] = useQueryLoader(
+        LIVE_QUERY, initialQueryRef
+    );
+
+    React.useEffect(() => {
+        loadQuery({eventId: id})
+    }, [])
+
+    // console.log(queryReference)
+
+    // if (queryReference != null) {
+    //     let data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference)
+    //     console.log('second useeffect')
+    // }
+    
+    // console.log(data)
+
     if (!router.isReady) return <EventLiveLoader />;
 
     return (
         <div className={classes.root}>
             <ConditionalRender client>
                 <React.Suspense fallback={<EventLiveLoader />}>
-                    <PreloadedEventLive eventId={router.query.id as string} token={router.query.token as string} />
+                    {/* check if router.query.id has started here
+                        if yes => route to event
+                        if not => route to pre-event page */}
+                    {queryReference != null
+                        ? <PreloadedEventLive queryReference={queryReference} eventId={router.query.id as string} token={router.query.token as string} />
+                        : null
+                    }
                 </React.Suspense>
             </ConditionalRender>
             <ConditionalRender server>
@@ -46,5 +90,3 @@ const Live: NextPage = () => {
         </div>
     );
 };
-
-export default Live;

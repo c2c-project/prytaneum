@@ -7,6 +7,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
+import { useRouter } from 'next/router';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { Fab } from '@local/components/Fab';
@@ -15,6 +16,9 @@ import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.gr
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
+import { liveQuery } from '@local/__generated__/liveQuery.graphql';
+import { LIVE_QUERY } from '@local/pages/events/[id]/live';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,6 +73,7 @@ export function EventLiveLoader() {
 }
 
 export interface PreloadedEventLiveProps {
+    queryReference: PreloadedQuery<liveQuery>;
     eventId: string;
     token?: string;
 }
@@ -139,7 +144,33 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     );
 }
 
-export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
+export function PreloadedEventLive({ queryReference, eventId, token }: PreloadedEventLiveProps) {
+    const router = useRouter()
+    const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
+    var startDateTime = JSON.stringify(data.findSingleEvent?.startDateTime)
+    var endDateTime = JSON.stringify(data.findSingleEvent?.endDateTime)
+
+    startDateTime = startDateTime.replaceAll('"', '');
+    endDateTime = endDateTime.replaceAll('"', '');
+
+    const start = Date.parse(startDateTime);
+    const end = Date.parse(endDateTime)
+    const curr = Date.now();
+
+    var url_arry = window.location.href.split('/')
+    url_arry.pop()
+    var url = url_arry.join('/')
+    
+    if (curr < start) {
+        // go to pre-event
+        router.push(url + '/pre')
+    }
+    else if (curr > end) {
+        // go to post-event
+        router.push(url + '/post')
+    }
+    // else => continue (load the live event; means the event is currently happening)
+
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
 
