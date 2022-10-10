@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7fff6f6196ce24d07455209769e82ad0>>
+ * @generated SignedSource<<0666d96993cbad407a7bb34d3d31a5eb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,8 +15,7 @@ export type liveQuery$variables = {
 export type liveQueryVariables = liveQuery$variables;
 export type liveQuery$data = {
   readonly findSingleEvent: {
-    readonly startDateTime: Date | null;
-    readonly endDateTime: Date | null;
+    readonly isActive: boolean | null;
   } | null;
 };
 export type liveQueryResponse = liveQuery$data;
@@ -44,14 +43,7 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "startDateTime",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "endDateTime",
+  "name": "isActive",
   "storageKey": null
 };
 return {
@@ -69,8 +61,7 @@ return {
         "name": "findSingleEvent",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/)
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
@@ -93,7 +84,6 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -107,16 +97,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "346ac30cb5674ceb9d0b4c8ca6f05a58",
+    "cacheID": "623f9161b504cbb3f33defcc43aecb4c",
     "id": null,
     "metadata": {},
     "name": "liveQuery",
     "operationKind": "query",
-    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  findSingleEvent(id: $eventId) {\n    startDateTime\n    endDateTime\n    id\n  }\n}\n"
+    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  findSingleEvent(id: $eventId) {\n    isActive\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "37faa47b0fade1c0bc5bfae06fb82a75";
+(node as any).hash = "421c0ee5dfea4bccb14ff08583b6f729";
 
 export default node;
