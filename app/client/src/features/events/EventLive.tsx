@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { Grid, useMediaQuery } from '@mui/material';
+import { Grid, toggleButtonClasses, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
@@ -20,6 +20,7 @@ import { liveQuery } from '@local/__generated__/liveQuery.graphql';
 import { LIVE_QUERY } from '@local/pages/events/[id]/live';
 // import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
+import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -89,6 +90,8 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, isActive 
     const router = useRouter();
     const id = router.query.id
 
+    const [buttonText, setButtonText] = React.useState(isActive ? 'End' : 'Start');
+
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
@@ -153,42 +156,27 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, isActive 
     // use isActive prop to display start/stop button and call the according mutation
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            {/* {isActive ?
+            {buttonText === 'End' ?
                 <button onClick={() => commitEventEndMutation({
                     variables: {
                         eventId: id,
                     },
                     onCompleted() {
+                        setButtonText(buttonText === 'Start' ? 'End' : 'Start')
                         alert('Event has ended!')
                     }
-                })}>End</button>
+                })}>{buttonText}</button>
                 :
                 <button onClick={() => commitEventStartMutation({
                     variables: {
                         eventId: id,
                     },
                     onCompleted() {
+                        setButtonText(buttonText === 'Start' ? 'End' : 'Start')
                         alert('Event has started!')
                     }
-                })}>Start</button>
-            } */}
-            <button onClick={() => commitEventStartMutation({
-                variables: {
-                    eventId: id,
-                },
-                onCompleted() {
-                    alert('Event has started!')
-                }
-            })}>Start</button>
-            <button onClick={() => commitEventEndMutation({
-                    variables: {
-                        eventId: id,
-                    },
-                    onCompleted() {
-                        alert('Event has ended!')
-                    }
-                })}>End</button>
-
+                })}>{buttonText}</button>
+            }
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
@@ -217,6 +205,7 @@ export function PreloadedEventLive({ queryReference, eventId, token }: Preloaded
     const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
     var isActive = data.findSingleEvent?.isActive    
 
+    console.log('is moderator: ' + data.findSingleEvent?.isViewerModerator)
     console.log(isActive)
 
     var url_arry = window.location.href.split('/')
