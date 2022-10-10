@@ -38,6 +38,7 @@ export const LIVE_QUERY = graphql`
     query liveQuery($eventId: ID!) {
         findSingleEvent(id: $eventId) {
             isActive
+            isViewerModerator
         }
     }
 `
@@ -47,10 +48,6 @@ export default function Live(initialQueryRef: PreloadedQuery<liveQuery>) {
     const classes = useStyles();
     const id = router.query.id
 
-    // const data = usePreloadedQuery<liveQuery>(
-    //     LIVE_QUERY, initialQueryRef
-    // )
-
     const [queryReference, loadQuery] = useQueryLoader(
         LIVE_QUERY, initialQueryRef
     );
@@ -58,15 +55,6 @@ export default function Live(initialQueryRef: PreloadedQuery<liveQuery>) {
     React.useEffect(() => {
         loadQuery({eventId: id})
     }, [])
-
-    // console.log(queryReference)
-
-    // if (queryReference != null) {
-    //     let data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference)
-    //     console.log('second useeffect')
-    // }
-    
-    // console.log(data)
 
     if (!router.isReady) return <EventLiveLoader />;
 
