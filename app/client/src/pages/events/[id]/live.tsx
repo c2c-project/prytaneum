@@ -37,8 +37,7 @@ export interface LiveProps {
 export const LIVE_QUERY = graphql`
     query liveQuery($eventId: ID!) {
         findSingleEvent(id: $eventId) {
-            startDateTime
-            endDateTime
+            isActive
         }
     }
 `
