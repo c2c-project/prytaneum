@@ -205,14 +205,16 @@ export function PreloadedEventLive({ queryReference, eventId, token }: Preloaded
     const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
     var isActive = data.findSingleEvent?.isActive    
 
+    // router pushing method
     // console.log('is moderator: ' + data.findSingleEvent?.isViewerModerator)
     console.log(isActive)
 
-    var url_arry = window.location.href.split('/')
-    url_arry.pop()
-    var url = url_arry.join('/')
     
     if (!isActive) {
+        var url_arry = window.location.href.split('/')
+        url_arry.pop()
+        var url = url_arry.join('/')
+        
         // go to pre-event or post-event TO:DO add a field isEnded
         router.push(url + '/pre')
     }
