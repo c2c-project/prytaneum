@@ -9,7 +9,8 @@ test.describe('User Settings Page', () => {
         await userSettingsPage.updateEmail(`${userSettingsPage.device}@example.com`);
 
         // Verify email address was updated successfully
-        await expect(userSettingsPage.page.locator(`text=Current email: ${userSettingsPage.device}@example.com`)).toHaveCount(1);
+        await userSettingsPage.setEmailField(userSettingsPage.device);
+        await expect(userSettingsPage.emailField).toHaveCount(1);
     });
 
     test('I can update my password', async({ userSettingsPage }) => {

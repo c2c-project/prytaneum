@@ -5,6 +5,7 @@ export class PlaywrightUserSettingsPage {
     readonly page: Page;
     readonly device: Device;
     readonly passwordUpdateConfirmation: Locator;
+    emailField: Locator;
 
     constructor(page: Page, device: Device) {
         this.page = page;
@@ -33,6 +34,10 @@ export class PlaywrightUserSettingsPage {
 
         // Submit Form
         await this.page.locator('text=Update email').click();
+    }
+
+    async setEmailField(email: string) {
+        this.emailField = await this.page.locator(`text=Current email: ${email}@example.com`);
     }
 
     async updatePassword(oldPassword: string, newPassword: string) {
