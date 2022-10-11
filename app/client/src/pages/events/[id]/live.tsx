@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 
 import { ConditionalRender } from '@local/components';
 import { PreloadedEventLive, EventLiveLoader } from '@local/features/events';
-import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { graphql, PreloadedQuery, useQueryLoader } from 'react-relay';
 import type { liveQuery } from '@local/__generated__/liveQuery.graphql'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -38,7 +37,7 @@ export const LIVE_QUERY = graphql`
     query liveQuery($eventId: ID!) {
         findSingleEvent(id: $eventId) {
             isActive
-            isViewerModerator
+            # isViewerModerator
         }
     }
 `
@@ -54,8 +53,13 @@ export default function Live(initialQueryRef: PreloadedQuery<liveQuery>) {
 
     React.useEffect(() => {
         loadQuery({eventId: id})
+        const interval = setInterval(() => {
+            loadQuery({eventId: id}, {fetchPolicy: 'network-only'})
+            console.log('hello');
+        }, 2000);
+        return () => clearInterval(interval)
     }, [])
-
+    
     if (!router.isReady) return <EventLiveLoader />;
 
     return (

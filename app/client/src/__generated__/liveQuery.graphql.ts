@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<078e457b532d69fc7f99211fc4624809>>
+ * @generated SignedSource<<0666d96993cbad407a7bb34d3d31a5eb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,6 @@ export type liveQueryVariables = liveQuery$variables;
 export type liveQuery$data = {
   readonly findSingleEvent: {
     readonly isActive: boolean | null;
-    readonly isViewerModerator: boolean | null;
   } | null;
 };
 export type liveQueryResponse = liveQuery$data;
@@ -46,13 +45,6 @@ v2 = {
   "kind": "ScalarField",
   "name": "isActive",
   "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isViewerModerator",
-  "storageKey": null
 };
 return {
   "fragment": {
@@ -69,8 +61,7 @@ return {
         "name": "findSingleEvent",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/)
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
@@ -93,7 +84,6 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -107,16 +97,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "081b1cc3a12935d7e263c8eb105579f5",
+    "cacheID": "623f9161b504cbb3f33defcc43aecb4c",
     "id": null,
     "metadata": {},
     "name": "liveQuery",
     "operationKind": "query",
-    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  findSingleEvent(id: $eventId) {\n    isActive\n    isViewerModerator\n    id\n  }\n}\n"
+    "text": "query liveQuery(\n  $eventId: ID!\n) {\n  findSingleEvent(id: $eventId) {\n    isActive\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ee5d67397afd81c55a65923eb792e906";
+(node as any).hash = "421c0ee5dfea4bccb14ff08583b6f729";
 
 export default node;
