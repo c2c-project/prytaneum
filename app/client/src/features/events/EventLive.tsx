@@ -146,7 +146,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     )
 
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
-    if (!node?.isActive) {
+    if (!node?.isActive && !node?.isViewerModerator) {
         var url_arry = window.location.href.split('/')
         url_arry.pop()
         var url = url_arry.join('/')
@@ -159,7 +159,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            {buttonText === 'End' ?
+            {node.isViewerModerator && (buttonText === 'End' ?
                 <button onClick={() => commitEventEndMutation({
                     variables: {
                         eventId: id,
@@ -179,7 +179,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                         alert('Event has started!')
                     }
                 })}>{buttonText}</button>
-            }
+            )}
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
