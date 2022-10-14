@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { Grid, toggleButtonClasses, useMediaQuery } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
@@ -16,9 +16,6 @@ import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.gr
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
-import { liveQuery } from '@local/__generated__/liveQuery.graphql';
-import { LIVE_QUERY } from '@local/pages/events/[id]/live';
-// import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 
@@ -61,6 +58,7 @@ export const EVENT_LIVE_QUERY = graphql`
             id
             ... on Event {
                 isViewerModerator
+                isActive
                 ...EventSidebarFragment
                 ...EventVideoFragment
                 ...EventDetailsCardFragment
@@ -75,7 +73,6 @@ export function EventLiveLoader() {
 }
 
 export interface PreloadedEventLiveProps {
-    queryReference: PreloadedQuery<liveQuery>;
     eventId: string;
     token?: string;
 }
@@ -83,15 +80,13 @@ export interface PreloadedEventLiveProps {
 export interface EventLiveProps {
     eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
     validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
-    isActive: boolean | null | undefined;
 }
 
-export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, isActive }: EventLiveProps) {
+export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const router = useRouter();
     const id = router.query.id
 
-    const [buttonText, setButtonText] = React.useState(isActive ? 'End' : 'Start');
-
+    
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
@@ -150,10 +145,18 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, isActive 
         START_EVENT_MUTATION
     )
 
+    const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
+    if (!node?.isActive) {
+        var url_arry = window.location.href.split('/')
+        url_arry.pop()
+        var url = url_arry.join('/')
+        
+        // go to pre-event or post-event TO:DO add a field isEnded
+        router.push(url + '/pre')
+    }
+
     if (!node) return <EventSidebarLoader />;
     
-    // TO:DO
-    // use isActive prop to display start/stop button and call the according mutation
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             {buttonText === 'End' ?
@@ -200,30 +203,34 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, isActive 
     );
 }
 
-export function PreloadedEventLive({ queryReference, eventId, token }: PreloadedEventLiveProps) {
-    const router = useRouter()
-    const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
-    var isActive = data.findSingleEvent?.isActive    
+export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
+    // const router = useRouter()
+    // const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
+    // var isActive = data.findSingleEvent?.isActive    
 
     // router pushing method
     // console.log('is moderator: ' + data.findSingleEvent?.isViewerModerator)
-    console.log(isActive)
+    // console.log(isActive)
 
     
-    if (!isActive) {
-        var url_arry = window.location.href.split('/')
-        url_arry.pop()
-        var url = url_arry.join('/')
+    // if (!isActive) {
+    //     var url_arry = window.location.href.split('/')
+    //     url_arry.pop()
+    //     var url = url_arry.join('/')
         
-        // go to pre-event or post-event TO:DO add a field isEnded
-        router.push(url + '/pre')
-    }
+    //     // go to pre-event or post-event TO:DO add a field isEnded
+    //     router.push(url + '/pre')
+    // }
 
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
 
     React.useEffect(() => {
         if (!eventLiveQueryRef) loadEventQuery({ eventId });
+        const interval = setInterval(() => {
+            loadEventQuery({ eventId }, {fetchPolicy: 'network-only'})
+        }, 2000);
+        return () => clearInterval(interval)
     }, [eventLiveQueryRef, loadEventQuery, eventId]);
 
     React.useEffect(() => {
@@ -233,5 +240,5 @@ export function PreloadedEventLive({ queryReference, eventId, token }: Preloaded
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
 
-    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} isActive={isActive}/>;
+    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
 }
