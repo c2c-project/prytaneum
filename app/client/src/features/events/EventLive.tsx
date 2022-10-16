@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation, fetchQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 import { useRouter } from 'next/router';
 
@@ -18,6 +18,7 @@ import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
+import { useEnvironment } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -84,9 +85,9 @@ export interface EventLiveProps {
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const router = useRouter();
-    const id = router.query.id
+    const eventId = router.query.id as string;
 
-    
+
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
@@ -120,66 +121,70 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         });
     };
 
-    
+
     const END_EVENT_MUTATION = graphql`
         mutation EventLiveEndEventMutation($eventId: String!) {
             endEvent(eventId: $eventId) {
                 message
             }
         }
-    `
+    `;
     // mutation to stop the event (set isActive to false)
-    const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(
-        END_EVENT_MUTATION
-    )
-
+    const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(END_EVENT_MUTATION);
     const START_EVENT_MUTATION = graphql`
         mutation EventLiveStartEventMutation($eventId: String!) {
             startEvent(eventId: $eventId) {
                 message
             }
         }
-    `
+    `;
     // mutation to start the event (set isActive to true)
-    const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(
-        START_EVENT_MUTATION
-    )
-
+    const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
     if (!node?.isActive && !node?.isViewerModerator) {
-        var url_arry = window.location.href.split('/')
-        url_arry.pop()
-        var url = url_arry.join('/')
-        
+        var url_arry = window.location.href.split('/');
+        url_arry.pop();
+        var url = url_arry.join('/');
         // go to pre-event or post-event TO:DO add a field isEnded
-        router.push(url + '/pre')
+        router.push(url + '/pre');
     }
-
     if (!node) return <EventSidebarLoader />;
-    
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            {node.isViewerModerator && (buttonText === 'End' ?
-                <button onClick={() => commitEventEndMutation({
-                    variables: {
-                        eventId: id,
-                    },
-                    onCompleted() {
-                        setButtonText('Start')
-                        alert('Event has ended!')
-                    }
-                })}>{buttonText}</button>
-                :
-                <button onClick={() => commitEventStartMutation({
-                    variables: {
-                        eventId: id,
-                    },
-                    onCompleted() {
-                        setButtonText('End')
-                        alert('Event has started!')
-                    }
-                })}>{buttonText}</button>
-            )}
+            {node.isViewerModerator &&
+                (buttonText === 'End' ? (
+                    <button
+                        onClick={() =>
+                            commitEventEndMutation({
+                                variables: {
+                                    eventId: eventId,
+                                },
+                                onCompleted() {
+                                    setButtonText('Start');
+                                    alert('Event has ended!');
+                                },
+                            })
+                        }
+                    >
+                        {buttonText}
+                    </button>
+                ) : (
+                    <button
+                        onClick={() =>
+                            commitEventStartMutation({
+                                variables: {
+                                    eventId: eventId,
+                                },
+                                onCompleted() {
+                                    setButtonText('End');
+                                    alert('Event has started!');
+                                },
+                            })
+                        }
+                    >
+                        {buttonText}
+                    </button>
+                ))}
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
@@ -206,39 +211,52 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
     // const router = useRouter()
     // const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
-    // var isActive = data.findSingleEvent?.isActive    
+    // var isActive = data.findSingleEvent?.isActive
 
     // router pushing method
     // console.log('is moderator: ' + data.findSingleEvent?.isViewerModerator)
     // console.log(isActive)
 
-    
+
     // if (!isActive) {
     //     var url_arry = window.location.href.split('/')
     //     url_arry.pop()
     //     var url = url_arry.join('/')
-        
+
     //     // go to pre-event or post-event TO:DO add a field isEnded
     //     router.push(url + '/pre')
     // }
 
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
-
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadEventQuery({ eventId }, { fetchPolicy: 'network-only' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadEventQuery]);
     React.useEffect(() => {
         if (!eventLiveQueryRef) loadEventQuery({ eventId });
-        const interval = setInterval(() => {
-            loadEventQuery({ eventId }, {fetchPolicy: 'network-only'})
-        }, 2000);
-        return () => clearInterval(interval)
-    }, [eventLiveQueryRef, loadEventQuery, eventId]);
-
+    }, [eventId, eventLiveQueryRef, loadEventQuery]);
     React.useEffect(() => {
         if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
         if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
     }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
-
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            refresh();
+        }, 5000);
+        return () => clearInterval(interval);
+    });
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
-
     return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
 }

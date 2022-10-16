@@ -1,11 +1,10 @@
 import React from 'react';
-import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { fetchQuery, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { useRouter } from 'next/router';
-import type { liveQuery } from '@local/__generated__/liveQuery.graphql'
 import { EventLiveLoader, EVENT_LIVE_QUERY } from '@local/features/events';
 import { ConditionalRender } from '@local/components';
-import { LIVE_QUERY } from './live';
 import { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
+import { useEnvironment } from '@local/core';
 export interface PreloadedEventLiveProps {
     eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
 }
@@ -44,18 +43,32 @@ export function PrePage({eventLiveQueryRef}: PreloadedEventLiveProps) {
 
 export default function Pre() {
     const router = useRouter();
-    const eventId = router.query.id
+    const eventId = router.query.id as string;
 
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadEventQuery({ eventId }, { fetchPolicy: 'network-only' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadEventQuery]);
 
     
     React.useEffect(() => {
-        if (!eventLiveQueryRef) loadEventQuery({ eventId });
         const interval = setInterval(() => {
-            loadEventQuery({ eventId }, {fetchPolicy: 'network-only'})
-        }, 2000);
-        return () => clearInterval(interval)
-    }, [eventLiveQueryRef, loadEventQuery, eventId]);
+            refresh();
+        }, 5000);
+        return () => clearInterval(interval);
+    });
     
     return (
         <div>
