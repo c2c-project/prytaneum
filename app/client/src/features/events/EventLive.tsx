@@ -210,24 +210,6 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
 }
 
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
-    // const router = useRouter()
-    // const data = usePreloadedQuery<liveQuery>(LIVE_QUERY, queryReference);
-    // var isActive = data.findSingleEvent?.isActive
-
-    // router pushing method
-    // console.log('is moderator: ' + data.findSingleEvent?.isViewerModerator)
-    // console.log(isActive)
-
-
-    // if (!isActive) {
-    //     var url_arry = window.location.href.split('/')
-    //     url_arry.pop()
-    //     var url = url_arry.join('/')
-
-    //     // go to pre-event or post-event TO:DO add a field isEnded
-    //     router.push(url + '/pre')
-    // }
-
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
