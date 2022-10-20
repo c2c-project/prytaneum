@@ -88,9 +88,9 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     const router = useRouter();
     const eventId = router.query.id as string;
 
-
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -142,14 +142,14 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     // mutation to start the event (set isActive to true)
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
+
     if (!node?.isActive && !node?.isViewerModerator) {
-        var url_arry = window.location.href.split('/');
-        url_arry.pop();
-        var url = url_arry.join('/');
-        // go to pre-event or post-event TO:DO add a field isEnded
-        router.push(url + '/pre');
+        // navigate to /pre if the event isn't active and the viewer isn't a moderator
+        router.push('/events/' + eventId + '/pre')
     }
+
     if (!node) return <EventSidebarLoader />;
+
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             {node.isViewerModerator &&
