@@ -59,6 +59,7 @@ export const EVENT_LIVE_QUERY = graphql`
             id
             ... on Event {
                 isViewerModerator
+                startDateTime
                 isActive
                 ...EventSidebarFragment
                 ...EventVideoFragment

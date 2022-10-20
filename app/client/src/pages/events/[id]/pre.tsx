@@ -5,6 +5,14 @@ import { EventLiveLoader, EVENT_LIVE_QUERY } from '@local/features/events';
 import { ConditionalRender } from '@local/components';
 import { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { useEnvironment } from '@local/core';
+import { CountdownWrapper } from '@local/components/Countdown';
+
+const styles = {
+  justifyCenter: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}
 export interface PreloadedEventLiveProps {
     eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
 }
@@ -20,13 +28,16 @@ export async function getServerSideProps() {
     return { props: baseProps };
 }
 
+
 export function PrePage({eventLiveQueryRef}: PreloadedEventLiveProps) {
     const router = useRouter()
-    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    var isActive = node?.isActive
+    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);    
+    // used to create the countdown component
+    const date = node?.startDateTime as Date
+    // used to check whether the event is on-going
+    const isActive = node?.isActive
 
-    console.log(isActive)
-
+    // route user to live event if event is on-going
     if (isActive) {
         var url_arry = window.location.href.split('/')
         url_arry.pop()
@@ -37,7 +48,9 @@ export function PrePage({eventLiveQueryRef}: PreloadedEventLiveProps) {
     }
     
     return (
-        <h1>pre-event page</h1>
+        <div style={styles.justifyCenter}>
+            <CountdownWrapper date={date} />
+        </div>
     )
 }
 
@@ -66,7 +79,7 @@ export default function Pre() {
     React.useEffect(() => {
         const interval = setInterval(() => {
             refresh();
-        }, 5000);
+        }, 2000);
         return () => clearInterval(interval);
     });
     
@@ -76,7 +89,7 @@ export default function Pre() {
                 <React.Suspense fallback={<EventLiveLoader />}>
                     {eventLiveQueryRef != null && eventLiveQueryRef !== undefined && eventId !== undefined
                         ? <PrePage eventLiveQueryRef={eventLiveQueryRef} />
-                        : <h1>uh</h1>
+                        : <h1>Loading page...</h1>
                     }
                 </React.Suspense>
             </ConditionalRender>
