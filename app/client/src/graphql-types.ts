@@ -619,7 +619,6 @@ export type Mutation = {
      * returns false if an account with the provided email cannot be found
      */
     resetPasswordRequest: ResetPasswordRequestMutationResponse;
-    shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     /** Start the event so that it is "live" */
     startEvent: EventMutationResponse;
     updateEmail: UserMutationResponse;
@@ -879,7 +878,6 @@ export type Query = {
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     node?: Maybe<Node>;
     prompt?: Maybe<EventLiveFeedbackPrompt>;
-    promptResponseVotes: Votes;
     promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
     prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
@@ -974,7 +972,6 @@ export type Subscription = {
     eventLiveFeedbackCreated: EventLiveFeedback;
     eventUpdates: Event;
     feedbackCRUD: FeedbackOperation;
-    feedbackPromptResultsShared: EventLiveFeedbackPrompt;
     feedbackPrompted: EventLiveFeedbackPrompt;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
