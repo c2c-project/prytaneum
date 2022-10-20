@@ -3,12 +3,9 @@ import { Grid } from '@mui/material';
 import { isBefore, isAfter } from 'date-fns';
 
 import { DashboardEventListDisplay } from './DashboardEventListDisplay';
-import { useUser } from '@local/features/accounts';
-import { useDashboardEventsFragment$key } from '@local/__generated__/useDashboardEventsFragment.graphql';
-import { useDashboardEvents } from './useDashboardEvents';
-import { useEventUpdates } from './useEventUpdates';
-import { useEventCreated } from './useEventCreated';
-import { useEventDeleted } from './useEventDeleted';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
+import { DASHBOARD_QUERY } from './Dashboard';
 
 export interface Event {
     node: {
@@ -25,22 +22,21 @@ export interface Event {
 }
 
 interface Props {
-    fragmentRef: useDashboardEventsFragment$key;
+    queryRef: PreloadedQuery<DashboardQuery>;
 }
 
-export function DashboardEventList({ fragmentRef }: Props) {
-    const [user] = useUser();
-    const userId = user?.id ? user.id : '';
-    const { events, connections } = useDashboardEvents({ fragmentRef });
-    const eventIds = events.map(({ node }) => node.id);
-
-    // Subscriptions to keep event info up-to-date
-    useEventUpdates(userId);
-    useEventCreated(userId, connections);
-    useEventDeleted(eventIds, connections);
-
-    // Store ongoing events
-    const ongoingEvents = React.useMemo(
+export function DashboardEventList({ queryRef }: Props) {
+    const { me } = usePreloadedQuery(DASHBOARD_QUERY, queryRef);
+    const events = React.useMemo(
+        () =>
+            me?.events?.edges
+                ? me?.events.edges.map(({ node }) => {
+                      return { node };
+                  })
+                : [],
+        [me]
+    );
+    const ongoingEvents = React.useCallback(
         () =>
             events.filter(({ node: event }) => {
                 if (!event.startDateTime || !event.endDateTime) return false;
@@ -49,9 +45,7 @@ export function DashboardEventList({ fragmentRef }: Props) {
             }),
         [events]
     );
-
-    // Store upcoming events
-    const upcomingEvents = React.useMemo(
+    const futureEvents = React.useCallback(
         () =>
             events.filter(({ node: event }) => {
                 if (!event.startDateTime) return false;
@@ -60,10 +54,29 @@ export function DashboardEventList({ fragmentRef }: Props) {
             }),
         [events]
     );
+    const [currentEvents, setCurrentEvents] = React.useState<Event[]>(ongoingEvents());
+    const [upcomingEvents, setUpcomingEvents] = React.useState<Event[]>(futureEvents());
+    // const [user] = useUser();
+    // const userId = user?.id ? user.id : '';
+    // const { events, connections, refresh } = useDashboardEvents({ fragmentRef });
+    // const eventIds = events.map(({ node }) => node.id);
+
+    // Subscriptions to keep event info up-to-date
+    // useEventUpdates(userId);
+    // useEventCreated(userId, connections);
+    // useEventDeleted(eventIds, connections);
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentEvents(ongoingEvents);
+            setUpcomingEvents(futureEvents);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [futureEvents, ongoingEvents]);
 
     return (
         <Grid container>
-            <DashboardEventListDisplay eventList={ongoingEvents} ongoing={true} />
+            <DashboardEventListDisplay eventList={currentEvents} ongoing={true} />
             <DashboardEventListDisplay eventList={upcomingEvents} ongoing={false} />
         </Grid>
     );

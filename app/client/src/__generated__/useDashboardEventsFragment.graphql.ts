@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<48292e6c32d502d22ed74134e63a12cc>>
+ * @generated SignedSource<<d8bd9f1b0608e4a217f3a598c0ae475e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useDashboardEventsFragment$data = {
+  readonly id: string;
   readonly events: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
@@ -27,7 +28,6 @@ export type useDashboardEventsFragment$data = {
       };
     }> | null;
   } | null;
-  readonly id: string;
   readonly " $fragmentType": "useDashboardEventsFragment";
 };
 export type useDashboardEventsFragment = useDashboardEventsFragment$data;
@@ -50,22 +50,22 @@ v1 = {
 return {
   "argumentDefinitions": [
     {
-      "defaultValue": "",
-      "kind": "LocalArgument",
-      "name": "after"
-    },
-    {
       "defaultValue": 50,
       "kind": "LocalArgument",
-      "name": "first"
+      "name": "count"
+    },
+    {
+      "defaultValue": "",
+      "kind": "LocalArgument",
+      "name": "cursor"
     }
   ],
   "kind": "Fragment",
   "metadata": {
     "connection": [
       {
-        "count": "first",
-        "cursor": "after",
+        "count": "count",
+        "cursor": "cursor",
         "direction": "forward",
         "path": (v0/*: any*/)
       }
@@ -73,8 +73,8 @@ return {
     "refetch": {
       "connection": {
         "forward": {
-          "count": "first",
-          "cursor": "after"
+          "count": "count",
+          "cursor": "cursor"
         },
         "backward": null,
         "path": (v0/*: any*/)
@@ -82,12 +82,13 @@ return {
       "fragmentPathInResult": [
         "node"
       ],
-      "operation": require('./dashboardEventsPagination.graphql'),
+      "operation": require('./DashboardEventsRefreshQuery.graphql'),
       "identifierField": "id"
     }
   },
   "name": "useDashboardEventsFragment",
   "selections": [
+    (v1/*: any*/),
     {
       "alias": "events",
       "args": null,
@@ -225,14 +226,13 @@ return {
         }
       ],
       "storageKey": null
-    },
-    (v1/*: any*/)
+    }
   ],
   "type": "User",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "00fcfb239c293c8df5116ce19e15b9d7";
+(node as any).hash = "f67f210adf210119d1e5afc11b5c670e";
 
 export default node;

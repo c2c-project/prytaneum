@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ab7d5d04c89d694b171cafbc2275af2b>>
+ * @generated SignedSource<<b1c77766c47a969288c3a849cfdbb873>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,34 +10,34 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type dashboardEventsPagination$variables = {
-  after?: string | null;
-  first?: number | null;
+export type DashboardEventsRefreshQuery$variables = {
+  count?: number | null;
+  cursor?: string | null;
   id: string;
 };
-export type dashboardEventsPaginationVariables = dashboardEventsPagination$variables;
-export type dashboardEventsPagination$data = {
+export type DashboardEventsRefreshQueryVariables = DashboardEventsRefreshQuery$variables;
+export type DashboardEventsRefreshQuery$data = {
   readonly node: {
     readonly " $fragmentSpreads": FragmentRefs<"useDashboardEventsFragment">;
   } | null;
 };
-export type dashboardEventsPaginationResponse = dashboardEventsPagination$data;
-export type dashboardEventsPagination = {
-  variables: dashboardEventsPaginationVariables;
-  response: dashboardEventsPagination$data;
+export type DashboardEventsRefreshQueryResponse = DashboardEventsRefreshQuery$data;
+export type DashboardEventsRefreshQuery = {
+  variables: DashboardEventsRefreshQueryVariables;
+  response: DashboardEventsRefreshQuery$data;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": "",
-    "kind": "LocalArgument",
-    "name": "after"
-  },
-  {
     "defaultValue": 50,
     "kind": "LocalArgument",
-    "name": "first"
+    "name": "count"
+  },
+  {
+    "defaultValue": "",
+    "kind": "LocalArgument",
+    "name": "cursor"
   },
   {
     "defaultValue": null,
@@ -52,38 +52,38 @@ v1 = [
     "variableName": "id"
   }
 ],
-v2 = [
-  {
-    "kind": "Variable",
-    "name": "after",
-    "variableName": "after"
-  },
-  {
-    "kind": "Variable",
-    "name": "first",
-    "variableName": "first"
-  }
-],
-v3 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-};
+},
+v4 = [
+  {
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "cursor"
+  },
+  {
+    "kind": "Variable",
+    "name": "first",
+    "variableName": "count"
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "dashboardEventsPagination",
+    "name": "DashboardEventsRefreshQuery",
     "selections": [
       {
         "alias": null,
@@ -94,7 +94,18 @@ return {
         "plural": false,
         "selections": [
           {
-            "args": (v2/*: any*/),
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "count",
+                "variableName": "count"
+              },
+              {
+                "kind": "Variable",
+                "name": "cursor",
+                "variableName": "cursor"
+              }
+            ],
             "kind": "FragmentSpread",
             "name": "useDashboardEventsFragment"
           }
@@ -109,7 +120,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "dashboardEventsPagination",
+    "name": "DashboardEventsRefreshQuery",
     "selections": [
       {
         "alias": null,
@@ -119,14 +130,14 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           (v3/*: any*/),
-          (v4/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
               {
                 "alias": null,
-                "args": (v2/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "EventConnection",
                 "kind": "LinkedField",
                 "name": "events",
@@ -148,7 +159,7 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v3/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -199,11 +210,11 @@ return {
                                 "name": "name",
                                 "storageKey": null
                               },
-                              (v4/*: any*/)
+                              (v3/*: any*/)
                             ],
                             "storageKey": null
                           },
-                          (v3/*: any*/)
+                          (v2/*: any*/)
                         ],
                         "storageKey": null
                       },
@@ -259,7 +270,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v2/*: any*/),
+                "args": (v4/*: any*/),
                 "filters": null,
                 "handle": "connection",
                 "key": "useDashboardEventsFragment_events",
@@ -276,16 +287,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2a4965afe4a4c53d88709f84c9792066",
+    "cacheID": "a11311d442d58cb49a17bd65954d3edc",
     "id": null,
     "metadata": {},
-    "name": "dashboardEventsPagination",
+    "name": "DashboardEventsRefreshQuery",
     "operationKind": "query",
-    "text": "query dashboardEventsPagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_2HEEH6 on User {\n  events(first: $first, after: $after) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n"
+    "text": "query DashboardEventsRefreshQuery(\n  $count: Int = 50\n  $cursor: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useDashboardEventsFragment_1G22uz\n    id\n  }\n}\n\nfragment useDashboardEventsFragment_1G22uz on User {\n  id\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        title\n        description\n        startDateTime\n        endDateTime\n        isViewerModerator\n        organization {\n          name\n          id\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "00fcfb239c293c8df5116ce19e15b9d7";
+(node as any).hash = "f67f210adf210119d1e5afc11b5c670e";
 
 export default node;
