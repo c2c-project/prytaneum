@@ -220,7 +220,7 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
         fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
             complete: () => {
                 setIsRefreshing(false);
-                loadEventQuery({ eventId }, { fetchPolicy: 'network-only' });
+                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
             },
             error: () => {
                 setIsRefreshing(false);
