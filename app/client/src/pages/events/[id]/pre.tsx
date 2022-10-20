@@ -36,15 +36,14 @@ export function PrePage({eventLiveQueryRef}: PreloadedEventLiveProps) {
     const date = node?.startDateTime as Date
     // used to check whether the event is on-going
     const isActive = node?.isActive
+    // used to route
+    const eventId = router.query.id
 
+    console.log(router.query)
     // route user to live event if event is on-going
     if (isActive) {
-        var url_arry = window.location.href.split('/')
-        url_arry.pop()
-        var url = url_arry.join('/')
-        
         // navigate back to /live once the event starts
-        router.push(url + '/live')
+        router.push('/events/' + eventId + '/live')
     }
     
     return (
