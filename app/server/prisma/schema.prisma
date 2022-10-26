@@ -27,6 +27,7 @@ model User {
     feedback EventLiveFeedback[]
     feedbackPromptResponses EventLiveFeedbackPromptResponse[]
     questions EventQuestion[]
+    broadcastMessages EventBroadcastMessage[]
     likes EventQuestionLike[]
     moderatorOf EventModerator[]
     invitedOf EventInvited[]
@@ -92,6 +93,7 @@ model Event {
     feedback EventLiveFeedback[]
     feedbackPrompt EventLiveFeedbackPrompt[]
     questions EventQuestion[]
+    broadcastMessages EventBroadcastMessage[]
     moderators EventModerator[]
     invited EventInvited[]
     speakers EventSpeaker[]
@@ -172,6 +174,18 @@ model EventQuestion {
     isQuote Boolean
     
     likes EventQuestionLike[]
+}
+
+model EventBroadcastMessage {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    createdById String @db.Uuid
+    createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    broadcastMessage String @db.VarChar(500)
+    isVisible Boolean
+    lang String @db.VarChar(30)
 }
 
 model EventQuestionLike {
