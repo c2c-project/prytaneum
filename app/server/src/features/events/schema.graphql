@@ -56,6 +56,8 @@ type Event implements Node {
     """
     questions(first: Int, after: String): EventQuestionConnection
 
+    broadcastMessage(after: String, first: Int): EventBroadcastMessagesConnection
+    
     """
     Speakers for this event
     """
@@ -117,6 +119,39 @@ type Event implements Node {
     currentQuestion: Int
 }
 
+type EventBroadcastMessage implements Node {
+ createdAt: Date
+ 
+ """User information on the person asking the broadcast message"""
+ createdBy: User
+ 
+ """The user id of the creator"""
+ createdById: ID
+ event: Event
+ id: ID!
+ isAsked: Boolean
+ isFollowUp: Boolean
+ 
+ """Whether or not the current user likes the broadcast message"""
+ isLikedByViewer: Boolean
+ 
+ """If the broadcast message is owned by the current viewer"""
+ isMyBroadcastMessage: Boolean
+ isQuote: Boolean
+ isVisible: Boolean
+ lang: String
+ 
+ """The users who have liked this broadcast message"""
+ likedBy: UserConnection
+ 
+ """Find the count of the likes only"""
+ likedByCount: Int
+ position: Int
+ 
+ """The actual content of the broadcast message"""
+ broadcastMessage: String
+}
+
 """
 Event Edge
 """
@@ -163,13 +198,35 @@ input DeleteEvent {
     confirmTitle: String!
 }
 
+input CreateBroadcastMessage {
+ eventId: ID!
+ broadcastMessage: String!
+}
+
 type EventMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
     body: Event
 }
 
+type EventBroadcastMessageEdge {
+ cursor: String!
+ node: EventBroadcastMessage!
+}
+
+type EventBroadcastMessagesConnection {
+ edges: [EventBroadcastMessageEdge!]
+ pageInfo: PageInfo!
+}
+
+type EventBroadcastMessageMutationResponse implements MutationResponse {
+ body: EventBroadcastMessageEdge
+ isError: Boolean!
+ message: String!
+}
+
 type Mutation {
+    createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!

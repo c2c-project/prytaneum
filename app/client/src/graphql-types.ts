@@ -24,6 +24,11 @@ export type AlterLike = {
     to: Scalars['Boolean'];
 };
 
+export type CreateBroadcastMessage = {
+    broadcastMessage: Scalars['String'];
+    eventId: Scalars['ID'];
+};
+
 export type CreateEvent = {
     description: Scalars['String'];
     endDateTime: Scalars['Date'];
@@ -149,6 +154,7 @@ export type Error = {
 
 export type Event = Node & {
     __typename?: 'Event';
+    broadcastMessage?: Maybe<EventBroadcastMessagesConnection>;
     createdAt?: Maybe<Scalars['Date']>;
     /** Creator of this event */
     createdBy?: Maybe<User>;
@@ -201,6 +207,11 @@ export type Event = Node & {
     videos?: Maybe<EventVideoConnection>;
 };
 
+export type EventBroadcastMessageArgs = {
+    after?: InputMaybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+};
+
 export type EventInvitedArgs = {
     after?: InputMaybe<Scalars['String']>;
     first?: InputMaybe<Scalars['Int']>;
@@ -244,6 +255,52 @@ export type EventSpeakersArgs = {
 export type EventVideosArgs = {
     after?: InputMaybe<Scalars['String']>;
     first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventBroadcastMessage = Node & {
+    __typename?: 'EventBroadcastMessage';
+    /** The actual content of the broadcast message */
+    broadcastMessage?: Maybe<Scalars['String']>;
+    createdAt?: Maybe<Scalars['Date']>;
+    /** User information on the person asking the broadcast message */
+    createdBy?: Maybe<User>;
+    /** The user id of the creator */
+    createdById?: Maybe<Scalars['ID']>;
+    event?: Maybe<Event>;
+    id: Scalars['ID'];
+    isAsked?: Maybe<Scalars['Boolean']>;
+    isFollowUp?: Maybe<Scalars['Boolean']>;
+    /** Whether or not the current user likes the broadcast message */
+    isLikedByViewer?: Maybe<Scalars['Boolean']>;
+    /** If the broadcast message is owned by the current viewer */
+    isMyBroadcastMessage?: Maybe<Scalars['Boolean']>;
+    isQuote?: Maybe<Scalars['Boolean']>;
+    isVisible?: Maybe<Scalars['Boolean']>;
+    lang?: Maybe<Scalars['String']>;
+    /** The users who have liked this broadcast message */
+    likedBy?: Maybe<UserConnection>;
+    /** Find the count of the likes only */
+    likedByCount?: Maybe<Scalars['Int']>;
+    position?: Maybe<Scalars['Int']>;
+};
+
+export type EventBroadcastMessageEdge = {
+    __typename?: 'EventBroadcastMessageEdge';
+    cursor: Scalars['String'];
+    node: EventBroadcastMessage;
+};
+
+export type EventBroadcastMessageMutationResponse = MutationResponse & {
+    __typename?: 'EventBroadcastMessageMutationResponse';
+    body?: Maybe<EventBroadcastMessageEdge>;
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
+export type EventBroadcastMessagesConnection = {
+    __typename?: 'EventBroadcastMessagesConnection';
+    edges?: Maybe<Array<EventBroadcastMessageEdge>>;
+    pageInfo: PageInfo;
 };
 
 /** Connection to Events */
@@ -572,6 +629,7 @@ export type Mutation = {
     __typename?: 'Mutation';
     addQuestionToQueue: EventQuestionMutationResponse;
     alterLike: EventQuestionMutationResponse;
+    createBroadcastMessage: EventBroadcastMessageMutationResponse;
     createEvent: EventMutationResponse;
     createFeedback: EventFeedbackMutationResponse;
     createFeedbackPrompt: EventFeedbackPromptMutationResponse;
@@ -637,6 +695,10 @@ export type MutationAddQuestionToQueueArgs = {
 
 export type MutationAlterLikeArgs = {
     input: AlterLike;
+};
+
+export type MutationCreateBroadcastMessageArgs = {
+    input: CreateBroadcastMessage;
 };
 
 export type MutationCreateEventArgs = {
