@@ -19,6 +19,8 @@ import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { useEnvironment } from '@local/core';
+import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
+import { useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,6 +72,15 @@ export const EVENT_LIVE_QUERY = graphql`
     }
 `;
 
+export const BROADCAST_MESSAGE_MUTATION = graphql`
+    mutation EventLiveMutation($input: CreateBroadcastMessage!) {
+        createBroadcastMessage(input: $input) {
+            isError
+            message
+        }
+    }
+`
+
 export function EventLiveLoader() {
     return <Loader />;
 }
@@ -85,6 +96,8 @@ export interface EventLiveProps {
 }
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
+    const { displaySnack } = useSnack();
+
     const router = useRouter();
     const eventId = router.query.id as string;
 
@@ -143,6 +156,23 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
 
+    const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION)
+    const [broadcastMessage, setBroadcastMessage] = React.useState('')
+    const handleSubmit = (event: { preventDefault: () => void; }) => {
+        event.preventDefault()
+        try {
+            commit({
+                variables: { input: { eventId, broadcastMessage }},
+                onCompleted(payload) {
+                    if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
+                    else displaySnack('broadcasted message successfully!')
+                }
+            })
+        } catch (err) {
+            displaySnack(err.message)
+        }
+    }
+
     if (!node?.isActive && !node?.isViewerModerator) {
         // navigate to /pre if the event isn't active and the viewer isn't a moderator
         router.push('/events/' + eventId + '/pre')
@@ -186,6 +216,16 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                         {buttonText}
                     </button>
                 ))}
+            <form onSubmit={handleSubmit}>
+                <label>Broadcast message:
+                    <input 
+                    type='text'
+                    value={broadcastMessage}
+                    onChange={(e) => setBroadcastMessage(e.target.value)}
+                    />
+                </label>
+                <input type='submit' value='send'/>
+            </form>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
