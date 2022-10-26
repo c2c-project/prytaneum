@@ -12,6 +12,11 @@ input AlterLike {
   to: Boolean!
 }
 
+input CreateBroadcastMessage {
+  broadcastMessage: String!
+  eventId: ID!
+}
+
 input CreateEvent {
   description: String!
   endDateTime: Date!
@@ -140,6 +145,7 @@ type Error {
 }
 
 type Event implements Node {
+  broadcastMessage(after: String, first: Int): EventBroadcastMessagesConnection
   createdAt: Date
 
   """Creator of this event"""
@@ -216,6 +222,54 @@ type Event implements Node {
 
   """Video feeds and the languages"""
   videos(after: String, first: Int): EventVideoConnection
+}
+
+type EventBroadcastMessage implements Node {
+  """The actual content of the broadcast message"""
+  broadcastMessage: String
+  createdAt: Date
+
+  """User information on the person asking the broadcast message"""
+  createdBy: User
+
+  """The user id of the creator"""
+  createdById: ID
+  event: Event
+  id: ID!
+  isAsked: Boolean
+  isFollowUp: Boolean
+
+  """Whether or not the current user likes the broadcast message"""
+  isLikedByViewer: Boolean
+
+  """If the broadcast message is owned by the current viewer"""
+  isMyBroadcastMessage: Boolean
+  isQuote: Boolean
+  isVisible: Boolean
+  lang: String
+
+  """The users who have liked this broadcast message"""
+  likedBy: UserConnection
+
+  """Find the count of the likes only"""
+  likedByCount: Int
+  position: Int
+}
+
+type EventBroadcastMessageEdge {
+  cursor: String!
+  node: EventBroadcastMessage!
+}
+
+type EventBroadcastMessageMutationResponse implements MutationResponse {
+  body: EventBroadcastMessageEdge
+  isError: Boolean!
+  message: String!
+}
+
+type EventBroadcastMessagesConnection {
+  edges: [EventBroadcastMessageEdge!]
+  pageInfo: PageInfo!
 }
 
 """Connection to Events"""
@@ -511,6 +565,7 @@ type ModeratorMutationResponse implements MutationResponse {
 type Mutation {
   addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
+  createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
   createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
