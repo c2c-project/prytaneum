@@ -33,6 +33,18 @@ export const resolvers: Resolvers = {
         // },
     },
     Mutation: {
+        async createBroadcastMessage(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const broadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
+                const edge = {
+                    node: broadcastMessage,
+                    cursor: broadcastMessage.createdAt.getTime().toString(),
+                };
+                return edge;
+            })
+        },
         async createEvent(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });

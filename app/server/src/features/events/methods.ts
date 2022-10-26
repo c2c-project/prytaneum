@@ -3,10 +3,27 @@ import { Event, PrismaClient } from '@local/__generated__/prisma';
 import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import type { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
+import type { CreateBroadcastMessage, CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 
 export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
+
+/**
+ * submit a broadcast message
+ */
+export async function createBroadcastMessage(userId: string, prisma: PrismaClient, input: CreateBroadcastMessage) {
+    const { eventId, broadcastMessage } = input;
+
+    return prisma.eventBroadcastMessage.create({
+        data: {
+            eventId,
+            broadcastMessage: broadcastMessage,
+            createdById: userId,
+            isVisible: true,
+            lang: 'EN',
+        }
+    })   
+}
 
 /**
  * get a specific event by its id
