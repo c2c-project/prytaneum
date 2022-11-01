@@ -154,10 +154,12 @@ export type Error = {
 
 export type Event = Node & {
     __typename?: 'Event';
-    broadcastMessage?: Maybe<EventBroadcastMessagesConnection>;
+    broadcastMessages?: Maybe<EventBroadcastMessagesConnection>;
     createdAt?: Maybe<Scalars['Date']>;
     /** Creator of this event */
     createdBy?: Maybe<User>;
+    /** The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage */
+    currentBroadcastMessage?: Maybe<Scalars['Int']>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
     currentQuestion?: Maybe<Scalars['String']>;
     description?: Maybe<Scalars['String']>;
@@ -207,7 +209,7 @@ export type Event = Node & {
     videos?: Maybe<EventVideoConnection>;
 };
 
-export type EventBroadcastMessageArgs = {
+export type EventBroadcastMessagesArgs = {
     after?: InputMaybe<Scalars['String']>;
     first?: InputMaybe<Scalars['Int']>;
 };
