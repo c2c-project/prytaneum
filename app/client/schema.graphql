@@ -145,11 +145,16 @@ type Error {
 }
 
 type Event implements Node {
-  broadcastMessage(after: String, first: Int): EventBroadcastMessagesConnection
+  broadcastMessages(after: String, first: Int): EventBroadcastMessagesConnection
   createdAt: Date
 
   """Creator of this event"""
   createdBy: User
+
+  """
+  The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage
+  """
+  currentBroadcastMessage: Int
 
   """
   The question currently being asked, corresponds to a "position" value on the event question
