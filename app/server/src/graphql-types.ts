@@ -491,7 +491,7 @@ export type Event = Node & {
     isPrivate?: Maybe<Scalars['Boolean']>;
     /** All questions relating to this event */
     questions?: Maybe<EventQuestionConnection>;
-    broadcastMessage?: Maybe<EventBroadcastMessagesConnection>;
+    broadcastMessages?: Maybe<EventBroadcastMessagesConnection>;
     /** Speakers for this event */
     speakers?: Maybe<EventSpeakerConnection>;
     /** Registrants for this event -- individuals invited */
@@ -516,6 +516,8 @@ export type Event = Node & {
     questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
     currentQuestion?: Maybe<Scalars['Int']>;
+    /** The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage */
+    currentBroadcastMessage?: Maybe<Scalars['Int']>;
 };
 
 export type EventquestionsArgs = {
@@ -523,7 +525,7 @@ export type EventquestionsArgs = {
     after?: Maybe<Scalars['String']>;
 };
 
-export type EventbroadcastMessageArgs = {
+export type EventbroadcastMessagesArgs = {
     after?: Maybe<Scalars['String']>;
     first?: Maybe<Scalars['Int']>;
 };
@@ -2157,11 +2159,11 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventquestionsArgs, never>
     >;
-    broadcastMessage?: Resolver<
+    broadcastMessages?: Resolver<
         Maybe<ResolversTypes['EventBroadcastMessagesConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventbroadcastMessageArgs, never>
+        RequireFields<EventbroadcastMessagesArgs, never>
     >;
     speakers?: Resolver<
         Maybe<ResolversTypes['EventSpeakerConnection']>,
@@ -2215,6 +2217,7 @@ export type EventResolvers<
         RequireFields<EventquestionQueueArgs, never>
     >;
     currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    currentBroadcastMessage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3070,10 +3073,10 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isForumEnabled?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         isPrivate?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventquestionsArgs, TContext>;
-        broadcastMessage?: LoaderResolver<
+        broadcastMessages?: LoaderResolver<
             Maybe<EventBroadcastMessagesConnection>,
             Event,
-            EventbroadcastMessageArgs,
+            EventbroadcastMessagesArgs,
             TContext
         >;
         speakers?: LoaderResolver<Maybe<EventSpeakerConnection>, Event, EventspeakersArgs, TContext>;
@@ -3093,6 +3096,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
         currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
+        currentBroadcastMessage?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
 
     EventBroadcastMessage?: {
