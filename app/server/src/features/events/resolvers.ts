@@ -9,6 +9,7 @@ const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
 const toVideoId = toGlobalId('EventVideo');
 const toQuestionId = toGlobalId('EventQuestion');
+const toBroadcastMessageId = toGlobalId('EventBroadcastMessage')
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
@@ -197,6 +198,12 @@ export const resolvers: Resolvers = {
             const { id: eventId } = fromGlobalId(parent.id);
             const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
             return connectionFromArray(questions.map(toQuestionId), args);
+        },
+        // add in a resolver for broadcastMessage
+        async broadcastMessages(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
+            return connectionFromArray(broadcastMessages.map(toBroadcastMessageId), args);
         },
         isViewerModerator(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
