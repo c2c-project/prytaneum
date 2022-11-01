@@ -26,6 +26,13 @@ export async function createBroadcastMessage(userId: string, prisma: PrismaClien
 }
 
 /**
+ * find broadcastMessages by event id
+ */
+export async function findBroadcastMessagesByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventBroadcastMessage.findMany({ where: { eventId, isVisible: true }, orderBy: { createdAt: 'desc' } });
+}
+
+/**
  * get a specific event by its id
  */
 export async function findEventById(eventId: string, prisma: PrismaClient) {
