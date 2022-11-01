@@ -199,7 +199,6 @@ export const resolvers: Resolvers = {
             const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
             return connectionFromArray(questions.map(toQuestionId), args);
         },
-        // add in a resolver for broadcastMessage
         async broadcastMessages(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
