@@ -21,7 +21,6 @@ import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEven
 import { useEnvironment } from '@local/core';
 import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
 import { useSnack } from '@local/core';
-import { BroadcastMessageList } from './BroadcastMessageList';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -184,7 +183,6 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
 
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            <BroadcastMessageList fragmentRef={node} />
             {node.isViewerModerator &&
                 (buttonText === 'End' ? (
                     <button

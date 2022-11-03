@@ -84,7 +84,6 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
     const { broadcastMessages, loadNext, hasNext } = useBroadcastMessageList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;
 
-    console.log(broadcastMessages)
     const accessors = React.useMemo<Accessors<ArrayElement<typeof broadcastMessages>>[]>(
         () => [
             (q) => q?.broadcastMessage || '', // question text itself
@@ -126,6 +125,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                     &nbsp; Questions Displayed
                                 </Typography>
                             </Grid> */}
+                            
                             <InfiniteScroller
                                 isModerator={isModerator}
                                 filteredList={filteredList}
@@ -135,17 +135,55 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                 {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
                                     (broadcastMessage) => (
                                         <ListItem disableGutters key={broadcastMessage.id}>
-                                            <h1>hello</h1>
-                                            <h1>{broadcastMessage.broadcastMessage}</h1>
+                                            <p>{broadcastMessage.broadcastMessage}</p>
                                         </ListItem>
                                     )
                                 )}
                             </InfiniteScroller>
-                            <h1>
-                                {broadcastMessages.map((message) => (
-                                    <h1 key={message.broadcastMessage}>{message.broadcastMessage}</h1>
-                                ))}
-                            </h1>
+
+                            {/* <InfiniteScroller
+                                isModerator={isModerator}
+                                filteredList={filteredList}
+                                hasNext={hasNext}
+                                loadNext={loadNext}
+                            >
+                                {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
+                                    (question) => (
+                                        <ListItem disableGutters key={question.id}>
+                                            <Card className={classes.item}>
+                                                <QuestionAuthor fragmentRef={question} />
+                                                {question.refQuestion && (
+                                                    <QuestionQuote fragmentRef={question.refQuestion} />
+                                                )}
+                                                <QuestionContent fragmentRef={question} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    {isModerator && <QuestionStats fragmentRef={question} />}
+                                                    <QuestionActions
+                                                        style={
+                                                            !isModerator
+                                                                ? { width: '100%' }
+                                                                : { width: '100%', maxWidth: '10rem' }
+                                                        }
+                                                        className={classes.questionActions}
+                                                        likeEnabled={!isModerator && Boolean(user)}
+                                                        quoteEnabled={!isModerator && Boolean(user)}
+                                                        queueEnabled={isModerator && Boolean(user)}
+                                                        deleteEnabled={isModerator && Boolean(user)}
+                                                        connections={connections}
+                                                        fragmentRef={question}
+                                                    />
+                                                    {isModerator && ( // filler to justify moderator queue button
+                                                        <span className={classes.filler}>
+                                                            <QuestionStats fragmentRef={question} />
+                                                        </span>
+                                                    )}
+                                                </Grid>
+                                            </Card>
+                                        </ListItem>
+                                    )
+                                )}
+                            </InfiniteScroller> */}
+                            
                             {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                                 <Typography align='center' variant='body2'>
                                     No results to display
