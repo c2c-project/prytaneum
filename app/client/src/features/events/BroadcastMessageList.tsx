@@ -125,7 +125,6 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                     &nbsp; Questions Displayed
                                 </Typography>
                             </Grid> */}
-                            
                             <InfiniteScroller
                                 isModerator={isModerator}
                                 filteredList={filteredList}
@@ -140,50 +139,6 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                     )
                                 )}
                             </InfiniteScroller>
-
-                            {/* <InfiniteScroller
-                                isModerator={isModerator}
-                                filteredList={filteredList}
-                                hasNext={hasNext}
-                                loadNext={loadNext}
-                            >
-                                {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
-                                    (question) => (
-                                        <ListItem disableGutters key={question.id}>
-                                            <Card className={classes.item}>
-                                                <QuestionAuthor fragmentRef={question} />
-                                                {question.refQuestion && (
-                                                    <QuestionQuote fragmentRef={question.refQuestion} />
-                                                )}
-                                                <QuestionContent fragmentRef={question} />
-                                                <Grid container alignItems='center' justifyContent='space-between'>
-                                                    {isModerator && <QuestionStats fragmentRef={question} />}
-                                                    <QuestionActions
-                                                        style={
-                                                            !isModerator
-                                                                ? { width: '100%' }
-                                                                : { width: '100%', maxWidth: '10rem' }
-                                                        }
-                                                        className={classes.questionActions}
-                                                        likeEnabled={!isModerator && Boolean(user)}
-                                                        quoteEnabled={!isModerator && Boolean(user)}
-                                                        queueEnabled={isModerator && Boolean(user)}
-                                                        deleteEnabled={isModerator && Boolean(user)}
-                                                        connections={connections}
-                                                        fragmentRef={question}
-                                                    />
-                                                    {isModerator && ( // filler to justify moderator queue button
-                                                        <span className={classes.filler}>
-                                                            <QuestionStats fragmentRef={question} />
-                                                        </span>
-                                                    )}
-                                                </Grid>
-                                            </Card>
-                                        </ListItem>
-                                    )
-                                )}
-                            </InfiniteScroller> */}
-                            
                             {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                                 <Typography align='center' variant='body2'>
                                     No results to display
