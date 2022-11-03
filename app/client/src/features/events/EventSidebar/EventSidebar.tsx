@@ -25,6 +25,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         ...EventDetailsCardFragment
         ...SpeakerListFragment
         ...useQuestionListFragment
+        ...useBroadcastMessageListFragment
         ...useQuestionQueueFragment
         ...QuestionCarouselFragment
         ...useLiveFeedbackListFragment
