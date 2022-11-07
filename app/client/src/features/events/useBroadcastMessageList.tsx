@@ -19,6 +19,7 @@ export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
                     createdBy {
                         firstName
                     }
+                    ...BroadcastMessageAuthorFragment
                 }
             }
         }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, List, ListItem, Typography } from '@mui/material';
+import { Card, Grid, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -15,6 +15,7 @@ import { Loader } from '@local/components/Loader';
 import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
 import { useBroadcastMessageList } from './useBroadcastMessageList';
+import { BroadcastMessageAuthor } from './BroadcastMessageAuthor';
 
 interface Props {
     className?: string;
@@ -131,13 +132,16 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                 hasNext={hasNext}
                                 loadNext={loadNext}
                             >
-                                {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
-                                    (broadcastMessage) => (
-                                        <ListItem disableGutters key={broadcastMessage.id}>
-                                            <p>{broadcastMessage.broadcastMessage}</p>
-                                        </ListItem>
-                                    )
-                                )}
+                                    {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
+                                        (broadcastMessage) => (
+                                            <ListItem disableGutters key={broadcastMessage.id}>
+                                                <Card className={classes.item}>
+                                                    <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                                                    <p>{broadcastMessage.broadcastMessage}</p>
+                                                </Card>
+                                            </ListItem>
+                                        )
+                                    )}
                             </InfiniteScroller>
                             {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                                 <Typography align='center' variant='body2'>
