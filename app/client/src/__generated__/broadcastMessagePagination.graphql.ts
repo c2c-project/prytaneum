@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4ff8b74103c44947de0453cdcdd3c02b>>
+ * @generated SignedSource<<d82afa0bebe34ff2533100554c03c8c0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -185,8 +185,29 @@ return {
                                 "name": "firstName",
                                 "storageKey": null
                               },
-                              (v4/*: any*/)
+                              (v4/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "lastName",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "avatar",
+                                "storageKey": null
+                              }
                             ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "createdAt",
                             "storageKey": null
                           },
                           (v3/*: any*/)
@@ -255,16 +276,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2d63cdccc08cb5d97ff74b008cd8c49f",
+    "cacheID": "70c30e78c5b9d6e11401d3167f1e86fc",
     "id": null,
     "metadata": {},
     "name": "broadcastMessagePagination",
     "operationKind": "query",
-    "text": "query broadcastMessagePagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useBroadcastMessageListFragment_2HEEH6\n    id\n  }\n}\n\nfragment useBroadcastMessageListFragment_2HEEH6 on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        createdBy {\n          firstName\n          id\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query broadcastMessagePagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useBroadcastMessageListFragment_2HEEH6\n    id\n  }\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment useBroadcastMessageListFragment_2HEEH6 on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageAuthorFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ac7c3d9e3e7d0c83a903a1af421f1c95";
+(node as any).hash = "4183359f7fc40f59961b2e32a71a4c71";
 
 export default node;
