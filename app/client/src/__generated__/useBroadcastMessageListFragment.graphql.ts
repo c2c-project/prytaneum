@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2503e8b4e0e48f2358e8f662790ec9d3>>
+ * @generated SignedSource<<134ada5c372d26e90e3347e166406641>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,6 +23,7 @@ export type useBroadcastMessageListFragment$data = {
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
+        readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageAuthorFragment">;
       };
     }> | null;
   } | null;
@@ -152,6 +153,11 @@ return {
                   "storageKey": null
                 },
                 {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "BroadcastMessageAuthorFragment"
+                },
+                {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
@@ -210,6 +216,6 @@ return {
 };
 })();
 
-(node as any).hash = "ac7c3d9e3e7d0c83a903a1af421f1c95";
+(node as any).hash = "4183359f7fc40f59961b2e32a71a4c71";
 
 export default node;
