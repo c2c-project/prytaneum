@@ -16,6 +16,7 @@ import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
 import { useBroadcastMessageList } from './useBroadcastMessageList';
 import { BroadcastMessageAuthor } from './BroadcastMessageAuthor';
+import { BroadcastMessageContent } from './BroadcastMessageContent';
 
 interface Props {
     className?: string;
@@ -137,7 +138,8 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                             <ListItem disableGutters key={broadcastMessage.id}>
                                                 <Card className={classes.item}>
                                                     <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                                    <p>{broadcastMessage.broadcastMessage}</p>
+                                                    <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                                    {/* <p>{broadcastMessage.broadcastMessage}</p> */}
                                                 </Card>
                                             </ListItem>
                                         )
