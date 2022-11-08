@@ -21,15 +21,18 @@ export async function createBroadcastMessage(userId: string, prisma: PrismaClien
             createdById: userId,
             isVisible: true,
             lang: 'EN',
-        }
-    })   
+        },
+    });
 }
 
 /**
  * find broadcastMessages by event id
  */
 export async function findBroadcastMessagesByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.eventBroadcastMessage.findMany({ where: { eventId, isVisible: true }, orderBy: { createdAt: 'desc' } });
+    return prisma.eventBroadcastMessage.findMany({
+        where: { eventId, isVisible: true },
+        orderBy: { createdAt: 'asc' },
+    });
 }
 
 /**

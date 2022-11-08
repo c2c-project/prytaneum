@@ -83,8 +83,16 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     // const [user] = useUser();
     const { isModerator } = useEvent();
-    const { broadcastMessages, loadNext, hasNext } = useBroadcastMessageList({ fragmentRef });
-    const MAX_QUESTIONS_DISPLAYED = 50;
+    const { broadcastMessages, loadNext, hasNext, refresh, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
+        fragmentRef,
+    });
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            refresh();
+        }, 10000);
+        return () => clearInterval(interval);
+    });
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof broadcastMessages>>[]>(
         () => [
@@ -123,7 +131,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                             {/* TODO: Restore Later 
                             <Grid container alignItems='center'>
                                 <Typography className={classes.text} variant='body2'>
-                                    <b>{filteredList.length <= MAX_QUESTIONS_DISPLAYED ? filteredList.length : MAX_QUESTIONS_DISPLAYED}</b>
+                                    <b>{filteredList.length <= MAX_MESSAGES_DISPLAYED ? filteredList.length : MAX_MESSAGES_DISPLAYED}</b>
                                     &nbsp; Questions Displayed
                                 </Typography>
                             </Grid> */}
@@ -133,17 +141,17 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                 hasNext={hasNext}
                                 loadNext={loadNext}
                             >
-                                    {(isModerator ? filteredList : filteredList.slice(0, MAX_QUESTIONS_DISPLAYED)).map(
-                                        (broadcastMessage) => (
-                                            <ListItem disableGutters key={broadcastMessage.id}>
-                                                <Card className={classes.item}>
-                                                    <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                                    <BroadcastMessageContent fragmentRef={broadcastMessage} />
-                                                    {/* <p>{broadcastMessage.broadcastMessage}</p> */}
-                                                </Card>
-                                            </ListItem>
-                                        )
-                                    )}
+                                {(isModerator ? filteredList : filteredList.slice(0, MAX_MESSAGES_DISPLAYED)).map(
+                                    (broadcastMessage) => (
+                                        <ListItem disableGutters key={broadcastMessage.id}>
+                                            <Card className={classes.item}>
+                                                <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                                                <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                                {/* <p>{broadcastMessage.broadcastMessage}</p> */}
+                                            </Card>
+                                        </ListItem>
+                                    )
+                                )}
                             </InfiniteScroller>
                             {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                                 <Typography align='center' variant='body2'>
