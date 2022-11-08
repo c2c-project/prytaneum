@@ -9,7 +9,7 @@ const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
 const toVideoId = toGlobalId('EventVideo');
 const toQuestionId = toGlobalId('EventQuestion');
-const toBroadcastMessageId = toGlobalId('EventBroadcastMessage')
+const toBroadcastMessageId = toGlobalId('EventBroadcastMessage');
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
@@ -19,7 +19,6 @@ export const resolvers: Resolvers = {
     Query: {
         async events(parent, args, ctx, info) {
             const foundEvents = await Event.findPublicEvents(ctx.prisma);
-            console.log(foundEvents.map(toEventId));
             return foundEvents.map(toEventId);
         },
         async event(parent, args, ctx, info) {
@@ -38,13 +37,16 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                const broadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
+                const broadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, {
+                    ...args.input,
+                    eventId,
+                });
                 const edge = {
                     node: broadcastMessage,
                     cursor: broadcastMessage.createdAt.getTime().toString(),
                 };
                 return edge;
-            })
+            });
         },
         async createEvent(parent, args, ctx, info) {
             return runMutation(async () => {

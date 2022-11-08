@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<085175201494e9eabee41961ebd970cd>>
+ * @generated SignedSource<<780c6855b220e0afb44103e9fb0c734b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -217,29 +217,31 @@ v22 = {
 v23 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "endCursor",
+  "storageKey": null
+},
+v24 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "hasNextPage",
+  "storageKey": null
+},
+v25 = {
+  "alias": null,
+  "args": null,
   "concreteType": "PageInfo",
   "kind": "LinkedField",
   "name": "pageInfo",
   "plural": false,
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "endCursor",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "hasNextPage",
-      "storageKey": null
-    }
+    (v23/*: any*/),
+    (v24/*: any*/)
   ],
   "storageKey": null
 },
-v24 = {
+v26 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -251,7 +253,7 @@ v24 = {
     }
   ]
 },
-v25 = [
+v27 = [
   (v10/*: any*/),
   {
     "kind": "Literal",
@@ -259,7 +261,7 @@ v25 = [
     "value": 1000
   }
 ],
-v26 = [
+v28 = [
   (v10/*: any*/),
   {
     "kind": "Literal",
@@ -267,7 +269,7 @@ v26 = [
     "value": 100
   }
 ],
-v27 = {
+v29 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -468,8 +470,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v23/*: any*/),
-                  (v24/*: any*/)
+                  (v25/*: any*/),
+                  (v26/*: any*/)
                 ],
                 "storageKey": "questions(after:\"\",first:50)"
               },
@@ -531,8 +533,27 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v23/*: any*/),
-                  (v24/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "PageInfo",
+                    "kind": "LinkedField",
+                    "name": "pageInfo",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "startCursor",
+                        "storageKey": null
+                      },
+                      (v23/*: any*/),
+                      (v24/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v26/*: any*/)
                 ],
                 "storageKey": "broadcastMessages(after:\"\",first:50)"
               },
@@ -555,7 +576,7 @@ return {
                 "selections": [
                   {
                     "alias": null,
-                    "args": (v25/*: any*/),
+                    "args": (v27/*: any*/),
                     "concreteType": "EventQuestionConnection",
                     "kind": "LinkedField",
                     "name": "questionRecord",
@@ -592,14 +613,14 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v23/*: any*/),
-                      (v24/*: any*/)
+                      (v25/*: any*/),
+                      (v26/*: any*/)
                     ],
                     "storageKey": "questionRecord(after:\"\",first:1000)"
                   },
                   {
                     "alias": null,
-                    "args": (v25/*: any*/),
+                    "args": (v27/*: any*/),
                     "filters": null,
                     "handle": "connection",
                     "key": "QuestionQueueFragment_questionRecord",
@@ -608,7 +629,7 @@ return {
                   },
                   {
                     "alias": null,
-                    "args": (v25/*: any*/),
+                    "args": (v27/*: any*/),
                     "filters": null,
                     "handle": "connection",
                     "key": "QuestionCarousel_questionRecord",
@@ -617,7 +638,7 @@ return {
                   },
                   {
                     "alias": null,
-                    "args": (v25/*: any*/),
+                    "args": (v27/*: any*/),
                     "concreteType": "EventQuestionConnection",
                     "kind": "LinkedField",
                     "name": "enqueuedQuestions",
@@ -655,14 +676,14 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v23/*: any*/),
-                      (v24/*: any*/)
+                      (v25/*: any*/),
+                      (v26/*: any*/)
                     ],
                     "storageKey": "enqueuedQuestions(after:\"\",first:1000)"
                   },
                   {
                     "alias": null,
-                    "args": (v25/*: any*/),
+                    "args": (v27/*: any*/),
                     "filters": null,
                     "handle": "connection",
                     "key": "QuestionQueueFragment_enqueuedQuestions",
@@ -674,7 +695,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v26/*: any*/),
+                "args": (v28/*: any*/),
                 "concreteType": "EventLiveFeedbackConnection",
                 "kind": "LinkedField",
                 "name": "liveFeedback",
@@ -698,7 +719,7 @@ return {
                         "plural": false,
                         "selections": [
                           (v2/*: any*/),
-                          (v27/*: any*/),
+                          (v29/*: any*/),
                           (v17/*: any*/),
                           {
                             "alias": null,
@@ -710,7 +731,7 @@ return {
                             "selections": [
                               (v17/*: any*/),
                               (v2/*: any*/),
-                              (v27/*: any*/),
+                              (v29/*: any*/),
                               (v18/*: any*/)
                             ],
                             "storageKey": null
@@ -723,14 +744,14 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v23/*: any*/),
-                  (v24/*: any*/)
+                  (v25/*: any*/),
+                  (v26/*: any*/)
                 ],
                 "storageKey": "liveFeedback(after:\"\",first:100)"
               },
               {
                 "alias": null,
-                "args": (v26/*: any*/),
+                "args": (v28/*: any*/),
                 "filters": null,
                 "handle": "connection",
                 "key": "useLiveFeedbackListFragment_liveFeedback",
@@ -796,12 +817,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a4623340e4d8473fb4099268333f117c",
+    "cacheID": "e0a6d00d12dcc0b91cc46c0da255d057",
     "id": null,
     "metadata": {},
     "name": "EventLiveQuery",
     "operationKind": "query",
-    "text": "query EventLiveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      startDateTime\n      isActive\n      ...EventSidebarFragment\n      ...useBroadcastMessageListFragment\n      ...EventVideoFragment\n      ...EventDetailsCardFragment\n      ...SpeakerListFragment\n    }\n  }\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  description\n  startDateTime\n  endDateTime\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n  ...useBroadcastMessageListFragment\n  ...useQuestionQueueFragment\n  ...QuestionCarouselFragment\n  ...useLiveFeedbackListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n  ...DeleteButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useBroadcastMessageListFragment on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: 50, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackListFragment on Event {\n  id\n  liveFeedback(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  currentQuestion\n  questions(first: 50, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionQueueFragment on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          id\n          question\n          createdBy {\n            firstName\n            id\n          }\n          ...QuestionAuthorFragment\n          ...QuestionStatsFragment\n          ...QuestionContentFragment\n          position\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    enqueuedQuestions(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          id\n          question\n          createdBy {\n            firstName\n            id\n          }\n          ...QuestionActionsFragment\n          ...QuestionAuthorFragment\n          ...QuestionStatsFragment\n          ...QuestionContentFragment\n          position\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
+    "text": "query EventLiveQuery(\n  $eventId: ID!\n) {\n  node(id: $eventId) {\n    __typename\n    id\n    ... on Event {\n      isViewerModerator\n      startDateTime\n      isActive\n      ...EventSidebarFragment\n      ...useBroadcastMessageListFragment\n      ...EventVideoFragment\n      ...EventDetailsCardFragment\n      ...SpeakerListFragment\n    }\n  }\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  description\n  startDateTime\n  endDateTime\n}\n\nfragment EventSidebarFragment on Event {\n  id\n  isQuestionFeedVisible\n  isViewerModerator\n  ...EventDetailsCardFragment\n  ...SpeakerListFragment\n  ...useQuestionListFragment\n  ...useBroadcastMessageListFragment\n  ...useQuestionQueueFragment\n  ...QuestionCarouselFragment\n  ...useLiveFeedbackListFragment\n}\n\nfragment EventVideoFragment on Event {\n  videos {\n    edges {\n      cursor\n      node {\n        url\n        lang\n        id\n      }\n    }\n  }\n}\n\nfragment LikeFragment on EventQuestion {\n  id\n  isLikedByViewer\n}\n\nfragment LiveFeedbackAuthorFragment on EventLiveFeedback {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment LiveFeedbackReplyFragment on EventLiveFeedback {\n  id\n  message\n  ...LiveFeedbackAuthorFragment\n}\n\nfragment QuestionActionsFragment on EventQuestion {\n  id\n  ...QuoteFragment\n  ...LikeFragment\n  ...QueueButtonFragment\n  ...DeleteButtonFragment\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionCarouselFragment on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          position\n          ...QuestionAuthorFragment\n          ...QuestionContentFragment\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          id\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionQuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n\nfragment QueueButtonFragment on EventQuestion {\n  id\n  position\n}\n\nfragment QuoteFragment on EventQuestion {\n  id\n  ...QuestionAuthorFragment\n  ...QuestionContentFragment\n}\n\nfragment SpeakerListFragment on Event {\n  speakers {\n    edges {\n      node {\n        id\n        pictureUrl\n        name\n        description\n        title\n      }\n      cursor\n    }\n  }\n}\n\nfragment useBroadcastMessageListFragment on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: 50, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n        __typename\n      }\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackListFragment on Event {\n  id\n  liveFeedback(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        message\n        createdBy {\n          id\n          firstName\n        }\n        refFeedback {\n          createdBy {\n            id\n          }\n          ...LiveFeedbackReplyFragment\n          id\n        }\n        ...LiveFeedbackReplyFragment\n        ...LiveFeedbackAuthorFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionListFragment on Event {\n  id\n  currentQuestion\n  questions(first: 50, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        question\n        createdBy {\n          firstName\n          id\n        }\n        refQuestion {\n          ...QuestionQuoteFragment\n          id\n        }\n        ...QuestionActionsFragment\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useQuestionQueueFragment on Event {\n  id\n  currentQuestion\n  questionQueue {\n    questionRecord(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          id\n          question\n          createdBy {\n            firstName\n            id\n          }\n          ...QuestionAuthorFragment\n          ...QuestionStatsFragment\n          ...QuestionContentFragment\n          position\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    enqueuedQuestions(first: 1000, after: \"\") {\n      edges {\n        cursor\n        node {\n          id\n          question\n          createdBy {\n            firstName\n            id\n          }\n          ...QuestionActionsFragment\n          ...QuestionAuthorFragment\n          ...QuestionStatsFragment\n          ...QuestionContentFragment\n          position\n          refQuestion {\n            ...QuestionQuoteFragment\n            id\n          }\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
   }
 };
 })();

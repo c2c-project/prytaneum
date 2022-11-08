@@ -9,7 +9,8 @@ export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
     @argumentDefinitions(first: { type: "Int", defaultValue: 50 }, after: { type: "String", defaultValue: "" }) {
         id
         currentBroadcastMessage
-        broadcastMessages(first: $first, after: $after) @connection(key: "useBroadcastMessageListFragment_broadcastMessages") {
+        broadcastMessages(first: $first, after: $after)
+            @connection(key: "useBroadcastMessageListFragment_broadcastMessages") {
             __id
             edges {
                 cursor
@@ -23,17 +24,22 @@ export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
                     ...BroadcastMessageContentFragment
                 }
             }
+            pageInfo {
+                startCursor
+                endCursor
+            }
         }
     }
 `;
 
 interface useBroadcastMessageListProps {
-    fragmentRef: useBroadcastMessageListFragment$key
+    fragmentRef: useBroadcastMessageListFragment$key;
 }
 export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageListProps) {
     const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
         usePaginationFragment(USE_BROADCAST_MESSAGE_LIST_FRAGMENT, fragmentRef);
     const { broadcastMessages, id: eventId, currentBroadcastMessage } = data;
+    const MAX_MESSAGES_DISPLAYED = 50;
 
     const broadcastMessageList = React.useMemo(
         () =>
@@ -44,6 +50,16 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
                 : [],
         [broadcastMessages]
     );
+
+    // Data in ascending time order, reverse to get latest message at the top
+    broadcastMessageList.reverse();
+
+    const refresh = React.useCallback(() => {
+        refetch(
+            { first: MAX_MESSAGES_DISPLAYED, after: data.broadcastMessages?.pageInfo?.endCursor },
+            { fetchPolicy: 'network-only' }
+        );
+    }, [data.broadcastMessages?.pageInfo?.endCursor, refetch]);
 
     return {
         broadcastMessages: broadcastMessageList,
@@ -56,6 +72,7 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         hasPrevious,
         isLoadingNext,
         isLoadingPrevious,
-        refetch,
+        refresh,
+        MAX_MESSAGES_DISPLAYED,
     };
 }

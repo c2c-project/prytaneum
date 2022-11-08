@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<30ee7b2cdc0135dbfd0d98c0d251f7cf>>
+ * @generated SignedSource<<74781ff70eedc633599c0ab12b9c59f5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,10 @@ export type useBroadcastMessageListFragment$data = {
         readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
       };
     }> | null;
+    readonly pageInfo: {
+      readonly startCursor: string | null;
+      readonly endCursor: string | null;
+    };
   } | null;
   readonly " $fragmentType": "useBroadcastMessageListFragment";
 };
@@ -187,6 +191,13 @@ return {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
+              "name": "startCursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
               "name": "endCursor",
               "storageKey": null
             },
@@ -221,6 +232,6 @@ return {
 };
 })();
 
-(node as any).hash = "6e640b7a5eca90482081b2031411b6c0";
+(node as any).hash = "5dbd7c884418a196e290f5d85fa800d5";
 
 export default node;
