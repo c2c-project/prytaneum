@@ -277,4 +277,11 @@ export const resolvers: Resolvers = {
             };
         },
     },
+    EventBroadcastMessage: {
+        async createdBy(parent, args, ctx, info) {
+            const { id: broadcastMessageId } = fromGlobalId(parent.id);
+            const submitter = await Event.findSubmitterByBroadcastMessageId(broadcastMessageId, ctx.prisma);
+            return toUserId(submitter);
+        },
+    }
 };
