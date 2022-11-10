@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation, fetchQuery } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 import { useRouter } from 'next/router';
 
@@ -18,7 +18,6 @@ import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
-import { useEnvironment } from '@local/core';
 import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
 import { useSnack } from '@local/core';
 
@@ -253,21 +252,21 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, eventId, isRefreshing, loadEventQuery]);
+    // const [isRefreshing, setIsRefreshing] = React.useState(false);
+    // const { env } = useEnvironment();
+    // const refresh = React.useCallback(() => {
+    //     if (isRefreshing) return;
+    //     setIsRefreshing(true);
+    //     fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
+    //         complete: () => {
+    //             setIsRefreshing(false);
+    //             loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+    //         },
+    //         error: () => {
+    //             setIsRefreshing(false);
+    //         },
+    //     });
+    // }, [env, eventId, isRefreshing, loadEventQuery]);
     React.useEffect(() => {
         if (!eventLiveQueryRef) loadEventQuery({ eventId });
     }, [eventId, eventLiveQueryRef, loadEventQuery]);
@@ -275,12 +274,17 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
         if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
         if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
     }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
-    React.useEffect(() => {
-        const interval = setInterval(() => {
-            refresh();
-        }, 5000);
-        return () => clearInterval(interval);
-    });
+    // React.useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         refresh();
+    //     }, 5000);
+    //     return () => clearInterval(interval);
+    // });
+
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
-    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
+    return (
+        <React.Suspense fallback={<EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />}>
+            <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />
+        </React.Suspense>
+    )
 }
