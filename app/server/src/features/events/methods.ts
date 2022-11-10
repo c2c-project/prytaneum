@@ -26,6 +26,18 @@ export async function createBroadcastMessage(userId: string, prisma: PrismaClien
 }
 
 /**
+ * find the submitter of a particular broadcast message
+ */
+export async function findSubmitterByBroadcastMessageId(broadcastMessageId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.eventBroadcastMessage.findUnique({
+        where: { id: broadcastMessageId },
+        select: { createdByUser: true },
+    });
+    if (!queryResult) return null;
+    return queryResult.createdByUser;
+}
+
+/**
  * find broadcastMessages by event id
  */
 export async function findBroadcastMessagesByEventId(eventId: string, prisma: PrismaClient) {
