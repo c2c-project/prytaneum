@@ -26,6 +26,18 @@ export async function createBroadcastMessage(userId: string, prisma: PrismaClien
 }
 
 /**
+ *  Remove a broadcastMessage from an event
+ */
+export async function updateBroadcastMessageVisibility(broadcastMessageId: string, isVisible: boolean, prisma: PrismaClient) {
+    return prisma.eventBroadcastMessage.update({
+        where: { id: broadcastMessageId },
+        data: {
+            isVisible,
+        },
+    });
+}
+
+/**
  * find the submitter of a particular broadcast message
  */
 export async function findSubmitterByBroadcastMessageId(broadcastMessageId: string, prisma: PrismaClient) {

@@ -48,6 +48,24 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        async deleteBroadcastMessage(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const { id: broadcastMessageId } = fromGlobalId(args.input.broadcastMessageId);
+                const deleteEventBroadcastMessage = await Event.updateBroadcastMessageVisibility(
+                    broadcastMessageId,
+                    args.input.isVisible,
+                    ctx.prisma
+                );
+                const formattedBroadcastMessage = toBroadcastMessageId(deleteEventBroadcastMessage);
+                const edge = {
+                    node: formattedBroadcastMessage,
+                    cursor: formattedBroadcastMessage.createdAt.getTime().toString(),
+                };
+                console.log(edge)
+                return edge;
+            });
+        },
         async createEvent(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
@@ -173,7 +191,7 @@ export const resolvers: Resolvers = {
                     return userEventIds.includes(eventId);
                 }
             ),
-        },
+        }
     },
     Event: {
         async speakers(parent, args, ctx, info) {
