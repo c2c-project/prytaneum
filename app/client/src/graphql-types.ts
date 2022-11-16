@@ -109,6 +109,11 @@ export type DeleteAccountForm = {
     password: Scalars['String'];
 };
 
+export type DeleteBroadcastMessage = {
+    broadcastMessageId: Scalars['ID'];
+    isVisible: Scalars['Boolean'];
+};
+
 /** In order to delete an event, user must provide a title and a confirmation title, similar to account deletion. */
 export type DeleteEvent = {
     confirmTitle: Scalars['String'];
@@ -646,6 +651,7 @@ export type Mutation = {
     createSpeaker: EventSpeakerMutationResponse;
     createVideo: EventVideoMutationResponse;
     deleteAccount: UserMutationResponse;
+    deleteBroadcastMessage: EventBroadcastMessageMutationResponse;
     deleteEvent: EventMutationResponse;
     /** Delete a member from the organization */
     deleteMember: UserMutationResponse;
@@ -749,6 +755,10 @@ export type MutationCreateVideoArgs = {
 
 export type MutationDeleteAccountArgs = {
     input: DeleteAccountForm;
+};
+
+export type MutationDeleteBroadcastMessageArgs = {
+    input: DeleteBroadcastMessage;
 };
 
 export type MutationDeleteEventArgs = {
