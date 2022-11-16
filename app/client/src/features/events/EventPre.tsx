@@ -3,7 +3,7 @@ import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { CountdownWrapper } from '@local/components/Countdown';
 import { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { EVENT_LIVE_QUERY } from './EventLive';
-import { BroadcastMessageList } from '../events/BroadcastMessageList';
+import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList/BroadcastMessageList';
 import React from 'react';
 import { EventContext } from './EventContext';
 
