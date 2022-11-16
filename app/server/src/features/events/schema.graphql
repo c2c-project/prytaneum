@@ -217,6 +217,11 @@ input DeleteEvent {
     confirmTitle: String!
 }
 
+input DeleteBroadcastMessage {
+    broadcastMessageId: ID!
+    isVisible: Boolean!
+}
+
 input CreateBroadcastMessage {
     eventId: ID!
     broadcastMessage: String!
@@ -246,6 +251,7 @@ type EventBroadcastMessageMutationResponse implements MutationResponse {
 
 type Mutation {
     createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    deleteBroadcastMessage (input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!

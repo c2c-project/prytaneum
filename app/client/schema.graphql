@@ -100,6 +100,11 @@ input DeleteAccountForm {
   password: String!
 }
 
+input DeleteBroadcastMessage {
+  broadcastMessageId: ID!
+  isVisible: Boolean!
+}
+
 """
 In order to delete an event, user must provide a title and a confirmation title, similar to account deletion.
 """
@@ -587,6 +592,7 @@ type Mutation {
   createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
   createVideo(input: CreateVideo!): EventVideoMutationResponse!
   deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+  deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
   deleteEvent(event: DeleteEvent!): EventMutationResponse!
 
   """Delete a member from the organization"""
