@@ -16,7 +16,7 @@ export const BROADCAST_MESSAGE_CONTENT_FRAGMENT = graphql`
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        margin: theme.spacing(-2, 0, -1, 0)
+        margin: theme.spacing(-2, 0, -1, 0),
     },
 }));
 
@@ -25,7 +25,9 @@ export function BroadcastMessageContent({ fragmentRef, typographyProps = {}, ...
     const classes = useStyles();
     return (
         <CardContent {...props} className={classes.content}>
-            <Typography variant='inherit' style={{ wordBreak: 'break-word' }} {...typographyProps}>{broadcastMessageContentData.broadcastMessage}</Typography>
+            <Typography variant='inherit' style={{ wordBreak: 'break-word' }} {...typographyProps}>
+                {broadcastMessageContentData.broadcastMessage}
+            </Typography>
         </CardContent>
     );
 }
