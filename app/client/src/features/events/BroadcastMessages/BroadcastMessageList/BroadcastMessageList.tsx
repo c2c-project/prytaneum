@@ -15,8 +15,8 @@ import { Loader } from '@local/components/Loader';
 import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
 import { useBroadcastMessageList } from './useBroadcastMessageList';
-import { BroadcastMessageAuthor } from './BroadcastMessageAuthor';
-import { BroadcastMessageContent } from './BroadcastMessageContent';
+import { BroadcastMessageAuthor } from '../BroadcastMessageAuthor';
+import { BroadcastMessageContent } from '../BroadcastMessageContent';
 
 interface Props {
     className?: string;
