@@ -249,6 +249,7 @@ export type Mutation = {
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createBroadcastMessage: EventBroadcastMessageMutationResponse;
+    deleteBroadcastMessage: EventBroadcastMessageMutationResponse;
     createEvent: EventMutationResponse;
     updateEvent: EventMutationResponse;
     deleteEvent: EventMutationResponse;
@@ -328,6 +329,10 @@ export type MutationdeleteAccountArgs = {
 
 export type MutationcreateBroadcastMessageArgs = {
     input: CreateBroadcastMessage;
+};
+
+export type MutationdeleteBroadcastMessageArgs = {
+    input: DeleteBroadcastMessage;
 };
 
 export type MutationcreateEventArgs = {
@@ -638,6 +643,11 @@ export type DeleteEvent = {
     eventId: Scalars['String'];
     title: Scalars['String'];
     confirmTitle: Scalars['String'];
+};
+
+export type DeleteBroadcastMessage = {
+    broadcastMessageId: Scalars['ID'];
+    isVisible: Scalars['Boolean'];
 };
 
 export type CreateBroadcastMessage = {
@@ -1446,6 +1456,7 @@ export type ResolversTypes = {
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
+    DeleteBroadcastMessage: DeleteBroadcastMessage;
     CreateBroadcastMessage: CreateBroadcastMessage;
     EventMutationResponse: ResolverTypeWrapper<EventMutationResponse>;
     EventBroadcastMessageEdge: ResolverTypeWrapper<EventBroadcastMessageEdge>;
@@ -1583,6 +1594,7 @@ export type ResolversParentTypes = {
     CreateEvent: CreateEvent;
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
+    DeleteBroadcastMessage: DeleteBroadcastMessage;
     CreateBroadcastMessage: CreateBroadcastMessage;
     EventMutationResponse: EventMutationResponse;
     EventBroadcastMessageEdge: EventBroadcastMessageEdge;
@@ -1933,6 +1945,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationcreateBroadcastMessageArgs, 'input'>
+    >;
+    deleteBroadcastMessage?: Resolver<
+        ResolversTypes['EventBroadcastMessageMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationdeleteBroadcastMessageArgs, 'input'>
     >;
     createEvent?: Resolver<
         ResolversTypes['EventMutationResponse'],
