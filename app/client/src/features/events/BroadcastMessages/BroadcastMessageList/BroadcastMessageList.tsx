@@ -17,6 +17,8 @@ import { LoadMoreFn } from 'react-relay';
 import { useBroadcastMessageList } from './useBroadcastMessageList';
 import { BroadcastMessageAuthor } from '../BroadcastMessageAuthor';
 import { BroadcastMessageContent } from '../BroadcastMessageContent';
+import { BroadcastMessageActions } from '../BroadcastMessageActions/BroadcastMessageActions';
+import { useUser } from '@local/features/accounts';
 
 interface Props {
     className?: string;
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         height: 0, // flex box recalculates this -- explanation:  https://stackoverflow.com/a/14964944
         flex: '1 1 100%',
     },
-    questionActions: {
+    broadcastMessageActions: {
         display: 'flex',
         justifyContent: 'center',
     },
@@ -81,7 +83,7 @@ export function InfiniteScroller({ children, isModerator, filteredList, loadNext
 
 export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
-    // const [user] = useUser();
+    const [user] = useUser();
     const { isModerator } = useEvent();
     const { broadcastMessages, loadNext, hasNext, refresh, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
         fragmentRef,
@@ -96,7 +98,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof broadcastMessages>>[]>(
         () => [
-            (q) => q?.broadcastMessage || '', // question text itself
+            (q) => q?.broadcastMessage || '', // broadcast message text itself
             (q) => q?.createdBy?.firstName || '', // first name of the user
         ],
         []
@@ -147,6 +149,18 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                             <Card className={classes.item}>
                                                 <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
                                                 <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    <BroadcastMessageActions
+                                                        style={
+                                                            !isModerator
+                                                                ? { width: '100%' }
+                                                                : { width: '100%', maxWidth: '10rem' }
+                                                        }
+                                                        className={classes.broadcastMessageActions}
+                                                        deleteEnabled={isModerator && Boolean(user)}
+                                                        fragmentRef={broadcastMessage}
+                                                    />
+                                                </Grid>
                                                 {/* <p>{broadcastMessage.broadcastMessage}</p> */}
                                             </Card>
                                         </ListItem>
