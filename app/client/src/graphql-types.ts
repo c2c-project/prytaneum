@@ -40,6 +40,19 @@ export type CreateFeedback = {
   refFeedbackId?: InputMaybe<Scalars['ID']>;
 };
 
+export type CreateFeedbackPrompt = {
+  eventId: Scalars['ID'];
+  feedbackType: Scalars['String'];
+  prompt: Scalars['String'];
+};
+
+export type CreateFeedbackPromptResponse = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
+  response: Scalars['String'];
+  vote: Scalars['String'];
+};
+
 export type CreateInvite = {
   email: Scalars['String'];
   eventId: Scalars['ID'];
@@ -255,6 +268,20 @@ export type EventFeedbackMutationResponse = MutationResponse & {
   message: Scalars['String'];
 };
 
+export type EventFeedbackPromptMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptResponseMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptResponseMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptResponseEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type EventLiveFeedback = Node & {
   __typename?: 'EventLiveFeedback';
   createdAt?: Maybe<Scalars['Date']>;
@@ -277,6 +304,56 @@ export type EventLiveFeedbackEdge = {
   __typename?: 'EventLiveFeedbackEdge';
   cursor: Scalars['String'];
   node: EventLiveFeedback;
+};
+
+export type EventLiveFeedbackPrompt = Node & {
+  __typename?: 'EventLiveFeedbackPrompt';
+  createdAt?: Maybe<Scalars['Date']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt: Scalars['String'];
+  responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
+};
+
+
+export type EventLiveFeedbackPromptResponsesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventLiveFeedbackPromptEdge = {
+  __typename?: 'EventLiveFeedbackPromptEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPrompt;
+};
+
+export type EventLiveFeedbackPromptResponse = Node & {
+  __typename?: 'EventLiveFeedbackPromptResponse';
+  createdAt?: Maybe<Scalars['Date']>;
+  createdBy?: Maybe<User>;
+  createdById?: Maybe<Scalars['ID']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptId?: Maybe<Scalars['ID']>;
+  response?: Maybe<Scalars['String']>;
+  vote?: Maybe<Scalars['String']>;
+};
+
+export type EventLiveFeedbackPromptResponseConnection = {
+  __typename?: 'EventLiveFeedbackPromptResponseConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptResponseEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptResponseEdge = {
+  __typename?: 'EventLiveFeedbackPromptResponseEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPromptResponse;
 };
 
 export type EventMutationResponse = MutationResponse & {
@@ -488,7 +565,9 @@ export type Mutation = {
   addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
-  createFeedback?: Maybe<EventFeedbackMutationResponse>;
+  createFeedback: EventFeedbackMutationResponse;
+  createFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
   createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
@@ -561,7 +640,17 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationCreateFeedbackArgs = {
-  input?: InputMaybe<CreateFeedback>;
+  input: CreateFeedback;
+};
+
+
+export type MutationCreateFeedbackPromptArgs = {
+  input: CreateFeedbackPrompt;
+};
+
+
+export type MutationCreateFeedbackPromptResponseArgs = {
+  input: CreateFeedbackPromptResponse;
 };
 
 
@@ -889,6 +978,7 @@ export type Subscription = {
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
+  feedbackPrompted: EventLiveFeedbackPrompt;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
   questionAddedToEnqueued: EventQuestionEdgeContainer;
@@ -931,6 +1021,11 @@ export type SubscriptionEventUpdatesArgs = {
 
 
 export type SubscriptionFeedbackCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1127,3 +1222,9 @@ export type ValidatePasswordResetTokenQueryResponse = {
   message: Scalars['String'];
   valid: Scalars['Boolean'];
 };
+
+export enum Vote {
+  Against = 'AGAINST',
+  Conflicted = 'CONFLICTED',
+  For = 'FOR'
+}
