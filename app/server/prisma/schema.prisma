@@ -25,6 +25,7 @@ model User {
     settings UserSettings[]
     memberOf OrgMember[]
     feedback EventLiveFeedback[]
+    feedbackPromptResponses EventLiveFeedbackPromptResponse[]
     questions EventQuestion[]
     likes EventQuestionLike[]
     moderatorOf EventModerator[]
@@ -89,6 +90,7 @@ model Event {
     isPrivate Boolean
 
     feedback EventLiveFeedback[]
+    feedbackPrompt EventLiveFeedbackPrompt[]
     questions EventQuestion[]
     moderators EventModerator[]
     invited EventInvited[]
@@ -117,6 +119,37 @@ model EventLiveFeedback {
     refFeedbackId String? @db.Uuid
     parentFeedback EventLiveFeedback[] @relation("reply")
     refFeedback EventLiveFeedback? @relation("reply", fields: [refFeedbackId], references: [id], onDelete: Cascade)
+}
+
+
+model EventLiveFeedbackPrompt {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    prompt String @db.VarChar(500)
+    isVote Boolean @default(false)
+    isOpenEnded Boolean @default(false)
+    responses EventLiveFeedbackPromptResponse[]
+}
+
+enum Vote {
+    FOR
+    AGAINST
+    CONFLICTED
+}
+
+model EventLiveFeedbackPromptResponse {
+    id String @id @default(uuid()) @db.Uuid
+    promptId String @db.Uuid
+    prompt EventLiveFeedbackPrompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    isVote Boolean @default(false)
+    vote Vote @default(CONFLICTED)
+    isOpenEnded Boolean @default(false)
+    response String @db.VarChar(500)
+    createdById String @db.Uuid
+    createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 }
 
 model EventQuestion {
