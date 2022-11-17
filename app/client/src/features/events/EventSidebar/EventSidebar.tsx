@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Grid } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { Skeleton } from '@mui/material';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import { graphql, useFragment } from 'react-relay';
 
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
@@ -16,6 +16,8 @@ import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLi
 import { Tabs } from '@local/components/Tabs';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
+import { SubmitLiveFeedbackPrompt } from '../Moderation/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
+import { useLiveFeedbackPrompt } from '../LiveFeedback/useLiveFeedbackPrompt';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -87,6 +89,9 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
     const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
 
+    // Subscribe to live feedback prompts
+    useLiveFeedbackPrompt();
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
         e.preventDefault();
@@ -108,6 +113,20 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
             setDisplayFeedbackButton(false);
         }
     }, [tabIndex, data]);
+
+    const displayTabButton = React.useMemo(() => {
+        if (displayFeedbackButton) {
+            if (data.isViewerModerator) return <SubmitLiveFeedbackPrompt eventId={data.id} />;
+            else return <SubmitLiveFeedback eventId={data.id} />;
+        } else {
+            // Ask question button default
+            if (!data.isViewerModerator) return <AskQuestion eventId={data.id} />;
+            else {
+                if (tabIndex === 1) return <AskQuestion eventId={data.id} />;
+                else return null;
+            }
+        }
+    }, [data.id, data.isViewerModerator, displayFeedbackButton, tabIndex]);
 
     return (
         <Grid
@@ -132,28 +151,8 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                 tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
             />
 
-            <Grid
-                container
-                direction='column'
-                wrap='nowrap'
-                className={clsx(classes.item, classes.paper, classes.fullWidth)}
-            >
-                {
-                    // Moderator feedback state = 2, Participant feedback state = 1
-                    displayFeedbackButton ? (
-                        <SubmitLiveFeedback
-                            className={classes.fullWidth}
-                            eventId={data.id}
-                            // connectionKey='useLiveFeedbackListFragment_liveFeedback'
-                        />
-                    ) : (
-                        <AskQuestion
-                            className={classes.fullWidth}
-                            eventId={data.id}
-                            // connectionKey='useQuestionListFragment_questions'
-                        />
-                    )
-                }
+            <Grid container direction='column' wrap='nowrap' className={classes.item}>
+                {displayTabButton}
             </Grid>
 
             <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
