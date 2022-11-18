@@ -41,9 +41,11 @@ export const resolvers: Resolvers = {
                     ...args.input,
                     eventId,
                 });
+
+                const formattedBroadcastMessage = toBroadcastMessageId(broadcastMessage);
                 const edge = {
-                    node: broadcastMessage,
-                    cursor: broadcastMessage.createdAt.getTime().toString(),
+                    node: formattedBroadcastMessage,
+                    cursor: formattedBroadcastMessage.id,
                 };
                 return edge;
             });
@@ -60,9 +62,8 @@ export const resolvers: Resolvers = {
                 const formattedBroadcastMessage = toBroadcastMessageId(deleteEventBroadcastMessage);
                 const edge = {
                     node: formattedBroadcastMessage,
-                    cursor: formattedBroadcastMessage.createdAt.getTime().toString(),
+                    cursor: formattedBroadcastMessage.id,
                 };
-                console.log(edge)
                 return edge;
             });
         },
@@ -191,7 +192,7 @@ export const resolvers: Resolvers = {
                     return userEventIds.includes(eventId);
                 }
             ),
-        }
+        },
     },
     Event: {
         async speakers(parent, args, ctx, info) {
@@ -222,7 +223,19 @@ export const resolvers: Resolvers = {
         async broadcastMessages(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
-            return connectionFromArray(broadcastMessages.map(toBroadcastMessageId), args);
+            const edges = broadcastMessages.map(toBroadcastMessageId).map((message) => ({
+                node: message,
+                cursor: message.id,
+            }));
+            return {
+                edges,
+                pageInfo: {
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: edges[0]?.cursor || '',
+                    endCursor: edges[edges.length - 1]?.cursor || '',
+                },
+            };
         },
         isViewerModerator(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
@@ -296,5 +309,5 @@ export const resolvers: Resolvers = {
             const submitter = await Event.findSubmitterByBroadcastMessageId(broadcastMessageId, ctx.prisma);
             return toUserId(submitter);
         },
-    }
+    },
 };
