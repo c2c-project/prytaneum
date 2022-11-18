@@ -3,7 +3,12 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Event from './methods';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import type { Event as TEvent, EventQuestion, EventEdgeContainer } from '@local/graphql-types';
+import type {
+    Event as TEvent,
+    EventQuestion,
+    EventEdgeContainer,
+    EventBroadcastMessageEdgeContainer,
+} from '@local/graphql-types';
 
 const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
@@ -190,6 +195,27 @@ export const resolvers: Resolvers = {
                     const userEventIds = args.eventIds.map((userEventId: string) => fromGlobalId(userEventId).id);
 
                     return userEventIds.includes(eventId);
+                }
+            ),
+        },
+        broadcastMessageCreated: {
+            subscribe: withFilter<{ broadcastMessageCreated: EventBroadcastMessageEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageCreated'),
+                (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageCreated.edge.node.id);
+                    return Event.doesEventMatch(eventId, broadcastMessageId, ctx.prisma);
+                }
+            ),
+        },
+        broadcastMessageDeleted: {
+            subscribe: withFilter<{ broadcastMessageDeleted: EventBroadcastMessageEdgeContainer; eventId: string }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageDeleted'),
+                (payload, args, ctx) => {
+                    const { eventId: broadcastMessageEventId } = payload;
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageDeleted.edge.node.id);
+                    return eventId === broadcastMessageEventId;
                 }
             ),
         },

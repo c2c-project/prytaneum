@@ -11,6 +11,8 @@ import { ArrayElement } from '@local/utils/ts-utils';
 import { useEvent } from '@local/features/events';
 // import { useUser } from '@local/features/accounts';
 
+import { useBroadcastMessageDeleted } from './useBroadcastMessageDeleted';
+import { useBroadcastMessageCreated } from './useBroadcastMessageCreated'
 import { Loader } from '@local/components/Loader';
 import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
@@ -85,16 +87,11 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { broadcastMessages, loadNext, hasNext, refresh, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
+    const { broadcastMessages, connections, loadNext, hasNext, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
         fragmentRef,
     });
-
-    React.useEffect(() => {
-        const interval = setInterval(() => {
-            refresh();
-        }, 10000);
-        return () => clearInterval(interval);
-    });
+    useBroadcastMessageCreated({ connections });
+    useBroadcastMessageDeleted({ connections });
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof broadcastMessages>>[]>(
         () => [
@@ -158,6 +155,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                                         }
                                                         className={classes.broadcastMessageActions}
                                                         deleteEnabled={isModerator && Boolean(user)}
+                                                        connections={connections}
                                                         fragmentRef={broadcastMessage}
                                                     />
                                                 </Grid>

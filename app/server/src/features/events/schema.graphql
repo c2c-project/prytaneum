@@ -251,7 +251,7 @@ type EventBroadcastMessageMutationResponse implements MutationResponse {
 
 type Mutation {
     createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
-    deleteBroadcastMessage (input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!
@@ -285,8 +285,28 @@ type EventEdgeContainer {
     edge: EventEdge!
 }
 
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
 type Subscription {
     eventUpdates(userId: ID!): Event!
     eventCreated(userId: ID!): EventEdgeContainer!
     eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
+    broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
+    broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
 }
