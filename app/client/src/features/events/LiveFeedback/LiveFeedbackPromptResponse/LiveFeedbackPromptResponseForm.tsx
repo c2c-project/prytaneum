@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { useMemo } from 'react';
+import type { MutableRefObject } from 'react';
 import { Button, TextField, Radio, RadioGroup, Typography, FormControlLabel } from '@mui/material';
 
 import { Form } from '@local/components/Form';
@@ -7,55 +8,61 @@ import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
 import Grid from '@mui/material/Grid';
+import { Prompt } from '../useLiveFeedbackPrompt';
 
-export type TLiveFeedbackPromptResponseFormState = { message: string; feedbackType: string };
+export type TLiveFeedbackPromptResponseFormState = { response: string; vote: string; promptId: string };
 
 export interface LiveFeedbackPromptResponseFormProps {
     onSubmit?: (state: TLiveFeedbackPromptResponseFormState) => void;
     onCancel?: () => void;
+    promptRef: MutableRefObject<Prompt>;
 }
 
-export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel }: LiveFeedbackPromptResponseFormProps) {
+export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }: LiveFeedbackPromptResponseFormProps) {
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
-        message: '',
-        feedbackType: 'open-ended',
+        response: '',
+        vote: '',
+        promptId: promptRef.current.id,
     });
 
-    const isFeedbackValid = React.useMemo(() => form.message.trim().length !== 0, [form]);
-
-    React.useEffect(() => {
-        console.log(form);
-    }, [form]);
+    const isFeedbackValid = useMemo(() => form.response.trim().length !== 0, [form]);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
-            <FormTitle title='Feedback Prompt' />
+            <FormTitle title='Feedback Response' />
             <FormContent>
-                <Grid container alignItems='center' justifyContent='space-around'>
-                    <Typography>Type of Feedback:</Typography>
-                    <RadioGroup
-                        row
-                        aria-label='feedback-prompt'
-                        name='feedback-prompt'
-                        value={form.feedbackType}
-                        onChange={handleChange('feedbackType')}
-                    >
-                        <FormControlLabel value='open-ended' control={<Radio />} label='Open Ended' />
-                        <FormControlLabel value='vote' control={<Radio />} label='Vote' />
-                    </RadioGroup>
+                <Grid container alignItems='center' justifyContent='center'>
+                    <Typography>{promptRef.current.prompt}</Typography>
                 </Grid>
+                {promptRef.current.isVote && (
+                    <Grid container alignItems='center' justifyContent='space-around'>
+                        <RadioGroup
+                            row
+                            aria-label='feedback-prompt-vote'
+                            name='feedback-prompt-vote'
+                            value={form.vote}
+                            onChange={handleChange('vote')}
+                        >
+                            <FormControlLabel value='FOR' control={<Radio />} label='For' />
+                            <FormControlLabel value='AGAINST' control={<Radio />} label='Against' />
+                            <FormControlLabel value='CONFLICTED' control={<Radio />} label='Conflicted' />
+                        </RadioGroup>
+                    </Grid>
+                )}
                 <TextField
-                    id='feedback-prompt-field'
-                    name='feedback-prompt'
-                    label='Write your feedback prompt here...'
+                    id='feedback-prompt-response-field'
+                    name='feedback-prompt-response'
+                    label={
+                        promptRef.current.isOpenEnded ? 'Write your response here...' : 'Write your reasoning here...'
+                    }
                     autoFocus
-                    error={Boolean(errors.message)}
-                    helperText={errors.message}
+                    error={Boolean(errors.response)}
+                    helperText={errors.response}
                     required
                     multiline
-                    value={form.message}
-                    onChange={handleChange('message')}
+                    value={form.response}
+                    onChange={handleChange('response')}
                 />
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
