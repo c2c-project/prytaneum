@@ -1,66 +1,81 @@
-// import * as React from 'react';
-// import { Button, DialogContent } from '@mui/material';
-// import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-// import LockIcon from '@mui/icons-material/Lock';
-// import { useMutation, graphql } from 'react-relay';
+import type { MutableRefObject } from 'react';
+import { Button, DialogContent } from '@mui/material';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { useMutation, graphql } from 'react-relay';
 
-// import type { SubmitLiveFeedbackPromptMutation } from '@local/__generated__/SubmitLiveFeedbackPromptMutation.graphql';
-// import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
-// import { useUser } from '@local/features/accounts';
-// import { LiveFeedbackPromptForm, TLiveFeedbackPromptFormState } from './LiveFeedbackPromptForm';
+import type { SubmitLiveFeedbackPromptResponseMutation } from '@local/__generated__/SubmitLiveFeedbackPromptResponseMutation.graphql';
+import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
+import { LiveFeedbackPromptResponseForm, TLiveFeedbackPromptResponseFormState } from './LiveFeedbackPromptResponseForm';
+import { Prompt } from '../useLiveFeedbackPrompt';
 
-// interface Props {
-//     className?: string;
-//     eventId: string;
-// }
+interface Props {
+    eventId: string;
+    promptRef: MutableRefObject<Prompt>;
+    closeSnackbar: () => void;
+}
 
-// export const SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION = graphql`
-//     mutation SubmitLiveFeedbackPromptMutation($input: CreateFeedbackPrompt!) {
-//         createFeedbackPrompt(input: $input) {
-//             isError
-//             message
-//             body {
-//                 cursor
-//                 node {
-//                     id
-//                     createdAt
-//                     prompt
-//                 }
-//             }
-//         }
-//     }
-// `;
+export const SUBMIT_LIVE_FEEDBACK_PROMPT_RESPONSE_MUTATION = graphql`
+    mutation SubmitLiveFeedbackPromptResponseMutation($input: CreateFeedbackPromptResponse!) {
+        createFeedbackPromptResponse(input: $input) {
+            isError
+            message
+            body {
+                cursor
+                node {
+                    id
+                }
+            }
+        }
+    }
+`;
 
-// export function SubmitLiveFeedbackPrompt({ className, eventId }: Props) {
-//     const [isOpen, open, close] = useResponsiveDialog();
-//     const [user] = useUser();
-//     const [commit] = useMutation<SubmitLiveFeedbackPromptMutation>(SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION);
+export function SubmitLiveFeedbackPromptResponse({ eventId, promptRef, closeSnackbar }: Props) {
+    const [isOpen, open, close] = useResponsiveDialog();
+    const [commit] = useMutation<SubmitLiveFeedbackPromptResponseMutation>(
+        SUBMIT_LIVE_FEEDBACK_PROMPT_RESPONSE_MUTATION
+    );
 
-//     function handleSubmit(form: TLiveFeedbackPromptFormState) {
-//         commit({
-//             variables: { input: { ...form, eventId } },
-//             onCompleted: close,
-//         });
-//     }
+    function handleSubmit(form: TLiveFeedbackPromptResponseFormState) {
+        commit({
+            variables: { input: { ...form, eventId } },
+            onCompleted: () => {
+                closeSnackbar();
+                close();
+            },
+        });
+    }
 
-//     return (
-//         <>
-//             <ResponsiveDialog open={isOpen} onClose={close}>
-//                 <DialogContent>
-//                     <LiveFeedbackPromptForm onCancel={close} onSubmit={handleSubmit} />
-//                 </DialogContent>
-//             </ResponsiveDialog>
+    return (
+        <>
+            <ResponsiveDialog
+                open={isOpen}
+                onClose={() => {
+                    closeSnackbar();
+                    close();
+                }}
+            >
+                <DialogContent>
+                    <LiveFeedbackPromptResponseForm
+                        onCancel={() => {
+                            closeSnackbar();
+                            close();
+                        }}
+                        onSubmit={handleSubmit}
+                        promptRef={promptRef}
+                    />
+                </DialogContent>
+            </ResponsiveDialog>
 
-//             <Button
-//                 className={className}
-//                 disabled={!user}
-//                 variant='contained'
-//                 color='primary'
-//                 onClick={open}
-//                 startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
-//             >
-//                 {user ? 'Submit Live Feedback' : 'Sign in to submit live feedback'}
-//             </Button>
-//         </>
-//     );
-// }
+            <Button
+                variant='contained'
+                color='primary'
+                onClick={() => {
+                    open();
+                }}
+                startIcon={<QuestionAnswerIcon />}
+            >
+                Respond
+            </Button>
+        </>
+    );
+}

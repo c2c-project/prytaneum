@@ -16,16 +16,22 @@ export const USE_LIVE_FEEDBACK_PROMPT_SUBSCRIPTION = graphql`
     }
 `;
 
+export interface Prompt {
+    id: string;
+    prompt: string;
+    isVote: boolean;
+    isOpenEnded: boolean;
+}
+
 export function useLiveFeedbackPrompt() {
-    // const [user] = useUser();
     const { isModerator, eventId } = useEvent();
 
-    // TODO: Open prompt response dialog
-    const onClick = React.useCallback(() => {
-        console.log('Clicked');
-    }, []);
+    const promptRef = React.useRef<Prompt>({ id: '', prompt: '', isVote: false, isOpenEnded: false });
 
-    const { displaySnack } = useLiveFeedbackPromptResponseSnack(onClick);
+    const updateCurrentPrompt = ({ id, prompt, isVote, isOpenEnded }: Prompt) => {
+        promptRef.current = { ...promptRef.current, id: id, prompt: prompt, isVote: isVote, isOpenEnded: isOpenEnded };
+    };
+    const { displaySnack } = useLiveFeedbackPromptResponseSnack(promptRef, eventId);
 
     const config = React.useMemo<GraphQLSubscriptionConfig<useLiveFeedbackPromptSubscription>>(
         () => ({
@@ -34,9 +40,13 @@ export function useLiveFeedbackPrompt() {
             },
             subscription: USE_LIVE_FEEDBACK_PROMPT_SUBSCRIPTION,
             onNext: (data) => {
-                console.log(data?.feedbackPrompted);
+                if (!data) return;
+                const { feedbackPrompted } = data;
+                const { id, prompt, isVote, isOpenEnded } = feedbackPrompted;
+                updateCurrentPrompt({ id, prompt, isVote: !!isVote, isOpenEnded: !!isOpenEnded });
                 if (isModerator) console.log('Moderator received prompt');
-                else console.log('Attendee received prompt');
+
+                // TODO: add moderator check
                 displaySnack('New Feedback Prompt', { variant: 'info' });
             },
         }),
