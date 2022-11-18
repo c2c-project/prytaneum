@@ -8,6 +8,20 @@ import type { CreateBroadcastMessage, CreateEvent, DeleteEvent, UpdateEvent } fr
 export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
 
+
+/**
+ * Filter function for event questions
+ */
+export async function doesEventMatch(eventId: string, broadcastMessageId: string, prisma: PrismaClient) {
+    // see if the event id matches the liked question
+    const found = await prisma.eventBroadcastMessage.findFirst({
+        where: { eventId, id: broadcastMessageId },
+        select: { id: true },
+    });
+
+    return Boolean(found);
+}
+
 /**
  * submit a broadcast message
  */

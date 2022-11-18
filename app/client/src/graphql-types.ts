@@ -297,6 +297,11 @@ export type EventBroadcastMessageEdge = {
     node: EventBroadcastMessage;
 };
 
+export type EventBroadcastMessageEdgeContainer = {
+    __typename?: 'EventBroadcastMessageEdgeContainer';
+    edge: EventBroadcastMessageEdge;
+};
+
 export type EventBroadcastMessageMutationResponse = MutationResponse & {
     __typename?: 'EventBroadcastMessageMutationResponse';
     body?: Maybe<EventBroadcastMessageEdge>;
@@ -1037,6 +1042,8 @@ export type ResetPasswordRequestMutationResponse = MutationResponse & {
 
 export type Subscription = {
     __typename?: 'Subscription';
+    broadcastMessageCreated: EventBroadcastMessageEdgeContainer;
+    broadcastMessageDeleted: EventBroadcastMessageEdgeContainer;
     enqueuedPushQuestion: EventQuestionEdgeContainer;
     enqueuedRemoveQuestion: EventQuestionEdgeContainer;
     enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
@@ -1060,6 +1067,14 @@ export type Subscription = {
     recordPushQuestion: EventQuestionEdgeContainer;
     recordRemoveQuestion: EventQuestionEdgeContainer;
     recordUnshiftQuestion: EventQuestionEdgeContainer;
+};
+
+export type SubscriptionBroadcastMessageCreatedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionBroadcastMessageDeletedArgs = {
+    eventId: Scalars['ID'];
 };
 
 export type SubscriptionEnqueuedPushQuestionArgs = {

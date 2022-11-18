@@ -271,6 +271,10 @@ type EventBroadcastMessageEdge {
   node: EventBroadcastMessage!
 }
 
+type EventBroadcastMessageEdgeContainer {
+  edge: EventBroadcastMessageEdge!
+}
+
 type EventBroadcastMessageMutationResponse implements MutationResponse {
   body: EventBroadcastMessageEdge
   isError: Boolean!
@@ -768,6 +772,8 @@ type ResetPasswordRequestMutationResponse implements MutationResponse {
 }
 
 type Subscription {
+  broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
+  broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
   enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!

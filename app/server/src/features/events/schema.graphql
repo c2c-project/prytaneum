@@ -57,7 +57,7 @@ type Event implements Node {
     questions(first: Int, after: String): EventQuestionConnection
 
     broadcastMessages(after: String, first: Int): EventBroadcastMessagesConnection
-    
+
     """
     Speakers for this event
     """
@@ -125,36 +125,50 @@ type Event implements Node {
 }
 
 type EventBroadcastMessage implements Node {
- createdAt: Date
- 
- """User information on the person asking the broadcast message"""
- createdBy: User
- 
- """The user id of the creator"""
- createdById: ID
- event: Event
- id: ID!
- isAsked: Boolean
- isFollowUp: Boolean
- 
- """Whether or not the current user likes the broadcast message"""
- isLikedByViewer: Boolean
- 
- """If the broadcast message is owned by the current viewer"""
- isMyBroadcastMessage: Boolean
- isQuote: Boolean
- isVisible: Boolean
- lang: String
- 
- """The users who have liked this broadcast message"""
- likedBy: UserConnection
- 
- """Find the count of the likes only"""
- likedByCount: Int
- position: Int
- 
- """The actual content of the broadcast message"""
- broadcastMessage: String
+    createdAt: Date
+
+    """
+    User information on the person asking the broadcast message
+    """
+    createdBy: User
+
+    """
+    The user id of the creator
+    """
+    createdById: ID
+    event: Event
+    id: ID!
+    isAsked: Boolean
+    isFollowUp: Boolean
+
+    """
+    Whether or not the current user likes the broadcast message
+    """
+    isLikedByViewer: Boolean
+
+    """
+    If the broadcast message is owned by the current viewer
+    """
+    isMyBroadcastMessage: Boolean
+    isQuote: Boolean
+    isVisible: Boolean
+    lang: String
+
+    """
+    The users who have liked this broadcast message
+    """
+    likedBy: UserConnection
+
+    """
+    Find the count of the likes only
+    """
+    likedByCount: Int
+    position: Int
+
+    """
+    The actual content of the broadcast message
+    """
+    broadcastMessage: String
 }
 
 """
@@ -209,8 +223,8 @@ input DeleteBroadcastMessage {
 }
 
 input CreateBroadcastMessage {
- eventId: ID!
- broadcastMessage: String!
+    eventId: ID!
+    broadcastMessage: String!
 }
 
 type EventMutationResponse implements MutationResponse {
@@ -220,24 +234,24 @@ type EventMutationResponse implements MutationResponse {
 }
 
 type EventBroadcastMessageEdge {
- cursor: String!
- node: EventBroadcastMessage!
+    cursor: String!
+    node: EventBroadcastMessage!
 }
 
 type EventBroadcastMessagesConnection {
- edges: [EventBroadcastMessageEdge!]
- pageInfo: PageInfo!
+    edges: [EventBroadcastMessageEdge!]
+    pageInfo: PageInfo!
 }
 
 type EventBroadcastMessageMutationResponse implements MutationResponse {
- body: EventBroadcastMessageEdge
- isError: Boolean!
- message: String!
+    body: EventBroadcastMessageEdge
+    isError: Boolean!
+    message: String!
 }
 
 type Mutation {
     createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
-    deleteBroadcastMessage (input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!
@@ -271,8 +285,28 @@ type EventEdgeContainer {
     edge: EventEdge!
 }
 
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
 type Subscription {
     eventUpdates(userId: ID!): Event!
     eventCreated(userId: ID!): EventEdgeContainer!
     eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
+    broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
+    broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
 }

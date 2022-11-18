@@ -687,11 +687,14 @@ export type EventEdgeContainer = {
     edge: EventEdge;
 };
 
+export type EventBroadcastMessageEdgeContainer = {
+    __typename?: 'EventBroadcastMessageEdgeContainer';
+    edge: EventBroadcastMessageEdge;
+};
+
 export type Subscription = {
     __typename?: 'Subscription';
     eventUpdates: Event;
-    eventCreated: EventEdgeContainer;
-    eventDeleted: EventEdgeContainer;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
@@ -723,14 +726,6 @@ export type Subscription = {
 
 export type SubscriptioneventUpdatesArgs = {
     userId: Scalars['ID'];
-};
-
-export type SubscriptioneventCreatedArgs = {
-    userId: Scalars['ID'];
-};
-
-export type SubscriptioneventDeletedArgs = {
-    eventIds: Array<Scalars['ID']>;
 };
 
 export type SubscriptionfeedbackCRUDArgs = {
@@ -1462,7 +1457,6 @@ export type ResolversTypes = {
     EventBroadcastMessageEdge: ResolverTypeWrapper<EventBroadcastMessageEdge>;
     EventBroadcastMessagesConnection: ResolverTypeWrapper<EventBroadcastMessagesConnection>;
     EventBroadcastMessageMutationResponse: ResolverTypeWrapper<EventBroadcastMessageMutationResponse>;
-    EventEdgeContainer: ResolverTypeWrapper<EventEdgeContainer>;
     Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
@@ -1600,7 +1594,6 @@ export type ResolversParentTypes = {
     EventBroadcastMessageEdge: EventBroadcastMessageEdge;
     EventBroadcastMessagesConnection: EventBroadcastMessagesConnection;
     EventBroadcastMessageMutationResponse: EventBroadcastMessageMutationResponse;
-    EventEdgeContainer: EventEdgeContainer;
     Subscription: {};
     Organization: Organization;
     OrganizationEdge: OrganizationEdge;
@@ -2318,14 +2311,6 @@ export type EventBroadcastMessageMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EventEdgeContainerResolvers<
-    ContextType = MercuriusContext,
-    ParentType extends ResolversParentTypes['EventEdgeContainer'] = ResolversParentTypes['EventEdgeContainer']
-> = {
-    edge?: Resolver<ResolversTypes['EventEdge'], ParentType, ContextType>;
-    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SubscriptionResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
@@ -2336,20 +2321,6 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventUpdatesArgs, 'userId'>
-    >;
-    eventCreated?: SubscriptionResolver<
-        ResolversTypes['EventEdgeContainer'],
-        'eventCreated',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventCreatedArgs, 'userId'>
-    >;
-    eventDeleted?: SubscriptionResolver<
-        ResolversTypes['EventEdgeContainer'],
-        'eventDeleted',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptioneventDeletedArgs, 'eventIds'>
     >;
     orgUpdated?: SubscriptionResolver<
         ResolversTypes['OrganizationSubscription'],
@@ -2943,7 +2914,6 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventBroadcastMessageEdge?: EventBroadcastMessageEdgeResolvers<ContextType>;
     EventBroadcastMessagesConnection?: EventBroadcastMessagesConnectionResolvers<ContextType>;
     EventBroadcastMessageMutationResponse?: EventBroadcastMessageMutationResponseResolvers<ContextType>;
-    EventEdgeContainer?: EventEdgeContainerResolvers<ContextType>;
     Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
@@ -3166,10 +3136,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         body?: LoaderResolver<Maybe<EventBroadcastMessageEdge>, EventBroadcastMessageMutationResponse, {}, TContext>;
         isError?: LoaderResolver<Scalars['Boolean'], EventBroadcastMessageMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventBroadcastMessageMutationResponse, {}, TContext>;
-    };
-
-    EventEdgeContainer?: {
-        edge?: LoaderResolver<EventEdge, EventEdgeContainer, {}, TContext>;
     };
 
     Organization?: {
