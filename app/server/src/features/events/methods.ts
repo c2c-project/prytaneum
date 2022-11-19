@@ -8,7 +8,6 @@ import type { CreateBroadcastMessage, CreateEvent, DeleteEvent, UpdateEvent } fr
 export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
 
-
 /**
  * Filter function for event questions
  */
@@ -42,7 +41,11 @@ export async function createBroadcastMessage(userId: string, prisma: PrismaClien
 /**
  *  Remove a broadcastMessage from an event
  */
-export async function updateBroadcastMessageVisibility(broadcastMessageId: string, isVisible: boolean, prisma: PrismaClient) {
+export async function updateBroadcastMessageVisibility(
+    broadcastMessageId: string,
+    isVisible: boolean,
+    prisma: PrismaClient
+) {
     return prisma.eventBroadcastMessage.update({
         where: { id: broadcastMessageId },
         data: {
