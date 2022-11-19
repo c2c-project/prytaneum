@@ -46,12 +46,15 @@ export const resolvers: Resolvers = {
                     ...args.input,
                     eventId,
                 });
-
                 const formattedBroadcastMessage = toBroadcastMessageId(broadcastMessage);
                 const edge = {
                     node: formattedBroadcastMessage,
                     cursor: formattedBroadcastMessage.id,
                 };
+                ctx.pubsub.publish({
+                    topic: 'broadcastMessageCreated',
+                    payload: { broadcastMessageCreated: { edge } },
+                });
                 return edge;
             });
         },
@@ -69,6 +72,10 @@ export const resolvers: Resolvers = {
                     node: formattedBroadcastMessage,
                     cursor: formattedBroadcastMessage.id,
                 };
+                ctx.pubsub.publish({
+                    topic: 'broadcastMessageDeleted',
+                    payload: { eventId: deleteEventBroadcastMessage.eventId, broadcastMessageDeleted: { edge } },
+                });
                 return edge;
             });
         },
@@ -202,6 +209,7 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ broadcastMessageCreated: EventBroadcastMessageEdgeContainer }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageCreated'),
                 (payload, args, ctx) => {
+                    console.log('payload', payload);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageCreated.edge.node.id);
                     return Event.doesEventMatch(eventId, broadcastMessageId, ctx.prisma);
@@ -214,7 +222,7 @@ export const resolvers: Resolvers = {
                 (payload, args, ctx) => {
                     const { eventId: broadcastMessageEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageDeleted.edge.node.id);
+                    // const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageDeleted.edge.node.id);
                     return eventId === broadcastMessageEventId;
                 }
             ),
@@ -258,8 +266,8 @@ export const resolvers: Resolvers = {
                 pageInfo: {
                     hasNextPage: false,
                     hasPreviousPage: false,
-                    startCursor: edges[0]?.cursor || '',
-                    endCursor: edges[edges.length - 1]?.cursor || '',
+                    startCursor: edges[0]?.cursor,
+                    endCursor: edges[edges.length - 1]?.cursor,
                 },
             };
         },

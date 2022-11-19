@@ -52,6 +52,10 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         [broadcastMessages]
     );
 
+    React.useEffect(() => {
+        console.log('data', data);
+    }, [data]);
+
     // Data in ascending time order, reverse to get latest message at the top
     broadcastMessageList.reverse();
 
