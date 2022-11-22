@@ -12,7 +12,7 @@ import { useEvent } from '@local/features/events';
 // import { useUser } from '@local/features/accounts';
 
 import { useBroadcastMessageDeleted } from './useBroadcastMessageDeleted';
-import { useBroadcastMessageCreated } from './useBroadcastMessageCreated'
+import { useBroadcastMessageCreated } from './useBroadcastMessageCreated';
 import { Loader } from '@local/components/Loader';
 import { OperationType } from 'relay-runtime';
 import { LoadMoreFn } from 'react-relay';
