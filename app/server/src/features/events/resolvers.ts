@@ -42,18 +42,18 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                const broadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, {
+                const createBroadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
                     eventId,
                 });
-                const formattedBroadcastMessage = toBroadcastMessageId(broadcastMessage);
+                const formattedBroadcastMessage = toBroadcastMessageId(createBroadcastMessage);
                 const edge = {
                     node: formattedBroadcastMessage,
                     cursor: formattedBroadcastMessage.id,
                 };
                 ctx.pubsub.publish({
                     topic: 'broadcastMessageCreated',
-                    payload: { broadcastMessageCreated: { edge } },
+                    payload: { eventId: createBroadcastMessage, broadcastMessageCreated: { edge } },
                 });
                 return edge;
             });
