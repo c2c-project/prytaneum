@@ -168,7 +168,7 @@ type EventBroadcastMessage implements Node {
     """
     The actual content of the broadcast message
     """
-    broadcastMessage: String
+    broadcastMessage: String!
 }
 
 """
@@ -222,6 +222,11 @@ input DeleteBroadcastMessage {
     isVisible: Boolean!
 }
 
+input EditBroadcastMessage {
+    broadcastMessageId: ID!
+    broadcastMessage: String!
+}
+
 input CreateBroadcastMessage {
     eventId: ID!
     broadcastMessage: String!
@@ -252,6 +257,7 @@ type EventBroadcastMessageMutationResponse implements MutationResponse {
 type Mutation {
     createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
     deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    editBroadcastMessage(input: EditBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!

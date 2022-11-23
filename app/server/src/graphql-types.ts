@@ -250,6 +250,7 @@ export type Mutation = {
     logout: Scalars['Date'];
     createBroadcastMessage: EventBroadcastMessageMutationResponse;
     deleteBroadcastMessage: EventBroadcastMessageMutationResponse;
+    editBroadcastMessage: EventBroadcastMessageMutationResponse;
     createEvent: EventMutationResponse;
     updateEvent: EventMutationResponse;
     deleteEvent: EventMutationResponse;
@@ -333,6 +334,10 @@ export type MutationcreateBroadcastMessageArgs = {
 
 export type MutationdeleteBroadcastMessageArgs = {
     input: DeleteBroadcastMessage;
+};
+
+export type MutationeditBroadcastMessageArgs = {
+    input: EditBroadcastMessage;
 };
 
 export type MutationcreateEventArgs = {
@@ -599,7 +604,7 @@ export type EventBroadcastMessage = Node & {
     likedByCount?: Maybe<Scalars['Int']>;
     position?: Maybe<Scalars['Int']>;
     /** The actual content of the broadcast message */
-    broadcastMessage?: Maybe<Scalars['String']>;
+    broadcastMessage: Scalars['String'];
 };
 
 /** Event Edge */
@@ -648,6 +653,11 @@ export type DeleteEvent = {
 export type DeleteBroadcastMessage = {
     broadcastMessageId: Scalars['ID'];
     isVisible: Scalars['Boolean'];
+};
+
+export type EditBroadcastMessage = {
+    broadcastMessageId: Scalars['ID'];
+    broadcastMessage: Scalars['String'];
 };
 
 export type CreateBroadcastMessage = {
@@ -1452,6 +1462,7 @@ export type ResolversTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     DeleteBroadcastMessage: DeleteBroadcastMessage;
+    EditBroadcastMessage: EditBroadcastMessage;
     CreateBroadcastMessage: CreateBroadcastMessage;
     EventMutationResponse: ResolverTypeWrapper<EventMutationResponse>;
     EventBroadcastMessageEdge: ResolverTypeWrapper<EventBroadcastMessageEdge>;
@@ -1589,6 +1600,7 @@ export type ResolversParentTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     DeleteBroadcastMessage: DeleteBroadcastMessage;
+    EditBroadcastMessage: EditBroadcastMessage;
     CreateBroadcastMessage: CreateBroadcastMessage;
     EventMutationResponse: EventMutationResponse;
     EventBroadcastMessageEdge: EventBroadcastMessageEdge;
@@ -1945,6 +1957,12 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationdeleteBroadcastMessageArgs, 'input'>
     >;
+    editBroadcastMessage?: Resolver<
+        ResolversTypes['EventBroadcastMessageMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationeditBroadcastMessageArgs, 'input'>
+    >;
     createEvent?: Resolver<
         ResolversTypes['EventMutationResponse'],
         ParentType,
@@ -2250,7 +2268,7 @@ export type EventBroadcastMessageResolvers<
     likedBy?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     likedByCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-    broadcastMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    broadcastMessage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3101,7 +3119,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         likedBy?: LoaderResolver<Maybe<UserConnection>, EventBroadcastMessage, {}, TContext>;
         likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventBroadcastMessage, {}, TContext>;
         position?: LoaderResolver<Maybe<Scalars['Int']>, EventBroadcastMessage, {}, TContext>;
-        broadcastMessage?: LoaderResolver<Maybe<Scalars['String']>, EventBroadcastMessage, {}, TContext>;
+        broadcastMessage?: LoaderResolver<Scalars['String'], EventBroadcastMessage, {}, TContext>;
     };
 
     EventEdge?: {
