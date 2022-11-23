@@ -155,6 +155,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                                         }
                                                         className={classes.broadcastMessageActions}
                                                         deleteEnabled={isModerator && Boolean(user)}
+                                                        editEnabled={isModerator && Boolean(user)}
                                                         connections={connections}
                                                         fragmentRef={broadcastMessage}
                                                     />

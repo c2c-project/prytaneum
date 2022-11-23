@@ -5,6 +5,7 @@ import { graphql, useFragment } from 'react-relay';
 
 import type { BroadcastMessageActionsFragment$key } from '@local/__generated__/BroadcastMessageActionsFragment.graphql';
 import { DeleteBroadcastMessageButton } from './DeleteBroadcastMessageButton';
+import { EditBroadcastMessageButton } from './EditBroadcastMessageButton';
 
 const useStyles = makeStyles((theme) => ({
     actions: {
@@ -20,17 +21,20 @@ const BROADCAST_MESSAGE_ACTIONS_FRAGMENT = graphql`
     fragment BroadcastMessageActionsFragment on EventBroadcastMessage {
         id
         ...DeleteBroadcastMessageButtonFragment
+        ...EditBroadcastMessageButtonFragment
     }
 `;
 
 export type BroadcastMessageActionProps = {
     deleteEnabled?: boolean;
+    editEnabled?: boolean;
     fragmentRef: BroadcastMessageActionsFragment$key;
     connections?: string[];
 } & CardActionsProps;
 
 export function BroadcastMessageActions({
     deleteEnabled = false,
+    editEnabled = false,
     fragmentRef,
     connections,
     ...props
@@ -40,6 +44,7 @@ export function BroadcastMessageActions({
     return (
         <CardActions {...props} className={classes.actions}>
             {deleteEnabled && <DeleteBroadcastMessageButton fragmentRef={data} className={classes.delete} />}
+            {editEnabled && <EditBroadcastMessageButton fragmentRef={data} className={classes.delete} />}
         </CardActions>
     );
 }
