@@ -58,6 +58,27 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        async editBroadcastMessage(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const { id: broadcastMessageId } = fromGlobalId(args.input.broadcastMessageId);
+                const editEventBroadcastMessage = await Event.editBroadcastMessage(
+                    broadcastMessageId,
+                    args.input.broadcastMessage,
+                    ctx.prisma
+                );
+                const formattedBroadcastMessage = toBroadcastMessageId(editEventBroadcastMessage);
+                const edge = {
+                    node: formattedBroadcastMessage,
+                    cursor: formattedBroadcastMessage.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'broadcastMessageEdited',
+                    payload: { eventId: editEventBroadcastMessage.eventId, broadcastMessageEdited: { edge } },
+                });
+                return edge;
+            });
+        },
         async deleteBroadcastMessage(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
