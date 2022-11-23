@@ -145,6 +145,11 @@ input DeleteVideo {
   id: String!
 }
 
+input EditBroadcastMessage {
+  broadcastMessage: String!
+  broadcastMessageId: ID!
+}
+
 type Error {
   message: String!
 }
@@ -236,7 +241,7 @@ type Event implements Node {
 
 type EventBroadcastMessage implements Node {
   """The actual content of the broadcast message"""
-  broadcastMessage: String
+  broadcastMessage: String!
   createdAt: Date
 
   """User information on the person asking the broadcast message"""
@@ -608,6 +613,7 @@ type Mutation {
   deleteQuestion(input: DeleteQuestion!): EventQuestionMutationResponse!
   deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
   deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
+  editBroadcastMessage(input: EditBroadcastMessage!): EventBroadcastMessageMutationResponse!
 
   """End the event so that it is not live"""
   endEvent(eventId: String!): EventMutationResponse!

@@ -152,6 +152,11 @@ export type DeleteVideo = {
     id: Scalars['String'];
 };
 
+export type EditBroadcastMessage = {
+    broadcastMessage: Scalars['String'];
+    broadcastMessageId: Scalars['ID'];
+};
+
 export type Error = {
     __typename?: 'Error';
     message: Scalars['String'];
@@ -267,7 +272,7 @@ export type EventVideosArgs = {
 export type EventBroadcastMessage = Node & {
     __typename?: 'EventBroadcastMessage';
     /** The actual content of the broadcast message */
-    broadcastMessage?: Maybe<Scalars['String']>;
+    broadcastMessage: Scalars['String'];
     createdAt?: Maybe<Scalars['Date']>;
     /** User information on the person asking the broadcast message */
     createdBy?: Maybe<User>;
@@ -666,6 +671,7 @@ export type Mutation = {
     deleteQuestion: EventQuestionMutationResponse;
     deleteSpeaker: EventSpeakerMutationResponse;
     deleteVideo: EventVideoMutationResponse;
+    editBroadcastMessage: EventBroadcastMessageMutationResponse;
     /** End the event so that it is not live */
     endEvent: EventMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
@@ -792,6 +798,10 @@ export type MutationDeleteSpeakerArgs = {
 
 export type MutationDeleteVideoArgs = {
     input: DeleteVideo;
+};
+
+export type MutationEditBroadcastMessageArgs = {
+    input: EditBroadcastMessage;
 };
 
 export type MutationEndEventArgs = {
