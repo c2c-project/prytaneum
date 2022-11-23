@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<92d684239c8e14db721e18c3ad39a181>>
+ * @generated SignedSource<<0d2ff35fe4e72057947ea66b3d6845bf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,7 +19,7 @@ export type useBroadcastMessageListFragment$data = {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly broadcastMessage: string | null;
+        readonly broadcastMessage: string;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
