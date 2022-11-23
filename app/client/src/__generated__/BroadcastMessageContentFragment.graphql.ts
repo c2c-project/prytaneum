@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bdcd44d31e6fa7aab8835661e1eaed1b>>
+ * @generated SignedSource<<f16f398035f1b696cb24936c35c8bb53>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type BroadcastMessageContentFragment$data = {
-  readonly broadcastMessage: string | null;
+  readonly broadcastMessage: string;
   readonly " $fragmentType": "BroadcastMessageContentFragment";
 };
 export type BroadcastMessageContentFragment = BroadcastMessageContentFragment$data;
