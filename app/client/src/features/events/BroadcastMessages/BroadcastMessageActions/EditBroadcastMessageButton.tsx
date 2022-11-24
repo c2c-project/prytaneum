@@ -36,15 +36,11 @@ interface Props {
 }
 
 export function EditBroadcastMessageButton({ className = undefined, fragmentRef }: Props) {
-    const {
-        id: broadcastMessageId,
-        position,
-        broadcastMessage,
-    } = useFragment(EDIT_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
+    const { id: broadcastMessageId, broadcastMessage } = useFragment(EDIT_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
     const [commit] = useMutation<EditBroadcastMessageButtonMutation>(EDIT_BROADCAST_MESSAGE_MUTATION);
     const { displaySnack } = useSnack();
 
-    function handleClick() {
+    function handleSubmit() {
         commit({
             variables: {
                 input: {
@@ -58,20 +54,33 @@ export function EditBroadcastMessageButton({ className = undefined, fragmentRef 
         });
     }
 
-    const isQueued = React.useMemo(() => {
-        if (!position || position === -1) return false;
-        return true;
-    }, [position]);
+    const [editedBroadcastMessage, setEditedBroadcastMessage] = React.useState('');
+    const [disableInput, setDisableInput] = React.useState(true);
+
+    function handleClick() {
+        setDisableInput(!disableInput);
+    }
 
     return (
         <div>
-            {isQueued ? (
+            {disableInput ? (
                 <></>
             ) : (
-                <Button onClick={handleClick} endIcon={<EditIcon fontSize='small' />} fullWidth className={className}>
-                    Edit
-                </Button>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Broadcast message:
+                        <input
+                            type='text'
+                            value={editedBroadcastMessage}
+                            onChange={(e) => setEditedBroadcastMessage(e.target.value)}
+                        />
+                    </label>
+                    <input type='submit' value='save' />
+                </form>
             )}
+            <Button onClick={handleClick} endIcon={<EditIcon fontSize='small' />} fullWidth className={className}>
+                Edit
+            </Button>
         </div>
     );
 }
