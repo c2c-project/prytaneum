@@ -3,6 +3,7 @@ services:
     app:
         container_name: app
         build: .
+        tty: true
         volumes:
             - type: bind
               source: .
