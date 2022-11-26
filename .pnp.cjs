@@ -401,7 +401,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./app/proxy/",\
           "packageDependencies": [\
             ["@app/proxy", "workspace:app/proxy"],\
-            ["@types/express", "npm:4.17.11"],\
+            ["@types/express", "npm:4.17.14"],\
             ["@types/node", "npm:14.14.41"],\
             ["dotenv", "npm:10.0.0"],\
             ["dotenv-cli", "npm:4.0.0"],\
@@ -15702,10 +15702,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/express", [\
-        ["npm:4.17.11", {\
-          "packageLocation": "./.yarn/cache/@types-express-npm-4.17.11-1b3f17f056-4f57fb2a3c.zip/node_modules/@types/express/",\
+        ["npm:4.17.13", {\
+          "packageLocation": "./.yarn/cache/@types-express-npm-4.17.13-0e12fe9c24-12a2a0e6c4.zip/node_modules/@types/express/",\
           "packageDependencies": [\
-            ["@types/express", "npm:4.17.11"],\
+            ["@types/express", "npm:4.17.13"],\
             ["@types/body-parser", "npm:1.19.0"],\
             ["@types/express-serve-static-core", "npm:4.17.19"],\
             ["@types/qs", "npm:6.9.6"],\
@@ -15713,10 +15713,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:4.17.13", {\
-          "packageLocation": "./.yarn/cache/@types-express-npm-4.17.13-0e12fe9c24-12a2a0e6c4.zip/node_modules/@types/express/",\
+        ["npm:4.17.14", {\
+          "packageLocation": "./.yarn/cache/@types-express-npm-4.17.14-076e1b4711-15c1af46d0.zip/node_modules/@types/express/",\
           "packageDependencies": [\
-            ["@types/express", "npm:4.17.13"],\
+            ["@types/express", "npm:4.17.14"],\
             ["@types/body-parser", "npm:1.19.0"],\
             ["@types/express-serve-static-core", "npm:4.17.19"],\
             ["@types/qs", "npm:6.9.6"],\
@@ -28574,7 +28574,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/http-proxy-middleware-virtual-80f12166c2/0/cache/http-proxy-middleware-npm-2.0.6-3bb17658ee-2ee85bc878.zip/node_modules/http-proxy-middleware/",\
           "packageDependencies": [\
             ["http-proxy-middleware", "virtual:0ca33ee6ec6b7927402f9cf060fe4008bf0048743ae2d9a5ec293053a6193ef4a74f16f88d2403c83e3d6c3f1394ca4d820565899c2c4efb04520638d9eba490#npm:2.0.6"],\
-            ["@types/express", "npm:4.17.11"],\
+            ["@types/express", "npm:4.17.14"],\
             ["@types/http-proxy", "npm:1.17.9"],\
             ["http-proxy", "npm:1.18.1"],\
             ["is-glob", "npm:4.0.1"],\
