@@ -176,7 +176,7 @@ export type Event = Node & {
   isViewerModerator?: Maybe<Scalars['Boolean']>;
   /** Live Feedback given during the event */
   liveFeedback?: Maybe<EventLiveFeedbackConnection>;
-  /** Live Feedback Prompt Responses */
+  /** Live Feedback Prompts w/ responses */
   liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
   /** List of moderators for this particular event */
   moderators?: Maybe<UserConnection>;
