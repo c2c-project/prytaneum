@@ -8,7 +8,7 @@
         "g:husky": "husky install",
         "g:commit": "commit",
         "g:dev": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/dev.ts",
-        "g:dev-docker": "yarn workspace @app/server generate && yarn workspace @app/server prisma-db-push --force-reset && ts-node-dev -- ./scripts/dev-docker.ts",
+        "g:dev-docker": "yarn workspace @app/server generate && yarn workspace @app/server prisma-db-push --accept-data-loss && ts-node-dev -- ./scripts/dev-docker.ts",
         "g:dev-test": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/test.ts",
         "g:start-test-db": "yarn exec db/start-test-db.sh",
         "g:start-db": "yarn exec db/start-db.sh",
