@@ -184,7 +184,7 @@ type Event implements Node {
   """Live Feedback given during the event"""
   liveFeedback(after: String, first: Int): EventLiveFeedbackConnection
 
-  """Live Feedback Prompt Responses"""
+  """Live Feedback Prompts w/ responses"""
   liveFeedbackPrompts(after: String, first: Int): EventLiveFeedbackPromptConnection
 
   """List of moderators for this particular event"""
