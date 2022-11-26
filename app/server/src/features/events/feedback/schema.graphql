@@ -49,6 +49,11 @@ type EventLiveFeedbackPromptEdge {
     cursor: String!
 }
 
+type EventLiveFeedbackPromptConnection {
+    edges: [EventLiveFeedbackPromptEdge!]
+    pageInfo: PageInfo!
+}
+
 type EventLiveFeedbackPromptResponseEdge {
     node: EventLiveFeedbackPromptResponse!
     cursor: String!

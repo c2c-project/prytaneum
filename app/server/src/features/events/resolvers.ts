@@ -12,6 +12,7 @@ const toQuestionId = toGlobalId('EventQuestion');
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
+const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
 
 export const resolvers: Resolvers = {
     Query: {
@@ -145,6 +146,13 @@ export const resolvers: Resolvers = {
                     endCursor: edges[liveFeedback.length - 1]?.cursor.toString(),
                 },
             };
+        },
+        async liveFeedbackPrompts(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const queryResult = await Event.findLiveFeedbackPromptsByEventId(eventId, ctx.prisma);
+            if (!queryResult) return connectionFromArray([], args);
+            const { feedbackPrompt: liveFeedbackPrompts } = queryResult;
+            return connectionFromArray(liveFeedbackPrompts.map(toFeedbackPromptId), args);
         },
         async questionQueue(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);

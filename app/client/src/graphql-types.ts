@@ -176,6 +176,8 @@ export type Event = Node & {
   isViewerModerator?: Maybe<Scalars['Boolean']>;
   /** Live Feedback given during the event */
   liveFeedback?: Maybe<EventLiveFeedbackConnection>;
+  /** Live Feedback Prompt Responses */
+  liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
   /** List of moderators for this particular event */
   moderators?: Maybe<UserConnection>;
   /** The owning organization */
@@ -207,6 +209,12 @@ export type EventInvitedArgs = {
 
 
 export type EventLiveFeedbackArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type EventLiveFeedbackPromptsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -321,6 +329,12 @@ export type EventLiveFeedbackPrompt = Node & {
 export type EventLiveFeedbackPromptResponsesArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventLiveFeedbackPromptConnection = {
+  __typename?: 'EventLiveFeedbackPromptConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptEdge>>;
+  pageInfo: PageInfo;
 };
 
 export type EventLiveFeedbackPromptEdge = {

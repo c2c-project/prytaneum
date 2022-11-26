@@ -184,6 +184,9 @@ type Event implements Node {
   """Live Feedback given during the event"""
   liveFeedback(after: String, first: Int): EventLiveFeedbackConnection
 
+  """Live Feedback Prompt Responses"""
+  liveFeedbackPrompts(after: String, first: Int): EventLiveFeedbackPromptConnection
+
   """List of moderators for this particular event"""
   moderators(after: String, first: Int): UserConnection
 
@@ -274,6 +277,11 @@ type EventLiveFeedbackPrompt implements Node {
   isVote: Boolean
   prompt: String!
   responses(after: String, first: Int): EventLiveFeedbackPromptResponseConnection
+}
+
+type EventLiveFeedbackPromptConnection {
+  edges: [EventLiveFeedbackPromptEdge!]
+  pageInfo: PageInfo!
 }
 
 type EventLiveFeedbackPromptEdge {

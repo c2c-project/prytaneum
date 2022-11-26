@@ -464,6 +464,8 @@ export type Event = Node & {
     videos?: Maybe<EventVideoConnection>;
     /** Live Feedback given during the event */
     liveFeedback?: Maybe<EventLiveFeedbackConnection>;
+    /** Live Feedback Prompts w/ responses */
+    liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
     /** List of moderators for this particular event */
     moderators?: Maybe<UserConnection>;
     /** Whether or not the viewer is a moderator */
@@ -499,6 +501,11 @@ export type EventvideosArgs = {
 };
 
 export type EventliveFeedbackArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+export type EventliveFeedbackPromptsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -805,6 +812,12 @@ export type EventLiveFeedbackPromptEdge = {
     __typename?: 'EventLiveFeedbackPromptEdge';
     node: EventLiveFeedbackPrompt;
     cursor: Scalars['String'];
+};
+
+export type EventLiveFeedbackPromptConnection = {
+    __typename?: 'EventLiveFeedbackPromptConnection';
+    edges?: Maybe<Array<EventLiveFeedbackPromptEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type EventLiveFeedbackPromptResponseEdge = {
@@ -1324,6 +1337,7 @@ export type ResolversTypes = {
     EventLiveFeedbackPromptResponse: ResolverTypeWrapper<EventLiveFeedbackPromptResponse>;
     EventLiveFeedbackEdge: ResolverTypeWrapper<EventLiveFeedbackEdge>;
     EventLiveFeedbackPromptEdge: ResolverTypeWrapper<EventLiveFeedbackPromptEdge>;
+    EventLiveFeedbackPromptConnection: ResolverTypeWrapper<EventLiveFeedbackPromptConnection>;
     EventLiveFeedbackPromptResponseEdge: ResolverTypeWrapper<EventLiveFeedbackPromptResponseEdge>;
     EventLiveFeedbackPromptResponseConnection: ResolverTypeWrapper<EventLiveFeedbackPromptResponseConnection>;
     EventLiveFeedbackConnection: ResolverTypeWrapper<EventLiveFeedbackConnection>;
@@ -1450,6 +1464,7 @@ export type ResolversParentTypes = {
     EventLiveFeedbackPromptResponse: EventLiveFeedbackPromptResponse;
     EventLiveFeedbackEdge: EventLiveFeedbackEdge;
     EventLiveFeedbackPromptEdge: EventLiveFeedbackPromptEdge;
+    EventLiveFeedbackPromptConnection: EventLiveFeedbackPromptConnection;
     EventLiveFeedbackPromptResponseEdge: EventLiveFeedbackPromptResponseEdge;
     EventLiveFeedbackPromptResponseConnection: EventLiveFeedbackPromptResponseConnection;
     EventLiveFeedbackConnection: EventLiveFeedbackConnection;
@@ -1988,6 +2003,12 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventliveFeedbackArgs, never>
     >;
+    liveFeedbackPrompts?: Resolver<
+        Maybe<ResolversTypes['EventLiveFeedbackPromptConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventliveFeedbackPromptsArgs, never>
+    >;
     moderators?: Resolver<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
@@ -2299,6 +2320,15 @@ export type EventLiveFeedbackPromptEdgeResolvers<
 > = {
     node?: Resolver<ResolversTypes['EventLiveFeedbackPrompt'], ParentType, ContextType>;
     cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptConnectionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptConnection'] = ResolversParentTypes['EventLiveFeedbackPromptConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedbackPromptEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2624,6 +2654,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventLiveFeedbackPromptResponse?: EventLiveFeedbackPromptResponseResolvers<ContextType>;
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
     EventLiveFeedbackPromptEdge?: EventLiveFeedbackPromptEdgeResolvers<ContextType>;
+    EventLiveFeedbackPromptConnection?: EventLiveFeedbackPromptConnectionResolvers<ContextType>;
     EventLiveFeedbackPromptResponseEdge?: EventLiveFeedbackPromptResponseEdgeResolvers<ContextType>;
     EventLiveFeedbackPromptResponseConnection?: EventLiveFeedbackPromptResponseConnectionResolvers<ContextType>;
     EventLiveFeedbackConnection?: EventLiveFeedbackConnectionResolvers<ContextType>;
@@ -2763,6 +2794,12 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         participants?: LoaderResolver<Maybe<EventParticipantConnection>, Event, EventparticipantsArgs, TContext>;
         videos?: LoaderResolver<Maybe<EventVideoConnection>, Event, EventvideosArgs, TContext>;
         liveFeedback?: LoaderResolver<Maybe<EventLiveFeedbackConnection>, Event, EventliveFeedbackArgs, TContext>;
+        liveFeedbackPrompts?: LoaderResolver<
+            Maybe<EventLiveFeedbackPromptConnection>,
+            Event,
+            EventliveFeedbackPromptsArgs,
+            TContext
+        >;
         moderators?: LoaderResolver<Maybe<UserConnection>, Event, EventmoderatorsArgs, TContext>;
         isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
@@ -2866,6 +2903,16 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
     EventLiveFeedbackPromptEdge?: {
         node?: LoaderResolver<EventLiveFeedbackPrompt, EventLiveFeedbackPromptEdge, {}, TContext>;
         cursor?: LoaderResolver<Scalars['String'], EventLiveFeedbackPromptEdge, {}, TContext>;
+    };
+
+    EventLiveFeedbackPromptConnection?: {
+        edges?: LoaderResolver<
+            Maybe<Array<EventLiveFeedbackPromptEdge>>,
+            EventLiveFeedbackPromptConnection,
+            {},
+            TContext
+        >;
+        pageInfo?: LoaderResolver<PageInfo, EventLiveFeedbackPromptConnection, {}, TContext>;
     };
 
     EventLiveFeedbackPromptResponseEdge?: {

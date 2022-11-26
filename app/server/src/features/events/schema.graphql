@@ -82,6 +82,11 @@ type Event implements Node {
     liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
 
     """
+    Live Feedback Prompts w/ responses
+    """
+    liveFeedbackPrompts(first: Int, after: String): EventLiveFeedbackPromptConnection
+
+    """
     List of moderators for this particular event
     """
     moderators(first: Int, after: String): UserConnection
