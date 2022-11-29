@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3d1e222efe0374cd7a68dd2ad9241080>>
+ * @generated SignedSource<<ad339dc3b7d79c3b54b0563e5f32cfea>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,7 @@ export type useQuestionCreatedSubscription$data = {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly position: any | null;
+        readonly position: number | null;
         readonly isVisible: boolean | null;
         readonly refQuestion: {
           readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
