@@ -71,7 +71,7 @@ export async function updateQuestionPosition(userId: string, prisma: PrismaClien
             id: questionId,
         },
         data: {
-            position: BigInt(position),
+            position,
         },
     });
 }
