@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cc3b73ed8de91d8417a3d6848f38d029>>
+ * @generated SignedSource<<7a27093fadd9fa47fd9801198dc04476>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionQueueFragment$data = {
   readonly id: string;
-  readonly currentQuestion: any | null;
+  readonly currentQuestion: number | null;
   readonly questionQueue: {
     readonly questionRecord: {
       readonly __id: string;
@@ -24,7 +24,7 @@ export type useQuestionQueueFragment$data = {
           readonly createdBy: {
             readonly firstName: string | null;
           } | null;
-          readonly position: any | null;
+          readonly position: number | null;
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
           } | null;
@@ -42,7 +42,7 @@ export type useQuestionQueueFragment$data = {
           readonly createdBy: {
             readonly firstName: string | null;
           } | null;
-          readonly position: any | null;
+          readonly position: number | null;
           readonly refQuestion: {
             readonly " $fragmentSpreads": FragmentRefs<"QuestionQuoteFragment">;
           } | null;

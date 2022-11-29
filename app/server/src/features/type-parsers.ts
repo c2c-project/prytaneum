@@ -25,20 +25,4 @@ export const resolvers: Resolvers = {
             return null;
         },
     }),
-    BigInt: new GraphQLScalarType({
-        name: 'BigInt',
-        description: 'BigInt custom scalar type',
-        parseValue(value: string) {
-            return parseInt(value, 10); // value from the client
-        },
-        serialize(value: string) {
-            return parseInt(value, 10); // value sent to the client
-        },
-        parseLiteral(ast) {
-            if (ast.kind === Kind.STRING) {
-                return parseInt(ast.value, 10); // ast value is always in string format
-            }
-            return null;
-        },
-    }),
 };

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ab4f94695b534317872e8de47e0b41ad>>
+ * @generated SignedSource<<7101c0688fa887cf3b78f73f1f1ab4b5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useQuestionListFragment$data = {
   readonly id: string;
-  readonly currentQuestion: any | null;
+  readonly currentQuestion: number | null;
   readonly questions: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
