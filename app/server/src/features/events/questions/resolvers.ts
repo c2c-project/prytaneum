@@ -27,7 +27,7 @@ export const resolvers: Resolvers = {
                 const edge = {
                     node: {
                         ...formattedQuestion,
-                        position: BigInt(question.position),
+                        position: formattedQuestion.position,
                     },
                     cursor: formattedQuestion.createdAt.getTime().toString(),
                 };
