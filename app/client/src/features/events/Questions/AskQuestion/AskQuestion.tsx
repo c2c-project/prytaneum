@@ -45,21 +45,25 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
     const { displaySnack } = useSnack();
 
     function handleSubmit(form: TQuestionFormState) {
-        commit({
-            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
-            onCompleted(payload) {
-                if (payload.createQuestion.isError) displaySnack(payload.createQuestion.message);
-                else {
-                    ga.event({
-                        action: 'submit_question',
-                        category: 'questions',
-                        label: 'live event',
-                        value: form.question,
-                    });
-                    close();
-                }
-            },
-        });
+        try {
+            commit({
+                variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
+                onCompleted(payload) {
+                    if (payload.createQuestion.isError) displaySnack('Something went wrong!');
+                    else {
+                        ga.event({
+                            action: 'submit_question',
+                            category: 'questions',
+                            label: 'live event',
+                            value: form.question,
+                        });
+                        close();
+                    }
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message);
+        }
     }
 
     return (
