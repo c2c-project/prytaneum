@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d4c9209d90c12a088dc0770e1c30371a>>
+ * @generated SignedSource<<f319184f3608ca4863e07ea13d9c2a46>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type useQuestionUpdatedSubscription$data = {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly position: any | null;
+        readonly position: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionContentFragment" | "QuestionStatsFragment">;
       };
     };
