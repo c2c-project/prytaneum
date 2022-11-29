@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<74dff83b9e9008a97b4162ad688e2957>>
+ * @generated SignedSource<<19cbbb4bd5df351659b95886736bdc72>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,7 +25,7 @@ export type DequeueQuestionButtonMutation$data = {
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly position: any | null;
+        readonly position: number | null;
       };
     } | null;
   };

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1bba52f8aec04e90aaf1f7efb43508ff>>
+ * @generated SignedSource<<b8fb542701dbd2bbd5d44c18165a08c7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type useEnqueuedUnshiftSubscription$data = {
     readonly edge: {
       readonly node: {
         readonly id: string;
-        readonly position: any | null;
+        readonly position: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
       };
       readonly cursor: string;
