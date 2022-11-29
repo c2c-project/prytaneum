@@ -21,7 +21,6 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
-                console.log(question);
                 const formattedQuestion = toQuestionId(question);
                 if (formattedQuestion.refQuestion)
                     formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
@@ -32,14 +31,12 @@ export const resolvers: Resolvers = {
                     },
                     cursor: formattedQuestion.createdAt.getTime().toString(),
                 };
-                console.log(edge);
                 ctx.pubsub.publish({
                     topic: 'questionCreated',
                     payload: {
                         questionCreated: { edge },
                     },
                 });
-                console.log(formattedQuestion);
                 return edge;
             });
         },
