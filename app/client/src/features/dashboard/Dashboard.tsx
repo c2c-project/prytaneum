@@ -1,74 +1,72 @@
 import * as React from 'react';
-import { fetchQuery, graphql, useQueryLoader } from 'react-relay';
-import { Grid } from '@mui/material';
+import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { useRouter } from 'next/router';
+import { Grid, Typography } from '@mui/material';
 
-import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
-import { useEnvironment } from '@local/core';
-import { ConditionalRender } from '@local/components/ConditionalRender';
 import { Loader } from '@local/components/Loader';
+import { useUser } from '@local/features/accounts';
+import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
 import { DashboardEventList } from './DashboardEventList';
+
+export interface Event {
+    node: {
+        id: string;
+        title: string | null;
+        description: string | null;
+        startDateTime: Date | null;
+        endDateTime: Date | null;
+        isViewerModerator: boolean | null;
+        organization: {
+            name: string;
+        } | null;
+    };
+}
 
 export const DASHBOARD_QUERY = graphql`
     query DashboardQuery {
         me {
-            events {
-                __id
-                edges {
-                    node {
-                        id
-                        title
-                        description
-                        startDateTime
-                        endDateTime
-                        isViewerModerator
-                        organization {
-                            name
-                        }
-                    }
-                }
-            }
+            ...useDashboardEventsFragment
         }
     }
 `;
 
-export function Dashboard() {
-    const [queryRef, loadQuery] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-    const REFRESH_INTERVAL = 20000; // 20 seconds
+interface Props {
+    queryRef: PreloadedQuery<DashboardQuery>;
+}
 
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, DASHBOARD_QUERY, {}).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadQuery({}, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, isRefreshing, loadQuery]);
+export function Dashboard({ queryRef }: Props) {
+    const data = usePreloadedQuery<DashboardQuery>(DASHBOARD_QUERY, queryRef);
+    const listOfEvents = React.useMemo(() => data.me?.events?.edges ?? [], [data.me]);
+    const router = useRouter();
+    const [user, , isLoading] = useUser();
 
+    // Verify user is logged in
     React.useEffect(() => {
-        // Load the query on initial render
-        if (!queryRef) loadQuery({}, { fetchPolicy: 'network-only' });
-        // Refresh the query every interval
-        const interval = setInterval(() => {
-            refresh();
-        }, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    }, []);
+        if (!isLoading && !user) router.push('/');
+    }, [user, router, isLoading]);
 
-    if (!queryRef) return <Loader />;
+    if (!me) return <Loader />;
+
     return (
-        <ConditionalRender client>
-            <React.Suspense fallback={<div>Loading...</div>}>
-                <Grid container>
-                    <DashboardEventList queryRef={queryRef} />
-                </Grid>
-            </React.Suspense>
-        </ConditionalRender>
+        <Grid container>
+            <DashboardEventList
+                ongoing={true}
+                eventList={ongoingEvents}
+                sectionTitle={
+                    <Typography variant='h6' style={{ marginBottom: '.5rem' }}>
+                        Current Events
+                    </Typography>
+                }
+            />
+            <DashboardEventList
+                ongoing={false}
+                eventList={upcomingEvents}
+                sectionTitle={
+                    <Typography variant='h6' style={{ marginBottom: '.5rem' }}>
+                        Upcoming Events
+                    </Typography>
+                }
+            />
+        </Grid>
     );
 }
