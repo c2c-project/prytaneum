@@ -29,3 +29,5 @@ enum Operation {
     UPDATE
     DELETE
 }
+
+scalar BigInt

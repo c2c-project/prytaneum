@@ -109,7 +109,7 @@ type Event implements Node {
     """
     The question currently being asked, corresponds to a "position" value on the event question
     """
-    currentQuestion: Int
+    currentQuestion: BigInt
 }
 
 """
