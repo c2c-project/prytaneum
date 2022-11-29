@@ -25,6 +25,7 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
             isVisible: true,
             isAsked: false,
             lang: 'EN', // TODO:
+            position: BigInt(-1)
         },
         include: {
             refQuestion: true,
