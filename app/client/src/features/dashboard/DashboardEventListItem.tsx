@@ -20,17 +20,34 @@ interface DashboardEventListItemProps {
     children: React.ReactNode;
 }
 
+function ModeratorIcon({ isModerator }: { isModerator: boolean }) {
+    if (isModerator)
+        return (
+            <ListItemAvatar>
+                <Shield />
+            </ListItemAvatar>
+        );
+    return <></>;
+}
+
 export function DashboardEventListItem({ event, divider, children }: DashboardEventListItemProps) {
     const router = useRouter();
-    const handleNav = (path: string) => () => router.push(path);
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault();
+        if (event.isViewerModerator) router.push(`/events/${event.id}/settings`);
+    };
 
     return (
-        <ListItem key={event.id} divider={divider} button onClick={handleNav(`/events/${event.id}/settings`)}>
-            {event.isViewerModerator && (
-                <ListItemAvatar>
-                    <Shield />
-                </ListItemAvatar>
-            )}
+        <ListItem
+            key={event.id}
+            divider={divider}
+            button
+            onClick={handleClick}
+            disableRipple={!event.isViewerModerator}
+            disableTouchRipple={!event.isViewerModerator}
+        >
+            <ModeratorIcon isModerator={!!event.isViewerModerator} />
             <DashboardEvent
                 key={event.id}
                 id={event.id}
