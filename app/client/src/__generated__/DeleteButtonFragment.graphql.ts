@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<868383ccfc22aa84113622cc5c337fb0>>
+ * @generated SignedSource<<b18e2503e04bd230133eb4602b4e2215>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type DeleteButtonFragment$data = {
   readonly id: string;
-  readonly position: any | null;
+  readonly position: number | null;
   readonly " $fragmentType": "DeleteButtonFragment";
 };
 export type DeleteButtonFragment = DeleteButtonFragment$data;
