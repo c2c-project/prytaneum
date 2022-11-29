@@ -25,7 +25,10 @@ export const resolvers: Resolvers = {
                 if (formattedQuestion.refQuestion)
                     formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
                 const edge = {
-                    node: formattedQuestion,
+                    node: {
+                        ...formattedQuestion,
+                        position: formattedQuestion.position,
+                    },
                     cursor: formattedQuestion.createdAt.getTime().toString(),
                 };
                 ctx.pubsub.publish({
@@ -34,7 +37,6 @@ export const resolvers: Resolvers = {
                         questionCreated: { edge },
                     },
                 });
-
                 return edge;
             });
         },

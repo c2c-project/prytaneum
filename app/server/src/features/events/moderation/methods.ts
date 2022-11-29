@@ -265,7 +265,8 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
-    const calculatedPosition = parseInt(currentTimeMsStr.slice(-9), 10);
+    // 13 digits long (BigInt)
+    const calculatedPosition = parseInt(currentTimeMsStr);
 
     // check if id is already non-negative
     const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
