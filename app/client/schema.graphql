@@ -12,6 +12,8 @@ input AlterLike {
   to: Boolean!
 }
 
+scalar BigInt
+
 input CreateEvent {
   description: String!
   endDateTime: Date!
@@ -135,7 +137,7 @@ type Event implements Node {
   """
   The question currently being asked, corresponds to a "position" value on the event question
   """
-  currentQuestion: Int
+  currentQuestion: BigInt
   description: String
 
   """The planned end date time string"""
@@ -290,7 +292,7 @@ type EventQuestion implements Node {
 
   """Find the count of the likes only"""
   likedByCount: Int
-  position: Int
+  position: BigInt
 
   """The actual content of the question"""
   question: String
@@ -676,7 +678,7 @@ input UpdatePasswordForm {
 
 input UpdateQuestionPosition {
   eventId: ID!
-  position: Int!
+  position: BigInt!
   questionId: ID!
 }
 
