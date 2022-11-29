@@ -2,27 +2,12 @@ import * as React from 'react';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { useRouter } from 'next/router';
 import { isBefore, isAfter } from 'date-fns';
-import { Card, CardContent, Grid, Typography, IconButton } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Add } from '@mui/icons-material';
+import { Grid, Typography } from '@mui/material';
 
 import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
 import { DashboardEventList } from './DashboardEventList';
-
-const useStyles = makeStyles((theme) => ({
-    secondaryText: {
-        color: theme.palette.text.secondary,
-    },
-    addIcon: {
-        fontSize: 32,
-        color: 'black',
-    },
-    addIconTitle: {
-        marginTop: 8,
-    },
-}));
 
 export interface Event {
     node: {
@@ -67,10 +52,8 @@ interface Props {
 export function Dashboard({ queryRef }: Props) {
     const data = usePreloadedQuery<DashboardQuery>(DASHBOARD_QUERY, queryRef);
     const listOfEvents = React.useMemo(() => data.me?.events?.edges ?? [], [data.me]);
-    const classes = useStyles();
     const router = useRouter();
     const [user, , isLoading] = useUser();
-    const handleNav = (path: string) => () => router.push(path);
 
     // Verify user is logged in
     React.useEffect(() => {
@@ -103,20 +86,24 @@ export function Dashboard({ queryRef }: Props) {
 
     return (
         <Grid container>
-            <DashboardEventList eventList={ongoingEvents} ongoing={true} />
-            <DashboardEventList eventList={upcomingEvents} ongoing={false} />
-            <Grid item>
-                <Card>
-                    <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
-                        <IconButton aria-label='view future event' onClick={handleNav('/organizations/me')}>
-                            <Add className={classes.addIcon} />
-                        </IconButton>
-                    </CardContent>
-                </Card>
-                <Typography variant='subtitle2' className={classes.addIconTitle}>
-                    Create Event
-                </Typography>
-            </Grid>
+            <DashboardEventList
+                ongoing={true}
+                eventList={ongoingEvents}
+                sectionTitle={
+                    <Typography variant='h6' style={{ marginBottom: '.5rem' }}>
+                        Current Events
+                    </Typography>
+                }
+            />
+            <DashboardEventList
+                ongoing={false}
+                eventList={upcomingEvents}
+                sectionTitle={
+                    <Typography variant='h6' style={{ marginBottom: '.5rem' }}>
+                        Upcoming Events
+                    </Typography>
+                }
+            />
         </Grid>
     );
 }
