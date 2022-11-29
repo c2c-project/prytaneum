@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b961df94de40f14a4dfa0f8add0c7c5f>>
+ * @generated SignedSource<<06c00819bd5bb734618219f250bd57be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type useRecordPushSubscription$data = {
     readonly edge: {
       readonly node: {
         readonly id: string;
-        readonly position: any | null;
+        readonly position: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"QuestionAuthorFragment" | "QuestionStatsFragment" | "QuestionContentFragment">;
       };
       readonly cursor: string;
