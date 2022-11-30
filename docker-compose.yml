@@ -7,7 +7,7 @@ services:
         volumes:
             - type: bind
               source: .
-              target: /usr/monorepo
+              target: /usr/monorepo:rw
         working_dir: /usr/monorepo
         ports:
             - 8080:8080
@@ -16,6 +16,7 @@ services:
             - DATABASE_URL=postgresql://postgres:postgrespassword@db:5432
     db:
         container_name: db
+        user: postgres
         image: postgres:13
         restart: always
         volumes:
