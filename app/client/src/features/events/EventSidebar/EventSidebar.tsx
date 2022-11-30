@@ -18,6 +18,7 @@ import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
 import { SubmitLiveFeedbackPrompt } from '../Moderation/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
 import { useLiveFeedbackPrompt } from '../LiveFeedback/useLiveFeedbackPrompt';
+import { ShareFeedbackResults } from '../Moderation/ShareFeedbackResults';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -116,7 +117,13 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
     const displayTabButton = React.useMemo(() => {
         if (displayFeedbackButton) {
-            if (data.isViewerModerator) return <SubmitLiveFeedbackPrompt eventId={data.id} />;
+            if (data.isViewerModerator)
+                return (
+                    <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                        <SubmitLiveFeedbackPrompt eventId={data.id} />
+                        <ShareFeedbackResults />
+                    </Grid>
+                );
             else return <SubmitLiveFeedback eventId={data.id} />;
         } else {
             // Ask question button default
@@ -126,7 +133,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                 else return null;
             }
         }
-    }, [data.id, data.isViewerModerator, displayFeedbackButton, tabIndex]);
+    }, [data, displayFeedbackButton, tabIndex]);
 
     return (
         <Grid
