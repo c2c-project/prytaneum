@@ -1,13 +1,14 @@
 version: '3.6'
 services:
     app:
+        user: '${UID}:${GID}'
         container_name: app
         build: .
         tty: true
         volumes:
             - type: bind
               source: .
-              target: /usr/monorepo:rw
+              target: /usr/monorepo
         working_dir: /usr/monorepo
         ports:
             - 8080:8080
