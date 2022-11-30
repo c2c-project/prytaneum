@@ -911,6 +911,8 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Fetch a single event */
+  event?: Maybe<Event>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
   /** Fetch user data about the current user */
@@ -920,6 +922,11 @@ export type Query = {
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
   validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
+};
+
+
+export type QueryEventArgs = {
+  eventId: Scalars['ID'];
 };
 
 

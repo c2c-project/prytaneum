@@ -190,6 +190,10 @@ type Query {
     Fetch all events
     """
     events: [Event!]
+    """
+    Fetch a single event
+    """
+    event(eventId: ID!): Event
 }
 
 type Subscription {

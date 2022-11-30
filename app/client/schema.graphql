@@ -640,6 +640,9 @@ type PageInfo {
 }
 
 type Query {
+  """Fetch a single event"""
+  event(eventId: ID!): Event
+
   """Fetch all events"""
   events: [Event!]
 

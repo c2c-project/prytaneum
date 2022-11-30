@@ -20,6 +20,11 @@ export const resolvers: Resolvers = {
             const foundEvents = await Event.findPublicEvents(ctx.prisma);
             return foundEvents.map(toEventId);
         },
+        async event(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const foundEvent = await Event.findEventById(eventId, ctx.prisma);
+            return foundEvent ? toEventId(foundEvent) : null;
+        },
         // async isEventPrivate(parent, args, ctx, info) {
         //     const isPrivateEvent = await Event.isEventPrivate(ctx.prisma,{ ...args.event, eventId }, status);
         //     if

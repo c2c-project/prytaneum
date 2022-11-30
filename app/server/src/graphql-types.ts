@@ -45,6 +45,8 @@ export type Query = {
     validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
+    /** Fetch a single event */
+    event?: Maybe<Event>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
@@ -56,6 +58,10 @@ export type QuerynodeArgs = {
 
 export type QueryvalidatePasswordResetTokenArgs = {
     input: ValidatePasswordResetTokenForm;
+};
+
+export type QueryeventArgs = {
+    eventId: Scalars['ID'];
 };
 
 export type QuerymyFeedbackArgs = {
@@ -1565,6 +1571,7 @@ export type QueryResolvers<
         RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
     >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
+    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
