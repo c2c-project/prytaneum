@@ -236,7 +236,7 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
 export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { feedbackPrompt: { orderBy: { createdAt: 'desc' } } },
+        select: { feedbackPrompt: { orderBy: { createdAt: 'asc' } } },
     });
 }
 
