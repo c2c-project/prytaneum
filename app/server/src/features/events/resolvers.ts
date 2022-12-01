@@ -155,21 +155,12 @@ export const resolvers: Resolvers = {
         async liveFeedbackPrompts(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const queryResult = await Event.findLiveFeedbackPromptsByEventId(eventId, ctx.prisma);
-            if (!queryResult) return connectionFromArray([], args);
-            const { feedbackPrompt: liveFeedbackPrompts } = queryResult;
-            const edges = liveFeedbackPrompts.map(toFeedbackPromptId).map((prompt) => ({
-                node: prompt,
-                cursor: prompt.createdAt.getTime().toString(),
-            }));
-            return {
-                edges,
-                pageInfo: {
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                    startCursor: edges[0]?.cursor.toString() || '',
-                    endCursor: edges[edges.length - 1]?.cursor.toString() || '',
-                },
-            };
+            const { feedbackPrompt: liveFeedbackPrompts } = queryResult || { feedbackPrompt: [] };
+            const connection = connectionFromArray(liveFeedbackPrompts.map(toFeedbackPromptId), args);
+
+            if (liveFeedbackPrompts.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
         },
         async questionQueue(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
