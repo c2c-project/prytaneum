@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9d1cc85ec49da53a63e93948a5e913d1>>
+ * @generated SignedSource<<1df3f5c892f1e7e0d144b5e2834313eb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -173,6 +173,13 @@ return {
                           {
                             "alias": null,
                             "args": null,
+                            "kind": "ScalarField",
+                            "name": "isVisible",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "User",
                             "kind": "LinkedField",
                             "name": "createdBy",
@@ -290,16 +297,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "71ccd649674ee495d75f1df21944567d",
+    "cacheID": "f4aa64cdb85f4c675c905562a7068a4c",
     "id": null,
     "metadata": {},
     "name": "broadcastMessagePagination",
     "operationKind": "query",
-    "text": "query broadcastMessagePagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useBroadcastMessageListFragment_2HEEH6\n    id\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n  broadcastMessage\n}\n\nfragment useBroadcastMessageListFragment_2HEEH6 on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageActionsFragment\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n        __typename\n      }\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query broadcastMessagePagination(\n  $after: String = \"\"\n  $first: Int = 50\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useBroadcastMessageListFragment_2HEEH6\n    id\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n}\n\nfragment useBroadcastMessageListFragment_2HEEH6 on Event {\n  id\n  currentBroadcastMessage\n  broadcastMessages(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        broadcastMessage\n        isVisible\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageActionsFragment\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n        __typename\n      }\n    }\n    pageInfo {\n      startCursor\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0f424e8ef3aad6ab2a71a572a1e33ef3";
+(node as any).hash = "921be387b6d41335de275a2cbc5f2017";
 
 export default node;

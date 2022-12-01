@@ -269,6 +269,7 @@ type Query {
     Fetch a single event
     """
     event(eventId: ID!): Event
+    eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
 }
 
 """

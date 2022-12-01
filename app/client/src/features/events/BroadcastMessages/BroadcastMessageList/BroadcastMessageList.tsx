@@ -2,36 +2,21 @@
 import * as React from 'react';
 import { Card, Grid, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { useBroadcastMessageListFragment$key } from '@local/__generated__/useBroadcastMessageListFragment.graphql';
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
 import { useEvent } from '@local/features/events';
-// import { useUser } from '@local/features/accounts';
-
-import { useBroadcastMessageDeleted } from './useBroadcastMessageDeleted';
-import { useBroadcastMessageCreated } from './useBroadcastMessageCreated';
+import { ConditionalRender } from '@local/components/ConditionalRender';
 import { Loader } from '@local/components/Loader';
-import { OperationType } from 'relay-runtime';
-import { LoadMoreFn } from 'react-relay';
-import { useBroadcastMessageList } from './useBroadcastMessageList';
+import { fetchQuery, FragmentRefs, graphql } from 'relay-runtime';
+import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { BroadcastMessageAuthor } from '../BroadcastMessageAuthor';
 import { BroadcastMessageContent } from '../BroadcastMessageContent';
 import { BroadcastMessageActions } from '../BroadcastMessageActions/BroadcastMessageActions';
-import { useUser } from '@local/features/accounts';
-
-interface Props {
-    className?: string;
-    style?: React.CSSProperties;
-    fragmentRef: useBroadcastMessageListFragment$key;
-}
+import { BroadcastMessageListQuery } from '@local/__generated__/BroadcastMessageListQuery.graphql';
+import { useEnvironment } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        // padding: theme.spacing(1.5),
-    },
     listFilter: {
         flex: 1,
     },
@@ -58,40 +43,49 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface InfiniteScrollerProps {
-    children: React.ReactNode | React.ReactNodeArray;
-    isModerator: boolean;
-    filteredList: Array<any>;
-    loadNext: LoadMoreFn<OperationType>;
-    hasNext: boolean;
+export const BROADCAST_MESSAGE_LIST_QUERY = graphql`
+    query BroadcastMessageListQuery($eventId: ID!) {
+        eventBroadcastMessages(eventId: $eventId) {
+            id
+            broadcastMessage
+            isVisible
+            createdBy {
+                firstName
+            }
+            ...BroadcastMessageActionsFragment
+            ...BroadcastMessageAuthorFragment
+            ...BroadcastMessageContentFragment
+        }
+    }
+`;
+
+type EventBroadcastMessage = {
+    readonly id: string;
+    readonly broadcastMessage: string;
+    readonly isVisible: boolean | null;
+    readonly createdBy: {
+        readonly firstName: string | null;
+    } | null;
+    readonly ' $fragmentSpreads': FragmentRefs<
+        'BroadcastMessageActionsFragment' | 'BroadcastMessageAuthorFragment' | 'BroadcastMessageContentFragment'
+    >;
+};
+
+interface MessageListProps {
+    broadcastMessages: readonly EventBroadcastMessage[];
 }
 
-export function InfiniteScroller({ children, isModerator, filteredList, loadNext, hasNext }: InfiniteScrollerProps) {
-    return isModerator ? (
-        <InfiniteScroll
-            dataLength={filteredList.length}
-            next={() => loadNext(10)}
-            hasMore={hasNext}
-            loader={<Loader />}
-            hasChildren
-            scrollableTarget='event-sidebar-scroller'
-        >
-            {children}
-        </InfiniteScroll>
-    ) : (
-        <>{children}</>
-    );
-}
-
-export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
+function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageListProps) {
+    // Hacky way to have deletes appear instant for the user even though the list itself doesn't update until the next polling interval
+    const [deletedMessageIndex, setDeletedMessageIndex] = React.useState<number | null>(null);
+    // Mutable
+    const broadcastMessages = React.useMemo(() => {
+        setDeletedMessageIndex(null);
+        const mutableList = [...immutableBroadcastMessages];
+        return mutableList.reverse();
+    }, [immutableBroadcastMessages]);
     const classes = useStyles();
-    const [user] = useUser();
     const { isModerator } = useEvent();
-    const { broadcastMessages, connections, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
-        fragmentRef,
-    });
-    useBroadcastMessageCreated({ connections });
-    useBroadcastMessageDeleted({ connections });
 
     const accessors = React.useMemo<Accessors<ArrayElement<typeof broadcastMessages>>[]>(
         () => [
@@ -101,41 +95,38 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
         []
     );
 
+    const onBroadcastMessageDelete = React.useCallback(
+        (messageId: string) => {
+            const index = broadcastMessages.findIndex((message) => message.id === messageId);
+            if (index !== -1) {
+                setDeletedMessageIndex(index);
+            }
+        },
+        [broadcastMessages]
+    );
+
+    const isMessageDeleted = React.useCallback(
+        (index: number) => {
+            return deletedMessageIndex !== null && index === deletedMessageIndex;
+        },
+        [deletedMessageIndex]
+    );
+
     const [filteredList, handleSearch, handleFilterChange] = useFilters(broadcastMessages, accessors);
 
     return (
-        <Grid alignContent='flex-start' container className={clsx(classes.root, className)} style={style}>
-            <ListFilter
-                className={classes.listFilter}
-                // filterMap={filterFuncs}
-                onFilterChange={handleFilterChange}
-                onSearch={handleSearch}
-                length={filteredList.length}
-                // menuIcons={[
-                //     <Tooltip title='Load New'>
-                //         <span>
-                //             <IconButton color='inherit' onClick={togglePause}>
-                //                 <Badge badgeContent={isPaused ? 0 : 0} color='secondary'>
-                //                     {isPaused ? <PlayArrow /> : <Pause />}
-                //                 </Badge>
-                //             </IconButton>
-                //         </span>
-                //     </Tooltip>,
-                // ]}
-            />
-            <div className={classes.content}>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <List disablePadding>
-                            {/* TODO: Restore Later 
-                            <Grid container alignItems='center'>
-                                <Typography className={classes.text} variant='body2'>
-                                    <b>{filteredList.length <= MAX_MESSAGES_DISPLAYED ? filteredList.length : MAX_MESSAGES_DISPLAYED}</b>
-                                    &nbsp; Questions Displayed
-                                </Typography>
-                            </Grid> */}
-                            {(isModerator ? filteredList : filteredList.slice(0, MAX_MESSAGES_DISPLAYED)).map(
-                                (broadcastMessage) => (
+        <Grid alignContent='flex-start' container>
+            <Grid item xs={12}>
+                <ListFilter onFilterChange={handleFilterChange} onSearch={handleSearch} length={filteredList.length} />
+            </Grid>
+            <Grid container height={0} flex='1 1 100%'>
+                <Grid item xs={12}>
+                    <List disablePadding>
+                        {filteredList.map((broadcastMessage, index) => (
+                            <>
+                                {isMessageDeleted(index) ? (
+                                    <> </>
+                                ) : (
                                     <ListItem disableGutters key={broadcastMessage.id}>
                                         <Card className={classes.item}>
                                             <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
@@ -148,31 +139,83 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                                             : { width: '100%', maxWidth: '10rem' }
                                                     }
                                                     className={classes.broadcastMessageActions}
-                                                    deleteEnabled={isModerator && Boolean(user)}
-                                                    editEnabled={isModerator && Boolean(user)}
-                                                    connections={connections}
+                                                    deleteEnabled={isModerator}
+                                                    editEnabled={isModerator}
+                                                    connections={[]}
                                                     fragmentRef={broadcastMessage}
+                                                    onBroadcastMessageDelete={onBroadcastMessageDelete}
                                                 />
                                             </Grid>
-                                            {/* <p>{broadcastMessage.broadcastMessage}</p> */}
                                         </Card>
                                     </ListItem>
-                                )
-                            )}
-                            {filteredList.length === 0 && broadcastMessages.length !== 0 && (
-                                <Typography align='center' variant='body2'>
-                                    No results to display
-                                </Typography>
-                            )}
-                            {broadcastMessages.length === 0 && (
-                                <Typography align='center' variant='h5'>
-                                    No broadcasted messages to display :(
-                                </Typography>
-                            )}
-                        </List>
-                    </Grid>
+                                )}
+                            </>
+                        ))}
+                        {filteredList.length === 0 && broadcastMessages.length !== 0 && (
+                            <Typography align='center' variant='body2'>
+                                No results to display
+                            </Typography>
+                        )}
+                        {broadcastMessages.length === 0 && (
+                            <Typography align='center' variant='h5'>
+                                No broadcasted messages to display
+                            </Typography>
+                        )}
+                    </List>
                 </Grid>
-            </div>
+            </Grid>
         </Grid>
+    );
+}
+
+interface BroadcastMessageListProps {
+    queryRef: PreloadedQuery<BroadcastMessageListQuery>;
+}
+
+function BroadcastMessageList({ queryRef }: BroadcastMessageListProps) {
+    const { eventBroadcastMessages } = usePreloadedQuery(BROADCAST_MESSAGE_LIST_QUERY, queryRef);
+    if (!eventBroadcastMessages) return <Loader />;
+    return <MessageList broadcastMessages={eventBroadcastMessages} />;
+}
+
+export interface PreloadedBroadcastMessageListProps {}
+
+export function PreloadedBroadcastMessageList() {
+    const [queryRef, loadQuery] = useQueryLoader<BroadcastMessageListQuery>(BROADCAST_MESSAGE_LIST_QUERY);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const { eventId } = useEvent();
+    const REFRESH_INTERVAL = 15000; // 15 seconds
+
+    const refresh = React.useCallback(() => {
+        console.log('refreshing broadcast messages');
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, BROADCAST_MESSAGE_LIST_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, isRefreshing, loadQuery, eventId]);
+
+    // Fetches up to date data on initial load and sets up polling
+    React.useEffect(() => {
+        console.log('initial broadcast messages load');
+        if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'network-only' });
+        const interval = setInterval(refresh, REFRESH_INTERVAL);
+        return () => clearInterval(interval);
+    }, []);
+
+    if (!queryRef) return <Loader />;
+    return (
+        <ConditionalRender client>
+            <React.Suspense fallback={<BroadcastMessageList queryRef={queryRef} />}>
+                <BroadcastMessageList queryRef={queryRef} />
+            </React.Suspense>
+        </ConditionalRender>
     );
 }

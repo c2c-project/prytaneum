@@ -280,19 +280,11 @@ export type EventBroadcastMessage = Node & {
     createdById?: Maybe<Scalars['ID']>;
     event?: Maybe<Event>;
     id: Scalars['ID'];
-    isAsked?: Maybe<Scalars['Boolean']>;
-    isFollowUp?: Maybe<Scalars['Boolean']>;
-    /** Whether or not the current user likes the broadcast message */
-    isLikedByViewer?: Maybe<Scalars['Boolean']>;
     /** If the broadcast message is owned by the current viewer */
-    isMyBroadcastMessage?: Maybe<Scalars['Boolean']>;
-    isQuote?: Maybe<Scalars['Boolean']>;
     isVisible?: Maybe<Scalars['Boolean']>;
     lang?: Maybe<Scalars['String']>;
     /** The users who have liked this broadcast message */
     likedBy?: Maybe<UserConnection>;
-    /** Find the count of the likes only */
-    likedByCount?: Maybe<Scalars['Int']>;
     position?: Maybe<Scalars['Int']>;
 };
 
@@ -960,6 +952,7 @@ export type Query = {
     __typename?: 'Query';
     /** Fetch a single event */
     event?: Maybe<Event>;
+    eventBroadcastMessages?: Maybe<Array<EventBroadcastMessage>>;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
     /** Fetch user data about the current user */
@@ -975,6 +968,10 @@ export type Query = {
 };
 
 export type QueryEventArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type QueryEventBroadcastMessagesArgs = {
     eventId: Scalars['ID'];
 };
 
