@@ -448,7 +448,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:8.3.0"],\
             ["eslint-import-resolver-node", "npm:0.3.6"],\
             ["eslint-plugin-import", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.25.4"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-cookie", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.3.0"],\
             ["fastify-cors", "npm:6.0.2"],\
             ["fastify-multipart", "npm:5.3.1"],\
@@ -9953,6 +9953,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@fastify/error", [\
+        ["npm:2.0.0", {\
+          "packageLocation": "./.yarn/cache/@fastify-error-npm-2.0.0-9960848f02-ecf0834966.zip/node_modules/@fastify/error/",\
+          "packageDependencies": [\
+            ["@fastify/error", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@google-cloud/paginator", [\
         ["npm:3.0.6", {\
           "packageLocation": "./.yarn/cache/@google-cloud-paginator-npm-3.0.6-23f0727a8f-f3ebd1fa70.zip/node_modules/@google-cloud/paginator/",\
@@ -18289,7 +18298,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["altair-fastify-plugin", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:4.0.2"],\
             ["@types/fastify", null],\
             ["altair-static", "npm:4.0.2"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-plugin", "npm:2.3.4"],\
             ["fastify-static", "npm:3.4.0"]\
           ],\
@@ -25703,15 +25712,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["fastify", [\
-        ["npm:3.25.3", {\
-          "packageLocation": "./.yarn/cache/fastify-npm-3.25.3-229a9fe040-b0ab3f9ae1.zip/node_modules/fastify/",\
+        ["npm:3.29.4", {\
+          "packageLocation": "./.yarn/cache/fastify-npm-3.29.4-42f3d4e84a-add73f5bcc.zip/node_modules/fastify/",\
           "packageDependencies": [\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["@fastify/ajv-compiler", "npm:1.1.0"],\
+            ["@fastify/error", "npm:2.0.0"],\
             ["abstract-logging", "npm:2.0.1"],\
             ["avvio", "npm:7.2.1"],\
+            ["content-type", "npm:1.0.4"],\
             ["fast-json-stringify", "npm:2.6.0"],\
-            ["fastify-error", "npm:0.3.1"],\
             ["find-my-way", "npm:4.5.1"],\
             ["flatstr", "npm:1.0.12"],\
             ["light-my-request", "npm:4.4.1"],\
@@ -25721,7 +25731,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["rfdc", "npm:1.3.0"],\
             ["secure-json-parse", "npm:2.4.0"],\
             ["semver", "npm:7.3.5"],\
-            ["tiny-lru", "npm:7.0.6"]\
+            ["tiny-lru", "npm:8.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -25741,7 +25751,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fastify", null],\
             ["cookie", "npm:0.4.1"],\
             ["cookie-signature", "npm:1.1.0"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-plugin", "npm:3.0.0"]\
           ],\
           "packagePeers": [\
@@ -32572,7 +32582,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/isomorphic-form-data", "npm:2.0.0"],\
             ["end-of-stream", "npm:1.4.4"],\
             ["events.on", "npm:1.0.1"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["fastify-error", "npm:0.3.1"],\
             ["fastify-plugin", "npm:3.0.0"],\
             ["fastify-static", "npm:4.5.0"],\
@@ -32621,7 +32631,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/graphql", null],\
             ["@types/mercurius", null],\
             ["chokidar", "npm:3.5.2"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["graphql", "npm:15.8.0"],\
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.9.1"],\
             ["mkdirp", "npm:1.0.4"],\
@@ -32655,7 +32665,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/graphql", null],\
             ["@types/mercurius", null],\
             ["cookie", "npm:0.4.2"],\
-            ["fastify", "npm:3.25.3"],\
+            ["fastify", "npm:3.29.4"],\
             ["graphql", "npm:15.8.0"],\
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:7.9.1"],\
             ["ws", "virtual:9ce3e1aeb4d7b149f7e8ad3b56dcf9613fa535dca6d9311a058ccb64208667ff7d898ca443cbfdacd6e5e42cbff8ba2e896a254d6809cf37f8b991d790b88442#npm:8.5.0"]\
@@ -41566,6 +41576,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/tiny-lru-npm-7.0.6-872b74163c-36a786a911.zip/node_modules/tiny-lru/",\
           "packageDependencies": [\
             ["tiny-lru", "npm:7.0.6"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:8.0.2", {\
+          "packageLocation": "./.yarn/cache/tiny-lru-npm-8.0.2-b190e31fd1-ec4d884914.zip/node_modules/tiny-lru/",\
+          "packageDependencies": [\
+            ["tiny-lru", "npm:8.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\

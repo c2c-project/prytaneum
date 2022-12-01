@@ -36,7 +36,7 @@
         "dotenv": "^8.2.0",
         "dotenv-cli": "^4.0.0",
         "dotenv-expand": "^5.1.0",
-        "fastify": "^3.25.3",
+        "fastify": "^3.29.4",
         "fastify-cookie": "^5.3.0",
         "fastify-cors": "^6.0.2",
         "fastify-multipart": "^5.3.1",
