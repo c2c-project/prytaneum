@@ -87,7 +87,7 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
     const classes = useStyles();
     const [user] = useUser();
     const { isModerator } = useEvent();
-    const { broadcastMessages, connections, loadNext, hasNext, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
+    const { broadcastMessages, connections, MAX_MESSAGES_DISPLAYED } = useBroadcastMessageList({
         fragmentRef,
     });
     useBroadcastMessageCreated({ connections });
@@ -134,38 +134,31 @@ export function BroadcastMessageList({ className, style, fragmentRef }: Props) {
                                     &nbsp; Questions Displayed
                                 </Typography>
                             </Grid> */}
-                            <InfiniteScroller
-                                isModerator={isModerator}
-                                filteredList={filteredList}
-                                hasNext={hasNext}
-                                loadNext={loadNext}
-                            >
-                                {(isModerator ? filteredList : filteredList.slice(0, MAX_MESSAGES_DISPLAYED)).map(
-                                    (broadcastMessage) => (
-                                        <ListItem disableGutters key={broadcastMessage.id}>
-                                            <Card className={classes.item}>
-                                                <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                                <BroadcastMessageContent fragmentRef={broadcastMessage} />
-                                                <Grid container alignItems='center' justifyContent='space-between'>
-                                                    <BroadcastMessageActions
-                                                        style={
-                                                            !isModerator
-                                                                ? { width: '100%' }
-                                                                : { width: '100%', maxWidth: '10rem' }
-                                                        }
-                                                        className={classes.broadcastMessageActions}
-                                                        deleteEnabled={isModerator && Boolean(user)}
-                                                        editEnabled={isModerator && Boolean(user)}
-                                                        connections={connections}
-                                                        fragmentRef={broadcastMessage}
-                                                    />
-                                                </Grid>
-                                                {/* <p>{broadcastMessage.broadcastMessage}</p> */}
-                                            </Card>
-                                        </ListItem>
-                                    )
-                                )}
-                            </InfiniteScroller>
+                            {(isModerator ? filteredList : filteredList.slice(0, MAX_MESSAGES_DISPLAYED)).map(
+                                (broadcastMessage) => (
+                                    <ListItem disableGutters key={broadcastMessage.id}>
+                                        <Card className={classes.item}>
+                                            <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                                            <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                            <Grid container alignItems='center' justifyContent='space-between'>
+                                                <BroadcastMessageActions
+                                                    style={
+                                                        !isModerator
+                                                            ? { width: '100%' }
+                                                            : { width: '100%', maxWidth: '10rem' }
+                                                    }
+                                                    className={classes.broadcastMessageActions}
+                                                    deleteEnabled={isModerator && Boolean(user)}
+                                                    editEnabled={isModerator && Boolean(user)}
+                                                    connections={connections}
+                                                    fragmentRef={broadcastMessage}
+                                                />
+                                            </Grid>
+                                            {/* <p>{broadcastMessage.broadcastMessage}</p> */}
+                                        </Card>
+                                    </ListItem>
+                                )
+                            )}
                             {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                                 <Typography align='center' variant='body2'>
                                     No results to display
