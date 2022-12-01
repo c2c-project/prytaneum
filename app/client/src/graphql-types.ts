@@ -919,6 +919,7 @@ export type Query = {
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
   node?: Maybe<Node>;
+  promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
   validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
@@ -937,6 +938,11 @@ export type QueryMyFeedbackArgs = {
 
 export type QueryNodeArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryPromptResponsesArgs = {
+  promptId: Scalars['ID'];
 };
 
 

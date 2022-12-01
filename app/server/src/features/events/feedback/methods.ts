@@ -12,6 +12,12 @@ export async function myFeedback(userId: string, eventId: string, prisma: Prisma
     return result;
 }
 
+export async function promptResponses(promptId: string, prisma: PrismaClient) {
+    return prisma.eventLiveFeedbackPromptResponse.findMany({
+        where: { promptId },
+    });
+}
+
 export async function createFeedback(userId: string, eventId: string, prisma: PrismaClient, input: CreateFeedback) {
     const { isReply, refFeedbackId: globalRefId } = input;
     const refFeedbackId = globalRefId ? fromGlobalId(globalRefId).id : null;
