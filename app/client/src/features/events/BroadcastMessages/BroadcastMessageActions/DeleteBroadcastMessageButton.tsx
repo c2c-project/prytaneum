@@ -30,10 +30,10 @@ const DELETE_BROADCAST_MESSAGE_MUTATION = graphql`
 
 interface Props {
     fragmentRef: DeleteBroadcastMessageButtonFragment$key;
-    className?: string;
+    onBroadcastMessageDelete: (messageId: string) => void;
 }
 
-export function DeleteBroadcastMessageButton({ className = undefined, fragmentRef }: Props) {
+export function DeleteBroadcastMessageButton({ fragmentRef, onBroadcastMessageDelete }: Props) {
     const { id: broadcastMessageId, position } = useFragment(DELETE_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
     const [commit] = useMutation<DeleteBroadcastMessageButtonMutation>(DELETE_BROADCAST_MESSAGE_MUTATION);
     const { displaySnack } = useSnack();
@@ -48,6 +48,7 @@ export function DeleteBroadcastMessageButton({ className = undefined, fragmentRe
             },
             onCompleted({ deleteBroadcastMessage }) {
                 if (deleteBroadcastMessage.isError) displaySnack(deleteBroadcastMessage.message);
+                else onBroadcastMessageDelete(broadcastMessageId);
             },
         });
     }
@@ -62,7 +63,7 @@ export function DeleteBroadcastMessageButton({ className = undefined, fragmentRe
             {isQueued ? (
                 <></>
             ) : (
-                <Button onClick={handleClick} endIcon={<DeleteIcon fontSize='small' />} fullWidth className={className}>
+                <Button onClick={handleClick} endIcon={<DeleteIcon fontSize='small' />} fullWidth color={'error'}>
                     Delete
                 </Button>
             )}

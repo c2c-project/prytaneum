@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0d2ff35fe4e72057947ea66b3d6845bf>>
+ * @generated SignedSource<<36b420517e2392172d53dce6468d7a58>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type useBroadcastMessageListFragment$data = {
       readonly node: {
         readonly id: string;
         readonly broadcastMessage: string;
+        readonly isVisible: boolean | null;
         readonly createdBy: {
           readonly firstName: string | null;
         } | null;
@@ -141,6 +142,13 @@ return {
                 {
                   "alias": null,
                   "args": null,
+                  "kind": "ScalarField",
+                  "name": "isVisible",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
                   "concreteType": "User",
                   "kind": "LinkedField",
                   "name": "createdBy",
@@ -237,6 +245,6 @@ return {
 };
 })();
 
-(node as any).hash = "0f424e8ef3aad6ab2a71a572a1e33ef3";
+(node as any).hash = "921be387b6d41335de275a2cbc5f2017";
 
 export default node;

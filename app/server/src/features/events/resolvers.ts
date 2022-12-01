@@ -31,6 +31,11 @@ export const resolvers: Resolvers = {
             const foundEvent = await Event.findEventById(eventId, ctx.prisma);
             return foundEvent ? toEventId(foundEvent) : null;
         },
+        async eventBroadcastMessages(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
+            return broadcastMessages.map(toBroadcastMessageId);
+        },
         // async isEventPrivate(parent, args, ctx, info) {
         //     const isPrivateEvent = await Event.isEventPrivate(ctx.prisma,{ ...args.event, eventId }, status);
         //     if
@@ -53,7 +58,7 @@ export const resolvers: Resolvers = {
                 };
                 ctx.pubsub.publish({
                     topic: 'broadcastMessageCreated',
-                    payload: { eventId: createBroadcastMessage, broadcastMessageCreated: { edge } },
+                    payload: { eventId, broadcastMessageCreated: { edge } },
                 });
                 return edge;
             });
@@ -227,13 +232,13 @@ export const resolvers: Resolvers = {
             ),
         },
         broadcastMessageCreated: {
-            subscribe: withFilter<{ broadcastMessageCreated: EventBroadcastMessageEdgeContainer }>(
+            subscribe: withFilter<{ broadcastMessageCreated: EventBroadcastMessageEdgeContainer; eventId: string }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageCreated'),
                 (payload, args, ctx) => {
-                    console.log('payload', payload);
+                    const { eventId: broadcastMessageEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageCreated.edge.node.id);
-                    return Event.doesEventMatch(eventId, broadcastMessageId, ctx.prisma);
+                    console.log('eventId', eventId, broadcastMessageEventId);
+                    return eventId === broadcastMessageEventId;
                 }
             ),
         },
@@ -278,19 +283,10 @@ export const resolvers: Resolvers = {
         async broadcastMessages(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
             const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
-            const edges = broadcastMessages.map(toBroadcastMessageId).map((message) => ({
-                node: message,
-                cursor: message.id,
-            }));
-            return {
-                edges,
-                pageInfo: {
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                    startCursor: edges[0]?.cursor,
-                    endCursor: edges[edges.length - 1]?.cursor,
-                },
-            };
+            const connection = connectionFromArray(broadcastMessages.map(toBroadcastMessageId), args);
+            if (broadcastMessages.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
         },
         isViewerModerator(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);

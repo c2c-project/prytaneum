@@ -17,6 +17,7 @@ export const USE_BROADCAST_MESSAGE_LIST_FRAGMENT = graphql`
                 node {
                     id
                     broadcastMessage
+                    isVisible
                     createdBy {
                         firstName
                     }
@@ -41,6 +42,7 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         usePaginationFragment(USE_BROADCAST_MESSAGE_LIST_FRAGMENT, fragmentRef);
     const { broadcastMessages, id: eventId, currentBroadcastMessage } = data;
     const MAX_MESSAGES_DISPLAYED = 50;
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
 
     const broadcastMessageList = React.useMemo(
         () =>
@@ -60,11 +62,19 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
     broadcastMessageList.reverse();
 
     const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
         refetch(
             { first: MAX_MESSAGES_DISPLAYED, after: data.broadcastMessages?.pageInfo?.endCursor },
             { fetchPolicy: 'network-only' }
         );
-    }, [data.broadcastMessages?.pageInfo?.endCursor, refetch]);
+        setIsRefreshing(false);
+    }, [data.broadcastMessages?.pageInfo?.endCursor, isRefreshing, refetch]);
+
+    // React.useEffect(() => {
+    //     const interval = setInterval(refresh, 5000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     return {
         broadcastMessages: broadcastMessageList,

@@ -10,8 +10,6 @@ import { useSnack } from '@local/core/useSnack';
 const EDIT_BROADCAST_MESSAGE_FRAGMENT = graphql`
     fragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {
         id
-        position
-        broadcastMessage
     }
 `;
 
@@ -32,30 +30,28 @@ const EDIT_BROADCAST_MESSAGE_MUTATION = graphql`
 
 interface Props {
     fragmentRef: EditBroadcastMessageButtonFragment$key;
-    className?: string;
 }
 
-export function EditBroadcastMessageButton({ className = undefined, fragmentRef }: Props) {
-    const { id: broadcastMessageId, broadcastMessage } = useFragment(EDIT_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
+export function EditBroadcastMessageButton({ fragmentRef }: Props) {
+    const { id: broadcastMessageId } = useFragment(EDIT_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
+    const [editedBroadcastMessage, setEditedBroadcastMessage] = React.useState<string>('');
+    const [disableInput, setDisableInput] = React.useState<boolean>(true);
     const [commit] = useMutation<EditBroadcastMessageButtonMutation>(EDIT_BROADCAST_MESSAGE_MUTATION);
     const { displaySnack } = useSnack();
 
-    function handleSubmit() {
+    const handleSubmit = React.useCallback(() => {
         commit({
             variables: {
                 input: {
                     broadcastMessageId,
-                    broadcastMessage,
+                    broadcastMessage: editedBroadcastMessage,
                 },
             },
             onCompleted({ editBroadcastMessage }) {
                 if (editBroadcastMessage.isError) displaySnack(editBroadcastMessage.message);
             },
         });
-    }
-
-    const [editedBroadcastMessage, setEditedBroadcastMessage] = React.useState('');
-    const [disableInput, setDisableInput] = React.useState(true);
+    }, [broadcastMessageId, editedBroadcastMessage, commit, displaySnack]);
 
     function handleClick() {
         setDisableInput(!disableInput);
@@ -78,7 +74,7 @@ export function EditBroadcastMessageButton({ className = undefined, fragmentRef 
                     <input type='submit' value='save' />
                 </form>
             )}
-            <Button onClick={handleClick} endIcon={<EditIcon fontSize='small' />} fullWidth className={className}>
+            <Button onClick={handleClick} endIcon={<EditIcon fontSize='small' />} fullWidth color={'error'}>
                 Edit
             </Button>
         </div>
