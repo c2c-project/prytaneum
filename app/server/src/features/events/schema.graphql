@@ -138,19 +138,10 @@ type EventBroadcastMessage implements Node {
     createdById: ID
     event: Event
     id: ID!
-    isAsked: Boolean
-    isFollowUp: Boolean
-
-    """
-    Whether or not the current user likes the broadcast message
-    """
-    isLikedByViewer: Boolean
 
     """
     If the broadcast message is owned by the current viewer
     """
-    isMyBroadcastMessage: Boolean
-    isQuote: Boolean
     isVisible: Boolean
     lang: String
 
@@ -159,10 +150,6 @@ type EventBroadcastMessage implements Node {
     """
     likedBy: UserConnection
 
-    """
-    Find the count of the likes only
-    """
-    likedByCount: Int
     position: Int
 
     """
