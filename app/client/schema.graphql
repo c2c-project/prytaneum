@@ -102,7 +102,7 @@ input DeleteAccountForm {
 
 input DeleteBroadcastMessage {
   broadcastMessageId: ID!
-  isVisible: Boolean!
+  toggleBroadcastMessageVisibility: Boolean!
 }
 
 """

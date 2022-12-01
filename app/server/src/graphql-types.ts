@@ -652,7 +652,7 @@ export type DeleteEvent = {
 
 export type DeleteBroadcastMessage = {
     broadcastMessageId: Scalars['ID'];
-    isVisible: Scalars['Boolean'];
+    toggleBroadcastMessageVisibility: Scalars['Boolean'];
 };
 
 export type EditBroadcastMessage = {

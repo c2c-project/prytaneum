@@ -219,7 +219,7 @@ input DeleteEvent {
 
 input DeleteBroadcastMessage {
     broadcastMessageId: ID!
-    isVisible: Boolean!
+    toggleBroadcastMessageVisibility: Boolean!
 }
 
 input EditBroadcastMessage {
