@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d9f9951c036a0a5c36aa29de68a3bd69>>
+ * @generated SignedSource<<97ad859f1619d24f849c278c8d54f463>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,41 +8,42 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
+import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type useLiveFeedbackPromptsFragment$data = {
+export type useLiveFeedbackPromptResponsesFragment$data = {
   readonly id: string;
-  readonly liveFeedbackPrompts: {
+  readonly responses: {
     readonly __id: string;
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
         readonly id: string;
-        readonly prompt: string;
-        readonly isVote: boolean | null;
         readonly isOpenEnded: boolean | null;
+        readonly response: string | null;
+        readonly isVote: boolean | null;
+        readonly vote: string | null;
         readonly createdAt: Date | null;
-        readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptResponsesFragment">;
+        readonly createdBy: {
+          readonly id: string;
+          readonly firstName: string | null;
+        } | null;
+        readonly prompt: {
+          readonly id: string;
+          readonly prompt: string;
+        } | null;
       };
     }> | null;
-    readonly pageInfo: {
-      readonly hasNextPage: boolean;
-      readonly endCursor: string | null;
-    };
   } | null;
-  readonly " $fragmentType": "useLiveFeedbackPromptsFragment";
+  readonly " $fragmentType": "useLiveFeedbackPromptResponsesFragment";
 };
-export type useLiveFeedbackPromptsFragment = useLiveFeedbackPromptsFragment$data;
-export type useLiveFeedbackPromptsFragment$key = {
-  readonly " $data"?: useLiveFeedbackPromptsFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptsFragment">;
+export type useLiveFeedbackPromptResponsesFragment = useLiveFeedbackPromptResponsesFragment$data;
+export type useLiveFeedbackPromptResponsesFragment$key = {
+  readonly " $data"?: useLiveFeedbackPromptResponsesFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"useLiveFeedbackPromptResponsesFragment">;
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
-  "liveFeedbackPrompts"
-],
-v1 = {
+var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -69,40 +70,27 @@ return {
         "count": "first",
         "cursor": "after",
         "direction": "forward",
-        "path": (v0/*: any*/)
+        "path": [
+          "responses"
+        ]
       }
-    ],
-    "refetch": {
-      "connection": {
-        "forward": {
-          "count": "first",
-          "cursor": "after"
-        },
-        "backward": null,
-        "path": (v0/*: any*/)
-      },
-      "fragmentPathInResult": [
-        "node"
-      ],
-      "operation": require('./liveFeedbackPromptPagination.graphql'),
-      "identifierField": "id"
-    }
+    ]
   },
-  "name": "useLiveFeedbackPromptsFragment",
+  "name": "useLiveFeedbackPromptResponsesFragment",
   "selections": [
-    (v1/*: any*/),
+    (v0/*: any*/),
     {
-      "alias": "liveFeedbackPrompts",
+      "alias": "responses",
       "args": null,
-      "concreteType": "EventLiveFeedbackPromptConnection",
+      "concreteType": "EventLiveFeedbackPromptResponseConnection",
       "kind": "LinkedField",
-      "name": "__useLiveFeedbackPromptsFragment_liveFeedbackPrompts_connection",
+      "name": "__useLiveFeedbackPromptResponsesFragment_responses_connection",
       "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "concreteType": "EventLiveFeedbackPromptEdge",
+          "concreteType": "EventLiveFeedbackPromptResponseEdge",
           "kind": "LinkedField",
           "name": "edges",
           "plural": true,
@@ -117,17 +105,24 @@ return {
             {
               "alias": null,
               "args": null,
-              "concreteType": "EventLiveFeedbackPrompt",
+              "concreteType": "EventLiveFeedbackPromptResponse",
               "kind": "LinkedField",
               "name": "node",
               "plural": false,
               "selections": [
-                (v1/*: any*/),
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
-                  "name": "prompt",
+                  "name": "isOpenEnded",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "response",
                   "storageKey": null
                 },
                 {
@@ -141,7 +136,7 @@ return {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
-                  "name": "isOpenEnded",
+                  "name": "vote",
                   "storageKey": null
                 },
                 {
@@ -152,9 +147,42 @@ return {
                   "storageKey": null
                 },
                 {
+                  "alias": null,
                   "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "useLiveFeedbackPromptResponsesFragment"
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "createdBy",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "firstName",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "EventLiveFeedbackPrompt",
+                  "kind": "LinkedField",
+                  "name": "prompt",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "prompt",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
                 },
                 {
                   "alias": null,
@@ -181,14 +209,14 @@ return {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
-              "name": "hasNextPage",
+              "name": "endCursor",
               "storageKey": null
             },
             {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
-              "name": "endCursor",
+              "name": "hasNextPage",
               "storageKey": null
             }
           ],
@@ -210,11 +238,11 @@ return {
       "storageKey": null
     }
   ],
-  "type": "Event",
+  "type": "EventLiveFeedbackPrompt",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "75da60be977c702e5ec8b156d041be84";
+(node as any).hash = "e93336d8fc9af9156b4d9482b5c2e7e8";
 
 export default node;

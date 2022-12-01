@@ -37,11 +37,15 @@ export function ShareFeedbackResults() {
                         maxWidth: '1280px',
                         maxHeight: '720px',
                         bgcolor: 'background.paper',
+                        overflow: 'scroll',
                     }}
                 >
-                    <Grid container direction='column' alignItems='center'>
-                        <Typography id='modal-title' variant='h5' paddingTop='1.5rem'>
+                    <Grid container direction='column' alignItems='center' alignContent='center'>
+                        <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
                             Share Feedback Results
+                        </Typography>
+                        <Typography className='modal-description' variant='body1' paddingTop='1rem'>
+                            Select a feedback prompt to see the responses
                         </Typography>
                         <PreloadedLiveFeedbackPromptList />
                     </Grid>

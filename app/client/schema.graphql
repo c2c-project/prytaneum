@@ -650,6 +650,7 @@ type Query {
   me: User
   myFeedback(eventId: ID!): [EventLiveFeedback]
   node(id: ID!): Node
+  promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!

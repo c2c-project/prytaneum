@@ -19,6 +19,13 @@ export const resolvers: Resolvers = {
             const feedback = Feedback.myFeedback(ctx.viewer.id, eventId, ctx.prisma);
             return feedback;
         },
+        async promptResponses(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: promptId } = fromGlobalId(args.promptId);
+            const responses = await Feedback.promptResponses(promptId, ctx.prisma);
+            return responses;
+        },
     },
     Mutation: {
         async createFeedback(parent, args, ctx) {
