@@ -589,19 +589,11 @@ export type EventBroadcastMessage = Node & {
     createdById?: Maybe<Scalars['ID']>;
     event?: Maybe<Event>;
     id: Scalars['ID'];
-    isAsked?: Maybe<Scalars['Boolean']>;
-    isFollowUp?: Maybe<Scalars['Boolean']>;
-    /** Whether or not the current user likes the broadcast message */
-    isLikedByViewer?: Maybe<Scalars['Boolean']>;
     /** If the broadcast message is owned by the current viewer */
-    isMyBroadcastMessage?: Maybe<Scalars['Boolean']>;
-    isQuote?: Maybe<Scalars['Boolean']>;
     isVisible?: Maybe<Scalars['Boolean']>;
     lang?: Maybe<Scalars['String']>;
     /** The users who have liked this broadcast message */
     likedBy?: Maybe<UserConnection>;
-    /** Find the count of the likes only */
-    likedByCount?: Maybe<Scalars['Int']>;
     position?: Maybe<Scalars['Int']>;
     /** The actual content of the broadcast message */
     broadcastMessage: Scalars['String'];
@@ -2258,15 +2250,9 @@ export type EventBroadcastMessageResolvers<
     createdById?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
     id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-    isAsked?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isFollowUp?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isLikedByViewer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isMyBroadcastMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    isQuote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     likedBy?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
-    likedByCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     broadcastMessage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3109,15 +3095,9 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         createdById?: LoaderResolver<Maybe<Scalars['ID']>, EventBroadcastMessage, {}, TContext>;
         event?: LoaderResolver<Maybe<Event>, EventBroadcastMessage, {}, TContext>;
         id?: LoaderResolver<Scalars['ID'], EventBroadcastMessage, {}, TContext>;
-        isAsked?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
-        isFollowUp?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
-        isLikedByViewer?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
-        isMyBroadcastMessage?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
-        isQuote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
         isVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, EventBroadcastMessage, {}, TContext>;
         lang?: LoaderResolver<Maybe<Scalars['String']>, EventBroadcastMessage, {}, TContext>;
         likedBy?: LoaderResolver<Maybe<UserConnection>, EventBroadcastMessage, {}, TContext>;
-        likedByCount?: LoaderResolver<Maybe<Scalars['Int']>, EventBroadcastMessage, {}, TContext>;
         position?: LoaderResolver<Maybe<Scalars['Int']>, EventBroadcastMessage, {}, TContext>;
         broadcastMessage?: LoaderResolver<Scalars['String'], EventBroadcastMessage, {}, TContext>;
     };
