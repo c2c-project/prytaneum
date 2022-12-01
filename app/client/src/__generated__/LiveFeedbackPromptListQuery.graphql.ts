@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1ae5c2097973420027c31f74f98cd8b5>>
+ * @generated SignedSource<<eaa8f91125ddc799d5bcfbb2ae7f93f3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -104,18 +104,29 @@ v9 = {
 v10 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "endCursor",
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
 v11 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "hasNextPage",
-  "storageKey": null
-},
-v12 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -281,20 +292,8 @@ return {
                             ],
                             "storageKey": null
                           },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PageInfo",
-                            "kind": "LinkedField",
-                            "name": "pageInfo",
-                            "plural": false,
-                            "selections": [
-                              (v10/*: any*/),
-                              (v11/*: any*/)
-                            ],
-                            "storageKey": null
-                          },
-                          (v12/*: any*/)
+                          (v10/*: any*/),
+                          (v11/*: any*/)
                         ],
                         "storageKey": "responses(after:\"\",first:100)"
                       },
@@ -314,20 +313,8 @@ return {
                 ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "PageInfo",
-                "kind": "LinkedField",
-                "name": "pageInfo",
-                "plural": false,
-                "selections": [
-                  (v11/*: any*/),
-                  (v10/*: any*/)
-                ],
-                "storageKey": null
-              },
-              (v12/*: any*/)
+              (v10/*: any*/),
+              (v11/*: any*/)
             ],
             "storageKey": "liveFeedbackPrompts(after:\"\",first:100)"
           },
@@ -346,12 +333,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2794328adf846b5c4999e16ac0b028c4",
+    "cacheID": "c1314a18776414815d9f0520a9e5b5ee",
     "id": null,
     "metadata": {},
     "name": "LiveFeedbackPromptListQuery",
     "operationKind": "query",
-    "text": "query LiveFeedbackPromptListQuery(\n  $eventId: ID!\n) {\n  event(eventId: $eventId) {\n    ...useLiveFeedbackPromptsFragment\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment on Event {\n  id\n  liveFeedbackPrompts(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+    "text": "query LiveFeedbackPromptListQuery(\n  $eventId: ID!\n) {\n  event(eventId: $eventId) {\n    ...useLiveFeedbackPromptsFragment\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment on Event {\n  id\n  liveFeedbackPrompts(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();

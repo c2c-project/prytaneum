@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d9f9951c036a0a5c36aa29de68a3bd69>>
+ * @generated SignedSource<<9ecc0c8a697bc16bb3e9c9910cb3b62c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,7 +26,6 @@ export type useLiveFeedbackPromptsFragment$data = {
       };
     }> | null;
     readonly pageInfo: {
-      readonly hasNextPage: boolean;
       readonly endCursor: string | null;
     };
   } | null;
@@ -181,14 +180,14 @@ return {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
-              "name": "hasNextPage",
+              "name": "endCursor",
               "storageKey": null
             },
             {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
-              "name": "endCursor",
+              "name": "hasNextPage",
               "storageKey": null
             }
           ],
@@ -215,6 +214,6 @@ return {
 };
 })();
 
-(node as any).hash = "75da60be977c702e5ec8b156d041be84";
+(node as any).hash = "c2b59a234a10b7a15a32749b775ab6d6";
 
 export default node;

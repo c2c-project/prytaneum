@@ -22,7 +22,6 @@ const USE_LIVE_FEEDBACK_PROMPTS = graphql`
                 }
             }
             pageInfo {
-                hasNextPage
                 endCursor
             }
         }
@@ -38,7 +37,7 @@ export function useLiveFeedbackPrompts({ fragmentRef, modalIsOpen }: Props) {
     const [data, refetch] = useRefetchableFragment(USE_LIVE_FEEDBACK_PROMPTS, fragmentRef);
     const [isRefetching, setIsRefetching] = React.useState(false);
     const { liveFeedbackPrompts } = data;
-    const REFETCH_INTERVAL = 15000; // 15 seconds
+    const REFETCH_INTERVAL = 20000; // 20 seconds
 
     const promptsList = React.useMemo(
         () =>
@@ -59,9 +58,9 @@ export function useLiveFeedbackPrompts({ fragmentRef, modalIsOpen }: Props) {
         setIsRefetching(false);
     }, [isRefetching, modalIsOpen, refetch, data.liveFeedbackPrompts?.pageInfo?.endCursor]);
 
+    // Set up refresh polling interval (20 seconds) to keep data fresh
     React.useEffect(() => {
         const interval = setInterval(refresh, REFETCH_INTERVAL);
-
         return () => clearInterval(interval);
     }, [refresh]);
 

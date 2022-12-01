@@ -35,6 +35,10 @@ interface PromptListProps {
     promptData: PromptData;
 }
 
+// TODO: Convert prompt responses to fragment rather than directly from query (Required for pagination)
+// TODO: Pagination support for prompt responses (Number of responses will be greater than number of prompts)
+// TODO: Infinite Scrolling support for prompt responses
+
 /**
  * This component is responsible for rendering the live feedback prompt responses list
  */
@@ -143,10 +147,8 @@ interface LiveFeedbackPromptResponseListProps {
  */
 export function LiveFeedbackPromptResponseList({ queryRef, promptData }: LiveFeedbackPromptResponseListProps) {
     const { promptResponses } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY, queryRef);
-    // React.useEffect(() => {
-    //     console.log('promptResponses', promptResponses);
-    // }, [promptResponses]);
-    return <PromptResponseList promptResponses={promptResponses || []} promptData={promptData} />;
+    if (!promptResponses) return <Loader />;
+    return <PromptResponseList promptResponses={promptResponses} promptData={promptData} />;
 }
 
 interface PreloadedLiveFeedbackPromptResponseListProps {
