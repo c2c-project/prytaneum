@@ -29,7 +29,7 @@ interface HandlePromptClickProps {
 interface PromptListProps {
     fragmentRef: useLiveFeedbackPromptsFragment$key;
     handleClick: ({ promptData }: HandlePromptClickProps) => void;
-    modalIsOpen: boolean; //
+    modalIsOpen: boolean;
 }
 
 /**
@@ -130,7 +130,6 @@ function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
                         <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
                             Feedback Responses
                         </Typography>
-                        {/* <Typography>{selectedPromptRef.current?.prompt}</Typography> */}
                         <PreloadedLiveFeedbackPromptResponseList promptData={selectedPromptRef.current.promptData} />
                     </Grid>
                 </Box>

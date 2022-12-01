@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<109fdcd23c64d65203a9ede91ba27c1b>>
+ * @generated SignedSource<<99ae16eff35a71e05a1d20f6354189de>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -128,18 +128,29 @@ v10 = [
 v11 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "endCursor",
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
 v12 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "hasNextPage",
-  "storageKey": null
-},
-v13 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -309,20 +320,8 @@ return {
                                 ],
                                 "storageKey": null
                               },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "PageInfo",
-                                "kind": "LinkedField",
-                                "name": "pageInfo",
-                                "plural": false,
-                                "selections": [
-                                  (v11/*: any*/),
-                                  (v12/*: any*/)
-                                ],
-                                "storageKey": null
-                              },
-                              (v13/*: any*/)
+                              (v11/*: any*/),
+                              (v12/*: any*/)
                             ],
                             "storageKey": "responses(after:\"\",first:100)"
                           },
@@ -342,20 +341,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "PageInfo",
-                    "kind": "LinkedField",
-                    "name": "pageInfo",
-                    "plural": false,
-                    "selections": [
-                      (v12/*: any*/),
-                      (v11/*: any*/)
-                    ],
-                    "storageKey": null
-                  },
-                  (v13/*: any*/)
+                  (v11/*: any*/),
+                  (v12/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -378,16 +365,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "205c8165e109f3651e5087c29e002808",
+    "cacheID": "8e4298a420663e975dc12f2d6bba0629",
     "id": null,
     "metadata": {},
     "name": "liveFeedbackPromptPagination",
     "operationKind": "query",
-    "text": "query liveFeedbackPromptPagination(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+    "text": "query liveFeedbackPromptPagination(\n  $after: String = \"\"\n  $first: Int = 100\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useLiveFeedbackPromptsFragment_2HEEH6\n    id\n  }\n}\n\nfragment useLiveFeedbackPromptResponsesFragment on EventLiveFeedbackPrompt {\n  id\n  responses(first: 100, after: \"\") {\n    edges {\n      cursor\n      node {\n        id\n        isOpenEnded\n        response\n        isVote\n        vote\n        createdAt\n        createdBy {\n          id\n          firstName\n        }\n        prompt {\n          id\n          prompt\n        }\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment useLiveFeedbackPromptsFragment_2HEEH6 on Event {\n  id\n  liveFeedbackPrompts(first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        prompt\n        isVote\n        isOpenEnded\n        createdAt\n        ...useLiveFeedbackPromptResponsesFragment\n        __typename\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "75da60be977c702e5ec8b156d041be84";
+(node as any).hash = "c2b59a234a10b7a15a32749b775ab6d6";
 
 export default node;
