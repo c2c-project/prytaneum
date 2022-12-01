@@ -85,7 +85,7 @@ export const resolvers: Resolvers = {
                 const { id: broadcastMessageId } = fromGlobalId(args.input.broadcastMessageId);
                 const deleteEventBroadcastMessage = await Event.updateBroadcastMessageVisibility(
                     broadcastMessageId,
-                    args.input.isVisible,
+                    args.input.toggleBroadcastMessageVisibility,
                     ctx.prisma
                 );
                 const formattedBroadcastMessage = toBroadcastMessageId(deleteEventBroadcastMessage);

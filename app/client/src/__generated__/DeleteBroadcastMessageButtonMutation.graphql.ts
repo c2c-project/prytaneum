@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3110af18a3dbec4f520d36ab47784ffb>>
+ * @generated SignedSource<<6e9a2356592880eae222730c37b25530>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type DeleteBroadcastMessage = {
   broadcastMessageId: string;
-  isVisible: boolean;
+  toggleBroadcastMessageVisibility: boolean;
 };
 export type DeleteBroadcastMessageButtonMutation$variables = {
   input: DeleteBroadcastMessage;

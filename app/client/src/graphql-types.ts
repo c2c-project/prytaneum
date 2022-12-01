@@ -111,7 +111,7 @@ export type DeleteAccountForm = {
 
 export type DeleteBroadcastMessage = {
     broadcastMessageId: Scalars['ID'];
-    isVisible: Scalars['Boolean'];
+    toggleBroadcastMessageVisibility: Scalars['Boolean'];
 };
 
 /** In order to delete an event, user must provide a title and a confirmation title, similar to account deletion. */

@@ -43,7 +43,7 @@ export function DeleteBroadcastMessageButton({ className = undefined, fragmentRe
             variables: {
                 input: {
                     broadcastMessageId,
-                    isVisible: false,
+                    toggleBroadcastMessageVisibility: false,
                 },
             },
             onCompleted({ deleteBroadcastMessage }) {
