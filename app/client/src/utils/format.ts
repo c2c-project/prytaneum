@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { format, formatDistanceToNow as formatDistance } from 'date-fns';
 
-export function formatDate(date: Date | number | string, formatString = 'MM/dd/yyyy hh:mm a'): string {
+export function formatDate(date: Date | number | string, formatString = 'MM/dd/yyyy') {
     let _date = date;
     if (typeof _date === 'string') _date = new Date(_date);
     return format(_date, formatString);

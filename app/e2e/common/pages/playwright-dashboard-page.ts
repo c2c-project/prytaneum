@@ -63,7 +63,7 @@ export class PlaywrightDashboardPage {
             year: 'numeric',
         });
         await Promise.all([
-            await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}")`).click(),
+            await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}${orgName}")`).click(),
             await this.page.waitForNavigation(),
         ]);
     }
