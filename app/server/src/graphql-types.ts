@@ -498,7 +498,7 @@ export type Event = Node & {
     /** Questions having to do with the queue */
     questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
-    currentQuestion?: Maybe<Scalars['Int']>;
+    currentQuestion?: Maybe<Scalars['String']>;
 };
 
 export type EventquestionsArgs = {
@@ -952,7 +952,7 @@ export type HideQuestion = {
 
 export type UpdateQuestionPosition = {
     questionId: Scalars['ID'];
-    position: Scalars['Int'];
+    position: Scalars['String'];
     eventId: Scalars['ID'];
 };
 
@@ -1025,7 +1025,7 @@ export type EventQuestion = Node & {
     refQuestion?: Maybe<EventQuestion>;
     /** The actual content of the question */
     question?: Maybe<Scalars['String']>;
-    position?: Maybe<Scalars['Int']>;
+    position: Scalars['String'];
     isVisible?: Maybe<Scalars['Boolean']>;
     isAsked?: Maybe<Scalars['Boolean']>;
     lang?: Maybe<Scalars['String']>;
@@ -2087,7 +2087,7 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventquestionQueueArgs, never>
     >;
-    currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    currentQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2544,7 +2544,7 @@ export type EventQuestionResolvers<
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     refQuestion?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
     question?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    position?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isAsked?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2886,7 +2886,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
-        currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
+        currentQuestion?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
     };
 
     EventEdge?: {
@@ -3087,7 +3087,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;
         refQuestion?: LoaderResolver<Maybe<EventQuestion>, EventQuestion, {}, TContext>;
         question?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
-        position?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
+        position?: LoaderResolver<Scalars['String'], EventQuestion, {}, TContext>;
         isVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isAsked?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         lang?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;

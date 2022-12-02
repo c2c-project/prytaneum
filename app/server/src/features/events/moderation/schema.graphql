@@ -10,7 +10,7 @@ input HideQuestion {
 
 input UpdateQuestionPosition {
     questionId: ID!
-    position: Int!
+    position: String!
     eventId: ID!
 }
 

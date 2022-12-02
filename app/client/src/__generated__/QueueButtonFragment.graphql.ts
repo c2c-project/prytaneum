@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<db20989ce0fd73000951562e41d43b8e>>
+ * @generated SignedSource<<535978cebcc3e11665f878f0b5a69c14>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type QueueButtonFragment$data = {
   readonly id: string;
-  readonly position: number | null;
+  readonly position: string;
   readonly " $fragmentType": "QueueButtonFragment";
 };
 export type QueueButtonFragment = QueueButtonFragment$data;
