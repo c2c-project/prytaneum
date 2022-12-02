@@ -3,7 +3,7 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Event from './methods';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import type { Event as TEvent, EventQuestion } from '@local/graphql-types';
+import type { Event as TEvent, EventQuestion, EventEdgeContainer } from '@local/graphql-types';
 
 const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
@@ -36,11 +36,18 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: orgId } = fromGlobalId(args.event.orgId);
-                const createdEvent = await Event.createEvent(ctx.viewer.id, ctx.prisma, {
-                    ...args.event,
-                    orgId,
+                const createdEvent = await Event.createEvent(ctx.viewer.id, ctx.prisma, { ...args.event, orgId });
+                const eventWithGlobalId = toEventId(createdEvent);
+                const edge = {
+                    node: eventWithGlobalId,
+                };
+                ctx.pubsub.publish({
+                    topic: 'eventCreated',
+                    payload: {
+                        eventCreated: { edge },
+                    },
                 });
-                return toEventId(createdEvent);
+                return eventWithGlobalId;
             });
         },
         async updateEvent(parent, args, ctx, info) {
@@ -51,7 +58,9 @@ export const resolvers: Resolvers = {
                 const eventWithGlobalId = toEventId(updatedEvent);
                 ctx.pubsub.publish({
                     topic: 'eventUpdates',
-                    payload: eventWithGlobalId,
+                    payload: {
+                        eventUpdates: eventWithGlobalId,
+                    },
                 });
                 return eventWithGlobalId;
             });
@@ -61,7 +70,17 @@ export const resolvers: Resolvers = {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.event.eventId);
                 const deletedEvent = await Event.deleteEvent(ctx.viewer.id, ctx.prisma, { ...args.event, eventId });
-                return toEventId(deletedEvent);
+                const eventWithGlobalId = toEventId(deletedEvent);
+                const edge = {
+                    node: eventWithGlobalId,
+                };
+                ctx.pubsub.publish({
+                    topic: 'eventDeleted',
+                    payload: {
+                        eventDeleted: { edge },
+                    },
+                });
+                return eventWithGlobalId;
             });
         },
         async startEvent(parent, args, ctx, info) {
@@ -72,7 +91,9 @@ export const resolvers: Resolvers = {
                 const eventWithGlobalId = toEventId(updatedEvent);
                 ctx.pubsub.publish({
                     topic: 'eventUpdates',
-                    payload: eventWithGlobalId,
+                    payload: {
+                        eventUpdates: eventWithGlobalId,
+                    },
                 });
                 return eventWithGlobalId;
             });
@@ -85,7 +106,9 @@ export const resolvers: Resolvers = {
                 const eventWithGlobalId = toEventId(updatedEvent);
                 ctx.pubsub.publish({
                     topic: 'eventUpdates',
-                    payload: eventWithGlobalId,
+                    payload: {
+                        eventUpdates: eventWithGlobalId,
+                    },
                 });
                 return eventWithGlobalId;
             });
@@ -95,10 +118,43 @@ export const resolvers: Resolvers = {
         eventUpdates: {
             subscribe: withFilter<{ eventUpdates: TEvent }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('eventUpdates'),
-                (payload, args, ctx) => {
+                async (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(payload.eventUpdates.id);
-                    const { id: argEventId } = fromGlobalId(args.eventId);
-                    return eventId === argEventId;
+                    const { id: userId } = fromGlobalId(args.userId);
+
+                    const moderatorsIds = (await Event.findModeratorsByEventId(eventId, ctx.prisma)).map(
+                        ({ id }) => id
+                    );
+                    const invitedIds = (await Event.findInvitedByEventId(eventId, ctx.prisma)).map(({ id }) => id);
+
+                    return moderatorsIds.includes(userId) || invitedIds.includes(userId);
+                }
+            ),
+        },
+        eventCreated: {
+            subscribe: withFilter<{ eventCreated: EventEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('eventCreated'),
+                async (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(payload.eventCreated.edge.node.id);
+                    const { id: userId } = fromGlobalId(args.userId);
+
+                    const moderatorsIds = (await Event.findModeratorsByEventId(eventId, ctx.prisma)).map(
+                        ({ id }) => id
+                    );
+                    const invitedIds = (await Event.findInvitedByEventId(eventId, ctx.prisma)).map(({ id }) => id);
+
+                    return moderatorsIds.includes(userId) || invitedIds.includes(userId);
+                }
+            ),
+        },
+        eventDeleted: {
+            subscribe: withFilter<{ eventDeleted: EventEdgeContainer }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('eventDeleted'),
+                async (payload, args, ctx) => {
+                    const { id: eventId } = fromGlobalId(payload.eventDeleted.edge.node.id);
+                    const userEventIds = args.eventIds.map((userEventId: string) => fromGlobalId(userEventId).id);
+
+                    return userEventIds.includes(eventId);
                 }
             ),
         },

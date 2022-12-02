@@ -1,25 +1,21 @@
 import * as React from 'react';
 import { NextPage } from 'next';
-import { useQueryLoader } from 'react-relay';
-
-import { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
-import { Dashboard, DASHBOARD_QUERY } from '@local/features/dashboard/Dashboard';
+import { Dashboard } from '@local/features/dashboard/Dashboard';
 import { Loader } from '@local/components/Loader';
+import { useUser } from '@local/features/accounts';
+import { useRouter } from 'next/router';
 
 const DashboardPage: NextPage = () => {
-    const [queryRef, loadQuery] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
+    const router = useRouter();
+    const [user, , isLoading] = useUser();
+    const [checkComplete, setCheckComplete] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({});
-    }, [queryRef, loadQuery]);
+        if (user && !isLoading) setCheckComplete(true);
+        if (!user && !isLoading) router.push('/');
+    }, [user, router, isLoading]);
 
-    if (!queryRef) return <Loader />;
-
-    return (
-        <React.Suspense fallback='loading...'>
-            <Dashboard queryRef={queryRef} />
-        </React.Suspense>
-    );
-}
+    return checkComplete ? <Dashboard /> : <Loader />;
+};
 
 export default DashboardPage;

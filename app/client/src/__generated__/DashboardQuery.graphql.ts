@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9dcb3449dd243ad58bd3219a26c4a6db>>
+ * @generated SignedSource<<a3512a84c2ef7439f18f572f6b692430>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type DashboardQueryVariables = DashboardQuery$variables;
 export type DashboardQuery$data = {
   readonly me: {
     readonly events: {
+      readonly __id: string;
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly id: string;
@@ -85,6 +86,18 @@ v6 = {
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
+},
+v7 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "__id",
+      "storageKey": null
+    }
+  ]
 };
 return {
   "fragment": {
@@ -148,7 +161,8 @@ return {
                   }
                 ],
                 "storageKey": null
-              }
+              },
+              (v7/*: any*/)
             ],
             "storageKey": null
           }
@@ -221,7 +235,8 @@ return {
                   }
                 ],
                 "storageKey": null
-              }
+              },
+              (v7/*: any*/)
             ],
             "storageKey": null
           },
@@ -242,6 +257,6 @@ return {
 };
 })();
 
-(node as any).hash = "cde2b2f74e80f599d283235544a751db";
+(node as any).hash = "5a22b8c475f81e44b7cbfb7d090eb0e4";
 
 export default node;

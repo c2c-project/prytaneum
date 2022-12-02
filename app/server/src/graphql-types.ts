@@ -596,9 +596,17 @@ export type EventMutationResponse = MutationResponse & {
     body?: Maybe<Event>;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventEdgeContainer = {
+    __typename?: 'EventEdgeContainer';
+    edge: EventEdge;
+};
+
 export type Subscription = {
     __typename?: 'Subscription';
     eventUpdates: Event;
+    eventCreated: EventEdgeContainer;
+    eventDeleted: EventEdgeContainer;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
@@ -628,7 +636,15 @@ export type Subscription = {
 };
 
 export type SubscriptioneventUpdatesArgs = {
-    eventId: Scalars['ID'];
+    userId: Scalars['ID'];
+};
+
+export type SubscriptioneventCreatedArgs = {
+    userId: Scalars['ID'];
+};
+
+export type SubscriptioneventDeletedArgs = {
+    eventIds: Array<Scalars['ID']>;
 };
 
 export type SubscriptionfeedbackCRUDArgs = {
@@ -1341,6 +1357,7 @@ export type ResolversTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: ResolverTypeWrapper<EventMutationResponse>;
+    EventEdgeContainer: ResolverTypeWrapper<EventEdgeContainer>;
     Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
@@ -1469,6 +1486,7 @@ export type ResolversParentTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: EventMutationResponse;
+    EventEdgeContainer: EventEdgeContainer;
     Subscription: {};
     Organization: Organization;
     OrganizationEdge: OrganizationEdge;
@@ -2101,6 +2119,14 @@ export type EventMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventEdgeContainerResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventEdgeContainer'] = ResolversParentTypes['EventEdgeContainer']
+> = {
+    edge?: Resolver<ResolversTypes['EventEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
@@ -2110,7 +2136,21 @@ export type SubscriptionResolvers<
         'eventUpdates',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventUpdatesArgs, 'eventId'>
+        RequireFields<SubscriptioneventUpdatesArgs, 'userId'>
+    >;
+    eventCreated?: SubscriptionResolver<
+        ResolversTypes['EventEdgeContainer'],
+        'eventCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventCreatedArgs, 'userId'>
+    >;
+    eventDeleted?: SubscriptionResolver<
+        ResolversTypes['EventEdgeContainer'],
+        'eventDeleted',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventDeletedArgs, 'eventIds'>
     >;
     orgUpdated?: SubscriptionResolver<
         ResolversTypes['OrganizationSubscription'],
@@ -2683,6 +2723,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventEdge?: EventEdgeResolvers<ContextType>;
     EventConnection?: EventConnectionResolvers<ContextType>;
     EventMutationResponse?: EventMutationResponseResolvers<ContextType>;
+    EventEdgeContainer?: EventEdgeContainerResolvers<ContextType>;
     Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
@@ -2862,6 +2903,10 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], EventMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<Event>, EventMutationResponse, {}, TContext>;
+    };
+
+    EventEdgeContainer?: {
+        edge?: LoaderResolver<EventEdge, EventEdgeContainer, {}, TContext>;
     };
 
     Organization?: {

@@ -1,47 +1,18 @@
 import * as React from 'react';
-import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { useRouter } from 'next/router';
-import { isBefore, isAfter } from 'date-fns';
-import { Card, CardContent, Grid, Typography, IconButton } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Add } from '@mui/icons-material';
+import { fetchQuery, graphql, useQueryLoader } from 'react-relay';
+import { Grid } from '@mui/material';
 
-import { Loader } from '@local/components/Loader';
-import { useUser } from '@local/features/accounts';
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
+import { useEnvironment } from '@local/core';
+import { ConditionalRender } from '@local/components/ConditionalRender';
+import { Loader } from '@local/components/Loader';
 import { DashboardEventList } from './DashboardEventList';
-
-const useStyles = makeStyles((theme) => ({
-    secondaryText: {
-        color: theme.palette.text.secondary,
-    },
-    addIcon: {
-        fontSize: 32,
-        color: 'black',
-    },
-    addIconTitle: {
-        marginTop: 8,
-    },
-}));
-
-export interface Event {
-    node: {
-        id: string;
-        title: string | null;
-        description: string | null;
-        startDateTime: Date | null;
-        endDateTime: Date | null;
-        isViewerModerator: boolean | null;
-        organization: {
-            name: string;
-        } | null;
-    };
-}
 
 export const DASHBOARD_QUERY = graphql`
     query DashboardQuery {
         me {
             events {
+                __id
                 edges {
                     node {
                         id
@@ -60,63 +31,44 @@ export const DASHBOARD_QUERY = graphql`
     }
 `;
 
-interface Props {
-    queryRef: PreloadedQuery<DashboardQuery>;
-}
+export function Dashboard() {
+    const [queryRef, loadQuery] = useQueryLoader<DashboardQuery>(DASHBOARD_QUERY);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const REFRESH_INTERVAL = 20000; // 20 seconds
 
-export function Dashboard({ queryRef }: Props) {
-    const data = usePreloadedQuery<DashboardQuery>(DASHBOARD_QUERY, queryRef);
-    const listOfEvents = React.useMemo(() => data.me?.events?.edges ?? [], [data.me]);
-    const classes = useStyles();
-    const router = useRouter();
-    const [user, , isLoading] = useUser();
-    const handleNav = (path: string) => () => router.push(path);
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, DASHBOARD_QUERY, {}).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadQuery({}, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, isRefreshing, loadQuery]);
 
-    // Verify user is logged in
     React.useEffect(() => {
-        if (!isLoading && !user) router.push('/');
-    }, [user, router, isLoading]);
+        // Load the query on initial render
+        if (!queryRef) loadQuery({}, { fetchPolicy: 'network-only' });
+        // Refresh the query every interval
+        const interval = setInterval(() => {
+            refresh();
+        }, REFRESH_INTERVAL);
+        return () => clearInterval(interval);
+    }, []);
 
-    // Store ongoing events
-    const ongoingEvents = React.useMemo(
-        () =>
-            listOfEvents.filter(({ node: event }) => {
-                if (!event.startDateTime || !event.endDateTime) return false;
-                const now = new Date();
-                return isBefore(new Date(event.startDateTime), now) && isAfter(new Date(event.endDateTime), now);
-            }),
-        [listOfEvents]
-    );
-
-    // Store upcoming events
-    const upcomingEvents = React.useMemo(
-        () =>
-            listOfEvents.filter(({ node: event }) => {
-                if (!event.startDateTime) return false;
-                const now = new Date();
-                return isAfter(new Date(event.startDateTime), now);
-            }),
-        [listOfEvents]
-    );
-
-    if (!data) return <Loader />;
-
+    if (!queryRef) return <Loader />;
     return (
-        <Grid container>
-            <DashboardEventList eventList={ongoingEvents} ongoing={true} />
-            <DashboardEventList eventList={upcomingEvents} ongoing={false} />
-            <Grid item>
-                <Card>
-                    <CardContent style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
-                        <IconButton aria-label='view future event' onClick={handleNav('/organizations/me')}>
-                            <Add className={classes.addIcon} />
-                        </IconButton>
-                    </CardContent>
-                </Card>
-                <Typography variant='subtitle2' className={classes.addIconTitle}>
-                    Create Event
-                </Typography>
-            </Grid>
-        </Grid>
+        <ConditionalRender client>
+            <React.Suspense fallback={<div>Loading...</div>}>
+                <Grid container>
+                    <DashboardEventList queryRef={queryRef} />
+                </Grid>
+            </React.Suspense>
+        </ConditionalRender>
     );
 }

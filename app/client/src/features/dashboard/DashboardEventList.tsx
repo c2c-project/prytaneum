@@ -1,85 +1,79 @@
-import { useRouter } from 'next/router';
-import { Button, Card, CardContent, Grid, List, ListItemSecondaryAction, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import * as React from 'react';
+import { Grid } from '@mui/material';
+import { isBefore, isAfter } from 'date-fns';
 
-import { DashboardEventListItem } from './DashboardEventListItem';
-import { Event } from './Dashboard';
+import { DashboardEventListDisplay } from './DashboardEventListDisplay';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
+import { DASHBOARD_QUERY } from './Dashboard';
 
-const useStyles = makeStyles((theme) => ({
-    item: {
-        marginBottom: theme.spacing(4),
-    },
-    card: {
-        padding: theme.spacing(1),
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-    },
-    text: {
-        marginLeft: theme.spacing(1),
-    },
-}));
-
-interface DashboardEventListProps {
-    eventList: Event[];
-    ongoing: boolean;
+export interface Event {
+    node: {
+        id: string;
+        title: string | null;
+        description: string | null;
+        startDateTime: Date | null;
+        endDateTime: Date | null;
+        isViewerModerator: boolean | null;
+        organization: {
+            name: string;
+        } | null;
+    };
 }
 
-export function DashboardEventList({ eventList, ongoing }: DashboardEventListProps) {
-    const classes = useStyles();
-    const router = useRouter();
-    const handleNav = (path: string) => () => router.push(path);
+interface Props {
+    queryRef: PreloadedQuery<DashboardQuery>;
+}
+
+export function DashboardEventList({ queryRef }: Props) {
+    const { me } = usePreloadedQuery(DASHBOARD_QUERY, queryRef);
+    const REFRESH_INTERVAL = 10000; // 10 seconds
+
+    const events = React.useMemo(
+        () =>
+            me?.events?.edges
+                ? me?.events.edges.map(({ node }) => {
+                      return { node };
+                  })
+                : [],
+        [me]
+    );
+
+    const ongoingEvents = React.useCallback(
+        () =>
+            events.filter(({ node: event }) => {
+                if (!event.startDateTime || !event.endDateTime) return false;
+                const now = new Date();
+                return isBefore(new Date(event.startDateTime), now) && isAfter(new Date(event.endDateTime), now);
+            }),
+        [events]
+    );
+    const futureEvents = React.useCallback(
+        () =>
+            events.filter(({ node: event }) => {
+                if (!event.startDateTime) return false;
+                const now = new Date();
+                return isAfter(new Date(event.startDateTime), now);
+            }),
+        [events]
+    );
+
+    const [currentEvents, setCurrentEvents] = React.useState<Event[]>(ongoingEvents());
+    const [upcomingEvents, setUpcomingEvents] = React.useState<Event[]>(futureEvents());
+
+    React.useEffect(() => {
+        // Update the event lists every interval since they are based on the start/end times
+        const interval = setInterval(() => {
+            setCurrentEvents(ongoingEvents);
+            setUpcomingEvents(futureEvents);
+        }, REFRESH_INTERVAL);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
-        <Grid item xs={12} className={classes.item}>
-            <Card className={classes.card}>
-                <CardContent>
-                    {ongoing ? (
-                        <Typography variant='h6' className={classes.title}>
-                            Current Events
-                        </Typography>
-                    ) : (
-                        <Typography variant='h6' className={classes.title}>
-                            Upcoming Events
-                        </Typography>
-                    )}
-
-                    {eventList.length > 0 ? (
-                        <List>
-                            {eventList.map(({ node: event }, idx) => {
-                                return (
-                                    <DashboardEventListItem
-                                        key={event.id}
-                                        event={event}
-                                        divider={idx !== eventList.length - 1}
-                                    >
-                                        {ongoing && (
-                                            <ListItemSecondaryAction>
-                                                <Button
-                                                    aria-label='view live feed of current event'
-                                                    variant='contained'
-                                                    color='primary'
-                                                    onClick={handleNav(`/events/${event.id}/live`)}
-                                                >
-                                                    Live Feed
-                                                </Button>
-                                            </ListItemSecondaryAction>
-                                        )}
-                                        {/* event.isViewerModerator && (
-                                                 // Render a badge here to indicate the user is a moderator
-                                             )
-                                        */}
-                                    </DashboardEventListItem>
-                                );
-                            })}
-                        </List>
-                    ) : (
-                        <Typography className={classes.text} variant='subtitle2'>
-                            No Events To Display
-                        </Typography>
-                    )}
-                </CardContent>
-            </Card>
+        <Grid container>
+            <DashboardEventListDisplay eventList={currentEvents} ongoing={true} />
+            <DashboardEventListDisplay eventList={upcomingEvents} ongoing={false} />
         </Grid>
     );
 }
