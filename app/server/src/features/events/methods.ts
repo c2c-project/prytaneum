@@ -231,6 +231,16 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
 }
 
 /**
+ * Find live feedback prompts by event id
+ */
+export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.event.findUnique({
+        where: { id: eventId },
+        select: { feedbackPrompt: { orderBy: { createdAt: 'asc' } } },
+    });
+}
+
+/**
  * find queued questions by event id
  * if position is greater than -1, then the question is queued
  */

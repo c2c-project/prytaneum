@@ -4,19 +4,19 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import LockIcon from '@mui/icons-material/Lock';
 import { useMutation, graphql } from 'react-relay';
 
-import type { SubmitLiveFeedbackMutation } from '@local/__generated__/SubmitLiveFeedbackMutation.graphql';
+import type { SubmitLiveFeedbackPromptMutation } from '@local/__generated__/SubmitLiveFeedbackPromptMutation.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
-import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
+import { LiveFeedbackPromptForm, TLiveFeedbackPromptFormState } from './LiveFeedbackPromptForm';
 
 interface Props {
     className?: string;
     eventId: string;
 }
 
-export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
-    mutation SubmitLiveFeedbackMutation($input: CreateFeedback!) {
-        createFeedback(input: $input) {
+export const SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION = graphql`
+    mutation SubmitLiveFeedbackPromptMutation($input: CreateFeedbackPrompt!) {
+        createFeedbackPrompt(input: $input) {
             isError
             message
             body {
@@ -24,24 +24,19 @@ export const SUBMIT_LIVE_FEEDBACK_MUTATION = graphql`
                 node {
                     id
                     createdAt
-                    message
-                    createdBy {
-                        id
-                        firstName
-                        lastName
-                    }
+                    prompt
                 }
             }
         }
     }
 `;
 
-export function SubmitLiveFeedback({ className, eventId }: Props) {
+export function SubmitLiveFeedbackPrompt({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
-    const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
+    const [commit] = useMutation<SubmitLiveFeedbackPromptMutation>(SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION);
 
-    function handleSubmit(form: TLiveFeedbackFormState) {
+    function handleSubmit(form: TLiveFeedbackPromptFormState) {
         commit({
             variables: { input: { ...form, eventId } },
             onCompleted: close,
@@ -52,7 +47,7 @@ export function SubmitLiveFeedback({ className, eventId }: Props) {
         <>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
-                    <LiveFeedbackForm onCancel={close} onSubmit={handleSubmit} />
+                    <LiveFeedbackPromptForm onCancel={close} onSubmit={handleSubmit} />
                 </DialogContent>
             </ResponsiveDialog>
 
@@ -64,7 +59,7 @@ export function SubmitLiveFeedback({ className, eventId }: Props) {
                 onClick={open}
                 startIcon={user ? <QuestionAnswerIcon /> : <LockIcon />}
             >
-                {user ? 'Submit Live Feedback' : 'Sign in to submit live feedback'}
+                {user ? 'Ask For Feedback' : 'Sign in to submit live feedback'}
             </Button>
         </>
     );

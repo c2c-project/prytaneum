@@ -12,12 +12,18 @@ const toQuestionId = toGlobalId('EventQuestion');
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
+const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
 
 export const resolvers: Resolvers = {
     Query: {
         async events(parent, args, ctx, info) {
             const foundEvents = await Event.findPublicEvents(ctx.prisma);
             return foundEvents.map(toEventId);
+        },
+        async event(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const foundEvent = await Event.findEventById(eventId, ctx.prisma);
+            return foundEvent ? toEventId(foundEvent) : null;
         },
         // async isEventPrivate(parent, args, ctx, info) {
         //     const isPrivateEvent = await Event.isEventPrivate(ctx.prisma,{ ...args.event, eventId }, status);
@@ -145,6 +151,16 @@ export const resolvers: Resolvers = {
                     endCursor: edges[liveFeedback.length - 1]?.cursor.toString(),
                 },
             };
+        },
+        async liveFeedbackPrompts(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const queryResult = await Event.findLiveFeedbackPromptsByEventId(eventId, ctx.prisma);
+            const { feedbackPrompt: liveFeedbackPrompts } = queryResult || { feedbackPrompt: [] };
+            const connection = connectionFromArray(liveFeedbackPrompts.map(toFeedbackPromptId), args);
+
+            if (liveFeedbackPrompts.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
         },
         async questionQueue(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
