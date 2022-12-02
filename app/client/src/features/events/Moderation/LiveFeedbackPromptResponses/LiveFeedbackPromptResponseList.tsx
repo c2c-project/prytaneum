@@ -6,6 +6,8 @@ import { Chart } from 'react-google-charts';
 import { ConditionalRender, Loader } from '@local/components';
 import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFeedbackPromptResponseListQuery.graphql';
 import { useEnvironment } from '@local/core';
+import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
+import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
     query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
@@ -13,14 +15,28 @@ export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
             id
             response
             vote
+            createdAt
+            createdBy {
+                id
+                firstName
+                lastName
+                avatar
+            }
         }
     }
 `;
 
-type PromptResponse = {
+export type PromptResponse = {
     readonly id: string;
     readonly response: string | null;
     readonly vote: string | null;
+    readonly createdAt: Date | null;
+    readonly createdBy: {
+        readonly id: string;
+        readonly firstName: string | null;
+        readonly lastName: string | null;
+        readonly avatar: string | null;
+    } | null;
 };
 
 export type PromptData = {
@@ -103,6 +119,11 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                             ]}
                             options={{
                                 title: 'Votes',
+                                slices: {
+                                    0: { color: getVoteColor('FOR') },
+                                    1: { color: getVoteColor('AGAINST') },
+                                    2: { color: getVoteColor('CONFLICTED') },
+                                },
                             }}
                             width='100%'
                             height='400px'
@@ -111,22 +132,27 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                 </>
             )}
             <List id='live-feedback-prompt-response-list'>
-                {promptResponses.map(({ id, response, vote }) => (
+                {promptResponses.map(({ id, response, vote, createdAt, createdBy }) => (
                     <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
-                        <Grid container direction='column' alignContent='center' spacing={1}>
+                        <Grid
+                            container
+                            display='flex'
+                            direction='column'
+                            alignContent='center'
+                            alignItems='stretch'
+                            spacing={1}
+                        >
                             <Card>
-                                <CardContent>
-                                    <Grid container direction='row' alignItems='center' justifyContent='space-around'>
-                                        <Grid item>
-                                            <Typography
-                                                variant='inherit'
-                                                sx={{ wordBreak: 'break-word' }}
-                                                color={promptData.isVote ? getVoteColor(vote) : 'black'}
-                                            >
-                                                {response}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
+                                <PromptResponseAuthorCardHeader
+                                    createdBy={createdBy}
+                                    createdAt={createdAt}
+                                    vote={vote}
+                                    isVote={promptData.isVote}
+                                />
+                                <CardContent sx={{ margin: (theme) => theme.spacing(-2, 0, -1, 0) }}>
+                                    <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                        {response}
+                                    </Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -152,16 +178,22 @@ export function LiveFeedbackPromptResponseList({ queryRef, promptData }: LiveFee
 }
 
 interface PreloadedLiveFeedbackPromptResponseListProps {
-    promptData: PromptData;
+    prompt: Prompt;
 }
 
-export function PreloadedLiveFeedbackPromptResponseList({ promptData }: PreloadedLiveFeedbackPromptResponseListProps) {
+export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiveFeedbackPromptResponseListProps) {
     const [queryRef, loadQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
     const REFRESH_INTERVAL = 10000; // 10 seconds
+    const promptData = {
+        promptId: prompt.id,
+        prompt: prompt.prompt,
+        isVote: !!prompt.isVote,
+        isOpenEnded: !!prompt.isOpenEnded,
+    };
     const { promptId } = promptData;
 
     const refresh = React.useCallback(() => {
@@ -179,7 +211,7 @@ export function PreloadedLiveFeedbackPromptResponseList({ promptData }: Preloade
     }, [env, isRefreshing, loadQuery, promptId]);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ promptId });
+        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'network-only' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
     }, []);
