@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b91125cfa066ee0ad72b35ef5ee87141>>
+ * @generated SignedSource<<1d47a0d75c16c40b6ab326da54e99ef5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -32,7 +32,7 @@ export type LiveFeedbackReplyActionMutation$data = {
         readonly " $fragmentSpreads": FragmentRefs<"LiveFeedbackAuthorFragment">;
       };
     } | null;
-  };
+  } | null;
 };
 export type LiveFeedbackReplyActionMutationResponse = LiveFeedbackReplyActionMutation$data;
 export type LiveFeedbackReplyActionMutation = {
