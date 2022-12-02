@@ -248,6 +248,7 @@ __metadata:
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
     react-dom: 17.0.2
+    react-google-charts: ^4.0.0
     react-infinite-scroll-component: ^6.1.0
     react-is: ^16.13.1
     react-player: ^1.11.1
@@ -27287,6 +27288,16 @@ fsevents@^1.2.7:
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
+  languageName: node
+  linkType: hard
+
+"react-google-charts@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-google-charts@npm:4.0.0"
+  peerDependencies:
+    react: ">=16.3.0"
+    react-dom: ">=16.3.0"
+  checksum: 7bd258523b03badef5c269cae1c854b5a971c589ceea4b9a626f8c59f421f5c569e95096cc4024d492a04b248e3f910dc7c34c6f52c2424dbe32980f651014a8
   languageName: node
   linkType: hard
 

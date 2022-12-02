@@ -1,10 +1,13 @@
-import { fromGlobalId } from 'graphql-relay';
+import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Feedback from './methods';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import type { FeedbackOperation } from '@local/graphql-types';
+import { EventLiveFeedbackPrompt } from '../../../graphql-types';
 
 const toFeedbackId = toGlobalId('EventLiveFeedback');
+const toFeedbackPromptId = toGlobalId('EventLiveFeedbackPrompt');
+const toFeedbackPromptResponseId = toGlobalId('EventLiveFeedbackPromptResponse');
 const toUserId = toGlobalId('User');
 
 export const resolvers: Resolvers = {
@@ -13,8 +16,29 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             if (!args.eventId) throw new ProtectedError({ userMessage: errors.invalidArgs });
             const { id: eventId } = fromGlobalId(args.eventId);
-            const feedback = Feedback.myFeedback(ctx.viewer.id, eventId, ctx.prisma);
-            return feedback;
+            const feedback = await Feedback.myFeedback(ctx.viewer.id, eventId, ctx.prisma);
+            return feedback.map(toFeedbackId);
+        },
+        async promptResponses(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: promptId } = fromGlobalId(args.promptId);
+            const responses = await Feedback.promptResponses(promptId, ctx.prisma);
+            return responses.map(toFeedbackPromptResponseId);
+        },
+        async prompt(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: promptId } = fromGlobalId(args.promptId);
+            const prompt = await Feedback.findPromptByPromptId(promptId, ctx.prisma);
+            return toFeedbackPromptId(prompt);
+        },
+        async prompts(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.eventId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const prompts = await Feedback.findPromptsByEventId(eventId, ctx.prisma);
+            return prompts.map(toFeedbackPromptId);
         },
     },
     Mutation: {
@@ -40,6 +64,43 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        async createFeedbackPrompt(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.input) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: eventId } = fromGlobalId(args.input.eventId);
+                const prompt = await Feedback.createFeedbackPrompt(ctx.viewer.id, eventId, ctx.prisma, args.input);
+                const formattedPrompt = toFeedbackPromptId(prompt);
+                const edge = {
+                    node: formattedPrompt,
+                    cursor: formattedPrompt.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'feedbackPrompted',
+                    payload: { feedbackPrompted: formattedPrompt },
+                });
+                return edge;
+            });
+        },
+        async createFeedbackPromptResponse(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.input) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: promptId } = fromGlobalId(args.input.promptId);
+                const promptResponse = await Feedback.createFeedbackPromptResponse(
+                    ctx.viewer.id,
+                    promptId,
+                    ctx.prisma,
+                    args.input
+                );
+                const formattedPromptResponse = toFeedbackPromptResponseId(promptResponse);
+                const edge = {
+                    node: formattedPromptResponse,
+                    cursor: formattedPromptResponse.id,
+                };
+                return edge;
+            });
+        },
     },
     Subscription: {
         feedbackCRUD: {
@@ -49,7 +110,18 @@ export const resolvers: Resolvers = {
                     const { id: feedbackId } = fromGlobalId(payload.feedbackCRUD.edge.node.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     // TODO only update moderators & feedback creator as other participants cant see other's feedback
-                    return Feedback.doesEventMatch(eventId, feedbackId, ctx.prisma);
+                    return Feedback.doesEventMatchFeedback(eventId, feedbackId, ctx.prisma);
+                }
+            ),
+        },
+        feedbackPrompted: {
+            subscribe: withFilter<{ feedbackPrompted: EventLiveFeedbackPrompt }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('feedbackPrompted'),
+                (payload, args, ctx) => {
+                    const { id: feedbackPromptId } = fromGlobalId(payload.feedbackPrompted.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    // TODO only update to non moderator participants
+                    return Feedback.doesEventMatchFeedbackPrompt(eventId, feedbackPromptId, ctx.prisma);
                 }
             ),
         },
@@ -64,6 +136,25 @@ export const resolvers: Resolvers = {
             const { id: feedbackId } = fromGlobalId(parent.id);
             const feedback = await Feedback.findRefFeedback(feedbackId, ctx.prisma);
             return toFeedbackId(feedback);
+        },
+    },
+    EventLiveFeedbackPrompt: {
+        async responses(parent, args, ctx) {
+            // TODO: prisma pagination for responses
+            const { id: promptId } = fromGlobalId(parent.id);
+            const responses = await Feedback.findResponsesByPromptId(promptId, ctx.prisma);
+            const responsesWithPromptResponseId = responses.map(toFeedbackPromptResponseId);
+            const connection = connectionFromArray(responsesWithPromptResponseId, args);
+            if (responses.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
+        },
+    },
+    EventLiveFeedbackPromptResponse: {
+        async createdBy(parent, args, ctx) {
+            const { id: responseId } = fromGlobalId(parent.id);
+            const submitter = await Feedback.findSubmitterByResponseId(responseId, ctx.prisma);
+            return toUserId(submitter);
         },
     },
 };
