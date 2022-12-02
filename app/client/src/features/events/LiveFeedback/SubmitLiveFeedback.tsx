@@ -52,13 +52,19 @@ export function SubmitLiveFeedback({ className, eventId }: Props) {
             if (isURL(form.message)) throw new Error('No links are allowed!');
             commit({
                 variables: { input: { ...form, eventId } },
-                onCompleted: ({ createFeedback }) => {
-                    if (createFeedback.isError) displaySnack(createFeedback.message, { variant: 'error' });
-                    else close();
+                onCompleted(payload) {
+                    try {
+                        if (payload.createFeedback.isError) throw new Error(payload.createFeedback.message);
+                        close();
+                        displaySnack('Feedback submitted!');
+                    } catch (err) {
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
+                    }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            displaySnack(err.message);
         }
     }
 
