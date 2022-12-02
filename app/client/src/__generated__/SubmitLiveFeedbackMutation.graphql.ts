@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f6a545b55f7bf1afc85715fd5911b99>>
+ * @generated SignedSource<<11f70e239e04c5507ca7fdb6f931ff84>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -36,7 +36,7 @@ export type SubmitLiveFeedbackMutation$data = {
         } | null;
       };
     } | null;
-  };
+  } | null;
 };
 export type SubmitLiveFeedbackMutationResponse = SubmitLiveFeedbackMutation$data;
 export type SubmitLiveFeedbackMutation = {
