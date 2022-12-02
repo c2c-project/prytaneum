@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a4436cd23eb7bbd633accd32b313d347>>
+ * @generated SignedSource<<4b2cffb970bfb50ef69c64bd2f6bdcfb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type PreviousQuestionButtonMutationVariables = PreviousQuestionButtonMuta
 export type PreviousQuestionButtonMutation$data = {
   readonly prevQuestion: {
     readonly id: string;
-    readonly currentQuestion: number | null;
+    readonly currentQuestion: string | null;
   };
 };
 export type PreviousQuestionButtonMutationResponse = PreviousQuestionButtonMutation$data;
