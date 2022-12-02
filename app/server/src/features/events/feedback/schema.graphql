@@ -121,6 +121,8 @@ type Mutation {
 type Query {
     myFeedback(eventId: ID!): [EventLiveFeedback]
     promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
+    prompt(promptId: ID!): EventLiveFeedbackPrompt
+    prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
 }
 
 type Subscription {

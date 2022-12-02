@@ -16,15 +16,29 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             if (!args.eventId) throw new ProtectedError({ userMessage: errors.invalidArgs });
             const { id: eventId } = fromGlobalId(args.eventId);
-            const feedback = Feedback.myFeedback(ctx.viewer.id, eventId, ctx.prisma);
-            return feedback;
+            const feedback = await Feedback.myFeedback(ctx.viewer.id, eventId, ctx.prisma);
+            return feedback.map(toFeedbackId);
         },
         async promptResponses(parent, args, ctx) {
             if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
             const { id: promptId } = fromGlobalId(args.promptId);
             const responses = await Feedback.promptResponses(promptId, ctx.prisma);
-            return responses;
+            return responses.map(toFeedbackPromptResponseId);
+        },
+        async prompt(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: promptId } = fromGlobalId(args.promptId);
+            const prompt = await Feedback.findPromptByPromptId(promptId, ctx.prisma);
+            return toFeedbackPromptId(prompt);
+        },
+        async prompts(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.eventId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: eventId } = fromGlobalId(args.eventId);
+            const prompts = await Feedback.findPromptsByEventId(eventId, ctx.prisma);
+            return prompts.map(toFeedbackPromptId);
         },
     },
     Mutation: {
@@ -129,7 +143,18 @@ export const resolvers: Resolvers = {
             // TODO: prisma pagination for responses
             const { id: promptId } = fromGlobalId(parent.id);
             const responses = await Feedback.findResponsesByPromptId(promptId, ctx.prisma);
-            return connectionFromArray(responses.map(toFeedbackPromptResponseId), args);
+            const responsesWithPromptResponseId = responses.map(toFeedbackPromptResponseId);
+            const connection = connectionFromArray(responsesWithPromptResponseId, args);
+            if (responses.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
+        },
+    },
+    EventLiveFeedbackPromptResponse: {
+        async createdBy(parent, args, ctx) {
+            const { id: responseId } = fromGlobalId(parent.id);
+            const submitter = await Feedback.findSubmitterByResponseId(responseId, ctx.prisma);
+            return toUserId(submitter);
         },
     },
 };
