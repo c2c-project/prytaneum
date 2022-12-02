@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
+import { FEEDBACK_MAX_LENGTH } from '@local/utils/rules';
 
 export type TLiveFeedbackFormState = { message: string };
 
@@ -15,7 +16,6 @@ export interface LiveFeedbackFormProps {
     onCancel?: () => void;
 }
 
-// TODO: eliminate inline styles
 export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackFormProps) {
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
@@ -41,6 +41,13 @@ export function LiveFeedbackForm({ reply, onSubmit, onCancel }: LiveFeedbackForm
                     value={form.message}
                     onChange={handleChange('message')}
                 />
+                <Typography
+                    variant='caption'
+                    color={form.message.length > FEEDBACK_MAX_LENGTH ? 'red' : 'black'}
+                    sx={{ display: 'block', textAlign: 'right' }}
+                >
+                    {form.message.length}/500
+                </Typography>
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (
