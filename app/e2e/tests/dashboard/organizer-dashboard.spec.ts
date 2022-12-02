@@ -17,6 +17,15 @@ export default function organizerTests() {
             await expect(dashboardPageOrganizer.page).toHaveURL(/.*settings/);
         });
 
+        test('I can see button to create event on dashboard.', async ({ dashboardPageOrganizer }) => {
+            // Go to Dashboard
+            await dashboardPageOrganizer.goto();
+
+            // Click Create Event button
+            await dashboardPageOrganizer.clickOnCreateEvent();
+            await expect(dashboardPageOrganizer.page).toHaveURL('/organizations/me');
+        });
+
         test('I can see sections for Current Events and Upcoming Events on dashboard.', async ({
             dashboardPageOrganizer,
         }) => {

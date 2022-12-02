@@ -659,7 +659,6 @@ type Query {
   node(id: ID!): Node
   prompt(promptId: ID!): EventLiveFeedbackPrompt
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
-  prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
