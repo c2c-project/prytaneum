@@ -47,26 +47,31 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
     const { displaySnack } = useSnack();
 
     function handleSubmit(form: TQuestionFormState) {
-        commit({
-            variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
-            onCompleted(payload) {
-                try {
-                    if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
-                    if (form.question.length >= QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
-                    if (isURL(form.question)) throw new Error('no links are allowed!');
-                    ga.event({
-                        action: 'submit_question',
-                        category: 'questions',
-                        label: 'live event',
-                        value: form.question,
-                    });
-                    close();
-                    displaySnack('Question submitted!');
-                } catch (err) {
-                    displaySnack(err.message);
-                }
-            },
-        });
+        try {
+            // Validate length and url presence before submitting to avoid unessisary serverside validation
+            if (form.question.length > QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
+            if (isURL(form.question)) throw new Error('no links are allowed!');
+            commit({
+                variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
+                onCompleted(payload) {
+                    try {
+                        if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
+                        ga.event({
+                            action: 'submit_question',
+                            category: 'questions',
+                            label: 'live event',
+                            value: form.question,
+                        });
+                        close();
+                        displaySnack('Question submitted!');
+                    } catch (err) {
+                        displaySnack(err.message);
+                    }
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message);
+        }
     }
 
     return (
