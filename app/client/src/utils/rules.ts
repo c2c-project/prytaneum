@@ -1,2 +1,2 @@
-export const QUESTIONS_MAX_LENGTH = 1000
-export const FEEDBACK_MAX_LENGTH = 1000
+export const QUESTIONS_MAX_LENGTH = 500;
+export const FEEDBACK_MAX_LENGTH = 500;
