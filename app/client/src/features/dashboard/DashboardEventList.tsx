@@ -27,6 +27,8 @@ interface Props {
 
 export function DashboardEventList({ queryRef }: Props) {
     const { me } = usePreloadedQuery(DASHBOARD_QUERY, queryRef);
+    const REFRESH_INTERVAL = 10000; // 10 seconds
+
     const events = React.useMemo(
         () =>
             me?.events?.edges
@@ -36,6 +38,7 @@ export function DashboardEventList({ queryRef }: Props) {
                 : [],
         [me]
     );
+
     const ongoingEvents = React.useCallback(
         () =>
             events.filter(({ node: event }) => {
@@ -54,25 +57,18 @@ export function DashboardEventList({ queryRef }: Props) {
             }),
         [events]
     );
+
     const [currentEvents, setCurrentEvents] = React.useState<Event[]>(ongoingEvents());
     const [upcomingEvents, setUpcomingEvents] = React.useState<Event[]>(futureEvents());
-    // const [user] = useUser();
-    // const userId = user?.id ? user.id : '';
-    // const { events, connections, refresh } = useDashboardEvents({ fragmentRef });
-    // const eventIds = events.map(({ node }) => node.id);
-
-    // Subscriptions to keep event info up-to-date
-    // useEventUpdates(userId);
-    // useEventCreated(userId, connections);
-    // useEventDeleted(eventIds, connections);
 
     React.useEffect(() => {
+        // Update the event lists every interval since they are based on the start/end times
         const interval = setInterval(() => {
             setCurrentEvents(ongoingEvents);
             setUpcomingEvents(futureEvents);
-        }, 5000);
+        }, REFRESH_INTERVAL);
         return () => clearInterval(interval);
-    }, [futureEvents, ongoingEvents]);
+    }, []);
 
     return (
         <Grid container>
