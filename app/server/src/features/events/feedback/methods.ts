@@ -18,6 +18,14 @@ export async function promptResponses(promptId: string, prisma: PrismaClient) {
     });
 }
 
+export async function findPromptByPromptId(promptId: string, prisma: PrismaClient) {
+    return prisma.eventLiveFeedbackPrompt.findUnique({ where: { id: promptId } });
+}
+
+export async function findPromptsByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventLiveFeedbackPrompt.findMany({ where: { eventId } });
+}
+
 export async function createFeedback(userId: string, eventId: string, prisma: PrismaClient, input: CreateFeedback) {
     const { isReply, refFeedbackId: globalRefId } = input;
     const refFeedbackId = globalRefId ? fromGlobalId(globalRefId).id : null;
@@ -133,4 +141,13 @@ export async function findRefFeedback(feedbackId: string, prisma: PrismaClient) 
     });
     if (!queryResult || !queryResult.refFeedback) return null;
     return queryResult.refFeedback;
+}
+
+export async function findSubmitterByResponseId(responseId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.eventLiveFeedbackPromptResponse.findUnique({
+        where: { id: responseId },
+        select: { createdByUser: true },
+    });
+    if (!queryResult) return null;
+    return queryResult.createdByUser;
 }

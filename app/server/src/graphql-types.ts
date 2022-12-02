@@ -49,6 +49,8 @@ export type Query = {
     event?: Maybe<Event>;
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
+    prompt?: Maybe<EventLiveFeedbackPrompt>;
+    prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
@@ -71,6 +73,14 @@ export type QuerymyFeedbackArgs = {
 
 export type QuerypromptResponsesArgs = {
     promptId: Scalars['ID'];
+};
+
+export type QuerypromptArgs = {
+    promptId: Scalars['ID'];
+};
+
+export type QuerypromptsArgs = {
+    eventId: Scalars['ID'];
 };
 
 export type QueryvalidateInviteArgs = {
@@ -1588,6 +1598,18 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QuerypromptResponsesArgs, 'promptId'>
+    >;
+    prompt?: Resolver<
+        Maybe<ResolversTypes['EventLiveFeedbackPrompt']>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptArgs, 'promptId'>
+    >;
+    prompts?: Resolver<
+        Maybe<Array<ResolversTypes['EventLiveFeedbackPrompt']>>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptsArgs, 'eventId'>
     >;
     validateInvite?: Resolver<
         ResolversTypes['ValidateInviteQueryResponse'],
