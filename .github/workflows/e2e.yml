@@ -3,7 +3,6 @@ name: Test end-to-end
 on:
     pull_request:
         branches:
-            - staging
             - prod
         paths:
             - 'app/client/**'
