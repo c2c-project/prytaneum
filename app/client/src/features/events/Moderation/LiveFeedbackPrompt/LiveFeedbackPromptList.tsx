@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { graphql, PreloadedQuery, useQueryLoader, usePreloadedQuery } from 'react-relay';
+import type { FragmentRefs } from 'relay-runtime';
 import { List, ListItem, Card, CardContent, Typography, Grid, IconButton, Modal, Box } from '@mui/material';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 
@@ -9,10 +10,7 @@ import { useLiveFeedbackPrompts } from './useLiveFeedbackPrompts';
 import { useEvent } from '@local/features/events/useEvent';
 import { ConditionalRender } from '@local/components';
 import { Loader } from '@local/components/Loader';
-import {
-    PreloadedLiveFeedbackPromptResponseList,
-    PromptData,
-} from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
+import { PreloadedLiveFeedbackPromptResponseList } from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
 
 export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
     query LiveFeedbackPromptListQuery($eventId: ID!) {
@@ -22,13 +20,19 @@ export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
     }
 `;
 
-interface HandlePromptClickProps {
-    promptData: PromptData;
-}
+export type Prompt = {
+    cursor: string;
+    id: string;
+    prompt: string;
+    isVote: boolean | null;
+    isOpenEnded: boolean | null;
+    createdAt: Date | null;
+    ' $fragmentSpreads': FragmentRefs<'useLiveFeedbackPromptResponsesFragment'>;
+};
 
 interface PromptListProps {
     fragmentRef: useLiveFeedbackPromptsFragment$key;
-    handleClick: ({ promptData }: HandlePromptClickProps) => void;
+    handleClick: (prompt: Prompt) => void;
     modalIsOpen: boolean;
 }
 
@@ -40,30 +44,19 @@ function PromptList({ fragmentRef, handleClick, modalIsOpen }: PromptListProps) 
 
     return (
         <List id='live-feedback-prompt-list'>
-            {prompts.map(({ id, prompt, isVote, isOpenEnded }) => (
-                <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
+            {prompts.map((prompt) => (
+                <ListItem key={prompt.id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
                     <Grid container direction='column' alignContent='center' spacing={1}>
                         <Card>
                             <CardContent>
                                 <Grid container direction='row' alignItems='center' justifyContent='space-around'>
                                     <Grid item>
                                         <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                            {prompt}
+                                            {prompt.prompt}
                                         </Typography>
                                     </Grid>
                                     <Grid item paddingRight={0.5}>
-                                        <IconButton
-                                            onClick={() =>
-                                                handleClick({
-                                                    promptData: {
-                                                        promptId: id,
-                                                        isVote: !!isVote,
-                                                        isOpenEnded: !!isOpenEnded,
-                                                        prompt,
-                                                    },
-                                                })
-                                            }
-                                        >
+                                        <IconButton onClick={() => handleClick(prompt)}>
                                             <OpenInNewIcon />
                                         </IconButton>
                                     </Grid>
@@ -87,16 +80,14 @@ interface LiveFeedbackPromptListProps {
 function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
     const { event } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_LIST_QUERY, queryRef);
     const [open, setOpen] = React.useState(false);
-    const selectedPromptRef = React.useRef<HandlePromptClickProps>({
-        promptData: { promptId: '', isVote: false, isOpenEnded: false, prompt: '' },
-    });
+    const selectedPromptRef = React.useRef<Prompt | null>(null);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handlePromptClick = ({ promptData }: HandlePromptClickProps) => {
+    const handlePromptClick = (prompt: Prompt) => {
         // Update the selected prompt ref
-        selectedPromptRef.current = { promptData };
+        selectedPromptRef.current = prompt;
         // Open the modal
         handleOpen();
     };
@@ -130,7 +121,9 @@ function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
                         <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
                             Feedback Responses
                         </Typography>
-                        <PreloadedLiveFeedbackPromptResponseList promptData={selectedPromptRef.current.promptData} />
+                        {selectedPromptRef.current && (
+                            <PreloadedLiveFeedbackPromptResponseList prompt={selectedPromptRef.current} />
+                        )}
                     </Grid>
                 </Box>
             </Modal>
@@ -146,7 +139,7 @@ export function PreloadedLiveFeedbackPromptList() {
     const { eventId } = useEvent();
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ eventId });
+        if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'network-only' });
     }, []);
 
     if (!queryRef) return <Loader />;
