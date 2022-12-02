@@ -68,7 +68,7 @@ export function DashboardEventList({ queryRef }: Props) {
             setUpcomingEvents(futureEvents);
         }, REFRESH_INTERVAL);
         return () => clearInterval(interval);
-    }, []);
+    }, [futureEvents, ongoingEvents]);
 
     return (
         <Grid container>
