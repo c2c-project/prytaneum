@@ -1,6 +1,7 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import type { MercuriusContext } from 'mercurius';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -10,9 +11,7 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
     context: TContext,
     info: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & {
-    [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: string;
@@ -102,8 +101,8 @@ export type QueryvalidateInviteArgs = {
 
 export type QueryeventParticipantsArgs = {
     eventId: Scalars['ID'];
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryquestionsByEventIdArgs = {
@@ -153,28 +152,28 @@ export type User = Node & {
 
 /** User Data */
 export type UserorganizationsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 /** User Data */
 export type UsereventsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 /** User Data */
 export type UserusersArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
-    filter?: Maybe<UsersSearchFilters>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
+    filter?: InputMaybe<UsersSearchFilters>;
 };
 
 /** User Data */
 export type UserallEventsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
-    filter?: Maybe<EventsSearchFilters>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
+    filter?: InputMaybe<EventsSearchFilters>;
 };
 
 /** User Data */
@@ -184,18 +183,18 @@ export type UsermoderatorOfArgs = {
 
 export type UsersSearchFilters = {
     /** Search by first name */
-    firstName?: Maybe<Scalars['String']>;
+    firstName?: InputMaybe<Scalars['String']>;
     /** Search by last name */
-    lastName?: Maybe<Scalars['String']>;
+    lastName?: InputMaybe<Scalars['String']>;
     /** Search by email */
-    email?: Maybe<Scalars['String']>;
+    email?: InputMaybe<Scalars['String']>;
 };
 
 export type EventsSearchFilters = {
     /** Search by event name */
-    eventName?: Maybe<Scalars['String']>;
+    eventName?: InputMaybe<Scalars['String']>;
     /** Search by organizaiton name */
-    orgName?: Maybe<Scalars['String']>;
+    orgName?: InputMaybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -636,54 +635,54 @@ export type Event = Node & {
 };
 
 export type EventquestionsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
-    viewerOnly?: Maybe<Scalars['Boolean']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
+    viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type EventbroadcastMessagesArgs = {
-    after?: Maybe<Scalars['String']>;
-    first?: Maybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
 };
 
 export type EventspeakersArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventparticipantsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventvideosArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventliveFeedbackArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventliveFeedbackPromptsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventmoderatorsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventinvitedArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventquestionQueueArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventBroadcastMessage = Node & {
@@ -729,15 +728,15 @@ export type CreateEvent = {
 };
 
 export type UpdateEvent = {
-    title?: Maybe<Scalars['String']>;
-    startDateTime?: Maybe<Scalars['Date']>;
-    endDateTime?: Maybe<Scalars['Date']>;
-    description?: Maybe<Scalars['String']>;
-    topic?: Maybe<Scalars['String']>;
-    isQuestionFeedVisible?: Maybe<Scalars['Boolean']>;
-    isCollectRatingsEnabled?: Maybe<Scalars['Boolean']>;
-    isForumEnabled?: Maybe<Scalars['Boolean']>;
-    isPrivate?: Maybe<Scalars['Boolean']>;
+    title?: InputMaybe<Scalars['String']>;
+    startDateTime?: InputMaybe<Scalars['Date']>;
+    endDateTime?: InputMaybe<Scalars['Date']>;
+    description?: InputMaybe<Scalars['String']>;
+    topic?: InputMaybe<Scalars['String']>;
+    isQuestionFeedVisible?: InputMaybe<Scalars['Boolean']>;
+    isCollectRatingsEnabled?: InputMaybe<Scalars['Boolean']>;
+    isForumEnabled?: InputMaybe<Scalars['Boolean']>;
+    isPrivate?: InputMaybe<Scalars['Boolean']>;
     eventId: Scalars['String'];
 };
 
@@ -821,12 +820,6 @@ export type Subscription = {
     questionDeleted: EventQuestionEdgeContainer;
     questionAddedToRecord: EventQuestionEdgeContainer;
     questionRemovedFromRecord: EventQuestionEdgeContainer;
-    /**
-     * Do not need to control the order that things
-     * are removed since we cannot control that on the frontend
-     * We need to control the order that things are added since
-     * we control that with append or prepend ont he frontend
-     */
     recordPushQuestion: EventQuestionEdgeContainer;
     recordUnshiftQuestion: EventQuestionEdgeContainer;
     recordRemoveQuestion: EventQuestionEdgeContainer;
@@ -879,17 +872,17 @@ export type SubscriptionparticipantMutedArgs = {
 
 export type SubscriptionquestionCreatedArgs = {
     eventId: Scalars['ID'];
-    viewerOnly?: Maybe<Scalars['Boolean']>;
+    viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionUpdatedArgs = {
     eventId: Scalars['ID'];
-    viewerOnly?: Maybe<Scalars['Boolean']>;
+    viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionDeletedArgs = {
     eventId: Scalars['ID'];
-    viewerOnly?: Maybe<Scalars['Boolean']>;
+    viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionAddedToRecordArgs = {
@@ -949,13 +942,13 @@ export type Organization = Node & {
 };
 
 export type OrganizationmembersArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type OrganizationeventsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type OrganizationEdge = {
@@ -1035,8 +1028,8 @@ export type EventLiveFeedbackPrompt = Node & {
 };
 
 export type EventLiveFeedbackPromptresponsesArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export enum Vote {
@@ -1132,8 +1125,8 @@ export type PostEventFeedbackMutationResponse = MutationResponse & {
 export type CreateFeedback = {
     message: Scalars['String'];
     eventId: Scalars['ID'];
-    refFeedbackId?: Maybe<Scalars['ID']>;
-    isReply?: Maybe<Scalars['Boolean']>;
+    refFeedbackId?: InputMaybe<Scalars['ID']>;
+    isReply?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateFeedbackPrompt = {
@@ -1297,14 +1290,14 @@ export type EventQuestionQueue = {
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueuequestionRecordArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 /** EventQuestionQueue is the entire queue of the event */
 export type EventQuestionQueueenqueuedQuestionsArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
+    first?: InputMaybe<Scalars['Int']>;
+    after?: InputMaybe<Scalars['String']>;
 };
 
 export type EventQuestionEdge = {
@@ -1327,9 +1320,9 @@ export type Like = {
 
 export type CreateQuestion = {
     question: Scalars['String'];
-    isQuote?: Maybe<Scalars['Boolean']>;
-    isFollowUp?: Maybe<Scalars['Boolean']>;
-    refQuestion?: Maybe<Scalars['ID']>;
+    isQuote?: InputMaybe<Scalars['Boolean']>;
+    isFollowUp?: InputMaybe<Scalars['Boolean']>;
+    refQuestion?: InputMaybe<Scalars['ID']>;
     eventId: Scalars['ID'];
 };
 
@@ -1400,11 +1393,11 @@ export type CreateSpeaker = {
 };
 
 export type UpdateSpeaker = {
-    name?: Maybe<Scalars['String']>;
-    title?: Maybe<Scalars['String']>;
-    description?: Maybe<Scalars['String']>;
-    pictureUrl?: Maybe<Scalars['String']>;
-    email?: Maybe<Scalars['String']>;
+    name?: InputMaybe<Scalars['String']>;
+    title?: InputMaybe<Scalars['String']>;
+    description?: InputMaybe<Scalars['String']>;
+    pictureUrl?: InputMaybe<Scalars['String']>;
+    email?: InputMaybe<Scalars['String']>;
     id: Scalars['String'];
     eventId: Scalars['String'];
 };
@@ -1451,8 +1444,8 @@ export type CreateVideo = {
 export type UpdateVideo = {
     videoId: Scalars['String'];
     eventId: Scalars['String'];
-    url?: Maybe<Scalars['String']>;
-    lang?: Maybe<Scalars['String']>;
+    url?: InputMaybe<Scalars['String']>;
+    lang?: InputMaybe<Scalars['String']>;
 };
 
 export type DeleteVideo = {
@@ -1472,30 +1465,16 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
     resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-    fragment: string;
-    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-    selectionSet: string;
-    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> =
-    | LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
-    | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
     | ResolverFn<TResult, TParent, TContext, TArgs>
-    | ResolverWithResolve<TResult, TParent, TContext, TArgs>
-    | StitchingResolver<TResult, TParent, TContext, TArgs>;
+    | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
     parent: TParent,
     args: TArgs,
     context: TContext,
     info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
     parent: TParent,
@@ -2005,26 +1984,11 @@ export type UserResolvers<
         Maybe<ResolversTypes['OrganizationConnection']>,
         ParentType,
         ContextType,
-        RequireFields<UserorganizationsArgs, never>
+        Partial<UserorganizationsArgs>
     >;
-    events?: Resolver<
-        Maybe<ResolversTypes['EventConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<UsereventsArgs, never>
-    >;
-    users?: Resolver<
-        Maybe<ResolversTypes['UserConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<UserusersArgs, never>
-    >;
-    allEvents?: Resolver<
-        Maybe<ResolversTypes['EventConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<UserallEventsArgs, never>
-    >;
+    events?: Resolver<Maybe<ResolversTypes['EventConnection']>, ParentType, ContextType, Partial<UsereventsArgs>>;
+    users?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType, Partial<UserusersArgs>>;
+    allEvents?: Resolver<Maybe<ResolversTypes['EventConnection']>, ParentType, ContextType, Partial<UserallEventsArgs>>;
     moderatorOf?: Resolver<
         Maybe<ResolversTypes['Boolean']>,
         ParentType,
@@ -2433,64 +2397,54 @@ export type EventResolvers<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventquestionsArgs, never>
+        Partial<EventquestionsArgs>
     >;
     broadcastMessages?: Resolver<
         Maybe<ResolversTypes['EventBroadcastMessagesConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventbroadcastMessagesArgs, never>
+        Partial<EventbroadcastMessagesArgs>
     >;
     speakers?: Resolver<
         Maybe<ResolversTypes['EventSpeakerConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventspeakersArgs, never>
+        Partial<EventspeakersArgs>
     >;
     registrants?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType>;
     participants?: Resolver<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventparticipantsArgs, never>
+        Partial<EventparticipantsArgs>
     >;
-    videos?: Resolver<
-        Maybe<ResolversTypes['EventVideoConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<EventvideosArgs, never>
-    >;
+    videos?: Resolver<Maybe<ResolversTypes['EventVideoConnection']>, ParentType, ContextType, Partial<EventvideosArgs>>;
     liveFeedback?: Resolver<
         Maybe<ResolversTypes['EventLiveFeedbackConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventliveFeedbackArgs, never>
+        Partial<EventliveFeedbackArgs>
     >;
     liveFeedbackPrompts?: Resolver<
         Maybe<ResolversTypes['EventLiveFeedbackPromptConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventliveFeedbackPromptsArgs, never>
+        Partial<EventliveFeedbackPromptsArgs>
     >;
     moderators?: Resolver<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventmoderatorsArgs, never>
+        Partial<EventmoderatorsArgs>
     >;
     isViewerModerator?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    invited?: Resolver<
-        Maybe<ResolversTypes['UserConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<EventinvitedArgs, never>
-    >;
+    invited?: Resolver<Maybe<ResolversTypes['UserConnection']>, ParentType, ContextType, Partial<EventinvitedArgs>>;
     isViewerInvited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     questionQueue?: Resolver<
         Maybe<ResolversTypes['EventQuestionQueue']>,
         ParentType,
         ContextType,
-        RequireFields<EventquestionQueueArgs, never>
+        Partial<EventquestionQueueArgs>
     >;
     currentQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     currentBroadcastMessage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -2770,13 +2724,13 @@ export type OrganizationResolvers<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
         ContextType,
-        RequireFields<OrganizationmembersArgs, never>
+        Partial<OrganizationmembersArgs>
     >;
     events?: Resolver<
         Maybe<ResolversTypes['EventConnection']>,
         ParentType,
         ContextType,
-        RequireFields<OrganizationeventsArgs, never>
+        Partial<OrganizationeventsArgs>
     >;
     isViewerMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2849,7 +2803,7 @@ export type EventLiveFeedbackPromptResolvers<
         Maybe<ResolversTypes['EventLiveFeedbackPromptResponseConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventLiveFeedbackPromptresponsesArgs, never>
+        Partial<EventLiveFeedbackPromptresponsesArgs>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3089,13 +3043,13 @@ export type EventQuestionQueueResolvers<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventQuestionQueuequestionRecordArgs, never>
+        Partial<EventQuestionQueuequestionRecordArgs>
     >;
     enqueuedQuestions?: Resolver<
         Maybe<ResolversTypes['EventQuestionConnection']>,
         ParentType,
         ContextType,
-        RequireFields<EventQuestionQueueenqueuedQuestionsArgs, never>
+        Partial<EventQuestionQueueenqueuedQuestionsArgs>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3299,13 +3253,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventVideoMutationResponse?: EventVideoMutationResponseResolvers<ContextType>;
 };
 
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = MercuriusContext> = Resolvers<ContextType>;
-
-type Loader<TReturn, TObj, TParams, TContext> = (
+export type Loader<TReturn, TObj, TParams, TContext> = (
     queries: Array<{
         obj: TObj;
         params: TParams;
@@ -3314,7 +3262,7 @@ type Loader<TReturn, TObj, TParams, TContext> = (
         reply: import('fastify').FastifyReply;
     }
 ) => Promise<Array<import('mercurius-codegen').DeepPartial<TReturn>>>;
-type LoaderResolver<TReturn, TObj, TParams, TContext> =
+export type LoaderResolver<TReturn, TObj, TParams, TContext> =
     | Loader<TReturn, TObj, TParams, TContext>
     | {
           loader: Loader<TReturn, TObj, TParams, TContext>;

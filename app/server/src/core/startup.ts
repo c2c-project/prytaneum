@@ -29,14 +29,13 @@ export function startup() {
 
     server.log.info('Finished server setup.');
 
-    server
-        .listen(process.env.PORT, process.env.HOST)
-        .then((address) => {
-            server.log.info(`Listening on ${address}`);
-        })
-        .catch((err) => {
+    server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
+        if (err) {
             server.log.error(err);
             server.log.fatal('Failed to start server, exiting.');
             process.exit(1);
-        });
+        } else {
+            server.log.info(`Listening on ${address}`);
+        }
+    });
 }
