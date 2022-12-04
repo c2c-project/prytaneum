@@ -79,7 +79,7 @@ export const BROADCAST_MESSAGE_MUTATION = graphql`
             message
         }
     }
-`
+`;
 
 export function EventLiveLoader() {
     return <Loader />;
@@ -135,7 +135,6 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         });
     };
 
-
     const END_EVENT_MUTATION = graphql`
         mutation EventLiveEndEventMutation($eventId: String!) {
             endEvent(eventId: $eventId) {
@@ -156,26 +155,26 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
 
-    const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION)
-    const [broadcastMessage, setBroadcastMessage] = React.useState('')
-    const handleSubmit = (event: { preventDefault: () => void; }) => {
-        event.preventDefault()
+    const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION);
+    const [broadcastMessage, setBroadcastMessage] = React.useState('');
+    const handleSubmit = (event: { preventDefault: () => void }) => {
+        event.preventDefault();
         try {
             commit({
-                variables: { input: { eventId, broadcastMessage }},
+                variables: { input: { eventId, broadcastMessage } },
                 onCompleted(payload) {
                     if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
-                    else displaySnack('broadcasted message successfully!')
-                }
-            })
+                    else displaySnack('broadcasted message successfully!');
+                },
+            });
         } catch (err) {
-            displaySnack(err.message)
+            displaySnack(err.message);
         }
-    }
+    };
 
     if (!node?.isActive && !node?.isViewerModerator) {
         // navigate to /pre if the event isn't active and the viewer isn't a moderator
-        router.push('/events/' + eventId + '/pre')
+        router.push('/events/' + eventId + '/pre');
     }
 
     if (!node) return <EventSidebarLoader />;
@@ -192,7 +191,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                                 },
                                 onCompleted() {
                                     setButtonText('Start');
-                                    alert('Event has ended!');
+                                    displaySnack('Event has ended!');
                                 },
                             })
                         }
@@ -208,7 +207,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                                 },
                                 onCompleted() {
                                     setButtonText('End');
-                                    alert('Event has started!');
+                                    displaySnack('Event has started!');
                                 },
                             })
                         }
@@ -217,14 +216,11 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
                     </button>
                 ))}
             <form onSubmit={handleSubmit}>
-                <label>Broadcast message:
-                    <input 
-                    type='text'
-                    value={broadcastMessage}
-                    onChange={(e) => setBroadcastMessage(e.target.value)}
-                    />
+                <label>
+                    Broadcast message:
+                    <input type='text' value={broadcastMessage} onChange={(e) => setBroadcastMessage(e.target.value)} />
                 </label>
-                <input type='submit' value='send'/>
+                <input type='submit' value='send' />
             </form>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
@@ -283,8 +279,12 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
     return (
-        <React.Suspense fallback={<EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />}>
+        <React.Suspense
+            fallback={
+                <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />
+            }
+        >
             <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />
         </React.Suspense>
-    )
+    );
 }
