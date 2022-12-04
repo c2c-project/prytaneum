@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { CountdownWrapper } from '@local/components/Countdown';
-import { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
-import { EVENT_LIVE_QUERY } from './EventLive';
+import { EventPreQuery } from '@local/__generated__/EventPreQuery.graphql';
 import React from 'react';
 import { EventContext } from './EventContext';
 import { ConditionalRender } from '../../components/ConditionalRender';
@@ -22,25 +21,26 @@ const styles = {
     },
 };
 
-// const EVENT_PRE_QUERY = graphql`
-//     query EventPreQuery($eventId: ID!) {
-//         event(id: $eventId) {
-//             id
-//             name
-//             startTime
-//             endTime
-//             ...EventContextFragment
-//         }
-//     }
-// `;
+const EVENT_PRE_QUERY = graphql`
+    query EventPreQuery($eventId: ID!) {
+        node(id: $eventId) {
+            id
+            ... on Event {
+                isViewerModerator
+                startDateTime
+                isActive
+            }
+        }
+    }
+`;
 
 export interface PreloadedEventLiveProps {
-    eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
+    eventLiveQueryRef: PreloadedQuery<EventPreQuery>;
 }
 
 export function EventPre({ eventLiveQueryRef }: PreloadedEventLiveProps) {
     const router = useRouter();
-    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
+    const { node } = usePreloadedQuery(EVENT_PRE_QUERY, eventLiveQueryRef);
     // used to create the countdown component
     const date = node?.startDateTime as Date;
     // used to check whether the event is on-going
@@ -76,7 +76,7 @@ export interface PreloadedEventPreProps {
 
 // TODO: Update this to PRE_LIVE_EVENT
 export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
-    const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+    const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventPreQuery>(EVENT_PRE_QUERY);
 
     React.useEffect(() => {
         loadEventQuery({ eventId });
