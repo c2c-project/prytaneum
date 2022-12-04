@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { fetchQuery, graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { CountdownWrapper } from '@local/components/Countdown';
 import { EventPreQuery } from '@local/__generated__/EventPreQuery.graphql';
 import React from 'react';
 import { EventContext } from './EventContext';
 import { ConditionalRender } from '../../components/ConditionalRender';
 import { PreloadedBroadcastMessageList } from './BroadcastMessages/BroadcastMessageList/BroadcastMessageList';
+import { useEnvironment } from '@local/core';
 
 const styles = {
     justifyCenter: {
@@ -78,6 +79,27 @@ export interface PreloadedEventPreProps {
 export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventPreQuery>(EVENT_PRE_QUERY);
 
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, EVENT_PRE_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadEventQuery]);
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            refresh();
+        }, 5000);
+        return () => clearInterval(interval);
+    });
     React.useEffect(() => {
         loadEventQuery({ eventId });
     }, [eventId, loadEventQuery]);
