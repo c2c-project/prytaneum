@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation, fetchQuery } from 'react-relay';
 import { Loader } from '@local/components/Loader';
 import { useRouter } from 'next/router';
 
@@ -19,7 +19,7 @@ import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
-import { useSnack } from '@local/core';
+import { useEnvironment, useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -135,6 +135,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         });
     };
 
+    // mutation to stop the event (set isActive to false)
     const END_EVENT_MUTATION = graphql`
         mutation EventLiveEndEventMutation($eventId: String!) {
             endEvent(eventId: $eventId) {
@@ -142,7 +143,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
             }
         }
     `;
-    // mutation to stop the event (set isActive to false)
+    // mutation to start the event (set isActive to true)
     const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(END_EVENT_MUTATION);
     const START_EVENT_MUTATION = graphql`
         mutation EventLiveStartEventMutation($eventId: String!) {
@@ -151,7 +152,6 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
             }
         }
     `;
-    // mutation to start the event (set isActive to true)
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
 
@@ -172,8 +172,10 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         }
     };
 
+    console.log('helloooo');
     if (!node?.isActive && !node?.isViewerModerator) {
         // navigate to /pre if the event isn't active and the viewer isn't a moderator
+        console.log('whyyy');
         router.push('/events/' + eventId + '/pre');
     }
 
@@ -248,21 +250,21 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
-    // const [isRefreshing, setIsRefreshing] = React.useState(false);
-    // const { env } = useEnvironment();
-    // const refresh = React.useCallback(() => {
-    //     if (isRefreshing) return;
-    //     setIsRefreshing(true);
-    //     fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
-    //         complete: () => {
-    //             setIsRefreshing(false);
-    //             loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
-    //         },
-    //         error: () => {
-    //             setIsRefreshing(false);
-    //         },
-    //     });
-    // }, [env, eventId, isRefreshing, loadEventQuery]);
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadEventQuery]);
     React.useEffect(() => {
         if (!eventLiveQueryRef) loadEventQuery({ eventId });
     }, [eventId, eventLiveQueryRef, loadEventQuery]);
@@ -270,12 +272,12 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
         if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
         if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
     }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
-    // React.useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         refresh();
-    //     }, 5000);
-    //     return () => clearInterval(interval);
-    // });
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            refresh();
+        }, 5000);
+        return () => clearInterval(interval);
+    });
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
     return (
