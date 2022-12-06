@@ -8,7 +8,7 @@ export async function getServerSideProps() {
     const baseProps = {
         hideSideNav: true,
         containerProps: { maxWidth: 'xl' },
-        disablePadding: true
+        disablePadding: true,
     };
 
     return { props: baseProps };
@@ -16,7 +16,8 @@ export async function getServerSideProps() {
 
 export default function Pre() {
     const router = useRouter();
-    
+
+    if (!router.isReady) return <EventLiveLoader />;
     return (
         <div>
             <ConditionalRender client>
@@ -25,5 +26,5 @@ export default function Pre() {
                 </React.Suspense>
             </ConditionalRender>
         </div>
-    )
+    );
 }
