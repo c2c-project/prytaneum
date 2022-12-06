@@ -123,11 +123,11 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageL
                 <Grid item xs={12}>
                     <List disablePadding>
                         {filteredList.map((broadcastMessage, index) => (
-                            <>
+                            <React.Fragment key={broadcastMessage.id}>
                                 {isMessageDeleted(index) ? (
-                                    <> </>
+                                    <React.Fragment />
                                 ) : (
-                                    <ListItem disableGutters key={broadcastMessage.id}>
+                                    <ListItem disableGutters>
                                         <Card className={classes.item}>
                                             <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
                                             <BroadcastMessageContent fragmentRef={broadcastMessage} />
@@ -149,7 +149,7 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageL
                                         </Card>
                                     </ListItem>
                                 )}
-                            </>
+                            </React.Fragment>
                         ))}
                         {filteredList.length === 0 && broadcastMessages.length !== 0 && (
                             <Typography align='center' variant='body2'>
@@ -181,14 +181,13 @@ function BroadcastMessageList({ queryRef }: BroadcastMessageListProps) {
 export interface PreloadedBroadcastMessageListProps {}
 
 export function PreloadedBroadcastMessageList() {
-    const [queryRef, loadQuery] = useQueryLoader<BroadcastMessageListQuery>(BROADCAST_MESSAGE_LIST_QUERY);
+    const [queryRef, loadQuery, disposeQuery] = useQueryLoader<BroadcastMessageListQuery>(BROADCAST_MESSAGE_LIST_QUERY);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
     const { eventId } = useEvent();
     const REFRESH_INTERVAL = 15000; // 15 seconds
 
     const refresh = React.useCallback(() => {
-        console.log('refreshing broadcast messages');
         if (isRefreshing) return;
         setIsRefreshing(true);
         fetchQuery(env, BROADCAST_MESSAGE_LIST_QUERY, { eventId }).subscribe({
@@ -204,10 +203,14 @@ export function PreloadedBroadcastMessageList() {
 
     // Fetches up to date data on initial load and sets up polling
     React.useEffect(() => {
-        console.log('initial broadcast messages load');
         if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'network-only' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
+    }, [eventId, loadQuery, queryRef, refresh]);
+
+    React.useEffect(() => {
+        return () => disposeQuery();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!queryRef) return <Loader />;
