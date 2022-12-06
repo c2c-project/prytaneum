@@ -66,7 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
-            ["@playwright/test", "npm:1.25.2"],\
+            ["@playwright/test", "npm:1.28.1"],\
             ["@types/node", "npm:14.14.41"],\
             ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
@@ -12629,15 +12629,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@playwright/test", [\
-        ["npm:1.25.2", {\
-          "packageLocation": "./.yarn/cache/@playwright-test-npm-1.25.2-8da79c4411-3c24027bd9.zip/node_modules/@playwright/test/",\
-          "packageDependencies": [\
-            ["@playwright/test", "npm:1.25.2"],\
-            ["@types/node", "npm:14.14.41"],\
-            ["playwright-core", "npm:1.25.2"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:1.28.1", {\
           "packageLocation": "./.yarn/cache/@playwright-test-npm-1.28.1-b090e47146-dc39dfdf84.zip/node_modules/@playwright/test/",\
           "packageDependencies": [\
@@ -35097,13 +35088,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["playwright-core", [\
-        ["npm:1.25.2", {\
-          "packageLocation": "./.yarn/unplugged/playwright-core-npm-1.25.2-734de773d7/node_modules/playwright-core/",\
-          "packageDependencies": [\
-            ["playwright-core", "npm:1.25.2"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:1.28.1", {\
           "packageLocation": "./.yarn/unplugged/playwright-core-npm-1.28.1-ec5428623a/node_modules/playwright-core/",\
           "packageDependencies": [\
@@ -36656,7 +36640,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.2"],\
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.2.2"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.4.3"],\
-            ["@playwright/test", "npm:1.25.2"],\
+            ["@playwright/test", "npm:1.28.1"],\
             ["@types/node", "npm:14.14.41"],\
             ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\

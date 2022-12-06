@@ -7504,18 +7504,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.25.2":
-  version: 1.25.2
-  resolution: "@playwright/test@npm:1.25.2"
-  dependencies:
-    "@types/node": "*"
-    playwright-core: 1.25.2
-  bin:
-    playwright: cli.js
-  checksum: 3c24027bd9b305a3985cae35a4046e656dd0ffb76ef4dfcfc864f6c8492a643fc21c79048ee8169c5c1562d3cae493e7223a5473b127fef3bda7c7c52795c17d
-  languageName: node
-  linkType: hard
-
 "@playwright/test@npm:^1.28.1":
   version: 1.28.1
   resolution: "@playwright/test@npm:1.28.1"
@@ -25791,15 +25779,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.25.2":
-  version: 1.25.2
-  resolution: "playwright-core@npm:1.25.2"
-  bin:
-    playwright: cli.js
-  checksum: 24ada61e2132bd7278cf0aa0ef711280e1519c437efa0088a99c47ef994202f4c9880521d8c0c51ab854bef08806f372477d754aac1e790ea64f18cd346b5b2f
-  languageName: node
-  linkType: hard
-
 "playwright-core@npm:1.28.1":
   version: 1.28.1
   resolution: "playwright-core@npm:1.28.1"
@@ -26831,7 +26810,7 @@ fsevents@^1.2.7:
     "@graphql-codegen/typescript": ^2.4.2
     "@graphql-codegen/typescript-operations": ^2.2.2
     "@graphql-codegen/typescript-resolvers": ^2.4.3
-    "@playwright/test": ^1.25.2
+    "@playwright/test": ^1.28.1
     "@types/node": ^14.14.41
     concurrently: ^7.2.2
     eslint: ^8.9.0
