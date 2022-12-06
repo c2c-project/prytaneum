@@ -99,12 +99,14 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     const PromptResponseList = () => {
         if (selectedPromptRef.current) {
             return (
-                <React.Suspense fallback={<Loader />}>
-                    <PreloadedLiveFeedbackPromptResponseList prompt={selectedPromptRef.current} />
-                </React.Suspense>
+                <ConditionalRender client>
+                    <React.Suspense fallback={<Loader />}>
+                        <PreloadedLiveFeedbackPromptResponseList prompt={selectedPromptRef.current} />
+                    </React.Suspense>
+                </ConditionalRender>
             );
         }
-        return null;
+        return <></>;
     };
 
     return (
@@ -158,7 +160,6 @@ export function PreloadedLiveFeedbackPromptList() {
 
     const refresh = React.useCallback(() => {
         if (isRefreshing || responsesModalStatusRef.current) return;
-        console.log('refreshing');
         setIsRefreshing(true);
         fetchQuery(env, LIVE_FEEDBACK_PROMPT_LIST_QUERY, { eventId }).subscribe({
             complete: () => {
@@ -172,7 +173,9 @@ export function PreloadedLiveFeedbackPromptList() {
     }, [env, eventId, isRefreshing, loadQuery]);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'network-only' });
+        // Fetch data from store and network on initial load
+        // This Ensures any cached data is displayed right away but will still be kept up to date
+        if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'store-and-network' });
         const interval = setInterval(refresh, REFETCH_INTERVAL);
         return () => clearInterval(interval);
     }, [eventId, loadQuery, queryRef, refresh]);
@@ -184,16 +187,5 @@ export function PreloadedLiveFeedbackPromptList() {
     }, []);
 
     if (!queryRef) return <Loader />;
-    return (
-        <ConditionalRender client>
-            {/* Suspense workaround to avoid component flashing during refetch */}
-            <React.Suspense
-                fallback={
-                    <LiveFeedbackPromptList queryRef={queryRef} responsesModalStatusRef={responsesModalStatusRef} />
-                }
-            >
-                <LiveFeedbackPromptList queryRef={queryRef} responsesModalStatusRef={responsesModalStatusRef} />
-            </React.Suspense>
-        </ConditionalRender>
-    );
+    return <LiveFeedbackPromptList queryRef={queryRef} responsesModalStatusRef={responsesModalStatusRef} />;
 }

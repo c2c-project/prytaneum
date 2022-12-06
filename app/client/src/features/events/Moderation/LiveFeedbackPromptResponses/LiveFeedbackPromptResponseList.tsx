@@ -211,7 +211,9 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
     }, [env, isRefreshing, loadQuery, promptId]);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'network-only' });
+        // Fetch data from store and network on initial load
+        // This Ensures any cached data is displayed right away but will still be kept up to date
+        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'store-and-network' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
     }, [loadQuery, promptId, queryRef, refresh]);

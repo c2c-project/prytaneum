@@ -4,6 +4,7 @@ import { PresentToAll } from '@mui/icons-material';
 
 import { PreloadedLiveFeedbackPromptList } from './LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { Loader } from '@local/components/Loader';
+import { ConditionalRender } from '@local/components';
 
 /**
  * A modal that opens when moderators click on the "Share Feedback Results" button
@@ -48,9 +49,11 @@ export function ShareFeedbackResults() {
                         <Typography className='modal-description' variant='body1' paddingTop='1rem'>
                             Select a feedback prompt to see the responses
                         </Typography>
-                        <React.Suspense fallback={<Loader />}>
-                            <PreloadedLiveFeedbackPromptList />
-                        </React.Suspense>
+                        <ConditionalRender client>
+                            <React.Suspense fallback={<Loader />}>
+                                <PreloadedLiveFeedbackPromptList />
+                            </React.Suspense>
+                        </ConditionalRender>
                     </Grid>
                 </Box>
             </Modal>
