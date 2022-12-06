@@ -118,6 +118,8 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ feedbackPrompted: EventLiveFeedbackPrompt }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('feedbackPrompted'),
                 (payload, args, ctx) => {
+                    // Check that user is logged in
+                    if (!ctx.viewer.id) return false;
                     const { id: feedbackPromptId } = fromGlobalId(payload.feedbackPrompted.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     // TODO only update to non moderator participants
