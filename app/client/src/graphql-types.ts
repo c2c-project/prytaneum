@@ -153,7 +153,7 @@ export type Event = Node & {
   /** Creator of this event */
   createdBy?: Maybe<User>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
-  currentQuestion?: Maybe<Scalars['String']>;
+  currentQuestion?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['String']>;
   /** The planned end date time string */
   endDateTime?: Maybe<Scalars['Date']>;
@@ -424,7 +424,7 @@ export type EventQuestion = Node & {
   likedBy?: Maybe<UserConnection>;
   /** Find the count of the likes only */
   likedByCount?: Maybe<Scalars['Int']>;
-  position: Scalars['String'];
+  position?: Maybe<Scalars['Int']>;
   /** The actual content of the question */
   question?: Maybe<Scalars['String']>;
   refQuestion?: Maybe<EventQuestion>;
@@ -1174,7 +1174,7 @@ export type UpdatePasswordForm = {
 
 export type UpdateQuestionPosition = {
   eventId: Scalars['ID'];
-  position: Scalars['String'];
+  position: Scalars['Int'];
   questionId: Scalars['ID'];
 };
 

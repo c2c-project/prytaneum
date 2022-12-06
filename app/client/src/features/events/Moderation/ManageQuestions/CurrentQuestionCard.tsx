@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     relative: {
         position: 'relative',
         overflow: 'visible',
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(3)
     },
     answeringNow: {
         padding: theme.spacing(0.5),
@@ -36,18 +36,18 @@ const useStyles = makeStyles((theme) => ({
         background: theme.palette.background.default,
         color: 'white',
         textTransform: 'uppercase',
-        fontWeight: 600,
+        fontWeight: 600
     },
     currentQuestionActions: {
-        padding: theme.spacing(0, 1, 1, 1),
+        padding: theme.spacing(0, 1, 1, 1)
     },
     text: {
         margin: 'auto',
-        paddingTop: '20px',
+        paddingTop: '20px'
     },
     typographyContainer: {
         alignItems: 'center',
-    },
+    }
 }));
 
 interface QuestionQueueProps {
@@ -88,14 +88,14 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
         () =>
             questionQueue?.enqueuedQuestions?.edges
                 ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
-                ?.sort(({ node: a }, { node: b }) => (parseInt(a?.position) ?? 0) - (parseInt(b?.position) ?? 0)) ?? [],
+                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
         [questionQueue]
     );
     const questionRecord = React.useMemo(
         () =>
             questionQueue?.questionRecord?.edges
                 ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
-                ?.sort(({ node: a }, { node: b }) => (parseInt(a?.position) ?? 0) - (parseInt(b?.position) ?? 0)) ?? [],
+                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
         [questionQueue]
     );
     const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
@@ -105,35 +105,26 @@ export function CurrentQuestionCard({ isViewerModerator, fragmentRef }: Question
         [questionRecord]
     );
 
-    return (
-        <>
-            <Card className={`${classes.item} ${classes.relative}`}>
-                <Chip
-                    color='secondary'
-                    icon={<BookmarkIcon fontSize='small' />}
-                    label='Answering Now'
-                    className={classes.answeringNow}
-                />
-                {currentQuestion && <QuestionAuthor fragmentRef={currentQuestion.node} />}
-                {currentQuestion && currentQuestion.node.refQuestion && (
-                    <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />
-                )}
-                {currentQuestion && <QuestionContent fragmentRef={currentQuestion.node} />}
-                <Grid container alignItems='center' className={classes.typographyContainer}>
-                    {!currentQuestion && <Typography className={classes.text}>No Current Question</Typography>}
+    return <>
+        <Card className={`${classes.item} ${classes.relative}`}>
+            <Chip
+                color='secondary'
+                icon={<BookmarkIcon fontSize='small' />}
+                label='Answering Now'
+                className={classes.answeringNow}
+            />
+            { currentQuestion && <QuestionAuthor fragmentRef={currentQuestion.node} />}
+            {currentQuestion && currentQuestion.node.refQuestion && <QuestionQuote fragmentRef={currentQuestion.node.refQuestion} />}
+            {currentQuestion && <QuestionContent fragmentRef={currentQuestion.node} />}
+            <Grid container alignItems='center' className={classes.typographyContainer}>
+                {!currentQuestion && <Typography className={classes.text}>No Current Question</Typography>} 
+            </Grid>
+            { isViewerModerator &&
+                <Grid container alignItems='center' justifyContent='space-between' className={classes.currentQuestionActions}>
+                    <PreviousQuestionButton disabled={!canGoBackward} />
+                    <NextQuestionButton disabled={!canGoForward} />
                 </Grid>
-                {isViewerModerator && (
-                    <Grid
-                        container
-                        alignItems='center'
-                        justifyContent='space-between'
-                        className={classes.currentQuestionActions}
-                    >
-                        <PreviousQuestionButton disabled={!canGoBackward} />
-                        <NextQuestionButton disabled={!canGoForward} />
-                    </Grid>
-                )}
-            </Card>
-        </>
-    );
+            }
+        </Card>
+    </>;
 }

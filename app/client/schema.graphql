@@ -148,7 +148,7 @@ type Event implements Node {
   """
   The question currently being asked, corresponds to a "position" value on the event question
   """
-  currentQuestion: String
+  currentQuestion: Int
   description: String
 
   """The planned end date time string"""
@@ -369,7 +369,7 @@ type EventQuestion implements Node {
 
   """Find the count of the likes only"""
   likedByCount: Int
-  position: String!
+  position: Int
 
   """The actual content of the question"""
   question: String
@@ -766,7 +766,7 @@ input UpdatePasswordForm {
 
 input UpdateQuestionPosition {
   eventId: ID!
-  position: String!
+  position: Int!
   questionId: ID!
 }
 
