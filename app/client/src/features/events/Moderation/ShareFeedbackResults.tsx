@@ -3,6 +3,7 @@ import { Button, Modal, Box, Typography, Grid } from '@mui/material';
 import { PresentToAll } from '@mui/icons-material';
 
 import { PreloadedLiveFeedbackPromptList } from './LiveFeedbackPrompt/LiveFeedbackPromptList';
+import { Loader } from '@local/components/Loader';
 
 /**
  * A modal that opens when moderators click on the "Share Feedback Results" button
@@ -47,7 +48,9 @@ export function ShareFeedbackResults() {
                         <Typography className='modal-description' variant='body1' paddingTop='1rem'>
                             Select a feedback prompt to see the responses
                         </Typography>
-                        <PreloadedLiveFeedbackPromptList />
+                        <React.Suspense fallback={<Loader />}>
+                            <PreloadedLiveFeedbackPromptList />
+                        </React.Suspense>
                     </Grid>
                 </Box>
             </Modal>

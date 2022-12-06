@@ -3,7 +3,7 @@ import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, fetchQuery 
 import { List, ListItem, Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import { Chart } from 'react-google-charts';
 
-import { ConditionalRender, Loader } from '@local/components';
+import { Loader } from '@local/components';
 import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFeedbackPromptResponseListQuery.graphql';
 import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
@@ -182,7 +182,7 @@ interface PreloadedLiveFeedbackPromptResponseListProps {
 }
 
 export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiveFeedbackPromptResponseListProps) {
-    const [queryRef, loadQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
+    const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -214,15 +214,14 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
         if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'network-only' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
+    }, [loadQuery, promptId, queryRef, refresh]);
+
+    React.useEffect(() => {
+        // Cleanup query on component unmount
+        return () => disposeQuery();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!queryRef) return <Loader />;
-    return (
-        <ConditionalRender client>
-            {/* Suspense workaround to avoid component flashing during refetch */}
-            <React.Suspense fallback={<LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />}>
-                <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />
-            </React.Suspense>
-        </ConditionalRender>
-    );
+    return <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />;
 }

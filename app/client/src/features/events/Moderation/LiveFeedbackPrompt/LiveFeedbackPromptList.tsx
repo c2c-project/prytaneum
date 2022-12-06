@@ -1,47 +1,44 @@
 import * as React from 'react';
-import { graphql, PreloadedQuery, useQueryLoader, usePreloadedQuery } from 'react-relay';
-import type { FragmentRefs } from 'relay-runtime';
+import { graphql, PreloadedQuery, useQueryLoader, usePreloadedQuery, fetchQuery } from 'react-relay';
 import { List, ListItem, Card, CardContent, Typography, Grid, IconButton, Modal, Box } from '@mui/material';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 
-import type { useLiveFeedbackPromptsFragment$key } from '@local/__generated__/useLiveFeedbackPromptsFragment.graphql';
 import { LiveFeedbackPromptListQuery } from '@local/__generated__/LiveFeedbackPromptListQuery.graphql';
-import { useLiveFeedbackPrompts } from './useLiveFeedbackPrompts';
 import { useEvent } from '@local/features/events/useEvent';
 import { ConditionalRender } from '@local/components';
 import { Loader } from '@local/components/Loader';
 import { PreloadedLiveFeedbackPromptResponseList } from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
+import { useEnvironment } from '@local/core';
 
 export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
     query LiveFeedbackPromptListQuery($eventId: ID!) {
-        event(eventId: $eventId) {
-            ...useLiveFeedbackPromptsFragment
+        prompts(eventId: $eventId) {
+            id
+            prompt
+            isVote
+            isOpenEnded
+            createdAt
         }
     }
 `;
 
 export type Prompt = {
-    cursor: string;
-    id: string;
-    prompt: string;
-    isVote: boolean | null;
-    isOpenEnded: boolean | null;
-    createdAt: Date | null;
-    ' $fragmentSpreads': FragmentRefs<'useLiveFeedbackPromptResponsesFragment'>;
+    readonly id: string;
+    readonly prompt: string;
+    readonly isVote: boolean | null;
+    readonly isOpenEnded: boolean | null;
+    readonly createdAt: Date | null;
 };
 
 interface PromptListProps {
-    fragmentRef: useLiveFeedbackPromptsFragment$key;
+    prompts: readonly Prompt[];
     handleClick: (prompt: Prompt) => void;
-    modalIsOpen: boolean;
 }
 
 /**
  * This component is responsible for rendering the live feedback prompts using the provided fragment Ref
  */
-function PromptList({ fragmentRef, handleClick, modalIsOpen }: PromptListProps) {
-    const { prompts } = useLiveFeedbackPrompts({ fragmentRef, modalIsOpen });
-
+function PromptList({ prompts, handleClick }: PromptListProps) {
     return (
         <List id='live-feedback-prompt-list'>
             {prompts.map((prompt) => (
@@ -72,18 +69,25 @@ function PromptList({ fragmentRef, handleClick, modalIsOpen }: PromptListProps) 
 
 interface LiveFeedbackPromptListProps {
     queryRef: PreloadedQuery<LiveFeedbackPromptListQuery>;
+    responsesModalStatusRef: React.MutableRefObject<boolean>;
 }
 
 /**
  * This component is responsible for loading the query and passing the fragment ref to the PromptList component
  */
-function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
-    const { event } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_LIST_QUERY, queryRef);
+function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedbackPromptListProps) {
+    const { prompts } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_LIST_QUERY, queryRef);
     const [open, setOpen] = React.useState(false);
     const selectedPromptRef = React.useRef<Prompt | null>(null);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpen = () => {
+        setOpen(true);
+        responsesModalStatusRef.current = true;
+    };
+    const handleClose = () => {
+        setOpen(false);
+        responsesModalStatusRef.current = false;
+    };
 
     const handlePromptClick = (prompt: Prompt) => {
         // Update the selected prompt ref
@@ -92,10 +96,20 @@ function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
         handleOpen();
     };
 
-    if (!event) return <Loader />;
+    const PromptResponseList = () => {
+        if (selectedPromptRef.current) {
+            return (
+                <React.Suspense fallback={<Loader />}>
+                    <PreloadedLiveFeedbackPromptResponseList prompt={selectedPromptRef.current} />
+                </React.Suspense>
+            );
+        }
+        return null;
+    };
+
     return (
         <React.Fragment>
-            <PromptList fragmentRef={event} handleClick={handlePromptClick} modalIsOpen={open} />
+            {!prompts ? <Loader /> : <PromptList prompts={prompts} handleClick={handlePromptClick} />}
             <Modal
                 open={open}
                 style={{
@@ -121,9 +135,7 @@ function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
                         <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
                             Feedback Responses
                         </Typography>
-                        {selectedPromptRef.current && (
-                            <PreloadedLiveFeedbackPromptResponseList prompt={selectedPromptRef.current} />
-                        )}
+                        <PromptResponseList />
                     </Grid>
                 </Box>
             </Modal>
@@ -135,19 +147,52 @@ function LiveFeedbackPromptList({ queryRef }: LiveFeedbackPromptListProps) {
  * This component is used to create the query for the LiveFeedbackPromptList
  */
 export function PreloadedLiveFeedbackPromptList() {
-    const [queryRef, loadQuery] = useQueryLoader<LiveFeedbackPromptListQuery>(LIVE_FEEDBACK_PROMPT_LIST_QUERY);
+    const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveFeedbackPromptListQuery>(
+        LIVE_FEEDBACK_PROMPT_LIST_QUERY
+    );
     const { eventId } = useEvent();
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const responsesModalStatusRef = React.useRef<boolean>(false);
+    const { env } = useEnvironment();
+    const REFETCH_INTERVAL = 20000; // 20 seconds
+
+    const refresh = React.useCallback(() => {
+        if (isRefreshing || responsesModalStatusRef.current) return;
+        console.log('refreshing');
+        setIsRefreshing(true);
+        fetchQuery(env, LIVE_FEEDBACK_PROMPT_LIST_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadQuery]);
 
     React.useEffect(() => {
         if (!queryRef) loadQuery({ eventId }, { fetchPolicy: 'network-only' });
+        const interval = setInterval(refresh, REFETCH_INTERVAL);
+        return () => clearInterval(interval);
+    }, [eventId, loadQuery, queryRef, refresh]);
+
+    React.useEffect(() => {
+        // Cleanup query on component unmount
+        return () => disposeQuery();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!queryRef) return <Loader />;
     return (
         <ConditionalRender client>
             {/* Suspense workaround to avoid component flashing during refetch */}
-            <React.Suspense fallback={<LiveFeedbackPromptList queryRef={queryRef} />}>
-                <LiveFeedbackPromptList queryRef={queryRef} />
+            <React.Suspense
+                fallback={
+                    <LiveFeedbackPromptList queryRef={queryRef} responsesModalStatusRef={responsesModalStatusRef} />
+                }
+            >
+                <LiveFeedbackPromptList queryRef={queryRef} responsesModalStatusRef={responsesModalStatusRef} />
             </React.Suspense>
         </ConditionalRender>
     );
