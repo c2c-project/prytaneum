@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<57799113975d149aa31070abb6abf24b>>
+ * @generated SignedSource<<b3b27ee97519cc48be1c7ae33ae978ba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EventDetailsCardFragment$data = {
   readonly id: string;
@@ -27,7 +27,16 @@ export type EventDetailsCardFragment$key = {
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./EventDetailsCardRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "EventDetailsCardFragment",
   "selections": [
     {
@@ -70,6 +79,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "ae3a9a413619b0f8684d73e066c4290e";
+(node as any).hash = "313ed1cb419c631e37e35aef7034117a";
 
 export default node;

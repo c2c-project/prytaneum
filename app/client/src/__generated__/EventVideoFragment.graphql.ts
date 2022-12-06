@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7ab43f273f868615b90de07a507f105d>>
+ * @generated SignedSource<<b345d7bbbae80295a234043dabc71d7b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EventVideoFragment$data = {
   readonly videos: {
@@ -20,6 +20,7 @@ export type EventVideoFragment$data = {
       };
     }> | null;
   } | null;
+  readonly id: string;
   readonly " $fragmentType": "EventVideoFragment";
 };
 export type EventVideoFragment = EventVideoFragment$data;
@@ -31,7 +32,16 @@ export type EventVideoFragment$key = {
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./EventVideoRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "EventVideoFragment",
   "selections": [
     {
@@ -87,12 +97,19 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
 
-(node as any).hash = "acc5636c631dd6f529095f96d1ef93c8";
+(node as any).hash = "497d6ec5dcdba88a4e48b9d8a1bd419e";
 
 export default node;
