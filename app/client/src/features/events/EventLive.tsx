@@ -5,7 +5,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation, fetchQuery } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
+import type { FragmentRefs } from 'relay-runtime';
 import { Loader } from '@local/components/Loader';
 import { useRouter } from 'next/router';
 
@@ -19,7 +20,7 @@ import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
-import { useEnvironment, useSnack } from '@local/core';
+import { useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,24 +86,23 @@ export function EventLiveLoader() {
     return <Loader />;
 }
 
-export interface PreloadedEventLiveProps {
-    eventId: string;
-    token?: string;
+type Node = {
+    readonly id: string;
+    readonly isViewerModerator?: boolean | null | undefined;
+    readonly startDateTime?: Date | null | undefined;
+    readonly isActive?: boolean | null | undefined;
+    readonly ' $fragmentSpreads': FragmentRefs<any>;
+};
+
+interface EventLiveProps {
+    node: Node;
 }
 
-export interface EventLiveProps {
-    eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
-    validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
-}
-
-export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
+function EventLive({ node }: EventLiveProps) {
     const { displaySnack } = useSnack();
 
     const router = useRouter();
     const eventId = router.query.id as string;
-
-    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
 
     // styles
     const classes = useStyles();
@@ -153,10 +153,11 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         }
     `;
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
-    const [buttonText, setButtonText] = React.useState(node?.isActive ? 'End' : 'Start');
+    const [buttonText, setButtonText] = React.useState(node.isActive ? 'End' : 'Start');
 
     const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION);
     const [broadcastMessage, setBroadcastMessage] = React.useState('');
+
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
         try {
@@ -172,12 +173,9 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
         }
     };
 
-    console.log('helloooo');
-    if (!node?.isActive && !node?.isViewerModerator) {
-        // navigate to /pre if the event isn't active and the viewer isn't a moderator
-        console.log('whyyy');
-        router.push('/events/' + eventId + '/pre');
-    }
+    React.useEffect(() => {
+        if (!node.isActive && !node.isViewerModerator) router.push('/events/' + eventId + '/pre');
+    }, [eventId, node.isActive, node.isViewerModerator, router]);
 
     if (!node) return <EventSidebarLoader />;
 
@@ -247,46 +245,44 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     );
 }
 
+interface EventLiveContainerProps {
+    eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
+    validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
+}
+
+function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveContainerProps) {
+    const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
+    const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+
+    // TODO: Implement private event validation here
+
+    if (!node || !validateInvite) return <Loader />;
+    return <EventLive node={node} />;
+}
+
+export interface PreloadedEventLiveProps {
+    eventId: string;
+    token?: string;
+}
+
 export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) {
-    const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
+    const [eventLiveQueryRef, loadEventQuery, disposeQuery] = useQueryLoader<EventLiveQuery>(EVENT_LIVE_QUERY);
     const [validateInviteQueryRef, loadInviteQuery] = useQueryLoader<ValidateInviteQuery>(VALIDATE_INVITE_QUERY);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, EVENT_LIVE_QUERY, { eventId }).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, eventId, isRefreshing, loadEventQuery]);
+
     React.useEffect(() => {
         if (!eventLiveQueryRef) loadEventQuery({ eventId });
     }, [eventId, eventLiveQueryRef, loadEventQuery]);
+
     React.useEffect(() => {
         if (!token && !validateInviteQueryRef) loadInviteQuery({ token: '', eventId });
         if (token && !validateInviteQueryRef) loadInviteQuery({ token, eventId });
     }, [validateInviteQueryRef, loadInviteQuery, eventId, token]);
+
     React.useEffect(() => {
-        const interval = setInterval(() => {
-            refresh();
-        }, 5000);
-        return () => clearInterval(interval);
-    });
+        return () => disposeQuery();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
-    return (
-        <React.Suspense
-            fallback={
-                <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />
-            }
-        >
-            <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />
-        </React.Suspense>
-    );
+    return <EventLiveContainer eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
 }
