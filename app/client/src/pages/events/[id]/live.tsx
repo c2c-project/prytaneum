@@ -22,7 +22,7 @@ export async function getServerSideProps() {
     const baseProps = {
         hideSideNav: true,
         containerProps: { maxWidth: 'xl' },
-        disablePadding: true
+        disablePadding: true,
     };
 
     return { props: baseProps };
@@ -31,7 +31,7 @@ export async function getServerSideProps() {
 const Live: NextPage = () => {
     const router = useRouter();
     const classes = useStyles();
-    
+
     if (!router.isReady) return <EventLiveLoader />;
 
     return (
@@ -47,6 +47,5 @@ const Live: NextPage = () => {
         </div>
     );
 };
-
 
 export default Live;
