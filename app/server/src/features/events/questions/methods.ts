@@ -157,5 +157,5 @@ export async function isEnqueued(questionId: string, prisma: PrismaClient) {
             userMessage: ProtectedError.internalServerErrorMessage,
             internalMessage: `Could not find a question with id ${questionId}.`,
         });
-    return queryResult.position !== -1;
+    return parseInt(queryResult.position) !== -1;
 }

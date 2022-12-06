@@ -138,10 +138,12 @@ function useStyledQueue({ eventId }: { eventId: string }) {
             // NOTE: race condition, since we're using time for ordering, then adding 1000 ms (1s) will mean that the order
             // at the very end may be messed up, but that's okay, the start is what's important
             const maxPos =
-                maxIdx === list.length ? (list[list.length - 1].node.position ?? 0) + 1000 : list[maxIdx].node.position;
+                maxIdx === list.length
+                    ? (parseInt(list[list.length - 1].node.position) ?? 0) + 1000
+                    : parseInt(list[maxIdx].node.position);
 
             // if minIdx === -1, then we're moving to the start of the list, hence special logic
-            const minPos = minIdx === -1 ? minPosition : list[minIdx].node.position;
+            const minPos = minIdx === -1 ? minPosition : parseInt(list[minIdx].node.position);
 
             if (!maxPos || minPos === null) return;
 
@@ -153,7 +155,7 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                     input: {
                         eventId,
                         questionId: list[sourceIdx].node.id,
-                        position: newPosition,
+                        position: newPosition.toString(),
                     },
                 },
                 optimisticResponse: {
@@ -169,7 +171,7 @@ function useStyledQueue({ eventId }: { eventId: string }) {
                                     firstName: list[sourceIdx].node.createdBy?.firstName || 'Unknown User',
                                     id: list[sourceIdx].node.id,
                                 },
-                                position: newPosition,
+                                position: newPosition.toString(),
                             },
                         },
                     },
@@ -242,14 +244,14 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
         () =>
             questionQueue?.enqueuedQuestions?.edges
                 ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
-                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
+                ?.sort(({ node: a }, { node: b }) => parseInt(a?.position) - parseInt(b?.position)) ?? [],
         [questionQueue]
     );
     const questionRecord = React.useMemo(
         () =>
             questionQueue?.questionRecord?.edges
                 ?.slice(0) // hacky way to copy the array, except current question -- feeling lazy TODO: more elegant solution
-                ?.sort(({ node: a }, { node: b }) => (a?.position ?? 0) - (b?.position ?? 0)) ?? [],
+                ?.sort(({ node: a }, { node: b }) => parseInt(a?.position) - parseInt(b?.position)) ?? [],
         [questionQueue]
     );
     // const canGoBackward = React.useMemo(() => questionRecord.length > 0, [questionRecord]);
@@ -279,7 +281,7 @@ export function QuestionQueue({ fragmentRef }: QuestionQueueProps) {
                 enqueuedQuestions,
                 result.source.index,
                 result.destination.index,
-                currentQuestion?.node.position || 0
+                parseInt(currentQuestion?.node.position || '0')
             );
         },
         [enqueuedQuestions, reorder, currentQuestion]
