@@ -10,7 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  BigInt: any;
+  BigInt: BigInt;
   Date: Date;
 };
 
