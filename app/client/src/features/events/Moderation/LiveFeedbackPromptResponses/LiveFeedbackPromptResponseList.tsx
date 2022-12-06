@@ -51,16 +51,17 @@ interface PromptListProps {
     promptData: PromptData;
 }
 
-// TODO: Convert prompt responses to fragment rather than directly from query (Required for pagination)
-// TODO: Pagination support for prompt responses (Number of responses will be greater than number of prompts)
-// TODO: Infinite Scrolling support for prompt responses
-
 /**
  * This component is responsible for rendering the live feedback prompt responses list
+ * TODO: Convert prompt responses to fragment rather than directly from query (Required for pagination)
+ * TODO: Pagination support for prompt responses (Number of responses will be greater than number of prompts)
+ * TODO: Infinite Scrolling support for prompt responses
+ * TODO: Update pi chart to chart selection (Different ways to visualize data)
+ * TODO: Add option to share prompt vote data with audience
  */
-// TODO: Update cards to include user data and createdAt timestamp
 function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
     const [chartVisiblity, setChartVisiblity] = React.useState<boolean>(false);
+    const MAX_VISIBLE_RESPONSES = 50;
 
     const toggleChartVisiblity = () => setChartVisiblity(!chartVisiblity);
 
@@ -89,6 +90,8 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
     const zeroVotes = React.useMemo(() => {
         return voteCount.for === 0 && voteCount.against === 0 && voteCount.conflicted === 0;
     }, [voteCount]);
+
+    const responses = React.useMemo(() => promptResponses.slice(0, MAX_VISIBLE_RESPONSES), [promptResponses]);
 
     return (
         <React.Fragment>
@@ -132,7 +135,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                 </>
             )}
             <List id='live-feedback-prompt-response-list'>
-                {promptResponses.map(({ id, response, vote, createdAt, createdBy }) => (
+                {responses.map(({ id, response, vote, createdAt, createdBy }) => (
                     <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
                         <Grid
                             container
