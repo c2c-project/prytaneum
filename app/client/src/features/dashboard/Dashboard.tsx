@@ -59,7 +59,7 @@ export function Dashboard() {
             refresh();
         }, REFRESH_INTERVAL);
         return () => clearInterval(interval);
-    }, []);
+    }, [loadQuery, queryRef, refresh]);
 
     if (!queryRef) return <Loader />;
     return (
