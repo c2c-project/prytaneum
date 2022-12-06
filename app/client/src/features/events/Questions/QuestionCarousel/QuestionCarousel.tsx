@@ -101,9 +101,7 @@ export function QuestionCarousel({ fragmentRef }: QuestionCarouselProps) {
             data.questionQueue?.questionRecord?.edges
                 ?.slice(0)
                 .sort((edgeA, edgeB) =>
-                    edgeA.node.position && edgeB.node.position
-                        ? parseInt(edgeA.node.position) - parseInt(edgeB.node.position)
-                        : 0
+                    edgeA.node.position && edgeB.node.position ? edgeA.node.position - edgeB.node.position : 0
                 ) ?? [],
         [data]
     );

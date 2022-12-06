@@ -53,7 +53,7 @@ export function DeleteButton({ className = undefined, fragmentRef }: Props) {
     }
 
     const isQueued = React.useMemo(() => {
-        if (parseInt(position) === -1) return false;
+        if (!position || position === -1) return false;
         return true;
     }, [position]);
 
