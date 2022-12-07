@@ -27,7 +27,7 @@ type TSchema = {
 };
 const validationSchema = Yup.object().shape<TSchema>({
     title: Yup.string().max(100, 'Title must be less than 100 characters').required('Please enter a title'),
-    description: Yup.string().required('Please enter a description'),
+    description: Yup.string().optional(),
     startDateTime: Yup.date()
         .max(Yup.ref('endDateTime'), 'Start date & time must be less than end date & time!')
         .required('Please enter a start date'),
@@ -51,6 +51,8 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
         validationSchema
     );
 
+    console.log(errors);
+
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
             <FormTitle title={title || 'Event Form'} />
@@ -61,6 +63,7 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
                     helperText={errors.title}
                     required
                     label='Title'
+                    name='title'
                     value={state.title}
                     onChange={handleChange('title')}
                 />
@@ -69,14 +72,15 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
                     helperText={errors.topic}
                     required
                     label='Topic'
+                    name='topic'
                     value={state.topic}
                     onChange={handleChange('topic')}
                 />
                 <TextField
                     error={Boolean(errors.description)}
                     helperText={errors.description}
-                    required
                     label='Description'
+                    name='description'
                     value={state.description}
                     onChange={handleChange('description')}
                 />
@@ -89,6 +93,7 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
                         <TextField
                             {...innerProps}
                             label='Start Date & Time'
+                            name='startDateTime'
                             required
                             error={Boolean(errors.startDateTime)}
                             helperText={errors.startDateTime}
@@ -104,6 +109,7 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
                         <TextField
                             {...innerProps}
                             label='End Date & Time'
+                            name='endDateTime'
                             required
                             error={Boolean(errors.endDateTime)}
                             helperText={errors.endDateTime}
