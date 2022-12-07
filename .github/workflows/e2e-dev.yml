@@ -1,13 +1,11 @@
-# Ensures e2e tests are run before merging into production branch
-name: Test end-to-end
+# Ensures e2e tests are run for pull requests only if app/e2e path changes.
+name: Test end-to-end development
 
 on:
     pull_request:
         branches:
-            - prod
+            - staging
         paths:
-            - 'app/client/**'
-            - 'app/server/**'
             - 'app/e2e/**'
 
 jobs:
