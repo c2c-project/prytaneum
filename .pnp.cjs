@@ -285,6 +285,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mui/lab", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.0.0-alpha.70"],\
             ["@mui/material", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.4.3"],\
             ["@mui/styles", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:5.4.2"],\
+            ["@next/swc-darwin-arm64", "npm:11.1.4"],\
             ["@storybook/addon-a11y", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.4.15"],\
             ["@storybook/addon-essentials", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.4.15"],\
             ["@storybook/node-logger", "npm:6.4.15"],\
@@ -7550,6 +7551,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@next/swc-darwin-arm64", [\
+        ["npm:11.1.4", {\
+          "packageLocation": "./.yarn/unplugged/@next-swc-darwin-arm64-npm-11.1.4-fc34030f9c/node_modules/@next/swc-darwin-arm64/",\
+          "packageDependencies": [\
+            ["@next/swc-darwin-arm64", "npm:11.1.4"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:12.2.2", {\
           "packageLocation": "./.yarn/unplugged/@next-swc-darwin-arm64-npm-12.2.2-7c98b4962a/node_modules/@next/swc-darwin-arm64/",\
           "packageDependencies": [\

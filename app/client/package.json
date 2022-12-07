@@ -48,6 +48,7 @@
         "@babel/core": "^7.17.5",
         "@babel/plugin-syntax-flow": "^7.16.7",
         "@babel/plugin-transform-react-jsx": "^7.17.3",
+        "@next/swc-darwin-arm64": "^11.1.2",
         "@storybook/addon-a11y": "^6.4.15",
         "@storybook/addon-essentials": "^6.4.15",
         "@storybook/node-logger": "^6.2.9",
