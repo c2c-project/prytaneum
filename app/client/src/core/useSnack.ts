@@ -6,7 +6,7 @@ export function useSnack() {
     const makeSnack = React.useCallback(
         (message: string, options?: OptionsObject) => {
             enqueueSnackbar(message, {
-                variant: 'default',
+                variant: options?.variant || 'default',
                 action: options?.action,
                 onExited: options?.onExited,
                 color: 'inherit',

@@ -201,7 +201,7 @@ export const ModeratorEventSettings = ({ fragmentRef, className }: EventSettings
                             <ListItemAvatar>
                                 <Avatar src={avatar || undefined} />
                             </ListItemAvatar>
-                            <ListItemText primary={`${firstName} ${lastName}`} secondary={email} />
+                            <ListItemText primary={firstName ? `${firstName} ${lastName}` : 'Pending Registration...'} secondary={email} />
                             <ListItemSecondaryAction>
                                 <IconButton onClick={openMenu({ id, firstName, lastName, email, avatar })} size='large'>
                                     <MoreVert />

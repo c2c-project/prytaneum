@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import { InviteForm, TInviteForm } from './InviteForm';
+import { useSnack } from '@local/core/useSnack';
+import { InviteForm, InviteFormProps } from './InviteForm';
+import { CreateInviteMutation } from '@local/__generated__/CreateInviteMutation.graphql';
 
 interface CreateInviteProps {
     onSubmit: () => void;
@@ -18,16 +20,18 @@ export const CREATE_INVITE_MUTATION = graphql`
 `;
 
 export const CreateInvite = ({ onSubmit, eventId }: CreateInviteProps) => {
-    const [commit] = useMutation(CREATE_INVITE_MUTATION);
+    const [commit] = useMutation<CreateInviteMutation>(CREATE_INVITE_MUTATION);
+    const { displaySnack } = useSnack();
 
-    function handleSubmit(form: TInviteForm) {
+    const handleSubmit: InviteFormProps['onSubmit'] = (submittedForm) => {
         commit({
-            variables: { input: { ...form, eventId } },
-            onCompleted() {
-                onSubmit();
+            variables: { input: { ...submittedForm, eventId } },
+            onCompleted({ createInvite }) {
+                if (createInvite.isError) displaySnack(createInvite.message, { variant: 'error' });
+                else onSubmit();
             },
         });
-    }
+    };
 
     return <InviteForm onSubmit={handleSubmit} />;
 };

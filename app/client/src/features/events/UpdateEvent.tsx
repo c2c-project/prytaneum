@@ -28,7 +28,7 @@ export type UpdateEventProps = {
     eventId: string;
     onSubmit: (event: TUpdatedEvent) => void;
     form: TEventForm;
-} & Omit<EventFormProps, 'onSubmit' | 'form'>;
+} & Omit<EventFormProps, 'onSubmit' | 'form' | 'formType'>;
 
 export function UpdateEvent({ eventId, onSubmit, ...eventFormProps }: UpdateEventProps) {
     const [commit] = useMutation<UpdateEventMutation>(UPDATE_EVENT_MUTATION);
@@ -47,5 +47,5 @@ export function UpdateEvent({ eventId, onSubmit, ...eventFormProps }: UpdateEven
         });
     }
 
-    return <EventForm {...eventFormProps} onSubmit={handleSubmit} title='Update Event Details' />;
+    return <EventForm {...eventFormProps} formType='Update' onSubmit={handleSubmit} title='Update Event Details' />;
 }

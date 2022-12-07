@@ -78,9 +78,13 @@ export function EventDetails({ fragmentRef, className }: EventDetailsProps) {
             </ResponsiveDialog>
             {entries.map(([key, value]) => (
                 <Grid item xs={12} key={key}>
-                    <Typography variant='overline'>{key}</Typography>
+                    <Typography variant='overline'>
+                        { key === 'startDateTime' && 'START DATE & TIME' }
+                        { key === 'endDateTime' && 'END DATE & TIME' }
+                        { (key !== 'startDateTime' && key !== 'endDateTime') && key }
+                    </Typography>
                     <Typography className={classes.indent}>{value}</Typography>
-                </Grid>
+                </Grid> 
             ))}
             <Grid item xs={12} container justifyContent='flex-end'>
                 <Grid item>

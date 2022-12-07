@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -80,7 +79,7 @@ export function EventSettings({ queryRef }: Props) {
         else if (data.node?.isViewerModerator) {
             setCanView(true);
         } else {
-            displaySnack('You must be a moderator to view');
+            displaySnack('You must be a moderator to view', { variant: 'error' });
             router.back();
         }
     }, [isLoading, user, router, data, displaySnack]);
@@ -137,22 +136,14 @@ export function EventSettings({ queryRef }: Props) {
                                 title: 'Invites',
                                 description: 'Invite people to join the event',
                                 component: (
-                                    <InviteEventSettings
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
+                                    <InviteEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
                             },
                             {
                                 title: 'Delete Event',
                                 description: 'Click here to delete your event',
-                                component: (
-                                    <DeleteEvent
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
-                            }
+                                component: <DeleteEvent className={classes.settingsSection} fragmentRef={data.node} />,
+                            },
                         ]}
                     />
                 )}
