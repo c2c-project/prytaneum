@@ -8,11 +8,12 @@ import type { CreateSpeaker as CreateType } from '@local/graphql-types';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
+import type { NullableFields } from '@local/utils/ts-utils';
 
 export type TSpeakerForm = Omit<CreateType, 'eventId' | 'id'>;
 export interface SpeakerFormProps {
     onSubmit: (speaker: TSpeakerForm) => void;
-    form?: TSpeakerForm;
+    form?: NullableFields<TSpeakerForm>;
 }
 
 type TSchema = {
@@ -29,9 +30,9 @@ const validationSchema = Yup.object().shape<TSchema>({
 const initialState: TSpeakerForm = { title: '', description: '', pictureUrl: '', name: '', email: '' };
 
 export function SpeakerForm(props: SpeakerFormProps) {
-    const { onSubmit, form } = props;
+    const { onSubmit } = props;
 
-    const [state, errors, handleSubmit, handleChange] = useForm<TSpeakerForm>(form || initialState, validationSchema);
+    const [state, errors, handleSubmit, handleChange] = useForm<TSpeakerForm>(initialState, validationSchema);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
