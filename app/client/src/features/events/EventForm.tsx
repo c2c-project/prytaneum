@@ -51,8 +51,6 @@ export function EventForm({ onCancel, onSubmit, title, className, form, formType
         validationSchema
     );
 
-    console.log(errors);
-
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
             <FormTitle title={title || 'Event Form'} />
