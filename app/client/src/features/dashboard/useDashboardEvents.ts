@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { fetchQuery, graphql, useRefetchableFragment } from 'react-relay';
+import { graphql, useRefetchableFragment } from 'react-relay';
 
 import type { useDashboardEventsFragment$key } from '@local/__generated__/useDashboardEventsFragment.graphql';
-import { useEnvironment } from '@local/core';
 import type { DashboardEventsRefreshQuery } from '@local/__generated__/DashboardEventsRefreshQuery.graphql';
+import { useRefresh } from '../core';
 
 export const USE_DASHBOARD_EVENTS_FRAGMENT = graphql`
     fragment useDashboardEventsFragment on User
@@ -39,22 +39,11 @@ export function useDashboardEvents({ fragmentRef }: TArgs) {
         fragmentRef
     );
     const { events } = data;
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-
+    const REFRESH_INTERVAL = 20000; // 20 seconds
     const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, USE_DASHBOARD_EVENTS_FRAGMENT, {}).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                refetch({}, { fetchPolicy: 'network-only' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, isRefreshing, refetch]);
+        refetch({}, { fetchPolicy: 'store-and-network' });
+    }, [refetch]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     const eventList = React.useMemo(
         () =>
@@ -69,6 +58,5 @@ export function useDashboardEvents({ fragmentRef }: TArgs) {
     return {
         events: eventList,
         connections: events?.__id ? [events.__id] : [],
-        refresh,
     };
 }

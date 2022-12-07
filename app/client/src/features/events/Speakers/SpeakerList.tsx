@@ -20,6 +20,7 @@ import clsx from 'clsx';
 
 import { SpeakerListFragment$key } from '@local/__generated__/SpeakerListFragment.graphql';
 import { SpeakerCard } from './SpeakerCard';
+import { useRefresh } from '@local/features/core';
 
 interface SpeakerItemProps {
     className?: string;
@@ -81,22 +82,14 @@ export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
 
     const [openCard, setOpenCard] = React.useState(''); // use id instead to determine which dialog to open
     const [isIn, setIsIn] = React.useState(false);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
+
     const REFRESH_INTERVAL = 30000; // 30 seconds
+    const refresh = React.useCallback(() => {
+        refetch({}, { fetchPolicy: 'store-and-network' });
+    }, [refetch]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
-
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        refetch({}, { fetchPolicy: 'store-and-network' });
-        setIsRefreshing(false);
-    }, [isRefreshing, setIsRefreshing, refetch]);
-
-    React.useEffect(() => {
-        const interval = setInterval(refresh, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    }, [refresh]);
 
     return speakers && speakerEdges.length !== 0 ? (
         <React.Fragment>

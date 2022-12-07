@@ -5,6 +5,7 @@ import { graphql, useRefetchableFragment } from 'react-relay';
 import { formatDate } from '@local/utils/format';
 
 import { EventDetailsCardFragment$key } from '@local/__generated__/EventDetailsCardFragment.graphql';
+import { useRefresh } from '@local/features/core';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -37,20 +38,13 @@ export function EventDetailsCard({ fragmentRef }: Props) {
     const classes = useStyles();
     const [data, refetch] = useRefetchableFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
     const { title, description, startDateTime, endDateTime } = data;
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
+
     const REFRESH_INTERVAL = 30000; // 30 seconds
-
     const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
         refetch({}, { fetchPolicy: 'store-and-network' });
-        setIsRefreshing(false);
-    }, [isRefreshing, setIsRefreshing, refetch]);
+    }, [refetch]);
 
-    React.useEffect(() => {
-        const interval = setInterval(refresh, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    }, [refresh]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     const startTime = React.useMemo(
         () => formatDate(startDateTime ? new Date(startDateTime) : new Date(), 'h:mmaa'),

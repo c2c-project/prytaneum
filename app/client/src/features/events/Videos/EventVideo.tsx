@@ -4,6 +4,7 @@ import { Skeleton } from '@mui/material';
 
 import type { EventVideoFragment$key } from '@local/__generated__/EventVideoFragment.graphql';
 import { VideoPlayer } from '@local/components/VideoPlayer';
+import { useRefresh } from '@local/features/core';
 
 export const EVENT_VIDEO_FRAGMENT = graphql`
     fragment EventVideoFragment on Event @refetchable(queryName: "EventVideoRefetchQuery") {
@@ -29,20 +30,12 @@ export function EventVideoLoader() {
 
 export function EventVideo({ fragmentRef }: EventVideoProps) {
     const [data, refetch] = useRefetchableFragment(EVENT_VIDEO_FRAGMENT, fragmentRef);
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
+
     const REFRESH_INTERVAL = 20000; // 20 seconds
-
     const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
         refetch({}, { fetchPolicy: 'store-and-network' });
-        setIsRefreshing(false);
-    }, [isRefreshing, setIsRefreshing, refetch]);
-
-    React.useEffect(() => {
-        const interval = setInterval(refresh, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    }, [refresh]);
+    }, [refetch]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     // TODO: better system/user flow for this
     if (!data || !data.videos || !data.videos.edges || data.videos.edges.length === 0) return <VideoPlayer url='' />;
