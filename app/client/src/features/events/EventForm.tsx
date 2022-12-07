@@ -13,6 +13,7 @@ import { useForm } from '@local/core';
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
+    formType: 'Create' | 'Update';
     className?: string;
     title?: string;
     form?: TEventForm;
@@ -44,7 +45,7 @@ const initialState: TEventForm = {
     topic: '',
 };
 
-export function EventForm({ onCancel, onSubmit, title, className, form }: EventFormProps) {
+export function EventForm({ onCancel, onSubmit, title, className, form, formType }: EventFormProps) {
     const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(
         form || initialState,
         validationSchema
@@ -118,7 +119,7 @@ export function EventForm({ onCancel, onSubmit, title, className, form }: EventF
                 )}
 
                 <Button type='submit' variant='contained' color='primary'>
-                    Create
+                    {formType}
                 </Button>
             </FormActions>
         </Form>

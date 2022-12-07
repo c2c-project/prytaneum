@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/features/core/useSnack';
 import type { CreateModeratorMutation } from '@local/__generated__/CreateModeratorMutation.graphql';
 import { ModeratorForm, ModeratorProps } from './ModeratorForm';
 
