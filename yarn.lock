@@ -184,6 +184,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.70
     "@mui/material": ^5.4.3
     "@mui/styles": ^5.4.2
+    "@next/swc-darwin-arm64": ^11.1.2
     "@storybook/addon-a11y": ^6.4.15
     "@storybook/addon-essentials": ^6.4.15
     "@storybook/node-logger": ^6.2.9
@@ -4725,6 +4726,14 @@ __metadata:
 "@next/swc-darwin-arm64@npm:12.2.2":
   version: 12.2.2
   resolution: "@next/swc-darwin-arm64@npm:12.2.2"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@next/swc-darwin-arm64@npm:^11.1.2":
+  version: 11.1.4
+  resolution: "@next/swc-darwin-arm64@npm:11.1.4"
+  checksum: 05bf238530d6d6305aaaf54abce958721366545702dcaafb358aa077e76d771c44edddd6d8a28a63ac48c11f5b228d5cd07afdb01633e2c8330b3c4a39e41bea
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
