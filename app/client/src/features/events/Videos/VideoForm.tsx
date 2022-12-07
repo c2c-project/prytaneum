@@ -33,8 +33,6 @@ export const VideoForm = (props: VideoFormProps) => {
         validationSchema
     );
 
-    console.log(state);
-
     const handleSelectionChange = (e: SelectChangeEvent) => {
         const { value } = e.target;
         setState({ ...state, lang: value });
