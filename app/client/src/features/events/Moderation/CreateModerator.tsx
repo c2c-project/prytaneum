@@ -39,7 +39,7 @@ export function CreateModerator({ eventId, onSubmit, connections }: CreateModera
             },
             onCompleted({ createModerator }) {
                 if (createModerator.isError) {
-                    displaySnack(createModerator.message);
+                    displaySnack(createModerator.message, { variant: 'error' });
                 } else if (!createModerator.isError && onSubmit) {
                     onSubmit();
                 }

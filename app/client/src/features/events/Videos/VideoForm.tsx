@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField } from '@mui/material';
-import { Form } from '@local/components/Form';
+import { Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
+
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { FormTitle } from '@local/components/FormTitle';
-import { makeInitialState } from '@local/utils/ts-utils';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export type TVideoForm = { url: string; lang: string };
 
@@ -15,41 +16,54 @@ type TSchema = {
 };
 const validationSchema = Yup.object().shape<TSchema>({
     lang: Yup.string().required('Please enter a language'),
-    url: Yup.string().required('Please enter a video URL'),
+    url: Yup.string().url('Please enter a valid URL').required('Please enter a video URL'),
 });
 interface VideoFormProps {
     onSubmit: (form: TVideoForm) => void;
     form?: TVideoForm;
 }
 
-const initialState: TVideoForm = { url: '', lang: '' };
+const initialState: TVideoForm = { url: '', lang: 'en' };
 
 export const VideoForm = (props: VideoFormProps) => {
     const { onSubmit, form } = props;
 
-    const { handleSubmit, handleChange, values, errors } = useFormik<TVideoForm>({
-        initialValues: makeInitialState(initialState, form),
-        validationSchema,
-        onSubmit,
-    });
+    const [state, errors, handleSubmit, handleChange, setState] = useForm<TVideoForm>(
+        form || initialState,
+        validationSchema
+    );
+
+    console.log(state);
+
+    const handleSelectionChange = (e: SelectChangeEvent) => {
+        const { value } = e.target;
+        setState({ ...state, lang: value });
+    };
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Video Form' />
+            <FormControl fullWidth>
+                <InputLabel id='lang-label'>Language</InputLabel>
+                <Select
+                    labelId='lang-label'
+                    id='lang'
+                    label='Language'
+                    name='lang'
+                    value={state.lang}
+                    onChange={handleSelectionChange}
+                >
+                    <MenuItem value='en'>English</MenuItem>
+                    <MenuItem value='sp'>Spanish</MenuItem>
+                </Select>
+            </FormControl>
             <FormContent>
                 <TextField
                     required
-                    helperText={errors.lang}
-                    value={values.lang}
-                    label='Language'
-                    onChange={handleChange('lang')}
-                    error={Boolean(errors.lang)}
-                />
-                <TextField
-                    required
                     helperText={errors.url}
-                    value={values.url}
+                    value={state.url}
                     label='Video URL'
+                    name='url'
                     onChange={handleChange('url')}
                     error={Boolean(errors.url)}
                 />

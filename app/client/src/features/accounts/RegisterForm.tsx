@@ -75,7 +75,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
             variables: { input: submittedForm },
             onCompleted({ register }) {
                 if (register.isError) {
-                    displaySnack(register.message);
+                    displaySnack(register.message, { variant: 'error' });
                     if (onFailure) onFailure();
                 } else {
                     setUser(register.body);

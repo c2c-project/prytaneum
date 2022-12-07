@@ -1,11 +1,11 @@
 import { Button, TextField } from '@mui/material';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Form } from '@local/components/Form';
+
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { makeInitialState } from '@local/utils/ts-utils';
 
 export type TModeratorForm = { email: string };
 
@@ -26,22 +26,19 @@ const initialState: TModeratorForm = { email: '' };
 export function ModeratorForm(props: ModeratorProps) {
     const { onSubmit, form } = props;
 
-    const { handleSubmit, handleChange, values, errors } = useFormik<TModeratorForm>({
-        initialValues: makeInitialState(initialState, form),
-        validationSchema,
-        onSubmit,
-    });
+    const [state, errors, handleSubmit, handleChange] = useForm<TModeratorForm>(form || initialState, validationSchema);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Moderator Form' />
             <FormContent>
                 <TextField
                     onChange={handleChange('email')}
                     helperText={errors.email}
                     error={Boolean(errors.email)}
-                    value={values.email}
+                    value={state.email}
                     label='Email'
+                    name='email'
                     type='email'
                 />
             </FormContent>

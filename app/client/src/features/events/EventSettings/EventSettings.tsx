@@ -79,7 +79,7 @@ export function EventSettings({ queryRef }: Props) {
         else if (data.node?.isViewerModerator) {
             setCanView(true);
         } else {
-            displaySnack('You must be a moderator to view');
+            displaySnack('You must be a moderator to view', { variant: 'error' });
             router.back();
         }
     }, [isLoading, user, router, data, displaySnack]);

@@ -24,7 +24,7 @@ export interface Prompt {
 }
 
 export function useLiveFeedbackPrompt() {
-    const { isModerator, eventId } = useEvent();
+    const { eventId } = useEvent();
 
     const promptRef = React.useRef<Prompt>({ id: '', prompt: '', isVote: false, isOpenEnded: false });
 
@@ -44,13 +44,12 @@ export function useLiveFeedbackPrompt() {
                 const { feedbackPrompted } = data;
                 const { id, prompt, isVote, isOpenEnded } = feedbackPrompted;
                 updateCurrentPrompt({ id, prompt, isVote: !!isVote, isOpenEnded: !!isOpenEnded });
-                if (isModerator) console.log('Moderator received prompt');
 
                 // TODO: add moderator check
                 displaySnack('New Feedback Prompt', { variant: 'info' });
             },
         }),
-        [displaySnack, eventId, isModerator]
+        [displaySnack, eventId]
     );
 
     useSubscription<useLiveFeedbackPromptSubscription>(config);

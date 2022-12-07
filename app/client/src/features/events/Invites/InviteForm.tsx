@@ -1,15 +1,15 @@
 import { Button, TextField } from '@mui/material';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Form } from '@local/components/Form';
+
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { makeInitialState } from '@local/utils/ts-utils';
 
 export type TInviteForm = { email: string };
 
-export interface InviteProps {
+export interface InviteFormProps {
     form?: TInviteForm;
     onSubmit: (submittedForm: TInviteForm) => void;
 }
@@ -23,25 +23,22 @@ const validationSchema = Yup.object().shape<TSchema>({
 
 const initialState: TInviteForm = { email: '' };
 
-export function InviteForm(props: InviteProps) {
+export function InviteForm(props: InviteFormProps) {
     const { onSubmit, form } = props;
 
-    const { handleSubmit, handleChange, values, errors } = useFormik<TInviteForm>({
-        initialValues: makeInitialState(initialState, form),
-        validationSchema,
-        onSubmit,
-    });
+    const [state, errors, handleSubmit, handleChange] = useForm<TInviteForm>(form || initialState, validationSchema);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Invite Form' />
             <FormContent>
                 <TextField
                     onChange={handleChange('email')}
                     helperText={errors.email}
                     error={Boolean(errors.email)}
-                    value={values.email}
+                    value={state.email}
                     label='Email'
+                    name='email'
                     type='email'
                 />
             </FormContent>

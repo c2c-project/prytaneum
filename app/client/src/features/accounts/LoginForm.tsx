@@ -87,7 +87,7 @@ export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
                 input: submittedForm,
             },
             onCompleted({ login }) {
-                if (login.isError) displaySnack(login.message);
+                if (login.isError) displaySnack(login.message, { variant: 'error' });
                 else {
                     setUser(login.body);
                     if (onSuccess) onSuccess();

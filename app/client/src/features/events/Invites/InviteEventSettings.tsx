@@ -92,6 +92,11 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
 
     return (
         <Grid container className={className}>
+            <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
+                <DialogContent>
+                    <CreateInvite onSubmit={close} eventId={eventId} />
+                </DialogContent>
+            </ResponsiveDialog>
             <Grid container justifyContent='right'>
                 <Grid item paddingRight='1rem'>
                     <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
@@ -109,11 +114,6 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                     <CopyText TextFieldProps={{ label: 'Invite Link' }} text={link} />
                 </Collapse>
             </Grid>
-            <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
-                <DialogContent>
-                    <CreateInvite onSubmit={close} eventId={eventId} />
-                </DialogContent>
-            </ResponsiveDialog>
         </Grid>
     );
 };

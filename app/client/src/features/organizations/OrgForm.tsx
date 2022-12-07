@@ -1,4 +1,3 @@
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
 
@@ -7,8 +6,8 @@ import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormActions } from '@local/components/FormActions';
-import { makeInitialState } from '@local/utils/ts-utils';
 import { LoadingButton } from '@local/components/LoadingButton';
+import { useForm } from '@local/core/useForm';
 
 export interface OrgFormProps {
     onSubmit: (result: TOrgFormState) => void;
@@ -22,27 +21,26 @@ type TSchema = {
     [key in keyof TOrgFormState]: Yup.AnySchema;
 };
 const validationSchema = Yup.object().shape<TSchema>({
-    name: Yup.string().required('Please enter an organization name'),
+    name: Yup.string()
+        .max(100, 'Organization name must be less than 100 characters')
+        .required('Please enter an organization name'),
 });
 
 export function OrgForm(props: OrgFormProps) {
     const { onSubmit } = props;
 
-    const { handleSubmit, handleChange, values, errors } = useFormik<TOrgFormState>({
-        initialValues: makeInitialState(initialState),
-        validationSchema,
-        onSubmit,
-    });
+    const [state, errors, handleSubmit, handleChange] = useForm<TOrgFormState>(initialState, validationSchema);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Create Organization' />
             <FormContent>
                 <TextField
                     required
                     helperText={errors.name}
                     label='Organization Name'
-                    value={values.name}
+                    name='name'
+                    value={state.name}
                     fullWidth
                     onChange={handleChange('name')}
                     error={Boolean(errors.name)}

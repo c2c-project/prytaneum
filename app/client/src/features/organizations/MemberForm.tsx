@@ -1,12 +1,12 @@
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
 import type { CreateMember } from '@local/graphql-types';
-import { Form } from '@local/components/Form';
+
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormActions } from '@local/components/FormActions';
-import { makeInitialState } from '@local/utils/ts-utils';
 
 export type TMemberForm = Pick<CreateMember, 'email'>;
 
@@ -27,14 +27,10 @@ const initialState: TMemberForm = { email: '' };
 export function MemberForm(props: MemberFormProps) {
     const { onSubmit, form } = props;
 
-    const { handleSubmit, handleChange, values, errors } = useFormik<TMemberForm>({
-        initialValues: makeInitialState(initialState, form),
-        validationSchema,
-        onSubmit,
-    });
+    const [state, errors, handleSubmit, handleChange] = useForm<TMemberForm>(form || initialState, validationSchema);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Member Form' />
             <FormContent>
                 <TextField
@@ -42,7 +38,8 @@ export function MemberForm(props: MemberFormProps) {
                     required
                     type='email'
                     label='Member Email'
-                    value={values.email}
+                    name='email'
+                    value={state.email}
                     onChange={handleChange('email')}
                     error={Boolean(errors.email)}
                     helperText={errors.email}
