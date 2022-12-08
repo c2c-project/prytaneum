@@ -61,12 +61,12 @@ export class PlaywrightOrganizationsPage {
         ]);
     }
 
-    async clickDeleteOrganizationButton() {
-        await this.page.locator('[aria-label="delete organization"]').first().click();
+    async clickDeleteOrganizationButton(organizationName: string) {
+        await this.page.getByRole('listitem').filter({ hasText: organizationName }).getByRole('button', { name: 'delete organization' }).click();
     }
 
     async clickConfirmDeleteOrganizationButton() {
-        await this.page.locator('text=Confirm').click();
+        await this.page.getByRole('button', { name: 'Confirm' }).click();
     }
 
     async clickOnCreateEvent() {

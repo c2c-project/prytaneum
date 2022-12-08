@@ -1,8 +1,8 @@
 import { test, expect } from '@local/common/utils/fixtures';
 
 export default function organizerTests() {
-    test.describe('Items Present on Dashboard', () => {
-        test('I can see an event I created in the dashboard', async ({ dashboardPageOrganizer }) => {
+    test.describe('Items Present', () => {
+        test.only('I can see an ongoing event I created', async ({ dashboardPageOrganizer }) => {
             // Go to Dashboard
             await dashboardPageOrganizer.goto();
 
@@ -10,10 +10,12 @@ export default function organizerTests() {
             await dashboardPageOrganizer.clickOnEvent('Ongoing Event', 'Test Organization', true);
 
             // Verify we are directed to the event's settings page
+            await dashboardPageOrganizer.page.waitForURL(/.*settings/);
+
             await expect(dashboardPageOrganizer.page).toHaveURL(/.*settings/);
         });
 
-        test('I can see sections for Current Events and Upcoming Events on dashboard.', async ({
+        test('I can see sections for Current Events and Upcoming Events.', async ({
             dashboardPageOrganizer,
         }) => {
             // Go to Dashboard
@@ -27,8 +29,8 @@ export default function organizerTests() {
         });
     });
 
-    test.describe('Dashboard Navigation', () => {
-        test('I can visit live feed of ongoing event from the dashboard.', async ({ dashboardPageOrganizer }) => {
+    test.describe('Navigation', () => {
+        test('I can visit live feed of ongoing event.', async ({ dashboardPageOrganizer }) => {
             // Go to Dashboard
             await dashboardPageOrganizer.goto();
 
@@ -55,6 +57,7 @@ export default function organizerTests() {
             await page.goto('/dashboard');
 
             // Verify we are directed to the landing page
+            await page.waitForURL('/');
             await expect(page).toHaveURL('/');
         });
     });

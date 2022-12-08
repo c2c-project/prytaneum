@@ -122,7 +122,7 @@ export class PlaywrightLandingPage {
     }
     // Route Checks
     async amLoggedIn() {
-        await expect(this.page).toHaveURL('/organizations/me');
+        await this.page.waitForURL('/organizations/me');
     }
 
     async amOnRegistrationPage() {

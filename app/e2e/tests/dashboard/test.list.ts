@@ -8,6 +8,8 @@ import userTests from './user-dashboard.spec';
 // Use `test.describe.configure({ mode: 'serial' });` to run tests in serial.
 test.describe.configure({ mode: 'serial' });
 
+const ORGANIZATION_NAME = 'Test Organization';
+
 // Dashboard tests setup and teardown
 // Create organization and events that can be used to test the dashboard
 test.beforeAll(async ({ browser, device }) => {
@@ -18,11 +20,11 @@ test.beforeAll(async ({ browser, device }) => {
     // Create organization
     await organizationsPage.goto();
     await organizationsPage.clickOnCreateOrganization();
-    await organizationsPage.fillInOrganizationName('Test Organization');
+    await organizationsPage.fillInOrganizationName(ORGANIZATION_NAME);
     await organizationsPage.submitOrganizationForm();
 
     // Create ongoing event
-    await organizationsPage.clickOnOrganization('Test Organization');
+    await organizationsPage.clickOnOrganization(ORGANIZATION_NAME);
     await organizationsPage.clickOnCreateEvent();
     await organizationsPage.fillInEventName('Ongoing Event');
     await organizationsPage.fillInEventTime(organizationsPage.today);
@@ -41,7 +43,7 @@ test.afterAll(async ({ browser, device }) => {
     const page = await context.newPage();
     const organizationsPage = await new PlaywrightOrganizationsPage(page, device).create(browser);
     await organizationsPage.goto();
-    await organizationsPage.clickDeleteOrganizationButton();
+    await organizationsPage.clickDeleteOrganizationButton(ORGANIZATION_NAME);
     await organizationsPage.clickConfirmDeleteOrganizationButton();
 });
 
