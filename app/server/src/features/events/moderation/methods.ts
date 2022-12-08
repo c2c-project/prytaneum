@@ -281,8 +281,9 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
 }
 
 export async function removeQuestionFromQueue(userId: string, prisma: PrismaClient, input: RemoveQuestionFromQueue) {
+    const { eventId, questionId } = input;
     // permission check
-    const hasPermission = await isModerator(userId, input.eventId, prisma);
+    const hasPermission = await isModerator(userId, eventId, prisma);
     if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     // Find current question
@@ -293,18 +294,23 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     if (!event)
         throw new ProtectedError({
             userMessage: ProtectedError.internalServerErrorMessage,
-            internalMessage: `Could not find event with id ${input.eventId}.`,
+            internalMessage: `Could not find event with id ${eventId}.`,
         });
 
-    const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
+    const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: questionId } });
     if (!toBeRemoved) throw new ProtectedError({ userMessage: 'Question cannot be found.' });
+    // Check if the question is in the question record
+    // All questions in the question record shoud have a position greater than or equal to the current question
     if (event.currentQuestion >= toBeRemoved.position) {
-        return toBeRemoved;
+        throw new ProtectedError({
+            userMessage: 'Cannot remove question that has already been asked.',
+            internalMessage: `Cannot remove question that has already been asked. Current question position: ${event.currentQuestion} | Question being dequeud position: ${toBeRemoved.position}`,
+        });
     }
 
     // Set the position to -1 to remove it from the queue
     return prisma.eventQuestion.update({
-        where: { id: input.questionId },
+        where: { id: questionId },
         data: {
             position: -1,
         },
