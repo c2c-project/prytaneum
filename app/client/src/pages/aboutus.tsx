@@ -35,6 +35,7 @@ export default function AboutUs() {
                         height={400}
                         objectFit='contain'
                         alt='Prytaneum Logo'
+                        priority
                     />
                 </Grid>
                 <Grid item>
@@ -56,6 +57,7 @@ export default function AboutUs() {
                         height={273}
                         objectFit='contain'
                         alt='Directors'
+                        priority
                     />
                 </Grid>
                 <Grid container item sm={7} md={9} spacing={2}>
