@@ -15,9 +15,7 @@ export default function organizerTests() {
             await expect(dashboardPageOrganizer.page).toHaveURL(/.*settings/);
         });
 
-        test('I can see sections for Current Events and Upcoming Events.', async ({
-            dashboardPageOrganizer,
-        }) => {
+        test('I can see sections for Current Events and Upcoming Events.', async ({ dashboardPageOrganizer }) => {
             // Go to Dashboard
             await dashboardPageOrganizer.goto();
 
