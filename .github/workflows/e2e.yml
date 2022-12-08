@@ -46,9 +46,6 @@ jobs:
             - name: Run Playwright tests
               run: yarn workspace @app/e2e run test:ci
 
-            - name: Generate Allure Report
-              run: yarn workspace @app/e2e run allure:generate-report
-
             - uses: actions/upload-artifact@v2
               if: always()
               with:

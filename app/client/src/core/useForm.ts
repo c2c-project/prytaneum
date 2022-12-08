@@ -11,7 +11,6 @@ export function useForm<TForm extends Record<string, unknown>>(initialState: TFo
     const [state, setState] = React.useState(initialState);
     const [errors, setErrors] = React.useState<Partial<TForm>>({});
     const { displaySnack } = useSnack();
-    
     function buildHandleSubmit(callback?: (form: TForm) => void) {
         return (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
