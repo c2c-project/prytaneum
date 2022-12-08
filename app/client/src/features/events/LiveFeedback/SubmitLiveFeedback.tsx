@@ -7,6 +7,9 @@ import { useMutation, graphql } from 'react-relay';
 import type { SubmitLiveFeedbackMutation } from '@local/__generated__/SubmitLiveFeedbackMutation.graphql';
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
+import { isURL } from '@local/utils/index';
+import { FEEDBACK_MAX_LENGTH } from '@local/utils/rules';
+import { useSnack } from '@local/features/core/useSnack';
 import { LiveFeedbackForm, TLiveFeedbackFormState } from './LiveFeedbackForm';
 
 interface Props {
@@ -40,12 +43,23 @@ export function SubmitLiveFeedback({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
     const [commit] = useMutation<SubmitLiveFeedbackMutation>(SUBMIT_LIVE_FEEDBACK_MUTATION);
+    const { displaySnack } = useSnack();
 
     function handleSubmit(form: TLiveFeedbackFormState) {
-        commit({
-            variables: { input: { ...form, eventId } },
-            onCompleted: close,
-        });
+        try {
+            // Validate length and url presence before submitting to avoid unessisary serverside validation
+            if (form.message.length > FEEDBACK_MAX_LENGTH) throw new Error('Question is too long!');
+            if (isURL(form.message)) throw new Error('No links are allowed!');
+            commit({
+                variables: { input: { ...form, eventId } },
+                onCompleted: ({ createFeedback }) => {
+                    if (createFeedback.isError) displaySnack(createFeedback.message, { variant: 'error' });
+                    else close();
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message, { variant: 'error' });
+        }
     }
 
     return (

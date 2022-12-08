@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     onSuccess?: () => void;
+    close?: () => void;
     secondaryActions?: React.ReactNode;
 }
 
@@ -72,7 +73,7 @@ const intialState: TLoginForm = { email: '', password: '' };
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
+export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const [, setUser] = useUser();
@@ -86,7 +87,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                 input: submittedForm,
             },
             onCompleted({ login }) {
-                if (login.isError) displaySnack(login.message);
+                if (login.isError) displaySnack(login.message, { variant: 'error' });
                 else {
                     setUser(login.body);
                     if (onSuccess) onSuccess();
@@ -96,7 +97,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     };
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='login-form' container justifyContent='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -150,7 +151,14 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                         />
                         <Grid container justifyContent='flex-end'>
                             <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary' underline='hover'>
+                                <MUILink
+                                    className={classes.link}
+                                    color='primary'
+                                    underline='hover'
+                                    onClick={() => {
+                                        if (close) close();
+                                    }}
+                                >
                                     Forgot Password?
                                 </MUILink>
                             </Link>

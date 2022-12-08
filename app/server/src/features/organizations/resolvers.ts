@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId, toGlobalId as gqlToGlobalId } from 'graphql-relay';
-import type { OrganizationSubscription } from '@local/graphql-types';
 import * as Organization from './methods';
-import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '../utils';
-import { isMemberOfOrg } from '../permissions';
+import { Resolvers, errors, toGlobalId, runMutation, withFilter } from '@local/features/utils';
+import { isMemberOfOrg } from '@local/features/permissions';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import type { OrganizationSubscription } from '@local/graphql-types';
 
 const toOrgId = toGlobalId('Organization');
 const toUserId = toGlobalId('User');
@@ -13,7 +14,7 @@ export const resolvers: Resolvers = {
     Mutation: {
         async createOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const createdOrg = await Organization.createOrg(ctx.viewer.id, ctx.prisma, args.input);
                 ctx.pubsub.publish({
                     topic: 'orgUpdated',
@@ -26,14 +27,14 @@ export const resolvers: Resolvers = {
         },
         async updateOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const updatedOrg = await Organization.updateOrg(ctx.viewer.id, ctx.prisma, args.input);
                 return { node: toOrgId(updatedOrg), cursor: updatedOrg.createdAt.getTime().toString() };
             });
         },
         async deleteOrganization(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: orgId } = fromGlobalId(args.input.orgId);
                 const deletedOrg = await Organization.deleteOrg(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
@@ -44,7 +45,7 @@ export const resolvers: Resolvers = {
         },
         createMember(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: orgId } = fromGlobalId(args.input.orgId);
                 const createdMember = await Organization.createMember(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
@@ -61,7 +62,7 @@ export const resolvers: Resolvers = {
         },
         deleteMember(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: orgId } = fromGlobalId(args.input.orgId);
                 const { id: userId } = fromGlobalId(args.input.userId);
                 const deletedMember = await Organization.deleteMember(ctx.viewer.id, ctx.prisma, {

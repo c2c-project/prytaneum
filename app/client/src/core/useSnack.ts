@@ -5,6 +5,7 @@ interface Options {
     action?: JSX.Element;
     onExited?: () => void;
 }
+import { useSnackbar, OptionsObject } from 'notistack';
 
 export function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -12,6 +13,9 @@ export function useSnack() {
         (message: string, options?: Options) => {
             enqueueSnackbar(message, {
                 variant: 'default',
+        (message: string, options?: OptionsObject) => {
+            enqueueSnackbar(message, {
+                variant: options?.variant || 'default',
                 action: options?.action,
                 onExited: options?.onExited,
                 color: 'inherit',

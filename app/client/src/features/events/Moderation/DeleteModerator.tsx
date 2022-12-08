@@ -33,7 +33,7 @@ export function DeleteModerator(props: DeleteModeratorProps) {
             variables: { input: { userId: moderatorId, eventId }, connections },
             onCompleted: ({ deleteModerator }) => {
                 if (deleteModerator.isError) {
-                    displaySnack(deleteModerator.message);
+                    displaySnack(deleteModerator.message, { variant: 'error' });
                 } else {
                     onConfirm();
                 }

@@ -10,7 +10,9 @@ import { PlaywrightTestConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-    testDir: './',
+    /* Used for saving login state for users and organizers */
+    globalSetup: require.resolve('./common/global/test-setup.ts'),
+    testDir: './tests',
     /* Maximum time one test can run for. */
     timeout: 60 * 1000,
     expect: {
@@ -23,9 +25,9 @@ const config: PlaywrightTestConfig = {
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
-    retries: process.env.CI ? 2 : 0,
-    /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 2 : undefined,
+    retries: process.env.CI ? 3 : 0,
+    /* Amount of workers based on number of browsers being tested */
+    workers: process.env.CI ? 1 : 6,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: process.env.CI ? 'github' : [['list'], ['experimental-allure-playwright']],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -36,7 +38,11 @@ const config: PlaywrightTestConfig = {
         baseURL: 'http://localhost:8080',
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-        trace: 'on-first-retry',
+        trace: {
+            mode: 'retain-on-failure',
+            screenshots: true,
+            snapshots: true,
+        },
     },
 
     /* Configure projects for major browsers */

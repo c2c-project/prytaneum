@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import {
-    Grid,
-    Button,
-    DialogContent,
-    Collapse,
-} from '@mui/material';
+import { Grid, Button, DialogContent, Collapse } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
@@ -14,8 +9,7 @@ import { CopyText } from '@local/components/CopyText';
 
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-import { LoadingButton } from '@local/components/LoadingButton';
-import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails'
+import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
 
 interface EventSettingsProps {
@@ -30,9 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     red: {
         color: 'red',
     },
-    text: {
-        fontSize: '1.3em',
-    },
     btn: {
         margin: theme.spacing(2, 0),
     },
@@ -44,9 +35,7 @@ interface TState {
     anchorEl: HTMLElement | null;
 }
 
-type Action =
-    | { type: 'dialog/create-invite'; payload?: never }
-    | { type: 'dialog/close-all'; payload?: never };
+type Action = { type: 'dialog/create-invite'; payload?: never } | { type: 'dialog/close-all'; payload?: never };
 
 const reducer = (state: TState, action: Action): TState => {
     switch (action.type) {
@@ -89,36 +78,41 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
 
     const generateInviteLink = () => {
         // TODO generate token for event if private unless only invites should be used for priavte events
-        const inviteLink = `https://prytaneum.io/events/${eventId}/live`;
+        const inviteLink =
+            process.env.NODE_ENV === 'development'
+                ? `localhost:8080/events/${eventId}/live`
+                : `https://prytaneum.io/events/${eventId}/live`;
         setLink(inviteLink);
     };
 
     const toggleInviteLink = () => {
         if (link === '') generateInviteLink();
         setOpen(!open);
-    }
+    };
 
     return (
-        <Grid container justifyContent='center' className={className}>
+        <Grid container className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
                 <DialogContent>
                     <CreateInvite onSubmit={close} eventId={eventId} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Grid item container justifyContent='center' direction='column' alignItems='flex-end'>
-                <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
-                    Invite
-                </Button>
-                <LoadingButton loading={false}>
+            <Grid container justifyContent='right'>
+                <Grid item paddingRight='1rem'>
                     <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
-                        Invite Link
+                        {open ? 'Hide invite link' : 'Reveal invite link'}
                     </Button>
-                </LoadingButton>
-                <Grid item container justifyContent='center' xs={12}>
-                    <Collapse in={open}>
-                        <CopyText TextFieldProps={{ label: 'Invite Link' }} className={classes.text} text={link} />
-                    </Collapse>
                 </Grid>
+                <Grid item>
+                    <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
+                        Invite
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid container justifyContent='center'>
+                <Collapse in={open} style={{ display: 'flex', flex: 1 }}>
+                    <CopyText TextFieldProps={{ label: 'Invite Link' }} text={link} />
+                </Collapse>
             </Grid>
         </Grid>
     );

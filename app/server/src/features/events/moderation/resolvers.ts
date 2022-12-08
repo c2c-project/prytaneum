@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { fromGlobalId } from 'graphql-relay';
-import type { EventLiveFeedback } from '@local/graphql-types';
 import * as Moderation from './methods';
+import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import type { EventLiveFeedback } from '@local/graphql-types';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
@@ -11,13 +12,13 @@ const toEventId = toGlobalId('Event');
 export const resolvers: Resolvers = {
     Mutation: {
         async hideQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, args.input);
             return toQuestionId(hiddenQuestion);
         },
         async updateQuestionPosition(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
@@ -41,7 +42,7 @@ export const resolvers: Resolvers = {
         },
         // TODO: make this a normal mutation response
         async nextQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
             const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
                 ctx.viewer.id,
@@ -80,7 +81,7 @@ export const resolvers: Resolvers = {
         },
         // TODO: make this a normal mutation response
         async prevQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
             const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
                 ctx.viewer.id,
@@ -116,7 +117,7 @@ export const resolvers: Resolvers = {
         },
         async createModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const newMod = await Moderation.createModerator(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 return toUserId(newMod);
@@ -124,7 +125,7 @@ export const resolvers: Resolvers = {
         },
         async updateModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 // const { id: userId } = fromGlobalId(args.input.userId);
                 const queryResult = await Moderation.findUserIdByEmail(args.input.email, ctx.prisma);
@@ -136,7 +137,7 @@ export const resolvers: Resolvers = {
         },
         async deleteModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: userId } = fromGlobalId(args.input.userId);
                 const deletedMod = await Moderation.deleteModerator(ctx.viewer.id, ctx.prisma, {
@@ -149,7 +150,7 @@ export const resolvers: Resolvers = {
         },
         addQuestionToQueue(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
@@ -173,7 +174,7 @@ export const resolvers: Resolvers = {
         },
         removeQuestionFromQueue(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
