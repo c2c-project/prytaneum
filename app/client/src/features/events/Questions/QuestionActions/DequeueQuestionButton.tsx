@@ -44,7 +44,7 @@ export function DequeueQuestionButton({ questionId }: QueueButtonProps) {
             },
             onCompleted: ({ removeQuestionFromQueue }) => {
                 if (removeQuestionFromQueue.isError) {
-                    displaySnack(removeQuestionFromQueue.message);
+                    displaySnack(removeQuestionFromQueue.message, { variant: 'error' });
                 }
             },
         });
