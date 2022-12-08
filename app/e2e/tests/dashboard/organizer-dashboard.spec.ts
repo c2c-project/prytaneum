@@ -2,7 +2,7 @@ import { test, expect } from '@local/common/utils/fixtures';
 
 export default function organizerTests() {
     test.describe('Items Present', () => {
-        test.only('I can see an ongoing event I created', async ({ dashboardPageOrganizer }) => {
+        test('I can see an ongoing event I created', async ({ dashboardPageOrganizer }) => {
             // Go to Dashboard
             await dashboardPageOrganizer.goto();
 
