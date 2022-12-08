@@ -17,8 +17,8 @@ test('I can register from the app bar', async ({ page }) => {
     await landing.fillInFirstName('John');
     await landing.fillInLastName('Smith');
     await landing.fillInEmail(`newuser${Math.floor(Math.random() * 10000)}@example.com`);
-    await landing.fillInPassword('Password1!');
-    await landing.fillInConfirmPassword('Password1!');
+    await landing.fillInRegisterPassword('Password1!');
+    await landing.fillInRegisterConfirmPassword('Password1!');
     await landing.submitRegisterForm();
     await landing.amLoggedIn();
 });

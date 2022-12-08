@@ -27,7 +27,7 @@ async function globalSetup() {
         await landingPage.goto();
         await landingPage.clickOnLogin();
         await landingPage.fillInEmail(`${users[i]}@example.com`);
-        await landingPage.fillInPassword('Password1!');
+        await landingPage.fillInLoginPassword('Password1!');
         await landingPage.submitLoginForm();
         // Save signed-in state to 'storageState.json'
         await page.context().storageState({ path: `./common/state/${users[i]}StorageState.json` });
@@ -47,7 +47,7 @@ async function globalSetup() {
         await landingPage.goto();
         await landingPage.clickOnLogin();
         await landingPage.fillInEmail(`${organizers[i]}@example.com`);
-        await landingPage.fillInPassword('Password1!');
+        await landingPage.fillInLoginPassword('Password1!');
         await landingPage.submitLoginForm();
         // Save signed-in state to 'organizerStorageState.json'
         await page.context().storageState({ path: `./common/state/${organizers[i]}StorageState.json` });

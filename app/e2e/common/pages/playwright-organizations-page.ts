@@ -6,9 +6,8 @@ export class PlaywrightOrganizationsPage {
     readonly page: Page;
     readonly device: Device;
 
-    readonly createOrganizationButton: Locator;
     readonly createOrganizationInput: Locator;
-    readonly createOrganizationSubmitButton: Locator;
+    readonly createOrganizationButton: Locator;
     readonly today: Date;
     readonly tomorrow: Date;
 
@@ -16,9 +15,8 @@ export class PlaywrightOrganizationsPage {
         this.page = page;
         this.device = device;
 
+        this.createOrganizationInput = page.getByLabel('Organization Name *');
         this.createOrganizationButton = page.locator('[data-test-id="create-organization-button"]');
-        this.createOrganizationInput = page.locator('input[type="text"]');
-        this.createOrganizationSubmitButton = page.locator('button:has-text("Create")');
         this.today = new Date();
         this.tomorrow = new Date();
         this.tomorrow.setDate(this.today.getDate() + 1);
@@ -53,7 +51,7 @@ export class PlaywrightOrganizationsPage {
     }
 
     async submitOrganizationForm() {
-        await this.createOrganizationSubmitButton.click();
+        await this.page.getByRole('button', { name: 'Create' }).click();
     }
 
     async clickOnOrganization(organizationName: string) {
@@ -72,15 +70,13 @@ export class PlaywrightOrganizationsPage {
     }
 
     async clickOnCreateEvent() {
-        await this.page.locator('text=New Event').click();
+        await this.page.getByRole('button', { name: 'New Event' }).click();
     }
 
     async fillInEventName(eventName: string) {
-        await this.page.locator('text=Title *Title * >> input[type="text"]').fill(eventName);
-        await this.page.locator('text=Topic *Topic * >> input[type="text"]').fill(`${eventName} Topic`);
-        await this.page
-            .locator('text=Description *Description * >> input[type="text"]')
-            .fill(`${eventName} Description`);
+        await this.page.getByLabel('Title *').fill(eventName);
+        await this.page.getByLabel('Topic *').fill(`${eventName} Topic`);
+        await this.page.getByLabel('Description').fill(`${eventName} Description`);
     }
 
     async fillInEventTime(eventDate: Date) {
@@ -115,6 +111,6 @@ export class PlaywrightOrganizationsPage {
     }
 
     async submitEventForm() {
-        await this.page.locator('button:has-text("Create")').click();
+        await this.page.getByRole('button', { name: 'Create' }).click();
     }
 }
