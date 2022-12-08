@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    cloud.google.com/neg: '{"ingress": true}'
-  finalizers:
-    - service.kubernetes.io/load-balancer-cleanup
-  labels:
-    app: prytaneum-client
-  name: prytaneum-client-service
-  namespace: production
+    annotations:
+        cloud.google.com/neg: '{"ingress": true}'
+    finalizers:
+        - service.kubernetes.io/load-balancer-cleanup
+    labels:
+        app: prytaneum-client
+    name: prytaneum-client-service
+    namespace: production
 spec:
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  selector:
-    app: prytaneum-client
-  sessionAffinity: None
-  type: ClusterIP
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 3000
+    selector:
+        app: prytaneum-client
+    sessionAffinity: 'ClientIP'
+    type: ClusterIP
