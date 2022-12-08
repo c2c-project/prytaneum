@@ -169,6 +169,12 @@ export const resolvers: Resolvers = {
                         enqueuedPushQuestion: { edge },
                     },
                 });
+                ctx.pubsub.publish({
+                    topic: 'questionUpdated',
+                    payload: {
+                        questionUpdated: { edge },
+                    },
+                });
                 return edge;
             });
         },
@@ -191,6 +197,12 @@ export const resolvers: Resolvers = {
                     topic: 'enqueuedRemoveQuestion',
                     payload: {
                         enqueuedRemoveQuestion: { edge },
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionUpdated',
+                    payload: {
+                        questionUpdated: { edge },
                     },
                 });
                 return edge;
