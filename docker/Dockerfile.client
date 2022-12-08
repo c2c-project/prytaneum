@@ -15,6 +15,7 @@ ARG GRAPHQL_URL=https://prytaneum.io/graphql
 ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}
 ARG GOOGLE_ANALYTICS_ID=secret
 ENV NEXT_PUBLIC_GOOGLE_ANALYTICS ${GOOGLE_ANALYTICS_ID}
+ENV NEXT_SHARP_PATH=/usr/monorepo/app/client/sharp
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 RUN yarn install
