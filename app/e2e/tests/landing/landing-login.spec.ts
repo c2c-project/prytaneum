@@ -15,7 +15,7 @@ test('I can login from the app bar', async ({ page }) => {
     await landing.goto();
     await landing.clickOnLogin();
     await landing.fillInEmail('user1@example.com');
-    await landing.fillInPassword('Password1!');
+    await landing.fillInLoginPassword('Password1!');
     await landing.submitLoginForm();
     await landing.amLoggedIn();
 });

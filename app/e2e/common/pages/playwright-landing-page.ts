@@ -64,52 +64,61 @@ export class PlaywrightLandingPage {
     }
 
     async fillInFirstName(firstName: string) {
-        const firstNameInput = this.page.locator('text=First Name *First Name * >> input[type="text"]');
+        const firstNameInput = this.page.getByLabel('First Name *');
         await expect(firstNameInput).toBeVisible();
         await firstNameInput.click();
         await firstNameInput.fill(firstName);
     }
 
     async fillInLastName(lastName: string) {
-        const lastNameInput = this.page.locator('text=Last Name *Last Name * >> input[type="text"]');
+        const lastNameInput = this.page.getByLabel('Last Name *');
         await expect(lastNameInput).toBeVisible();
         await lastNameInput.click();
         await lastNameInput.fill(lastName);
     }
 
     async fillInEmail(email: string) {
-        const emailInput = this.page.locator('input[type="email"]');
+        const emailInput = this.page.getByLabel('Email *');
         await expect(emailInput).toBeVisible();
         await emailInput.fill(email);
     }
 
-    async fillInPassword(password: string) {
-        const passwordInput = this.page.locator('input[type="password"]').first();
+    async fillInLoginPassword(password: string) {
+        const passwordInput = this.page.getByLabel('Password *');
         await expect(passwordInput).toBeVisible();
         await passwordInput.fill(password);
     }
 
-    async fillInConfirmPassword(password: string) {
-        const confirmPasswordInput = this.page.locator('input[type="password"]').nth(1);
+    async fillInRegisterPassword(password: string) {
+        const passwordInput = this.page.locator('[data-test-id="register-password"]').getByLabel('Password *');
+        await expect(passwordInput).toBeVisible();
+        await passwordInput.fill(password);
+    }
+
+    async fillInRegisterConfirmPassword(password: string) {
+        const confirmPasswordInput = this.page.getByLabel('Confirm Password *');
         await expect(confirmPasswordInput).toBeVisible();
         await confirmPasswordInput.fill(password);
     }
 
     async submitLoginForm() {
-        const loginButton = this.page.locator('div[role="dialog"] button:has-text("Login")');
+        const loginButton = this.page.getByRole('button', { name: 'Login' });
         await expect(loginButton).toBeVisible();
-        await Promise.all([this.page.waitForNavigation(), loginButton.click()]);
+        await loginButton.click();
+        await this.page.waitForNavigation();
     }
 
     async submitRegisterForm() {
-        const registerButton = this.page.locator('div[role="dialog"] button:has-text("Register")');
+        const registerButton = this.page.getByRole('button', { name: 'Register' });
         await expect(registerButton).toBeVisible();
-        await Promise.all([this.page.waitForNavigation(), registerButton.click()]);
+        await registerButton.click();
+        await this.page.waitForNavigation();
     }
 
     async clickOnLargeRegisterButton() {
         await expect(this.largeRegisterButton).toBeVisible();
-        await Promise.all([this.page.waitForNavigation(), this.largeRegisterButton.click()]);
+        await this.largeRegisterButton.click();
+        await this.page.waitForNavigation();
     }
     // Route Checks
     async amLoggedIn() {

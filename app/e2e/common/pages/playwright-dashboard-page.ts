@@ -1,5 +1,6 @@
 import { Browser, Locator, Page } from '@playwright/test';
 import { Device, getIndexByDevice } from '@local/common/utils';
+import { format } from 'date-fns';
 
 export class PlaywrightDashboardPage {
     readonly page: Page;
@@ -7,7 +8,6 @@ export class PlaywrightDashboardPage {
 
     readonly currentEventsSection: Locator;
     readonly upcomingEventsSection: Locator;
-    readonly createEventButton: Locator;
     readonly today: Date;
 
     constructor(page: Page, device: Device) {
@@ -16,7 +16,6 @@ export class PlaywrightDashboardPage {
 
         this.currentEventsSection = page.locator('text=Current Events');
         this.upcomingEventsSection = page.locator('text=Upcoming Events');
-        this.createEventButton = page.locator('[aria-label="view future event"]');
         this.today = new Date();
     }
 
@@ -42,7 +41,7 @@ export class PlaywrightDashboardPage {
         const storageState = `./common/state/user${deviceIndex}StorageState.json`;
         const context = await browser.newContext({
             baseURL: process.env.BASE_URL || 'http://localhost:8080',
-            storageState,
+            storageState: storageState,
         });
         const page = await context.newPage();
         return new PlaywrightDashboardPage(page, this.device);
@@ -56,26 +55,19 @@ export class PlaywrightDashboardPage {
         await this.page.reload();
     }
 
-    async clickOnEvent(eventName: string, eventDate: Date, orgName: string) {
-        const formattedDate = eventDate.toLocaleDateString('en-US', {
+    async clickOnEvent(eventName: string, orgName: string, ongoing: boolean) {
+        const formattedDate = this.today.toLocaleDateString('en-US', {
             month: '2-digit',
             day: '2-digit',
             year: 'numeric',
         });
-        await Promise.all([
-            await this.page.locator(`div[role="button"]:has-text("${eventName}${formattedDate}")`).click(),
-            await this.page.waitForNavigation(),
-        ]);
-    }
-
-    async clickOnCreateEvent() {
-        await Promise.all([await this.createEventButton.click(), await this.page.waitForNavigation()]);
+        const buttonName = `${eventName} ${formattedDate} ${ongoing ? '12:00 AM' : '11:59 PM'} ${orgName}`;
+        await this.page.getByRole('button', { name: buttonName }).click();
+        await this.page.waitForNavigation();
     }
 
     async clickOnLiveFeed() {
-        await Promise.all([
-            await this.page.locator('[aria-label="view live feed of current event"]').click(),
-            await this.page.waitForNavigation(),
-        ]);
+        await this.page.getByRole('button', { name: 'view live feed of current event' }).click();
+        await this.page.waitForNavigation();
     }
 }

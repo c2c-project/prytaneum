@@ -126,6 +126,8 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     />
                     <TextField
                         id='register-password'
+                        data-test-id='register-password'
+                        name='password'
                         required
                         error={Boolean(errors.password)}
                         helperText={errors.password || 'Passwords must be at least 8 characters'}
@@ -155,6 +157,8 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     />
                     <TextField
                         id='register-confirm-password'
+                        data-test-id='register-confirm-password'
+                        name='confirmPassword'
                         required
                         error={Boolean(errors.confirmPassword)}
                         helperText={errors.confirmPassword}
