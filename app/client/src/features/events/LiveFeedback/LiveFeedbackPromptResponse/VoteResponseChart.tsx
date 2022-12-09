@@ -1,3 +1,4 @@
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import * as React from 'react';
 import Chart from 'react-google-charts';
 
@@ -15,8 +16,10 @@ const getVoteColor = (vote: 'FOR' | 'AGAINST' | 'CONFLICTED') => {
     }
 };
 
+type ChartType = 'PieChart' | 'BarChart';
+
 interface DisplayChartProps {
-    chartType: 'PieChart' | 'BarChart';
+    chartType: ChartType;
     votes: VoteResponseChartProps['votes'];
 }
 
@@ -87,12 +90,30 @@ interface VoteResponseChartProps {
 }
 
 export function VoteResponseChart({ votes }: VoteResponseChartProps) {
-    const [chartType, setChartType] = React.useState<'PieChart' | 'BarChart'>('BarChart');
+    const [chartType, setChartType] = React.useState<ChartType>('BarChart');
+
+    const handleSelectionChange = (e: SelectChangeEvent<ChartType>) => {
+        e.preventDefault();
+        setChartType(e.target.value as ChartType);
+    };
 
     return (
         <React.Fragment>
+            <FormControl>
+                <InputLabel id='lang-label'>Chart Type</InputLabel>
+                <Select
+                    labelId='lang-label'
+                    id='lang'
+                    label='Language'
+                    name='lang'
+                    value={chartType}
+                    onChange={handleSelectionChange}
+                >
+                    <MenuItem value='BarChart'>Bar Chart</MenuItem>
+                    <MenuItem value='PieChart'>Pie Chart</MenuItem>
+                </Select>
+            </FormControl>
             <DisplayChart chartType={chartType} votes={votes} />
-            {/* Chart selection here */}
         </React.Fragment>
     );
 }
