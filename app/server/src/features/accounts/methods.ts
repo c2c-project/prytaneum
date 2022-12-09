@@ -2,8 +2,9 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@local/__generated__/prisma';
 import { ProtectedError } from '@local/lib/ProtectedError';
 import { errors, toGlobalId } from '@local/features/utils';
+
 import * as jwt from '@local/lib/jwt';
-import {
+import type {
     DeleteAccountForm,
     LoginForm,
     RegistrationForm,
@@ -20,24 +21,6 @@ import { sendEmail } from '@local/lib/email/email';
 const toUserId = toGlobalId('User');
 
 type MinimalUser = Pick<RegistrationForm, 'email'> & Partial<Pick<RegistrationForm, 'firstName' | 'lastName'>>;
-
-export async function isOrganizer(userId: string, prisma: PrismaClient) {
-    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
-    if (!queryResult)
-        throw new ProtectedError({
-            userMessage: 'Internal server error. Please try again later.',
-            internalMessage: errors.DNE('user'),
-        });
-    return queryResult.canMakeOrgs;
-}
-
-/**
- * given a user id, return the associated email
- */
-export async function findEmailByUserId(userId: string, prisma: PrismaClient) {
-    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
-    return queryResult;
-}
 
 /**
  * Helper function for when we're trying to validate the input credentials match ones in our records.
@@ -429,6 +412,16 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
+}
+
+export async function isOrganizer(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    return queryResult.canMakeOrgs;
 }
 
 export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
