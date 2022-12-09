@@ -122,7 +122,7 @@ export class PlaywrightLandingPage {
     }
     // Route Checks
     async amLoggedIn() {
-        await this.page.waitForURL('/organizations/me');
+        await this.page.waitForURL('/dashboard');
     }
 
     async amOnRegistrationPage() {
