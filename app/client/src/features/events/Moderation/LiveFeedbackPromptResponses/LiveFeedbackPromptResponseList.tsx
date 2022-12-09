@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, fetchQuery } from 'react-relay';
 import { List, ListItem, Card, CardContent, Typography, Grid, Button } from '@mui/material';
-import { Chart } from 'react-google-charts';
 
 import { Loader } from '@local/components';
 import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFeedbackPromptResponseListQuery.graphql';
 import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
+import { VoteResponseChart } from '../../LiveFeedback/LiveFeedbackPromptResponse/VoteResponseChart';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
     query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
@@ -65,20 +65,6 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
 
     const toggleChartVisiblity = () => setChartVisiblity(!chartVisiblity);
 
-    // Color association based on the vote value
-    const getVoteColor = (vote: PromptResponse['vote']) => {
-        switch (vote) {
-            case 'FOR':
-                return 'green';
-            case 'AGAINST':
-                return 'red';
-            case 'CONFLICTED':
-                return 'orange';
-            default:
-                return 'black';
-        }
-    };
-
     // Counts votes for each response categorized by vote type (For, Against, Conflicted)
     const voteCount = React.useMemo(() => {
         const forVotes = promptResponses.filter((response) => response.vote === 'FOR').length;
@@ -112,24 +98,8 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                     {zeroVotes ? (
                         <div>No Votes Yet</div>
                     ) : (
-                        <Chart
-                            chartType='PieChart'
-                            data={[
-                                ['Vote', 'Count'],
-                                ['For', voteCount.for],
-                                ['Against', voteCount.against],
-                                ['Conflicted', voteCount.conflicted],
-                            ]}
-                            options={{
-                                title: 'Votes',
-                                slices: {
-                                    0: { color: getVoteColor('FOR') },
-                                    1: { color: getVoteColor('AGAINST') },
-                                    2: { color: getVoteColor('CONFLICTED') },
-                                },
-                            }}
-                            width='100%'
-                            height='400px'
+                        <VoteResponseChart
+                            votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
                         />
                     )}
                 </>

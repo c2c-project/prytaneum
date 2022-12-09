@@ -6,7 +6,7 @@ import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import { Prompt } from './useLiveFeedbackPromptResultsShared';
 import { ConditionalRender, Loader } from '@local/components';
 import { ViewLiveFeedbackPromptResultsQuery } from '@local/__generated__/ViewLiveFeedbackPromptResultsQuery.graphql';
-import Chart from 'react-google-charts';
+import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
 
 const VIEW_LIVE_FEEDBACK_PROMPT_RESULTS = graphql`
     query ViewLiveFeedbackPromptResultsQuery($promptId: ID!) {
@@ -29,19 +29,6 @@ interface ResultsProps {
 function Results({ promptResponseVotes }: ResultsProps) {
     const { for: forVotes, against: againstVotes, conflicted: conflictedVotes } = promptResponseVotes;
 
-    // Color association based on the vote value
-    const getVoteColor = (vote: 'FOR' | 'AGAINST' | 'CONFLICTED') => {
-        switch (vote) {
-            case 'FOR':
-                return 'green';
-            case 'AGAINST':
-                return 'red';
-            case 'CONFLICTED':
-                return 'orange';
-            default:
-                return 'black';
-        }
-    };
     const zeroVotes = React.useMemo(() => {
         return forVotes === 0 && againstVotes === 0 && conflictedVotes === 0;
     }, [againstVotes, conflictedVotes, forVotes]);
@@ -51,25 +38,7 @@ function Results({ promptResponseVotes }: ResultsProps) {
             {zeroVotes ? (
                 <div>No Votes To Display</div>
             ) : (
-                <Chart
-                    chartType='PieChart'
-                    data={[
-                        ['Vote', 'Count'],
-                        ['For', forVotes],
-                        ['Against', againstVotes],
-                        ['Conflicted', conflictedVotes],
-                    ]}
-                    options={{
-                        title: 'Votes',
-                        slices: {
-                            0: { color: getVoteColor('FOR') },
-                            1: { color: getVoteColor('AGAINST') },
-                            2: { color: getVoteColor('CONFLICTED') },
-                        },
-                    }}
-                    width='100%'
-                    height='400px'
-                />
+                <VoteResponseChart votes={{ for: forVotes, against: againstVotes, conflicted: conflictedVotes }} />
             )}
         </React.Fragment>
     );
