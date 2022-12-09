@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 const DashboardPage: NextPage = () => {
     const router = useRouter();
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const [checkComplete, setCheckComplete] = React.useState<boolean>(false);
 
     React.useEffect(() => {
