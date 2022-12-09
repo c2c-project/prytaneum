@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/utils';
-import { CookieSerializeOptions } from 'fastify-cookie';
+import { CookieSerializeOptions } from '@fastify/cookie';
 import * as User from './methods';
 import { findAllEvents } from '../events/methods';
 import * as jwt from '@local/lib/jwt';
@@ -90,6 +90,7 @@ export const resolvers: Resolvers = {
         async register(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { registeredUser, token } = await User.registerSelf(ctx.prisma, args.input);
+                // @ts-ignore
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(registeredUser);
             });
@@ -97,17 +98,20 @@ export const resolvers: Resolvers = {
         async login(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { user, token } = await User.loginWithPassword(ctx.prisma, args.input);
+                // @ts-ignore
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(user);
             });
         },
         logout(parent, args, ctx, info) {
+            // @ts-ignore
             ctx.reply.clearCookie('jwt', cookieOptions);
             return new Date();
         },
         async updateEmail(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { updatedUser, token } = await User.updateEmail(ctx.prisma, args.input);
+                // @ts-ignore
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(updatedUser);
             });
@@ -115,6 +119,7 @@ export const resolvers: Resolvers = {
         async updatePassword(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);
+                // @ts-ignore
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(updatedUser);
             });
@@ -133,6 +138,7 @@ export const resolvers: Resolvers = {
         async deleteAccount(parent, args, ctx, info) {
             return runMutation(async () => {
                 const { deletedUser } = await User.deleteAccount(ctx.prisma, args.input);
+                // @ts-ignore
                 ctx.reply.clearCookie('jwt', cookieOptions);
                 return toUserId(deletedUser);
             });
