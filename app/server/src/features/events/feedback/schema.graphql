@@ -112,10 +112,17 @@ input CreateFeedbackPromptResponse {
     vote: String!
 }
 
+type Votes {
+    for: Int!
+    against: Int!
+    conflicted: Int!
+}
+
 type Mutation {
     createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
     createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
     createFeedbackPromptResponse(input: CreateFeedbackPromptResponse!): EventFeedbackPromptResponseMutationResponse!
+    shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
 }
 
 type Query {
@@ -123,9 +130,11 @@ type Query {
     promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
     prompt(promptId: ID!): EventLiveFeedbackPrompt
     prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
+    promptResponseVotes(promptId: ID!): Votes!
 }
 
 type Subscription {
     feedbackCRUD(eventId: ID!): FeedbackOperation!
     feedbackPrompted(eventId: ID!): EventLiveFeedbackPrompt!
+    feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
 }

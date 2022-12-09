@@ -51,6 +51,7 @@ export type Query = {
     promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
     prompt?: Maybe<EventLiveFeedbackPrompt>;
     prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
+    promptResponseVotes: Votes;
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
@@ -81,6 +82,10 @@ export type QuerypromptArgs = {
 
 export type QuerypromptsArgs = {
     eventId: Scalars['ID'];
+};
+
+export type QuerypromptResponseVotesArgs = {
+    promptId: Scalars['ID'];
 };
 
 export type QueryvalidateInviteArgs = {
@@ -260,6 +265,7 @@ export type Mutation = {
     createFeedback: EventFeedbackMutationResponse;
     createFeedbackPrompt: EventFeedbackPromptMutationResponse;
     createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
+    shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     createInvite: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
@@ -369,6 +375,11 @@ export type MutationcreateFeedbackPromptArgs = {
 
 export type MutationcreateFeedbackPromptResponseArgs = {
     input: CreateFeedbackPromptResponse;
+};
+
+export type MutationshareFeedbackPromptResultsArgs = {
+    eventId: Scalars['ID'];
+    promptId: Scalars['ID'];
 };
 
 export type MutationcreateInviteArgs = {
@@ -611,6 +622,7 @@ export type Subscription = {
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
     feedbackPrompted: EventLiveFeedbackPrompt;
+    feedbackPromptResultsShared: EventLiveFeedbackPrompt;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
     /** Question subscription for all operations performed on questions */
@@ -652,6 +664,10 @@ export type SubscriptionfeedbackCRUDArgs = {
 };
 
 export type SubscriptionfeedbackPromptedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionfeedbackPromptResultsSharedArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -920,6 +936,13 @@ export type CreateFeedbackPromptResponse = {
     promptId: Scalars['ID'];
     response: Scalars['String'];
     vote: Scalars['String'];
+};
+
+export type Votes = {
+    __typename?: 'Votes';
+    for: Scalars['Int'];
+    against: Scalars['Int'];
+    conflicted: Scalars['Int'];
 };
 
 export type CreateInvite = {
@@ -1386,6 +1409,7 @@ export type ResolversTypes = {
     CreateFeedback: CreateFeedback;
     CreateFeedbackPrompt: CreateFeedbackPrompt;
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
+    Votes: ResolverTypeWrapper<Votes>;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: ResolverTypeWrapper<InviteMutationResponse>;
@@ -1514,6 +1538,7 @@ export type ResolversParentTypes = {
     CreateFeedback: CreateFeedback;
     CreateFeedbackPrompt: CreateFeedbackPrompt;
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
+    Votes: Votes;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: InviteMutationResponse;
@@ -1628,6 +1653,12 @@ export type QueryResolvers<
         ParentType,
         ContextType,
         RequireFields<QuerypromptsArgs, 'eventId'>
+    >;
+    promptResponseVotes?: Resolver<
+        ResolversTypes['Votes'],
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptResponseVotesArgs, 'promptId'>
     >;
     validateInvite?: Resolver<
         ResolversTypes['ValidateInviteQueryResponse'],
@@ -1894,6 +1925,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationcreateFeedbackPromptResponseArgs, 'input'>
+    >;
+    shareFeedbackPromptResults?: Resolver<
+        ResolversTypes['EventFeedbackPromptMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationshareFeedbackPromptResultsArgs, 'eventId' | 'promptId'>
     >;
     createInvite?: Resolver<
         ResolversTypes['InviteMutationResponse'],
@@ -2171,6 +2208,13 @@ export type SubscriptionResolvers<
         ParentType,
         ContextType,
         RequireFields<SubscriptionfeedbackPromptedArgs, 'eventId'>
+    >;
+    feedbackPromptResultsShared?: SubscriptionResolver<
+        ResolversTypes['EventLiveFeedbackPrompt'],
+        'feedbackPromptResultsShared',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionfeedbackPromptResultsSharedArgs, 'eventId'>
     >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         ResolversTypes['EventLiveFeedback'],
@@ -2478,6 +2522,16 @@ export type EventFeedbackPromptResponseMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type VotesResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['Votes'] = ResolversParentTypes['Votes']
+> = {
+    for?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    against?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    conflicted?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type InviteMutationResponseResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['InviteMutationResponse'] = ResolversParentTypes['InviteMutationResponse']
@@ -2743,6 +2797,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventFeedbackMutationResponse?: EventFeedbackMutationResponseResolvers<ContextType>;
     EventFeedbackPromptMutationResponse?: EventFeedbackPromptMutationResponseResolvers<ContextType>;
     EventFeedbackPromptResponseMutationResponse?: EventFeedbackPromptResponseMutationResponseResolvers<ContextType>;
+    Votes?: VotesResolvers<ContextType>;
     InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
     ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
@@ -3046,6 +3101,12 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
             {},
             TContext
         >;
+    };
+
+    Votes?: {
+        for?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+        against?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+        conflicted?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
     };
 
     InviteMutationResponse?: {

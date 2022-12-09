@@ -567,6 +567,7 @@ type Mutation {
   returns false if an account with the provided email cannot be found
   """
   resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+  shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
 
   """
   Start the event so that it is "live"
@@ -658,6 +659,7 @@ type Query {
   myFeedback(eventId: ID!): [EventLiveFeedback]
   node(id: ID!): Node
   prompt(promptId: ID!): EventLiveFeedbackPrompt
+  promptResponseVotes(promptId: ID!): Votes!
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
@@ -710,6 +712,7 @@ type Subscription {
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
   eventUpdates(userId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
+  feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
   feedbackPrompted(eventId: ID!): EventLiveFeedbackPrompt!
 
   """subscription for whenever a new org is added"""
@@ -857,4 +860,10 @@ enum Vote {
   AGAINST
   CONFLICTED
   FOR
+}
+
+type Votes {
+  against: Int!
+  conflicted: Int!
+  for: Int!
 }

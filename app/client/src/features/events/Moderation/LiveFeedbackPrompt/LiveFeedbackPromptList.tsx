@@ -9,6 +9,7 @@ import { ConditionalRender } from '@local/components';
 import { Loader } from '@local/components/Loader';
 import { PreloadedLiveFeedbackPromptResponseList } from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
 import { useEnvironment } from '@local/core';
+import { ShareFeedbackPromptResults } from '../LiveFeedbackPromptResponses';
 
 export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
     query LiveFeedbackPromptListQuery($eventId: ID!) {
@@ -109,6 +110,12 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
         return <></>;
     };
 
+    const ShareFeedbackResultsButton = () => {
+        if (selectedPromptRef.current && selectedPromptRef.current.isVote)
+            return <ShareFeedbackPromptResults prompt={selectedPromptRef.current} />;
+        return <></>;
+    };
+
     return (
         <React.Fragment>
             {!prompts ? <Loader /> : <PromptList prompts={prompts} handleClick={handlePromptClick} />}
@@ -137,6 +144,7 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
                         <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
                             Feedback Responses
                         </Typography>
+                        <ShareFeedbackResultsButton />
                         <PromptResponseList />
                     </Grid>
                 </Box>

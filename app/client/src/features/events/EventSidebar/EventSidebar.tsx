@@ -19,6 +19,7 @@ import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuesti
 import { SubmitLiveFeedbackPrompt } from '../Moderation/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
 import { useLiveFeedbackPrompt } from '../LiveFeedback/useLiveFeedbackPrompt';
 import { ShareFeedbackResults } from '../Moderation/ShareFeedbackResults';
+import { useLiveFeedbackPromptResultsShared } from '../LiveFeedback/LiveFeedbackPromptResults';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -92,6 +93,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
 
     // Subscribe to live feedback prompts
     useLiveFeedbackPrompt();
+    useLiveFeedbackPromptResultsShared();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
