@@ -12,11 +12,13 @@ export const resolvers: Resolvers = {
     Date: new GraphQLScalarType({
         name: 'Date',
         description: 'Date custom scalar type',
-        parseValue(value: string) {
-            return new Date(value); // value from the client
+        parseValue(value: unknown) {
+            if (typeof value === 'string') return new Date(value); // value from the client
+            return value;
         },
-        serialize(value: Date) {
-            return value.toISOString(); // value sent to the client
+        serialize(value: unknown) {
+            if (value instanceof Date) return value.toISOString(); // value sent to the client
+            return value;
         },
         parseLiteral(ast) {
             if (ast.kind === Kind.INT) {
