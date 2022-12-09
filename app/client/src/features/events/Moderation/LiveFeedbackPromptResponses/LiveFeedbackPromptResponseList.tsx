@@ -86,9 +86,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
             </Grid>
             <Grid container justifyContent='center'>
                 {promptData.isVote ? (
-                    <Button onClick={toggleChartVisiblity}>
-                        {chartVisiblity ? 'Hide Pie Chart' : 'Show Pie Chart'}
-                    </Button>
+                    <Button onClick={toggleChartVisiblity}>{chartVisiblity ? 'Hide Chart' : 'Show Chart'}</Button>
                 ) : (
                     <></>
                 )}
