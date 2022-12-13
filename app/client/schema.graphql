@@ -663,6 +663,9 @@ type Query {
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
+
+  """Fetch all users"""
+  users: [User!]!
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
@@ -800,12 +803,14 @@ input UpdateVideo {
 type User implements Node {
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
+  canMakeOrgs: Boolean
   email: String
 
   """Events that this user is a moderator of, or has been invited to"""
   events(after: String, first: Int): EventConnection
   firstName: String
   id: ID!
+  isAdmin: Boolean
   isEmailVerified: Boolean
   lastName: String
 

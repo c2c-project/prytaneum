@@ -937,6 +937,8 @@ export type Query = {
   promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
   prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  /** Fetch all users */
+  users: Array<User>;
   validateInvite: ValidateInviteQueryResponse;
   validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
 };
@@ -1225,11 +1227,13 @@ export type User = Node & {
   __typename?: 'User';
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
+  canMakeOrgs?: Maybe<Scalars['Boolean']>;
   email?: Maybe<Scalars['String']>;
   /** Events that this user is a moderator of, or has been invited to */
   events?: Maybe<EventConnection>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  isAdmin?: Maybe<Scalars['Boolean']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */

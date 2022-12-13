@@ -162,6 +162,15 @@ export function findUserById(id: string, prisma: PrismaClient) {
     return prisma.user.findUnique({ where: { id } });
 }
 
+export async function findAllUsers(viewerId: string, prisma: PrismaClient) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return null;
+    if (!queryResult.isAdmin) return null;
+
+    return prisma.user.findMany({});
+}
+
 /**
  * get organizations of this particular user
  * NOTE: the performance of this for one field probably leaves much to be wanted, two joins for one field

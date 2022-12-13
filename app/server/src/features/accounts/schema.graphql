@@ -7,6 +7,8 @@ type User implements Node {
     lastName: String
     email: String
     isEmailVerified: Boolean
+    isAdmin: Boolean
+    canMakeOrgs: Boolean
 
     """
     Avatar URL if null then no avatar is uploaded
@@ -116,6 +118,10 @@ type Query {
     """
     me: User
     validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
+    """
+    Fetch all users
+    """
+    users: [User!]!
 }
 
 type Mutation {

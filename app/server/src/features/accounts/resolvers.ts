@@ -31,6 +31,12 @@ export const resolvers: Resolvers = {
                 return { valid: false, message: errors.jwt };
             }
         },
+        async users(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return [];
+            const users = await User.findAllUsers(ctx.viewer.id, ctx.prisma);
+            if (!users) return [];
+            return users.map(toUserId);
+        },
     },
     User: {
         async organizations(parent, args, ctx, info) {

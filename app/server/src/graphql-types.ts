@@ -43,6 +43,8 @@ export type Query = {
     /** Fetch user data about the current user */
     me?: Maybe<User>;
     validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
+    /** Fetch all users */
+    users: Array<User>;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
     /** Fetch a single event */
@@ -120,6 +122,8 @@ export type User = Node & {
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
     isEmailVerified?: Maybe<Scalars['Boolean']>;
+    isAdmin?: Maybe<Scalars['Boolean']>;
+    canMakeOrgs?: Maybe<Scalars['Boolean']>;
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
@@ -1628,6 +1632,7 @@ export type QueryResolvers<
         ContextType,
         RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
     >;
+    users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
     myFeedback?: Resolver<
@@ -1716,6 +1721,8 @@ export type UserResolvers<
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    canMakeOrgs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<
         Maybe<ResolversTypes['OrganizationConnection']>,
@@ -2862,6 +2869,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isAdmin?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        canMakeOrgs?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
         events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
