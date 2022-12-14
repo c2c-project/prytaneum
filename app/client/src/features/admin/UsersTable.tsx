@@ -11,13 +11,74 @@ import {
     TableBody,
     TextField,
     IconButton,
+    TableFooter,
+    Box,
+    TablePagination,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { Search as SearchIcon } from '@mui/icons-material';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
 
 import { Form } from '@local/components';
 import type { useUsersDashboardFragment$key } from '@local/__generated__/useUsersDashboardFragment.graphql';
 import { useUsersDashboard } from './useUsersDashboard';
 import { useForm } from '@local/core';
+
+interface TablePaginationActionsProps {
+    count: number;
+    page: number;
+    rowsPerPage: number;
+    onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
+}
+
+function TablePaginationActions(props: TablePaginationActionsProps) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label='first page'>
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label='previous page'>
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label='next page'
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label='last page'
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
 
 type UsersDashboardSearchFilter = {
     firstName: string;
@@ -74,9 +135,7 @@ function SearchBar({ handleSearchFilter }: SearchBarProps) {
                         aria-label='search button'
                         type='submit'
                         onClick={() => {
-                            console.log('clicked');
                             handleSubmit((_form) => {
-                                console.log('FORM: ', _form);
                                 handleSearchFilter(_form);
                             });
                         }}
@@ -93,11 +152,28 @@ interface UsersTableProps {
     fragmentRef: useUsersDashboardFragment$key;
 }
 
-// TODO: Use virtualized table here
 export function UsersTable({ fragmentRef }: UsersTableProps) {
-    const { usersList, hasNext, loadNext, isLoadingNext, refetch } = useUsersDashboard({ fragmentRef });
+    const { users, hasNext, loadNext, isLoadingNext, refetch } = useUsersDashboard({ fragmentRef });
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
     const date = new Date();
     const FETCH_AMMOUNT = 50;
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows = React.useMemo(
+        () => (page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0),
+        [page, rowsPerPage, users.length]
+    );
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const handleDelete = (id: string) => {
         console.log(id);
@@ -108,18 +184,25 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
         // TODO: Implement edit button to premote/demote as organizers
     };
 
-    const handleLoadNext = () => {
-        if (hasNext) loadNext(FETCH_AMMOUNT);
-    };
-
     const handleSearchFilter = (filter: UsersDashboardSearchFilter) => {
-        console.log(filter);
         refetch({
             filter: { firstName: filter.firstName, lastName: filter.lastName, email: filter.email },
         });
     };
 
-    const usersListLength = React.useMemo(() => usersList.length, [usersList]);
+    const handleLoadNext = React.useCallback(() => {
+        if (hasNext) loadNext(FETCH_AMMOUNT);
+    }, [hasNext, loadNext]);
+
+    const usersListLength = React.useMemo(() => users.length, [users]);
+    const nextPageIsLastPage = React.useMemo(
+        () => page + 1 > Math.ceil(usersListLength / rowsPerPage) - 1,
+        [page, rowsPerPage, usersListLength]
+    );
+
+    React.useEffect(() => {
+        if (nextPageIsLastPage) handleLoadNext();
+    }, [handleLoadNext, nextPageIsLastPage]);
 
     return (
         <React.Fragment>
@@ -131,16 +214,16 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
                     <Table sx={{ minWidth: 650 }} aria-label='dashboard-table'>
                         <TableHead>
                             <TableRow>
-                                <TableCell>
+                                <TableCell style={{ width: 250 }}>
                                     <Typography fontWeight='bold'>Name</Typography>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: 250 }}>
                                     <Typography fontWeight='bold'>Email</Typography>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: 150 }}>
                                     <Typography fontWeight='bold'>User Type</Typography>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: 200 }}>
                                     <Typography fontWeight='bold'>Last Login Date</Typography>
                                 </TableCell>
                                 <TableCell />
@@ -148,7 +231,10 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {usersList.map((user) => (
+                            {(rowsPerPage > 0
+                                ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : users
+                            ).map((user) => (
                                 <TableRow key={user.id}>
                                     <TableCell>
                                         <Typography>{user.firstName + ' ' + user.lastName}</Typography>
@@ -160,6 +246,7 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
                                         <Typography>{user.canMakeOrgs ? 'Organizer' : 'Participant'}</Typography>
                                     </TableCell>
                                     <TableCell>
+                                        {/* TODO: Get this from the backend */}
                                         <Typography>
                                             {date.toLocaleDateString() +
                                                 ' ' +
@@ -178,7 +265,37 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
                                     </TableCell>
                                 </TableRow>
                             ))}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 70 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    count={usersListLength}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    labelRowsPerPage={<span>Rows per page:</span>}
+                                    labelDisplayedRows={({ page: _page }) => {
+                                        return `Page: ${_page + 1}`;
+                                    }}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'page number',
+                                        },
+                                        style: { width: '4rem' },
+                                    }}
+                                    showFirstButton={true}
+                                    showLastButton={true}
+                                    ActionsComponent={TablePaginationActions}
+                                />
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
             ) : (

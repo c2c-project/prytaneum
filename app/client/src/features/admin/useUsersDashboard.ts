@@ -35,9 +35,9 @@ export function useUsersDashboard({ fragmentRef }: UseUsersDashboardProps) {
     const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
         usePaginationFragment(USE_USERS_DASHBOARD_FRAGMENT, fragmentRef);
 
-    const usersList = useMemo(() => {
+    const users = useMemo(() => {
         return data.users?.edges?.map((edge) => edge?.node) ?? [];
     }, [data.users?.edges]);
 
-    return { usersList, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch };
+    return { users, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch };
 }

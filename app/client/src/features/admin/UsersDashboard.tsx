@@ -2,7 +2,7 @@ import * as React from 'react';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Grid, Paper, Typography } from '@mui/material';
 
-import { Loader } from '@local/components';
+import { ConditionalRender, Loader } from '@local/components';
 import type { UsersDashboardQuery } from '@local/__generated__/UsersDashboardQuery.graphql';
 import { UsersTable } from './UsersTable';
 
@@ -48,14 +48,14 @@ function PreloadedUsersList() {
 export function UsersDashboard() {
     return (
         <Paper>
-            <Grid container>
-                <Grid item paddingLeft='1rem'>
-                    <Typography variant='h4'>Admin Dashboard: Users</Typography>
-                </Grid>
+            <Grid paddingLeft='1rem'>
+                <Typography variant='h4'>Admin Dashboard: Users</Typography>
+            </Grid>
+            <ConditionalRender client>
                 <React.Suspense fallback={<Loader />}>
                     <PreloadedUsersList />
                 </React.Suspense>
-            </Grid>
+            </ConditionalRender>
         </Paper>
     );
 }
