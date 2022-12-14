@@ -8,6 +8,9 @@ import type { SubmitLiveFeedbackPromptMutation } from '@local/__generated__/Subm
 import { ResponsiveDialog, useResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { useUser } from '@local/features/accounts';
 import { LiveFeedbackPromptForm, TLiveFeedbackPromptFormState } from './LiveFeedbackPromptForm';
+import { useSnack } from '@local/core';
+import { FEEDBACK_PROMPT_MAX_LENGTH } from '@local/utils/rules';
+import { isURL } from '@local/utils';
 
 interface Props {
     className?: string;
@@ -34,17 +37,33 @@ export const SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION = graphql`
 export function SubmitLiveFeedbackPrompt({ className, eventId }: Props) {
     const [isOpen, open, close] = useResponsiveDialog();
     const [user] = useUser();
+    const { displaySnack } = useSnack();
     const [commit] = useMutation<SubmitLiveFeedbackPromptMutation>(SUBMIT_LIVE_FEEDBACK_PROMPT_MUTATION);
 
     function handleSubmit(form: TLiveFeedbackPromptFormState) {
-        commit({
-            variables: { input: { ...form, eventId } },
-            onCompleted: close,
-        });
+        try {
+            // Validate length and url presence before submitting to avoid unessisary serverside validation
+            if (form.prompt.length > FEEDBACK_PROMPT_MAX_LENGTH) throw new Error('Prompt is too long!');
+            if (isURL(form.prompt)) throw new Error('no links are allowed!');
+            commit({
+                variables: { input: { ...form, eventId } },
+                onCompleted(payload) {
+                    try {
+                        if (payload.createFeedbackPrompt.isError) throw new Error(payload.createFeedbackPrompt.message);
+                        close();
+                        displaySnack('Prompt submitted successfully!', { variant: 'success' });
+                    } catch (err) {
+                        displaySnack(err.message, { variant: 'error' });
+                    }
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message, { variant: 'error' });
+        }
     }
 
     return (
-        <>
+        <React.Fragment>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
                     <LiveFeedbackPromptForm onCancel={close} onSubmit={handleSubmit} />
@@ -61,6 +80,6 @@ export function SubmitLiveFeedbackPrompt({ className, eventId }: Props) {
             >
                 {user ? 'Ask For Feedback' : 'Sign in to submit live feedback'}
             </Button>
-        </>
+        </React.Fragment>
     );
 }
