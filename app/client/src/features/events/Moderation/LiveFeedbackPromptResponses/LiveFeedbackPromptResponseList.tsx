@@ -81,8 +81,10 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
 
     return (
         <React.Fragment>
-            <Grid container justifyContent='center'>
-                <Typography>Prompt: {promptData.prompt}</Typography>
+            <Grid container paddingX='1rem'>
+                <Grid item xs>
+                    <Typography style={{ overflowWrap: 'break-word' }}>Prompt: {promptData.prompt}</Typography>
+                </Grid>
             </Grid>
             <Grid container justifyContent='center'>
                 {promptData.isVote ? (
