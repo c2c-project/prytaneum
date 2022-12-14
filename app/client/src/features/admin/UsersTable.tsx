@@ -16,11 +16,10 @@ import {
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
-import { Form } from '@local/components';
+import { Form, TablePaginationActions } from '@local/components';
 import type { useUsersDashboardFragment$key } from '@local/__generated__/useUsersDashboardFragment.graphql';
 import { useUsersDashboard } from './useUsersDashboard';
 import { useForm } from '@local/core';
-import { TablePaginationActions } from './TablePaginationActions';
 
 export type UsersDashboardSearchFilter = {
     firstName: string;
