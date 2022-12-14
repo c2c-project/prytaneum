@@ -92,7 +92,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                 )}
             </Grid>
             {chartVisiblity && (
-                <>
+                <React.Fragment>
                     {zeroVotes ? (
                         <div>No Votes Yet</div>
                     ) : (
@@ -100,7 +100,7 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
                             votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
                         />
                     )}
-                </>
+                </React.Fragment>
             )}
             <List id='live-feedback-prompt-response-list'>
                 {responses.map(({ id, response, vote, createdAt, createdBy }) => (

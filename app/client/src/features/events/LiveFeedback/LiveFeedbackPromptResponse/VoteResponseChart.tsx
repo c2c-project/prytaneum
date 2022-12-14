@@ -16,7 +16,7 @@ const getVoteColor = (vote: 'FOR' | 'AGAINST' | 'CONFLICTED') => {
     }
 };
 
-type ChartType = 'PieChart' | 'BarChart';
+type ChartType = 'PieChart' | 'BarChart' | 'StakedBarChart';
 
 interface DisplayChartProps {
     chartType: ChartType;
@@ -76,6 +76,30 @@ const DisplayChart = ({ chartType, votes }: DisplayChartProps) => {
                     height='400px'
                 />
             );
+        case 'StakedBarChart':
+            return (
+                <Chart
+                    chartType='BarChart'
+                    data={[
+                        ['Votes', 'For', 'Against', 'Conflicted'],
+                        ['Votes', votes.for, votes.against, votes.conflicted],
+                    ]}
+                    options={{
+                        title: 'Feedback Prompt Votes',
+                        chartArea: { width: '65%' },
+                        isStacked: true,
+                        bar: { groupWidth: '85%' },
+                        legend: { position: 'top' },
+                        series: {
+                            0: { color: getVoteColor('FOR') },
+                            1: { color: getVoteColor('AGAINST') },
+                            2: { color: getVoteColor('CONFLICTED') },
+                        },
+                    }}
+                    width='100%'
+                    height='400px'
+                />
+            );
         default:
             return <></>;
     }
@@ -111,6 +135,7 @@ export function VoteResponseChart({ votes }: VoteResponseChartProps) {
                 >
                     <MenuItem value='BarChart'>Bar Chart</MenuItem>
                     <MenuItem value='PieChart'>Pie Chart</MenuItem>
+                    <MenuItem value='StakedBarChart'>Staked Bar Chart</MenuItem>
                 </Select>
             </FormControl>
             <DisplayChart chartType={chartType} votes={votes} />
