@@ -31,12 +31,6 @@ export const resolvers: Resolvers = {
                 return { valid: false, message: errors.jwt };
             }
         },
-        async users(parent, args, ctx, info) {
-            if (!ctx.viewer.id) return [];
-            const users = await User.findAllUsers(ctx.viewer.id, ctx.prisma);
-            if (!users) return [];
-            return users.map(toUserId);
-        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -50,6 +44,21 @@ export const resolvers: Resolvers = {
             const userEvents = await User.findUsersEventsByUserId(userId, ctx.prisma);
             if (!userEvents) return null;
             return connectionFromArray(userEvents.map(toEventId), args);
+        },
+        async users(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return connectionFromArray([], args);
+            const filter = {
+                firstName: args.filter?.firstName ?? '',
+                lastName: args.filter?.lastName ?? '',
+                email: args.filter?.email ?? '',
+            };
+            const users = await User.findAllUsers(ctx.viewer.id, filter, ctx.prisma);
+            if (!users) return connectionFromArray([], args);
+            const formattedUsers = users.map(toUserId);
+            const connection = connectionFromArray(formattedUsers, args);
+            if (formattedUsers.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
         },
     },
     Mutation: {

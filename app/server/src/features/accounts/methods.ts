@@ -162,13 +162,25 @@ export function findUserById(id: string, prisma: PrismaClient) {
     return prisma.user.findUnique({ where: { id } });
 }
 
-export async function findAllUsers(viewerId: string, prisma: PrismaClient) {
+type UsersSearchFilter = {
+    firstName: string;
+    lastName: string;
+    email: string;
+};
+
+export async function findAllUsers(viewerId: string, filter: UsersSearchFilter, prisma: PrismaClient) {
     // Only admins should be able to query for all users.
     const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
-    if (!queryResult) return null;
-    if (!queryResult.isAdmin) return null;
+    if (!queryResult) return [];
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all users.' });
 
-    return prisma.user.findMany({});
+    return prisma.user.findMany({
+        where: {
+            firstName: { contains: filter.firstName },
+            lastName: { contains: filter.lastName },
+            email: { contains: filter.email },
+        },
+    });
 }
 
 /**

@@ -1238,6 +1238,8 @@ export type User = Node & {
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+  /** All the users */
+  users?: Maybe<UserConnection>;
 };
 
 
@@ -1251,6 +1253,14 @@ export type UserEventsArgs = {
 /** User Data */
 export type UserOrganizationsArgs = {
   after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** User Data */
+export type UserUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<UsersSearchFilters>;
   first?: InputMaybe<Scalars['Int']>;
 };
 
@@ -1281,6 +1291,15 @@ export type UserSettings = {
   isNotificationsEnabled: Scalars['Boolean'];
   updateEmail?: Maybe<Scalars['String']>;
   updatePassword?: Maybe<Scalars['String']>;
+};
+
+export type UsersSearchFilters = {
+  /** Search by email */
+  email?: InputMaybe<Scalars['String']>;
+  /** Search by first name */
+  firstName?: InputMaybe<Scalars['String']>;
+  /** Search by last name */
+  lastName?: InputMaybe<Scalars['String']>;
 };
 
 export type ValidateInvite = {

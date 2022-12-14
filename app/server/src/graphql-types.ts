@@ -43,8 +43,6 @@ export type Query = {
     /** Fetch user data about the current user */
     me?: Maybe<User>;
     validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
-    /** Fetch all users */
-    users: Array<User>;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
     /** Fetch a single event */
@@ -130,6 +128,8 @@ export type User = Node & {
     organizations?: Maybe<OrganizationConnection>;
     /** Events that this user is a moderator of, or has been invited to */
     events?: Maybe<EventConnection>;
+    /** All the users */
+    users?: Maybe<UserConnection>;
 };
 
 /** User Data */
@@ -142,6 +142,22 @@ export type UserorganizationsArgs = {
 export type UsereventsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
+};
+
+/** User Data */
+export type UserusersArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<UsersSearchFilters>;
+};
+
+export type UsersSearchFilters = {
+    /** Search by first name */
+    firstName?: Maybe<Scalars['String']>;
+    /** Search by last name */
+    lastName?: Maybe<Scalars['String']>;
+    /** Search by email */
+    email?: Maybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -1361,6 +1377,7 @@ export type ResolversTypes = {
     Operation: Operation;
     User: ResolverTypeWrapper<User>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
+    UsersSearchFilters: UsersSearchFilters;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -1491,6 +1508,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventVideoMutationResponse'];
     User: User;
     Int: Scalars['Int'];
+    UsersSearchFilters: UsersSearchFilters;
     UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
@@ -1632,7 +1650,6 @@ export type QueryResolvers<
         ContextType,
         RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
     >;
-    users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
     myFeedback?: Resolver<
@@ -1735,6 +1752,12 @@ export type UserResolvers<
         ParentType,
         ContextType,
         RequireFields<UsereventsArgs, never>
+    >;
+    users?: Resolver<
+        Maybe<ResolversTypes['UserConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserusersArgs, never>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2874,6 +2897,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
         events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
+        users?: LoaderResolver<Maybe<UserConnection>, User, UserusersArgs, TContext>;
     };
 
     UserSettings?: {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<049d063b4d8e71bbf3fe863cde2b32e7>>
+ * @generated SignedSource<<6f127d459154dc64d7fadd5b567a7bba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,18 +9,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type UsersDashboardQuery$variables = {};
 export type UsersDashboardQueryVariables = UsersDashboardQuery$variables;
 export type UsersDashboardQuery$data = {
-  readonly users: ReadonlyArray<{
-    readonly id: string;
-    readonly firstName: string | null;
-    readonly lastName: string | null;
-    readonly email: string | null;
-    readonly avatar: string | null;
-    readonly isAdmin: boolean | null;
-    readonly canMakeOrgs: boolean | null;
-  }>;
+  readonly me: {
+    readonly " $fragmentSpreads": FragmentRefs<"useUsersDashboardFragment">;
+  } | null;
 };
 export type UsersDashboardQueryResponse = UsersDashboardQuery$data;
 export type UsersDashboardQuery = {
@@ -31,73 +26,56 @@ export type UsersDashboardQuery = {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "alias": null,
-    "args": null,
-    "concreteType": "User",
-    "kind": "LinkedField",
-    "name": "users",
-    "plural": true,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "firstName",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "lastName",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "email",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "avatar",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isAdmin",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "canMakeOrgs",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Literal",
+    "name": "after",
+    "value": ""
+  },
+  {
+    "kind": "Literal",
+    "name": "filter",
+    "value": {
+      "email": "",
+      "firstName": "",
+      "lastName": ""
+    }
+  },
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 200
   }
-];
+],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "UsersDashboardQuery",
-    "selections": (v0/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "me",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "useUsersDashboardFragment"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Query",
     "abstractKey": null
   },
@@ -106,19 +84,158 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "UsersDashboardQuery",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "me",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": (v0/*: any*/),
+            "concreteType": "UserConnection",
+            "kind": "LinkedField",
+            "name": "users",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "UserEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v1/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "firstName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "lastName",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "email",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "avatar",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "isAdmin",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "canMakeOrgs",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__typename",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "cursor",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PageInfo",
+                "kind": "LinkedField",
+                "name": "pageInfo",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "endCursor",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "hasNextPage",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "users(after:\"\",filter:{\"email\":\"\",\"firstName\":\"\",\"lastName\":\"\"},first:200)"
+          },
+          {
+            "alias": null,
+            "args": (v0/*: any*/),
+            "filters": [
+              "filter"
+            ],
+            "handle": "connection",
+            "key": "UsersDashboard_users",
+            "kind": "LinkedHandle",
+            "name": "users"
+          },
+          (v1/*: any*/)
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "f3b30c17c74a54669b5e48f5773cd618",
+    "cacheID": "c5e4dae6af8877dce06cf3e91ef3bcad",
     "id": null,
     "metadata": {},
     "name": "UsersDashboardQuery",
     "operationKind": "query",
-    "text": "query UsersDashboardQuery {\n  users {\n    id\n    firstName\n    lastName\n    email\n    avatar\n    isAdmin\n    canMakeOrgs\n  }\n}\n"
+    "text": "query UsersDashboardQuery {\n  me {\n    ...useUsersDashboardFragment\n    id\n  }\n}\n\nfragment useUsersDashboardFragment on User {\n  users(first: 200, after: \"\", filter: {firstName: \"\", lastName: \"\", email: \"\"}) {\n    edges {\n      node {\n        id\n        firstName\n        lastName\n        email\n        avatar\n        isAdmin\n        canMakeOrgs\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4ba6162138adf61bea8e91e376a28287";
+(node as any).hash = "ec937040f6f9eebeb823b15a1a1800e1";
 
 export default node;

@@ -18,6 +18,7 @@ import {
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
 import { Skeleton } from '@mui/material';
+import { useUser } from './useUser';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +37,7 @@ enum Nav {
     'Organizer Guide',
     'Moderator Guide',
     'Participant Guide',
+    'Admin User Dashboard',
 }
 type Keys = keyof typeof Nav;
 
@@ -57,6 +59,7 @@ const urls: Record<Keys, string> = {
     'Organizer Guide': '/guides/organizer',
     'Moderator Guide': '/guides/moderator',
     'Participant Guide': '/guides/participant',
+    'Admin User Dashboard': '/admin/users',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -97,6 +100,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
+    const [user] = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
     function handleClick(key: Keys) {
@@ -161,6 +165,21 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='My Organizations' />
                 </StyledListItem>
+                {user?.isAdmin === true && (
+                    <React.Fragment>
+                        <StyledSubheader>Admin</StyledSubheader>
+                        <StyledDivider />
+                        <StyledListItem
+                            onClick={handleClick('Admin User Dashboard')}
+                            selected={selected === 'Admin User Dashboard'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='User Dashboard' />
+                        </StyledListItem>
+                    </React.Fragment>
+                )}
             </AnimateSharedLayout>
         </List>
     );

@@ -816,6 +816,9 @@ type User implements Node {
 
   """Organizations that this user belongs to"""
   organizations(after: String, first: Int): OrganizationConnection
+
+  """All the users"""
+  users(after: String, filter: UsersSearchFilters, first: Int): UserConnection
 }
 
 type UserConnection {
@@ -841,6 +844,17 @@ type UserSettings {
   isNotificationsEnabled: Boolean!
   updateEmail: String
   updatePassword: String
+}
+
+input UsersSearchFilters {
+  """Search by email"""
+  email: String
+
+  """Search by first name"""
+  firstName: String
+
+  """Search by last name"""
+  lastName: String
 }
 
 input ValidateInvite {

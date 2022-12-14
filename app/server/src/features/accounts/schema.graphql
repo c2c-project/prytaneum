@@ -24,6 +24,25 @@ type User implements Node {
     Events that this user is a moderator of, or has been invited to
     """
     events(first: Int, after: String): EventConnection
+    """
+    All the users
+    """
+    users(first: Int, after: String, filter: UsersSearchFilters): UserConnection
+}
+
+input UsersSearchFilters {
+    """
+    Search by first name
+    """
+    firstName: String
+    """
+    Search by last name
+    """
+    lastName: String
+    """
+    Search by email
+    """
+    email: String
 }
 
 type UserSettings {
@@ -118,10 +137,6 @@ type Query {
     """
     me: User
     validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
-    """
-    Fetch all users
-    """
-    users: [User!]!
 }
 
 type Mutation {
