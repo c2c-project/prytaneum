@@ -22,7 +22,7 @@ import { useUsersDashboard } from './useUsersDashboard';
 import { useForm } from '@local/core';
 import { TablePaginationActions } from './TablePaginationActions';
 
-type UsersDashboardSearchFilter = {
+export type UsersDashboardSearchFilter = {
     firstName: string;
     lastName: string;
     email: string;
@@ -89,7 +89,7 @@ interface UsersTableProps {
 }
 
 export function UsersTable({ fragmentRef }: UsersTableProps) {
-    const { users, hasNext, loadNext, isLoadingNext, refetch } = useUsersDashboard({ fragmentRef });
+    const { users, hasNext, loadNext, isLoadingNext, refresh } = useUsersDashboard({ fragmentRef });
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -121,9 +121,7 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
     };
 
     const handleSearchFilter = (filter: UsersDashboardSearchFilter) => {
-        refetch({
-            filter: { firstName: filter.firstName, lastName: filter.lastName, email: filter.email },
-        });
+        refresh(filter);
     };
 
     const handleLoadNext = React.useCallback(() => {

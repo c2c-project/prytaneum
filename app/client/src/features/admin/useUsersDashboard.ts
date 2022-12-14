@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import type { useUsersDashboardFragment$key } from '@local/__generated__/useUsersDashboardFragment.graphql';
+import type { UsersDashboardSearchFilter } from './UsersTable';
 
 const USE_USERS_DASHBOARD_FRAGMENT = graphql`
     fragment useUsersDashboardFragment on User
@@ -32,12 +33,25 @@ interface UseUsersDashboardProps {
 }
 
 export function useUsersDashboard({ fragmentRef }: UseUsersDashboardProps) {
-    const { data, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch } =
-        usePaginationFragment(USE_USERS_DASHBOARD_FRAGMENT, fragmentRef);
+    const { data, loadNext, loadPrevious, hasNext, isLoadingNext, refetch } = usePaginationFragment(
+        USE_USERS_DASHBOARD_FRAGMENT,
+        fragmentRef
+    );
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const refresh = useCallback(
+        (filter: UsersDashboardSearchFilter) => {
+            if (isRefreshing) return;
+            setIsRefreshing(true);
+            refetch({ filter });
+            setIsRefreshing(false);
+        },
+        [isRefreshing, refetch]
+    );
 
     const users = useMemo(() => {
         return data.users?.edges?.map((edge) => edge?.node) ?? [];
     }, [data.users?.edges]);
 
-    return { users, loadNext, loadPrevious, hasNext, hasPrevious, isLoadingNext, isLoadingPrevious, refetch };
+    return { users, loadNext, loadPrevious, hasNext, isLoadingNext, refresh };
 }
