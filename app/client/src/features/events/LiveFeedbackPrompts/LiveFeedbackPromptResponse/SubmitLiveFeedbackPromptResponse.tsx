@@ -52,6 +52,7 @@ export function SubmitLiveFeedbackPromptResponse({ eventId, promptRef, closeSnac
                             throw new Error(response.createFeedbackPromptResponse.message);
                         displaySnack('Response submitted', { variant: 'success' });
                         close();
+                        closeSnackbar();
                     } catch (err) {
                         displaySnack(err.message, { variant: 'error' });
                     }
@@ -73,6 +74,7 @@ export function SubmitLiveFeedbackPromptResponse({ eventId, promptRef, closeSnac
                 <DialogContent>
                     <LiveFeedbackPromptResponseForm
                         onCancel={() => {
+                            closeSnackbar();
                             close();
                         }}
                         onSubmit={handleSubmit}
