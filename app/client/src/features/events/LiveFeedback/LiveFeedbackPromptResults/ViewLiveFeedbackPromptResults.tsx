@@ -103,7 +103,7 @@ export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiv
                 aria-labelledby='feedback-results-dialog'
             >
                 <StyledDialogTitle id='feedback-results-dialog-title' onClose={handleClose}>
-                    Feedback Result
+                    Feedback Results
                 </StyledDialogTitle>
                 <DialogContent dividers>
                     <Grid container direction='column' alignItems='center' alignContent='center'>
