@@ -37,7 +37,7 @@ function Results({ promptResponseVotes }: ResultsProps) {
     return (
         <React.Fragment>
             {zeroVotes ? (
-                <div>No Votes To Display</div>
+                <Typography>No Votes To Display</Typography>
             ) : (
                 <VoteResponseChart votes={{ for: forVotes, against: againstVotes, conflicted: conflictedVotes }} />
             )}
@@ -107,9 +107,18 @@ export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiv
                 </StyledDialogTitle>
                 <DialogContent dividers>
                     <Grid container direction='column' alignItems='center' alignContent='center'>
-                        <Typography className='modal-prompt' variant='h5' paddingTop='1.5rem'>
-                            {promptRef.current.prompt}
-                        </Typography>
+                        <Grid container padding='1rem'>
+                            <Grid item xs>
+                                <Typography
+                                    className='modal-prompt'
+                                    variant='h5'
+                                    paddingY='1.5rem'
+                                    style={{ overflowWrap: 'break-word' }}
+                                >
+                                    Prompt: {promptRef.current.prompt}
+                                </Typography>
+                            </Grid>
+                        </Grid>
                         <ConditionalRender client>
                             <React.Suspense fallback={<Loader />}>
                                 <PreloadedViewLiveFeedbackPromptResults promptId={promptRef.current.id} />

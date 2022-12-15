@@ -81,22 +81,17 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
 
     return (
         <React.Fragment>
-            <Grid container paddingX='1rem'>
-                <Grid item xs>
-                    <Typography style={{ overflowWrap: 'break-word' }}>Prompt: {promptData.prompt}</Typography>
-                </Grid>
-            </Grid>
-            <Grid container justifyContent='center'>
+            <Grid container justifyContent='center' paddingBottom='1rem'>
                 {promptData.isVote ? (
                     <Button onClick={toggleChartVisiblity}>{chartVisiblity ? 'Hide Chart' : 'Show Chart'}</Button>
                 ) : (
-                    <></>
+                    <React.Fragment />
                 )}
             </Grid>
             {chartVisiblity && (
                 <React.Fragment>
                     {zeroVotes ? (
-                        <div>No Votes Yet</div>
+                        <Typography>No Votes Yet</Typography>
                     ) : (
                         <VoteResponseChart
                             votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
