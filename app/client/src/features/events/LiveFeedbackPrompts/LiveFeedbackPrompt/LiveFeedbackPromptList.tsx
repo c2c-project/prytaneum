@@ -191,7 +191,7 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     };
 
     const PromptResponseList = () => {
-        if (selectedPromptRef.current) {
+        if (selectedPromptRef.current)
             return (
                 <ConditionalRender client>
                     <React.Suspense fallback={<Loader />}>
@@ -199,13 +199,30 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
                     </React.Suspense>
                 </ConditionalRender>
             );
-        }
         return <React.Fragment />;
     };
 
+    const PromptText = React.useCallback(() => {
+        if (selectedPromptRef.current)
+            return (
+                <Grid container padding='1rem'>
+                    <Grid item xs>
+                        <Typography variant='h5' style={{ overflowWrap: 'break-word' }}>
+                            Prompt: {selectedPromptRef.current.prompt}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            );
+        return <React.Fragment />;
+    }, []);
+
     const ShareFeedbackResultsButton = () => {
         if (selectedPromptRef.current && selectedPromptRef.current.isVote)
-            return <ShareFeedbackPromptResults prompt={selectedPromptRef.current} />;
+            return (
+                <Grid item paddingBottom='1rem'>
+                    <ShareFeedbackPromptResults prompt={selectedPromptRef.current} />
+                </Grid>
+            );
         return <React.Fragment />;
     };
 
@@ -226,6 +243,7 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
                 </StyledDialogTitle>
                 <DialogContent dividers>
                     <Grid container direction='column' alignItems='center' alignContent='center'>
+                        <PromptText />
                         <ShareFeedbackResultsButton />
                         <PromptResponseList />
                     </Grid>
