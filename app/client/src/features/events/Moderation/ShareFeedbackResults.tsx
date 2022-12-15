@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Button, Modal, Box, Typography, Grid } from '@mui/material';
-import { PresentToAll } from '@mui/icons-material';
+import { Button, Typography, Grid, DialogContent } from '@mui/material';
+import { PresentToAll as PresentToAllIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { PreloadedLiveFeedbackPromptList } from './LiveFeedbackPrompt/LiveFeedbackPromptList';
-import { Loader } from '@local/components/Loader';
-import { ConditionalRender } from '@local/components';
+import { ConditionalRender, Loader, StyledDialogTitle, StyledDialog } from '@local/components';
 
 /**
  * A modal that opens when moderators click on the "Share Feedback Results" button
@@ -12,51 +13,39 @@ import { ConditionalRender } from '@local/components';
  * A button can be pressed to share the results card for one of the prompts with the audience
  */
 export function ShareFeedbackResults() {
+    const theme = useTheme();
+    const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     return (
-        <div id='share-feedback-results-container'>
-            <Button variant='contained' color='primary' onClick={handleOpen} startIcon={<PresentToAll />}>
+        <React.Fragment>
+            <Button variant='contained' color='primary' onClick={handleOpen} startIcon={<PresentToAllIcon />}>
                 Share Feedback Results
             </Button>
-            <Modal
+            <StyledDialog
+                fullScreen={fullscreen}
+                maxWidth='lg'
+                scroll='paper'
                 open={open}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
                 onClose={handleClose}
-                aria-labelledby='share-feedback-results-modal'
+                aria-labelledby='share-feedback-results-dialog'
             >
-                <Box
-                    id='share-feedback-results-modal-box'
-                    sx={{
-                        width: '85vw',
-                        height: '85vh',
-                        maxWidth: '1280px',
-                        maxHeight: '720px',
-                        bgcolor: 'background.paper',
-                        overflow: 'scroll',
-                    }}
-                >
-                    <Grid container direction='column' alignItems='center' alignContent='center'>
-                        <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
-                            Share Feedback Results
-                        </Typography>
-                        <Typography className='modal-description' variant='body1' paddingTop='1rem'>
-                            Select a feedback prompt to see the responses
-                        </Typography>
+                <StyledDialogTitle id='share-feedback-results-dialog-title' onClose={handleClose}>
+                    Share Feedback Results
+                </StyledDialogTitle>
+                <DialogContent dividers>
+                    <Grid container direction='column' alignItems='center'>
+                        <Typography variant='h6'>Select a feedback prompt to see the responses</Typography>
                         <ConditionalRender client>
                             <React.Suspense fallback={<Loader />}>
                                 <PreloadedLiveFeedbackPromptList />
                             </React.Suspense>
                         </ConditionalRender>
                     </Grid>
-                </Box>
-            </Modal>
-        </div>
+                </DialogContent>
+            </StyledDialog>
+        </React.Fragment>
     );
 }

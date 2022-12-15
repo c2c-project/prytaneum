@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { graphql } from 'relay-runtime';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Box, Button, Grid, Modal, Typography } from '@mui/material';
+import { Button, DialogContent, Grid, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/styles';
 
 import { Prompt } from './useLiveFeedbackPromptResultsShared';
-import { ConditionalRender, Loader } from '@local/components';
+import { ConditionalRender, Loader, StyledDialog, StyledDialogTitle } from '@local/components';
 import { ViewLiveFeedbackPromptResultsQuery } from '@local/__generated__/ViewLiveFeedbackPromptResultsQuery.graphql';
 import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
 
@@ -78,8 +79,9 @@ interface ViewLiveFeedbackPromptResultsProps {
 }
 
 export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiveFeedbackPromptResultsProps) {
+    const theme = useTheme();
+    const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const [open, setOpen] = React.useState<boolean>(false);
-
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
@@ -91,31 +93,20 @@ export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiv
             <Button variant='contained' color='primary' onClick={handleOpen}>
                 View Results
             </Button>
-            <Modal
+            <StyledDialog
+                fullScreen={fullscreen}
+                maxWidth='lg'
+                fullWidth={true}
+                scroll='paper'
                 open={open}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
                 onClose={handleClose}
-                aria-labelledby='view-feedback-prompt-results-modal'
+                aria-labelledby='feedback-results-dialog'
             >
-                <Box
-                    id='view-feedback-prompt-results-box'
-                    sx={{
-                        width: '85vw',
-                        height: '85vh',
-                        maxWidth: '1280px',
-                        maxHeight: '720px',
-                        bgcolor: 'background.paper',
-                        overflow: 'scroll',
-                    }}
-                >
+                <StyledDialogTitle id='feedback-results-dialog-title' onClose={handleClose}>
+                    Feedback Result
+                </StyledDialogTitle>
+                <DialogContent dividers>
                     <Grid container direction='column' alignItems='center' alignContent='center'>
-                        <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
-                            Feedback Result
-                        </Typography>
                         <Typography className='modal-prompt' variant='h5' paddingTop='1.5rem'>
                             {promptRef.current.prompt}
                         </Typography>
@@ -125,8 +116,8 @@ export function ViewLiveFeedbackPromptResults({ promptRef, closeSnack }: ViewLiv
                             </React.Suspense>
                         </ConditionalRender>
                     </Grid>
-                </Box>
-            </Modal>
+                </DialogContent>
+            </StyledDialog>
         </React.Fragment>
     );
 }

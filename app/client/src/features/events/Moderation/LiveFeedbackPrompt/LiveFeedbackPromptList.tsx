@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { graphql, PreloadedQuery, useQueryLoader, usePreloadedQuery, fetchQuery } from 'react-relay';
-import { List, ListItem, Card, CardContent, Typography, Grid, IconButton, Modal, Box } from '@mui/material';
+import { List, ListItem, Card, CardContent, Typography, Grid, IconButton, DialogContent } from '@mui/material';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { LiveFeedbackPromptListQuery } from '@local/__generated__/LiveFeedbackPromptListQuery.graphql';
-import { useEvent } from '@local/features/events/useEvent';
-import { ConditionalRender } from '@local/components';
-import { Loader } from '@local/components/Loader';
 import { PreloadedLiveFeedbackPromptResponseList } from '../LiveFeedbackPromptResponses/LiveFeedbackPromptResponseList';
-import { useEnvironment } from '@local/core';
 import { ShareFeedbackPromptResults } from '../LiveFeedbackPromptResponses';
+import { useEnvironment } from '@local/core';
+import { useEvent } from '@local/features/events/useEvent';
+import { StyledDialogTitle, Loader, StyledDialog, ConditionalRender } from '@local/components';
 
 export const LIVE_FEEDBACK_PROMPT_LIST_QUERY = graphql`
     query LiveFeedbackPromptListQuery($eventId: ID!) {
@@ -77,6 +78,8 @@ interface LiveFeedbackPromptListProps {
  * This component is responsible for loading the query and passing the fragment ref to the PromptList component
  */
 function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedbackPromptListProps) {
+    const theme = useTheme();
+    const fullscreen = useMediaQuery(theme.breakpoints.down('md'));
     const { prompts } = usePreloadedQuery(LIVE_FEEDBACK_PROMPT_LIST_QUERY, queryRef);
     const [open, setOpen] = React.useState(false);
     const selectedPromptRef = React.useRef<Prompt | null>(null);
@@ -107,7 +110,7 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
                 </ConditionalRender>
             );
         }
-        return <></>;
+        return <React.Fragment />;
     };
 
     const ShareFeedbackResultsButton = () => {
@@ -119,36 +122,25 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     return (
         <React.Fragment>
             {!prompts ? <Loader /> : <PromptList prompts={prompts} handleClick={handlePromptClick} />}
-            <Modal
+            <StyledDialog
+                fullScreen={fullscreen}
+                maxWidth='lg'
+                fullWidth={true}
+                scroll='paper'
                 open={open}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
                 onClose={handleClose}
-                aria-labelledby='feedback-responses-modal'
+                aria-labelledby='feedback-responses-dialog'
             >
-                <Box
-                    id='feedback-responses-modal-box'
-                    sx={{
-                        width: '85vw',
-                        height: '85vh',
-                        maxWidth: '1120px',
-                        maxHeight: '630px',
-                        bgcolor: 'background.paper',
-                        overflow: 'scroll',
-                    }}
-                >
+                <StyledDialogTitle id='feedback-responses-dialog-title' onClose={handleClose}>
+                    Feedback Responses
+                </StyledDialogTitle>
+                <DialogContent dividers>
                     <Grid container direction='column' alignItems='center' alignContent='center'>
-                        <Typography className='modal-title' variant='h5' paddingTop='1.5rem'>
-                            Feedback Responses
-                        </Typography>
                         <ShareFeedbackResultsButton />
                         <PromptResponseList />
                     </Grid>
-                </Box>
-            </Modal>
+                </DialogContent>
+            </StyledDialog>
         </React.Fragment>
     );
 }
