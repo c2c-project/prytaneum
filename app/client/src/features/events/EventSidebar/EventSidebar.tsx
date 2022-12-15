@@ -16,9 +16,8 @@ import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLi
 import { Tabs } from '@local/components/Tabs';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
+import { ShareFeedbackResults, useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
 import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
-import { useLiveFeedbackPrompt } from '../LiveFeedbackPrompts/useLiveFeedbackPrompt';
-import { ShareFeedbackResults } from '../LiveFeedbackPrompts/ShareFeedbackResults';
 import { useLiveFeedbackPromptResultsShared } from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
