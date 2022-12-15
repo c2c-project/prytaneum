@@ -37,7 +37,7 @@ export function ShareFeedbackResults() {
                 </StyledDialogTitle>
                 <DialogContent dividers>
                     <Grid container direction='column' alignItems='center'>
-                        <Typography variant='h6'>Select a feedback prompt to see the responses</Typography>
+                        <Typography variant='h6'>Select view on a prompt to see its responses</Typography>
                         <ConditionalRender client>
                             <React.Suspense fallback={<Loader />}>
                                 <PreloadedLiveFeedbackPromptList />

@@ -1,8 +1,19 @@
 import * as React from 'react';
 import { graphql, PreloadedQuery, useQueryLoader, usePreloadedQuery, fetchQuery } from 'react-relay';
-import { List, ListItem, Card, CardContent, Typography, Grid, IconButton, DialogContent } from '@mui/material';
+import {
+    List,
+    ListItem,
+    Card,
+    CardContent,
+    Typography,
+    Grid,
+    IconButton,
+    DialogContent,
+    Tabs,
+    Tab,
+} from '@mui/material';
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, alpha } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { LiveFeedbackPromptListQuery } from '@local/__generated__/LiveFeedbackPromptListQuery.graphql';
@@ -32,6 +43,37 @@ export type Prompt = {
     readonly createdAt: Date | null;
 };
 
+interface PromptItemProps {
+    prompt: Prompt;
+    handleClick: (prompt: Prompt) => void;
+}
+
+function PromptItem({ prompt, handleClick }: PromptItemProps) {
+    return (
+        <ListItem style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
+            <Grid container direction='column' alignContent='center' spacing={1}>
+                <Card>
+                    <CardContent>
+                        <Grid container direction='row' alignItems='center' justifyContent='space-around'>
+                            <Grid item>
+                                <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
+                                    {prompt.prompt}
+                                </Typography>
+                            </Grid>
+                            <Grid item paddingRight={0.5}>
+                                <IconButton onClick={() => handleClick(prompt)}>
+                                    <OpenInNewIcon />
+                                    <Typography variant='subtitle1'>View</Typography>
+                                </IconButton>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </ListItem>
+    );
+}
+
 interface PromptListProps {
     prompts: readonly Prompt[];
     handleClick: (prompt: Prompt) => void;
@@ -40,32 +82,80 @@ interface PromptListProps {
 /**
  * This component is responsible for rendering the live feedback prompts using the provided fragment Ref
  */
-function PromptList({ prompts, handleClick }: PromptListProps) {
+function PromptList({ prompts: readonlyPrompts, handleClick }: PromptListProps) {
+    const theme = useTheme();
+    // Reverse the prompts so that the most recent are at the top
+    const prompts = React.useMemo(() => [...readonlyPrompts].reverse(), [readonlyPrompts]);
+    const [value, setValue] = React.useState<'open-ended' | 'vote'>('open-ended');
+    const MAX_LIST_LENGTH = 100;
+
+    const handleChange = (e: React.SyntheticEvent, newValue: 'open-ended' | 'vote') => {
+        e.preventDefault();
+        setValue(newValue);
+    };
+
+    const openEndedPrompts = React.useMemo(() => prompts.filter((prompt) => prompt.isOpenEnded), [prompts]);
+    const votePrompts = React.useMemo(() => prompts.filter((prompt) => prompt.isVote), [prompts]);
+
     return (
-        <List id='live-feedback-prompt-list'>
-            {prompts.map((prompt) => (
-                <ListItem key={prompt.id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
-                    <Grid container direction='column' alignContent='center' spacing={1}>
-                        <Card>
-                            <CardContent>
-                                <Grid container direction='row' alignItems='center' justifyContent='space-around'>
-                                    <Grid item>
-                                        <Typography variant='inherit' sx={{ wordBreak: 'break-word' }}>
-                                            {prompt.prompt}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item paddingRight={0.5}>
-                                        <IconButton onClick={() => handleClick(prompt)}>
-                                            <OpenInNewIcon />
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </ListItem>
-            ))}
-        </List>
+        <React.Fragment>
+            <Tabs
+                sx={{
+                    '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
+                    '& .MuiTab-root': {
+                        color: 'white',
+                        backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
+                        borderRadius: '20px 20px 0 0',
+                    },
+                    '& .Mui-selected': { backgroundColor: 'custom.creamCan' },
+                }}
+                value={value}
+                onChange={handleChange}
+                centered
+                aria-label='secondary tabs example'
+            >
+                <Tab label='Open Ended' value='open-ended' />
+                <Tab label='Vote' value='vote' />
+            </Tabs>
+            {value === 'open-ended' && (
+                <React.Fragment>
+                    {openEndedPrompts.length > 0 ? (
+                        <List
+                            id='live-feedback-open-ended-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                            }}
+                        >
+                            {openEndedPrompts.slice(0, MAX_LIST_LENGTH).map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography>No Open Ended Prompts To Display Yet</Typography>
+                    )}
+                </React.Fragment>
+            )}
+            {value === 'vote' && votePrompts.length > 0 && (
+                <React.Fragment>
+                    {votePrompts.length > 0 ? (
+                        <List
+                            id='live-feedback-vote-prompt-list'
+                            sx={{
+                                border: 5,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},white) 10`,
+                            }}
+                        >
+                            {votePrompts.map((prompt) => (
+                                <PromptItem key={prompt.id} prompt={prompt} handleClick={handleClick} />
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography>No Vote Prompts To Display Yet</Typography>
+                    )}
+                </React.Fragment>
+            )}
+        </React.Fragment>
     );
 }
 
@@ -116,7 +206,7 @@ function LiveFeedbackPromptList({ queryRef, responsesModalStatusRef }: LiveFeedb
     const ShareFeedbackResultsButton = () => {
         if (selectedPromptRef.current && selectedPromptRef.current.isVote)
             return <ShareFeedbackPromptResults prompt={selectedPromptRef.current} />;
-        return <></>;
+        return <React.Fragment />;
     };
 
     return (

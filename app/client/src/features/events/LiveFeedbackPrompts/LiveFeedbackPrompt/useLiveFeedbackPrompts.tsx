@@ -52,7 +52,6 @@ export function useLiveFeedbackPrompts({ fragmentRef, modalIsOpen }: Props) {
         if (isRefetching || modalIsOpen) return;
         setIsRefetching(true);
         const afterCursor = promptsList[promptsList.length - 1]?.cursor || '';
-        console.log('afterCursor', afterCursor);
         refetch({ first: 100, after: afterCursor }, { fetchPolicy: 'network-only' });
         setIsRefetching(false);
     }, [isRefetching, modalIsOpen, promptsList, refetch]);
