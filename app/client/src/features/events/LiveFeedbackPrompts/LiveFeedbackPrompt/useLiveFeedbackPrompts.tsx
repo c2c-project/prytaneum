@@ -51,12 +51,14 @@ export function useLiveFeedbackPrompts({ fragmentRef, modalIsOpen }: Props) {
         // if the modal is open, don't refetch (Ensures secondary modal doesn't flash)
         if (isRefetching || modalIsOpen) return;
         setIsRefetching(true);
-        refetch(
-            { first: 100, after: data.liveFeedbackPrompts?.pageInfo?.endCursor || '' },
-            { fetchPolicy: 'network-only' }
-        );
+        const afterCursor = promptsList[promptsList.length - 1]?.cursor || '';
+        refetch({ first: 100, after: afterCursor }, { fetchPolicy: 'network-only' });
         setIsRefetching(false);
-    }, [isRefetching, modalIsOpen, refetch, data.liveFeedbackPrompts?.pageInfo?.endCursor]);
+    }, [isRefetching, modalIsOpen, promptsList, refetch]);
+
+    React.useEffect(() => {
+        console.log(promptsList);
+    }, [promptsList]);
 
     // Set up refresh polling interval (20 seconds) to keep data fresh
     React.useEffect(() => {

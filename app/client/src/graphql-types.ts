@@ -631,6 +631,7 @@ export type Mutation = {
    * returns false if an account with the provided email cannot be found
    */
   resetPasswordRequest: ResetPasswordRequestMutationResponse;
+  shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
@@ -794,6 +795,12 @@ export type MutationResetPasswordRequestArgs = {
 };
 
 
+export type MutationShareFeedbackPromptResultsArgs = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
+};
+
+
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
 };
@@ -926,6 +933,7 @@ export type Query = {
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
   node?: Maybe<Node>;
   prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptResponseVotes: Votes;
   promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
   prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
@@ -950,6 +958,11 @@ export type QueryNodeArgs = {
 
 
 export type QueryPromptArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptResponseVotesArgs = {
   promptId: Scalars['ID'];
 };
 
@@ -1025,6 +1038,7 @@ export type Subscription = {
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
+  feedbackPromptResultsShared: EventLiveFeedbackPrompt;
   feedbackPrompted: EventLiveFeedbackPrompt;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
@@ -1078,6 +1092,11 @@ export type SubscriptionEventUpdatesArgs = {
 
 
 export type SubscriptionFeedbackCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptResultsSharedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1285,3 +1304,10 @@ export enum Vote {
   Conflicted = 'CONFLICTED',
   For = 'FOR'
 }
+
+export type Votes = {
+  __typename?: 'Votes';
+  against: Scalars['Int'];
+  conflicted: Scalars['Int'];
+  for: Scalars['Int'];
+};

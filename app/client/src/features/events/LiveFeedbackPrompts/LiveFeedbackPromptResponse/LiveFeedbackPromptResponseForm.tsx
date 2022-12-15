@@ -9,6 +9,7 @@ import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
 import Grid from '@mui/material/Grid';
 import { Prompt } from '../useLiveFeedbackPrompt';
+import { FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH } from '../../../../utils/rules';
 
 export type TLiveFeedbackPromptResponseFormState = { response: string; vote: string; promptId: string };
 
@@ -32,8 +33,10 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Feedback Response' />
             <FormContent>
-                <Grid container alignItems='center' justifyContent='center'>
-                    <Typography>{promptRef.current.prompt}</Typography>
+                <Grid container>
+                    <Grid item xs>
+                        <Typography style={{ overflowWrap: 'break-word' }}>{promptRef.current.prompt}</Typography>
+                    </Grid>
                 </Grid>
                 {promptRef.current.isVote && (
                     <Grid container alignItems='center' justifyContent='space-around'>
@@ -64,6 +67,13 @@ export function LiveFeedbackPromptResponseForm({ onSubmit, onCancel, promptRef }
                     value={form.response}
                     onChange={handleChange('response')}
                 />
+                <Typography
+                    variant='caption'
+                    color={form.response.length > FEEDBACK_PROMPT_RESPONSE_MAX_LENGTH ? 'red' : 'black'}
+                    sx={{ display: 'block', textAlign: 'right' }}
+                >
+                    {form.response.length}/500
+                </Typography>
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (

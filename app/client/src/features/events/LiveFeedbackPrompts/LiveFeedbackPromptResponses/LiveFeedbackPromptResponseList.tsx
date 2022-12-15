@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, fetchQuery } from 'react-relay';
 import { List, ListItem, Card, CardContent, Typography, Grid, Button } from '@mui/material';
-import { Chart } from 'react-google-charts';
 
-import { ConditionalRender, Loader } from '@local/components';
+import { Loader } from '@local/components';
 import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFeedbackPromptResponseListQuery.graphql';
 import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
+import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
     query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
@@ -51,32 +51,19 @@ interface PromptListProps {
     promptData: PromptData;
 }
 
-// TODO: Convert prompt responses to fragment rather than directly from query (Required for pagination)
-// TODO: Pagination support for prompt responses (Number of responses will be greater than number of prompts)
-// TODO: Infinite Scrolling support for prompt responses
-
 /**
  * This component is responsible for rendering the live feedback prompt responses list
+ * TODO: Convert prompt responses to fragment rather than directly from query (Required for pagination)
+ * TODO: Pagination support for prompt responses (Number of responses will be greater than number of prompts)
+ * TODO: Infinite Scrolling support for prompt responses
+ * TODO: Update pi chart to chart selection (Different ways to visualize data)
+ * TODO: Add option to share prompt vote data with audience
  */
-// TODO: Update cards to include user data and createdAt timestamp
 function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
     const [chartVisiblity, setChartVisiblity] = React.useState<boolean>(false);
+    const MAX_VISIBLE_RESPONSES = 50;
 
     const toggleChartVisiblity = () => setChartVisiblity(!chartVisiblity);
-
-    // Color association based on the vote value
-    const getVoteColor = (vote: PromptResponse['vote']) => {
-        switch (vote) {
-            case 'FOR':
-                return 'green';
-            case 'AGAINST':
-                return 'red';
-            case 'CONFLICTED':
-                return 'orange';
-            default:
-                return 'black';
-        }
-    };
 
     // Counts votes for each response categorized by vote type (For, Against, Conflicted)
     const voteCount = React.useMemo(() => {
@@ -90,49 +77,35 @@ function PromptResponseList({ promptResponses, promptData }: PromptListProps) {
         return voteCount.for === 0 && voteCount.against === 0 && voteCount.conflicted === 0;
     }, [voteCount]);
 
+    const responses = React.useMemo(() => promptResponses.slice(0, MAX_VISIBLE_RESPONSES), [promptResponses]);
+
     return (
         <React.Fragment>
-            <Grid container justifyContent='center'>
-                <Typography>Prompt: {promptData.prompt}</Typography>
+            <Grid container paddingX='1rem'>
+                <Grid item xs>
+                    <Typography style={{ overflowWrap: 'break-word' }}>Prompt: {promptData.prompt}</Typography>
+                </Grid>
             </Grid>
             <Grid container justifyContent='center'>
                 {promptData.isVote ? (
-                    <Button onClick={toggleChartVisiblity}>
-                        {chartVisiblity ? 'Hide Pie Chart' : 'Show Pie Chart'}
-                    </Button>
+                    <Button onClick={toggleChartVisiblity}>{chartVisiblity ? 'Hide Chart' : 'Show Chart'}</Button>
                 ) : (
                     <></>
                 )}
             </Grid>
             {chartVisiblity && (
-                <>
+                <React.Fragment>
                     {zeroVotes ? (
                         <div>No Votes Yet</div>
                     ) : (
-                        <Chart
-                            chartType='PieChart'
-                            data={[
-                                ['Vote', 'Count'],
-                                ['For', voteCount.for],
-                                ['Against', voteCount.against],
-                                ['Conflicted', voteCount.conflicted],
-                            ]}
-                            options={{
-                                title: 'Votes',
-                                slices: {
-                                    0: { color: getVoteColor('FOR') },
-                                    1: { color: getVoteColor('AGAINST') },
-                                    2: { color: getVoteColor('CONFLICTED') },
-                                },
-                            }}
-                            width='100%'
-                            height='400px'
+                        <VoteResponseChart
+                            votes={{ for: voteCount.for, against: voteCount.against, conflicted: voteCount.conflicted }}
                         />
                     )}
-                </>
+                </React.Fragment>
             )}
             <List id='live-feedback-prompt-response-list'>
-                {promptResponses.map(({ id, response, vote, createdAt, createdBy }) => (
+                {responses.map(({ id, response, vote, createdAt, createdBy }) => (
                     <ListItem key={id} style={{ paddingBottom: '.5rem', paddingTop: '.5rem' }}>
                         <Grid
                             container
@@ -182,7 +155,7 @@ interface PreloadedLiveFeedbackPromptResponseListProps {
 }
 
 export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiveFeedbackPromptResponseListProps) {
-    const [queryRef, loadQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
+    const [queryRef, loadQuery, disposeQuery] = useQueryLoader<LiveFeedbackPromptResponseListQuery>(
         LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY
     );
     const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -211,18 +184,19 @@ export function PreloadedLiveFeedbackPromptResponseList({ prompt }: PreloadedLiv
     }, [env, isRefreshing, loadQuery, promptId]);
 
     React.useEffect(() => {
-        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'network-only' });
+        // Fetch data from store and network on initial load
+        // This Ensures any cached data is displayed right away but will still be kept up to date
+        if (!queryRef) loadQuery({ promptId }, { fetchPolicy: 'store-and-network' });
         const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
+    }, [loadQuery, promptId, queryRef, refresh]);
+
+    React.useEffect(() => {
+        // Cleanup query on component unmount
+        return () => disposeQuery();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!queryRef) return <Loader />;
-    return (
-        <ConditionalRender client>
-            {/* Suspense workaround to avoid component flashing during refetch */}
-            <React.Suspense fallback={<LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />}>
-                <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />
-            </React.Suspense>
-        </ConditionalRender>
-    );
+    return <LiveFeedbackPromptResponseList queryRef={queryRef} promptData={promptData} />;
 }

@@ -63,14 +63,14 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
                             value: form.question,
                         });
                         close();
-                        displaySnack('Question submitted!');
+                        displaySnack('Question submitted!', { variant: 'success' });
                     } catch (err) {
-                        displaySnack(err.message);
+                        displaySnack(err.message, { variant: 'error' });
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message);
+            displaySnack(err.message, { variant: 'error' });
         }
     }
 

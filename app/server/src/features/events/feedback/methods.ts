@@ -151,3 +151,33 @@ export async function findSubmitterByResponseId(responseId: string, prisma: Pris
     if (!queryResult) return null;
     return queryResult.createdByUser;
 }
+
+export async function countPromptResponseVotes(promptId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.eventLiveFeedbackPrompt.findUnique({
+        where: { id: promptId },
+        select: { responses: true, isVote: true },
+    });
+
+    if (!queryResult) throw new ProtectedError({ userMessage: 'Prompt not found' });
+    if (!queryResult.isVote)
+        throw new ProtectedError({ userMessage: 'Can only currently share vote type prompt results' });
+
+    const votes = { for: 0, against: 0, conflicted: 0 };
+    queryResult.responses.forEach((response) => {
+        switch (response.vote) {
+            case 'FOR':
+                votes.for++;
+                break;
+            case 'AGAINST':
+                votes.against++;
+                break;
+            case 'CONFLICTED':
+                votes.conflicted++;
+                break;
+            default:
+                break;
+        }
+    });
+
+    return votes;
+}

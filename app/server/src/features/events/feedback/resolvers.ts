@@ -40,6 +40,13 @@ export const resolvers: Resolvers = {
             const prompts = await Feedback.findPromptsByEventId(eventId, ctx.prisma);
             return prompts.map(toFeedbackPromptId);
         },
+        async promptResponseVotes(parent, args, ctx) {
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+            if (!args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+            const { id: promptId } = fromGlobalId(args.promptId);
+            const votes = await Feedback.countPromptResponseVotes(promptId, ctx.prisma);
+            return votes;
+        },
     },
     Mutation: {
         async createFeedback(parent, args, ctx) {
@@ -101,6 +108,29 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        async shareFeedbackPromptResults(parent, args, ctx) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!args.eventId || !args.promptId) throw new ProtectedError({ userMessage: errors.invalidArgs });
+                const { id: promptId } = fromGlobalId(args.promptId);
+                const prompt = await Feedback.findPromptByPromptId(promptId, ctx.prisma);
+                if (!prompt)
+                    throw new ProtectedError({
+                        userMessage: 'Inalid Prompt',
+                        internalMessage: 'Expected Prompt but got null',
+                    });
+                const formattedPrompt = toFeedbackPromptId(prompt);
+                const edge = {
+                    node: formattedPrompt,
+                    cursor: formattedPrompt.id,
+                };
+                ctx.pubsub.publish({
+                    topic: 'feedbackPromptResultsShared',
+                    payload: { feedbackPromptResultsShared: formattedPrompt },
+                });
+                return edge;
+            });
+        },
     },
     Subscription: {
         feedbackCRUD: {
@@ -118,7 +148,22 @@ export const resolvers: Resolvers = {
             subscribe: withFilter<{ feedbackPrompted: EventLiveFeedbackPrompt }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('feedbackPrompted'),
                 (payload, args, ctx) => {
+                    // Check that user is logged in
+                    if (!ctx.viewer.id) return false;
                     const { id: feedbackPromptId } = fromGlobalId(payload.feedbackPrompted.id);
+                    const { id: eventId } = fromGlobalId(args.eventId);
+                    // TODO only update to non moderator participants
+                    return Feedback.doesEventMatchFeedbackPrompt(eventId, feedbackPromptId, ctx.prisma);
+                }
+            ),
+        },
+        feedbackPromptResultsShared: {
+            subscribe: withFilter<{ feedbackPromptResultsShared: EventLiveFeedbackPrompt }>(
+                (parent, args, ctx) => ctx.pubsub.subscribe('feedbackPromptResultsShared'),
+                (payload, args, ctx) => {
+                    // Check that user is logged in
+                    if (!ctx.viewer.id) return false;
+                    const { id: feedbackPromptId } = fromGlobalId(payload.feedbackPromptResultsShared.id);
                     const { id: eventId } = fromGlobalId(args.eventId);
                     // TODO only update to non moderator participants
                     return Feedback.doesEventMatchFeedbackPrompt(eventId, feedbackPromptId, ctx.prisma);
