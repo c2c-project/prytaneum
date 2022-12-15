@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSnackbar, OptionsObject, SnackbarKey } from 'notistack';
 import { Button } from '@mui/material';
 import Close from '@mui/icons-material/Close';
-import { SubmitLiveFeedbackPromptResponse } from '@local/features/events/LiveFeedback/LiveFeedbackPromptResponse';
+import { SubmitLiveFeedbackPromptResponse } from '@local/features/events/LiveFeedbackPrompts/LiveFeedbackPromptResponse';
 import { Prompt } from '../useLiveFeedbackPrompt';
 
 export function useLiveFeedbackPromptResponseSnack(promptRef: React.MutableRefObject<Prompt>, eventId: string) {

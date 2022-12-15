@@ -16,10 +16,10 @@ import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLi
 import { Tabs } from '@local/components/Tabs';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
-import { SubmitLiveFeedbackPrompt } from '../Moderation/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
-import { useLiveFeedbackPrompt } from '../LiveFeedback/useLiveFeedbackPrompt';
-import { ShareFeedbackResults } from '../Moderation/ShareFeedbackResults';
-import { useLiveFeedbackPromptResultsShared } from '../LiveFeedback/LiveFeedbackPromptResults';
+import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
+import { useLiveFeedbackPrompt } from '../LiveFeedbackPrompts/useLiveFeedbackPrompt';
+import { ShareFeedbackResults } from '../LiveFeedbackPrompts/ShareFeedbackResults';
+import { useLiveFeedbackPromptResultsShared } from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {

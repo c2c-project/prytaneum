@@ -7,7 +7,7 @@ import { LiveFeedbackPromptResponseListQuery } from '@local/__generated__/LiveFe
 import { useEnvironment } from '@local/core';
 import { Prompt } from '../LiveFeedbackPrompt/LiveFeedbackPromptList';
 import { PromptResponseAuthorCardHeader } from './PromptResponseAuthorCardHeader';
-import { VoteResponseChart } from '../../LiveFeedback/LiveFeedbackPromptResponse/VoteResponseChart';
+import { VoteResponseChart } from '../LiveFeedbackPromptResponse/VoteResponseChart';
 
 export const LIVE_FEEDBACK_PROMPT_RESPONSE_LIST_QUERY = graphql`
     query LiveFeedbackPromptResponseListQuery($promptId: ID!) {
