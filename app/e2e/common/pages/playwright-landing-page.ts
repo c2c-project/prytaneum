@@ -1,4 +1,3 @@
-// playwright-landing-page.ts
 import { expect, Locator, Page } from '@playwright/test';
 export class PlaywrightLandingPage {
     readonly page: Page;

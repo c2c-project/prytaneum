@@ -1,40 +1,60 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { PlaywrightLandingPage } from '@local/common/pages/playwright-login-page';
 
 test.describe('login page', () => {
     test.describe.configure({ mode: 'parallel' });
     test('login page should display login form', async ({ page }) => {
         // arrange
-        await page.goto('/login');
+        const login = new PlaywrightLandingPage(page);
+        // act
+        await login.goto();
         // assert
-        await expect(page.locator('input[type="email"]')).toBeVisible();
-        await expect(page.locator('input[type="password"]')).toBeVisible();
-        await expect(page.locator('[data-test-id=login-form-submit]')).toBeVisible();
+        await login.amOnLoginPage();
+        await login.see(login.loginIllustation);
+        await login.see(login.emailInput);
+        await login.see(login.passwordInput);
+        await login.see(login.loginButton);
+        await login.see(login.forgotPasswordLink);
+        await login.see(login.registerAccountLink);
     });
     test('An error displays when logging in with incorrect credentials', async ({ page }) => {
         // arrange
-        await page.goto('/login');
-        await page.locator('input[type="email"]').click();
-        await page.locator('input[type="email"]').fill('test@test.com');
-        await page.locator('input[type="email"]').press('Tab');
-        await page.locator('input[type="password"]').fill('testPassword');
+        const login = new PlaywrightLandingPage(page);
         // act
-        await page.locator('[data-test-id=login-form-submit]').click();
+        await login.goto();
+        await login.fillInEmail('test@test.com');
+        await login.fillInPassword('testPassword');
+        await login.submitLoginForm();
         // assert
-        await expect(page.locator('text=Login failed; Invalid email or password.Dismiss')).toBeVisible();
+        await login.see(login.failedSnack);
     });
     test('Logs in successfully with correct credentials', async ({ page }) => {
         // arrange
-        await page.goto('/login');
-        await page.locator('input[type="email"]').click();
-        await page.locator('input[type="email"]').fill('test@prytaneum.io');
-        await page.locator('input[type="email"]').press('Tab');
-        await page.locator('input[type="password"]').fill('password');
+        const login = new PlaywrightLandingPage(page);
         // act
-        await Promise.all([
-            page.waitForNavigation({ url: 'http://localhost:8080/organizations/me' }),
-            page.locator('[data-test-id=login-form-submit]').click(),
-        ]);
+        await login.goto();
+        await login.fillInEmail('user1@example.com');
+        await login.fillInPassword('Password1!');
+        await login.submitLoginForm();
         // assert
-        await expect(page).toHaveURL('/organizations/me');
+        await login.amLoggedIn();
+    });
+    test('I can click on the forgot password link', async ({ page }) => {
+        // arrange
+        const login = new PlaywrightLandingPage(page);
+        // act
+        await login.goto();
+        await login.clickOnForgotPassword();
+        // assert
+        await login.amOnForgotPasswordPage();
+    });
+    test('I can click on the register account link', async ({ page }) => {
+        // arrange
+        const login = new PlaywrightLandingPage(page);
+        // act
+        await login.goto();
+        await login.clickOnRegisterAccount();
+        // assert
+        await login.amOnRegisterPage();
     });
 });

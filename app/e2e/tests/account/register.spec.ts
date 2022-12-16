@@ -1,61 +1,142 @@
 import { test, expect } from '@playwright/test';
+import { PlaywrightRegisterPage } from '@local/common/pages/playwright-register-page';
 
 test.describe('register page', () => {
-    test('register page displays form', async ({ page }) => {
+    test('register page displays form and illustration', async ({ page }) => {
         // arrange
-        await page.goto('/register');
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
         // assert
-        await Promise.all([
-            expect(page.locator('label:has-text("First Name *")')).toBeVisible(),
-            expect(page.locator('label:has-text("Last Name *")')).toBeVisible(),
-            expect(page.locator('label:has-text("Email *")')).toBeVisible(),
-            expect(page.locator('#register-password-label')).toBeVisible(),
-            expect(page.locator('label:has-text("Confirm Password *")')).toBeVisible(),
-            expect(page.locator('[data-test-id=register-form-submit]')).toBeVisible(),
-        ])
+        await register.amOnRegisterPage();
+        await register.see(register.registerIllustration);
+        await register.see(register.firstNameInput);
+        await register.see(register.lastNameInput);
+        await register.see(register.emailInput);
+        await register.see(register.passwordInput);
+        await register.see(register.confirmPasswordInput);
+        await register.see(register.registerButton);
+        await register.see(register.loginLink);
     });
     test('An error displays when registering with different passwords', async ({ page }) => {
         // arrange
-        await page.goto('/register');
-        await page.locator('text=First Name *First Name * >> input[type="text"]').click();
-        await page.locator('text=First Name *First Name * >> input[type="text"]').fill('John');
-        await page.locator('text=Last Name *Last Name * >> input[type="text"]').click();
-        await page.locator('text=Last Name *Last Name * >> input[type="text"]').fill('Doe');
-        await page.locator('input[type="email"]').click();
-        await page.locator('input[type="email"]').fill('JohnDoe@gmail.com');
-        await page
-            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
-            .click();
-        await page
-            .locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]')
-            .fill('JohnDoePwd');
-        await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').click();
-        await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').fill('diffPwd');
+        const register = new PlaywrightRegisterPage(page);
         // act
-        await page.locator('[data-test-id=register-form-submit]').click();
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('Password1!');
+        await register.fillInConfirmPassword('Password2!');
+        await register.submitRegisterForm();
         // assert
-        await expect(page.locator('text=Passwords must matchDismiss')).toBeVisible();
+        await register.see(register.failedSnackMismatcedPasswords);
     });
-    test('Registers successfully with correctly filled fields', async ({ page }) => {
+    test('An error displays when passwords lack a special character', async ({ page }) => {
         // arrange
-        await page.goto('/register');
-        await page.locator('text=First Name *First Name * >> input[type="text"]').click();
-        await page.locator('text=First Name *First Name * >> input[type="text"]').fill('New');
-        await page.locator('text=First Name *First Name * >> input[type="text"]').press('Tab');
-        await page.locator('text=Last Name *Last Name * >> input[type="text"]').fill('User');
-        await page.locator('text=Last Name *Last Name * >> input[type="text"]').press('Tab');
-        await page.locator('input[type="email"]').fill(`newuser${Math.floor(Math.random() * 10000)}@prytaneum.io`);
-        await page.locator('input[type="email"]').press('Tab');
-        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').fill('password');
-        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> input[type="password"]').press('Tab');
-        await page.locator('text=Password *Password *Passwords must be at least 8 characters >> [aria-label="toggle password visibility"]').press('Tab');
-        await page.locator('text=Confirm Password *Confirm Password * >> input[type="password"]').fill('password');
+        const register = new PlaywrightRegisterPage(page);
         // act
-        await Promise.all([
-            page.waitForNavigation({ url: 'http://localhost:8080/organizations/me' }),
-            page.locator('[data-test-id=register-form-submit]').click()
-        ]);
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('Password1');
+        await register.fillInConfirmPassword('Password1');
+        await register.submitRegisterForm();
         // assert
-        await expect(page).toHaveURL('/organizations/me');
-    })
-})
+        await register.see(register.failedSnackPasswordSpecialCharacter);
+    });
+    test('An error displays when passwords lack a number', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('Password!');
+        await register.fillInConfirmPassword('Password!');
+        await register.submitRegisterForm();
+        // assert
+        await register.see(register.failedSnackPasswordMissingNumber);
+    });
+    test('An error displays when passwords lack an upper case character', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('password1!');
+        await register.fillInConfirmPassword('password1!');
+        await register.submitRegisterForm();
+        // assert
+        await register.see(register.failedSnackPasswordUpperCase);
+    });
+    test('An error displays when passwords lack a lower case character', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('PASSWORD1!');
+        await register.fillInConfirmPassword('PASSWORD1!');
+        await register.submitRegisterForm();
+        // assert
+        await register.see(register.failedSnackPasswordLowerCase);
+    });
+    test('An error displays when passwords are less than 8 characters', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('johnDoe@test.com');
+        await register.fillInPassword('Pass1!');
+        await register.fillInConfirmPassword('Pass1!');
+        await register.submitRegisterForm();
+        // assert
+        await register.see(register.failedSnackPasswordLength);
+    });
+    test('An error displays when account already exists', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail('user1@example.com');
+        await register.fillInPassword('Password1!');
+        await register.fillInConfirmPassword('Password1!');
+        await register.submitRegisterForm();
+        // assert
+        await register.see(register.failedSnackInternalError);
+    });
+    test('I can register successfully with valid form data', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.fillInFirstName('John');
+        await register.fillInLastName('Doe');
+        await register.fillInEmail(`newuser${Math.floor(Math.random() * 10000)}@test.com`);
+        await register.fillInPassword('Password1!');
+        await register.fillInConfirmPassword('Password1!');
+        await register.submitRegisterForm();
+        // assert
+        await register.amRegistered();
+    });
+    test('I can click "Already have an account?" link', async ({ page }) => {
+        // arrange
+        const register = new PlaywrightRegisterPage(page);
+        // act
+        await register.goto();
+        await register.clickOnLoginLink();
+        // assert
+        await register.amOnLoginPage();
+    });
+});
