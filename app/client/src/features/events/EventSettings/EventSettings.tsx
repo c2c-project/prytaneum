@@ -13,6 +13,7 @@ import { useSnack } from '@local/core';
 import { VideoEventSettings } from '../Videos';
 import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
+import { EventData } from './EventData';
 import { EventDetails } from './EventDetails';
 import { ModeratorEventSettings } from '../Moderation';
 import { EventContext } from '../EventContext';
@@ -52,6 +53,7 @@ export const EVENT_SETTINGS_QUERY = graphql`
             id
             ... on Event {
                 isViewerModerator
+                ...EventDataFragment
                 ...EventDetailsFragment
                 ...SpeakerEventSettingsFragment
                 ...VideoEventSettingsFragment
@@ -137,6 +139,13 @@ export function EventSettings({ queryRef }: Props) {
                                 description: 'Invite people to join the event',
                                 component: (
                                     <InviteEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
+                            },
+                            {
+                                title: 'Data',
+                                description: 'Download data from the event.',
+                                component: (
+                                    <EventData fragmentRef={data.node} />
                                 ),
                             },
                             {
