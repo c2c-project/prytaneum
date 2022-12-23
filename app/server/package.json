@@ -50,7 +50,7 @@
         "graphql-relay": "^0.10.0",
         "ioredis": "^5.3.2",
         "ioredis-mock": "^8.7.0",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "mailgun.js": "^3.4.0",
         "mercurius": "^11.3.0",
         "mercurius-codegen": "^5.0.1",
