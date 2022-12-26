@@ -81,6 +81,8 @@ export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
 
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
+    const REFRESH_INTERVAL = 5000;
+
     const refresh = React.useCallback(() => {
         if (isRefreshing) return;
         setIsRefreshing(true);
@@ -95,9 +97,7 @@ export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
         });
     }, [env, eventId, isRefreshing, loadEventQuery]);
     React.useEffect(() => {
-        const interval = setInterval(() => {
-            refresh();
-        }, 5000);
+        const interval = setInterval(refresh, REFRESH_INTERVAL);
         return () => clearInterval(interval);
     });
     React.useEffect(() => {
