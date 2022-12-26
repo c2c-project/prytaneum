@@ -31,11 +31,6 @@ export const resolvers: Resolvers = {
             const foundEvent = await Event.findEventById(eventId, ctx.prisma);
             return foundEvent ? toEventId(foundEvent) : null;
         },
-        async eventBroadcastMessages(parent, args, ctx, info) {
-            const { id: eventId } = fromGlobalId(args.eventId);
-            const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
-            return broadcastMessages.map(toBroadcastMessageId);
-        },
         // async isEventPrivate(parent, args, ctx, info) {
         //     const isPrivateEvent = await Event.isEventPrivate(ctx.prisma,{ ...args.event, eventId }, status);
         //     if
@@ -43,68 +38,6 @@ export const resolvers: Resolvers = {
         // },
     },
     Mutation: {
-        async createBroadcastMessage(parent, args, ctx, info) {
-            return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
-                const { id: eventId } = fromGlobalId(args.input.eventId);
-                const createBroadcastMessage = await Event.createBroadcastMessage(ctx.viewer.id, ctx.prisma, {
-                    ...args.input,
-                    eventId,
-                });
-                const formattedBroadcastMessage = toBroadcastMessageId(createBroadcastMessage);
-                const edge = {
-                    node: formattedBroadcastMessage,
-                    cursor: formattedBroadcastMessage.id,
-                };
-                ctx.pubsub.publish({
-                    topic: 'broadcastMessageCreated',
-                    payload: { eventId, broadcastMessageCreated: { edge } },
-                });
-                return edge;
-            });
-        },
-        async editBroadcastMessage(parent, args, ctx, info) {
-            return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
-                const { id: broadcastMessageId } = fromGlobalId(args.input.broadcastMessageId);
-                const editEventBroadcastMessage = await Event.editBroadcastMessage(
-                    broadcastMessageId,
-                    args.input.broadcastMessage,
-                    ctx.prisma
-                );
-                const formattedBroadcastMessage = toBroadcastMessageId(editEventBroadcastMessage);
-                const edge = {
-                    node: formattedBroadcastMessage,
-                    cursor: formattedBroadcastMessage.id,
-                };
-                ctx.pubsub.publish({
-                    topic: 'broadcastMessageEdited',
-                    payload: { eventId: editEventBroadcastMessage.eventId, broadcastMessageEdited: { edge } },
-                });
-                return edge;
-            });
-        },
-        async deleteBroadcastMessage(parent, args, ctx, info) {
-            return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
-                const { id: broadcastMessageId } = fromGlobalId(args.input.broadcastMessageId);
-                const deleteEventBroadcastMessage = await Event.updateBroadcastMessageVisibility(
-                    broadcastMessageId,
-                    args.input.toggleBroadcastMessageVisibility,
-                    ctx.prisma
-                );
-                const formattedBroadcastMessage = toBroadcastMessageId(deleteEventBroadcastMessage);
-                const edge = {
-                    node: formattedBroadcastMessage,
-                    cursor: formattedBroadcastMessage.id,
-                };
-                ctx.pubsub.publish({
-                    topic: 'broadcastMessageDeleted',
-                    payload: { eventId: deleteEventBroadcastMessage.eventId, broadcastMessageDeleted: { edge } },
-                });
-                return edge;
-            });
-        },
         async createEvent(parent, args, ctx, info) {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
@@ -231,28 +164,6 @@ export const resolvers: Resolvers = {
                 }
             ),
         },
-        broadcastMessageCreated: {
-            subscribe: withFilter<{ broadcastMessageCreated: EventBroadcastMessageEdgeContainer; eventId: string }>(
-                (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageCreated'),
-                (payload, args, ctx) => {
-                    const { eventId: broadcastMessageEventId } = payload;
-                    const { id: eventId } = fromGlobalId(args.eventId);
-                    console.log('eventId', eventId, broadcastMessageEventId);
-                    return eventId === broadcastMessageEventId;
-                }
-            ),
-        },
-        broadcastMessageDeleted: {
-            subscribe: withFilter<{ broadcastMessageDeleted: EventBroadcastMessageEdgeContainer; eventId: string }>(
-                (parent, args, ctx) => ctx.pubsub.subscribe('broadcastMessageDeleted'),
-                (payload, args, ctx) => {
-                    const { eventId: broadcastMessageEventId } = payload;
-                    const { id: eventId } = fromGlobalId(args.eventId);
-                    // const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageDeleted.edge.node.id);
-                    return eventId === broadcastMessageEventId;
-                }
-            ),
-        },
     },
     Event: {
         async speakers(parent, args, ctx, info) {
@@ -357,13 +268,6 @@ export const resolvers: Resolvers = {
                 questionRecord: makeConnection(questionRecordEdges),
                 enqueuedQuestions: makeConnection(enqueuedQuestionsEdges),
             };
-        },
-    },
-    EventBroadcastMessage: {
-        async createdBy(parent, args, ctx, info) {
-            const { id: broadcastMessageId } = fromGlobalId(parent.id);
-            const submitter = await Event.findSubmitterByBroadcastMessageId(broadcastMessageId, ctx.prisma);
-            return toUserId(submitter);
         },
     },
 };
