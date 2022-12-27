@@ -3,6 +3,7 @@ import { Grid, Typography, Divider } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { graphql, useRefetchableFragment } from 'react-relay';
 import { formatDate } from '@local/utils/format';
+import { useRouter } from 'next/router';
 
 import { EventDetailsCardFragment$key } from '@local/__generated__/EventDetailsCardFragment.graphql';
 import { useRefresh } from '@local/features/core';
@@ -27,6 +28,8 @@ export const EVENT_DETAILS_CARD_FRAGMENT = graphql`
         description
         startDateTime
         endDateTime
+        isActive
+        isViewerModerator
     }
 `;
 
@@ -38,7 +41,8 @@ export function EventDetailsCard({ fragmentRef }: Props) {
     const classes = useStyles();
     const [data, refetch] = useRefetchableFragment(EVENT_DETAILS_CARD_FRAGMENT, fragmentRef);
     const { title, description, startDateTime, endDateTime } = data;
-
+    const router = useRouter();
+    const eventId = router.query.id as string;
     const REFRESH_INTERVAL = 30000; // 30 seconds
     const refresh = React.useCallback(() => {
         refetch({}, { fetchPolicy: 'store-and-network' });
@@ -54,6 +58,10 @@ export function EventDetailsCard({ fragmentRef }: Props) {
         () => formatDate(endDateTime ? new Date(endDateTime) : new Date(), 'h:mmaa'),
         [endDateTime]
     );
+
+    React.useEffect(() => {
+        if (!data.isActive && !data.isViewerModerator) router.push('/events/' + eventId + '/pre');
+    }, [eventId, data.isActive, data.isViewerModerator, router]);
 
     return (
         <Grid container direction='column'>
