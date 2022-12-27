@@ -61,7 +61,6 @@ export const EVENT_LIVE_QUERY = graphql`
             id
             ... on Event {
                 isViewerModerator
-                startDateTime
                 isActive
                 ...EventSidebarFragment
                 ...useBroadcastMessageListFragment
@@ -89,7 +88,6 @@ export function EventLiveLoader() {
 type Node = {
     readonly id: string;
     readonly isViewerModerator?: boolean | null | undefined;
-    readonly startDateTime?: Date | null | undefined;
     readonly isActive?: boolean | null | undefined;
     readonly ' $fragmentSpreads': FragmentRefs<any>;
 };
@@ -172,10 +170,6 @@ function EventLive({ node }: EventLiveProps) {
             displaySnack(err.message);
         }
     };
-
-    React.useEffect(() => {
-        if (!node.isActive && !node.isViewerModerator) router.push('/events/' + eventId + '/pre');
-    }, [eventId, node.isActive, node.isViewerModerator, router]);
 
     if (!node) return <EventSidebarLoader />;
 
