@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
-import { Form } from '@local/components';
-import { useForm } from '@local/core';
 import type { CreateSpeaker as CreateType } from '@local/graphql-types';
 import { FormTitle } from '@local/components/FormTitle';
+import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import type { NullableFields } from '@local/utils/ts-utils';
+import { useForm } from '@local/core';
+import { NullableFields, makeInitialState } from '@local/utils/ts-utils';
 
 export type TSpeakerForm = Omit<CreateType, 'eventId' | 'id'>;
 export interface SpeakerFormProps {
@@ -16,34 +16,27 @@ export interface SpeakerFormProps {
     form?: NullableFields<TSpeakerForm>;
 }
 
-type TSchema = {
-    [key in keyof TSpeakerForm]: Yup.AnySchema;
-};
-const validationSchema = Yup.object().shape<TSchema>({
-    title: Yup.string().required('Please enter a title'),
-    description: Yup.string().required('Please enter a description'),
-    pictureUrl: Yup.string().url('Please enter a valid URL'),
-    name: Yup.string().required('Please enter a name'),
-    email: Yup.string().email('Please enter a valid email'),
-});
+const useStyles = makeStyles(() => ({
+    root: {
+        width: '100%',
+    },
+}));
 
 const initialState: TSpeakerForm = { title: '', description: '', pictureUrl: '', name: '', email: '' };
 
-export function SpeakerForm(props: SpeakerFormProps) {
-    const { onSubmit } = props;
-
-    const [state, errors, handleSubmit, handleChange] = useForm<TSpeakerForm>(initialState, validationSchema);
+export function SpeakerForm({ form, onSubmit }: SpeakerFormProps) {
+    const [state, errors, handleSubmit, handleChange] = useForm(makeInitialState(initialState, form));
+    const classes = useStyles();
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Speaker Form' />
-            <FormContent>
+            <FormContent className={classes.root}>
                 <TextField
                     error={Boolean(errors?.name)}
                     helperText={errors?.name}
                     required
                     label='Speaker Name'
-                    name='name'
                     value={state.name}
                     onChange={handleChange('name')}
                 />
@@ -52,7 +45,6 @@ export function SpeakerForm(props: SpeakerFormProps) {
                     helperText={errors?.title}
                     required
                     label='Speaker Title'
-                    name='title'
                     value={state.title}
                     onChange={handleChange('title')}
                 />
@@ -61,24 +53,22 @@ export function SpeakerForm(props: SpeakerFormProps) {
                     helperText={errors?.description}
                     required
                     label='Speaker Description'
-                    name='description'
                     value={state.description}
                     onChange={handleChange('description')}
                 />
                 <TextField
                     error={Boolean(errors?.pictureUrl)}
                     helperText={errors?.pictureUrl}
+                    required
                     label='Picture URL'
-                    name='pictureUrl'
                     value={state.pictureUrl}
                     onChange={handleChange('pictureUrl')}
                 />
                 <TextField
                     error={Boolean(errors?.email)}
                     helperText={errors?.email}
-                    type='email'
+                    required
                     label="Speaker's Email"
-                    name='email'
                     value={state.email}
                     onChange={handleChange('email')}
                 />

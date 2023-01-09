@@ -36,8 +36,6 @@ export class ProtectedError extends Error implements TProtectedError {
     // This is intentional. See the above OWASP cheat sheet link for more information.
     static accountCreationErrorMessage = 'A link to activate your account has been emailed to the address provided.';
 
-    static internalServerErrorMessage = 'Internal server error. Please try again later.';
-
     constructor(message: TProtectedError) {
         super(JSON.stringify(message, null, 4));
 

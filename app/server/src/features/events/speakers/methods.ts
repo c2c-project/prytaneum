@@ -3,7 +3,6 @@ import { errors } from '@local/features/utils';
 import type { DeleteSpeaker, CreateSpeaker, UpdateSpeaker } from '@local/graphql-types';
 import { register } from '@local/features/accounts/methods';
 import { canUserModify } from '@local/features/events/methods';
-import { ProtectedError } from '@local/lib/ProtectedError';
 
 export function findSpeakerAccByEmail(email: string, prisma: PrismaClient) {
     if (!email) return null;
@@ -16,7 +15,7 @@ export async function createSpeaker(userId: string, prisma: PrismaClient, input:
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     // find user by email
     const speakerAccount = await prisma.user.findUnique({ where: { email }, select: { id: true } });
@@ -46,7 +45,7 @@ export async function updateSpeaker(userId: string, prisma: PrismaClient, input:
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.update({
         where: {
@@ -66,7 +65,7 @@ export async function deleteSpeaker(userId: string, prisma: PrismaClient, input:
 
     // permission check
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventSpeaker.delete({
         where: {

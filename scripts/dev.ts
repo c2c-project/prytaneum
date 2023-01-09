@@ -13,11 +13,7 @@ const { result } = concurrently([
     { command: 'yarn workspace @app/proxy dev', name: 'proxy', prefixColor: 'black.bgYellow.bold' },
     { command: 'yarn workspace @app/client relay', name: 'relay', prefixColor: 'black.bgCyan' },
     { command: 'graphql-codegen --config codegen.yml', name: 'graphql-codegen', prefixColor: 'bgCyan.bold' },
-    {
-        command: `yarn exec ${projectRoot}/db/start-db.sh && yarn workspace @app/server prisma-db-push`,
-        name: 'db',
-        prefixColor: 'bgGreen.bold',
-    },
+    { command: `yarn exec ${projectRoot}/db/start-db.sh`, name: 'db', prefixColor: 'bgGreen.bold' },
 ]);
 
 const noOp = () => {};

@@ -9,59 +9,9 @@ type EventLiveFeedback implements Node {
     refFeedback: EventLiveFeedback
 }
 
-type EventLiveFeedbackPrompt implements Node {
-    id: ID!
-    prompt: String!
-    event: Event
-    createdAt: Date
-    isVote: Boolean
-    isOpenEnded: Boolean
-    responses(first: Int, after: String): EventLiveFeedbackPromptResponseConnection
-}
-
-enum Vote {
-    FOR
-    AGAINST
-    CONFLICTED
-}
-
-type EventLiveFeedbackPromptResponse implements Node {
-    id: ID!
-    isOpenEnded: Boolean
-    response: String
-    isVote: Boolean
-    vote: String
-    event: Event
-    createdAt: Date
-    createdBy: User
-    createdById: ID
-    promptId: ID
-    prompt: EventLiveFeedbackPrompt
-}
-
 type EventLiveFeedbackEdge {
     node: EventLiveFeedback!
     cursor: String!
-}
-
-type EventLiveFeedbackPromptEdge {
-    node: EventLiveFeedbackPrompt!
-    cursor: String!
-}
-
-type EventLiveFeedbackPromptConnection {
-    edges: [EventLiveFeedbackPromptEdge!]
-    pageInfo: PageInfo!
-}
-
-type EventLiveFeedbackPromptResponseEdge {
-    node: EventLiveFeedbackPromptResponse!
-    cursor: String!
-}
-
-type EventLiveFeedbackPromptResponseConnection {
-    edges: [EventLiveFeedbackPromptResponseEdge!]
-    pageInfo: PageInfo!
 }
 
 type EventLiveFeedbackConnection {
@@ -80,18 +30,6 @@ type EventFeedbackMutationResponse implements MutationResponse {
     body: EventLiveFeedbackEdge
 }
 
-type EventFeedbackPromptMutationResponse implements MutationResponse {
-    isError: Boolean!
-    message: String!
-    body: EventLiveFeedbackPromptEdge
-}
-
-type EventFeedbackPromptResponseMutationResponse implements MutationResponse {
-    isError: Boolean!
-    message: String!
-    body: EventLiveFeedbackPromptResponseEdge
-}
-
 input CreateFeedback {
     message: String!
     eventId: ID!
@@ -99,42 +37,15 @@ input CreateFeedback {
     isReply: Boolean
 }
 
-input CreateFeedbackPrompt {
-    prompt: String!
-    eventId: ID!
-    feedbackType: String!
-}
-
-input CreateFeedbackPromptResponse {
-    eventId: ID!
-    promptId: ID!
-    response: String!
-    vote: String!
-}
-
-type Votes {
-    for: Int!
-    against: Int!
-    conflicted: Int!
-}
 
 type Mutation {
-    createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
-    createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
-    createFeedbackPromptResponse(input: CreateFeedbackPromptResponse!): EventFeedbackPromptResponseMutationResponse!
-    shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
+    createFeedback(input: CreateFeedback): EventFeedbackMutationResponse
 }
 
 type Query {
     myFeedback(eventId: ID!): [EventLiveFeedback]
-    promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
-    prompt(promptId: ID!): EventLiveFeedbackPrompt
-    prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
-    promptResponseVotes(promptId: ID!): Votes!
 }
 
 type Subscription {
     feedbackCRUD(eventId: ID!): FeedbackOperation!
-    feedbackPrompted(eventId: ID!): EventLiveFeedbackPrompt!
-    feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
 }

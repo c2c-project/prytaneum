@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fromGlobalId, connectionFromArray } from 'graphql-relay';
-import * as Question from './methods';
 import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
-import { ProtectedError } from '@local/lib/ProtectedError';
 import type { EventQuestionEdgeContainer } from '@local/graphql-types';
+import * as Question from './methods';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
@@ -18,7 +17,7 @@ export const resolvers: Resolvers = {
     Mutation: {
         async createQuestion(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 const formattedQuestion = toQuestionId(question);
@@ -40,10 +39,10 @@ export const resolvers: Resolvers = {
         },
         async deleteQuestion(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const enqueued = await Question.isEnqueued(questionId, ctx.prisma);
-                if (enqueued) throw new ProtectedError({ userMessage: 'Cannot delete an enqueued question' });
+                if (enqueued) throw new Error('Cannot delete an enqueued question');
                 const deletedQuestion = await Question.updateQuestionVisibility(
                     questionId,
                     args.input.isVisible,
@@ -68,7 +67,7 @@ export const resolvers: Resolvers = {
         async alterLike(parent, args, ctx, info) {
             return runMutation(async () => {
                 // this whole function is kinda eh
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const question = await Question.alterLikeByQuestionId(ctx.viewer.id, ctx.prisma, {
                     ...args.input,

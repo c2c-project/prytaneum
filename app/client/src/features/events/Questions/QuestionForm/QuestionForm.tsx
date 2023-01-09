@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 import { Form } from '@local/components/Form';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
 import { useForm } from '@local/core';
-import { QUESTIONS_MAX_LENGTH } from '@local/utils/rules';
 
 export type TQuestionFormState = { question: string };
 
@@ -16,6 +15,7 @@ export interface QuestionFormProps {
     onCancel?: () => void;
 }
 
+// TODO: eliminate inline styles
 export function QuestionForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
     // form related hooks
     const [form, errors, handleSubmit, handleChange] = useForm({
@@ -41,16 +41,6 @@ export function QuestionForm({ quote, onSubmit, onCancel }: QuestionFormProps) {
                     value={form.question}
                     onChange={handleChange('question')}
                 />
-                <Typography
-                    variant='caption'
-                    color={form.question.length > QUESTIONS_MAX_LENGTH ? 'red' : 'black'}
-                    sx={{
-                        display: 'block',
-                        textAlign: 'right',
-                    }}
-                >
-                    {form.question.length}/500
-                </Typography>
             </FormContent>
             <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
                 {onCancel && (

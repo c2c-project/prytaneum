@@ -14,7 +14,6 @@ env:
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
     GRAPHQL_URL: https://dev.prytaneum.io/graphql
-    DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
     GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
 
 jobs:
@@ -76,17 +75,6 @@ jobs:
                   kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG="gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
-
-            - uses: actions/setup-node@v2
-              with:
-                  node-version: '16'
-
-            - name: Yarn Install
-              run: yarn install
-
-            # Update DB schema to be in sync with prisma schema
-            - name: Prisma Migration
-              run: yarn workspace @app/server prisma-migrate-deploy
 
     finalize:
         name: Finalize

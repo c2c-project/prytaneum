@@ -1,8 +1,7 @@
 import { PrismaClient } from '@local/__generated__/prisma';
-import { errors } from '@local/features/utils';
-import { canUserModify } from '@local/features/events/methods';
-import { ProtectedError } from '@local/lib/ProtectedError';
 import type { CreateVideo, UpdateVideo, DeleteVideo } from '@local/graphql-types';
+import { errors } from '@local/features/utils';
+import { canUserModify } from '../methods';
 
 /**
  * add a video to the given event
@@ -11,7 +10,7 @@ export async function createVideo(userId: string, prisma: PrismaClient, input: C
     const { eventId, lang, url } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventVideo.create({
         data: {
@@ -29,7 +28,7 @@ export async function deleteVideo(userId: string, prisma: PrismaClient, input: D
     const { eventId, id } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     return prisma.eventVideo.delete({ where: { id } });
 }
@@ -41,7 +40,7 @@ export async function updateVideo(userId: string, prisma: PrismaClient, input: U
     const { eventId, videoId } = input;
 
     const hasPermissions = await canUserModify(userId, eventId, prisma);
-    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermissions) throw new Error(errors.permissions);
 
     const data: Record<string, string> = {};
     if (input.url) data.url = input.url;

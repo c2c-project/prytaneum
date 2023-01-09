@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { useSnackbar, OptionsObject } from 'notistack';
+import { useSnackbar } from 'notistack';
+
+interface Options {
+    action?: JSX.Element;
+    onExited?: () => void;
+}
 
 export function useSnack() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const makeSnack = React.useCallback(
-        (message: string, options?: OptionsObject) => {
+        (message: string, options?: Options) => {
             enqueueSnackbar(message, {
-                variant: options?.variant || 'default',
+                variant: 'default',
                 action: options?.action,
                 onExited: options?.onExited,
                 color: 'inherit',

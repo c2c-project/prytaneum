@@ -74,7 +74,6 @@ export function OrgEventList({ fragementRef, className }: OrgEventListProps) {
                 <ResponsiveDialog open={isOpen} onClose={close}>
                     <DialogContent>
                         <CreateEvent
-                            formType='Create'
                             connections={data.events ? [data.events.__id] : []}
                             orgId={data.id}
                             onCancel={close}

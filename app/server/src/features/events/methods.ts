@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
 import { Event, PrismaClient } from '@local/__generated__/prisma';
+import type { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 import { errors, filterFields, toGlobalId } from '@local/features/utils';
 import { isMemberOfOrg } from '@local/features/permissions';
-import { ProtectedError } from '@local/lib/ProtectedError';
-import type { CreateEvent, DeleteEvent, UpdateEvent } from '@local/graphql-types';
 
 export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
@@ -46,7 +45,7 @@ type Settings = Omit<
 export async function createEvent(userId: string, prisma: PrismaClient, input: CreateEvent) {
     const { title, description, topic, startDateTime, endDateTime, orgId } = input;
 
-    if (!isMemberOfOrg(userId, orgId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!isMemberOfOrg(userId, orgId, prisma)) throw new Error(errors.permissions);
 
     // default values for different settings
     const defaultSettings: Settings = {
@@ -108,7 +107,7 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
  */
 export async function updateEvent(userId: string, prisma: PrismaClient, input: UpdateEvent) {
     // check if user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
 
     const fields = filterFields({
         input,
@@ -132,21 +131,20 @@ export async function updateEvent(userId: string, prisma: PrismaClient, input: U
  * delete an event
  */
 export async function deleteEvent(userId: string, prisma: PrismaClient, input: DeleteEvent) {
-    if (!userId) throw new ProtectedError({ userMessage: errors.noLogin });
+    if (!userId) throw new Error(errors.noLogin);
 
     // check if the user has valid permissions
-    if (!canUserModify(userId, input.eventId, prisma)) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!canUserModify(userId, input.eventId, prisma)) throw new Error(errors.permissions);
     const { eventId, title, confirmTitle } = input;
 
     const eventToDelete = await prisma.event.findUnique({ where: { id: eventId } });
     const eventWithGlobalId = toEventId(eventToDelete);
 
     //validation if event titles match
-    if (title !== confirmTitle) throw new ProtectedError({ userMessage: 'Event titles must match.' });
+    if (title !== confirmTitle) throw new Error('Event titles must match');
 
     //validation is if event title matches actual event title
-    if (title !== eventWithGlobalId?.title)
-        throw new ProtectedError({ userMessage: 'Deleting event failed, invalid event title.' });
+    if (title !== eventWithGlobalId?.title) throw new Error('Deleting event failed: Invalid event title.');
 
     //delete user by event id
     return prisma.event.delete({ where: { id: eventId } });
@@ -182,17 +180,6 @@ export async function findModeratorsByEventId(eventId: string, prisma: PrismaCli
 }
 
 /**
- * find invited users for the given event
- * @param eventId
- * @param prisma
- * @returns list of users
- */
-export async function findInvitedByEventId(eventId: string, prisma: PrismaClient) {
-    const results = await prisma.eventInvited.findMany({ where: { eventId }, include: { user: true } });
-    return results.map(({ user }) => user);
-}
-
-/**
  * find an organization based on the event (probably inefficient)
  */
 export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
@@ -215,7 +202,7 @@ export async function findQuestionsByEventId(eventId: string, prisma: PrismaClie
  */
 export async function changeEventStatus(userId: string, prisma: PrismaClient, eventId: string, status: boolean) {
     const hasPermission = await canUserModify(userId, eventId, prisma);
-    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
+    if (!hasPermission) throw new Error(errors.permissions);
 
     return prisma.event.update({ where: { id: eventId }, data: { isActive: status } });
 }
@@ -238,16 +225,6 @@ export async function findLiveFeedbackByEventId(eventId: string, prisma: PrismaC
     return prisma.event.findUnique({
         where: { id: eventId },
         select: { feedback: { orderBy: { createdAt: 'desc' } } },
-    });
-}
-
-/**
- * Find live feedback prompts by event id
- */
-export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: PrismaClient) {
-    return prisma.event.findUnique({
-        where: { id: eventId },
-        select: { feedbackPrompt: { orderBy: { createdAt: 'asc' } } },
     });
 }
 
