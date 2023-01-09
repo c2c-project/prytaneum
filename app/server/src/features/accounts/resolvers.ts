@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { connectionFromArray, fromGlobalId } from 'graphql-relay';
-import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/utils';
+import { Resolvers, toGlobalId, runMutation } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
-import * as jwt from '@local/lib/jwt';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
-const toEventId = toGlobalId('Event');
 
 const cookieOptions: CookieSerializeOptions = {
-    sameSite: 'lax',
-};
+    sameSite: 'lax'
+}
 
 export const resolvers: Resolvers = {
     Query: {
@@ -20,17 +18,6 @@ export const resolvers: Resolvers = {
             const user = await User.findUserById(ctx.viewer.id, ctx.prisma);
             return toUserId(user);
         },
-        async validatePasswordResetToken(parent, args, ctx, info) {
-            const { token } = args.input;
-
-            try {
-                await jwt.verify(token);
-                return { valid: true, message: '' };
-            } catch (err) {
-                ctx.app.log.error(err);
-                return { valid: false, message: errors.jwt };
-            }
-        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -38,12 +25,6 @@ export const resolvers: Resolvers = {
             const userOrgs = await User.findOrgsByUserId(userId, ctx.prisma);
             if (!userOrgs) return null;
             return connectionFromArray(userOrgs.map(toOrgId), args);
-        },
-        async events(parent, args, ctx, info) {
-            const { id: userId } = fromGlobalId(parent.id);
-            const userEvents = await User.findUsersEventsByUserId(userId, ctx.prisma);
-            if (!userEvents) return null;
-            return connectionFromArray(userEvents.map(toEventId), args);
         },
     },
     Mutation: {
@@ -77,17 +58,6 @@ export const resolvers: Resolvers = {
                 const { updatedUser, token } = await User.updatePassword(ctx.prisma, args.input);
                 ctx.reply.setCookie('jwt', token, cookieOptions);
                 return toUserId(updatedUser);
-            });
-        },
-        async resetPasswordRequest(parent, args, ctx, info) {
-            return runMutation(async () => {
-                const result = await User.resetPasswordRequest(ctx.prisma, args.input);
-                return result;
-            });
-        },
-        async resetPassword(parent, args, ctx, info) {
-            return runMutation(async () => {
-                return User.resetPassword(ctx.prisma, args.input);
             });
         },
         async deleteAccount(parent, args, ctx, info) {

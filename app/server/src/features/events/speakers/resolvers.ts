@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fromGlobalId } from 'graphql-relay';
-import * as Speaker from './methods';
 import { Resolvers, errors, runMutation, toGlobalId } from '@local/features/utils';
-import { ProtectedError } from '@local/lib/ProtectedError';
+import * as Speaker from './methods';
 
 const toSpeakerId = toGlobalId('EventSpeaker');
 
@@ -10,7 +9,7 @@ export const resolvers: Resolvers = {
     Mutation: {
         createSpeaker(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const createdSpeaker = await Speaker.createSpeaker(ctx.viewer.id, ctx.prisma, {
                     ...args.input,
@@ -21,7 +20,7 @@ export const resolvers: Resolvers = {
         },
         deleteSpeaker(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: speakerId } = fromGlobalId(args.input.id);
                 const deletedSpeaker = await Speaker.deleteSpeaker(ctx.viewer.id, ctx.prisma, {
@@ -34,7 +33,7 @@ export const resolvers: Resolvers = {
         },
         updateSpeaker(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: speakerId } = fromGlobalId(args.input.id);
                 const updatedSpeaker = await Speaker.updateSpeaker(ctx.viewer.id, ctx.prisma, {

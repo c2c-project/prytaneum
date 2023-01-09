@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
-import { useSnack } from '@local/features/core/useSnack';
+
 import type { CreateModeratorMutation } from '@local/__generated__/CreateModeratorMutation.graphql';
 import { ModeratorForm, ModeratorProps } from './ModeratorForm';
 
@@ -26,7 +26,6 @@ export const CREATE_MODERATOR_MUTATION = graphql`
 `;
 
 export function CreateModerator({ eventId, onSubmit, connections }: CreateModeratorProps) {
-    const { displaySnack } = useSnack();
     const [commit] = useMutation<CreateModeratorMutation>(CREATE_MODERATOR_MUTATION);
     const handleSubmit: ModeratorProps['onSubmit'] = (submittedForm) => {
         commit({
@@ -37,12 +36,8 @@ export function CreateModerator({ eventId, onSubmit, connections }: CreateModera
                 },
                 connections,
             },
-            onCompleted({ createModerator }) {
-                if (createModerator.isError) {
-                    displaySnack(createModerator.message, { variant: 'error' });
-                } else if (!createModerator.isError && onSubmit) {
-                    onSubmit();
-                }
+            onCompleted() {
+                if (onSubmit) onSubmit();
             },
         });
     };

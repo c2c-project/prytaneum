@@ -1,8 +1,7 @@
-import { fromGlobalId } from 'graphql-relay';
 import { PrismaClient } from '@local/__generated__/prisma';
-import { errors } from '@local/features/utils';
-import { ProtectedError } from '@local/lib/ProtectedError';
 import type { CreateQuestion, AlterLike } from '@local/graphql-types';
+import { fromGlobalId } from 'graphql-relay';
+import { errors } from '@local/features/utils';
 
 /**
  * submit a question, in the future this may plug into an event broker like kafka or redis
@@ -12,7 +11,7 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
     const refQuestionId = globalRefId ? fromGlobalId(globalRefId).id : null;
 
     // it's okay to have both false, but both cannot be true
-    if (isQuote === isFollowUp && isQuote === true) throw new ProtectedError({ userMessage: errors.invalidArgs });
+    if (isQuote === isFollowUp && isQuote === true) throw new Error(errors.invalidArgs);
 
     return prisma.eventQuestion.create({
         data: {
@@ -152,10 +151,6 @@ export async function isEnqueued(questionId: string, prisma: PrismaClient) {
         where: { id: questionId },
         select: { position: true },
     });
-    if (!queryResult)
-        throw new ProtectedError({
-            userMessage: ProtectedError.internalServerErrorMessage,
-            internalMessage: `Could not find a question with id ${questionId}.`,
-        });
+    if (!queryResult) throw new Error(errors.DNE('question'));
     return queryResult.position !== -1;
 }

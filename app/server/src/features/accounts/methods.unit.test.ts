@@ -173,10 +173,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.loginWithPassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: `User with email: ${input.email} does not exist or has no password set.`,
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
 
@@ -188,10 +185,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.loginWithPassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: 'Incorrect password.',
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
 
@@ -223,7 +217,7 @@ describe('account methods', () => {
             await expect(AccountMethods.updateEmail(prismaMock, input)).rejects.toThrow(
                 new ProtectedError({
                     userMessage: 'A link to activate your account has been emailed to the address provided.',
-                    internalMessage: `A user with the email ${input.newEmail} already exists.`,
+                    internalMessage: 'A user with the email already exists.',
                 })
             );
         });
@@ -259,10 +253,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: `User with email: ${input.email} does not exist or has no password set.`,
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
         test('should throw if account has no existing password', async () => {
@@ -279,10 +270,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: `User with email: ${input.email} does not exist or has no password set.`,
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
         test('should throw if oldPassword is wrong', async () => {
@@ -299,10 +287,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.updatePassword(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: 'Incorrect password.',
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
         test('should throw if password is shorter than 8 characters', async () => {
@@ -393,10 +378,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: `User with email: ${input.email} does not exist or has no password set.`,
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
         test('should throw if oldPassword is wrong', async () => {
@@ -410,10 +392,7 @@ describe('account methods', () => {
 
             // Assert
             await expect(AccountMethods.deleteAccount(prismaMock, input)).rejects.toThrow(
-                new ProtectedError({
-                    userMessage: 'Login failed; Invalid user ID or password.',
-                    internalMessage: 'Incorrect password.',
-                })
+                new ProtectedError({ userMessage: 'Login failed; Invalid user ID or password.' })
             );
         });
         test('should throw if new passwords do not match', async () => {

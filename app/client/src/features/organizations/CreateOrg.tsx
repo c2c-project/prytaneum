@@ -33,7 +33,7 @@ export function CreateOrg({ connection, onSubmit }: TCreateOrgProps) {
                 connections: !connection ? [] : [connection],
             },
             onCompleted({ createOrganization }) {
-                if (createOrganization.isError) displaySnack(createOrganization.message, { variant: 'error' });
+                if (createOrganization.isError) displaySnack(createOrganization.message);
                 else if (onSubmit) onSubmit();
             },
         });

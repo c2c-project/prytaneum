@@ -65,7 +65,7 @@ const CreateOrgFab = ({ connection }: TCreateOrgProps) => {
                     <CreateOrg connection={connection} onSubmit={close} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Fab data-test-id='create-organization-button' onClick={open}>
+            <Fab onClick={open}>
                 <Add />
             </Fab>
         </>
@@ -77,11 +77,11 @@ export interface OrgListProps {
 }
 
 export interface SelectedOrg {
-    readonly id: string;
-    readonly name: string | null;
+    readonly id: string,
+    readonly name: string | null
 }
 
-const initialState = { id: '', name: '' };
+const initialState = { id: '', name: '' }
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
@@ -92,7 +92,7 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
 
     const close = () => {
         setIsConfDialogOpen(false);
-    };
+    }
 
     const listOfOrgs = React.useMemo(() => data.me?.organizations?.edges ?? [], [data.me]);
     const connectionId = React.useMemo(() => data.me?.organizations?.__id ?? '', [data.me?.organizations?.__id]);

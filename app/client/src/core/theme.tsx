@@ -5,7 +5,6 @@ declare module '@mui/material/styles/createPalette' {
     interface Palette {
         custom: {
             creamCan: string;
-            darkCreamCan: string;
             lightBlue: string;
             danger: string;
         };
@@ -13,7 +12,6 @@ declare module '@mui/material/styles/createPalette' {
     interface PaletteOptions {
         custom?: {
             creamCan?: string;
-            darkCreamCan?: string;
             lightBlue?: string;
             danger?: string;
         };
@@ -123,7 +121,6 @@ const base = createTheme({
         },
         custom: {
             creamCan: '#f5c64f',
-            darkCreamCan: '#A78100',
             lightBlue: '#8eafff',
             danger: '#ff0000',
         },

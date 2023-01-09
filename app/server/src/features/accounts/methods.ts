@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@local/__generated__/prisma';
+import { toGlobalId } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import { errors, toGlobalId } from '@local/features/utils';
 
 import * as jwt from '@local/lib/jwt';
 import type {
@@ -10,12 +10,7 @@ import type {
     RegistrationForm,
     UpdateEmailForm,
     UpdatePasswordForm,
-    ResetPasswordRequestForm,
-    ResetPasswordForm,
 } from '@local/graphql-types';
-
-import { getOrCreateServer } from '@local/core/server';
-import { sendEmail } from '@local/lib/email/email';
 
 const toUserId = toGlobalId('User');
 
@@ -31,19 +26,11 @@ async function validateAuthenticationAttempt(prisma: PrismaClient, email: string
     // If there is no password set, the user likely needs to finish registering their account.
     // TODO: In order not to let an attacker know that this is the case, it's best to send
     // a follow up email to the user's account rather than display a specific error message in the app itself.
-    if (!user?.password)
-        throw new ProtectedError({
-            userMessage: ProtectedError.loginErrorMessage,
-            internalMessage: `User with email: ${email} does not exist or has no password set.`,
-        });
+    if (!user?.password) throw new ProtectedError({ userMessage: ProtectedError.loginErrorMessage });
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 
-    if (!isCorrectPassword)
-        throw new ProtectedError({
-            userMessage: ProtectedError.loginErrorMessage,
-            internalMessage: 'Incorrect password.',
-        });
+    if (!isCorrectPassword) throw new ProtectedError({ userMessage: ProtectedError.loginErrorMessage });
 
     return user;
 }
@@ -165,39 +152,6 @@ export async function findOrgsByUserId(userId: string, prisma: PrismaClient) {
 }
 
 /**
- * get events that this particular user is a moderator of, or has been invited to
- * @param userId
- * @param prisma
- * @returns Event[]
- */
-export async function findUsersEventsByUserId(userId: string, prisma: PrismaClient) {
-    const results = await prisma.user.findUnique({
-        where: { id: userId },
-        include: {
-            moderatorOf: {
-                include: {
-                    event: true,
-                },
-            },
-            invitedOf: {
-                include: {
-                    event: true,
-                },
-            },
-        },
-    });
-
-    if (!results) return null;
-
-    let formattedData = results.moderatorOf.map(({ event }) => event);
-    // Check if event id already exists in the array. If it does, don't add it again.
-    results.invitedOf.forEach(({ event }) => {
-        if (!formattedData.find(({ id }) => id === event.id)) formattedData.push(event);
-    });
-    return formattedData;
-}
-
-/**
  * function called when a user is registering themselves
  */
 export async function registerSelf(prisma: PrismaClient, input: RegistrationForm) {
@@ -251,7 +205,7 @@ export async function updateEmail(prisma: PrismaClient, input: UpdateEmailForm) 
         throw new ProtectedError({
             userMessage: ProtectedError.accountCreationErrorMessage,
             // This is probably only useful for debugging purposes, but it's still fine to log this anyways.
-            internalMessage: `A user with the email ${newEmail} already exists.`,
+            internalMessage: 'A user with the email already exists.',
         });
 
     // update user email
@@ -309,59 +263,4 @@ export async function deleteAccount(prisma: PrismaClient, input: DeleteAccountFo
 
     // return deleted user
     return { deletedUser };
-}
-
-export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPasswordRequestForm) {
-    const result = await prisma.user.findUnique({
-        where: { email: input.email },
-    });
-
-    const accountFound = !!result;
-
-    // No need to send email if the account does not exist
-    if (!accountFound) throw new Error('No account with that email was found');
-
-    const token = await jwt.sign({ email: input.email });
-    const passwordResetLink = `prytaneum.io/reset-password?token=${token}`;
-
-    try {
-        await sendEmail({
-            to: input.email,
-            subject: 'Password Reset',
-            template: 'password-reset',
-            'h:X-Mailgun-Variables': JSON.stringify({ passwordResetLink }),
-        });
-        return accountFound;
-    } catch (err) {
-        const server = getOrCreateServer();
-        server.log.error(err);
-        throw new Error(errors.email);
-    }
-}
-
-export async function resetPassword(prisma: PrismaClient, input: ResetPasswordForm) {
-    const { newPassword, confirmNewPassword, token } = input;
-    let email;
-
-    // Ensure token is valid
-    try {
-        const result = (await jwt.verify(token)) as { email?: string };
-        if (!result.email) throw new Error(errors.jwt);
-        email = result.email;
-    } catch (err) {
-        const server = getOrCreateServer();
-        server.log.error(err);
-        throw new Error(errors.jwt);
-    }
-
-    // Ensure passwords match
-    if (newPassword !== confirmNewPassword) throw new Error('Passwords must match');
-
-    const encryptedPassword = newPassword ? await bcrypt.hash(newPassword, 10) : null;
-
-    // update user password
-    await prisma.user.update({
-        where: { email },
-        data: { password: encryptedPassword },
-    });
 }

@@ -25,11 +25,11 @@ jobs:
             - name: Yarn Install
               run: yarn install
 
-            # Build the server via docker so we are as close to the real build as possible.
+            # Build the client via docker so we are as close to the real build as possible.
             - name: Docker build
               run: |-
                   docker build \
-                    -f ./docker/Dockerfile.server \
+                    -f ./docker/Dockerfile.client \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     --build-arg GRAPHQL_URL="123" \

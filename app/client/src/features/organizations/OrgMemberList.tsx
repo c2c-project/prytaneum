@@ -94,13 +94,7 @@ export function OrgMemberList({ fragmentRef, className }: OrgMemberListProps) {
                     {members.length > 0 ? (
                         members.map(({ node }) => (
                             <ListItem button key={node.id} divider>
-                                <ListItemText
-                                    primary={
-                                        node.firstName
-                                            ? `${node.firstName} ${node.lastName}`
-                                            : 'Pending Registration...'
-                                    }
-                                />
+                                <ListItemText primary={`${node.firstName} ${node.lastName}`} />
                                 {user?.id !== node.id ? (
                                     <IconButton
                                         className='deleteMember'

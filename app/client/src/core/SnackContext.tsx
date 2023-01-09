@@ -19,9 +19,7 @@ export function SnackContext({ children, ...rest }: Props) {
 
     return (
         <SnackbarProvider
-            ref={(ref) => {
-                notistackRef.current = ref;
-            }}
+            // ref={notistackRef}
             action={(key) => (
                 <Button color='inherit' onClick={onClickDismiss(key)}>
                     Dismiss

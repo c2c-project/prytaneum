@@ -9,8 +9,6 @@ import { ResponsiveDialog, useResponsiveDialog } from '@local/components/Respons
 import { useSnack } from '@local/core';
 import { useUser } from '@local/features/accounts';
 import * as ga from '@local/utils/ga/index';
-import { isURL } from '@local/utils';
-import { QUESTIONS_MAX_LENGTH } from '@local/utils/rules';
 import { QuestionForm, TQuestionFormState } from '../QuestionForm';
 
 export interface AskQuestionProps {
@@ -48,14 +46,11 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
 
     function handleSubmit(form: TQuestionFormState) {
         try {
-            // Validate length and url presence before submitting to avoid unessisary serverside validation
-            if (form.question.length > QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
-            if (isURL(form.question)) throw new Error('no links are allowed!');
             commit({
                 variables: { input: { ...form, eventId, isFollowUp: false, isQuote: false } },
                 onCompleted(payload) {
-                    try {
-                        if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
+                    if (payload.createQuestion.isError) displaySnack('Something went wrong!');
+                    else {
                         ga.event({
                             action: 'submit_question',
                             category: 'questions',
@@ -63,14 +58,11 @@ function AskQuestion({ className, eventId }: AskQuestionProps) {
                             value: form.question,
                         });
                         close();
-                        displaySnack('Question submitted!', { variant: 'success' });
-                    } catch (err) {
-                        displaySnack(err.message, { variant: 'error' });
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            displaySnack(err.message);
         }
     }
 

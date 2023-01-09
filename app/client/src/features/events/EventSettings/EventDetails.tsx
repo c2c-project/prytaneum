@@ -60,7 +60,7 @@ export function EventDetails({ fragmentRef, className }: EventDetailsProps) {
 
     return (
         <Grid container className={clsx(classes.root, className)}>
-            <ResponsiveDialog open={isOpen} onClose={close}>
+            <ResponsiveDialog open={isOpen} onClose={close} title='Event Details'>
                 <DialogContent>
                     <UpdateEvent
                         form={{
@@ -78,13 +78,9 @@ export function EventDetails({ fragmentRef, className }: EventDetailsProps) {
             </ResponsiveDialog>
             {entries.map(([key, value]) => (
                 <Grid item xs={12} key={key}>
-                    <Typography variant='overline'>
-                        { key === 'startDateTime' && 'START DATE & TIME' }
-                        { key === 'endDateTime' && 'END DATE & TIME' }
-                        { (key !== 'startDateTime' && key !== 'endDateTime') && key }
-                    </Typography>
+                    <Typography variant='overline'>{key}</Typography>
                     <Typography className={classes.indent}>{value}</Typography>
-                </Grid> 
+                </Grid>
             ))}
             <Grid item xs={12} container justifyContent='flex-end'>
                 <Grid item>
