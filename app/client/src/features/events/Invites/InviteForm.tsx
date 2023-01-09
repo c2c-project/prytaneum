@@ -1,40 +1,44 @@
-import { useMemo } from 'react';
 import { Button, TextField } from '@mui/material';
 import * as Yup from 'yup';
 
-import { Form } from '@local/components/Form';
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
-import { useForm } from '@local/core';
 
 export type TInviteForm = { email: string };
-export interface InviteProps {
+
+export interface InviteFormProps {
     form?: TInviteForm;
-    onSubmit?: (submittedForm: TInviteForm) => void;
+    onSubmit: (submittedForm: TInviteForm) => void;
 }
+
+type TSchema = {
+    [key in keyof TInviteForm]: Yup.AnySchema;
+};
+const validationSchema = Yup.object().shape<TSchema>({
+    email: Yup.string().email('Please enter a valid email').required('Please enter an email'),
+});
+
 const initialState: TInviteForm = { email: '' };
-export function InviteForm({ form, onSubmit }: InviteProps) {
-    const [state, errors, buildHandleSubmit, buildHandleChange] = useForm(
-        form || initialState,
-        useMemo(
-            () =>
-                Yup.object().shape({
-                    email: Yup.string().email().required(),
-                }),
-            []
-        )
-    );
+
+export function InviteForm(props: InviteFormProps) {
+    const { onSubmit, form } = props;
+
+    const [state, errors, handleSubmit, handleChange] = useForm<TInviteForm>(form || initialState, validationSchema);
+
     return (
-        <Form onSubmit={buildHandleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Invite Form' />
             <FormContent>
                 <TextField
-                    onChange={buildHandleChange('email')}
+                    onChange={handleChange('email')}
                     helperText={errors.email}
                     error={Boolean(errors.email)}
                     value={state.email}
                     label='Email'
+                    name='email'
                     type='email'
                 />
             </FormContent>

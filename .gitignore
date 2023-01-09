@@ -127,3 +127,5 @@ test-results/
 playwright-report/
 allure-report/
 allure-results/
+state/
+screenshots/

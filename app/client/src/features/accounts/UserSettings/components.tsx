@@ -180,9 +180,9 @@ export function ModifyUserEmail({ user, demo }: { user: User; demo?: boolean }) 
             variables: { input: completeForm },
             onCompleted({ updateEmail }) {
                 if (updateEmail.isError) {
-                    displaySnack(updateEmail.message);
+                    displaySnack(updateEmail.message, { variant: 'error' });
                 } else {
-                    displaySnack('Email changed successfully!');
+                    displaySnack('Email changed successfully!', { variant: 'success' });
                     setUser(updateEmail.body);
                     resetForm();
                 }
@@ -257,9 +257,9 @@ export function ModifyUserPassword({ user }: { user: User }) {
             variables: { input: completeForm },
             onCompleted({ updatePassword }) {
                 if (updatePassword.isError) {
-                    displaySnack(updatePassword.message);
+                    displaySnack(updatePassword.message, { variant: 'error' });
                 } else {
-                    displaySnack('Password changed successfully!');
+                    displaySnack('Password changed successfully!', { variant: 'success' });
                     setUser(updatePassword.body);
                     resetForm();
                 }
@@ -474,9 +474,9 @@ export function DeleteAccount({ user }: { user: User }) {
             variables: { input: completeForm },
             onCompleted({ deleteAccount }) {
                 if (deleteAccount.isError) {
-                    displaySnack(deleteAccount.message);
+                    displaySnack(deleteAccount.message, { variant: 'error' });
                 } else {
-                    displaySnack('Account deleted successfully!');
+                    displaySnack('Account deleted successfully!', { variant: 'success' });
                     resetForm();
                     // route to login after successfully deleting account
                     router.push('/login');

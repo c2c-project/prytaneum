@@ -152,6 +152,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         if (isSmUp)
             return (
                 <ButtonBase
+                    data-test-id='appbar-user-menu'
                     color='inherit'
                     onClick={handleOpen}
                     aria-label='user-menu'
@@ -164,7 +165,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                 </ButtonBase>
             );
         return (
-            <IconButton onClick={handleOpen} size='large'>
+            <IconButton data-test-id='appbar-user-menu' onClick={handleOpen} size='large'>
                 <MoreVert />
             </IconButton>
         );
@@ -174,12 +175,19 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         <div className={className}>
             {!isSignedIn && (
                 <>
-                    <Button color='primary' variant='contained' className={classes.item} onClick={handleClick('login')}>
+                    <Button
+                        data-test-id='appbar-login-button'
+                        color='primary'
+                        variant='contained'
+                        className={classes.item}
+                        onClick={handleClick('login')}
+                    >
                         Login
                     </Button>
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
                             <LoginForm
+                                close={close}
                                 onSuccess={() => {
                                     close();
                                     router.reload();

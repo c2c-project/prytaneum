@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { sendEmail } from '@local/lib/email/email';
+import { ProtectedError } from '../../../lib/ProtectedError';
 
 export interface InviteEmailTemplateVariables {
     eventStartDate: string;
@@ -136,7 +137,10 @@ export const validateDeliveryTime = (deliveryTimeString: string | undefined): Da
         deliveryTime = new Date(Date.now());
     } else if (Number.isNaN(Date.parse(deliveryTimeString))) {
         // Check if the ISO format is valid by parsing string, returns NaN if invalid
-        throw new Error('Invalid ISO Date format');
+        throw new ProtectedError({
+            userMessage: ProtectedError.internalServerErrorMessage,
+            internalMessage: 'Invalid ISO Date format',
+        });
     } else {
         // Delivery time is set to the time given
         deliveryTime = new Date(deliveryTimeString);

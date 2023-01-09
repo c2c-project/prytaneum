@@ -11,6 +11,10 @@ import { ResponsiveDialog, useResponsiveDialog } from '@local/components/Respons
 import { QuestionForm, QuestionFormProps } from '../QuestionForm';
 import { QuestionAuthor } from '../QuestionAuthor';
 import { QuestionContent } from '../QuestionContent';
+import * as ga from '@local/utils/ga/index';
+import { isURL } from '@local/utils';
+import { QUESTIONS_MAX_LENGTH } from '@local/utils/rules';
+import { useSnack } from '@local/core';
 
 interface QuoteProps {
     className?: string;
@@ -53,22 +57,41 @@ export function Quote({ className, fragmentRef }: QuoteProps) {
     const [isOpen, open, close] = useResponsiveDialog(false);
     const { eventId } = useEvent();
     const classes = useStyles();
-
+    const { displaySnack } = useSnack();
     const [commit] = useMutation<QuoteMutation>(QUOTE_MUTATION);
     const data = useFragment(QUOTE_FRAGMENT, fragmentRef);
 
-    const handleSubmit: QuestionFormProps['onSubmit'] = (submittedForm) => {
-        commit({
-            variables: {
-                input: {
-                    ...submittedForm,
-                    eventId,
-                    isQuote: true,
-                    refQuestion: data.id,
+    const handleSubmit: QuestionFormProps['onSubmit'] = (form) => {
+        try {
+            // Validate length and url presence before submitting to avoid unessisary serverside validation
+            if (form.question.length > QUESTIONS_MAX_LENGTH) throw new Error('Question is too long!');
+            if (isURL(form.question)) throw new Error('no links are allowed!');
+            commit({
+                variables: {
+                    input: {
+                        ...form,
+                        eventId,
+                        isQuote: true,
+                        refQuestion: data.id,
+                    },
                 },
-            },
-        });
-        close();
+                onCompleted(payload) {
+                    try {
+                        if (payload.createQuestion.isError) throw new Error(payload.createQuestion.message);
+                        ga.event({
+                            action: 'submit_question',
+                            category: 'questions',
+                            label: 'live event',
+                            value: form.question,
+                        });
+                        close();
+                        displaySnack('Question submitted!', { variant: 'success' });
+                    } catch (err) {}
+                },
+            });
+        } catch (err) {
+            displaySnack(err.message, { variant: 'error' });
+        }
     };
 
     const quote = React.useMemo(
@@ -82,7 +105,7 @@ export function Quote({ className, fragmentRef }: QuoteProps) {
     );
 
     return (
-        <>
+        <React.Fragment>
             <ResponsiveDialog open={isOpen} onClose={close}>
                 <DialogContent>
                     <QuestionForm onSubmit={handleSubmit} quote={quote} onCancel={close} />
@@ -97,6 +120,6 @@ export function Quote({ className, fragmentRef }: QuoteProps) {
             >
                 Quote
             </Button>
-        </>
+        </React.Fragment>
     );
 }

@@ -7,8 +7,9 @@
     "scripts": {
         "g:husky": "husky install",
         "g:commit": "commit",
-        "g:dev": "ts-node-dev -- ./scripts/dev.ts",
-        "g:dev-test": "ts-node-dev -- ./scripts/test.ts",
+        "g:dev": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/dev.ts",
+        "g:dev-docker": "yarn workspace @app/server generate && yarn workspace @app/server prisma-db-push --accept-data-loss && ts-node-dev -- ./scripts/dev-docker.ts",
+        "g:dev-test": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/test.ts",
         "g:start-test-db": "yarn exec db/start-test-db.sh",
         "g:start-db": "yarn exec db/start-db.sh",
         "g:stop-db": "yarn exec db/stop-db.sh"
@@ -34,5 +35,5 @@
         "graphql-tag": "^2.12.6",
         "ts-node-dev": "^1.1.6"
     },
-    "packageManager": "yarn@3.2.0"
+    "packageManager": "yarn@3.2.3"
 }
