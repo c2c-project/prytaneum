@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Card, Grid, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
+import { useTheme, alpha } from '@mui/material/styles';
 
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
@@ -19,6 +20,8 @@ import { useEnvironment } from '@local/core';
 const useStyles = makeStyles((theme) => ({
     listFilter: {
         flex: 1,
+        paddingLeft: '0.5rem',
+        paddingRight: '0.5rem',
     },
     content: {
         height: 0, // flex box recalculates this -- explanation:  https://stackoverflow.com/a/14964944
@@ -73,9 +76,10 @@ type EventBroadcastMessage = {
 
 interface MessageListProps {
     broadcastMessages: readonly EventBroadcastMessage[];
+    isVisible: boolean;
 }
 
-function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageListProps) {
+function MessageList({ broadcastMessages: immutableBroadcastMessages, isVisible }: MessageListProps) {
     // Hacky way to have deletes appear instant for the user even though the list itself doesn't update until the next polling interval
     const [deletedMessageIndex, setDeletedMessageIndex] = React.useState<number | null>(null);
     // Mutable
@@ -113,55 +117,75 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageL
     );
 
     const [filteredList, handleSearch, handleFilterChange] = useFilters(broadcastMessages, accessors);
+    const theme = useTheme();
 
     return (
-        <Grid alignContent='flex-start' container>
-            <Grid item xs={12}>
-                <ListFilter onFilterChange={handleFilterChange} onSearch={handleSearch} length={filteredList.length} />
-            </Grid>
-            <Grid container height={0} flex='1 1 100%'>
-                <Grid item xs={12}>
-                    <List disablePadding>
-                        {filteredList.map((broadcastMessage, index) => (
-                            <React.Fragment key={broadcastMessage.id}>
-                                {isMessageDeleted(index) ? (
-                                    <React.Fragment />
-                                ) : (
-                                    <ListItem disableGutters>
-                                        <Card className={classes.item}>
-                                            <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                            <BroadcastMessageContent fragmentRef={broadcastMessage} />
-                                            <Grid container alignItems='center' justifyContent='space-between'>
-                                                <BroadcastMessageActions
-                                                    style={
-                                                        !isModerator
-                                                            ? { width: '100%' }
-                                                            : { width: '100%', maxWidth: '10rem' }
-                                                    }
-                                                    className={classes.broadcastMessageActions}
-                                                    deleteEnabled={isModerator}
-                                                    editEnabled={isModerator}
-                                                    connections={[]}
-                                                    fragmentRef={broadcastMessage}
-                                                    onBroadcastMessageDelete={onBroadcastMessageDelete}
-                                                />
-                                            </Grid>
-                                        </Card>
-                                    </ListItem>
-                                )}
-                            </React.Fragment>
-                        ))}
-                        {filteredList.length === 0 && broadcastMessages.length !== 0 && (
-                            <Typography align='center' variant='body2'>
-                                No results to display
-                            </Typography>
-                        )}
-                        {broadcastMessages.length === 0 && (
-                            <Typography align='center' variant='h5'>
-                                No broadcasted messages to display
-                            </Typography>
-                        )}
-                    </List>
+        <Grid container height={0} flex='1 1 100%' sx={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+            <Grid
+                item
+                paddingTop='1rem'
+                xs={12}
+                sx={{
+                    border: 5,
+                    borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                        theme.palette.custom.creamCan,
+                        0.06
+                    )}) 10`,
+                    backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                }}
+            >
+                <Grid alignContent='flex-start' container>
+                    <Grid item xs={12}>
+                        <ListFilter
+                            className={classes.listFilter}
+                            onFilterChange={handleFilterChange}
+                            onSearch={handleSearch}
+                            length={filteredList.length}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <List disablePadding>
+                            {filteredList.map((broadcastMessage, index) => (
+                                <React.Fragment key={broadcastMessage.id}>
+                                    {isMessageDeleted(index) ? (
+                                        <React.Fragment />
+                                    ) : (
+                                        <ListItem disableGutters sx={{ paddingX: '0.5rem' }}>
+                                            <Card className={classes.item}>
+                                                <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                                                <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    <BroadcastMessageActions
+                                                        style={
+                                                            !isModerator
+                                                                ? { width: '100%' }
+                                                                : { width: '100%', maxWidth: '10rem' }
+                                                        }
+                                                        className={classes.broadcastMessageActions}
+                                                        deleteEnabled={isModerator}
+                                                        editEnabled={isModerator}
+                                                        connections={[]}
+                                                        fragmentRef={broadcastMessage}
+                                                        onBroadcastMessageDelete={onBroadcastMessageDelete}
+                                                    />
+                                                </Grid>
+                                            </Card>
+                                        </ListItem>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                            {filteredList.length === 0 && broadcastMessages.length !== 0 && (
+                                <Typography align='center' variant='body2'>
+                                    No results to display
+                                </Typography>
+                            )}
+                            {broadcastMessages.length === 0 && (
+                                <Typography align='center' variant='h5'>
+                                    No broadcasted messages to display
+                                </Typography>
+                            )}
+                        </List>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
@@ -170,12 +194,13 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageL
 
 interface BroadcastMessageListProps {
     queryRef: PreloadedQuery<BroadcastMessageListQuery>;
+    isVisible: boolean;
 }
 
-function BroadcastMessageList({ queryRef }: BroadcastMessageListProps) {
+function BroadcastMessageList({ queryRef, isVisible }: BroadcastMessageListProps) {
     const { eventBroadcastMessages } = usePreloadedQuery(BROADCAST_MESSAGE_LIST_QUERY, queryRef);
     if (!eventBroadcastMessages) return <Loader />;
-    return <MessageList broadcastMessages={eventBroadcastMessages} />;
+    return <MessageList broadcastMessages={eventBroadcastMessages} isVisible={isVisible} />;
 }
 
 export interface PreloadedBroadcastMessageListProps {
@@ -218,8 +243,8 @@ export function PreloadedBroadcastMessageList({ isVisible }: PreloadedBroadcastM
     if (!queryRef) return <Loader />;
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<BroadcastMessageList queryRef={queryRef} />}>
-                {isVisible && <BroadcastMessageList queryRef={queryRef} />}
+            <React.Suspense fallback={<BroadcastMessageList queryRef={queryRef} isVisible={isVisible} />}>
+                {isVisible && <BroadcastMessageList queryRef={queryRef} isVisible={isVisible} />}
             </React.Suspense>
         </ConditionalRender>
     );
