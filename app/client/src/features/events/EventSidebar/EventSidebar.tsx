@@ -10,6 +10,7 @@ import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
+import { PreloadedBroadcastMessageList } from '@local/features/events/BroadcastMessages/BroadcastMessageList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type SidebarTabs = 'Queue' | 'Questions' | 'Feedback';
+type SidebarTabs = 'Queue' | 'Questions' | 'Feedback' | 'Broadcast';
 
 export function EventSidebarLoader() {
     return <Skeleton variant='rectangular' height={500} width={200} />;
@@ -141,6 +142,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     {data.isViewerModerator === true && <Tab label='Queue' value='Queue' />}
                     <Tab label='Questions' value='Questions' />
                     <Tab label='Feedback' value='Feedback' />
+                    <Tab label='Broadcast' value='Broadcast' />
                 </Tabs>
                 {data.isViewerModerator === true && <QuestionQueue fragmentRef={data} isVisible={tab === 'Queue'} />}
                 <QuestionList fragmentRef={data} ActionButtons={displayActionButtons} isVisible={tab === 'Questions'} />
@@ -149,6 +151,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     ActionButtons={displayActionButtons}
                     isVisible={tab === 'Feedback'}
                 />
+                <PreloadedBroadcastMessageList isVisible={tab === 'Broadcast'} />
             </Grid>
         </Grid>
     );

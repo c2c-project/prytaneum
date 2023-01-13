@@ -178,9 +178,11 @@ function BroadcastMessageList({ queryRef }: BroadcastMessageListProps) {
     return <MessageList broadcastMessages={eventBroadcastMessages} />;
 }
 
-export interface PreloadedBroadcastMessageListProps {}
+export interface PreloadedBroadcastMessageListProps {
+    isVisible: boolean;
+}
 
-export function PreloadedBroadcastMessageList() {
+export function PreloadedBroadcastMessageList({ isVisible }: PreloadedBroadcastMessageListProps) {
     const [queryRef, loadQuery, disposeQuery] = useQueryLoader<BroadcastMessageListQuery>(BROADCAST_MESSAGE_LIST_QUERY);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const { env } = useEnvironment();
@@ -217,7 +219,7 @@ export function PreloadedBroadcastMessageList() {
     return (
         <ConditionalRender client>
             <React.Suspense fallback={<BroadcastMessageList queryRef={queryRef} />}>
-                <BroadcastMessageList queryRef={queryRef} />
+                {isVisible && <BroadcastMessageList queryRef={queryRef} />}
             </React.Suspense>
         </ConditionalRender>
     );
