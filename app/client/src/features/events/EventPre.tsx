@@ -64,7 +64,7 @@ export function EventPre({ eventLiveQueryRef }: PreloadedEventLiveProps) {
             </div>
             <div style={styles.list}>
                 <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-                    <PreloadedBroadcastMessageList />
+                    <PreloadedBroadcastMessageList isVisible={true} />
                 </EventContext.Provider>
             </div>
         </div>
