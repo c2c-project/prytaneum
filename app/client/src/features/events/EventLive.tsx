@@ -19,7 +19,6 @@ import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
-import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
 import { useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -153,24 +152,6 @@ function EventLive({ node }: EventLiveProps) {
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node.isActive ? 'End' : 'Start');
 
-    const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION);
-    const [broadcastMessage, setBroadcastMessage] = React.useState('');
-
-    const handleSubmit = (event: { preventDefault: () => void }) => {
-        event.preventDefault();
-        try {
-            commit({
-                variables: { input: { eventId, broadcastMessage } },
-                onCompleted(payload) {
-                    if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
-                    else displaySnack('broadcasted message successfully!');
-                },
-            });
-        } catch (err) {
-            displaySnack(err.message);
-        }
-    };
-
     if (!node) return <EventSidebarLoader />;
 
     return (
@@ -209,13 +190,6 @@ function EventLive({ node }: EventLiveProps) {
                         {buttonText}
                     </button>
                 ))}
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Broadcast message:
-                    <input type='text' value={broadcastMessage} onChange={(e) => setBroadcastMessage(e.target.value)} />
-                </label>
-                <input type='submit' value='send' />
-            </form>
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
