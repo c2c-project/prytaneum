@@ -16,6 +16,7 @@ import { BroadcastMessageContent } from '../BroadcastMessageContent';
 import { BroadcastMessageActions } from '../BroadcastMessageActions/BroadcastMessageActions';
 import { BroadcastMessageListQuery } from '@local/__generated__/BroadcastMessageListQuery.graphql';
 import { useEnvironment } from '@local/core';
+import { BroadcastMessageInput } from '../BroadcastMessageInput';
 
 const useStyles = makeStyles((theme) => ({
     listFilter: {
@@ -135,6 +136,9 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages, isVisible 
                 }}
             >
                 <Grid alignContent='flex-start' container>
+                    <Grid item xs={12}>
+                        <BroadcastMessageInput />
+                    </Grid>
                     <Grid item xs={12}>
                         <ListFilter
                             className={classes.listFilter}
