@@ -17,6 +17,11 @@ type User implements Node {
     Organizations that this user belongs to
     """
     organizations(first: Int, after: String): OrganizationConnection
+
+    """
+    Events that this user is a moderator of, or has been invited to
+    """
+    events(first: Int, after: String): EventConnection
 }
 
 type UserSettings {
@@ -69,10 +74,40 @@ input LoginForm {
     password: String!
 }
 
+input ResetPasswordRequestForm {
+    email: String!
+}
+
+input ResetPasswordForm {
+    newPassword: String!
+    confirmNewPassword: String!
+    token: String!
+}
+
+input ValidatePasswordResetTokenForm {
+    token: String!
+}
+
 type UserMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
     body: User
+}
+
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Boolean
+}
+
+type ResetPasswordMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
+type ValidatePasswordResetTokenQueryResponse {
+    valid: Boolean!
+    message: String!
 }
 
 type Query {
@@ -80,6 +115,7 @@ type Query {
     Fetch user data about the current user
     """
     me: User
+    validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
 
 type Mutation {
@@ -87,6 +123,12 @@ type Mutation {
     login(input: LoginForm!): UserMutationResponse!
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
+    """
+    send a reset password request if the account exists
+    returns false if an account with the provided email cannot be found
+    """
+    resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+    resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action

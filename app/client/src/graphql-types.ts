@@ -40,6 +40,19 @@ export type CreateFeedback = {
   refFeedbackId?: InputMaybe<Scalars['ID']>;
 };
 
+export type CreateFeedbackPrompt = {
+  eventId: Scalars['ID'];
+  feedbackType: Scalars['String'];
+  prompt: Scalars['String'];
+};
+
+export type CreateFeedbackPromptResponse = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
+  response: Scalars['String'];
+  vote: Scalars['String'];
+};
+
 export type CreateInvite = {
   email: Scalars['String'];
   eventId: Scalars['ID'];
@@ -163,6 +176,8 @@ export type Event = Node & {
   isViewerModerator?: Maybe<Scalars['Boolean']>;
   /** Live Feedback given during the event */
   liveFeedback?: Maybe<EventLiveFeedbackConnection>;
+  /** Live Feedback Prompts w/ responses */
+  liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
   /** List of moderators for this particular event */
   moderators?: Maybe<UserConnection>;
   /** The owning organization */
@@ -194,6 +209,12 @@ export type EventInvitedArgs = {
 
 
 export type EventLiveFeedbackArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type EventLiveFeedbackPromptsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -248,9 +269,29 @@ export type EventEdge = {
   node: Event;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventEdgeContainer = {
+  __typename?: 'EventEdgeContainer';
+  edge: EventEdge;
+};
+
 export type EventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'EventFeedbackMutationResponse';
   body?: Maybe<EventLiveFeedbackEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptResponseMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptResponseMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptResponseEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -277,6 +318,62 @@ export type EventLiveFeedbackEdge = {
   __typename?: 'EventLiveFeedbackEdge';
   cursor: Scalars['String'];
   node: EventLiveFeedback;
+};
+
+export type EventLiveFeedbackPrompt = Node & {
+  __typename?: 'EventLiveFeedbackPrompt';
+  createdAt?: Maybe<Scalars['Date']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt: Scalars['String'];
+  responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
+};
+
+
+export type EventLiveFeedbackPromptResponsesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventLiveFeedbackPromptConnection = {
+  __typename?: 'EventLiveFeedbackPromptConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptEdge = {
+  __typename?: 'EventLiveFeedbackPromptEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPrompt;
+};
+
+export type EventLiveFeedbackPromptResponse = Node & {
+  __typename?: 'EventLiveFeedbackPromptResponse';
+  createdAt?: Maybe<Scalars['Date']>;
+  createdBy?: Maybe<User>;
+  createdById?: Maybe<Scalars['ID']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptId?: Maybe<Scalars['ID']>;
+  response?: Maybe<Scalars['String']>;
+  vote?: Maybe<Scalars['String']>;
+};
+
+export type EventLiveFeedbackPromptResponseConnection = {
+  __typename?: 'EventLiveFeedbackPromptResponseConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptResponseEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptResponseEdge = {
+  __typename?: 'EventLiveFeedbackPromptResponseEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPromptResponse;
 };
 
 export type EventMutationResponse = MutationResponse & {
@@ -488,7 +585,9 @@ export type Mutation = {
   addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
-  createFeedback?: Maybe<EventFeedbackMutationResponse>;
+  createFeedback: EventFeedbackMutationResponse;
+  createFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
   createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
@@ -526,6 +625,13 @@ export type Mutation = {
   prevQuestion: Event;
   register: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
+  resetPassword: ResetPasswordMutationResponse;
+  /**
+   * send a reset password request if the account exists
+   * returns false if an account with the provided email cannot be found
+   */
+  resetPasswordRequest: ResetPasswordRequestMutationResponse;
+  shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
@@ -555,7 +661,17 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationCreateFeedbackArgs = {
-  input?: InputMaybe<CreateFeedback>;
+  input: CreateFeedback;
+};
+
+
+export type MutationCreateFeedbackPromptArgs = {
+  input: CreateFeedbackPrompt;
+};
+
+
+export type MutationCreateFeedbackPromptResponseArgs = {
+  input: CreateFeedbackPromptResponse;
 };
 
 
@@ -666,6 +782,22 @@ export type MutationRegisterArgs = {
 
 export type MutationRemoveQuestionFromQueueArgs = {
   input: RemoveQuestionFromQueue;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordForm;
+};
+
+
+export type MutationResetPasswordRequestArgs = {
+  input: ResetPasswordRequestForm;
+};
+
+
+export type MutationShareFeedbackPromptResultsArgs = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
 };
 
 
@@ -792,14 +924,26 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Fetch a single event */
+  event?: Maybe<Event>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
   node?: Maybe<Node>;
+  prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptResponseVotes: Votes;
+  promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
+  prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
   validateInvite: ValidateInviteQueryResponse;
+  validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
+};
+
+
+export type QueryEventArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -813,6 +957,26 @@ export type QueryNodeArgs = {
 };
 
 
+export type QueryPromptArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptResponseVotesArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptResponsesArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptsArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type QueryQuestionsByEventIdArgs = {
   eventId: Scalars['ID'];
 };
@@ -820,6 +984,11 @@ export type QueryQuestionsByEventIdArgs = {
 
 export type QueryValidateInviteArgs = {
   input: ValidateInvite;
+};
+
+
+export type QueryValidatePasswordResetTokenArgs = {
+  input: ValidatePasswordResetTokenForm;
 };
 
 export type RegistrationForm = {
@@ -835,15 +1004,42 @@ export type RemoveQuestionFromQueue = {
   questionId: Scalars['ID'];
 };
 
+export type ResetPasswordForm = {
+  confirmNewPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type ResetPasswordMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type ResetPasswordRequestForm = {
+  email: Scalars['String'];
+};
+
+export type ResetPasswordRequestMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordRequestMutationResponse';
+  body?: Maybe<Scalars['Boolean']>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   enqueuedPushQuestion: EventQuestionEdgeContainer;
   enqueuedRemoveQuestion: EventQuestionEdgeContainer;
   enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
+  eventCreated: EventEdgeContainer;
+  eventDeleted: EventEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
+  feedbackPromptResultsShared: EventLiveFeedbackPrompt;
+  feedbackPrompted: EventLiveFeedbackPrompt;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
   questionAddedToEnqueued: EventQuestionEdgeContainer;
@@ -875,17 +1071,37 @@ export type SubscriptionEnqueuedUnshiftQuestionArgs = {
 };
 
 
+export type SubscriptionEventCreatedArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type SubscriptionEventDeletedArgs = {
+  eventIds: Array<Scalars['ID']>;
+};
+
+
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
   eventId: Scalars['ID'];
 };
 
 
 export type SubscriptionEventUpdatesArgs = {
-  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
 export type SubscriptionFeedbackCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptResultsSharedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1010,12 +1226,21 @@ export type User = Node & {
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  /** Events that this user is a moderator of, or has been invited to */
+  events?: Maybe<EventConnection>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isEmailVerified?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+};
+
+
+/** User Data */
+export type UserEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1062,4 +1287,27 @@ export type ValidateInvite = {
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
   valid: Scalars['Boolean'];
+};
+
+export type ValidatePasswordResetTokenForm = {
+  token: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenQueryResponse = {
+  __typename?: 'ValidatePasswordResetTokenQueryResponse';
+  message: Scalars['String'];
+  valid: Scalars['Boolean'];
+};
+
+export enum Vote {
+  Against = 'AGAINST',
+  Conflicted = 'CONFLICTED',
+  For = 'FOR'
+}
+
+export type Votes = {
+  __typename?: 'Votes';
+  against: Scalars['Int'];
+  conflicted: Scalars['Int'];
+  for: Scalars['Int'];
 };

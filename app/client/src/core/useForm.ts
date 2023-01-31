@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import * as Yup from 'yup';
+import { useSnack } from './useSnack';
 
 type TSchema<T extends Record<string, unknown>> = Yup.ObjectSchema<{
     [key in keyof T]: Yup.SchemaOf<T[key]>;
@@ -9,6 +10,7 @@ type TSchema<T extends Record<string, unknown>> = Yup.ObjectSchema<{
 export function useForm<TForm extends Record<string, unknown>>(initialState: TForm, validationSchema?: TSchema<TForm>) {
     const [state, setState] = React.useState(initialState);
     const [errors, setErrors] = React.useState<Partial<TForm>>({});
+    const { displaySnack } = useSnack();
     function buildHandleSubmit(callback?: (form: TForm) => void) {
         return (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -33,8 +35,9 @@ export function useForm<TForm extends Record<string, unknown>>(initialState: TFo
                         .then(() => {
                             callback(state);
                         })
-                        .catch(() => {
+                        .catch((err) => {
                             // TODO: parse yup errors appropriately
+                            displaySnack(err.message, { variant: 'error' });
                         });
                 } else {
                     callback(state);

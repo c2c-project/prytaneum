@@ -75,7 +75,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
             variables: { input: submittedForm },
             onCompleted({ register }) {
                 if (register.isError) {
-                    displaySnack(register.message);
+                    displaySnack(register.message, { variant: 'error' });
                     if (onFailure) onFailure();
                 } else {
                     setUser(register.body);
@@ -87,7 +87,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     }
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='register-form' container justifyContent='center'>
             <Grid container item xs={12} direction='column' alignItems='center'>
                 <Typography component='h1' variant='h6'>
                     Register
@@ -126,9 +126,14 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     />
                     <TextField
                         id='register-password'
+                        data-test-id='register-password'
+                        name='password'
                         required
                         error={Boolean(errors.password)}
-                        helperText={errors.password || 'Passwords must be at least 8 characters'}
+                        helperText={
+                            errors.password ||
+                            'Passwords must be at least 8 characters long and contain at least one lowercase letter, capital letter, number, and symbol.'
+                        }
                         type={isPassVisible ? 'text' : 'password'}
                         value={form.password}
                         onChange={handleChange('password')}
@@ -155,6 +160,8 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
                     />
                     <TextField
                         id='register-confirm-password'
+                        data-test-id='register-confirm-password'
+                        name='confirmPassword'
                         required
                         error={Boolean(errors.confirmPassword)}
                         helperText={errors.confirmPassword}

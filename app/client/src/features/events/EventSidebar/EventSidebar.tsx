@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Tab, Skeleton, Tabs } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { Skeleton } from '@mui/material';
-import clsx from 'clsx';
+import { useTheme, alpha } from '@mui/material/styles';
 import { graphql, useFragment } from 'react-relay';
 
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
-import TabPanel, { TabPanels } from '@local/components/TabPanel';
 import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
-import { Tabs } from '@local/components/Tabs';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
+import { ShareFeedbackResults, useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
+import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
+import { useLiveFeedbackPromptResultsShared } from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -33,7 +33,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100%',
+        height: '75%',
 
         padding: theme.spacing(0, 1, 1, 1),
         [theme.breakpoints.down('md')]: {
@@ -47,33 +47,9 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
-    paneContainer: {
-        flexBasis: '100%',
-        paddingbottom: theme.spacing(2),
-    },
-    divider: {
-        margin: theme.spacing(2, 0),
-    },
-    rightJustify: {
-        alignSelf: 'flex-end',
-    },
-    fullWidth: {
-        // width: '100%',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: theme.shape.borderRadius,
-        padding: theme.spacing(1),
-        boxShadow: theme.shadows[1],
-    },
-    item: {},
-    pl: {
-        paddingLeft: theme.spacing(2),
-    },
-    pb: {
-        paddingBottom: theme.spacing(2),
-    },
 }));
+
+type SidebarTabs = 'Queue' | 'Questions' | 'Feedback';
 
 export function EventSidebarLoader() {
     return <Skeleton variant='rectangular' height={500} width={200} />;
@@ -82,32 +58,53 @@ export interface EventSidebarProps {
     fragmentRef: EventSidebarFragment$key;
 }
 export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
+    const theme = useTheme();
     const classes = useStyles();
-    const [tabIndex, setTabIndex] = React.useState<number>(0);
-    const [displayFeedbackButton, setDisplayFeedbackButton] = React.useState<boolean>(false);
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
+    const [tab, setTab] = React.useState<SidebarTabs>('Questions');
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleTabChange = (e: React.ChangeEvent<any>, newTabIndex: number) => {
+    // Subscribe to live feedback prompts
+    useLiveFeedbackPrompt();
+    useLiveFeedbackPromptResultsShared();
+
+    const handleChange = (e: React.SyntheticEvent, newTab: SidebarTabs) => {
         e.preventDefault();
-        setTabIndex(newTabIndex);
+        setTab(newTab);
     };
 
-    const moderatorTabs = ['Queue', 'Questions', 'Feedback'];
-    const participantTabs = ['Questions', 'Feedback'];
-
-    // const tabVisibility = React.useMemo(() => getTabVisibility(data), [data]);
-    // const tabs = React.useMemo(() => buildTabs(tabVisibility), [tabVisibility]);
-
-    React.useEffect(() => {
-        if (data.isViewerModerator && tabIndex === 2) {
-            setDisplayFeedbackButton(true);
-        } else if (!data.isViewerModerator && tabIndex === 1) {
-            setDisplayFeedbackButton(true);
+    const displayActionButtons = React.useMemo(() => {
+        const eventId = data.id;
+        if (data.isViewerModerator) {
+            if (tab === 'Queue') return null;
+            if (tab === 'Questions') return null;
+            if (tab === 'Feedback')
+                return (
+                    <Grid container direction='row' justifyContent='space-evenly' alignItems='center'>
+                        <Grid item paddingBottom='1rem'>
+                            <SubmitLiveFeedbackPrompt eventId={eventId} />
+                        </Grid>
+                        <Grid item paddingBottom='1rem'>
+                            <ShareFeedbackResults />
+                        </Grid>
+                    </Grid>
+                );
+            return null;
         } else {
-            setDisplayFeedbackButton(false);
+            if (tab === 'Questions')
+                return (
+                    <Grid container paddingBottom='1rem' justifyContent='center'>
+                        <AskQuestion eventId={eventId} />
+                    </Grid>
+                );
+            if (tab === 'Feedback')
+                return (
+                    <Grid container paddingBottom='1rem' justifyContent='center'>
+                        <SubmitLiveFeedback eventId={eventId} />
+                    </Grid>
+                );
+            return null;
         }
-    }, [tabIndex, data]);
+    }, [data, tab]);
 
     return (
         <Grid
@@ -124,48 +121,33 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     <CurrentQuestionCard isViewerModerator={Boolean(data.isViewerModerator)} fragmentRef={data} />
                 )}
             </Grid>
-
-            <Tabs
-                tabIndex={tabIndex}
-                onChange={handleTabChange}
-                // conditionally set which tabs are viewable to a moderator/participant
-                tabs={data.isViewerModerator ? moderatorTabs : participantTabs}
-            />
-
-            <Grid
-                container
-                direction='column'
-                wrap='nowrap'
-                className={clsx(classes.item, classes.paper, classes.fullWidth)}
-            >
-                {
-                    // Moderator feedback state = 2, Participant feedback state = 1
-                    displayFeedbackButton ? (
-                        <SubmitLiveFeedback
-                            className={classes.fullWidth}
-                            eventId={data.id}
-                            // connectionKey='useLiveFeedbackListFragment_liveFeedback'
-                        />
-                    ) : (
-                        <AskQuestion
-                            className={classes.fullWidth}
-                            eventId={data.id}
-                            // connectionKey='useQuestionListFragment_questions'
-                        />
-                    )
-                }
-            </Grid>
-
-            <Grid component={TabPanels} container item xs='auto' className={classes.paneContainer}>
-                <TabPanel visible={data.isViewerModerator ? tabIndex === 0 : false}>
-                    <QuestionQueue fragmentRef={data} />
-                </TabPanel>
-                <TabPanel visible={data.isViewerModerator ? tabIndex === 1 : tabIndex === 0}>
-                    <QuestionList fragmentRef={data} />
-                </TabPanel>
-                <TabPanel visible={data.isViewerModerator ? tabIndex === 2 : tabIndex === 1}>
-                    <LiveFeedbackList fragmentRef={data} />
-                </TabPanel>
+            <Grid item>
+                <Tabs
+                    sx={{
+                        '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
+                        '& .MuiTab-root': {
+                            color: 'white',
+                            backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
+                            borderRadius: '20px 20px 0 0',
+                        },
+                        '& .Mui-selected': { color: 'white !important', backgroundColor: 'custom.creamCan' },
+                    }}
+                    value={tab}
+                    onChange={handleChange}
+                    centered
+                    aria-label='secondary tabs example'
+                >
+                    {data.isViewerModerator === true && <Tab label='Queue' value='Queue' />}
+                    <Tab label='Questions' value='Questions' />
+                    <Tab label='Feedback' value='Feedback' />
+                </Tabs>
+                {data.isViewerModerator === true && <QuestionQueue fragmentRef={data} isVisible={tab === 'Queue'} />}
+                <QuestionList fragmentRef={data} ActionButtons={displayActionButtons} isVisible={tab === 'Questions'} />
+                <LiveFeedbackList
+                    fragmentRef={data}
+                    ActionButtons={displayActionButtons}
+                    isVisible={tab === 'Feedback'}
+                />
             </Grid>
         </Grid>
     );
