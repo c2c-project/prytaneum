@@ -1,5 +1,4 @@
 scalar Date
-scalar BigInt
 
 type PageInfo {
     hasNextPage: Boolean!

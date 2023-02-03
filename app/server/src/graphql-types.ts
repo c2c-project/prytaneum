@@ -22,8 +22,6 @@ export type Scalars = {
     Float: number;
     /** Date custom scalar type */
     Date: any;
-    /** BigInt custom scalar type */
-    BigInt: any;
     _FieldSet: any;
 };
 
@@ -511,7 +509,7 @@ export type Event = Node & {
     /** Questions having to do with the queue */
     questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
-    currentQuestion?: Maybe<Scalars['BigInt']>;
+    currentQuestion?: Maybe<Scalars['Int']>;
 };
 
 export type EventquestionsArgs = {
@@ -977,7 +975,7 @@ export type HideQuestion = {
 
 export type UpdateQuestionPosition = {
     questionId: Scalars['ID'];
-    position: Scalars['BigInt'];
+    position: Scalars['Int'];
     eventId: Scalars['ID'];
 };
 
@@ -1050,7 +1048,7 @@ export type EventQuestion = Node & {
     refQuestion?: Maybe<EventQuestion>;
     /** The actual content of the question */
     question?: Maybe<Scalars['String']>;
-    position?: Maybe<Scalars['BigInt']>;
+    position?: Maybe<Scalars['Int']>;
     isVisible?: Maybe<Scalars['Boolean']>;
     isAsked?: Maybe<Scalars['Boolean']>;
     lang?: Maybe<Scalars['String']>;
@@ -1326,7 +1324,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
-    BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
     PageInfo: ResolverTypeWrapper<PageInfo>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     String: ResolverTypeWrapper<Scalars['String']>;
@@ -1458,7 +1455,6 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
     Date: Scalars['Date'];
-    BigInt: Scalars['BigInt'];
     PageInfo: PageInfo;
     Boolean: Scalars['Boolean'];
     String: Scalars['String'];
@@ -1587,10 +1583,6 @@ export type ResolversParentTypes = {
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
     name: 'Date';
-}
-
-export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
-    name: 'BigInt';
 }
 
 export type PageInfoResolvers<
@@ -2132,7 +2124,7 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventquestionQueueArgs, never>
     >;
-    currentQuestion?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+    currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2606,7 +2598,7 @@ export type EventQuestionResolvers<
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     refQuestion?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
     question?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    position?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+    position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isAsked?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2767,7 +2759,6 @@ export type EventVideoMutationResponseResolvers<
 
 export type Resolvers<ContextType = MercuriusContext> = {
     Date?: GraphQLScalarType;
-    BigInt?: GraphQLScalarType;
     PageInfo?: PageInfoResolvers<ContextType>;
     Node?: NodeResolvers<ContextType>;
     Query?: QueryResolvers<ContextType>;
@@ -2950,7 +2941,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
-        currentQuestion?: LoaderResolver<Maybe<Scalars['BigInt']>, Event, {}, TContext>;
+        currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
 
     EventEdge?: {
@@ -3157,7 +3148,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;
         refQuestion?: LoaderResolver<Maybe<EventQuestion>, EventQuestion, {}, TContext>;
         question?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
-        position?: LoaderResolver<Maybe<Scalars['BigInt']>, EventQuestion, {}, TContext>;
+        position?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
         isVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isAsked?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         lang?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
