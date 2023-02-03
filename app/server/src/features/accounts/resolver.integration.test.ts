@@ -7,9 +7,6 @@ import * as jwt from '@local/lib/jwt';
 import { toGlobalId } from '../utils';
 
 const server = getOrCreateServer();
-// Attach relevant plugins
-plugins.attachMercuriusTo(server);
-plugins.attachCookieTo(server);
 const testClient = createMercuriusTestClient(server);
 const prisma = getPrismaClient(server.log);
 
@@ -25,6 +22,10 @@ const userData = {
 };
 
 beforeAll(async () => {
+    // Attack relevant plugins
+    plugins.attachCookieTo(server);
+    plugins.attachMercuriusTo(server);
+
     // hash password as they are never stored in plaintext on the DB
     const encryptedPassword = await bcrypt.hash(userData.password, 10);
 
