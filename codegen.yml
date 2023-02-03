@@ -9,6 +9,7 @@ generates:
             skipGraphQLImport: true
             scalars:
                 Date: Date
+                BigInt: number
     ./app/client/schema.graphql:
         plugins:
             - custom/gen-sdl-plugin.js
