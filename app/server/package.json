@@ -47,7 +47,7 @@
         "graphql-relay": "0.9.0",
         "jsonwebtoken": "^8.5.1",
         "mailgun.js": "^3.4.0",
-        "mercurius": "^7.6.1",
+        "mercurius": "^8.13.2",
         "mercurius-codegen": "^1.6.1",
         "module-alias": "^2.2.2",
         "mqemitter": "^4.5.0",
