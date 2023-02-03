@@ -144,7 +144,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     const nextQuestion = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: -1 } }],
+            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: BigInt(-1) } }],
         },
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
@@ -159,7 +159,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion?.position ?? -1 },
+        data: { currentQuestion: BigInt(nextQuestion?.position ?? -1) },
         select: { currentQuestion: true, id: true },
     });
     return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
@@ -181,7 +181,7 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
     const nextQuestionPosition = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            position: { lt: currentQuestionPosition ?? -1 },
+            position: { lt: BigInt(currentQuestionPosition ?? -1) },
         },
         orderBy: { position: 'desc' },
         select: { position: true },
@@ -192,7 +192,7 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
     const prevCurrentQuestion = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            position: { equals: currentQuestionPosition },
+            position: { equals: currentQuestionPosition ? BigInt(currentQuestionPosition) : undefined },
         },
     });
 
@@ -200,7 +200,7 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestionPosition.position },
+        data: { currentQuestion: BigInt(nextQuestionPosition.position) },
         select: { currentQuestion: true, id: true },
     });
 
@@ -226,7 +226,7 @@ export async function incrementQuestion(userId: string, prisma: PrismaClient, ev
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion.position },
+        data: { currentQuestion: BigInt(nextQuestion.position) },
         select: { currentQuestion: true, id: true },
     });
 
@@ -265,10 +265,11 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
-    const calculatedPosition = parseInt(currentTimeMsStr.slice(-9), 10);
+    // 13 digits long (BigInt)
+    const calculatedPosition = BigInt(currentTimeMsStr);
 
     // check if id is already non-negative
-    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
+    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: BigInt(-1) } });
     // if the question isn't found with the -1 position, then it's already in queue
     if (!question) throw new ProtectedError({ userMessage: 'Question is already in queue.' });
 
@@ -312,7 +313,7 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     return prisma.eventQuestion.update({
         where: { id: questionId },
         data: {
-            position: -1,
+            position: BigInt(-1),
         },
     });
 }
