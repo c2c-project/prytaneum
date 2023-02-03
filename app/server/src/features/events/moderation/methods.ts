@@ -180,18 +180,16 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
 
     const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
     const position = parseInt(currentQuestionPosition || '-1');
-    console.log('decrement position', position);
     const queryResult: { position: string }[] = await prisma.$queryRaw(Prisma.sql`
         SELECT position FROM "EventQuestion"
-        WHERE position::BigInt < ${position} 
+        WHERE position::BigInt < ${position} AND position::BigInt > -1
         AND "eventId" = ${eventId}::uuid
-        ORDER BY position DESC LIMIT 1
+        ORDER BY position::BigInt DESC LIMIT 1
     `);
 
     const nextQuestionPosition = queryResult.length === 0 ? null : queryResult[0]?.position;
-    console.log('Decrement NEXT QUESTION: ', nextQuestionPosition);
 
-    if (!nextQuestionPosition) throw new ProtectedError({ userMessage: 'Cannot decrement question' });
+    // if (!nextQuestionPosition) throw new ProtectedError({ userMessage: 'Cannot decrement question' });
 
     const prevCurrentQuestion = await prisma.eventQuestion.findFirst({
         where: {
@@ -204,7 +202,7 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestionPosition },
+        data: { currentQuestion: nextQuestionPosition || '-1' },
         select: { currentQuestion: true, id: true },
     });
 
@@ -224,15 +222,13 @@ export async function incrementQuestion(userId: string, prisma: PrismaClient, ev
         SELECT * FROM "EventQuestion"
         WHERE "eventId" = $1::uuid
         AND position::BigInt > $2::BigInt
-        ORDER BY position ASC LIMIT 1
+        ORDER BY position::BigInt ASC LIMIT 1
     `,
         eventId,
         position
     );
 
     const nextQuestion = queryResponse.length === 0 ? null : queryResponse[0];
-
-    console.log('NEXT QUESTION: ', nextQuestion);
 
     if (!nextQuestion) throw new ProtectedError({ userMessage: 'Cannot increment question' });
 
