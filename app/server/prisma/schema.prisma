@@ -81,7 +81,7 @@ model Event {
     endDateTime DateTime
     description String @db.VarChar(500)
     topic String @db.VarChar(50)
-    currentQuestion BigInt @default(-1)
+    currentQuestion Int @default(-1)
     // settings defaults are built into the business logic layer rather than the db layer
     isActive Boolean
     isQuestionFeedVisible Boolean
@@ -164,7 +164,7 @@ model EventQuestion {
     createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
     question String @db.VarChar(500)
     // if position is -1, then the question is not queued
-    position BigInt @default(-1)
+    position Int @default(-1)
     isVisible Boolean
     isAsked Boolean
     lang String @db.VarChar(30)

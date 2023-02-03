@@ -20,28 +20,22 @@ export const resolvers: Resolvers = {
             return runMutation(async () => {
                 if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
-                try {
-                    const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
-                    const formattedQuestion = toQuestionId(question);
-                    if (formattedQuestion.refQuestion)
-                        formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
-                    const edge = {
-                        node: {
-                            ...formattedQuestion,
-                            position: formattedQuestion.position,
-                        },
-                        cursor: formattedQuestion.createdAt.getTime().toString(),
-                    };
-                    ctx.pubsub.publish({
-                        topic: 'questionCreated',
-                        payload: {
-                            questionCreated: { edge },
-                        },
-                    });
-                    return edge;
-                } catch (error) {
-                    throw new ProtectedError({ userMessage: 'An internal error has occured', internalMessage: error.message });
-                }
+                const question = await Question.createQuestion(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
+                const formattedQuestion = toQuestionId(question);
+                if (formattedQuestion.refQuestion)
+                    formattedQuestion.refQuestion = toQuestionId(formattedQuestion.refQuestion);
+                const edge = {
+                    node: formattedQuestion,
+                    cursor: formattedQuestion.createdAt.getTime().toString(),
+                };
+                ctx.pubsub.publish({
+                    topic: 'questionCreated',
+                    payload: {
+                        questionCreated: { edge },
+                    },
+                });
+
+                return edge;
             });
         },
         async deleteQuestion(parent, args, ctx, info) {

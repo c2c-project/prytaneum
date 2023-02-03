@@ -25,7 +25,6 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
             isVisible: true,
             isAsked: false,
             lang: 'EN', // TODO:
-            position: BigInt(-1)
         },
         include: {
             refQuestion: true,
@@ -158,5 +157,5 @@ export async function isEnqueued(questionId: string, prisma: PrismaClient) {
             userMessage: ProtectedError.internalServerErrorMessage,
             internalMessage: `Could not find a question with id ${questionId}.`,
         });
-    return BigInt(queryResult.position) !== BigInt(-1);
+    return queryResult.position !== -1;
 }
