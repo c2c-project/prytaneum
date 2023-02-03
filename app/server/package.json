@@ -14,6 +14,8 @@
         "prisma-db-seed": "prisma db seed",
         "prisma-migrate-dev": "prisma migrate dev --skip-generate",
         "prisma-migrate-deploy": "prisma migrate deploy",
+        "prisma-migrate-diff": "prisma migrate diff",
+        "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma",
         "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
         "test:unit": "dotenv -c test -- jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
