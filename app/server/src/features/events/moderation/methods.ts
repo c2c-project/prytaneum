@@ -144,7 +144,10 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     const nextQuestion = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: BigInt(-1) } }],
+            AND: [
+                { position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } },
+                { position: { not: BigInt(-1) } },
+            ],
         },
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });

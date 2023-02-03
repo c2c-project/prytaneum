@@ -1326,6 +1326,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
+    BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
     PageInfo: ResolverTypeWrapper<PageInfo>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     String: ResolverTypeWrapper<Scalars['String']>;
@@ -1357,7 +1358,6 @@ export type ResolversTypes = {
         | ResolversTypes['EventSpeakerMutationResponse']
         | ResolversTypes['EventVideoMutationResponse'];
     Operation: Operation;
-    BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
     User: ResolverTypeWrapper<User>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
     UserSettings: ResolverTypeWrapper<UserSettings>;
@@ -1458,6 +1458,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
     Date: Scalars['Date'];
+    BigInt: Scalars['BigInt'];
     PageInfo: PageInfo;
     Boolean: Scalars['Boolean'];
     String: Scalars['String'];
@@ -1488,7 +1489,6 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventQuestionMutationResponse']
         | ResolversParentTypes['EventSpeakerMutationResponse']
         | ResolversParentTypes['EventVideoMutationResponse'];
-    BigInt: Scalars['BigInt'];
     User: User;
     Int: Scalars['Int'];
     UserSettings: UserSettings;
@@ -1587,6 +1587,10 @@ export type ResolversParentTypes = {
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
     name: 'Date';
+}
+
+export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
+    name: 'BigInt';
 }
 
 export type PageInfoResolvers<
@@ -1710,10 +1714,6 @@ export type MutationResponseResolvers<
     isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
-
-export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
-    name: 'BigInt';
-}
 
 export type UserResolvers<
     ContextType = MercuriusContext,
@@ -2767,12 +2767,12 @@ export type EventVideoMutationResponseResolvers<
 
 export type Resolvers<ContextType = MercuriusContext> = {
     Date?: GraphQLScalarType;
+    BigInt?: GraphQLScalarType;
     PageInfo?: PageInfoResolvers<ContextType>;
     Node?: NodeResolvers<ContextType>;
     Query?: QueryResolvers<ContextType>;
     Error?: ErrorResolvers<ContextType>;
     MutationResponse?: MutationResponseResolvers<ContextType>;
-    BigInt?: GraphQLScalarType;
     User?: UserResolvers<ContextType>;
     UserSettings?: UserSettingsResolvers<ContextType>;
     UserEdge?: UserEdgeResolvers<ContextType>;

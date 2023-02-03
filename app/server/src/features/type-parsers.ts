@@ -29,7 +29,7 @@ export const resolvers: Resolvers = {
         name: 'BigInt',
         description: 'BigInt custom scalar type',
         parseValue(value: string) {
-            return BigInt(value); // value from the client
+            return parseInt(value, 10); // value from the client
         },
         serialize(value: string) {
             return parseInt(value, 10); // value sent to the client
