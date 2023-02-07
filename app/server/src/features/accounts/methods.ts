@@ -119,6 +119,28 @@ async function maybeValidateAndHashPassword(password: string | null) {
  */
 export async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
     const { email, firstName, lastName } = userData;
+
+    // validiation if no other user exists with the new email
+    const user = await prisma.user.findUnique({ where: { email: email } });
+
+    // https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-creation
+    // This could technically be an attack vector. Say a user creates an account and is trying to see
+    // if a particular email is already registered. We should throw the same type of protected error
+    // that is used on the account creation page.
+    if (!!user)
+        throw new ProtectedError({
+            userMessage: ProtectedError.accountCreationErrorMessage,
+            // This is probably only useful for debugging purposes, but it's still fine to log this anyways.
+            internalMessage: `A user with the email ${email} already exists.`,
+        });
+
+    // TODO remove once shadow user account setup prompt is implemented
+    if (!textPassword)
+        throw new ProtectedError({
+            userMessage: 'Password is required.',
+            internalMessage: 'Shadow account setup is not implemented yet.',
+        });
+
     // It's okay to not have a password, it means this is a user being registered via invitation.
     const encryptedPassword = await maybeValidateAndHashPassword(textPassword);
     return prisma.user.create({
