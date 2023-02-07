@@ -134,6 +134,13 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
             internalMessage: `A user with the email ${email} already exists.`,
         });
 
+    // TODO remove once shadow user account setup prompt is implemented
+    if (!textPassword)
+        throw new ProtectedError({
+            userMessage: 'Password is required.',
+            internalMessage: 'Shadow account setup is not implemented yet.',
+        });
+
     // It's okay to not have a password, it means this is a user being registered via invitation.
     const encryptedPassword = await maybeValidateAndHashPassword(textPassword);
     return prisma.user.create({
