@@ -236,8 +236,6 @@ export const resolvers: Resolvers = {
             });
             if (!queryResult) return null;
 
-            console.log(queryResult);
-
             // many ways to do the following, done in similar ways for clarity
             const questionRecordEdges = queryResult.questions
                 .filter((question) => parseInt(question.position) <= parseInt(queryResult.currentQuestion))
@@ -247,9 +245,6 @@ export const resolvers: Resolvers = {
                 .filter((question) => parseInt(question.position) > parseInt(queryResult.currentQuestion))
                 .map(toQuestionId)
                 .map(toQuestionEdge);
-
-            console.log('questionRecordEdges', questionRecordEdges);
-            console.log('enqueuedQuestionsEdges', enqueuedQuestionsEdges);
             return {
                 questionRecord: makeConnection(questionRecordEdges),
                 enqueuedQuestions: makeConnection(enqueuedQuestionsEdges),
