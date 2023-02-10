@@ -247,6 +247,7 @@ __metadata:
     react: 17.0.2
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
+    react-csv: ^2.2.2
     react-dom: 17.0.2
     react-google-charts: ^4.0.0
     react-infinite-scroll-component: ^6.1.0
@@ -27288,6 +27289,13 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">=16.9"
   checksum: ceec2d53ce57bd9fab395fdc5c0b85040d8e93df7bb34f2133fde59ff91a2291f3d57f30dcfaa2ecbf2dfe3e6d1d66933b1ecbf759c668a95a9bd51fe62eb865
+  languageName: node
+  linkType: hard
+
+"react-csv@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "react-csv@npm:2.2.2"
+  checksum: a6ffabd67fc9ba1478b003977923cfa3ccdd9553ac5edcc3824b4a5ea849b87cb2acfcc0781b0cd0a259bf56e6a7dfd35cfc307576aa51819fc5a32b03118fab
   languageName: node
   linkType: hard
 
