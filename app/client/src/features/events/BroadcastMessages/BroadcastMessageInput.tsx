@@ -1,5 +1,5 @@
 import { useSnack } from '@local/core';
-import { EventLiveMutation } from '@local/__generated__/EventLiveMutation.graphql';
+import { BroadcastMessageInputMutation } from '@local/__generated__/BroadcastMessageInputMutation.graphql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { graphql, useMutation } from 'react-relay';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const BROADCAST_MESSAGE_MUTATION = graphql`
-    mutation EventLiveMutation($input: CreateBroadcastMessage!) {
+    mutation BroadcastMessageInputMutation($input: CreateBroadcastMessage!) {
         createBroadcastMessage(input: $input) {
             isError
             message
@@ -36,7 +36,7 @@ export function BroadcastMessageInput() {
     const { displaySnack } = useSnack();
     const router = useRouter();
     const eventId = router.query.id as string;
-    const [commit] = useMutation<EventLiveMutation>(BROADCAST_MESSAGE_MUTATION);
+    const [commit] = useMutation<BroadcastMessageInputMutation>(BROADCAST_MESSAGE_MUTATION);
     const [broadcastMessage, setBroadcastMessage] = React.useState('');
 
     const handleSubmit = (event: { preventDefault: () => void }) => {

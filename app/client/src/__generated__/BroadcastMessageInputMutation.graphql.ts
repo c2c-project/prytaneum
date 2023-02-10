@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<358dd7e396cfb00672d2ed6553389dcc>>
+ * @generated SignedSource<<478815fae46ce2160f151bf15d624230>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,20 +13,20 @@ export type CreateBroadcastMessage = {
   broadcastMessage: string;
   eventId: string;
 };
-export type EventLiveMutation$variables = {
+export type BroadcastMessageInputMutation$variables = {
   input: CreateBroadcastMessage;
 };
-export type EventLiveMutationVariables = EventLiveMutation$variables;
-export type EventLiveMutation$data = {
+export type BroadcastMessageInputMutationVariables = BroadcastMessageInputMutation$variables;
+export type BroadcastMessageInputMutation$data = {
   readonly createBroadcastMessage: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type EventLiveMutationResponse = EventLiveMutation$data;
-export type EventLiveMutation = {
-  variables: EventLiveMutationVariables;
-  response: EventLiveMutation$data;
+export type BroadcastMessageInputMutationResponse = BroadcastMessageInputMutation$data;
+export type BroadcastMessageInputMutation = {
+  variables: BroadcastMessageInputMutationVariables;
+  response: BroadcastMessageInputMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -75,7 +75,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "EventLiveMutation",
+    "name": "BroadcastMessageInputMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -84,20 +84,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "EventLiveMutation",
+    "name": "BroadcastMessageInputMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "e0a3068f6486c22c4ca94e3068e7dd7b",
+    "cacheID": "00da74e10c7a95e2e8e9dd36dbeeac94",
     "id": null,
     "metadata": {},
-    "name": "EventLiveMutation",
+    "name": "BroadcastMessageInputMutation",
     "operationKind": "mutation",
-    "text": "mutation EventLiveMutation(\n  $input: CreateBroadcastMessage!\n) {\n  createBroadcastMessage(input: $input) {\n    isError\n    message\n  }\n}\n"
+    "text": "mutation BroadcastMessageInputMutation(\n  $input: CreateBroadcastMessage!\n) {\n  createBroadcastMessage(input: $input) {\n    isError\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "acd31aa8f8896f430ef857809b713424";
+(node as any).hash = "96581741703032518e3bb19f8671b924";
 
 export default node;

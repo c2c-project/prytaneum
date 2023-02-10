@@ -71,15 +71,6 @@ export const EVENT_LIVE_QUERY = graphql`
     }
 `;
 
-export const BROADCAST_MESSAGE_MUTATION = graphql`
-    mutation EventLiveMutation($input: CreateBroadcastMessage!) {
-        createBroadcastMessage(input: $input) {
-            isError
-            message
-        }
-    }
-`;
-
 export function EventLiveLoader() {
     return <Loader />;
 }
