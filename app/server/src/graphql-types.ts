@@ -2272,7 +2272,8 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventquestionQueueArgs, never>
     >;
-    currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    currentQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    currentBroadcastMessage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3167,7 +3168,8 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
-        currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
+        currentQuestion?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
+        currentBroadcastMessage?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
     };
 
     EventBroadcastMessage?: {
