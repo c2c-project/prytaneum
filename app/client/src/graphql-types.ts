@@ -171,7 +171,7 @@ export type Event = Node & {
   /** The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage */
   currentBroadcastMessage?: Maybe<Scalars['Int']>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
-  currentQuestion?: Maybe<Scalars['Int']>;
+  currentQuestion?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   /** The planned end date time string */
   endDateTime?: Maybe<Scalars['Date']>;
@@ -491,7 +491,7 @@ export type EventQuestion = Node & {
   likedBy?: Maybe<UserConnection>;
   /** Find the count of the likes only */
   likedByCount?: Maybe<Scalars['Int']>;
-  position?: Maybe<Scalars['Int']>;
+  position: Scalars['String'];
   /** The actual content of the question */
   question?: Maybe<Scalars['String']>;
   refQuestion?: Maybe<EventQuestion>;
@@ -1296,7 +1296,7 @@ export type UpdatePasswordForm = {
 
 export type UpdateQuestionPosition = {
   eventId: Scalars['ID'];
-  position: Scalars['Int'];
+  position: Scalars['String'];
   questionId: Scalars['ID'];
 };
 

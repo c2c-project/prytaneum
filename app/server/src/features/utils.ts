@@ -109,8 +109,7 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
                 body: null,
             };
         }
-        getOrCreateServer().log.error('Error is not an instance of ProtectedError!');
-        getOrCreateServer().log.error(e.message);
+        getOrCreateServer().log.error(`Error is not an instance of ProtectedError! Error: ${JSON.stringify(e)}}`);
         return {
             isError: true,
             message: 'Internal server error. Please try again.',

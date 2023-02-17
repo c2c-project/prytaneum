@@ -23,7 +23,7 @@ export function QueueButton({ fragmentRef }: QueueButtonProps) {
     const { id: questionId, position } = useFragment(QUEUE_BUTTON_FRAGMENT, fragmentRef);
 
     const isQueued = React.useMemo(() => {
-        if (!position || position === -1) return false;
+        if (!position || position === '-1') return false;
         return true;
     }, [position]);
 

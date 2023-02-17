@@ -189,8 +189,8 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                             <LoginForm
                                 close={close}
                                 onSuccess={() => {
-                                    close();
                                     router.reload();
+                                    close();
                                 }}
                             />
                         </DialogContent>
@@ -205,7 +205,12 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'register'} onClose={close}>
                         <DialogContent>
-                            <RegisterForm onSuccess={close} />
+                            <RegisterForm
+                                onSuccess={() => {
+                                    router.reload();
+                                    close();
+                                }}
+                            />
                         </DialogContent>
                     </ResponsiveDialog>
                 </>

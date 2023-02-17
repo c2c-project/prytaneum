@@ -24,8 +24,8 @@ const config: PlaywrightTestConfig = {
     },
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
-    /* Retry on CI only */
-    retries: process.env.CI ? 3 : 0,
+    /* How many times tests are retried if they fail */
+    retries: process.env.CI ? 3 : 1,
     /* Amount of workers based on number of browsers being tested */
     workers: process.env.CI ? 1 : 6,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */

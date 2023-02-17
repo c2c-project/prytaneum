@@ -250,7 +250,7 @@ export async function changeEventStatus(userId: string, prisma: PrismaClient, ev
 export async function findQueuedQuestionsByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } } },
+        select: { questions: { where: { position: { equals: '-1' } }, orderBy: { position: 'asc' } } },
     });
 }
 
@@ -281,6 +281,9 @@ export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: 
 export async function findQuestionQueueByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } }, currentQuestion: true },
+        select: {
+            questions: { where: { position: { not: '-1' } }, orderBy: { position: 'asc' } },
+            currentQuestion: true,
+        },
     });
 }

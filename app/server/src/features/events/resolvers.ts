@@ -237,28 +237,33 @@ export const resolvers: Resolvers = {
             const queryResult = await Event.findQuestionQueueByEventId(eventId, ctx.prisma);
             const toQuestionEdge = (question: EventQuestion) => ({
                 node: question,
-                cursor: question.position?.toString() ?? '',
+                cursor: question.position,
             });
             const makeConnection = <T extends ReturnType<typeof toQuestionEdge>[]>(edges: T) => ({
                 edges,
                 pageInfo: {
                     hasNextPage: false,
                     hasPreviousPage: false,
-                    startCursor: edges.length > 0 ? edges[0].cursor.toString() : '',
-                    endCursor: edges.length > 0 ? edges[edges.length - 1].cursor.toString() : '',
+                    startCursor: edges.length > 0 ? edges[0].cursor : '',
+                    endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : '',
                 },
             });
             if (!queryResult) return null;
 
+            console.log(queryResult);
+
             // many ways to do the following, done in similar ways for clarity
             const questionRecordEdges = queryResult.questions
-                .filter((question) => question.position <= queryResult.currentQuestion)
+                .filter((question) => parseInt(question.position) <= parseInt(queryResult.currentQuestion))
                 .map(toQuestionId)
                 .map(toQuestionEdge);
             const enqueuedQuestionsEdges = queryResult.questions
-                .filter((question) => question.position > queryResult.currentQuestion)
+                .filter((question) => parseInt(question.position) > parseInt(queryResult.currentQuestion))
                 .map(toQuestionId)
                 .map(toQuestionEdge);
+
+            console.log('questionRecordEdges', questionRecordEdges);
+            console.log('enqueuedQuestionsEdges', enqueuedQuestionsEdges);
             return {
                 questionRecord: makeConnection(questionRecordEdges),
                 enqueuedQuestions: makeConnection(enqueuedQuestionsEdges),
