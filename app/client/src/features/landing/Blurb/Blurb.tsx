@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
         gap: theme.spacing(2),
         textAlign: 'center',
     },
+    title: {
+        fontSize: '25px',
+    },
     paragraph: {
         fontSize: '18px',
     },
@@ -23,16 +26,17 @@ interface Props {
     title?: string;
     icon?: React.ReactNode;
     paragraphs?: string[];
+    color?: string;
 }
 
-export function Blurb({title, icon, paragraphs}: Props) {
+export function Blurb({title, icon, paragraphs, color}: Props) {
     const classes = useStyles();
 
     return (
         <Grid item xs={12} className={classes.section}>
             {
                 title &&
-                <Typography variant='h4'>
+                <Typography variant='h4' color={color} className={classes.title}>
                     {title}
                 </Typography>
             }
@@ -44,7 +48,7 @@ export function Blurb({title, icon, paragraphs}: Props) {
             }
             {
                 paragraphs?.map((paragraph, index) =>
-                    <Typography key={index} variant='body1' className={classes.paragraph}>
+                    <Typography key={index} variant='body1' color={color} className={classes.paragraph}>
                         {paragraph}
                     </Typography>
                 )

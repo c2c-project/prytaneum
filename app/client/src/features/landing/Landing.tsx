@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { Grid } from '@mui/material';
+import ReactPlayer from 'react-player';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { Button, Grid } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import RecordVoiceOverOutlinedIcon from '@mui/icons-material/RecordVoiceOverOutlined';
 import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
@@ -12,6 +16,17 @@ import { ParticipantDemo, ModeratorDemo } from '@local/features/landing/Interact
 // import { ConditionalRender } from '@local/components';
 
 const useStyles = makeStyles((theme) => ({
+    button: {
+        color: 'white',
+        backgroundColor: '#F5C64F',
+        borderRadius: 12,
+        height: '100%',
+        width: 'auto',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
     landing: {
         width: '100%',
         minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
@@ -35,6 +50,15 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '4rem',
         transform: 'rotate(-90deg)',
     },
+    video: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 0,
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    },
     // sentinel: {
     //     paddingTop: theme.spacing(4), // offset for scroll
     // }
@@ -42,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Landing() {
     const classes = useStyles();
+    const router = useRouter();
 
     const roles = [
         <Blurb
@@ -88,24 +113,69 @@ export default function Landing() {
             <ConditionalRender client>
                 <ScrollButton sentinelRef={sentinelRef}/>
             </ConditionalRender> */}
-            </Grid>
-            {/* <div ref={sentinelRef} className={classes.sentinel}> */}
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-                <Blurb
-                    title='What is Prytaneum?'
-                    paragraphs={[
-                        'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
-                        'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.',
-                    ]}
+        </Grid>
+        {/* <div ref={sentinelRef} className={classes.sentinel}> */}
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42' }}>
+            <Blurb
+                title='Enable constructive, virtual dialogue'
+                color='#282D6E'
+            />
+            {/*
+                <ParticipantDemo
+                    shadow='10px 10px 0 0 #f5c64f'
+                    scale='scale(0.95)'
                 />
-                <Grid item xs={12}>
-                    <ParticipantDemo shadow='10px 10px 0 0 #f5c64f' scale='scale(0.95)' />
-                </Grid>
+            */}
+            <Grid item xs={12}>
+                <div className={classes.video}>
+                    <ReactPlayer url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' height='480px' width='854px' />
+                </div>
             </Grid>
-            {/* </div> */}
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-                <Blurb title='A better solution for remote public engagement.' />
-                <Carousel cards={views} />
+            <Grid item marginBottom={10}>
+                <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                    Learn How To Get Started
+                </Button>
+            </Grid>
+        </Grid>
+        {/* </div> */}
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+            <Blurb
+                title='A better solution for remote public engagement.'
+                color='#F5C64F'
+            />
+            <Blurb paragraphs={['See how Prytaneum enables interaction through our town hall platform:']} color='#272C6C' />
+            {/*<Carousel cards={views} />*/}
+            <Grid item>
+                <PersonIcon fontSize='large' />
+                <Image
+                    data-test-id='participant-view'
+                    alt='Participant View Screenshot'
+                    src='/static/participant_view.svg'
+                    width={557}
+                    height={288}
+                    objectFit='contain'
+                />
+            </Grid>
+        </Grid>
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+            <Blurb
+                paragraphs={
+                    [
+                        'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
+                    ]
+                }
+            />
+            <Carousel cards={roles} />
+        </Grid>HEAD
+        <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
+            <Grid item>
+                <Image
+                    src='/static/democracy_fund_logo.svg'
+                    width={280}
+                    height={200}
+                    objectFit='contain'
+                    alt='democracy fund logo'
+                />
             </Grid>
             <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
                 <Blurb
