@@ -50,9 +50,6 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         padding: '3px 20px 3px 20px',
     },
-    contain: {
-        objectFit: 'contain',
-    },
 }));
 
 export function CallToAction() {

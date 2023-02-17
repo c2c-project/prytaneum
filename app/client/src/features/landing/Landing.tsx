@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Box, Button, Card, CardActions, CardContent, Divider, Grid, Stack, Typography } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 import makeStyles from '@mui/styles/makeStyles';
 import { CallToAction } from '@local/features/landing/CallToAction'
 import { Blurb } from '@local/features/landing/Blurb'
@@ -61,16 +62,27 @@ export default function Landing() {
         <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.landing} marginTop={-10}>
             <CallToAction />
         </Grid>
-
-        {/* The following style prop can be added to override the maxWidth of the component set by its parent container in `Main.tsx` */}
-        {/* However, this leaves whitespace on the right side of the page, so I have removed it until I can find a reliable solution. */}
-        {/* style={{ width: '150%', marginLeft: '50%', transform: 'translateX(-50%)'}} */}
-        <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42', width: '150%', marginLeft: '50%', transform: 'translateX(-50%)' }}>
-            <Grid item marginTop={6}>
-                <Blurb
-                    title='Enable constructive, virtual dialogue'
-                    titleColor='#282D6E'
+        {/* <div ref={sentinelRef} className={classes.sentinel}> */}
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42' }}>
+            <Blurb
+                title='Enable constructive, virtual dialogue'
+                color='#282D6E'
+            />
+            {/*
+                <ParticipantDemo
+                    shadow='10px 10px 0 0 #f5c64f'
+                    scale='scale(0.95)'
                 />
+            */}
+            <Grid item xs={12}>
+                <div className={classes.video}>
+                    <ReactPlayer url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' height='480px' width='854px' />
+                </div>
+            </Grid>
+            <Grid item marginBottom={10}>
+                <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                    Learn How To Get Started
+                </Button>
             </Grid>
             
             <Grid item xs={12}>
@@ -88,71 +100,22 @@ export default function Landing() {
        
         {/* This is the only section of the page that doesn't need the style prop detailed above. */}
         <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-            <Grid item marginTop={6}>
-                <Blurb
-                    title='A better solution for remote public engagement.'
-                    paragraphs={['See how Prytaneum enables interaction through our town hall platform:']}
-                    titleColor='#F5C64F'
-                    paragraphsColor='#272C6C'
+            <Blurb
+                title='A better solution for remote public engagement.'
+                color='#F5C64F'
+            />
+            <Blurb paragraphs={['See how Prytaneum enables interaction through our town hall platform:']} color='#272C6C' />
+            {/*<Carousel cards={views} />*/}
+            <Grid item>
+                <PersonIcon fontSize='large' />
+                <Image
+                    data-test-id='participant-view'
+                    alt='Participant View Screenshot'
+                    src='/static/participant_view.svg'
+                    width={557}
+                    height={288}
+                    objectFit='contain'
                 />
-            </Grid>
-            <Grid container alignItems='center' justifyContent='center' wrap='nowrap' marginTop={5}>
-                <Grid item>
-                    <Grid container wrap='nowrap'>
-                        <Image 
-                            alt='Participant Icon'
-                            src='/static/participant_icon_yellow.svg' 
-                            width={31} 
-                            height={21}
-                            objectFit='contain'
-                        />
-                        <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
-                            Participant View
-                        </Typography>
-                    </Grid>
-                    <Typography variant='body1' color='#272C6C' fontSize='18px' align='center' width='80%'>
-                        Sit in on Prytaneum events as a participant and contribute to event discussion
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <Image
-                        data-test-id='participant-view'
-                        alt='Participant View Screenshot'
-                        src='/static/participant_view.svg'
-                        width={1114}
-                        height={576}
-                        objectFit='contain'
-                    />
-                </Grid>
-            </Grid>
-            <Grid container alignItems='center' justifyContent='center' wrap='nowrap' marginTop={10} marginBottom={4}>
-                <Grid item>
-                    <Image
-                        data-test-id='moderator-view'
-                        alt='Moderator View Screenshot'
-                        src='/static/moderator_view.svg'
-                        width={1114}
-                        height={576}
-                        objectFit='contain'
-                    />
-                </Grid>
-                <Grid item marginRight={-10} marginLeft={10}>
-                    <Grid container wrap='nowrap'>
-                        <Image 
-                            alt='Moderator Icon'
-                            src='/static/moderator_icon_yellow.svg' 
-                            width={36} 
-                            height={26}
-                            objectFit='contain'
-                        />
-                        <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
-                            Moderator View
-                        </Typography>
-                    </Grid>
-                    <Typography variant='body1' color='#272C6C' fontSize='18px' align='center' width='80%' marginLeft={-2}>
-                        or take charge of your own Prytaneum event as a moderator and administrate event discussion
-                    </Typography>
-                </Grid>
             </Grid>
         </Grid>
 
