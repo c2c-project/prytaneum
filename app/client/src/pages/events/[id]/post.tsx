@@ -1,31 +1,20 @@
-import { Card, CardContent, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { ConditionalRender } from '@local/components';
+import { EventLiveLoader } from '@local/features/events';
+import PreloadedEventPost from '@local/features/events/EventPost';
+import { useRouter } from 'next/router';
 import React from 'react';
 
-const useStyles = makeStyles((theme) => ({
-    item: {
-        marginBottom: theme.spacing(4),
-    },
-    card: {
-        padding: theme.spacing(1),
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-    },
-    text: {
-        marginLeft: theme.spacing(1),
-    },
-}));
-
 export default function Pre() {
-    const classes = useStyles();
+    const router = useRouter();
+
+    if (!router.isReady) return <EventLiveLoader />;
     return (
-        <Card className={classes.card}>
-            <CardContent>
-                <Typography variant='h6' className={classes.title}>
-                    Event Ended
-                </Typography>
-            </CardContent>
-        </Card>
+        <div>
+            <ConditionalRender client>
+                <React.Suspense fallback={<EventLiveLoader />}>
+                    <PreloadedEventPost eventId={router.query.id as string} />
+                </React.Suspense>
+            </ConditionalRender>
+        </div>
     );
 }
