@@ -202,7 +202,7 @@ function EventLive({ node }: EventLiveProps) {
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} id='event-sidebar-scroller' onScroll={handleScroll}>
                         {isMdUp && <div ref={topRef} className={classes.target} />}
-                        <EventSidebar fragmentRef={node} />
+                        <EventSidebar fragmentRef={node} override={Boolean(false)} />
                     </div>
                 </Grid>
                 <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>

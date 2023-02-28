@@ -58,8 +58,9 @@ export function EventSidebarLoader() {
 }
 export interface EventSidebarProps {
     fragmentRef: EventSidebarFragment$key;
+    override: Boolean;
 }
-export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
+export const EventSidebar = ({ fragmentRef, override }: EventSidebarProps) => {
     const theme = useTheme();
     const classes = useStyles();
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
@@ -119,7 +120,7 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
         >
             <Grid item>
                 {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
-                {data.isViewerModerator && (
+                {data.isViewerModerator && !override && (
                     <CurrentQuestionCard isViewerModerator={Boolean(data.isViewerModerator)} fragmentRef={data} />
                 )}
             </Grid>
@@ -139,10 +140,10 @@ export const EventSidebar = ({ fragmentRef }: EventSidebarProps) => {
                     centered
                     aria-label='secondary tabs example'
                 >
-                    {data.isViewerModerator === true && <Tab label='Queue' value='Queue' />}
+                    {data.isViewerModerator === true && !override && <Tab label='Queue' value='Queue' />}
                     <Tab label='Questions' value='Questions' />
                     <Tab label='Feedback' value='Feedback' />
-                    <Tab label='Broadcast' value='Broadcast' />
+                    {!override && <Tab label='Broadcast' value='Broadcast' />}
                 </Tabs>
                 {data.isViewerModerator === true && <QuestionQueue fragmentRef={data} isVisible={tab === 'Queue'} />}
                 <QuestionList fragmentRef={data} ActionButtons={displayActionButtons} isVisible={tab === 'Questions'} />

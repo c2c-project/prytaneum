@@ -1,6 +1,5 @@
 import { ConditionalRender } from '@local/components';
-import { EventContext } from '@local/features/events';
-import { PreloadedBroadcastMessageList } from '@local/features/events/BroadcastMessages/BroadcastMessageList';
+import { EventContext, EventSidebar } from '@local/features/events';
 import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -31,6 +30,8 @@ const EVENT_POST_QUERY = graphql`
                 isViewerModerator
                 startDateTime
                 isActive
+                ...EventSidebarFragment
+                ...useBroadcastMessageListFragment
             }
         }
     }
@@ -50,7 +51,7 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
         <Card className={classes.card}>
             <CardContent>
                 <Grid container spacing={2}>
-                    <Grid item xs={8}>
+                    <Grid item xs={7}>
                         <Typography variant='h6' className={classes.title}>
                             Event Ended
                         </Typography>
@@ -61,14 +62,14 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
                             to the right.
                         </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={5}>
                         <Typography variant='h6' className={classes.title}>
                             Prytaneum
                         </Typography>
                         <EventContext.Provider
                             value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}
                         >
-                            <PreloadedBroadcastMessageList isVisible={true} />
+                            <EventSidebar fragmentRef={node} override={Boolean(true)} />
                         </EventContext.Provider>
                     </Grid>
                 </Grid>
