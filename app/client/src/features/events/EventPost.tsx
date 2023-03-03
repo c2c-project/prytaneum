@@ -3,8 +3,15 @@ import { EventContext, EventSidebar } from '@local/features/events';
 import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import Button from '@mui/material/Button';
 import React from 'react';
 import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import Image from 'next/image';
+
+import { EventDetailsCard } from './EventDetailsCard';
+import { SpeakerList } from './Speakers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,19 +27,31 @@ const useStyles = makeStyles((theme) => ({
     },
     card: {
         padding: theme.spacing(1),
-        height: '100vh',
+    },
+    secondaryCard: {
+        padding: theme.spacing(3),
+        marginBottom: theme.spacing(3),
     },
     title: {
         marginBottom: theme.spacing(1),
     },
     text: {
         marginLeft: theme.spacing(1),
+        marginBottom: theme.spacing(3),
     },
     panes: {
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
         overflowY: 'scroll',
+    },
+    button: {
+        marginBottom: theme.spacing(3),
+    },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        minHeight: '50px',
     },
 }));
 
@@ -46,6 +65,8 @@ const EVENT_POST_QUERY = graphql`
                 isActive
                 ...EventSidebarFragment
                 ...useBroadcastMessageListFragment
+                ...EventDetailsCardFragment
+                ...SpeakerListFragment
             }
         }
     }
@@ -65,9 +86,12 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
 
     return (
         <Card className={classes.card}>
-            <CardContent className={classes.root}>
-                <Grid container spacing={2}>
+            <CardContent>
+                <Grid container spacing={8}>
                     <Grid item xs={7} className={classes.root}>
+                        <Button variant='outlined' className={classes.button}>
+                            Back
+                        </Button>
                         <Typography variant='h6' className={classes.title}>
                             Event Ended
                         </Typography>
@@ -77,11 +101,42 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
                             Resources” below. Questions and feedback given during this event can be viewed on the window
                             to the right.
                         </Typography>
+                        <Card className={classes.secondaryCard}>
+                            <EventDetailsCard fragmentRef={node} />
+                            <SpeakerList fragmentRef={node} />
+                        </Card>
+                        <Typography variant='h6' className={classes.title}>
+                            Post-Event Resources
+                        </Typography>
+                        <div className={classes.buttonContainer}>
+                            <Button
+                                aria-label='Watch Replay'
+                                variant='contained'
+                                color='primary'
+                                style={{ minWidth: '200px' }}
+                                startIcon={<VideocamIcon />}
+                            >
+                                Watch Replay
+                            </Button>
+                            <Button
+                                aria-label='Watch Replay'
+                                variant='contained'
+                                color='primary'
+                                style={{ minWidth: '200px' }}
+                                startIcon={<QuestionAnswerIcon />}
+                            >
+                                Submit Feedback
+                            </Button>
+                        </div>
                     </Grid>
                     <Grid item xs={5} className={classes.sidebar}>
-                        <Typography variant='h6' className={classes.title}>
-                            Prytaneum
-                        </Typography>
+                        <Image
+                            src='/static/prytaneum_logo2.svg'
+                            width={150}
+                            height={200}
+                            objectFit='contain'
+                            alt='prytaneum logo'
+                        />
                         <EventContext.Provider
                             value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}
                         >
