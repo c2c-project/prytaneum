@@ -7,6 +7,14 @@ import React from 'react';
 import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        height: '100%',
+    },
+    sidebar: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+    },
     item: {
         marginBottom: theme.spacing(4),
     },
@@ -19,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {
         marginLeft: theme.spacing(1),
+    },
+    panes: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        overflowY: 'scroll',
     },
 }));
 
@@ -42,16 +56,18 @@ export interface PreloadedEventLiveProps {
 }
 
 export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
+    // styles
     const classes = useStyles();
+
     const { node } = usePreloadedQuery(EVENT_POST_QUERY, eventLiveQueryRef);
 
     if (!node) return <h1>Loading Post-Event Page...</h1>;
 
     return (
         <Card className={classes.card}>
-            <CardContent>
+            <CardContent className={classes.root}>
                 <Grid container spacing={2}>
-                    <Grid item xs={7}>
+                    <Grid item xs={7} className={classes.root}>
                         <Typography variant='h6' className={classes.title}>
                             Event Ended
                         </Typography>
@@ -62,14 +78,16 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
                             to the right.
                         </Typography>
                     </Grid>
-                    <Grid item xs={5}>
+                    <Grid item xs={5} className={classes.sidebar}>
                         <Typography variant='h6' className={classes.title}>
                             Prytaneum
                         </Typography>
                         <EventContext.Provider
                             value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}
                         >
-                            <EventSidebar fragmentRef={node} override={Boolean(true)} />
+                            <div className={classes.panes} id='event-sidebar-scroller'>
+                                <EventSidebar fragmentRef={node} override={Boolean(true)} />
+                            </div>
                         </EventContext.Provider>
                     </Grid>
                 </Grid>
