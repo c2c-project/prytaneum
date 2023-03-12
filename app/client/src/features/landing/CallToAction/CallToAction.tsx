@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
-//import { useUser } from '@local/features/accounts';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -55,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 export function CallToAction() {
     const classes = useStyles();
     const router = useRouter();
-    //const [user] = useUser();
 
     return (
         <>
@@ -67,26 +65,6 @@ export function CallToAction() {
                     height={2097}
                     objectFit='contain'
                 />
-                {/*user ? (
-                    <Button
-                        variant='contained'
-                        color='secondary'
-                        className={classes.button}
-                        onClick={() => router.push('/app/home')}
-                    >
-                        Go to Dashboard
-                    </Button>
-                ) : (
-                    <Button
-                        data-test-id='large-register-button'
-                        variant='contained'
-                        color='secondary'
-                        className={classes.button}
-                        onClick={() => router.push('/register')}
-                    >
-                        Register
-                    </Button>
-                )*/}
             </Grid>
             <Grid item xs={12} md={6} marginLeft={-16} marginTop={-13}>
                 <Image

@@ -2,9 +2,10 @@ import * as React from 'react';
 import ReactPlayer from 'react-player';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Button, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Divider, Grid, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import makeStyles from '@mui/styles/makeStyles';
+
 import { CallToAction } from '@local/features/landing/CallToAction'
 import { Blurb } from '@local/features/landing/Blurb'
 
@@ -52,6 +53,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
+    roleCard: {
+        width: '25%', 
+        height: 560, 
+        backgroundColor: theme.palette.custom.creamCan, 
+        borderRadius: 0, 
+        display: 'flex', 
+        flexDirection: 'column',
+    }
 }));
 
 export default function Landing() {
@@ -62,21 +71,16 @@ export default function Landing() {
         <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.landing} marginTop={-10}>
             <CallToAction />
         </Grid>
-        
-        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42' }}>
-            <Blurb
-                title='Enable constructive, virtual dialogue'
-                titleColor='#282D6E'
-            />
-            <Grid item xs={12}>
-                <div className={classes.video}>
-                    <ReactPlayer url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' height='480px' width='854px' />
-                </div>
-            </Grid>
-            <Grid item marginBottom={10}>
-                <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
-                    Learn How To Get Started
-                </Button>
+
+        {/* The following style prop can be added to override the maxWidth of the component set by its parent container in `Main.tsx` */}
+        {/* However, this leaves whitespace on the right side of the page, so I have removed it until I can find a reliable solution. */}
+        {/* style={{ width: '150%', marginLeft: '50%', transform: 'translateX(-50%)'}} */}
+        <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42' }}>
+            <Grid item marginTop={6}>
+                <Blurb
+                    title='Enable constructive, virtual dialogue'
+                    titleColor='#282D6E'
+                />
             </Grid>
             
             <Grid item xs={12}>
@@ -116,7 +120,7 @@ export default function Landing() {
                     <Image
                         data-test-id='participant-view'
                         alt='Participant View Screenshot'
-                        src='/static/participant_view.svg'
+                        src='/static/participant_view.png'
                         width={1114}
                         height={576}
                         objectFit='contain'
@@ -128,7 +132,7 @@ export default function Landing() {
                     <Image
                         data-test-id='moderator-view'
                         alt='Moderator View Screenshot'
-                        src='/static/moderator_view.svg'
+                        src='/static/moderator_view.png'
                         width={1114}
                         height={576}
                         objectFit='contain'
@@ -154,15 +158,133 @@ export default function Landing() {
             </Grid>
         </Grid>
 
-        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-            <Blurb
-                paragraphs={
-                    [
-                        'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
-                    ]
-                }
-            />
-            <Carousel cards={roles} />
+        <Grid container display='flex' alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#F5C64F42' }}>
+            <Grid item width='100%' marginTop={8}>
+                <Blurb title='Participate in town hall events using roles' />
+            </Grid>
+
+            <Stack direction='row' spacing={2} width='95%' marginTop={7} marginBottom={20}>
+                <Card className={classes.roleCard}>
+                    <CardContent>
+                        <Grid container display='flex' alignItems='center' justifyContent='center'>
+                            <Image 
+                                alt='Speaker Icon'
+                                src='/static/speaker_icon.svg' 
+                                width={82} 
+                                height={80}
+                                objectFit='contain'
+                            />
+                        </Grid>
+                        <Blurb 
+                            title='Speaker' 
+                            titleColor='#F9F9F9' 
+                            paragraphs={['Officials who answer the discussion given by moderators.']}
+                        />
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
+                                <ListItemText primary={'Same experience as a Zoom call'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2}}>
+                                <ListItemText primary={'One on one with moderators'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                </Card>
+                <Card className={classes.roleCard}>
+                    <CardContent>
+                        <Grid container display='flex' alignItems='center' justifyContent='center'>
+                            <Image 
+                                alt='Participant Icon'
+                                src='/static/participant_icon.svg' 
+                                width={82} 
+                                height={80}
+                                objectFit='contain'
+                            />
+                        </Grid>
+                        <Blurb 
+                            title='Participant' 
+                            titleColor='#F9F9F9' 
+                            paragraphs={['Residents who engage in discussion on a policy topic.']}
+                        />
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
+                                <ListItemText primary={'Submit questions'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2}}>
+                                <ListItemText primary={'Like and quote other participant questions'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2}}>
+                                <ListItemText primary={'Provide feedback to moderators'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                    <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
+                        <Button size='medium' style={{ color: 'white' }}>Participant Guide</Button>
+                    </CardActions>
+                </Card>
+                <Card className={classes.roleCard}>
+                    <CardContent>
+                        <Grid container display='flex' alignItems='center' justifyContent='center'>
+                            <Image 
+                                alt='Moderator Icon'
+                                src='/static/moderator_icon.svg' 
+                                width={82}
+                                height={80}
+                                objectFit='contain'
+                            />
+                        </Grid>
+                        <Blurb 
+                            title='Moderator' 
+                            titleColor='#F9F9F9' 
+                            paragraphs={['Officials that oversee event discussion with the speaker.']}
+                        />
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
+                                <ListItemText primary={'Manage the question queue by adding, removing and reordering participant questions'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2}}>
+                                <ListItemText primary={'Respond to participant feedback'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                    <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
+                        <Button size='medium' style={{ color: 'white' }}>Moderator Guide</Button>
+                    </CardActions>
+                </Card>
+                <Card className={classes.roleCard}>
+                    <CardContent>
+                        <Grid container display='flex' alignItems='center' justifyContent='center'>
+                            <Image 
+                                alt='Organizer Icon'
+                                src='/static/organizer_icon.svg' 
+                                width={82}
+                                height={80}
+                                objectFit='contain'
+                            />
+                        </Grid>
+                        <Blurb 
+                            title='Organizer' 
+                            titleColor='#F9F9F9' 
+                            paragraphs={['Officials that create and set up events on Prytaneum.']}
+                        />
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 9, marginLeft: 1 }}>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
+                                <ListItemText primary={'Create events for an organization'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'list-item', marginBottom: -2}}>
+                                <ListItemText primary={'Configure event details'} primaryTypographyProps={{ fontSize: 18 }} />
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                    <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
+                        <Button size='medium' style={{ color: 'white' }}>Organizer Guide</Button>
+                    </CardActions>
+                </Card>
+            </Stack>
+
+            <Grid item height={40} width='95%' marginTop={-116} zIndex={1000} display='flex' alignItems='center' justifyContent='center' style={{ backgroundColor: '#D2A942' }}>
+                <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>Features</Typography>
+            </Grid>
         </Grid>
 
         <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
