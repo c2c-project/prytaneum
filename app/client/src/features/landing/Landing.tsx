@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ReactPlayer from 'react-player';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Button, Card, CardActions, CardContent, Divider, Grid, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
     },
     root: {
-        width: '100%',
         minHeight: '60vh',
         margin: 0,
         marginTop: theme.spacing(2),
@@ -72,11 +70,9 @@ export default function Landing() {
             <CallToAction />
         </Grid>
 
-        {/* The following style prop can be added to override the maxWidth of the component set by its parent container in `Main.tsx` */}
-        {/* However, this leaves whitespace on the right side of the page, so I have removed it until I can find a reliable solution. */}
-        {/* style={{ width: '150%', marginLeft: '50%', transform: 'translateX(-50%)'}} */}
-        <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#8EAFFF42' }}>
-            <Grid item marginTop={6}>
+        {/* The marginLeft and width props allow this component to override the maxWidth set by its parent container in `Main.tsx` */}
+        <Grid container overflow='hidden' alignItems='center' justifyContent='center' spacing={2} className={classes.root} marginLeft='calc(-100vw / 2 + 50%) !important' style={{ backgroundColor: '#8EAFFF42', width: '100vw' }}>
+            <Grid item marginTop={6} id='video-section'>
                 <Blurb
                     title='Enable constructive, virtual dialogue'
                     titleColor='#282D6E'
@@ -85,7 +81,7 @@ export default function Landing() {
             
             <Grid item xs={12}>
                 <div className={classes.video}>
-                    <ReactPlayer url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' height='480px' width='854px'/>
+                    <iframe src='https://drive.google.com/file/d/14OzBMXPlkDENtyHgwRlDW4315DRImYzx/preview' width='854' height='480' allow='autoplay' title='instructional video'></iframe>
                 </div>
             </Grid>
 
@@ -158,12 +154,14 @@ export default function Landing() {
             </Grid>
         </Grid>
 
-        <Grid container display='flex' alignItems='center' justifyContent='center' spacing={2} className={classes.root} style={{ backgroundColor: '#F5C64F42' }}>
+        <Grid container display='flex' alignItems='center' justifyContent='center' spacing={2} className={classes.root} marginLeft='calc(-100vw / 2 + 50%) !important' style={{ backgroundColor: '#F5C64F42', width: '100vw' }}>
             <Grid item width='100%' marginTop={8}>
                 <Blurb title='Participate in town hall events using roles' />
             </Grid>
 
             <Stack direction='row' spacing={2} width='95%' marginTop={7} marginBottom={20}>
+                {/* User is not pointed to the top of each guide page after navigating to the page.
+                    This is caused by an open NextJS bug: https://github.com/vercel/next.js/issues/28778 */}
                 <Card className={classes.roleCard}>
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
@@ -219,7 +217,7 @@ export default function Landing() {
                         </List>
                     </CardContent>
                     <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
-                        <Button size='medium' style={{ color: 'white' }}>Participant Guide</Button>
+                        <Button size='medium' style={{ color: 'white' }} onClick={() => router.push('/guides/participant')}>Participant Guide</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.roleCard}>
@@ -248,7 +246,7 @@ export default function Landing() {
                         </List>
                     </CardContent>
                     <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
-                        <Button size='medium' style={{ color: 'white' }}>Moderator Guide</Button>
+                        <Button size='medium' style={{ color: 'white' }} onClick={() => router.push('/guides/moderator')}>Moderator Guide</Button>
                     </CardActions>
                 </Card>
                 <Card className={classes.roleCard}>
@@ -267,7 +265,7 @@ export default function Landing() {
                             titleColor='#F9F9F9' 
                             paragraphs={['Officials that create and set up events on Prytaneum.']}
                         />
-                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 9, marginLeft: 1 }}>
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText primary={'Create events for an organization'} primaryTypographyProps={{ fontSize: 18 }} />
                             </ListItem>
@@ -277,48 +275,47 @@ export default function Landing() {
                         </List>
                     </CardContent>
                     <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 'auto', marginBottom: 2 }}>
-                        <Button size='medium' style={{ color: 'white' }}>Organizer Guide</Button>
+                        <Button size='medium' style={{ color: 'white' }} onClick={() => router.push('guides/organizer')}>Organizer Guide</Button>
                     </CardActions>
                 </Card>
             </Stack>
 
-            <Grid item height={40} width='95%' marginTop={-116} zIndex={1000} display='flex' alignItems='center' justifyContent='center' style={{ backgroundColor: '#D2A942' }}>
+            <Grid item height={40} width='95%' marginTop={-122} zIndex={1000} display='flex' alignItems='center' justifyContent='center' style={{ backgroundColor: '#D2A942' }}>
                 <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>Features</Typography>
             </Grid>
         </Grid>
 
-        <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
-            <Grid item>
-                <Image
-                    src='/static/democracy_fund_logo.svg'
-                    width={280}
-                    height={200}
-                    objectFit='contain'
-                    alt='democracy fund logo'
+        <Grid container display='flex' alignItems='center' justifyContent='center' spacing={2} className={classes.root} marginLeft='calc(-103vw / 2 + 50%) !important' style={{ width: '100vw' }}>
+            <Grid item marginTop={2} marginBottom={1}>
+                <Blurb 
+                    title='Read more on how Prytaneum came to be,'
+                    paragraphs={['the team behind the online town hall platform, and our motivations.']}
+                    titleColor='#F5C64F'
+                    paragraphsColor='#272C6C'
                 />
             </Grid>
-            <Grid item>
+            <Grid item marginRight='-1.5%'>
                 <Image 
                     alt='Team Photo' 
                     src='/static/team_photo.png' 
                     height={450} 
                     width={1920}
-                    objectFit='contain'
+                    objectFit='fill'
                 />
                 <Carousel cards={roles} />
             </Grid>
             <Grid item>
                 <Button 
                     size='medium' 
-                    style={{ color: 'white', marginTop: -480 }} 
+                    style={{ color: 'white', marginTop: '-250%' }} 
                     onClick={() => router.push('/aboutus')}>
                         Read more about us
                 </Button>
             </Grid>
         </Grid>
 
-        <Grid container spacing={3} className={classes.root}>
-            <Grid item justifyContent='flex-start' marginTop={10} marginLeft='10%'>
+        <Grid container spacing={3} className={classes.root} marginLeft='calc(-100vw / 2 + 50%) !important' style={{ width: '100vw' }}>
+            <Grid item justifyContent='flex-start' marginTop={10} marginLeft='5%'>
                 <Image 
                     src='/static/prytaneum_logo2.svg' 
                     width={234} 
@@ -327,7 +324,7 @@ export default function Landing() {
                     alt='prytaneum 2 logo'
                 />
             </Grid>
-            <Grid container justifyContent='flex-end' marginTop={-10} marginRight='10%'>
+            <Grid container justifyContent='flex-end' marginTop={-10} marginRight='5%'>
                 <Stack direction='row' justifyContent='end' spacing={4}>
                     <Button style={{ color: '#282D6E', fontSize: '28px', maxHeight: '30px', textTransform: 'capitalize' }} onClick={() => router.push('/aboutus')}>About</Button>
                     <Button style={{ color: '#282D6E', fontSize: '28px', maxHeight: '30px', textTransform: 'capitalize' }}>Guides</Button>
@@ -335,12 +332,12 @@ export default function Landing() {
                 </Stack>
             </Grid>
 
-            <Divider flexItem variant='middle' style={{ width: '80%', marginLeft: '10%' }}/>
+            <Divider flexItem variant='middle' style={{ width: '90%', marginLeft: '5%' }}/>
 
-            <Grid item justifyContent='flex-start' marginTop={10} marginLeft='10%'>
+            <Grid item justifyContent='flex-start' marginTop={10} marginLeft='5%'>
                 <Typography color='#999999'>© 2023 Prytaneum. All rights reserved.</Typography>
             </Grid>
-            <Grid container justifyContent='flex-end' marginTop={-10} marginRight='10%'>
+            <Grid container justifyContent='flex-end' marginTop={-10} marginRight='5%'>
                 <Grid item marginRight={6}>
                     <Image
                         src='/static/democracy_fund_logo.svg'

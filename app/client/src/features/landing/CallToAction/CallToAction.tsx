@@ -90,7 +90,7 @@ export function CallToAction() {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button className={classes.secondaryButton}>
+                        <Button className={classes.secondaryButton} onClick={() => router.push('#video-section')}>
                             See How It Works
                         </Button>
                     </Grid>
