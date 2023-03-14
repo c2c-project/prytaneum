@@ -18,6 +18,7 @@ import {
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
 import { Skeleton } from '@mui/material';
+import { useUser } from './useUser';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +37,8 @@ enum Nav {
     'Organizer Guide',
     'Moderator Guide',
     'Participant Guide',
+    'Admin User Dashboard',
+    'Admin Event Dashboard',
 }
 type Keys = keyof typeof Nav;
 
@@ -57,6 +60,8 @@ const urls: Record<Keys, string> = {
     'Organizer Guide': '/guides/organizer',
     'Moderator Guide': '/guides/moderator',
     'Participant Guide': '/guides/participant',
+    'Admin User Dashboard': '/admin/users',
+    'Admin Event Dashboard': '/admin/events',
 };
 
 const findTab = (pathname: string): Keys | undefined => {
@@ -97,6 +102,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
+    const [user] = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
 
     function handleClick(key: Keys) {
@@ -161,6 +167,30 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='My Organizations' />
                 </StyledListItem>
+                {user?.isAdmin === true && (
+                    <React.Fragment>
+                        <StyledSubheader>Admin</StyledSubheader>
+                        <StyledDivider />
+                        <StyledListItem
+                            onClick={handleClick('Admin User Dashboard')}
+                            selected={selected === 'Admin User Dashboard'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='User Dashboard' />
+                        </StyledListItem>
+                        <StyledListItem
+                            onClick={handleClick('Admin Event Dashboard')}
+                            selected={selected === 'Admin Event Dashboard'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='Event Dashboard' />
+                        </StyledListItem>
+                    </React.Fragment>
+                )}
             </AnimateSharedLayout>
         </List>
     );

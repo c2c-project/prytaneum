@@ -19,6 +19,8 @@ const userData = {
     lastName: 'Smith',
     password: 'testPassword',
     preferredLang: 'EN',
+    isAdmin: false,
+    canMakeOrgs: false,
 };
 
 beforeAll(async () => {

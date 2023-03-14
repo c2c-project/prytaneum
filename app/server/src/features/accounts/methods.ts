@@ -12,10 +12,12 @@ import type {
     UpdatePasswordForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
+    UpdateOrganizerForm,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
 import { sendEmail } from '@local/lib/email/email';
+import { fromGlobalId } from 'graphql-relay';
 
 const toUserId = toGlobalId('User');
 
@@ -160,6 +162,27 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
  */
 export function findUserById(id: string, prisma: PrismaClient) {
     return prisma.user.findUnique({ where: { id } });
+}
+
+type UsersSearchFilter = {
+    firstName: string;
+    lastName: string;
+    email: string;
+};
+
+export async function findAllUsers(viewerId: string, filter: UsersSearchFilter, prisma: PrismaClient) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return [];
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all users.' });
+
+    return prisma.user.findMany({
+        where: {
+            firstName: { contains: filter.firstName },
+            lastName: { contains: filter.lastName },
+            email: { contains: filter.email },
+        },
+    });
 }
 
 /**
@@ -386,4 +409,19 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
+}
+
+export async function updateOrganizer(viewerId: string, prisma: PrismaClient, input: UpdateOrganizerForm) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return null;
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all events.' });
+
+    const { id, canMakeOrgs } = input;
+    const { id: userId } = fromGlobalId(id);
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { canMakeOrgs },
+    });
+    return updatedUser;
 }

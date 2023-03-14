@@ -21,6 +21,7 @@ const userData = {
     fullName: 'Sally Smith',
     password: userTextPassword,
     preferredLang: 'EN',
+    isAdmin: false,
     canMakeOrgs: false,
 };
 
