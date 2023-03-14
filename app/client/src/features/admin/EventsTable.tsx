@@ -16,27 +16,24 @@ import {
 import { Search as SearchIcon } from '@mui/icons-material';
 
 import { Form, TablePaginationActions } from '@local/components';
-import type { useUsersDashboardFragment$key } from '@local/__generated__/useUsersDashboardFragment.graphql';
-import { useUsersDashboard } from './useUsersDashboard';
+import type { useEventsDashboardFragment$key } from '@local/__generated__/useEventsDashboardFragment.graphql';
+import { useEventsDashboard } from './useEventsDashboard';
 import { useForm } from '@local/core';
-import UpdateOrganizer from './UserDashboardActions/UpdateOrganizer';
 
-export type UsersDashboardSearchFilter = {
-    firstName: string;
-    lastName: string;
-    email: string;
+export type EventsDashboardSearchFilter = {
+    orgName: string;
+    eventName: string;
 };
 
 interface SearchBarProps {
-    handleSearchFilter: (filter: UsersDashboardSearchFilter) => void;
+    handleSearchFilter: (filter: EventsDashboardSearchFilter) => void;
 }
 
 // TODO: Add filtering for current results (Ie. filter by column (asc/desc))
 function SearchBar({ handleSearchFilter }: SearchBarProps) {
     const initialState = {
-        firstName: '',
-        lastName: '',
-        email: '',
+        orgName: '',
+        eventName: '',
     };
     const [form, , handleSubmit, handleChange] = useForm(initialState);
     return (
@@ -46,24 +43,21 @@ function SearchBar({ handleSearchFilter }: SearchBarProps) {
             })}
         >
             <Grid container paddingX='2rem' paddingY='1rem' columnSpacing='1rem' alignItems='center'>
+                {/* <Grid item>
+                    <TextField
+                        label='Org Name'
+                        aria-label='Org Name'
+                        value={form.orgName}
+                        onChange={handleChange('orgName')}
+                    />
+                </Grid> */}
                 <Grid item>
                     <TextField
-                        label='First Name'
-                        aria-label='First Name'
-                        value={form.firstName}
-                        onChange={handleChange('firstName')}
+                        label='Event Name'
+                        aria-label='Event Name'
+                        value={form.eventName}
+                        onChange={handleChange('eventName')}
                     />
-                </Grid>
-                <Grid item>
-                    <TextField
-                        label='Last Name'
-                        aria-label='Last Name'
-                        value={form.lastName}
-                        onChange={handleChange('lastName')}
-                    />
-                </Grid>
-                <Grid item>
-                    <TextField label='Email' aria-label='Email' value={form.email} onChange={handleChange('email')} />
                 </Grid>
                 <Grid item>
                     <IconButton
@@ -83,12 +77,12 @@ function SearchBar({ handleSearchFilter }: SearchBarProps) {
     );
 }
 
-interface UsersTableProps {
-    fragmentRef: useUsersDashboardFragment$key;
+interface EventsTableProps {
+    fragmentRef: useEventsDashboardFragment$key;
 }
 
-export function UsersTable({ fragmentRef }: UsersTableProps) {
-    const { users, hasNext, loadNext, isLoadingNext, refresh } = useUsersDashboard({ fragmentRef });
+export function EventsTable({ fragmentRef }: EventsTableProps) {
+    const { events, hasNext, loadNext, isLoadingNext, refresh } = useEventsDashboard({ fragmentRef });
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -97,8 +91,8 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = React.useMemo(
-        () => (page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0),
-        [page, rowsPerPage, users.length]
+        () => (page > 0 ? Math.max(0, (1 + page) * rowsPerPage - events.length) : 0),
+        [page, rowsPerPage, events.length]
     );
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -114,8 +108,12 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
     //     console.log(id);
     //     // TODO: Confirmation dialog
     // };
+    // const handleEdit = (id: string) => {
+    //     console.log(id);
+    //     // TODO: Implement edit button to premote/demote as organizers
+    // };
 
-    const handleSearchFilter = (filter: UsersDashboardSearchFilter) => {
+    const handleSearchFilter = (filter: EventsDashboardSearchFilter) => {
         refresh(filter);
     };
 
@@ -123,7 +121,7 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
         if (hasNext && !isLoadingNext) loadNext(FETCH_AMMOUNT);
     }, [hasNext, loadNext, isLoadingNext]);
 
-    const usersListLength = React.useMemo(() => users.length, [users]);
+    const usersListLength = React.useMemo(() => events.length, [events]);
     const nextPageIsLastPage = React.useMemo(
         () => page + 1 > Math.ceil(usersListLength / rowsPerPage) - 1,
         [page, rowsPerPage, usersListLength]
@@ -143,52 +141,62 @@ export function UsersTable({ fragmentRef }: UsersTableProps) {
                     <TableHead>
                         <TableRow>
                             <TableCell style={{ width: 250 }}>
-                                <Typography fontWeight='bold'>Name</Typography>
+                                <Typography fontWeight='bold'>Title</Typography>
                             </TableCell>
                             <TableCell style={{ width: 250 }}>
-                                <Typography fontWeight='bold'>Email</Typography>
-                            </TableCell>
-                            <TableCell style={{ width: 150 }}>
-                                <Typography fontWeight='bold'>User Type</Typography>
+                                <Typography fontWeight='bold'>Organization</Typography>
                             </TableCell>
                             <TableCell style={{ width: 200 }}>
-                                <Typography fontWeight='bold'>Last Login Date</Typography>
+                                <Typography fontWeight='bold'>Start Date</Typography>
                             </TableCell>
-                            <TableCell />
-                            {/* <TableCell /> */}
+                            <TableCell style={{ width: 200 }}>
+                                <Typography fontWeight='bold'>End Date</Typography>
+                            </TableCell>
+                            {/* <TableCell />
+                            <TableCell /> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {(rowsPerPage > 0
-                            ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : users
-                        ).map((user) => (
-                            <TableRow key={user.id}>
+                            ? events.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : events
+                        ).map((event) => (
+                            <TableRow key={event.id}>
                                 <TableCell>
-                                    <Typography>{user.firstName + ' ' + user.lastName}</Typography>
+                                    <Typography>{event.title}</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography>{user.email}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography>{user.canMakeOrgs ? 'Organizer' : 'Participant'}</Typography>
+                                    <Typography>{event.organization?.name}</Typography>
                                 </TableCell>
                                 <TableCell>
                                     {/* TODO: Get this from the backend */}
                                     <Typography>
-                                        {date.toLocaleDateString() +
+                                        {new Date(event.startDateTime || date).toLocaleDateString() +
                                             ' ' +
-                                            date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            new Date(event.startDateTime || date).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    {/* <Button variant='contained' onClick={() => handleEdit(user.id)}>
-                                        Edit
-                                    </Button> */}
-                                    <UpdateOrganizer userId={user.id} canMakeOrgs={!!user.canMakeOrgs} />
+                                    {/* TODO: Get this from the backend */}
+                                    <Typography>
+                                        {new Date(event.endDateTime || date).toLocaleDateString() +
+                                            ' ' +
+                                            new Date(event.endDateTime || date).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
+                                    </Typography>
                                 </TableCell>
                                 {/* <TableCell>
-                                    <Button variant='contained' color='error' onClick={() => handleDelete(user.id)}>
+                                    <Button variant='contained' onClick={() => handleEdit(event.id)}>
+                                        Edit
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant='contained' color='error' onClick={() => handleDelete(event.id)}>
                                         Delete
                                     </Button>
                                 </TableCell> */}

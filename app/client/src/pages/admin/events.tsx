@@ -13,10 +13,6 @@ export default function Admin() {
         if (!isLoading && (!user || !user.isAdmin)) router.push('/');
     }, [isLoading, user, router]);
 
-    if (isLoading) return <Loader />;
-    return (
-        <div>
-            <EventsDashboard />
-        </div>
-    );
+    if (isLoading || !router.isReady) return <Loader />;
+    return <EventsDashboard />;
 }

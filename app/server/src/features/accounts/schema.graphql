@@ -28,6 +28,10 @@ type User implements Node {
     All the users
     """
     users(first: Int, after: String, filter: UsersSearchFilters): UserConnection
+    """
+    All events
+    """
+    allEvents(first: Int, after: String, filter: EventsSearchFilters): EventConnection
 }
 
 input UsersSearchFilters {
@@ -43,6 +47,18 @@ input UsersSearchFilters {
     Search by email
     """
     email: String
+}
+
+input EventsSearchFilters {
+    """
+    Search by event name
+    """
+    eventName: String
+
+    """
+    Search by organizaiton name
+    """
+    orgName: String
 }
 
 type UserSettings {
@@ -88,6 +104,11 @@ input DeleteAccountForm {
     email: String!
     password: String!
     confirmPassword: String!
+}
+
+input UpdateOrganizerForm {
+    id: ID!
+    canMakeOrgs: Boolean!
 }
 
 input LoginForm {
@@ -151,6 +172,7 @@ type Mutation {
     resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
     resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+    updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
     """
     The logout just returns the timestamp of the logout action
     """

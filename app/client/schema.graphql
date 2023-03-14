@@ -472,6 +472,14 @@ type EventVideoMutationResponse implements MutationResponse {
   message: String!
 }
 
+input EventsSearchFilters {
+  """Search by event name"""
+  eventName: String
+
+  """Search by organizaiton name"""
+  orgName: String
+}
+
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
@@ -577,6 +585,7 @@ type Mutation {
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
   updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
@@ -663,9 +672,6 @@ type Query {
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
-
-  """Fetch all users"""
-  users: [User!]!
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
@@ -763,6 +769,11 @@ input UpdateOrganization {
   orgId: ID!
 }
 
+input UpdateOrganizerForm {
+  canMakeOrgs: Boolean!
+  id: ID!
+}
+
 input UpdatePasswordForm {
   confirmNewPassword: String!
   email: String!
@@ -801,6 +812,9 @@ input UpdateVideo {
 
 """User Data"""
 type User implements Node {
+  """All events"""
+  allEvents(after: String, filter: EventsSearchFilters, first: Int): EventConnection
+
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
   canMakeOrgs: Boolean

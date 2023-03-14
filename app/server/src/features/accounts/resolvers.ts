@@ -3,7 +3,9 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import { findAllEvents } from '../events/methods';
 import * as jwt from '@local/lib/jwt';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
@@ -60,6 +62,15 @@ export const resolvers: Resolvers = {
                 connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
             return connection;
         },
+        async allEvents(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return connectionFromArray([], args);
+            const filter = {
+                eventName: args.filter?.eventName ?? '',
+                orgName: args.filter?.orgName ?? '',
+            };
+            const events = await findAllEvents(ctx.viewer.id, filter, ctx.prisma);
+            return connectionFromArray(events.map(toEventId), args);
+        },
     },
     Mutation: {
         async register(parent, args, ctx, info) {
@@ -110,6 +121,13 @@ export const resolvers: Resolvers = {
                 const { deletedUser } = await User.deleteAccount(ctx.prisma, args.input);
                 ctx.reply.clearCookie('jwt', cookieOptions);
                 return toUserId(deletedUser);
+            });
+        },
+        async updateOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const updatedUser = await User.updateOrganizer(ctx.viewer.id, ctx.prisma, args.input);
+                return toUserId(updatedUser);
             });
         },
     },

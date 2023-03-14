@@ -130,6 +130,8 @@ export type User = Node & {
     events?: Maybe<EventConnection>;
     /** All the users */
     users?: Maybe<UserConnection>;
+    /** All events */
+    allEvents?: Maybe<EventConnection>;
 };
 
 /** User Data */
@@ -151,6 +153,13 @@ export type UserusersArgs = {
     filter?: Maybe<UsersSearchFilters>;
 };
 
+/** User Data */
+export type UserallEventsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<EventsSearchFilters>;
+};
+
 export type UsersSearchFilters = {
     /** Search by first name */
     firstName?: Maybe<Scalars['String']>;
@@ -158,6 +167,13 @@ export type UsersSearchFilters = {
     lastName?: Maybe<Scalars['String']>;
     /** Search by email */
     email?: Maybe<Scalars['String']>;
+};
+
+export type EventsSearchFilters = {
+    /** Search by event name */
+    eventName?: Maybe<Scalars['String']>;
+    /** Search by organizaiton name */
+    orgName?: Maybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -206,6 +222,11 @@ export type DeleteAccountForm = {
     email: Scalars['String'];
     password: Scalars['String'];
     confirmPassword: Scalars['String'];
+};
+
+export type UpdateOrganizerForm = {
+    id: Scalars['ID'];
+    canMakeOrgs: Scalars['Boolean'];
 };
 
 export type LoginForm = {
@@ -266,6 +287,7 @@ export type Mutation = {
     resetPasswordRequest: ResetPasswordRequestMutationResponse;
     resetPassword: ResetPasswordMutationResponse;
     deleteAccount: UserMutationResponse;
+    updateOrganizer: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -343,6 +365,10 @@ export type MutationresetPasswordArgs = {
 
 export type MutationdeleteAccountArgs = {
     input: DeleteAccountForm;
+};
+
+export type MutationupdateOrganizerArgs = {
+    input: UpdateOrganizerForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -1378,6 +1404,7 @@ export type ResolversTypes = {
     User: ResolverTypeWrapper<User>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
     UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -1385,6 +1412,7 @@ export type ResolversTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
@@ -1509,6 +1537,7 @@ export type ResolversParentTypes = {
     User: User;
     Int: Scalars['Int'];
     UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
@@ -1516,6 +1545,7 @@ export type ResolversParentTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
@@ -1759,6 +1789,12 @@ export type UserResolvers<
         ContextType,
         RequireFields<UserusersArgs, never>
     >;
+    allEvents?: Resolver<
+        Maybe<ResolversTypes['EventConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserallEventsArgs, never>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1876,6 +1912,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationdeleteAccountArgs, 'input'>
+    >;
+    updateOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateOrganizerArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<
@@ -2898,6 +2940,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
         events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
         users?: LoaderResolver<Maybe<UserConnection>, User, UserusersArgs, TContext>;
+        allEvents?: LoaderResolver<Maybe<EventConnection>, User, UserallEventsArgs, TContext>;
     };
 
     UserSettings?: {
