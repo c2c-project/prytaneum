@@ -106,6 +106,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const { user } = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
     const [isOrganizer, setIsOrganizer] = React.useState(false);
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     function handleClick(key: Keys) {
         return () => {
@@ -118,6 +119,8 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     React.useEffect(() => {
         if (user?.isOrganizer) setIsOrganizer(true);
         else setIsOrganizer(false);
+        if (user?.isAdmin) setIsAdmin(true);
+        else setIsAdmin(false);
     }, [user]);
 
     React.useEffect(() => {
@@ -186,23 +189,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                         </StyledListItem>
                     </>
                 </RoleGuard>
-                {/* <RoleGuard organizer={data.isOrganizer} moderator={isModerator}>
-                    <>
-                        <StyledSubheader>MODERATOR AND ORGANIZER</StyledSubheader>
-                        <StyledDivider />
-
-                        <StyledListItem
-                            onClick={handleClick('My Organizations')}
-                            selected={selected === 'My Organizations'}
-                        >
-                            <StyledListItemIcon>
-                                <ListIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary='MODERATOR AND ORGANIZER' />
-                        </StyledListItem>
-                    </>
-                </RoleGuard> */}
-                {user?.isAdmin === true && (
+                <RoleGuard admin={isAdmin}>
                     <React.Fragment>
                         <StyledSubheader>Admin</StyledSubheader>
                         <StyledDivider />
@@ -225,7 +212,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                             <ListItemText primary='Event Dashboard' />
                         </StyledListItem>
                     </React.Fragment>
-                )}
+                </RoleGuard>
             </AnimateSharedLayout>
         </List>
     );
