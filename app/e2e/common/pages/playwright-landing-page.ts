@@ -105,20 +105,20 @@ export class PlaywrightLandingPage {
         const loginButton = this.page.getByRole('button', { name: 'Login' });
         await expect(loginButton).toBeVisible();
         await loginButton.click();
-        await this.page.waitForNavigation();
+        await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
 
     async submitRegisterForm() {
         const registerButton = this.page.getByRole('button', { name: 'Register' });
         await expect(registerButton).toBeVisible();
         await registerButton.click();
-        await this.page.waitForNavigation();
+        await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
 
     async clickOnLargeRegisterButton() {
         await expect(this.largeRegisterButton).toBeVisible();
         await this.largeRegisterButton.click();
-        await this.page.waitForNavigation();
+        await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
     // Route Checks
     async amLoggedIn() {
