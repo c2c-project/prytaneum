@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import { Grid, Typography, Button, useMediaQuery } from '@mui/material';
+import Image from 'next/image';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
+import useTheme from '@mui/styles/useTheme';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 25,
     },
     text: {
-        textAlign: 'right',
+        textAlign: 'center',
         color: '#272C6C',
         fontFamily: 'Manrope',
         fontWeight: 400,
@@ -52,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function CallToAction() {
+    const theme = useTheme();
+    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
     const router = useRouter();
 
@@ -66,7 +70,7 @@ export function CallToAction() {
                     objectFit='contain'
                 />
             </Grid>
-            <Grid item xs={12} md={6} marginLeft={-16} marginTop={-13}>
+            <Grid item xs={12} md={6} marginLeft={mdBreakpoint ? 0 : -10} marginTop={-13}>
                 <Image
                     data-test-id='landing-prytanum-logo'
                     alt='Prytaneum Logo'
@@ -78,12 +82,13 @@ export function CallToAction() {
                 <Typography variant='h5' className={classes.subtitle} marginTop={-1}>
                     A crucial tool for a better democracy.
                 </Typography>
-                <Grid item marginLeft={14} marginTop={2}>
+                <Grid item marginLeft={mdBreakpoint ? 0 : 14} marginTop={2}>
                     <Typography variant='h6' className={classes.text}>
-                        This town hall platform leverages AI and big data to enable meaningful democratic engagement between residents and public officials.
+                        This town hall platform leverages AI and big data to enable meaningful democratic engagement
+                        between residents and public officials.
                     </Typography>
                 </Grid>
-                <Grid container marginLeft={30} marginTop={3}>
+                <Grid item container marginLeft={mdBreakpoint ? 0 : 5} marginTop={3} justifyContent='center'>
                     <Grid item marginRight={3}>
                         <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
                             Get Started
