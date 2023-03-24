@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center',
         },
     },
+    landing: {
+        width: '100%',
+        minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
+        margin: 0,
+    },
     subtitle: {
         textAlign: 'right',
         color: '#D79922',
@@ -60,7 +65,14 @@ export function CallToAction() {
     const router = useRouter();
 
     return (
-        <>
+        <Grid
+            container
+            alignItems='center'
+            justifyContent='center'
+            spacing={2}
+            className={classes.landing}
+            marginTop={-10}
+        >
             <Grid item xs={12} md={6} className={classes.header}>
                 <Image
                     alt='Prytaneum Landing Graphic'
@@ -101,6 +113,6 @@ export function CallToAction() {
                     </Grid>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
 }
