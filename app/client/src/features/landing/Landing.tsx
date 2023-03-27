@@ -8,6 +8,7 @@ import useTheme from '@mui/styles/useTheme';
 import { CallToAction } from '@local/features/landing/CallToAction';
 import { Blurb } from '@local/features/landing/Blurb';
 import { Roles as RolesPanel } from './Panels/Roles';
+import { MobileRoles as MobileRolesPanel } from './Panels/MobileRoles';
 import { Views as ViewsPanel } from './Panels/Views';
 import ReactPlayer from 'react-player';
 
@@ -56,6 +57,7 @@ export default function Landing() {
     const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
     const router = useRouter();
+    const [isMobile] = React.useState(window.innerWidth < 640);
 
     console.log(mdBreakpoint);
 
@@ -102,7 +104,7 @@ export default function Landing() {
 
             {/* This is the only section of the page that doesn't need the style prop detailed above. */}
             <ViewsPanel />
-            <RolesPanel />
+            {isMobile ? <MobileRolesPanel /> : <RolesPanel />}
             {/* BOTTOM BANNER SECTION */}
             <Grid
                 container
