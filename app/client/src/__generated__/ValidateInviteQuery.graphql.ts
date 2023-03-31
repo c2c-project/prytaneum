@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e4007b24e0547f5279d979885afd04ab>>
+ * @generated SignedSource<<3bb1e353c6527e0846b18d241e045856>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,14 +17,6 @@ export type ValidateInviteQueryVariables = ValidateInviteQuery$variables;
 export type ValidateInviteQuery$data = {
   readonly validateInvite: {
     readonly valid: boolean;
-    readonly user: {
-      readonly id: string;
-      readonly firstName: string | null;
-      readonly lastName: string | null;
-      readonly email: string | null;
-      readonly avatar: string | null;
-      readonly isAdmin: boolean | null;
-    } | null;
   };
 };
 export type ValidateInviteQueryResponse = ValidateInviteQuery$data;
@@ -76,59 +68,6 @@ v2 = [
         "kind": "ScalarField",
         "name": "valid",
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "user",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "firstName",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "lastName",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "email",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "avatar",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isAdmin",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -158,16 +97,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "3dd2c3c4d1e09b57841afdbb8d19c1b6",
+    "cacheID": "4d6e8c33ff2d4886f94f1b822de8c5b7",
     "id": null,
     "metadata": {},
     "name": "ValidateInviteQuery",
     "operationKind": "query",
-    "text": "query ValidateInviteQuery(\n  $token: String!\n  $eventId: ID!\n) {\n  validateInvite(input: {token: $token, eventId: $eventId}) {\n    valid\n    user {\n      id\n      firstName\n      lastName\n      email\n      avatar\n      isAdmin\n    }\n  }\n}\n"
+    "text": "query ValidateInviteQuery(\n  $token: String!\n  $eventId: ID!\n) {\n  validateInvite(input: {token: $token, eventId: $eventId}) {\n    valid\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f88ecc14ac9c525ae385ada4bafb4543";
+(node as any).hash = "3d9ed8edb405c82cec726d830562912d";
 
 export default node;

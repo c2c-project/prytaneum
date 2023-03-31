@@ -15,8 +15,6 @@ import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.gr
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
-import { useRouter } from 'next/router';
-import { useSnack } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,9 +80,7 @@ export interface EventLiveProps {
 
 export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
-    const router = useRouter();
-    const { displaySnack } = useSnack();
+    usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -115,13 +111,6 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
             inline: 'nearest',
         });
     };
-
-    React.useEffect(() => {
-        if (!validateInvite?.valid) {
-            displaySnack('Invalid invite token', { variant: 'error' });
-            router.push('/');
-        }
-    }, [displaySnack, router, validateInvite]);
 
     if (!node) return <EventSidebarLoader />;
 

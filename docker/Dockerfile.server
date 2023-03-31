@@ -23,8 +23,6 @@ RUN yarn workspace @app/server build
 FROM node:16.14.2-alpine AS production-stage
 WORKDIR /usr/monorepo
 # Set appropriate env variables
-ARG ORIGIN=https://prytaneum.io
-ENV ORIGIN $ORIGIN
 ENV NODE_ENV production
 ENV HOST 0.0.0.0
 ENV PORT 3002

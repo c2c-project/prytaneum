@@ -129,4 +129,3 @@ allure-report/
 allure-results/
 state/
 screenshots/
-*.csv
