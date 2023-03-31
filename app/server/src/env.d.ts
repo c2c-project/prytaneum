@@ -4,6 +4,7 @@ declare global {
             NODE_ENV: 'production' | 'development' | 'staging' | 'test';
             PORT: string;
             HOST: string;
+            ORIGIN: string;
             COOKIE_SECRET: string;
             JWT_SECRET: string;
             NODE_ENV: string;

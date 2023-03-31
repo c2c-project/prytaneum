@@ -13,7 +13,7 @@ env:
     SERVER_DEPLOYMENT: prytaneum-server
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: production
-    GRAPHQL_URL: https://prytaneum.io/graphql
+    ORIGIN: https://prytaneum.io
     DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
     GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
 
@@ -55,6 +55,7 @@ jobs:
                   docker build \
                     -f ./docker/Dockerfile.server \
                     --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --build-arg ORIGIN="$ORIGIN" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     .
