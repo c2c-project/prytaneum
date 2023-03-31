@@ -364,11 +364,7 @@ export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPas
     const accountFound = !!result;
 
     // No need to send email if the account does not exist
-    if (!accountFound)
-        throw new ProtectedError({
-            userMessage: 'Internal error occured, try again later.',
-            internalMessage: 'No account with that email was found',
-        });
+    if (!accountFound) throw new Error('No account with that email was found');
 
     const token = await jwt.sign({ email: input.email });
     const passwordResetLink = `prytaneum.io/reset-password?token=${token}`;
@@ -384,7 +380,7 @@ export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPas
     } catch (err) {
         const server = getOrCreateServer();
         server.log.error(err);
-        throw new ProtectedError({ userMessage: errors.email, internalMessage: err.message });
+        throw new Error(errors.email);
     }
 }
 
