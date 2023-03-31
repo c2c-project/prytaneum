@@ -950,6 +950,7 @@ export type Query = {
   promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
   prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  /** Validates an invite token and logs the user in if they are already registered. */
   validateInvite: ValidateInviteQueryResponse;
   validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
 };
@@ -1335,6 +1336,7 @@ export type ValidateInvite = {
 
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
+  user?: Maybe<User>;
   valid: Scalars['Boolean'];
 };
 

@@ -672,6 +672,10 @@ type Query {
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
+
+  """
+  Validates an invite token and logs the user in if they are already registered.
+  """
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
@@ -877,6 +881,7 @@ input ValidateInvite {
 }
 
 type ValidateInviteQueryResponse {
+  user: User
   valid: Boolean!
 }
 
