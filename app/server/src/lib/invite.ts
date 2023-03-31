@@ -39,6 +39,7 @@ const generateInviteLink = async (
         const randomPassword =
             Math.random().toString(36).slice(-8) + 'zZ' + Math.floor(Math.random() * 10).toString() + '!';
         user = await register(prisma, { email, firstName: first, lastName: last }, randomPassword);
+        // TODO: Add user to event invited list
     } else {
         user = result;
     }
@@ -95,6 +96,7 @@ const generateRecipiantVariables = async (
     return { emails, recipiantVariables: JSON.stringify(recipiantVariables) };
 };
 
+// TODO Add timezone suffix to time (e.g. EST)
 const formatDate = (dt: Date): string => {
     const padL = (nr: number, chr = '0') => `${nr}`.padStart(2, chr);
     return `${padL(dt.getMonth() + 1)}/${padL(dt.getDate())}/${dt.getFullYear()} ${padL(dt.getHours())}:${padL(

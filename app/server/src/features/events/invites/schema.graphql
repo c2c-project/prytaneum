@@ -15,9 +15,13 @@ type InviteMutationResponse implements MutationResponse {
 
 type ValidateInviteQueryResponse {
     valid: Boolean!
+    user: User
 }
 
 type Query {
+    """
+    Validates an invite token and logs the user in if they are already registered.
+    """
     validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
 }
 
