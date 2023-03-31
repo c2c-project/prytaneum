@@ -52,6 +52,7 @@ export type Query = {
     prompt?: Maybe<EventLiveFeedbackPrompt>;
     prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
     promptResponseVotes: Votes;
+    /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
@@ -1010,6 +1011,7 @@ export type InviteMutationResponse = MutationResponse & {
 export type ValidateInviteQueryResponse = {
     __typename?: 'ValidateInviteQueryResponse';
     valid: Scalars['Boolean'];
+    user?: Maybe<User>;
 };
 
 export type HideQuestion = {
@@ -2618,6 +2620,7 @@ export type ValidateInviteQueryResponseResolvers<
     ParentType extends ResolversParentTypes['ValidateInviteQueryResponse'] = ResolversParentTypes['ValidateInviteQueryResponse']
 > = {
     valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3192,6 +3195,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
 
     ValidateInviteQueryResponse?: {
         valid?: LoaderResolver<Scalars['Boolean'], ValidateInviteQueryResponse, {}, TContext>;
+        user?: LoaderResolver<Maybe<User>, ValidateInviteQueryResponse, {}, TContext>;
     };
 
     ModeratorMutationResponse?: {
