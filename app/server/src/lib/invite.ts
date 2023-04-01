@@ -5,6 +5,7 @@ import { sendEmail } from '@local/lib/email';
 import { PrismaClient, User } from '@local/__generated__/prisma';
 import { register } from '@local/features/accounts/methods';
 import { toGlobalId } from '@local/features/utils';
+import { fromGlobalId } from 'graphql-relay';
 
 const toEventId = toGlobalId('Event');
 
@@ -33,24 +34,43 @@ const generateInviteLink = async (
     prisma: PrismaClient
 ): Promise<string> => {
     const { email, first, last } = invitee;
+    const { id: globalEventId } = fromGlobalId(eventId);
     let user: User;
-    const result = await prisma.user.findUnique({ where: { email } });
-    if (!result) {
+    const result = await prisma.user.findFirst({ where: { email: email } });
+    if (result === null) {
         const randomPassword =
             Math.random().toString(36).slice(-8) + 'zZ' + Math.floor(Math.random() * 10).toString() + '!';
-        user = await register(prisma, { email, firstName: first, lastName: last }, randomPassword);
-        // TODO: Add user to event invited list
+        user = await register(prisma, { email: email, firstName: first, lastName: last }, randomPassword);
+        // No need to check if user is already invited to event since their account was just created
+        await prisma.eventInvited.create({
+            data: {
+                user: { connect: { id: user.id } },
+                event: { connect: { id: globalEventId } },
+            },
+        });
     } else {
         user = result;
+        // Check if user is already invited to event
+        const invitedResult = await prisma.eventInvited.findFirst({
+            where: { userId: user.id, eventId: globalEventId },
+        });
+        if (invitedResult === null) {
+            // Add user to event invited list
+            await prisma.eventInvited.create({
+                data: {
+                    user: { connect: { id: user.id } },
+                    event: { connect: { id: globalEventId } },
+                },
+            });
+        }
     }
-    console.log(user);
     // Get time until event endDateTime in hours
     const hoursUntilEventEndTime = Math.floor((endDateTime.getTime() - Date.now()) / 1000 / 60 / 60);
     const jwtOptions: jwt.SignOptions = {
         algorithm: 'HS256',
         expiresIn: (hoursUntilEventEndTime + 24).toString() + 'h',
     };
-    const payload = { email, eventId, autoLogin: true };
+    const payload = { email, eventId };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     return `${process.env.ORIGIN}/events/${eventId}/live?token=${token}`;
 };
