@@ -17,6 +17,7 @@ import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { useRouter } from 'next/router';
 import { useSnack } from '@local/core';
+import { useUser } from '../accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,6 +86,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     const router = useRouter();
     const { displaySnack } = useSnack();
+    const [user] = useUser();
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -121,7 +123,9 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
             displaySnack('Invalid invite token', { variant: 'error' });
             router.push('/');
         }
-    }, [displaySnack, router, validateInvite]);
+        // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
+        if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
+    }, [displaySnack, router, user, validateInvite]);
 
     if (!node) return <EventSidebarLoader />;
 
