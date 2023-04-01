@@ -35,7 +35,12 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
         invitedUserId = userResult.id;
     }
     // Add to invitedOf for event
-    await prisma.eventInvited.create({ data: { eventId: globalEventId, userId: invitedUserId } });
+    await prisma.eventInvited.create({
+        data: {
+            user: { connect: { id: invitedUserId } },
+            event: { connect: { id: globalEventId } },
+        },
+    });
 
     // Sign token
     const token = await sign({ eventId, invitedUserId }); // TODO: expire at some point
@@ -61,12 +66,18 @@ export async function validateInvite(
     try {
         const result = (await verify(token)) as { email: string; eventId: string };
         if (!result.eventId) return { valid: false, user: null };
-        const { id: tokenEventId } = fromGlobalId(result.eventId);
+        const { id: globalEventId } = fromGlobalId(result.eventId);
 
         // Ensure token is being used for the correct event
-        if (eventId !== tokenEventId) return { valid: false, user: null };
+        if (eventId !== globalEventId) return { valid: false, user: null };
         // Get user if valid
         const user = await prisma.user.findUnique({ where: { email: result.email } });
+        if (!user) throw new Error('User not found.');
+        // Ensure user is invited to event
+        const invitedResult = await prisma.eventInvited.findFirst({
+            where: { userId: user.id, eventId: globalEventId },
+        });
+        if (!invitedResult) throw new Error('User not invited to event.');
         return { valid: true, user };
     } catch (err) {
         server.log.error(err);
