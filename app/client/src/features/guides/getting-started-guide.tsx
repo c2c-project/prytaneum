@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Chip, Grid, Link, Paper, Typography } from '@mui/material';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import makeStyles from '@mui/styles/makeStyles';
@@ -50,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         padding: theme.spacing(2),
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export default function GettingStartedGuide() {
@@ -58,11 +60,11 @@ export default function GettingStartedGuide() {
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
             <Grid item xs={4} sm={3}>
-                <Image
+                <img
+                    className={classes.contain}
                     src='/static/prytaneum_logo.svg'
-                    width={1107}
-                    height={1108}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>

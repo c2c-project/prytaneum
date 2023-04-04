@@ -44,6 +44,7 @@ module.exports = {
         'react/require-default-props': 'off',
         'import/no-anonymous-default-export': 'off',
         'react/display-name': [0, { ignoreTranspilerName: true }],
+        '@next/next/no-img-element': 'off',
     },
     overrides: [
         {

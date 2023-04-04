@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Link, Typography } from '@mui/material';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import makeStyles from '@mui/styles/makeStyles';
@@ -28,6 +27,9 @@ const useStyles = makeStyles(() => ({
     icon: {
         fontSize: '2.25rem',
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export default function Guide() {
@@ -36,11 +38,11 @@ export default function Guide() {
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
             <Grid item xs={4} sm={3}>
-                <Image
+                <img
+                    className={classes.contain}
                     src='/static/prytaneum_logo.svg'
-                    width={1107}
-                    height={1108}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>
