@@ -6,6 +6,7 @@ on:
             - staging
         paths:
             - 'app/client/**'
+            - 'k8s/client/development/**'
             - 'docker/Dockerfile.client'
 
 env:
