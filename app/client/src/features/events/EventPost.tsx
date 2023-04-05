@@ -1,17 +1,19 @@
-import { ConditionalRender } from '@local/components';
-import { EventContext, EventSidebar } from '@local/features/events';
-import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
+import React from 'react';
+import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import type { FragmentRefs } from 'relay-runtime';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
-import React from 'react';
-import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import Image from 'next/image';
 
-import { EventDetailsCard } from './EventDetailsCard';
+import { ConditionalRender, Loader } from '@local/components';
+import { EventContext, EventSidebar } from '@local/features/events';
+import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
 import { SpeakerList } from './Speakers';
+import { useEventDetails } from './useEventDetails';
+import { EventDetailsCard } from './EventDetailsCard';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,23 +66,30 @@ const EVENT_POST_QUERY = graphql`
                 startDateTime
                 isActive
                 ...EventSidebarFragment
+                ...EventDetailsFragment
                 ...useBroadcastMessageListFragment
-                ...EventDetailsCardFragment
                 ...SpeakerListFragment
             }
         }
     }
 `;
 
-export interface PreloadedEventLiveProps {
-    eventLiveQueryRef: PreloadedQuery<EventPostQuery>;
+type Node = {
+    readonly id: string;
+    readonly isViewerModerator?: boolean | null | undefined;
+    readonly startDateTime?: Date | null | undefined;
+    readonly isActive?: boolean | null | undefined;
+    readonly ' $fragmentSpreads': FragmentRefs<any>
 }
 
-export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
+export interface EventPostProps {
+    node: Node;
+}
+
+export function EventPost({ node }: EventPostProps) {
     // styles
     const classes = useStyles();
-
-    const { node } = usePreloadedQuery(EVENT_POST_QUERY, eventLiveQueryRef);
+    const { eventData } = useEventDetails({ fragmentRef: node });
 
     if (!node) return <h1>Loading Post-Event Page...</h1>;
 
@@ -102,7 +111,7 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
                             to the right.
                         </Typography>
                         <Card className={classes.secondaryCard}>
-                            <EventDetailsCard fragmentRef={node} />
+                            <EventDetailsCard eventData={eventData} />
                             <SpeakerList fragmentRef={node} />
                         </Card>
                         <Typography variant='h6' className={classes.title}>
@@ -151,11 +160,21 @@ export function EventPost({ eventLiveQueryRef }: PreloadedEventLiveProps) {
     );
 }
 
-export interface PreloadedEventPreProps {
+export interface EventPostContainerProps {
+    eventLiveQueryRef: PreloadedQuery<EventPostQuery>;
+}
+
+export function EventPostContainer({ eventLiveQueryRef }: EventPostContainerProps) {
+    const { node } = usePreloadedQuery(EVENT_POST_QUERY, eventLiveQueryRef);
+    if (!node) return <Loader />;
+    return <EventPost node={node} />;
+}
+
+export interface PreloadedEventPostProps {
     eventId: string;
 }
 
-export default function PreloadedEventPost({ eventId }: PreloadedEventPreProps) {
+export default function PreloadedEventPost({ eventId }: PreloadedEventPostProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventPostQuery>(EVENT_POST_QUERY);
 
     React.useEffect(() => {
@@ -165,8 +184,8 @@ export default function PreloadedEventPost({ eventId }: PreloadedEventPreProps) 
     if (!eventLiveQueryRef) return <h1>Loading Post-Event Page...</h1>;
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<EventPost eventLiveQueryRef={eventLiveQueryRef} />}>
-                <EventPost eventLiveQueryRef={eventLiveQueryRef} />
+            <React.Suspense fallback={<EventPostContainer eventLiveQueryRef={eventLiveQueryRef} />}>
+                <EventPostContainer eventLiveQueryRef={eventLiveQueryRef} />
             </React.Suspense>
         </ConditionalRender>
     );

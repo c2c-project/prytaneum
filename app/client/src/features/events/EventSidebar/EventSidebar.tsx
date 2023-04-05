@@ -23,7 +23,6 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
         id
         isQuestionFeedVisible
         isViewerModerator
-        ...EventDetailsCardFragment
         ...SpeakerListFragment
         ...useQuestionListFragment
         ...useBroadcastMessageListFragment
@@ -143,7 +142,7 @@ export const EventSidebar = ({ fragmentRef, override }: EventSidebarProps) => {
                     {data.isViewerModerator === true && !override && <Tab label='Queue' value='Queue' />}
                     <Tab label='Questions' value='Questions' />
                     <Tab label='Feedback' value='Feedback' />
-                    {!override && <Tab label='Broadcast' value='Broadcast' />}
+                    {data.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
                 </Tabs>
                 {data.isViewerModerator === true && <QuestionQueue fragmentRef={data} isVisible={tab === 'Queue'} />}
                 <QuestionList fragmentRef={data} ActionButtons={displayActionButtons} isVisible={tab === 'Questions'} />
@@ -152,7 +151,7 @@ export const EventSidebar = ({ fragmentRef, override }: EventSidebarProps) => {
                     ActionButtons={displayActionButtons}
                     isVisible={tab === 'Feedback'}
                 />
-                <PreloadedBroadcastMessageList isVisible={tab === 'Broadcast'} />
+                {data.isViewerModerator === true && <PreloadedBroadcastMessageList isVisible={tab === 'Broadcast'} />}
             </Grid>
         </Grid>
     );

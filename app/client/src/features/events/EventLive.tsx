@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { Fab } from '@local/components/Fab';
-import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
+import { EventSidebar, EventVideo, EventContext } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
@@ -21,6 +21,7 @@ import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStart
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { useSnack } from '@local/core';
 import { useUser } from '../accounts';
+import { useEventDetails } from './useEventDetails';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,10 +63,11 @@ export const EVENT_LIVE_QUERY = graphql`
             ... on Event {
                 isViewerModerator
                 isActive
+                isPrivate
                 ...EventSidebarFragment
                 ...useBroadcastMessageListFragment
                 ...EventVideoFragment
-                ...EventDetailsCardFragment
+                ...useEventDetailsFragment
                 ...SpeakerListFragment
             }
         }
@@ -100,6 +102,25 @@ function EventLive({ node }: EventLiveProps) {
     const { displaySnack } = useSnack();
     const router = useRouter();
     const eventId = router.query.id as string;
+    const { eventData, isLive } = useEventDetails({ fragmentRef: node });
+    const isModerator = Boolean(node.isViewerModerator);
+    
+    React.useEffect(() => {
+        if (eventData.isActive || isModerator) return;
+        const now = new Date();
+        if (!eventData.isActive && !isModerator) {
+            if (eventData.endDateTime === null) {
+                router.push(`/events/${eventId}/post`);
+                return;
+            }
+            if (now > eventData.endDateTime) {
+                router.push(`/events/${eventId}/post`);
+            } else {
+                router.push(`/events/${eventId}/pre`);
+                
+            }
+        }
+    }, [eventData, eventData.endDateTime, eventData.isActive, eventId, isLive, isModerator, router]);
 
     // styles
     const classes = useStyles();
@@ -152,7 +173,7 @@ function EventLive({ node }: EventLiveProps) {
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
     const [buttonText, setButtonText] = React.useState(node.isActive ? 'End' : 'Start');
 
-    if (!node) return <EventSidebarLoader />;
+    if (!node || (!isLive && !isModerator)) return <Loader />;
 
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
@@ -196,7 +217,7 @@ function EventLive({ node }: EventLiveProps) {
                     <Grid item className={classes.video}>
                         <EventVideo fragmentRef={node} />
                     </Grid>
-                    <EventDetailsCard fragmentRef={node} />
+                    <EventDetailsCard eventData={eventData} />
                     <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
@@ -216,24 +237,31 @@ function EventLive({ node }: EventLiveProps) {
 interface EventLiveContainerProps {
     eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
     validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
+    tokenProvided: boolean;
 }
 
-function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveContainerProps) {
+function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenProvided }: EventLiveContainerProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     const { displaySnack } = useSnack();
     const router = useRouter();
     const [user] = useUser();
 
-    // TODO: Implement private event validation here
+    // Handle private events and token validation
     React.useEffect(() => {
-        if (!validateInvite?.valid) {
+        if (!tokenProvided && node?.isPrivate === false) {
+            return;
+        }
+        if (!tokenProvided && node?.isPrivate === true) {
+            // TODO: Check invited list for user
+        }
+        if (!validateInvite?.valid && node?.isPrivate === true) {
             displaySnack('Invalid invite token', { variant: 'error' });
             router.push('/');
         }
         // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
         if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
-    }, [displaySnack, router, user, validateInvite]);
+    }, [displaySnack, node?.isPrivate, router, tokenProvided, user, validateInvite]);
 
     if (!node || !validateInvite) return <Loader />;
     return <EventLive node={node} />;
@@ -262,6 +290,6 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
-    return <EventLiveContainer eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
+    if (!eventLiveQueryRef || !validateInviteQueryRef) return <Loader />;
+    return <EventLiveContainer eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} tokenProvided={!!token} />;
 }

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4a52b8aa8fa1120e032b4980f1054c6f>>
+ * @generated SignedSource<<8aacbbfb4faf96ca8df0f9ac2011a747>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,19 +10,19 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type EventDetailsCardRefetchQuery$variables = {
+export type UseEventDetailsRefetchQuery$variables = {
   id: string;
 };
-export type EventDetailsCardRefetchQueryVariables = EventDetailsCardRefetchQuery$variables;
-export type EventDetailsCardRefetchQuery$data = {
+export type UseEventDetailsRefetchQueryVariables = UseEventDetailsRefetchQuery$variables;
+export type UseEventDetailsRefetchQuery$data = {
   readonly node: {
-    readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment">;
+    readonly " $fragmentSpreads": FragmentRefs<"useEventDetailsFragment">;
   } | null;
 };
-export type EventDetailsCardRefetchQueryResponse = EventDetailsCardRefetchQuery$data;
-export type EventDetailsCardRefetchQuery = {
-  variables: EventDetailsCardRefetchQueryVariables;
-  response: EventDetailsCardRefetchQuery$data;
+export type UseEventDetailsRefetchQueryResponse = UseEventDetailsRefetchQuery$data;
+export type UseEventDetailsRefetchQuery = {
+  variables: UseEventDetailsRefetchQueryVariables;
+  response: UseEventDetailsRefetchQuery$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -45,7 +45,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "EventDetailsCardRefetchQuery",
+    "name": "UseEventDetailsRefetchQuery",
     "selections": [
       {
         "alias": null,
@@ -58,7 +58,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "EventDetailsCardFragment"
+            "name": "useEventDetailsFragment"
           }
         ],
         "storageKey": null
@@ -71,7 +71,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "EventDetailsCardRefetchQuery",
+    "name": "UseEventDetailsRefetchQuery",
     "selections": [
       {
         "alias": null,
@@ -109,6 +109,13 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "topic",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "description",
                 "storageKey": null
               },
@@ -132,13 +139,6 @@ return {
                 "kind": "ScalarField",
                 "name": "isActive",
                 "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "isViewerModerator",
-                "storageKey": null
               }
             ],
             "type": "Event",
@@ -150,16 +150,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e42586857e4671e22ea0d125a669fea8",
+    "cacheID": "6fb6bfcafb182bc9c8cd2144a2552d07",
     "id": null,
     "metadata": {},
-    "name": "EventDetailsCardRefetchQuery",
+    "name": "UseEventDetailsRefetchQuery",
     "operationKind": "query",
-    "text": "query EventDetailsCardRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...EventDetailsCardFragment\n    id\n  }\n}\n\nfragment EventDetailsCardFragment on Event {\n  id\n  title\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n}\n"
+    "text": "query UseEventDetailsRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useEventDetailsFragment\n    id\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n}\n"
   }
 };
 })();
 
-(node as any).hash = "43c13ae5dd3db7282b05dfcdbefacddb";
+(node as any).hash = "a13e385118bfbeea94c827c5a3a1e893";
 
 export default node;
