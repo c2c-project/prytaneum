@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Dialog, DialogTitle, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -35,7 +34,7 @@ export function StyledDialogTitle(props: DialogTitleProps) {
                         color: (theme) => theme.palette.grey[500],
                     }}
                 >
-                    <Image src='/static/Close_Button.svg' alt='Close Button' width='27px' height='27px' />
+                    <img src='/static/Close_Button.svg' alt='Close Button' width='27px' height='27px' />
                 </IconButton>
             ) : null}
         </DialogTitle>

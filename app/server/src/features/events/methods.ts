@@ -287,3 +287,21 @@ export async function findQuestionQueueByEventId(eventId: string, prisma: Prisma
         },
     });
 }
+
+type EventsSearchFilter = {
+    eventName: string;
+    orgName: string;
+};
+
+export async function findAllEvents(viewerId: string, filter: EventsSearchFilter, prisma: PrismaClient) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return [];
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all events.' });
+
+    return prisma.event.findMany({
+        where: {
+            title: { contains: filter.eventName },
+        },
+    });
+}

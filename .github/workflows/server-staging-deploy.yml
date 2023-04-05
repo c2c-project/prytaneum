@@ -5,6 +5,10 @@ on:
         branches:
             - staging
             - 'docker/Dockerfile.server'
+        paths:
+            - 'app/server/**'
+            - 'k8s/server/development/**'
+            - 'docker/Dockerfile.server'
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -13,7 +17,7 @@ env:
     SERVER_DEPLOYMENT: prytaneum-server
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
-    GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    ORIGIN: https://dev.prytaneum.io
     DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
     GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
 
@@ -55,6 +59,7 @@ jobs:
                   docker build \
                     -f ./docker/Dockerfile.server \
                     --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --build-arg ORIGIN="$ORIGIN" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     .

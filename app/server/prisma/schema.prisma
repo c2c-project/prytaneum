@@ -21,6 +21,7 @@ model User {
     password String?
     preferredLang String @db.VarChar(30)
     canMakeOrgs Boolean @default(false)
+    isAdmin Boolean @default(false)
 
     settings UserSettings[]
     memberOf OrgMember[]

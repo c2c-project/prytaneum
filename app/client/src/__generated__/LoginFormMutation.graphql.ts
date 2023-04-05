@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d1ad8f59ebeccbd9b1ecefcb59121ea0>>
+ * @generated SignedSource<<24dee9ba4ff610fca19427c9f97c9b32>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -160,6 +160,13 @@ return {
                 "kind": "ScalarField",
                 "name": "avatar",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isAdmin",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -170,12 +177,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e00e85a3f1382e64df8573ed381ee118",
+    "cacheID": "d4b3331949d63d95ef30ac3e8cf5a054",
     "id": null,
     "metadata": {},
     "name": "LoginFormMutation",
     "operationKind": "mutation",
-    "text": "mutation LoginFormMutation(\n  $input: LoginForm!\n) {\n  login(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n}\n"
+    "text": "mutation LoginFormMutation(\n  $input: LoginForm!\n) {\n  login(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isAdmin\n}\n"
   }
 };
 })();

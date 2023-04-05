@@ -20,6 +20,7 @@ import { SpeakerList } from './Speakers';
 import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
 import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { useSnack } from '@local/core';
+import { useUser } from '../accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -97,7 +98,6 @@ interface EventLiveProps {
 
 function EventLive({ node }: EventLiveProps) {
     const { displaySnack } = useSnack();
-
     const router = useRouter();
     const eventId = router.query.id as string;
 
@@ -221,8 +221,19 @@ interface EventLiveContainerProps {
 function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveContainerProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+    const { displaySnack } = useSnack();
+    const router = useRouter();
+    const [user] = useUser();
 
     // TODO: Implement private event validation here
+    React.useEffect(() => {
+        if (!validateInvite?.valid) {
+            displaySnack('Invalid invite token', { variant: 'error' });
+            router.push('/');
+        }
+        // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
+        if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
+    }, [displaySnack, router, user, validateInvite]);
 
     if (!node || !validateInvite) return <Loader />;
     return <EventLive node={node} />;

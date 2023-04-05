@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Button, DialogContent, Collapse } from '@mui/material';
+import { Grid, Button, DialogContent, Collapse, Tooltip, IconButton, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Theme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { useFragment } from 'react-relay';
-import { CopyText } from '@local/components/CopyText';
+import InfoIcon from '@mui/icons-material/Info';
 
+import { CopyText } from '@local/components/CopyText';
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
+import { useSnack } from '@local/core';
 
 interface EventSettingsProps {
     fragmentRef: EventDetailsFragment$key;
@@ -70,6 +72,9 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     });
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [csvFile, setCSVFile] = React.useState<File | null>(null);
+    const [isUploading, setIsUploading] = React.useState(false);
+    const { displaySnack } = useSnack();
 
     // close all dialogs
     const close = () => dispatch({ type: 'dialog/close-all' });
@@ -88,6 +93,50 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
     const toggleInviteLink = () => {
         if (link === '') generateInviteLink();
         setOpen(!open);
+    };
+
+    const attachCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        if (e.target.files) {
+            // Validate csv file
+            const limit = 5 * 1024 * 1024; // 5 MB
+            if (e.target.files[0]?.size > limit) {
+                displaySnack('File size too large. Max 5MB.', { variant: 'error' });
+                const file = document.getElementById('invite-csv') as HTMLInputElement;
+                file.value = file.defaultValue;
+                return;
+            }
+            setCSVFile(e.target.files[0]);
+        }
+    };
+
+    const uploadCSV = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        if (csvFile === null) return;
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('invite-list', csvFile);
+        formData.append('eventId', eventId);
+        fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL + '/invite-csv', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((res) => {
+                // Remove file from input upon success
+                setCSVFile(null);
+                const file = document.getElementById('invite-csv') as HTMLInputElement;
+                file.value = file.defaultValue;
+                setIsUploading(false);
+                if (res.status === 200) {
+                    displaySnack('Invites queued.', { variant: 'success' });
+                } else {
+                    displaySnack('Invites failed to upload.', { variant: 'error' });
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setIsUploading(false);
+            });
     };
 
     return (
@@ -113,6 +162,18 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 <Collapse in={open} style={{ display: 'flex', flex: 1 }}>
                     <CopyText TextFieldProps={{ label: 'Invite Link' }} text={link} />
                 </Collapse>
+            </Grid>
+            <Grid container direction='row' alignItems='center' justifyContent='right'>
+                <Typography textAlign='center'>Invite Via CSV</Typography>
+                <Tooltip title='Header row are required to be: first, last, email' enterTouchDelay={0}>
+                    <IconButton>
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+                <input id='invite-csv' type='file' accept='.csv' onChange={attachCSV} />
+                <Button disabled={csvFile === null || isUploading} onClick={uploadCSV} variant='outlined'>
+                    Upload CSV
+                </Button>
             </Grid>
         </Grid>
     );

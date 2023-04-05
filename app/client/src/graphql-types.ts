@@ -610,6 +610,13 @@ export type EventVideoMutationResponse = MutationResponse & {
   message: Scalars['String'];
 };
 
+export type EventsSearchFilters = {
+  /** Search by event name */
+  eventName?: InputMaybe<Scalars['String']>;
+  /** Search by organizaiton name */
+  orgName?: InputMaybe<Scalars['String']>;
+};
+
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
@@ -708,6 +715,7 @@ export type Mutation = {
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
   updateOrganization: OrganizationMutationResponse;
+  updateOrganizer: UserMutationResponse;
   updatePassword: UserMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
@@ -911,6 +919,11 @@ export type MutationUpdateOrganizationArgs = {
 };
 
 
+export type MutationUpdateOrganizerArgs = {
+  input: UpdateOrganizerForm;
+};
+
+
 export type MutationUpdatePasswordArgs = {
   input: UpdatePasswordForm;
 };
@@ -1023,6 +1036,7 @@ export type Query = {
   promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
   prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  /** Validates an invite token and logs the user in if they are already registered. */
   validateInvite: ValidateInviteQueryResponse;
   validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
 };
@@ -1287,6 +1301,11 @@ export type UpdateOrganization = {
   orgId: Scalars['ID'];
 };
 
+export type UpdateOrganizerForm = {
+  canMakeOrgs: Scalars['Boolean'];
+  id: Scalars['ID'];
+};
+
 export type UpdatePasswordForm = {
   confirmNewPassword: Scalars['String'];
   email: Scalars['String'];
@@ -1326,17 +1345,31 @@ export type UpdateVideo = {
 /** User Data */
 export type User = Node & {
   __typename?: 'User';
+  /** All events */
+  allEvents?: Maybe<EventConnection>;
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
+  canMakeOrgs?: Maybe<Scalars['Boolean']>;
   email?: Maybe<Scalars['String']>;
   /** Events that this user is a moderator of, or has been invited to */
   events?: Maybe<EventConnection>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  isAdmin?: Maybe<Scalars['Boolean']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+  /** All the users */
+  users?: Maybe<UserConnection>;
+};
+
+
+/** User Data */
+export type UserAllEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<EventsSearchFilters>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1350,6 +1383,14 @@ export type UserEventsArgs = {
 /** User Data */
 export type UserOrganizationsArgs = {
   after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** User Data */
+export type UserUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<UsersSearchFilters>;
   first?: InputMaybe<Scalars['Int']>;
 };
 
@@ -1382,6 +1423,15 @@ export type UserSettings = {
   updatePassword?: Maybe<Scalars['String']>;
 };
 
+export type UsersSearchFilters = {
+  /** Search by email */
+  email?: InputMaybe<Scalars['String']>;
+  /** Search by first name */
+  firstName?: InputMaybe<Scalars['String']>;
+  /** Search by last name */
+  lastName?: InputMaybe<Scalars['String']>;
+};
+
 export type ValidateInvite = {
   eventId: Scalars['ID'];
   token: Scalars['String'];
@@ -1389,6 +1439,7 @@ export type ValidateInvite = {
 
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
+  user?: Maybe<User>;
   valid: Scalars['Boolean'];
 };
 

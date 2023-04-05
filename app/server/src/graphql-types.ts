@@ -53,6 +53,7 @@ export type Query = {
     prompt?: Maybe<EventLiveFeedbackPrompt>;
     prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
     promptResponseVotes: Votes;
+    /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
@@ -125,12 +126,18 @@ export type User = Node & {
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
     isEmailVerified?: Maybe<Scalars['Boolean']>;
+    isAdmin?: Maybe<Scalars['Boolean']>;
+    canMakeOrgs?: Maybe<Scalars['Boolean']>;
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
     organizations?: Maybe<OrganizationConnection>;
     /** Events that this user is a moderator of, or has been invited to */
     events?: Maybe<EventConnection>;
+    /** All the users */
+    users?: Maybe<UserConnection>;
+    /** All events */
+    allEvents?: Maybe<EventConnection>;
 };
 
 /** User Data */
@@ -143,6 +150,36 @@ export type UserorganizationsArgs = {
 export type UsereventsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
+};
+
+/** User Data */
+export type UserusersArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<UsersSearchFilters>;
+};
+
+/** User Data */
+export type UserallEventsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<EventsSearchFilters>;
+};
+
+export type UsersSearchFilters = {
+    /** Search by first name */
+    firstName?: Maybe<Scalars['String']>;
+    /** Search by last name */
+    lastName?: Maybe<Scalars['String']>;
+    /** Search by email */
+    email?: Maybe<Scalars['String']>;
+};
+
+export type EventsSearchFilters = {
+    /** Search by event name */
+    eventName?: Maybe<Scalars['String']>;
+    /** Search by organizaiton name */
+    orgName?: Maybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -191,6 +228,11 @@ export type DeleteAccountForm = {
     email: Scalars['String'];
     password: Scalars['String'];
     confirmPassword: Scalars['String'];
+};
+
+export type UpdateOrganizerForm = {
+    id: Scalars['ID'];
+    canMakeOrgs: Scalars['Boolean'];
 };
 
 export type LoginForm = {
@@ -251,6 +293,7 @@ export type Mutation = {
     resetPasswordRequest: ResetPasswordRequestMutationResponse;
     resetPassword: ResetPasswordMutationResponse;
     deleteAccount: UserMutationResponse;
+    updateOrganizer: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createBroadcastMessage: EventBroadcastMessageMutationResponse;
@@ -331,6 +374,10 @@ export type MutationresetPasswordArgs = {
 
 export type MutationdeleteAccountArgs = {
     input: DeleteAccountForm;
+};
+
+export type MutationupdateOrganizerArgs = {
+    input: UpdateOrganizerForm;
 };
 
 export type MutationcreateBroadcastMessageArgs = {
@@ -1060,6 +1107,7 @@ export type InviteMutationResponse = MutationResponse & {
 export type ValidateInviteQueryResponse = {
     __typename?: 'ValidateInviteQueryResponse';
     valid: Scalars['Boolean'];
+    user?: Maybe<User>;
 };
 
 export type HideQuestion = {
@@ -1455,6 +1503,8 @@ export type ResolversTypes = {
     Operation: Operation;
     User: ResolverTypeWrapper<User>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
+    UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -1462,6 +1512,7 @@ export type ResolversTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
@@ -1595,6 +1646,8 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventVideoMutationResponse'];
     User: User;
     Int: Scalars['Int'];
+    UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
@@ -1602,6 +1655,7 @@ export type ResolversParentTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
@@ -1840,6 +1894,8 @@ export type UserResolvers<
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    canMakeOrgs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<
         Maybe<ResolversTypes['OrganizationConnection']>,
@@ -1852,6 +1908,18 @@ export type UserResolvers<
         ParentType,
         ContextType,
         RequireFields<UsereventsArgs, never>
+    >;
+    users?: Resolver<
+        Maybe<ResolversTypes['UserConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserusersArgs, never>
+    >;
+    allEvents?: Resolver<
+        Maybe<ResolversTypes['EventConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserallEventsArgs, never>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1970,6 +2038,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationdeleteAccountArgs, 'input'>
+    >;
+    updateOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateOrganizerArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createBroadcastMessage?: Resolver<
@@ -2762,6 +2836,7 @@ export type ValidateInviteQueryResponseResolvers<
     ParentType extends ResolversParentTypes['ValidateInviteQueryResponse'] = ResolversParentTypes['ValidateInviteQueryResponse']
 > = {
     valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3083,9 +3158,13 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isAdmin?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        canMakeOrgs?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
         events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
+        users?: LoaderResolver<Maybe<UserConnection>, User, UserusersArgs, TContext>;
+        allEvents?: LoaderResolver<Maybe<EventConnection>, User, UserallEventsArgs, TContext>;
     };
 
     UserSettings?: {
@@ -3377,6 +3456,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
 
     ValidateInviteQueryResponse?: {
         valid?: LoaderResolver<Scalars['Boolean'], ValidateInviteQueryResponse, {}, TContext>;
+        user?: LoaderResolver<Maybe<User>, ValidateInviteQueryResponse, {}, TContext>;
     };
 
     ModeratorMutationResponse?: {
