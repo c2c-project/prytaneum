@@ -249,14 +249,9 @@ function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenPr
 
     // Handle private events and token validation
     React.useEffect(() => {
-        if (!tokenProvided && node?.isPrivate === false) {
-            return;
-        }
-        if (!tokenProvided && node?.isPrivate === true) {
-            // TODO: Check invited list for user
-        }
         if (!validateInvite?.valid && node?.isPrivate === true) {
-            displaySnack('Invalid invite token', { variant: 'error' });
+            if (tokenProvided) displaySnack('Invalid invite token.', { variant: 'error' });
+            else displaySnack('You do not have permission to join this private event.', { variant: 'error' });
             router.push('/');
         }
         // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)

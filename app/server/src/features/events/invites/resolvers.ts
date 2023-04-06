@@ -18,6 +18,11 @@ export const resolvers: Resolvers = {
             const { id: viewerId } = ctx.viewer;
             const { id: eventId } = fromGlobalId(args.input.eventId);
             const { token } = args.input;
+            // If logged in without a token, check if the user is already invited.
+            if (viewerId && !token) {
+                const { valid, user } = await Invites.validateInviteWithoutToken(viewerId, eventId, ctx.prisma);
+                return { valid, user: toUserId(user) };
+            }
             if (!token) return { valid: false, user: null };
             const { valid, user } = await Invites.validateInvite(token, eventId, ctx.prisma);
             if (!user) return { valid, user: null };

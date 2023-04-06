@@ -56,7 +56,22 @@ export async function invite(viewerId: string, prisma: PrismaClient, { email, ev
     );
 }
 
-// FIXME:
+export async function validateInviteWithoutToken(viewerId: string, eventId: string, prisma: PrismaClient) {
+    try {
+        const result = await prisma.eventInvited.findFirst({
+            where: { userId: viewerId, eventId: eventId },
+        });
+        if (!result) throw new Error('User not invited to event.');
+        const user = await prisma.user.findUnique({ where: { id: viewerId } });
+        if (!user) throw new Error('User not found.');
+        return { valid: true, user };
+
+    } catch (err) {
+        server.log.error(err);
+        return { valid: false, user: null };
+    }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function validateInvite(
     token: string,
