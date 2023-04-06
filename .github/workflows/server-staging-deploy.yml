@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - staging
-            - 'docker/Dockerfile.server'
         paths:
             - 'app/server/**'
             - 'k8s/server/development/**'

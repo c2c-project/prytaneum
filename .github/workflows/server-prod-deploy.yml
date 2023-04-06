@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - prod
-            - 'docker/Dockerfile.server'
         paths:
             - 'app/server/**'
             - 'k8s/server/production/**'
