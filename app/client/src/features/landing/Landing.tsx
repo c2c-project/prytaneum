@@ -57,7 +57,6 @@ export default function Landing() {
     const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
     const router = useRouter();
-    const [isMobile] = React.useState(window.innerWidth < 640);
 
     console.log(mdBreakpoint);
 
@@ -104,7 +103,7 @@ export default function Landing() {
 
             {/* This is the only section of the page that doesn't need the style prop detailed above. */}
             <ViewsPanel />
-            {isMobile ? <MobileRolesPanel /> : <RolesPanel />}
+            {mdBreakpoint ? <MobileRolesPanel /> : <RolesPanel />}
             {/* BOTTOM BANNER SECTION */}
             <Grid
                 container

@@ -45,6 +45,21 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
+    featuresBanner: {
+        height: 40,
+        width: '95%',
+        [theme.breakpoints.up('lg')]: {
+            marginTop: -950,
+        },
+        [theme.breakpoints.down('lg')]: {
+            marginTop: -890,
+        },
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#D2A942',
+    },
 }));
 
 export function Roles() {
@@ -87,7 +102,7 @@ export function Roles() {
                             titleColor='#F9F9F9'
                             paragraphs={['Officials who answer the discussion given by moderators.']}
                         />
-                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Same experience as a Zoom call'}
@@ -119,7 +134,7 @@ export function Roles() {
                             titleColor='#F9F9F9'
                             paragraphs={['Residents who engage in discussion on a policy topic.']}
                         />
-                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText primary={'Submit questions'} primaryTypographyProps={{ fontSize: 18 }} />
                             </ListItem>
@@ -171,7 +186,7 @@ export function Roles() {
                             titleColor='#F9F9F9'
                             paragraphs={['Officials that oversee event discussion with the speaker.']}
                         />
-                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={
@@ -222,7 +237,7 @@ export function Roles() {
                             titleColor='#F9F9F9'
                             paragraphs={['Officials that create and set up events on Prytaneum.']}
                         />
-                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 6, marginLeft: 1 }}>
+                        <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Create events for an organization'}
@@ -257,17 +272,7 @@ export function Roles() {
                 </Card>
             </Stack>
 
-            <Grid
-                item
-                height={40}
-                width='95%'
-                marginTop={-122}
-                zIndex={1000}
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
-                style={{ backgroundColor: '#D2A942' }}
-            >
+            <Grid item className={classes.featuresBanner}>
                 <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>
                     Features
                 </Typography>
