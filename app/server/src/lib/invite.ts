@@ -160,11 +160,13 @@ const inviteMany = async (
                 to: emails,
                 subject: 'Prytaneum Invite',
                 // text: inviteString,
-                template: 'prytaneum-student-invite',
+                template: 'prytaneum-invites',
                 'recipient-variables': recipiantVariables,
-                'h:X-Mailgun-Variables': JSON.stringify({ eventName: title, eventStartDate }),
+                'h:X-Mailgun-Variables': JSON.stringify({ 'event-title': title, topic: event.topic, 'event-start-date': eventStartDate }),
                 'o:deliverytime': deliveryTime.toUTCString(),
                 'v:invite-url': '%recipient.inviteLink%',
+                'v:first-name': '%recipient.first%',
+                // 'v:unsubscribe-url': '%recipient.unsubLink%',
             })
         );
     }
@@ -200,7 +202,7 @@ const inviteCSVList = async (
     inviteeList: Array<InviteeData>,
     data: InviteData,
     prisma: PrismaClient,
-    previewEmail?: string
+    // previewEmail?: string
 ): Promise<Array<string | Mailgun.messages.SendResponse>> => {
     const unsubSet = new Set();
     // await notifications.getUnsubList(data.region) // Checked if undefined earlier
@@ -210,12 +212,12 @@ const inviteCSVList = async (
     if (filteredInviteeList.length === 0) {
         throw new Error('No valid invitees');
     }
-    if (previewEmail)
-        filteredInviteeList.push({
-            email: previewEmail,
-            first: 'first',
-            last: 'last',
-        } as InviteeData);
+    // if (previewEmail)
+    //     filteredInviteeList.push({
+    //         email: previewEmail,
+    //         first: 'first',
+    //         last: 'last',
+    //     } as InviteeData);
     return inviteMany(filteredInviteeList, data, prisma);
 };
 

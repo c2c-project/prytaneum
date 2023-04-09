@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import { Grid, Button, DialogContent, Collapse, Tooltip, IconButton, Typography } from '@mui/material';
+import { useTheme } from '@mui/styles';
 import { Add } from '@mui/icons-material';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import { useFragment } from 'react-relay';
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -13,23 +12,6 @@ import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
 import { useSnack } from '@local/core';
-
-interface EventSettingsProps {
-    fragmentRef: EventDetailsFragment$key;
-    className?: string;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-    listRoot: {
-        width: '100%',
-    },
-    red: {
-        color: 'red',
-    },
-    btn: {
-        margin: theme.spacing(2, 0),
-    },
-}));
 
 interface TState {
     isFormDialogOpen: boolean;
@@ -62,6 +44,11 @@ const reducer = (state: TState, action: Action): TState => {
     }
 };
 
+interface EventSettingsProps {
+    fragmentRef: EventDetailsFragment$key;
+    className?: string;
+}
+
 export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
     const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
     const [link, setLink] = React.useState('');
@@ -70,7 +57,7 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
         isConfDialogOpen: false,
         anchorEl: null,
     });
-    const classes = useStyles();
+    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [csvFile, setCSVFile] = React.useState<File | null>(null);
     const [isUploading, setIsUploading] = React.useState(false);
@@ -128,7 +115,15 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 file.value = file.defaultValue;
                 setIsUploading(false);
                 if (res.status === 200) {
-                    displaySnack('Invites queued.', { variant: 'success' });
+                    res.json().then((data) => { 
+                        if (!data) {
+                            displaySnack('Something went wrong, please try again later.', { variant: 'error' });
+                            return;
+                        }
+                        const { isError, message } = data as { isError: boolean; message: string };
+                        if (isError) displaySnack(message, { variant: 'error' });
+                        else displaySnack(message, { variant: 'success' });
+                     });
                 } else {
                     displaySnack('Invites failed to upload.', { variant: 'error' });
                 }
@@ -148,12 +143,12 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
             </ResponsiveDialog>
             <Grid container justifyContent='right'>
                 <Grid item paddingRight='1rem'>
-                    <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
+                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={toggleInviteLink} variant='outlined'>
                         {open ? 'Hide invite link' : 'Reveal invite link'}
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
+                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
                         Invite
                     </Button>
                 </Grid>
