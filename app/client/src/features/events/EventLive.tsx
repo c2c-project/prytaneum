@@ -86,7 +86,7 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     const router = useRouter();
     const { displaySnack } = useSnack();
-    const [user] = useUser();
+    const { user } = useUser();
     // styles
     const classes = useStyles();
     const theme = useTheme();
