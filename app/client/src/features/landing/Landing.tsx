@@ -40,14 +40,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 0,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
         [theme.breakpoints.up('md')]: {
             marginLeft: 0,
         },
         [theme.breakpoints.down('md')]: {
             marginLeft: -8,
+            aspectRatio: '16/9',
         },
     },
 }));
@@ -82,12 +80,12 @@ export default function Landing() {
                 <Grid item xs={12}>
                     <div className={classes.videoWrapper}>
                         <ReactPlayer
-                            url='videos/prytaneum_promo.mp4'
+                            url='https://youtu.be/Q-8-cQujh3k'
                             playing={true}
                             muted
                             loop
                             width={'854px'}
-                            height='100%'
+                            height={mdBreakpoint ? '100%' : '480px'}
                             playsinline
                             controls
                         />
