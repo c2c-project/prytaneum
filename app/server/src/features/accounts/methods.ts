@@ -12,10 +12,13 @@ import type {
     UpdatePasswordForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
+    OrganizerForm,
+    UpdateOrganizerForm,
 } from '@local/graphql-types';
 
 import { getOrCreateServer } from '@local/core/server';
 import { sendEmail } from '@local/lib/email/email';
+import { fromGlobalId } from 'graphql-relay';
 
 const toUserId = toGlobalId('User');
 
@@ -119,6 +122,28 @@ async function maybeValidateAndHashPassword(password: string | null) {
  */
 export async function register(prisma: PrismaClient, userData: MinimalUser, textPassword: string | null = null) {
     const { email, firstName, lastName } = userData;
+
+    // validiation if no other user exists with the new email
+    const user = await prisma.user.findUnique({ where: { email: email } });
+
+    // https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-creation
+    // This could technically be an attack vector. Say a user creates an account and is trying to see
+    // if a particular email is already registered. We should throw the same type of protected error
+    // that is used on the account creation page.
+    if (!!user)
+        throw new ProtectedError({
+            userMessage: ProtectedError.accountCreationErrorMessage,
+            // This is probably only useful for debugging purposes, but it's still fine to log this anyways.
+            internalMessage: `A user with the email ${email} already exists.`,
+        });
+
+    // TODO remove once shadow user account setup prompt is implemented
+    if (!textPassword)
+        throw new ProtectedError({
+            userMessage: 'Password is required.',
+            internalMessage: 'Shadow account setup is not implemented yet.',
+        });
+
     // It's okay to not have a password, it means this is a user being registered via invitation.
     const encryptedPassword = await maybeValidateAndHashPassword(textPassword);
     return prisma.user.create({
@@ -138,6 +163,27 @@ export async function register(prisma: PrismaClient, userData: MinimalUser, text
  */
 export function findUserById(id: string, prisma: PrismaClient) {
     return prisma.user.findUnique({ where: { id } });
+}
+
+type UsersSearchFilter = {
+    firstName: string;
+    lastName: string;
+    email: string;
+};
+
+export async function findAllUsers(viewerId: string, filter: UsersSearchFilter, prisma: PrismaClient) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return [];
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all users.' });
+
+    return prisma.user.findMany({
+        where: {
+            firstName: { contains: filter.firstName },
+            lastName: { contains: filter.lastName },
+            email: { contains: filter.email },
+        },
+    });
 }
 
 /**
@@ -319,7 +365,11 @@ export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPas
     const accountFound = !!result;
 
     // No need to send email if the account does not exist
-    if (!accountFound) throw new Error('No account with that email was found');
+    if (!accountFound)
+        throw new ProtectedError({
+            userMessage: 'Internal error occured, try again later.',
+            internalMessage: 'No account with that email was found',
+        });
 
     const token = await jwt.sign({ email: input.email });
     const passwordResetLink = `prytaneum.io/reset-password?token=${token}`;
@@ -335,7 +385,7 @@ export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPas
     } catch (err) {
         const server = getOrCreateServer();
         server.log.error(err);
-        throw new Error(errors.email);
+        throw new ProtectedError({ userMessage: errors.email, internalMessage: err.message });
     }
 }
 
@@ -364,4 +414,67 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
+}
+
+export async function isOrganizer(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    return queryResult.canMakeOrgs;
+}
+
+export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO validate product key to elevate account to organizer
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: true },
+    });
+    return updatedUser;
+}
+
+export async function removeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO Check if admin account once admin accounts are implemented
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: false },
+    });
+    return updatedUser;
+}
+
+export async function updateOrganizer(viewerId: string, prisma: PrismaClient, input: UpdateOrganizerForm) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return null;
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all events.' });
+
+    const { id, canMakeOrgs } = input;
+    const { id: userId } = fromGlobalId(id);
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { canMakeOrgs },
+    });
+    return updatedUser;
 }

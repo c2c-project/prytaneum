@@ -6,6 +6,7 @@ on:
             - prod
         paths:
             - 'app/client/**'
+            - 'k8s/client/production/**'
             - 'docker/Dockerfile.client'
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}

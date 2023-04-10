@@ -1,7 +1,8 @@
-import { PrismaClient } from '@local/__generated__/prisma';
+import { Prisma, PrismaClient } from '@local/__generated__/prisma';
 import { errors } from '@local/features/utils';
 import { register } from '@local/features/accounts/methods';
 import { ProtectedError } from '@local/lib/ProtectedError';
+import { EventQuestion } from '../../../graphql-types';
 import type {
     CreateModerator,
     DeleteModerator,
@@ -144,7 +145,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
     const nextQuestion = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: -1 } }],
+            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: '-1' } }],
         },
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
@@ -159,7 +160,7 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion?.position ?? -1 },
+        data: { currentQuestion: nextQuestion?.position ?? '-1' },
         select: { currentQuestion: true, id: true },
     });
     return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
@@ -178,16 +179,17 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
     if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
-    const nextQuestionPosition = await prisma.eventQuestion.findFirst({
-        where: {
-            eventId,
-            position: { lt: currentQuestionPosition ?? -1 },
-        },
-        orderBy: { position: 'desc' },
-        select: { position: true },
-    });
+    const position = parseInt(currentQuestionPosition || '-1');
+    const queryResult: { position: string }[] = await prisma.$queryRaw(Prisma.sql`
+        SELECT position FROM "EventQuestion"
+        WHERE position::BigInt < ${position} AND position::BigInt > -1
+        AND "eventId" = ${eventId}::uuid
+        ORDER BY position::BigInt DESC LIMIT 1
+    `);
 
-    if (!nextQuestionPosition) throw new ProtectedError({ userMessage: 'Cannot increment question' });
+    const nextQuestionPosition = queryResult.length === 0 ? null : queryResult[0]?.position;
+
+    // if (!nextQuestionPosition) throw new ProtectedError({ userMessage: 'Cannot decrement question' });
 
     const prevCurrentQuestion = await prisma.eventQuestion.findFirst({
         where: {
@@ -200,7 +202,7 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestionPosition.position },
+        data: { currentQuestion: nextQuestionPosition || '-1' },
         select: { currentQuestion: true, id: true },
     });
 
@@ -214,19 +216,25 @@ export async function incrementQuestion(userId: string, prisma: PrismaClient, ev
     const hasPermission = await isModerator(userId, eventId, prisma);
     if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
     const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
-    const nextQuestion = await prisma.eventQuestion.findFirst({
-        where: {
-            eventId,
-            position: { gt: currentQuestionPosition ?? -1 },
-        },
-        orderBy: { position: 'asc' },
-    });
+    const position = parseInt(currentQuestionPosition || '-1');
+    const queryResponse: EventQuestion[] = await prisma.$queryRawUnsafe(
+        `
+        SELECT * FROM "EventQuestion"
+        WHERE "eventId" = $1::uuid
+        AND position::BigInt > $2::BigInt
+        ORDER BY position::BigInt ASC LIMIT 1
+    `,
+        eventId,
+        position
+    );
+
+    const nextQuestion = queryResponse.length === 0 ? null : queryResponse[0];
 
     if (!nextQuestion) throw new ProtectedError({ userMessage: 'Cannot increment question' });
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion.position },
+        data: { currentQuestion: nextQuestion.position || '' },
         select: { currentQuestion: true, id: true },
     });
 
@@ -265,17 +273,17 @@ export async function addQuestionToQueue(userId: string, prisma: PrismaClient, i
     const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
-    const calculatedPosition = parseInt(currentTimeMsStr.slice(-9), 10);
+    const calculatedPosition = parseInt(currentTimeMsStr);
 
     // check if id is already non-negative
-    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
+    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: '-1' } });
     // if the question isn't found with the -1 position, then it's already in queue
     if (!question) throw new ProtectedError({ userMessage: 'Question is already in queue.' });
 
     return prisma.eventQuestion.update({
         where: { id: input.questionId },
         data: {
-            position: calculatedPosition,
+            position: calculatedPosition.toString(),
         },
     });
 }
@@ -312,7 +320,7 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
     return prisma.eventQuestion.update({
         where: { id: questionId },
         data: {
-            position: -1,
+            position: '-1',
         },
     });
 }

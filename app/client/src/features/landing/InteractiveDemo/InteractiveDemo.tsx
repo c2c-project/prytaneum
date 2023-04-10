@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Typography, Paper, Button, IconButton, Avatar, InputAdornment, Chip, TextField } from '@mui/material';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -241,6 +240,9 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 interface WindowProps {
@@ -300,12 +302,12 @@ function Tabs() {
         <Grid container item xs={12} className={classes.windowheader}>
             <div className={classes.tabs}>
                 <div className={classes.logo}>
-                    <Image
+                    <img
+                        className={classes.contain}
                         alt='Prytaneum Logo'
                         src='/static/prytaneum_logo.svg'
-                        width={50}
-                        height={49}
-                        objectFit='contain'
+                        width='100%'
+                        height='100%'
                     />
                 </div>
                 <div>Home</div>
@@ -329,10 +331,22 @@ function MeetingDisplay() {
         <Grid item xs={12} lg={7}>
             <div className={classes.windowdisplay}>
                 <Grid item xs={6}>
-                    <Image alt='Speaker Camera' src='/static/cam1.png' width={1146} height={648} objectFit='contain' />
+                    <img
+                        className={classes.contain}
+                        alt='Speaker Camera'
+                        src='/static/cam1.png'
+                        width='100%'
+                        height='100%'
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <Image alt='Speaker Camera' src='/static/cam2.png' width={1146} height={648} objectFit='contain' />
+                    <img
+                        className={classes.contain}
+                        alt='Speaker Camera'
+                        src='/static/cam2.png'
+                        width='100%'
+                        height='100%'
+                    />
                 </Grid>
             </div>
             <div className={classes.windowtitle}>

@@ -3,7 +3,9 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import { Resolvers, toGlobalId, runMutation, errors } from '@local/features/utils';
 import { CookieSerializeOptions } from 'fastify-cookie';
 import * as User from './methods';
+import { findAllEvents } from '../events/methods';
 import * as jwt from '@local/lib/jwt';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 const toUserId = toGlobalId('User');
 const toOrgId = toGlobalId('Organization');
@@ -31,6 +33,10 @@ export const resolvers: Resolvers = {
                 return { valid: false, message: errors.jwt };
             }
         },
+        async isOrganizer(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return false;
+            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
+        },
     },
     User: {
         async organizations(parent, args, ctx, info) {
@@ -44,6 +50,34 @@ export const resolvers: Resolvers = {
             const userEvents = await User.findUsersEventsByUserId(userId, ctx.prisma);
             if (!userEvents) return null;
             return connectionFromArray(userEvents.map(toEventId), args);
+        },
+        async users(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return connectionFromArray([], args);
+            const filter = {
+                firstName: args.filter?.firstName ?? '',
+                lastName: args.filter?.lastName ?? '',
+                email: args.filter?.email ?? '',
+            };
+            const users = await User.findAllUsers(ctx.viewer.id, filter, ctx.prisma);
+            if (!users) return connectionFromArray([], args);
+            const formattedUsers = users.map(toUserId);
+            const connection = connectionFromArray(formattedUsers, args);
+            if (formattedUsers.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
+        },
+        async allEvents(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return connectionFromArray([], args);
+            const filter = {
+                eventName: args.filter?.eventName ?? '',
+                orgName: args.filter?.orgName ?? '',
+            };
+            const events = await findAllEvents(ctx.viewer.id, filter, ctx.prisma);
+            return connectionFromArray(events.map(toEventId), args);
+        },
+        async isOrganizer(parent, args, ctx, info) {
+            if (!ctx.viewer.id) return false;
+            return User.isOrganizer(ctx.viewer.id, ctx.prisma);
         },
     },
     Mutation: {
@@ -95,6 +129,27 @@ export const resolvers: Resolvers = {
                 const { deletedUser } = await User.deleteAccount(ctx.prisma, args.input);
                 ctx.reply.clearCookie('jwt', cookieOptions);
                 return toUserId(deletedUser);
+            });
+        },
+        async updateOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
+                const updatedUser = await User.updateOrganizer(ctx.viewer.id, ctx.prisma, args.input);
+                return toUserId(updatedUser);
+            });
+        },
+        async makeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.makeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
+                return toUserId(updatedUser);
+            });
+        },
+        async removeOrganizer(parent, args, ctx, info) {
+            return runMutation(async () => {
+                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                const updatedUser = await User.removeOrganizer(ctx.prisma, args.input, ctx.viewer.id);
+                return toUserId(updatedUser);
             });
         },
     },

@@ -10,7 +10,7 @@ import { useUser } from '@local/features/accounts';
 
 const Page: NextPage = () => {
     const router = useRouter();
-    const [user,, isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const { id: eventId } = router.query as { id: string };
     const [queryRef, loadQuery] = useQueryLoader<EventSettingsQuery>(EVENT_SETTINGS_QUERY);
 
@@ -19,7 +19,7 @@ const Page: NextPage = () => {
     }, [router.isReady, loadQuery, eventId]);
 
     React.useEffect(() => {
-        if (!isLoading && !user) router.push('/')
+        if (!isLoading && !user) router.push('/');
     }, [isLoading, router, user]);
 
     if (!router.isReady || !queryRef) return <Loader />;

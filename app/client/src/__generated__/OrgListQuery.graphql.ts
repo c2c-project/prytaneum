@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<233e23e6671962fd434569d1d0e7319e>>
+ * @generated SignedSource<<8c1d6300d03a7c013fbaee40c4d6a55b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,6 @@ export type OrgListQuery$variables = {
 export type OrgListQueryVariables = OrgListQuery$variables;
 export type OrgListQuery$data = {
   readonly me: {
-    readonly id: string;
     readonly organizations: {
       readonly __id: string;
       readonly edges: ReadonlyArray<{
@@ -174,7 +173,6 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": "organizations",
             "args": null,
@@ -209,7 +207,6 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": null,
             "args": (v4/*: any*/),
@@ -228,14 +225,15 @@ return {
             "key": "OrgListQuery_organizations",
             "kind": "LinkedHandle",
             "name": "organizations"
-          }
+          },
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "ed1765ad576187d6a0b594604ae887c0",
+    "cacheID": "8318a1e000b67a18eecc0b1534e72542",
     "id": null,
     "metadata": {
       "connection": [
@@ -252,11 +250,11 @@ return {
     },
     "name": "OrgListQuery",
     "operationKind": "query",
-    "text": "query OrgListQuery(\n  $first: Int\n  $after: String\n) {\n  me {\n    id\n    organizations(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          createdAt\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n}\n"
+    "text": "query OrgListQuery(\n  $first: Int\n  $after: String\n) {\n  me {\n    organizations(first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          id\n          name\n          createdAt\n          __typename\n        }\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9d66dfba6ef031fabf8b6c0cff438792";
+(node as any).hash = "2950725a8f6dfe399a722e05bf6a946b";
 
 export default node;

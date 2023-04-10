@@ -148,7 +148,7 @@ type Event implements Node {
   """
   The question currently being asked, corresponds to a "position" value on the event question
   """
-  currentQuestion: Int
+  currentQuestion: String
   description: String
 
   """The planned end date time string"""
@@ -369,7 +369,7 @@ type EventQuestion implements Node {
 
   """Find the count of the likes only"""
   likedByCount: Int
-  position: Int
+  position: String!
 
   """The actual content of the question"""
   question: String
@@ -472,6 +472,14 @@ type EventVideoMutationResponse implements MutationResponse {
   message: String!
 }
 
+input EventsSearchFilters {
+  """Search by event name"""
+  eventName: String
+
+  """Search by organizaiton name"""
+  orgName: String
+}
+
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
@@ -546,6 +554,7 @@ type Mutation {
 
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
+  makeOrganizer(input: OrganizerForm!): UserMutationResponse!
 
   """
   Advance the current question
@@ -559,6 +568,7 @@ type Mutation {
   """
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
+  removeOrganizer(input: OrganizerForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
   resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
 
@@ -577,6 +587,7 @@ type Mutation {
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
   updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
@@ -640,6 +651,10 @@ type OrganizationSubscription {
   userId: ID
 }
 
+input OrganizerForm {
+  email: String!
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -653,6 +668,7 @@ type Query {
 
   """Fetch all events"""
   events: [Event!]
+  isOrganizer: Boolean!
 
   """Fetch user data about the current user"""
   me: User
@@ -663,6 +679,10 @@ type Query {
   promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
   prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
+
+  """
+  Validates an invite token and logs the user in if they are already registered.
+  """
   validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
   validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
@@ -760,6 +780,11 @@ input UpdateOrganization {
   orgId: ID!
 }
 
+input UpdateOrganizerForm {
+  canMakeOrgs: Boolean!
+  id: ID!
+}
+
 input UpdatePasswordForm {
   confirmNewPassword: String!
   email: String!
@@ -769,7 +794,7 @@ input UpdatePasswordForm {
 
 input UpdateQuestionPosition {
   eventId: ID!
-  position: Int!
+  position: String!
   questionId: ID!
 }
 
@@ -798,19 +823,28 @@ input UpdateVideo {
 
 """User Data"""
 type User implements Node {
+  """All events"""
+  allEvents(after: String, filter: EventsSearchFilters, first: Int): EventConnection
+
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
+  canMakeOrgs: Boolean
   email: String
 
   """Events that this user is a moderator of, or has been invited to"""
   events(after: String, first: Int): EventConnection
   firstName: String
   id: ID!
+  isAdmin: Boolean
   isEmailVerified: Boolean
+  isOrganizer: Boolean
   lastName: String
 
   """Organizations that this user belongs to"""
   organizations(after: String, first: Int): OrganizationConnection
+
+  """All the users"""
+  users(after: String, filter: UsersSearchFilters, first: Int): UserConnection
 }
 
 type UserConnection {
@@ -838,12 +872,24 @@ type UserSettings {
   updatePassword: String
 }
 
+input UsersSearchFilters {
+  """Search by email"""
+  email: String
+
+  """Search by first name"""
+  firstName: String
+
+  """Search by last name"""
+  lastName: String
+}
+
 input ValidateInvite {
   eventId: ID!
   token: String!
 }
 
 type ValidateInviteQueryResponse {
+  user: User
   valid: Boolean!
 }
 

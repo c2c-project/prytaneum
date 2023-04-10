@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b1af62cd9d7072bbaecbf419d70eace7>>
+ * @generated SignedSource<<0f38aeda60f9a5e0685956f8ebccf52a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type NextQuestionButtonMutationVariables = NextQuestionButtonMutation$var
 export type NextQuestionButtonMutation$data = {
   readonly nextQuestion: {
     readonly id: string;
-    readonly currentQuestion: number | null;
+    readonly currentQuestion: string | null;
   };
 };
 export type NextQuestionButtonMutationResponse = NextQuestionButtonMutation$data;

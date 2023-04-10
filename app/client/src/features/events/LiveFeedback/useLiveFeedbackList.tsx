@@ -67,7 +67,7 @@ interface Props {
 }
 
 export function useLiveFeedbackList({ fragmentRef }: Props) {
-    const [user] = useUser();
+    const { user } = useUser();
     const { isModerator } = useEvent();
     const { liveFeedback, id: eventId } = useFragment(USE_LIVE_FEEDBACK_LIST, fragmentRef);
     const feedbackList = React.useMemo(

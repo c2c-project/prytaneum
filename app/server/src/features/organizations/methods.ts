@@ -8,8 +8,8 @@ import type {
 } from '@local/graphql-types';
 import { isMemberOfOrg } from '@local/features/permissions';
 import { register } from '@local/features/accounts/methods';
-import { errors } from '../utils';
-import { ProtectedError } from '../../lib/ProtectedError';
+import { errors } from '@local/features/utils';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 /**
  * find an organization by user id
@@ -76,7 +76,6 @@ export async function updateOrg(userId: string, prisma: PrismaClient, { name, or
 }
 
 export async function deleteOrg(userId: string, prisma: PrismaClient, { orgId }: DeleteOrganization) {
-   
     //current permissions to delete organization is if they are a member of the organization then they can delete
     const hasPermissions = await isMemberOfOrg(userId, orgId, prisma);
     if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });

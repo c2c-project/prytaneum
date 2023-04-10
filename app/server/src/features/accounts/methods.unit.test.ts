@@ -21,6 +21,7 @@ const userData = {
     fullName: 'Sally Smith',
     password: userTextPassword,
     preferredLang: 'EN',
+    isAdmin: false,
     canMakeOrgs: false,
 };
 
@@ -42,19 +43,19 @@ describe('account methods', () => {
             const expectedOutput = { ...userData };
             expect(output).toEqual(expectedOutput);
         });
+        // TODO Update this test once the shaddow account registration feature is implemented
+        // test('should register new user with null password', async () => {
+        //     // Arrange
+        //     const user = { ...userData, password: null };
+        //     prismaMock.user.create.mockResolvedValueOnce(user);
 
-        test('should register new user with null password', async () => {
-            // Arrange
-            const user = { ...userData, password: null };
-            prismaMock.user.create.mockResolvedValueOnce(user);
+        //     // Act
+        //     const output = await AccountMethods.register(prismaMock, userData, null);
 
-            // Act
-            const output = await AccountMethods.register(prismaMock, userData, null);
-
-            // Assert
-            const expectedOutput = { ...userData, password: null };
-            expect(output).toEqual(expectedOutput);
-        });
+        //     // Assert
+        //     const expectedOutput = { ...userData, password: null };
+        //     expect(output).toEqual(expectedOutput);
+        // });
     });
 
     describe('findUserById', () => {

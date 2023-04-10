@@ -1,33 +1,17 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Button, DialogContent, Collapse } from '@mui/material';
+import { Grid, Button, DialogContent, Collapse, Tooltip, IconButton, Typography } from '@mui/material';
+import { useTheme } from '@mui/styles';
 import { Add } from '@mui/icons-material';
-import { Theme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import { useFragment } from 'react-relay';
-import { CopyText } from '@local/components/CopyText';
+import InfoIcon from '@mui/icons-material/Info';
 
+import { CopyText } from '@local/components/CopyText';
 import type { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 import { EVENT_DETAILS_FRAGMENT } from '../EventSettings/EventDetails';
 import { CreateInvite } from './CreateInvite';
-
-interface EventSettingsProps {
-    fragmentRef: EventDetailsFragment$key;
-    className?: string;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-    listRoot: {
-        width: '100%',
-    },
-    red: {
-        color: 'red',
-    },
-    btn: {
-        margin: theme.spacing(2, 0),
-    },
-}));
+import { useSnack } from '@local/core';
 
 interface TState {
     isFormDialogOpen: boolean;
@@ -60,6 +44,11 @@ const reducer = (state: TState, action: Action): TState => {
     }
 };
 
+interface EventSettingsProps {
+    fragmentRef: EventDetailsFragment$key;
+    className?: string;
+}
+
 export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsProps) => {
     const { id: eventId } = useFragment(EVENT_DETAILS_FRAGMENT, fragmentRef);
     const [link, setLink] = React.useState('');
@@ -68,8 +57,11 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
         isConfDialogOpen: false,
         anchorEl: null,
     });
-    const classes = useStyles();
+    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [csvFile, setCSVFile] = React.useState<File | null>(null);
+    const [isUploading, setIsUploading] = React.useState(false);
+    const { displaySnack } = useSnack();
 
     // close all dialogs
     const close = () => dispatch({ type: 'dialog/close-all' });
@@ -90,6 +82,58 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
         setOpen(!open);
     };
 
+    const attachCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        if (e.target.files) {
+            // Validate csv file
+            const limit = 5 * 1024 * 1024; // 5 MB
+            if (e.target.files[0]?.size > limit) {
+                displaySnack('File size too large. Max 5MB.', { variant: 'error' });
+                const file = document.getElementById('invite-csv') as HTMLInputElement;
+                file.value = file.defaultValue;
+                return;
+            }
+            setCSVFile(e.target.files[0]);
+        }
+    };
+
+    const uploadCSV = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        if (csvFile === null) return;
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('invite-list', csvFile);
+        formData.append('eventId', eventId);
+        fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL + '/invite-csv', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((res) => {
+                // Remove file from input upon success
+                setCSVFile(null);
+                const file = document.getElementById('invite-csv') as HTMLInputElement;
+                file.value = file.defaultValue;
+                setIsUploading(false);
+                if (res.status === 200) {
+                    res.json().then((data) => { 
+                        if (!data) {
+                            displaySnack('Something went wrong, please try again later.', { variant: 'error' });
+                            return;
+                        }
+                        const { isError, message } = data as { isError: boolean; message: string };
+                        if (isError) displaySnack(message, { variant: 'error' });
+                        else displaySnack(message, { variant: 'success' });
+                     });
+                } else {
+                    displaySnack('Invites failed to upload.', { variant: 'error' });
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setIsUploading(false);
+            });
+    };
+
     return (
         <Grid container className={className}>
             <ResponsiveDialog open={isFormDialogOpen} onClose={close}>
@@ -99,12 +143,12 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
             </ResponsiveDialog>
             <Grid container justifyContent='right'>
                 <Grid item paddingRight='1rem'>
-                    <Button className={classes.btn} onClick={toggleInviteLink} variant='outlined'>
+                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={toggleInviteLink} variant='outlined'>
                         {open ? 'Hide invite link' : 'Reveal invite link'}
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button className={classes.btn} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
+                    <Button style={{ margin: theme.spacing(2, 0)}} onClick={openFormDialog} variant='outlined' startIcon={<Add />}>
                         Invite
                     </Button>
                 </Grid>
@@ -113,6 +157,18 @@ export const InviteEventSettings = ({ fragmentRef, className }: EventSettingsPro
                 <Collapse in={open} style={{ display: 'flex', flex: 1 }}>
                     <CopyText TextFieldProps={{ label: 'Invite Link' }} text={link} />
                 </Collapse>
+            </Grid>
+            <Grid container direction='row' alignItems='center' justifyContent='right'>
+                <Typography textAlign='center'>Invite Via CSV</Typography>
+                <Tooltip title='Header row are required to be: first, last, email' enterTouchDelay={0}>
+                    <IconButton>
+                        <InfoIcon />
+                    </IconButton>
+                </Tooltip>
+                <input id='invite-csv' type='file' accept='.csv' onChange={attachCSV} />
+                <Button disabled={csvFile === null || isUploading} onClick={uploadCSV} variant='outlined'>
+                    Upload CSV
+                </Button>
             </Grid>
         </Grid>
     );

@@ -7,7 +7,9 @@ type User implements Node {
     lastName: String
     email: String
     isEmailVerified: Boolean
-
+    isAdmin: Boolean
+    canMakeOrgs: Boolean
+    isOrganizer: Boolean
     """
     Avatar URL if null then no avatar is uploaded
     """
@@ -22,6 +24,41 @@ type User implements Node {
     Events that this user is a moderator of, or has been invited to
     """
     events(first: Int, after: String): EventConnection
+    """
+    All the users
+    """
+    users(first: Int, after: String, filter: UsersSearchFilters): UserConnection
+    """
+    All events
+    """
+    allEvents(first: Int, after: String, filter: EventsSearchFilters): EventConnection
+}
+
+input UsersSearchFilters {
+    """
+    Search by first name
+    """
+    firstName: String
+    """
+    Search by last name
+    """
+    lastName: String
+    """
+    Search by email
+    """
+    email: String
+}
+
+input EventsSearchFilters {
+    """
+    Search by event name
+    """
+    eventName: String
+
+    """
+    Search by organizaiton name
+    """
+    orgName: String
 }
 
 type UserSettings {
@@ -69,6 +106,11 @@ input DeleteAccountForm {
     confirmPassword: String!
 }
 
+input UpdateOrganizerForm {
+    id: ID!
+    canMakeOrgs: Boolean!
+}
+
 input LoginForm {
     email: String!
     password: String!
@@ -86,6 +128,10 @@ input ResetPasswordForm {
 
 input ValidatePasswordResetTokenForm {
     token: String!
+}
+
+input OrganizerForm {
+    email: String!
 }
 
 type UserMutationResponse implements MutationResponse {
@@ -130,6 +176,10 @@ type Mutation {
     resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
     resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+    updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
+    makeOrganizer(input: OrganizerForm!): UserMutationResponse!
+    removeOrganizer(input: OrganizerForm!): UserMutationResponse!
+
     """
     The logout just returns the timestamp of the logout action
     """

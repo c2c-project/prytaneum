@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
 import { Grid, Link, Typography } from '@mui/material';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         gap: '0.5rem',
     },
     formWidth: {
-        maxWidth: '560'
+        maxWidth: '560',
     },
     icon: {
         fontSize: '2.25rem',
@@ -44,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
     },
     contain: {
-        objectFit: 'contain'
-    }
+        objectFit: 'contain',
+    },
 }));
 
 export default function OrganizerGuide() {
@@ -74,9 +73,10 @@ export default function OrganizerGuide() {
         <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
             <Grid item xs={4} sm={3}>
                 <img
+                    className={classes.contain}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
-                    className={classes.contain}
+                    height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>
@@ -116,14 +116,9 @@ export default function OrganizerGuide() {
             <Grid item xs={12} className={classes.section}>
                 <Typography variant='body1' className={classes.paragraph}>
                     If you don&#39;t have an organization yet, you can create one by clicking the{' '}
-                    <img
-                        src='/static/fab.svg'
-                        width={27}
-                        className={classes.contain}
-                        alt='Fab Icon'
-                    />{' '}
-                    in the bottom right corner of the page. Selecting an organization will show you the
-                    organization&#39;s events and members. Here, you can create new events and invite new members.
+                    <img src='/static/fab.svg' width={27} className={classes.contain} alt='Fab Icon' /> in the bottom
+                    right corner of the page. Selecting an organization will show you the organization&#39;s events and
+                    members. Here, you can create new events and invite new members.
                 </Typography>
             </Grid>
             <Grid item xs={12} className={classes.centeredSection}>

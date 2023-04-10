@@ -4,10 +4,11 @@ import MUIAppBar, { AppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useQueryLoader } from 'react-relay';
 
-import { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
 import { ConditionalRender } from '@local/components';
-import { UserMenu, UserMenuLoader, USER_MENU_QUERY } from '@local/features/accounts';
+import { UserMenu, UserMenuLoader } from '@local/features/accounts';
 import Title from './Title';
+import { USER_CONTEXT_QUERY } from '@local/features/accounts/UserContext';
+import { UserContextQuery } from '@local/__generated__/UserContextQuery.graphql';
 
 const useStyles = makeStyles((theme) => ({
     appbar: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PreloadedUserMenu() {
-    const [queryRef, loadQuery] = useQueryLoader<UserMenuQuery>(USER_MENU_QUERY);
+    const [queryRef, loadQuery] = useQueryLoader<UserContextQuery>(USER_CONTEXT_QUERY);
     React.useEffect(() => {
         if (!queryRef) loadQuery({});
     }, [loadQuery, queryRef]);

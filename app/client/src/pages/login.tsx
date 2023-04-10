@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Paper, Link } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
@@ -44,26 +43,29 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.primary.main,
         },
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export default function Login() {
     const classes = useStyles();
     const router = useRouter();
 
-    const [user] = useUser();
+    const { user } = useUser();
 
     React.useEffect(() => {
-        if (user) router.push('/organizations/me');
+        if (user) router.push('/dashboard');
     }, [user, router]);
 
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center'>
             <Grid item md={7}>
-                <Image
+                <img
+                    className={classes.contain}
                     src='/static/login_illustration.png'
-                    width={697}
-                    height={383}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                     alt='Login Illustation'
                 />
             </Grid>

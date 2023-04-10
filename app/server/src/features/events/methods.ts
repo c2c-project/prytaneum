@@ -227,7 +227,7 @@ export async function changeEventStatus(userId: string, prisma: PrismaClient, ev
 export async function findQueuedQuestionsByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } } },
+        select: { questions: { where: { position: { equals: '-1' } }, orderBy: { position: 'asc' } } },
     });
 }
 
@@ -258,6 +258,27 @@ export async function findLiveFeedbackPromptsByEventId(eventId: string, prisma: 
 export async function findQuestionQueueByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.event.findUnique({
         where: { id: eventId },
-        select: { questions: { where: { position: { gt: -1 } }, orderBy: { position: 'asc' } }, currentQuestion: true },
+        select: {
+            questions: { where: { position: { not: '-1' } }, orderBy: { position: 'asc' } },
+            currentQuestion: true,
+        },
+    });
+}
+
+type EventsSearchFilter = {
+    eventName: string;
+    orgName: string;
+};
+
+export async function findAllEvents(viewerId: string, filter: EventsSearchFilter, prisma: PrismaClient) {
+    // Only admins should be able to query for all users.
+    const queryResult = await prisma.user.findUnique({ where: { id: viewerId } });
+    if (!queryResult) return [];
+    if (!queryResult.isAdmin) throw new ProtectedError({ userMessage: 'Only admins can fetch all events.' });
+
+    return prisma.event.findMany({
+        where: {
+            title: { contains: filter.eventName },
+        },
     });
 }

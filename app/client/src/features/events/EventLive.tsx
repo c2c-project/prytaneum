@@ -15,6 +15,9 @@ import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.gr
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
+import { useRouter } from 'next/router';
+import { useSnack } from '@local/core';
+import { useUser } from '../accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -76,11 +79,15 @@ export interface PreloadedEventLiveProps {
 export interface EventLiveProps {
     eventLiveQueryRef: PreloadedQuery<EventLiveQuery>;
     validateInviteQueryRef: PreloadedQuery<ValidateInviteQuery>;
+    tokenPassed: boolean;
 }
 
-export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLiveProps) {
+export function EventLive({ eventLiveQueryRef, validateInviteQueryRef, tokenPassed }: EventLiveProps) {
     const { node } = usePreloadedQuery(EVENT_LIVE_QUERY, eventLiveQueryRef);
-    usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+    const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
+    const router = useRouter();
+    const { displaySnack } = useSnack();
+    const { user } = useUser();
     // styles
     const classes = useStyles();
     const theme = useTheme();
@@ -111,6 +118,16 @@ export function EventLive({ eventLiveQueryRef, validateInviteQueryRef }: EventLi
             inline: 'nearest',
         });
     };
+
+    React.useEffect(() => {
+        if (!tokenPassed) return;
+        if (!validateInvite?.valid) {
+            displaySnack('Invalid invite token', { variant: 'error' });
+            router.push('/');
+        }
+        // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
+        if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
+    }, [displaySnack, router, tokenPassed, user, validateInvite]);
 
     if (!node) return <EventSidebarLoader />;
 
@@ -154,5 +171,5 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <EventSidebarLoader />;
 
-    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} />;
+    return <EventLive eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} tokenPassed={!!token} />;
 }
