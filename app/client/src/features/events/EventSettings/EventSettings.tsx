@@ -71,7 +71,7 @@ export function EventSettings({ queryRef }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const [canView, setCanView] = React.useState(false);
 
     React.useEffect(() => {

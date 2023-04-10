@@ -161,7 +161,7 @@ export function ModifyUserEmail({ user, demo }: { user: User; demo?: boolean }) 
     // user feedback
     const { displaySnack } = useSnack();
 
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
 
     // styling hook
     const classes = useStyles();
@@ -238,7 +238,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
     // user feedback
     const { displaySnack } = useSnack();
 
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
 
     // styling hook
     const classes = useStyles();

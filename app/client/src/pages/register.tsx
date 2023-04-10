@@ -52,7 +52,7 @@ export default function RegisterPage() {
     const classes = useStyles();
     const router = useRouter();
 
-    const [user] = useUser();
+    const { user } = useUser();
 
     React.useEffect(() => {
         if (user) router.push('/organizations/me');
@@ -72,7 +72,7 @@ export default function RegisterPage() {
             <Grid item md={5} className={classes.formContainer}>
                 <Paper className={classes.paper}>
                     <RegisterForm
-                        onSuccess={() => router.push('/app/home')}
+                        onSuccess={() => router.push('/dashboard')}
                         secondaryActions={
                             <Link href='/login' className={classes.link} underline='hover'>
                                 Already have an account?

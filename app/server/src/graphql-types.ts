@@ -47,6 +47,7 @@ export type Query = {
     events?: Maybe<Array<Event>>;
     /** Fetch a single event */
     event?: Maybe<Event>;
+    isOrganizer: Scalars['Boolean'];
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
     promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
     prompt?: Maybe<EventLiveFeedbackPrompt>;
@@ -123,6 +124,7 @@ export type User = Node & {
     isEmailVerified?: Maybe<Scalars['Boolean']>;
     isAdmin?: Maybe<Scalars['Boolean']>;
     canMakeOrgs?: Maybe<Scalars['Boolean']>;
+    isOrganizer?: Maybe<Scalars['Boolean']>;
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
@@ -249,6 +251,10 @@ export type ValidatePasswordResetTokenForm = {
     token: Scalars['String'];
 };
 
+export type OrganizerForm = {
+    email: Scalars['String'];
+};
+
 export type UserMutationResponse = MutationResponse & {
     __typename?: 'UserMutationResponse';
     isError: Scalars['Boolean'];
@@ -289,6 +295,8 @@ export type Mutation = {
     resetPassword: ResetPasswordMutationResponse;
     deleteAccount: UserMutationResponse;
     updateOrganizer: UserMutationResponse;
+    makeOrganizer: UserMutationResponse;
+    removeOrganizer: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -370,6 +378,14 @@ export type MutationdeleteAccountArgs = {
 
 export type MutationupdateOrganizerArgs = {
     input: UpdateOrganizerForm;
+};
+
+export type MutationmakeOrganizerArgs = {
+    input: OrganizerForm;
+};
+
+export type MutationremoveOrganizerArgs = {
+    input: OrganizerForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -1419,6 +1435,7 @@ export type ResolversTypes = {
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
     ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
     ResetPasswordRequestMutationResponse: ResolverTypeWrapper<ResetPasswordRequestMutationResponse>;
     ResetPasswordMutationResponse: ResolverTypeWrapper<ResetPasswordMutationResponse>;
@@ -1552,6 +1569,7 @@ export type ResolversParentTypes = {
     ResetPasswordRequestForm: ResetPasswordRequestForm;
     ResetPasswordForm: ResetPasswordForm;
     ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: UserMutationResponse;
     ResetPasswordRequestMutationResponse: ResetPasswordRequestMutationResponse;
     ResetPasswordMutationResponse: ResetPasswordMutationResponse;
@@ -1684,6 +1702,7 @@ export type QueryResolvers<
     >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
     event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
+    isOrganizer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
@@ -1772,6 +1791,7 @@ export type UserResolvers<
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     canMakeOrgs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isOrganizer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<
         Maybe<ResolversTypes['OrganizationConnection']>,
@@ -1920,6 +1940,18 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationupdateOrganizerArgs, 'input'>
+    >;
+    makeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationmakeOrganizerArgs, 'input'>
+    >;
+    removeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveOrganizerArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<
@@ -2939,6 +2971,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         isAdmin?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         canMakeOrgs?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isOrganizer?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
         events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;

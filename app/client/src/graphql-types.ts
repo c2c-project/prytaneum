@@ -620,6 +620,7 @@ export type Mutation = {
   login: UserMutationResponse;
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
+  makeOrganizer: UserMutationResponse;
   /**
    * Advance the current question
    * TODO: make this an EventMutationResponse
@@ -631,6 +632,7 @@ export type Mutation = {
    */
   prevQuestion: Event;
   register: UserMutationResponse;
+  removeOrganizer: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   /**
@@ -773,6 +775,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationMakeOrganizerArgs = {
+  input: OrganizerForm;
+};
+
+
 export type MutationNextQuestionArgs = {
   eventId: Scalars['ID'];
 };
@@ -785,6 +792,11 @@ export type MutationPrevQuestionArgs = {
 
 export type MutationRegisterArgs = {
   input: RegistrationForm;
+};
+
+
+export type MutationRemoveOrganizerArgs = {
+  input: OrganizerForm;
 };
 
 
@@ -927,6 +939,10 @@ export type OrganizationSubscription = {
   userId?: Maybe<Scalars['ID']>;
 };
 
+export type OrganizerForm = {
+  email: Scalars['String'];
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -941,6 +957,7 @@ export type Query = {
   event?: Maybe<Event>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
+  isOrganizer: Scalars['Boolean'];
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
@@ -1254,6 +1271,7 @@ export type User = Node & {
   id: Scalars['ID'];
   isAdmin?: Maybe<Scalars['Boolean']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
+  isOrganizer?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;

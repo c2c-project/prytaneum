@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2eea25020f44b88ac957b94d38c47e82>>
+ * @generated SignedSource<<ae04f333230cd8e73095bf7bc16d3813>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -166,6 +166,13 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "isOrganizer",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "isAdmin",
                 "storageKey": null
               }
@@ -178,12 +185,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "80a0182fec5f51bced7ddce2917671b7",
+    "cacheID": "42b7756f26a36f3cda9dda8418bca749",
     "id": null,
     "metadata": {},
     "name": "DeleteAccountFormMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteAccountFormMutation(\n  $input: DeleteAccountForm!\n) {\n  deleteAccount(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isAdmin\n}\n"
+    "text": "mutation DeleteAccountFormMutation(\n  $input: DeleteAccountForm!\n) {\n  deleteAccount(input: $input) {\n    isError\n    message\n    body {\n      ...useUserFragment\n      id\n    }\n  }\n}\n\nfragment useUserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  avatar\n  isOrganizer\n  isAdmin\n}\n"
   }
 };
 })();

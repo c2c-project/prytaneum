@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 export function CallToAction() {
     const classes = useStyles();
     const router = useRouter();
-    const [user] = useUser();
+    const { user } = useUser();
 
     return (
         <>

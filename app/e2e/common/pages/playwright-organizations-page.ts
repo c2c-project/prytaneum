@@ -62,7 +62,11 @@ export class PlaywrightOrganizationsPage {
     }
 
     async clickDeleteOrganizationButton(organizationName: string) {
-        await this.page.getByRole('listitem').filter({ hasText: organizationName }).getByRole('button', { name: 'delete organization' }).click();
+        await this.page
+            .getByRole('listitem')
+            .filter({ hasText: organizationName })
+            .getByRole('button', { name: 'delete organization' })
+            .click();
     }
 
     async clickConfirmDeleteOrganizationButton() {

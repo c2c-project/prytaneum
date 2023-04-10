@@ -12,6 +12,7 @@ import type {
     UpdatePasswordForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
+    OrganizerForm,
     UpdateOrganizerForm,
 } from '@local/graphql-types';
 
@@ -413,6 +414,54 @@ export async function resetPassword(prisma: PrismaClient, input: ResetPasswordFo
         where: { email },
         data: { password: encryptedPassword },
     });
+}
+
+export async function isOrganizer(userId: string, prisma: PrismaClient) {
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    return queryResult.canMakeOrgs;
+}
+
+export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO validate product key to elevate account to organizer
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: true },
+    });
+    return updatedUser;
+}
+
+export async function removeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
+    const { email } = input;
+    // TODO Check if admin account once admin accounts are implemented
+    // ensure viewer has privledge to make user organizer
+    const queryResult = await prisma.user.findUnique({ where: { id: userId }, select: { canMakeOrgs: true } });
+    if (!queryResult)
+        throw new ProtectedError({
+            userMessage: 'Internal server error. Please try again later.',
+            internalMessage: errors.DNE('user'),
+        });
+    if (!queryResult.canMakeOrgs) throw new ProtectedError({ userMessage: errors.permissions });
+
+    const updatedUser = await prisma.user.update({
+        where: { email },
+        data: { canMakeOrgs: false },
+    });
+    return updatedUser;
 }
 
 export async function updateOrganizer(viewerId: string, prisma: PrismaClient, input: UpdateOrganizerForm) {
