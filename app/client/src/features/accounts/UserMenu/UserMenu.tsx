@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         width: 'auto',
         margin: theme.spacing(1),
-        backgroundColor: '#2427B7',
     },
     paper: {
         marginTop: theme.spacing(2),
@@ -171,7 +170,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                 <>
                     <Button
                         data-test-id='appbar-login-button'
-                        color='primary'
+                        style={{ backgroundColor: '#2427B7' }}
                         variant='contained'
                         className={classes.button}
                         onClick={handleClick('login')}
@@ -192,7 +191,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </ResponsiveDialog>
                     <Button
                         data-test-id='appbar-register-button'
-                        color='primary'
+                        style={{ backgroundColor: '#2427B7' }}
                         variant='contained'
                         className={classes.button}
                         onClick={handleClick('register')}
