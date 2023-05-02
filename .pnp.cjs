@@ -344,6 +344,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],\
             ["react-beautiful-dnd", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:13.1.0"],\
             ["react-compound-slider", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:3.3.1"],\
+            ["react-csv", "npm:2.2.2"],\
             ["react-dom", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"],\
             ["react-google-charts", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:4.0.0"],\
             ["react-infinite-scroll-component", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.1.0"],\
@@ -37218,6 +37219,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/react",\
             "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-csv", [\
+        ["npm:2.2.2", {\
+          "packageLocation": "./.yarn/cache/react-csv-npm-2.2.2-b5548c3e54-a6ffabd67f.zip/node_modules/react-csv/",\
+          "packageDependencies": [\
+            ["react-csv", "npm:2.2.2"]\
           ],\
           "linkType": "HARD"\
         }]\
