@@ -1,5 +1,8 @@
-import { PrismaClient } from '@local/__generated__/prisma';
+import { Prisma, PrismaClient } from '@local/__generated__/prisma';
 import { errors } from '@local/features/utils';
+import { register } from '@local/features/accounts/methods';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import { EventQuestion } from '../../../graphql-types';
 import type {
     CreateModerator,
     DeleteModerator,
@@ -8,7 +11,6 @@ import type {
     AddQuestionToQueue,
     RemoveQuestionFromQueue,
 } from '@local/graphql-types';
-import { register } from '@local/features/accounts/methods';
 
 async function isMember(userId: string, eventId: string, prisma: PrismaClient) {
     const memberResults = await prisma.event.findUnique({
@@ -43,7 +45,7 @@ export async function hideQuestionById(userId: string, prisma: PrismaClient, inp
 
     // permission check
     const hasPermission = await isModerator(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     return prisma.eventQuestion.update({
         where: {
@@ -63,7 +65,7 @@ export async function updateQuestionPosition(userId: string, prisma: PrismaClien
 
     // permission check
     const hasPermission = await isModerator(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     return prisma.eventQuestion.update({
         where: {
@@ -83,7 +85,7 @@ export async function createModerator(userId: string, prisma: PrismaClient, inpu
 
     // permission check
     const hasPermissions = await isMember(userId, eventId, prisma);
-    if (!hasPermissions) throw new Error(errors.permissions);
+    if (!hasPermissions) throw new ProtectedError({ userMessage: errors.permissions });
 
     // check if email already exists
     let userResult = await prisma.user.findFirst({ where: { email } });
@@ -125,7 +127,7 @@ export async function isEventRelevant(eventId: string, prisma: PrismaClient, fee
  */
 export async function changeCurrentQuestion(userId: string, prisma: PrismaClient, eventId: string, change: 1 | -1) {
     const hasPermission = await isModerator(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     // first find the event's current question
     const dbEvent = await prisma.event.findUnique({
@@ -133,13 +135,17 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
         select: { currentQuestion: true },
     });
 
-    if (!dbEvent) throw new Error(errors.DNE('Event'));
+    if (!dbEvent)
+        throw new ProtectedError({
+            userMessage: ProtectedError.internalServerErrorMessage,
+            internalMessage: `Could not find event with id ${eventId}.`,
+        });
 
     // the "next" question, where next can be +1 or -1
     const nextQuestion = await prisma.eventQuestion.findFirst({
         where: {
             eventId,
-            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: -1 } }],
+            AND: [{ position: { [change === 1 ? 'gt' : 'lt']: dbEvent.currentQuestion } }, { position: { not: '-1' } }],
         },
         orderBy: { position: change === 1 ? 'asc' : 'desc' },
     });
@@ -149,11 +155,12 @@ export async function changeCurrentQuestion(userId: string, prisma: PrismaClient
         where: { position: dbEvent.currentQuestion, eventId },
     });
 
-    if (!nextQuestion && !currentQuestion) throw new Error(`Cannot move ${change === -1 ? 'back' : 'forward'}`);
+    if (!nextQuestion && !currentQuestion)
+        throw new ProtectedError({ userMessage: `Cannot move ${change === -1 ? 'back' : 'forward'}` });
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion?.position ?? -1 },
+        data: { currentQuestion: nextQuestion?.position ?? '-1' },
         select: { currentQuestion: true, id: true },
     });
     return { event: updatedEvent, newCurrentQuestion: nextQuestion, prevCurrentQuestion: currentQuestion };
@@ -169,19 +176,20 @@ async function getCurrentQuestionPosition(eventId: string, prisma: PrismaClient)
 
 export async function decrementQuestion(userId: string, prisma: PrismaClient, eventId: string) {
     const hasPermission = await isModerator(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
-    const nextQuestionPosition = await prisma.eventQuestion.findFirst({
-        where: {
-            eventId,
-            position: { lt: currentQuestionPosition ?? -1 },
-        },
-        orderBy: { position: 'desc' },
-        select: { position: true },
-    });
+    const position = parseInt(currentQuestionPosition || '-1');
+    const queryResult: { position: string }[] = await prisma.$queryRaw(Prisma.sql`
+        SELECT position FROM "EventQuestion"
+        WHERE position::BigInt < ${position} AND position::BigInt > -1
+        AND "eventId" = ${eventId}::uuid
+        ORDER BY position::BigInt DESC LIMIT 1
+    `);
 
-    if (!nextQuestionPosition) throw new Error('Cannot increment question');
+    const nextQuestionPosition = queryResult.length === 0 ? null : queryResult[0]?.position;
+
+    // if (!nextQuestionPosition) throw new ProtectedError({ userMessage: 'Cannot decrement question' });
 
     const prevCurrentQuestion = await prisma.eventQuestion.findFirst({
         where: {
@@ -190,11 +198,11 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
         },
     });
 
-    if (!prevCurrentQuestion) throw new Error('Could not find previous question.');
+    if (!prevCurrentQuestion) throw new ProtectedError({ userMessage: 'Could not find previous question.' });
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestionPosition.position },
+        data: { currentQuestion: nextQuestionPosition || '-1' },
         select: { currentQuestion: true, id: true },
     });
 
@@ -206,21 +214,27 @@ export async function decrementQuestion(userId: string, prisma: PrismaClient, ev
 
 export async function incrementQuestion(userId: string, prisma: PrismaClient, eventId: string) {
     const hasPermission = await isModerator(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
     const currentQuestionPosition = await getCurrentQuestionPosition(eventId, prisma);
-    const nextQuestion = await prisma.eventQuestion.findFirst({
-        where: {
-            eventId,
-            position: { gt: currentQuestionPosition ?? -1 },
-        },
-        orderBy: { position: 'asc' },
-    });
+    const position = parseInt(currentQuestionPosition || '-1');
+    const queryResponse: EventQuestion[] = await prisma.$queryRawUnsafe(
+        `
+        SELECT * FROM "EventQuestion"
+        WHERE "eventId" = $1::uuid
+        AND position::BigInt > $2::BigInt
+        ORDER BY position::BigInt ASC LIMIT 1
+    `,
+        eventId,
+        position
+    );
 
-    if (!nextQuestion) throw new Error('Cannot increment question');
+    const nextQuestion = queryResponse.length === 0 ? null : queryResponse[0];
+
+    if (!nextQuestion) throw new ProtectedError({ userMessage: 'Cannot increment question' });
 
     const updatedEvent = await prisma.event.update({
         where: { id: eventId },
-        data: { currentQuestion: nextQuestion.position },
+        data: { currentQuestion: nextQuestion.position || '' },
         select: { currentQuestion: true, id: true },
     });
 
@@ -244,7 +258,7 @@ export async function updateModerator(userId: string, eventId: string, prisma: P
 export async function deleteModerator(userId: string, prisma: PrismaClient, input: DeleteModerator) {
     const { userId: modId, eventId } = input;
     const hasPermission = await isMember(userId, eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
     const deletedModerator = await prisma.eventModerator.delete({
         where: { eventId_userId: { eventId, userId: modId } },
     });
@@ -254,49 +268,59 @@ export async function deleteModerator(userId: string, prisma: PrismaClient, inpu
 export async function addQuestionToQueue(userId: string, prisma: PrismaClient, input: AddQuestionToQueue) {
     // permission check
     const hasPermission = await isModerator(userId, input.eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     const currentTimeMs = new Date().getTime();
     const currentTimeMsStr = currentTimeMs.toString();
 
-    const calculatedPosition = parseInt(currentTimeMsStr.slice(-9), 10);
+    const calculatedPosition = parseInt(currentTimeMsStr);
 
     // check if id is already non-negative
-    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: -1 } });
+    const question = await prisma.eventQuestion.findFirst({ where: { id: input.questionId, position: '-1' } });
     // if the question isn't found with the -1 position, then it's already in queue
-    if (!question) throw new Error('Question is already in queue');
+    if (!question) throw new ProtectedError({ userMessage: 'Question is already in queue.' });
 
     return prisma.eventQuestion.update({
         where: { id: input.questionId },
         data: {
-            position: calculatedPosition,
+            position: calculatedPosition.toString(),
         },
     });
 }
 
 export async function removeQuestionFromQueue(userId: string, prisma: PrismaClient, input: RemoveQuestionFromQueue) {
+    const { eventId, questionId } = input;
     // permission check
-    const hasPermission = await isModerator(userId, input.eventId, prisma);
-    if (!hasPermission) throw new Error(errors.permissions);
+    const hasPermission = await isModerator(userId, eventId, prisma);
+    if (!hasPermission) throw new ProtectedError({ userMessage: errors.permissions });
 
     // Find current question
     const event = await prisma.event.findUnique({
         where: { id: input.eventId },
         select: { currentQuestion: true },
     });
-    if (!event) throw new Error(errors.DNE('Event'));
+    if (!event)
+        throw new ProtectedError({
+            userMessage: ProtectedError.internalServerErrorMessage,
+            internalMessage: `Could not find event with id ${eventId}.`,
+        });
 
-    const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: input.questionId } });
-    if (!toBeRemoved) throw new Error('Question cannot be found');
+    const toBeRemoved = await prisma.eventQuestion.findUnique({ where: { id: questionId } });
+    if (!toBeRemoved) throw new ProtectedError({ userMessage: 'Question cannot be found.' });
+    // Check if the question is in the question record
+    // All questions in the question record shoud have a position greater than or equal to the current question
     if (event.currentQuestion >= toBeRemoved.position) {
-        return toBeRemoved;
+        throw new ProtectedError({
+            userMessage: 'Cannot remove question that has already been asked.',
+            internalMessage: `Cannot remove question that has already been asked. Current question position: ${event.currentQuestion} | Question being dequeud position: ${toBeRemoved.position}`,
+        });
     }
 
     // Set the position to -1 to remove it from the queue
     return prisma.eventQuestion.update({
-        where: { id: input.questionId },
+        where: { id: questionId },
         data: {
-            position: -1,
+            position: '-1',
         },
     });
 }
@@ -304,6 +328,6 @@ export async function removeQuestionFromQueue(userId: string, prisma: PrismaClie
 export async function findUserIdByEmail(email: string, prisma: PrismaClient) {
     return prisma.user.findUnique({
         where: { email },
-        select: { id: true }
+        select: { id: true },
     });
 }

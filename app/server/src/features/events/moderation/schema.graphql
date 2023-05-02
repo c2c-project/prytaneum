@@ -10,7 +10,7 @@ input HideQuestion {
 
 input UpdateQuestionPosition {
     questionId: ID!
-    position: Int!
+    position: String!
     eventId: ID!
 }
 
@@ -56,8 +56,6 @@ type Mutation {
     updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
     addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
     removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
-    # TODO: #QQRedesign delete once code complete
-    updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
 
     """
     Add a new moderator to the given event
@@ -89,10 +87,4 @@ type Subscription {
     New messages as feedback is given
     """
     eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-
-    """
-    subscription for whenever questions are added to the queue
-    TODO: #QQRedesign delete once code complete
-    """
-    questionQueued(eventId: ID!): EventQuestion!
 }

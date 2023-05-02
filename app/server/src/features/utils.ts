@@ -4,6 +4,7 @@ import mercurius, { IResolvers } from 'mercurius';
 import * as Relay from 'graphql-relay';
 import type { Node, ResolversParentTypes, MutationResponse, Maybe } from '@local/graphql-types';
 import { getOrCreateServer } from '@local/core/server';
+import { ProtectedError } from '@local/lib/ProtectedError';
 
 /**
  * Resolver type used for making resolvers
@@ -34,6 +35,8 @@ export const errors = {
     permissions: 'Insufficient permissions',
     fileNotFound: 'File not found',
     fileSize: 'File too large',
+    email: 'Emailed failed to send due to an unexpected error',
+    jwt: 'Invalid Token',
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;
@@ -97,10 +100,19 @@ export async function runMutation<TReturn>(cb: TCallback<TReturn>): TRunMutation
             body: result,
         };
     } catch (e) {
-        getOrCreateServer().log.error(e.message);
+        if (e instanceof ProtectedError) {
+            // Display internal message if one exists, otherwise just display uesrMessage
+            getOrCreateServer().log.error(e.internalMessage === '' ? e.userMessage : e.internalMessage);
+            return {
+                isError: true,
+                message: e.userMessage,
+                body: null,
+            };
+        }
+        getOrCreateServer().log.error(`Error is not an instance of ProtectedError! Error: ${JSON.stringify(e)}}`);
         return {
             isError: true,
-            message: e.message,
+            message: 'Internal server error. Please try again.',
             body: null,
         };
     }

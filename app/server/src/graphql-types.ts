@@ -42,9 +42,18 @@ export type Query = {
     node?: Maybe<Node>;
     /** Fetch user data about the current user */
     me?: Maybe<User>;
+    validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
     /** Fetch all events */
     events?: Maybe<Array<Event>>;
+    /** Fetch a single event */
+    event?: Maybe<Event>;
+    isOrganizer: Scalars['Boolean'];
     myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
+    promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
+    prompt?: Maybe<EventLiveFeedbackPrompt>;
+    prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
+    promptResponseVotes: Votes;
+    /** Validates an invite token and logs the user in if they are already registered. */
     validateInvite: ValidateInviteQueryResponse;
     questionsByEventId?: Maybe<Array<EventQuestion>>;
 };
@@ -53,8 +62,32 @@ export type QuerynodeArgs = {
     id: Scalars['ID'];
 };
 
+export type QueryvalidatePasswordResetTokenArgs = {
+    input: ValidatePasswordResetTokenForm;
+};
+
+export type QueryeventArgs = {
+    eventId: Scalars['ID'];
+};
+
 export type QuerymyFeedbackArgs = {
     eventId: Scalars['ID'];
+};
+
+export type QuerypromptResponsesArgs = {
+    promptId: Scalars['ID'];
+};
+
+export type QuerypromptArgs = {
+    promptId: Scalars['ID'];
+};
+
+export type QuerypromptsArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type QuerypromptResponseVotesArgs = {
+    promptId: Scalars['ID'];
 };
 
 export type QueryvalidateInviteArgs = {
@@ -89,16 +122,61 @@ export type User = Node & {
     lastName?: Maybe<Scalars['String']>;
     email?: Maybe<Scalars['String']>;
     isEmailVerified?: Maybe<Scalars['Boolean']>;
+    isAdmin?: Maybe<Scalars['Boolean']>;
+    canMakeOrgs?: Maybe<Scalars['Boolean']>;
+    isOrganizer?: Maybe<Scalars['Boolean']>;
     /** Avatar URL if null then no avatar is uploaded */
     avatar?: Maybe<Scalars['String']>;
     /** Organizations that this user belongs to */
     organizations?: Maybe<OrganizationConnection>;
+    /** Events that this user is a moderator of, or has been invited to */
+    events?: Maybe<EventConnection>;
+    /** All the users */
+    users?: Maybe<UserConnection>;
+    /** All events */
+    allEvents?: Maybe<EventConnection>;
 };
 
 /** User Data */
 export type UserorganizationsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
+};
+
+/** User Data */
+export type UsereventsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+/** User Data */
+export type UserusersArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<UsersSearchFilters>;
+};
+
+/** User Data */
+export type UserallEventsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+    filter?: Maybe<EventsSearchFilters>;
+};
+
+export type UsersSearchFilters = {
+    /** Search by first name */
+    firstName?: Maybe<Scalars['String']>;
+    /** Search by last name */
+    lastName?: Maybe<Scalars['String']>;
+    /** Search by email */
+    email?: Maybe<Scalars['String']>;
+};
+
+export type EventsSearchFilters = {
+    /** Search by event name */
+    eventName?: Maybe<Scalars['String']>;
+    /** Search by organizaiton name */
+    orgName?: Maybe<Scalars['String']>;
 };
 
 export type UserSettings = {
@@ -149,9 +227,32 @@ export type DeleteAccountForm = {
     confirmPassword: Scalars['String'];
 };
 
+export type UpdateOrganizerForm = {
+    id: Scalars['ID'];
+    canMakeOrgs: Scalars['Boolean'];
+};
+
 export type LoginForm = {
     email: Scalars['String'];
     password: Scalars['String'];
+};
+
+export type ResetPasswordRequestForm = {
+    email: Scalars['String'];
+};
+
+export type ResetPasswordForm = {
+    newPassword: Scalars['String'];
+    confirmNewPassword: Scalars['String'];
+    token: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenForm = {
+    token: Scalars['String'];
+};
+
+export type OrganizerForm = {
+    email: Scalars['String'];
 };
 
 export type UserMutationResponse = MutationResponse & {
@@ -161,13 +262,41 @@ export type UserMutationResponse = MutationResponse & {
     body?: Maybe<User>;
 };
 
+export type ResetPasswordRequestMutationResponse = MutationResponse & {
+    __typename?: 'ResetPasswordRequestMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<Scalars['Boolean']>;
+};
+
+export type ResetPasswordMutationResponse = MutationResponse & {
+    __typename?: 'ResetPasswordMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenQueryResponse = {
+    __typename?: 'ValidatePasswordResetTokenQueryResponse';
+    valid: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
 export type Mutation = {
     __typename?: 'Mutation';
     register: UserMutationResponse;
     login: UserMutationResponse;
     updateEmail: UserMutationResponse;
     updatePassword: UserMutationResponse;
+    /**
+     * send a reset password request if the account exists
+     * returns false if an account with the provided email cannot be found
+     */
+    resetPasswordRequest: ResetPasswordRequestMutationResponse;
+    resetPassword: ResetPasswordMutationResponse;
     deleteAccount: UserMutationResponse;
+    updateOrganizer: UserMutationResponse;
+    makeOrganizer: UserMutationResponse;
+    removeOrganizer: UserMutationResponse;
     /** The logout just returns the timestamp of the logout action */
     logout: Scalars['Date'];
     createEvent: EventMutationResponse;
@@ -184,14 +313,15 @@ export type Mutation = {
     createMember: UserMutationResponse;
     /** Delete a member from the organization */
     deleteMember: UserMutationResponse;
-    createFeedback?: Maybe<EventFeedbackMutationResponse>;
+    createFeedback: EventFeedbackMutationResponse;
+    createFeedbackPrompt: EventFeedbackPromptMutationResponse;
+    createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
+    shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
     createInvite: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
     addQuestionToQueue: EventQuestionMutationResponse;
     removeQuestionFromQueue: EventQuestionMutationResponse;
-    /** TODO: #QQRedesign delete once code complete */
-    updateQuestionQueue: EventQuestionMutationResponse;
     /** Add a new moderator to the given event */
     createModerator: ModeratorMutationResponse;
     updateModerator: ModeratorMutationResponse;
@@ -234,8 +364,28 @@ export type MutationupdatePasswordArgs = {
     input: UpdatePasswordForm;
 };
 
+export type MutationresetPasswordRequestArgs = {
+    input: ResetPasswordRequestForm;
+};
+
+export type MutationresetPasswordArgs = {
+    input: ResetPasswordForm;
+};
+
 export type MutationdeleteAccountArgs = {
     input: DeleteAccountForm;
+};
+
+export type MutationupdateOrganizerArgs = {
+    input: UpdateOrganizerForm;
+};
+
+export type MutationmakeOrganizerArgs = {
+    input: OrganizerForm;
+};
+
+export type MutationremoveOrganizerArgs = {
+    input: OrganizerForm;
 };
 
 export type MutationcreateEventArgs = {
@@ -279,7 +429,20 @@ export type MutationdeleteMemberArgs = {
 };
 
 export type MutationcreateFeedbackArgs = {
-    input?: Maybe<CreateFeedback>;
+    input: CreateFeedback;
+};
+
+export type MutationcreateFeedbackPromptArgs = {
+    input: CreateFeedbackPrompt;
+};
+
+export type MutationcreateFeedbackPromptResponseArgs = {
+    input: CreateFeedbackPromptResponse;
+};
+
+export type MutationshareFeedbackPromptResultsArgs = {
+    eventId: Scalars['ID'];
+    promptId: Scalars['ID'];
 };
 
 export type MutationcreateInviteArgs = {
@@ -300,10 +463,6 @@ export type MutationaddQuestionToQueueArgs = {
 
 export type MutationremoveQuestionFromQueueArgs = {
     input: RemoveQuestionFromQueue;
-};
-
-export type MutationupdateQuestionQueueArgs = {
-    input: UpdateQuestionQueue;
 };
 
 export type MutationcreateModeratorArgs = {
@@ -400,6 +559,8 @@ export type Event = Node & {
     videos?: Maybe<EventVideoConnection>;
     /** Live Feedback given during the event */
     liveFeedback?: Maybe<EventLiveFeedbackConnection>;
+    /** Live Feedback Prompts w/ responses */
+    liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
     /** List of moderators for this particular event */
     moderators?: Maybe<UserConnection>;
     /** Whether or not the viewer is a moderator */
@@ -408,15 +569,10 @@ export type Event = Node & {
     invited?: Maybe<UserConnection>;
     /** Whether or not the viewer is invited */
     isViewerInvited?: Maybe<Scalars['Boolean']>;
-    /**
-     * Questions queued in this session by the moderator(s)
-     * TODO: #QQRedesign delete after code complete
-     */
-    queuedQuestions?: Maybe<EventQuestionConnection>;
     /** Questions having to do with the queue */
     questionQueue?: Maybe<EventQuestionQueue>;
     /** The question currently being asked, corresponds to a "position" value on the event question */
-    currentQuestion?: Maybe<Scalars['Int']>;
+    currentQuestion?: Maybe<Scalars['String']>;
 };
 
 export type EventquestionsArgs = {
@@ -444,17 +600,17 @@ export type EventliveFeedbackArgs = {
     after?: Maybe<Scalars['String']>;
 };
 
+export type EventliveFeedbackPromptsArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
 export type EventmoderatorsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
 
 export type EventinvitedArgs = {
-    first?: Maybe<Scalars['Int']>;
-    after?: Maybe<Scalars['String']>;
-};
-
-export type EventqueuedQuestionsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
 };
@@ -514,25 +670,25 @@ export type EventMutationResponse = MutationResponse & {
     body?: Maybe<Event>;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventEdgeContainer = {
+    __typename?: 'EventEdgeContainer';
+    edge: EventEdge;
+};
+
 export type Subscription = {
     __typename?: 'Subscription';
-    /** TODO: #QQRedesign delete after code complete */
     eventUpdates: Event;
+    eventCreated: EventEdgeContainer;
+    eventDeleted: EventEdgeContainer;
     /** subscription for whenever a new org is added */
     orgUpdated: OrganizationSubscription;
     feedbackCRUD: FeedbackOperation;
+    feedbackPrompted: EventLiveFeedbackPrompt;
+    feedbackPromptResultsShared: EventLiveFeedbackPrompt;
     /** New messages as feedback is given */
     eventLiveFeedbackCreated: EventLiveFeedback;
-    /**
-     * subscription for whenever questions are added to the queue
-     * TODO: #QQRedesign delete once code complete
-     */
-    questionQueued: EventQuestion;
-    /**
-     * Question subscription for all operations performed on questions
-     * TODO: #QQRedesign delete after code complete
-     */
-    questionCRUD: QuestionOperation;
+    /** Question subscription for all operations performed on questions */
     questionCreated: EventQuestionEdgeContainer;
     questionUpdated: EventQuestionEdgeContainer;
     questionDeleted: EventQuestionEdgeContainer;
@@ -555,22 +711,30 @@ export type Subscription = {
 };
 
 export type SubscriptioneventUpdatesArgs = {
-    eventId: Scalars['ID'];
+    userId: Scalars['ID'];
+};
+
+export type SubscriptioneventCreatedArgs = {
+    userId: Scalars['ID'];
+};
+
+export type SubscriptioneventDeletedArgs = {
+    eventIds: Array<Scalars['ID']>;
 };
 
 export type SubscriptionfeedbackCRUDArgs = {
     eventId: Scalars['ID'];
 };
 
+export type SubscriptionfeedbackPromptedArgs = {
+    eventId: Scalars['ID'];
+};
+
+export type SubscriptionfeedbackPromptResultsSharedArgs = {
+    eventId: Scalars['ID'];
+};
+
 export type SubscriptioneventLiveFeedbackCreatedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionQueuedArgs = {
-    eventId: Scalars['ID'];
-};
-
-export type SubscriptionquestionCRUDArgs = {
     eventId: Scalars['ID'];
 };
 
@@ -717,10 +881,71 @@ export type EventLiveFeedback = Node & {
     refFeedback?: Maybe<EventLiveFeedback>;
 };
 
+export type EventLiveFeedbackPrompt = Node & {
+    __typename?: 'EventLiveFeedbackPrompt';
+    id: Scalars['ID'];
+    prompt: Scalars['String'];
+    event?: Maybe<Event>;
+    createdAt?: Maybe<Scalars['Date']>;
+    isVote?: Maybe<Scalars['Boolean']>;
+    isOpenEnded?: Maybe<Scalars['Boolean']>;
+    responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
+};
+
+export type EventLiveFeedbackPromptresponsesArgs = {
+    first?: Maybe<Scalars['Int']>;
+    after?: Maybe<Scalars['String']>;
+};
+
+export enum Vote {
+    FOR = 'FOR',
+    AGAINST = 'AGAINST',
+    CONFLICTED = 'CONFLICTED',
+}
+
+export type EventLiveFeedbackPromptResponse = Node & {
+    __typename?: 'EventLiveFeedbackPromptResponse';
+    id: Scalars['ID'];
+    isOpenEnded?: Maybe<Scalars['Boolean']>;
+    response?: Maybe<Scalars['String']>;
+    isVote?: Maybe<Scalars['Boolean']>;
+    vote?: Maybe<Scalars['String']>;
+    event?: Maybe<Event>;
+    createdAt?: Maybe<Scalars['Date']>;
+    createdBy?: Maybe<User>;
+    createdById?: Maybe<Scalars['ID']>;
+    promptId?: Maybe<Scalars['ID']>;
+    prompt?: Maybe<EventLiveFeedbackPrompt>;
+};
+
 export type EventLiveFeedbackEdge = {
     __typename?: 'EventLiveFeedbackEdge';
     node: EventLiveFeedback;
     cursor: Scalars['String'];
+};
+
+export type EventLiveFeedbackPromptEdge = {
+    __typename?: 'EventLiveFeedbackPromptEdge';
+    node: EventLiveFeedbackPrompt;
+    cursor: Scalars['String'];
+};
+
+export type EventLiveFeedbackPromptConnection = {
+    __typename?: 'EventLiveFeedbackPromptConnection';
+    edges?: Maybe<Array<EventLiveFeedbackPromptEdge>>;
+    pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptResponseEdge = {
+    __typename?: 'EventLiveFeedbackPromptResponseEdge';
+    node: EventLiveFeedbackPromptResponse;
+    cursor: Scalars['String'];
+};
+
+export type EventLiveFeedbackPromptResponseConnection = {
+    __typename?: 'EventLiveFeedbackPromptResponseConnection';
+    edges?: Maybe<Array<EventLiveFeedbackPromptResponseEdge>>;
+    pageInfo: PageInfo;
 };
 
 export type EventLiveFeedbackConnection = {
@@ -742,11 +967,45 @@ export type EventFeedbackMutationResponse = MutationResponse & {
     body?: Maybe<EventLiveFeedbackEdge>;
 };
 
+export type EventFeedbackPromptMutationResponse = MutationResponse & {
+    __typename?: 'EventFeedbackPromptMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<EventLiveFeedbackPromptEdge>;
+};
+
+export type EventFeedbackPromptResponseMutationResponse = MutationResponse & {
+    __typename?: 'EventFeedbackPromptResponseMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+    body?: Maybe<EventLiveFeedbackPromptResponseEdge>;
+};
+
 export type CreateFeedback = {
     message: Scalars['String'];
     eventId: Scalars['ID'];
     refFeedbackId?: Maybe<Scalars['ID']>;
     isReply?: Maybe<Scalars['Boolean']>;
+};
+
+export type CreateFeedbackPrompt = {
+    prompt: Scalars['String'];
+    eventId: Scalars['ID'];
+    feedbackType: Scalars['String'];
+};
+
+export type CreateFeedbackPromptResponse = {
+    eventId: Scalars['ID'];
+    promptId: Scalars['ID'];
+    response: Scalars['String'];
+    vote: Scalars['String'];
+};
+
+export type Votes = {
+    __typename?: 'Votes';
+    for: Scalars['Int'];
+    against: Scalars['Int'];
+    conflicted: Scalars['Int'];
 };
 
 export type CreateInvite = {
@@ -768,6 +1027,7 @@ export type InviteMutationResponse = MutationResponse & {
 export type ValidateInviteQueryResponse = {
     __typename?: 'ValidateInviteQueryResponse';
     valid: Scalars['Boolean'];
+    user?: Maybe<User>;
 };
 
 export type HideQuestion = {
@@ -779,7 +1039,7 @@ export type HideQuestion = {
 
 export type UpdateQuestionPosition = {
     questionId: Scalars['ID'];
-    position: Scalars['Int'];
+    position: Scalars['String'];
     eventId: Scalars['ID'];
 };
 
@@ -852,7 +1112,7 @@ export type EventQuestion = Node & {
     refQuestion?: Maybe<EventQuestion>;
     /** The actual content of the question */
     question?: Maybe<Scalars['String']>;
-    position?: Maybe<Scalars['Int']>;
+    position: Scalars['String'];
     isVisible?: Maybe<Scalars['Boolean']>;
     isAsked?: Maybe<Scalars['Boolean']>;
     lang?: Maybe<Scalars['String']>;
@@ -930,13 +1190,6 @@ export type EventQuestionMutationResponse = MutationResponse & {
     isError: Scalars['Boolean'];
     message: Scalars['String'];
     body?: Maybe<EventQuestionEdge>;
-};
-
-/** TODO: #QQRedesign dlete after code complete */
-export type QuestionOperation = {
-    __typename?: 'QuestionOperation';
-    operationType: Operation;
-    edge: EventQuestionEdge;
 };
 
 /** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
@@ -1143,6 +1396,8 @@ export type ResolversTypes = {
         | ResolversTypes['Event']
         | ResolversTypes['Organization']
         | ResolversTypes['EventLiveFeedback']
+        | ResolversTypes['EventLiveFeedbackPrompt']
+        | ResolversTypes['EventLiveFeedbackPromptResponse']
         | ResolversTypes['EventQuestion']
         | ResolversTypes['EventSpeaker']
         | ResolversTypes['EventVideo'];
@@ -1151,9 +1406,13 @@ export type ResolversTypes = {
     Error: ResolverTypeWrapper<Error>;
     MutationResponse:
         | ResolversTypes['UserMutationResponse']
+        | ResolversTypes['ResetPasswordRequestMutationResponse']
+        | ResolversTypes['ResetPasswordMutationResponse']
         | ResolversTypes['EventMutationResponse']
         | ResolversTypes['OrganizationMutationResponse']
         | ResolversTypes['EventFeedbackMutationResponse']
+        | ResolversTypes['EventFeedbackPromptMutationResponse']
+        | ResolversTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversTypes['InviteMutationResponse']
         | ResolversTypes['ModeratorMutationResponse']
         | ResolversTypes['EventQuestionMutationResponse']
@@ -1162,6 +1421,8 @@ export type ResolversTypes = {
     Operation: Operation;
     User: ResolverTypeWrapper<User>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
+    UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: ResolverTypeWrapper<UserSettings>;
     UserEdge: ResolverTypeWrapper<UserEdge>;
     UserConnection: ResolverTypeWrapper<UserConnection>;
@@ -1169,8 +1430,16 @@ export type ResolversTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
+    ResetPasswordRequestForm: ResetPasswordRequestForm;
+    ResetPasswordForm: ResetPasswordForm;
+    ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: ResolverTypeWrapper<UserMutationResponse>;
+    ResetPasswordRequestMutationResponse: ResolverTypeWrapper<ResetPasswordRequestMutationResponse>;
+    ResetPasswordMutationResponse: ResolverTypeWrapper<ResetPasswordMutationResponse>;
+    ValidatePasswordResetTokenQueryResponse: ResolverTypeWrapper<ValidatePasswordResetTokenQueryResponse>;
     Mutation: ResolverTypeWrapper<{}>;
     Event: ResolverTypeWrapper<Event>;
     EventEdge: ResolverTypeWrapper<EventEdge>;
@@ -1179,6 +1448,7 @@ export type ResolversTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: ResolverTypeWrapper<EventMutationResponse>;
+    EventEdgeContainer: ResolverTypeWrapper<EventEdgeContainer>;
     Subscription: ResolverTypeWrapper<{}>;
     Organization: ResolverTypeWrapper<Organization>;
     OrganizationEdge: ResolverTypeWrapper<OrganizationEdge>;
@@ -1191,11 +1461,23 @@ export type ResolversTypes = {
     DeleteMember: DeleteMember;
     OrganizationMutationResponse: ResolverTypeWrapper<OrganizationMutationResponse>;
     EventLiveFeedback: ResolverTypeWrapper<EventLiveFeedback>;
+    EventLiveFeedbackPrompt: ResolverTypeWrapper<EventLiveFeedbackPrompt>;
+    Vote: Vote;
+    EventLiveFeedbackPromptResponse: ResolverTypeWrapper<EventLiveFeedbackPromptResponse>;
     EventLiveFeedbackEdge: ResolverTypeWrapper<EventLiveFeedbackEdge>;
+    EventLiveFeedbackPromptEdge: ResolverTypeWrapper<EventLiveFeedbackPromptEdge>;
+    EventLiveFeedbackPromptConnection: ResolverTypeWrapper<EventLiveFeedbackPromptConnection>;
+    EventLiveFeedbackPromptResponseEdge: ResolverTypeWrapper<EventLiveFeedbackPromptResponseEdge>;
+    EventLiveFeedbackPromptResponseConnection: ResolverTypeWrapper<EventLiveFeedbackPromptResponseConnection>;
     EventLiveFeedbackConnection: ResolverTypeWrapper<EventLiveFeedbackConnection>;
     FeedbackOperation: ResolverTypeWrapper<FeedbackOperation>;
     EventFeedbackMutationResponse: ResolverTypeWrapper<EventFeedbackMutationResponse>;
+    EventFeedbackPromptMutationResponse: ResolverTypeWrapper<EventFeedbackPromptMutationResponse>;
+    EventFeedbackPromptResponseMutationResponse: ResolverTypeWrapper<EventFeedbackPromptResponseMutationResponse>;
     CreateFeedback: CreateFeedback;
+    CreateFeedbackPrompt: CreateFeedbackPrompt;
+    CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
+    Votes: ResolverTypeWrapper<Votes>;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: ResolverTypeWrapper<InviteMutationResponse>;
@@ -1221,7 +1503,6 @@ export type ResolversTypes = {
     DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: ResolverTypeWrapper<EventQuestionMutationResponse>;
-    QuestionOperation: ResolverTypeWrapper<QuestionOperation>;
     EventQuestionEdgeContainer: ResolverTypeWrapper<EventQuestionEdgeContainer>;
     EventSpeaker: ResolverTypeWrapper<EventSpeaker>;
     EventSpeakerEdge: ResolverTypeWrapper<EventSpeakerEdge>;
@@ -1250,6 +1531,8 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['Event']
         | ResolversParentTypes['Organization']
         | ResolversParentTypes['EventLiveFeedback']
+        | ResolversParentTypes['EventLiveFeedbackPrompt']
+        | ResolversParentTypes['EventLiveFeedbackPromptResponse']
         | ResolversParentTypes['EventQuestion']
         | ResolversParentTypes['EventSpeaker']
         | ResolversParentTypes['EventVideo'];
@@ -1258,9 +1541,13 @@ export type ResolversParentTypes = {
     Error: Error;
     MutationResponse:
         | ResolversParentTypes['UserMutationResponse']
+        | ResolversParentTypes['ResetPasswordRequestMutationResponse']
+        | ResolversParentTypes['ResetPasswordMutationResponse']
         | ResolversParentTypes['EventMutationResponse']
         | ResolversParentTypes['OrganizationMutationResponse']
         | ResolversParentTypes['EventFeedbackMutationResponse']
+        | ResolversParentTypes['EventFeedbackPromptMutationResponse']
+        | ResolversParentTypes['EventFeedbackPromptResponseMutationResponse']
         | ResolversParentTypes['InviteMutationResponse']
         | ResolversParentTypes['ModeratorMutationResponse']
         | ResolversParentTypes['EventQuestionMutationResponse']
@@ -1268,6 +1555,8 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventVideoMutationResponse'];
     User: User;
     Int: Scalars['Int'];
+    UsersSearchFilters: UsersSearchFilters;
+    EventsSearchFilters: EventsSearchFilters;
     UserSettings: UserSettings;
     UserEdge: UserEdge;
     UserConnection: UserConnection;
@@ -1275,8 +1564,16 @@ export type ResolversParentTypes = {
     UpdateEmailForm: UpdateEmailForm;
     UpdatePasswordForm: UpdatePasswordForm;
     DeleteAccountForm: DeleteAccountForm;
+    UpdateOrganizerForm: UpdateOrganizerForm;
     LoginForm: LoginForm;
+    ResetPasswordRequestForm: ResetPasswordRequestForm;
+    ResetPasswordForm: ResetPasswordForm;
+    ValidatePasswordResetTokenForm: ValidatePasswordResetTokenForm;
+    OrganizerForm: OrganizerForm;
     UserMutationResponse: UserMutationResponse;
+    ResetPasswordRequestMutationResponse: ResetPasswordRequestMutationResponse;
+    ResetPasswordMutationResponse: ResetPasswordMutationResponse;
+    ValidatePasswordResetTokenQueryResponse: ValidatePasswordResetTokenQueryResponse;
     Mutation: {};
     Event: Event;
     EventEdge: EventEdge;
@@ -1285,6 +1582,7 @@ export type ResolversParentTypes = {
     UpdateEvent: UpdateEvent;
     DeleteEvent: DeleteEvent;
     EventMutationResponse: EventMutationResponse;
+    EventEdgeContainer: EventEdgeContainer;
     Subscription: {};
     Organization: Organization;
     OrganizationEdge: OrganizationEdge;
@@ -1297,11 +1595,22 @@ export type ResolversParentTypes = {
     DeleteMember: DeleteMember;
     OrganizationMutationResponse: OrganizationMutationResponse;
     EventLiveFeedback: EventLiveFeedback;
+    EventLiveFeedbackPrompt: EventLiveFeedbackPrompt;
+    EventLiveFeedbackPromptResponse: EventLiveFeedbackPromptResponse;
     EventLiveFeedbackEdge: EventLiveFeedbackEdge;
+    EventLiveFeedbackPromptEdge: EventLiveFeedbackPromptEdge;
+    EventLiveFeedbackPromptConnection: EventLiveFeedbackPromptConnection;
+    EventLiveFeedbackPromptResponseEdge: EventLiveFeedbackPromptResponseEdge;
+    EventLiveFeedbackPromptResponseConnection: EventLiveFeedbackPromptResponseConnection;
     EventLiveFeedbackConnection: EventLiveFeedbackConnection;
     FeedbackOperation: FeedbackOperation;
     EventFeedbackMutationResponse: EventFeedbackMutationResponse;
+    EventFeedbackPromptMutationResponse: EventFeedbackPromptMutationResponse;
+    EventFeedbackPromptResponseMutationResponse: EventFeedbackPromptResponseMutationResponse;
     CreateFeedback: CreateFeedback;
+    CreateFeedbackPrompt: CreateFeedbackPrompt;
+    CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
+    Votes: Votes;
     CreateInvite: CreateInvite;
     ValidateInvite: ValidateInvite;
     InviteMutationResponse: InviteMutationResponse;
@@ -1327,7 +1636,6 @@ export type ResolversParentTypes = {
     DeleteQuestion: DeleteQuestion;
     AlterLike: AlterLike;
     EventQuestionMutationResponse: EventQuestionMutationResponse;
-    QuestionOperation: QuestionOperation;
     EventQuestionEdgeContainer: EventQuestionEdgeContainer;
     EventSpeaker: EventSpeaker;
     EventSpeakerEdge: EventSpeakerEdge;
@@ -1365,7 +1673,15 @@ export type NodeResolvers<
     ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']
 > = {
     __resolveType: TypeResolveFn<
-        'User' | 'Event' | 'Organization' | 'EventLiveFeedback' | 'EventQuestion' | 'EventSpeaker' | 'EventVideo',
+        | 'User'
+        | 'Event'
+        | 'Organization'
+        | 'EventLiveFeedback'
+        | 'EventLiveFeedbackPrompt'
+        | 'EventLiveFeedbackPromptResponse'
+        | 'EventQuestion'
+        | 'EventSpeaker'
+        | 'EventVideo',
         ParentType,
         ContextType
     >;
@@ -1378,12 +1694,44 @@ export type QueryResolvers<
 > = {
     node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QuerynodeArgs, 'id'>>;
     me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    validatePasswordResetToken?: Resolver<
+        ResolversTypes['ValidatePasswordResetTokenQueryResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<QueryvalidatePasswordResetTokenArgs, 'input'>
+    >;
     events?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>;
+    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryeventArgs, 'eventId'>>;
+    isOrganizer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     myFeedback?: Resolver<
         Maybe<Array<Maybe<ResolversTypes['EventLiveFeedback']>>>,
         ParentType,
         ContextType,
         RequireFields<QuerymyFeedbackArgs, 'eventId'>
+    >;
+    promptResponses?: Resolver<
+        Maybe<Array<ResolversTypes['EventLiveFeedbackPromptResponse']>>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptResponsesArgs, 'promptId'>
+    >;
+    prompt?: Resolver<
+        Maybe<ResolversTypes['EventLiveFeedbackPrompt']>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptArgs, 'promptId'>
+    >;
+    prompts?: Resolver<
+        Maybe<Array<ResolversTypes['EventLiveFeedbackPrompt']>>,
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptsArgs, 'eventId'>
+    >;
+    promptResponseVotes?: Resolver<
+        ResolversTypes['Votes'],
+        ParentType,
+        ContextType,
+        RequireFields<QuerypromptResponseVotesArgs, 'promptId'>
     >;
     validateInvite?: Resolver<
         ResolversTypes['ValidateInviteQueryResponse'],
@@ -1413,9 +1761,13 @@ export type MutationResponseResolvers<
 > = {
     __resolveType: TypeResolveFn<
         | 'UserMutationResponse'
+        | 'ResetPasswordRequestMutationResponse'
+        | 'ResetPasswordMutationResponse'
         | 'EventMutationResponse'
         | 'OrganizationMutationResponse'
         | 'EventFeedbackMutationResponse'
+        | 'EventFeedbackPromptMutationResponse'
+        | 'EventFeedbackPromptResponseMutationResponse'
         | 'InviteMutationResponse'
         | 'ModeratorMutationResponse'
         | 'EventQuestionMutationResponse'
@@ -1437,12 +1789,33 @@ export type UserResolvers<
     lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    canMakeOrgs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isOrganizer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     organizations?: Resolver<
         Maybe<ResolversTypes['OrganizationConnection']>,
         ParentType,
         ContextType,
         RequireFields<UserorganizationsArgs, never>
+    >;
+    events?: Resolver<
+        Maybe<ResolversTypes['EventConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UsereventsArgs, never>
+    >;
+    users?: Resolver<
+        Maybe<ResolversTypes['UserConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserusersArgs, never>
+    >;
+    allEvents?: Resolver<
+        Maybe<ResolversTypes['EventConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<UserallEventsArgs, never>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1488,6 +1861,34 @@ export type UserMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ResetPasswordRequestMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ResetPasswordRequestMutationResponse'] = ResolversParentTypes['ResetPasswordRequestMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ResetPasswordMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ResetPasswordMutationResponse'] = ResolversParentTypes['ResetPasswordMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ValidatePasswordResetTokenQueryResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['ValidatePasswordResetTokenQueryResponse'] = ResolversParentTypes['ValidatePasswordResetTokenQueryResponse']
+> = {
+    valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
@@ -1516,11 +1917,41 @@ export type MutationResolvers<
         ContextType,
         RequireFields<MutationupdatePasswordArgs, 'input'>
     >;
+    resetPasswordRequest?: Resolver<
+        ResolversTypes['ResetPasswordRequestMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordRequestArgs, 'input'>
+    >;
+    resetPassword?: Resolver<
+        ResolversTypes['ResetPasswordMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationresetPasswordArgs, 'input'>
+    >;
     deleteAccount?: Resolver<
         ResolversTypes['UserMutationResponse'],
         ParentType,
         ContextType,
         RequireFields<MutationdeleteAccountArgs, 'input'>
+    >;
+    updateOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationupdateOrganizerArgs, 'input'>
+    >;
+    makeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationmakeOrganizerArgs, 'input'>
+    >;
+    removeOrganizer?: Resolver<
+        ResolversTypes['UserMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationremoveOrganizerArgs, 'input'>
     >;
     logout?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
     createEvent?: Resolver<
@@ -1584,10 +2015,28 @@ export type MutationResolvers<
         RequireFields<MutationdeleteMemberArgs, 'input'>
     >;
     createFeedback?: Resolver<
-        Maybe<ResolversTypes['EventFeedbackMutationResponse']>,
+        ResolversTypes['EventFeedbackMutationResponse'],
         ParentType,
         ContextType,
-        RequireFields<MutationcreateFeedbackArgs, never>
+        RequireFields<MutationcreateFeedbackArgs, 'input'>
+    >;
+    createFeedbackPrompt?: Resolver<
+        ResolversTypes['EventFeedbackPromptMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationcreateFeedbackPromptArgs, 'input'>
+    >;
+    createFeedbackPromptResponse?: Resolver<
+        ResolversTypes['EventFeedbackPromptResponseMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationcreateFeedbackPromptResponseArgs, 'input'>
+    >;
+    shareFeedbackPromptResults?: Resolver<
+        ResolversTypes['EventFeedbackPromptMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationshareFeedbackPromptResultsArgs, 'eventId' | 'promptId'>
     >;
     createInvite?: Resolver<
         ResolversTypes['InviteMutationResponse'],
@@ -1618,12 +2067,6 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationremoveQuestionFromQueueArgs, 'input'>
-    >;
-    updateQuestionQueue?: Resolver<
-        ResolversTypes['EventQuestionMutationResponse'],
-        ParentType,
-        ContextType,
-        RequireFields<MutationupdateQuestionQueueArgs, 'input'>
     >;
     createModerator?: Resolver<
         ResolversTypes['ModeratorMutationResponse'],
@@ -1761,6 +2204,12 @@ export type EventResolvers<
         ContextType,
         RequireFields<EventliveFeedbackArgs, never>
     >;
+    liveFeedbackPrompts?: Resolver<
+        Maybe<ResolversTypes['EventLiveFeedbackPromptConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventliveFeedbackPromptsArgs, never>
+    >;
     moderators?: Resolver<
         Maybe<ResolversTypes['UserConnection']>,
         ParentType,
@@ -1775,19 +2224,13 @@ export type EventResolvers<
         RequireFields<EventinvitedArgs, never>
     >;
     isViewerInvited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-    queuedQuestions?: Resolver<
-        Maybe<ResolversTypes['EventQuestionConnection']>,
-        ParentType,
-        ContextType,
-        RequireFields<EventqueuedQuestionsArgs, never>
-    >;
     questionQueue?: Resolver<
         Maybe<ResolversTypes['EventQuestionQueue']>,
         ParentType,
         ContextType,
         RequireFields<EventquestionQueueArgs, never>
     >;
-    currentQuestion?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    currentQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1819,6 +2262,14 @@ export type EventMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventEdgeContainerResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventEdgeContainer'] = ResolversParentTypes['EventEdgeContainer']
+> = {
+    edge?: Resolver<ResolversTypes['EventEdge'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
@@ -1828,7 +2279,21 @@ export type SubscriptionResolvers<
         'eventUpdates',
         ParentType,
         ContextType,
-        RequireFields<SubscriptioneventUpdatesArgs, 'eventId'>
+        RequireFields<SubscriptioneventUpdatesArgs, 'userId'>
+    >;
+    eventCreated?: SubscriptionResolver<
+        ResolversTypes['EventEdgeContainer'],
+        'eventCreated',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventCreatedArgs, 'userId'>
+    >;
+    eventDeleted?: SubscriptionResolver<
+        ResolversTypes['EventEdgeContainer'],
+        'eventDeleted',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptioneventDeletedArgs, 'eventIds'>
     >;
     orgUpdated?: SubscriptionResolver<
         ResolversTypes['OrganizationSubscription'],
@@ -1843,26 +2308,26 @@ export type SubscriptionResolvers<
         ContextType,
         RequireFields<SubscriptionfeedbackCRUDArgs, 'eventId'>
     >;
+    feedbackPrompted?: SubscriptionResolver<
+        ResolversTypes['EventLiveFeedbackPrompt'],
+        'feedbackPrompted',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionfeedbackPromptedArgs, 'eventId'>
+    >;
+    feedbackPromptResultsShared?: SubscriptionResolver<
+        ResolversTypes['EventLiveFeedbackPrompt'],
+        'feedbackPromptResultsShared',
+        ParentType,
+        ContextType,
+        RequireFields<SubscriptionfeedbackPromptResultsSharedArgs, 'eventId'>
+    >;
     eventLiveFeedbackCreated?: SubscriptionResolver<
         ResolversTypes['EventLiveFeedback'],
         'eventLiveFeedbackCreated',
         ParentType,
         ContextType,
         RequireFields<SubscriptioneventLiveFeedbackCreatedArgs, 'eventId'>
-    >;
-    questionQueued?: SubscriptionResolver<
-        ResolversTypes['EventQuestion'],
-        'questionQueued',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionQueuedArgs, 'eventId'>
-    >;
-    questionCRUD?: SubscriptionResolver<
-        ResolversTypes['QuestionOperation'],
-        'questionCRUD',
-        ParentType,
-        ContextType,
-        RequireFields<SubscriptionquestionCRUDArgs, 'eventId'>
     >;
     questionCreated?: SubscriptionResolver<
         ResolversTypes['EventQuestionEdgeContainer'],
@@ -2033,12 +2498,85 @@ export type EventLiveFeedbackResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventLiveFeedbackPromptResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPrompt'] = ResolversParentTypes['EventLiveFeedbackPrompt']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    prompt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
+    createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    isOpenEnded?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    responses?: Resolver<
+        Maybe<ResolversTypes['EventLiveFeedbackPromptResponseConnection']>,
+        ParentType,
+        ContextType,
+        RequireFields<EventLiveFeedbackPromptresponsesArgs, never>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptResponse'] = ResolversParentTypes['EventLiveFeedbackPromptResponse']
+> = {
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+    isOpenEnded?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    response?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+    vote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType>;
+    createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+    createdBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+    createdById?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    promptId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+    prompt?: Resolver<Maybe<ResolversTypes['EventLiveFeedbackPrompt']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type EventLiveFeedbackEdgeResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['EventLiveFeedbackEdge'] = ResolversParentTypes['EventLiveFeedbackEdge']
 > = {
     node?: Resolver<ResolversTypes['EventLiveFeedback'], ParentType, ContextType>;
     cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptEdgeResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptEdge'] = ResolversParentTypes['EventLiveFeedbackPromptEdge']
+> = {
+    node?: Resolver<ResolversTypes['EventLiveFeedbackPrompt'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptConnectionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptConnection'] = ResolversParentTypes['EventLiveFeedbackPromptConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedbackPromptEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptResponseEdgeResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptResponseEdge'] = ResolversParentTypes['EventLiveFeedbackPromptResponseEdge']
+> = {
+    node?: Resolver<ResolversTypes['EventLiveFeedbackPromptResponse'], ParentType, ContextType>;
+    cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventLiveFeedbackPromptResponseConnectionResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventLiveFeedbackPromptResponseConnection'] = ResolversParentTypes['EventLiveFeedbackPromptResponseConnection']
+> = {
+    edges?: Resolver<Maybe<Array<ResolversTypes['EventLiveFeedbackPromptResponseEdge']>>, ParentType, ContextType>;
+    pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2070,6 +2608,36 @@ export type EventFeedbackMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EventFeedbackPromptMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventFeedbackPromptMutationResponse'] = ResolversParentTypes['EventFeedbackPromptMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['EventLiveFeedbackPromptEdge']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EventFeedbackPromptResponseMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['EventFeedbackPromptResponseMutationResponse'] = ResolversParentTypes['EventFeedbackPromptResponseMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    body?: Resolver<Maybe<ResolversTypes['EventLiveFeedbackPromptResponseEdge']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VotesResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['Votes'] = ResolversParentTypes['Votes']
+> = {
+    for?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    against?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    conflicted?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type InviteMutationResponseResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['InviteMutationResponse'] = ResolversParentTypes['InviteMutationResponse']
@@ -2084,6 +2652,7 @@ export type ValidateInviteQueryResponseResolvers<
     ParentType extends ResolversParentTypes['ValidateInviteQueryResponse'] = ResolversParentTypes['ValidateInviteQueryResponse']
 > = {
     valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2136,7 +2705,7 @@ export type EventQuestionResolvers<
     createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
     refQuestion?: Resolver<Maybe<ResolversTypes['EventQuestion']>, ParentType, ContextType>;
     question?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-    position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+    position?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     isAsked?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
     lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2202,15 +2771,6 @@ export type EventQuestionMutationResponseResolvers<
     isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
     message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     body?: Resolver<Maybe<ResolversTypes['EventQuestionEdge']>, ParentType, ContextType>;
-    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type QuestionOperationResolvers<
-    ContextType = MercuriusContext,
-    ParentType extends ResolversParentTypes['QuestionOperation'] = ResolversParentTypes['QuestionOperation']
-> = {
-    operationType?: Resolver<ResolversTypes['Operation'], ParentType, ContextType>;
-    edge?: Resolver<ResolversTypes['EventQuestionEdge'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2316,11 +2876,15 @@ export type Resolvers<ContextType = MercuriusContext> = {
     UserEdge?: UserEdgeResolvers<ContextType>;
     UserConnection?: UserConnectionResolvers<ContextType>;
     UserMutationResponse?: UserMutationResponseResolvers<ContextType>;
+    ResetPasswordRequestMutationResponse?: ResetPasswordRequestMutationResponseResolvers<ContextType>;
+    ResetPasswordMutationResponse?: ResetPasswordMutationResponseResolvers<ContextType>;
+    ValidatePasswordResetTokenQueryResponse?: ValidatePasswordResetTokenQueryResponseResolvers<ContextType>;
     Mutation?: MutationResolvers<ContextType>;
     Event?: EventResolvers<ContextType>;
     EventEdge?: EventEdgeResolvers<ContextType>;
     EventConnection?: EventConnectionResolvers<ContextType>;
     EventMutationResponse?: EventMutationResponseResolvers<ContextType>;
+    EventEdgeContainer?: EventEdgeContainerResolvers<ContextType>;
     Subscription?: SubscriptionResolvers<ContextType>;
     Organization?: OrganizationResolvers<ContextType>;
     OrganizationEdge?: OrganizationEdgeResolvers<ContextType>;
@@ -2328,10 +2892,19 @@ export type Resolvers<ContextType = MercuriusContext> = {
     OrganizationSubscription?: OrganizationSubscriptionResolvers<ContextType>;
     OrganizationMutationResponse?: OrganizationMutationResponseResolvers<ContextType>;
     EventLiveFeedback?: EventLiveFeedbackResolvers<ContextType>;
+    EventLiveFeedbackPrompt?: EventLiveFeedbackPromptResolvers<ContextType>;
+    EventLiveFeedbackPromptResponse?: EventLiveFeedbackPromptResponseResolvers<ContextType>;
     EventLiveFeedbackEdge?: EventLiveFeedbackEdgeResolvers<ContextType>;
+    EventLiveFeedbackPromptEdge?: EventLiveFeedbackPromptEdgeResolvers<ContextType>;
+    EventLiveFeedbackPromptConnection?: EventLiveFeedbackPromptConnectionResolvers<ContextType>;
+    EventLiveFeedbackPromptResponseEdge?: EventLiveFeedbackPromptResponseEdgeResolvers<ContextType>;
+    EventLiveFeedbackPromptResponseConnection?: EventLiveFeedbackPromptResponseConnectionResolvers<ContextType>;
     EventLiveFeedbackConnection?: EventLiveFeedbackConnectionResolvers<ContextType>;
     FeedbackOperation?: FeedbackOperationResolvers<ContextType>;
     EventFeedbackMutationResponse?: EventFeedbackMutationResponseResolvers<ContextType>;
+    EventFeedbackPromptMutationResponse?: EventFeedbackPromptMutationResponseResolvers<ContextType>;
+    EventFeedbackPromptResponseMutationResponse?: EventFeedbackPromptResponseMutationResponseResolvers<ContextType>;
+    Votes?: VotesResolvers<ContextType>;
     InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
     ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
     ModeratorMutationResponse?: ModeratorMutationResponseResolvers<ContextType>;
@@ -2344,7 +2917,6 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventQuestionConnection?: EventQuestionConnectionResolvers<ContextType>;
     Like?: LikeResolvers<ContextType>;
     EventQuestionMutationResponse?: EventQuestionMutationResponseResolvers<ContextType>;
-    QuestionOperation?: QuestionOperationResolvers<ContextType>;
     EventQuestionEdgeContainer?: EventQuestionEdgeContainerResolvers<ContextType>;
     EventSpeaker?: EventSpeakerResolvers<ContextType>;
     EventSpeakerEdge?: EventSpeakerEdgeResolvers<ContextType>;
@@ -2397,8 +2969,14 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         lastName?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         email?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         isEmailVerified?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isAdmin?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        canMakeOrgs?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
+        isOrganizer?: LoaderResolver<Maybe<Scalars['Boolean']>, User, {}, TContext>;
         avatar?: LoaderResolver<Maybe<Scalars['String']>, User, {}, TContext>;
         organizations?: LoaderResolver<Maybe<OrganizationConnection>, User, UserorganizationsArgs, TContext>;
+        events?: LoaderResolver<Maybe<EventConnection>, User, UsereventsArgs, TContext>;
+        users?: LoaderResolver<Maybe<UserConnection>, User, UserusersArgs, TContext>;
+        allEvents?: LoaderResolver<Maybe<EventConnection>, User, UserallEventsArgs, TContext>;
     };
 
     UserSettings?: {
@@ -2426,6 +3004,22 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         body?: LoaderResolver<Maybe<User>, UserMutationResponse, {}, TContext>;
     };
 
+    ResetPasswordRequestMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], ResetPasswordRequestMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], ResetPasswordRequestMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<Scalars['Boolean']>, ResetPasswordRequestMutationResponse, {}, TContext>;
+    };
+
+    ResetPasswordMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], ResetPasswordMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], ResetPasswordMutationResponse, {}, TContext>;
+    };
+
+    ValidatePasswordResetTokenQueryResponse?: {
+        valid?: LoaderResolver<Scalars['Boolean'], ValidatePasswordResetTokenQueryResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], ValidatePasswordResetTokenQueryResponse, {}, TContext>;
+    };
+
     Event?: {
         id?: LoaderResolver<Scalars['ID'], Event, {}, TContext>;
         createdBy?: LoaderResolver<Maybe<User>, Event, {}, TContext>;
@@ -2448,13 +3042,18 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         participants?: LoaderResolver<Maybe<EventParticipantConnection>, Event, EventparticipantsArgs, TContext>;
         videos?: LoaderResolver<Maybe<EventVideoConnection>, Event, EventvideosArgs, TContext>;
         liveFeedback?: LoaderResolver<Maybe<EventLiveFeedbackConnection>, Event, EventliveFeedbackArgs, TContext>;
+        liveFeedbackPrompts?: LoaderResolver<
+            Maybe<EventLiveFeedbackPromptConnection>,
+            Event,
+            EventliveFeedbackPromptsArgs,
+            TContext
+        >;
         moderators?: LoaderResolver<Maybe<UserConnection>, Event, EventmoderatorsArgs, TContext>;
         isViewerModerator?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
         invited?: LoaderResolver<Maybe<UserConnection>, Event, EventinvitedArgs, TContext>;
         isViewerInvited?: LoaderResolver<Maybe<Scalars['Boolean']>, Event, {}, TContext>;
-        queuedQuestions?: LoaderResolver<Maybe<EventQuestionConnection>, Event, EventqueuedQuestionsArgs, TContext>;
         questionQueue?: LoaderResolver<Maybe<EventQuestionQueue>, Event, EventquestionQueueArgs, TContext>;
-        currentQuestion?: LoaderResolver<Maybe<Scalars['Int']>, Event, {}, TContext>;
+        currentQuestion?: LoaderResolver<Maybe<Scalars['String']>, Event, {}, TContext>;
     };
 
     EventEdge?: {
@@ -2471,6 +3070,10 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], EventMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<Event>, EventMutationResponse, {}, TContext>;
+    };
+
+    EventEdgeContainer?: {
+        edge?: LoaderResolver<EventEdge, EventEdgeContainer, {}, TContext>;
     };
 
     Organization?: {
@@ -2515,9 +3118,68 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         refFeedback?: LoaderResolver<Maybe<EventLiveFeedback>, EventLiveFeedback, {}, TContext>;
     };
 
+    EventLiveFeedbackPrompt?: {
+        id?: LoaderResolver<Scalars['ID'], EventLiveFeedbackPrompt, {}, TContext>;
+        prompt?: LoaderResolver<Scalars['String'], EventLiveFeedbackPrompt, {}, TContext>;
+        event?: LoaderResolver<Maybe<Event>, EventLiveFeedbackPrompt, {}, TContext>;
+        createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedbackPrompt, {}, TContext>;
+        isVote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPrompt, {}, TContext>;
+        isOpenEnded?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPrompt, {}, TContext>;
+        responses?: LoaderResolver<
+            Maybe<EventLiveFeedbackPromptResponseConnection>,
+            EventLiveFeedbackPrompt,
+            EventLiveFeedbackPromptresponsesArgs,
+            TContext
+        >;
+    };
+
+    EventLiveFeedbackPromptResponse?: {
+        id?: LoaderResolver<Scalars['ID'], EventLiveFeedbackPromptResponse, {}, TContext>;
+        isOpenEnded?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        response?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        isVote?: LoaderResolver<Maybe<Scalars['Boolean']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        vote?: LoaderResolver<Maybe<Scalars['String']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        event?: LoaderResolver<Maybe<Event>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        createdBy?: LoaderResolver<Maybe<User>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        createdById?: LoaderResolver<Maybe<Scalars['ID']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        promptId?: LoaderResolver<Maybe<Scalars['ID']>, EventLiveFeedbackPromptResponse, {}, TContext>;
+        prompt?: LoaderResolver<Maybe<EventLiveFeedbackPrompt>, EventLiveFeedbackPromptResponse, {}, TContext>;
+    };
+
     EventLiveFeedbackEdge?: {
         node?: LoaderResolver<EventLiveFeedback, EventLiveFeedbackEdge, {}, TContext>;
         cursor?: LoaderResolver<Scalars['String'], EventLiveFeedbackEdge, {}, TContext>;
+    };
+
+    EventLiveFeedbackPromptEdge?: {
+        node?: LoaderResolver<EventLiveFeedbackPrompt, EventLiveFeedbackPromptEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], EventLiveFeedbackPromptEdge, {}, TContext>;
+    };
+
+    EventLiveFeedbackPromptConnection?: {
+        edges?: LoaderResolver<
+            Maybe<Array<EventLiveFeedbackPromptEdge>>,
+            EventLiveFeedbackPromptConnection,
+            {},
+            TContext
+        >;
+        pageInfo?: LoaderResolver<PageInfo, EventLiveFeedbackPromptConnection, {}, TContext>;
+    };
+
+    EventLiveFeedbackPromptResponseEdge?: {
+        node?: LoaderResolver<EventLiveFeedbackPromptResponse, EventLiveFeedbackPromptResponseEdge, {}, TContext>;
+        cursor?: LoaderResolver<Scalars['String'], EventLiveFeedbackPromptResponseEdge, {}, TContext>;
+    };
+
+    EventLiveFeedbackPromptResponseConnection?: {
+        edges?: LoaderResolver<
+            Maybe<Array<EventLiveFeedbackPromptResponseEdge>>,
+            EventLiveFeedbackPromptResponseConnection,
+            {},
+            TContext
+        >;
+        pageInfo?: LoaderResolver<PageInfo, EventLiveFeedbackPromptResponseConnection, {}, TContext>;
     };
 
     EventLiveFeedbackConnection?: {
@@ -2536,6 +3198,29 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         body?: LoaderResolver<Maybe<EventLiveFeedbackEdge>, EventFeedbackMutationResponse, {}, TContext>;
     };
 
+    EventFeedbackPromptMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], EventFeedbackPromptMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], EventFeedbackPromptMutationResponse, {}, TContext>;
+        body?: LoaderResolver<Maybe<EventLiveFeedbackPromptEdge>, EventFeedbackPromptMutationResponse, {}, TContext>;
+    };
+
+    EventFeedbackPromptResponseMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], EventFeedbackPromptResponseMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], EventFeedbackPromptResponseMutationResponse, {}, TContext>;
+        body?: LoaderResolver<
+            Maybe<EventLiveFeedbackPromptResponseEdge>,
+            EventFeedbackPromptResponseMutationResponse,
+            {},
+            TContext
+        >;
+    };
+
+    Votes?: {
+        for?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+        against?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+        conflicted?: LoaderResolver<Scalars['Int'], Votes, {}, TContext>;
+    };
+
     InviteMutationResponse?: {
         isError?: LoaderResolver<Scalars['Boolean'], InviteMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], InviteMutationResponse, {}, TContext>;
@@ -2543,6 +3228,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
 
     ValidateInviteQueryResponse?: {
         valid?: LoaderResolver<Scalars['Boolean'], ValidateInviteQueryResponse, {}, TContext>;
+        user?: LoaderResolver<Maybe<User>, ValidateInviteQueryResponse, {}, TContext>;
     };
 
     ModeratorMutationResponse?: {
@@ -2575,7 +3261,7 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         createdAt?: LoaderResolver<Maybe<Scalars['Date']>, EventQuestion, {}, TContext>;
         refQuestion?: LoaderResolver<Maybe<EventQuestion>, EventQuestion, {}, TContext>;
         question?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
-        position?: LoaderResolver<Maybe<Scalars['Int']>, EventQuestion, {}, TContext>;
+        position?: LoaderResolver<Scalars['String'], EventQuestion, {}, TContext>;
         isVisible?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         isAsked?: LoaderResolver<Maybe<Scalars['Boolean']>, EventQuestion, {}, TContext>;
         lang?: LoaderResolver<Maybe<Scalars['String']>, EventQuestion, {}, TContext>;
@@ -2621,11 +3307,6 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
         isError?: LoaderResolver<Scalars['Boolean'], EventQuestionMutationResponse, {}, TContext>;
         message?: LoaderResolver<Scalars['String'], EventQuestionMutationResponse, {}, TContext>;
         body?: LoaderResolver<Maybe<EventQuestionEdge>, EventQuestionMutationResponse, {}, TContext>;
-    };
-
-    QuestionOperation?: {
-        operationType?: LoaderResolver<Operation, QuestionOperation, {}, TContext>;
-        edge?: LoaderResolver<EventQuestionEdge, QuestionOperation, {}, TContext>;
     };
 
     EventQuestionEdgeContainer?: {

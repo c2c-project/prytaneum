@@ -3,18 +3,19 @@ import { Button, TextField } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/lab';
 import * as Yup from 'yup';
 
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import type { CreateEvent as FormType } from '@local/graphql-types';
 import { FormActions } from '@local/components/FormActions';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
-import { Form } from '@local/components/Form';
-import { useForm } from '../core';
 
 export interface EventFormProps {
     onSubmit: (event: TEventForm) => void;
     onCancel?: () => void;
-    title?: boolean;
+    formType: 'Create' | 'Update';
     className?: string;
+    title?: string;
     form?: TEventForm;
 }
 
@@ -26,7 +27,7 @@ type TSchema = {
 };
 const validationSchema = Yup.object().shape<TSchema>({
     title: Yup.string().max(100, 'Title must be less than 100 characters').required('Please enter a title'),
-    description: Yup.string(),
+    description: Yup.string().optional(),
     startDateTime: Yup.date()
         .max(Yup.ref('endDateTime'), 'Start date & time must be less than end date & time!')
         .required('Please enter a start date'),
@@ -44,14 +45,15 @@ const initialState: TEventForm = {
     topic: '',
 };
 
-export function EventForm(props: EventFormProps) {
-    const { onCancel, onSubmit, title, className, form } = props;
-
-    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(form || initialState, validationSchema);
+export function EventForm({ onCancel, onSubmit, title, className, form, formType }: EventFormProps) {
+    const [state, errors, handleSubmit, handleChange, setState] = useForm<TEventForm>(
+        form || initialState,
+        validationSchema
+    );
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={className}>
-            {title && <FormTitle title='Townhall Form' />}
+            <FormTitle title={title || 'Event Form'} />
             <FormContent>
                 <TextField
                     autoFocus
@@ -59,6 +61,7 @@ export function EventForm(props: EventFormProps) {
                     helperText={errors.title}
                     required
                     label='Title'
+                    name='title'
                     value={state.title}
                     onChange={handleChange('title')}
                 />
@@ -67,24 +70,28 @@ export function EventForm(props: EventFormProps) {
                     helperText={errors.topic}
                     required
                     label='Topic'
+                    name='topic'
                     value={state.topic}
                     onChange={handleChange('topic')}
                 />
                 <TextField
                     error={Boolean(errors.description)}
                     helperText={errors.description}
-                    required
                     label='Description'
+                    name='description'
                     value={state.description}
                     onChange={handleChange('description')}
                 />
                 <MobileDateTimePicker
                     value={state.startDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, startDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, startDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
                             label='Start Date & Time'
+                            name='startDateTime'
                             required
                             error={Boolean(errors.startDateTime)}
                             helperText={errors.startDateTime}
@@ -93,11 +100,14 @@ export function EventForm(props: EventFormProps) {
                 />
                 <MobileDateTimePicker
                     value={state.endDateTime}
-                    onChange={(value) => setState(currentState => ({ ...currentState, endDateTime: value || new Date() }))}
+                    onChange={(value) =>
+                        setState((currentState) => ({ ...currentState, endDateTime: value || new Date() }))
+                    }
                     renderInput={(innerProps) => (
                         <TextField
                             {...innerProps}
                             label='End Date & Time'
+                            name='endDateTime'
                             required
                             error={Boolean(errors.endDateTime)}
                             helperText={errors.endDateTime}
@@ -113,7 +123,7 @@ export function EventForm(props: EventFormProps) {
                 )}
 
                 <Button type='submit' variant='contained' color='primary'>
-                    Create
+                    {formType}
                 </Button>
             </FormActions>
         </Form>

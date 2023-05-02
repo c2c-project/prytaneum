@@ -7,7 +7,9 @@ type User implements Node {
     lastName: String
     email: String
     isEmailVerified: Boolean
-
+    isAdmin: Boolean
+    canMakeOrgs: Boolean
+    isOrganizer: Boolean
     """
     Avatar URL if null then no avatar is uploaded
     """
@@ -17,6 +19,46 @@ type User implements Node {
     Organizations that this user belongs to
     """
     organizations(first: Int, after: String): OrganizationConnection
+
+    """
+    Events that this user is a moderator of, or has been invited to
+    """
+    events(first: Int, after: String): EventConnection
+    """
+    All the users
+    """
+    users(first: Int, after: String, filter: UsersSearchFilters): UserConnection
+    """
+    All events
+    """
+    allEvents(first: Int, after: String, filter: EventsSearchFilters): EventConnection
+}
+
+input UsersSearchFilters {
+    """
+    Search by first name
+    """
+    firstName: String
+    """
+    Search by last name
+    """
+    lastName: String
+    """
+    Search by email
+    """
+    email: String
+}
+
+input EventsSearchFilters {
+    """
+    Search by event name
+    """
+    eventName: String
+
+    """
+    Search by organizaiton name
+    """
+    orgName: String
 }
 
 type UserSettings {
@@ -64,9 +106,32 @@ input DeleteAccountForm {
     confirmPassword: String!
 }
 
+input UpdateOrganizerForm {
+    id: ID!
+    canMakeOrgs: Boolean!
+}
+
 input LoginForm {
     email: String!
     password: String!
+}
+
+input ResetPasswordRequestForm {
+    email: String!
+}
+
+input ResetPasswordForm {
+    newPassword: String!
+    confirmNewPassword: String!
+    token: String!
+}
+
+input ValidatePasswordResetTokenForm {
+    token: String!
+}
+
+input OrganizerForm {
+    email: String!
 }
 
 type UserMutationResponse implements MutationResponse {
@@ -75,11 +140,28 @@ type UserMutationResponse implements MutationResponse {
     body: User
 }
 
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+    body: Boolean
+}
+
+type ResetPasswordMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
+type ValidatePasswordResetTokenQueryResponse {
+    valid: Boolean!
+    message: String!
+}
+
 type Query {
     """
     Fetch user data about the current user
     """
     me: User
+    validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
 
 type Mutation {
@@ -87,7 +169,17 @@ type Mutation {
     login(input: LoginForm!): UserMutationResponse!
     updateEmail(input: UpdateEmailForm!): UserMutationResponse!
     updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
+    """
+    send a reset password request if the account exists
+    returns false if an account with the provided email cannot be found
+    """
+    resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+    resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
     deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+    updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
+    makeOrganizer(input: OrganizerForm!): UserMutationResponse!
+    removeOrganizer(input: OrganizerForm!): UserMutationResponse!
+
     """
     The logout just returns the timestamp of the logout action
     """

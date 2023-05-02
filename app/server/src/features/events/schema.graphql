@@ -82,6 +82,11 @@ type Event implements Node {
     liveFeedback(first: Int, after: String): EventLiveFeedbackConnection
 
     """
+    Live Feedback Prompts w/ responses
+    """
+    liveFeedbackPrompts(first: Int, after: String): EventLiveFeedbackPromptConnection
+
+    """
     List of moderators for this particular event
     """
     moderators(first: Int, after: String): UserConnection
@@ -102,12 +107,6 @@ type Event implements Node {
     isViewerInvited: Boolean
 
     """
-    Questions queued in this session by the moderator(s)
-    TODO: #QQRedesign delete after code complete
-    """
-    queuedQuestions(first: Int, after: String): EventQuestionConnection
-
-    """
     Questions having to do with the queue
     """
     questionQueue(first: Int, after: String): EventQuestionQueue
@@ -115,7 +114,7 @@ type Event implements Node {
     """
     The question currently being asked, corresponds to a "position" value on the event question
     """
-    currentQuestion: Int
+    currentQuestion: String
 }
 
 """
@@ -191,11 +190,21 @@ type Query {
     Fetch all events
     """
     events: [Event!]
+    """
+    Fetch a single event
+    """
+    event(eventId: ID!): Event
+}
+
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventEdgeContainer {
+    edge: EventEdge!
 }
 
 type Subscription {
-    """
-    TODO: #QQRedesign delete after code complete
-    """
-    eventUpdates(eventId: ID!): Event!
+    eventUpdates(userId: ID!): Event!
+    eventCreated(userId: ID!): EventEdgeContainer!
+    eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
 }

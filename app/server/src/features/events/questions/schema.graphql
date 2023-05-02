@@ -19,7 +19,7 @@ type EventQuestion implements Node {
     The actual content of the question
     """
     question: String
-    position: Int
+    position: String!
     isVisible: Boolean
     isAsked: Boolean
     lang: String
@@ -100,14 +100,6 @@ type EventQuestionMutationResponse implements MutationResponse {
     body: EventQuestionEdge
 }
 
-"""
-TODO: #QQRedesign dlete after code complete
-"""
-type QuestionOperation {
-    operationType: Operation!
-    edge: EventQuestionEdge!
-}
-
 type Mutation {
     createQuestion(input: CreateQuestion!): EventQuestionMutationResponse!
     deleteQuestion(input: DeleteQuestion!): EventQuestionMutationResponse!
@@ -124,10 +116,7 @@ type EventQuestionEdgeContainer {
 type Subscription {
     """
     Question subscription for all operations performed on questions
-    TODO: #QQRedesign delete after code complete
     """
-    questionCRUD(eventId: ID!): QuestionOperation!
-
     questionCreated(eventId: ID!): EventQuestionEdgeContainer!
     questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
     questionDeleted(eventId: ID!): EventQuestionEdgeContainer!

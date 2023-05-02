@@ -32,7 +32,7 @@ export function PreloadUserSideNav(props: PreloadedUserSideNavProps) {
 
 type SideNavProps = { isHidden: boolean; isOpen: boolean; close: () => void };
 export function SideNav({ isHidden: _isHidden, isOpen, close }: SideNavProps) {
-    const [user] = useUser();
+    const { user } = useUser();
     const isHidden = React.useMemo(() => _isHidden || !user, [_isHidden, user]);
 
     return (

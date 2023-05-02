@@ -48,7 +48,7 @@ export function Layout({
 }: LayoutProps) {
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
-    const [user] = useUser();
+    const { user } = useUser();
 
     // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
     const isLargeScreen = useMediaQuery('(max-width:1520px)');

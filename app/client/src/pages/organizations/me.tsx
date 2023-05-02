@@ -5,7 +5,7 @@ import { useQueryLoader } from 'react-relay';
 
 import { OrgListQuery } from '@local/__generated__/OrgListQuery.graphql';
 import { ORG_LIST_QUERY, OrgList } from '@local/features/organizations';
-import { useIsClient } from '@local/features/core';
+import { useIsClient } from '@local/core';
 import { Loader } from '@local/components/Loader';
 import { useUser } from '@local/features/accounts';
 
@@ -13,7 +13,7 @@ const Page: NextPage = () => {
     const router = useRouter();
     const [queryRef, loadQuery] = useQueryLoader<OrgListQuery>(ORG_LIST_QUERY);
     const isClient = useIsClient();
-    const [user,,isLoading] = useUser();
+    const { user, isLoading } = useUser();
 
     React.useEffect(() => {
         if (isClient) loadQuery({});
@@ -23,7 +23,7 @@ const Page: NextPage = () => {
         if (!isLoading && !user) router.push('/');
     }, [user, router, isLoading]);
 
-    if (!queryRef) return <Loader />;
+    if (!queryRef || isLoading) return <Loader />;
 
     return (
         <React.Suspense fallback={<Loader />}>

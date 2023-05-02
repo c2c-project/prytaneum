@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
 import { fromGlobalId } from 'graphql-relay';
-import type { EventLiveFeedback, QuestionOperation, EventQuestion } from '@local/graphql-types';
 import * as Moderation from './methods';
-import { doesEventMatch } from '../questions/methods';
+import { Resolvers, withFilter, errors, toGlobalId, runMutation } from '@local/features/utils';
+import { ProtectedError } from '@local/lib/ProtectedError';
+import type { EventLiveFeedback } from '@local/graphql-types';
 
 const toQuestionId = toGlobalId('EventQuestion');
 const toUserId = toGlobalId('User');
@@ -12,13 +12,13 @@ const toEventId = toGlobalId('Event');
 export const resolvers: Resolvers = {
     Mutation: {
         async hideQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const hiddenQuestion = await Moderation.hideQuestionById(ctx.viewer.id, ctx.prisma, args.input);
             return toQuestionId(hiddenQuestion);
         },
         async updateQuestionPosition(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.updateQuestionPosition(ctx.viewer.id, ctx.prisma, {
@@ -31,13 +31,6 @@ export const resolvers: Resolvers = {
                     node: questionWithGlobalId,
                     cursor: questionWithGlobalId.createdAt.getTime().toString(),
                 };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
-                    },
-                });
                 ctx.pubsub.publish({
                     topic: 'questionUpdated',
                     payload: {
@@ -49,7 +42,7 @@ export const resolvers: Resolvers = {
         },
         // TODO: make this a normal mutation response
         async nextQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
             const { event, newCurrentQuestion } = await Moderation.incrementQuestion(
                 ctx.viewer.id,
@@ -58,14 +51,6 @@ export const resolvers: Resolvers = {
             );
             const eventWithGlobalId = toEventId(event);
             const newCurrentQuestionWithGlobalId = toQuestionId(newCurrentQuestion);
-
-            // TODO: #QQRedesign delete once code complete
-            ctx.pubsub.publish({
-                topic: 'eventUpdates',
-                payload: {
-                    eventUpdates: eventWithGlobalId,
-                },
-            });
 
             if (!newCurrentQuestionWithGlobalId) return eventWithGlobalId;
 
@@ -96,7 +81,7 @@ export const resolvers: Resolvers = {
         },
         // TODO: make this a normal mutation response
         async prevQuestion(parent, args, ctx, info) {
-            if (!ctx.viewer.id) throw new Error(errors.noLogin);
+            if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
             const { id: eventId } = fromGlobalId(args.eventId);
             const { event, prevCurrentQuestion } = await Moderation.decrementQuestion(
                 ctx.viewer.id,
@@ -106,13 +91,6 @@ export const resolvers: Resolvers = {
 
             const eventWithGlobalId = toEventId(event);
             const prevCurrentQuestionWithGlobalId = toQuestionId(prevCurrentQuestion);
-            // TODO: #QQRedesign delete once code complete
-            ctx.pubsub.publish({
-                topic: 'eventUpdates',
-                payload: {
-                    eventUpdates: eventWithGlobalId,
-                },
-            });
             ctx.pubsub.publish({
                 topic: 'enqueuedUnshiftQuestion',
                 payload: {
@@ -139,7 +117,7 @@ export const resolvers: Resolvers = {
         },
         async createModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const newMod = await Moderation.createModerator(ctx.viewer.id, ctx.prisma, { ...args.input, eventId });
                 return toUserId(newMod);
@@ -147,7 +125,7 @@ export const resolvers: Resolvers = {
         },
         async updateModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 // const { id: userId } = fromGlobalId(args.input.userId);
                 const queryResult = await Moderation.findUserIdByEmail(args.input.email, ctx.prisma);
@@ -159,7 +137,7 @@ export const resolvers: Resolvers = {
         },
         async deleteModerator(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: userId } = fromGlobalId(args.input.userId);
                 const deletedMod = await Moderation.deleteModerator(ctx.viewer.id, ctx.prisma, {
@@ -170,53 +148,9 @@ export const resolvers: Resolvers = {
                 return toUserId(deletedMod);
             });
         },
-        // TODO: #QQRedesign delete once code complete
-        updateQuestionQueue(parent, args, ctx, info) {
-            return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
-                // TODO Check if the question is a current question as it must be handled differently
-                const { adding } = args.input;
-                const { id: eventId } = fromGlobalId(args.input.eventId);
-                const { id: questionId } = fromGlobalId(args.input.questionId);
-                let updatedQuestion;
-                if (adding) {
-                    updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
-                        ...args.input,
-                        eventId,
-                        questionId,
-                    });
-                } else {
-                    updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
-                        ...args.input,
-                        eventId,
-                        questionId,
-                    });
-                }
-                const questionWithGlobalId = toQuestionId(updatedQuestion);
-                const edge = {
-                    cursor: updatedQuestion.createdAt.getTime().toString(),
-                    node: questionWithGlobalId,
-                };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
-                    },
-                });
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionQueued',
-                    payload: {
-                        questionQueued: questionWithGlobalId,
-                    },
-                });
-                return edge;
-            });
-        },
         addQuestionToQueue(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.addQuestionToQueue(ctx.viewer.id, ctx.prisma, {
@@ -229,24 +163,16 @@ export const resolvers: Resolvers = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
-                    },
-                });
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionQueued',
-                    payload: {
-                        questionQueued: questionWithGlobalId,
-                    },
-                });
                 ctx.pubsub.publish({
                     topic: 'enqueuedPushQuestion',
                     payload: {
                         enqueuedPushQuestion: { edge },
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionUpdated',
+                    payload: {
+                        questionUpdated: { edge },
                     },
                 });
                 return edge;
@@ -254,7 +180,7 @@ export const resolvers: Resolvers = {
         },
         removeQuestionFromQueue(parent, args, ctx, info) {
             return runMutation(async () => {
-                if (!ctx.viewer.id) throw new Error(errors.noLogin);
+                if (!ctx.viewer.id) throw new ProtectedError({ userMessage: errors.noLogin });
                 const { id: eventId } = fromGlobalId(args.input.eventId);
                 const { id: questionId } = fromGlobalId(args.input.questionId);
                 const updatedQuestion = await Moderation.removeQuestionFromQueue(ctx.viewer.id, ctx.prisma, {
@@ -267,24 +193,16 @@ export const resolvers: Resolvers = {
                     cursor: updatedQuestion.createdAt.getTime().toString(),
                     node: questionWithGlobalId,
                 };
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionCRUD',
-                    payload: {
-                        questionCRUD: { operationType: 'UPDATE', edge } as QuestionOperation,
-                    },
-                });
-                // TODO: #QQRedesign delete once code complete
-                ctx.pubsub.publish({
-                    topic: 'questionQueued',
-                    payload: {
-                        questionQueued: questionWithGlobalId,
-                    },
-                });
                 ctx.pubsub.publish({
                     topic: 'enqueuedRemoveQuestion',
                     payload: {
                         enqueuedRemoveQuestion: { edge },
+                    },
+                });
+                ctx.pubsub.publish({
+                    topic: 'questionUpdated',
+                    payload: {
+                        questionUpdated: { edge },
                     },
                 });
                 return edge;
@@ -297,17 +215,6 @@ export const resolvers: Resolvers = {
                 (parent, args, ctx, info) => ctx.pubsub.subscribe('eventLiveFeedbackCreated'),
                 (payload, args, ctx) =>
                     Moderation.isEventRelevant(args.id, ctx.prisma, payload.eventLiveFeedbackCreated.id)
-            ),
-        },
-        // TODO: #QQRedesign delete once code complete
-        questionQueued: {
-            subscribe: withFilter<{ questionQueued: EventQuestion }>(
-                (parent, args, ctx, info) => ctx.pubsub.subscribe('questionQueued'),
-                (payload, args, ctx) => {
-                    const { id: questionId } = fromGlobalId(payload.questionQueued.id);
-                    const { id: eventId } = fromGlobalId(args.eventId);
-                    return doesEventMatch(eventId, questionId, ctx.prisma);
-                }
             ),
         },
     },

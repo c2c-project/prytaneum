@@ -12,11 +12,11 @@ const Page: NextPage = () => {
     const router = useRouter();
     const { id } = router.query as { id: string }; // guaranteed as part of the file name
     const [queryRef, loadQuery] = useQueryLoader<OrgProfileQuery>(ORG_PROFILE);
-    const [user,, isLoading] = useUser();
+    const { user, isLoading } = useUser();
 
     React.useEffect(() => {
-        if (router.isReady) loadQuery({ id });
-    }, [router.isReady, id, loadQuery]);
+        if (router.isReady && !queryRef) loadQuery({ id });
+    }, [router.isReady, id, loadQuery, queryRef]);
 
     React.useEffect(() => {
         if (!isLoading && !user) router.push('/');

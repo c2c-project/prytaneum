@@ -1,17 +1,26 @@
 FROM node:16.14.2-alpine AS build-stage
 WORKDIR /usr/monorepo
-COPY . .
+# Copy all necessary files/folders
+COPY package.json .
+COPY yarn.lock .
+COPY .yarnrc.yml .
+COPY .yarn ./.yarn
+COPY .nvmrc .
+COPY tsconfig.json .
+COPY .pnp.cjs .
+COPY .pnp.loader.mjs .
+COPY app/client ./app/client
+# Set up build environment variables
 ARG GRAPHQL_URL=https://prytaneum.io/graphql
 ENV NEXT_PUBLIC_GRAPHQL_URL ${GRAPHQL_URL}
 ARG GOOGLE_ANALYTICS_ID=secret
 ENV NEXT_PUBLIC_GOOGLE_ANALYTICS ${GOOGLE_ANALYTICS_ID}
-ENV NEXT_SHARP_PATH=/usr/monorepo/.yarn/cache/sharp-npm-0.30.6-4067fc2ceb-2560b5769d.zip/node_modules/sharp
+ENV NEXT_SHARP_PATH=/usr/monorepo/app/client/sharp
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 RUN yarn install
 RUN yarn workspace @app/client build
 
-# Production image, copy all the files and run next
 FROM node:16.14.2-alpine AS production-stage
 WORKDIR /usr/monorepo
 # Set appropriate env variables
@@ -20,7 +29,7 @@ ENV HOST 0.0.0.0
 ENV PORT 3000
 ARG DEPLOYMENT_ENV=production
 ENV DEPLOYMENT_ENV ${DEPLOYMENT_ENV}
-ENV NEXT_SHARP_PATH=/usr/monorepo/.yarn/cache/sharp-npm-0.30.6-4067fc2ceb-2560b5769d.zip/node_modules/sharp
+ENV NEXT_SHARP_PATH=/usr/monorepo/app/client/sharp
 # Monorepo files
 COPY --from=build-stage /usr/monorepo/package.json ./
 COPY --from=build-stage /usr/monorepo/.yarnrc.yml ./
@@ -30,11 +39,12 @@ COPY --from=build-stage /usr/monorepo/.nvmrc ./
 COPY --from=build-stage /usr/monorepo/.yarn/releases ./.yarn/releases
 COPY --from=build-stage /usr/monorepo/.yarn/plugins ./.yarn/plugins
 # Client specific files
-COPY --from=build-stage /usr/monorepo/app/client ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
-# COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
-# COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
+COPY --from=build-stage /usr/monorepo/app/client/.next ./app/client/.next
+COPY --from=build-stage /usr/monorepo/app/client/public ./app/client/public
+COPY --from=build-stage /usr/monorepo/app/client/next.config.js ./app/client
+COPY --from=build-stage /usr/monorepo/app/client/package.json ./app/client
+COPY --from=build-stage /usr/monorepo/app/client/sharp .app/client/sharp
+# Install only packages necessary for the client to run
 RUN yarn workspaces focus --production @app/client
 EXPOSE 3000
 CMD ["yarn", "workspace", "@app/client", "start"]

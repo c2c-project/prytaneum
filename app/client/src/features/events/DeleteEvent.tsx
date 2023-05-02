@@ -1,11 +1,6 @@
 import * as React from 'react';
 import * as Yup from 'yup';
-import {
-    Typography,
-    Button,
-    Grid,
-    TextField
-} from '@mui/material';
+import { Typography, Button, Grid, TextField } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useMutation, useFragment } from 'react-relay';
 import { useFormik } from 'formik';
@@ -13,7 +8,7 @@ import { graphql } from 'react-relay';
 
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import { makeInitialState } from '@local/utils/ts-utils';
 import type { DeleteEventMutation } from '@local/__generated__/DeleteEventMutation.graphql';
 import { EventDetailsFragment$key } from '@local/__generated__/EventDetailsFragment.graphql';
@@ -25,7 +20,7 @@ const DELETE_EVENT_MUTATION = graphql`
             isError
             message
             body {
-                id 
+                id
                 title
                 topic
                 startDateTime
@@ -68,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     button: {
         color: theme.palette.custom.danger,
         borderColor: theme.palette.custom.danger,
-    }
+    },
 }));
 
 export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
@@ -90,11 +85,11 @@ export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
             variables: { input: { eventId, ...submittedForm } },
             onCompleted({ deleteEvent }) {
                 if (deleteEvent.isError) {
-                    displaySnack(deleteEvent.message);
+                    displaySnack(deleteEvent.message, { variant: 'error' });
                 } else {
-                    displaySnack('Event deleted successfully!');
+                    displaySnack('Event deleted successfully!', { variant: 'success' });
                     //forces the page to reload which lets it route back to the proper page
-                    window.location.reload()
+                    window.location.reload();
                     //route to list of organizations after successfully deleting event
                     //TODO: https://github.com/c2c-project/prytaneum/issues/265#issue-1152493329
                 }
@@ -128,6 +123,7 @@ export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
                         error={Boolean(errors.title)}
                         required
                         variant='outlined'
+                        name='title'
                         value={values.title}
                         onChange={handleChange('title')}
                         spellCheck={false}
@@ -139,6 +135,7 @@ export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
                         error={Boolean(errors.confirmTitle)}
                         required
                         variant='outlined'
+                        name='confirmTitle'
                         value={values.confirmTitle}
                         onChange={handleChange('confirmTitle')}
                         spellCheck={false}
@@ -152,4 +149,4 @@ export const DeleteEvent = ({ fragmentRef }: DeleteEventProps) => {
             </Form>
         </Grid>
     );
-}
+};

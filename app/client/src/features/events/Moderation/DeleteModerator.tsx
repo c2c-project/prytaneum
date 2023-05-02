@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import type { DeleteModeratorMutation } from '@local/__generated__/DeleteModeratorMutation.graphql';
 import { ConfirmationDialog, ConfirmationDialogProps } from '@local/components/ConfirmationDialog';
 
@@ -33,7 +33,7 @@ export function DeleteModerator(props: DeleteModeratorProps) {
             variables: { input: { userId: moderatorId, eventId }, connections },
             onCompleted: ({ deleteModerator }) => {
                 if (deleteModerator.isError) {
-                    displaySnack(deleteModerator.message);
+                    displaySnack(deleteModerator.message, { variant: 'error' });
                 } else {
                     onConfirm();
                 }

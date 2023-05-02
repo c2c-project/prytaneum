@@ -11,8 +11,7 @@ import { LoginFormMutation } from '@local/__generated__/LoginFormMutation.graphq
 import { Form } from '@local/components/Form';
 import { FormContent } from '@local/components/FormContent';
 import { LoadingButton } from '@local/components/LoadingButton';
-import { useUser } from '@local/features/accounts';
-import { useSnack, useForm } from '@local/features/core';
+import { useSnack, useForm } from '@local/core';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -39,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
     onSuccess?: () => void;
+    close?: () => void;
     secondaryActions?: React.ReactNode;
 }
 
@@ -72,10 +72,9 @@ const intialState: TLoginForm = { email: '', password: '' };
  * const onF = () => {};
  * <ForgotPassRequest onSuccess={onS} onFailure={onF}/>
  */
-export function LoginForm({ onSuccess, secondaryActions }: Props) {
+export function LoginForm({ onSuccess, close, secondaryActions }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
-    const [, setUser] = useUser();
     const [isPassVisible, setIsPassVisible] = React.useState(false);
     const [form, errors, handleSubmit, handleChange] = useForm(intialState);
     const [commit, isLoading] = useMutation<LoginFormMutation>(LOGIN_FORM_MUTATION);
@@ -86,9 +85,8 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                 input: submittedForm,
             },
             onCompleted({ login }) {
-                if (login.isError) displaySnack(login.message);
+                if (login.isError) displaySnack(login.message, { variant: 'error' });
                 else {
-                    setUser(login.body);
                     if (onSuccess) onSuccess();
                 }
             },
@@ -96,7 +94,7 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
     };
 
     return (
-        <Grid container justifyContent='center'>
+        <Grid data-test-id='login-form' container justifyContent='center'>
             <Grid item container xs={12} direction='column' alignItems='center'>
                 {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -150,7 +148,14 @@ export function LoginForm({ onSuccess, secondaryActions }: Props) {
                         />
                         <Grid container justifyContent='flex-end'>
                             <Link href='/forgot-password' passHref>
-                                <MUILink className={classes.link} color='primary' underline='hover'>
+                                <MUILink
+                                    className={classes.link}
+                                    color='primary'
+                                    underline='hover'
+                                    onClick={() => {
+                                        if (close) close();
+                                    }}
+                                >
                                     Forgot Password?
                                 </MUILink>
                             </Link>

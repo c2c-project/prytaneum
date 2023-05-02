@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -10,7 +9,7 @@ import type { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery
 import { useUser } from '@local/features/accounts';
 import { useRouter } from 'next/router';
 import { Loader } from '@local/components/Loader';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import { VideoEventSettings } from '../Videos';
 import { SpeakerEventSettings } from '../Speakers';
 import { GenericSettings } from './GenericSettings';
@@ -72,7 +71,7 @@ export function EventSettings({ queryRef }: Props) {
     const classes = useStyles();
     const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const [canView, setCanView] = React.useState(false);
 
     React.useEffect(() => {
@@ -80,7 +79,7 @@ export function EventSettings({ queryRef }: Props) {
         else if (data.node?.isViewerModerator) {
             setCanView(true);
         } else {
-            displaySnack('You must be a moderator to view');
+            displaySnack('You must be a moderator to view', { variant: 'error' });
             router.back();
         }
     }, [isLoading, user, router, data, displaySnack]);
@@ -137,22 +136,14 @@ export function EventSettings({ queryRef }: Props) {
                                 title: 'Invites',
                                 description: 'Invite people to join the event',
                                 component: (
-                                    <InviteEventSettings
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
+                                    <InviteEventSettings className={classes.settingsSection} fragmentRef={data.node} />
+                                ),
                             },
                             {
                                 title: 'Delete Event',
                                 description: 'Click here to delete your event',
-                                component: (
-                                    <DeleteEvent
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                )
-                            }
+                                component: <DeleteEvent className={classes.settingsSection} fragmentRef={data.node} />,
+                            },
                         ]}
                     />
                 )}

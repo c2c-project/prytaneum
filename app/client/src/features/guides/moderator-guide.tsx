@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
-import Image from 'next/image';
 import {
     Button,
     Chip,
@@ -97,8 +95,8 @@ const useStyles = makeStyles(() => ({
         zIndex: 100,
     },
     contain: {
-        objectFit: 'contain'
-    }
+        objectFit: 'contain',
+    },
 }));
 
 export default function ModeratorGuide() {
@@ -159,11 +157,11 @@ export default function ModeratorGuide() {
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
             <Grid item xs={4} sm={3}>
-                <Image
+                <img
+                    className={classes.contain}
                     src='/static/prytaneum_logo.svg'
-                    width={1107}
-                    height={1108}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>

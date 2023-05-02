@@ -1,8 +1,9 @@
+import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
-
-import { useForm } from '@local/features/core';
 import type { CreateMember } from '@local/graphql-types';
-import { Form } from '@local/components/Form';
+
+import { Form } from '@local/components';
+import { useForm } from '@local/core';
 import { FormContent } from '@local/components/FormContent';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormActions } from '@local/components/FormActions';
@@ -14,20 +15,33 @@ export interface MemberFormProps {
     form?: TMemberForm;
 }
 
+type TSchema = {
+    [key in keyof TMemberForm]: Yup.AnySchema;
+};
+const validationSchema = Yup.object().shape<TSchema>({
+    email: Yup.string().email('Please enter a valid email').required('Please enter an email'),
+});
+
 const initialState: TMemberForm = { email: '' };
 
-export function MemberForm({ onSubmit, form: formProp }: MemberFormProps) {
-    const [form, errors, handleSubmit, handleChange] = useForm(formProp ?? initialState);
+export function MemberForm(props: MemberFormProps) {
+    const { onSubmit, form } = props;
+
+    const [state, errors, handleSubmit, handleChange] = useForm<TMemberForm>(form || initialState, validationSchema);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormTitle title='Member Form' />
             <FormContent>
                 <TextField
+                    autoFocus
+                    required
+                    type='email'
                     label='Member Email'
-                    value={form.email}
+                    name='email'
+                    value={state.email}
                     onChange={handleChange('email')}
-                    error={!!errors.email}
+                    error={Boolean(errors.email)}
                     helperText={errors.email}
                 />
             </FormContent>

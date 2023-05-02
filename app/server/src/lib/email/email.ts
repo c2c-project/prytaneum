@@ -1,13 +1,18 @@
 import mg from './client';
 
+export type EmailTemplates = 'prytaneum-invite' | 'password-reset' | 'prytaneum-invites';
+
 export interface EmailConfig {
     to: string | Array<string>;
     subject: string;
     text?: string;
     'o:deliverytime'?: string;
     'recipient-variables'?: string;
-    template?: 'prytaneum-invite';
+    template?: EmailTemplates;
     'h:X-Mailgun-Variables'?: string;
+    'v:invite-url'?: string;
+    'v:first-name'?: string;
+    'v:unsubscribe-url'?: string;
 }
 
 /**

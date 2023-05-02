@@ -17,6 +17,7 @@ export function startup() {
     plugins.attachCookieTo(server);
     plugins.attachCorsTo(server);
     plugins.attachMercuriusTo(server);
+    plugins.attachMulterTo(server);
 
     server.log.info('Attaching hooks...');
     hooks.attachPreHandlerTo(server);

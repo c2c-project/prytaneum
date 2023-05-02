@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Typography, Button } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
@@ -38,22 +37,26 @@ const useStyles = makeStyles((theme) => ({
             fontSize: 20,
         },
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export function CallToAction() {
     const classes = useStyles();
     const router = useRouter();
-    const [user] = useUser();
+    const { user } = useUser();
 
     return (
         <>
             <Grid item xs={12} md={6} className={classes.header}>
-                <Image
+                <img
+                    className={classes.contain}
+                    data-test-id='landing-prytanum-logo'
                     alt='Prytaneum Logo'
                     src='/static/prytaneum_logo2.svg'
-                    width={3483}
-                    height={665}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                 />
                 <Typography variant='h5' className={classes.subtitle}>
                     A crucial tool for a better democracy.
@@ -69,7 +72,7 @@ export function CallToAction() {
                     </Button>
                 ) : (
                     <Button
-                        data-test-id='landing-button'
+                        data-test-id='large-register-button'
                         variant='contained'
                         color='secondary'
                         className={classes.button}
@@ -80,12 +83,12 @@ export function CallToAction() {
                 )}
             </Grid>
             <Grid item xs={12} md={6}>
-                <Image
+                <img
+                    className={classes.contain}
                     alt='Prytaneum Landing Graphic'
                     src='/static/prytaneum_landing_graphic.svg'
-                    width={3292}
-                    height={2097}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                 />
             </Grid>
         </>

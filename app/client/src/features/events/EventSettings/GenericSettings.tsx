@@ -10,7 +10,7 @@ import type { GenericSettingsMutation } from '@local/__generated__/GenericSettin
 
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 
 const HELPT_TEXT = {
     isQuestionFeedVisible:
@@ -74,16 +74,16 @@ export const GenericSettings = ({ className, fragmentRef }: EventSettingsProps) 
     return (
         <SettingsList className={className}>
             <SettingsItem helpText={HELPT_TEXT.isQuestionFeedVisible} name='Question Feed Visibility'>
-                <Switch checked={Boolean(isQuestionFeedVisible)} onChange={handleChange('isQuestionFeedVisible')} />
+                <Switch name='question-feed-visibility-switch' checked={Boolean(isQuestionFeedVisible)} onChange={handleChange('isQuestionFeedVisible')} />
             </SettingsItem>
             <SettingsItem helpText={HELPT_TEXT.isCollectRatingsEnabled} name='Collect User Ratings'>
-                <Switch checked={Boolean(isCollectRatingsEnabled)} onChange={handleChange('isCollectRatingsEnabled')} />
+                <Switch name='collect-user-ratings-switch' checked={Boolean(isCollectRatingsEnabled)} onChange={handleChange('isCollectRatingsEnabled')} />
             </SettingsItem>
             <SettingsItem helpText={HELPT_TEXT.isForumEnabled} name='Post Event Forum'>
-                <Switch checked={Boolean(isForumEnabled)} onChange={handleChange('isForumEnabled')} />
+                <Switch name='post-event-form-switch' checked={Boolean(isForumEnabled)} onChange={handleChange('isForumEnabled')} />
             </SettingsItem>
             <SettingsItem helpText={HELPT_TEXT.isPrivate} name='Private Event'>
-                <Switch checked={Boolean(isPrivate)} onChange={handleChange('isPrivate')} />
+                <Switch name='event-private-switch' checked={Boolean(isPrivate)} onChange={handleChange('isPrivate')} />
             </SettingsItem>
         </SettingsList>
     );

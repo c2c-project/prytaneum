@@ -2,10 +2,10 @@ name: Client build, lint, and test
 on:
     pull_request:
         branches:
-            - dev
             - staging
         paths:
             - 'app/client/**'
+            - 'docker/Dockerfile.client'
 
 jobs:
     build:

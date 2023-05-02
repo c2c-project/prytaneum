@@ -4,6 +4,10 @@ on:
     push:
         branches:
             - staging
+        paths:
+            - 'app/server/**'
+            - 'k8s/server/development/**'
+            - 'docker/Dockerfile.server'
 
 env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -12,7 +16,8 @@ env:
     SERVER_DEPLOYMENT: prytaneum-server
     SERVER_IMAGE: prytaneum-server
     NAMESPACE: development
-    GRAPHQL_URL: https://dev.prytaneum.io/graphql
+    ORIGIN: https://dev.prytaneum.io
+    DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
     GOOGLE_ANALYTICS_ID: ${{ secrets.DEV_GOOGLE_ANALYTICS_ID }}
 
 jobs:
@@ -25,10 +30,15 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
-            # Setup gcloud CLI
-            - uses: google-github-actions/setup-gcloud@v0.6.0
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v0.8.0'
               with:
-                  service_account_key: ${{ secrets.GKE_SA_KEY }}
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v0.6.0
+              with:
                   project_id: ${{ secrets.GKE_PROJECT_ID }}
 
             # Configure Docker to use the gcloud command-line tool as a credential
@@ -36,11 +46,11 @@ jobs:
             - run: |-
                   gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
-            - uses: google-github-actions/get-gke-credentials@v0.7.0
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
               with:
                   cluster_name: ${{ env.GKE_CLUSTER }}
                   location: ${{ env.GKE_ZONE }}
-                  credentials: ${{ secrets.GKE_SA_KEY }}
 
             # Build the Server
             - name: Build Server
@@ -48,6 +58,7 @@ jobs:
                   docker build \
                     -f ./docker/Dockerfile.server \
                     --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --build-arg ORIGIN="$ORIGIN" \
                     --build-arg GITHUB_SHA="$GITHUB_SHA" \
                     --build-arg GITHUB_REF="$GITHUB_REF" \
                     .
@@ -70,6 +81,17 @@ jobs:
                   kustomize edit set namespace $NAMESPACE
                   kustomize build . | kubectl apply -f -
 
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Update DB schema to be in sync with prisma schema
+            - name: Prisma Migration
+              run: yarn workspace @app/server prisma-migrate-deploy
+
     finalize:
         name: Finalize
         runs-on: ubuntu-latest
@@ -78,12 +100,17 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v0.8.0'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
 
             # Setup gcloud CLI
-            - uses: google-github-actions/setup-gcloud@v0.6.0
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v0.6.0
               with:
-                  service_account_key: ${{ secrets.GKE_SA_KEY }}
                   project_id: ${{ secrets.GKE_PROJECT_ID }}
 
             # Configure Docker to use the gcloud command-line tool as a credential
@@ -91,11 +118,11 @@ jobs:
             - run: |-
                   gcloud --quiet auth configure-docker
             # Get the GKE credentials so we can deploy to the cluster
-            - uses: google-github-actions/get-gke-credentials@v0.7.0
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
               with:
                   cluster_name: ${{ env.GKE_CLUSTER }}
                   location: ${{ env.GKE_ZONE }}
-                  credentials: ${{ secrets.GKE_SA_KEY }}
 
             - name: Set kubectl context
               run: |-

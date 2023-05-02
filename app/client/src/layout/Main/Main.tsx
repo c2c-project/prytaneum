@@ -2,11 +2,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-    Container as MUIContainer,
-    ContainerProps,
-    Theme,
-} from '@mui/material';
+import { Container as MUIContainer, ContainerProps, Theme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 
@@ -34,7 +30,6 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { children, className, ...passThroughProps } = props;
     const classes = useStyles(props);
-    // console.log('main');
     return (
         <MUIContainer
             disableGutters
@@ -54,10 +49,7 @@ Container.defaultProps = {
 };
 
 Container.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]),
     className: PropTypes.string,
 };
 

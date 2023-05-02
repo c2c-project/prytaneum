@@ -1,0 +1,49 @@
+version: '3.6'
+services:
+    app:
+        user: '${UID}:${GID}'
+        container_name: app
+        build: .
+        tty: true
+        volumes:
+            - type: bind
+              source: .
+              target: /usr/monorepo
+        working_dir: /usr/monorepo
+        ports:
+            - 8080:8080
+        environment:
+            NODE_ENV: development
+            DATABASE_URL: postgresql://postgres:postgrespassword@db:5432
+    db:
+        container_name: db
+        user: postgres
+        image: postgres:13
+        restart: always
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgrespassword
+            POSTGRES_DB: postgres
+    prisma-studio:
+        container_name: prisma-studio
+        image: timothyjmiller/prisma-studio:latest
+        restart: unless-stopped
+        environment:
+            PROJECT_NAME: prytaneum
+            POSTGRES_DATABASE: postgres
+            POSTGRES_HOST: db
+            POSTGRES_USERNAME: postgres
+            POSTGRES_PASSWORD: postgrespassword
+            POSTGRES_PORT: 5432
+            PRISMA_STUDIO_PORT: 5555
+            POSTGRES_PATH: db_data
+            POSTGRES_URL: postgresql://postgres:postgrespassword@db:5432
+        ports:
+            - 5555:5555
+
+volumes:
+    db_data:

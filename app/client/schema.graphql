@@ -28,6 +28,19 @@ input CreateFeedback {
   refFeedbackId: ID
 }
 
+input CreateFeedbackPrompt {
+  eventId: ID!
+  feedbackType: String!
+  prompt: String!
+}
+
+input CreateFeedbackPromptResponse {
+  eventId: ID!
+  promptId: ID!
+  response: String!
+  vote: String!
+}
+
 input CreateInvite {
   email: String!
   eventId: ID!
@@ -135,7 +148,7 @@ type Event implements Node {
   """
   The question currently being asked, corresponds to a "position" value on the event question
   """
-  currentQuestion: Int
+  currentQuestion: String
   description: String
 
   """The planned end date time string"""
@@ -171,6 +184,9 @@ type Event implements Node {
   """Live Feedback given during the event"""
   liveFeedback(after: String, first: Int): EventLiveFeedbackConnection
 
+  """Live Feedback Prompts w/ responses"""
+  liveFeedbackPrompts(after: String, first: Int): EventLiveFeedbackPromptConnection
+
   """List of moderators for this particular event"""
   moderators(after: String, first: Int): UserConnection
 
@@ -185,12 +201,6 @@ type Event implements Node {
 
   """All questions relating to this event"""
   questions(after: String, first: Int): EventQuestionConnection
-
-  """
-  Questions queued in this session by the moderator(s)
-  TODO: #QQRedesign delete after code complete
-  """
-  queuedQuestions(after: String, first: Int): EventQuestionConnection
 
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
@@ -220,8 +230,27 @@ type EventEdge {
   node: Event!
 }
 
+"""
+Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457
+"""
+type EventEdgeContainer {
+  edge: EventEdge!
+}
+
 type EventFeedbackMutationResponse implements MutationResponse {
   body: EventLiveFeedbackEdge
+  isError: Boolean!
+  message: String!
+}
+
+type EventFeedbackPromptMutationResponse implements MutationResponse {
+  body: EventLiveFeedbackPromptEdge
+  isError: Boolean!
+  message: String!
+}
+
+type EventFeedbackPromptResponseMutationResponse implements MutationResponse {
+  body: EventLiveFeedbackPromptResponseEdge
   isError: Boolean!
   message: String!
 }
@@ -245,6 +274,50 @@ type EventLiveFeedbackConnection {
 type EventLiveFeedbackEdge {
   cursor: String!
   node: EventLiveFeedback!
+}
+
+type EventLiveFeedbackPrompt implements Node {
+  createdAt: Date
+  event: Event
+  id: ID!
+  isOpenEnded: Boolean
+  isVote: Boolean
+  prompt: String!
+  responses(after: String, first: Int): EventLiveFeedbackPromptResponseConnection
+}
+
+type EventLiveFeedbackPromptConnection {
+  edges: [EventLiveFeedbackPromptEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventLiveFeedbackPromptEdge {
+  cursor: String!
+  node: EventLiveFeedbackPrompt!
+}
+
+type EventLiveFeedbackPromptResponse implements Node {
+  createdAt: Date
+  createdBy: User
+  createdById: ID
+  event: Event
+  id: ID!
+  isOpenEnded: Boolean
+  isVote: Boolean
+  prompt: EventLiveFeedbackPrompt
+  promptId: ID
+  response: String
+  vote: String
+}
+
+type EventLiveFeedbackPromptResponseConnection {
+  edges: [EventLiveFeedbackPromptResponseEdge!]
+  pageInfo: PageInfo!
+}
+
+type EventLiveFeedbackPromptResponseEdge {
+  cursor: String!
+  node: EventLiveFeedbackPromptResponse!
 }
 
 type EventMutationResponse implements MutationResponse {
@@ -296,7 +369,7 @@ type EventQuestion implements Node {
 
   """Find the count of the likes only"""
   likedByCount: Int
-  position: Int
+  position: String!
 
   """The actual content of the question"""
   question: String
@@ -399,6 +472,14 @@ type EventVideoMutationResponse implements MutationResponse {
   message: String!
 }
 
+input EventsSearchFilters {
+  """Search by event name"""
+  eventName: String
+
+  """Search by organizaiton name"""
+  orgName: String
+}
+
 type FeedbackOperation {
   edge: EventLiveFeedbackEdge!
   operationType: Operation!
@@ -439,7 +520,9 @@ type Mutation {
   addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
-  createFeedback(input: CreateFeedback): EventFeedbackMutationResponse
+  createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
+  createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
+  createFeedbackPromptResponse(input: CreateFeedbackPromptResponse!): EventFeedbackPromptResponseMutationResponse!
   createInvite(input: CreateInvite!): InviteMutationResponse!
 
   """Adds a new member and returns the new user added"""
@@ -471,6 +554,7 @@ type Mutation {
 
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
+  makeOrganizer(input: OrganizerForm!): UserMutationResponse!
 
   """
   Advance the current question
@@ -484,7 +568,16 @@ type Mutation {
   """
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
+  removeOrganizer(input: OrganizerForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
+  resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
+
+  """
+  send a reset password request if the account exists
+  returns false if an account with the provided email cannot be found
+  """
+  resetPasswordRequest(input: ResetPasswordRequestForm!): ResetPasswordRequestMutationResponse!
+  shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
 
   """
   Start the event so that it is "live"
@@ -494,9 +587,9 @@ type Mutation {
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
   updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!
+  updateOrganizer(input: UpdateOrganizerForm!): UserMutationResponse!
   updatePassword(input: UpdatePasswordForm!): UserMutationResponse!
   updateQuestionPosition(input: UpdateQuestionPosition!): EventQuestionMutationResponse!
-  updateQuestionQueue(input: UpdateQuestionQueue!): EventQuestionMutationResponse!
   updateSpeaker(input: UpdateSpeaker!): EventSpeakerMutationResponse!
   updateVideo(input: UpdateVideo!): EventVideoMutationResponse!
 }
@@ -558,6 +651,10 @@ type OrganizationSubscription {
   userId: ID
 }
 
+input OrganizerForm {
+  email: String!
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -566,21 +663,28 @@ type PageInfo {
 }
 
 type Query {
+  """Fetch a single event"""
+  event(eventId: ID!): Event
+
   """Fetch all events"""
   events: [Event!]
+  isOrganizer: Boolean!
 
   """Fetch user data about the current user"""
   me: User
   myFeedback(eventId: ID!): [EventLiveFeedback]
   node(id: ID!): Node
+  prompt(promptId: ID!): EventLiveFeedbackPrompt
+  promptResponseVotes(promptId: ID!): Votes!
+  promptResponses(promptId: ID!): [EventLiveFeedbackPromptResponse!]
+  prompts(eventId: ID!): [EventLiveFeedbackPrompt!]
   questionsByEventId(eventId: ID!): [EventQuestion!]
-  validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
-}
 
-"""TODO: #QQRedesign dlete after code complete"""
-type QuestionOperation {
-  edge: EventQuestionEdge!
-  operationType: Operation!
+  """
+  Validates an invite token and logs the user in if they are already registered.
+  """
+  validateInvite(input: ValidateInvite!): ValidateInviteQueryResponse!
+  validatePasswordResetToken(input: ValidatePasswordResetTokenForm!): ValidatePasswordResetTokenQueryResponse!
 }
 
 input RegistrationForm {
@@ -596,36 +700,49 @@ input RemoveQuestionFromQueue {
   questionId: ID!
 }
 
+input ResetPasswordForm {
+  confirmNewPassword: String!
+  newPassword: String!
+  token: String!
+}
+
+type ResetPasswordMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+}
+
+input ResetPasswordRequestForm {
+  email: String!
+}
+
+type ResetPasswordRequestMutationResponse implements MutationResponse {
+  body: Boolean
+  isError: Boolean!
+  message: String!
+}
+
 type Subscription {
   enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
+  eventCreated(userId: ID!): EventEdgeContainer!
+  eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
 
   """New messages as feedback is given"""
   eventLiveFeedbackCreated(eventId: ID!): EventLiveFeedback!
-
-  """TODO: #QQRedesign delete after code complete"""
-  eventUpdates(eventId: ID!): Event!
+  eventUpdates(userId: ID!): Event!
   feedbackCRUD(eventId: ID!): FeedbackOperation!
+  feedbackPromptResultsShared(eventId: ID!): EventLiveFeedbackPrompt!
+  feedbackPrompted(eventId: ID!): EventLiveFeedbackPrompt!
 
   """subscription for whenever a new org is added"""
   orgUpdated: OrganizationSubscription!
   questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
-  """
-  Question subscription for all operations performed on questions
-  TODO: #QQRedesign delete after code complete
-  """
-  questionCRUD(eventId: ID!): QuestionOperation!
+  """Question subscription for all operations performed on questions"""
   questionCreated(eventId: ID!): EventQuestionEdgeContainer!
   questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
-
-  """
-  subscription for whenever questions are added to the queue
-  TODO: #QQRedesign delete once code complete
-  """
-  questionQueued(eventId: ID!): EventQuestion!
   questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
   questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
@@ -663,6 +780,11 @@ input UpdateOrganization {
   orgId: ID!
 }
 
+input UpdateOrganizerForm {
+  canMakeOrgs: Boolean!
+  id: ID!
+}
+
 input UpdatePasswordForm {
   confirmNewPassword: String!
   email: String!
@@ -672,7 +794,7 @@ input UpdatePasswordForm {
 
 input UpdateQuestionPosition {
   eventId: ID!
-  position: Int!
+  position: String!
   questionId: ID!
 }
 
@@ -701,16 +823,28 @@ input UpdateVideo {
 
 """User Data"""
 type User implements Node {
+  """All events"""
+  allEvents(after: String, filter: EventsSearchFilters, first: Int): EventConnection
+
   """Avatar URL if null then no avatar is uploaded"""
   avatar: String
+  canMakeOrgs: Boolean
   email: String
+
+  """Events that this user is a moderator of, or has been invited to"""
+  events(after: String, first: Int): EventConnection
   firstName: String
   id: ID!
+  isAdmin: Boolean
   isEmailVerified: Boolean
+  isOrganizer: Boolean
   lastName: String
 
   """Organizations that this user belongs to"""
   organizations(after: String, first: Int): OrganizationConnection
+
+  """All the users"""
+  users(after: String, filter: UsersSearchFilters, first: Int): UserConnection
 }
 
 type UserConnection {
@@ -738,11 +872,44 @@ type UserSettings {
   updatePassword: String
 }
 
+input UsersSearchFilters {
+  """Search by email"""
+  email: String
+
+  """Search by first name"""
+  firstName: String
+
+  """Search by last name"""
+  lastName: String
+}
+
 input ValidateInvite {
   eventId: ID!
   token: String!
 }
 
 type ValidateInviteQueryResponse {
+  user: User
   valid: Boolean!
+}
+
+input ValidatePasswordResetTokenForm {
+  token: String!
+}
+
+type ValidatePasswordResetTokenQueryResponse {
+  message: String!
+  valid: Boolean!
+}
+
+enum Vote {
+  AGAINST
+  CONFLICTED
+  FOR
+}
+
+type Votes {
+  against: Int!
+  conflicted: Int!
+  for: Int!
 }

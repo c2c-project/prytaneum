@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 // import { Redirect } from '@local/domains/Logical/Redirect';
 import { logoutMutation } from '@local/__generated__/logoutMutation.graphql';
 import { Loader } from '@local/components/Loader';
-import { useIsClient, useEnvironment } from '@local/features/core';
+import { useIsClient, useEnvironment } from '@local/core';
 import { useUser } from '@local/features/accounts';
 
 const LOGOUT_MUTATION = graphql`
@@ -19,7 +19,7 @@ const LOGOUT_MUTATION = graphql`
  *  @constructor Logout
  */
 export default function Logout() {
-    const [user, setUser] = useUser();
+    const { user, setUser } = useUser();
     const { resetEnv } = useEnvironment();
     const [runMutation] = useMutation<logoutMutation>(LOGOUT_MUTATION);
     const isClient = useIsClient();
@@ -31,8 +31,7 @@ export default function Logout() {
             variables: {},
             onCompleted() {
                 resetEnv();
-                setUser(null);
-                router.push('/')
+                router.push('/');
             },
         });
     }, [runMutation, isClient, resetEnv, setUser, router, user]);

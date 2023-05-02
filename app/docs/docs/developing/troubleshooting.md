@@ -7,7 +7,7 @@ Common errors and their solutions
 -   Run `yarn workspace @app/db prisma generate`.
 -   Run `yarn g:dev-server` to check if the server starts up without any errors.
 -   Ensure you have [nvm](https://github.com/nvm-sh/nvm) installed and/or follow [this guide](https://stackoverflow.com/questions/11284634/upgrade-node-js-to-the-latest-version-on-mac-os) to upgrade your node to LTS.
--   Open a fresh terminal and run `yarn g:dev-project`.
+-   Open a fresh terminal and run `yarn g:dev`.
 
 ## `Subject/type may not be empty` error when trying to commit for the first time?
 
@@ -17,13 +17,13 @@ Common errors and their solutions
 
 -   Verify that Docker is running.
 -   Run `yarn g:start-db` to start db.
--   Run `yarn g:dev-project`.
+-   Run `yarn g:dev`.
 
 ## Still can't log in or register and the server exits with code 0 in the terminal?
 
 -   Check your node version by running `yarn node -v` and verify it's [Node LTS](https://nodejs.org/en/about/releases/).
 -   Run `yarn workspace @app/server prisma generate`.
--   Run `yarn g:dev-project`.
+-   Run `yarn g:dev`.
 
 ## Can't log in or register and the error `public.User does not exist in the current database` shows?
 
@@ -32,4 +32,4 @@ Common errors and their solutions
 -   Run `docker-compose down && docker volume prune && docker container prune && docker image prune` to clear current db and all docker images. Alternatively, you could run `docker system prune`
 -   Run `yarn g:start-db` to start db again.
 -   Run `yarn workspace @app/server prisma db push --preview-feature` to sync the db with the schema.
--   Run `yarn g:dev-project`.
+-   Run `yarn g:dev`.

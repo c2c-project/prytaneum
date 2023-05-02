@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Paper, Link } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
@@ -44,13 +43,16 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.primary.main,
         },
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export default function RegisterPage() {
     const classes = useStyles();
     const router = useRouter();
 
-    const [user] = useUser();
+    const { user } = useUser();
 
     React.useEffect(() => {
         if (user) router.push('/organizations/me');
@@ -59,18 +61,18 @@ export default function RegisterPage() {
     return (
         <Grid container alignItems='center' className={classes.root} justifyContent='center'>
             <Grid item md={7}>
-                <Image
+                <img
+                    className={classes.contain}
                     src='/static/login_illustration.png'
-                    width={697}
-                    height={383}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                     alt='Register Illustration'
                 />
             </Grid>
             <Grid item md={5} className={classes.formContainer}>
                 <Paper className={classes.paper}>
                     <RegisterForm
-                        onSuccess={() => router.push('/app/home')}
+                        onSuccess={() => router.push('/dashboard')}
                         secondaryActions={
                             <Link href='/login' className={classes.link} underline='hover'>
                                 Already have an account?

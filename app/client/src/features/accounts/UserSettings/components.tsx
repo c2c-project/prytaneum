@@ -22,7 +22,7 @@ import { ConfirmationDialog } from '@local/components/ConfirmationDialog';
 import SettingsList from '@local/components/SettingsList';
 import SettingsItem from '@local/components/SettingsItem';
 import { useUser } from '@local/features/accounts';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 import makeStyles from '@mui/styles/makeStyles';
 import { useMutation } from 'react-relay';
 import Link from 'next/link';
@@ -161,7 +161,7 @@ export function ModifyUserEmail({ user, demo }: { user: User; demo?: boolean }) 
     // user feedback
     const { displaySnack } = useSnack();
 
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
 
     // styling hook
     const classes = useStyles();
@@ -180,9 +180,9 @@ export function ModifyUserEmail({ user, demo }: { user: User; demo?: boolean }) 
             variables: { input: completeForm },
             onCompleted({ updateEmail }) {
                 if (updateEmail.isError) {
-                    displaySnack(updateEmail.message);
+                    displaySnack(updateEmail.message, { variant: 'error' });
                 } else {
-                    displaySnack('Email changed successfully!');
+                    displaySnack('Email changed successfully!', { variant: 'success' });
                     setUser(updateEmail.body);
                     resetForm();
                 }
@@ -238,7 +238,7 @@ export function ModifyUserPassword({ user }: { user: User }) {
     // user feedback
     const { displaySnack } = useSnack();
 
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
 
     // styling hook
     const classes = useStyles();
@@ -257,9 +257,9 @@ export function ModifyUserPassword({ user }: { user: User }) {
             variables: { input: completeForm },
             onCompleted({ updatePassword }) {
                 if (updatePassword.isError) {
-                    displaySnack(updatePassword.message);
+                    displaySnack(updatePassword.message, { variant: 'error' });
                 } else {
-                    displaySnack('Password changed successfully!');
+                    displaySnack('Password changed successfully!', { variant: 'success' });
                     setUser(updatePassword.body);
                     resetForm();
                 }
@@ -474,9 +474,9 @@ export function DeleteAccount({ user }: { user: User }) {
             variables: { input: completeForm },
             onCompleted({ deleteAccount }) {
                 if (deleteAccount.isError) {
-                    displaySnack(deleteAccount.message);
+                    displaySnack(deleteAccount.message, { variant: 'error' });
                 } else {
-                    displaySnack('Account deleted successfully!');
+                    displaySnack('Account deleted successfully!', { variant: 'success' });
                     resetForm();
                     // route to login after successfully deleting account
                     router.push('/login');

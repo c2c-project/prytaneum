@@ -1,10 +1,14 @@
+# Ensures e2e tests are run before merging into production branch
 name: Test end-to-end
 
 on:
     pull_request:
         branches:
-            - staging
             - prod
+        paths:
+            - 'app/client/**'
+            - 'app/server/**'
+            - 'app/e2e/**'
 
 jobs:
     e2e:
@@ -42,9 +46,12 @@ jobs:
             - name: Run Playwright tests
               run: yarn workspace @app/e2e run test:ci
 
+            - name: Generate Allure Report
+              run: yarn workspace @app/e2e run allure:generate-report
+
             - uses: actions/upload-artifact@v2
               if: always()
               with:
-                  name: allure-report
-                  path: app/e2e/allure-report/
+                  name: test-results
+                  path: app/e2e/test-results/
                   retention-days: 30

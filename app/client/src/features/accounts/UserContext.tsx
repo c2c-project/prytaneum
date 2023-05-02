@@ -10,7 +10,7 @@ type TLoadingState = boolean;
 type TUserContext = {
     userState: TUserState;
     isLoadingState: TLoadingState;
-}
+};
 
 // read note above
 export const UserContext = React.createContext<TUserContext>({ userState: undefined, isLoadingState: true });
@@ -18,9 +18,12 @@ export const UserContext = React.createContext<TUserContext>({ userState: undefi
 type TUserDispatch = {
     userDispatch: React.Dispatch<SetStateAction<TUserState>> | undefined;
     isLoadingDispatch: React.Dispatch<SetStateAction<TLoadingState>> | undefined;
-}
+};
 // read note above
-export const UserDispatch = React.createContext<TUserDispatch>({ userDispatch: undefined, isLoadingDispatch: undefined });
+export const UserDispatch = React.createContext<TUserDispatch>({
+    userDispatch: undefined,
+    isLoadingDispatch: undefined,
+});
 
 interface UserProps {
     children: React.ReactNode | React.ReactNodeArray;
@@ -45,7 +48,9 @@ export function UserProvider({ children, userInfo }: UserProps) {
 
     return (
         <UserContext.Provider value={{ userState: user, isLoadingState: isLoading }}>
-            <UserDispatch.Provider value={{ userDispatch: setUser, isLoadingDispatch: setIsLoading }}>{children}</UserDispatch.Provider>
+            <UserDispatch.Provider value={{ userDispatch: setUser, isLoadingDispatch: setIsLoading }}>
+                {children}
+            </UserDispatch.Provider>
         </UserContext.Provider>
     );
 }

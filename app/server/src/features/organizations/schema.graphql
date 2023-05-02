@@ -83,6 +83,10 @@ type OrganizationMutationResponse implements MutationResponse{
     body: OrganizationEdge
 }
 
+type Query {
+    isOrganizer: Boolean!
+}
+
 type Mutation {
     createOrganization(input: CreateOrganization!): OrganizationMutationResponse!
     updateOrganization(input: UpdateOrganization!): OrganizationMutationResponse!

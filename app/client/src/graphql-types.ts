@@ -40,6 +40,19 @@ export type CreateFeedback = {
   refFeedbackId?: InputMaybe<Scalars['ID']>;
 };
 
+export type CreateFeedbackPrompt = {
+  eventId: Scalars['ID'];
+  feedbackType: Scalars['String'];
+  prompt: Scalars['String'];
+};
+
+export type CreateFeedbackPromptResponse = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
+  response: Scalars['String'];
+  vote: Scalars['String'];
+};
+
 export type CreateInvite = {
   email: Scalars['String'];
   eventId: Scalars['ID'];
@@ -140,7 +153,7 @@ export type Event = Node & {
   /** Creator of this event */
   createdBy?: Maybe<User>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
-  currentQuestion?: Maybe<Scalars['Int']>;
+  currentQuestion?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   /** The planned end date time string */
   endDateTime?: Maybe<Scalars['Date']>;
@@ -163,6 +176,8 @@ export type Event = Node & {
   isViewerModerator?: Maybe<Scalars['Boolean']>;
   /** Live Feedback given during the event */
   liveFeedback?: Maybe<EventLiveFeedbackConnection>;
+  /** Live Feedback Prompts w/ responses */
+  liveFeedbackPrompts?: Maybe<EventLiveFeedbackPromptConnection>;
   /** List of moderators for this particular event */
   moderators?: Maybe<UserConnection>;
   /** The owning organization */
@@ -173,11 +188,6 @@ export type Event = Node & {
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
   questions?: Maybe<EventQuestionConnection>;
-  /**
-   * Questions queued in this session by the moderator(s)
-   * TODO: #QQRedesign delete after code complete
-   */
-  queuedQuestions?: Maybe<EventQuestionConnection>;
   /** Registrants for this event -- individuals invited */
   registrants?: Maybe<UserConnection>;
   /** Speakers for this event */
@@ -204,6 +214,12 @@ export type EventLiveFeedbackArgs = {
 };
 
 
+export type EventLiveFeedbackPromptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type EventModeratorsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -223,12 +239,6 @@ export type EventQuestionQueueArgs = {
 
 
 export type EventQuestionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type EventQueuedQuestionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -259,9 +269,29 @@ export type EventEdge = {
   node: Event;
 };
 
+/** Required to reduce frontend complexity due to relay limitation https://github.com/facebook/relay/issues/3457 */
+export type EventEdgeContainer = {
+  __typename?: 'EventEdgeContainer';
+  edge: EventEdge;
+};
+
 export type EventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'EventFeedbackMutationResponse';
   body?: Maybe<EventLiveFeedbackEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventFeedbackPromptResponseMutationResponse = MutationResponse & {
+  __typename?: 'EventFeedbackPromptResponseMutationResponse';
+  body?: Maybe<EventLiveFeedbackPromptResponseEdge>;
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -288,6 +318,62 @@ export type EventLiveFeedbackEdge = {
   __typename?: 'EventLiveFeedbackEdge';
   cursor: Scalars['String'];
   node: EventLiveFeedback;
+};
+
+export type EventLiveFeedbackPrompt = Node & {
+  __typename?: 'EventLiveFeedbackPrompt';
+  createdAt?: Maybe<Scalars['Date']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt: Scalars['String'];
+  responses?: Maybe<EventLiveFeedbackPromptResponseConnection>;
+};
+
+
+export type EventLiveFeedbackPromptResponsesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventLiveFeedbackPromptConnection = {
+  __typename?: 'EventLiveFeedbackPromptConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptEdge = {
+  __typename?: 'EventLiveFeedbackPromptEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPrompt;
+};
+
+export type EventLiveFeedbackPromptResponse = Node & {
+  __typename?: 'EventLiveFeedbackPromptResponse';
+  createdAt?: Maybe<Scalars['Date']>;
+  createdBy?: Maybe<User>;
+  createdById?: Maybe<Scalars['ID']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  isOpenEnded?: Maybe<Scalars['Boolean']>;
+  isVote?: Maybe<Scalars['Boolean']>;
+  prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptId?: Maybe<Scalars['ID']>;
+  response?: Maybe<Scalars['String']>;
+  vote?: Maybe<Scalars['String']>;
+};
+
+export type EventLiveFeedbackPromptResponseConnection = {
+  __typename?: 'EventLiveFeedbackPromptResponseConnection';
+  edges?: Maybe<Array<EventLiveFeedbackPromptResponseEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type EventLiveFeedbackPromptResponseEdge = {
+  __typename?: 'EventLiveFeedbackPromptResponseEdge';
+  cursor: Scalars['String'];
+  node: EventLiveFeedbackPromptResponse;
 };
 
 export type EventMutationResponse = MutationResponse & {
@@ -338,7 +424,7 @@ export type EventQuestion = Node & {
   likedBy?: Maybe<UserConnection>;
   /** Find the count of the likes only */
   likedByCount?: Maybe<Scalars['Int']>;
-  position?: Maybe<Scalars['Int']>;
+  position: Scalars['String'];
   /** The actual content of the question */
   question?: Maybe<Scalars['String']>;
   refQuestion?: Maybe<EventQuestion>;
@@ -457,6 +543,13 @@ export type EventVideoMutationResponse = MutationResponse & {
   message: Scalars['String'];
 };
 
+export type EventsSearchFilters = {
+  /** Search by event name */
+  eventName?: InputMaybe<Scalars['String']>;
+  /** Search by organizaiton name */
+  orgName?: InputMaybe<Scalars['String']>;
+};
+
 export type FeedbackOperation = {
   __typename?: 'FeedbackOperation';
   edge: EventLiveFeedbackEdge;
@@ -499,7 +592,9 @@ export type Mutation = {
   addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
   createEvent: EventMutationResponse;
-  createFeedback?: Maybe<EventFeedbackMutationResponse>;
+  createFeedback: EventFeedbackMutationResponse;
+  createFeedbackPrompt: EventFeedbackPromptMutationResponse;
+  createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
   createInvite: InviteMutationResponse;
   /** Adds a new member and returns the new user added */
   createMember: UserMutationResponse;
@@ -525,6 +620,7 @@ export type Mutation = {
   login: UserMutationResponse;
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
+  makeOrganizer: UserMutationResponse;
   /**
    * Advance the current question
    * TODO: make this an EventMutationResponse
@@ -536,16 +632,24 @@ export type Mutation = {
    */
   prevQuestion: Event;
   register: UserMutationResponse;
+  removeOrganizer: UserMutationResponse;
   removeQuestionFromQueue: EventQuestionMutationResponse;
+  resetPassword: ResetPasswordMutationResponse;
+  /**
+   * send a reset password request if the account exists
+   * returns false if an account with the provided email cannot be found
+   */
+  resetPasswordRequest: ResetPasswordRequestMutationResponse;
+  shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
   updateOrganization: OrganizationMutationResponse;
+  updateOrganizer: UserMutationResponse;
   updatePassword: UserMutationResponse;
   updateQuestionPosition: EventQuestionMutationResponse;
-  updateQuestionQueue: EventQuestionMutationResponse;
   updateSpeaker: EventSpeakerMutationResponse;
   updateVideo: EventVideoMutationResponse;
 };
@@ -567,7 +671,17 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationCreateFeedbackArgs = {
-  input?: InputMaybe<CreateFeedback>;
+  input: CreateFeedback;
+};
+
+
+export type MutationCreateFeedbackPromptArgs = {
+  input: CreateFeedbackPrompt;
+};
+
+
+export type MutationCreateFeedbackPromptResponseArgs = {
+  input: CreateFeedbackPromptResponse;
 };
 
 
@@ -661,6 +775,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationMakeOrganizerArgs = {
+  input: OrganizerForm;
+};
+
+
 export type MutationNextQuestionArgs = {
   eventId: Scalars['ID'];
 };
@@ -676,8 +795,29 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveOrganizerArgs = {
+  input: OrganizerForm;
+};
+
+
 export type MutationRemoveQuestionFromQueueArgs = {
   input: RemoveQuestionFromQueue;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordForm;
+};
+
+
+export type MutationResetPasswordRequestArgs = {
+  input: ResetPasswordRequestForm;
+};
+
+
+export type MutationShareFeedbackPromptResultsArgs = {
+  eventId: Scalars['ID'];
+  promptId: Scalars['ID'];
 };
 
 
@@ -706,6 +846,11 @@ export type MutationUpdateOrganizationArgs = {
 };
 
 
+export type MutationUpdateOrganizerArgs = {
+  input: UpdateOrganizerForm;
+};
+
+
 export type MutationUpdatePasswordArgs = {
   input: UpdatePasswordForm;
 };
@@ -713,11 +858,6 @@ export type MutationUpdatePasswordArgs = {
 
 export type MutationUpdateQuestionPositionArgs = {
   input: UpdateQuestionPosition;
-};
-
-
-export type MutationUpdateQuestionQueueArgs = {
-  input: UpdateQuestionQueue;
 };
 
 
@@ -799,6 +939,10 @@ export type OrganizationSubscription = {
   userId?: Maybe<Scalars['ID']>;
 };
 
+export type OrganizerForm = {
+  email: Scalars['String'];
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -809,14 +953,28 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Fetch a single event */
+  event?: Maybe<Event>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
+  isOrganizer: Scalars['Boolean'];
   /** Fetch user data about the current user */
   me?: Maybe<User>;
   myFeedback?: Maybe<Array<Maybe<EventLiveFeedback>>>;
   node?: Maybe<Node>;
+  prompt?: Maybe<EventLiveFeedbackPrompt>;
+  promptResponseVotes: Votes;
+  promptResponses?: Maybe<Array<EventLiveFeedbackPromptResponse>>;
+  prompts?: Maybe<Array<EventLiveFeedbackPrompt>>;
   questionsByEventId?: Maybe<Array<EventQuestion>>;
+  /** Validates an invite token and logs the user in if they are already registered. */
   validateInvite: ValidateInviteQueryResponse;
+  validatePasswordResetToken: ValidatePasswordResetTokenQueryResponse;
+};
+
+
+export type QueryEventArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -830,6 +988,26 @@ export type QueryNodeArgs = {
 };
 
 
+export type QueryPromptArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptResponseVotesArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptResponsesArgs = {
+  promptId: Scalars['ID'];
+};
+
+
+export type QueryPromptsArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type QueryQuestionsByEventIdArgs = {
   eventId: Scalars['ID'];
 };
@@ -839,11 +1017,9 @@ export type QueryValidateInviteArgs = {
   input: ValidateInvite;
 };
 
-/** TODO: #QQRedesign dlete after code complete */
-export type QuestionOperation = {
-  __typename?: 'QuestionOperation';
-  edge: EventQuestionEdge;
-  operationType: Operation;
+
+export type QueryValidatePasswordResetTokenArgs = {
+  input: ValidatePasswordResetTokenForm;
 };
 
 export type RegistrationForm = {
@@ -859,32 +1035,49 @@ export type RemoveQuestionFromQueue = {
   questionId: Scalars['ID'];
 };
 
+export type ResetPasswordForm = {
+  confirmNewPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type ResetPasswordMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type ResetPasswordRequestForm = {
+  email: Scalars['String'];
+};
+
+export type ResetPasswordRequestMutationResponse = MutationResponse & {
+  __typename?: 'ResetPasswordRequestMutationResponse';
+  body?: Maybe<Scalars['Boolean']>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   enqueuedPushQuestion: EventQuestionEdgeContainer;
   enqueuedRemoveQuestion: EventQuestionEdgeContainer;
   enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
+  eventCreated: EventEdgeContainer;
+  eventDeleted: EventEdgeContainer;
   /** New messages as feedback is given */
   eventLiveFeedbackCreated: EventLiveFeedback;
-  /** TODO: #QQRedesign delete after code complete */
   eventUpdates: Event;
   feedbackCRUD: FeedbackOperation;
+  feedbackPromptResultsShared: EventLiveFeedbackPrompt;
+  feedbackPrompted: EventLiveFeedbackPrompt;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
   questionAddedToEnqueued: EventQuestionEdgeContainer;
   questionAddedToRecord: EventQuestionEdgeContainer;
-  /**
-   * Question subscription for all operations performed on questions
-   * TODO: #QQRedesign delete after code complete
-   */
-  questionCRUD: QuestionOperation;
+  /** Question subscription for all operations performed on questions */
   questionCreated: EventQuestionEdgeContainer;
   questionDeleted: EventQuestionEdgeContainer;
-  /**
-   * subscription for whenever questions are added to the queue
-   * TODO: #QQRedesign delete once code complete
-   */
-  questionQueued: EventQuestion;
   questionRemovedFromEnqueued: EventQuestionEdgeContainer;
   questionRemovedFromRecord: EventQuestionEdgeContainer;
   questionUpdated: EventQuestionEdgeContainer;
@@ -909,17 +1102,37 @@ export type SubscriptionEnqueuedUnshiftQuestionArgs = {
 };
 
 
+export type SubscriptionEventCreatedArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type SubscriptionEventDeletedArgs = {
+  eventIds: Array<Scalars['ID']>;
+};
+
+
 export type SubscriptionEventLiveFeedbackCreatedArgs = {
   eventId: Scalars['ID'];
 };
 
 
 export type SubscriptionEventUpdatesArgs = {
-  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
 export type SubscriptionFeedbackCrudArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptResultsSharedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionFeedbackPromptedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -934,22 +1147,12 @@ export type SubscriptionQuestionAddedToRecordArgs = {
 };
 
 
-export type SubscriptionQuestionCrudArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type SubscriptionQuestionCreatedArgs = {
   eventId: Scalars['ID'];
 };
 
 
 export type SubscriptionQuestionDeletedArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type SubscriptionQuestionQueuedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1012,6 +1215,11 @@ export type UpdateOrganization = {
   orgId: Scalars['ID'];
 };
 
+export type UpdateOrganizerForm = {
+  canMakeOrgs: Scalars['Boolean'];
+  id: Scalars['ID'];
+};
+
 export type UpdatePasswordForm = {
   confirmNewPassword: Scalars['String'];
   email: Scalars['String'];
@@ -1021,7 +1229,7 @@ export type UpdatePasswordForm = {
 
 export type UpdateQuestionPosition = {
   eventId: Scalars['ID'];
-  position: Scalars['Int'];
+  position: Scalars['String'];
   questionId: Scalars['ID'];
 };
 
@@ -1051,21 +1259,53 @@ export type UpdateVideo = {
 /** User Data */
 export type User = Node & {
   __typename?: 'User';
+  /** All events */
+  allEvents?: Maybe<EventConnection>;
   /** Avatar URL if null then no avatar is uploaded */
   avatar?: Maybe<Scalars['String']>;
+  canMakeOrgs?: Maybe<Scalars['Boolean']>;
   email?: Maybe<Scalars['String']>;
+  /** Events that this user is a moderator of, or has been invited to */
+  events?: Maybe<EventConnection>;
   firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  isAdmin?: Maybe<Scalars['Boolean']>;
   isEmailVerified?: Maybe<Scalars['Boolean']>;
+  isOrganizer?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
+  /** All the users */
+  users?: Maybe<UserConnection>;
+};
+
+
+/** User Data */
+export type UserAllEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<EventsSearchFilters>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** User Data */
+export type UserEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** User Data */
 export type UserOrganizationsArgs = {
   after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** User Data */
+export type UserUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<UsersSearchFilters>;
   first?: InputMaybe<Scalars['Int']>;
 };
 
@@ -1098,6 +1338,15 @@ export type UserSettings = {
   updatePassword?: Maybe<Scalars['String']>;
 };
 
+export type UsersSearchFilters = {
+  /** Search by email */
+  email?: InputMaybe<Scalars['String']>;
+  /** Search by first name */
+  firstName?: InputMaybe<Scalars['String']>;
+  /** Search by last name */
+  lastName?: InputMaybe<Scalars['String']>;
+};
+
 export type ValidateInvite = {
   eventId: Scalars['ID'];
   token: Scalars['String'];
@@ -1105,5 +1354,29 @@ export type ValidateInvite = {
 
 export type ValidateInviteQueryResponse = {
   __typename?: 'ValidateInviteQueryResponse';
+  user?: Maybe<User>;
   valid: Scalars['Boolean'];
+};
+
+export type ValidatePasswordResetTokenForm = {
+  token: Scalars['String'];
+};
+
+export type ValidatePasswordResetTokenQueryResponse = {
+  __typename?: 'ValidatePasswordResetTokenQueryResponse';
+  message: Scalars['String'];
+  valid: Scalars['Boolean'];
+};
+
+export enum Vote {
+  Against = 'AGAINST',
+  Conflicted = 'CONFLICTED',
+  For = 'FOR'
+}
+
+export type Votes = {
+  __typename?: 'Votes';
+  against: Scalars['Int'];
+  conflicted: Scalars['Int'];
+  for: Scalars['Int'];
 };

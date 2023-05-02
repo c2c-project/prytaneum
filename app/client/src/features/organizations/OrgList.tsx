@@ -22,13 +22,12 @@ import { Fab } from '@local/components/Fab';
 import { CreateOrg, TCreateOrgProps } from '@local/features/organizations';
 
 import { Loader } from '@local/components/Loader';
-import { useUser } from '../accounts';
 import { DeleteOrganization } from './DeleteOrg';
+import { useUser } from '@local/features/accounts';
 
 export const ORG_LIST_QUERY = graphql`
     query OrgListQuery($first: Int, $after: String) {
         me {
-            id
             organizations(first: $first, after: $after) @connection(key: "OrgListQuery_organizations") {
                 __id
                 edges {
@@ -65,7 +64,7 @@ const CreateOrgFab = ({ connection }: TCreateOrgProps) => {
                     <CreateOrg connection={connection} onSubmit={close} />
                 </DialogContent>
             </ResponsiveDialog>
-            <Fab onClick={open}>
+            <Fab data-test-id='create-organization-button' onClick={open}>
                 <Add />
             </Fab>
         </>
@@ -77,36 +76,31 @@ export interface OrgListProps {
 }
 
 export interface SelectedOrg {
-    readonly id: string,
-    readonly name: string | null
+    readonly id: string;
+    readonly name: string | null;
 }
 
-const initialState = { id: '', name: '' }
+const initialState = { id: '', name: '' };
 export const OrgList = ({ queryRef }: OrgListProps) => {
     const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const classes = useStyles();
     const router = useRouter();
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
     const [selectedOrg, setSelectedOrg] = React.useState(initialState);
 
     const close = () => {
         setIsConfDialogOpen(false);
-    }
+    };
 
     const listOfOrgs = React.useMemo(() => data.me?.organizations?.edges ?? [], [data.me]);
     const connectionId = React.useMemo(() => data.me?.organizations?.__id ?? '', [data.me?.organizations?.__id]);
 
     React.useEffect(() => {
-        if (!isLoading && !user) router.push('/');
-    }, [user, router, isLoading]);
+        if (!isLoading && !user?.isOrganizer) router.push('/');
+    }, [router, user, isLoading]);
 
-    React.useEffect(() => {
-        if (isLoading) return;
-        if (!user) router.push('/login');
-    }, [isLoading, user, router]);
-
-    if (isLoading) return <Loader />;
+    if (isLoading || !user?.isOrganizer) return <Loader />;
 
     if (listOfOrgs.length === 0)
         return (

@@ -23,15 +23,16 @@ import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Skeleton } from '@mui/material';
-import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+import { usePreloadedQuery, PreloadedQuery } from 'react-relay';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
-import type { UserMenuQuery } from '@local/__generated__/UserMenuQuery.graphql';
-import { useIsClient } from '@local/features/core';
-import { useUser } from '../useUser';
-import { LoginForm } from '../LoginForm';
-import { RegisterForm } from '../RegisterForm';
-import useLogout from '../useLogout';
+import { useIsClient } from '@local/core';
+import { useUser } from '@local/features/accounts/useUser';
+import { LoginForm } from '@local/features/accounts/LoginForm';
+import { RegisterForm } from '@local/features/accounts/RegisterForm';
+import useLogout from '@local/features/accounts/useLogout';
+import { USER_CONTEXT_QUERY } from '@local/features/accounts/UserContext';
+import { UserContextQuery } from '@local/__generated__/UserContextQuery.graphql';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -76,21 +77,13 @@ export function UserMenuLoader() {
     );
 }
 
-export const USER_MENU_QUERY = graphql`
-    query UserMenuQuery {
-        me {
-            ...useUserFragment
-        }
-    }
-`;
-
 export interface UserMenuProps {
     className?: string;
-    queryRef: PreloadedQuery<UserMenuQuery>;
+    queryRef: PreloadedQuery<UserContextQuery>;
 }
 
 function UserName() {
-    const [user] = useUser();
+    const { user } = useUser();
     const classes = useStyles();
 
     return (
@@ -107,8 +100,8 @@ type TButtons = 'login' | 'register' | null;
 export function UserMenu({ className, queryRef }: UserMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     // TODO remove unused query
-    const data = usePreloadedQuery<UserMenuQuery>(USER_MENU_QUERY, queryRef);
-    const [user, setUser, , setIsLoading] = useUser();
+    const data = usePreloadedQuery<UserContextQuery>(USER_CONTEXT_QUERY, queryRef);
+    const { user, setUser, setIsLoading } = useUser();
     const isClient = useIsClient();
     const classes = useStyles();
     const isSignedIn = React.useMemo(() => !!user, [user]);
@@ -129,13 +122,12 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
     const handleNavigation = (path: string) => () => router.push(path);
 
     React.useEffect(() => {
-        if (!data) setIsLoading(true);
-        if (data) setIsLoading(false);
+        setIsLoading(true);
         if (data && !user) {
             setUser(data.me);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+        setIsLoading(false);
+    }, [data, setIsLoading, setUser, user]);
 
     function handleOpen(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const { currentTarget } = e;
@@ -152,6 +144,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         if (isSmUp)
             return (
                 <ButtonBase
+                    data-test-id='appbar-user-menu'
                     color='inherit'
                     onClick={handleOpen}
                     aria-label='user-menu'
@@ -164,7 +157,7 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                 </ButtonBase>
             );
         return (
-            <IconButton onClick={handleOpen} size='large'>
+            <IconButton data-test-id='appbar-user-menu' onClick={handleOpen} size='large'>
                 <MoreVert />
             </IconButton>
         );
@@ -174,13 +167,21 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
         <div className={className}>
             {!isSignedIn && (
                 <>
-                    <Button color='primary' variant='contained' className={classes.item} onClick={handleClick('login')}>
+                    <Button
+                        data-test-id='appbar-login-button'
+                        color='primary'
+                        variant='contained'
+                        className={classes.item}
+                        onClick={handleClick('login')}
+                    >
                         Login
                     </Button>
                     <ResponsiveDialog open={type === 'login'} onClose={close}>
                         <DialogContent>
                             <LoginForm
+                                close={close}
                                 onSuccess={() => {
+                                    router.reload();
                                     close();
                                     router.reload();
                                 }}
@@ -197,7 +198,12 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </Button>
                     <ResponsiveDialog open={type === 'register'} onClose={close}>
                         <DialogContent>
-                            <RegisterForm onSuccess={close} />
+                            <RegisterForm
+                                onSuccess={() => {
+                                    close();
+                                    router.reload();
+                                }}
+                            />
                         </DialogContent>
                     </ResponsiveDialog>
                 </>

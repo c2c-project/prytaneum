@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { graphql, useMutation, useFragment } from 'react-relay';
 import { DeleteButtonFragment$key } from '@local/__generated__/DeleteButtonFragment.graphql';
 import { DeleteButtonMutation } from '@local/__generated__/DeleteButtonMutation.graphql';
-import { useSnack } from '@local/features/core/useSnack';
+import { useSnack } from '@local/core/useSnack';
 
 const DELETE_QUESTION_FRAGMENT = graphql`
     fragment DeleteButtonFragment on EventQuestion {
@@ -53,7 +53,7 @@ export function DeleteButton({ className = undefined, fragmentRef }: Props) {
     }
 
     const isQueued = React.useMemo(() => {
-        if (!position || position === -1) return false;
+        if (parseInt(position) === -1) return false;
         return true;
     }, [position]);
 

@@ -5,7 +5,7 @@ import { graphql, useMutation } from 'react-relay';
 
 import type { DequeueQuestionButtonMutation } from '@local/__generated__/DequeueQuestionButtonMutation.graphql';
 import { useEvent } from '@local/features/events';
-import { useSnack } from '@local/features/core';
+import { useSnack } from '@local/core';
 
 export interface QueueButtonProps {
     questionId: string;
@@ -44,7 +44,7 @@ export function DequeueQuestionButton({ questionId }: QueueButtonProps) {
             },
             onCompleted: ({ removeQuestionFromQueue }) => {
                 if (removeQuestionFromQueue.isError) {
-                    displaySnack(removeQuestionFromQueue.message);
+                    displaySnack(removeQuestionFromQueue.message, { variant: 'error' });
                 }
             },
         });
