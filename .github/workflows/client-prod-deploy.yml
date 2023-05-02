@@ -37,6 +37,7 @@ jobs:
             - name: 'Set up Cloud SDK'
               uses: google-github-actions/setup-gcloud@v1
               with:
+                  version: '400.0.0'
                   project_id: ${{ secrets.GKE_PROJECT_ID }}
 
             # Configure Docker to use the gcloud command-line tool as a credential
@@ -100,6 +101,7 @@ jobs:
             - name: 'Set up Cloud SDK'
               uses: google-github-actions/setup-gcloud@v1
               with:
+                  version: '400.0.0'
                   project_id: ${{ secrets.GKE_PROJECT_ID }}
 
             # Configure Docker to use the gcloud command-line tool as a credential
