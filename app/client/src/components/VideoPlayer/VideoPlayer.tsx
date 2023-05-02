@@ -42,7 +42,6 @@ export function VideoPlayer({ url, rest }: ReactPlayerProps) {
                     <ReactPlayer
                         url={url}
                         playing={process.env.NODE_ENV === 'production'}
-                        muted
                         width='100%'
                         height='100%'
                         playsinline
