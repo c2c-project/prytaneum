@@ -251,7 +251,7 @@ __metadata:
     react-google-charts: ^4.0.0
     react-infinite-scroll-component: ^6.1.0
     react-is: ^16.13.1
-    react-player: ^1.11.1
+    react-player: ^2.12.0
     react-relay: ^13.0.2
     react-test-renderer: ^17.0.2
     react-transition-group: ^4.4.2
@@ -27522,16 +27522,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-player@npm:^1.11.1":
-  version: 1.15.3
-  resolution: "react-player@npm:1.15.3"
+"react-player@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "react-player@npm:2.12.0"
   dependencies:
     deepmerge: ^4.0.0
     load-script: ^1.0.0
+    memoize-one: ^5.1.1
     prop-types: ^15.7.2
+    react-fast-compare: ^3.0.1
   peerDependencies:
-    react: "*"
-  checksum: f61a261b8a82e4ddd5a4a156de3e31993fc8800d53c50ea6fcfeec8818c4df3e8aa1cafb5effd405a324dfebb8dc184b015a6533305a8c5c86e2d761157bf9b6
+    react: ">=16.6.0"
+  checksum: 77d3e55ed67cd9c1e2300a990d8015d270072daad41f8a0750c32748f3fbfbc5bd2a2f06e78ac6828c2260b84537b9571d0abac31d3e888b74a3dccb59a56365
   languageName: node
   linkType: hard
 
