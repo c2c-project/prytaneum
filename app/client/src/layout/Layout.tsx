@@ -32,6 +32,9 @@ export interface LayoutProps {
 }
 
 const useStyles = makeStyles((theme) => ({
+    background: {
+        backgroundColor: '#FFFFFF',
+    },
     menuIcon: {
         marginRight: theme.spacing(1),
     },
@@ -59,19 +62,21 @@ export function Layout({
 
     return (
         <Page>
-            <AppBar sx={{ zIndex: (theme) => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
-                {isSideNavHidden && (
-                    <IconButton
-                        className={classes.menuIcon}
-                        onClick={() => setOpen(!open)}
-                        color='inherit'
-                        size='large'
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                )}
-            </AppBar>
-            <Grid container alignItems='flex-start' item xs={12}>
+            <div className={classes.background}>
+                <AppBar sx={{ zIndex: (theme) => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
+                    {isSideNavHidden && (
+                        <IconButton
+                            className={classes.menuIcon}
+                            onClick={() => setOpen(!open)}
+                            color='inherit'
+                            size='large'
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
+                </AppBar>
+            </div>
+            <Grid container className={classes.background} alignItems='flex-start' item xs={12}>
                 <SideNav isOpen={open} close={() => setOpen(false)} isHidden={isSideNavHidden} />
                 <Main className={disablePadding ? undefined : classes.main} {..._ContainerProps}>
                     {children}

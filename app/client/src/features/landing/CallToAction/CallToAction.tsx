@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import { Grid, Typography, Button, useMediaQuery } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
-import { useUser } from '@local/features/accounts';
+import useTheme from '@mui/styles/useTheme';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -13,29 +13,47 @@ const useStyles = makeStyles((theme) => ({
             alignItems: 'center',
         },
     },
+    landing: {
+        width: '100%',
+        minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
+        margin: 0,
+    },
     subtitle: {
         textAlign: 'right',
-        color: '#272C6C',
+        color: '#D79922',
         [theme.breakpoints.down('lg')]: {
             textAlign: 'center',
         },
         [theme.breakpoints.down('sm')]: {
             fontSize: 18,
         },
+        fontWeight: 500,
+        fontSize: 25,
+    },
+    text: {
+        textAlign: 'center',
+        color: '#272C6C',
+        fontFamily: 'Manrope',
+        fontWeight: 400,
+        fontSize: 20,
     },
     button: {
-        marginTop: theme.spacing(2),
-        minWidth: 300,
-        alignSelf: 'flex-start',
-        fontSize: 24,
-        [theme.breakpoints.down('lg')]: {
-            alignSelf: 'center',
-        },
-        [theme.breakpoints.down('sm')]: {
-            minWidth: 0,
-            width: '100%',
-            fontSize: 20,
-        },
+        color: 'white',
+        backgroundColor: '#2427B7',
+        borderRadius: 12,
+        height: '100%',
+        width: 'auto',
+        justifySelf: 'end',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    secondaryButton: {
+        backgroundColor: '#ED526C',
+        borderRadius: 12,
+        color: 'white',
+        padding: '3px 20px 3px 20px',
     },
     contain: {
         objectFit: 'contain',
@@ -43,46 +61,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function CallToAction() {
+    const theme = useTheme();
+    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
     const router = useRouter();
-    const { user } = useUser();
 
     return (
-        <>
+        <Grid
+            container
+            alignItems='center'
+            justifyContent='center'
+            spacing={2}
+            className={classes.landing}
+            marginTop={-10}
+        >
             <Grid item xs={12} md={6} className={classes.header}>
-                <img
-                    className={classes.contain}
-                    data-test-id='landing-prytanum-logo'
-                    alt='Prytaneum Logo'
-                    src='/static/prytaneum_logo2.svg'
-                    width='100%'
-                    height='100%'
-                />
-                <Typography variant='h5' className={classes.subtitle}>
-                    A crucial tool for a better democracy.
-                </Typography>
-                {user ? (
-                    <Button
-                        variant='contained'
-                        color='secondary'
-                        className={classes.button}
-                        onClick={() => router.push('/app/home')}
-                    >
-                        Go to Dashboard
-                    </Button>
-                ) : (
-                    <Button
-                        data-test-id='large-register-button'
-                        variant='contained'
-                        color='secondary'
-                        className={classes.button}
-                        onClick={() => router.push('/register')}
-                    >
-                        Register
-                    </Button>
-                )}
-            </Grid>
-            <Grid item xs={12} md={6}>
                 <img
                     className={classes.contain}
                     alt='Prytaneum Landing Graphic'
@@ -91,6 +84,37 @@ export function CallToAction() {
                     height='100%'
                 />
             </Grid>
-        </>
+            <Grid item xs={12} md={6} marginLeft={mdBreakpoint ? 0 : -10} marginTop={-13}>
+                <img
+                    className={classes.contain}
+                    data-test-id='landing-prytanum-logo'
+                    alt='Prytaneum Logo'
+                    src='/static/p_logo.svg'
+                    width='100%'
+                    height='100%'
+                />
+                <Typography variant='h5' className={classes.subtitle} marginTop={-1}>
+                    A crucial tool for a better democracy.
+                </Typography>
+                <Grid item marginLeft={mdBreakpoint ? 0 : 14} marginTop={2}>
+                    <Typography variant='h6' className={classes.text}>
+                        This town hall platform leverages AI and big data to enable meaningful democratic engagement
+                        between residents and public officials.
+                    </Typography>
+                </Grid>
+                <Grid item container marginLeft={mdBreakpoint ? 0 : 5} marginTop={3} justifyContent='center'>
+                    <Grid item marginRight={3}>
+                        <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                            Get Started
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button className={classes.secondaryButton} onClick={() => router.push('#video-section')}>
+                            See How It Works
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     );
 }

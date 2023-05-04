@@ -1,129 +1,248 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import * as React from 'react';
-import { Grid } from '@mui/material';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import RecordVoiceOverOutlinedIcon from '@mui/icons-material/RecordVoiceOverOutlined';
-import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
+import { useRouter } from 'next/router';
+import { Button, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
+import useTheme from '@mui/styles/useTheme';
+
 import { CallToAction } from '@local/features/landing/CallToAction';
 import { Blurb } from '@local/features/landing/Blurb';
-import { Carousel } from '@local/features/landing/Carousel';
-import { ParticipantDemo, ModeratorDemo } from '@local/features/landing/InteractiveDemo';
-// import { ScrollButton } from '@local/features/promo/ScrollButton'
-// import { ConditionalRender } from '@local/components';
+import { Roles as RolesPanel } from './Panels/Roles';
+import { MobileRoles as MobileRolesPanel } from './Panels/MobileRoles';
+import { Views as ViewsPanel } from './Panels/Views';
+import ReactPlayer from 'react-player';
 
 const useStyles = makeStyles((theme) => ({
+    button: {
+        color: 'white',
+        backgroundColor: '#F5C64F',
+        borderRadius: 12,
+        height: '100%',
+        width: 'auto',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
     landing: {
         width: '100%',
         minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
         margin: 0,
     },
     root: {
-        width: '100%',
         minHeight: '60vh',
         margin: 0,
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
-    arrowsection: {
+    videoWrapper: {
+        width: '100%',
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
+        [theme.breakpoints.up('md')]: {
+            marginLeft: 0,
+        },
         [theme.breakpoints.down('md')]: {
-            display: 'none',
+            marginLeft: -8,
+            aspectRatio: '16/9',
         },
     },
-    downarrow: {
-        fontSize: '4rem',
-        transform: 'rotate(-90deg)',
+    contain: {
+        objectFit: 'contain',
     },
-    // sentinel: {
-    //     paddingTop: theme.spacing(4), // offset for scroll
-    // }
 }));
 
 export default function Landing() {
+    const theme = useTheme();
+    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const classes = useStyles();
+    const router = useRouter();
 
-    const roles = [
-        <Blurb
-            key='blurb1'
-            title='Participant Role'
-            icon={<PeopleAltOutlinedIcon />}
-            paragraphs={[
-                // eslint-disable-next-line quotes
-                "The residents who want to engage in discussion on a policy topic. Participants can type and ask questions; they can like, quote, and reply to other participant's questions; they can participate in breakout rooms.",
-            ]}
-        />,
-        <Blurb
-            key='blurb2'
-            title='Moderator Role'
-            icon={<SupervisedUserCircleOutlinedIcon />}
-            paragraphs={[
-                // eslint-disable-next-line quotes
-                "The mediators who handle participants' questions to be answered by the speaker. Moderators see the full question list and the question queue that was  curated by the moderator assistants; they select which question to ask next;  they ask the question on the video call for the speaker to respond. Moderators interact with the speaker via a streaming service of the organizer's choice.",
-            ]}
-        />,
-        <Blurb
-            key='blurb3'
-            title='Speaker Role'
-            icon={<RecordVoiceOverOutlinedIcon />}
-            paragraphs={[
-                // eslint-disable-next-line quotes
-                "The main speaker of a discussion. The speaker does not see the question list or  the question queue. Instead, meetings appear like an ordinary video call with  the moderator. The speaker interacts with the moderators via a streaming service  of the organizer's choice.",
-            ]}
-        />,
-    ];
-
-    const views = [
-        <ParticipantDemo key='view1' title='Participant View' shadow='10px 10px 0 0 #4056a1' scale='scale(0.95)' />,
-        <ModeratorDemo key='view2' title='Moderator View' shadow='10px 10px 0 0 #8eafff' scale='scale(0.95)' />,
-    ];
-
-    // const sentinelRef = React.useRef<HTMLDivElement | null>(null);
+    console.log(mdBreakpoint);
 
     return (
         <>
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.landing}>
-                <CallToAction />
-                {/* TODO: Fix auto-scroll
-            <ConditionalRender client>
-                <ScrollButton sentinelRef={sentinelRef}/>
-            </ConditionalRender> */}
-            </Grid>
-            {/* <div ref={sentinelRef} className={classes.sentinel}> */}
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-                <Blurb
-                    title='What is Prytaneum?'
-                    paragraphs={[
-                        'Prytaneum is an open-source, highly-interactive online town hall platform powered by artificial intelligence and an innovative user interface.',
-                        'Our town hall platform enables constructive, virtual dialogue between government officials and their constituents - creating opportunities for democratic engagement that is not available through commercially available webinar or streaming platforms.',
-                    ]}
-                />
+            <CallToAction />
+
+            {/* The marginLeft and width props allow this component to override the maxWidth set by its parent container in `Main.tsx` */}
+            <Grid
+                container
+                overflow='hidden'
+                alignItems='center'
+                justifyContent='center'
+                spacing={2}
+                className={classes.root}
+                marginLeft='calc(-100vw / 2 + 50%) !important'
+                style={{ backgroundColor: '#8EAFFF42', width: '100vw' }}
+            >
+                <Grid item marginTop={6} id='video-section'>
+                    <Blurb title='Enable constructive, virtual dialogue' titleColor='#282D6E' />
+                </Grid>
+
                 <Grid item xs={12}>
-                    <ParticipantDemo shadow='10px 10px 0 0 #f5c64f' scale='scale(0.95)' />
+                    <div className={classes.videoWrapper}>
+                        <ReactPlayer
+                            url='https://youtu.be/Q-8-cQujh3k'
+                            playing={true}
+                            muted
+                            loop
+                            width={'854px'}
+                            height={mdBreakpoint ? '100%' : '480px'}
+                            playsinline
+                            controls
+                        />
+                    </div>
+                </Grid>
+
+                <Grid item marginBottom={10}>
+                    <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                        Learn How To Get Started
+                    </Button>
                 </Grid>
             </Grid>
-            {/* </div> */}
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-                <Blurb title='A better solution for remote public engagement.' />
-                <Carousel cards={views} />
+
+            {/* This is the only section of the page that doesn't need the style prop detailed above. */}
+            <ViewsPanel />
+            {mdBreakpoint ? <MobileRolesPanel /> : <RolesPanel />}
+            {/* BOTTOM BANNER SECTION */}
+            <Grid
+                container
+                direction='column'
+                display='flex'
+                alignItems='center'
+                justifyContent='center'
+                spacing={2}
+                className={classes.root}
+                marginLeft='calc(-103vw / 2 + 50%) !important'
+                style={{ width: '100vw' }}
+            >
+                <Grid item marginTop={2} marginBottom={1}>
+                    <Blurb
+                        title='Read more on how Prytaneum came to be,'
+                        paragraphs={['the team behind the online town hall platform, and our motivations.']}
+                        titleColor='#F5C64F'
+                        paragraphsColor='#272C6C'
+                    />
+                </Grid>
+                <Grid item marginRight='-1.5%'>
+                    <img
+                        className={classes.contain}
+                        alt='Team Photo'
+                        src='/static/team_photo.png'
+                        width='100%'
+                        height='100%'
+                    />
+                </Grid>
+                <Grid item>
+                    <Button
+                        size='medium'
+                        style={{ color: 'white', marginTop: '-250%' }}
+                        onClick={() => router.push('/aboutus')}
+                    >
+                        Read more about us
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
-                <Blurb
-                    paragraphs={[
-                        'Just like any town hall, Prytaneum offers roles to fit the needs of any attendee: organizer, speaker, moderator, moderator assistant, and participant. Prytaneum complements these roles by promoting constructive engagement through the user interface and “pro-social” algorithm.',
-                    ]}
+            {/* FOOTER SECTION */}
+            <Grid container marginLeft='calc(-100vw / 2 + 50%) !important' width='100vw'>
+                <Grid item container justifyContent={mdBreakpoint ? 'center' : 'normal'}>
+                    <Grid
+                        item
+                        justifyContent={mdBreakpoint ? 'center' : 'flex-start'}
+                        marginLeft={mdBreakpoint ? '0%' : '5%'}
+                    >
+                        <img
+                            className={classes.contain}
+                            alt='prytaneum 2 logo'
+                            src='/static/prytaneum_logo2.svg'
+                            width={234}
+                            height={51}
+                        />
+                    </Grid>
+                    <Grid
+                        container
+                        justifyContent={mdBreakpoint ? 'center' : 'flex-end'}
+                        marginTop={mdBreakpoint ? 4 : -6}
+                        marginRight={mdBreakpoint ? '0%' : '5%'}
+                    >
+                        <Stack direction='row' spacing={4}>
+                            <Button
+                                style={{
+                                    color: '#282D6E',
+                                    fontSize: '28px',
+                                    maxHeight: '30px',
+                                    textTransform: 'capitalize',
+                                }}
+                                onClick={() => router.push('/aboutus')}
+                            >
+                                About
+                            </Button>
+                            <Button
+                                style={{
+                                    color: '#282D6E',
+                                    fontSize: '28px',
+                                    maxHeight: '30px',
+                                    textTransform: 'capitalize',
+                                }}
+                            >
+                                Guides
+                            </Button>
+                            <Button
+                                style={{
+                                    color: '#282D6E',
+                                    fontSize: '28px',
+                                    maxHeight: '30px',
+                                    textTransform: 'capitalize',
+                                }}
+                            >
+                                Contact Us
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
+                <Divider
+                    variant='middle'
+                    style={{
+                        width: '90%',
+                        paddingBottom: mdBreakpoint ? '2rem' : '0rem',
+                        marginLeft: mdBreakpoint ? '0%' : '5%',
+                    }}
                 />
-                <Carousel cards={roles} />
-            </Grid>
-            <Grid container alignItems='center' justifyContent='center' spacing={3} className={classes.root}>
-                <Grid item>
-                    <img src='/static/democracy_fund_logo.svg' width={280} height={200} alt='democracy fund logo' />
-                </Grid>
-                <Grid item>
-                    <img src='/static/prytaneum_logo.svg' width={150} height={200} alt='prytaneum logo' />
-                </Grid>
-                <Grid item>
-                    <img src='/static/ucr_tecd_logo.svg' width={450} height={200} alt='ucr tecd logo' />
+                <Grid item container justifyContent={mdBreakpoint ? 'center' : 'normal'}>
+                    <Grid
+                        item
+                        justifyContent={mdBreakpoint ? 'center' : 'flex-start'}
+                        marginLeft={mdBreakpoint ? '0%' : '5%'}
+                        marginTop='2rem'
+                    >
+                        <Typography color='#999999'>© 2023 Prytaneum. All rights reserved.</Typography>
+                    </Grid>
+                    <Grid
+                        container
+                        justifyContent={mdBreakpoint ? 'center' : 'flex-end'}
+                        marginTop={mdBreakpoint ? 4 : -6}
+                        marginRight={mdBreakpoint ? '0%' : '5%'}
+                    >
+                        <Grid item marginRight={6}>
+                            <img
+                                className={classes.contain}
+                                alt='democracy fund logo'
+                                src='/static/democracy_fund_logo.svg'
+                                width={152}
+                                height={61}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <img
+                                className={classes.contain}
+                                alt='ucr tecd logo'
+                                src='/static/ucr_tecd_logo.svg'
+                                width={276}
+                                height={62}
+                            />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </>

@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
             margin: '0 2.5%',
             position: 'absolute',
             height: '6px',
-            backgroundColor: theme.palette.primary.light,
             bottom: '-1px',
             borderRadius: '4px',
             // borderBottom: `3px solid ${theme.palette.primary.light}`,

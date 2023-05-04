@@ -36,9 +36,10 @@ import { UserContextQuery } from '@local/__generated__/UserContextQuery.graphql'
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        borderRadius: 0,
+        borderRadius: 16,
         height: '100%',
         width: 'auto',
+        margin: theme.spacing(1),
     },
     paper: {
         marginTop: theme.spacing(2),
@@ -169,9 +170,9 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                 <>
                     <Button
                         data-test-id='appbar-login-button'
-                        color='primary'
+                        style={{ backgroundColor: '#2427B7' }}
                         variant='contained'
-                        className={classes.item}
+                        className={classes.button}
                         onClick={handleClick('login')}
                     >
                         Login
@@ -190,8 +191,9 @@ export function UserMenu({ className, queryRef }: UserMenuProps) {
                     </ResponsiveDialog>
                     <Button
                         data-test-id='appbar-register-button'
-                        color='primary'
-                        variant='outlined'
+                        style={{ backgroundColor: '#2427B7' }}
+                        variant='contained'
+                        className={classes.button}
                         onClick={handleClick('register')}
                     >
                         Register
