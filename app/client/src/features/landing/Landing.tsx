@@ -1,5 +1,5 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import * as React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Button, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: -8,
             aspectRatio: '16/9',
         },
+    },
+    contain: {
+        objectFit: 'contain',
     },
 }));
 
@@ -105,6 +108,7 @@ export default function Landing() {
             {/* BOTTOM BANNER SECTION */}
             <Grid
                 container
+                direction='column'
                 display='flex'
                 alignItems='center'
                 justifyContent='center'
@@ -122,7 +126,13 @@ export default function Landing() {
                     />
                 </Grid>
                 <Grid item marginRight='-1.5%'>
-                    <Image alt='Team Photo' src='/static/team_photo.png' height={450} width={1920} objectFit='fill' />
+                    <img
+                        className={classes.contain}
+                        alt='Team Photo'
+                        src='/static/team_photo.png'
+                        width='100%'
+                        height='100%'
+                    />
                 </Grid>
                 <Grid item>
                     <Button
@@ -142,12 +152,12 @@ export default function Landing() {
                         justifyContent={mdBreakpoint ? 'center' : 'flex-start'}
                         marginLeft={mdBreakpoint ? '0%' : '5%'}
                     >
-                        <Image
+                        <img
+                            className={classes.contain}
+                            alt='prytaneum 2 logo'
                             src='/static/prytaneum_logo2.svg'
                             width={234}
                             height={51}
-                            objectFit='contain'
-                            alt='prytaneum 2 logo'
                         />
                     </Grid>
                     <Grid
@@ -215,21 +225,21 @@ export default function Landing() {
                         marginRight={mdBreakpoint ? '0%' : '5%'}
                     >
                         <Grid item marginRight={6}>
-                            <Image
+                            <img
+                                className={classes.contain}
+                                alt='democracy fund logo'
                                 src='/static/democracy_fund_logo.svg'
                                 width={152}
                                 height={61}
-                                objectFit='contain'
-                                alt='democracy fund logo'
                             />
                         </Grid>
                         <Grid item>
-                            <Image
+                            <img
+                                className={classes.contain}
+                                alt='ucr tecd logo'
                                 src='/static/ucr_tecd_logo.svg'
                                 width={276}
                                 height={62}
-                                objectFit='contain'
-                                alt='ucr tecd logo'
                             />
                         </Grid>
                     </Grid>

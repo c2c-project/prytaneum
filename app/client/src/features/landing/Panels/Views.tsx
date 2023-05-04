@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { Grid, Typography, useMediaQuery } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import useTheme from '@mui/styles/useTheme';
@@ -57,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export function Views() {
@@ -83,12 +85,12 @@ export function Views() {
             >
                 <Grid item>
                     <Grid container wrap='nowrap' justifyContent='center'>
-                        <Image
+                        <img
+                            className={classes.contain}
                             alt='Participant Icon'
                             src='/static/participant_icon_yellow.svg'
                             width={31}
                             height={21}
-                            objectFit='contain'
                         />
                         <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
                             Participant View
@@ -98,16 +100,14 @@ export function Views() {
                         Sit in on Prytaneum events as a participant and contribute to event discussion
                     </Typography>
                 </Grid>
-                <Grid item>
-                    <Image
-                        data-test-id='participant-view'
-                        alt='Participant View Screenshot'
-                        src='/static/participant_view.png'
-                        width={1114}
-                        height={576}
-                        objectFit='contain'
-                    />
-                </Grid>
+                <img
+                    className={classes.contain}
+                    data-test-id='participant-view'
+                    alt='Participant View Screenshot'
+                    src='/static/participant_view.png'
+                    width='60%'
+                    height='60%'
+                />
             </Grid>
             <Grid
                 container
@@ -117,24 +117,22 @@ export function Views() {
                 marginTop={10}
                 marginBottom={4}
             >
-                <Grid item>
-                    <Image
-                        data-test-id='moderator-view'
-                        alt='Moderator View Screenshot'
-                        src='/static/moderator_view.png'
-                        width={1114}
-                        height={576}
-                        objectFit='contain'
-                    />
-                </Grid>
+                <img
+                    className={classes.contain}
+                    data-test-id='moderator-view'
+                    alt='Moderator View Screenshot'
+                    src='/static/moderator_view.png'
+                    width='60%'
+                    height='60%'
+                />
                 <Grid item>
                     <Grid container wrap='nowrap' justifyContent='center'>
-                        <Image
+                        <img
+                            className={classes.contain}
                             alt='Moderator Icon'
                             src='/static/moderator_icon_yellow.svg'
                             width={36}
                             height={26}
-                            objectFit='contain'
                         />
                         <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
                             Moderator View

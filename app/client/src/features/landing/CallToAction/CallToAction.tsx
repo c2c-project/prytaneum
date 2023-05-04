@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Grid, Typography, Button, useMediaQuery } from '@mui/material';
-import Image from 'next/image';
 import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import useTheme from '@mui/styles/useTheme';
@@ -56,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         padding: '3px 20px 3px 20px',
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export function CallToAction() {
@@ -74,22 +76,22 @@ export function CallToAction() {
             marginTop={-10}
         >
             <Grid item xs={12} md={6} className={classes.header}>
-                <Image
+                <img
+                    className={classes.contain}
                     alt='Prytaneum Landing Graphic'
                     src='/static/prytaneum_landing_graphic.svg'
-                    width={3292}
-                    height={2097}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                 />
             </Grid>
             <Grid item xs={12} md={6} marginLeft={mdBreakpoint ? 0 : -10} marginTop={-13}>
-                <Image
+                <img
+                    className={classes.contain}
                     data-test-id='landing-prytanum-logo'
                     alt='Prytaneum Logo'
                     src='/static/p_logo.svg'
-                    width={3483}
-                    height={665}
-                    objectFit='contain'
+                    width='100%'
+                    height='100%'
                 />
                 <Typography variant='h5' className={classes.subtitle} marginTop={-1}>
                     A crucial tool for a better democracy.

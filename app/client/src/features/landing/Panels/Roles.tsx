@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
     Button,
@@ -60,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         backgroundColor: '#D2A942',
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export function Roles() {
@@ -83,18 +85,25 @@ export function Roles() {
                 <Blurb title='Participate in town hall events using roles' />
             </Grid>
 
-            <Stack direction={mdBreakpoint ? 'column' : 'row'} spacing={2} width='95%' marginTop={7} marginBottom={20}>
+            <Stack
+                direction={mdBreakpoint ? 'column' : 'row'}
+                spacing={2}
+                width='95%'
+                maxWidth='1500px'
+                marginTop={7}
+                marginBottom={20}
+            >
                 {/* User is not pointed to the top of each guide page after navigating to the page.
                     This is caused by an open NextJS bug: https://github.com/vercel/next.js/issues/28778 */}
                 <Card className={classes.roleCard}>
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
-                            <Image
+                            <img
+                                className={classes.contain}
                                 alt='Speaker Icon'
                                 src='/static/speaker_icon.svg'
                                 width={82}
                                 height={80}
-                                objectFit='contain'
                             />
                         </Grid>
                         <Blurb
@@ -121,12 +130,12 @@ export function Roles() {
                 <Card className={classes.roleCard}>
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
-                            <Image
+                            <img
+                                className={classes.contain}
                                 alt='Participant Icon'
                                 src='/static/participant_icon.svg'
                                 width={82}
                                 height={80}
-                                objectFit='contain'
                             />
                         </Grid>
                         <Blurb
@@ -173,12 +182,12 @@ export function Roles() {
                 <Card className={classes.roleCard}>
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
-                            <Image
+                            <img
+                                className={classes.contain}
                                 alt='Moderator Icon'
                                 src='/static/moderator_icon.svg'
                                 width={82}
                                 height={80}
-                                objectFit='contain'
                             />
                         </Grid>
                         <Blurb
@@ -224,12 +233,12 @@ export function Roles() {
                 <Card className={classes.roleCard}>
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
-                            <Image
+                            <img
+                                className={classes.contain}
                                 alt='Organizer Icon'
                                 src='/static/organizer_icon.svg'
                                 width={82}
                                 height={80}
-                                objectFit='contain'
                             />
                         </Grid>
                         <Blurb
@@ -272,7 +281,7 @@ export function Roles() {
                 </Card>
             </Stack>
 
-            <Grid item className={classes.featuresBanner}>
+            <Grid item className={classes.featuresBanner} maxWidth='1500px'>
                 <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>
                     Features
                 </Typography>

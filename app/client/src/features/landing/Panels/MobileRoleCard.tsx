@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
     Accordion,
@@ -32,6 +31,9 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         backgroundColor: '#D2A94280',
     },
+    contain: {
+        objectFit: 'contain',
+    },
 }));
 
 export default function MobileRoleCard(props: Props) {
@@ -46,12 +48,12 @@ export default function MobileRoleCard(props: Props) {
     return (
         <Accordion square={true}>
             <AccordionSummary expandIcon={<ExpandMoreIcon htmlColor='white' />} style={{ backgroundColor: '#F5C64F' }}>
-                <Image
+                <img
+                    className={classes.contain}
                     alt={`${props.title} Icon`}
                     src={`/static/${props.title.toLowerCase()}_icon.svg`}
                     width={31}
                     height={31}
-                    objectFit='contain'
                 />
                 <Typography color='white' variant='h4' fontSize='25px' marginLeft={3}>
                     {props.title}
