@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { Grid, useMediaQuery } from '@mui/material';
+import { Button, Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
@@ -102,9 +102,9 @@ function EventLive({ node }: EventLiveProps) {
     const { displaySnack } = useSnack();
     const router = useRouter();
     const eventId = router.query.id as string;
-    const { eventData, isLive } = useEventDetails({ fragmentRef: node });
+    const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const isModerator = Boolean(node.isViewerModerator);
-    
+
     React.useEffect(() => {
         if (eventData.isActive || isModerator) return;
         const now = new Date();
@@ -117,7 +117,6 @@ function EventLive({ node }: EventLiveProps) {
                 router.push(`/events/${eventId}/post`);
             } else {
                 router.push(`/events/${eventId}/pre`);
-                
             }
         }
     }, [eventData, eventData.endDateTime, eventData.isActive, eventId, isLive, isModerator, router]);
@@ -171,46 +170,35 @@ function EventLive({ node }: EventLiveProps) {
         }
     `;
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
-    const [buttonText, setButtonText] = React.useState(node.isActive ? 'End' : 'Start');
 
     if (!node || (!isLive && !isModerator)) return <Loader />;
 
+    const updateEventStatus = () => {
+        if (isLive) {
+            commitEventEndMutation({
+                variables: {
+                    eventId: eventId,
+                },
+                onCompleted() {
+                    displaySnack('Event has ended!');
+                    setIsLive(false);
+                },
+            });
+        } else {
+            commitEventStartMutation({
+                variables: {
+                    eventId: eventId,
+                },
+                onCompleted() {
+                    displaySnack('Event has started!');
+                    setIsLive(true);
+                },
+            });
+        }
+    };
+
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
-            {node.isViewerModerator &&
-                (buttonText === 'End' ? (
-                    <button
-                        onClick={() =>
-                            commitEventEndMutation({
-                                variables: {
-                                    eventId: eventId,
-                                },
-                                onCompleted() {
-                                    setButtonText('Start');
-                                    displaySnack('Event has ended!');
-                                },
-                            })
-                        }
-                    >
-                        {buttonText}
-                    </button>
-                ) : (
-                    <button
-                        onClick={() =>
-                            commitEventStartMutation({
-                                variables: {
-                                    eventId: eventId,
-                                },
-                                onCompleted() {
-                                    setButtonText('End');
-                                    displaySnack('Event has started!');
-                                },
-                            })
-                        }
-                    >
-                        {buttonText}
-                    </button>
-                ))}
             <Grid component={motion.div} key='townhall-live' container className={classes.root} onScroll={handleScroll}>
                 {!isMdUp && <div ref={topRef} />}
                 <Grid container item md={8} direction='column' wrap='nowrap'>
@@ -221,6 +209,17 @@ function EventLive({ node }: EventLiveProps) {
                     <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
+                    {node.isViewerModerator ? (
+                        isLive ? (
+                            <Button variant='contained' color='error' onClick={updateEventStatus}>
+                                End Event
+                            </Button>
+                        ) : (
+                            <Button variant='contained' color='success' onClick={updateEventStatus}>
+                                Start Event
+                            </Button>
+                        )
+                    ) : null}
                     <div className={classes.panes} id='event-sidebar-scroller' onScroll={handleScroll}>
                         {isMdUp && <div ref={topRef} className={classes.target} />}
                         <EventSidebar fragmentRef={node} override={Boolean(false)} />
@@ -249,6 +248,7 @@ function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenPr
 
     // Handle private events and token validation
     React.useEffect(() => {
+        if (node?.isViewerModerator) return;
         if (!validateInvite?.valid && node?.isPrivate === true) {
             if (tokenProvided) displaySnack('Invalid invite token.', { variant: 'error' });
             else displaySnack('You do not have permission to join this private event.', { variant: 'error' });
@@ -256,7 +256,7 @@ function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenPr
         }
         // Ensure user is logged in if invite is valid (Do not reload if user is already logged in)
         if (user === null && validateInvite?.valid && validateInvite?.user !== null) router.reload();
-    }, [displaySnack, node?.isPrivate, router, tokenProvided, user, validateInvite]);
+    }, [displaySnack, node?.isPrivate, node?.isViewerModerator, router, tokenProvided, user, validateInvite]);
 
     if (!node || !validateInvite) return <Loader />;
     return <EventLive node={node} />;
@@ -286,5 +286,11 @@ export function PreloadedEventLive({ eventId, token }: PreloadedEventLiveProps) 
     }, []);
 
     if (!eventLiveQueryRef || !validateInviteQueryRef) return <Loader />;
-    return <EventLiveContainer eventLiveQueryRef={eventLiveQueryRef} validateInviteQueryRef={validateInviteQueryRef} tokenProvided={!!token} />;
+    return (
+        <EventLiveContainer
+            eventLiveQueryRef={eventLiveQueryRef}
+            validateInviteQueryRef={validateInviteQueryRef}
+            tokenProvided={!!token}
+        />
+    );
 }
