@@ -32,6 +32,7 @@ export const resolvers: Resolvers = {
                     topic: 'questionCreated',
                     payload: {
                         questionCreated: { edge },
+                        authorId: ctx.viewer.id,
                     },
                 });
 
@@ -59,6 +60,7 @@ export const resolvers: Resolvers = {
                     payload: {
                         questionDeleted: { edge },
                         eventId: formattedQuestion.eventId,
+                        authorId: deletedQuestion.createdById,
                     },
                 });
 
@@ -91,11 +93,16 @@ export const resolvers: Resolvers = {
     },
     Subscription: {
         questionCreated: {
-            subscribe: withFilter<{ questionCreated: EventQuestionEdgeContainer }>(
+            subscribe: withFilter<{ questionCreated: EventQuestionEdgeContainer; authorId: string }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionCreated'),
                 (payload, args, ctx) => {
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.questionCreated.edge.node.id);
+                    if (args.viewerOnly === true) {
+                        // Only update if the author is the viewer
+                        const { authorId } = payload;
+                        if (authorId !== ctx.viewer.id) return false;
+                    }
                     return Question.doesEventMatch(eventId, questionId, ctx.prisma);
                 }
             ),
@@ -111,12 +118,16 @@ export const resolvers: Resolvers = {
             ),
         },
         questionDeleted: {
-            subscribe: withFilter<{ questionDeleted: EventQuestionEdgeContainer; eventId: string }>(
+            subscribe: withFilter<{ questionDeleted: EventQuestionEdgeContainer; eventId: string; authorId: string }>(
                 (parent, args, ctx) => ctx.pubsub.subscribe('questionDeleted'),
                 (payload, args, ctx) => {
                     const { eventId: questionEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
                     const { id: questionId } = fromGlobalId(payload.questionDeleted.edge.node.id);
+                    if (args.viewerOnly === true) {
+                        const { authorId } = payload;
+                        if (authorId !== ctx.viewer.id) return false;
+                    }
                     return eventId === questionEventId;
                 }
             ),

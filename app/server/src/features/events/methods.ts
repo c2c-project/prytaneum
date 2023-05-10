@@ -234,6 +234,20 @@ export async function findQuestionsByEventId(eventId: string, prisma: PrismaClie
 }
 
 /**
+ * find questions by event id and user id
+ */
+export async function findQuestionsByEventIdAndUser(eventId: string, userId: string, prisma: PrismaClient) {
+    return prisma.eventQuestion.findMany({
+        where: {
+            eventId,
+            createdById: userId,
+            isVisible: true,
+        },
+        orderBy: { createdAt: 'desc' },
+    });
+}
+
+/**
  * start or end an event
  */
 export async function changeEventStatus(userId: string, prisma: PrismaClient, eventId: string, status: boolean) {

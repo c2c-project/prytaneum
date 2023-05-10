@@ -265,6 +265,7 @@ export type EventQuestionQueueArgs = {
 export type EventQuestionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1235,11 +1236,13 @@ export type SubscriptionQuestionAddedToRecordArgs = {
 
 export type SubscriptionQuestionCreatedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
 export type SubscriptionQuestionDeletedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1255,6 +1258,7 @@ export type SubscriptionQuestionRemovedFromRecordArgs = {
 
 export type SubscriptionQuestionUpdatedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 

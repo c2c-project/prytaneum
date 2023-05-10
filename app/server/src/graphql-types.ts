@@ -585,6 +585,7 @@ export type Event = Node & {
 export type EventquestionsArgs = {
     first?: Maybe<Scalars['Int']>;
     after?: Maybe<Scalars['String']>;
+    viewerOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export type EventbroadcastMessagesArgs = {
@@ -820,14 +821,17 @@ export type SubscriptioneventLiveFeedbackCreatedArgs = {
 
 export type SubscriptionquestionCreatedArgs = {
     eventId: Scalars['ID'];
+    viewerOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionUpdatedArgs = {
     eventId: Scalars['ID'];
+    viewerOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionDeletedArgs = {
     eventId: Scalars['ID'];
+    viewerOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export type SubscriptionquestionAddedToRecordArgs = {

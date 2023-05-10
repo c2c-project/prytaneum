@@ -221,7 +221,7 @@ type Event implements Node {
   questionQueue(after: String, first: Int): EventQuestionQueue
 
   """All questions relating to this event"""
-  questions(after: String, first: Int): EventQuestionConnection
+  questions(after: String, first: Int, viewerOnly: Boolean): EventQuestionConnection
 
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
@@ -803,11 +803,11 @@ type Subscription {
   questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
   """Question subscription for all operations performed on questions"""
-  questionCreated(eventId: ID!): EventQuestionEdgeContainer!
-  questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
+  questionCreated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
+  questionDeleted(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
   questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
-  questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
+  questionUpdated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
   recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!

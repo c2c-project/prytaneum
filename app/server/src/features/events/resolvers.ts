@@ -188,8 +188,15 @@ export const resolvers: Resolvers = {
         },
         async questions(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
-            const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
-            return connectionFromArray(questions.map(toQuestionId), args);
+            const { viewerOnly } = args;
+            if (!!viewerOnly) {
+                if (!ctx.viewer.id) return connectionFromArray([], args);
+                const questions = await Event.findQuestionsByEventIdAndUser(eventId, ctx.viewer.id, ctx.prisma);
+                return connectionFromArray(questions.map(toQuestionId), args);
+            } else {
+                const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
+                return connectionFromArray(questions.map(toQuestionId), args);
+            }
         },
         async broadcastMessages(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);

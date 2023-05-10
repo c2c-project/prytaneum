@@ -117,9 +117,9 @@ type Subscription {
     """
     Question subscription for all operations performed on questions
     """
-    questionCreated(eventId: ID!): EventQuestionEdgeContainer!
-    questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
-    questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
+    questionCreated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
+    questionUpdated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
+    questionDeleted(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
 
     questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
     questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
