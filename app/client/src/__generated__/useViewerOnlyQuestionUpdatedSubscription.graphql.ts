@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<defa8a80330b46a86c1b173ae28114da>>
+ * @generated SignedSource<<c7b009baac7bffa59632505af9ef5137>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type useViewerOnlyQuestionUpdatedSubscription$variables = {
   eventId: string;
+  viewerOnly?: boolean | null;
 };
 export type useViewerOnlyQuestionUpdatedSubscriptionVariables = useViewerOnlyQuestionUpdatedSubscription$variables;
 export type useViewerOnlyQuestionUpdatedSubscription$data = {
@@ -38,6 +39,11 @@ var v0 = [
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "eventId"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "viewerOnly"
   }
 ],
 v1 = [
@@ -45,6 +51,11 @@ v1 = [
     "kind": "Variable",
     "name": "eventId",
     "variableName": "eventId"
+  },
+  {
+    "kind": "Variable",
+    "name": "viewerOnly",
+    "variableName": "viewerOnly"
   }
 ],
 v2 = {
@@ -229,16 +240,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f00ef97e0adf8144fe086bf404c73e28",
+    "cacheID": "37db3a0a4fba87f85cf30397d4d015ef",
     "id": null,
     "metadata": {},
     "name": "useViewerOnlyQuestionUpdatedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useViewerOnlyQuestionUpdatedSubscription(\n  $eventId: ID!\n) {\n  questionUpdated(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
+    "text": "subscription useViewerOnlyQuestionUpdatedSubscription(\n  $eventId: ID!\n  $viewerOnly: Boolean\n) {\n  questionUpdated(eventId: $eventId, viewerOnly: $viewerOnly) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...QuestionAuthorFragment\n        ...QuestionContentFragment\n        ...QuestionStatsFragment\n      }\n    }\n  }\n}\n\nfragment QuestionAuthorFragment on EventQuestion {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment QuestionContentFragment on EventQuestion {\n  question\n}\n\nfragment QuestionStatsFragment on EventQuestion {\n  id\n  likedByCount\n}\n"
   }
 };
 })();
 
-(node as any).hash = "abbb885196feb0ac56f68329b5751f0e";
+(node as any).hash = "ad550e7e0c40d44cbcda4e316dc928cc";
 
 export default node;

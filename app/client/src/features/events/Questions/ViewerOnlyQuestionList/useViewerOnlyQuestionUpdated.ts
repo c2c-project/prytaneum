@@ -6,7 +6,7 @@ import type { useViewerOnlyQuestionUpdatedSubscription } from '@local/__generate
 import { useEvent } from '../../useEvent';
 
 export const USE_VIEWER_ONLY_QUESTION_UPDATED_SUBSCRIPTION = graphql`
-    subscription useViewerOnlyQuestionUpdatedSubscription($eventId: ID!, $connections: [ID!]!, $viewerOnly: Boolean) {
+    subscription useViewerOnlyQuestionUpdatedSubscription($eventId: ID!, $viewerOnly: Boolean) {
         questionUpdated(eventId: $eventId, viewerOnly: $viewerOnly) {
             edge {
                 cursor
@@ -22,19 +22,18 @@ export const USE_VIEWER_ONLY_QUESTION_UPDATED_SUBSCRIPTION = graphql`
     }
 `;
 
-export function useViewerOnlyQuestionUpdated({ connections }: { connections: string[] }) {
+export function useViewerOnlyQuestionUpdated() {
     const { eventId } = useEvent();
 
     const createdConfig = useMemo<GraphQLSubscriptionConfig<useViewerOnlyQuestionUpdatedSubscription>>(
         () => ({
             variables: {
                 eventId,
-                connections,
                 viewerOnly: true,
             },
             subscription: USE_VIEWER_ONLY_QUESTION_UPDATED_SUBSCRIPTION,
         }),
-        [eventId, connections]
+        [eventId]
     );
 
     useSubscription<useViewerOnlyQuestionUpdatedSubscription>(createdConfig);

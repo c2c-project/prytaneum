@@ -95,7 +95,7 @@ export function ViewerOnlyQuestionList({ fragmentRef, ActionButtons, isVisible }
     const { questions, connections, loadNext, hasNext } = useViewerOnlyQuestionList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;
     useViewerOnlyQuestionCreated({ connections });
-    useViewerOnlyQuestionUpdated({ connections });
+    useViewerOnlyQuestionUpdated();
     useViewerOnlyQuestionDeleted({ connections });
     // const [isPaused, setIsPaused] = React.useState();
 
