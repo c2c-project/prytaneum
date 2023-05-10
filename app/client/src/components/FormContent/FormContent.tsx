@@ -19,9 +19,17 @@ export function FormContent({ children, className }: Props) {
     const count = React.Children.count(children);
 
     return (
-        <Grid item xs={12} container className={className} alignItems='center' alignContent='center'>
+        <Grid
+            item
+            width='100%'
+            data-test-id='form-content'
+            container
+            className={className}
+            alignItems='center'
+            alignContent='center'
+        >
             {React.Children.map(children, (child, idx) => (
-                <Grid item xs={12} className={idx < count - 1 ? classes.item : ''}>
+                <Grid item width='100%' className={idx < count - 1 ? classes.item : ''}>
                     {child}
                 </Grid>
             ))}

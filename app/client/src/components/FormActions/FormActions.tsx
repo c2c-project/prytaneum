@@ -34,7 +34,7 @@ export function FormActions({ children, gridProps, disableGrow }: Props) {
     return (
         <Grid
             item
-            xs={12}
+            width='100%'
             container
             justifyContent='space-evenly'
             alignContent='flex-end'

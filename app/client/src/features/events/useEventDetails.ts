@@ -49,5 +49,5 @@ export function useEventDetails({ fragmentRef }: Props) {
         }
     }, [data.isActive, endDateTime, startDateTime]);
 
-    return { eventData: data, isLive };
+    return { eventData: data, isLive, setIsLive };
 }

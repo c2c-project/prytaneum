@@ -5,10 +5,6 @@ import { graphql, useFragment } from 'react-relay';
 import type { BroadcastMessageAuthorFragment$key } from '@local/__generated__/BroadcastMessageAuthorFragment.graphql';
 import { formatDate } from '@local/utils/format';
 
-export type BroadcastMessageProps = {
-    fragmentRef: BroadcastMessageAuthorFragment$key;
-} & CardHeaderProps;
-
 export const BROADCAST_MESSAGE_AUTHOR_FRAGMENT = graphql`
     fragment BroadcastMessageAuthorFragment on EventBroadcastMessage {
         createdBy {
@@ -20,6 +16,10 @@ export const BROADCAST_MESSAGE_AUTHOR_FRAGMENT = graphql`
         createdAt
     }
 `;
+
+export type BroadcastMessageProps = {
+    fragmentRef: BroadcastMessageAuthorFragment$key;
+} & CardHeaderProps;
 
 /**
  * Simple wrapper to CardHeader material ui component
@@ -55,7 +55,7 @@ export function BroadcastMessageAuthor({ fragmentRef, ...props }: BroadcastMessa
         <CardHeader
             // get first letter of name to display
             avatar={<Avatar>{authorName[0]}</Avatar>}
-            title={<Typography>{authorName}</Typography>}
+            title={<Typography>{authorName} [Moderator]</Typography>}
             subheader={subheader}
             {...props}
         />

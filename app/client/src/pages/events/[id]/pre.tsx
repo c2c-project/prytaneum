@@ -19,12 +19,10 @@ export default function Pre() {
 
     if (!router.isReady) return <EventLiveLoader />;
     return (
-        <div>
-            <ConditionalRender client>
-                <React.Suspense fallback={<EventLiveLoader />}>
-                    <PreloadedEventPre eventId={router.query.id as string} />
-                </React.Suspense>
-            </ConditionalRender>
-        </div>
+        <ConditionalRender client>
+            <React.Suspense fallback={<EventLiveLoader />}>
+                <PreloadedEventPre eventId={router.query.id as string} />
+            </React.Suspense>
+        </ConditionalRender>
     );
 }
