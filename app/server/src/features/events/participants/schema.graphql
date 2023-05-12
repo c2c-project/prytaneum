@@ -1,0 +1,27 @@
+type EventParticipant {
+    user: User!
+    isMuted: Boolean!
+}
+
+type EventParticipantEdge {
+    node: User!
+    cursor: String!
+}
+
+type EventParticipantConnection {
+    edges: [EventParticipantEdge!]
+    pageInfo: PageInfo!
+}
+
+type ParticipantPingEventMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
+type Query {
+    eventParticipants(eventId: ID!, first: Int, after: String): [EventParticipant]!
+}
+
+type Mutation {
+    participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
+}

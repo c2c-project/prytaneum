@@ -215,7 +215,7 @@ type Event implements Node {
   organization: Organization
 
   """Participants of the event -- individuals who showed up"""
-  participants(after: String, first: Int): EventParticipantConnection
+  participants(after: String, first: Int): UserConnection
 
   """Questions having to do with the queue"""
   questionQueue(after: String, first: Int): EventQuestionQueue
@@ -390,9 +390,8 @@ type EventMutationResponse implements MutationResponse {
 }
 
 type EventParticipant {
-  liveFeedBack: [EventLiveFeedback]
-  questions: [EventQuestion]
-  user: User
+  isMuted: Boolean!
+  user: User!
 }
 
 type EventParticipantConnection {
@@ -402,7 +401,7 @@ type EventParticipantConnection {
 
 type EventParticipantEdge {
   cursor: String!
-  node: EventParticipant!
+  node: User!
 }
 
 type EventQuestion implements Node {
@@ -627,6 +626,7 @@ type Mutation {
   TODO: make this an EventMutationResponse
   """
   nextQuestion(eventId: ID!): Event!
+  participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
 
   """
   Go to the previous question
@@ -729,6 +729,11 @@ type PageInfo {
   startCursor: String
 }
 
+type ParticipantPingEventMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+}
+
 type PostEventFeedbackMutationResponse implements MutationResponse {
   isError: Boolean!
   message: String!
@@ -738,6 +743,7 @@ type Query {
   """Fetch a single event"""
   event(eventId: ID!): Event
   eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
+  eventParticipants(after: String, eventId: ID!, first: Int): [EventParticipant]!
 
   """Fetch all events"""
   events: [Event!]

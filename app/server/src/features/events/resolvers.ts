@@ -271,5 +271,10 @@ export const resolvers: Resolvers = {
                 enqueuedQuestions: makeConnection(enqueuedQuestionsEdges),
             };
         },
+        async participants(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const participants = await Event.findParticipantsByEventId(eventId, ctx.prisma);
+            return connectionFromArray(participants.map(toUserId), args);
+        },
     },
 };

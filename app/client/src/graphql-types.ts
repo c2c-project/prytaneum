@@ -201,7 +201,7 @@ export type Event = Node & {
   /** The owning organization */
   organization?: Maybe<Organization>;
   /** Participants of the event -- individuals who showed up */
-  participants?: Maybe<EventParticipantConnection>;
+  participants?: Maybe<UserConnection>;
   /** Questions having to do with the queue */
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
@@ -453,9 +453,8 @@ export type EventMutationResponse = MutationResponse & {
 
 export type EventParticipant = {
   __typename?: 'EventParticipant';
-  liveFeedBack?: Maybe<Array<Maybe<EventLiveFeedback>>>;
-  questions?: Maybe<Array<Maybe<EventQuestion>>>;
-  user?: Maybe<User>;
+  isMuted: Scalars['Boolean'];
+  user: User;
 };
 
 export type EventParticipantConnection = {
@@ -467,7 +466,7 @@ export type EventParticipantConnection = {
 export type EventParticipantEdge = {
   __typename?: 'EventParticipantEdge';
   cursor: Scalars['String'];
-  node: EventParticipant;
+  node: User;
 };
 
 export type EventQuestion = Node & {
@@ -697,6 +696,7 @@ export type Mutation = {
    * TODO: make this an EventMutationResponse
    */
   nextQuestion: Event;
+  participantPingEvent: ParticipantPingEventMutationResponse;
   /**
    * Go to the previous question
    * TODO: make this an EventMutationResponse
@@ -868,6 +868,11 @@ export type MutationMakeOrganizerArgs = {
 
 
 export type MutationNextQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type MutationParticipantPingEventArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1044,6 +1049,12 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type ParticipantPingEventMutationResponse = MutationResponse & {
+  __typename?: 'ParticipantPingEventMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type PostEventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'PostEventFeedbackMutationResponse';
   isError: Scalars['Boolean'];
@@ -1055,6 +1066,7 @@ export type Query = {
   /** Fetch a single event */
   event?: Maybe<Event>;
   eventBroadcastMessages?: Maybe<Array<EventBroadcastMessage>>;
+  eventParticipants: Array<Maybe<EventParticipant>>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
   isOrganizer: Scalars['Boolean'];
@@ -1080,6 +1092,13 @@ export type QueryEventArgs = {
 
 export type QueryEventBroadcastMessagesArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryEventParticipantsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  eventId: Scalars['ID'];
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
