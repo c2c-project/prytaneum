@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { Fab } from '@local/components/Fab';
-import { EventSidebar, EventVideo, EventContext } from '@local/features/events';
+import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
@@ -22,6 +22,7 @@ import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEven
 import { useSnack } from '@local/core';
 import { useUser } from '../accounts';
 import { useEventDetails } from './useEventDetails';
+import { usePingEvent } from './Participants/usePingEvent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -176,6 +177,26 @@ function EventLive({ node }: EventLiveProps) {
     const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
 
     if (!node || (!isLive && !isModerator)) return <Loader />;
+
+    const { pingEvent } = usePingEvent();
+
+    React.useEffect(() => {
+        if (!node?.id) return;
+        const PING_INTERVAL = 10000; // 10 seconds
+
+        pingEvent({
+            variables: { eventId: node.id },
+        });
+
+        const pingInterval = setInterval(() => {
+            pingEvent({
+                variables: { eventId: node.id },
+            });
+        }, PING_INTERVAL);
+
+        return () => clearInterval(pingInterval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const updateEventStatus = () => {
         if (isLive) {
