@@ -50,3 +50,75 @@ export async function joinOrPingEvent(prisma: PrismaClient, eventId: string, use
         throw new ProtectedError({ userMessage: 'Already Joined Event' });
     }
 }
+
+export async function muteParticipant(
+    prisma: PrismaClient,
+    eventId: string,
+    userId: string,
+    viewerId: string
+): Promise<void> {
+    try {
+        // Validate that the viewer has permission to mute
+        const isModerator = await prisma.eventModerator.findUnique({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId: viewerId,
+                },
+            },
+        });
+        if (!isModerator) throw new ProtectedError({ userMessage: 'Insufficient permissions to mute users.' });
+        await prisma.eventParticipant.update({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId,
+                },
+            },
+            data: {
+                isMuted: true,
+            },
+        });
+    } catch (e) {
+        console.error(e);
+        throw new ProtectedError({
+            userMessage: 'An unexpected error occured while attempting to mute. Please try again later.',
+        });
+    }
+}
+
+export async function unmuteParticipant(
+    prisma: PrismaClient,
+    eventId: string,
+    userId: string,
+    viewerId: string
+): Promise<void> {
+    try {
+        // Validate that the viewer has permission to mute
+        const isModerator = await prisma.eventModerator.findUnique({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId: viewerId,
+                },
+            },
+        });
+        if (!isModerator) throw new ProtectedError({ userMessage: 'Insufficient permissions to unmute users.' });
+        await prisma.eventParticipant.update({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId,
+                },
+            },
+            data: {
+                isMuted: false,
+            },
+        });
+    } catch (e) {
+        console.error(e);
+        throw new ProtectedError({
+            userMessage: 'An unexpected error occured while attempting to unmute. Please try again later.',
+        });
+    }
+}

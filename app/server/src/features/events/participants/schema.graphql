@@ -18,10 +18,21 @@ type ParticipantPingEventMutationResponse implements MutationResponse {
     message: String!
 }
 
+type MuteParticipantMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
 type Query {
     eventParticipants(eventId: ID!, first: Int, after: String): [EventParticipant]!
 }
 
 type Mutation {
     participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
+    muteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
+    unmuteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
+}
+
+type Subscription {
+    participantMuted(eventId: ID!): Boolean
 }
