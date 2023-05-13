@@ -182,7 +182,7 @@ function EventLive({ node }: EventLiveProps) {
 
     React.useEffect(() => {
         if (!node?.id) return;
-        const PING_INTERVAL = 10000; // 10 seconds
+        const PING_INTERVAL = 20000; // 20 seconds
 
         pingEvent({
             variables: { eventId: node.id },
