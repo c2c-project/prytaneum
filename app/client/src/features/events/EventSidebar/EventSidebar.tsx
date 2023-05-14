@@ -17,6 +17,7 @@ import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuesti
 import { ShareFeedbackResults, useLiveFeedbackPrompt } from '../LiveFeedbackPrompts';
 import { SubmitLiveFeedbackPrompt } from '../LiveFeedbackPrompts/LiveFeedbackPrompt/SubmitLiveFeedbackPrompt';
 import { useLiveFeedbackPromptResultsShared } from '../LiveFeedbackPrompts/LiveFeedbackPromptResults';
+import { PreloadedParticipantsList } from '../Participants/ParticipantsList';
 
 export const EVENT_SIDEBAR_FRAGMENT = graphql`
     fragment EventSidebarFragment on Event {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 // TODO: Add sidebar top section for moderator tools
 // type sidebarTopTabs = 'Moderator';
-type SidebarBottomTabs = 'Queue' | 'Questions' | 'Feedback' | 'Broadcast';
+type SidebarBottomTabs = 'Queue' | 'Questions' | 'Feedback' | 'Broadcast' | 'Participants';
 
 export function EventSidebarLoader() {
     return <Skeleton variant='rectangular' height={500} width={200} />;
@@ -212,6 +213,7 @@ export const EventSidebar = ({
                     <Tab label='Questions' value='Questions' />
                     <Tab label='Feedback' value='Feedback' />
                     {data.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
+                    {data.isViewerModerator === true && <Tab label='Users' value='Participants' />}
                 </Tabs>
                 {data.isViewerModerator === true && (
                     <QuestionQueue fragmentRef={data} isVisible={bottomTab === 'Queue'} />
@@ -228,6 +230,9 @@ export const EventSidebar = ({
                 />
                 {data.isViewerModerator === true && (
                     <PreloadedBroadcastMessageList isVisible={bottomTab === 'Broadcast'} />
+                )}
+                {data.isViewerModerator === true && bottomTab === 'Participants' && (
+                    <PreloadedParticipantsList eventId={data.id} isVisible={bottomTab === 'Participants'} />
                 )}
             </Grid>
         </Grid>
