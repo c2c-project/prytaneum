@@ -1,18 +1,25 @@
 import * as React from 'react';
 import { fetchQuery, graphql } from 'relay-runtime';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Button, DialogContent, Grid, IconButton, List, ListItem, Paper, Typography } from '@mui/material';
-// import NotInterestedIcon from '@mui/icons-material/NotInterested';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import { Grid, List, ListItem, Paper, Typography } from '@mui/material';
+import { useTheme, alpha } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 import type { ParticipantsListQuery } from '@local/__generated__/ParticipantsListQuery.graphql';
-import { ConditionalRender, Loader, ResponsiveDialog, useResponsiveDialog } from '@local/components';
-import { useEnvironment, useSnack } from '@local/core';
-import { useMuteParticipant } from './useMuteParticipant';
+import { ConditionalRender, Loader } from '@local/components';
+import { useEnvironment } from '@local/core';
 import { useEvent } from '../useEvent';
-import { useUnmuteParticipant } from './useUnmuteParticipant';
 import { useParticipantMuted } from './useParticipantMuted';
+import ListFilter, { Accessors, useFilters } from '@local/components/ListFilter';
+import { ArrayElement } from '@local/utils/ts-utils';
+import { ParticipantCard } from './ParticipantCard';
+
+const useStyles = makeStyles(() => ({
+    listFilter: {
+        paddingLeft: '0.5rem',
+        paddingRight: '0.5rem',
+    },
+}));
 
 // TODO Update to refetchable fragment w/ pagination
 export const PARTICIPANTS_LIST_QUERY = graphql`
@@ -29,7 +36,7 @@ export const PARTICIPANTS_LIST_QUERY = graphql`
     }
 `;
 
-type Participant = {
+export type Participant = {
     readonly id: string;
     readonly firstName: string | null;
     readonly lastName: string | null;
@@ -45,12 +52,9 @@ interface ParticipantsListProps {
 
 export function ParticipantsList({ queryRef, isVisible, refresh }: ParticipantsListProps) {
     const { eventParticipants } = usePreloadedQuery(PARTICIPANTS_LIST_QUERY, queryRef);
-    const [selectedParticipant, setSelectedParticipant] = React.useState<Participant | null>(null);
-    const [isOpen, open, close] = useResponsiveDialog();
-    const { muteParticipant } = useMuteParticipant();
-    const { unmuteParticipant } = useUnmuteParticipant();
     const { eventId } = useEvent();
-    const { displaySnack } = useSnack();
+    const theme = useTheme();
+    const classes = useStyles();
 
     // Refreshes the list when a participant is muted/unmuted
     useParticipantMuted(eventId, refresh);
@@ -67,96 +71,66 @@ export function ParticipantsList({ queryRef, isVisible, refresh }: ParticipantsL
         return unsortedParticipants.sort((a, b) => (a.moderatorOf === b.moderatorOf ? 0 : a.moderatorOf ? -1 : 1));
     }, [eventParticipants]);
 
-    function handleToggleParticipantMute() {
-        if (!selectedParticipant) return;
-        try {
-            if (!selectedParticipant.isMuted)
-                muteParticipant({
-                    variables: { eventId, userId: selectedParticipant.id },
-                    onCompleted(payload) {
-                        try {
-                            if (payload.muteParticipant.isError) throw new Error(payload.muteParticipant.message);
-                            close();
-                            displaySnack('Participant Muted', { variant: 'success' });
-                        } catch (err) {
-                            displaySnack(err.message, { variant: 'error' });
-                        }
-                    },
-                });
-            else
-                unmuteParticipant({
-                    variables: { eventId, userId: selectedParticipant.id },
-                    onCompleted(payload) {
-                        try {
-                            if (payload.unmuteParticipant.isError) throw new Error(payload.unmuteParticipant.message);
-                            close();
-                            displaySnack('Participant Unmuted', { variant: 'success' });
-                        } catch (err) {
-                            displaySnack(err.message, { variant: 'error' });
-                        }
-                    },
-                });
-        } catch (err) {
-            console.error(err);
-            displaySnack(err.message, { variant: 'error' });
-        }
-    }
+    const accessors = React.useMemo<Accessors<ArrayElement<Participant[]>>[]>(
+        () => [(p) => p.firstName || '', (p) => p.lastName || ''],
+        []
+    );
+
+    const [filteredList, handleSearch, handleFilterChange] = useFilters(participants, accessors);
 
     return (
         <Grid container display='grid' sx={{ visibility: isVisible ? 'visible' : 'hidden' }} height={0}>
-            {participants.length === 0 && <p>No participants yet</p>}
-            <List>
-                {participants.map((participant) => (
-                    <ListItem key={participant.id}>
-                        <Paper style={{ width: '100%' }}>
-                            <Grid container direction='row' alignItems='center' display='grid'>
-                                <Grid item justifySelf='center' width='50px'>
-                                    <img src='/static/participant_icon.svg' alt='avatar' width='50px' height='50px' />
-                                </Grid>
-                                <Grid item width='200px' gridColumn='2/5'>
-                                    <Typography variant='body1'>
-                                        {participant.firstName + ' ' + participant.lastName}
-                                    </Typography>
-                                    <Typography variant='body2' color='text.secondary'>
-                                        {participant.moderatorOf ? 'Moderator' : 'Participant'}
-                                    </Typography>
-                                </Grid>
-                                <Grid item gridColumn='5/6' justifySelf='center' width='50px'>
-                                    <ResponsiveDialog open={isOpen} onClose={close}>
-                                        <DialogContent>
-                                            <Typography variant='h6'>
-                                                Are you sure you want to{' '}
-                                                {selectedParticipant?.isMuted ? 'unmute ' : 'mute '}
-                                                {`"${selectedParticipant?.firstName} ${selectedParticipant?.lastName}"`}{' '}
-                                                for this event?
+            {isVisible && (
+                <Grid
+                    item
+                    paddingTop='1rem'
+                    sx={{
+                        border: 5,
+                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                            theme.palette.custom.creamCan,
+                            0.06
+                        )}) 10`,
+                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                    }}
+                >
+                    {participants.length === 0 && <p>No participants yet</p>}
+                    <ListFilter
+                        className={classes.listFilter}
+                        onFilterChange={handleFilterChange}
+                        onSearch={handleSearch}
+                        length={filteredList.length}
+                    />
+                    <List>
+                        {filteredList.map((participant) => (
+                            <ListItem key={participant.id}>
+                                <Paper style={{ width: '100%' }}>
+                                    <Grid container direction='row' alignItems='center' display='grid'>
+                                        <Grid item justifySelf='center' width='50px'>
+                                            <img
+                                                src='/static/participant_icon.svg'
+                                                alt='avatar'
+                                                width='50px'
+                                                height='50px'
+                                            />
+                                        </Grid>
+                                        <Grid item width='200px' gridColumn='2/5'>
+                                            <Typography variant='body1'>
+                                                {participant.firstName + ' ' + participant.lastName}
                                             </Typography>
-                                            <Grid container justifyContent='end'>
-                                                <Button onClick={close}>Cancel</Button>
-                                                <Button variant='contained' onClick={handleToggleParticipantMute}>
-                                                    {selectedParticipant?.isMuted ? 'unmute ' : 'mute '}
-                                                </Button>
-                                            </Grid>
-                                        </DialogContent>
-                                    </ResponsiveDialog>
-                                    <IconButton
-                                        disabled={participant.moderatorOf}
-                                        onClick={() => {
-                                            open();
-                                            setSelectedParticipant(participant);
-                                        }}
-                                    >
-                                        {participant.isMuted ? (
-                                            <VolumeOffIcon color='error' />
-                                        ) : (
-                                            <VolumeUpIcon color='success' />
-                                        )}
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </ListItem>
-                ))}
-            </List>
+                                            <Typography variant='body2' color='text.secondary'>
+                                                {participant.moderatorOf ? 'Moderator' : 'Participant'}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item gridColumn='5/6' justifySelf='center' width='50px'>
+                                            <ParticipantCard participant={participant} />
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Grid>
+            )}
         </Grid>
     );
 }
