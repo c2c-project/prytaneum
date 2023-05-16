@@ -1,26 +1,14 @@
-import { useSnack } from '@local/core';
+import { useForm, useSnack } from '@local/core';
 import { BroadcastMessageInputMutation } from '@local/__generated__/BroadcastMessageInputMutation.graphql';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { graphql, useMutation } from 'react-relay';
 
-import { IconButton, InputAdornment, TextField } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import CreateIcon from '@mui/icons-material/Create';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-
-const useStyles = makeStyles((theme) => ({
-    search: {
-        flex: 1,
-        marginBottom: theme.spacing(2),
-        padding: theme.spacing(1, 1),
-    },
-    input: {
-        '& fieldset': {
-            borderRadius: 9999, // rounded text field
-        },
-    },
-}));
+import { Button, DialogContent, TextField, Typography } from '@mui/material';
+import { Form, ResponsiveDialog, useResponsiveDialog } from '@local/components';
+import { FormTitle } from '@local/components/FormTitle';
+import { FormContent } from '@local/components/FormContent';
+import { FormActions } from '@local/components/FormActions';
 
 export const BROADCAST_MESSAGE_MUTATION = graphql`
     mutation BroadcastMessageInputMutation($input: CreateBroadcastMessage!) {
@@ -32,18 +20,21 @@ export const BROADCAST_MESSAGE_MUTATION = graphql`
 `;
 
 export function BroadcastMessageInput() {
-    const classes = useStyles();
     const { displaySnack } = useSnack();
     const router = useRouter();
     const eventId = router.query.id as string;
     const [commit] = useMutation<BroadcastMessageInputMutation>(BROADCAST_MESSAGE_MUTATION);
-    const [broadcastMessage, setBroadcastMessage] = React.useState('');
+    const [isOpen, open, close] = useResponsiveDialog();
+    const [form, errors, handleSubmit, handleChange] = useForm({
+        message: '',
+    });
 
-    const handleSubmit = (event: { preventDefault: () => void }) => {
-        event.preventDefault();
+    const MESSAGE_MAX_LENGTH = 500;
+
+    const onSubmit = (state: { message: string }) => {
         try {
             commit({
-                variables: { input: { eventId, broadcastMessage } },
+                variables: { input: { eventId, broadcastMessage: state.message } },
                 onCompleted(payload) {
                     if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
                     else displaySnack('broadcasted message successfully!');
@@ -53,30 +44,57 @@ export function BroadcastMessageInput() {
             displaySnack(err.message);
         }
     };
+
+    const isMessageValid = React.useMemo(
+        () => form.message.trim().length !== 0 && form.message.length <= MESSAGE_MAX_LENGTH,
+        [form]
+    );
+
     return (
-        <form onSubmit={handleSubmit} className={classes.search}>
-            <TextField
-                label='Search'
-                value={broadcastMessage}
-                onChange={(e) => setBroadcastMessage(e.target.value)}
-                className={classes.input}
-                InputProps={{
-                    // TODO: animation change here
-                    startAdornment: (
-                        <InputAdornment position='start'>
-                            <CreateIcon />
-                        </InputAdornment>
-                    ),
-                    // TODO: add refresh action
-                    endAdornment: (
-                        <InputAdornment position='end'>
-                            <IconButton edge='end' onClick={handleSubmit} size='large'>
-                                <ArrowUpwardIcon />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-        </form>
+        <React.Fragment>
+            <ResponsiveDialog open={isOpen} onClose={close}>
+                <DialogContent>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                        <FormTitle title='Broadcast Message Form' />
+                        <FormContent>
+                            <TextField
+                                id='broadcast-message-field'
+                                name='broadcast-message'
+                                label='Add your broadcast message for everyone to see'
+                                autoFocus
+                                error={Boolean(errors.message)}
+                                helperText={errors.message}
+                                required
+                                multiline
+                                value={form.message}
+                                onChange={handleChange('message')}
+                            />
+                            <Typography
+                                variant='caption'
+                                color={form.message.length > MESSAGE_MAX_LENGTH ? 'red' : 'black'}
+                                sx={{
+                                    display: 'block',
+                                    textAlign: 'right',
+                                }}
+                            >
+                                {form.message.length}/500
+                            </Typography>
+                        </FormContent>
+                        <FormActions disableGrow gridProps={{ justifyContent: 'flex-end' }}>
+                            <Button color='primary' onClick={close}>
+                                Cancel
+                            </Button>
+                            <Button disabled={!isMessageValid} color='primary' type='submit'>
+                                Submit
+                            </Button>
+                        </FormActions>
+                    </Form>
+                </DialogContent>
+            </ResponsiveDialog>
+
+            <Button variant='contained' color='primary' onClick={open}>
+                Broadcast Message
+            </Button>
+        </React.Fragment>
     );
 }
