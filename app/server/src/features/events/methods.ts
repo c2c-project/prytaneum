@@ -119,11 +119,17 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
                     },
                 },
             },
+            moderators: {
+                select: {
+                    userId: true,
+                },
+            },
         },
         where: { id },
     });
+    const _isModerator = queryResult ? queryResult.moderators.find((mod) => mod.userId === userId) : false;
     const _isMember = queryResult ? queryResult.organization.members.length > 0 : false;
-    return _isMember;
+    return _isMember || _isModerator;
 }
 
 /**
