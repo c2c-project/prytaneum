@@ -9,6 +9,7 @@ import { Form, ResponsiveDialog, useResponsiveDialog } from '@local/components';
 import { FormTitle } from '@local/components/FormTitle';
 import { FormContent } from '@local/components/FormContent';
 import { FormActions } from '@local/components/FormActions';
+import { BROADCAST_MESSAGE_MAX_LENGTH } from '@local/utils/rules';
 
 export const BROADCAST_MESSAGE_MUTATION = graphql`
     mutation BroadcastMessageInputMutation($input: CreateBroadcastMessage!) {
@@ -29,13 +30,12 @@ export function BroadcastMessageInput() {
         message: '',
     });
 
-    const MESSAGE_MAX_LENGTH = 500;
-
     const onSubmit = (state: { message: string }) => {
         try {
             commit({
                 variables: { input: { eventId, broadcastMessage: state.message } },
                 onCompleted(payload) {
+                    close();
                     if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
                     else displaySnack('broadcasted message successfully!');
                 },
@@ -46,7 +46,7 @@ export function BroadcastMessageInput() {
     };
 
     const isMessageValid = React.useMemo(
-        () => form.message.trim().length !== 0 && form.message.length <= MESSAGE_MAX_LENGTH,
+        () => form.message.trim().length !== 0 && form.message.length <= BROADCAST_MESSAGE_MAX_LENGTH,
         [form]
     );
 
@@ -71,7 +71,7 @@ export function BroadcastMessageInput() {
                             />
                             <Typography
                                 variant='caption'
-                                color={form.message.length > MESSAGE_MAX_LENGTH ? 'red' : 'black'}
+                                color={form.message.length > BROADCAST_MESSAGE_MAX_LENGTH ? 'red' : 'black'}
                                 sx={{
                                     display: 'block',
                                     textAlign: 'right',
