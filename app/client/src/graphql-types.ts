@@ -712,6 +712,7 @@ export type Mutation = {
   shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
+  submitPostEventFeedback: PostEventFeedbackMutationResponse;
   updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
@@ -900,6 +901,12 @@ export type MutationStartEventArgs = {
 };
 
 
+export type MutationSubmitPostEventFeedbackArgs = {
+  eventId: Scalars['ID'];
+  feedback: Scalars['String'];
+};
+
+
 export type MutationUpdateEmailArgs = {
   input: UpdateEmailForm;
 };
@@ -1019,6 +1026,12 @@ export type PageInfo = {
   hasNextPage: Scalars['Boolean'];
   hasPreviousPage: Scalars['Boolean'];
   startCursor?: Maybe<Scalars['String']>;
+};
+
+export type PostEventFeedbackMutationResponse = MutationResponse & {
+  __typename?: 'PostEventFeedbackMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
 };
 
 export type Query = {

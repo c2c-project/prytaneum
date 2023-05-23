@@ -181,3 +181,19 @@ export async function countPromptResponseVotes(promptId: string, prisma: PrismaC
 
     return votes;
 }
+
+export async function submitPostEventFeedback(
+    feedback: string,
+    eventId: string,
+    viewerId: string | null,
+    prisma: PrismaClient
+) {
+    return prisma.postEventFeedback.create({
+        data: {
+            eventId,
+            createdById: viewerId,
+            feedback,
+            isAnonymous: viewerId === null,
+        },
+    });
+}

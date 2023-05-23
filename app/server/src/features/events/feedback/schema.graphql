@@ -92,6 +92,11 @@ type EventFeedbackPromptResponseMutationResponse implements MutationResponse {
     body: EventLiveFeedbackPromptResponseEdge
 }
 
+type PostEventFeedbackMutationResponse implements MutationResponse {
+    isError: Boolean!
+    message: String!
+}
+
 input CreateFeedback {
     message: String!
     eventId: ID!
@@ -123,6 +128,7 @@ type Mutation {
     createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
     createFeedbackPromptResponse(input: CreateFeedbackPromptResponse!): EventFeedbackPromptResponseMutationResponse!
     shareFeedbackPromptResults(eventId: ID!, promptId: ID!): EventFeedbackPromptMutationResponse!
+    submitPostEventFeedback(feedback: String!, eventId: ID!): PostEventFeedbackMutationResponse!
 }
 
 type Query {

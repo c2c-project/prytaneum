@@ -131,6 +131,13 @@ export const resolvers: Resolvers = {
                 return edge;
             });
         },
+        async submitPostEventFeedback(parent, args, ctx) {
+            return runMutation(async () => {
+                const { feedback } = args;
+                const { id: eventId } = fromGlobalId(args.eventId);
+                await Feedback.submitPostEventFeedback(feedback, eventId, ctx.viewer.id, ctx.prisma);
+            });
+        },
     },
     Subscription: {
         feedbackCRUD: {

@@ -317,6 +317,7 @@ export type Mutation = {
     createFeedbackPrompt: EventFeedbackPromptMutationResponse;
     createFeedbackPromptResponse: EventFeedbackPromptResponseMutationResponse;
     shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
+    submitPostEventFeedback: PostEventFeedbackMutationResponse;
     createInvite: InviteMutationResponse;
     hideQuestion?: Maybe<EventQuestion>;
     updateQuestionPosition: EventQuestionMutationResponse;
@@ -447,6 +448,11 @@ export type MutationcreateFeedbackPromptResponseArgs = {
 export type MutationshareFeedbackPromptResultsArgs = {
     eventId: Scalars['ID'];
     promptId: Scalars['ID'];
+};
+
+export type MutationsubmitPostEventFeedbackArgs = {
+    feedback: Scalars['String'];
+    eventId: Scalars['ID'];
 };
 
 export type MutationcreateInviteArgs = {
@@ -1065,6 +1071,12 @@ export type EventFeedbackPromptResponseMutationResponse = MutationResponse & {
     body?: Maybe<EventLiveFeedbackPromptResponseEdge>;
 };
 
+export type PostEventFeedbackMutationResponse = MutationResponse & {
+    __typename?: 'PostEventFeedbackMutationResponse';
+    isError: Scalars['Boolean'];
+    message: Scalars['String'];
+};
+
 export type CreateFeedback = {
     message: Scalars['String'];
     eventId: Scalars['ID'];
@@ -1499,6 +1511,7 @@ export type ResolversTypes = {
         | ResolversTypes['EventFeedbackMutationResponse']
         | ResolversTypes['EventFeedbackPromptMutationResponse']
         | ResolversTypes['EventFeedbackPromptResponseMutationResponse']
+        | ResolversTypes['PostEventFeedbackMutationResponse']
         | ResolversTypes['InviteMutationResponse']
         | ResolversTypes['ModeratorMutationResponse']
         | ResolversTypes['EventQuestionMutationResponse']
@@ -1567,6 +1580,7 @@ export type ResolversTypes = {
     EventFeedbackMutationResponse: ResolverTypeWrapper<EventFeedbackMutationResponse>;
     EventFeedbackPromptMutationResponse: ResolverTypeWrapper<EventFeedbackPromptMutationResponse>;
     EventFeedbackPromptResponseMutationResponse: ResolverTypeWrapper<EventFeedbackPromptResponseMutationResponse>;
+    PostEventFeedbackMutationResponse: ResolverTypeWrapper<PostEventFeedbackMutationResponse>;
     CreateFeedback: CreateFeedback;
     CreateFeedbackPrompt: CreateFeedbackPrompt;
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
@@ -1643,6 +1657,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes['EventFeedbackMutationResponse']
         | ResolversParentTypes['EventFeedbackPromptMutationResponse']
         | ResolversParentTypes['EventFeedbackPromptResponseMutationResponse']
+        | ResolversParentTypes['PostEventFeedbackMutationResponse']
         | ResolversParentTypes['InviteMutationResponse']
         | ResolversParentTypes['ModeratorMutationResponse']
         | ResolversParentTypes['EventQuestionMutationResponse']
@@ -1709,6 +1724,7 @@ export type ResolversParentTypes = {
     EventFeedbackMutationResponse: EventFeedbackMutationResponse;
     EventFeedbackPromptMutationResponse: EventFeedbackPromptMutationResponse;
     EventFeedbackPromptResponseMutationResponse: EventFeedbackPromptResponseMutationResponse;
+    PostEventFeedbackMutationResponse: PostEventFeedbackMutationResponse;
     CreateFeedback: CreateFeedback;
     CreateFeedbackPrompt: CreateFeedbackPrompt;
     CreateFeedbackPromptResponse: CreateFeedbackPromptResponse;
@@ -1877,6 +1893,7 @@ export type MutationResponseResolvers<
         | 'EventFeedbackMutationResponse'
         | 'EventFeedbackPromptMutationResponse'
         | 'EventFeedbackPromptResponseMutationResponse'
+        | 'PostEventFeedbackMutationResponse'
         | 'InviteMutationResponse'
         | 'ModeratorMutationResponse'
         | 'EventQuestionMutationResponse'
@@ -2151,6 +2168,12 @@ export type MutationResolvers<
         ParentType,
         ContextType,
         RequireFields<MutationshareFeedbackPromptResultsArgs, 'eventId' | 'promptId'>
+    >;
+    submitPostEventFeedback?: Resolver<
+        ResolversTypes['PostEventFeedbackMutationResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<MutationsubmitPostEventFeedbackArgs, 'feedback' | 'eventId'>
     >;
     createInvite?: Resolver<
         ResolversTypes['InviteMutationResponse'],
@@ -2816,6 +2839,15 @@ export type EventFeedbackPromptResponseMutationResponseResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PostEventFeedbackMutationResponseResolvers<
+    ContextType = MercuriusContext,
+    ParentType extends ResolversParentTypes['PostEventFeedbackMutationResponse'] = ResolversParentTypes['PostEventFeedbackMutationResponse']
+> = {
+    isError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+    message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type VotesResolvers<
     ContextType = MercuriusContext,
     ParentType extends ResolversParentTypes['Votes'] = ResolversParentTypes['Votes']
@@ -3097,6 +3129,7 @@ export type Resolvers<ContextType = MercuriusContext> = {
     EventFeedbackMutationResponse?: EventFeedbackMutationResponseResolvers<ContextType>;
     EventFeedbackPromptMutationResponse?: EventFeedbackPromptMutationResponseResolvers<ContextType>;
     EventFeedbackPromptResponseMutationResponse?: EventFeedbackPromptResponseMutationResponseResolvers<ContextType>;
+    PostEventFeedbackMutationResponse?: PostEventFeedbackMutationResponseResolvers<ContextType>;
     Votes?: VotesResolvers<ContextType>;
     InviteMutationResponse?: InviteMutationResponseResolvers<ContextType>;
     ValidateInviteQueryResponse?: ValidateInviteQueryResponseResolvers<ContextType>;
@@ -3445,6 +3478,11 @@ export interface Loaders<TContext = import('mercurius').MercuriusContext & { rep
             {},
             TContext
         >;
+    };
+
+    PostEventFeedbackMutationResponse?: {
+        isError?: LoaderResolver<Scalars['Boolean'], PostEventFeedbackMutationResponse, {}, TContext>;
+        message?: LoaderResolver<Scalars['String'], PostEventFeedbackMutationResponse, {}, TContext>;
     };
 
     Votes?: {
