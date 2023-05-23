@@ -90,7 +90,7 @@ interface ViewerOnlyQuestionListProps {
 export function ViewerOnlyQuestionList({ fragmentRef, ActionButtons, isVisible }: ViewerOnlyQuestionListProps) {
     const theme = useTheme();
     const classes = useStyles();
-    const [user] = useUser();
+    const { user } = useUser();
     const { isModerator } = useEvent();
     const { questions, connections, loadNext, hasNext } = useViewerOnlyQuestionList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;
