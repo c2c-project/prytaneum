@@ -1,61 +1,23 @@
 import React from 'react';
-import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
-import type { FragmentRefs } from 'relay-runtime';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import Button from '@mui/material/Button';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { fetchQuery, graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { Divider, Grid, Paper, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
+import { useTheme, alpha } from '@mui/material/styles';
 
-import { ConditionalRender, Loader } from '@local/components';
-import { EventContext, EventSidebar } from '@local/features/events';
 import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
+import { EventContext } from './EventContext';
+import { ConditionalRender } from '../../components/ConditionalRender';
+import { useEnvironment } from '@local/core';
+import { Loader } from '@local/components';
+import { LiveFeedbackList } from './LiveFeedback';
+import { SubmitLiveFeedback } from './LiveFeedback/SubmitLiveFeedback';
+import { FragmentRefs } from 'relay-runtime';
+import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
 import { useEventDetails } from './useEventDetails';
-import { EventDetailsCard } from './EventDetailsCard';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '100%',
-    },
-    sidebar: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    item: {
-        marginBottom: theme.spacing(4),
-    },
-    card: {
-        padding: theme.spacing(1),
-    },
-    secondaryCard: {
-        padding: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-    },
-    title: {
-        marginBottom: theme.spacing(1),
-    },
-    text: {
-        marginLeft: theme.spacing(1),
-        marginBottom: theme.spacing(3),
-    },
-    panes: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        overflowY: 'scroll',
-    },
-    button: {
-        marginBottom: theme.spacing(3),
-    },
-    buttonContainer: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        minHeight: '50px',
-    },
-}));
+import { QuestionList } from './Questions/QuestionList/QuestionList';
+import { VideoModal } from './Videos/VideoModal';
+import PostEventFeedback from './PostEventFeedback/PostEventFeedback';
 
 const EVENT_POST_QUERY = graphql`
     query EventPostQuery($eventId: ID!) {
@@ -65,127 +27,223 @@ const EVENT_POST_QUERY = graphql`
                 isViewerModerator
                 startDateTime
                 isActive
-                ...EventSidebarFragment
-                ...EventDetailsFragment
-                ...useBroadcastMessageListFragment
+                ...useQuestionListFragment
+                ...useLiveFeedbackListFragment
+                ...useEventDetailsFragment
                 ...SpeakerListFragment
+                ...EventVideoFragment
             }
         }
     }
 `;
 
-type Node = {
-    readonly id: string;
-    readonly isViewerModerator?: boolean | null | undefined;
-    readonly startDateTime?: Date | null | undefined;
-    readonly isActive?: boolean | null | undefined;
-    readonly ' $fragmentSpreads': FragmentRefs<any>
-}
-
 export interface EventPostProps {
-    node: Node;
+    eventData: {
+        readonly id: string;
+        readonly isViewerModerator?: boolean | null | undefined;
+        readonly startDateTime?: Date | null | undefined;
+        readonly isActive?: boolean | null | undefined;
+        readonly ' $fragmentSpreads': FragmentRefs<any>;
+    };
 }
 
-export function EventPost({ node }: EventPostProps) {
-    // styles
-    const classes = useStyles();
-    const { eventData } = useEventDetails({ fragmentRef: node });
+export function EventPost({ eventData }: EventPostProps) {
+    const theme = useTheme();
+    const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
+    const [tab, setTab] = React.useState<'Questions' | 'Feedback'>('Questions');
+    const { eventData: eventDetails } = useEventDetails({ fragmentRef: eventData });
 
-    if (!node) return <h1>Loading Post-Event Page...</h1>;
+    const handleChange = (e: React.SyntheticEvent, newTab: 'Questions' | 'Feedback') => {
+        e.preventDefault();
+        setTab(newTab);
+    };
+
+    const eventId = eventData.id;
 
     return (
-        <Card className={classes.card}>
-            <CardContent>
-                <Grid container spacing={8}>
-                    <Grid item xs={7} className={classes.root}>
-                        <Button variant='outlined' className={classes.button}>
-                            Back
-                        </Button>
-                        <Typography variant='h6' className={classes.title}>
-                            Event Ended
-                        </Typography>
-                        <Typography className={classes.text} variant='subtitle1'>
-                            This event is now over, thank you for participating! If you would like to view this event
-                            again in archived mode or want to submit post-event feed, check out the “Post-Event
-                            Resources” below. Questions and feedback given during this event can be viewed on the window
-                            to the right.
-                        </Typography>
-                        <Card className={classes.secondaryCard}>
-                            <EventDetailsCard eventData={eventData} />
-                            <SpeakerList fragmentRef={node} />
-                        </Card>
-                        <Typography variant='h6' className={classes.title}>
-                            Post-Event Resources
-                        </Typography>
-                        <div className={classes.buttonContainer}>
-                            <Button
-                                aria-label='Watch Replay'
-                                variant='contained'
-                                color='primary'
-                                style={{ minWidth: '200px' }}
-                                startIcon={<VideocamIcon />}
-                            >
-                                Watch Replay
-                            </Button>
-                            <Button
-                                aria-label='Watch Replay'
-                                variant='contained'
-                                color='primary'
-                                style={{ minWidth: '200px' }}
-                                startIcon={<QuestionAnswerIcon />}
-                            >
-                                Submit Feedback
-                            </Button>
-                        </div>
+        <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
+            <Paper style={{ width: '100%', height: '100%' }}>
+                <Grid container spacing={2} columns={16} height='100%'>
+                    {/* Column 1 */}
+                    <Grid
+                        item
+                        container
+                        xs={mdDownBreakpoint ? 16 : 7}
+                        direction='column'
+                        justifyContent='space-around'
+                        marginLeft={mdDownBreakpoint ? '0' : '3rem'}
+                    >
+                        <Grid item container className='Upcoming Event Text'>
+                            <Typography variant='h4'>Event Ended</Typography>
+                            <Grid item paddingTop='1rem'>
+                                <Typography variant='h5'>
+                                    This event is now over, thank you for participating! If you would like to view this
+                                    event again in archived mode or want to submit post-event feed, check out the
+                                    “Post-Event Resources” below. Questions and feedback given during this event can be
+                                    viewed on the window to the right.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid item className='Event Details'>
+                            <Typography variant='h4'>Event Details</Typography>
+                            <Paper style={{ width: '100%', height: '200px', maxHeight: '200px', overflowY: 'auto' }}>
+                                <Grid container height='100%' justifyContent='center' alignItems='center'>
+                                    <Grid item>
+                                        <EventDetailsCard eventData={eventDetails} />
+                                        <Divider style={{ background: 'black' }} />
+                                        <SpeakerList fragmentRef={eventData} />
+                                        {/* TODO: add Organizers List */}
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                        <Grid item className='Resources'>
+                            <Typography variant='h4'>Resources</Typography>
+                            <Grid container justifyContent='space-around' width='100%' marginTop='1rem'>
+                                <Grid item>
+                                    <VideoModal fragmentRef={eventData} />
+                                </Grid>
+                                <Grid item>
+                                    <PostEventFeedback eventId={eventId} />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={5} className={classes.sidebar}>
-                        <Image
-                            src='/static/prytaneum_logo2.svg'
-                            width={150}
-                            height={200}
-                            objectFit='contain'
-                            alt='prytaneum logo'
-                        />
-                        <EventContext.Provider
-                            value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}
+                    {/* Column 2 */}
+                    <Grid item container xs={mdDownBreakpoint ? 16 : 8} direction='column' flexWrap='nowrap'>
+                        <Grid
+                            item
+                            container
+                            className='Pre-Event-Prytaneum-Logo'
+                            justifyContent='center'
+                            marginTop='4rem'
                         >
-                            <div className={classes.panes} id='event-sidebar-scroller'>
-                                <EventSidebar fragmentRef={node} override={Boolean(true)} />
-                            </div>
-                        </EventContext.Provider>
+                            <img width='60%' src='/static/prytaneum_logo2.svg' alt='Prytaneum Logo' />
+                        </Grid>
+                        <Grid
+                            item
+                            container
+                            height='100%'
+                            minHeight='600px'
+                            maxHeight='100%'
+                            style={{
+                                overflowY: 'scroll',
+                            }}
+                        >
+                            <Grid item width='100%'>
+                                <Tabs
+                                    sx={{
+                                        '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
+                                        '& .MuiTab-root': {
+                                            color: 'white',
+                                            backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
+                                            borderRadius: '20px 20px 0 0',
+                                        },
+                                        '& .Mui-selected': {
+                                            color: 'white !important',
+                                            backgroundColor: 'custom.creamCan',
+                                        },
+                                    }}
+                                    value={tab}
+                                    onChange={handleChange}
+                                    centered
+                                    aria-label='secondary tabs example'
+                                >
+                                    <Tab label='Questions' value='Questions' />
+                                    <Tab label='Feedback' value='Feedback' />
+                                    {eventData.isViewerModerator === true && (
+                                        <Tab label='Broadcast' value='Broadcast' />
+                                    )}
+                                </Tabs>
+                                <QuestionList
+                                    fragmentRef={eventData}
+                                    ActionButtons={<></>}
+                                    isVisible={tab === 'Questions'}
+                                />
+                                <LiveFeedbackList
+                                    fragmentRef={eventData}
+                                    ActionButtons={
+                                        <Grid container paddingBottom='1rem' justifyContent='center'>
+                                            <SubmitLiveFeedback eventId={eventId} />
+                                        </Grid>
+                                    }
+                                    isVisible={tab === 'Feedback'}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </CardContent>
-        </Card>
+            </Paper>
+        </EventContext.Provider>
     );
 }
 
 export interface EventPostContainerProps {
-    eventLiveQueryRef: PreloadedQuery<EventPostQuery>;
+    queryRef: PreloadedQuery<EventPostQuery>;
 }
 
-export function EventPostContainer({ eventLiveQueryRef }: EventPostContainerProps) {
-    const { node } = usePreloadedQuery(EVENT_POST_QUERY, eventLiveQueryRef);
+function EventPostContainer({ queryRef }: EventPostContainerProps) {
+    const router = useRouter();
+    const { node } = usePreloadedQuery(EVENT_POST_QUERY, queryRef);
+    // used to check whether the event is on-going
+    const isActive = node?.isActive;
+    // used to route
+    const eventId = router.query.id;
+
+    // route user to live event if event is on-going
+    if (isActive || node?.isViewerModerator) {
+        // navigate back to /live once the event starts
+        router.push('/events/' + eventId + '/live');
+    }
+    const now = new Date();
+    const eventStart = new Date(node?.startDateTime || '');
+    if (!isActive && now < eventStart) {
+        // navigate to pre-event page if event has not started
+        router.push('/events/' + eventId + '/pre');
+    }
+
     if (!node) return <Loader />;
-    return <EventPost node={node} />;
+
+    return <EventPost eventData={node} />;
 }
 
 export interface PreloadedEventPostProps {
     eventId: string;
 }
 
-export default function PreloadedEventPost({ eventId }: PreloadedEventPostProps) {
+export function PreloadedEventPost({ eventId }: PreloadedEventPostProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventPostQuery>(EVENT_POST_QUERY);
 
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const { env } = useEnvironment();
+    const REFRESH_INTERVAL = 5000;
+
+    const refresh = React.useCallback(() => {
+        if (isRefreshing) return;
+        setIsRefreshing(true);
+        fetchQuery(env, EVENT_POST_QUERY, { eventId }).subscribe({
+            complete: () => {
+                setIsRefreshing(false);
+                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
+            },
+            error: () => {
+                setIsRefreshing(false);
+            },
+        });
+    }, [env, eventId, isRefreshing, loadEventQuery]);
+    React.useEffect(() => {
+        const interval = setInterval(refresh, REFRESH_INTERVAL);
+        return () => clearInterval(interval);
+    });
     React.useEffect(() => {
         loadEventQuery({ eventId });
     }, [eventId, loadEventQuery]);
 
-    if (!eventLiveQueryRef) return <h1>Loading Post-Event Page...</h1>;
+    if (!eventLiveQueryRef) return <Loader />;
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<EventPostContainer eventLiveQueryRef={eventLiveQueryRef} />}>
-                <EventPostContainer eventLiveQueryRef={eventLiveQueryRef} />
+            <React.Suspense fallback={<EventPostContainer queryRef={eventLiveQueryRef} />}>
+                <EventPostContainer queryRef={eventLiveQueryRef} />
             </React.Suspense>
         </ConditionalRender>
     );
