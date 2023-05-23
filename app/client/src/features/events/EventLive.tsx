@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { Button, Grid, useMediaQuery } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
 import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
@@ -107,13 +107,17 @@ function EventLive({ node }: EventLiveProps) {
 
     React.useEffect(() => {
         if (eventData.isActive || isModerator) return;
-        const now = new Date();
         if (!eventData.isActive && !isModerator) {
             if (eventData.endDateTime === null) {
                 router.push(`/events/${eventId}/post`);
                 return;
             }
-            if (now > eventData.endDateTime) {
+            // TODO: Revisit this logic when we have a better idea of how we want to handle edge cases
+            // IE: If event is ended early by moderator, should we redirect to post event page?
+            // How early is too early to redirect to post event page?
+            const now = new Date();
+            const endTime = new Date(eventData.endDateTime);
+            if (now > endTime) {
                 router.push(`/events/${eventId}/post`);
             } else {
                 router.push(`/events/${eventId}/pre`);
@@ -209,20 +213,15 @@ function EventLive({ node }: EventLiveProps) {
                     <SpeakerList fragmentRef={node} />
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
-                    {node.isViewerModerator ? (
-                        isLive ? (
-                            <Button variant='contained' color='error' onClick={updateEventStatus}>
-                                End Event
-                            </Button>
-                        ) : (
-                            <Button variant='contained' color='success' onClick={updateEventStatus}>
-                                Start Event
-                            </Button>
-                        )
-                    ) : null}
                     <div className={classes.panes} id='event-sidebar-scroller' onScroll={handleScroll}>
                         {isMdUp && <div ref={topRef} className={classes.target} />}
-                        <EventSidebar fragmentRef={node} override={Boolean(false)} />
+                        <EventSidebar
+                            fragmentRef={node}
+                            override={Boolean(false)}
+                            isViewerModerator={isModerator}
+                            isLive={isLive}
+                            updateEventStatus={updateEventStatus}
+                        />
                     </div>
                 </Grid>
                 <Fab onClick={handleClick} ZoomProps={{ in: isFabVisible }}>
