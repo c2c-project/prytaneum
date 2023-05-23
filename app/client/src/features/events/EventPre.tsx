@@ -28,6 +28,7 @@ const EVENT_PRE_QUERY = graphql`
             ... on Event {
                 isViewerModerator
                 startDateTime
+                endDateTime
                 isActive
                 ...useViewerOnlyQuestionListFragment
                 ...useLiveFeedbackListFragment
@@ -213,9 +214,15 @@ function EventPreContainer({ queryRef }: EventPreContainerProps) {
     const eventId = router.query.id;
 
     // route user to live event if event is on-going
-    if (isActive) {
+    if (isActive || node?.isViewerModerator) {
         // navigate back to /live once the event starts
         router.push('/events/' + eventId + '/live');
+    }
+    const now = new Date();
+    const eventEnd = new Date(node?.endDateTime || now);
+    if (!isActive && now > eventEnd) {
+        // navigate to pre-event page if event has not started
+        router.push('/events/' + eventId + '/post');
     }
 
     if (!node) return <Loader />;
