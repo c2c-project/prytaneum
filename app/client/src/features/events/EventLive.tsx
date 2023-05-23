@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 
 import type { EventLiveQuery } from '@local/__generated__/EventLiveQuery.graphql';
 import { Fab } from '@local/components/Fab';
-import { EventSidebar, EventVideo, EventContext, EventSidebarLoader } from '@local/features/events';
+import { EventSidebar, EventVideo, EventContext } from '@local/features/events';
 import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.graphql';
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
@@ -157,27 +157,6 @@ function EventLive({ node }: EventLiveProps) {
         });
     };
 
-    // mutation to stop the event (set isActive to false)
-    const END_EVENT_MUTATION = graphql`
-        mutation EventLiveEndEventMutation($eventId: String!) {
-            endEvent(eventId: $eventId) {
-                message
-            }
-        }
-    `;
-    // mutation to start the event (set isActive to true)
-    const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(END_EVENT_MUTATION);
-    const START_EVENT_MUTATION = graphql`
-        mutation EventLiveStartEventMutation($eventId: String!) {
-            startEvent(eventId: $eventId) {
-                message
-            }
-        }
-    `;
-    const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
-
-    if (!node || (!isLive && !isModerator)) return <Loader />;
-
     const { pingEvent } = usePingEvent();
 
     React.useEffect(() => {
@@ -197,6 +176,25 @@ function EventLive({ node }: EventLiveProps) {
         return () => clearInterval(pingInterval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // mutation to stop the event (set isActive to false)
+    const END_EVENT_MUTATION = graphql`
+        mutation EventLiveEndEventMutation($eventId: String!) {
+            endEvent(eventId: $eventId) {
+                message
+            }
+        }
+    `;
+    // mutation to start the event (set isActive to true)
+    const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(END_EVENT_MUTATION);
+    const START_EVENT_MUTATION = graphql`
+        mutation EventLiveStartEventMutation($eventId: String!) {
+            startEvent(eventId: $eventId) {
+                message
+            }
+        }
+    `;
+    const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
 
     const updateEventStatus = () => {
         if (isLive) {
@@ -221,6 +219,8 @@ function EventLive({ node }: EventLiveProps) {
             });
         }
     };
+
+    if (!node || (!isLive && !isModerator)) return <Loader />;
 
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
