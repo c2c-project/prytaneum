@@ -12,6 +12,11 @@ input AlterLike {
   to: Boolean!
 }
 
+input CreateBroadcastMessage {
+  broadcastMessage: String!
+  eventId: ID!
+}
+
 input CreateEvent {
   description: String!
   endDateTime: Date!
@@ -95,6 +100,11 @@ input DeleteAccountForm {
   password: String!
 }
 
+input DeleteBroadcastMessage {
+  broadcastMessageId: ID!
+  toggleBroadcastMessageVisibility: Boolean!
+}
+
 """
 In order to delete an event, user must provide a title and a confirmation title, similar to account deletion.
 """
@@ -135,15 +145,26 @@ input DeleteVideo {
   id: String!
 }
 
+input EditBroadcastMessage {
+  broadcastMessage: String!
+  broadcastMessageId: ID!
+}
+
 type Error {
   message: String!
 }
 
 type Event implements Node {
+  broadcastMessages(after: String, first: Int): EventBroadcastMessagesConnection
   createdAt: Date
 
   """Creator of this event"""
   createdBy: User
+
+  """
+  The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage
+  """
+  currentBroadcastMessage: Int
 
   """
   The question currently being asked, corresponds to a "position" value on the event question
@@ -200,7 +221,7 @@ type Event implements Node {
   questionQueue(after: String, first: Int): EventQuestionQueue
 
   """All questions relating to this event"""
-  questions(after: String, first: Int): EventQuestionConnection
+  questions(after: String, first: Int, viewerOnly: Boolean): EventQuestionConnection
 
   """Registrants for this event -- individuals invited"""
   registrants: UserConnection
@@ -216,6 +237,48 @@ type Event implements Node {
 
   """Video feeds and the languages"""
   videos(after: String, first: Int): EventVideoConnection
+}
+
+type EventBroadcastMessage implements Node {
+  """The actual content of the broadcast message"""
+  broadcastMessage: String!
+  createdAt: Date
+
+  """User information on the person asking the broadcast message"""
+  createdBy: User
+
+  """The user id of the creator"""
+  createdById: ID
+  event: Event
+  id: ID!
+
+  """If the broadcast message is owned by the current viewer"""
+  isVisible: Boolean
+  lang: String
+
+  """The users who have liked this broadcast message"""
+  likedBy: UserConnection
+  position: Int
+}
+
+type EventBroadcastMessageEdge {
+  cursor: String!
+  node: EventBroadcastMessage!
+}
+
+type EventBroadcastMessageEdgeContainer {
+  edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageMutationResponse implements MutationResponse {
+  body: EventBroadcastMessageEdge
+  isError: Boolean!
+  message: String!
+}
+
+type EventBroadcastMessagesConnection {
+  edges: [EventBroadcastMessageEdge!]
+  pageInfo: PageInfo!
 }
 
 """Connection to Events"""
@@ -519,6 +582,7 @@ type ModeratorMutationResponse implements MutationResponse {
 type Mutation {
   addQuestionToQueue(input: AddQuestionToQueue!): EventQuestionMutationResponse!
   alterLike(input: AlterLike!): EventQuestionMutationResponse!
+  createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
   createEvent(event: CreateEvent!): EventMutationResponse!
   createFeedback(input: CreateFeedback!): EventFeedbackMutationResponse!
   createFeedbackPrompt(input: CreateFeedbackPrompt!): EventFeedbackPromptMutationResponse!
@@ -535,6 +599,7 @@ type Mutation {
   createSpeaker(input: CreateSpeaker!): EventSpeakerMutationResponse!
   createVideo(input: CreateVideo!): EventVideoMutationResponse!
   deleteAccount(input: DeleteAccountForm!): UserMutationResponse!
+  deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
   deleteEvent(event: DeleteEvent!): EventMutationResponse!
 
   """Delete a member from the organization"""
@@ -546,6 +611,7 @@ type Mutation {
   deleteQuestion(input: DeleteQuestion!): EventQuestionMutationResponse!
   deleteSpeaker(input: DeleteSpeaker!): EventSpeakerMutationResponse!
   deleteVideo(input: DeleteVideo!): EventVideoMutationResponse!
+  editBroadcastMessage(input: EditBroadcastMessage!): EventBroadcastMessageMutationResponse!
 
   """End the event so that it is not live"""
   endEvent(eventId: String!): EventMutationResponse!
@@ -583,6 +649,7 @@ type Mutation {
   Start the event so that it is "live"
   """
   startEvent(eventId: String!): EventMutationResponse!
+  submitPostEventFeedback(eventId: ID!, feedback: String!): PostEventFeedbackMutationResponse!
   updateEmail(input: UpdateEmailForm!): UserMutationResponse!
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
@@ -662,9 +729,15 @@ type PageInfo {
   startCursor: String
 }
 
+type PostEventFeedbackMutationResponse implements MutationResponse {
+  isError: Boolean!
+  message: String!
+}
+
 type Query {
   """Fetch a single event"""
   event(eventId: ID!): Event
+  eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
 
   """Fetch all events"""
   events: [Event!]
@@ -722,6 +795,8 @@ type ResetPasswordRequestMutationResponse implements MutationResponse {
 }
 
 type Subscription {
+  broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
+  broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
   enqueuedPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   enqueuedUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!
@@ -741,11 +816,11 @@ type Subscription {
   questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
   """Question subscription for all operations performed on questions"""
-  questionCreated(eventId: ID!): EventQuestionEdgeContainer!
-  questionDeleted(eventId: ID!): EventQuestionEdgeContainer!
+  questionCreated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
+  questionDeleted(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
   questionRemovedFromEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionRemovedFromRecord(eventId: ID!): EventQuestionEdgeContainer!
-  questionUpdated(eventId: ID!): EventQuestionEdgeContainer!
+  questionUpdated(eventId: ID!, viewerOnly: Boolean): EventQuestionEdgeContainer!
   recordPushQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordRemoveQuestion(eventId: ID!): EventQuestionEdgeContainer!
   recordUnshiftQuestion(eventId: ID!): EventQuestionEdgeContainer!

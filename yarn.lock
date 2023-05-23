@@ -247,6 +247,7 @@ __metadata:
     react: 17.0.2
     react-beautiful-dnd: ^13.0.0
     react-compound-slider: ^3.3.1
+    react-countdown: ^2.3.2
     react-dom: 17.0.2
     react-google-charts: ^4.0.0
     react-infinite-scroll-component: ^6.1.0
@@ -27288,6 +27289,18 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">=16.9"
   checksum: ceec2d53ce57bd9fab395fdc5c0b85040d8e93df7bb34f2133fde59ff91a2291f3d57f30dcfaa2ecbf2dfe3e6d1d66933b1ecbf759c668a95a9bd51fe62eb865
+  languageName: node
+  linkType: hard
+
+"react-countdown@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "react-countdown@npm:2.3.2"
+  dependencies:
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: ">= 15"
+    react-dom: ">= 15"
+  checksum: 670d7f6f355cd2c862fde2039e3fbaf39dae2925d2dea78c0406c04a9a5c35cca61bbd137de04a965ebdbbbaee5d435a06f06c0786a86d7bfc175b4fd9789e19
   languageName: node
   linkType: hard
 

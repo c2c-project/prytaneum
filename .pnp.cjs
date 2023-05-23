@@ -344,6 +344,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],\
             ["react-beautiful-dnd", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:13.1.0"],\
             ["react-compound-slider", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:3.3.1"],\
+            ["react-countdown", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.3.2"],\
             ["react-dom", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"],\
             ["react-google-charts", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:4.0.0"],\
             ["react-infinite-scroll-component", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:6.1.0"],\
@@ -37217,6 +37218,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "packagePeers": [\
             "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-countdown", [\
+        ["npm:2.3.2", {\
+          "packageLocation": "./.yarn/cache/react-countdown-npm-2.3.2-6f0ad243fa-670d7f6f35.zip/node_modules/react-countdown/",\
+          "packageDependencies": [\
+            ["react-countdown", "npm:2.3.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.3.2", {\
+          "packageLocation": "./.yarn/__virtual__/react-countdown-virtual-fcd6de687d/0/cache/react-countdown-npm-2.3.2-6f0ad243fa-670d7f6f35.zip/node_modules/react-countdown/",\
+          "packageDependencies": [\
+            ["react-countdown", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:2.3.2"],\
+            ["@types/react", "npm:17.0.2"],\
+            ["@types/react-dom", "npm:17.0.2"],\
+            ["prop-types", "npm:15.7.2"],\
+            ["react", "npm:17.0.2"],\
+            ["react-dom", "virtual:d184ea428bc08e6689e56de959db639964594659b4f9d1940ad16fd67c719f805332510e53b0a206ff95249aca6c3ff1f52554f78df9c72728a10bf3101eedec#npm:17.0.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
             "react"\
           ],\
           "linkType": "HARD"\

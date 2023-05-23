@@ -13,13 +13,14 @@ import {
     IconButton,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { graphql, useFragment } from 'react-relay';
+import { graphql, useRefetchableFragment } from 'react-relay';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import clsx from 'clsx';
 
 import { SpeakerListFragment$key } from '@local/__generated__/SpeakerListFragment.graphql';
 import { SpeakerCard } from './SpeakerCard';
+import { useRefresh } from '@local/features/core';
 
 interface SpeakerItemProps {
     className?: string;
@@ -27,7 +28,7 @@ interface SpeakerItemProps {
 }
 
 export const SPEAKER_LIST_FRAGMENT = graphql`
-    fragment SpeakerListFragment on Event {
+    fragment SpeakerListFragment on Event @refetchable(queryName: "SpeakerListRefetchQuery") {
         speakers {
             edges {
                 node {
@@ -76,13 +77,22 @@ const useStyles = makeStyles((theme) => ({
 
 export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
     const classes = useStyles();
-    const { speakers } = useFragment(SPEAKER_LIST_FRAGMENT, fragmentRef);
-    const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
+    const [data, refetch] = useRefetchableFragment(SPEAKER_LIST_FRAGMENT, fragmentRef);
+    const { speakers } = data;
+
     const [openCard, setOpenCard] = React.useState(''); // use id instead to determine which dialog to open
     const [isIn, setIsIn] = React.useState(false);
 
+    const REFRESH_INTERVAL = 30000; // 30 seconds
+    const refresh = React.useCallback(() => {
+        refetch({}, { fetchPolicy: 'store-and-network' });
+    }, [refetch]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
+
+    const speakerEdges = React.useMemo(() => speakers?.edges ?? [], [speakers]);
+
     return speakers && speakerEdges.length !== 0 ? (
-        <>
+        <React.Fragment>
             <Grid container alignItems='center' className={classes.root}>
                 <PeopleOutlineIcon fontSize='inherit' />
                 <Typography variant='h5' className={classes.speakers}>
@@ -123,7 +133,7 @@ export function SpeakerList({ fragmentRef, className }: SpeakerItemProps) {
                     ))}
                 </List>
             </Collapse>
-        </>
+        </React.Fragment>
     ) : (
         <Grid container alignItems='center' className={classes.root}>
             <PeopleOutlineIcon fontSize='inherit' />

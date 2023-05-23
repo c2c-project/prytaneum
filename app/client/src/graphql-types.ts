@@ -24,6 +24,11 @@ export type AlterLike = {
   to: Scalars['Boolean'];
 };
 
+export type CreateBroadcastMessage = {
+  broadcastMessage: Scalars['String'];
+  eventId: Scalars['ID'];
+};
+
 export type CreateEvent = {
   description: Scalars['String'];
   endDateTime: Scalars['Date'];
@@ -104,6 +109,11 @@ export type DeleteAccountForm = {
   password: Scalars['String'];
 };
 
+export type DeleteBroadcastMessage = {
+  broadcastMessageId: Scalars['ID'];
+  toggleBroadcastMessageVisibility: Scalars['Boolean'];
+};
+
 /** In order to delete an event, user must provide a title and a confirmation title, similar to account deletion. */
 export type DeleteEvent = {
   confirmTitle: Scalars['String'];
@@ -142,6 +152,11 @@ export type DeleteVideo = {
   id: Scalars['String'];
 };
 
+export type EditBroadcastMessage = {
+  broadcastMessage: Scalars['String'];
+  broadcastMessageId: Scalars['ID'];
+};
+
 export type Error = {
   __typename?: 'Error';
   message: Scalars['String'];
@@ -149,9 +164,12 @@ export type Error = {
 
 export type Event = Node & {
   __typename?: 'Event';
+  broadcastMessages?: Maybe<EventBroadcastMessagesConnection>;
   createdAt?: Maybe<Scalars['Date']>;
   /** Creator of this event */
   createdBy?: Maybe<User>;
+  /** The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage */
+  currentBroadcastMessage?: Maybe<Scalars['Int']>;
   /** The question currently being asked, corresponds to a "position" value on the event question */
   currentQuestion?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -202,6 +220,12 @@ export type Event = Node & {
 };
 
 
+export type EventBroadcastMessagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type EventInvitedArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -241,6 +265,7 @@ export type EventQuestionQueueArgs = {
 export type EventQuestionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -253,6 +278,49 @@ export type EventSpeakersArgs = {
 export type EventVideosArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+};
+
+export type EventBroadcastMessage = Node & {
+  __typename?: 'EventBroadcastMessage';
+  /** The actual content of the broadcast message */
+  broadcastMessage: Scalars['String'];
+  createdAt?: Maybe<Scalars['Date']>;
+  /** User information on the person asking the broadcast message */
+  createdBy?: Maybe<User>;
+  /** The user id of the creator */
+  createdById?: Maybe<Scalars['ID']>;
+  event?: Maybe<Event>;
+  id: Scalars['ID'];
+  /** If the broadcast message is owned by the current viewer */
+  isVisible?: Maybe<Scalars['Boolean']>;
+  lang?: Maybe<Scalars['String']>;
+  /** The users who have liked this broadcast message */
+  likedBy?: Maybe<UserConnection>;
+  position?: Maybe<Scalars['Int']>;
+};
+
+export type EventBroadcastMessageEdge = {
+  __typename?: 'EventBroadcastMessageEdge';
+  cursor: Scalars['String'];
+  node: EventBroadcastMessage;
+};
+
+export type EventBroadcastMessageEdgeContainer = {
+  __typename?: 'EventBroadcastMessageEdgeContainer';
+  edge: EventBroadcastMessageEdge;
+};
+
+export type EventBroadcastMessageMutationResponse = MutationResponse & {
+  __typename?: 'EventBroadcastMessageMutationResponse';
+  body?: Maybe<EventBroadcastMessageEdge>;
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type EventBroadcastMessagesConnection = {
+  __typename?: 'EventBroadcastMessagesConnection';
+  edges?: Maybe<Array<EventBroadcastMessageEdge>>;
+  pageInfo: PageInfo;
 };
 
 /** Connection to Events */
@@ -591,6 +659,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addQuestionToQueue: EventQuestionMutationResponse;
   alterLike: EventQuestionMutationResponse;
+  createBroadcastMessage: EventBroadcastMessageMutationResponse;
   createEvent: EventMutationResponse;
   createFeedback: EventFeedbackMutationResponse;
   createFeedbackPrompt: EventFeedbackPromptMutationResponse;
@@ -605,6 +674,7 @@ export type Mutation = {
   createSpeaker: EventSpeakerMutationResponse;
   createVideo: EventVideoMutationResponse;
   deleteAccount: UserMutationResponse;
+  deleteBroadcastMessage: EventBroadcastMessageMutationResponse;
   deleteEvent: EventMutationResponse;
   /** Delete a member from the organization */
   deleteMember: UserMutationResponse;
@@ -614,6 +684,7 @@ export type Mutation = {
   deleteQuestion: EventQuestionMutationResponse;
   deleteSpeaker: EventSpeakerMutationResponse;
   deleteVideo: EventVideoMutationResponse;
+  editBroadcastMessage: EventBroadcastMessageMutationResponse;
   /** End the event so that it is not live */
   endEvent: EventMutationResponse;
   hideQuestion?: Maybe<EventQuestion>;
@@ -643,6 +714,7 @@ export type Mutation = {
   shareFeedbackPromptResults: EventFeedbackPromptMutationResponse;
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
+  submitPostEventFeedback: PostEventFeedbackMutationResponse;
   updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
@@ -662,6 +734,11 @@ export type MutationAddQuestionToQueueArgs = {
 
 export type MutationAlterLikeArgs = {
   input: AlterLike;
+};
+
+
+export type MutationCreateBroadcastMessageArgs = {
+  input: CreateBroadcastMessage;
 };
 
 
@@ -725,6 +802,11 @@ export type MutationDeleteAccountArgs = {
 };
 
 
+export type MutationDeleteBroadcastMessageArgs = {
+  input: DeleteBroadcastMessage;
+};
+
+
 export type MutationDeleteEventArgs = {
   event: DeleteEvent;
 };
@@ -757,6 +839,11 @@ export type MutationDeleteSpeakerArgs = {
 
 export type MutationDeleteVideoArgs = {
   input: DeleteVideo;
+};
+
+
+export type MutationEditBroadcastMessageArgs = {
+  input: EditBroadcastMessage;
 };
 
 
@@ -823,6 +910,12 @@ export type MutationShareFeedbackPromptResultsArgs = {
 
 export type MutationStartEventArgs = {
   eventId: Scalars['String'];
+};
+
+
+export type MutationSubmitPostEventFeedbackArgs = {
+  eventId: Scalars['ID'];
+  feedback: Scalars['String'];
 };
 
 
@@ -951,10 +1044,17 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type PostEventFeedbackMutationResponse = MutationResponse & {
+  __typename?: 'PostEventFeedbackMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Fetch a single event */
   event?: Maybe<Event>;
+  eventBroadcastMessages?: Maybe<Array<EventBroadcastMessage>>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
   isOrganizer: Scalars['Boolean'];
@@ -974,6 +1074,11 @@ export type Query = {
 
 
 export type QueryEventArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type QueryEventBroadcastMessagesArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1060,6 +1165,8 @@ export type ResetPasswordRequestMutationResponse = MutationResponse & {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  broadcastMessageCreated: EventBroadcastMessageEdgeContainer;
+  broadcastMessageDeleted: EventBroadcastMessageEdgeContainer;
   enqueuedPushQuestion: EventQuestionEdgeContainer;
   enqueuedRemoveQuestion: EventQuestionEdgeContainer;
   enqueuedUnshiftQuestion: EventQuestionEdgeContainer;
@@ -1084,6 +1191,16 @@ export type Subscription = {
   recordPushQuestion: EventQuestionEdgeContainer;
   recordRemoveQuestion: EventQuestionEdgeContainer;
   recordUnshiftQuestion: EventQuestionEdgeContainer;
+};
+
+
+export type SubscriptionBroadcastMessageCreatedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionBroadcastMessageDeletedArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -1149,11 +1266,13 @@ export type SubscriptionQuestionAddedToRecordArgs = {
 
 export type SubscriptionQuestionCreatedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
 export type SubscriptionQuestionDeletedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1169,6 +1288,7 @@ export type SubscriptionQuestionRemovedFromRecordArgs = {
 
 export type SubscriptionQuestionUpdatedArgs = {
   eventId: Scalars['ID'];
+  viewerOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 

@@ -54,7 +54,9 @@ type Event implements Node {
     """
     All questions relating to this event
     """
-    questions(first: Int, after: String): EventQuestionConnection
+    questions(first: Int, after: String, viewerOnly: Boolean): EventQuestionConnection
+
+    broadcastMessages(after: String, first: Int): EventBroadcastMessagesConnection
 
     """
     Speakers for this event
@@ -115,6 +117,45 @@ type Event implements Node {
     The question currently being asked, corresponds to a "position" value on the event question
     """
     currentQuestion: String
+
+    """
+    The broadcast message currently being broadcasted, corresponds to a "position" value on the event broadcastmessage
+    """
+    currentBroadcastMessage: Int
+}
+
+type EventBroadcastMessage implements Node {
+    createdAt: Date
+
+    """
+    User information on the person asking the broadcast message
+    """
+    createdBy: User
+
+    """
+    The user id of the creator
+    """
+    createdById: ID
+    event: Event
+    id: ID!
+
+    """
+    If the broadcast message is owned by the current viewer
+    """
+    isVisible: Boolean
+    lang: String
+
+    """
+    The users who have liked this broadcast message
+    """
+    likedBy: UserConnection
+
+    position: Int
+
+    """
+    The actual content of the broadcast message
+    """
+    broadcastMessage: String!
 }
 
 """
@@ -163,13 +204,47 @@ input DeleteEvent {
     confirmTitle: String!
 }
 
+input DeleteBroadcastMessage {
+    broadcastMessageId: ID!
+    toggleBroadcastMessageVisibility: Boolean!
+}
+
+input EditBroadcastMessage {
+    broadcastMessageId: ID!
+    broadcastMessage: String!
+}
+
+input CreateBroadcastMessage {
+    eventId: ID!
+    broadcastMessage: String!
+}
+
 type EventMutationResponse implements MutationResponse {
     isError: Boolean!
     message: String!
     body: Event
 }
 
+type EventBroadcastMessageEdge {
+    cursor: String!
+    node: EventBroadcastMessage!
+}
+
+type EventBroadcastMessagesConnection {
+    edges: [EventBroadcastMessageEdge!]
+    pageInfo: PageInfo!
+}
+
+type EventBroadcastMessageMutationResponse implements MutationResponse {
+    body: EventBroadcastMessageEdge
+    isError: Boolean!
+    message: String!
+}
+
 type Mutation {
+    createBroadcastMessage(input: CreateBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    deleteBroadcastMessage(input: DeleteBroadcastMessage!): EventBroadcastMessageMutationResponse!
+    editBroadcastMessage(input: EditBroadcastMessage!): EventBroadcastMessageMutationResponse!
     createEvent(event: CreateEvent!): EventMutationResponse!
     updateEvent(event: UpdateEvent!): EventMutationResponse!
     deleteEvent(event: DeleteEvent!): EventMutationResponse!
@@ -194,6 +269,7 @@ type Query {
     Fetch a single event
     """
     event(eventId: ID!): Event
+    eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
 }
 
 """
@@ -203,8 +279,28 @@ type EventEdgeContainer {
     edge: EventEdge!
 }
 
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
+type EventBroadcastMessageEdgeContainer {
+    edge: EventBroadcastMessageEdge!
+}
+
+type EventBroadcastMessageEdge {
+    node: EventBroadcastMessage!
+    cursor: String!
+}
+
 type Subscription {
     eventUpdates(userId: ID!): Event!
     eventCreated(userId: ID!): EventEdgeContainer!
     eventDeleted(eventIds: [ID!]!): EventEdgeContainer!
+    broadcastMessageCreated(eventId: ID!): EventBroadcastMessageEdgeContainer!
+    broadcastMessageDeleted(eventId: ID!): EventBroadcastMessageEdgeContainer!
 }

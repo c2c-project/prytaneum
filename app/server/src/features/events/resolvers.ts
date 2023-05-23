@@ -3,12 +3,18 @@ import { connectionFromArray, fromGlobalId } from 'graphql-relay';
 import * as Event from './methods';
 import { Resolvers, toGlobalId, errors, runMutation, withFilter } from '@local/features/utils';
 import { ProtectedError } from '@local/lib/ProtectedError';
-import type { Event as TEvent, EventQuestion, EventEdgeContainer } from '@local/graphql-types';
+import type {
+    Event as TEvent,
+    EventQuestion,
+    EventEdgeContainer,
+    EventBroadcastMessageEdgeContainer,
+} from '@local/graphql-types';
 
 const toEventId = toGlobalId('Event');
 const toUserId = toGlobalId('User');
 const toVideoId = toGlobalId('EventVideo');
 const toQuestionId = toGlobalId('EventQuestion');
+const toBroadcastMessageId = toGlobalId('EventBroadcastMessage');
 const toSpeakerId = toGlobalId('EventSpeaker');
 const toOrgId = toGlobalId('Organization');
 const toFeedbackId = toGlobalId('EventLiveFeedback');
@@ -182,8 +188,23 @@ export const resolvers: Resolvers = {
         },
         async questions(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);
-            const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
-            return connectionFromArray(questions.map(toQuestionId), args);
+            const { viewerOnly } = args;
+            if (!!viewerOnly) {
+                if (!ctx.viewer.id) return connectionFromArray([], args);
+                const questions = await Event.findQuestionsByEventIdAndUser(eventId, ctx.viewer.id, ctx.prisma);
+                return connectionFromArray(questions.map(toQuestionId), args);
+            } else {
+                const questions = await Event.findQuestionsByEventId(eventId, ctx.prisma);
+                return connectionFromArray(questions.map(toQuestionId), args);
+            }
+        },
+        async broadcastMessages(parent, args, ctx, info) {
+            const { id: eventId } = fromGlobalId(parent.id);
+            const broadcastMessages = await Event.findBroadcastMessagesByEventId(eventId, ctx.prisma);
+            const connection = connectionFromArray(broadcastMessages.map(toBroadcastMessageId), args);
+            if (broadcastMessages.length === 0)
+                connection.pageInfo = { ...connection.pageInfo, startCursor: '', endCursor: '' };
+            return connection;
         },
         isViewerModerator(parent, args, ctx, info) {
             const { id: eventId } = fromGlobalId(parent.id);

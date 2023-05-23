@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e19ff0d8e6561096bfdad90154c597b1>>
+ * @generated SignedSource<<454356a3284e08f387c58aced18234b7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type SpeakerListFragment$data = {
   readonly speakers: {
@@ -23,6 +23,7 @@ export type SpeakerListFragment$data = {
       readonly cursor: string;
     }> | null;
   } | null;
+  readonly id: string;
   readonly " $fragmentType": "SpeakerListFragment";
 };
 export type SpeakerListFragment = SpeakerListFragment$data;
@@ -31,10 +32,27 @@ export type SpeakerListFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"SpeakerListFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./SpeakerListRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "SpeakerListFragment",
   "selections": [
     {
@@ -61,13 +79,7 @@ const node: ReaderFragment = {
               "name": "node",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "id",
-                  "storageKey": null
-                },
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -111,12 +123,14 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
-    }
+    },
+    (v0/*: any*/)
   ],
   "type": "Event",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "1263a427258bbec279bc6a96f8d2c1ba";
+(node as any).hash = "4e24a9165c283d14e4233b854f4c0fd2";
 
 export default node;

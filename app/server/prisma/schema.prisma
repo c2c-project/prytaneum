@@ -26,8 +26,10 @@ model User {
     settings UserSettings[]
     memberOf OrgMember[]
     feedback EventLiveFeedback[]
+    postEventFeedback PostEventFeedback[]
     feedbackPromptResponses EventLiveFeedbackPromptResponse[]
     questions EventQuestion[]
+    broadcastMessages EventBroadcastMessage[]
     likes EventQuestionLike[]
     moderatorOf EventModerator[]
     invitedOf EventInvited[]
@@ -91,8 +93,10 @@ model Event {
     isPrivate Boolean
 
     feedback EventLiveFeedback[]
+    postEventFeedback PostEventFeedback[]
     feedbackPrompt EventLiveFeedbackPrompt[]
     questions EventQuestion[]
+    broadcastMessages EventBroadcastMessage[]
     moderators EventModerator[]
     invited EventInvited[]
     speakers EventSpeaker[]
@@ -106,6 +110,17 @@ model EventVideo {
     event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
     url String
     lang String
+}
+
+model PostEventFeedback {
+    id String @id @default(uuid()) @db.Uuid
+    createdById String? @db.Uuid
+    createdByUser User? @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    feedback String @db.VarChar(500)
+    isAnonymous Boolean @default(false)
 }
 
 model EventLiveFeedback {
@@ -173,6 +188,18 @@ model EventQuestion {
     isQuote Boolean
     
     likes EventQuestionLike[]
+}
+
+model EventBroadcastMessage {
+    id String @id @default(uuid()) @db.Uuid
+    eventId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    createdById String @db.Uuid
+    createdByUser User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    broadcastMessage String @db.VarChar(500)
+    isVisible Boolean
+    lang String @db.VarChar(30)
 }
 
 model EventQuestionLike {

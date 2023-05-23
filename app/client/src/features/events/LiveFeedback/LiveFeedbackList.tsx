@@ -69,7 +69,13 @@ export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: Live
     }, [user, isModerator]);
 
     return (
-        <Grid container height={0} flex='1 1 100%' sx={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+        <Grid
+            container
+            height={0}
+            flex='1 1 100%'
+            justifyContent='center'
+            sx={{ visibility: isVisible ? 'visible' : 'hidden' }}
+        >
             {isVisible && (
                 <Grid
                     item

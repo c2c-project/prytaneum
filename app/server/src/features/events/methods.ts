@@ -9,6 +9,29 @@ export { isModerator } from './moderation/methods';
 const toEventId = toGlobalId('Event');
 
 /**
+ * find broadcastMessages by event id
+ */
+export async function findBroadcastMessagesByEventId(eventId: string, prisma: PrismaClient) {
+    return prisma.eventBroadcastMessage.findMany({
+        where: { eventId, isVisible: true },
+        orderBy: { createdAt: 'asc' },
+    });
+}
+
+/**
+ * Filter function for event questions
+ */
+export async function doesEventMatch(eventId: string, broadcastMessageId: string, prisma: PrismaClient) {
+    // see if the event id matches the liked question
+    const found = await prisma.eventBroadcastMessage.findFirst({
+        where: { eventId, id: broadcastMessageId },
+        select: { id: true },
+    });
+
+    return Boolean(found);
+}
+
+/**
  * get a specific event by its id
  */
 export async function findEventById(eventId: string, prisma: PrismaClient) {
@@ -96,11 +119,17 @@ export async function canUserModify(userId: string, id: string, prisma: PrismaCl
                     },
                 },
             },
+            moderators: {
+                select: {
+                    userId: true,
+                },
+            },
         },
         where: { id },
     });
+    const _isModerator = queryResult ? queryResult.moderators.find((mod) => mod.userId === userId) : false;
     const _isMember = queryResult ? queryResult.organization.members.length > 0 : false;
-    return _isMember;
+    return _isMember || _isModerator;
 }
 
 /**
@@ -208,6 +237,20 @@ export async function findOrgByEventId(eventId: string, prisma: PrismaClient) {
  */
 export async function findQuestionsByEventId(eventId: string, prisma: PrismaClient) {
     return prisma.eventQuestion.findMany({ where: { eventId, isVisible: true }, orderBy: { createdAt: 'desc' } });
+}
+
+/**
+ * find questions by event id and user id
+ */
+export async function findQuestionsByEventIdAndUser(eventId: string, userId: string, prisma: PrismaClient) {
+    return prisma.eventQuestion.findMany({
+        where: {
+            eventId,
+            createdById: userId,
+            isVisible: true,
+        },
+        orderBy: { createdAt: 'desc' },
+    });
 }
 
 /**

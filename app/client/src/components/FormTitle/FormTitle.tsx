@@ -12,8 +12,8 @@ interface Props {
 
 export function FormTitle({ title, subtitle, description, titleTypographyProps }: Props) {
     return (
-        <Grid container item xs={12}>
-            <Grid item xs={12}>
+        <Grid container width='100%'>
+            <Grid item width='100%'>
                 <Typography variant='h4' {...titleTypographyProps}>
                     {title}
                 </Typography>

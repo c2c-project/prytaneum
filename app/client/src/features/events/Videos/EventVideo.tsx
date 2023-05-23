@@ -1,11 +1,13 @@
-import { graphql, useFragment } from 'react-relay';
+import * as React from 'react';
+import { graphql, useRefetchableFragment } from 'react-relay';
 import { Skeleton } from '@mui/material';
 
 import type { EventVideoFragment$key } from '@local/__generated__/EventVideoFragment.graphql';
 import { VideoPlayer } from '@local/components/VideoPlayer';
+import { useRefresh } from '@local/features/core';
 
 export const EVENT_VIDEO_FRAGMENT = graphql`
-    fragment EventVideoFragment on Event {
+    fragment EventVideoFragment on Event @refetchable(queryName: "EventVideoRefetchQuery") {
         videos {
             edges {
                 cursor
@@ -27,7 +29,13 @@ export function EventVideoLoader() {
 }
 
 export function EventVideo({ fragmentRef }: EventVideoProps) {
-    const data = useFragment(EVENT_VIDEO_FRAGMENT, fragmentRef);
+    const [data, refetch] = useRefetchableFragment(EVENT_VIDEO_FRAGMENT, fragmentRef);
+
+    const REFRESH_INTERVAL = 20000; // 20 seconds
+    const refresh = React.useCallback(() => {
+        refetch({}, { fetchPolicy: 'store-and-network' });
+    }, [refetch]);
+    useRefresh({ refreshInterval: REFRESH_INTERVAL, callback: refresh });
 
     // TODO: better system/user flow for this
     if (!data || !data.videos || !data.videos.edges || data.videos.edges.length === 0) return <VideoPlayer url='' />;

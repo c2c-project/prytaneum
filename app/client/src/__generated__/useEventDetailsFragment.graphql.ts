@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<57799113975d149aa31070abb6abf24b>>
+ * @generated SignedSource<<3db0d0d838714d6327d21c09988ac381>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,27 +8,38 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type EventDetailsCardFragment$data = {
+export type useEventDetailsFragment$data = {
   readonly id: string;
   readonly title: string | null;
+  readonly topic: string | null;
   readonly description: string | null;
   readonly startDateTime: Date | null;
   readonly endDateTime: Date | null;
-  readonly " $fragmentType": "EventDetailsCardFragment";
+  readonly isActive: boolean | null;
+  readonly " $fragmentType": "useEventDetailsFragment";
 };
-export type EventDetailsCardFragment = EventDetailsCardFragment$data;
-export type EventDetailsCardFragment$key = {
-  readonly " $data"?: EventDetailsCardFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"EventDetailsCardFragment">;
+export type useEventDetailsFragment = useEventDetailsFragment$data;
+export type useEventDetailsFragment$key = {
+  readonly " $data"?: useEventDetailsFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"useEventDetailsFragment">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
-  "name": "EventDetailsCardFragment",
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./UseEventDetailsRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
+  "name": "useEventDetailsFragment",
   "selections": [
     {
       "alias": null,
@@ -42,6 +53,13 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "ScalarField",
       "name": "title",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "topic",
       "storageKey": null
     },
     {
@@ -64,12 +82,19 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "endDateTime",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "isActive",
+      "storageKey": null
     }
   ],
   "type": "Event",
   "abstractKey": null
 };
 
-(node as any).hash = "ae3a9a413619b0f8684d73e066c4290e";
+(node as any).hash = "a13e385118bfbeea94c827c5a3a1e893";
 
 export default node;
