@@ -170,7 +170,8 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages, isVisible 
                                                             }
                                                             className={classes.broadcastMessageActions}
                                                             deleteEnabled={isModerator}
-                                                            editEnabled={isModerator}
+                                                            // TODO: Reinstate edit functionality once updated to dialog
+                                                            editEnabled={false}
                                                             connections={[]}
                                                             fragmentRef={broadcastMessage}
                                                             onBroadcastMessageDelete={onBroadcastMessageDelete}

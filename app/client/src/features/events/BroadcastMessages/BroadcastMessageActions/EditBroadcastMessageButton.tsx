@@ -57,6 +57,7 @@ export function EditBroadcastMessageButton({ fragmentRef }: Props) {
         setDisableInput(!disableInput);
     }
 
+    // TODO: Update to dialog
     return (
         <div>
             {disableInput ? (
