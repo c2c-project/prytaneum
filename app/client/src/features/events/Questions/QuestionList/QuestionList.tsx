@@ -112,7 +112,13 @@ export function QuestionList({ fragmentRef, ActionButtons, isVisible }: Question
     const [filteredList, handleSearch, handleFilterChange] = useFilters(questions, accessors);
 
     return (
-        <Grid container height={0} flex='1 1 100%' sx={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+        <Grid
+            container
+            height={0}
+            flex='1 1 100%'
+            justifyContent='center'
+            sx={{ visibility: isVisible ? 'visible' : 'hidden' }}
+        >
             {isVisible && (
                 <Grid
                     item
