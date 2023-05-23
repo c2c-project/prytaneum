@@ -6,19 +6,20 @@ import ListIcon from '@mui/icons-material/List';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Skeleton } from '@mui/material';
 import { AnimateSharedLayout /* motion */ } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
-
-import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 import {
     StyledSubheader,
     StyledDivider,
     StyledListItemIcon,
     StyledListItem,
 } from '@local/layout/SideNav/StyledComponents';
-import { Skeleton } from '@mui/material';
-import { useUser } from './useUser';
+import { useUser } from '@local/features/accounts';
+import { RoleGuard } from '@local/components/RoleGuard';
+import { graphql, usePreloadedQuery, PreloadedQuery } from 'react-relay';
+
+import type { UserSideNavQuery } from '@local/__generated__/UserSideNavQuery.graphql';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -102,8 +103,10 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     const classes = useStyles();
     const router = useRouter();
     usePreloadedQuery(USER_SIDE_NAV_QUERY, queryRef);
-    const [user] = useUser();
+    const { user } = useUser();
     const [selected, setSelected] = React.useState<Keys | undefined>(findTab(router.pathname));
+    const [isOrganizer, setIsOrganizer] = React.useState(false);
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     function handleClick(key: Keys) {
         return () => {
@@ -114,18 +117,29 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
     }
 
     React.useEffect(() => {
+        if (user?.isOrganizer) setIsOrganizer(true);
+        else setIsOrganizer(false);
+        if (user?.isAdmin) setIsAdmin(true);
+        else setIsAdmin(false);
+    }, [user]);
+
+    React.useEffect(() => {
         if (findTab(router.pathname) !== selected) setSelected(findTab(router.pathname));
     }, [router.pathname, selected]);
 
     return (
         <List component='nav' className={classes.root}>
             <AnimateSharedLayout>
-                <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
-                    <StyledListItemIcon>
-                        <DashboardIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='Dashboard' />
-                </StyledListItem>
+                {!!user ? (
+                    <StyledListItem onClick={handleClick('Dashboard')} selected={selected === 'Dashboard'}>
+                        <StyledListItemIcon>
+                            <DashboardIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary='Dashboard' />
+                    </StyledListItem>
+                ) : (
+                    <></>
+                )}
                 <StyledListItem onClick={handleClick('About Us')} selected={selected === 'About Us'}>
                     <StyledListItemIcon>
                         <PeopleIcon />
@@ -159,15 +173,23 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                     </StyledListItemIcon>
                     <ListItemText primary='Participant Guide' />
                 </StyledListItem>
-                <StyledSubheader>Organizations</StyledSubheader>
-                <StyledDivider />
-                <StyledListItem onClick={handleClick('My Organizations')} selected={selected === 'My Organizations'}>
-                    <StyledListItemIcon>
-                        <ListIcon />
-                    </StyledListItemIcon>
-                    <ListItemText primary='My Organizations' />
-                </StyledListItem>
-                {user?.isAdmin === true && (
+                <RoleGuard organizer={isOrganizer}>
+                    <>
+                        <StyledSubheader>Organizations</StyledSubheader>
+                        <StyledDivider />
+
+                        <StyledListItem
+                            onClick={handleClick('My Organizations')}
+                            selected={selected === 'My Organizations'}
+                        >
+                            <StyledListItemIcon>
+                                <ListIcon />
+                            </StyledListItemIcon>
+                            <ListItemText primary='My Organizations' />
+                        </StyledListItem>
+                    </>
+                </RoleGuard>
+                <RoleGuard admin={isAdmin}>
                     <React.Fragment>
                         <StyledSubheader>Admin</StyledSubheader>
                         <StyledDivider />
@@ -190,7 +212,7 @@ export function UserSideNav({ queryRef, onClick }: UserSideNavProps) {
                             <ListItemText primary='Event Dashboard' />
                         </StyledListItem>
                     </React.Fragment>
-                )}
+                </RoleGuard>
             </AnimateSharedLayout>
         </List>
     );

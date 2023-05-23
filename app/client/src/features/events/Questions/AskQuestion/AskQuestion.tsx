@@ -42,7 +42,7 @@ export const ASK_QUESTION_MUTATION = graphql`
 
 function AskQuestion({ className, eventId }: AskQuestionProps) {
     const [isOpen, open, close] = useResponsiveDialog();
-    const [user] = useUser();
+    const { user } = useUser();
     const [commit] = useMutation<AskQuestionMutation>(ASK_QUESTION_MUTATION);
     const { displaySnack } = useSnack();
 

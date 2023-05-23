@@ -98,6 +98,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function ParticipantGuide() {
+    // TODO: Remove this redirect
+    React.useEffect(() => {
+        window.location.assign('https://www.classrooms2congress.org/prytaneum');
+    }, []);
+
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [infoIndex, setInfoIndex] = React.useState(0);

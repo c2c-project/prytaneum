@@ -67,7 +67,7 @@ export function RegisterForm({ onSuccess, onFailure, secondaryActions }: Props) 
     const [commit, isLoading] = useMutation<RegisterFormMutation>(REGISTER_FORM_MUTATION);
 
     const classes = useStyles();
-    const [, setUser] = useUser();
+    const { setUser } = useUser();
     const { displaySnack } = useSnack();
 
     function handleCommit(submittedForm: TRegisterForm) {

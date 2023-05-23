@@ -90,7 +90,7 @@ interface QuestionListProps {
 export function QuestionList({ fragmentRef, ActionButtons, isVisible }: QuestionListProps) {
     const theme = useTheme();
     const classes = useStyles();
-    const [user] = useUser();
+    const { user } = useUser();
     const { isModerator } = useEvent();
     const { questions, connections, loadNext, hasNext } = useQuestionList({ fragmentRef });
     const MAX_QUESTIONS_DISPLAYED = 50;

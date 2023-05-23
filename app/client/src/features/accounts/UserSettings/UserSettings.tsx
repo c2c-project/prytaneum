@@ -5,7 +5,6 @@ import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 
 import { SettingsMenu } from '@local/components/SettingsMenu/SettingsMenu';
 import { useUser } from '@local/features/accounts';
-import { useRouter } from 'next/router';
 
 import { ModifyUserEmail, ModifyUserPassword, DeleteAccount } from './components';
 
@@ -29,12 +28,8 @@ export default function UserSettings({ id }: Props) {
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
-    const [user, , isLoading] = useUser();
-    const router = useRouter();
+    const { user } = useUser();
 
-    React.useEffect(() => {
-        if (!isLoading && !user) router.push('/');
-    }, [isLoading, router, user]);
     React.useEffect(() => {
         if (cont !== null) setOpen(true);
         if (cont === null) setOpen(false);

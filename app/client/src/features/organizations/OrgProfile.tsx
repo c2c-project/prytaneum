@@ -44,7 +44,7 @@ interface Props {
 export const OrgProfile = ({ queryRef }: Props) => {
     const classes = useStyles();
     const { node } = usePreloadedQuery(ORG_PROFILE, queryRef);
-    const [user] = useUser();
+    const { user } = useUser();
 
     if (!node || !user) return <Loader />;
 

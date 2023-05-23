@@ -30,7 +30,7 @@ export default function Title() {
             <div className={classes.title}>
                 <img
                     data-test-id='prytaneum-title-logo'
-                    src='/static/prytaneum_logo.svg'
+                    src='/static/p_logo_2.svg'
                     alt='Prytaneum Logo'
                     className={classes.logo}
                     // onClick={() => router.push('/')}

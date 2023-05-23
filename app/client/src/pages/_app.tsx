@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, Theme } from '@mui/material/styles';
 import { AppProps } from 'next/app';
@@ -12,8 +12,7 @@ import { ThemeProvider, SnackContext, useEnvironment } from '@local/core';
 import { Layout } from '@local/layout';
 import '@local/index.css';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import * as ga from '../utils/ga/index';
+import * as ga from '@local/utils/ga/index';
 
 declare module '@mui/styles/defaultTheme' {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -22,6 +21,7 @@ declare module '@mui/styles/defaultTheme' {
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
+    const { env } = useEnvironment(pageProps.initialRecords);
 
     // https://arturocampos.dev/blog/nextjs-with-google-analytics <- referenced for the router implementation
     useEffect(() => {
@@ -36,9 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
         };
     }, [router.events]);
 
-    const { env } = useEnvironment(pageProps.initialRecords);
-
-    React.useEffect(() => {
+    useEffect(() => {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);

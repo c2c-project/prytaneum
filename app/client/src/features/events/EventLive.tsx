@@ -243,7 +243,7 @@ function EventLiveContainer({ eventLiveQueryRef, validateInviteQueryRef, tokenPr
     const { validateInvite } = usePreloadedQuery(VALIDATE_INVITE_QUERY, validateInviteQueryRef);
     const { displaySnack } = useSnack();
     const router = useRouter();
-    const [user] = useUser();
+    const { user } = useUser();
 
     // Handle private events and token validation
     React.useEffect(() => {

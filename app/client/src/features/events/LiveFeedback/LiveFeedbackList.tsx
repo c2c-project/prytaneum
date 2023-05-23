@@ -48,7 +48,7 @@ interface LiveFeedbackListProps {
 export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: LiveFeedbackListProps) {
     const theme = useTheme();
     const classes = useStyles();
-    const [user] = useUser();
+    const { user } = useUser();
     const [displayLiveFeedback, setDisplayLiveFeedback] = React.useState(false);
     const { liveFeedback } = useLiveFeedbackList({ fragmentRef });
     const { isModerator } = useEvent();

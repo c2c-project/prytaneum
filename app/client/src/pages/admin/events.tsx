@@ -6,7 +6,7 @@ import { Loader } from '@local/components';
 import { EventsDashboard } from '@local/features/admin/EventsDashboard';
 
 export default function Admin() {
-    const [user, , isLoading] = useUser();
+    const { user, isLoading } = useUser();
     const router = useRouter();
 
     React.useEffect(() => {

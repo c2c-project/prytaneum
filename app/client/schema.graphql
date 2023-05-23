@@ -620,6 +620,7 @@ type Mutation {
 
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
+  makeOrganizer(input: OrganizerForm!): UserMutationResponse!
 
   """
   Advance the current question
@@ -633,6 +634,7 @@ type Mutation {
   """
   prevQuestion(eventId: ID!): Event!
   register(input: RegistrationForm!): UserMutationResponse!
+  removeOrganizer(input: OrganizerForm!): UserMutationResponse!
   removeQuestionFromQueue(input: RemoveQuestionFromQueue!): EventQuestionMutationResponse!
   resetPassword(input: ResetPasswordForm!): ResetPasswordMutationResponse!
 
@@ -716,6 +718,10 @@ type OrganizationSubscription {
   userId: ID
 }
 
+input OrganizerForm {
+  email: String!
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -735,6 +741,7 @@ type Query {
 
   """Fetch all events"""
   events: [Event!]
+  isOrganizer: Boolean!
 
   """Fetch user data about the current user"""
   me: User
@@ -905,6 +912,7 @@ type User implements Node {
   id: ID!
   isAdmin: Boolean
   isEmailVerified: Boolean
+  isOrganizer: Boolean
   lastName: String
 
   """Organizations that this user belongs to"""

@@ -1,6 +1,5 @@
 import { Browser, Locator, Page } from '@playwright/test';
 import { Device, getIndexByDevice } from '@local/common/utils';
-import { format } from 'date-fns';
 
 export class PlaywrightDashboardPage {
     readonly page: Page;
@@ -63,11 +62,11 @@ export class PlaywrightDashboardPage {
         });
         const buttonName = `${eventName} ${formattedDate} ${ongoing ? '12:00 AM' : '11:59 PM'} ${orgName}`;
         await this.page.getByRole('button', { name: buttonName }).click();
-        await this.page.waitForNavigation();
+        await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
 
     async clickOnLiveFeed() {
         await this.page.getByRole('button', { name: 'view live feed of current event' }).click();
-        await this.page.waitForNavigation();
+        await this.page.waitForTimeout(5000); // Using this over waitForNavigation because it was not working with firefox.
     }
 }
