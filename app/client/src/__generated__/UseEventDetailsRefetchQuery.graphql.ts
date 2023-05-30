@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8aacbbfb4faf96ca8df0f9ac2011a747>>
+ * @generated SignedSource<<0611d04163ba1535e5b151caef000997>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -139,6 +139,13 @@ return {
                 "kind": "ScalarField",
                 "name": "isActive",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isViewerModerator",
+                "storageKey": null
               }
             ],
             "type": "Event",
@@ -150,16 +157,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6fb6bfcafb182bc9c8cd2144a2552d07",
+    "cacheID": "a745ed5d0fd4fae8212532d2c3ac088c",
     "id": null,
     "metadata": {},
     "name": "UseEventDetailsRefetchQuery",
     "operationKind": "query",
-    "text": "query UseEventDetailsRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useEventDetailsFragment\n    id\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n}\n"
+    "text": "query UseEventDetailsRefetchQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...useEventDetailsFragment\n    id\n  }\n}\n\nfragment useEventDetailsFragment on Event {\n  id\n  title\n  topic\n  description\n  startDateTime\n  endDateTime\n  isActive\n  isViewerModerator\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a13e385118bfbeea94c827c5a3a1e893";
+(node as any).hash = "5a1fec2451fe8bc5f9d2f47086e1aff0";
 
 export default node;
