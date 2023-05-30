@@ -51,11 +51,13 @@ export async function joinOrPingEvent(prisma: PrismaClient, eventId: string, use
     }
 }
 
+// TODO: Add purge messages option
 export async function muteParticipant(
     prisma: PrismaClient,
     eventId: string,
     userId: string,
     viewerId: string
+    // purgeMessages: boolean
 ): Promise<void> {
     try {
         // Validate that the viewer has permission to mute
@@ -77,6 +79,16 @@ export async function muteParticipant(
             },
             data: {
                 isMuted: true,
+            },
+        });
+        // Hide all of the user's messages
+        await prisma.eventQuestion.updateMany({
+            where: {
+                eventId,
+                createdById: userId,
+            },
+            data: {
+                isVisible: false,
             },
         });
     } catch (e) {
