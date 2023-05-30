@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        [theme.breakpoints.up('md')]: {
-            overflowY: 'scroll',
-        },
+        // [theme.breakpoints.up('md')]: {
+        //     overflowY: 'scroll',
+        // },
     },
     video: {
         [theme.breakpoints.down('md')]: {
@@ -235,7 +235,7 @@ function EventLive({ node }: EventLiveProps) {
                 </Grid>
                 <Grid container item xs={12} md={4} direction='column'>
                     <div className={classes.panes} id='event-sidebar-scroller' onScroll={handleScroll}>
-                        {isMdUp && <div ref={topRef} className={classes.target} />}
+                        {/* {isMdUp && <div ref={topRef} className={classes.target} />} */}
                         <EventSidebar
                             fragmentRef={node}
                             override={Boolean(false)}

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Card, CardContent, Grid, List, ListItem, Typography, CardActions } from '@mui/material';
-import { useTheme, alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 
 import { useLiveFeedbackListFragment$key } from '@local/__generated__/useLiveFeedbackListFragment.graphql';
@@ -46,7 +45,6 @@ interface LiveFeedbackListProps {
 }
 
 export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: LiveFeedbackListProps) {
-    const theme = useTheme();
     const classes = useStyles();
     const { user } = useUser();
     const [displayLiveFeedback, setDisplayLiveFeedback] = React.useState(false);
@@ -68,68 +66,48 @@ export function LiveFeedbackList({ fragmentRef, ActionButtons, isVisible }: Live
         else setDisplayLiveFeedback(true);
     }, [user, isModerator]);
 
+    if (!isVisible) return <React.Fragment />;
+
     return (
-        <Grid
-            container
-            height={0}
-            flex='1 1 100%'
-            justifyContent='center'
-            sx={{ visibility: isVisible ? 'visible' : 'hidden' }}
-        >
-            {isVisible && (
-                <Grid
-                    item
-                    paddingTop='1rem'
-                    xs={12}
-                    sx={{
-                        border: 5,
-                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                            theme.palette.custom.creamCan,
-                            0.06
-                        )}) 10`,
-                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
-                    }}
-                >
-                    {ActionButtons}
-                    <ListFilter
-                        className={classes.listFilter}
-                        onFilterChange={handleFilterChange}
-                        onSearch={handleSearch}
-                        length={filteredList.length}
-                        displayNumResults={Boolean(user)} // only display for users logged in
-                    />
-                    <List disablePadding>
-                        {displayLiveFeedback ? (
-                            filteredList.map((feedback) => (
-                                <ListItem disableGutters key={feedback.id} sx={{ paddingX: '0.5rem' }}>
-                                    <Card className={classes.item}>
-                                        <LiveFeedbackAuthor fragmentRef={feedback} />
-                                        {feedback.refFeedback && (
-                                            <LiveFeedbackReply fragmentRef={feedback.refFeedback} />
-                                        )}
-                                        <CardContent className={classes.body}>
-                                            <Typography variant='inherit' style={{ wordBreak: 'break-word' }}>
-                                                {feedback.message}
-                                            </Typography>
-                                        </CardContent>
-                                        {isModerator ? (
-                                            <CardActions>
-                                                <LiveFeedbackReplyAction fragmentRef={feedback} />
-                                            </CardActions>
-                                        ) : (
-                                            <React.Fragment />
-                                        )}
-                                    </Card>
-                                </ListItem>
-                            ))
-                        ) : (
-                            <Typography align='center' className={classes.notSignedInMessage}>
-                                Sign in to submit Live Feedback
-                            </Typography>
-                        )}
-                    </List>
-                </Grid>
-            )}
+        <Grid container height={0} flex='1 1 100%' justifyContent='center'>
+            <Grid item paddingTop='1rem' width='100%'>
+                {ActionButtons}
+                <ListFilter
+                    className={classes.listFilter}
+                    onFilterChange={handleFilterChange}
+                    onSearch={handleSearch}
+                    length={filteredList.length}
+                    displayNumResults={Boolean(user)} // only display for users logged in
+                />
+                <List disablePadding>
+                    {displayLiveFeedback ? (
+                        filteredList.map((feedback) => (
+                            <ListItem disableGutters key={feedback.id} sx={{ paddingX: '0.5rem' }}>
+                                <Card className={classes.item}>
+                                    <LiveFeedbackAuthor fragmentRef={feedback} />
+                                    {feedback.refFeedback && <LiveFeedbackReply fragmentRef={feedback.refFeedback} />}
+                                    <CardContent className={classes.body}>
+                                        <Typography variant='inherit' style={{ wordBreak: 'break-word' }}>
+                                            {feedback.message}
+                                        </Typography>
+                                    </CardContent>
+                                    {isModerator ? (
+                                        <CardActions>
+                                            <LiveFeedbackReplyAction fragmentRef={feedback} />
+                                        </CardActions>
+                                    ) : (
+                                        <React.Fragment />
+                                    )}
+                                </Card>
+                            </ListItem>
+                        ))
+                    ) : (
+                        <Typography align='center' className={classes.notSignedInMessage}>
+                            Sign in to submit Live Feedback
+                        </Typography>
+                    )}
+                </List>
+            </Grid>
         </Grid>
     );
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { useTheme, alpha } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { Select, MenuItem, Grid, Typography, Card, List, ListItem, IconButton, SelectProps } from '@mui/material';
 import { graphql, useMutation } from 'react-relay';
@@ -225,7 +225,6 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
     );
 
     const { eventId } = useEvent();
-    const theme = useTheme();
     const classes = useStyles();
     const [reorder, getListStyle, itemStyle] = useStyledQueue({ eventId });
 
@@ -308,115 +307,103 @@ export function QuestionQueue({ fragmentRef, isVisible }: QuestionQueueProps) {
     const [filteredList, handleSearch, handleFilterChange] = useFilters(enqueuedQuestions, accessors);
     const [prevFilteredList, prevHandleSearch, prevHandleFilterChange] = useFilters(prevQuestions, prevAccessors);
 
+    if (!isVisible) return <React.Fragment />;
+
     return (
-        <Grid container height={0} flex='1 1 100%' sx={{ visibility: isVisible ? 'visible' : 'hidden' }}>
-            {isVisible && (
-                <Grid
-                    item
-                    paddingTop='1rem'
-                    xs={12}
-                    sx={{
-                        border: 5,
-                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                            theme.palette.custom.creamCan,
-                            0.06
-                        )}) 10`,
-                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
-                    }}
-                >
-                    <Grid item container sx={{ paddingX: '0.5rem' }}>
-                        <Select value={queueIndex} onChange={handleQueueChange} className={classes.select}>
-                            <MenuItem value={0} className={classes.menuItem}>
-                                Upcoming
-                            </MenuItem>
-                            <MenuItem value={1} className={classes.menuItem}>
-                                Previous
-                            </MenuItem>
-                        </Select>
-                        {/* TODO: add filter functionality */}
-                        <IconButton className={classes.filterIcon} size='large'>
-                            <FilterListIcon />
-                        </IconButton>
-                        <ListFilter
-                            className={classes.listFilter}
-                            onFilterChange={queueIndex === 0 ? () => handleFilterChange : () => prevHandleFilterChange}
-                            onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
-                            length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
-                        />
-                    </Grid>
-                    {queueIndex === 0 ? (
-                        <React.Fragment>
-                            <Grid className={classes.helperText}>
-                                <Typography variant='caption'>Drag and drop questions to re-order queue</Typography>
-                            </Grid>
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                <DropArea getStyle={getListStyle} droppableId='droppable'>
-                                    {filteredList.map((question, idx) => (
-                                        <DragArea
-                                            getStyle={itemStyle}
-                                            key={question.node.id}
-                                            index={idx}
-                                            draggableId={question.node.id}
-                                        >
-                                            <ListItem
-                                                disableGutters
-                                                className={classes.relative}
-                                                sx={{ paddingX: '0.5rem' }}
-                                            >
-                                                {question === nextQuestion && (
-                                                    <NextQuestionButton
-                                                        color='primary'
-                                                        disabled={!canGoForward}
-                                                        variant='contained'
-                                                        className={classes.nextQuestion}
-                                                    />
-                                                )}
-                                                <Card className={classes.item}>
-                                                    <QuestionAuthor fragmentRef={question.node} />
-                                                    {question.node.refQuestion && (
-                                                        <QuestionQuote fragmentRef={question.node.refQuestion} />
-                                                    )}
-                                                    <QuestionContent fragmentRef={question.node} />
-                                                    <Grid container alignItems='center' justifyContent='space-between'>
-                                                        <QuestionStats fragmentRef={question.node} />
-                                                        <QuestionActions
-                                                            className={classes.questionActions}
-                                                            likeEnabled={Boolean(false)}
-                                                            quoteEnabled={Boolean(false)}
-                                                            queueEnabled={Boolean(true)}
-                                                            deleteEnabled={Boolean(false)}
-                                                            connections={connections}
-                                                            fragmentRef={question.node}
-                                                        />
-                                                        <span className={classes.filler}>
-                                                            <QuestionStats fragmentRef={question.node} />
-                                                        </span>
-                                                    </Grid>
-                                                </Card>
-                                            </ListItem>
-                                        </DragArea>
-                                    )) ?? []}
-                                </DropArea>
-                            </DragDropContext>
-                        </React.Fragment>
-                    ) : (
-                        <List>
-                            {prevFilteredList.reverse().map((question) => (
-                                <ListItem key={question.node.id} disableGutters>
-                                    <Card className={`${classes.item} ${classes.previousQuestion}`}>
-                                        <QuestionAuthor fragmentRef={question.node} />
-                                        {question.node.refQuestion && (
-                                            <QuestionQuote fragmentRef={question.node.refQuestion} />
-                                        )}
-                                        <QuestionContent fragmentRef={question.node} />
-                                        <QuestionStats fragmentRef={question.node} />
-                                    </Card>
-                                </ListItem>
-                            )) ?? []}
-                        </List>
-                    )}
+        <Grid container height={0} flex='1 1 100%'>
+            <Grid item paddingTop='1rem' xs={12}>
+                <Grid item container sx={{ paddingX: '0.5rem' }}>
+                    <Select value={queueIndex} onChange={handleQueueChange} className={classes.select}>
+                        <MenuItem value={0} className={classes.menuItem}>
+                            Upcoming
+                        </MenuItem>
+                        <MenuItem value={1} className={classes.menuItem}>
+                            Previous
+                        </MenuItem>
+                    </Select>
+                    {/* TODO: add filter functionality */}
+                    <IconButton className={classes.filterIcon} size='large'>
+                        <FilterListIcon />
+                    </IconButton>
+                    <ListFilter
+                        className={classes.listFilter}
+                        onFilterChange={queueIndex === 0 ? () => handleFilterChange : () => prevHandleFilterChange}
+                        onSearch={queueIndex === 0 ? handleSearch : prevHandleSearch}
+                        length={queueIndex === 0 ? filteredList.length : prevFilteredList.length}
+                    />
                 </Grid>
-            )}
+                {queueIndex === 0 ? (
+                    <React.Fragment>
+                        <Grid className={classes.helperText}>
+                            <Typography variant='caption'>Drag and drop questions to re-order queue</Typography>
+                        </Grid>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <DropArea getStyle={getListStyle} droppableId='droppable'>
+                                {filteredList.map((question, idx) => (
+                                    <DragArea
+                                        getStyle={itemStyle}
+                                        key={question.node.id}
+                                        index={idx}
+                                        draggableId={question.node.id}
+                                    >
+                                        <ListItem
+                                            disableGutters
+                                            className={classes.relative}
+                                            sx={{ paddingX: '0.5rem' }}
+                                        >
+                                            {question === nextQuestion && (
+                                                <NextQuestionButton
+                                                    color='primary'
+                                                    disabled={!canGoForward}
+                                                    variant='contained'
+                                                    className={classes.nextQuestion}
+                                                />
+                                            )}
+                                            <Card className={classes.item}>
+                                                <QuestionAuthor fragmentRef={question.node} />
+                                                {question.node.refQuestion && (
+                                                    <QuestionQuote fragmentRef={question.node.refQuestion} />
+                                                )}
+                                                <QuestionContent fragmentRef={question.node} />
+                                                <Grid container alignItems='center' justifyContent='space-between'>
+                                                    <QuestionStats fragmentRef={question.node} />
+                                                    <QuestionActions
+                                                        className={classes.questionActions}
+                                                        likeEnabled={Boolean(false)}
+                                                        quoteEnabled={Boolean(false)}
+                                                        queueEnabled={Boolean(true)}
+                                                        deleteEnabled={Boolean(false)}
+                                                        connections={connections}
+                                                        fragmentRef={question.node}
+                                                    />
+                                                    <span className={classes.filler}>
+                                                        <QuestionStats fragmentRef={question.node} />
+                                                    </span>
+                                                </Grid>
+                                            </Card>
+                                        </ListItem>
+                                    </DragArea>
+                                )) ?? []}
+                            </DropArea>
+                        </DragDropContext>
+                    </React.Fragment>
+                ) : (
+                    <List>
+                        {prevFilteredList.reverse().map((question) => (
+                            <ListItem key={question.node.id} disableGutters>
+                                <Card className={`${classes.item} ${classes.previousQuestion}`}>
+                                    <QuestionAuthor fragmentRef={question.node} />
+                                    {question.node.refQuestion && (
+                                        <QuestionQuote fragmentRef={question.node.refQuestion} />
+                                    )}
+                                    <QuestionContent fragmentRef={question.node} />
+                                    <QuestionStats fragmentRef={question.node} />
+                                </Card>
+                            </ListItem>
+                        )) ?? []}
+                    </List>
+                )}
+            </Grid>
         </Grid>
     );
 }

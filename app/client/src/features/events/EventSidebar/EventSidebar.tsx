@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Tab, Skeleton, Tabs, Button } from '@mui/material';
+import { Grid, Tab, Skeleton, Tabs, Button, useMediaQuery } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme, alpha } from '@mui/material/styles';
 import { graphql, useFragment } from 'react-relay';
@@ -35,7 +35,7 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '75%',
+        height: '100%',
 
         padding: theme.spacing(0, 1, 1, 1),
         [theme.breakpoints.down('md')]: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO: Add sidebar top section for moderator tools
-// type sidebarTopTabs = 'Moderator';
+type sidebarTopTabs = 'Moderator';
 type SidebarBottomTabs = 'Queue' | 'Questions' | 'Feedback' | 'Broadcast' | 'Participants';
 
 export function EventSidebarLoader() {
@@ -75,17 +75,24 @@ export const EventSidebar = ({
     const theme = useTheme();
     const classes = useStyles();
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
-    // const [topTab, setTopTab] = React.useState<sidebarTopTabs>('Moderator');
+    const [topTab, setTopTab] = React.useState<sidebarTopTabs>('Moderator');
     const [bottomTab, setBottomTab] = React.useState<SidebarBottomTabs>('Questions');
+    const [topSectionVisible, setTopSectionVisible] = React.useState(true);
+
+    const mdUpBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
     // Subscribe to live feedback prompts
     useLiveFeedbackPrompt();
     useLiveFeedbackPromptResultsShared();
 
-    // const handleTopChange = (e: React.SyntheticEvent, newTab: sidebarTopTabs) => {
-    //     e.preventDefault();
-    //     setTopTab(newTab);
-    // };
+    const toggleTopSectionVisibility = React.useCallback(() => {
+        setTopSectionVisible((prev) => !prev);
+    }, []);
+
+    const handleTopChange = (e: React.SyntheticEvent, newTab: sidebarTopTabs) => {
+        e.preventDefault();
+        setTopTab(newTab);
+    };
 
     const handleBottomChange = (e: React.SyntheticEvent, newTab: SidebarBottomTabs) => {
         e.preventDefault();
@@ -136,20 +143,13 @@ export const EventSidebar = ({
             wrap='nowrap'
         >
             <Grid item>
-                {!data.isViewerModerator && <QuestionCarousel fragmentRef={data} />}
-                {data.isViewerModerator && !override && (
-                    <CurrentQuestionCard isViewerModerator={Boolean(data.isViewerModerator)} fragmentRef={data} />
+                {!isViewerModerator && <QuestionCarousel fragmentRef={data} />}
+                {isViewerModerator && !override && (
+                    <CurrentQuestionCard isViewerModerator={Boolean(isViewerModerator)} fragmentRef={data} />
                 )}
             </Grid>
             {isViewerModerator && (
-                <Grid container justifyContent='center'>
-                    <Button variant='contained' color={isLive ? 'error' : 'success'} onClick={updateEventStatus}>
-                        {isLive ? 'End Event' : 'Start Event'}
-                    </Button>
-                </Grid>
-            )}
-            {/* {isViewerModerator && (
-                <Grid item container>
+                <Grid item container justifyContent='center'>
                     <Tabs
                         sx={{
                             '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
@@ -165,35 +165,57 @@ export const EventSidebar = ({
                         centered
                         aria-label='secondary tabs example'
                     >
-                        {data.isViewerModerator === true && !override && <Tab label='Moderator' value='Moderator' />}
+                        {data.isViewerModerator === true && !override && (
+                            <Tab onClick={toggleTopSectionVisibility} label='Moderator' value='Moderator' />
+                        )}
                     </Tabs>
-                    <Grid
-                        container
-                        sx={{
-                            width: '100%',
-                            height: '250px',
-                            border: 5,
-                            padding: 1,
-                            borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                                theme.palette.custom.creamCan,
-                                0.06
-                            )}) 10`,
-                            backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
-                        }}
-                    >
-                        <Grid item justifyContent='center'>
-                            <Button
-                                variant='contained'
-                                color={isLive ? 'error' : 'success'}
-                                onClick={updateEventStatus}
-                            >
-                                {isLive ? 'End Event' : 'Start Event'}
-                            </Button>
+                    {topSectionVisible && (
+                        <Grid
+                            container
+                            justifyContent='center'
+                            sx={{
+                                width: '100%',
+                                height: '250px',
+                                border: 5,
+                                padding: 1,
+                                borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                                    theme.palette.custom.creamCan,
+                                    0.06
+                                )}) 10`,
+                                backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                                overflowY: 'scroll',
+                                '::-webkit-scrollbar': {
+                                    backgroundColor: 'transparent',
+                                },
+                                '::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#D9D9D9',
+                                    backgroundOpacity: '0.3',
+                                    borderRadius: '20px',
+                                    border: '5px solid transparent',
+                                    backgroundClip: 'content-box',
+                                },
+                            }}
+                        >
+                            <Grid item justifyContent='center' width='100%'>
+                                <Grid item container justifyContent='center' width='100%'>
+                                    <Button
+                                        variant='contained'
+                                        color={isLive ? 'error' : 'success'}
+                                        onClick={updateEventStatus}
+                                    >
+                                        {isLive ? 'End Event' : 'Start Event'}
+                                    </Button>
+                                </Grid>
+                                <PreloadedParticipantsList
+                                    eventId={data.id}
+                                    isVisible={isViewerModerator && topTab === 'Moderator'}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    )}
                 </Grid>
-            )} */}
-            <Grid item>
+            )}
+            <Grid item container justifyContent='center' height='100%'>
                 <Tabs
                     sx={{
                         '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
@@ -209,31 +231,55 @@ export const EventSidebar = ({
                     centered
                     aria-label='secondary tabs example'
                 >
-                    {data.isViewerModerator === true && !override && <Tab label='Queue' value='Queue' />}
+                    {isViewerModerator === true && !override && <Tab label='Queue' value='Queue' />}
                     <Tab label='Questions' value='Questions' />
                     <Tab label='Feedback' value='Feedback' />
-                    {data.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
-                    {data.isViewerModerator === true && <Tab label='Users' value='Participants' />}
+                    {isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
                 </Tabs>
-                {data.isViewerModerator === true && (
-                    <QuestionQueue fragmentRef={data} isVisible={bottomTab === 'Queue'} />
-                )}
-                <QuestionList
-                    fragmentRef={data}
-                    ActionButtons={displayActionButtons}
-                    isVisible={bottomTab === 'Questions'}
-                />
-                <LiveFeedbackList
-                    fragmentRef={data}
-                    ActionButtons={displayActionButtons}
-                    isVisible={bottomTab === 'Feedback'}
-                />
-                {data.isViewerModerator === true && (
-                    <PreloadedBroadcastMessageList isVisible={bottomTab === 'Broadcast'} />
-                )}
-                {data.isViewerModerator === true && bottomTab === 'Participants' && (
-                    <PreloadedParticipantsList eventId={data.id} isVisible={bottomTab === 'Participants'} />
-                )}
+                <Grid
+                    id='event-sidebar-bottom-tabs-scrollable'
+                    container
+                    justifyContent='center'
+                    sx={{
+                        width: '100%',
+                        height: `${mdUpBreakpoint ? '97%' : '500px'}`,
+                        border: 5,
+                        padding: 1,
+                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                            theme.palette.custom.creamCan,
+                            0.06
+                        )}) 10`,
+                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                        overflowY: 'scroll',
+                        '::-webkit-scrollbar': {
+                            backgroundColor: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#D9D9D9',
+                            backgroundOpacity: '0.3',
+                            borderRadius: '20px',
+                            border: '5px solid transparent',
+                            backgroundClip: 'content-box',
+                        },
+                    }}
+                >
+                    {isViewerModerator === true && (
+                        <QuestionQueue fragmentRef={data} isVisible={bottomTab === 'Queue'} />
+                    )}
+                    <QuestionList
+                        fragmentRef={data}
+                        ActionButtons={displayActionButtons}
+                        isVisible={bottomTab === 'Questions'}
+                    />
+                    <LiveFeedbackList
+                        fragmentRef={data}
+                        ActionButtons={displayActionButtons}
+                        isVisible={bottomTab === 'Feedback'}
+                    />
+                    {isViewerModerator === true && (
+                        <PreloadedBroadcastMessageList isVisible={bottomTab === 'Broadcast'} />
+                    )}
+                </Grid>
             </Grid>
         </Grid>
     );
