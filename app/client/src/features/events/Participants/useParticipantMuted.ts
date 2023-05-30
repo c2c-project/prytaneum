@@ -18,7 +18,6 @@ export function useParticipantMuted(eventId: string, refresh: () => void) {
             },
             subscription: USE_PARTICIPANT_MUTED_SUBSCRIPTION,
             onNext: () => {
-                console.log('useParticipantMutedSubscription');
                 refresh();
             },
         }),
