@@ -2,24 +2,15 @@ import * as React from 'react';
 import { fetchQuery, graphql } from 'relay-runtime';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Grid, List, ListItem, Paper, Typography } from '@mui/material';
-import { useTheme, alpha } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
 
 import type { ParticipantsListQuery } from '@local/__generated__/ParticipantsListQuery.graphql';
 import { ConditionalRender, Loader } from '@local/components';
 import { useEnvironment } from '@local/core';
 import { useEvent } from '../useEvent';
 import { useParticipantMuted } from './useParticipantMuted';
-import ListFilter, { Accessors, useFilters } from '@local/components/ListFilter';
-import { ArrayElement } from '@local/utils/ts-utils';
+// import ListFilter, { Accessors, useFilters } from '@local/components/ListFilter';
+// import { ArrayElement } from '@local/utils/ts-utils';
 import { ParticipantCard } from './ParticipantCard';
-
-const useStyles = makeStyles(() => ({
-    listFilter: {
-        paddingLeft: '0.5rem',
-        paddingRight: '0.5rem',
-    },
-}));
 
 // TODO Update to refetchable fragment w/ pagination
 export const PARTICIPANTS_LIST_QUERY = graphql`
@@ -53,8 +44,6 @@ interface ParticipantsListProps {
 export function ParticipantsList({ queryRef, isVisible, refresh }: ParticipantsListProps) {
     const { eventParticipants } = usePreloadedQuery(PARTICIPANTS_LIST_QUERY, queryRef);
     const { eventId } = useEvent();
-    const theme = useTheme();
-    const classes = useStyles();
 
     // Refreshes the list when a participant is muted/unmuted
     useParticipantMuted(eventId, refresh);
@@ -71,66 +60,58 @@ export function ParticipantsList({ queryRef, isVisible, refresh }: ParticipantsL
         return unsortedParticipants.sort((a, b) => (a.moderatorOf === b.moderatorOf ? 0 : a.moderatorOf ? -1 : 1));
     }, [eventParticipants]);
 
-    const accessors = React.useMemo<Accessors<ArrayElement<Participant[]>>[]>(
-        () => [(p) => p.firstName || '', (p) => p.lastName || ''],
-        []
-    );
+    // const accessors = React.useMemo<Accessors<ArrayElement<Participant[]>>[]>(
+    //     () => [(p) => p.firstName || '', (p) => p.lastName || ''],
+    //     []
+    // );
 
-    const [filteredList, handleSearch, handleFilterChange] = useFilters(participants, accessors);
+    // const [filteredList, handleSearch, handleFilterChange] = useFilters(participants, accessors);
+
+    if (!isVisible) return <React.Fragment />;
 
     return (
-        <Grid container display='grid' sx={{ visibility: isVisible ? 'visible' : 'hidden' }} height={0}>
-            {isVisible && (
-                <Grid
-                    item
-                    paddingTop='1rem'
-                    sx={{
-                        border: 5,
-                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                            theme.palette.custom.creamCan,
-                            0.06
-                        )}) 10`,
-                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
-                    }}
-                >
-                    {participants.length === 0 && <p>No participants yet</p>}
-                    <ListFilter
-                        className={classes.listFilter}
-                        onFilterChange={handleFilterChange}
-                        onSearch={handleSearch}
-                        length={filteredList.length}
-                    />
-                    <List>
-                        {filteredList.map((participant) => (
-                            <ListItem key={participant.id}>
-                                <Paper style={{ width: '100%' }}>
-                                    <Grid container direction='row' alignItems='center' display='grid'>
-                                        <Grid item justifySelf='center' width='50px'>
-                                            <img
-                                                src='/static/participant_icon.svg'
-                                                alt='avatar'
-                                                width='50px'
-                                                height='50px'
-                                            />
-                                        </Grid>
-                                        <Grid item width='200px' gridColumn='2/5'>
-                                            <Typography variant='body1'>
-                                                {participant.firstName + ' ' + participant.lastName}
-                                            </Typography>
-                                            <Typography variant='body2' color='text.secondary'>
-                                                {participant.moderatorOf ? 'Moderator' : 'Participant'}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item gridColumn='5/6' justifySelf='center' width='50px'>
-                                            <ParticipantCard participant={participant} />
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </ListItem>
-                        ))}
-                    </List>
+        <Grid container display='grid' height={0} width='100%'>
+            <Grid item paddingTop='1rem'>
+                <Grid item container alignItems='center' justifyContent='center'>
+                    <Typography variant='h6'>Participants List</Typography>
                 </Grid>
-            )}
+                {participants.length === 0 && <p>No participants yet</p>}
+                {/* <ListFilter
+                    className={classes.listFilter}
+                    onFilterChange={handleFilterChange}
+                    onSearch={handleSearch}
+                    length={filteredList.length}
+                /> */}
+                <List>
+                    {participants.map((participant) => (
+                        <ListItem key={participant.id}>
+                            <Paper style={{ width: '100%' }}>
+                                <Grid container direction='row' alignItems='center' display='grid'>
+                                    <Grid item justifySelf='center' width='50px'>
+                                        <img
+                                            src='/static/participant_icon.svg'
+                                            alt='avatar'
+                                            width='50px'
+                                            height='50px'
+                                        />
+                                    </Grid>
+                                    <Grid item width='200px' gridColumn='2/5'>
+                                        <Typography variant='body1'>
+                                            {participant.firstName + ' ' + participant.lastName}
+                                        </Typography>
+                                        <Typography variant='body2' color='text.secondary'>
+                                            {participant.moderatorOf ? 'Moderator' : 'Participant'}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item gridColumn='5/6' justifySelf='center' width='50px'>
+                                        <ParticipantCard participant={participant} />
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </ListItem>
+                    ))}
+                </List>
+            </Grid>
         </Grid>
     );
 }
@@ -168,6 +149,8 @@ export function PreloadedParticipantsList({ eventId, isVisible }: PreloadedParti
     }, [queryRef, loadQuery, eventId, refresh]);
 
     React.useEffect(() => {
+        // For initial load, gives enough time for moderator to ping and show up in the list
+        setTimeout(refresh, 500);
         return () => disposeQuery();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
