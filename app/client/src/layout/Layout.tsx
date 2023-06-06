@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { Grid, useMediaQuery, IconButton, ContainerProps } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useUser } from '@local/features/accounts';
@@ -49,12 +50,13 @@ export function Layout({
     ContainerProps: _ContainerProps,
     disablePadding,
 }: LayoutProps) {
+    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const { user } = useUser();
 
     // hardcode breakpoint based on when page resizes (default keys hid element too early or too late)
-    const isLargeScreen = useMediaQuery('(max-width:1520px)');
+    const isLargeScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const isSideNavHidden = React.useMemo(
         () => isLargeScreen || !!noSideNav || !user,
         [isLargeScreen, noSideNav, user]
@@ -63,7 +65,7 @@ export function Layout({
     return (
         <Page>
             <div className={classes.background}>
-                <AppBar sx={{ zIndex: (theme) => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
+                <AppBar sx={{ zIndex: () => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
                     {isSideNavHidden && (
                         <IconButton
                             className={classes.menuIcon}
