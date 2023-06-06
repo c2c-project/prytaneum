@@ -19,6 +19,7 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
         display: 'flex',
     },
     main: {
+        width: '100%',
         flex: '1 1 100%',
         position: 'relative',
     },
