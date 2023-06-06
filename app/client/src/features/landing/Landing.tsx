@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
+        width: '100%',
     },
     videoWrapper: {
         width: '100%',
@@ -64,7 +65,6 @@ export default function Landing() {
     return (
         <>
             <CallToAction />
-
             {/* The marginLeft and width props allow this component to override the maxWidth set by its parent container in `Main.tsx` */}
             <Grid
                 container
@@ -72,15 +72,13 @@ export default function Landing() {
                 alignItems='center'
                 justifyContent='center'
                 spacing={2}
-                className={classes.root}
-                marginLeft='calc(-100vw / 2 + 50%) !important'
-                style={{ backgroundColor: '#8EAFFF42', width: '100vw' }}
+                style={{ backgroundColor: '#8EAFFF42', width: '100%' }}
             >
                 <Grid item marginTop={6} id='video-section'>
                     <Blurb title='Enable constructive, virtual dialogue' titleColor='#282D6E' />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item container justifyContent='center' width='80%'>
                     <div className={classes.videoWrapper}>
                         <ReactPlayer
                             url='https://youtu.be/Q-8-cQujh3k'
@@ -93,12 +91,11 @@ export default function Landing() {
                             controls
                         />
                     </div>
-                </Grid>
-
-                <Grid item marginBottom={10}>
-                    <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
-                        Learn How To Get Started
-                    </Button>
+                    <Grid item marginBottom={10}>
+                        <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                            Learn How To Get Started
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
 
@@ -113,9 +110,7 @@ export default function Landing() {
                 alignItems='center'
                 justifyContent='center'
                 spacing={2}
-                className={classes.root}
-                marginLeft='calc(-103vw / 2 + 50%) !important'
-                style={{ width: '100vw' }}
+                style={{ width: '100%' }}
             >
                 <Grid item marginTop={2} marginBottom={1}>
                     <Blurb
@@ -125,7 +120,7 @@ export default function Landing() {
                         paragraphsColor='#272C6C'
                     />
                 </Grid>
-                <Grid item marginRight='-1.5%'>
+                {/* <Grid item>
                     <img
                         className={classes.contain}
                         alt='Team Photo'
@@ -133,7 +128,7 @@ export default function Landing() {
                         width='100%'
                         height='100%'
                     />
-                </Grid>
+                </Grid> */}
                 <Grid item>
                     <Button
                         size='medium'
@@ -145,7 +140,7 @@ export default function Landing() {
                 </Grid>
             </Grid>
             {/* FOOTER SECTION */}
-            <Grid container marginLeft='calc(-100vw / 2 + 50%) !important' width='100vw'>
+            <Grid container width='100%'>
                 <Grid item container justifyContent={mdBreakpoint ? 'center' : 'normal'}>
                     <Grid
                         item

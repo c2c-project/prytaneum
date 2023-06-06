@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { isBefore, isAfter } from 'date-fns';
 
 import { DashboardEventListDisplay } from './DashboardEventListDisplay';
@@ -26,6 +27,8 @@ interface Props {
 }
 
 export function DashboardEventList({ queryRef }: Props) {
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     const { me } = usePreloadedQuery(DASHBOARD_QUERY, queryRef);
     const REFRESH_INTERVAL = 10000; // 10 seconds
 
@@ -71,7 +74,7 @@ export function DashboardEventList({ queryRef }: Props) {
     }, [futureEvents, ongoingEvents]);
 
     return (
-        <Grid container>
+        <Grid container width={lgUpBreakpoint ? '80%' : '100%'} marginLeft={lgUpBreakpoint ? '250px' : '0px'}>
             <DashboardEventListDisplay eventList={currentEvents} ongoing={true} />
             <DashboardEventListDisplay eventList={upcomingEvents} ongoing={false} />
         </Grid>

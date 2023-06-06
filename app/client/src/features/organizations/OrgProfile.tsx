@@ -10,7 +10,14 @@ import { useUser } from '../accounts';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        [theme.breakpoints.down('lg')]: {
+            width: '100%',
+            marginLeft: 0,
+        },
+        [theme.breakpoints.up('lg')]: {
+            width: '80%',
+            marginLeft: 250,
+        },
         height: '100%',
         '& > *': {
             margin: theme.spacing(2, 0),

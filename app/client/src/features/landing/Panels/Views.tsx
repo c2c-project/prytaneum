@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         minHeight: '60vh',
+        width: '100%',
         margin: 0,
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
@@ -78,6 +79,7 @@ export function Views() {
             </Grid>
             <Grid
                 container
+                item
                 alignItems='center'
                 justifyContent='center'
                 wrap={mdBreakpoint ? 'wrap' : 'nowrap'}
@@ -105,8 +107,8 @@ export function Views() {
                     data-test-id='participant-view'
                     alt='Participant View Screenshot'
                     src='/static/participant_view.png'
-                    width='60%'
-                    height='60%'
+                    width='50%'
+                    height='50%'
                 />
             </Grid>
             <Grid
@@ -122,8 +124,8 @@ export function Views() {
                     data-test-id='moderator-view'
                     alt='Moderator View Screenshot'
                     src='/static/moderator_view.png'
-                    width='60%'
-                    height='60%'
+                    width='50%'
+                    height='50%'
                 />
                 <Grid item>
                     <Grid container wrap='nowrap' justifyContent='center'>

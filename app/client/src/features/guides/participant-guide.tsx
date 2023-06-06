@@ -14,12 +14,32 @@ import {
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import makeStyles from '@mui/styles/makeStyles';
 import HelpIcon from '@mui/icons-material/Help';
+import { useUser } from '../accounts';
+import { Loader } from '@local/components';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         minHeight: '85vh',
-        paddingLeft: '1rem',
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: 0,
+        },
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: 250,
+        },
+        scrollPaddingTop: '-10rem',
+    },
+    rootLoggedOut: {
+        width: '100%',
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: '10%',
+            paddingRight: '10%',
+        },
+        minHeight: '85vh',
         scrollPaddingTop: '-10rem',
     },
     heading: {
@@ -94,18 +114,22 @@ const useStyles = makeStyles(() => ({
     },
     contain: {
         objectFit: 'contain',
+        maxWidth: '250px',
     },
 }));
 
 export default function ParticipantGuide() {
     // TODO: Remove this redirect
-    React.useEffect(() => {
-        window.location.assign('https://www.classrooms2congress.org/prytaneum');
-    }, []);
+    // React.useEffect(() => {
+    //     window.location.assign('https://www.classrooms2congress.org/prytaneum');
+    // }, []);
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [infoIndex, setInfoIndex] = React.useState(0);
+    const { user, isLoading } = useUser();
+
+    if (isLoading) return <Loader />;
 
     const info = [
         {
@@ -153,7 +177,13 @@ export default function ParticipantGuide() {
     };
 
     return (
-        <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
+        <Grid
+            container
+            alignItems='center'
+            className={user ? classes.root : classes.rootLoggedOut}
+            justifyContent='center'
+            spacing={4}
+        >
             <Grid item xs={4} sm={3}>
                 <img
                     className={classes.contain}

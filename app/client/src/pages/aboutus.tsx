@@ -1,13 +1,34 @@
 import * as React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useUser } from '@local/features/accounts';
+import { Loader } from '@local/components';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        paddingLeft: theme.spacing(1),
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: 0,
+        },
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: 250,
+        },
         textAlign: 'center',
+        alignContent: 'flex-start',
+    },
+    rootLoggedOut: {
+        width: '100%',
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: '5%',
+            paddingRight: '5%',
+        },
+        minHeight: '85vh',
+        scrollPaddingTop: '-10rem',
     },
     section: {
         display: 'flex',
@@ -26,16 +47,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AboutUs() {
     const classes = useStyles();
+    const { user, isLoading } = useUser();
+
+    if (isLoading) return <Loader />;
 
     return (
-        <Grid container className={classes.root} alignItems='center' spacing={2}>
+        <Grid container className={user ? classes.root : classes.rootLoggedOut} alignItems='center' spacing={2}>
             <Grid container item xs={12} direction='column' alignItems='center' spacing={1}>
                 <Grid item xs={4} sm={3} md={2}>
                     <img
                         className={classes.contain}
                         src='/static/prytaneum_logo.svg'
-                        width='100%'
-                        height='100%'
+                        width='250px'
+                        height='250px'
                         alt='Prytaneum Logo'
                     />
                 </Grid>
@@ -48,13 +72,13 @@ export default function AboutUs() {
                     <Typography variant='h4'>Our Journey</Typography>
                 </Grid>
             </Grid>
-            <Grid container item xs={12} alignItems='center' spacing={2}>
+            <Grid container item xs={12} alignItems='center' justifyContent='center' spacing={2}>
                 <Grid item sm={5} md={3}>
                     <img
                         className={classes.contain}
                         src='/static/directors.png'
-                        width='100%'
-                        height='100%'
+                        width='250px'
+                        height='250px'
                         alt='Directors'
                     />
                 </Grid>

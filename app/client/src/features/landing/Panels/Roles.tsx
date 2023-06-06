@@ -77,9 +77,7 @@ export function Roles() {
             alignItems='center'
             justifyContent='center'
             spacing={2}
-            className={classes.root}
-            marginLeft='calc(-100vw / 2 + 50%) !important'
-            style={{ backgroundColor: '#F5C64F42', width: '100vw' }}
+            style={{ backgroundColor: '#F5C64F42', width: '100%' }}
         >
             <Grid item width='100%' marginTop={8}>
                 <Blurb title='Participate in town hall events using roles' />
