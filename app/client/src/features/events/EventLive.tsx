@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Grid, useMediaQuery } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { motion } from 'framer-motion';
-import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery, useMutation } from 'react-relay';
+import { graphql, useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import type { FragmentRefs } from 'relay-runtime';
 import { Loader } from '@local/components/Loader';
 import { useRouter } from 'next/router';
@@ -17,8 +17,6 @@ import { ValidateInviteQuery } from '@local/__generated__/ValidateInviteQuery.gr
 import { VALIDATE_INVITE_QUERY } from './Invites/ValidateInvite';
 import { EventDetailsCard } from './EventDetailsCard';
 import { SpeakerList } from './Speakers';
-import { EventLiveStartEventMutation } from '@local/__generated__/EventLiveStartEventMutation.graphql';
-import { EventLiveEndEventMutation } from '@local/__generated__/EventLiveEndEventMutation.graphql';
 import { useSnack } from '@local/core';
 import { useUser } from '../accounts';
 import { useEventDetails } from './useEventDetails';
@@ -75,22 +73,6 @@ export const EVENT_LIVE_QUERY = graphql`
     }
 `;
 
-export const START_EVENT_MUTATION = graphql`
-    mutation EventLiveStartEventMutation($eventId: String!) {
-        startEvent(eventId: $eventId) {
-            message
-        }
-    }
-`;
-
-export const END_EVENT_MUTATION = graphql`
-    mutation EventLiveEndEventMutation($eventId: String!) {
-        endEvent(eventId: $eventId) {
-            message
-        }
-    }
-`;
-
 export function EventLiveLoader() {
     return <Loader />;
 }
@@ -107,7 +89,6 @@ interface EventLiveProps {
 }
 
 function EventLive({ node }: EventLiveProps) {
-    const { displaySnack } = useSnack();
     const router = useRouter();
     const { id: eventId } = node;
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
@@ -166,33 +147,6 @@ function EventLive({ node }: EventLiveProps) {
         });
     };
 
-    const [commitEventEndMutation] = useMutation<EventLiveEndEventMutation>(END_EVENT_MUTATION);
-    const [commitEventStartMutation] = useMutation<EventLiveStartEventMutation>(START_EVENT_MUTATION);
-
-    const updateEventStatus = () => {
-        if (isLive) {
-            commitEventEndMutation({
-                variables: {
-                    eventId: eventId,
-                },
-                onCompleted() {
-                    displaySnack('Event has ended!');
-                    setIsLive(false);
-                },
-            });
-        } else {
-            commitEventStartMutation({
-                variables: {
-                    eventId: eventId,
-                },
-                onCompleted() {
-                    displaySnack('Event has started!');
-                    setIsLive(true);
-                },
-            });
-        }
-    };
-
     if (!node || (!isLive && !isModerator)) return <Loader />;
 
     return (
@@ -211,10 +165,9 @@ function EventLive({ node }: EventLiveProps) {
                         {/* {isMdUp && <div ref={topRef} className={classes.target} />} */}
                         <EventSidebar
                             fragmentRef={node}
-                            override={Boolean(false)}
                             isViewerModerator={isModerator}
                             isLive={isLive}
-                            updateEventStatus={updateEventStatus}
+                            setIsLive={setIsLive}
                         />
                     </div>
                 </Grid>

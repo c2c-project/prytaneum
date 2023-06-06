@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<666f022f7d4c5694b73299e50147c10a>>
+ * @generated SignedSource<<86d8a65b1cb1e1edbb867a38e16542ab>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,19 +9,19 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type EventLiveEndEventMutation$variables = {
+export type ModeratorActionsEndEventMutation$variables = {
   eventId: string;
 };
-export type EventLiveEndEventMutationVariables = EventLiveEndEventMutation$variables;
-export type EventLiveEndEventMutation$data = {
+export type ModeratorActionsEndEventMutationVariables = ModeratorActionsEndEventMutation$variables;
+export type ModeratorActionsEndEventMutation$data = {
   readonly endEvent: {
     readonly message: string;
   };
 };
-export type EventLiveEndEventMutationResponse = EventLiveEndEventMutation$data;
-export type EventLiveEndEventMutation = {
-  variables: EventLiveEndEventMutationVariables;
-  response: EventLiveEndEventMutation$data;
+export type ModeratorActionsEndEventMutationResponse = ModeratorActionsEndEventMutation$data;
+export type ModeratorActionsEndEventMutation = {
+  variables: ModeratorActionsEndEventMutationVariables;
+  response: ModeratorActionsEndEventMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -63,7 +63,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "EventLiveEndEventMutation",
+    "name": "ModeratorActionsEndEventMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -72,20 +72,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "EventLiveEndEventMutation",
+    "name": "ModeratorActionsEndEventMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "5f8e0d3ef59de442b9fd1c43d66dc39d",
+    "cacheID": "d80dac3c1a05dc097981ef06413e47e2",
     "id": null,
     "metadata": {},
-    "name": "EventLiveEndEventMutation",
+    "name": "ModeratorActionsEndEventMutation",
     "operationKind": "mutation",
-    "text": "mutation EventLiveEndEventMutation(\n  $eventId: String!\n) {\n  endEvent(eventId: $eventId) {\n    message\n  }\n}\n"
+    "text": "mutation ModeratorActionsEndEventMutation(\n  $eventId: String!\n) {\n  endEvent(eventId: $eventId) {\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1f31ba016bce900d44d273f49c8263d4";
+(node as any).hash = "da6f332978aefbf0db980851bd8dd529";
 
 export default node;
