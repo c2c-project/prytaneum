@@ -32,11 +32,6 @@ type User implements Node {
     All events
     """
     allEvents(first: Int, after: String, filter: EventsSearchFilters): EventConnection
-
-    """
-    Can be used to check if the user is a moderator of a specific event
-    """
-    moderatorOf(eventId: ID!): Boolean
 }
 
 input UsersSearchFilters {

@@ -215,7 +215,7 @@ type Event implements Node {
   organization: Organization
 
   """Participants of the event -- individuals who showed up"""
-  participants(after: String, first: Int): UserConnection
+  participants(after: String, first: Int): EventParticipantConnection
 
   """Questions having to do with the queue"""
   questionQueue(after: String, first: Int): EventQuestionQueue
@@ -390,8 +390,9 @@ type EventMutationResponse implements MutationResponse {
 }
 
 type EventParticipant {
-  isMuted: Boolean!
-  user: User!
+  liveFeedBack: [EventLiveFeedback]
+  questions: [EventQuestion]
+  user: User
 }
 
 type EventParticipantConnection {
@@ -401,7 +402,7 @@ type EventParticipantConnection {
 
 type EventParticipantEdge {
   cursor: String!
-  node: User!
+  node: EventParticipant!
 }
 
 type EventQuestion implements Node {
@@ -620,14 +621,12 @@ type Mutation {
   """The logout just returns the timestamp of the logout action"""
   logout: Date!
   makeOrganizer(input: OrganizerForm!): UserMutationResponse!
-  muteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
 
   """
   Advance the current question
   TODO: make this an EventMutationResponse
   """
   nextQuestion(eventId: ID!): Event!
-  participantPingEvent(eventId: ID!): ParticipantPingEventMutationResponse!
 
   """
   Go to the previous question
@@ -651,7 +650,6 @@ type Mutation {
   """
   startEvent(eventId: String!): EventMutationResponse!
   submitPostEventFeedback(eventId: ID!, feedback: String!): PostEventFeedbackMutationResponse!
-  unmuteParticipant(eventId: ID!, userId: ID!): MuteParticipantMutationResponse!
   updateEmail(input: UpdateEmailForm!): UserMutationResponse!
   updateEvent(event: UpdateEvent!): EventMutationResponse!
   updateModerator(input: UpdateModerator!): ModeratorMutationResponse!
@@ -664,11 +662,6 @@ type Mutation {
 }
 
 interface MutationResponse {
-  isError: Boolean!
-  message: String!
-}
-
-type MuteParticipantMutationResponse implements MutationResponse {
   isError: Boolean!
   message: String!
 }
@@ -736,11 +729,6 @@ type PageInfo {
   startCursor: String
 }
 
-type ParticipantPingEventMutationResponse implements MutationResponse {
-  isError: Boolean!
-  message: String!
-}
-
 type PostEventFeedbackMutationResponse implements MutationResponse {
   isError: Boolean!
   message: String!
@@ -750,7 +738,6 @@ type Query {
   """Fetch a single event"""
   event(eventId: ID!): Event
   eventBroadcastMessages(eventId: ID!): [EventBroadcastMessage!]
-  eventParticipants(after: String, eventId: ID!, first: Int): [EventParticipant]!
 
   """Fetch all events"""
   events: [Event!]
@@ -825,7 +812,6 @@ type Subscription {
 
   """subscription for whenever a new org is added"""
   orgUpdated: OrganizationSubscription!
-  participantMuted(eventId: ID!): Boolean
   questionAddedToEnqueued(eventId: ID!): EventQuestionEdgeContainer!
   questionAddedToRecord(eventId: ID!): EventQuestionEdgeContainer!
 
@@ -928,9 +914,6 @@ type User implements Node {
   isEmailVerified: Boolean
   isOrganizer: Boolean
   lastName: String
-
-  """Can be used to check if the user is a moderator of a specific event"""
-  moderatorOf(eventId: ID!): Boolean
 
   """Organizations that this user belongs to"""
   organizations(after: String, first: Int): OrganizationConnection

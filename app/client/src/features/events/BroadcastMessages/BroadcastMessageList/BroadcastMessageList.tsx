@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Card, Grid, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
+import { useTheme, alpha } from '@mui/material/styles';
 
 import ListFilter, { useFilters, Accessors } from '@local/components/ListFilter';
 import { ArrayElement } from '@local/utils/ts-utils';
@@ -117,72 +118,85 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages, isVisible 
     );
 
     const [filteredList, handleSearch, handleFilterChange] = useFilters(broadcastMessages, accessors);
-
-    if (!isVisible) return <React.Fragment />;
+    const theme = useTheme();
 
     return (
-        <Grid container height={0} flex='1 1 100%'>
-            <Grid item paddingTop='1rem' xs={12}>
-                <Grid alignContent='flex-start' container>
-                    <Grid container direction='row' justifyContent='space-evenly' paddingBottom='1rem'>
-                        <Grid item>
-                            <BroadcastMessageInput />
+        <Grid container height={0} flex='1 1 100%' sx={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+            {isVisible && (
+                <Grid
+                    item
+                    paddingTop='1rem'
+                    xs={12}
+                    sx={{
+                        border: 5,
+                        borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                            theme.palette.custom.creamCan,
+                            0.06
+                        )}) 10`,
+                        backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                    }}
+                >
+                    <Grid alignContent='flex-start' container>
+                        <Grid container direction='row' justifyContent='space-evenly' paddingBottom='1rem'>
+                            <Grid item>
+                                <BroadcastMessageInput />
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListFilter
+                                className={classes.listFilter}
+                                onFilterChange={handleFilterChange}
+                                onSearch={handleSearch}
+                                length={filteredList.length}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <List disablePadding>
+                                {filteredList.map((broadcastMessage, index) => (
+                                    <React.Fragment key={broadcastMessage.id}>
+                                        {isMessageDeleted(index) ? (
+                                            <React.Fragment />
+                                        ) : (
+                                            <ListItem disableGutters sx={{ paddingX: '0.5rem' }}>
+                                                <Card className={classes.item}>
+                                                    <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
+                                                    <BroadcastMessageContent fragmentRef={broadcastMessage} />
+                                                    <Grid container alignItems='center' justifyContent='space-between'>
+                                                        <BroadcastMessageActions
+                                                            style={
+                                                                !isModerator
+                                                                    ? { width: '100%' }
+                                                                    : { width: '100%', maxWidth: '10rem' }
+                                                            }
+                                                            className={classes.broadcastMessageActions}
+                                                            deleteEnabled={isModerator}
+                                                            // TODO: Reinstate edit functionality once updated to dialog
+                                                            editEnabled={false}
+                                                            connections={[]}
+                                                            fragmentRef={broadcastMessage}
+                                                            onBroadcastMessageDelete={onBroadcastMessageDelete}
+                                                        />
+                                                    </Grid>
+                                                </Card>
+                                            </ListItem>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                                {filteredList.length === 0 && broadcastMessages.length !== 0 && (
+                                    <Typography align='center' variant='body2'>
+                                        No results to display
+                                    </Typography>
+                                )}
+                                {broadcastMessages.length === 0 && (
+                                    <Typography align='center' variant='h5'>
+                                        No broadcasted messages to display
+                                    </Typography>
+                                )}
+                            </List>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <ListFilter
-                            className={classes.listFilter}
-                            onFilterChange={handleFilterChange}
-                            onSearch={handleSearch}
-                            length={filteredList.length}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List disablePadding>
-                            {filteredList.map((broadcastMessage, index) => (
-                                <React.Fragment key={broadcastMessage.id}>
-                                    {isMessageDeleted(index) ? (
-                                        <React.Fragment />
-                                    ) : (
-                                        <ListItem disableGutters sx={{ paddingX: '0.5rem' }}>
-                                            <Card className={classes.item}>
-                                                <BroadcastMessageAuthor fragmentRef={broadcastMessage} />
-                                                <BroadcastMessageContent fragmentRef={broadcastMessage} />
-                                                <Grid container alignItems='center' justifyContent='space-between'>
-                                                    <BroadcastMessageActions
-                                                        style={
-                                                            !isModerator
-                                                                ? { width: '100%' }
-                                                                : { width: '100%', maxWidth: '10rem' }
-                                                        }
-                                                        className={classes.broadcastMessageActions}
-                                                        deleteEnabled={isModerator}
-                                                        // TODO: Reinstate edit functionality once updated to dialog
-                                                        editEnabled={false}
-                                                        connections={[]}
-                                                        fragmentRef={broadcastMessage}
-                                                        onBroadcastMessageDelete={onBroadcastMessageDelete}
-                                                    />
-                                                </Grid>
-                                            </Card>
-                                        </ListItem>
-                                    )}
-                                </React.Fragment>
-                            ))}
-                            {filteredList.length === 0 && broadcastMessages.length !== 0 && (
-                                <Typography align='center' variant='body2'>
-                                    No results to display
-                                </Typography>
-                            )}
-                            {broadcastMessages.length === 0 && (
-                                <Typography align='center' variant='h5'>
-                                    No broadcasted messages to display
-                                </Typography>
-                            )}
-                        </List>
-                    </Grid>
                 </Grid>
-            </Grid>
+            )}
         </Grid>
     );
 }

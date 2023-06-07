@@ -79,12 +79,6 @@ export const resolvers: Resolvers = {
             if (!ctx.viewer.id) return false;
             return User.isOrganizer(ctx.viewer.id, ctx.prisma);
         },
-        async moderatorOf(parent, args, ctx, info) {
-            if (!ctx.viewer.id) return false;
-            const { id: userId } = fromGlobalId(parent.id);
-            const { id: eventId } = fromGlobalId(args.eventId);
-            return User.isModeratorOf(eventId, userId, ctx.prisma);
-        },
     },
     Mutation: {
         async register(parent, args, ctx, info) {

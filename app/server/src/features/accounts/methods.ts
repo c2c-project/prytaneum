@@ -426,13 +426,6 @@ export async function isOrganizer(userId: string, prisma: PrismaClient) {
     return queryResult.canMakeOrgs;
 }
 
-export async function isModeratorOf(eventId: string, userId: string, prisma: PrismaClient) {
-    const queryResult = await prisma.eventModerator.findUnique({
-        where: { eventId_userId: { eventId, userId } },
-    });
-    return !!queryResult;
-}
-
 export async function makeOrganizer(prisma: PrismaClient, input: OrganizerForm, userId: string) {
     const { email } = input;
     // TODO validate product key to elevate account to organizer

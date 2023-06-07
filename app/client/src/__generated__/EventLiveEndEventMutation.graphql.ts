@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fcf7a21e27d2fab52e24720f90dce3be>>
+ * @generated SignedSource<<666f022f7d4c5694b73299e50147c10a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,20 +9,19 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type usePingEventMutation$variables = {
+export type EventLiveEndEventMutation$variables = {
   eventId: string;
 };
-export type usePingEventMutationVariables = usePingEventMutation$variables;
-export type usePingEventMutation$data = {
-  readonly participantPingEvent: {
-    readonly isError: boolean;
+export type EventLiveEndEventMutationVariables = EventLiveEndEventMutation$variables;
+export type EventLiveEndEventMutation$data = {
+  readonly endEvent: {
     readonly message: string;
   };
 };
-export type usePingEventMutationResponse = usePingEventMutation$data;
-export type usePingEventMutation = {
-  variables: usePingEventMutationVariables;
-  response: usePingEventMutation$data;
+export type EventLiveEndEventMutationResponse = EventLiveEndEventMutation$data;
+export type EventLiveEndEventMutation = {
+  variables: EventLiveEndEventMutationVariables;
+  response: EventLiveEndEventMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -43,18 +42,11 @@ v1 = [
         "variableName": "eventId"
       }
     ],
-    "concreteType": "ParticipantPingEventMutationResponse",
+    "concreteType": "EventMutationResponse",
     "kind": "LinkedField",
-    "name": "participantPingEvent",
+    "name": "endEvent",
     "plural": false,
     "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "isError",
-        "storageKey": null
-      },
       {
         "alias": null,
         "args": null,
@@ -71,7 +63,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "usePingEventMutation",
+    "name": "EventLiveEndEventMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -80,20 +72,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "usePingEventMutation",
+    "name": "EventLiveEndEventMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "6f02a807748bcfc40f6dd97b62da8ce4",
+    "cacheID": "5f8e0d3ef59de442b9fd1c43d66dc39d",
     "id": null,
     "metadata": {},
-    "name": "usePingEventMutation",
+    "name": "EventLiveEndEventMutation",
     "operationKind": "mutation",
-    "text": "mutation usePingEventMutation(\n  $eventId: ID!\n) {\n  participantPingEvent(eventId: $eventId) {\n    isError\n    message\n  }\n}\n"
+    "text": "mutation EventLiveEndEventMutation(\n  $eventId: String!\n) {\n  endEvent(eventId: $eventId) {\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "6d0056d5add3efccab0fbce40dd1ea43";
+(node as any).hash = "1f31ba016bce900d44d273f49c8263d4";
 
 export default node;

@@ -71,7 +71,7 @@ type Event implements Node {
     """
     Participants of the event -- individuals who showed up
     """
-    participants(first: Int, after: String): UserConnection
+    participants(first: Int, after: String): EventParticipantConnection
 
     """
     Video feeds and the languages

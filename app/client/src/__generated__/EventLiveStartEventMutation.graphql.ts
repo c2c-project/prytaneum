@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7bf4e4482309959b1f16b3ace011bffc>>
+ * @generated SignedSource<<fc22ae5909ee901f31c432dd629a33d4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,19 +9,19 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type ModeratorActionsStartEventMutation$variables = {
+export type EventLiveStartEventMutation$variables = {
   eventId: string;
 };
-export type ModeratorActionsStartEventMutationVariables = ModeratorActionsStartEventMutation$variables;
-export type ModeratorActionsStartEventMutation$data = {
+export type EventLiveStartEventMutationVariables = EventLiveStartEventMutation$variables;
+export type EventLiveStartEventMutation$data = {
   readonly startEvent: {
     readonly message: string;
   };
 };
-export type ModeratorActionsStartEventMutationResponse = ModeratorActionsStartEventMutation$data;
-export type ModeratorActionsStartEventMutation = {
-  variables: ModeratorActionsStartEventMutationVariables;
-  response: ModeratorActionsStartEventMutation$data;
+export type EventLiveStartEventMutationResponse = EventLiveStartEventMutation$data;
+export type EventLiveStartEventMutation = {
+  variables: EventLiveStartEventMutationVariables;
+  response: EventLiveStartEventMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -63,7 +63,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ModeratorActionsStartEventMutation",
+    "name": "EventLiveStartEventMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -72,20 +72,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ModeratorActionsStartEventMutation",
+    "name": "EventLiveStartEventMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "de2b8d70fef5c32aa42189eb938aa09c",
+    "cacheID": "2928f279b58b88b8f0202f871dc5bbe5",
     "id": null,
     "metadata": {},
-    "name": "ModeratorActionsStartEventMutation",
+    "name": "EventLiveStartEventMutation",
     "operationKind": "mutation",
-    "text": "mutation ModeratorActionsStartEventMutation(\n  $eventId: String!\n) {\n  startEvent(eventId: $eventId) {\n    message\n  }\n}\n"
+    "text": "mutation EventLiveStartEventMutation(\n  $eventId: String!\n) {\n  startEvent(eventId: $eventId) {\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a2785490d8a97c9389d86083d5f9da55";
+(node as any).hash = "f4e1fdec34badbfe4d556d94c0e6e6f4";
 
 export default node;
