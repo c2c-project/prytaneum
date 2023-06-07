@@ -1,7 +1,7 @@
 import * as React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Typography, Divider } from '@mui/material';
+import { Typography, Divider, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { SettingsMenu } from '@local/components/SettingsMenu';
 import type { EventSettingsQuery } from '@local/__generated__/EventSettingsQuery.graphql';
@@ -18,22 +18,6 @@ import { ModeratorEventSettings } from '../Moderation';
 import { EventContext } from '../EventContext';
 import { InviteEventSettings } from '../Invites/InviteEventSettings';
 import { DeleteEvent } from '../DeleteEvent';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        padding: theme.spacing(0, 0, 2, 0),
-    },
-    settingsSection: {
-        padding: theme.spacing(2),
-    },
-    title: {
-        margin: theme.spacing(0, 0, 2, 0),
-    },
-    titleDivider: {
-        width: '85%',
-    },
-}));
 
 export const townhallSettingsSections = [
     'Form',
@@ -67,8 +51,9 @@ interface Props {
 }
 
 export function EventSettings({ queryRef }: Props) {
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     const router = useRouter();
-    const classes = useStyles();
     const { displaySnack } = useSnack();
     const data = usePreloadedQuery(EVENT_SETTINGS_QUERY, queryRef);
     const { user, isLoading } = useUser();
@@ -88,61 +73,48 @@ export function EventSettings({ queryRef }: Props) {
 
     return (
         <EventContext.Provider value={{ eventId: data.node.id, isModerator: Boolean(data.node.isViewerModerator) }}>
-            <div className={classes.root}>
-                <Typography variant='h2' className={classes.title}>
+            <div style={{ width: lgUpBreakpoint ? '80%' : '100%', marginLeft: lgUpBreakpoint ? '250px' : 0 }}>
+                <Typography variant='h2' margin={theme.spacing(0, 0, 2, 0)}>
                     Event Settings
                 </Typography>
-                <Divider className={classes.titleDivider} />
+                <Divider style={{ width: '85%' }} />
                 {data.node && (
                     <SettingsMenu
                         config={[
                             {
                                 title: 'Details',
                                 description: 'Update basic event details',
-                                component: <EventDetails fragmentRef={data.node} className={classes.settingsSection} />,
+                                component: <EventDetails fragmentRef={data.node} />,
                             },
                             {
                                 title: 'General',
                                 description: 'Customize the event using various settings',
-                                component: (
-                                    <GenericSettings className={classes.settingsSection} fragmentRef={data.node} />
-                                ),
+                                component: <GenericSettings fragmentRef={data.node} />,
                             },
                             {
                                 title: 'Video',
                                 description: 'Modify the list of video streams and their languages',
-                                component: (
-                                    <VideoEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                                ),
+                                component: <VideoEventSettings fragmentRef={data.node} />,
                             },
                             {
                                 title: 'Speaker',
                                 description: 'Add and Modify speakers at this event',
-                                component: (
-                                    <SpeakerEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                                ),
+                                component: <SpeakerEventSettings fragmentRef={data.node} />,
                             },
                             {
                                 title: 'Moderators',
                                 description: 'Designate individuals as moderators',
-                                component: (
-                                    <ModeratorEventSettings
-                                        className={classes.settingsSection}
-                                        fragmentRef={data.node}
-                                    />
-                                ),
+                                component: <ModeratorEventSettings fragmentRef={data.node} />,
                             },
                             {
                                 title: 'Invites',
                                 description: 'Invite people to join the event',
-                                component: (
-                                    <InviteEventSettings className={classes.settingsSection} fragmentRef={data.node} />
-                                ),
+                                component: <InviteEventSettings fragmentRef={data.node} />,
                             },
                             {
                                 title: 'Delete Event',
                                 description: 'Click here to delete your event',
-                                component: <DeleteEvent className={classes.settingsSection} fragmentRef={data.node} />,
+                                component: <DeleteEvent fragmentRef={data.node} />,
                             },
                         ]}
                     />

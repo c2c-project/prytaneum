@@ -8,11 +8,12 @@ import {
     ListItem,
     ListItemText,
     ListItemSecondaryAction,
+    useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
-import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 import { usePreloadedQuery, graphql, PreloadedQuery } from 'react-relay';
 
@@ -43,24 +44,6 @@ export const ORG_LIST_QUERY = graphql`
     }
 `;
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        [theme.breakpoints.down('lg')]: {
-            width: '100%',
-            marginLeft: 0,
-        },
-        [theme.breakpoints.up('lg')]: {
-            width: '80%',
-            marginLeft: 250,
-        },
-        height: '100%',
-        padding: theme.spacing(3),
-    },
-    listRoot: {
-        width: '100%',
-    },
-}));
-
 const CreateOrgFab = ({ connection }: TCreateOrgProps) => {
     const [isOpen, open, close] = useResponsiveDialog(false);
 
@@ -89,9 +72,10 @@ export interface SelectedOrg {
 
 const initialState = { id: '', name: '' };
 export const OrgList = ({ queryRef }: OrgListProps) => {
-    const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
-    const classes = useStyles();
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     const router = useRouter();
+    const data = usePreloadedQuery(ORG_LIST_QUERY, queryRef);
     const { user, isLoading } = useUser();
     const [isConfDialogOpen, setIsConfDialogOpen] = React.useState(false);
     const [selectedOrg, setSelectedOrg] = React.useState(initialState);
@@ -122,9 +106,17 @@ export const OrgList = ({ queryRef }: OrgListProps) => {
         );
 
     return (
-        <Grid component={Paper} className={classes.root} container direction='column'>
+        <Grid
+            component={Paper}
+            container
+            width={lgUpBreakpoint ? '80%' : '100%'}
+            height='100%'
+            marginLeft={lgUpBreakpoint ? '250px' : 0}
+            padding={theme.spacing(3)}
+            direction='column'
+        >
             <Typography variant='h4'>My Organizations</Typography>
-            <List className={classes.listRoot}>
+            <List style={{ width: '100%' }}>
                 {listOfOrgs.map(({ node: organization }) => (
                     <ListItem
                         button
