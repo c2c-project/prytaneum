@@ -35,6 +35,7 @@ model User {
     invitedOf EventInvited[]
     speakerOf EventSpeaker[]
     registrantOf EventRegistrant[]
+    participantOf EventParticipant[]
 }
 
 model UserSettings {
@@ -102,6 +103,7 @@ model Event {
     speakers EventSpeaker[]
     registrants EventRegistrant[]
     videos EventVideo[]
+    participants EventParticipant[]
 }
 
 model EventVideo {
@@ -248,4 +250,15 @@ model EventRegistrant {
     event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
     @@id([userId, eventId])
+}
+
+model EventParticipant {
+    eventId String @db.Uuid
+    userId String @db.Uuid
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    isMuted Boolean @default(false)
+    lastPingTime DateTime @default(now())
+
+    @@id([eventId, userId])
 }

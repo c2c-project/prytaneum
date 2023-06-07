@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { fetchQuery, graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { Button, Divider, Grid, Paper, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 
@@ -9,7 +9,6 @@ import { EventPreQuery } from '@local/__generated__/EventPreQuery.graphql';
 import { EventContext } from './EventContext';
 import { ConditionalRender } from '../../components/ConditionalRender';
 // import { PreloadedBroadcastMessageList } from './BroadcastMessages/BroadcastMessageList/BroadcastMessageList';
-import { useEnvironment } from '@local/core';
 import { Loader } from '@local/components';
 import { LiveFeedbackList } from './LiveFeedback';
 import AskQuestion from './Questions/AskQuestion';
@@ -26,10 +25,6 @@ const EVENT_PRE_QUERY = graphql`
         node(id: $eventId) {
             id
             ... on Event {
-                isViewerModerator
-                startDateTime
-                endDateTime
-                isActive
                 ...useViewerOnlyQuestionListFragment
                 ...useLiveFeedbackListFragment
                 ...useEventDetailsFragment
@@ -40,29 +35,39 @@ const EVENT_PRE_QUERY = graphql`
 `;
 
 export interface EventPreProps {
-    eventData: {
+    fragmentRef: {
         readonly id: string;
-        readonly isViewerModerator?: boolean | null | undefined;
-        readonly startDateTime?: Date | null | undefined;
-        readonly isActive?: boolean | null | undefined;
         readonly ' $fragmentSpreads': FragmentRefs<any>;
     };
 }
 
-export function EventPre({ eventData }: EventPreProps) {
+export function EventPre({ fragmentRef }: EventPreProps) {
+    const router = useRouter();
     const theme = useTheme();
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const [tab, setTab] = React.useState<'Questions' | 'Feedback'>('Questions');
-    const { eventData: eventDetails } = useEventDetails({ fragmentRef: eventData });
+    const { eventData } = useEventDetails({ fragmentRef });
+    const { id: eventId, isActive, isViewerModerator, endDateTime } = eventData;
 
     const handleChange = (e: React.SyntheticEvent, newTab: 'Questions' | 'Feedback') => {
         e.preventDefault();
         setTab(newTab);
     };
 
-    const eventId = eventData.id;
     // used to create the countdown component
-    const date = eventData?.startDateTime as Date;
+    const date = eventData.startDateTime as Date;
+
+    // route user to live event if event is on-going
+    if (isActive || isViewerModerator) {
+        // navigate back to /live once the event starts
+        router.push('/events/' + eventId + '/live');
+    }
+    const now = new Date();
+    const eventEnd = new Date(endDateTime || now);
+    if (!isActive && now > eventEnd) {
+        // navigate to pre-event page if event has not started
+        router.push('/events/' + eventId + '/post');
+    }
 
     return (
         <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
@@ -94,12 +99,29 @@ export function EventPre({ eventData }: EventPreProps) {
                         </Grid>
                         <Grid item className='Event Details'>
                             <Typography variant='h4'>Event Details</Typography>
-                            <Paper style={{ width: '100%', height: '200px', maxHeight: '200px', overflowY: 'auto' }}>
+                            <Paper
+                                sx={{
+                                    width: '100%',
+                                    height: '200px',
+                                    maxHeight: '200px',
+                                    overflowY: 'auto',
+                                    '::-webkit-scrollbar': {
+                                        backgroundColor: 'transparent',
+                                    },
+                                    '::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#D9D9D9',
+                                        backgroundOpacity: '0.3',
+                                        borderRadius: '20px',
+                                        border: '5px solid transparent',
+                                        backgroundClip: 'content-box',
+                                    },
+                                }}
+                            >
                                 <Grid container height='100%' justifyContent='center' alignItems='center'>
                                     <Grid item>
-                                        <EventDetailsCard eventData={eventDetails} />
+                                        <EventDetailsCard eventData={eventData} />
                                         <Divider style={{ background: 'black' }} />
-                                        <SpeakerList fragmentRef={eventData} />
+                                        <SpeakerList fragmentRef={fragmentRef} />
                                         {/* TODO: add Organizers List */}
                                     </Grid>
                                 </Grid>
@@ -122,7 +144,7 @@ export function EventPre({ eventData }: EventPreProps) {
                         </Grid>
                     </Grid>
                     {/* Column 2 */}
-                    <Grid item container xs={mdDownBreakpoint ? 16 : 8} direction='column' flexWrap='nowrap'>
+                    <Grid item container xs={mdDownBreakpoint ? 16 : 8} direction='column' wrap='nowrap'>
                         <Grid
                             item
                             container
@@ -134,48 +156,64 @@ export function EventPre({ eventData }: EventPreProps) {
                         </Grid>
                         <Grid item container className='Countdown' justifyContent='center' alignContent='center'>
                             <Paper
-                                style={{ margin: '15px', paddingLeft: '25px', paddingRight: '25px', minWidth: '400px' }}
+                                style={{ margin: '15px', paddingLeft: '25px', paddingRight: '25px', minWidth: '300px' }}
                             >
                                 <CountdownWrapper date={date} />
                             </Paper>
                         </Grid>
-                        <Grid
-                            item
-                            container
-                            height='100%'
-                            minHeight='600px'
-                            maxHeight='100%'
-                            style={{
-                                overflowY: 'scroll',
-                            }}
-                        >
-                            <Grid item width='100%'>
-                                <Tabs
-                                    sx={{
-                                        '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
-                                        '& .MuiTab-root': {
-                                            color: 'white',
-                                            backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
-                                            borderRadius: '20px 20px 0 0',
-                                        },
-                                        '& .Mui-selected': {
-                                            color: 'white !important',
-                                            backgroundColor: 'custom.creamCan',
-                                        },
-                                    }}
-                                    value={tab}
-                                    onChange={handleChange}
-                                    centered
-                                    aria-label='secondary tabs example'
-                                >
-                                    <Tab label='Questions' value='Questions' />
-                                    <Tab label='Feedback' value='Feedback' />
-                                    {eventData.isViewerModerator === true && (
-                                        <Tab label='Broadcast' value='Broadcast' />
-                                    )}
-                                </Tabs>
+                        <Grid item container justifyContent='center' height='100%' alignContent='flex-start'>
+                            <Tabs
+                                sx={{
+                                    '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
+                                    '& .MuiTab-root': {
+                                        color: 'white',
+                                        backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
+                                        borderRadius: '20px 20px 0 0',
+                                    },
+                                    '& .Mui-selected': {
+                                        color: 'white !important',
+                                        backgroundColor: 'custom.creamCan',
+                                    },
+                                }}
+                                value={tab}
+                                onChange={handleChange}
+                                centered
+                                aria-label='secondary tabs example'
+                            >
+                                <Tab label='Questions' value='Questions' />
+                                <Tab label='Feedback' value='Feedback' />
+                                {eventData.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
+                            </Tabs>
+                            <Grid
+                                id='event-pre-tabs-scrollable'
+                                container
+                                justifyContent='center'
+                                width='80%'
+                                height='90%'
+                                minHeight='600px'
+                                sx={{
+                                    border: 5,
+                                    padding: 1,
+                                    borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
+                                        theme.palette.custom.creamCan,
+                                        0.06
+                                    )}) 10`,
+                                    backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
+                                    overflowY: 'scroll',
+                                    '::-webkit-scrollbar': {
+                                        backgroundColor: 'transparent',
+                                    },
+                                    '::-webkit-scrollbar-thumb': {
+                                        backgroundColor: '#D9D9D9',
+                                        backgroundOpacity: '0.3',
+                                        borderRadius: '20px',
+                                        border: '5px solid transparent',
+                                        backgroundClip: 'content-box',
+                                    },
+                                }}
+                            >
                                 <ViewerOnlyQuestionList
-                                    fragmentRef={eventData}
+                                    fragmentRef={fragmentRef}
                                     ActionButtons={
                                         <Grid container width='100%' paddingBottom='1rem' justifyContent='center'>
                                             <AskQuestion eventId={eventId} />
@@ -184,7 +222,7 @@ export function EventPre({ eventData }: EventPreProps) {
                                     isVisible={tab === 'Questions'}
                                 />
                                 <LiveFeedbackList
-                                    fragmentRef={eventData}
+                                    fragmentRef={fragmentRef}
                                     ActionButtons={
                                         <Grid container paddingBottom='1rem' justifyContent='center'>
                                             <SubmitLiveFeedback eventId={eventId} />
@@ -206,28 +244,11 @@ export interface EventPreContainerProps {
 }
 
 function EventPreContainer({ queryRef }: EventPreContainerProps) {
-    const router = useRouter();
     const { node } = usePreloadedQuery(EVENT_PRE_QUERY, queryRef);
-    // used to check whether the event is on-going
-    const isActive = node?.isActive;
-    // used to route
-    const eventId = router.query.id;
-
-    // route user to live event if event is on-going
-    if (isActive || node?.isViewerModerator) {
-        // navigate back to /live once the event starts
-        router.push('/events/' + eventId + '/live');
-    }
-    const now = new Date();
-    const eventEnd = new Date(node?.endDateTime || now);
-    if (!isActive && now > eventEnd) {
-        // navigate to pre-event page if event has not started
-        router.push('/events/' + eventId + '/post');
-    }
 
     if (!node) return <Loader />;
 
-    return <EventPre eventData={node} />;
+    return <EventPre fragmentRef={node} />;
 }
 
 export interface PreloadedEventPreProps {
@@ -237,27 +258,6 @@ export interface PreloadedEventPreProps {
 export function PreloadedEventPre({ eventId }: PreloadedEventPreProps) {
     const [eventLiveQueryRef, loadEventQuery] = useQueryLoader<EventPreQuery>(EVENT_PRE_QUERY);
 
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const { env } = useEnvironment();
-    const REFRESH_INTERVAL = 5000;
-
-    const refresh = React.useCallback(() => {
-        if (isRefreshing) return;
-        setIsRefreshing(true);
-        fetchQuery(env, EVENT_PRE_QUERY, { eventId }).subscribe({
-            complete: () => {
-                setIsRefreshing(false);
-                loadEventQuery({ eventId }, { fetchPolicy: 'store-or-network' });
-            },
-            error: () => {
-                setIsRefreshing(false);
-            },
-        });
-    }, [env, eventId, isRefreshing, loadEventQuery]);
-    React.useEffect(() => {
-        const interval = setInterval(refresh, REFRESH_INTERVAL);
-        return () => clearInterval(interval);
-    });
     React.useEffect(() => {
         loadEventQuery({ eventId });
     }, [eventId, loadEventQuery]);

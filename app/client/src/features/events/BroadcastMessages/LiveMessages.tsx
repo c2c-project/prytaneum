@@ -95,8 +95,18 @@ function MessageList({ broadcastMessages: immutableBroadcastMessages }: MessageL
                 item
                 container
                 height='180px'
-                style={{
+                sx={{
                     overflowY: 'scroll',
+                    '::-webkit-scrollbar': {
+                        backgroundColor: 'transparent',
+                    },
+                    '::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#D9D9D9',
+                        backgroundOpacity: '0.3',
+                        borderRadius: '20px',
+                        border: '5px solid transparent',
+                        backgroundClip: 'content-box',
+                    },
                 }}
             >
                 <Grid alignContent='center' justifyContent='center' container>
