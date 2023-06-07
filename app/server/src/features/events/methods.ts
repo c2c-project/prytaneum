@@ -325,8 +325,3 @@ export async function findAllEvents(viewerId: string, filter: EventsSearchFilter
         },
     });
 }
-
-export async function findParticipantsByEventId(eventId: string, prisma: PrismaClient) {
-    const results = await prisma.eventParticipant.findMany({ where: { eventId }, include: { user: true } });
-    return results.map(({ user }) => user);
-}

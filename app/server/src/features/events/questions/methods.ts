@@ -11,14 +11,6 @@ export async function createQuestion(userId: string, prisma: PrismaClient, input
     const { question, refQuestion: globalRefId, isFollowUp, isQuote, eventId } = input;
     const refQuestionId = globalRefId ? fromGlobalId(globalRefId).id : null;
 
-    // Verify that user is not muted from asking questions
-    const isMutedResult = await prisma.eventParticipant.findUnique({
-        where: { eventId_userId: { eventId, userId } },
-        select: { isMuted: true },
-    });
-
-    if (isMutedResult?.isMuted) throw new ProtectedError({ userMessage: errors.muted, internalMessage: `User with id: ${userId} attempted to ask a question while muted.` });
-
     // it's okay to have both false, but both cannot be true
     if (isQuote === isFollowUp && isQuote === true) throw new ProtectedError({ userMessage: errors.invalidArgs });
 
