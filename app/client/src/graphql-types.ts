@@ -201,7 +201,7 @@ export type Event = Node & {
   /** The owning organization */
   organization?: Maybe<Organization>;
   /** Participants of the event -- individuals who showed up */
-  participants?: Maybe<EventParticipantConnection>;
+  participants?: Maybe<UserConnection>;
   /** Questions having to do with the queue */
   questionQueue?: Maybe<EventQuestionQueue>;
   /** All questions relating to this event */
@@ -453,9 +453,8 @@ export type EventMutationResponse = MutationResponse & {
 
 export type EventParticipant = {
   __typename?: 'EventParticipant';
-  liveFeedBack?: Maybe<Array<Maybe<EventLiveFeedback>>>;
-  questions?: Maybe<Array<Maybe<EventQuestion>>>;
-  user?: Maybe<User>;
+  isMuted: Scalars['Boolean'];
+  user: User;
 };
 
 export type EventParticipantConnection = {
@@ -467,7 +466,7 @@ export type EventParticipantConnection = {
 export type EventParticipantEdge = {
   __typename?: 'EventParticipantEdge';
   cursor: Scalars['String'];
-  node: EventParticipant;
+  node: User;
 };
 
 export type EventQuestion = Node & {
@@ -692,11 +691,13 @@ export type Mutation = {
   /** The logout just returns the timestamp of the logout action */
   logout: Scalars['Date'];
   makeOrganizer: UserMutationResponse;
+  muteParticipant: MuteParticipantMutationResponse;
   /**
    * Advance the current question
    * TODO: make this an EventMutationResponse
    */
   nextQuestion: Event;
+  participantPingEvent: ParticipantPingEventMutationResponse;
   /**
    * Go to the previous question
    * TODO: make this an EventMutationResponse
@@ -715,6 +716,7 @@ export type Mutation = {
   /** Start the event so that it is "live" */
   startEvent: EventMutationResponse;
   submitPostEventFeedback: PostEventFeedbackMutationResponse;
+  unmuteParticipant: MuteParticipantMutationResponse;
   updateEmail: UserMutationResponse;
   updateEvent: EventMutationResponse;
   updateModerator: ModeratorMutationResponse;
@@ -867,7 +869,18 @@ export type MutationMakeOrganizerArgs = {
 };
 
 
+export type MutationMuteParticipantArgs = {
+  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+
 export type MutationNextQuestionArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type MutationParticipantPingEventArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -919,6 +932,12 @@ export type MutationSubmitPostEventFeedbackArgs = {
 };
 
 
+export type MutationUnmuteParticipantArgs = {
+  eventId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+
 export type MutationUpdateEmailArgs = {
   input: UpdateEmailForm;
 };
@@ -964,6 +983,12 @@ export type MutationUpdateVideoArgs = {
 };
 
 export type MutationResponse = {
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
+export type MuteParticipantMutationResponse = MutationResponse & {
+  __typename?: 'MuteParticipantMutationResponse';
   isError: Scalars['Boolean'];
   message: Scalars['String'];
 };
@@ -1044,6 +1069,12 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type ParticipantPingEventMutationResponse = MutationResponse & {
+  __typename?: 'ParticipantPingEventMutationResponse';
+  isError: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type PostEventFeedbackMutationResponse = MutationResponse & {
   __typename?: 'PostEventFeedbackMutationResponse';
   isError: Scalars['Boolean'];
@@ -1055,6 +1086,7 @@ export type Query = {
   /** Fetch a single event */
   event?: Maybe<Event>;
   eventBroadcastMessages?: Maybe<Array<EventBroadcastMessage>>;
+  eventParticipants: Array<Maybe<EventParticipant>>;
   /** Fetch all events */
   events?: Maybe<Array<Event>>;
   isOrganizer: Scalars['Boolean'];
@@ -1080,6 +1112,13 @@ export type QueryEventArgs = {
 
 export type QueryEventBroadcastMessagesArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryEventParticipantsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  eventId: Scalars['ID'];
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1180,6 +1219,7 @@ export type Subscription = {
   feedbackPrompted: EventLiveFeedbackPrompt;
   /** subscription for whenever a new org is added */
   orgUpdated: OrganizationSubscription;
+  participantMuted?: Maybe<Scalars['Boolean']>;
   questionAddedToEnqueued: EventQuestionEdgeContainer;
   questionAddedToRecord: EventQuestionEdgeContainer;
   /** Question subscription for all operations performed on questions */
@@ -1250,6 +1290,11 @@ export type SubscriptionFeedbackPromptResultsSharedArgs = {
 
 
 export type SubscriptionFeedbackPromptedArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type SubscriptionParticipantMutedArgs = {
   eventId: Scalars['ID'];
 };
 
@@ -1393,6 +1438,8 @@ export type User = Node & {
   isEmailVerified?: Maybe<Scalars['Boolean']>;
   isOrganizer?: Maybe<Scalars['Boolean']>;
   lastName?: Maybe<Scalars['String']>;
+  /** Can be used to check if the user is a moderator of a specific event */
+  moderatorOf?: Maybe<Scalars['Boolean']>;
   /** Organizations that this user belongs to */
   organizations?: Maybe<OrganizationConnection>;
   /** All the users */
@@ -1412,6 +1459,12 @@ export type UserAllEventsArgs = {
 export type UserEventsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** User Data */
+export type UserModeratorOfArgs = {
+  eventId: Scalars['ID'];
 };
 
 

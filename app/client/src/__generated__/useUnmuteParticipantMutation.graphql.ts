@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<358dd7e396cfb00672d2ed6553389dcc>>
+ * @generated SignedSource<<02ee602222750c0912dfb5a1d2385228>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,24 +9,21 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type CreateBroadcastMessage = {
-  broadcastMessage: string;
+export type useUnmuteParticipantMutation$variables = {
   eventId: string;
+  userId: string;
 };
-export type EventLiveMutation$variables = {
-  input: CreateBroadcastMessage;
-};
-export type EventLiveMutationVariables = EventLiveMutation$variables;
-export type EventLiveMutation$data = {
-  readonly createBroadcastMessage: {
+export type useUnmuteParticipantMutationVariables = useUnmuteParticipantMutation$variables;
+export type useUnmuteParticipantMutation$data = {
+  readonly unmuteParticipant: {
     readonly isError: boolean;
     readonly message: string;
   };
 };
-export type EventLiveMutationResponse = EventLiveMutation$data;
-export type EventLiveMutation = {
-  variables: EventLiveMutationVariables;
-  response: EventLiveMutation$data;
+export type useUnmuteParticipantMutationResponse = useUnmuteParticipantMutation$data;
+export type useUnmuteParticipantMutation = {
+  variables: useUnmuteParticipantMutationVariables;
+  response: useUnmuteParticipantMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -34,7 +31,12 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "eventId"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "userId"
   }
 ],
 v1 = [
@@ -43,13 +45,18 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "input",
-        "variableName": "input"
+        "name": "eventId",
+        "variableName": "eventId"
+      },
+      {
+        "kind": "Variable",
+        "name": "userId",
+        "variableName": "userId"
       }
     ],
-    "concreteType": "EventBroadcastMessageMutationResponse",
+    "concreteType": "MuteParticipantMutationResponse",
     "kind": "LinkedField",
-    "name": "createBroadcastMessage",
+    "name": "unmuteParticipant",
     "plural": false,
     "selections": [
       {
@@ -75,7 +82,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "EventLiveMutation",
+    "name": "useUnmuteParticipantMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -84,20 +91,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "EventLiveMutation",
+    "name": "useUnmuteParticipantMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "e0a3068f6486c22c4ca94e3068e7dd7b",
+    "cacheID": "882d28292292e9cf3fb1dd6c2860c29f",
     "id": null,
     "metadata": {},
-    "name": "EventLiveMutation",
+    "name": "useUnmuteParticipantMutation",
     "operationKind": "mutation",
-    "text": "mutation EventLiveMutation(\n  $input: CreateBroadcastMessage!\n) {\n  createBroadcastMessage(input: $input) {\n    isError\n    message\n  }\n}\n"
+    "text": "mutation useUnmuteParticipantMutation(\n  $eventId: ID!\n  $userId: ID!\n) {\n  unmuteParticipant(eventId: $eventId, userId: $userId) {\n    isError\n    message\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "acd31aa8f8896f430ef857809b713424";
+(node as any).hash = "544940214ca8e982280453cc25c14ef4";
 
 export default node;

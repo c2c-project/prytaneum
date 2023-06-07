@@ -13,6 +13,7 @@ export const USE_EVENT_DETAILS_FRAGMENT = graphql`
         startDateTime
         endDateTime
         isActive
+        isViewerModerator
     }
 `;
 

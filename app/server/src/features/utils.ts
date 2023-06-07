@@ -37,6 +37,7 @@ export const errors = {
     fileSize: 'File too large',
     email: 'Emailed failed to send due to an unexpected error',
     jwt: 'Invalid Token',
+    muted: 'You are muted and cannot perform this action',
 };
 interface TFilterFieldArgs<TObj extends Record<string, unknown>, TKeys extends keyof TObj> {
     input: TObj;
