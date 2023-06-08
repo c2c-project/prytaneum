@@ -22,6 +22,7 @@ import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 import { StyledTabs } from '@local/components/StyledTabs';
 import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
+import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -62,15 +63,10 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
 
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const { id: eventId } = node;
-    const isModerator = Boolean(node.isViewerModerator);
 
     usePingEvent(eventId);
 
-    if (!node || (!isLive && !isModerator)) return <Loader />;
-
     // TODO: Add broadcast tab to moderator section
-    // TODO: Add question carousel (top right maybe?)
-    // TODO: Refactor out the moderator tools section of moderator tab
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid container columns={8} direction='row' justifyContent='space-around' height='100%'>
@@ -91,6 +87,9 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     </Grid>
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
+                    <Grid item>
+                        <CurrentQuestionCard isViewerModerator={true} fragmentRef={node} />
+                    </Grid>
                     <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
                         <StyledTabs value='Queue'>
                             <Tab label='Queue' value='Queue' />
