@@ -278,12 +278,7 @@ export function Roles() {
                     height: 40,
                     width: '95%',
                     maxWidth: '2000px',
-                    [theme.breakpoints.up('lg')]: {
-                        marginTop: -710,
-                    },
-                    [theme.breakpoints.down('lg')]: {
-                        marginTop: -660,
-                    },
+                    marginTop: lgDownBreakpoint ? -660 : -710,
                     zIndex: 1000,
                     display: 'flex',
                     alignItems: 'center',
