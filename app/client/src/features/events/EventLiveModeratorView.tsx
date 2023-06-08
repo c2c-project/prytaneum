@@ -23,6 +23,7 @@ import { StyledTabs } from '@local/components/StyledTabs';
 import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
+import { PreloadedBroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -78,7 +79,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         <StyledTabs value='Moderator'>
                             <Tab label='Moderator' value='Moderator' />
                         </StyledTabs>
-                        <StyledColumnGrid props={{ height: '85%', width: '98%' }}>
+                        <StyledColumnGrid props={{ width: '98%', display: 'flex', flexGrow: 1 }}>
                             <Grid item width='100%'>
                                 <ModeratorActions isLive={isLive} setIsLive={setIsLive} eventId={eventId} />
                                 <PreloadedParticipantsList eventId={eventData.id} isVisible={true} />
@@ -96,8 +97,8 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         </StyledTabs>
                         <StyledColumnGrid
                             props={{
-                                id: 'event-queue-scrollable',
-                                height: `${mdUpBreakpoint ? '90%' : '500px'}`,
+                                display: 'flex',
+                                flexGrow: 1,
                                 width: '98%',
                             }}
                         >
@@ -106,14 +107,15 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     </Grid>
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
-                    <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
+                    <Grid item container direction='column' flexGrow={1} alignContent='center'>
                         <StyledTabs value='Questions'>
                             <Tab label='Questions' value='Questions' />
                         </StyledTabs>
                         <StyledColumnGrid
                             props={{
-                                id: 'event-queue-scrollable',
-                                height: `${mdUpBreakpoint ? '90%' : '500px'}`,
+                                id: 'scrollable-tab',
+                                display: 'flex',
+                                flexGrow: 1,
                                 width: '98%',
                             }}
                         >
@@ -122,18 +124,31 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     </Grid>
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
-                    <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
+                    <Grid item container direction='column' height='50%' justifyContent='center' alignContent='center'>
                         <StyledTabs value='Feedback'>
                             <Tab label='Feedback' value='Feedback' />
                         </StyledTabs>
                         <StyledColumnGrid
                             props={{
-                                id: 'event-queue-scrollable',
-                                height: `${mdUpBreakpoint ? '90%' : '500px'}`,
+                                display: 'flex',
+                                flexGrow: 1,
                                 width: '98%',
                             }}
                         >
                             <LiveFeedbackList fragmentRef={node} ActionButtons={true} isVisible={true} />
+                        </StyledColumnGrid>
+                    </Grid>
+                    <Grid item container direction='column' height='50%' justifyContent='center' alignContent='center'>
+                        <StyledTabs value='Broadcast'>
+                            <Tab label='Broadcast' value='Broadcast' />
+                        </StyledTabs>
+                        <StyledColumnGrid
+                            props={{
+                                height: `${mdUpBreakpoint ? '90%' : '500px'}`,
+                                width: '98%',
+                            }}
+                        >
+                            <PreloadedBroadcastMessageList isVisible={true} />
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
