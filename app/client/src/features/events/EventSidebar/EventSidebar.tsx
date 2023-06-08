@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
-import { Grid, Tab, Skeleton, Tabs, Button, useMediaQuery, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import { useTheme, alpha } from '@mui/material/styles';
+import { Grid, Tab, Skeleton, Button, useMediaQuery, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { graphql, useFragment } from 'react-relay';
 
 import { EventSidebarFragment$key } from '@local/__generated__/EventSidebarFragment.graphql';
@@ -36,24 +35,6 @@ export const EVENT_SIDEBAR_FRAGMENT = graphql`
     }
 `;
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '100%',
-
-        padding: theme.spacing(0, 1, 1, 1),
-        [theme.breakpoints.down('md')]: {
-            padding: theme.spacing(1),
-        },
-        [theme.breakpoints.up('md')]: {
-            maxWidth: 600,
-        },
-        '& > *': {
-            marginBottom: theme.spacing(2.5),
-            width: '100%',
-        },
-    },
-}));
-
 // TODO: Add sidebar top section for moderator tools
 type sidebarTopTabs = 'Moderator';
 type SidebarBottomTabs = 'Queue' | 'Questions' | 'Feedback' | 'Broadcast' | 'Participants';
@@ -69,15 +50,13 @@ export interface EventSidebarProps {
 }
 export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive }: EventSidebarProps) => {
     const theme = useTheme();
-    const classes = useStyles();
+    const mdUpBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
+    const smDownBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
     const data = useFragment(EVENT_SIDEBAR_FRAGMENT, fragmentRef);
     const [topTab, setTopTab] = React.useState<sidebarTopTabs>('Moderator');
     const [bottomTab, setBottomTab] = React.useState<SidebarBottomTabs>('Questions');
     const [topSectionVisible, setTopSectionVisible] = React.useState(true);
     const eventId = data.id;
-
-    const mdUpBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
-    const smDownBreakpoint = useMediaQuery(theme.breakpoints.down('sm'));
 
     // Subscribe to live feedback prompts
     useLiveFeedbackPrompt();
@@ -133,7 +112,15 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
     return (
         <Grid
             container
-            className={classes.root}
+            height='100%'
+            padding={mdUpBreakpoint ? theme.spacing(0, 1, 1, 1) : theme.spacing(1)}
+            maxWidth={mdUpBreakpoint ? 600 : '100%'}
+            sx={{
+                '& > *': {
+                    marginBottom: theme.spacing(2.5),
+                    width: '100%',
+                },
+            }}
             direction='column'
             alignContent='flex-start'
             alignItems='flex-start'
@@ -152,10 +139,10 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
             )}
             {isViewerModerator && topSectionVisible && (
                 <Grid item container justifyContent='start'>
-                    <StyledTabs value={topTab} theme={theme} props={{ onChange: handleTopChange }}>
+                    <StyledTabs value={topTab} props={{ onChange: handleTopChange, 'aria-label': 'top tabs' }}>
                         <Tab label='Moderator' value='Moderator' />
                     </StyledTabs>
-                    <StyledColumnGrid theme={theme} props={{ height: '250px' }}>
+                    <StyledColumnGrid props={{ height: '250px' }}>
                         <Grid item justifyContent='center' width='100%'>
                             <ModeratorActions isLive={isLive} setIsLive={setIsLive} eventId={eventId} />
                             <PreloadedParticipantsList
@@ -167,20 +154,9 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                 </Grid>
             )}
             <Grid item container justifyContent='center' height='100%' width='100%'>
-                <Tabs
-                    sx={{
-                        '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
-                        '& .MuiTab-root': {
-                            color: 'white',
-                            backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
-                            borderRadius: '20px 20px 0 0',
-                        },
-                        '& .Mui-selected': { color: 'white !important', backgroundColor: 'custom.creamCan' },
-                    }}
+                <StyledTabs
                     value={bottomTab}
-                    onChange={handleBottomChange}
-                    centered
-                    aria-label='secondary tabs example'
+                    props={{ onChange: handleBottomChange, 'aria-label': 'bottom tabs', centered: true }}
                 >
                     {isViewerModerator && (
                         <Tab
@@ -188,7 +164,6 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                             value='Queue'
                         />
                     )}
-                    {/* eslint-disable-next-line quotes */}
                     <Tab
                         label={smDownBreakpoint ? <Typography variant='caption'>Questions</Typography> : 'Questions'}
                         value='Questions'
@@ -205,9 +180,8 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                             value='Broadcast'
                         />
                     )}
-                </Tabs>
+                </StyledTabs>
                 <StyledColumnGrid
-                    theme={theme}
                     props={{
                         id: 'event-sidebar-bottom-tabs-scrollable',
                         height: `${mdUpBreakpoint ? '97%' : '500px'}`,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { fetchQuery, graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
-import { Divider, Grid, Paper, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
-import { useTheme, alpha } from '@mui/material/styles';
+import { Divider, Grid, Paper, Tab, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { EventPostQuery } from '@local/__generated__/EventPostQuery.graphql';
 import { EventContext } from './EventContext';
@@ -18,6 +18,7 @@ import { useEventDetails } from './useEventDetails';
 import { QuestionList } from './Questions/QuestionList/QuestionList';
 import { VideoModal } from './Videos/VideoModal';
 import PostEventFeedback from './PostEventFeedback/PostEventFeedback';
+import { StyledTabs } from '@local/components/StyledTabs';
 
 const EVENT_POST_QUERY = graphql`
     query EventPostQuery($eventId: ID!) {
@@ -131,30 +132,13 @@ export function EventPost({ eventData }: EventPostProps) {
                             }}
                         >
                             <Grid item width='100%'>
-                                <Tabs
-                                    sx={{
-                                        '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
-                                        '& .MuiTab-root': {
-                                            color: 'white',
-                                            backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
-                                            borderRadius: '20px 20px 0 0',
-                                        },
-                                        '& .Mui-selected': {
-                                            color: 'white !important',
-                                            backgroundColor: 'custom.creamCan',
-                                        },
-                                    }}
-                                    value={tab}
-                                    onChange={handleChange}
-                                    centered
-                                    aria-label='secondary tabs example'
-                                >
+                                <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
                                     <Tab label='Questions' value='Questions' />
                                     <Tab label='Feedback' value='Feedback' />
                                     {eventData.isViewerModerator === true && (
                                         <Tab label='Broadcast' value='Broadcast' />
                                     )}
-                                </Tabs>
+                                </StyledTabs>
                                 <QuestionList
                                     fragmentRef={eventData}
                                     ActionButtons={<></>}

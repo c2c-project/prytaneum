@@ -79,10 +79,10 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                     <EventDetailsCard eventData={eventData} />
                     <SpeakerList fragmentRef={node} />
                     <Grid item container direction='column' flex={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs theme={theme} value='Moderator'>
+                        <StyledTabs value='Moderator'>
                             <Tab label='Moderator' value='Moderator' />
                         </StyledTabs>
-                        <StyledColumnGrid theme={theme} props={{ height: '85%', width: '98%' }}>
+                        <StyledColumnGrid props={{ height: '85%', width: '98%' }}>
                             <Grid item width='100%'>
                                 <ModeratorActions isLive={isLive} setIsLive={setIsLive} eventId={eventId} />
                                 <PreloadedParticipantsList eventId={eventData.id} isVisible={true} />
@@ -92,11 +92,10 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
                     <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs theme={theme} value='Queue'>
+                        <StyledTabs value='Queue'>
                             <Tab label='Queue' value='Queue' />
                         </StyledTabs>
                         <StyledColumnGrid
-                            theme={theme}
                             props={{
                                 id: 'event-queue-scrollable',
                                 height: `${mdUpBreakpoint ? '90%' : '500px'}`,
@@ -109,11 +108,10 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
                     <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs theme={theme} value='Questions'>
+                        <StyledTabs value='Questions'>
                             <Tab label='Questions' value='Questions' />
                         </StyledTabs>
                         <StyledColumnGrid
-                            theme={theme}
                             props={{
                                 id: 'event-queue-scrollable',
                                 height: `${mdUpBreakpoint ? '90%' : '500px'}`,
@@ -126,11 +124,10 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                 </Grid>
                 <Grid container direction='column' xs={2} height='100%'>
                     <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
-                        <StyledTabs theme={theme} value='Feedback'>
+                        <StyledTabs value='Feedback'>
                             <Tab label='Feedback' value='Feedback' />
                         </StyledTabs>
                         <StyledColumnGrid
-                            theme={theme}
                             props={{
                                 id: 'event-queue-scrollable',
                                 height: `${mdUpBreakpoint ? '90%' : '500px'}`,
