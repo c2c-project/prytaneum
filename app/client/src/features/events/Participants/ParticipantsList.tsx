@@ -95,7 +95,7 @@ export function ParticipantsList({ queryRef, isVisible, refresh }: ParticipantsL
                                             height='50px'
                                         />
                                     </Grid>
-                                    <Grid item width='200px' gridColumn='2/5'>
+                                    <Grid item maxWidth='200px' minWidth='100px' gridColumn='2/5'>
                                         <Typography variant='body1'>
                                             {participant.firstName + ' ' + participant.lastName}
                                         </Typography>
