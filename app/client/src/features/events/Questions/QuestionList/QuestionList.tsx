@@ -71,7 +71,7 @@ export function InfiniteScroller({ children, isModerator, filteredList, loadNext
             hasMore={hasNext}
             loader={<Loader />}
             hasChildren
-            scrollableTarget='event-sidebar-bottom-tabs-scrollable'
+            scrollableTarget='scrollable-tab'
         >
             {children}
         </InfiniteScroll>

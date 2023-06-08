@@ -19,6 +19,7 @@ import { QuestionList } from './Questions/QuestionList/QuestionList';
 import { VideoModal } from './Videos/VideoModal';
 import PostEventFeedback from './PostEventFeedback/PostEventFeedback';
 import { StyledTabs } from '@local/components/StyledTabs';
+import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 
 const EVENT_POST_QUERY = graphql`
     query EventPostQuery($eventId: ID!) {
@@ -50,6 +51,7 @@ export interface EventPostProps {
 
 export function EventPost({ eventData }: EventPostProps) {
     const theme = useTheme();
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const [tab, setTab] = React.useState<'Questions' | 'Feedback'>('Questions');
     const { eventData: eventDetails } = useEventDetails({ fragmentRef: eventData });
@@ -63,7 +65,7 @@ export function EventPost({ eventData }: EventPostProps) {
 
     return (
         <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
-            <Paper style={{ width: '100%', height: '100%' }}>
+            <Paper style={{ width: '100%', height: '100%', padding: '1rem' }}>
                 <Grid container spacing={2} columns={16} height='100%'>
                     {/* Column 1 */}
                     <Grid
@@ -111,34 +113,39 @@ export function EventPost({ eventData }: EventPostProps) {
                         </Grid>
                     </Grid>
                     {/* Column 2 */}
-                    <Grid item container xs={mdDownBreakpoint ? 16 : 8} direction='column' flexWrap='nowrap'>
+                    <Grid
+                        item
+                        container
+                        xs={mdDownBreakpoint ? 16 : 8}
+                        direction='column'
+                        flexWrap='nowrap'
+                        marginLeft={lgDownBreakpoint ? 0 : 2}
+                    >
                         <Grid
                             item
                             container
                             className='Pre-Event-Prytaneum-Logo'
                             justifyContent='center'
-                            marginTop='4rem'
+                            marginTop='2rem'
+                            marginBottom='2rem'
                         >
                             <img width='60%' src='/static/prytaneum_logo2.svg' alt='Prytaneum Logo' />
                         </Grid>
-                        <Grid
-                            item
-                            container
-                            height='100%'
-                            minHeight='600px'
-                            maxHeight='100%'
-                            style={{
-                                overflowY: 'scroll',
-                            }}
-                        >
-                            <Grid item width='100%'>
-                                <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
-                                    <Tab label='Questions' value='Questions' />
-                                    <Tab label='Feedback' value='Feedback' />
-                                    {eventData.isViewerModerator === true && (
-                                        <Tab label='Broadcast' value='Broadcast' />
-                                    )}
-                                </StyledTabs>
+                        <Grid item direction='column' width='100%' display='flex' flexGrow={1}>
+                            <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
+                                <Tab label='Questions' value='Questions' />
+                                <Tab label='Feedback' value='Feedback' />
+                                {eventData.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
+                            </StyledTabs>
+                            <StyledColumnGrid
+                                props={{
+                                    id: 'scrollable-tab',
+                                    minHeight: '600px',
+                                    maxHeight: '100%',
+                                    display: 'flex',
+                                    flexGrow: 1,
+                                }}
+                            >
                                 <QuestionList
                                     fragmentRef={eventData}
                                     ActionButtons={<></>}
@@ -153,7 +160,7 @@ export function EventPost({ eventData }: EventPostProps) {
                                     }
                                     isVisible={tab === 'Feedback'}
                                 />
-                            </Grid>
+                            </StyledColumnGrid>
                         </Grid>
                     </Grid>
                 </Grid>

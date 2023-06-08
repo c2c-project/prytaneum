@@ -183,7 +183,7 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                 </StyledTabs>
                 <StyledColumnGrid
                     props={{
-                        id: 'event-sidebar-bottom-tabs-scrollable',
+                        id: 'scrollable-tab',
                         height: `${mdUpBreakpoint ? '97%' : '500px'}`,
                     }}
                 >

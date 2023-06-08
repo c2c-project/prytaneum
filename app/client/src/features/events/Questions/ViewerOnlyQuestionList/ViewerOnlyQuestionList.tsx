@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as React from 'react';
+import { OperationType } from 'relay-runtime';
+import { LoadMoreFn } from 'react-relay';
 import { Grid, Card, List, ListItem, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -16,17 +18,12 @@ import { QuestionContent } from '../QuestionContent';
 import { QuestionQuote } from '../QuestionQuote';
 import { QuestionStats } from '../QuestionStats';
 import { Loader } from '@local/components/Loader';
-import { OperationType } from 'relay-runtime';
-import { LoadMoreFn } from 'react-relay';
 import { useViewerOnlyQuestionList } from './useViewerOnlyQuestionList';
 import { useViewerOnlyQuestionCreated } from './useViewerOnlyQuestionCreated';
 import { useViewerOnlyQuestionUpdated } from './useViewerOnlyQuestionUpdated';
 import { useViewerOnlyQuestionDeleted } from './useViewerOnlyQuestionDeleted';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        // padding: theme.spacing(1.5),
-    },
     listFilter: {
         flex: 1,
         paddingLeft: '0.5rem',
@@ -71,7 +68,7 @@ export function InfiniteScroller({ children, isModerator, filteredList, loadNext
             hasMore={hasNext}
             loader={<Loader />}
             hasChildren
-            scrollableTarget='event-pre-tabs-scrollable'
+            scrollableTarget='scrollable-tab'
         >
             {children}
         </InfiniteScroll>

@@ -14,7 +14,6 @@ export const StyledColumnGrid = ({ children, props }: StyledColumnGridProps) => 
         <Grid
             {...props}
             width={props?.width ? props.width : '100%'}
-            id='event-sidebar-bottom-tabs-scrollable'
             container
             justifyContent='center'
             sx={{
