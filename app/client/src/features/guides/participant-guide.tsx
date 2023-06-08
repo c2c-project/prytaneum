@@ -88,7 +88,7 @@ export default function ParticipantGuide() {
         >
             <Grid item xs={6} sm={3}>
                 <img
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
                     height='100%'

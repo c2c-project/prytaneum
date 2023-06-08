@@ -27,10 +27,10 @@ export default function AboutUs() {
             <Grid container item xs={12} direction='column' alignItems='center' spacing={1}>
                 <Grid item xs={4} sm={3} md={2}>
                     <img
-                        style={{ objectFit: 'contain' }}
+                        style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                         src='/static/prytaneum_logo.svg'
-                        width='250px'
-                        height='250px'
+                        width='100%'
+                        height='100%'
                         alt='Prytaneum Logo'
                     />
                 </Grid>
@@ -46,10 +46,10 @@ export default function AboutUs() {
             <Grid container item xs={12} alignItems='center' justifyContent='center' spacing={2}>
                 <Grid item sm={5} md={3}>
                     <img
-                        style={{ objectFit: 'contain' }}
+                        style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                         src='/static/directors.png'
-                        width='250px'
-                        height='250px'
+                        width='100%'
+                        height='100%'
                         alt='Directors'
                     />
                 </Grid>

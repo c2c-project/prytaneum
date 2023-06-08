@@ -31,7 +31,7 @@ export default function GettingStartedGuide() {
         >
             <Grid item xs={4} sm={3}>
                 <img
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
                     height='100%'

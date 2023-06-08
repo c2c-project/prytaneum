@@ -19,16 +19,17 @@ export default function OrganizerGuide() {
             container
             width='100%'
             height='100%'
+            textAlign='center'
             alignItems='center'
             justifyContent='center'
             paddingLeft={user ? (lgUpBreakpoint ? '250px' : 0) : lgUpBreakpoint ? '5%' : 0}
-            paddingRight={user ? (lgUpBreakpoint ? '5%' : 0) : 0}
+            paddingRight={user ? 0 : lgUpBreakpoint ? '5%' : 0}
             spacing={4}
             sx={{ scrollPaddingTop: '-10rem' }}
         >
             <Grid item xs={4} sm={3}>
                 <img
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
                     height='100%'
