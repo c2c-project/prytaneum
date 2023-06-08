@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { Button, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import useTheme from '@mui/styles/useTheme';
 
 import { CallToAction } from '@local/features/landing/CallToAction';
@@ -12,87 +11,64 @@ import { MobileRoles as MobileRolesPanel } from './Panels/MobileRoles';
 import { Views as ViewsPanel } from './Panels/Views';
 import ReactPlayer from 'react-player';
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-        color: 'white',
-        backgroundColor: '#F5C64F',
-        borderRadius: 12,
-        height: '100%',
-        width: 'auto',
-        paddingTop: 3,
-        paddingBottom: 3,
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    landing: {
-        width: '100%',
-        minHeight: '85vh', // set to this height to center call to action (offset height from navbar)
-        margin: 0,
-    },
-    root: {
-        minHeight: '60vh',
-        margin: 0,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        width: '100%',
-    },
-    videoWrapper: {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        [theme.breakpoints.up('md')]: {
-            marginLeft: 0,
-        },
-        [theme.breakpoints.down('md')]: {
-            marginLeft: -8,
-            aspectRatio: '16/9',
-        },
-    },
-    contain: {
-        objectFit: 'contain',
-    },
-}));
-
 export default function Landing() {
     const theme = useTheme();
-    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
-    const classes = useStyles();
+    const mdUpBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
+    const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
 
-    console.log(mdBreakpoint);
-
     return (
-        <>
+        <Grid container>
             <CallToAction />
-            {/* The marginLeft and width props allow this component to override the maxWidth set by its parent container in `Main.tsx` */}
             <Grid
                 container
-                overflow='hidden'
+                width='100%'
                 alignItems='center'
                 justifyContent='center'
                 spacing={2}
-                style={{ backgroundColor: '#8EAFFF42', width: '100%' }}
+                margin={0}
+                style={{ backgroundColor: '#8EAFFF42' }}
             >
                 <Grid item marginTop={6} id='video-section'>
                     <Blurb title='Enable constructive, virtual dialogue' titleColor='#282D6E' />
                 </Grid>
 
-                <Grid item container justifyContent='center' width='80%'>
-                    <div className={classes.videoWrapper}>
+                <Grid item container justifyContent='center' width='100%' style={{ paddingLeft: 0 }}>
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            aspectRatio: mdDownBreakpoint ? '16/9' : 'auto',
+                        }}
+                    >
                         <ReactPlayer
                             url='https://youtu.be/Q-8-cQujh3k'
                             playing={true}
                             muted
                             loop
                             width={'854px'}
-                            height={mdBreakpoint ? '100%' : '480px'}
+                            height={mdUpBreakpoint ? '480px' : '100%'}
                             playsinline
                             controls
                         />
                     </div>
-                    <Grid item marginBottom={10}>
-                        <Button className={classes.button} onClick={() => router.push('/guides/getting-started')}>
+                    <Grid item marginY={5}>
+                        <Button
+                            style={{
+                                color: 'white',
+                                backgroundColor: '#F5C64F',
+                                borderRadius: 12,
+                                height: '100%',
+                                width: 'auto',
+                                paddingTop: 3,
+                                paddingBottom: 3,
+                                paddingLeft: 20,
+                                paddingRight: 20,
+                            }}
+                            onClick={() => router.push('/guides/getting-started')}
+                        >
                             Learn How To Get Started
                         </Button>
                     </Grid>
@@ -101,7 +77,7 @@ export default function Landing() {
 
             {/* This is the only section of the page that doesn't need the style prop detailed above. */}
             <ViewsPanel />
-            {mdBreakpoint ? <MobileRolesPanel /> : <RolesPanel />}
+            {mdDownBreakpoint ? <MobileRolesPanel /> : <RolesPanel />}
             {/* BOTTOM BANNER SECTION */}
             <Grid
                 container
@@ -110,6 +86,7 @@ export default function Landing() {
                 alignItems='center'
                 justifyContent='center'
                 spacing={2}
+                margin={0}
                 style={{ width: '100%' }}
             >
                 <Grid item marginTop={2} marginBottom={1}>
@@ -120,35 +97,31 @@ export default function Landing() {
                         paragraphsColor='#272C6C'
                     />
                 </Grid>
-                {/* <Grid item>
+                <Grid item>
                     <img
-                        className={classes.contain}
+                        style={{ objectFit: 'contain' }}
                         alt='Team Photo'
                         src='/static/team_photo.png'
                         width='100%'
                         height='100%'
                     />
-                </Grid> */}
+                </Grid>
                 <Grid item>
-                    <Button
-                        size='medium'
-                        style={{ color: 'white', marginTop: '-250%' }}
-                        onClick={() => router.push('/aboutus')}
-                    >
+                    <Button size='medium' style={{ color: 'white' }} onClick={() => router.push('/aboutus')}>
                         Read more about us
                     </Button>
                 </Grid>
             </Grid>
             {/* FOOTER SECTION */}
             <Grid container width='100%'>
-                <Grid item container justifyContent={mdBreakpoint ? 'center' : 'normal'}>
+                <Grid item container justifyContent={mdDownBreakpoint ? 'center' : 'normal'}>
                     <Grid
                         item
-                        justifyContent={mdBreakpoint ? 'center' : 'flex-start'}
-                        marginLeft={mdBreakpoint ? '0%' : '5%'}
+                        justifyContent={mdDownBreakpoint ? 'center' : 'flex-start'}
+                        marginLeft={mdDownBreakpoint ? '0%' : '5%'}
                     >
                         <img
-                            className={classes.contain}
+                            style={{ objectFit: 'contain' }}
                             alt='prytaneum 2 logo'
                             src='/static/prytaneum_logo2.svg'
                             width={234}
@@ -157,15 +130,15 @@ export default function Landing() {
                     </Grid>
                     <Grid
                         container
-                        justifyContent={mdBreakpoint ? 'center' : 'flex-end'}
-                        marginTop={mdBreakpoint ? 4 : -6}
-                        marginRight={mdBreakpoint ? '0%' : '5%'}
+                        justifyContent={mdDownBreakpoint ? 'center' : 'flex-end'}
+                        marginTop={mdDownBreakpoint ? 4 : -6}
+                        marginRight={mdDownBreakpoint ? '0%' : '5%'}
                     >
                         <Stack direction='row' spacing={4}>
                             <Button
                                 style={{
                                     color: '#282D6E',
-                                    fontSize: '28px',
+                                    fontSize: mdDownBreakpoint ? '20px' : '28px',
                                     maxHeight: '30px',
                                     textTransform: 'capitalize',
                                 }}
@@ -176,7 +149,7 @@ export default function Landing() {
                             <Button
                                 style={{
                                     color: '#282D6E',
-                                    fontSize: '28px',
+                                    fontSize: mdDownBreakpoint ? '20px' : '28px',
                                     maxHeight: '30px',
                                     textTransform: 'capitalize',
                                 }}
@@ -186,7 +159,7 @@ export default function Landing() {
                             <Button
                                 style={{
                                     color: '#282D6E',
-                                    fontSize: '28px',
+                                    fontSize: mdDownBreakpoint ? '20px' : '28px',
                                     maxHeight: '30px',
                                     textTransform: 'capitalize',
                                 }}
@@ -200,28 +173,28 @@ export default function Landing() {
                     variant='middle'
                     style={{
                         width: '90%',
-                        paddingBottom: mdBreakpoint ? '2rem' : '0rem',
-                        marginLeft: mdBreakpoint ? '0%' : '5%',
+                        paddingBottom: mdDownBreakpoint ? '2rem' : '0rem',
+                        marginLeft: mdDownBreakpoint ? '0%' : '5%',
                     }}
                 />
-                <Grid item container justifyContent={mdBreakpoint ? 'center' : 'normal'}>
+                <Grid item container justifyContent={mdDownBreakpoint ? 'center' : 'normal'}>
                     <Grid
                         item
-                        justifyContent={mdBreakpoint ? 'center' : 'flex-start'}
-                        marginLeft={mdBreakpoint ? '0%' : '5%'}
+                        justifyContent={mdDownBreakpoint ? 'center' : 'flex-start'}
+                        marginLeft={mdDownBreakpoint ? '0%' : '5%'}
                         marginTop='2rem'
                     >
                         <Typography color='#999999'>© 2023 Prytaneum. All rights reserved.</Typography>
                     </Grid>
                     <Grid
                         container
-                        justifyContent={mdBreakpoint ? 'center' : 'flex-end'}
-                        marginTop={mdBreakpoint ? 4 : -6}
-                        marginRight={mdBreakpoint ? '0%' : '5%'}
+                        justifyContent={mdDownBreakpoint ? 'center' : 'flex-end'}
+                        marginTop={mdDownBreakpoint ? 4 : -6}
+                        marginRight={mdDownBreakpoint ? '0%' : '5%'}
                     >
                         <Grid item marginRight={6}>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='democracy fund logo'
                                 src='/static/democracy_fund_logo.svg'
                                 width={152}
@@ -230,7 +203,7 @@ export default function Landing() {
                         </Grid>
                         <Grid item>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='ucr tecd logo'
                                 src='/static/ucr_tecd_logo.svg'
                                 width={276}
@@ -240,6 +213,6 @@ export default function Landing() {
                     </Grid>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
 }

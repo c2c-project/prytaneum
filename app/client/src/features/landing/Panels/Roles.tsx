@@ -13,62 +13,15 @@ import {
     Typography,
     useMediaQuery,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import useTheme from '@mui/styles/useTheme';
 
 import { Blurb } from '@local/features/landing/Blurb';
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-        color: 'white',
-        backgroundColor: '#F5C64F',
-        borderRadius: 12,
-        height: '100%',
-        width: 'auto',
-        paddingTop: 3,
-        paddingBottom: 3,
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    root: {
-        minHeight: '60vh',
-        margin: 0,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-    },
-    roleCard: {
-        width: '25%',
-        height: 560,
-        backgroundColor: theme.palette.custom.creamCan,
-        borderRadius: 0,
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    featuresBanner: {
-        height: 40,
-        width: '95%',
-        [theme.breakpoints.up('lg')]: {
-            marginTop: -950,
-        },
-        [theme.breakpoints.down('lg')]: {
-            marginTop: -890,
-        },
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#D2A942',
-    },
-    contain: {
-        objectFit: 'contain',
-    },
-}));
-
 export function Roles() {
     const theme = useTheme();
-    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
+    const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
-    const classes = useStyles();
 
     return (
         <Grid
@@ -77,6 +30,7 @@ export function Roles() {
             alignItems='center'
             justifyContent='center'
             spacing={2}
+            margin={0}
             style={{ backgroundColor: '#F5C64F42', width: '100%' }}
         >
             <Grid item width='100%' marginTop={8}>
@@ -84,20 +38,29 @@ export function Roles() {
             </Grid>
 
             <Stack
-                direction={mdBreakpoint ? 'column' : 'row'}
+                direction={mdDownBreakpoint ? 'column' : 'row'}
                 spacing={2}
                 width='95%'
                 maxWidth='1500px'
                 marginTop={7}
-                marginBottom={20}
+                marginBottom={5}
             >
                 {/* User is not pointed to the top of each guide page after navigating to the page.
                     This is caused by an open NextJS bug: https://github.com/vercel/next.js/issues/28778 */}
-                <Card className={classes.roleCard}>
+                <Card
+                    style={{
+                        width: '25%',
+                        height: 570,
+                        backgroundColor: theme.palette.custom.creamCan,
+                        borderRadius: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='Speaker Icon'
                                 src='/static/speaker_icon.svg'
                                 width={82}
@@ -113,23 +76,32 @@ export function Roles() {
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Same experience as a Zoom call'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'One on one with moderators'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
                     </CardContent>
                 </Card>
-                <Card className={classes.roleCard}>
+                <Card
+                    style={{
+                        width: '25%',
+                        height: 570,
+                        backgroundColor: theme.palette.custom.creamCan,
+                        borderRadius: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='Participant Icon'
                                 src='/static/participant_icon.svg'
                                 width={82}
@@ -143,18 +115,21 @@ export function Roles() {
                         />
                         <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
-                                <ListItemText primary={'Submit questions'} primaryTypographyProps={{ fontSize: 18 }} />
+                                <ListItemText
+                                    primary={'Submit questions'}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
+                                />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Like and quote other participant questions'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Provide feedback to moderators'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -177,11 +152,20 @@ export function Roles() {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.roleCard}>
+                <Card
+                    style={{
+                        width: '25%',
+                        height: 570,
+                        backgroundColor: theme.palette.custom.creamCan,
+                        borderRadius: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='Moderator Icon'
                                 src='/static/moderator_icon.svg'
                                 width={82}
@@ -199,13 +183,13 @@ export function Roles() {
                                     primary={
                                         'Manage the question queue by adding, removing and reordering participant questions'
                                     }
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Respond to participant feedback'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -228,11 +212,20 @@ export function Roles() {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card className={classes.roleCard}>
+                <Card
+                    style={{
+                        width: '25%',
+                        height: 570,
+                        backgroundColor: theme.palette.custom.creamCan,
+                        borderRadius: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
                     <CardContent>
                         <Grid container display='flex' alignItems='center' justifyContent='center'>
                             <img
-                                className={classes.contain}
+                                style={{ objectFit: 'contain' }}
                                 alt='Organizer Icon'
                                 src='/static/organizer_icon.svg'
                                 width={82}
@@ -248,13 +241,13 @@ export function Roles() {
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Create events for an organization'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Configure event details'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -279,7 +272,25 @@ export function Roles() {
                 </Card>
             </Stack>
 
-            <Grid item className={classes.featuresBanner} maxWidth='1500px'>
+            <Grid
+                item
+                style={{
+                    height: 40,
+                    width: '95%',
+                    maxWidth: '2000px',
+                    [theme.breakpoints.up('lg')]: {
+                        marginTop: -710,
+                    },
+                    [theme.breakpoints.down('lg')]: {
+                        marginTop: -660,
+                    },
+                    zIndex: 1000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#D2A942',
+                }}
+            >
                 <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>
                     Features
                 </Typography>
