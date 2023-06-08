@@ -10,99 +10,22 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
+    useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
-import makeStyles from '@mui/styles/makeStyles';
 import HelpIcon from '@mui/icons-material/Help';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        width: '100%',
-        minHeight: '85vh',
-        paddingLeft: '1rem',
-        scrollPaddingTop: '-10rem',
-    },
-    heading: {
-        paddingTop: '80px',
-    },
-    paragraph: {
-        fontSize: '18px',
-    },
-    section: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem',
-    },
-    centeredSection: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '0.5rem',
-    },
-    icon: {
-        fontSize: '2.25rem',
-    },
-    relative: {
-        position: 'relative',
-        width: '100%',
-    },
-    videoInfo: {
-        position: 'absolute',
-        top: '1.25rem',
-        left: '-1.25rem',
-        zIndex: 100,
-    },
-    eventInfo: {
-        position: 'absolute',
-        top: '69%',
-        left: '-1.25rem',
-        transform: 'translateY(-69%)',
-        zIndex: 100,
-    },
-    answeringNowInfo: {
-        position: 'absolute',
-        top: '4%',
-        right: '-1.25rem',
-        transform: 'translateY(-4%)',
-        zIndex: 100,
-    },
-    modeSelectInfo: {
-        position: 'absolute',
-        top: '26%',
-        right: '-1.25rem',
-        transform: 'translateY(-26%)',
-        zIndex: 100,
-    },
-    askQuestionButtonInfo: {
-        position: 'absolute',
-        top: '35%',
-        right: '-1.25rem',
-        transform: 'translateY(-35%)',
-        zIndex: 100,
-    },
-    toolbarInfo: {
-        position: 'absolute',
-        top: '44%',
-        right: '-1.25rem',
-        transform: 'translateY(-44%)',
-        zIndex: 100,
-    },
-    questionCardInfo: {
-        position: 'absolute',
-        top: '59%',
-        right: '-1.25rem',
-        transform: 'translateY(-59%)',
-        zIndex: 100,
-    },
-    contain: {
-        objectFit: 'contain',
-    },
-}));
+import { useUser } from '../accounts';
+import { Loader } from '@local/components';
 
 export default function ModeratorGuide() {
-    const classes = useStyles();
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     const [open, setOpen] = React.useState(false);
     const [infoIndex, setInfoIndex] = React.useState(0);
+    const { user, isLoading } = useUser();
+
+    if (isLoading) return <Loader />;
 
     const info = [
         {
@@ -155,45 +78,56 @@ export default function ModeratorGuide() {
     };
 
     return (
-        <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
+        <Grid
+            container
+            width='100%'
+            height='100%'
+            textAlign='center'
+            alignItems='center'
+            justifyContent='center'
+            paddingLeft={user ? (lgUpBreakpoint ? '250px' : 0) : lgUpBreakpoint ? '5%' : 0}
+            paddingRight={user ? 0 : lgUpBreakpoint ? '5%' : 0}
+            spacing={4}
+            sx={{ scrollPaddingTop: '-10rem' }}
+        >
             <Grid item xs={4} sm={3}>
                 <img
-                    className={classes.contain}
+                    style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
                     height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>
-            <Grid item xs={12} sm={9} className={classes.section}>
+            <Grid item xs={12} sm={9} display='flex' flexDirection='column' gap='0.5rem'>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon} /> <b>Guide to Prytaneum:</b> Moderator
+                    <BookOutlinedIcon style={{ fontSize: '2.25rem' }} /> <b>Guide to Prytaneum:</b> Moderator
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     Being a moderator for an event means you are leading the discussion and are curating participant
                     questions.
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     This article covers:
                 </Typography>
                 <Link href='#becomingAModerator'>Becoming a Moderator</Link>
                 <Link href='#moderatorEventView'>ModeratorEventView</Link>
             </Grid>
-            <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='becomingAModerator' className={classes.heading}>
+            <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
+                <Typography variant='h4' id='becomingAModerator' paddingTop='80px'>
                     Becoming a Moderator
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     You first become a moderator by being assigned as one by an event organizer. More information on how
                     to assign moderators can be found in the{' '}
                     {<Link href='/guides/organizer'>organizer user guide</Link>}.
                 </Typography>
             </Grid>
-            <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='moderatorEventView' className={classes.heading}>
+            <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
+                <Typography variant='h4' id='moderatorEventView' paddingTop='80px'>
                     Moderator Event View
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph} component='span'>
+                <Typography variant='body1' fontSize='large' component='span'>
                     The moderator event view is one of the two views Prytaneum offers. The other view being the
                     participant event view, which you can find more information on in the{' '}
                     {<Link href='/guides/participant'>participant user guide</Link>}. With the moderator event view, you
@@ -202,14 +136,14 @@ export default function ModeratorGuide() {
                     corresponding element.
                 </Typography>
             </Grid>
-            <Grid item xs={12} className={classes.centeredSection}>
-                <div className={classes.relative}>
+            <Grid item xs={12} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
+                <div style={{ position: 'relative', width: '100%' }}>
                     <Chip
                         color='secondary'
                         icon={<HelpIcon />}
                         label='1'
                         size='small'
-                        className={classes.videoInfo}
+                        style={{ position: 'absolute', top: '1.25rem', left: '-1.25rem', zIndex: 100 }}
                         onClick={() => handleClickOpen(1)}
                     />
                     <Chip
@@ -217,7 +151,13 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='2'
                         size='small'
-                        className={classes.eventInfo}
+                        style={{
+                            position: 'absolute',
+                            top: '69%',
+                            left: '-1.25rem',
+                            transform: 'translateY(-69%)',
+                            zIndex: 100,
+                        }}
                         onClick={() => handleClickOpen(2)}
                     />
                     <Chip
@@ -225,7 +165,7 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='3'
                         size='small'
-                        className={classes.answeringNowInfo}
+                        style={{ position: 'absolute', top: '4%', right: '-1.25rem', transform: 'translateY(-4%)' }}
                         onClick={() => handleClickOpen(3)}
                     />
                     <Chip
@@ -233,7 +173,7 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='4'
                         size='small'
-                        className={classes.modeSelectInfo}
+                        style={{ position: 'absolute', top: '26%', right: '-1.25rem', transform: 'translateY(-26%)' }}
                         onClick={() => handleClickOpen(4)}
                     />
                     <Chip
@@ -241,7 +181,7 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='5'
                         size='small'
-                        className={classes.askQuestionButtonInfo}
+                        style={{ position: 'absolute', top: '35%', right: '-1.25rem', transform: 'translateY(-35%)' }}
                         onClick={() => handleClickOpen(5)}
                     />
                     <Chip
@@ -249,7 +189,7 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='6'
                         size='small'
-                        className={classes.toolbarInfo}
+                        style={{ position: 'absolute', top: '44%', right: '-1.25rem', transform: 'translateY(-44%)' }}
                         onClick={() => handleClickOpen(6)}
                     />
                     <Chip
@@ -257,13 +197,13 @@ export default function ModeratorGuide() {
                         icon={<HelpIcon />}
                         label='7'
                         size='small'
-                        className={classes.questionCardInfo}
+                        style={{ position: 'absolute', top: '59%', right: '-1.25rem', transform: 'translateY(-59%)' }}
                         onClick={() => handleClickOpen(7)}
                     />
                     <img
-                        src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-mod-view-queue.png'
+                        style={{ objectFit: 'contain' }}
                         width='100%'
-                        className={classes.contain}
+                        src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-mod-view-queue.png'
                         alt='Event Live Moderator View'
                     />
                 </div>

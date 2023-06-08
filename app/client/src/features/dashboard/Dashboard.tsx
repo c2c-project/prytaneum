@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { fetchQuery, graphql, useQueryLoader } from 'react-relay';
-import { Grid } from '@mui/material';
 
 import type { DashboardQuery } from '@local/__generated__/DashboardQuery.graphql';
 import { useEnvironment } from '@local/core';
@@ -64,10 +63,8 @@ export function Dashboard() {
     if (!queryRef) return <Loader />;
     return (
         <ConditionalRender client>
-            <React.Suspense fallback={<div>Loading...</div>}>
-                <Grid container>
-                    <DashboardEventList queryRef={queryRef} />
-                </Grid>
+            <React.Suspense fallback={<Loader />}>
+                <DashboardEventList queryRef={queryRef} />
             </React.Suspense>
         </ConditionalRender>
     );

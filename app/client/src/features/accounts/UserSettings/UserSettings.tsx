@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, Divider } from '@mui/material';
+import { Grid, Divider, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { ResponsiveDialog } from '@local/components/ResponsiveDialog';
 
@@ -25,6 +26,8 @@ interface Props {
  * @param {string} id id of the container for testing if it exists or styling. Also just for general specification of the element
  */
 export default function UserSettings({ id }: Props) {
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [cont, setContent] = React.useState<JSX.Element | null>(null);
@@ -64,7 +67,14 @@ export default function UserSettings({ id }: Props) {
     ];
 
     return (
-        <div id={id} style={{ width: '100%', height: '100%' }}>
+        <div
+            id={id}
+            style={{
+                width: lgUpBreakpoint ? '80%' : '100%',
+                height: '100%',
+                marginLeft: lgUpBreakpoint ? '250px' : '0px',
+            }}
+        >
             <SettingsMenu config={sections} />
             <ResponsiveDialog open={open} onClose={() => setContent(null)}>
                 {cont || <div />}

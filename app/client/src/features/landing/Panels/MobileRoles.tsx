@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     root: {
         backgroundColor: '#F5C64F42',
         minHeight: '60vh',
-        width: '100vw',
+        width: '100%',
     },
 }));
 
@@ -35,7 +35,6 @@ export function MobileRoles() {
             justifyContent='center'
             spacing={2}
             className={classes.root}
-            marginLeft='calc(-100vw / 2 + 50%) !important'
         >
             <Grid item>
                 <Blurb title='Participate in town hall events using roles' />

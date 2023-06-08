@@ -10,102 +10,23 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
+    useMediaQuery,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
-import makeStyles from '@mui/styles/makeStyles';
 import HelpIcon from '@mui/icons-material/Help';
 
-const useStyles = makeStyles(() => ({
-    root: {
-        width: '100%',
-        minHeight: '85vh',
-        paddingLeft: '1rem',
-        scrollPaddingTop: '-10rem',
-    },
-    heading: {
-        paddingTop: '80px',
-    },
-    paragraph: {
-        fontSize: '18px',
-    },
-    section: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem',
-    },
-    centeredSection: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '0.5rem',
-    },
-    icon: {
-        fontSize: '2.25rem',
-    },
-    relative: {
-        position: 'relative',
-        width: '100%',
-    },
-    videoInfo: {
-        position: 'absolute',
-        top: '0.25rem',
-        left: '-1.25rem',
-        zIndex: 100,
-    },
-    eventInfo: {
-        position: 'absolute',
-        top: '67%',
-        left: '-1.25rem',
-        transform: 'translateY(-67%)',
-        zIndex: 100,
-    },
-    upcomingQuestionInfo: {
-        position: 'absolute',
-        right: '-1.25rem',
-        zIndex: 100,
-    },
-    modeSelectInfo: {
-        position: 'absolute',
-        top: '26%',
-        right: '-1.25rem',
-        transform: 'translateY(-26%)',
-        zIndex: 100,
-    },
-    askQuestionButtonInfo: {
-        position: 'absolute',
-        top: '35%',
-        right: '-1.25rem',
-        transform: 'translateY(-35%)',
-        zIndex: 100,
-    },
-    searchBarInfo: {
-        position: 'absolute',
-        top: '44%',
-        right: '-1.25rem',
-        transform: 'translateY(-44%)',
-        zIndex: 100,
-    },
-    questionCardInfo: {
-        position: 'absolute',
-        top: '54%',
-        right: '-1.25rem',
-        transform: 'translateY(-54%)',
-        zIndex: 100,
-    },
-    contain: {
-        objectFit: 'contain',
-    },
-}));
+import { useUser } from '../accounts';
+import { Loader } from '@local/components';
 
 export default function ParticipantGuide() {
-    // TODO: Remove this redirect
-    React.useEffect(() => {
-        window.location.assign('https://www.classrooms2congress.org/prytaneum');
-    }, []);
-
-    const classes = useStyles();
+    const theme = useTheme();
+    const lgUpBreakpoint = useMediaQuery(theme.breakpoints.up('lg'));
     const [open, setOpen] = React.useState(false);
     const [infoIndex, setInfoIndex] = React.useState(0);
+    const { user, isLoading } = useUser();
+
+    if (isLoading) return <Loader />;
 
     const info = [
         {
@@ -153,45 +74,56 @@ export default function ParticipantGuide() {
     };
 
     return (
-        <Grid container alignItems='center' className={classes.root} justifyContent='center' spacing={4}>
-            <Grid item xs={4} sm={3}>
+        <Grid
+            container
+            width='100%'
+            height='100%'
+            textAlign='center'
+            alignItems='center'
+            justifyContent='center'
+            paddingLeft={user ? (lgUpBreakpoint ? '250px' : 0) : lgUpBreakpoint ? '5%' : 0}
+            paddingRight={user ? 0 : lgUpBreakpoint ? '5%' : 0}
+            spacing={4}
+            sx={{ scrollPaddingTop: '-10rem' }}
+        >
+            <Grid item xs={6} sm={3}>
                 <img
-                    className={classes.contain}
+                    style={{ objectFit: 'contain', maxWidth: '250px', minWidth: '150px' }}
                     src='/static/prytaneum_logo.svg'
                     width='100%'
                     height='100%'
                     alt='Prytaneum Logo'
                 />
             </Grid>
-            <Grid item xs={12} sm={9} className={classes.section}>
+            <Grid item xs={12} sm={9} display='flex' flexDirection='column' gap='0.5rem'>
                 <Typography variant='h3'>
-                    <BookOutlinedIcon className={classes.icon} /> <b>Guide to Prytaneum:</b> Participant
+                    <BookOutlinedIcon style={{ fontSize: '2.25rem' }} /> <b>Guide to Prytaneum:</b> Participant
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     As a participant, you engange in discussion during town hall events. Participants can submit
                     questions and feedback, as well as like, reply, and quote other participant questions.
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     This article covers:
                 </Typography>
                 <Link href='#attendingEvents'>Attending Events</Link>
                 <Link href='#participantEventView'>Participant Event View</Link>
             </Grid>
-            <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='attendingEvents' className={classes.heading}>
+            <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
+                <Typography variant='h4' id='attendingEvents' paddingTop='80px'>
                     Attending an Event as a Participant
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph}>
+                <Typography variant='body1' fontSize='large'>
                     To attend any Prytaneum event, you must be invited by the event organizer through email or a direct
                     link. You can find more information on event invites in the
                     {<Link href='/guides/organizer'>organizer user guide</Link>}.
                 </Typography>
             </Grid>
-            <Grid item xs={12} className={classes.section}>
-                <Typography variant='h4' id='participantEventView' className={classes.heading}>
+            <Grid item xs={12} display='flex' flexDirection='column' gap='0.5rem'>
+                <Typography variant='h4' id='participantEventView' paddingTop='80px'>
                     Participant Event View
                 </Typography>
-                <Typography variant='body1' className={classes.paragraph} component='span'>
+                <Typography variant='body1' fontSize='large' component='span'>
                     The participant event view is one of the two views Prytaneum offers. The other view being the
                     moderator event view, which you can find more information on in the{' '}
                     {<Link href='/guides/moderator'>moderator user guide</Link>}. With the participant event view, you
@@ -200,14 +132,14 @@ export default function ParticipantGuide() {
                     corresponding element.
                 </Typography>
             </Grid>
-            <Grid item xs={12} className={classes.centeredSection}>
-                <div className={classes.relative}>
+            <Grid item xs={12} display='flex' flexDirection='column' alignItems='center' gap='0.5rem'>
+                <div style={{ position: 'relative', width: '100%' }}>
                     <Chip
                         color='secondary'
                         icon={<HelpIcon />}
                         label='1'
                         size='small'
-                        className={classes.videoInfo}
+                        style={{ position: 'absolute', top: '0.25rem', left: '-1.25rem', zIndex: 100 }}
                         onClick={() => handleClickOpen(1)}
                     />
                     <Chip
@@ -215,7 +147,13 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='2'
                         size='small'
-                        className={classes.eventInfo}
+                        style={{
+                            position: 'absolute',
+                            top: '67%',
+                            left: '-1.25rem',
+                            transform: 'translateY(-67%)',
+                            zIndex: 100,
+                        }}
                         onClick={() => handleClickOpen(2)}
                     />
                     <Chip
@@ -223,7 +161,7 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='3'
                         size='small'
-                        className={classes.upcomingQuestionInfo}
+                        style={{ position: 'absolute', right: '-1.25rem', zIndex: 100 }}
                         onClick={() => handleClickOpen(3)}
                     />
                     <Chip
@@ -231,7 +169,7 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='4'
                         size='small'
-                        className={classes.modeSelectInfo}
+                        style={{ position: 'absolute', top: '26%', right: '-1.25rem', transform: 'translateY(-26%)' }}
                         onClick={() => handleClickOpen(4)}
                     />
                     <Chip
@@ -239,7 +177,7 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='5'
                         size='small'
-                        className={classes.askQuestionButtonInfo}
+                        style={{ position: 'absolute', top: '35%', right: '-1.25rem', transform: 'translateY(-35%)' }}
                         onClick={() => handleClickOpen(5)}
                     />
                     <Chip
@@ -247,7 +185,7 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='6'
                         size='small'
-                        className={classes.searchBarInfo}
+                        style={{ position: 'absolute', top: '44%', right: '-1.25rem', transform: 'translateY(-44%)' }}
                         onClick={() => handleClickOpen(6)}
                     />
                     <Chip
@@ -255,13 +193,13 @@ export default function ParticipantGuide() {
                         icon={<HelpIcon />}
                         label='7'
                         size='small'
-                        className={classes.questionCardInfo}
+                        style={{ position: 'absolute', top: '54%', right: '-1.25rem', transform: 'translateY(-54%)' }}
                         onClick={() => handleClickOpen(7)}
                     />
                     <img
                         src='https://storage.googleapis.com/prytaneum.io/static/guide/event-live-participant-view.png'
                         width='100%'
-                        className={classes.contain}
+                        style={{ objectFit: 'contain' }}
                         alt='Event Live Participant View'
                     />
                 </div>

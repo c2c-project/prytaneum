@@ -63,7 +63,6 @@ export function RegisterFormDemo() {
                         value={form.firstName}
                         onChange={handleChange('firstName')}
                         label='First Name'
-                        autoFocus
                         error={Boolean(errors.firstName)}
                     />
                     <TextField

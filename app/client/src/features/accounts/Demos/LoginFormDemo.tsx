@@ -66,7 +66,6 @@ export function LoginFormDemo() {
                         error={Boolean(errors.email)}
                         onChange={handleChange('email')}
                         label='Email'
-                        autoFocus
                     />
                     <>
                         <TextField

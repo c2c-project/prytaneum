@@ -19,12 +19,18 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
         display: 'flex',
     },
     main: {
+        width: '100%',
         flex: '1 1 100%',
         position: 'relative',
     },
     spacing: ({ spacing }) => ({
         padding: spacing ? theme.spacing(spacing) : 0,
     }),
+    maxWidth: {
+        [theme.breakpoints.up('lg')]: {
+            maxWidth: '90%',
+        },
+    },
 }));
 
 const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
@@ -33,9 +39,9 @@ const Container = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     return (
         <MUIContainer
             disableGutters
-            maxWidth='lg'
+            maxWidth={false}
             ref={ref}
-            className={clsx([classes.root, classes.spacing, className])}
+            className={clsx([classes.root, classes.spacing, className, classes.maxWidth])}
             {...passThroughProps}
         >
             <main className={classes.main}>{children}</main>
