@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
-import { Button, Divider, Grid, Paper, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
-import { useTheme, alpha } from '@mui/material/styles';
+import { Button, Divider, Grid, Paper, Tab, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { CountdownWrapper } from '@local/components/Countdown';
 import { EventPreQuery } from '@local/__generated__/EventPreQuery.graphql';
@@ -19,6 +19,8 @@ import { SpeakerList } from './Speakers';
 import { useEventDetails } from './useEventDetails';
 import { PreloadedLiveMessages } from './BroadcastMessages/LiveMessages';
 import { ViewerOnlyQuestionList } from './Questions/ViewerOnlyQuestionList/ViewerOnlyQuestionList';
+import { StyledTabs } from '@local/components/StyledTabs';
+import { StyledColumnGrid } from '@local/components/StyledColumnGrid';
 
 const EVENT_PRE_QUERY = graphql`
     query EventPreQuery($eventId: ID!) {
@@ -42,8 +44,9 @@ export interface EventPreProps {
 }
 
 export function EventPre({ fragmentRef }: EventPreProps) {
-    const router = useRouter();
     const theme = useTheme();
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
+    const router = useRouter();
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const [tab, setTab] = React.useState<'Questions' | 'Feedback'>('Questions');
     const { eventData } = useEventDetails({ fragmentRef });
@@ -71,7 +74,7 @@ export function EventPre({ fragmentRef }: EventPreProps) {
 
     return (
         <EventContext.Provider value={{ eventId: eventData.id, isModerator: Boolean(eventData.isViewerModerator) }}>
-            <Paper style={{ width: '100%', height: '100%' }}>
+            <Paper style={{ width: '100%', height: '100%', padding: '1rem' }}>
                 <Grid container spacing={2} columns={16} height='100%'>
                     {/* Column 1 */}
                     <Grid
@@ -144,72 +147,49 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                         </Grid>
                     </Grid>
                     {/* Column 2 */}
-                    <Grid item container xs={mdDownBreakpoint ? 16 : 8} direction='column' wrap='nowrap'>
+                    <Grid
+                        item
+                        container
+                        xs={mdDownBreakpoint ? 16 : 8}
+                        direction='column'
+                        wrap='nowrap'
+                        marginLeft={lgDownBreakpoint ? 0 : 2}
+                    >
                         <Grid
                             item
                             container
                             className='Pre-Event-Prytaneum-Logo'
                             justifyContent='center'
-                            marginTop='4rem'
+                            marginTop='2rem'
+                            marginBottom='2rem'
                         >
                             <img width='60%' src='/static/prytaneum_logo2.svg' alt='Prytaneum Logo' />
                         </Grid>
                         <Grid item container className='Countdown' justifyContent='center' alignContent='center'>
                             <Paper
-                                style={{ margin: '15px', paddingLeft: '25px', paddingRight: '25px', minWidth: '300px' }}
+                                style={{
+                                    marginBottom: '2rem',
+                                    paddingLeft: '25px',
+                                    paddingRight: '25px',
+                                    minWidth: '300px',
+                                }}
                             >
                                 <CountdownWrapper date={date} />
                             </Paper>
                         </Grid>
-                        <Grid item container justifyContent='center' height='100%' alignContent='flex-start'>
-                            <Tabs
-                                sx={{
-                                    '& .MuiTabs-indicator': { backgroundColor: 'custom.creamCan' },
-                                    '& .MuiTab-root': {
-                                        color: 'white',
-                                        backgroundColor: alpha(theme.palette.custom.darkCreamCan, 0.25),
-                                        borderRadius: '20px 20px 0 0',
-                                    },
-                                    '& .Mui-selected': {
-                                        color: 'white !important',
-                                        backgroundColor: 'custom.creamCan',
-                                    },
-                                }}
-                                value={tab}
-                                onChange={handleChange}
-                                centered
-                                aria-label='secondary tabs example'
-                            >
+                        <Grid item direction='column' width='100%' display='flex' flexGrow={1}>
+                            <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
                                 <Tab label='Questions' value='Questions' />
                                 <Tab label='Feedback' value='Feedback' />
                                 {eventData.isViewerModerator === true && <Tab label='Broadcast' value='Broadcast' />}
-                            </Tabs>
-                            <Grid
-                                id='event-pre-tabs-scrollable'
-                                container
-                                justifyContent='center'
-                                width='80%'
-                                height='90%'
-                                minHeight='600px'
-                                sx={{
-                                    border: 5,
-                                    padding: 1,
-                                    borderImage: `linear-gradient(${theme.palette.custom.creamCan},${alpha(
-                                        theme.palette.custom.creamCan,
-                                        0.06
-                                    )}) 10`,
-                                    backgroundColor: alpha(theme.palette.custom.creamCan, 0.06),
-                                    overflowY: 'scroll',
-                                    '::-webkit-scrollbar': {
-                                        backgroundColor: 'transparent',
-                                    },
-                                    '::-webkit-scrollbar-thumb': {
-                                        backgroundColor: '#D9D9D9',
-                                        backgroundOpacity: '0.3',
-                                        borderRadius: '20px',
-                                        border: '5px solid transparent',
-                                        backgroundClip: 'content-box',
-                                    },
+                            </StyledTabs>
+                            <StyledColumnGrid
+                                props={{
+                                    id: 'scrollable-tab',
+                                    minHeight: '600px',
+                                    maxHeight: '100%',
+                                    display: 'flex',
+                                    flexGrow: 1,
                                 }}
                             >
                                 <ViewerOnlyQuestionList
@@ -230,7 +210,7 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                                     }
                                     isVisible={tab === 'Feedback'}
                                 />
-                            </Grid>
+                            </StyledColumnGrid>
                         </Grid>
                     </Grid>
                 </Grid>

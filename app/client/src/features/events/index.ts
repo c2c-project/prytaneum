@@ -9,4 +9,5 @@ export * from './Videos';
 export * from './EventProfile';
 export * from './useEvent';
 export * from './EventLive';
+export * from './EventLiveModeratorView';
 export * from './DeleteEvent';
