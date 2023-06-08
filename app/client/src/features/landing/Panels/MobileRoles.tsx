@@ -1,20 +1,10 @@
 import * as React from 'react';
 import { Grid, Stack } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 
 import { Blurb } from '@local/features/landing/Blurb';
 import MobileRoleCard from '@local/features/landing/Panels/MobileRoleCard';
 
-const useStyles = makeStyles(() => ({
-    root: {
-        backgroundColor: '#F5C64F42',
-        minHeight: '60vh',
-        width: '100%',
-    },
-}));
-
 export function MobileRoles() {
-    const classes = useStyles();
     const speakerBulletPoints = ['Same experience as a zoom call', 'One on one with speakers'];
     const participantBulletPoints = [
         'Submit questions',
@@ -30,12 +20,14 @@ export function MobileRoles() {
     return (
         <Grid
             container
+            width='100%'
+            minHeight='60vh'
             overflow='hidden'
             alignItems='center'
             justifyContent='center'
             spacing={2}
             margin={0}
-            className={classes.root}
+            style={{ backgroundColor: '#F5C64F42' }}
         >
             <Grid item>
                 <Blurb title='Participate in town hall events using roles' />
