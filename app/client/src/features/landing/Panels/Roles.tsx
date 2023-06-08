@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     roleCard: {
         width: '25%',
-        height: 560,
+        height: 570,
         backgroundColor: theme.palette.custom.creamCan,
         borderRadius: 0,
         display: 'flex',
@@ -48,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         width: '95%',
         [theme.breakpoints.up('lg')]: {
-            marginTop: -950,
+            marginTop: -710,
         },
         [theme.breakpoints.down('lg')]: {
-            marginTop: -890,
+            marginTop: -660,
         },
         zIndex: 1000,
         display: 'flex',
@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Roles() {
     const theme = useTheme();
+    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
     const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
     const classes = useStyles();
@@ -77,6 +78,7 @@ export function Roles() {
             alignItems='center'
             justifyContent='center'
             spacing={2}
+            margin={0}
             style={{ backgroundColor: '#F5C64F42', width: '100%' }}
         >
             <Grid item width='100%' marginTop={8}>
@@ -89,7 +91,7 @@ export function Roles() {
                 width='95%'
                 maxWidth='1500px'
                 marginTop={7}
-                marginBottom={20}
+                marginBottom={5}
             >
                 {/* User is not pointed to the top of each guide page after navigating to the page.
                     This is caused by an open NextJS bug: https://github.com/vercel/next.js/issues/28778 */}
@@ -113,13 +115,13 @@ export function Roles() {
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Same experience as a Zoom call'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'One on one with moderators'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -143,18 +145,21 @@ export function Roles() {
                         />
                         <List disablePadding={true} sx={{ listStyleType: 'disc', marginTop: 10, marginLeft: 1 }}>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
-                                <ListItemText primary={'Submit questions'} primaryTypographyProps={{ fontSize: 18 }} />
+                                <ListItemText
+                                    primary={'Submit questions'}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
+                                />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Like and quote other participant questions'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Provide feedback to moderators'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -199,13 +204,13 @@ export function Roles() {
                                     primary={
                                         'Manage the question queue by adding, removing and reordering participant questions'
                                     }
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Respond to participant feedback'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -248,13 +253,13 @@ export function Roles() {
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Create events for an organization'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                             <ListItem sx={{ display: 'list-item', marginBottom: -2 }}>
                                 <ListItemText
                                     primary={'Configure event details'}
-                                    primaryTypographyProps={{ fontSize: 18 }}
+                                    primaryTypographyProps={{ fontSize: lgDownBreakpoint ? 14 : 16 }}
                                 />
                             </ListItem>
                         </List>
@@ -279,7 +284,7 @@ export function Roles() {
                 </Card>
             </Stack>
 
-            <Grid item className={classes.featuresBanner} maxWidth='1500px'>
+            <Grid item className={classes.featuresBanner} maxWidth='2000px'>
                 <Typography variant='h4' color='white' fontSize={20} marginBottom={2}>
                     Features
                 </Typography>

@@ -34,6 +34,7 @@ export function MobileRoles() {
             alignItems='center'
             justifyContent='center'
             spacing={2}
+            margin={0}
             className={classes.root}
         >
             <Grid item>

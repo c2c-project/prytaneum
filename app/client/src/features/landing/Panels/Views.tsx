@@ -68,7 +68,7 @@ export function Views() {
     const classes = useStyles();
 
     return (
-        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root}>
+        <Grid container alignItems='center' justifyContent='center' spacing={2} className={classes.root} margin={0}>
             <Grid item marginTop={6}>
                 <Blurb
                     title='A better solution for remote public engagement.'
@@ -85,7 +85,7 @@ export function Views() {
                 wrap={mdBreakpoint ? 'wrap' : 'nowrap'}
                 marginTop={5}
             >
-                <Grid item>
+                <Grid item marginRight={2}>
                     <Grid container wrap='nowrap' justifyContent='center'>
                         <img
                             className={classes.contain}
@@ -127,7 +127,7 @@ export function Views() {
                     width='50%'
                     height='50%'
                 />
-                <Grid item>
+                <Grid item marginLeft={2}>
                     <Grid container wrap='nowrap' justifyContent='center'>
                         <img
                             className={classes.contain}
