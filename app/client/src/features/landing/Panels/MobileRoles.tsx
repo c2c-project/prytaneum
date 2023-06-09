@@ -21,19 +21,20 @@ export function MobileRoles() {
         <Grid
             container
             width='100%'
-            minHeight='60vh'
             overflow='hidden'
             alignItems='center'
             justifyContent='center'
             spacing={2}
             margin={0}
+            paddingTop={5}
+            paddingBottom={5}
             style={{ backgroundColor: '#F5C64F42' }}
         >
             <Grid item>
                 <Blurb title='Participate in town hall events using roles' />
             </Grid>
 
-            <Stack spacing={2} width='90%'>
+            <Stack spacing={2} width='90%' marginTop={5}>
                 <MobileRoleCard
                     title='Speaker'
                     description='Officials who answer the discussion by moderators.'

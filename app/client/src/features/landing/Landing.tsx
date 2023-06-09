@@ -97,7 +97,7 @@ export default function Landing() {
                         paragraphsColor='#272C6C'
                     />
                 </Grid>
-                <Grid item>
+                <Grid item style={{ padding: 0 }}>
                     <img
                         style={{ objectFit: 'contain' }}
                         alt='Team Photo'
@@ -107,13 +107,23 @@ export default function Landing() {
                     />
                 </Grid>
                 <Grid item>
-                    <Button size='medium' style={{ color: 'white' }} onClick={() => router.push('/aboutus')}>
+                    <Button
+                        size='medium'
+                        variant='contained'
+                        style={{
+                            color: 'white',
+                            backgroundColor: theme.palette.custom.creamCan,
+                            marginTop: mdDownBreakpoint ? 0 : '-10rem',
+                            zIndex: 100,
+                        }}
+                        onClick={() => router.push('/aboutus')}
+                    >
                         Read more about us
                     </Button>
                 </Grid>
             </Grid>
             {/* FOOTER SECTION */}
-            <Grid container width='100%'>
+            <Grid container width='100%' marginTop={mdDownBreakpoint ? '1rem' : 0}>
                 <Grid item container justifyContent={mdDownBreakpoint ? 'center' : 'normal'}>
                     <Grid
                         item
