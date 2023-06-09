@@ -29,7 +29,7 @@ export function CallToAction() {
                     height='100%'
                 />
             </Grid>
-            <Grid item xs={12} md={6} marginLeft={mdDownBreakpoint ? 0 : -10} marginTop={-13}>
+            <Grid item xs={12} md={6} marginLeft={mdDownBreakpoint ? 0 : -10} marginTop={-13} style={{ padding: 0 }}>
                 <img
                     style={{ objectFit: 'contain' }}
                     data-test-id='landing-prytanum-logo'
@@ -54,7 +54,15 @@ export function CallToAction() {
                         between residents and public officials.
                     </Typography>
                 </Grid>
-                <Grid item container marginLeft={mdDownBreakpoint ? 0 : 5} marginTop={3} justifyContent='center'>
+                <Grid
+                    item
+                    container
+                    direction={smDownBreakpoint ? 'column' : 'row'}
+                    marginLeft={mdDownBreakpoint ? 0 : 5}
+                    marginTop={3}
+                    justifyContent='center'
+                    alignItems='center'
+                >
                     <Grid item marginRight={3}>
                         <Button
                             style={{
@@ -68,7 +76,7 @@ export function CallToAction() {
                             Get Started
                         </Button>
                     </Grid>
-                    <Grid item>
+                    <Grid item marginTop={smDownBreakpoint ? '1rem' : 0}>
                         <Button
                             style={{
                                 backgroundColor: '#ED526C',

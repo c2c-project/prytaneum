@@ -5,7 +5,7 @@ import useTheme from '@mui/styles/useTheme';
 import { Blurb } from '@local/features/landing/Blurb';
 export function Views() {
     const theme = useTheme();
-    const mdBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
+    const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <Grid
@@ -14,7 +14,7 @@ export function Views() {
             minHeight='60vh'
             alignItems='center'
             justifyContent='center'
-            spacing={2}
+            // spacing={2}
             margin={0}
             marginTop={theme.spacing(2)}
             marginBottom={theme.spacing(2)}
@@ -32,10 +32,10 @@ export function Views() {
                 item
                 alignItems='center'
                 justifyContent='center'
-                wrap={mdBreakpoint ? 'wrap' : 'nowrap'}
+                wrap={mdDownBreakpoint ? 'wrap' : 'nowrap'}
                 marginTop={5}
             >
-                <Grid item marginRight={2}>
+                <Grid item>
                     <Grid container wrap='nowrap' justifyContent='center'>
                         <img
                             style={{ objectFit: 'contain' }}
@@ -44,16 +44,22 @@ export function Views() {
                             width={31}
                             height={21}
                         />
-                        <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
+                        <Typography variant='h4' color='#F5C64F' fontSize='40px'>
                             Participant View
                         </Typography>
                     </Grid>
-                    <Typography variant='body1' color='#272C6C' fontSize='18px' align='center'>
+                    <Typography
+                        variant='body1'
+                        color='#272C6C'
+                        fontSize='18px'
+                        align='center'
+                        marginRight={mdDownBreakpoint ? 0 : theme.spacing(2)}
+                    >
                         Sit in on Prytaneum events as a participant and contribute to event discussion
                     </Typography>
                 </Grid>
                 <img
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', marginTop: mdDownBreakpoint ? theme.spacing(2) : 0 }}
                     data-test-id='participant-view'
                     alt='Participant View Screenshot'
                     src='/static/participant_view.png'
@@ -65,19 +71,19 @@ export function Views() {
                 container
                 alignItems='center'
                 justifyContent='center'
-                wrap={mdBreakpoint ? 'wrap' : 'nowrap'}
-                marginTop={10}
+                wrap={mdDownBreakpoint ? 'wrap' : 'nowrap'}
+                marginTop={mdDownBreakpoint ? 5 : 10}
                 marginBottom={4}
             >
                 <img
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', marginBottom: mdDownBreakpoint ? theme.spacing(2) : 0 }}
                     data-test-id='moderator-view'
                     alt='Moderator View Screenshot'
                     src='/static/moderator_view.png'
                     width='50%'
                     height='50%'
                 />
-                <Grid item marginLeft={2}>
+                <Grid item>
                     <Grid container wrap='nowrap' justifyContent='center'>
                         <img
                             style={{ objectFit: 'contain' }}
@@ -86,11 +92,17 @@ export function Views() {
                             width={36}
                             height={26}
                         />
-                        <Typography variant='h4' color='#F5C64F' fontSize='40px' marginLeft={1}>
+                        <Typography variant='h4' color='#F5C64F' fontSize='40px'>
                             Moderator View
                         </Typography>
                     </Grid>
-                    <Typography variant='body1' color='#272C6C' fontSize='18px' align='center' marginLeft={-2}>
+                    <Typography
+                        variant='body1'
+                        color='#272C6C'
+                        fontSize='18px'
+                        align='center'
+                        marginLeft={mdDownBreakpoint ? 0 : theme.spacing(2)}
+                    >
                         or take charge of your own Prytaneum event as a moderator and administrate event discussion
                     </Typography>
                 </Grid>
