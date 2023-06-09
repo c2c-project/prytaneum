@@ -1,6 +1,13 @@
 name: Deploy Client
 
 on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'app/client/**'
+            - 'k8s/client/**'
+            - 'docker/Dockerfile.client'
     workflow_dispatch:
         inputs:
             releaseType:
@@ -16,6 +23,7 @@ env:
     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
     GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
     GKE_ZONE: ${{ vars.GKE_ZONE }}
+    CLIENT_DEPLOYMENT: ${{ vars.CLIENT_DEPLOYMENT }}
     CLIENT_IMAGE: ${{ vars.CLIENT_IMAGE }}
     NAMESPACE: ${{ vars.NAMESPACE }}
     GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
@@ -104,6 +112,7 @@ jobs:
         environment:
             name: production
             url: ${{ env.ORIGIN }}
+        needs: [staging]
 
         steps:
             - name: Checkout
