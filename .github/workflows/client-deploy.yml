@@ -1,6 +1,13 @@
 name: Deploy Client
 
 on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'app/client/**'
+            - 'k8s/client/**'
+            - 'docker/Dockerfile.client'
     workflow_dispatch:
         inputs:
             releaseType:
@@ -104,6 +111,7 @@ jobs:
         environment:
             name: production
             url: ${{ env.ORIGIN }}
+        needs: [staging]
 
         steps:
             - name: Checkout
