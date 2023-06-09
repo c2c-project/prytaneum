@@ -19,6 +19,7 @@ env:
     SERVER_IMAGE: ${{ vars.SERVER_IMAGE }}
     NAMESPACE: ${{ vars.NAMESPACE }}
     ORIGIN: ${{ vars.ORIGIN }}
+    DATABASE_URL: ${{ secrets.DATABASE_URL }} # Used for prisma migration
 
 jobs:
     staging:
