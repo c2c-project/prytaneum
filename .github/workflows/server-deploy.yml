@@ -1,6 +1,13 @@
 name: Deploy Server
 
 on:
+    push:
+        branches:
+            - staging
+        paths:
+            - 'app/server/**'
+            - 'k8s/server/**'
+            - 'docker/Dockerfile.server'
     workflow_dispatch:
         inputs:
             releaseType:
