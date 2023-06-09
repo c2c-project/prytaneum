@@ -1,0 +1,195 @@
+name: Deploy Server
+
+on:
+    workflow_dispatch:
+        inputs:
+            releaseType:
+                description: 'Where to release (staging or prod)?'
+                required: true
+                default: 'staging'
+                type: choice
+                options:
+                    - staging
+                    - prod
+
+env:
+    PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+    GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
+    GKE_ZONE: ${{ vars.GKE_ZONE }}
+    SERVER_IMAGE: ${{ vars.SERVER_IMAGE }}
+    NAMESPACE: ${{ vars.NAMESPACE }}
+    ORIGIN: ${{ vars.ORIGIN }}
+
+jobs:
+    staging:
+        name: Deploy to Staging
+        runs-on: ubuntu-latest
+        environment:
+            name: development
+            url: ${{ env.ORIGIN }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - run: env
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            # Build the Server
+            - name: Build Server
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.server \
+                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --build-arg ORIGIN="$ORIGIN" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    .
+
+            # Push the Server image to Google Container Registry
+            - name: Publish Server
+              run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
+
+            # Set up kustomize
+            - name: Set up Kustomize
+              run: |-
+                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+                  chmod u+x ./kustomize
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy Server
+              run: |-
+                  cd ./k8s/server/production
+                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Update DB schema to be in sync with prisma schema
+            - name: Prisma Migration
+              run: yarn workspace @app/server prisma-migrate-deploy
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/prytaneum-server
+                  kubectl get services -o wide
+    prod:
+        if: github.event.inputs.releaseType == 'prod'
+        name: Deploy to Production
+        runs-on: ubuntu-latest
+        environment:
+            name: production
+            url: ${{ env.ORIGIN }}
+        needs: [staging]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - run: env
+
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+            # Setup gcloud CLI
+            - name: 'Set up Cloud SDK'
+              uses: google-github-actions/setup-gcloud@v1
+              with:
+                  version: '400.0.0'
+                  project_id: ${{ secrets.GKE_PROJECT_ID }}
+
+            # Configure Docker to use the gcloud command-line tool as a credential
+            # helper for authentication
+            - run: |-
+                  gcloud --quiet auth configure-docker
+            # Get the GKE credentials so we can deploy to the cluster
+            - id: 'get-credentials'
+              uses: google-github-actions/get-gke-credentials@v0.7.0
+              with:
+                  cluster_name: ${{ env.GKE_CLUSTER }}
+                  location: ${{ env.GKE_ZONE }}
+
+            # Build the Server
+            - name: Build Server
+              run: |-
+                  docker build \
+                    -f ./docker/Dockerfile.server \
+                    --tag "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA" \
+                    --build-arg ORIGIN="$ORIGIN" \
+                    --build-arg GITHUB_SHA="$GITHUB_SHA" \
+                    --build-arg GITHUB_REF="$GITHUB_REF" \
+                    .
+
+            # Push the Server image to Google Container Registry
+            - name: Publish Server
+              run: docker push "gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA"
+
+            # Set up kustomize
+            - name: Set up Kustomize
+              run: |-
+                  curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+                  chmod u+x ./kustomize
+
+            # Deploy the Docker image to the GKE cluster
+            - name: Kustomize & Deploy Server
+              run: |-
+                  cd ./k8s/server/production
+                  kustomize edit set image gcr.io/PROJECT_ID/SERVER_IMAGE:TAG=gcr.io/$PROJECT_ID/$SERVER_IMAGE:$GITHUB_SHA
+                  kustomize edit set namespace $NAMESPACE
+                  kustomize build . | kubectl apply -f -
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+
+            - name: Yarn Install
+              run: yarn install
+
+            # Update DB schema to be in sync with prisma schema
+            - name: Prisma Migration
+              run: yarn workspace @app/server prisma-migrate-deploy
+
+            # Finalize Deployment
+            - name: Set kubectl context
+              run: |-
+                  kubectl config set-context --current --namespace=$NAMESPACE
+
+            - name: Deployment Rollout Check
+              run: |-
+                  kubectl rollout status deployment/prytaneum-server
+                  kubectl get services -o wide
