@@ -45,6 +45,7 @@ export class PlaywrightLandingPage {
     // Actions
     async goto() {
         await this.page.goto('/');
+        await this.reload();
     }
 
     async clickOnLogin() {
@@ -135,5 +136,9 @@ export class PlaywrightLandingPage {
 
     async doNotSee(component: Locator) {
         await expect(component).toBeHidden();
+    }
+
+    async reload() {
+        await this.page.reload();
     }
 }
