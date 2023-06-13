@@ -1,0 +1,17 @@
+version: '3.6'
+services:
+    redis-server:
+        container_name: redis
+        image: redis:6
+        restart: always
+        ports:
+            - '6379:6380'
+        # --save 20 1 means save every 20 seconds if 1 or more writes has been made
+        command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS:-redispassword}
+        volumes:
+            - redis_data:/data
+            - redis_conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+    redis_data:
+    redis_conf:

@@ -9,7 +9,7 @@ export function startup() {
     const server = getOrCreateServer();
     server.log.info('Performing setup checks...');
     checkEnv();
-    initGracefulShutdown();
+    initGracefulShutdown(server.log);
     setupMetaRoutes(server);
 
     server.log.info('Attaching plugins...');

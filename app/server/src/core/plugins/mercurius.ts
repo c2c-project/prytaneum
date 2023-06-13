@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import redis from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
-import { loadSchema, getPrismaClient } from '../utils';
+import { getRedisClient, loadSchema, getPrismaClient } from '@local/core/utils';
 
 /**
  * Helper function for extracting the the authentication JWT from a `FastifyRequest`
@@ -37,8 +37,10 @@ async function makeRequestContext(req: FastifyRequest, reply: FastifyReply) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
+    const _redis = await getRedisClient(reply.log);
     return {
         prisma: getPrismaClient(reply.log),
+        redis: _redis,
         viewer: {
             id: userId,
         },
@@ -51,8 +53,10 @@ async function makeSubscriptionContext(_: any, req: FastifyRequest) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
+    const _redis = await getRedisClient(req.log);
     return {
         prisma: getPrismaClient(req.log),
+        redis: _redis,
         viewer: {
             id: userId,
         },
@@ -78,20 +82,25 @@ declare module 'mercurius' {
 export function attachMercuriusTo(server: FastifyInstance) {
     server.log.debug('Attaching Mercurius.');
     const schema = loadSchema(server.log);
+    const getEmitter = () => {
+        if (process.env.NODE_ENV === 'production') {
+            server.log.debug('Using redis MQEmitter.');
+            return redis({
+                host: process.env.REDIS_HOST,
+                port: process.env.REDIS_PORT,
+                password: process.env.REDIS_PASSWORD,
+            });
+        }
+        server.log.debug('Using in-memory MQEmitter.');
+        return undefined;
+    };
     server.register(mercurius, {
         schema,
         graphiql: process.env.NODE_ENV === 'development',
         context: makeRequestContext,
         subscription: {
             context: makeSubscriptionContext,
-            emitter:
-                process.env.NODE_ENV === 'production'
-                    ? redis({
-                        host: process.env.REDIS_HOST,
-                        port: process.env.REDIS_PORT,
-                        password: process.env.REDIS_PASSWORD,
-                    })
-                    : undefined,
+            emitter: getEmitter(),
         },
     });
 

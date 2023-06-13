@@ -15,6 +15,15 @@ services:
         environment:
             NODE_ENV: development
             DATABASE_URL: postgresql://postgres:postgrespassword@db:5432
+            REDIS_HOST: redis-server
+            REDIS_PORT: 6379
+            REDIS_PASSWORD: redispassword
+        depends_on:
+            - db
+            - redis-server
+        links:
+            - db
+            - redis-server
     db:
         container_name: db
         user: postgres
@@ -28,6 +37,17 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgrespassword
             POSTGRES_DB: postgres
+    redis-server:
+        container_name: redis
+        image: redis:6
+        restart: always
+        ports:
+            - '6379:6380'
+        # --save 20 1 means save every 20 seconds if 1 or more writes has been made
+        command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS:-redispassword}
+        volumes:
+            - redis_data:/data
+            - redis_conf:/usr/local/etc/redis/redis.conf
     prisma-studio:
         container_name: prisma-studio
         image: timothyjmiller/prisma-studio:latest
@@ -44,6 +64,10 @@ services:
             POSTGRES_URL: postgresql://postgres:postgrespassword@db:5432
         ports:
             - 5555:5555
+        depends_on:
+            - db
 
 volumes:
     db_data:
+    redis_data:
+    redis_conf:
