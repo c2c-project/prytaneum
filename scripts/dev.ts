@@ -18,6 +18,7 @@ const { result } = concurrently([
         name: 'db',
         prefixColor: 'bgGreen.bold',
     },
+    { command: `yarn exec ${projectRoot}/redis/start-redis.sh`, name: 'redis', prefixColor: 'bgRed.bold' },
 ]);
 
 const noOp = () => {};
