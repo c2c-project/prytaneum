@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "pretest": "yarn workspace @app/server prisma-db-push && yarn workspace @app/server prisma-db-seed",
+        "pretest": "yarn g:start-test-db && yarn workspace @app/server prisma-db-push && yarn workspace @app/server prisma-db-seed",
         "test": "yarn pretest && dotenv -e .env.development -- playwright test",
         "test:ci": "dotenv -e .env.test -- yarn run test",
         "debug": "yarn pretest && dotenv -e .env.development -- playwright test --headed",
