@@ -11,8 +11,6 @@ const { result } = concurrently([
     { command: 'yarn workspace @app/client dev', name: 'client', prefixColor: 'bgMagenta.bold' },
     { command: 'yarn workspace @app/server dev', name: 'server', prefixColor: 'bgBlue.bold' },
     { command: 'yarn workspace @app/proxy dev', name: 'proxy', prefixColor: 'black.bgYellow.bold' },
-    { command: `yarn exec ${projectRoot}/db/start-test-db.sh`, name: 'db', prefixColor: 'bgGreen.bold' },
-    { command: `yarn exec ${projectRoot}/redis/start-redis.sh`, name: 'redis', prefixColor: 'bgRed.bold' },
 ]);
 
 const noOp = () => {};
