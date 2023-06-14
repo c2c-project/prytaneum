@@ -45,7 +45,6 @@ export class PlaywrightLandingPage {
     // Actions
     async goto() {
         await this.page.goto('/');
-        await this.reload();
     }
 
     async clickOnLogin() {
