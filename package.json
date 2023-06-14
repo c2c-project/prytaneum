@@ -12,7 +12,9 @@
         "g:dev-test": "yarn workspace @app/server generate && ts-node-dev -- ./scripts/test.ts",
         "g:start-test-db": "yarn exec db/start-test-db.sh",
         "g:start-db": "yarn exec db/start-db.sh",
-        "g:stop-db": "yarn exec db/stop-db.sh"
+        "g:stop-db": "yarn exec db/stop-db.sh",
+        "g:start-redis": "yarn exec redis/start-redis.sh",
+        "g:stop-redis": "yarn exec redis/stop-redis.sh"
     },
     "devDependencies": {
         "@commitlint/cli": "^17.0.2",

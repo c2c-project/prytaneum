@@ -12,6 +12,11 @@ declare global {
             POD_ID: string;
             PUB_SUB_PREFIX: string;
             LOG_LEVEL: string;
+            REDIS_HOST: string;
+            REDIS_PORT: string;
+            REDIS_USERNAME: string;
+            REDIS_PASSWORD: string;
+            REDIS_URL: string;
         }
     }
 }

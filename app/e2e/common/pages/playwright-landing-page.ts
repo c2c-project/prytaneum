@@ -136,4 +136,8 @@ export class PlaywrightLandingPage {
     async doNotSee(component: Locator) {
         await expect(component).toBeHidden();
     }
+
+    async reload() {
+        await this.page.reload();
+    }
 }

@@ -16,10 +16,11 @@
         "prisma-migrate-deploy": "prisma migrate deploy",
         "prisma-migrate-diff": "prisma migrate diff",
         "prisma-down-migration": "prisma db execute --file ./down.sql --schema prisma/schema.prisma",
+        "pretest": "yarn g:start-redis",
         "test:prisma-db-push": "dotenv -c test yarn prisma-db-push",
         "test:unit": "dotenv -c test -- jest \"src/.*\\.unit\\.test\\.ts\" --detectOpenHandles --runInBand",
         "test:integration": "dotenv -c test -- jest \"src/.*\\.integration\\.test\\.ts\" --detectOpenHandles --runInBand",
-        "test:all": "dotenv -c test -- jest \"src/.*.test\\.ts\" --detectOpenHandles --runInBand",
+        "test:all": "yarn pretest && dotenv -c test -- jest \"src/.*.test\\.ts\" --detectOpenHandles --runInBand",
         "test:coverage": "dotenv -c test -- jest --coverage",
         "test:ci": "yarn generate && yarn g:start-test-db && yarn test:prisma-db-push && yarn test:all"
     },
@@ -56,6 +57,7 @@
         "multer": "^1.4.5-lts.1",
         "papaparse": "^5.4.1",
         "pino-pretty": "^7.1.0",
+        "redis": "^4.6.7",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -69,6 +71,7 @@
         "@types/multer": "^1",
         "@types/node": "^15.0.1",
         "@types/papaparse": "^5",
+        "@types/redis": "^4.0.11",
         "@types/supertest": "^2.0.12",
         "@types/uuid": "^8",
         "@typescript-eslint/eslint-plugin": "^5.12.0",

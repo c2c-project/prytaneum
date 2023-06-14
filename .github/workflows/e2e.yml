@@ -25,11 +25,6 @@ jobs:
               with:
                   node-version: '16'
 
-            - name: Start Redis
-              uses: supercharge/redis-github-action@1.4.0
-              with:
-                  redis-version: 6
-
             - name: Yarn Install
               run: yarn install
 

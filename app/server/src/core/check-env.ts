@@ -39,7 +39,13 @@ const isValidOrigin = isString(process.env.ORIGIN);
 
 const isValidRedisHost = isString(process.env.REDIS_HOST);
 
+const isValidRedisPort = isNumber(process.env.REDIS_PORT);
+
+const isValidRedisUsername = isString(process.env.REDIS_USERNAME);
+
 const isValidRedisPassword = isString(process.env.REDIS_PASSWORD);
+
+const isValidRedisUrl = isString(process.env.REDIS_URL);
 
 // This only needs to be defined in production.
 const isValidGcpProjectId = isProduction || isStaging ? isString(process.env.GCP_PROJECT_ID) : true;
@@ -53,5 +59,8 @@ export function checkEnv() {
     if (!isValidOrigin) throw new Error('ORIGIN is not valid');
     if (!isValidGcpProjectId) throw new Error('GCP_PROJECT_ID is not valid');
     if (!isValidRedisHost) throw new Error('REDIS_HOST is not valid');
+    if (!isValidRedisPort) throw new Error('REDIS_PORT is not valid');
+    if (!isValidRedisUsername) throw new Error('REDIS_USERNAME is not valid');
     if (!isValidRedisPassword) throw new Error('REDIS_PASSWORD is not valid');
+    if (!isValidRedisUrl) throw new Error('REDIS_URL is not valid');
 }

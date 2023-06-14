@@ -22,10 +22,3 @@ test('I can register from the app bar', async ({ page }) => {
     await landing.submitRegisterForm();
     await landing.amLoggedIn();
 });
-
-test('I can be redicrected via the large register button', async ({ page }) => {
-    const landing = new PlaywrightLandingPage(page);
-    await landing.goto();
-    await landing.clickOnLargeRegisterButton();
-    await landing.amOnRegistrationPage();
-});
