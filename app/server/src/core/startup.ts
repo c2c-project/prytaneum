@@ -2,7 +2,7 @@ import { getOrCreateServer } from './server';
 import { checkEnv } from './check-env';
 import { initGracefulShutdown } from './graceful-shutdown';
 import { setupMetaRoutes } from './meta-routes';
-import { getRedisClient } from './utils';
+import { getPrismaClient, getRedisClient } from './utils';
 import * as plugins from './plugins';
 import * as hooks from './hooks';
 
@@ -12,7 +12,9 @@ export function startup() {
     checkEnv();
     initGracefulShutdown(server.log);
     setupMetaRoutes(server);
-    // Intial redis client load
+    // Init prisma client
+    getPrismaClient(server.log);
+    // Intit redis client
     getRedisClient(server.log);
 
     server.log.info('Attaching plugins...');
