@@ -117,7 +117,7 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
             maxWidth={mdUpBreakpoint ? 600 : '100%'}
             sx={{
                 '& > *': {
-                    marginBottom: theme.spacing(2.5),
+                    marginBottom: theme.spacing(1),
                     width: '100%',
                 },
             }}
@@ -133,9 +133,11 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                 )}
             </Grid>
             {isViewerModerator && (
-                <Button onClick={toggleTopSectionVisibility}>
-                    {topSectionVisible ? 'Hide Moderator Tools' : 'Show Moderator Tools'}
-                </Button>
+                <Grid item container justifyContent='center'>
+                    <Button onClick={toggleTopSectionVisibility}>
+                        {topSectionVisible ? 'Hide Moderator Tools' : 'Show Moderator Tools'}
+                    </Button>
+                </Grid>
             )}
             {isViewerModerator && topSectionVisible && (
                 <Grid item container justifyContent='start'>
@@ -153,13 +155,26 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                     </StyledColumnGrid>
                 </Grid>
             )}
-            <Grid item container justifyContent='center' height='100%' width='100%'>
+            <Grid
+                item
+                container
+                display='flex'
+                direction='column'
+                justifyContent='flex-start'
+                flexGrow={1}
+                width='100%'
+            >
                 <StyledTabs
                     value={bottomTab}
-                    props={{ onChange: handleBottomChange, 'aria-label': 'bottom tabs', centered: true }}
+                    props={{
+                        onChange: handleBottomChange,
+                        'aria-label': 'bottom tabs',
+                        centered: true,
+                    }}
                 >
                     {isViewerModerator && (
                         <Tab
+                            style={{ height: 0 }}
                             label={smDownBreakpoint ? <Typography variant='caption'>Queue</Typography> : 'Queue'}
                             value='Queue'
                         />
@@ -184,7 +199,9 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                 <StyledColumnGrid
                     props={{
                         id: 'scrollable-tab',
-                        height: `${mdUpBreakpoint ? '97%' : '500px'}`,
+                        minHeight: '500px',
+                        display: 'flex',
+                        flexGrow: 1,
                     }}
                 >
                     {isViewerModerator === true && (
