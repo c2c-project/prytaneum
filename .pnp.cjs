@@ -430,6 +430,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/bcryptjs", "npm:2.4.2"],\
             ["@types/cors", "npm:2.8.12"],\
             ["@types/eslint", "npm:7.29.0"],\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
             ["@types/jest", "npm:27.4.1"],\
             ["@types/jsonwebtoken", "npm:8.5.1"],\
             ["@types/mailgun-js", "npm:0.22.11"],\
@@ -462,6 +463,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["graphql", "npm:15.8.0"],\
             ["graphql-relay", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:0.9.0"],\
             ["ioredis", "npm:5.3.2"],\
+            ["ioredis-mock", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.7.0"],\
             ["jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.5.1"],\
             ["jest-mock-extended", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.0.5"],\
             ["jsonwebtoken", "npm:8.5.1"],\
@@ -11519,6 +11521,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@ioredis/as-callback", [\
+        ["npm:3.0.0", {\
+          "packageLocation": "./.yarn/cache/@ioredis-as-callback-npm-3.0.0-37fb1e968e-2835e39631.zip/node_modules/@ioredis/as-callback/",\
+          "packageDependencies": [\
+            ["@ioredis/as-callback", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@ioredis/commands", [\
         ["npm:1.2.0", {\
           "packageLocation": "./.yarn/cache/@ioredis-commands-npm-1.2.0-47541de88b-9b20225ba3.zip/node_modules/@ioredis/commands/",\
@@ -15859,6 +15870,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/http-proxy", "npm:1.17.9"],\
             ["@types/node", "npm:14.14.41"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/ioredis-mock", [\
+        ["npm:8.2.2", {\
+          "packageLocation": "./.yarn/cache/@types-ioredis-mock-npm-8.2.2-f226a95516-caf0fd904d.zip/node_modules/@types/ioredis-mock/",\
+          "packageDependencies": [\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
+            ["ioredis", "npm:5.3.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -26087,6 +26108,40 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["fengari", [\
+        ["npm:0.1.4", {\
+          "packageLocation": "./.yarn/cache/fengari-npm-0.1.4-f367acc87f-bd6b04f973.zip/node_modules/fengari/",\
+          "packageDependencies": [\
+            ["fengari", "npm:0.1.4"],\
+            ["readline-sync", "npm:1.4.10"],\
+            ["sprintf-js", "npm:1.1.2"],\
+            ["tmp", "npm:0.0.33"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fengari-interop", [\
+        ["npm:0.1.3", {\
+          "packageLocation": "./.yarn/cache/fengari-interop-npm-0.1.3-4cca8d3bbc-f483e0aede.zip/node_modules/fengari-interop/",\
+          "packageDependencies": [\
+            ["fengari-interop", "npm:0.1.3"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:fc91ac6e5a525f4aba475f0e9513c75d92fdf62ec77be7e86d3e80e9a59ffade1c2f49bf6c806b8d4802bd0eacea1f17d8aa23a50fa1869d709ad1bc618075f1#npm:0.1.3", {\
+          "packageLocation": "./.yarn/__virtual__/fengari-interop-virtual-31db8ede14/0/cache/fengari-interop-npm-0.1.3-4cca8d3bbc-f483e0aede.zip/node_modules/fengari-interop/",\
+          "packageDependencies": [\
+            ["fengari-interop", "virtual:fc91ac6e5a525f4aba475f0e9513c75d92fdf62ec77be7e86d3e80e9a59ffade1c2f49bf6c806b8d4802bd0eacea1f17d8aa23a50fa1869d709ad1bc618075f1#npm:0.1.3"],\
+            ["@types/fengari", null],\
+            ["fengari", "npm:0.1.4"]\
+          ],\
+          "packagePeers": [\
+            "@types/fengari",\
+            "fengari"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["fetch-blob", [\
         ["npm:2.1.2", {\
           "packageLocation": "./.yarn/cache/fetch-blob-npm-2.1.2-2056bf83c5-22d4487ce7.zip/node_modules/fetch-blob/",\
@@ -29217,6 +29272,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["ioredis-auto-pipeline", "npm:1.0.2"],\
             ["to-fast-properties", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["ioredis-mock", [\
+        ["npm:8.7.0", {\
+          "packageLocation": "./.yarn/cache/ioredis-mock-npm-8.7.0-e632a644c7-46a4ee40b8.zip/node_modules/ioredis-mock/",\
+          "packageDependencies": [\
+            ["ioredis-mock", "npm:8.7.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.7.0", {\
+          "packageLocation": "./.yarn/__virtual__/ioredis-mock-virtual-fc91ac6e5a/0/cache/ioredis-mock-npm-8.7.0-e632a644c7-46a4ee40b8.zip/node_modules/ioredis-mock/",\
+          "packageDependencies": [\
+            ["ioredis-mock", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.7.0"],\
+            ["@ioredis/as-callback", "npm:3.0.0"],\
+            ["@ioredis/commands", "npm:1.2.0"],\
+            ["@types/ioredis", null],\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
+            ["fengari", "npm:0.1.4"],\
+            ["fengari-interop", "virtual:fc91ac6e5a525f4aba475f0e9513c75d92fdf62ec77be7e86d3e80e9a59ffade1c2f49bf6c806b8d4802bd0eacea1f17d8aa23a50fa1869d709ad1bc618075f1#npm:0.1.3"],\
+            ["ioredis", "npm:5.3.2"],\
+            ["semver", "npm:7.5.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/ioredis-mock",\
+            "@types/ioredis",\
+            "ioredis"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -38349,6 +38433,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["readline-sync", [\
+        ["npm:1.4.10", {\
+          "packageLocation": "./.yarn/cache/readline-sync-npm-1.4.10-6809f52ca7-4dbd8925af.zip/node_modules/readline-sync/",\
+          "packageDependencies": [\
+            ["readline-sync", "npm:1.4.10"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["rechoir", [\
         ["npm:0.6.2", {\
           "packageLocation": "./.yarn/cache/rechoir-npm-0.6.2-0df5f171ec-fe76bf9c21.zip/node_modules/rechoir/",\
@@ -39638,6 +39731,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lru-cache", "npm:6.0.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:7.5.2", {\
+          "packageLocation": "./.yarn/cache/semver-npm-7.5.2-28fb0fd2d6-3fdf5d1e6f.zip/node_modules/semver/",\
+          "packageDependencies": [\
+            ["semver", "npm:7.5.2"],\
+            ["lru-cache", "npm:6.0.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["semver-diff", [\
@@ -40459,6 +40560,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/sprintf-js-npm-1.0.3-73f0a322fa-19d79aec21.zip/node_modules/sprintf-js/",\
           "packageDependencies": [\
             ["sprintf-js", "npm:1.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.1.2", {\
+          "packageLocation": "./.yarn/cache/sprintf-js-npm-1.1.2-ea16269a6d-d4bb464646.zip/node_modules/sprintf-js/",\
+          "packageDependencies": [\
+            ["sprintf-js", "npm:1.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
