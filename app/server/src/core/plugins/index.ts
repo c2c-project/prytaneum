@@ -3,3 +3,4 @@ export * from './cookie';
 export * from './cors';
 export * from './mercurius';
 export * from './multer';
+export * from './rate-limit';
