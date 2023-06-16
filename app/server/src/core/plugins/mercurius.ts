@@ -37,7 +37,7 @@ async function makeRequestContext(req: FastifyRequest, reply: FastifyReply) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
-    const _redis = await getRedisClient(reply.log);
+    const _redis = getRedisClient(reply.log);
     return {
         prisma: getPrismaClient(reply.log),
         redis: _redis,
@@ -53,7 +53,7 @@ async function makeSubscriptionContext(_: any, req: FastifyRequest) {
         const { id } = fromGlobalId(userId);
         userId = id;
     }
-    const _redis = await getRedisClient(req.log);
+    const _redis = getRedisClient(req.log);
     return {
         prisma: getPrismaClient(req.log),
         redis: _redis,
