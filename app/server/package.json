@@ -66,6 +66,7 @@
         "@types/bcryptjs": "^2",
         "@types/cors": "^2",
         "@types/eslint": "^7",
+        "@types/ioredis-mock": "^8.2.2",
         "@types/jest": "^27.4.1",
         "@types/jsonwebtoken": "^8",
         "@types/mailgun-js": "^0.22.11",

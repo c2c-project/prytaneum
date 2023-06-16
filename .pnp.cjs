@@ -430,6 +430,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/bcryptjs", "npm:2.4.2"],\
             ["@types/cors", "npm:2.8.12"],\
             ["@types/eslint", "npm:7.29.0"],\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
             ["@types/jest", "npm:27.4.1"],\
             ["@types/jsonwebtoken", "npm:8.5.1"],\
             ["@types/mailgun-js", "npm:0.22.11"],\
@@ -15873,6 +15874,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/ioredis-mock", [\
+        ["npm:8.2.2", {\
+          "packageLocation": "./.yarn/cache/@types-ioredis-mock-npm-8.2.2-f226a95516-caf0fd904d.zip/node_modules/@types/ioredis-mock/",\
+          "packageDependencies": [\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
+            ["ioredis", "npm:5.3.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/is-function", [\
         ["npm:1.0.0", {\
           "packageLocation": "./.yarn/cache/@types-is-function-npm-1.0.0-1339ca8d44-7cfe4f65ec.zip/node_modules/@types/is-function/",\
@@ -29280,7 +29291,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@ioredis/as-callback", "npm:3.0.0"],\
             ["@ioredis/commands", "npm:1.2.0"],\
             ["@types/ioredis", null],\
-            ["@types/ioredis-mock", null],\
+            ["@types/ioredis-mock", "npm:8.2.2"],\
             ["fengari", "npm:0.1.4"],\
             ["fengari-interop", "virtual:fc91ac6e5a525f4aba475f0e9513c75d92fdf62ec77be7e86d3e80e9a59ffade1c2f49bf6c806b8d4802bd0eacea1f17d8aa23a50fa1869d709ad1bc618075f1#npm:0.1.3"],\
             ["ioredis", "npm:5.3.2"],\
