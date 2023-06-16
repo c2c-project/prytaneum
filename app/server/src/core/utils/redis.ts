@@ -1,5 +1,5 @@
 import type { FastifyLoggerInstance } from 'fastify';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 // @ts-ignore - MockRedis is not typed
 import MockRedis from 'ioredis-mock';
 
@@ -7,22 +7,18 @@ import MockRedis from 'ioredis-mock';
 let _redis: Redis | null = null;
 
 function generateNewRedisClient(logger: FastifyLoggerInstance) {
-    console.log(
-        'ENV: ',
-        process.env.REDIS_HOST,
-        process.env.REDIS_PORT,
-        process.env.REDIS_USERNAME,
-        process.env.REDIS_PASSWORD
-    );
     if (process.env.NODE_ENV === 'test') {
         logger.info('Using mock redis client.');
         return new MockRedis() as Redis;
     }
+    logger.debug('DEBUG DNS lookup');
+    const dns = require('dns');
+    const res = dns.lookup(process.env.REDIS_HOST, console.log);
+    console.log(res);
     logger.info('Generating new redis client.');
     return new Redis({
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT),
-        username: process.env.REDIS_USERNAME,
         password: process.env.REDIS_PASSWORD,
         connectTimeout: 10000, // 10 seconds
         reconnectOnError(err) {
