@@ -316,6 +316,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/server@workspace:app/server"
   dependencies:
+    "@fastify/rate-limit": 6
     "@google-cloud/pubsub": ^2.18.5
     "@graphql-tools/load-files": ^6.3.2
     "@graphql-tools/merge": ^6.2.13
@@ -5724,6 +5725,17 @@ __metadata:
   dependencies:
     text-decoding: ^1.0.0
   checksum: 96880fd8c035014aed3d675ccf79c70f3d2c3be9240c619994bc1a8cd8b8e6c46ebc6390cee42701b6f49685dddab1177773f7ce884c9bbab1259bfceaf5e855
+  languageName: node
+  linkType: hard
+
+"@fastify/rate-limit@npm:6":
+  version: 6.0.1
+  resolution: "@fastify/rate-limit@npm:6.0.1"
+  dependencies:
+    fastify-plugin: ^3.0.1
+    ms: ^2.1.3
+    tiny-lru: ^8.0.1
+  checksum: 3186b5d98f9c37629b4ba080cf452bb4658b10257684a3bcaa65603cf53637064c7bc0bc0baaffa0e79a5ae332ace0b3d002e1c3589befcd273e26d4dcef9a19
   languageName: node
   linkType: hard
 
@@ -17787,6 +17799,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-plugin@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "fastify-plugin@npm:3.0.1"
+  checksum: 131ba0a388f777829c3fb0fd5b75cf057688ce6d0ca354fb1ebf829767a8c853b0825762b9185b5200097454df0ede2f3095da2efe1aa1b3736d07f194e6d374
+  languageName: node
+  linkType: hard
+
 "fastify-static@npm:^3.2.1":
   version: 3.4.0
   resolution: "fastify-static@npm:3.4.0"
@@ -24231,7 +24250,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"ms@npm:2.1.3, ms@npm:^2.0.0, ms@npm:^2.1.1":
+"ms@npm:2.1.3, ms@npm:^2.0.0, ms@npm:^2.1.1, ms@npm:^2.1.3":
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
@@ -31057,6 +31076,13 @@ resolve@^2.0.0-next.3:
   version: 7.0.6
   resolution: "tiny-lru@npm:7.0.6"
   checksum: 36a786a9111a3a358a698c9404783ad3f5396f6ed891672ffa4cd7dec4617abb8dfed6af7611bbaf8a3942a9475534c8b80f9bd58d7efa9aa594f395c9805f09
+  languageName: node
+  linkType: hard
+
+"tiny-lru@npm:^8.0.1":
+  version: 8.0.2
+  resolution: "tiny-lru@npm:8.0.2"
+  checksum: ec4d884914626760eef05cd57850f21a153adeeb7c4242eb8d44a031f1bd8489f18c1bf5d6f10f0a11c5dcfe03b302f26b00f2b879b38853599486bf0dca8c97
   languageName: node
   linkType: hard
 

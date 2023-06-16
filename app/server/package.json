@@ -28,6 +28,7 @@
         "seed": "ts-node-dev ./prisma/seed.ts"
     },
     "dependencies": {
+        "@fastify/rate-limit": "6",
         "@google-cloud/pubsub": "^2.18.5",
         "@graphql-tools/load-files": "^6.3.2",
         "@graphql-tools/merge": "^6.2.13",

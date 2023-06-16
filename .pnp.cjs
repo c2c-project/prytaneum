@@ -421,6 +421,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./app/server/",\
           "packageDependencies": [\
             ["@app/server", "workspace:app/server"],\
+            ["@fastify/rate-limit", "npm:6.0.1"],\
             ["@google-cloud/pubsub", "npm:2.19.4"],\
             ["@graphql-tools/load-files", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.5.3"],\
             ["@graphql-tools/merge", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:6.2.17"],\
@@ -9957,6 +9958,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@fastify/busboy", "npm:1.0.0"],\
             ["text-decoding", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@fastify/rate-limit", [\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/@fastify-rate-limit-npm-6.0.1-539ad25589-3186b5d98f.zip/node_modules/@fastify/rate-limit/",\
+          "packageDependencies": [\
+            ["@fastify/rate-limit", "npm:6.0.1"],\
+            ["fastify-plugin", "npm:3.0.1"],\
+            ["ms", "npm:2.1.3"],\
+            ["tiny-lru", "npm:8.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -25894,6 +25907,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fastify-plugin", "npm:3.0.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/fastify-plugin-npm-3.0.1-30a545741d-131ba0a388.zip/node_modules/fastify-plugin/",\
+          "packageDependencies": [\
+            ["fastify-plugin", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["fastify-static", [\
@@ -41796,6 +41816,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/tiny-lru-npm-7.0.6-872b74163c-36a786a911.zip/node_modules/tiny-lru/",\
           "packageDependencies": [\
             ["tiny-lru", "npm:7.0.6"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:8.0.2", {\
+          "packageLocation": "./.yarn/cache/tiny-lru-npm-8.0.2-b190e31fd1-ec4d884914.zip/node_modules/tiny-lru/",\
+          "packageDependencies": [\
+            ["tiny-lru", "npm:8.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
