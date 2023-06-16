@@ -47,6 +47,7 @@
         "form-data": "^4.0.0",
         "graphql": "^15.5.0",
         "graphql-relay": "0.9.0",
+        "ioredis": "^5.3.2",
         "jsonwebtoken": "^8.5.1",
         "mailgun.js": "^3.4.0",
         "mercurius": "^7.6.1",
@@ -57,7 +58,6 @@
         "multer": "^1.4.5-lts.1",
         "papaparse": "^5.4.1",
         "pino-pretty": "^7.1.0",
-        "redis": "^4.6.7",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -71,7 +71,6 @@
         "@types/multer": "^1",
         "@types/node": "^15.0.1",
         "@types/papaparse": "^5",
-        "@types/redis": "^4.0.11",
         "@types/supertest": "^2.0.12",
         "@types/uuid": "^8",
         "@typescript-eslint/eslint-plugin": "^5.12.0",
