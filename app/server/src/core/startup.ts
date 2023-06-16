@@ -18,7 +18,6 @@ export function startup() {
     getRedisClient(server.log);
 
     server.log.info('Attaching plugins...');
-    plugins.attachRateLimitTo(server);
     plugins.attachAltairTo(server);
     plugins.attachCookieTo(server);
     plugins.attachCorsTo(server);

@@ -53,11 +53,6 @@ spec:
                 configMapKeyRef:
                   name: prytaneum-server-config
                   key: REDIS_HOST
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: prytaneum-server-config
-                  key: REDIS_PORT
             - name: GCP_PROJECT_ID
               valueFrom:
                 configMapKeyRef:
