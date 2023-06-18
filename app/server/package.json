@@ -28,7 +28,7 @@
         "seed": "ts-node-dev ./prisma/seed.ts"
     },
     "dependencies": {
-        "@fastify/cookie": "6.0.0",
+        "@fastify/cookie": "^8.3.0",
         "@fastify/cors": "^8.2.0",
         "@fastify/rate-limit": "6",
         "@google-cloud/pubsub": "^2.18.5",
@@ -72,7 +72,7 @@
         "@types/mailgun-js": "^0.22.11",
         "@types/module-alias": "^2.0.1",
         "@types/multer": "^1",
-        "@types/node": "^18.11.10",
+        "@types/node": "^20.3.1",
         "@types/papaparse": "^5",
         "@types/prettier": "^2",
         "@types/supertest": "^2.0.12",

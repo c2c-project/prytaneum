@@ -196,7 +196,7 @@ __metadata:
     "@types/babel__core": ^7
     "@types/eslint": ^7
     "@types/jest": ^26.0.0
-    "@types/node": ^18.11.10
+    "@types/node": ^20.3.1
     "@types/prop-types": ^15.7.3
     "@types/react": 17.0.2
     "@types/react-beautiful-dnd": ^13.0.0
@@ -279,7 +279,7 @@ __metadata:
   resolution: "@app/e2e@workspace:app/e2e"
   dependencies:
     "@playwright/test": ^1.28.1
-    "@types/node": ^18.11.10
+    "@types/node": ^20.3.1
     allure-commandline: ^2.17.2
     dotenv-cli: ^5.1.0
     experimental-allure-playwright: ^0.0.3
@@ -293,7 +293,7 @@ __metadata:
   resolution: "@app/proxy@workspace:app/proxy"
   dependencies:
     "@types/express": ^4.17.14
-    "@types/node": ^18.11.10
+    "@types/node": ^20.3.1
     dotenv: ^10.0.0
     dotenv-cli: 5.1.0
     dotenv-expand: ^5.1.0
@@ -308,7 +308,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/server@workspace:app/server"
   dependencies:
-    "@fastify/cookie": 6.0.0
+    "@fastify/cookie": ^8.3.0
     "@fastify/cors": ^8.2.0
     "@fastify/rate-limit": 6
     "@google-cloud/pubsub": ^2.18.5
@@ -325,7 +325,7 @@ __metadata:
     "@types/mailgun-js": ^0.22.11
     "@types/module-alias": ^2.0.1
     "@types/multer": ^1
-    "@types/node": ^18.11.10
+    "@types/node": ^20.3.1
     "@types/papaparse": ^5
     "@types/prettier": ^2
     "@types/supertest": ^2.0.12
@@ -3183,13 +3183,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/cookie@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@fastify/cookie@npm:6.0.0"
+"@fastify/cookie@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "@fastify/cookie@npm:8.3.0"
   dependencies:
-    cookie-signature: ^1.1.0
-    fastify-plugin: ^3.0.1
-  checksum: 56146dd26b2639364d5d22372bf2de06d8aa78aab852251ad1a0344a409a37d7e8e14ca7d60d19bbc09dba240869f20a9c062c21f3325c12eb6161e4ca9df9e7
+    cookie: ^0.5.0
+    fastify-plugin: ^4.0.0
+  checksum: d5dfb5c85d4ae02188aad63c8cf055d3b904287bc2750964ee0b8589c5b5ae32850e8fc9456a8830e9f4e9f24d5059e54dac084835d6ef4cbba7fa4b9c4673b3
   languageName: node
   linkType: hard
 
@@ -7058,7 +7058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^18.11.10":
+"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
   version: 18.11.10
   resolution: "@types/node@npm:18.11.10"
   checksum: 0f60cb090b2ee91fcd3dc4311bc1ed7889b92f14644c0069f100776f86474c12eebbcc6c75bc0d7d96b975a103b4d5d6b3c22b4e88bea6e7f4e2b1bb0daf5ea8
@@ -7090,6 +7090,13 @@ __metadata:
   version: 17.0.42
   resolution: "@types/node@npm:17.0.42"
   checksum: a200cd87e4f12d4d5682a893ad6e1140720c6c074a2cd075f254b3b8306d6174f5a3630e5d2347efb5e9b80d420404b5fafc8fe3c7d4c81998cd914c50b19f75
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.3.1":
+  version: 20.3.1
+  resolution: "@types/node@npm:20.3.1"
+  checksum: 63a393ab6d947be17320817b35d7277ef03728e231558166ed07ee30b09fd7c08861be4d746f10fdc63ca7912e8cd023939d4eab887ff6580ff704ff24ed810c
   languageName: node
   linkType: hard
 
@@ -11206,13 +11213,6 @@ __metadata:
   version: 1.0.6
   resolution: "cookie-signature@npm:1.0.6"
   checksum: f4e1b0a98a27a0e6e66fd7ea4e4e9d8e038f624058371bf4499cfcd8f3980be9a121486995202ba3fca74fbed93a407d6d54d43a43f96fd28d0bd7a06761591a
-  languageName: node
-  linkType: hard
-
-"cookie-signature@npm:^1.1.0":
-  version: 1.2.0
-  resolution: "cookie-signature@npm:1.2.0"
-  checksum: d11f56f909733695d989511bf0e1dd874220d818b9d118945dce3c275fa50adfb3f6984354de0f5eefdc9347951a22ba3545230a762576019d23c16055b12d4c
   languageName: node
   linkType: hard
 
@@ -22263,7 +22263,7 @@ fsevents@^1.2.7:
     "@graphql-codegen/typescript-operations": ^2.5.8
     "@graphql-codegen/typescript-resolvers": ^2.7.8
     "@types/babel__core": ^7
-    "@types/node": ^18.11.10
+    "@types/node": ^20.3.1
     concurrently: ^7.2.2
     eslint: ^8.9.0
     graphql: ^16.6.0

@@ -68,7 +68,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.5.8"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.7.8"],\
             ["@types/babel__core", "npm:7.1.19"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
             ["graphql", "npm:16.6.0"],\
@@ -297,7 +297,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/babel__core", "npm:7.1.19"],\
             ["@types/eslint", "npm:7.29.0"],\
             ["@types/jest", "npm:26.0.23"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/prop-types", "npm:15.7.4"],\
             ["@types/react", "npm:17.0.2"],\
             ["@types/react-beautiful-dnd", "npm:13.0.0"],\
@@ -384,7 +384,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@app/e2e", "workspace:app/e2e"],\
             ["@playwright/test", "npm:1.28.1"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["allure-commandline", "npm:2.17.2"],\
             ["dotenv-cli", "npm:5.1.0"],\
             ["experimental-allure-playwright", "npm:0.0.3"],\
@@ -400,7 +400,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@app/proxy", "workspace:app/proxy"],\
             ["@types/express", "npm:4.17.14"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["dotenv", "npm:10.0.0"],\
             ["dotenv-cli", "npm:5.1.0"],\
             ["dotenv-expand", "npm:5.1.0"],\
@@ -417,7 +417,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./app/server/",\
           "packageDependencies": [\
             ["@app/server", "workspace:app/server"],\
-            ["@fastify/cookie", "npm:6.0.0"],\
+            ["@fastify/cookie", "npm:8.3.0"],\
             ["@fastify/cors", "npm:8.3.0"],\
             ["@fastify/rate-limit", "npm:6.0.1"],\
             ["@google-cloud/pubsub", "npm:2.19.4"],\
@@ -434,7 +434,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mailgun-js", "npm:0.22.11"],\
             ["@types/module-alias", "npm:2.0.1"],\
             ["@types/multer", "npm:1.4.7"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/papaparse", "npm:5.3.7"],\
             ["@types/prettier", "npm:2.7.1"],\
             ["@types/supertest", "npm:2.0.12"],\
@@ -5242,12 +5242,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@fastify/cookie", [\
-        ["npm:6.0.0", {\
-          "packageLocation": "./.yarn/cache/@fastify-cookie-npm-6.0.0-fb59a064c8-56146dd26b.zip/node_modules/@fastify/cookie/",\
+        ["npm:8.3.0", {\
+          "packageLocation": "./.yarn/cache/@fastify-cookie-npm-8.3.0-d4b09e29b0-d5dfb5c85d.zip/node_modules/@fastify/cookie/",\
           "packageDependencies": [\
-            ["@fastify/cookie", "npm:6.0.0"],\
-            ["cookie-signature", "npm:1.2.0"],\
-            ["fastify-plugin", "npm:3.0.1"]\
+            ["@fastify/cookie", "npm:8.3.0"],\
+            ["cookie", "npm:0.5.0"],\
+            ["fastify-plugin", "npm:4.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5436,7 +5436,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/utils", "virtual:492559435753f05f6804d334b29ff849f08f15d9d67f5ebb74b21a6dc3952847c6762180b1409ff8a76628fde4b0a4927f69e1c49ebf7317142563dfee17fac5#npm:8.13.1"],\
             ["@types/babel__core", "npm:7.1.19"],\
             ["@types/graphql", null],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/ts-node", null],\
             ["@types/typescript", null],\
             ["@whatwg-node/fetch", "npm:0.3.2"],\
@@ -11133,6 +11133,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.10"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:20.3.1", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-20.3.1-86012346c0-63a393ab6d.zip/node_modules/@types/node/",\
+          "packageDependencies": [\
+            ["@types/node", "npm:20.3.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@types/node-fetch", [\
@@ -16137,13 +16144,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cookie-signature", "npm:1.0.6"]\
           ],\
           "linkType": "HARD"\
-        }],\
-        ["npm:1.2.0", {\
-          "packageLocation": "./.yarn/cache/cookie-signature-npm-1.2.0-93c31a5b73-d11f56f909.zip/node_modules/cookie-signature/",\
-          "packageDependencies": [\
-            ["cookie-signature", "npm:1.2.0"]\
-          ],\
-          "linkType": "HARD"\
         }]\
       ]],\
       ["cookiejar", [\
@@ -16365,7 +16365,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["cosmiconfig-typescript-loader", "virtual:10fffff32afb431eca8c707fc4d3dde2f0e76ab906358380f130e40b752e1db55622a1d0c4964cecc1ded633243849d491a6d5ef44d81e285df154884d7ce032#npm:4.2.0"],\
             ["@types/cosmiconfig", null],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/ts-node", null],\
             ["@types/typescript", null],\
             ["cosmiconfig", "npm:7.0.1"],\
@@ -16388,7 +16388,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["cosmiconfig-typescript-loader", "virtual:492559435753f05f6804d334b29ff849f08f15d9d67f5ebb74b21a6dc3952847c6762180b1409ff8a76628fde4b0a4927f69e1c49ebf7317142563dfee17fac5#npm:4.1.1"],\
             ["@types/cosmiconfig", null],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/ts-node", null],\
             ["@types/typescript", null],\
             ["cosmiconfig", "npm:7.0.1"],\
@@ -21335,7 +21335,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-tools/url-loader", "virtual:492559435753f05f6804d334b29ff849f08f15d9d67f5ebb74b21a6dc3952847c6762180b1409ff8a76628fde4b0a4927f69e1c49ebf7317142563dfee17fac5#npm:7.16.22"],\
             ["@graphql-tools/utils", "virtual:492559435753f05f6804d334b29ff849f08f15d9d67f5ebb74b21a6dc3952847c6762180b1409ff8a76628fde4b0a4927f69e1c49ebf7317142563dfee17fac5#npm:8.13.1"],\
             ["@types/graphql", null],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/typescript", null],\
             ["cosmiconfig", "npm:7.0.1"],\
             ["cosmiconfig-toml-loader", "npm:1.0.0"],\
@@ -29751,7 +29751,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@graphql-codegen/typescript-operations", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.5.8"],\
             ["@graphql-codegen/typescript-resolvers", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.7.8"],\
             ["@types/babel__core", "npm:7.1.19"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["concurrently", "npm:7.2.2"],\
             ["eslint", "npm:8.9.0"],\
             ["graphql", "npm:16.6.0"],\
@@ -34675,7 +34675,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tsconfig/node12", "npm:1.0.9"],\
             ["@tsconfig/node14", "npm:1.0.1"],\
             ["@tsconfig/node16", "npm:1.0.2"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/swc__core", null],\
             ["@types/swc__wasm", null],\
             ["@types/typescript", null],\
@@ -34713,7 +34713,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/ts-node-dev-virtual-43a6c487bc/0/cache/ts-node-dev-npm-2.0.0-a9d487396c-d654b401de.zip/node_modules/ts-node-dev/",\
           "packageDependencies": [\
             ["ts-node-dev", "virtual:1f1be7429141ed392b0c036c406b73b55c8f7b2effa492075bd2604c192dd714a1a836bb1e02a0c479896c1eeb51ca0f2199efa780089dda5a777496658a151a#npm:2.0.0"],\
-            ["@types/node", "npm:18.11.10"],\
+            ["@types/node", "npm:20.3.1"],\
             ["@types/node-notifier", null],\
             ["@types/typescript", null],\
             ["chokidar", "npm:3.5.3"],\
