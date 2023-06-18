@@ -54,12 +54,14 @@ export function SubmitLiveFeedbackPromptResponse({ eventId, promptRef, closeSnac
                         close();
                         closeSnackbar();
                     } catch (err) {
-                        displaySnack(err.message, { variant: 'error' });
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 

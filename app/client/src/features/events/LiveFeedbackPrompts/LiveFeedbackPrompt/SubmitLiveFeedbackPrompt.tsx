@@ -53,12 +53,14 @@ export function SubmitLiveFeedbackPrompt({ className, eventId }: Props) {
                         close();
                         displaySnack('Prompt submitted successfully!', { variant: 'success' });
                     } catch (err) {
-                        displaySnack(err.message, { variant: 'error' });
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 

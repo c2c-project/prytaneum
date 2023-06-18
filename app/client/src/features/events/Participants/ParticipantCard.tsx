@@ -32,7 +32,8 @@ export function ParticipantCard({ participant }: ParticipantCardProps) {
                             close();
                             displaySnack('Participant Muted', { variant: 'success' });
                         } catch (err) {
-                            displaySnack(err.message, { variant: 'error' });
+                            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                            else displaySnack('Something went wrong!');
                         }
                     },
                 });
@@ -45,13 +46,14 @@ export function ParticipantCard({ participant }: ParticipantCardProps) {
                             close();
                             displaySnack('Participant Unmuted', { variant: 'success' });
                         } catch (err) {
-                            displaySnack(err.message, { variant: 'error' });
+                            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                            else displaySnack('Something went wrong!');
                         }
                     },
                 });
         } catch (err) {
-            console.error(err);
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 

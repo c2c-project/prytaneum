@@ -50,12 +50,14 @@ function PostEventFeedback({ className, eventId }: PostEventFeedbackProps) {
                         close();
                         displaySnack('Question submitted!', { variant: 'success' });
                     } catch (err) {
-                        displaySnack(err.message, { variant: 'error' });
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 
