@@ -1,5 +1,5 @@
 import { fromGlobalId } from 'graphql-relay';
-import type { CookieSerializeOptions } from 'fastify-cookie';
+import type { CookieSerializeOptions } from '@fastify/cookie';
 
 import * as jwt from '@local/lib/jwt';
 import * as Invites from './methods';
