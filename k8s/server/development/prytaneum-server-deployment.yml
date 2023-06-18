@@ -95,8 +95,8 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: REDIS_PASSWORD
-                  name: redis-secret
+                  key: redis-password
+                  name: staging-redis-cluster
             - name: "GOOGLE_APPLICATION_CREDENTIALS"
               value: "/var/secrets/google/key.json"
           volumeMounts:
