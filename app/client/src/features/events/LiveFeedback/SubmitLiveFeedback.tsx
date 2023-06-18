@@ -64,7 +64,8 @@ export function SubmitLiveFeedback({ className, eventId }: Props) {
                 },
             });
         } catch (err) {
-            displaySnack(err.message);
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 

@@ -86,11 +86,15 @@ export function Quote({ className, fragmentRef }: QuoteProps) {
                         });
                         close();
                         displaySnack('Question submitted!', { variant: 'success' });
-                    } catch (err) {}
+                    } catch (err) {
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
+                    }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     };
 

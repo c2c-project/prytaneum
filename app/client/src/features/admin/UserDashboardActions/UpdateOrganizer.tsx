@@ -42,12 +42,14 @@ function UpdateOrganizer({ userId, canMakeOrgs }: UpdateOrganizerProps) {
                         displaySnack('Organizer Status Updated', { variant: 'success' });
                         router.reload();
                     } catch (err) {
-                        displaySnack(err.message, { variant: 'error' });
+                        if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+                        else displaySnack('Something went wrong!');
                     }
                 },
             });
         } catch (err) {
-            displaySnack(err.message, { variant: 'error' });
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
+            else displaySnack('Something went wrong!');
         }
     }
 

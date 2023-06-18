@@ -41,7 +41,7 @@ export function BroadcastMessageInput() {
                 },
             });
         } catch (err) {
-            displaySnack(err.message);
+            if (err instanceof Error) displaySnack(err.message, { variant: 'error' });
         }
     };
 
