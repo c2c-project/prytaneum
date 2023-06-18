@@ -385,7 +385,8 @@ export async function resetPasswordRequest(prisma: PrismaClient, input: ResetPas
     } catch (err) {
         const server = getOrCreateServer();
         server.log.error(err);
-        throw new ProtectedError({ userMessage: errors.email, internalMessage: err.message });
+        const internalMessage = err instanceof Error ? err.message : 'Error sending password reset email';
+        throw new ProtectedError({ userMessage: errors.email, internalMessage });
     }
 }
 

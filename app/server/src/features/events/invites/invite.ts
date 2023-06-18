@@ -119,7 +119,7 @@ server.route({
             }
             reply.code(200).send({
                 isError: true,
-                message: error.message,
+                message: error instanceof Error ? error.message : 'An unknown error occurred.',
                 body: null,
             });
         }
