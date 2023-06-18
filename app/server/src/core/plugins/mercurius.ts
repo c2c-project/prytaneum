@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import mercurius from 'mercurius';
 import { fromGlobalId } from 'graphql-relay';
 import mercuriusCodgen from 'mercurius-codegen';
@@ -8,12 +8,10 @@ import redis from 'mqemitter-redis';
 import { verify } from '@local/lib/jwt';
 import { getRedisClient, loadSchema, getPrismaClient } from '@local/core/utils';
 
-// TODO: Find fix for cookies types not being added to FastifyRequest and FastifyReply interfaces.
-// Using any for now since data is still there just not the types.
 /**
  * Helper function for extracting the the authentication JWT from a `FastifyRequest`
  */
-async function extractAuthenticationJwt(req: any) {
+async function extractAuthenticationJwt(req: FastifyRequest) {
     if (req.cookies.jwt) {
         const decodedJwt = await verify(req.cookies.jwt);
         return (decodedJwt as { id: string }).id;
@@ -31,7 +29,7 @@ async function extractAuthenticationJwt(req: any) {
 // ─── CONTEXT GENERATOR FUNCTIONS ────────────────────────────────────────────────
 //
 
-async function makeRequestContext(req: any, reply: any) {
+async function makeRequestContext(req: FastifyRequest, reply: FastifyReply) {
     reply.header('Access-Control-Allow-Origin', '*');
     reply.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
     let userId = await extractAuthenticationJwt(req).catch(() => reply.clearCookie('jwt').send());
