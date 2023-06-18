@@ -44,7 +44,14 @@ const makeDevelopmentServer = () =>
         },
     });
 
-const makeServer = process.env.NODE_ENV === 'production' ? makeProductionServer : makeDevelopmentServer;
+const makeTestServer = () => fastify({ logger: true });
+
+const makeServer =
+    process.env.NODE_ENV === 'production'
+        ? makeProductionServer
+        : process.env.NODE_ENV === 'test'
+        ? makeTestServer
+        : makeDevelopmentServer;
 
 export function getOrCreateServer() {
     const server = _server ?? makeServer();

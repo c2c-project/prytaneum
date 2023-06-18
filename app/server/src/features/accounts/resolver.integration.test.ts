@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs';
-import { getOrCreateServer } from '@local/core/server';
-import { getPrismaClient } from '@local/core/utils';
 import { createMercuriusTestClient } from 'mercurius-integration-testing';
+
+import { getOrCreateServer } from '@local/core/server';
+import { getPrismaClient, getRedisClient } from '@local/core/utils';
 import * as plugins from '@local/core/plugins';
 import * as jwt from '@local/lib/jwt';
-import { toGlobalId } from '../utils';
+import { toGlobalId } from '@local/features/utils';
 
 const toUserId = toGlobalId('User');
 
@@ -41,8 +42,10 @@ beforeAll(async () => {
 afterAll(async () => {
     const server = getOrCreateServer();
     const prisma = getPrismaClient(server.log);
+    const redis = getRedisClient(server.log);
     await prisma.user.deleteMany();
     await prisma.$disconnect();
+    await redis.quit();
     await server.close();
 });
 
