@@ -1,39 +1,35 @@
 import * as React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles(() => ({
-    titleContainer: {
-        flexGrow: 1,
-        display: 'flex',
-    },
-    title: {
-        flexShrink: 1,
-        flexGrow: 0,
-        width: 25,
-        cursor: 'pointer',
-        marginRight: '15px',
-    },
-    logo: {
-        width: 50,
-        height: 50,
-        padding: 4,
-        objectFit: 'contain',
-    },
-}));
+import { useRouter } from 'next/router';
+import { useUser } from '@local/features/accounts';
 
 export default function Title() {
-    const classes = useStyles();
-    // const router = useRouter();
+    const router = useRouter();
+    const { user, isLoading } = useUser();
+    const isLoggedIn = React.useMemo(() => !isLoading && user !== null, [isLoading, user]);
+
+    const handleClick = () => {
+        if (isLoggedIn) router.push('/dashboard');
+        else router.push('/');
+    };
 
     return (
-        <div className={classes.titleContainer}>
-            <div className={classes.title}>
+        <div style={{ display: 'flex', flexGrow: 1 }}>
+            <div
+                style={{
+                    display: 'flex',
+                    flexShrink: 1,
+                    flexGrow: 0,
+                    width: 25,
+                    cursor: 'pointer',
+                    marginRight: '15px',
+                }}
+            >
                 <img
                     data-test-id='prytaneum-title-logo'
                     src='/static/p_logo_2.svg'
                     alt='Prytaneum Logo'
-                    className={classes.logo}
-                    // onClick={() => router.push('/')}
+                    style={{ width: 50, height: 50, padding: 4, objectFit: 'contain' }}
+                    onClick={handleClick}
                 />
             </div>
         </div>
