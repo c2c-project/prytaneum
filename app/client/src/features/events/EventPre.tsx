@@ -177,7 +177,7 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                                 <CountdownWrapper date={date} />
                             </Paper>
                         </Grid>
-                        <Grid item direction='column' width='100%' display='flex' flexGrow={1}>
+                        <Grid item container direction='column' width='100%' display='flex' flexGrow={1}>
                             <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
                                 <Tab label='Questions' value='Questions' />
                                 <Tab label='Feedback' value='Feedback' />
