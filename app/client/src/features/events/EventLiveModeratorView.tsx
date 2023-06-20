@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Grid, useMediaQuery, Tab } from '@mui/material';
+import { Grid, Tab } from '@mui/material';
 import { useQueryLoader, PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { FragmentRefs, graphql } from 'relay-runtime';
 import { Loader } from '@local/components/Loader';
@@ -59,9 +58,6 @@ interface EventLiveProps {
 }
 
 function EventLiveModeratorView({ node }: EventLiveProps) {
-    const theme = useTheme();
-    const mdUpBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
-
     const { eventData, isLive, setIsLive } = useEventDetails({ fragmentRef: node });
     const { id: eventId } = node;
 
@@ -71,7 +67,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
     return (
         <EventContext.Provider value={{ eventId: node.id, isModerator: Boolean(node.isViewerModerator) }}>
             <Grid container columns={8} direction='row' justifyContent='space-around' height='100%'>
-                <Grid container direction='column' xs={2} height='100%'>
+                <Grid container item direction='column' xs={2} height='100%'>
                     <EventVideo fragmentRef={node} />
                     <EventDetailsCard eventData={eventData} />
                     <SpeakerList fragmentRef={node} />
@@ -87,7 +83,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
-                <Grid container direction='column' xs={2} height='100%'>
+                <Grid container item direction='column' xs={2} height='100%'>
                     <Grid item>
                         <CurrentQuestionCard isViewerModerator={true} fragmentRef={node} />
                     </Grid>
@@ -106,7 +102,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
-                <Grid container direction='column' xs={2} height='100%'>
+                <Grid container item direction='column' xs={2} height='100%'>
                     <Grid item container direction='column' flexGrow={1} alignContent='center'>
                         <StyledTabs value='Questions'>
                             <Tab label='Questions' value='Questions' />
@@ -123,7 +119,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
-                <Grid container direction='column' xs={2} height='100%'>
+                <Grid container item direction='column' xs={2} height='100%'>
                     <Grid item container direction='column' height='50%' justifyContent='center' alignContent='center'>
                         <StyledTabs value='Feedback'>
                             <Tab label='Feedback' value='Feedback' />
@@ -138,13 +134,14 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                             <LiveFeedbackList fragmentRef={node} ActionButtons={true} isVisible={true} />
                         </StyledColumnGrid>
                     </Grid>
-                    <Grid item container direction='column' height='50%' justifyContent='center' alignContent='center'>
+                    <Grid item container direction='column' flexGrow={1} justifyContent='center' alignContent='center'>
                         <StyledTabs value='Broadcast'>
                             <Tab label='Broadcast' value='Broadcast' />
                         </StyledTabs>
                         <StyledColumnGrid
                             props={{
-                                height: `${mdUpBreakpoint ? '90%' : '500px'}`,
+                                display: 'flex',
+                                flexGrow: 1,
                                 width: '98%',
                             }}
                         >

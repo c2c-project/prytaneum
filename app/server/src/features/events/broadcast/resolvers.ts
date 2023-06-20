@@ -87,7 +87,6 @@ export const resolvers: Resolvers = {
                 (payload, args, ctx) => {
                     const { eventId: broadcastMessageEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    console.log('eventId', eventId, broadcastMessageEventId);
                     return eventId === broadcastMessageEventId;
                 }
             ),
@@ -98,7 +97,6 @@ export const resolvers: Resolvers = {
                 (payload, args, ctx) => {
                     const { eventId: broadcastMessageEventId } = payload;
                     const { id: eventId } = fromGlobalId(args.eventId);
-                    // const { id: broadcastMessageId } = fromGlobalId(payload.broadcastMessageDeleted.edge.node.id);
                     return eventId === broadcastMessageEventId;
                 }
             ),

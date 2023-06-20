@@ -57,10 +57,6 @@ export function useLiveFeedbackPrompts({ fragmentRef, modalIsOpen }: Props) {
         [liveFeedbackPrompts]
     );
 
-    React.useEffect(() => {
-        console.log(promptsList);
-    }, [promptsList]);
-
     // Set up refresh polling interval (20 seconds) to keep data fresh
     React.useEffect(() => {
         const interval = setInterval(refresh, REFETCH_INTERVAL);

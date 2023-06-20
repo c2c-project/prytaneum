@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import { graphql, PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import { Button, Divider, Grid, Paper, Tab, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ArticleIcon from '@mui/icons-material/Article';
+import PersonIcon from '@mui/icons-material/Person';
 
 import { CountdownWrapper } from '@local/components/Countdown';
 import { EventPreQuery } from '@local/__generated__/EventPreQuery.graphql';
 import { EventContext } from './EventContext';
 import { ConditionalRender } from '../../components/ConditionalRender';
-// import { PreloadedBroadcastMessageList } from './BroadcastMessages/BroadcastMessageList/BroadcastMessageList';
 import { Loader } from '@local/components';
 import { LiveFeedbackList } from './LiveFeedback';
 import AskQuestion from './Questions/AskQuestion';
@@ -138,10 +139,16 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                             <Typography variant='h4'>Resources</Typography>
                             <Grid container justifyContent='space-around' width='100%' marginTop='1rem'>
                                 <Grid item>
-                                    <Button variant='contained'>Event Issue Guide</Button>
+                                    <Button variant='contained'>
+                                        <ArticleIcon sx={{ marginRight: '0.5rem' }} />
+                                        Event Issue Guide
+                                    </Button>
                                 </Grid>
                                 <Grid item>
-                                    <Button variant='contained'>Participant Guide</Button>
+                                    <Button variant='contained'>
+                                        <PersonIcon sx={{ marginRight: '0.5rem' }} />
+                                        Participant Guide
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -177,7 +184,7 @@ export function EventPre({ fragmentRef }: EventPreProps) {
                                 <CountdownWrapper date={date} />
                             </Paper>
                         </Grid>
-                        <Grid item direction='column' width='100%' display='flex' flexGrow={1}>
+                        <Grid item container direction='column' width='100%' display='flex' flexGrow={1}>
                             <StyledTabs value={tab} props={{ onChange: handleChange, 'aria-label': 'tabs' }}>
                                 <Tab label='Questions' value='Questions' />
                                 <Tab label='Feedback' value='Feedback' />

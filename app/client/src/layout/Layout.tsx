@@ -64,8 +64,13 @@ export function Layout({
 
     return (
         <Page>
-            <div className={classes.background}>
-                <AppBar sx={{ zIndex: () => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined) }}>
+            <div style={{ backgroundColor: '#FFF', marginBottom: isSideNavHidden ? 0 : '64px' }}>
+                <AppBar
+                    sx={{
+                        position: isSideNavHidden ? 'sticky' : 'fixed',
+                        zIndex: () => (!isSideNavHidden ? theme.zIndex.drawer + 1 : undefined),
+                    }}
+                >
                     {isSideNavHidden && (
                         <IconButton
                             className={classes.menuIcon}
