@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<53d08edc4b908abf1ac4a56fa6140b92>>
+ * @generated SignedSource<<d909f648a11989e30dc489bf9f879d0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,9 +19,14 @@ export type useBroadcastMessageDeletedSubscription$data = {
     readonly edge: {
       readonly cursor: string;
       readonly node: {
+        readonly broadcastMessage: string;
+        readonly createdBy: {
+          readonly firstName: string | null;
+        } | null;
         readonly id: string;
+        readonly isVisible: boolean | null;
         readonly position: number | null;
-        readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"BroadcastMessageActionsFragment" | "BroadcastMessageAuthorFragment" | "BroadcastMessageContentFragment">;
       };
     };
   };
@@ -67,7 +72,28 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "broadcastMessage",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "position",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isVisible",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "firstName",
   "storageKey": null
 };
 return {
@@ -107,6 +133,25 @@ return {
                 "selections": [
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "createdBy",
+                    "plural": false,
+                    "selections": [
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "BroadcastMessageActionsFragment"
+                  },
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -182,6 +227,8 @@ return {
                     ]
                   },
                   (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -190,14 +237,8 @@ return {
                     "name": "createdBy",
                     "plural": false,
                     "selections": [
+                      (v8/*: any*/),
                       (v4/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "firstName",
-                        "storageKey": null
-                      },
                       {
                         "alias": null,
                         "args": null,
@@ -215,18 +256,12 @@ return {
                     ],
                     "storageKey": null
                   },
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
                     "name": "createdAt",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "broadcastMessage",
                     "storageKey": null
                   }
                 ],
@@ -241,16 +276,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5ff5d36ac6a7dded07750f0874e56dd2",
+    "cacheID": "07f5bfd6aa5da916b0a544e4a47ab12f",
     "id": null,
     "metadata": {},
     "name": "useBroadcastMessageDeletedSubscription",
     "operationKind": "subscription",
-    "text": "subscription useBroadcastMessageDeletedSubscription(\n  $eventId: ID!\n) {\n  broadcastMessageDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        position\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n      }\n    }\n  }\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n"
+    "text": "subscription useBroadcastMessageDeletedSubscription(\n  $eventId: ID!\n) {\n  broadcastMessageDeleted(eventId: $eventId) {\n    edge {\n      cursor\n      node {\n        id\n        broadcastMessage\n        position\n        isVisible\n        createdBy {\n          firstName\n          id\n        }\n        ...BroadcastMessageActionsFragment\n        ...BroadcastMessageAuthorFragment\n        ...BroadcastMessageContentFragment\n      }\n    }\n  }\n}\n\nfragment BroadcastMessageActionsFragment on EventBroadcastMessage {\n  id\n  ...DeleteBroadcastMessageButtonFragment\n  ...EditBroadcastMessageButtonFragment\n}\n\nfragment BroadcastMessageAuthorFragment on EventBroadcastMessage {\n  createdBy {\n    id\n    firstName\n    lastName\n    avatar\n  }\n  createdAt\n}\n\nfragment BroadcastMessageContentFragment on EventBroadcastMessage {\n  broadcastMessage\n}\n\nfragment DeleteBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n  position\n}\n\nfragment EditBroadcastMessageButtonFragment on EventBroadcastMessage {\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0ee725887ba6d311d8fc117ff2e2b272";
+(node as any).hash = "3c283552617e55c7012b960b09aaf887";
 
 export default node;

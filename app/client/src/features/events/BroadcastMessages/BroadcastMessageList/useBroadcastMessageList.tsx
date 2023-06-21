@@ -54,9 +54,6 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         [broadcastMessages]
     );
 
-    // Data in ascending time order, reverse to get latest message at the top
-    broadcastMessageList.reverse();
-
     const refresh = React.useCallback(() => {
         if (isRefreshing) return;
         setIsRefreshing(true);
@@ -66,11 +63,6 @@ export function useBroadcastMessageList({ fragmentRef }: useBroadcastMessageList
         );
         setIsRefreshing(false);
     }, [data.broadcastMessages?.pageInfo?.endCursor, isRefreshing, refetch]);
-
-    // React.useEffect(() => {
-    //     const interval = setInterval(refresh, 5000);
-    //     return () => clearInterval(interval);
-    // }, []);
 
     return {
         broadcastMessages: broadcastMessageList,

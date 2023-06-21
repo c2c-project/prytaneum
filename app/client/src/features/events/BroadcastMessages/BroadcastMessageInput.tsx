@@ -26,7 +26,7 @@ export function BroadcastMessageInput() {
     const eventId = router.query.id as string;
     const [commit] = useMutation<BroadcastMessageInputMutation>(BROADCAST_MESSAGE_MUTATION);
     const [isOpen, open, close] = useResponsiveDialog();
-    const [form, errors, handleSubmit, handleChange] = useForm({
+    const [form, errors, handleSubmit, handleChange, setState] = useForm({
         message: '',
     });
 
@@ -37,7 +37,7 @@ export function BroadcastMessageInput() {
                 onCompleted(payload) {
                     close();
                     if (payload.createBroadcastMessage.isError) displaySnack('Something went wrong!');
-                    else displaySnack('broadcasted message successfully!');
+                    else displaySnack('broadcasted message successfully!', { variant: 'success' });
                 },
             });
         } catch (err) {
@@ -50,9 +50,16 @@ export function BroadcastMessageInput() {
         [form]
     );
 
+    const handleClose = () => setState({ message: '' });
+
+    const handleOpen = () => {
+        setState({ message: '' });
+        open();
+    };
+
     return (
         <React.Fragment>
-            <ResponsiveDialog open={isOpen} onClose={close}>
+            <ResponsiveDialog open={isOpen} onClose={handleClose}>
                 <DialogContent>
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <FormTitle title='Broadcast Message Form' />
@@ -92,7 +99,7 @@ export function BroadcastMessageInput() {
                 </DialogContent>
             </ResponsiveDialog>
 
-            <Button variant='contained' color='primary' onClick={open}>
+            <Button variant='contained' color='primary' onClick={handleOpen}>
                 Broadcast Message
             </Button>
         </React.Fragment>
