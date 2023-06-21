@@ -30,10 +30,9 @@ const DELETE_BROADCAST_MESSAGE_MUTATION = graphql`
 
 interface Props {
     fragmentRef: DeleteBroadcastMessageButtonFragment$key;
-    onBroadcastMessageDelete: (messageId: string) => void;
 }
 
-export function DeleteBroadcastMessageButton({ fragmentRef, onBroadcastMessageDelete }: Props) {
+export function DeleteBroadcastMessageButton({ fragmentRef }: Props) {
     const { id: broadcastMessageId, position } = useFragment(DELETE_BROADCAST_MESSAGE_FRAGMENT, fragmentRef);
     const [commit] = useMutation<DeleteBroadcastMessageButtonMutation>(DELETE_BROADCAST_MESSAGE_MUTATION);
     const { displaySnack } = useSnack();
@@ -48,7 +47,7 @@ export function DeleteBroadcastMessageButton({ fragmentRef, onBroadcastMessageDe
             },
             onCompleted({ deleteBroadcastMessage }) {
                 if (deleteBroadcastMessage.isError) displaySnack(deleteBroadcastMessage.message);
-                else onBroadcastMessageDelete(broadcastMessageId);
+                else displaySnack('Broadcast message deleted', { variant: 'success' });
             },
         });
     }

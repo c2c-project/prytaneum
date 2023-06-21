@@ -29,25 +29,19 @@ export type BroadcastMessageActionProps = {
     deleteEnabled?: boolean;
     editEnabled?: boolean;
     fragmentRef: BroadcastMessageActionsFragment$key;
-    connections?: string[];
-    onBroadcastMessageDelete: (messageId: string) => void;
 } & CardActionsProps;
 
 export function BroadcastMessageActions({
     deleteEnabled = false,
     editEnabled = false,
     fragmentRef,
-    connections,
-    onBroadcastMessageDelete,
     ...props
 }: BroadcastMessageActionProps) {
     const data = useFragment(BROADCAST_MESSAGE_ACTIONS_FRAGMENT, fragmentRef);
     const classes = useStyles();
     return (
         <CardActions {...props} className={classes.actions}>
-            {deleteEnabled && (
-                <DeleteBroadcastMessageButton fragmentRef={data} onBroadcastMessageDelete={onBroadcastMessageDelete} />
-            )}
+            {deleteEnabled && <DeleteBroadcastMessageButton fragmentRef={data} />}
             {editEnabled && <EditBroadcastMessageButton fragmentRef={data} />}
         </CardActions>
     );

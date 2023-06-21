@@ -9,7 +9,7 @@ import { QuestionList } from '@local/features/events/Questions/QuestionList';
 import { QuestionQueue } from '@local/features/events/Moderation/ManageQuestions';
 import AskQuestion from '@local/features/events/Questions/AskQuestion';
 import { LiveFeedbackList } from '@local/features/events/LiveFeedback/LiveFeedbackList';
-import { PreloadedBroadcastMessageList } from '@local/features/events/BroadcastMessages/BroadcastMessageList';
+import { BroadcastMessageList } from '@local/features/events/BroadcastMessages/BroadcastMessageList';
 import { SubmitLiveFeedback } from '@local/features/events/LiveFeedback/SubmitLiveFeedback';
 import { QuestionCarousel } from '../Questions/QuestionCarousel';
 import { CurrentQuestionCard } from '../Moderation/ManageQuestions/CurrentQuestionCard';
@@ -218,7 +218,7 @@ export const EventSidebar = ({ fragmentRef, isViewerModerator, isLive, setIsLive
                         isVisible={bottomTab === 'Feedback'}
                     />
                     {isViewerModerator === true && (
-                        <PreloadedBroadcastMessageList isVisible={bottomTab === 'Broadcast'} />
+                        <BroadcastMessageList fragmentRef={data} isVisible={bottomTab === 'Broadcast'} />
                     )}
                 </StyledColumnGrid>
             </Grid>

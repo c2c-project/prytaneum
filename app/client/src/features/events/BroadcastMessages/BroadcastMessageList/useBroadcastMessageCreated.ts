@@ -12,8 +12,13 @@ export const USE_BROADCAST_MESSAGE_CREATED_SUBSCRIPTION = graphql`
                 cursor
                 node {
                     id
+                    broadcastMessage
                     position
                     isVisible
+                    createdBy {
+                        firstName
+                    }
+                    ...BroadcastMessageActionsFragment
                     ...BroadcastMessageAuthorFragment
                     ...BroadcastMessageContentFragment
                 }
