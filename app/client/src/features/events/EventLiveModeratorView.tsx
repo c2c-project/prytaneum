@@ -22,7 +22,7 @@ import { StyledTabs } from '@local/components/StyledTabs';
 import { QuestionList } from './Questions';
 import { LiveFeedbackList } from './LiveFeedback';
 import { CurrentQuestionCard } from './Moderation/ManageQuestions/CurrentQuestionCard';
-import { PreloadedBroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
+import { BroadcastMessageList } from './BroadcastMessages/BroadcastMessageList';
 
 export const EVENT_LIVE_MODERATOR_VIEW_QUERY = graphql`
     query EventLiveModeratorViewQuery($eventId: ID!) {
@@ -145,7 +145,7 @@ function EventLiveModeratorView({ node }: EventLiveProps) {
                                 width: '98%',
                             }}
                         >
-                            <PreloadedBroadcastMessageList isVisible={true} />
+                            <BroadcastMessageList fragmentRef={node} isVisible={true} />
                         </StyledColumnGrid>
                     </Grid>
                 </Grid>
