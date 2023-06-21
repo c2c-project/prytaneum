@@ -463,7 +463,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ioredis-mock", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:8.7.0"],\
             ["jest", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:27.5.1"],\
             ["jest-mock-extended", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:2.0.5"],\
-            ["jsonwebtoken", "npm:8.5.1"],\
+            ["jsonwebtoken", "npm:9.0.0"],\
             ["mailgun.js", "npm:3.4.0"],\
             ["mercurius", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:11.3.0"],\
             ["mercurius-codegen", "virtual:8677a47b7766945d002e7a51965f47027cfed0d45596695b49bd7d6174f0430951262648e27ddf1d0f801daddcf4db4a425e2c90e59f9252c5e3357dc0e5bbe8#npm:5.0.1"],\
@@ -22933,7 +22933,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fengari", "npm:0.1.4"],\
             ["fengari-interop", "virtual:fc91ac6e5a525f4aba475f0e9513c75d92fdf62ec77be7e86d3e80e9a59ffade1c2f49bf6c806b8d4802bd0eacea1f17d8aa23a50fa1869d709ad1bc618075f1#npm:0.1.3"],\
             ["ioredis", "npm:5.3.2"],\
-            ["semver", "npm:7.5.2"]\
+            ["semver", "npm:7.3.8"]\
           ],\
           "packagePeers": [\
             "@types/ioredis-mock",\
@@ -24931,6 +24931,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lodash.once", "npm:4.1.1"],\
             ["ms", "npm:2.1.3"],\
             ["semver", "npm:5.7.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:9.0.0", {\
+          "packageLocation": "./.yarn/cache/jsonwebtoken-npm-9.0.0-36fd1594c0-b9181cecf9.zip/node_modules/jsonwebtoken/",\
+          "packageDependencies": [\
+            ["jsonwebtoken", "npm:9.0.0"],\
+            ["jws", "npm:3.2.2"],\
+            ["lodash", "npm:4.17.21"],\
+            ["ms", "npm:2.1.3"],\
+            ["semver", "npm:7.3.8"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -32583,10 +32594,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:7.5.2", {\
-          "packageLocation": "./.yarn/cache/semver-npm-7.5.2-28fb0fd2d6-3fdf5d1e6f.zip/node_modules/semver/",\
+        ["npm:7.3.8", {\
+          "packageLocation": "./.yarn/cache/semver-npm-7.3.8-25a996cb4f-ba9c7cbbf2.zip/node_modules/semver/",\
           "packageDependencies": [\
-            ["semver", "npm:7.5.2"],\
+            ["semver", "npm:7.3.8"],\
             ["lru-cache", "npm:6.0.0"]\
           ],\
           "linkType": "HARD"\

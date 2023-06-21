@@ -354,7 +354,7 @@ __metadata:
     ioredis-mock: ^8.7.0
     jest: ^27.5.1
     jest-mock-extended: ^2.0.5
-    jsonwebtoken: ^8.5.1
+    jsonwebtoken: ^9.0.0
     mailgun.js: ^3.4.0
     mercurius: ^11.3.0
     mercurius-codegen: ^5.0.1
@@ -18334,6 +18334,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"jsonwebtoken@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "jsonwebtoken@npm:9.0.0"
+  dependencies:
+    jws: ^3.2.2
+    lodash: ^4.17.21
+    ms: ^2.1.1
+    semver: ^7.3.8
+  checksum: b9181cecf9df99f1dc0253f91ba000a1aa4d91f5816d1608c0dba61a5623726a0bfe200b51df25de18c1a6000825d231ad7ce2788aa54fd48dcb760ad9eb9514
+  languageName: node
+  linkType: hard
+
 "jss-plugin-camel-case@npm:^10.8.2":
   version: 10.9.0
   resolution: "jss-plugin-camel-case@npm:10.9.0"
@@ -24372,13 +24384,13 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "semver@npm:^7.3.8":
-  version: 7.5.2
-  resolution: "semver@npm:7.5.2"
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: 3fdf5d1e6f170fe8bcc41669e31787649af91af7f54f05c71d0865bb7aa27e8b92f68b3e6b582483e2c1c648008bc84249d2cd86301771fe5cbf7621d1fe5375
+  checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
   languageName: node
   linkType: hard
 
